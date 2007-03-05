@@ -2,6 +2,12 @@
 <ProActiveDescriptor
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://www-sop.inria.fr/oasis/proactive/schema/3.2/DescriptorSchema.xsd">
+	<variables>
+		<descriptorVariable name="JAVA_HOME" 
+			value="/usr/java/j2sdk1.4.2_08" /><!-- Path of the remote JVM , CHANGE ME!!!! -->
+		<descriptorVariable name="REMOTE_HOME" 
+			value="/home/mozonne" /><!-- CHANGE ME!!!! -->
+	</variables>
 	<componentDefinition>
 		<virtualNodesDefinition>
 			<virtualNode name="plugtest" property="multiple"
