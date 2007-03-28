@@ -656,7 +656,7 @@
 	<!-- http://www.java2html.de /dev/lib/j2h.jar -->
 	<target name="java2html">
 		<taskdef name="j2h" classname="de.java2html.anttasks.Java2HtmlTask" classpath="${base}/dev/lib/j2h.jar" />
-		<j2h srcdir="${src.dir}/${proactive.dir}" destdir="${docs.dir}/ProActive_src_html" includes="**/*.java" style="eclipse" showLineNumbers="false" showFileName="true" showTableBorder="false" useshortfilename="true" outputFormat="html" />
+		<j2h srcdir="${src.dir}" destdir="${docs.dir}/ProActive_src_html" includes="${proactive.dir}/**/*.java" style="eclipse" showLineNumbers="false" showFileName="true" showTableBorder="false" useshortfilename="false" outputFormat="html" />
 	</target>
 
 
