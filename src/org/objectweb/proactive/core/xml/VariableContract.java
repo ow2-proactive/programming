@@ -1,33 +1,33 @@
-/* 
+/*
  * ################################################################
- * 
- * ProActive: The Java(TM) library for Parallel, Distributed, 
+ *
+ * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
- * 
+ *
  * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
  * Contact: proactive@objectweb.org
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
- *  
+ *
  *  Initial developer(s):               The ProActive Team
  *                        http://www.inria.fr/oasis/ProActive/contacts.html
- *  Contributor(s): 
- * 
+ *  Contributor(s):
+ *
  * ################################################################
- */ 
+ */
 package org.objectweb.proactive.core.xml;
 
 import java.io.FileInputStream;
@@ -55,11 +55,12 @@ public class VariableContract implements Serializable {
     public static VariableContract xmlproperties = null;
     public static final Lock lock = new Lock();
     private boolean closed;
-    
-    private static final Pattern variablePattern = Pattern.compile("(\\$\\{(.*?)\\})");
-    private static final Pattern legalPattern = Pattern.compile("^\\$\\{[\\w\\.]+\\}$");
-    
-    private class PropertiesDatas {
+    private static final Pattern variablePattern = Pattern.compile(
+            "(\\$\\{(.*?)\\})");
+    private static final Pattern legalPattern = Pattern.compile(
+            "^\\$\\{[\\w\\.]+\\}$");
+
+    private class PropertiesDatas implements Serializable {
         public String value;
         public VariableContractType type;
         public String setFrom; //Descriptor, Program
@@ -88,30 +89,30 @@ public class VariableContract implements Serializable {
      * Marks the contract as closed. No more variables can be defined or set.
      */
     public void close() {
-		closed = true;
-	}
+        closed = true;
+    }
 
     /**
-	 * Tells wether this contract is closed or not.
-	 * 
-	 * @return True if it is closed, false otherwise.
-	 */
+         * Tells wether this contract is closed or not.
+         *
+         * @return True if it is closed, false otherwise.
+         */
     public boolean isClosed() {
         return closed;
     }
 
     /**
-	 * Method for setting variables value from the deploying application.
-	 * 
-	 * @param name
-	 *            The name of the variable.
-	 * @param value
-	 *            Value of the variable
-	 * @throws NullPointerException
-	 *             if the arguments are null.
-	 * @throws IllegalArgumentException
-	 *             if setting the value breaches the variable (contract) type
-	 */
+         * Method for setting variables value from the deploying application.
+         *
+         * @param name
+         *            The name of the variable.
+         * @param value
+         *            Value of the variable
+         * @throws NullPointerException
+         *             if the arguments are null.
+         * @throws IllegalArgumentException
+         *             if setting the value breaches the variable (contract) type
+         */
     public void setVariableFromProgram(String name, String value,
         VariableContractType type) {
         setVariableFrom(name, value, type, "Program");
@@ -122,39 +123,43 @@ public class VariableContract implements Serializable {
      * Finds and sets all pending values for java properties
      *
      */
-    public void setJavaPropertiesValues(){
-    	//before closing we set the JavaProperties values
-		java.util.Iterator it = list.keySet().iterator();
-		while (it.hasNext()) {
-			String name = (String) it.next();
-			PropertiesDatas data = (PropertiesDatas) list.get(name);
-			setFromJavaProperty(name, data.type);
-		}// while
+    public void setJavaPropertiesValues() {
+        //before closing we set the JavaProperties values
+        java.util.Iterator it = list.keySet().iterator();
+        while (it.hasNext()) {
+            String name = (String) it.next();
+            PropertiesDatas data = (PropertiesDatas) list.get(name);
+            setFromJavaProperty(name, data.type);
+        } // while
     }
-    
+
     /**
      * If the variable can be set from the javaProperty, then it looks
      * for the corresponding.
      * @param name
      * @param type
      */
-    public void setFromJavaProperty(String name, VariableContractType type){
-    	
-    	if(!type.hasSetAbility("JavaProperty")) return;
-    	
-    	try {
-			String value = System.getProperty(name);
-			if(logger.isDebugEnabled()){
-				logger.debug("Found java property "+name+"="+value);
-			}
-			if (value == null) value="";
-			setVariableFrom(name, value, type, "JavaProperty");
-		} catch (Exception ex) {
-			if (logger.isDebugEnabled())
-				logger.debug("Unable to get java property: " + name);
-		}
+    public void setFromJavaProperty(String name, VariableContractType type) {
+        if (!type.hasSetAbility("JavaProperty")) {
+            return;
+        }
+
+        try {
+            String value = System.getProperty(name);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Found java property " + name + "=" + value);
+            }
+            if (value == null) {
+                value = "";
+            }
+            setVariableFrom(name, value, type, "JavaProperty");
+        } catch (Exception ex) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Unable to get java property: " + name);
+            }
+        }
     }
-    
+
     /**
      * Method for setting variables value from the deploying application. If the variable is not defined,
      * this method will also define it.
@@ -232,11 +237,10 @@ public class VariableContract implements Serializable {
      */
     public void setDescriptorVariable(String name, String value,
         VariableContractType type) {
-    	
         setVariableFrom(name, value, type, "Descriptor");
         setFromJavaProperty(name, type);
     }
-    
+
     /**
      * Loads the variable contract from a Java Properties file format
      * @param file The file location.
@@ -301,35 +305,40 @@ public class VariableContract implements Serializable {
 
     /**
      * Replaces the variables inside a text with their values.
-     * I  
+     * I
      * @param         text        Text with variables inside.
      * @return        The text with the values
      */
     public String transform(String text) throws SAXException {
-    	if(text==null) return null;
-    	
-    	Matcher m=variablePattern.matcher(text);
-    	StringBuffer sb=new StringBuffer();
-    	while(m.find()){
+        if (text == null) {
+            return null;
+        }
 
-    		if(!isLegalName(m.group(1)))
-    			throw new SAXException("Error, malformed variable:"+m.group(1));
-    		
-    		String name=m.group(2);
-    		String value=getValue(name);
+        Matcher m = variablePattern.matcher(text);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            if (!isLegalName(m.group(1))) {
+                throw new SAXException("Error, malformed variable:" +
+                    m.group(1));
+            }
 
-    		if(value==null || value.length()<=0)
-    			throw new SAXException("Error, variable value not found: "+name+"=?");
-    			
-    		if(logger.isDebugEnabled()){
-    			logger.debug("Matched:"+name+" = "+value);
-    			//logger.debug(m);
-    		}
-    		m.appendReplacement(sb, value);
-    	}
-    	m.appendTail(sb);
-    	
-    	return sb.toString();
+            String name = m.group(2);
+            String value = getValue(name);
+
+            if ((value == null) || (value.length() <= 0)) {
+                throw new SAXException("Error, variable value not found: " +
+                    name + "=?");
+            }
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("Matched:" + name + " = " + value);
+                //logger.debug(m);
+            }
+            m.appendReplacement(sb, value);
+        }
+        m.appendTail(sb);
+
+        return sb.toString();
     }
 
     /**
@@ -352,11 +361,10 @@ public class VariableContract implements Serializable {
             throw new IllegalArgumentException("Variable Name is empty.");
         }
 
-        if (!isLegalName("${"+name+"}")) {
-            throw new IllegalArgumentException("Illegal variable name:"+name);
+        if (!isLegalName("${" + name + "}")) {
+            throw new IllegalArgumentException("Illegal variable name:" + name);
         }
 
-        
         if (value == null) {
             throw new NullPointerException("Variable Value is null.");
         }
@@ -364,14 +372,13 @@ public class VariableContract implements Serializable {
         if (type == null) {
             throw new NullPointerException("Variable Type is null.");
         }
-        
+
         if (list.containsKey(name) &&
                 !((PropertiesDatas) list.get(name)).type.equals(type)) {
             throw new IllegalArgumentException("Variable " + name +
                 " is already defined with type: " +
                 ((PropertiesDatas) list.get(name)).type);
         }
-
     }
 
     /**
@@ -399,12 +406,14 @@ public class VariableContract implements Serializable {
         if (list.containsKey(name)) {
             data = (PropertiesDatas) list.get(name);
             if (logger.isDebugEnabled()) {
-                logger.debug("...Modifying variable registry: "+name+"="+value);
+                logger.debug("...Modifying variable registry: " + name + "=" +
+                    value);
             }
         } else {
             data = new PropertiesDatas();
             if (logger.isDebugEnabled()) {
-                logger.debug("...Creating new registry for variable: "+name+"="+value);
+                logger.debug("...Creating new registry for variable: " + name +
+                    "=" + value);
             }
         }
 
@@ -427,9 +436,9 @@ public class VariableContract implements Serializable {
             name = (String) it.next();
             PropertiesDatas data = (PropertiesDatas) list.get(name);
 
-            if(data.value.length()<=0){
-            	logger.error(data.type.getEmptyErrorMessage(name));
-            	retval=false;
+            if (data.value.length() <= 0) {
+                logger.error(data.type.getEmptyErrorMessage(name));
+                retval = false;
             }
         }
 
@@ -451,222 +460,224 @@ public class VariableContract implements Serializable {
 
         return sb.toString();
     }
-    
+
     /**
      * This methods tells if a variable name is acceptable
      * @param var The variable name, without the ${} wrapping.
      * @return true if the variable is legal, false otherwise.
      */
-	public boolean isLegalName(String var){
-		Matcher  m = legalPattern.matcher(var);
-		return m.matches();
-	}
-    
-/*
-    public void setDescriptorVariableOLD(String name, String value,
-        VariableContractType type) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Setting from descriptor: " + type + " " + name + "=" +
-                value + ".");
-        }
+    public boolean isLegalName(String var) {
+        Matcher m = legalPattern.matcher(var);
+        return m.matches();
+    }
 
-        checkGenericLogic(name, value, type);
-
-        /* DescriptorVariable
-         *  -Priority: XML
-         *  -Set Ability: XML
-         *  -Default: XML
-     
-        if (type.equals(VariableContractType.DescriptorVariable) &&
-                (value.length() <= 0)) {
-            throw new IllegalArgumentException("Variable " + name +
-                " value must be specified for type: " + type);
-        }
-
-        /* ProgramVariable
-         *  -Priority: Program
-         *  -Set Ability: Program
-         *  -Default: Program
-       
-        if (type.equals(VariableContractType.ProgramVariable)) {
-            if (value.length() > 0) {
-                throw new IllegalArgumentException("Variable " + name +
-                    " can not be set from descriptor for type: " + type);
+    /*
+        public void setDescriptorVariableOLD(String name, String value,
+            VariableContractType type) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Setting from descriptor: " + type + " " + name + "=" +
+                    value + ".");
             }
 
-            if (list.containsKey(name)) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Skipping " + type + " " + name + "=" + value +
-                        ". Program already set variable with value.");
-                }
-                return;
-            }
-        }
+            checkGenericLogic(name, value, type);
 
-        /* DescriptorDefaultVariable
-         *  -Priority: Program
-         *  -Set Ability: Program, XML
-         *  -Default: XML
-      
-        if (type.equals(VariableContractType.DescriptorDefaultVariable)) {
-            if (value.length() < 0) {
+            /* DescriptorVariable
+             *  -Priority: XML
+             *  -Set Ability: XML
+             *  -Default: XML
+
+            if (type.equals(VariableContractType.DescriptorVariable) &&
+                    (value.length() <= 0)) {
                 throw new IllegalArgumentException("Variable " + name +
                     " value must be specified for type: " + type);
             }
 
-            //Priority is lost if Program set the variable
-            if (list.containsKey(name)) {
-                PropertiesDatas var = (PropertiesDatas) list.get(name);
+            /* ProgramVariable
+             *  -Priority: Program
+             *  -Set Ability: Program
+             *  -Default: Program
 
-                //skipe if program already set a value
-                if (var.setFrom.equals("Program") && (var.value.length() > 0)) {
+            if (type.equals(VariableContractType.ProgramVariable)) {
+                if (value.length() > 0) {
+                    throw new IllegalArgumentException("Variable " + name +
+                        " can not be set from descriptor for type: " + type);
+                }
+
+                if (list.containsKey(name)) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Skipping variable " + name + " type: " +
-                            type +
-                            ". Program already set variable with higher priority");
+                        logger.debug("Skipping " + type + " " + name + "=" + value +
+                            ". Program already set variable with value.");
                     }
                     return;
                 }
             }
-        }
 
-        /* ProgramDefaultVariable
-         *  -Priority: XML
-         *  -Set Ability: Program, XML
-         *  -Default: Program
-     
-        if (type.equals(VariableContractType.ProgramDefaultVariable) &&
-                (value.length() <= 0)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Variable " + name +
-                    ", not setting to empty value");
-            }
-            return;
-        }
+            /* DescriptorDefaultVariable
+             *  -Priority: Program
+             *  -Set Ability: Program, XML
+             *  -Default: XML
 
-        /* JavaPropertyVariable
-         *  -Priority: JavaProperty
-         *  -Set Ability: JavaProperty
-         *  -Default: JavaProperty
-
-        if (type.equals(VariableContractType.JavaPropertyVariable)) {
-            String prop_value = null;
-
-            if (value.length() <= 0) {
-                throw new IllegalArgumentException("Variable " + name +
-                    " value can not be empty for type " + type);
-            }
-
-            try {
-                prop_value = System.getProperty(value);
-                if (prop_value == null) {
-                    throw new Exception();
+            if (type.equals(VariableContractType.DescriptorDefaultVariable)) {
+                if (value.length() < 0) {
+                    throw new IllegalArgumentException("Variable " + name +
+                        " value must be specified for type: " + type);
                 }
-            } catch (Exception ex) {
-                throw new IllegalArgumentException(
-                    "Unable to get System Property: " + value);
+
+                //Priority is lost if Program set the variable
+                if (list.containsKey(name)) {
+                    PropertiesDatas var = (PropertiesDatas) list.get(name);
+
+                    //skipe if program already set a value
+                    if (var.setFrom.equals("Program") && (var.value.length() > 0)) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Skipping variable " + name + " type: " +
+                                type +
+                                ". Program already set variable with higher priority");
+                        }
+                        return;
+                    }
+                }
             }
 
-            value = prop_value;
-        }
+            /* ProgramDefaultVariable
+             *  -Priority: XML
+             *  -Set Ability: Program, XML
+             *  -Default: Program
 
-        //defineVariable(type, name);
-        unsafeAdd(name, value, type, "Descriptor");
-    }
+            if (type.equals(VariableContractType.ProgramDefaultVariable) &&
+                    (value.length() <= 0)) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Variable " + name +
+                        ", not setting to empty value");
+                }
+                return;
+            }
+
+            /* JavaPropertyVariable
+             *  -Priority: JavaProperty
+             *  -Set Ability: JavaProperty
+             *  -Default: JavaProperty
+
+            if (type.equals(VariableContractType.JavaPropertyVariable)) {
+                String prop_value = null;
+
+                if (value.length() <= 0) {
+                    throw new IllegalArgumentException("Variable " + name +
+                        " value can not be empty for type " + type);
+                }
+
+                try {
+                    prop_value = System.getProperty(value);
+                    if (prop_value == null) {
+                        throw new Exception();
+                    }
+                } catch (Exception ex) {
+                    throw new IllegalArgumentException(
+                        "Unable to get System Property: " + value);
+                }
+
+                value = prop_value;
+            }
+
+            //defineVariable(type, name);
+            unsafeAdd(name, value, type, "Descriptor");
+        }
+        */
+
+    /*
+        public void setVariableFromProgramOLD(String name, String value,
+            VariableContractType type)
+            throws NullPointerException, IllegalArgumentException {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Setting from program:    " + type + " " + name + "=" +
+                    value);
+            }
+
+            checkGenericLogic(name, value, type);
+
+            // DescriptorVariable        *  -Priority: XML         *  -Set Ability: XML        *  -Default: XML
+            if (type.equals(VariableContractType.DescriptorVariable)) {
+                if (value.length() > 0) {
+                    throw new IllegalArgumentException("Variable " + name +
+                        " can not be set from program for type: " + type);
+                }
+
+                if (list.containsKey(name)) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Skipping " + type + " " + name + "=" + value +
+                            ". Descriptor already set variable with value.");
+                    }
+                    return;
+                }
+            }
+
+            // ProgramVariable         *  -Priority: Program         *  -Set Ability: Program         *  -Default: Program
+            if (type.equals(VariableContractType.ProgramVariable) &&
+                    (value.length() <= 0)) {
+                throw new IllegalArgumentException("Variable " + name +
+                    " value must be specified for type: " + type);
+            }
+
+            // DescriptorDefaultVariable         *  -Priority: Program         *  -Set Ability: Program, XML         *  -Default: XML
+            if (type.equals(VariableContractType.DescriptorDefaultVariable) &&
+                    (value.length() <= 0)) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Variable " + name +
+                        ", not setting to empty value");
+                }
+                return;
+            }
+
+            // ProgramDefaultVariable          *  -Priority: XML         *  -Set Ability: Program, XML         *  -Default: Program
+            if (type.equals(VariableContractType.ProgramDefaultVariable)) {
+                if (value.length() < 0) {
+                    throw new IllegalArgumentException("Variable " + name +
+                        " value must be specified for type: " + type);
+                }
+
+                if (list.containsKey(name)) {
+                    PropertiesDatas var = (PropertiesDatas) list.get(name);
+
+                    //skipe if descriptor already set a value
+                    if (var.setFrom.equals("Descriptor") &&
+                            (var.value.length() > 0)) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Skipping variable " + name + " type: " +
+                                type +
+                                ". Descriptor already set variable with higher priority");
+                        }
+                        return;
+                    }
+                }
+            }
+
+            // JavaPropertyVariable         *  -Priority: JavaProperty         *  -Set Ability: JavaProperty         *  -Default: JavaProperty
+            if (type.equals(VariableContractType.JavaPropertyVariable)) {
+                String prop_value = null;
+
+                if (value.length() <= 0) {
+                    throw new IllegalArgumentException("Variable " + name +
+                        " value can not be empty for type " + type);
+                }
+
+                try {
+                    prop_value = System.getProperty(value);
+                    if (prop_value == null) {
+                        throw new Exception();
+                    }
+                } catch (Exception ex) {
+                    throw new IllegalArgumentException(
+                        "Unable to get System Property: " + value);
+                }
+
+                value = prop_value;
+            }
+
+            //defineVariable(type, name);
+            unsafeAdd(name, value, type, "Program");
+        }
     */
-/*
-    public void setVariableFromProgramOLD(String name, String value,
-        VariableContractType type)
-        throws NullPointerException, IllegalArgumentException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Setting from program:    " + type + " " + name + "=" +
-                value);
-        }
 
-        checkGenericLogic(name, value, type);
-
-        // DescriptorVariable        *  -Priority: XML         *  -Set Ability: XML        *  -Default: XML         
-        if (type.equals(VariableContractType.DescriptorVariable)) {
-            if (value.length() > 0) {
-                throw new IllegalArgumentException("Variable " + name +
-                    " can not be set from program for type: " + type);
-            }
-
-            if (list.containsKey(name)) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Skipping " + type + " " + name + "=" + value +
-                        ". Descriptor already set variable with value.");
-                }
-                return;
-            }
-        }
-
-        // ProgramVariable         *  -Priority: Program         *  -Set Ability: Program         *  -Default: Program         
-        if (type.equals(VariableContractType.ProgramVariable) &&
-                (value.length() <= 0)) {
-            throw new IllegalArgumentException("Variable " + name +
-                " value must be specified for type: " + type);
-        }
-
-        // DescriptorDefaultVariable         *  -Priority: Program         *  -Set Ability: Program, XML         *  -Default: XML         
-        if (type.equals(VariableContractType.DescriptorDefaultVariable) &&
-                (value.length() <= 0)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Variable " + name +
-                    ", not setting to empty value");
-            }
-            return;
-        }
-
-        // ProgramDefaultVariable          *  -Priority: XML         *  -Set Ability: Program, XML         *  -Default: Program         
-        if (type.equals(VariableContractType.ProgramDefaultVariable)) {
-            if (value.length() < 0) {
-                throw new IllegalArgumentException("Variable " + name +
-                    " value must be specified for type: " + type);
-            }
-
-            if (list.containsKey(name)) {
-                PropertiesDatas var = (PropertiesDatas) list.get(name);
-
-                //skipe if descriptor already set a value
-                if (var.setFrom.equals("Descriptor") &&
-                        (var.value.length() > 0)) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Skipping variable " + name + " type: " +
-                            type +
-                            ". Descriptor already set variable with higher priority");
-                    }
-                    return;
-                }
-            }
-        }
-
-        // JavaPropertyVariable         *  -Priority: JavaProperty         *  -Set Ability: JavaProperty         *  -Default: JavaProperty         
-        if (type.equals(VariableContractType.JavaPropertyVariable)) {
-            String prop_value = null;
-
-            if (value.length() <= 0) {
-                throw new IllegalArgumentException("Variable " + name +
-                    " value can not be empty for type " + type);
-            }
-
-            try {
-                prop_value = System.getProperty(value);
-                if (prop_value == null) {
-                    throw new Exception();
-                }
-            } catch (Exception ex) {
-                throw new IllegalArgumentException(
-                    "Unable to get System Property: " + value);
-            }
-
-            value = prop_value;
-        }
-
-        //defineVariable(type, name);
-        unsafeAdd(name, value, type, "Program");
-    }
-*/
     /**
      * Class used for exclusive acces to global static variable:
      * org.objectweb.proactive.core.xml.XMLProperties.xmlproperties

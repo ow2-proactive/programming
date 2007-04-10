@@ -1,34 +1,36 @@
-/* 
+/*
  * ################################################################
- * 
- * ProActive: The Java(TM) library for Parallel, Distributed, 
+ *
+ * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
- * 
+ *
  * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
  * Contact: proactive@objectweb.org
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or any later version.
- *  
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
- *  
+ *
  *  Initial developer(s):               The ProActive Team
  *                        http://www.inria.fr/oasis/ProActive/contacts.html
- *  Contributor(s): 
- * 
+ *  Contributor(s):
+ *
  * ################################################################
- */ 
+ */
 package org.objectweb.proactive.core.xml;
+
+import java.io.Serializable;
 
 import org.objectweb.proactive.core.descriptor.xml.ProActiveDescriptorConstants;
 
@@ -39,7 +41,7 @@ import org.objectweb.proactive.core.descriptor.xml.ProActiveDescriptorConstants;
  * @author The ProActive Team
  * @since ProActive 3.0 (December 2005)
  */
-public class VariableContractType {
+public class VariableContractType implements Serializable {
     static final public VariableContractType DescriptorVariable = new VariableContractType(0,
             new String[] { "Descriptor", "Program" },
             new String[] { "Descriptor" }, new String[] { "Program" });
@@ -47,7 +49,8 @@ public class VariableContractType {
             new String[] { "Program", "Descriptor" },
             new String[] { "Program" }, new String[] { "Descriptor" });
     static final public VariableContractType JavaPropertyVariable = new VariableContractType(2,
-            new String[] {"JavaProperty"},  new String[] {"JavaProperty"}, new String[] { "Program", "Descriptor" } );
+            new String[] { "JavaProperty" }, new String[] { "JavaProperty" },
+            new String[] { "Program", "Descriptor" });
     static final public VariableContractType ProgramDefaultVariable = new VariableContractType(3,
             new String[] { "Descriptor", "Program" },
             new String[] { "Descriptor", "Program" }, new String[0]);
@@ -55,11 +58,13 @@ public class VariableContractType {
             new String[] { "Program", "Descriptor" },
             new String[] { "Descriptor", "Program" }, new String[0]);
     static final public VariableContractType JavaPropertyDescriptorDefault = new VariableContractType(5,
-            new String[] {"JavaProperty","Descriptor","Program"}, new String[] {"JavaProperty", "Descriptor", "Program"},
-            new String[] {"Program"});
+            new String[] { "JavaProperty", "Descriptor", "Program" },
+            new String[] { "JavaProperty", "Descriptor", "Program" },
+            new String[] { "Program" });
     static final public VariableContractType JavaPropertyProgramDefault = new VariableContractType(6,
-    		new String[] {"JavaProperty","Program","Descriptor"}, new String[] {"JavaProperty","Program","Descriptor"},
-    		new String[] {"Descriptor"});
+            new String[] { "JavaProperty", "Program", "Descriptor" },
+            new String[] { "JavaProperty", "Program", "Descriptor" },
+            new String[] { "Descriptor" });
     private int type; //Type internal identefier
     private String[] priority; //The lower indexed element has higher priority
     private String[] setAbility; //Who can set a non empty value
@@ -132,10 +137,12 @@ public class VariableContractType {
                     ProActiveDescriptorConstants.VARIABLES_DESCRIPTOR_DEFAULT_TAG)) {
             return DescriptorDefaultVariable;
         }
-        if (type.equals(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG)) {
+        if (type.equals(
+                    ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_DESCRIPTOR_TAG)) {
             return JavaPropertyDescriptorDefault;
         }
-        if (type.equals(ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG)) {
+        if (type.equals(
+                    ProActiveDescriptorConstants.VARIABLES_JAVAPROPERTY_PROGRAM_TAG)) {
             return JavaPropertyProgramDefault;
         }
 
@@ -194,15 +201,14 @@ public class VariableContractType {
 
         return j <= i;
     }
-    
-    public String getEmptyErrorMessage(String name){
-    	
-    	String canSetValue="nobody";
-    	for(int i=0;i<setAbility.length;i++){
-    		canSetValue=setAbility[i]+" ";
-    	}
-    	
-    	return "Empty value for variable"+ this.toString() +" "+name+
-    			" value can be set by: "+canSetValue;
+
+    public String getEmptyErrorMessage(String name) {
+        String canSetValue = "nobody";
+        for (int i = 0; i < setAbility.length; i++) {
+            canSetValue = setAbility[i] + " ";
+        }
+
+        return "Empty value for variable" + this.toString() + " " + name +
+        " value can be set by: " + canSetValue;
     }
 }
