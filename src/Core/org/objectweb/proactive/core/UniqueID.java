@@ -130,7 +130,7 @@ public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
 
     public String getCanonString() {
         if (this.cachedCanonString == null) {
-            this.cachedCanonString = "" + this.id + "--" + this.vmID;
+            this.cachedCanonString = ("" + this.id + "--" + this.vmID).replace(':', '-');
         }
 
         return this.cachedCanonString;
