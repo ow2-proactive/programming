@@ -137,6 +137,18 @@ class EnvironmentParser {
                     if (varValue == null) {
                         varValue = "";
                     }
+
+                    // check that javaPropertyVariable are defined
+                    if (varContractType.equals(VariableContractType.JavaPropertyVariable)) {
+                        String javaProperty = System.getProperty(varName);
+                        if (javaProperty == null) {
+                            GCMDeploymentLoggers.GCMD_LOGGER.fatal("undefined javaProperty variable : " +
+                                varName);
+                            throw new IllegalStateException("undefined javaProperty variable : " + varName);
+                        }
+
+                    }
+
                     variableContract.setDescriptorVariable(varName, varValue, varContractType);
                 }
 
