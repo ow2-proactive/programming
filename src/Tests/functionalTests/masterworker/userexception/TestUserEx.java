@@ -65,6 +65,8 @@ public class TestUserEx extends FunctionalTest {
             ids.clear();
         } catch (TaskException e) {
             assertTrue("Expected exception is the cause", e.getCause() instanceof ArithmeticException);
+            System.out.println("Expected exception catched, here it is : ");
+            e.printStackTrace();
             catched = true;
         }
         assertTrue("Exception caught as excepted", catched);
