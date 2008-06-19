@@ -717,7 +717,7 @@ public class MersenneTwisterFast extends Random implements Serializable {
 
         // UNCOMMENT THIS TO TEST FOR CORRECTNESS
         // COMPARE WITH http://www.math.keio.ac.jp/~nisimura/random/int/mt19937int.out
-        MersenneTwisterRNGFactory fact = new MersenneTwisterRNGFactory();
+        /*MersenneTwisterRNGFactory fact = new MersenneTwisterRNGFactory();
         Random r1 = fact.createRandomNumberGenerator();
         r = new MersenneTwisterFast(4357);
         System.out.println("Output of MersenneTwisterFast.java");
@@ -734,7 +734,7 @@ public class MersenneTwisterFast extends Random implements Serializable {
             System.out.print(s + " ");
             if (j % 8 == 7)
                 System.out.println();
-        }
+        }*/
 
         // UNCOMMENT THIS TO TEST FOR SPEED
         /*
