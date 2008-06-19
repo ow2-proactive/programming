@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd"> -->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">
 
 <chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="GCMDeployment">
 	<info>
@@ -471,43 +471,31 @@
 
 				<para>
 					A host list can be used with SSH and RSH groups as a shorthand to specify several machine names in a compact form. The format of a
-					host list is a whitespace-seperated list of name patterns or hostnames. A name pattern describes a set of hostnames with a common
+					host list is a whitespace-separated list of name patterns or hostnames. A name pattern describes a set of hostnames with a common
 					root. The format is as follows.
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 <root name><interval> 
 ]]>
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
 					with root name being an alphanumeric string (only letters and digits, no spaces or punctuation signs), and interval defining a set
 					of numerical values in the form of an interval or list of values, possibly followed by an exclusion interval or list of values.
 					The general form of an interval is:
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 
 [<value set>]^[<value set>]
 ]]>
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
 					or simply
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 
 [<value set>] 
 ]]>
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
 					if no exclusion interval is needed.
 
@@ -814,10 +802,8 @@
 
 				A deployment descriptor has the following XML structure:
 
-				<blockquote>
-					<para>
-						<programlisting>
-							<![CDATA[
+				<programlisting>
+					<![CDATA[
 <environment>
 		<descriptorVariable …/>
 …
@@ -856,9 +842,7 @@
 
 ]]>
 
-						</programlisting>
-					</para>
-				</blockquote>
+				</programlisting>
 
 			</para>
 			<para>
@@ -896,10 +880,8 @@
 				would be represented as follows (configuration parameters are omitted for the sake of clarity):
 			</para>
 
-			<blockquote>
-				<para>
-					<programlisting>
-						<![CDATA[
+			<programlisting>
+				<![CDATA[
 <resources>
 	<hosts>
 		<host refid="host1"  />
@@ -914,9 +896,7 @@
 	</hosts>
 </infrastructure>
 ]]>
-					</programlisting>
-				</para>
-			</blockquote>
+			</programlisting>
 
 			<para>
 				There is no hierarchical relation between the two hosts, so both resources and infrastructure parts are identical (aside of the extra
@@ -924,10 +904,8 @@
 				running LSF. The representation in GCM Deployment would be as follows:
 			</para>
 
-			<blockquote>
-				<para>
-					<programlisting>
-						<![CDATA[
+			<programlisting>
+				<![CDATA[
 <resources>
 		<group refid="LSF_GROUP">
 			<host refid="LSF_GROUP_MEMBER" />
@@ -947,9 +925,7 @@
 </infrastructure>
 
 ]]>
-					</programlisting>
-				</para>
-			</blockquote>
+			</programlisting>
 
 			<para>
 				Within the &lt;infrastructure&gt;, the &lt;hosts&gt; part describes the configuration common to the machines in the group. The
@@ -968,21 +944,17 @@
 					element. They cannot be used in an XML element name. The &lt;environment&gt; element is where the variables are defined. It is a
 					simple list of &lt;descriptorVariable&gt; elements. For example:
 
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 <environment>
 	<descriptorVariable name="usertype" value="admin" />
   <descriptorVariable name="username" value="jsmith" />
 </environment>
 ]]>
 
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
-					This allows the following usage later on in the decriptor: &lt;sshGroup user="${username}" /&gt;
+					This allows the following usage later on in the descriptor: &lt;sshGroup user="${username}" /&gt;
 
 
 				</para>
@@ -1040,45 +1012,33 @@
 
 					For example, the following constructions are correct: Single host:
 
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 <host refid="A_HOST" />
 ]]>
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
 					Group:
 
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 <group refid="CLUSTER">
 	<host refid="CLUSTER_NODE" />
 </group>
 ]]>
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
 					Group behind a bridge:
 
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 <bridge refid="CLUSTER_FRONT_END" />
 	<group refid="CLUSTER">
 		<host refid="CLUSTER_NODE" />
 	</group>
 </bridge>
 ]]>
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
 				</para>
 
@@ -1147,10 +1107,8 @@
 			<para>
 				The overall structure of an Application Descriptor is as follows :
 
-				<blockquote>
-					<para>
-						<programlisting>
-							<![CDATA[
+				<programlisting>
+					<![CDATA[
 <environment>
 		…
 </environment>
@@ -1167,9 +1125,7 @@
 		…
 </resources>
 ]]>
-						</programlisting>
-					</para>
-				</blockquote>
+				</programlisting>
 
 			</para>
 
@@ -1195,10 +1151,8 @@
 					A stand-alone executable is very straightforward to describe. You only need to specify one or several &lt;nodeProvider&gt;s and
 					the application will be run on all the physical nodes these providers can yield.
 
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 	<application>
 		<executable>
 			<command name="ls">
@@ -1218,9 +1172,7 @@
 								
 								
 ]]>
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
 				</para>
 
@@ -1237,10 +1189,8 @@
 					and "slaves"). The first will fetch a single physical node from the COMPANY_LAN node provider. The second will get as many nodes
 					as available (its capacity is set to "MAX") from both the COMPANY_LAN and REMOTE_CLUSTER providers.
 
-					<blockquote>
-						<para>
-							<programlisting>
-								<![CDATA[
+					<programlisting>
+						<![CDATA[
 				
 	<application>
 		<proactive relpath="Scratch/ProActive/">
@@ -1271,9 +1221,7 @@
 
 				
 ]]>
-							</programlisting>
-						</para>
-					</blockquote>
+					</programlisting>
 
 
 				</para>
@@ -1283,7 +1231,84 @@
 
 		</section><!-- end of Application Descriptor Tutorial -->
 
-	</section>
+		<section>
+			<info>
+				<title>For the Grid Application Developer : deploying your application on the grid</title>
+			</info>
+
+			<para>
+				To deploy your application on the grid, you need to get your application descriptor as a
+				<code>java.io.File</code>
+				. You then pass it to
+				<code>org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.PAGCMDeployment.loadApplicationDescriptor()</code>
+				which will return a GCMApplication object. To actually start the deployment, simply call the
+				<code>startDeployment()</code>
+				method.
+
+				<programlisting>
+					<![CDATA[
+GCMApplication app;
+									
+File desc = new File(this.getClass().getResource("MyApplicationDescriptor.xml").getPath());
+
+app = PAGCMDeployment.loadApplicationDescriptor(desc);
+app.startDeployment();
+
+				]]>
+				</programlisting>
+
+			</para>
+
+			<para>
+				If needed you may want to also create a VariableContract and set some of its variables, then pass it as 2nd argument to
+				loadApplicationDescriptor() :
+
+				<programlisting>
+					<![CDATA[
+VariableContractImpl vContract = new VariableContractImpl();
+vContract.setVariableFromProgram("HOST_CAPACITY", "4",
+				VariableContractType.DescriptorDefaultVariable);
+vContract.setVariableFromProgram("VM_CAPACITY", "1",
+                VariableContractType.DescriptorDefaultVariable);
+
+GCMApplication app;
+									
+File desc = new File(this.getClass().getResource("MyApplicationDescriptor.xml").getPath());
+
+app = PAGCMDeployment.loadApplicationDescriptor(desc, vContract);
+app.startDeployment();
+
+]]>
+				</programlisting>
+
+			</para>
+
+			<para>
+				In the case of a stand-alone application, it will simply be deployed on all the available nodes without any special intervention on
+				your side. In the case of a ProActive-based application, there are two ways for an application to handle the deployment process. The
+				simplest one is to call the
+				<code>waitReady()</code>
+				method on your GCMApplication object. As the name of the method indicates, it amounts to "wait until everything is ready". The call
+				will block until all virtual nodes are ready, that is that they have acquired the minimum number of nodes they need. However, a more
+				flexible way is for your application to listen to the availability of new nodes on each virtual node, and act accordingly. The method
+				for this is
+				<code>subscribeNodeAttachment(Object client, String methodName, boolean withHistory)</code>
+				in
+				<code>GCMVirtualNode</code>
+				.
+				<code>methodName</code>
+				must be the name of a method of
+				<code>client</code>
+				, which prototype is
+				<code>method(GCMVirtualNode node, String virtualNodeName)</code>
+				. This method will be called by the virtual node for each new available node.
+			</para>
+
+		</section>
+
+
+
+	</section><!-- end of Tutorial -->
 
 
 </chapter>
