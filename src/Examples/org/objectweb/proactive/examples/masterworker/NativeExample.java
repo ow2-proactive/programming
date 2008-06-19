@@ -42,7 +42,6 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.tasks.NativeTask;
-import org.objectweb.proactive.extensions.scheduler.common.exception.SchedulerException;
 
 
 /**
@@ -61,7 +60,7 @@ public class NativeExample extends AbstractExample {
      * @throws LoginException 
      */
     public static void main(String[] args) throws MalformedURLException, ProActiveException,
-            SchedulerException, LoginException {
+            LoginException {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 

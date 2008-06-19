@@ -108,5 +108,6 @@
 	<classpathentry kind="lib" path="lib/sunxacml.jar"/>
 	<classpathentry kind="lib" path="lib/xsdlib.jar"/>
 	<classpathentry kind="lib" path="lib/winp-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/rngpack-1.1a.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

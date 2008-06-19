@@ -43,7 +43,6 @@ import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
-import org.objectweb.proactive.extensions.scheduler.common.exception.SchedulerException;
 
 
 /**
@@ -112,7 +111,7 @@ public class BasicPrimeExample extends AbstractExample {
      * @throws LoginException 
      */
     public static void main(String[] args) throws TaskException, MalformedURLException, ProActiveException,
-            SchedulerException, LoginException {
+             LoginException {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 
