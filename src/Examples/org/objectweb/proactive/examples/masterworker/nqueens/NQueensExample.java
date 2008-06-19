@@ -59,8 +59,7 @@ public class NQueensExample extends AbstractExample {
     private static ProActiveMaster<QueryExtern, Pair<Long, Long>> master;
 
     @SuppressWarnings("unchecked")
-    public static void main(String[] args) throws MalformedURLException, ProActiveException,
-             LoginException {
+    public static void main(String[] args) throws MalformedURLException, ProActiveException, LoginException {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 

@@ -59,8 +59,7 @@ public class NativeExample extends AbstractExample {
      * @throws SchedulerException 
      * @throws LoginException 
      */
-    public static void main(String[] args) throws MalformedURLException, ProActiveException,
-            LoginException {
+    public static void main(String[] args) throws MalformedURLException, ProActiveException, LoginException {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 

@@ -111,7 +111,7 @@ public class BasicPrimeExample extends AbstractExample {
      * @throws LoginException 
      */
     public static void main(String[] args) throws TaskException, MalformedURLException, ProActiveException,
-             LoginException {
+            LoginException {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 
