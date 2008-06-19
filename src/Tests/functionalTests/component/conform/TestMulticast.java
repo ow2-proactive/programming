@@ -71,7 +71,7 @@ public class TestMulticast extends Conformtest {
         ".SlaveMulticast/true,false,false";
 
     // -------------------------------------------------------------------------
-    // Constructor ans setup
+    // Constructor and setup
     // -------------------------------------------------------------------------
     @Before
     public void setUp() throws Exception {

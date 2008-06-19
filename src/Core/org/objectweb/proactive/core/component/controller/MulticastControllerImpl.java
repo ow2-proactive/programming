@@ -42,6 +42,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
@@ -449,6 +450,19 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
                 e.printStackTrace();
             }
         }
+    }
+
+    public Boolean isBoundTo(Interface clientItfName, Interface[] serverItfs) {
+        if (clientSideProxies.containsKey(clientItfName.getFcItfName())) {
+            ProxyForComponentInterfaceGroup clientSideProxy = (ProxyForComponentInterfaceGroup) clientSideProxies
+                    .get(clientItfName.getFcItfName());
+            for (int i = 0; i < serverItfs.length; i++) {
+                Interface curServerItf = serverItfs[i];
+                if (((Group<ProActiveInterface>) clientSideProxy.getDelegatee()).contains(curServerItf))
+                    return new Boolean(true);
+            }
+        }
+        return new Boolean(false);
     }
 
     private boolean hasClientSideProxy(String itfName) {

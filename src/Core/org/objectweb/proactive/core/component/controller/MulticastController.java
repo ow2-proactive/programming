@@ -32,6 +32,7 @@ package org.objectweb.proactive.core.component.controller;
 
 import java.util.List;
 
+import org.objectweb.fractal.api.Interface;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.component.ProActiveInterface;
 import org.objectweb.proactive.core.component.exceptions.ParameterDispatchException;
@@ -80,13 +81,24 @@ public interface MulticastController extends CollectiveInterfaceController {
 
     /**
      * Removes a binding between a multicast client interface and a server interface
-     * @param itfName namd of a multicast client interface
+     *
+     * @param itfName name of a multicast client interface
      * @param itfRef reference on a server interface
      */
     public void unbindFcMulticast(String itfName, ProActiveInterface itfRef);
 
     /**
+     * Check if the given multicast interface is bound to one of the given server interfaces
+     *
+     * @param clientItfName name of the multicast interface
+     * @param serverItfsComponent array of server interfaces
+     * @return true if the given multicast interface of the component is bound on a component
+     */
+    public Boolean isBoundTo(Interface clientItfName, Interface[] serverItfs);
+
+    /**
      * Returns a reference on a multicast interface
+     *
      * @param multicastItfName name of a multicast interface
      * @return a reference on this multicast interface
      */
