@@ -11,7 +11,11 @@
 
 	<application>
 		<proactive base="root" relpath="${proactive.home}">
-			<virtualNode id="Workers" capacity="4">
+            <configuration>
+				 <jvmarg value="-Dlog4j.configuration=file:/home/fviale/eclipse_workspace/ProActive_Clean/compile/proactive-log4j"/>				
+			</configuration>
+
+            <virtualNode id="Workers" capacity="4">
 				<nodeProvider refid="workers" />
 			</virtualNode>
 

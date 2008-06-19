@@ -7,6 +7,7 @@ import org.objectweb.proactive.extra.montecarlo.Executor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -16,14 +17,18 @@ import java.util.List;
  */
 public class ExecutorImpl implements Executor {
 
-    SubMaster master;
+    SubMaster<EngineTaskAdapter, Serializable> master;
 
     public ExecutorImpl(SubMaster master) {
         this.master = master;
     }
 
     public List<Serializable> solve(List<EngineTask> engineTasks) throws TaskException {
-        master.solve(engineTasks);
+        ArrayList<EngineTaskAdapter> adapterTasks = new ArrayList<EngineTaskAdapter>(engineTasks.size());
+        for (EngineTask etask : engineTasks) {
+            adapterTasks.add(new EngineTaskAdapter(etask));
+        }
+        master.solve(adapterTasks);
         return master.waitAllResults();
     }
 }

@@ -51,4 +51,8 @@ public class PAMonteCarlo {
         return master.waitOneResult();
     }
 
+    public void terminate() {
+        master.terminate(true);
+    }
+
 }

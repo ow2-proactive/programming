@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class SimulatorImpl implements Simulator {
 
-    SubMaster master;
+    SubMaster<ExperienceTask, ArrayList<Double>> master;
 
     public SimulatorImpl(SubMaster master) {
         this.master = master;
@@ -24,6 +24,9 @@ public class SimulatorImpl implements Simulator {
 
     public ArrayList<Double> solve(List<ExperienceSet> experienceSets) throws TaskException {
         ArrayList<ExperienceTask> adpaterTasks = new ArrayList<ExperienceTask>(experienceSets.size());
+        for (ExperienceSet eset : experienceSets) {
+            adpaterTasks.add(new ExperienceTask(eset));
+        }
         master.solve(adpaterTasks);
         List<ArrayList<Double>> results = master.waitAllResults();
         int bigsize = 0;

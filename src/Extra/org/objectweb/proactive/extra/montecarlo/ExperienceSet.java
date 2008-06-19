@@ -2,6 +2,7 @@ package org.objectweb.proactive.extra.montecarlo;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.Serializable;
 
 
 /**
@@ -11,7 +12,7 @@ import java.util.Random;
  *
  * @author The ProActive Team
  */
-public interface ExperienceSet {
+public interface ExperienceSet extends Serializable {
 
     /**
      * Defines a Monte-Carlo set of successive experiences, a Random generator is given and will be used

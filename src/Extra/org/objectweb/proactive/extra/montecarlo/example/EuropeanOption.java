@@ -13,6 +13,7 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 import org.objectweb.proactive.extra.montecarlo.PAMonteCarlo;
 import org.objectweb.proactive.extra.montecarlo.Simulator;
 import org.objectweb.proactive.extra.montecarlo.basic.GeometricBrownianMotion;
+import org.objectweb.proactive.api.PALifeCycle;
 
 
 public class EuropeanOption implements EngineTask {
@@ -44,7 +45,6 @@ public class EuropeanOption implements EngineTask {
     }
 
     public Serializable run(Simulator simulator, Executor executor) {
-        // TODO Auto-generated method stub
         List<ExperienceSet> sets = new ArrayList<ExperienceSet>(M);
         for (int i = 0; i < M; i++) {
             sets.add(new GeometricBrownianMotion(spotPrice, interestRate, volatilityRate, maturityDate, N));
@@ -78,6 +78,8 @@ public class EuropeanOption implements EngineTask {
         EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 1000, 1000);
         double[] price = (double[]) mc.run(option);
         System.out.println("Call: " + price[0] + " Put : " + price[1]);
+        mc.terminate();
+        PALifeCycle.exitSuccess();
 
     }
 

@@ -21,10 +21,11 @@ public class GeometricBrownianMotion implements ExperienceSet {
         this.mu = mu;
         this.sigma = sigma;
         this.t = t;
+        this.N = N;
     }
 
     public ArrayList<Double> simulate(Random rng) {
-        final ArrayList<Double> answer = new ArrayList<Double>(N);
+        ArrayList<Double> answer = new ArrayList<Double>(N);
         for (int i = 0; i < N; i++) {
             answer.add(s0 *
                 Math.exp((mu - 0.5 * sigma * sigma) * t + sigma * Math.sqrt(t) * rng.nextGaussian()));
