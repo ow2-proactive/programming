@@ -252,6 +252,9 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
     /** {@inheritDoc} */
 
     public void solve(List<T> tasks) {
+        if (tasks.size() == 0) {
+            throw new IllegalArgumentException("empty list");
+        }
         aomaster.solveIntern(null, tasks);
     }
 
@@ -270,21 +273,15 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
         if (aomaster.isEmpty(null)) {
             throw new IllegalStateException("Master is empty, call to this method will wait forever");
         }
-        List<ResultIntern<R>> completed = (List<ResultIntern<R>>) PAFuture.getFutureValue(aomaster
-                .waitAllResults(null));
-        List<R> results = new ArrayList<R>(completed.size());
-        for (ResultIntern<R> res : completed) {
-            if (res.threwException()) {
-                throw new TaskException(res.getException());
-            }
-
-            R obj = res.getResult();
-            if (obj != null) {
-                results.add(obj);
-            } else {
-                results.add(null);
-            }
-
+        List<R> results = null;
+        try {
+            results = (List<R>) PAFuture.getFutureValue(aomaster.waitAllResults(null));
+        } catch (RuntimeException e) {
+            Throwable texp = findTaskException(e);
+            if (texp != null) {
+                throw (TaskException) texp;
+            } else
+                throw e;
         }
 
         return results;
@@ -297,21 +294,16 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
             throw new IllegalStateException("Number of tasks submitted previously is strictly less than " +
                 k + ": call to this method will wait forever");
         }
-        List<ResultIntern<R>> completed = (List<ResultIntern<R>>) PAFuture.getFutureValue(aomaster
-                .waitKResults(null, k));
-        List<R> results = new ArrayList<R>(completed.size());
-        for (ResultIntern<R> res : completed) {
-            if (res.threwException()) {
-                throw new TaskException(res.getException());
-            }
 
-            R obj = res.getResult();
-            if (obj != null) {
-                results.add(obj);
-            } else {
-                results.add(null);
-            }
-
+        List<R> results = null;
+        try {
+            results = (List<R>) PAFuture.getFutureValue(aomaster.waitKResults(null, k));
+        } catch (RuntimeException e) {
+            Throwable texp = findTaskException(e);
+            if (texp != null) {
+                throw (TaskException) texp;
+            } else
+                throw e;
         }
 
         return results;
@@ -323,21 +315,33 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
         if (aomaster.isEmpty(null)) {
             throw new IllegalStateException("Master is empty, call to this method will wait forever");
         }
-        ResultIntern<R> completed = (ResultIntern<R>) PAFuture.getFutureValue(aomaster.waitOneResult(null));
-        if (completed.threwException()) {
-            throw new TaskException(completed.getException());
+        R result = null;
+        try {
+            result = (R) PAFuture.getFutureValue(aomaster.waitOneResult(null));
+        } catch (RuntimeException e) {
+            Throwable texp = findTaskException(e);
+            if (texp != null) {
+                throw (TaskException) texp;
+            } else
+                throw e;
         }
 
-        R obj = completed.getResult();
-        if (obj != null) {
-            return obj;
-        }
-
-        return null;
+        return result;
     }
 
     public void clear() {
         aomaster.clear();
+    }
+
+    private Throwable findTaskException(Throwable e) {
+        if (e instanceof TaskException) {
+            return e;
+        }
+        if (e.getCause() != null) {
+            return findTaskException(e.getCause());
+        } else {
+            return null;
+        }
     }
 
 }

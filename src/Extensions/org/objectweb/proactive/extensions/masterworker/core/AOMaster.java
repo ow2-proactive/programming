@@ -51,9 +51,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Master;
+import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.*;
 import org.objectweb.proactive.extensions.masterworker.util.TaskID;
 import org.objectweb.proactive.extensions.masterworker.util.TaskQueue;
@@ -89,7 +89,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /** is the master terminated */
     private boolean terminated;
 
-    /** is the master in the process of clearing all activity ? **/
+    /** is the master in the process of clearing all activity ? * */
     private boolean isClearing;
 
     // Active objects references :
@@ -123,7 +123,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /** Group of cleared workers */
     private Set<Worker> clearedWorkers;
 
-    /** Names of workers which have been spawned **/
+    /** Names of workers which have been spawned * */
     private Set<String> spawnedWorkerNames;
     private HashMap<String, HashSet<String>> workersDependencies;
     private HashMap<String, String> workersDependenciesRev;
@@ -171,7 +171,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /** VN Name of the master (if any) */
     private String masterVNNAme;
 
-    /** Filters **/
+    /** Filters * */
     private final FindNotWaitAndTerminateFilter notWaitOrTerminateFilter = new FindNotWaitAndTerminateFilter();
     private final FindWaitFilter findWaitFilter = new FindWaitFilter();
     private final IsClearingFilter clearingFilter = new IsClearingFilter();
@@ -185,7 +185,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /**
      * Creates the master with the initial memory of the workers
      *
-     * @param memoryFactory factory which will create memory for each new workers
+     * @param memoryFactory       factory which will create memory for each new workers
      * @param masterDescriptorURL descriptor used to deploy the master (if any)
      * @param applicationUsed     GCMapplication used to deploy the master (if any)
      * @param masterVNNAme        VN Name of the master (if any)
@@ -461,7 +461,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     }
 
     /** {@inheritDoc} */
-    public boolean isEmpty(String originatorName) throws IsClearingException {
+    public boolean isEmpty(String originatorName) throws IsClearingError {
         if (originatorName == null) {
             return (resultQueue.isEmpty() && pendingTasks.isEmpty());
         } else {
@@ -477,7 +477,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         }
     }
 
-    public int countPending(String originatorName) throws IsClearingException {
+    public int countPending(String originatorName) throws IsClearingError {
         if (originatorName == null) {
             return resultQueue.countPendingResults();
         } else {
@@ -881,7 +881,14 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
 
     /** {@inheritDoc} */
     public void solveIntern(String originatorName, List<? extends Task<? extends Serializable>> tasks)
-            throws IsClearingException {
+            throws IsClearingError {
+        if (debug) {
+            if (originatorName == null) {
+                logger.debug("solve method received from main client");
+            } else {
+                logger.debug("solve method received from " + originatorName);
+            }
+        }
         if (isClearing) {
             clearingCallFromSpawnedWorker(originatorName);
         }
@@ -891,7 +898,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
 
     /** {@inheritDoc} */
     public void setResultReceptionOrder(final String originatorName, final SubMaster.OrderingMode mode)
-            throws IsClearingException {
+            throws IsClearingError {
         if (originatorName == null) {
             resultQueue.setMode(mode);
         } else {
@@ -914,16 +921,17 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /**
      * When the master is clearing
      * Throws an exception to workers waiting for an answer from the master
+     *
      * @param originator worker waiting
-     * @throws IsClearingException to notify that it's clearing
+     * @throws IsClearingError to notify that it's clearing
      */
-    private void clearingCallFromSpawnedWorker(String originator) throws IsClearingException {
+    private void clearingCallFromSpawnedWorker(String originator) throws IsClearingError {
         if (debug) {
             logger.debug(originator + " is cleared");
         }
         workersActivity.remove(originator);
         spawnedWorkerNames.remove(originator);
-        throw new IsClearingException();
+        throw new IsClearingError();
     }
 
     /**
@@ -991,13 +999,15 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     }
 
     /** {@inheritDoc} */
-    public List<ResultIntern<Serializable>> waitAllResults(String originatorName) throws TaskException {
+    public List<Serializable> waitAllResults(String originatorName) throws TaskException {
+        List<Serializable> results = null;
+        List<ResultIntern<Serializable>> completed = null;
         if (originatorName == null) {
             if (debug) {
                 logger.debug("All results received by the main client.");
             }
 
-            return resultQueue.getAll();
+            completed = resultQueue.getAll();
         } else {
             if (isClearing) {
                 clearingCallFromSpawnedWorker(originatorName);
@@ -1006,17 +1016,28 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 logger.debug("All results received by " + originatorName);
             }
             if (subResultQueues.containsKey(originatorName)) {
-                return subResultQueues.get(originatorName).getAll();
+                completed = subResultQueues.get(originatorName).getAll();
 
             } else
                 throw new IllegalArgumentException("Unknown originator: " + originatorName);
 
         }
+        results = new ArrayList<Serializable>(completed.size());
+        for (ResultIntern<Serializable> res : completed) {
+            if (res.threwException()) {
+                throw new RuntimeException(new TaskException(res.getException()));
+            }
+
+            results.add(res.getResult());
+        }
+        return results;
+
     }
 
     /** {@inheritDoc} */
-    public List<ResultIntern<Serializable>> waitKResults(final String originatorName, final int k)
-            throws TaskException {
+    public List<Serializable> waitKResults(final String originatorName, final int k) {
+        List<Serializable> results = new ArrayList<Serializable>(k);
+        List<ResultIntern<Serializable>> completed = null;
         if (originatorName == null) {
 
             if ((resultQueue.countPendingResults() + resultQueue.countAvailableResults()) < k) {
@@ -1029,8 +1050,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 logger.debug("" + k + " results received by the main client.");
 
             }
-
-            return resultQueue.getNextK(k);
+            completed = resultQueue.getNextK(k);
         } else {
             if (isClearing) {
                 clearingCallFromSpawnedWorker(originatorName);
@@ -1046,41 +1066,50 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 if (debug) {
                     logger.debug("" + k + " results received by " + originatorName);
                 }
-
-                return rq.getNextK(k);
+                completed = rq.getNextK(k);
             } else
                 throw new IllegalArgumentException("Unknown originator: " + originatorName);
 
         }
+        for (ResultIntern<Serializable> res : completed) {
+            if (res.threwException()) {
+                throw new RuntimeException(new TaskException(res.getException()));
+            }
+
+            results.add(res.getResult());
+        }
+        return results;
     }
 
     /** {@inheritDoc} */
-    public ResultIntern<Serializable> waitOneResult(String originatorName) throws TaskException {
+    public Serializable waitOneResult(String originatorName) throws TaskException {
+        ResultIntern<Serializable> res = null;
         if (originatorName == null) {
 
-            ResultIntern<Serializable> res = resultQueue.getNext();
+            res = resultQueue.getNext();
 
             if (debug) {
                 logger.debug("Result of task " + res.getId() + " received by the main client.");
             }
 
-            return res;
         } else {
             if (isClearing) {
                 clearingCallFromSpawnedWorker(originatorName);
             }
             if (subResultQueues.containsKey(originatorName)) {
-                ResultIntern<Serializable> res = subResultQueues.get(originatorName).getNext();
+                res = subResultQueues.get(originatorName).getNext();
 
                 if (debug) {
                     logger.debug("Result of task " + res.getId() + " received by " + originatorName);
                 }
 
-                return res;
             } else
                 throw new IllegalArgumentException("Unknown originator: " + originatorName);
-
         }
+        if (res.threwException()) {
+            throw new RuntimeException(new TaskException(res.getException()));
+        }
+        return res.getResult();
     }
 
     /**

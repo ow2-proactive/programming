@@ -158,13 +158,18 @@ public class ResultQueue<R extends Serializable> implements Serializable {
      */
     public List<ResultIntern<R>> getAll() {
         if (areAllResultsAvailable()) {
-            List<ResultIntern<R>> answer = new ArrayList<ResultIntern<R>>();
+
+            int size = 0;
+
             Iterator<ResultIntern<R>> it;
             if (mode == Master.COMPLETION_ORDER) {
                 it = unorderedResults.iterator();
+                size = unorderedResults.size();
             } else {
                 it = orderedResults.iterator();
+                size = orderedResults.size();
             }
+            List<ResultIntern<R>> answer = new ArrayList<ResultIntern<R>>(size);
             while (it.hasNext()) {
                 ResultIntern<R> res = it.next();
                 answer.add(res);
@@ -212,7 +217,7 @@ public class ResultQueue<R extends Serializable> implements Serializable {
      */
     public List<ResultIntern<R>> getNextK(final int k) {
         if (countAvailableResults() >= k) {
-            List<ResultIntern<R>> answer = new ArrayList<ResultIntern<R>>();
+            List<ResultIntern<R>> answer = new ArrayList<ResultIntern<R>>(k);
             Iterator<ResultIntern<R>> it;
             if (mode == Master.COMPLETION_ORDER) {
                 it = unorderedResults.iterator();

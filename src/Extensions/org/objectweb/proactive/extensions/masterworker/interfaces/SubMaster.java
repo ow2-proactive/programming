@@ -58,7 +58,6 @@ public interface SubMaster<T extends Task<R>, R extends Serializable> {
      * <b>Warning</b>: the master keeps a track of task objects that have been submitted to it and which are currently computing.<br>
      * Submitting two times the same task object without waiting for the result of the first computation is not allowed.
      * @param tasks list of tasks
-     * @throws org.objectweb.proactive.extensions.masterworker.TaskAlreadySubmittedException if a task is submitted twice
      */
     void solve(List<T> tasks);
 

@@ -31,7 +31,6 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
 
     private SubMasterImpl submaster;
     private TaskIntern<Serializable> task;
-    private String parentName;
 
     /**
      * ProActive no-arg constructor
@@ -86,7 +85,10 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
             }
 
             resultObj = task.run(memory, submaster);
-        } catch (IsClearingException ex) {
+            if (debug) {
+                logger.debug(name + " task " + task.getId() + " is finished");
+            }
+        } catch (IsClearingError ex) {
             gotCancelled = true;
 
         } catch (Exception e) {
