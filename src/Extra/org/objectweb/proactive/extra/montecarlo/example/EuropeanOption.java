@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Enumeration;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
@@ -49,18 +50,22 @@ public class EuropeanOption implements EngineTask {
         for (int i = 0; i < M; i++) {
             sets.add(new GeometricBrownianMotion(spotPrice, interestRate, volatilityRate, maturityDate, N));
         }
-        ArrayList<Double> simulatedPrice = null;
+        Enumeration<double[]> simulatedPriceList = null;
         try {
-            simulatedPrice = simulator.solve(sets);
+            simulatedPriceList = simulator.solve(sets);
         } catch (TaskException e) {
             throw new RuntimeException(e);
         }
 
         double payoffCall = 0;
         double payoffPut = 0;
-        for (int j = 0; j < N * M; j++) {
-            payoffCall += Math.max(simulatedPrice.get(j) - this.strikePrice, 0);
-            payoffPut += Math.max(this.strikePrice - simulatedPrice.get(j), 0);
+        int counter = 1;
+        while (simulatedPriceList.hasMoreElements()) {
+            double[] simulatedPrice = simulatedPriceList.nextElement();
+            for (int j = 0; j < N; j++) {
+                payoffCall += Math.max(simulatedPrice[j] - this.strikePrice, 0);
+                payoffPut += Math.max(this.strikePrice - simulatedPrice[j], 0);
+            }
         }
 
         double call, put;
@@ -75,7 +80,7 @@ public class EuropeanOption implements EngineTask {
         URL descriptor = EuropeanOption.class.getResource("WorkersApplication.xml");
         PAMonteCarlo mc = new PAMonteCarlo(descriptor, null, "Workers");
 
-        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 1000, 1000);
+        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 10000, 1000);
         double[] price = (double[]) mc.run(option);
         System.out.println("Call: " + price[0] + " Put : " + price[1]);
         mc.terminate();

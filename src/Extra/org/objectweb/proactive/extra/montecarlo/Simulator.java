@@ -4,6 +4,7 @@ import org.objectweb.proactive.extensions.masterworker.TaskException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Enumeration;
 
 
 /**
@@ -21,5 +22,5 @@ public interface Simulator {
      * @return a list of double which is a concatenation of each list of double produced by each experience set. The order of the ouput list is guarantied to be coherent with the order of the experience list.
      * @throws TaskException if an exception occured inside the user code
      */
-    public ArrayList<Double> solve(List<ExperienceSet> experienceSets) throws TaskException;
+    public Enumeration<double[]> solve(List<ExperienceSet> experienceSets) throws TaskException;
 }

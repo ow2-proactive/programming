@@ -7,6 +7,8 @@ import org.objectweb.proactive.extra.montecarlo.Simulator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Enumeration;
+import java.util.LinkedList;
 
 
 /**
@@ -16,27 +18,43 @@ import java.util.List;
  */
 public class SimulatorImpl implements Simulator {
 
-    SubMaster<ExperienceTask, ArrayList<Double>> master;
+    SubMaster<ExperienceTask, double[]> master;
 
     public SimulatorImpl(SubMaster master) {
         this.master = master;
     }
 
-    public ArrayList<Double> solve(List<ExperienceSet> experienceSets) throws TaskException {
-        ArrayList<ExperienceTask> adpaterTasks = new ArrayList<ExperienceTask>(experienceSets.size());
+    public Enumeration<double[]> solve(List<ExperienceSet> experienceSets) throws TaskException {
+        ArrayList<ExperienceTask> adapterTasks = new ArrayList<ExperienceTask>(experienceSets.size());
         for (ExperienceSet eset : experienceSets) {
-            adpaterTasks.add(new ExperienceTask(eset));
+            adapterTasks.add(new ExperienceTask(eset));
         }
-        master.solve(adpaterTasks);
-        List<ArrayList<Double>> results = master.waitAllResults();
-        int bigsize = 0;
-        for (ArrayList<Double> chunk : results) {
-            bigsize += chunk.size();
+        master.setResultReceptionOrder(SubMaster.COMPLETION_ORDER);
+        master.solve(adapterTasks);
+        return new OutputEnumeration();
+    }
+
+    public class OutputEnumeration implements Enumeration<double[]> {
+
+        private LinkedList<double[]> buffer = new LinkedList<double[]>();
+
+        public OutputEnumeration() {
+
         }
-        ArrayList<Double> finalResults = new ArrayList<Double>(bigsize);
-        for (ArrayList<Double> chunk : results) {
-            finalResults.addAll(chunk);
+
+        public boolean hasMoreElements() {
+            return buffer.size() > 0 || !master.isEmpty();
         }
-        return finalResults;
+
+        public double[] nextElement() {
+            if (buffer.isEmpty()) {
+                try {
+                    buffer.addAll(master.waitSomeResults());
+                } catch (TaskException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return buffer.poll();
+        }
     }
 }

@@ -28,6 +28,7 @@ public class ExecutorImpl implements Executor {
         for (EngineTask etask : engineTasks) {
             adapterTasks.add(new EngineTaskAdapter(etask));
         }
+        master.setResultReceptionOrder(SubMaster.SUBMISSION_ORDER);
         master.solve(adapterTasks);
         return master.waitAllResults();
     }

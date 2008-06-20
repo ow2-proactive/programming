@@ -23,5 +23,5 @@ public interface ExperienceSet extends Serializable {
      * @param rng random number generator
      * @return a list of double values
      */
-    ArrayList<Double> simulate(final Random rng);
+    double[] simulate(final Random rng);
 }

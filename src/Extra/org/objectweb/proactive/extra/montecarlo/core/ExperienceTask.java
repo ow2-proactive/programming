@@ -13,7 +13,7 @@ import java.util.Random;
  *
  * @author The ProActive Team
  */
-public class ExperienceTask implements Task<ArrayList<Double>> {
+public class ExperienceTask implements Task<double[]> {
 
     private ExperienceSet exp;
 
@@ -21,7 +21,7 @@ public class ExperienceTask implements Task<ArrayList<Double>> {
         this.exp = exp;
     }
 
-    public ArrayList<Double> run(WorkerMemory memory) throws Exception {
+    public double[] run(WorkerMemory memory) throws Exception {
         final Random random = (Random) memory.load("rng");
         return exp.simulate(random);
     }

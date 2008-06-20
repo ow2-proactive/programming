@@ -23,7 +23,6 @@ public class MersenneTwisterRNGFactory implements RandomNumberGeneratorFactory, 
     public Random createRandomNumberGenerator() {
         // TODO this is a naive implementation, LF generators have the property that two successive values are well separated, thus we use these successive values for seeding a MT generator.
         long seed = (long) ((seedGenerator.raw() * 2.0 - 1.0) * Integer.MAX_VALUE);
-        System.out.println(seed);
         return new MersenneTwisterFast(seed);
     }
 

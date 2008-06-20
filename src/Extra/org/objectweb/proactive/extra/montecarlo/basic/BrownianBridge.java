@@ -35,9 +35,9 @@ public class BrownianBridge implements ExperienceSet {
      * The Brownian Bridge is used to generate new samples between two known samples of a Brownian motion path.
      * i.e generate sample at time t using sample at time 0 and at T, with 0<t<T
      */
-    public ArrayList<Double> simulate(Random rng) {
-        final ArrayList<Double> answer = new ArrayList<Double>(1);
-        answer.add(w0 + (t / T) * (wT - w0) + Math.sqrt(t * (T - t) / T) * rng.nextGaussian());
+    public double[] simulate(Random rng) {
+        final double[] answer = new double[1];
+        answer[0] = w0 + (t / T) * (wT - w0) + Math.sqrt(t * (T - t) / T) * rng.nextGaussian();
         return answer;
     }
 

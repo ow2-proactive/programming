@@ -24,13 +24,12 @@ public class GeometricBrownianMotion implements ExperienceSet {
         this.N = N;
     }
 
-    public ArrayList<Double> simulate(Random rng) {
-        ArrayList<Double> answer = new ArrayList<Double>(N);
+    public double[] simulate(Random rng) {
+        double[] answer = new double[N];
         for (int i = 0; i < N; i++) {
-            answer.add(s0 *
-                Math.exp((mu - 0.5 * sigma * sigma) * t + sigma * Math.sqrt(t) * rng.nextGaussian()));
+            answer[i] = s0 *
+                Math.exp((mu - 0.5 * sigma * sigma) * t + sigma * Math.sqrt(t) * rng.nextGaussian());
         }
-
         return answer;
     }
 }
