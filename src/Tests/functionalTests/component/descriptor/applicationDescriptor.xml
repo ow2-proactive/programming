@@ -9,8 +9,7 @@
 		<javaPropertyVariable name="java.home"/>
 
 		<descriptorDefaultVariable name="deploymentDescriptor" value="../../_CONFIG/localhost/generic.xml" />
-		<descriptorDefaultVariable name="jvmargDefinedByTest" value=" -Djava.security.policy=/user/cdalmass/home/workspace/ProActiveTrunk/scripts/proactive.java.policy -Dproactive.classloader=true"/>
-		<!-- -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8012 -->
+		<descriptorDefaultVariable name="jvmargDefinedByTest" value=" "/>
 	</environment>
 	
 	<application>
