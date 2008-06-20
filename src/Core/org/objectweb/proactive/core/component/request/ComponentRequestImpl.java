@@ -183,13 +183,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                 e);
         } catch (java.lang.reflect.InvocationTargetException e) {
             exception = e.getTargetException();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Serve method " + methodCall.getReifiedMethod().getName() + " failed: ", e);
-            } else {
-                logger.info("Serve method " + methodCall.getReifiedMethod().getName() +
-                    " failed; throws exception with the following message:" + e.getMessage() +
-                    " Activate debug logger level for more information.");
-            }
+            logger.debug("Serve method " + methodCall.getReifiedMethod().getName() + " failed: ", e);
 
             if (isOneWay) {
                 throw new ServeException("serve method " + methodCall.getReifiedMethod().toString() +
