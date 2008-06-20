@@ -307,28 +307,6 @@ public class PAFuture {
     }
 
     /**
-     * Register a method in the calling active object to be called when the specified future is
-     * updated. The registered method takes a java.util.concurrent.Future as parameter.
-     * 
-     * @param future
-     *            the future to watch
-     * @param methodName
-     *            the name of the method to call on the current active object
-     * @throws IllegalArgumentException
-     *             if the first argument is not a future or if the method could not be found
-     */
-    public static void addActionOnFuture(Object future, String methodName) {
-        FutureProxy f;
-        try {
-            f = (FutureProxy) ((StubObject) future).getProxy();
-        } catch (ClassCastException e) {
-            throw new IllegalArgumentException("Expected a future, got a " + future.getClass());
-        }
-
-        f.addCallback(methodName);
-    }
-
-    /**
      * Add a future to the list of monitored future. This is automatically done when waiting a
      * future. If the active object serving the method for this future cannot be pinged, the future
      * is updated with a RuntimeException.
