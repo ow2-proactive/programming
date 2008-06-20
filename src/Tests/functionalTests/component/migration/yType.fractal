@@ -3,6 +3,6 @@
 
 <definition name="functionalTests.component.migration.yType">
 
-  <interface signature="functionalTests.component.migration.B" role="server" name="b" cardinality="gathercast" />
+<!--  <interface signature="functionalTests.component.migration.B" role="server" name="b" cardinality="gathercast" /> -->
   <interface signature="functionalTests.component.migration.C" role="client" name="c" cardinality="multicast" contingency="optional" />
 </definition>

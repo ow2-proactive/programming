@@ -4,14 +4,14 @@
 <definition name="functionalTests.component.migration.test" extends="functionalTests.component.migration.testType">
 	
 
-   <interface name="a" signature="functionalTests.component.migration.A" role="server"/>
+<!--   <interface name="a" signature="functionalTests.component.migration.A" role="server"/> -->
    <interface name="e" signature="functionalTests.component.migration.E" role="server" cardinality="collection" />
    
   <component name="x" definition="functionalTests.component.migration.x"/>
   <component name="y" definition="functionalTests.component.migration.y"/>
   <component name="z" definition="functionalTests.component.migration.z"/>
 
-  <binding client="this.a" server="y.b"/>
+<!--  <binding client="this.a" server="y.b"/> -->
   <binding client="this.e01" server="x.e"/>
   <binding client="y.c" server="z.d"/>
   <controller desc="composite"/>

@@ -90,9 +90,9 @@ public class DummyAO implements Serializable {
 
         Fractal.getLifeCycleController(test).startFc();
         StringWrapper result = new StringWrapper("");
-        for (int i = 0; i < 2; i++) {
-            result = ((A) test.getFcInterface("a")).foo(new StringWrapper("hello world !"));
-        }
+        //        for (int i = 0; i < 2; i++) {
+        //            result = ((A) test.getFcInterface("a")).foo(new StringWrapper("hello world !"));
+        //        }
 
         Component[] subComponents = Fractal.getContentController(test).getFcSubComponents();
         for (int i = 0; i < subComponents.length; i++) {
@@ -105,10 +105,10 @@ public class DummyAO implements Serializable {
         }
 
         // check singleton - gathercast - multicast interfaces
-        for (int i = 0; i < 100; i++) {
-            result = ((A) test.getFcInterface("a")).foo(new StringWrapper("hello world !"));
-        }
-        Assert.assertEquals("hello world !", result.stringValue());
+        //        for (int i = 0; i < 100; i++) {
+        //            result = ((A) test.getFcInterface("a")).foo(new StringWrapper("hello world !"));
+        //        }
+        //        Assert.assertEquals("hello world !", result.stringValue());
 
         // check collection interfaces
         result = ((E) test.getFcInterface("e01")).gee(new StringWrapper("hello world !"));
@@ -165,9 +165,9 @@ public class DummyAO implements Serializable {
 
         Fractal.getLifeCycleController(test).startFc();
         StringWrapper result = new StringWrapper("");
-        for (int i = 0; i < 2; i++) {
-            result = ((A) test.getFcInterface("a")).foo(new StringWrapper("hello world !"));
-        }
+        //        for (int i = 0; i < 2; i++) {
+        //            result = ((A) test.getFcInterface("a")).foo(new StringWrapper("hello world !"));
+        //        }
 
         Component[] subComponents = Fractal.getContentController(test).getFcSubComponents();
         for (int i = 0; i < subComponents.length; i++) {
@@ -180,10 +180,10 @@ public class DummyAO implements Serializable {
         }
 
         // check singleton - gathercast - multicast interfaces
-        for (int i = 0; i < 100; i++) {
-            result = ((A) test.getFcInterface("a")).foo(new StringWrapper("hello world !"));
-        }
-        Assert.assertEquals("hello world !", result.stringValue());
+        //        for (int i = 0; i < 100; i++) {
+        //            result = ((A) test.getFcInterface("a")).foo(new StringWrapper("hello world !"));
+        //        }
+        //        Assert.assertEquals("hello world !", result.stringValue());
 
         // check collection interfaces
         result = ((E) test.getFcInterface("e01")).gee(new StringWrapper("hello world !"));
