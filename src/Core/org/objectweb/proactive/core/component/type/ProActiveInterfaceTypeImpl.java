@@ -117,8 +117,10 @@ public class ProActiveInterfaceTypeImpl implements ProActiveInterfaceType, Seria
             Class<?> c = Class.forName(signature);
             return StreamInterface.class.isAssignableFrom(c);
         } catch (ClassNotFoundException e) {
-            throw new InstantiationException(
+            InstantiationException ie = new InstantiationException(
                 "cannot find interface defined in component interface signature : " + e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 
@@ -140,8 +142,10 @@ public class ProActiveInterfaceTypeImpl implements ProActiveInterfaceType, Seria
                 }
             }
         } catch (ClassNotFoundException e) {
-            throw new InstantiationException(
+            InstantiationException ie = new InstantiationException(
                 "cannot find interface defined in component interface signature : " + e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 
@@ -180,8 +184,10 @@ public class ProActiveInterfaceTypeImpl implements ProActiveInterfaceType, Seria
                 }
             }
         } catch (ClassNotFoundException e) {
-            throw new InstantiationException(
+            InstantiationException ie = new InstantiationException(
                 "cannot find interface defined in component interface signature : " + e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 

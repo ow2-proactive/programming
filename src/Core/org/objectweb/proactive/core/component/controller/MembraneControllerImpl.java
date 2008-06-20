@@ -123,7 +123,10 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
             }
         } catch (NoSuchInterfaceException e) {
 
-            /*Without a life cycle controller, the default activity of a GCM component does not work*/
+            /*
+             * Without a life cycle controller, the default activity of a GCM component does not
+             * work
+             */
         }
         checkMembraneIsStarted(component);
         ProActiveComponent ownerRepresentative = owner.getRepresentativeOnThis();
@@ -135,7 +138,10 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
         try {
             name = Fractal.getNameController(component).getFcName();
         } catch (NoSuchInterfaceException e) {
-            throw new IllegalContentException("The component has to implement the name-controller interface");
+            IllegalContentException ice = new IllegalContentException(
+                "The component has to implement the name-controller interface");
+            ice.initCause(e);
+            throw ice;
         }
 
         if (nfcomponents.containsKey(name)) {
@@ -143,16 +149,23 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                 "The name of the component is already assigned to an existing non functional component");
         }
 
-        if (!((ProActiveComponentRepresentativeImpl) ownerRepresentative).isPrimitive()) { /*The host component is composite*/
+        if (!((ProActiveComponentRepresentativeImpl) ownerRepresentative).isPrimitive()) { /*
+         * The host component is composite
+         */
             Component[] fcomponents = null;
             try {
                 fcomponents = Fractal.getContentController(owner).getFcSubComponents();
             } catch (NoSuchInterfaceException e) {
-                throw new IllegalContentException(
+                IllegalContentException ice = new IllegalContentException(
                     "The host component seems to be a composite without content-controller interface!!!");
+                ice.initCause(e);
+                throw ice;
             }
 
-            for (Component c : fcomponents) { /*Check that the name of the component is not assigned to an existing functional one*/
+            for (Component c : fcomponents) { /*
+             * Check that the name of the component is not
+             * assigned to an existing functional one
+             */
                 try {
                     try {
                         if (Fractive.getMembraneController(c).getMembraneState().equals(
@@ -170,15 +183,21 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                     }
                 } catch (NoSuchInterfaceException e) {
 
-                    /*Do nothing : if the component does not have a name-controller interface, then it can not be bound with a non functional component*/
+                    /*
+                     * Do nothing : if the component does not have a name-controller interface, then
+                     * it can not be bound with a non functional component
+                     */
                 }
             }
-        } /*end of case with composite*/
+        } /* end of case with composite */
         try {
             ((ProActiveSuperController) Fractal.getSuperController(component)).addParent(ownerRepresentative);
         } catch (NoSuchInterfaceException e) {
 
-            /*Once again, nothing to do, if the component  doesn't have the super-controller, it means that it will not reference the host component*/
+            /*
+             * Once again, nothing to do, if the component doesn't have the super-controller, it
+             * means that it will not reference the host component
+             */
         }
 
         //If the component has the appropriate interface, give it a reference on the host component
@@ -545,7 +564,7 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
 
     public void removeNFSubComponent(Component component) throws IllegalContentException,
             IllegalLifeCycleException, NoSuchComponentException {
-        try { /*Check the lifecycle of the membrane and the component*/
+        try { /* Check the lifecycle of the membrane and the component */
             if (membraneState.equals(MEMBRANE_STARTED) ||
                 Fractal.getLifeCycleController(owner).getFcState().equals(LifeCycleController.STARTED)) {
                 throw new IllegalLifeCycleException(
@@ -553,15 +572,17 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
             }
         } catch (NoSuchInterfaceException e) {
 
-            /*Without a life cycle controller, a GCM component does not work*/
+            /* Without a life cycle controller, a GCM component does not work */
         }
         checkMembraneIsStarted(component);
         String componentname = null;
         try {
             componentname = Fractal.getNameController(component).getFcName();
         } catch (NoSuchInterfaceException i) {
-            throw new IllegalContentException(
+            IllegalContentException ice = new IllegalContentException(
                 "NF components are identified by their names. The component to remove does not have any.");
+            ice.initCause(i);
+            throw ice;
         }
         ProActiveComponent ownerRepresentative = owner.getRepresentativeOnThis();
 
@@ -586,7 +607,7 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                     .removeParent(ownerRepresentative);
         } catch (NoSuchInterfaceException e) {
 
-            /*No superController*/
+            /* No superController */
         }
         //Here, when removing a component on which the host holds bindings, remove those bindings
         nfBindings.removeServerAliasBindingsOn(componentname);
@@ -677,10 +698,11 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                                 itfT.getFcItfName() + " is not.");
                     }
                 } catch (NoSuchInterfaceException e) {
-
-                    throw new IllegalLifeCycleException("The interface " + itfT.getFcItfName() +
+                    IllegalLifeCycleException ilce = new IllegalLifeCycleException("The interface " +
+                        itfT.getFcItfName() +
                         " declared in the non-functional type was not generated on the server side");
-
+                    ilce.initCause(e);
+                    throw ilce;
                 }
             }
 
@@ -691,7 +713,10 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                 Fractal.getLifeCycleController(c).startFc();
             } catch (NoSuchInterfaceException nosi) {
 
-                /* If the component has no lifecycle controller, then it can not be started or stopped*/
+                /*
+                 * If the component has no lifecycle controller, then it can not be started or
+                 * stopped
+                 */
             }
         }
         membraneState = MEMBRANE_STARTED;
@@ -731,7 +756,7 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                     (Fractal.getLifeCycleController(c).getFcState().compareTo(LifeCycleController.STOPPED) == 0);
             } catch (NoSuchInterfaceException e) {
 
-                /*Without a lifecycle controller, the componnet has no lifecycle state*/
+                /* Without a lifecycle controller, the componnet has no lifecycle state */
             }
         }
 
@@ -788,7 +813,10 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
     private ComponentAndInterface getComponentAndInterface(String itf) throws NoSuchInterfaceException,
             NoSuchComponentException {
         String[] itfTab = itf.split("\\.", 2);
-        if (itfTab.length == 1) { /*The interface tab has only one element : if it exists, it is an interface of the membrane*/
+        if (itfTab.length == 1) { /*
+         * The interface tab has only one element : if it exists, it is
+         * an interface of the membrane
+         */
             if (itfTab[0].endsWith("-controller")) {
                 Interface i = (Interface) owner.getFcInterface(itfTab[0]);
 
@@ -797,7 +825,7 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                 throw new NoSuchInterfaceException("The specified interface" + itfTab[0] +
                     "is not non-functional");
             }
-        } else { /*Normally, component and its interface are specified*/
+        } else { /* Normally, component and its interface are specified */
             if (itfTab[0].equals("membrane")) {
                 Interface i = (Interface) owner.getFcInterface(itfTab[1]);
                 return new ComponentAndInterface(i);
@@ -809,14 +837,17 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                 }
 
                 if (searchComponent == null) {//The component we are looking for is not in the functional content
-                    searchComponent = getNFcSubComponent(itfTab[0]); /*Is it a non functional component??*/
+                    searchComponent = getNFcSubComponent(itfTab[0]); /*
+                     * Is it a non functional
+                     * component??
+                     */
                     if (searchComponent == null) {
                         throw new NoSuchComponentException("There is no : " + itfTab[0] + " component");
-                    } else { /*The component is non-functional*/
+                    } else { /* The component is non-functional */
                         return new ComponentAndInterface(searchComponent, (Interface) searchComponent
                                 .getFcInterface(itfTab[1]));
                     }
-                } else { /*The component is functional*/
+                } else { /* The component is functional */
                     return new ComponentAndInterface(searchComponent, (Interface) searchComponent
                             .getFcInterface(itfTab[1]));
                 }
@@ -868,9 +899,11 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
                                 itfT.getFcItfName() + " is not.");
                     }
                 } catch (NoSuchInterfaceException e) {
-
-                    throw new IllegalLifeCycleException("The interface " + itfT.getFcItfName() +
+                    IllegalLifeCycleException ilce = new IllegalLifeCycleException("The interface " +
+                        itfT.getFcItfName() +
                         " declared in the non-functional type was not generated on the server side");
+                    ilce.initCause(e);
+                    throw ilce;
                 }
 
             }

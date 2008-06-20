@@ -72,6 +72,7 @@ import org.objectweb.proactive.core.component.controller.ProActiveBindingControl
 import org.objectweb.proactive.core.component.controller.ProActiveContentController;
 import org.objectweb.proactive.core.component.exceptions.InstantiationExceptionListException;
 import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
+import org.objectweb.proactive.core.component.group.ProActiveComponentGroup;
 import org.objectweb.proactive.core.component.identity.ProActiveComponent;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentativeFactory;
@@ -79,7 +80,6 @@ import org.objectweb.proactive.core.component.type.Composite;
 import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
 import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
 import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.component.group.ProActiveComponentGroup;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.Node;
@@ -329,8 +329,10 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
                                 new ContentDescription((String) contentDesc));
                     }
                 } catch (ClassNotFoundException e2) {
-                    throw new InstantiationException("cannot find classe " + contentDesc + " : " +
-                        e2.getMessage());
+                    InstantiationException ie = new InstantiationException("cannot find classe " +
+                        contentDesc + " : " + e2.getMessage());
+                    ie.initCause(e);
+                    throw ie;
                 }
 
             }
@@ -381,8 +383,10 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
                                 new ContentDescription((String) contentDesc));
                     }
                 } catch (ClassNotFoundException e2) {
-                    throw new InstantiationException("cannot find classe " + contentDesc + " : " +
-                        e2.getMessage());
+                    InstantiationException ie = new InstantiationException("cannot find classe " +
+                        contentDesc + " : " + e2.getMessage());
+                    ie.initCause(e);
+                    throw ie;
                 }
 
             }
@@ -436,10 +440,13 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
                     contentDesc, node);
             return nfComponent(type, container);
         } catch (ActiveObjectCreationException e) {
-            e.printStackTrace();
-            throw new InstantiationException(e.getMessage());
+            InstantiationException ie = new InstantiationException(e.getMessage());
+            ie.initCause(e);
+            throw ie;
         } catch (NodeException e) {
-            throw new InstantiationException(e.getMessage());
+            InstantiationException ie = new InstantiationException(e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 
@@ -833,8 +840,10 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
                         "Content can be not null for composite component only if it extends AttributeControler");
                 }
             } catch (ClassNotFoundException e) {
-                throw new InstantiationException("Cannot find interface defined in content : " +
-                    e.getMessage());
+                InstantiationException ie = new InstantiationException(
+                    "Cannot find interface defined in content : " + e.getMessage());
+                ie.initCause(e);
+                throw ie;
             }
         }
 
@@ -969,10 +978,10 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
                         logger.info("Interruption when waiting for thread pool termination.", e);
                     }
                     if (!exceptions.isEmpty()) {
-                        InstantiationException e = new InstantiationException(
+                        InstantiationException ie = new InstantiationException(
                             "Creation of some of the components failed");
-                        e.initCause(new InstantiationExceptionListException(exceptions));
-                        throw e;
+                        ie.initCause(new InstantiationExceptionListException(exceptions));
+                        throw ie;
                     }
                 } else {
                     // component is a composite : it will be
@@ -986,7 +995,9 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
             }
             return componentsList;
         } catch (ClassNotFoundException e) {
-            throw new InstantiationException(e.getMessage());
+            InstantiationException ie = new InstantiationException(e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 
@@ -1085,9 +1096,13 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
                         .info("Active object creation error while creating component; throws exception with the following message: " +
                             e.getMessage() + " Activate debug logger level for more information.");
             }
-            throw new InstantiationException(e.getMessage());
+            InstantiationException ie = new InstantiationException(e.getMessage());
+            ie.initCause(e);
+            throw ie;
         } catch (NodeException e) {
-            throw new InstantiationException(e.getMessage());
+            InstantiationException ie = new InstantiationException(e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 

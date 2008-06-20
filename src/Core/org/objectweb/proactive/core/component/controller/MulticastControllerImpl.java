@@ -168,8 +168,10 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
                 matchingMethods.put(clientSideItfType.getFcItfName(), matchingMethodsForThisClientItf);
             }
         } catch (ClassNotFoundException e) {
-            throw new IllegalBindingException("cannot find class corresponding to given signature " +
-                e.getMessage());
+            IllegalBindingException ibe = new IllegalBindingException(
+                "cannot find class corresponding to given signature " + e.getMessage());
+            ibe.initCause(e);
+            throw ibe;
         }
     }
 

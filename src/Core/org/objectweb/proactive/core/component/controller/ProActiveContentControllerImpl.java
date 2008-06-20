@@ -89,7 +89,7 @@ public class ProActiveContentControllerImpl extends AbstractProActiveController 
 
     /*
      * @see org.objectweb.fractal.api.control.ContentController#getFcInternalInterfaces()
-     *
+     * 
      * in this implementation, the external interfaces are also internal interfaces
      */
     public Object[] getFcInternalInterfaces() {
@@ -147,9 +147,10 @@ public class ProActiveContentControllerImpl extends AbstractProActiveController 
                 try {
                     addFcSubComponent(PAGroup.getGroup(subComponent));
                 } catch (ContentControllerExceptionListException e) {
-                    e.printStackTrace();
-                    throw new IllegalContentException("problem adding a list of component to a composite : " +
-                        e.getMessage());
+                    IllegalContentException ice = new IllegalContentException(
+                        "problem adding a list of component to a composite : " + e.getMessage());
+                    ice.initCause(e);
+                    throw ice;
                 }
                 return;
             }
@@ -195,8 +196,10 @@ public class ProActiveContentControllerImpl extends AbstractProActiveController 
 
             ((ProActiveSuperController) itf).addParent(ref_on_this_component);
         } catch (NoSuchInterfaceException e) {
-            throw new IllegalContentException(
+            IllegalContentException ice = new IllegalContentException(
                 "Cannot add component : cannot find super-controller interface.");
+            ice.initCause(e);
+            throw ice;
         }
     }
 
@@ -234,13 +237,16 @@ public class ProActiveContentControllerImpl extends AbstractProActiveController 
             ((ProActiveSuperController) Fractal.getSuperController(subComponent)).removeParent(subComponent);
         } catch (NoSuchInterfaceException e) {
             fcSubComponents.add(subComponent);
-            throw new IllegalContentException(
+            IllegalContentException ice = new IllegalContentException(
                 "cannot remove component : cannot find super-controller interface");
+            ice.initCause(e);
+            throw ice;
         }
     }
 
     /*
      * Returns all the direct and indirect sub components of the given component.
+     *
      * @param component a component.
      * @return all the direct and indirect sub components of the given component.
      */

@@ -73,7 +73,7 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
  * Implementation of the
  * {@link org.objectweb.fractal.api.control.BindingController BindingController} interface.
  *
- * @author Matthieu Morel
+ * @author The ProActive Team
  *
  */
 public class ProActiveBindingControllerImpl extends AbstractProActiveController implements
@@ -169,7 +169,10 @@ public class ProActiveBindingControllerImpl extends AbstractProActiveController 
                         " is not a subtype of the client interface type " + c.getName());
                 }
             } catch (ClassNotFoundException e) {
-                throw new IllegalBindingException("Cannot find type of interface : " + e.getMessage());
+                IllegalBindingException ibe = new IllegalBindingException("Cannot find type of interface : " +
+                    e.getMessage());
+                ibe.initCause(e);
+                throw ibe;
             }
         }
 
@@ -301,10 +304,11 @@ public class ProActiveBindingControllerImpl extends AbstractProActiveController 
                 controllerLogger.error("could not generate output interceptor for client interface " +
                     clientItfName + " : " + e.getMessage());
 
-                e.printStackTrace();
-                throw new IllegalBindingException(
+                IllegalBindingException ibe = new IllegalBindingException(
                     "could not generate output interceptor for client interface " + clientItfName + " : " +
                         e.getMessage());
+                ibe.initCause(e);
+                throw ibe;
             }
         }
 

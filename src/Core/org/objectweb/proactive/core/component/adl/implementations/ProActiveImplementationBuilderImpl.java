@@ -38,6 +38,7 @@ import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.control.BindingController;
+import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
@@ -267,9 +268,11 @@ public class ProActiveImplementationBuilderImpl implements ProActiveImplementati
                         result = genericFactory.newFcInstance(type, controllerDesc, contentDesc, deploymentVN
                                 .getNode());
                     } catch (NodeException e) {
-                        throw new InstantiationException(
+                        InstantiationException ie = new InstantiationException(
                             "could not instantiate components due to a deployment problem : " +
                                 e.getMessage());
+                        ie.initCause(e);
+                        throw ie;
                     }
                 }
             }
@@ -333,8 +336,10 @@ public class ProActiveImplementationBuilderImpl implements ProActiveImplementati
             return genericFactory.newFcInstanceAsList(type, controllerDesc, contentDesc, virtualNode
                     .getNodes());
         } catch (NodeException e) {
-            throw new InstantiationException(
+            InstantiationException ie = new InstantiationException(
                 "could not instantiate components due to a deployment problem : " + e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 

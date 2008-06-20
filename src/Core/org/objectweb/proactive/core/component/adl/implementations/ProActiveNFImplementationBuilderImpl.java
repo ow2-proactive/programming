@@ -35,6 +35,7 @@ import java.util.Map;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Type;
+import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
@@ -98,8 +99,10 @@ public class ProActiveNFImplementationBuilderImpl extends ProActiveImplementatio
             return genericFactory.newNFcInstanceAsList(type, controllerDesc, contentDesc, virtualNode
                     .getNodes());
         } catch (NodeException e) {
-            throw new InstantiationException(
+            InstantiationException ie = new InstantiationException(
                 "could not instantiate components due to a deployment problem : " + e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 
@@ -121,8 +124,10 @@ public class ProActiveNFImplementationBuilderImpl extends ProActiveImplementatio
             }
             return genericFactory.newNFcInstance(type, controllerDesc, contentDesc, virtualNode.getNode());
         } catch (NodeException e) {
-            throw new InstantiationException(
+            InstantiationException ie = new InstantiationException(
                 "could not instantiate components due to a deployment problem : " + e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 

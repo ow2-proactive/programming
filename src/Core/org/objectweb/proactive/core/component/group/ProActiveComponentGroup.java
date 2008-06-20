@@ -150,8 +150,10 @@ public class ProActiveComponentGroup {
 
             return result;
         } catch (Exception e) {
-            throw new InstantiationException("cannot create group of component representatives : " +
-                e.getMessage());
+            InstantiationException ie = new InstantiationException(
+                "cannot create group of component representatives : " + e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 
@@ -197,8 +199,10 @@ public class ProActiveComponentGroup {
 
             return result;
         } catch (Exception e) {
-            throw new InstantiationException("cannot create group of component representatives : " +
-                e.getMessage());
+            InstantiationException ie = new InstantiationException(
+                "cannot create group of component representatives : " + e.getMessage());
+            ie.initCause(e);
+            throw ie;
         }
     }
 }
