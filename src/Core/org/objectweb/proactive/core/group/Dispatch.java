@@ -3,6 +3,8 @@ package org.objectweb.proactive.core.group;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
 
 /**
  * An annotation for specifying the dispatch operation.
@@ -11,6 +13,7 @@ import java.lang.annotation.RetentionPolicy;
  *
  */
 
+@PublicAPI
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Dispatch {
 

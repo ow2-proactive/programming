@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.proxy.BodyProxy;
 import org.objectweb.proactive.core.mop.Proxy;
@@ -33,6 +34,7 @@ import org.objectweb.proactive.core.mop.StubObject;
  * @author The ProActive Team
  *
  */
+@PublicAPI
 public class DispatchMonitor {
 
     int instance;

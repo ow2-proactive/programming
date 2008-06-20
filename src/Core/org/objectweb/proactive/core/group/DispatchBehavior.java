@@ -2,6 +2,7 @@ package org.objectweb.proactive.core.group;
 
 import java.util.List;
 
+import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.mop.MethodCall;
 
 
@@ -11,6 +12,7 @@ import org.objectweb.proactive.core.mop.MethodCall;
  * @author The ProActive Team
  *
  */
+@PublicAPI
 public interface DispatchBehavior {
 
     /**

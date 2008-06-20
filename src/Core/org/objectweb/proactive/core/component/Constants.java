@@ -30,11 +30,15 @@
  */
 package org.objectweb.proactive.core.component;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
+
 /**
  * Constant strings used throughout the components implementation
  *
  * @author The ProActive Team
  */
+@PublicAPI
 public interface Constants {
     public final static String CONTENT_CONTROLLER = "content-controller";
     public final static String LIFECYCLE_CONTROLLER = "lifecycle-controller";

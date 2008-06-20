@@ -18,11 +18,10 @@ import org.objectweb.proactive.core.group.Dispatch;
 import org.objectweb.proactive.core.group.DispatchMode;
 import org.objectweb.proactive.core.group.ExceptionListException;
 import org.objectweb.proactive.core.group.ProxyForGroup;
-import org.objectweb.proactive.core.group.TaskFactory;
 import org.objectweb.proactive.core.mop.MethodCall;
 
 
-public class CollectiveItfsTaskFactory extends BasicTaskFactory implements TaskFactory {
+public class CollectiveItfsTaskFactory extends BasicTaskFactory {
 
     public CollectiveItfsTaskFactory(ProxyForGroup groupProxy) {
         super(groupProxy);
