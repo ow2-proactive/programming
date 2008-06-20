@@ -87,7 +87,6 @@ import org.objectweb.proactive.core.process.oar.OARSubProcess;
 import org.objectweb.proactive.core.process.pbs.PBSSubProcess;
 import org.objectweb.proactive.core.process.prun.PrunSubProcess;
 import org.objectweb.proactive.core.process.rsh.maprsh.MapRshProcess;
-import org.objectweb.proactive.core.process.unicore.UnicoreProcess;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -704,8 +703,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
                 new DependentProcessSequenceExtractor(node, infrastructureContext);
             } else if (processType.equals(SEQUENTIAL_PROCESS_TAG)) {
                 new SequentialProcessExtractor(node, infrastructureContext);
-            } else if (processType.equals(UNICORE_PROCESS_TAG)) {
-                new UnicoreProcessExtractor(node, infrastructureContext);
             } else if (processType.equals(NG_PROCESS_TAG)) {
                 new NGProcessExtractor(node, infrastructureContext);
             } else if (processType.equals(CLUSTERFORK_PROCESS_TAG)) {
@@ -1396,134 +1393,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
                             gliteProcess.setJobArgument(nodeValue);
                         }
                     }
-                }
-            }
-        }
-    }
-
-    protected class UnicoreProcessExtractor extends ProcessExtractor {
-        public UnicoreProcessExtractor(Node node, Node context) throws XPathExpressionException,
-                SAXException, ProActiveException {
-            super(node, context);
-            UnicoreProcess unicoreProcess = ((UnicoreProcess) targetProcess);
-
-            Node namedItem = node.getAttributes().getNamedItem("jobname");
-            String t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                unicoreProcess.uParam.setUsiteName(t);
-            }
-
-            namedItem = node.getAttributes().getNamedItem("keypassword");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                unicoreProcess.uParam.setKeyPassword(t);
-            }
-
-            namedItem = node.getAttributes().getNamedItem("submitjob");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                unicoreProcess.uParam.setSubmitJob(t);
-            }
-
-            namedItem = node.getAttributes().getNamedItem("savejob");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                unicoreProcess.uParam.setSaveJob(t);
-            }
-
-            NodeList childNodes = node.getChildNodes();
-            for (int i = 0; i < childNodes.getLength(); ++i) {
-                Node childNode = childNodes.item(i);
-                if (childNode.getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-
-                String nodeName = childNode.getNodeName();
-                if (nodeName.equals(UNICORE_DIR_PATH_TAG)) {
-                    String path = getPath(childNode);
-                    unicoreProcess.uParam.setUnicoreDir(path);
-                } else if (nodeName.equals(UNICORE_KEYFILE_PATH_TAG)) {
-                    String path = getPath(childNode);
-                    unicoreProcess.uParam.setKeyFilePath(path);
-                } else if (nodeName.equals(UNICORE_OPTIONS_TAG)) {
-                    NodeList grandChildren = childNode.getChildNodes();
-                    for (int j = 0; j < grandChildren.getLength(); ++j) {
-                        Node grandChildNode = grandChildren.item(j);
-                        if (grandChildNode.getNodeType() != Node.ELEMENT_NODE) {
-                            continue;
-                        }
-
-                        String grandChildNodeName = grandChildNode.getNodeName();
-                        if (grandChildNodeName.equals(UNICORE_USITE_TAG)) {
-                            new UnicoreUSiteExtractor(grandChildNode, unicoreProcess);
-                        } else if (grandChildNodeName.equals(UNICORE_VSITE_TAG)) {
-                            new UnicoreVSiteExtractor(grandChildNode, unicoreProcess);
-                        }
-                    }
-                }
-            }
-        }
-
-        protected class UnicoreUSiteExtractor {
-            public UnicoreUSiteExtractor(Node grandChildNode, UnicoreProcess unicoreProcess)
-                    throws SAXException {
-                Node namedItem = grandChildNode.getAttributes().getNamedItem("name");
-                String t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setUsiteName(t);
-                }
-
-                namedItem = grandChildNode.getAttributes().getNamedItem("type");
-                t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setUsiteType(t);
-                }
-
-                namedItem = grandChildNode.getAttributes().getNamedItem("url");
-                t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setUsiteUrl(t);
-                }
-            }
-        }
-
-        protected class UnicoreVSiteExtractor {
-            public UnicoreVSiteExtractor(Node grandChildNode, UnicoreProcess unicoreProcess)
-                    throws SAXException {
-                Node namedItem = grandChildNode.getAttributes().getNamedItem("name");
-                String t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setVsiteName(t);
-                }
-
-                namedItem = grandChildNode.getAttributes().getNamedItem("nodes");
-                t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setVsiteNodes(Integer.parseInt(t));
-                }
-
-                namedItem = grandChildNode.getAttributes().getNamedItem("processors");
-                t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setVsiteProcessors(Integer.parseInt(t));
-                }
-
-                namedItem = grandChildNode.getAttributes().getNamedItem("memory");
-                t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setVsiteMemory(Integer.parseInt(t));
-                }
-
-                namedItem = grandChildNode.getAttributes().getNamedItem("runtime");
-                t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setVsiteRuntime(Integer.parseInt(t));
-                }
-
-                namedItem = grandChildNode.getAttributes().getNamedItem("priority");
-                t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    unicoreProcess.uParam.setVsitePriority(t);
                 }
             }
         }

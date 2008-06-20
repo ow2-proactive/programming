@@ -350,36 +350,18 @@
 			<fileset dir="${osgi.manifest.dir}" includes="Manifest.mf" />
 		</concat>
 
-		<if name="isRelease" exists="true">
-			<!-- Extra is not packaged in the release -->
-			<jar manifest="${compile.dir}/Manifest.mf" destfile="${deploy.lib.dir}/ProActive.jar">
-				<fileset dir="${cl.proactive.dir}" includes="**" />
-				<fileset dir="${cl.extensions.dir}" includes="**" />
-				<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
-				<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
-				<indexjars>
-					<fileset dir="${lib.dir}">
-						<include name="*.jar" />
+		<jar manifest="${compile.dir}/Manifest.mf" destfile="${deploy.lib.dir}/ProActive.jar" index="true">
+			<fileset dir="${cl.proactive.dir}" includes="**" />
+			<fileset dir="${cl.extensions.dir}" includes="**" />
+			<fileset dir="${cl.extra.dir}" includes="**" />
+			<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
+			<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
+			<indexjars>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
 				</fileset>
 			</indexjars>
-			</jar>
-
-			<else>
-
-				<jar manifest="${compile.dir}/Manifest.mf" destfile="${deploy.lib.dir}/ProActive.jar" index="true">
-					<fileset dir="${cl.proactive.dir}" includes="**" />
-					<fileset dir="${cl.extensions.dir}" includes="**" />
-					<fileset dir="${cl.extra.dir}" includes="**" />
-					<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
-					<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
-					<indexjars>
-						<fileset dir="${lib.dir}">
-						<include name="*.jar" />
-					</fileset>
-				</indexjars>
-				</jar>
-			</else>
-		</if>
+		</jar>
 
 		<copy todir="${deploy.lib.dir}">
 			<!-- Copy all libs -->
@@ -600,83 +582,6 @@
 	<target name="junit.performance" depends="deploy.all">
 		<junitMacro nodeDescriptor="/functionalTests/descriptor/defaultnodes/Nodes.xml" testsuite="performancesuite"/>
 	</target>
-
-
-
-
-	<!-- ************
-		Release		
-	-->
-
-	<target name="-release.mkdir">
-
-		<!-- Make release directories -->
-		<mkdir dir="${release.dir}" />
-	</target>
-
-	<target name="release.bin" depends="deploy.all, manualPdf, -release.mkdir" description="Binary Release: dist + docs">
-		<tar destfile="${release.dir}/ProActive-bin_${version}.tar" longfile="gnu">
-			<tarfileset dir="${base.dir}" prefix="ProActive_${version}">
-				<include name="dist/**" />
-				<include name="scripts/**" />
-
-				<include name="docs/pdf/**" />
-				<include name="descriptors/**" />
-
-				<include name="LICENSE.txt" />
-				<include name="README.txt" />
-				<include name="README.html" />
-			</tarfileset>
-		</tar>
-
-		<!-- Zip with Jars: PA, PAExamples, required libs, scripts -->
-
-		<zip destfile="${release.dir}/ProActive-bin_${version}.zip">
-			<tarfileset src="${release.dir}/ProActive-bin_${version}.tar" />
-		</zip>
-
-		<bzip2 src="${release.dir}/ProActive-bin_${version}.tar" destfile="${release.dir}/ProActive-bin_${version}.tar.bz2" />
-	</target>
-
-	<target name="release.src" depends="-release.mkdir, manualPdf" description="Source Release: sources + docs">
-		<tar destfile="${release.dir}/ProActive-src_${version}.tar" longfile="gnu">
-			<tarfileset dir="${base.dir}" prefix="ProActive_${version}">
-				<include name="compile/**" />
-				<include name="scripts/**" />
-
-				<include name="descriptors/**" />
-				<include name="docs/pdf/**" />
-				<include name="lib/**" />
-				<include name="daemon/**" />
-				<include name="src/**" />
-				<!-- Extra is not released -->
-				<exclude name="src/Extra/*/**" />
-
-				<include name="ic2d-plugins-src/**" />
-
-				<include name="LICENSE.txt" />
-				<include name="README.txt" />
-				<include name="README.html" />
-			</tarfileset>
-
-		</tar>
-
-		<zip destfile="${release.dir}/ProActive-src_${version}.zip">
-			<tarfileset src="${release.dir}/ProActive-src_${version}.tar" />
-		</zip>
-
-		<bzip2 src="${release.dir}/ProActive-bin_${version}.tar" destfile="${release.dir}/ProActive-bin_${version}.tar.bz2" />
-	</target>
-
-
-	<target name="release" depends="release.bin, release.src" description="Source and Binary Releases" />
-
-
-	<target name="release.all" depends="release" description="Source and Binary Releases" />
-
-
-
-
 
 	<!-- ************
 		Source file handling		

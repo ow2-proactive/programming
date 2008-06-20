@@ -54,7 +54,6 @@ import org.objectweb.proactive.core.process.oar.OARSubProcess;
 import org.objectweb.proactive.core.process.pbs.PBSSubProcess;
 import org.objectweb.proactive.core.process.prun.PrunSubProcess;
 import org.objectweb.proactive.core.process.rsh.maprsh.MapRshProcess;
-import org.objectweb.proactive.core.process.unicore.UnicoreProcess;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.handler.AbstractUnmarshallerDecorator;
 import org.objectweb.proactive.core.xml.handler.BasicUnmarshaller;
@@ -97,7 +96,6 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
         ProcessListHandler handler = new ProcessListHandler(proActiveDescriptor);
         this.addHandler(PROCESS_LIST_TAG, handler);
         this.addHandler(PROCESS_LIST_BYHOST_TAG, handler);
-        this.addHandler(UNICORE_PROCESS_TAG, new UnicoreProcessHandler(proActiveDescriptor));
         this.addHandler(NG_PROCESS_TAG, new NGProcessHandler(proActiveDescriptor));
         this.addHandler(CLUSTERFORK_PROCESS_TAG, new ClusterForkProcessHandler(proActiveDescriptor));
     }
@@ -1344,178 +1342,6 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
     }
 
     //  END OF GLITE PROCESS HANDLER
-    protected class UnicoreProcessHandler extends ProcessHandler {
-        public UnicoreProcessHandler(ProActiveDescriptorInternal proActiveDescriptor) {
-            super(proActiveDescriptor);
-            this.addHandler(UNICORE_OPTIONS_TAG, new UnicoreOptionHandler());
-
-            UnmarshallerHandler pathHandler = new PathHandler();
-            BasicUnmarshallerDecorator bch = new BasicUnmarshallerDecorator();
-            bch.addHandler(ABS_PATH_TAG, pathHandler);
-            bch.addHandler(REL_PATH_TAG, pathHandler);
-            this.addHandler(UNICORE_DIR_PATH_TAG, bch);
-
-            pathHandler = new PathHandler();
-            bch = new BasicUnmarshallerDecorator();
-            bch.addHandler(ABS_PATH_TAG, pathHandler);
-            bch.addHandler(REL_PATH_TAG, pathHandler);
-            this.addHandler(UNICORE_KEYFILE_PATH_TAG, bch);
-
-            CollectionUnmarshaller cu = new CollectionUnmarshaller(String.class);
-            cu.addHandler(ABS_PATH_TAG, pathHandler);
-            cu.addHandler(REL_PATH_TAG, pathHandler);
-
-            //cu.addHandler(JVMPARAMETER_TAG, new SimpleValueHandler());
-        }
-
-        @Override
-        public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
-            super.startContextElement(name, attributes);
-
-            String jobName = (attributes.getValue("jobname"));
-
-            if (checkNonEmpty(jobName)) {
-                ((UnicoreProcess) targetProcess).uParam.setUsiteName(jobName);
-            }
-
-            String keyPassword = (attributes.getValue("keypassword"));
-
-            if (checkNonEmpty(keyPassword)) {
-                ((UnicoreProcess) targetProcess).uParam.setKeyPassword(keyPassword);
-            }
-
-            String submitJob = (attributes.getValue("submitjob"));
-
-            if (checkNonEmpty(submitJob)) {
-                ((UnicoreProcess) targetProcess).uParam.setSubmitJob(submitJob);
-            }
-
-            String saveJob = (attributes.getValue("savejob"));
-
-            if (checkNonEmpty(saveJob)) {
-                ((UnicoreProcess) targetProcess).uParam.setSaveJob(saveJob);
-            }
-        }
-
-        @Override
-        protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
-                throws org.xml.sax.SAXException {
-            if (name.equals(UNICORE_DIR_PATH_TAG)) {
-                ((UnicoreProcess) targetProcess).uParam.setUnicoreDir((String) activeHandler
-                        .getResultObject());
-            } else if (name.equals(UNICORE_KEYFILE_PATH_TAG)) {
-                ((UnicoreProcess) targetProcess).uParam.setKeyFilePath((String) activeHandler
-                        .getResultObject());
-            } else {
-                super.notifyEndActiveHandler(name, activeHandler);
-            }
-        }
-
-        protected class UnicoreOptionHandler extends PassiveCompositeUnmarshaller {
-            public UnicoreOptionHandler() {
-                this.addHandler(UNICORE_USITE_TAG, new UsiteHandler());
-                this.addHandler(UNICORE_VSITE_TAG, new VsiteHandler());
-            }
-
-            @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
-            }
-
-            /*
-               protected void notifyEndActiveHandler(String name,
-                               UnmarshallerHandler activeHandler)
-                               throws org.xml.sax.SAXException {
-                       //OARGRIDSubProcess oarGridSubProcess = (OARGRIDSubProcess)
-                       // targetProcess;
-                       if (name.equals(UNICORE_USITE_TAG)) {
-                               //  oarGridSubProcess.setResources((String)
-                               // activeHandler.getResultObject());
-                               System.out.println(activeHandler.getResultObject());
-                       } else {
-                               super.notifyEndActiveHandler(name, activeHandler);
-                       }
-               }*/
-        }
-
-        protected class UsiteHandler extends PassiveCompositeUnmarshaller {
-            public UsiteHandler() {
-            }
-
-            @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
-                super.startContextElement(name, attributes);
-
-                String usiteName = (attributes.getValue("name"));
-
-                if (checkNonEmpty(usiteName)) {
-                    ((UnicoreProcess) targetProcess).uParam.setUsiteName(usiteName);
-                }
-
-                String type = (attributes.getValue("type"));
-
-                if (checkNonEmpty(type)) {
-                    ((UnicoreProcess) targetProcess).uParam.setUsiteType(type);
-                }
-
-                String url = (attributes.getValue("url"));
-
-                if (checkNonEmpty(url)) {
-                    ((UnicoreProcess) targetProcess).uParam.setUsiteUrl(url);
-                }
-            }
-        }
-
-        protected class VsiteHandler extends PassiveCompositeUnmarshaller {
-            public VsiteHandler() {
-            }
-
-            @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
-                super.startContextElement(name, attributes);
-
-                String vsiteName = (attributes.getValue("name"));
-
-                if (checkNonEmpty(vsiteName)) {
-                    ((UnicoreProcess) targetProcess).uParam.setVsiteName(vsiteName);
-                }
-
-                String nodes = (attributes.getValue("nodes"));
-
-                if (checkNonEmpty(nodes)) {
-                    ((UnicoreProcess) targetProcess).uParam.setVsiteNodes(Integer.parseInt(nodes));
-                }
-
-                String processors = (attributes.getValue("processors"));
-
-                if (checkNonEmpty(processors)) {
-                    ((UnicoreProcess) targetProcess).uParam.setVsiteProcessors(Integer.parseInt(processors));
-                }
-
-                String memory = (attributes.getValue("memory"));
-
-                if (checkNonEmpty(memory)) {
-                    ((UnicoreProcess) targetProcess).uParam.setVsiteMemory(Integer.parseInt(memory));
-                }
-
-                String runtime = (attributes.getValue("runtime"));
-
-                if (checkNonEmpty(runtime)) {
-                    ((UnicoreProcess) targetProcess).uParam.setVsiteRuntime(Integer.parseInt(runtime));
-                }
-
-                String priority = (attributes.getValue("priority"));
-
-                if (checkNonEmpty(priority)) {
-                    ((UnicoreProcess) targetProcess).uParam.setVsitePriority(priority);
-                }
-            }
-        }
-    } //end of Unicore Process Handler
-
-    //end of Unicore Process Handler
     protected class NGProcessHandler extends ProcessHandler {
         public NGProcessHandler(ProActiveDescriptorInternal proActiveDescriptor) {
             super(proActiveDescriptor);
