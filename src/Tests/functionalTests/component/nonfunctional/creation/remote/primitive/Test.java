@@ -93,7 +93,7 @@ public class Test extends ComponentTestDefaultNodes {
         ContentDescription contentDescription = new ContentDescription(DummyControllerComponentImpl.class
                 .getName());
 
-        dummyNFComponent = cf.newFcInstance(fcType, controllerDescription, contentDescription, super
+        dummyNFComponent = cf.newNFcInstance(fcType, controllerDescription, contentDescription, super
                 .getANode());
         Fractal.getLifeCycleController(dummyNFComponent).startFc();
         DummyControllerItf ref = (DummyControllerItf) dummyNFComponent

@@ -85,7 +85,7 @@ public class Test extends ComponentTestDefaultNodes {
         ControllerDescription controllerDescription = new ControllerDescription("fitnessController",
             Constants.COMPOSITE);
 
-        dummyNFComposite = cf.newFcInstance(fcType, controllerDescription, null, super.getANode());
+        dummyNFComposite = cf.newNFcInstance(fcType, controllerDescription, null, super.getANode());
         dummyNFPrimitive = cf.newNFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
                 .createFcItfType("fitness-controller-membrane", DummyControllerItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE), }),
@@ -100,6 +100,7 @@ public class Test extends ComponentTestDefaultNodes {
         DummyControllerItf ref = (DummyControllerItf) dummyNFComposite
                 .getFcInterface("fitness-controller-membrane");
         name = ref.dummyMethodWithResult();
+        System.out.println(name);
         ref.dummyVoidMethod("Message to a composite");
         Assert.assertTrue(dummyNFComposite instanceof ProActiveNFComponentRepresentative);
         Fractal.getLifeCycleController(dummyNFComposite).stopFc();
