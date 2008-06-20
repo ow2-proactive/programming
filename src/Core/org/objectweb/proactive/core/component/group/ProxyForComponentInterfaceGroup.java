@@ -38,12 +38,17 @@ import java.util.concurrent.CountDownLatch;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
+import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.collectiveitfs.MulticastHelper;
 import org.objectweb.proactive.core.component.exceptions.ParameterDispatchException;
+import org.objectweb.proactive.core.component.exceptions.ReductionException;
 import org.objectweb.proactive.core.component.identity.ProActiveComponent;
 import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
 import org.objectweb.proactive.core.component.type.ProActiveInterfaceTypeImpl;
+import org.objectweb.proactive.core.component.type.annotations.multicast.Reduce;
+import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceBehavior;
+import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceMode;
 import org.objectweb.proactive.core.group.AbstractProcessForGroup;
 import org.objectweb.proactive.core.group.Dispatch;
 import org.objectweb.proactive.core.group.Dispatcher;
@@ -168,6 +173,34 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
         }
     }
 
+    protected Object asynchronousCallOnGroup(MethodCall mc) throws InvocationTargetException {
+        Object result = super.asynchronousCallOnGroup(mc);
+
+        // TODO rely on API or method call rather than annotation?
+        Reduce reduceAnnotation = mc.getReifiedMethod().getAnnotation(Reduce.class);
+        if (reduceAnnotation != null) {
+            try {
+                if (!ReduceMode.CUSTOM.equals(reduceAnnotation.reductionMode())) {
+                    result = reduceAnnotation.reductionMode().reduce(PAGroup.getGroup(result));
+                    //                  result = reduceAnnotation.reductionMode().reduce((List<?>)result);
+                } else {
+                    ReduceBehavior reduction = (ReduceBehavior) reduceAnnotation.customReductionMode()
+                            .newInstance();
+                    result = reduction.reduce(PAGroup.getGroup(result));
+                }
+            } catch (ReductionException e) {
+                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
+            } catch (InstantiationException e) {
+                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
+            } catch (IllegalAccessException e) {
+                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
+            }
+        }
+
+        // LocalBodyStore.getInstance().setCurrentThreadBody(body);
+        return result;
+    }
+
     /*
      * @see org.objectweb.proactive.core.group.ProxyForGroup#oneWayCallOnGroup(org.objectweb.proactive.core.mop.MethodCall,
      *      org.objectweb.proactive.core.group.ExceptionListException)
@@ -220,7 +253,6 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
         // replace dispatcher and task factory so that they use this delegatee
         dispatcher = new Dispatcher(delegatee, false, dispatcher.getBufferSize());
         taskFactory = new CollectiveItfsTaskFactory(delegatee);
-
     }
 
     public void setParent(ProxyForComponentInterfaceGroup parent) {

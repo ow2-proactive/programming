@@ -59,10 +59,6 @@ import org.objectweb.proactive.core.body.SendingQueue;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.proxy.AbstractProxy;
 import org.objectweb.proactive.core.body.proxy.SendingQueueProxy;
-import org.objectweb.proactive.core.component.exceptions.ReductionException;
-import org.objectweb.proactive.core.component.type.annotations.multicast.Reduce;
-import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceBehavior;
-import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceMode;
 import org.objectweb.proactive.core.group.spmd.MethodCallSetSPMDGroup;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedException;
@@ -408,7 +404,6 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
      */
     protected Object asynchronousCallOnGroup(MethodCall mc) throws InvocationTargetException {
         Object result;
-        Body body = PAActiveObject.getBodyOnThis();
 
         // Creates a stub + ProxyForGroup for representing the result
         String returnTypeClassName = null;
@@ -444,25 +439,25 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
                 Dispatch.class));
 
         // TODO rely on API or method call rather than annotation?
-        Reduce reduceAnnotation = mc.getReifiedMethod().getAnnotation(Reduce.class);
-        if (reduceAnnotation != null) {
-            try {
-                if (!ReduceMode.CUSTOM.equals(reduceAnnotation.reductionMode())) {
-                    result = reduceAnnotation.reductionMode().reduce(PAGroup.getGroup(result));
-                    //					result = reduceAnnotation.reductionMode().reduce((List<?>)result);
-                } else {
-                    ReduceBehavior reduction = (ReduceBehavior) reduceAnnotation.customReductionMode()
-                            .newInstance();
-                    result = reduction.reduce(PAGroup.getGroup(result));
-                }
-            } catch (ReductionException e) {
-                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
-            } catch (InstantiationException e) {
-                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
-            } catch (IllegalAccessException e) {
-                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
-            }
-        }
+        //        Reduce reduceAnnotation = mc.getReifiedMethod().getAnnotation(Reduce.class);
+        //        if (reduceAnnotation != null) {
+        //            try {
+        //                if (!ReduceMode.CUSTOM.equals(reduceAnnotation.reductionMode())) {
+        //                    result = reduceAnnotation.reductionMode().reduce(PAGroup.getGroup(result));
+        //                    //					result = reduceAnnotation.reductionMode().reduce((List<?>)result);
+        //                } else {
+        //                    ReduceBehavior reduction = (ReduceBehavior) reduceAnnotation.customReductionMode()
+        //                            .newInstance();
+        //                    result = reduction.reduce(PAGroup.getGroup(result));
+        //                }
+        //            } catch (ReductionException e) {
+        //                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
+        //            } catch (InstantiationException e) {
+        //                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
+        //            } catch (IllegalAccessException e) {
+        //                throw new InvocationTargetException(e, "cannot reduce results from group invocation");
+        //            }
+        //        }
 
         // LocalBodyStore.getInstance().setCurrentThreadBody(body);
         return result;
@@ -532,8 +527,6 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
      */
     protected void oneWayCallOnGroup(MethodCall mc, ExceptionListException exceptionList)
             throws InvocationTargetException {
-        Body body = PAActiveObject.getBodyOnThis();
-
         List<MethodCall> methodsToDispatch = taskFactory.generateMethodCalls(mc);
         int nbExpectedCalls = methodsToDispatch.size();
         CountDownLatch doneSignal = new CountDownLatch(nbExpectedCalls);
