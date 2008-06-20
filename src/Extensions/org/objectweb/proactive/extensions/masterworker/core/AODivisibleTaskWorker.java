@@ -30,6 +30,7 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
     private static final boolean debug = logger.isDebugEnabled();
 
     private SubMasterImpl submaster;
+    private AOWorker parentWorker;
     private TaskIntern<Serializable> task;
 
     /**
@@ -50,10 +51,11 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
      * @param provider the entity which will provide tasks to the worker
      * @param initialMemory initial memory of the worker
      */
-    public AODivisibleTaskWorker(final String name, final WorkerMaster provider,
+    public AODivisibleTaskWorker(final String name, final WorkerMaster provider, final AOWorker parentWorker,
             final Map<String, Serializable> initialMemory, final TaskIntern<Serializable> task) {
         super(name, provider, initialMemory);
-        this.submaster = new SubMasterImpl(provider, name);
+        this.parentWorker = parentWorker;
+        this.submaster = new SubMasterImpl(provider, name, parentWorker);
         this.task = task;
 
     }
@@ -84,6 +86,7 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
                 logger.debug(name + " runs task " + task.getId() + "...");
             }
 
+            //parentWorker.suspendWork();
             resultObj = task.run(memory, submaster);
             if (debug) {
                 logger.debug(name + " task " + task.getId() + " is finished");
@@ -109,6 +112,7 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
             BooleanWrapper wrap = provider.sendResult(result, name);
             // We synchronize the answer to avoid a BodyTerminatedException (the AO terminates right after this call)
             PAFuture.waitFor(wrap);
+            // parentWorker.resumeWork();
         }
     }
 }

@@ -66,6 +66,8 @@ public class AOWorker implements InitActive, Serializable, Worker {
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER_WORKERS);
     protected static final boolean debug = logger.isDebugEnabled();
 
+    protected boolean suspended = false;
+
     /** stub on this active object */
     protected AOWorker stubOnThis;
 
@@ -178,6 +180,24 @@ public class AOWorker implements InitActive, Serializable, Worker {
 
     }
 
+    public void suspendWork() {
+        if (debug) {
+            logger.debug(name + " suspended");
+        }
+
+        suspended = true;
+    }
+
+    public void resumeWork() {
+        if (debug) {
+            logger.debug(name + " resumed work");
+        }
+        if (suspended) {
+            suspended = false;
+            stubOnThis.scheduleTask();
+        }
+    }
+
     /** gets the initial task to solve */
     @SuppressWarnings("unchecked")
     public void getTaskAndSchedule() {
@@ -201,8 +221,9 @@ public class AOWorker implements InitActive, Serializable, Worker {
             subWorkerNameCounter = (subWorkerNameCounter + 1) % (Long.MAX_VALUE - 1);
             AODivisibleTaskWorker spawnedWorker = null;
             try {
-                spawnedWorker = (AODivisibleTaskWorker) PAActiveObject.newActive(AODivisibleTaskWorker.class
-                        .getName(), new Object[] { newWorkerName, provider, initialMemory, task });
+                spawnedWorker = (AODivisibleTaskWorker) PAActiveObject
+                        .newActive(AODivisibleTaskWorker.class.getName(), new Object[] { newWorkerName,
+                                provider, stubOnThis, initialMemory, task });
 
             } catch (ActiveObjectCreationException e) {
                 e.printStackTrace();
@@ -215,6 +236,8 @@ public class AOWorker implements InitActive, Serializable, Worker {
             spawnedWorker.readyToLive();
             // We get some new tasks
             getTasks();
+            // // but we are suspended
+            // suspendWork();
         } else {
             Serializable resultObj = null;
             ResultInternImpl result = new ResultInternImpl(task);
@@ -245,14 +268,15 @@ public class AOWorker implements InitActive, Serializable, Worker {
         while ((pendingTasks.size() == 0) && (pendingTasksFutures.size() > 0)) {
             pendingTasks.addAll(pendingTasksFutures.remove());
         }
-        if (pendingTasks.size() > 0) {
+
+        if (!suspended && (pendingTasks.size() > 0)) {
+
             TaskIntern<Serializable> newTask = pendingTasks.remove();
             // We handle the current Task
             stubOnThis.handleTask(newTask);
 
-        } else {
-            // if there is nothing to do we sleep
         }
+        // if there is nothing to do or if we are suspended we sleep
     }
 
     /** {@inheritDoc} */
@@ -265,7 +289,6 @@ public class AOWorker implements InitActive, Serializable, Worker {
         ((WorkerMemoryImpl) memory).clear();
         initialMemory.clear();
 
-        // TODO terminaison of the worker seems a bit brutal
         PAActiveObject.terminateActiveObject(false);
         if (debug) {
             logger.debug(name + " terminated...");
@@ -280,16 +303,16 @@ public class AOWorker implements InitActive, Serializable, Worker {
             logger.debug(name + " receives a wake up message...");
         }
 
-        if (pendingTasks.size() == 0) {
+        if (pendingTasks.size() > 0 || suspended) {
+            if (debug) {
+                logger.debug(name + " ignored wake up message ...");
+            }
+        } else {
             if (debug) {
                 logger.debug(name + " wakes up...");
             }
             // Initial Task
             stubOnThis.getTaskAndSchedule();
-        } else {
-            if (debug) {
-                logger.debug(name + " ignored wake up message ...");
-            }
         }
 
     }

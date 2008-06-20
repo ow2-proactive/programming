@@ -329,6 +329,25 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
         return result;
     }
 
+    public List<R> waitSomeResults() throws TaskException {
+        if (aomaster.isEmpty(null)) {
+            throw new IllegalStateException("Master is empty, call to this method will wait forever");
+        }
+
+        List<R> results = null;
+        try {
+            results = (List<R>) PAFuture.getFutureValue(aomaster.waitSomeResults(null));
+        } catch (RuntimeException e) {
+            Throwable texp = findTaskException(e);
+            if (texp != null) {
+                throw (TaskException) texp;
+            } else
+                throw e;
+        }
+
+        return results;
+    }
+
     public void clear() {
         aomaster.clear();
     }

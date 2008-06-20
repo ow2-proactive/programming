@@ -172,8 +172,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     private String masterVNNAme;
 
     /** Filters * */
-    private final FindNotWaitAndTerminateFilter notWaitOrTerminateFilter = new FindNotWaitAndTerminateFilter();
+    private final FindWorkersRequests workersRequestsFilter = new FindWorkersRequests();
     private final FindWaitFilter findWaitFilter = new FindWaitFilter();
+    private final NotTerminateFilter notTerminateFilter = new NotTerminateFilter();
     private final IsClearingFilter clearingFilter = new IsClearingFilter();
 
     /** Proactive empty no arg constructor */
@@ -512,46 +513,40 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     public void runActivity(final Body body) {
         Service service = new Service(body);
         while (!terminated) {
-            if (!service.hasRequestToServe()) {
-                service.waitForRequest();
-            }
+            service.waitForRequest();
+            // Sweep of wait requests
+            sweepWaitRequests(service);
+            maybeServePending();
 
             // Serving methods other than waitXXX
-            while (service.hasRequestToServe(notWaitOrTerminateFilter)) {
-                service.serveOldest(notWaitOrTerminateFilter);
-                if (isClearing == true) {
-                    break;
+            while (!isClearing && service.hasRequestToServe()) {
+                Request oldest = service.getOldest();
+                while ((oldest != null) && !workersRequestsFilter.acceptRequest(oldest) &&
+                    notTerminateFilter.acceptRequest(oldest)) {
+                    service.serveOldest();
+                    // Sweep of wait requests
+                    sweepWaitRequests(service);
+                    // Serving quick requests
+                    // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
+                    maybeServePending();
+                    oldest = service.getOldest();
                 }
+                if ((oldest != null) && notTerminateFilter.acceptRequest(oldest)) {
+                    service.serveOldest();
+                    // Sweep of wait requests
+                    sweepWaitRequests(service);
+                    // Serving quick requests
+                    // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
+                    maybeServePending();
+                }
+
             }
+
             // If a clear request is detected we enter a special mode
             if (isClearing) {
                 clearingRunActivity(service);
-                continue;
             }
 
-            // We detect all waitXXX requests in the request queue
-            Request waitRequest = service.getOldest(findWaitFilter);
-            while (waitRequest != null) {
-                String originatorName = (String) waitRequest.getParameter(0);
-                // if there is one and there was none previously found we remove it and store it for later
-                if (originatorName == null) {
-                    pendingRequest = waitRequest;
-                    if (debug) {
-                        logger.debug("pending waitXXX from main client stored");
-                    }
-                } else {
-                    pendingSubRequests.put(originatorName, waitRequest);
-                    if (debug) {
-                        logger.debug("pending waitXXX from " + originatorName + " stored");
-                    }
-                }
-                service.blockingRemoveOldest(findWaitFilter);
-                waitRequest = service.getOldest(findWaitFilter);
-
-            }
-
-            // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
-            maybeServePending();
             service.serveAll("finalTerminate");
             service.serveAll("awaitsTermination");
         }
@@ -566,6 +561,27 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         body.blockCommunication();
         // we finally terminate the master
         body.terminate();
+    }
+
+    private void sweepWaitRequests(Service service) {
+        while (service.hasRequestToServe(findWaitFilter)) {
+            Request waitRequest = service.getOldest(findWaitFilter);
+            String originatorName = (String) waitRequest.getParameter(0);
+            // if there is one and there was none previously found we remove it and store it for later
+            if (originatorName == null) {
+                pendingRequest = waitRequest;
+                if (debug) {
+                    logger.debug("pending waitXXX from main client stored");
+                }
+            } else {
+                pendingSubRequests.put(originatorName, waitRequest);
+                if (debug) {
+                    logger.debug("pending waitXXX from " + originatorName + " stored");
+                }
+            }
+            service.blockingRemoveOldest(findWaitFilter);
+        }
+
     }
 
     private void clearingRunActivity(Service service) {
@@ -712,21 +728,27 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
             String originator = ent.getKey();
             String methodName = req.getMethodName();
             ResultQueue rq = subResultQueues.get(originator);
-            if (methodName.equals("waitOneResult") && rq.isOneResultAvailable()) {
-                servePending(originator);
-            } else if (methodName.equals("waitAllResults") && rq.areAllResultsAvailable()) {
-                servePending(originator);
-            } else if (methodName.equals("waitKResults")) {
-                int k = (Integer) req.getParameter(1);
-                if (rq.countAvailableResults() >= k) {
+            if (rq != null) {
+                if ((methodName.equals("waitOneResult") || methodName.equals("waitSomeResults")) &&
+                    rq.isOneResultAvailable()) {
                     servePending(originator);
+                } else if (methodName.equals("waitAllResults") && rq.areAllResultsAvailable()) {
+                    servePending(originator);
+                } else if (methodName.equals("waitKResults")) {
+                    int k = (Integer) req.getParameter(1);
+                    if (rq.countAvailableResults() >= k) {
+                        servePending(originator);
+                    }
                 }
             }
         }
+        newSet.clear();
+        newSet = null;
 
         if (pendingRequest != null) {
             String methodName = pendingRequest.getMethodName();
-            if (methodName.equals("waitOneResult") && resultQueue.isOneResultAvailable()) {
+            if ((methodName.equals("waitOneResult") || methodName.equals("waitSomeResults")) &&
+                resultQueue.isOneResultAvailable()) {
                 servePending(null);
             } else if (methodName.equals("waitAllResults") && resultQueue.areAllResultsAvailable()) {
                 servePending(null);
@@ -909,6 +931,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 subResultQueues.get(originatorName).setMode(mode);
             } else {
                 ResultQueue rq = new ResultQueue(mode);
+                rq.setMode(mode);
                 subResultQueues.put(originatorName, rq);
             }
         }
@@ -947,9 +970,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         }
 
         // The cleaner way is to first clearing the activity
-        stubOnThis.clear();
+        clear();
 
-        // then cleaning all instances
+        // then delay final termination
         stubOnThis.finalTerminate(freeResources);
 
         return new BooleanWrapper(true);
@@ -1112,6 +1135,44 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         return res.getResult();
     }
 
+    public List<Serializable> waitSomeResults(String originatorName) throws TaskException {
+        List<Serializable> results = new ArrayList<Serializable>();
+        List<ResultIntern<Serializable>> completed = null;
+        if (originatorName == null) {
+
+            int k = resultQueue.countAvailableResults();
+
+            if (debug) {
+                logger.debug("" + k + " results received by the main client.");
+
+            }
+            completed = resultQueue.getNextK(k);
+        } else {
+            if (isClearing) {
+                clearingCallFromSpawnedWorker(originatorName);
+            }
+            if (subResultQueues.containsKey(originatorName)) {
+                ResultQueue rq = subResultQueues.get(originatorName);
+                int k = rq.countAvailableResults();
+
+                if (debug) {
+                    logger.debug("" + k + " results received by " + originatorName);
+                }
+                completed = rq.getNextK(k);
+            } else
+                throw new IllegalArgumentException("Unknown originator: " + originatorName);
+
+        }
+        for (ResultIntern<Serializable> res : completed) {
+            if (res.threwException()) {
+                throw new RuntimeException(new TaskException(res.getException()));
+            }
+
+            results.add(res.getResult());
+        }
+        return results;
+    }
+
     /**
      * @author The ProActive Team
      *         Internal class for filtering requests in the queue
@@ -1126,8 +1187,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         public boolean acceptRequest(final Request request) {
             // We find all the requests that are not servable yet
             String name = request.getMethodName();
-            return name.equals("waitOneResult") || name.equals("waitAllResults") ||
-                name.equals("waitKResults");
+            return name.startsWith("wait");
         }
     }
 
@@ -1135,19 +1195,36 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      * @author The ProActive Team
      *         Internal class for filtering requests in the queue
      */
-    private class FindNotWaitAndTerminateFilter implements RequestFilter {
+    private class NotTerminateFilter implements RequestFilter {
+
+        /** Creates a filter */
+        public NotTerminateFilter() {
+        }
+
+        /** {@inheritDoc} */
+        public boolean acceptRequest(final Request request) {
+            // We find all the requests that are not servable yet
+            String name = request.getMethodName();
+            return !name.equals("finalTerminate") && !name.equals("awaitsTermination");
+        }
+    }
+
+    /**
+     * @author The ProActive Team
+     *         Internal class for filtering requests in the queue
+     */
+    private class FindWorkersRequests implements RequestFilter {
 
         /** Creates the filter */
-        public FindNotWaitAndTerminateFilter() {
+        public FindWorkersRequests() {
         }
 
         /** {@inheritDoc} */
         public boolean acceptRequest(final Request request) {
             // We find all the requests which can't be served yet
             String name = request.getMethodName();
-            return !name.equals("waitOneResult") && !name.equals("waitAllResults") &&
-                !name.equals("waitKResults") && !name.equals("finalTerminate") &&
-                !name.equals("awaitsTermination");
+            return name.startsWith("sendResult") || name.startsWith("getTask") ||
+                name.equals("forwardedTask");
         }
     }
 
@@ -1160,8 +1237,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         public boolean acceptRequest(Request request) {
             // We serve with an exception every request coming from workers (task requesting, results sending, result waiting), we serve nicely the isCleared request, finally, we serve as well the isDead notification coming from the pinger
             String name = request.getMethodName();
-            if (name.equals("solveIntern") || name.equals("waitOneResult") || name.equals("waitAllResults") ||
-                name.equals("waitKResults") || name.equals("isEmpty") ||
+            if (name.equals("solveIntern") || name.startsWith("wait") || name.equals("isEmpty") ||
                 name.equals("setResultReceptionOrder") || name.equals("countPending") ||
                 name.equals("countAvailableResults")) {
                 return request.getParameter(0) != null;

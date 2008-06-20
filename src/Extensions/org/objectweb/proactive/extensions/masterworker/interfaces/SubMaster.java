@@ -81,6 +81,16 @@ public interface SubMaster<T extends Task<R>, R extends Serializable> {
     R waitOneResult() throws TaskException;
 
     /**
+    * Wait for at least one result is available <br>
+    * If there are more results availables at the time the request is executed, then every currently available results are returned 
+    * Note that in SubmittedOrder mode, the method will block until the next result in submission order is available and will return
+    * as many successive results as possible<br>
+    * @return a collection of objects containing the results
+    * @throws TaskException if the task threw an Exception
+    */
+    List<R> waitSomeResults() throws TaskException;
+
+    /**
      * Wait for a number of results<br>
      * Will block until at least k results are available. <br>
      * The ordering of the results depends on the result reception mode in use <br>

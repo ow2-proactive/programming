@@ -24,10 +24,12 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
     private final MasterIntern master;
     private final String originatorName;
     private boolean initCalled = false;
+    private AOWorker parentWorker;
 
-    public SubMasterImpl(MasterIntern master, String originatorName) {
+    public SubMasterImpl(MasterIntern master, String originatorName, AOWorker parentWorker) {
         this.master = master;
         this.originatorName = originatorName;
+        this.parentWorker = parentWorker;
     }
 
     public void setResultReceptionOrder(OrderingMode mode) {
@@ -53,13 +55,12 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
         if (!initCalled) {
             throw new IllegalStateException("A call to solve should occur before this call.");
         }
-        if (master.isEmpty(originatorName)) {
-            throw new IllegalStateException("Master is empty, call to this method will wait forever");
-        }
 
         List<Serializable> results = null;
+        Object future = master.waitAllResults(originatorName);
+        //parentWorker.resumeWork();
         try {
-            results = (List<Serializable>) PAFuture.getFutureValue(master.waitAllResults(originatorName));
+            results = (List<Serializable>) PAFuture.getFutureValue(future);
         } catch (RuntimeException e) {
             Throwable texp = findTaskException(e);
             if (texp != null) {
@@ -67,6 +68,7 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
             } else
                 throw e;
         }
+        //parentWorker.suspendWork();
 
         return results;
     }
@@ -79,12 +81,11 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
         if (!initCalled) {
             throw new IllegalStateException("A call to solve should occur before this call.");
         }
-        if (master.isEmpty(originatorName)) {
-            throw new IllegalStateException("Master is empty, call to this method will wait forever");
-        }
         Serializable result = null;
+        Object future = master.waitOneResult(originatorName);
+        //parentWorker.resumeWork();
         try {
-            result = (Serializable) PAFuture.getFutureValue(master.waitOneResult(originatorName));
+            result = (Serializable) PAFuture.getFutureValue(future);
         } catch (RuntimeException e) {
             Throwable texp = findTaskException(e);
             if (texp != null) {
@@ -93,8 +94,30 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
                 throw e;
         }
 
+        //parentWorker.suspendWork();
         return result;
 
+    }
+
+    public List<Serializable> waitSomeResults() throws TaskException {
+        if (!initCalled) {
+            throw new IllegalStateException("A call to solve should occur before this call.");
+        }
+
+        List<Serializable> results = null;
+        Object future = master.waitSomeResults(originatorName);
+        // parentWorker.resumeWork();
+        try {
+            results = (List<Serializable>) PAFuture.getFutureValue(future);
+        } catch (RuntimeException e) {
+            Throwable texp = findTaskException(e);
+            if (texp != null) {
+                throw (TaskException) texp;
+            } else
+                throw e;
+        }
+        // parentWorker.suspendWork();
+        return results;
     }
 
     /**
@@ -110,8 +133,10 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
                 k + ": call to this method will wait forever");
         }
         List<Serializable> results = null;
+        Object future = master.waitKResults(originatorName, k);
+        //  parentWorker.resumeWork();
         try {
-            results = (List<Serializable>) PAFuture.getFutureValue(master.waitKResults(originatorName, k));
+            results = (List<Serializable>) PAFuture.getFutureValue(future);
         } catch (RuntimeException e) {
             Throwable texp = findTaskException(e);
             if (texp != null) {
@@ -119,7 +144,7 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
             } else
                 throw e;
         }
-
+        //  parentWorker.suspendWork();
         return results;
     }
 
