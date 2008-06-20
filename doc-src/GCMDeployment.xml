@@ -1287,12 +1287,29 @@ app.startDeployment();
 				In the case of a stand-alone application, it will simply be deployed on all the available nodes without any special intervention on
 				your side. In the case of a ProActive-based application, there are two ways for an application to handle the deployment process. The
 				simplest one is to call the
-				<code>waitReady()</code>
+				<programlisting xml:lang="screen">
+					<textobject>
+						<textdata fileref="automatic_snippets/GCMVirtualNode_waitReady.snip" />
+					</textobject>
+				</programlisting>
 				method on your GCMApplication object. As the name of the method indicates, it amounts to "wait until everything is ready". The call
-				will block until all virtual nodes are ready, that is that they have acquired the minimum number of nodes they need. However, a more
-				flexible way is for your application to listen to the availability of new nodes on each virtual node, and act accordingly. The method
-				for this is
-				<code>subscribeNodeAttachment(Object client, String methodName, boolean withHistory)</code>
+				will block until all virtual nodes are ready, that is that they have acquired the minimum number of nodes they need. This method
+				should not be used if one of the virtual nodes is "greedy", in which case it will never be in a "ready" state. There's another version
+				of the method with a timeout parameter :
+				<programlisting xml:lang="screen">
+					<textobject>
+						<textdata fileref="automatic_snippets/GCMVirtualNode_waitReady_timeout.snip" />
+					</textobject>
+				</programlisting>
+
+
+				However, a more flexible way is for your application to listen to the availability of new nodes on each virtual node, and act
+				accordingly. The method for this is
+				<programlisting xml:lang="screen">
+					<textobject>
+						<textdata fileref="automatic_snippets/GCMVirtualNode_subscribeNodeAttachment.snip" />
+					</textobject>
+				</programlisting>
 				in
 				<code>GCMVirtualNode</code>
 				.
@@ -1302,6 +1319,20 @@ app.startDeployment();
 				, which prototype is
 				<code>method(GCMVirtualNode node, String virtualNodeName)</code>
 				. This method will be called by the virtual node for each new available node.
+
+				To get the list of virtual nodes for your GCMApplication, use
+				<programlisting xml:lang="screen">
+					<textobject>
+						<textdata fileref="automatic_snippets/GCMApplication_getVirtualNodes.snip" />
+					</textobject>
+				</programlisting>
+
+				You can also get a specific virtual node if you know its name :
+				<programlisting xml:lang="screen">
+					<textobject>
+						<textdata fileref="automatic_snippets/GCMApplication_getVirtualNode.snip" />
+					</textobject>
+				</programlisting>
 			</para>
 
 		</section>
