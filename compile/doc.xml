@@ -141,7 +141,7 @@
 				<link href="http://fractal.objectweb.org/current/doc/javadoc/fractal/" />
 				<link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
 				<doctitle><![CDATA[ProActive ${version}<br><a href='../html/index.html'>(documentation is here)</a><br>]]></doctitle>
-				<bottom><![CDATA[<i>Copyright 1997-2007 INRIA All Rights Reserved.</i>]]></bottom>
+				<bottom><![CDATA[<i>Copyright 1997-2008 INRIA All Rights Reserved.</i>]]></bottom>
 				
 				<group title="ProActive entry point">
 					<package name="org.objectweb.proactive.api" />
@@ -221,8 +221,11 @@
 			<param name="VERSION" expression="${version}" />
 			<!-- the version number, for the first page -->
 			<classpath>
-				<fileset dir="${base.dir}/dev/lib/docbook/">
-					<include name="*.jar" />
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${base.dir}/dev/lib">
+					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
 		</xslt>
@@ -323,6 +326,9 @@
 	<!-- ==================================================================== -->
 	<target name="-docbookPreProcess">
 
+		<!-- Call the code for generating the snippets -->
+		<antcall target="-snippetscreation"/>
+
 		<!-- as this file gets edited, make sure it's a fresh copy-->
 		<delete file="${docs.tmp.dir}/${docs.mainFile}" />
 
@@ -331,6 +337,8 @@
 			<fileset dir="${doc.src}">
 				<include name="**/*.png" />
 				<include name="**/*.jpg" />
+				<include name="**/*.svg" />
+				<include name="**/*.gif" />
 				<include name="ProActive.css" />
 			</fileset>
 		</copy>
@@ -343,9 +351,6 @@
 				<exclude name="xsl" />
 			</fileset>
 		</copy>
-
-		<!-- Call the code for generating the snippets -->
-		<antcall target="-snippetscreation"/>
 
 		<!-- Decorate the code a bit (code examples in programlistings) -->
 		<antcall target="-docbookBeautify">
