@@ -754,6 +754,7 @@
                     <title>Example: Interface Matlab/Scilab</title>
                 </info>
 
+            </example>
 
                 <programlisting xml:lang="java">
                     <textobject>
@@ -761,20 +762,18 @@
                                 fileref="../src/Extensions/org/objectweb/proactive/extensions/scilab/test/SciTest2.java"/>
                     </textobject>
                 </programlisting>
-            </example>
 
             <example xml:id="sciex2">
                 <info>
                     <title>Descriptor deployment</title>
                 </info>
-
+            </example>
 
                 <programlisting xml:lang="xml">
                     <textobject>
                         <textdata fileref="../scripts/unix/scilab/ProActiveScilab.xml"/>
                     </textobject>
                 </programlisting>
-            </example>
         </section>
     </section>
 </chapter>
