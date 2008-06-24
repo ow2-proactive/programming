@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.xml.VariableContract;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
@@ -134,6 +135,16 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
 
     public Topology getTopology() throws ProActiveException {
         return target.getTopology();
+    }
+
+    public ProActiveSecurityManager getProActiveApplicationSecurityManager() {
+        return target.getProActiveApplicationSecurityManager();
+    }
+
+    public void setProActiveApplicationSecurityManager(
+            ProActiveSecurityManager proactiveApplicationSecurityManager) {
+        target.setProActiveApplicationSecurityManager(proactiveApplicationSecurityManager);
+
     }
 
 }

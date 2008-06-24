@@ -60,7 +60,7 @@ public enum PAProperties {
     /**
      * Java security policy file location
      */
-    SECURITY_POLICY("java.security.policy", PAPropertiesType.STRING),
+    JAVA_SECURITY_POLICY("java.security.policy", PAPropertiesType.STRING),
 
     /**
      * If IPv6 is available on the operating system the default preference is to prefer an IPv4-mapped address over an IPv6 address

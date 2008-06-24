@@ -83,33 +83,6 @@ public class PolicyRule implements Serializable {
                 .getCommunicationReply(), policy.isAoCreation(), policy.isMigration());
     }
 
-    //    /**
-    //     * @param object
-    //     */
-    //    public void setEntitiesFrom(RuleEntities entities) {
-    //        this.from = entities;
-    //    }
-    //
-    //    /**
-    //     * @param object
-    //     */
-    //    public void setEntitiesTo(RuleEntities entities) {
-    //        this.to = entities;
-    //    }
-    //
-    //    /**
-    //     * @param object
-    //     */
-    //    public void setCommunicationRulesRequest(Communication object) {
-    //    	this.communicationRequest = object;
-    //    }
-    //
-    //    /**
-    //     * @param object
-    //     */
-    //    public void setCommunicationRulesReply(Communication object) {
-    //    	this. communicationReply = object;
-    //    }
     @Override
     public String toString() {
         String vnFrom;
@@ -126,17 +99,10 @@ public class PolicyRule implements Serializable {
             vnTo = this.to.toString();
         }
 
-        return vnFrom + "-->\n" + vnTo + "\nRequest : " + this.communicationRequest + "\nReply : " +
-            this.communicationReply + "\nMigration :" + this.migration + "\nAOCreation:" + this.aocreation;
+        return vnFrom + "-->" + vnTo + "== Req : " + this.communicationRequest + "; Rep : " +
+            this.communicationReply + ";Migration :" + this.migration + ";AOCreation:" + this.aocreation;
     }
 
-    //    /**
-    //     * @param arrayLists
-    //     */
-    //    public void setCommunicationRules(Communication[] arrayLists) {
-    //        setCommunicationRulesReply(arrayLists[0]);
-    //        setCommunicationRulesRequest(arrayLists[1]);
-    //    }
     public Communication getCommunicationReply() {
         return this.communicationReply;
     }
@@ -167,19 +133,6 @@ public class PolicyRule implements Serializable {
         return this.migration;
     }
 
-    //    /**
-    //     * @param b
-    //     */
-    //    public void setAocreation(boolean b) {
-    //    	this.aocreation = b;
-    //    }
-    //
-    //    /**
-    //     * @param b
-    //     */
-    //    public void setMigration(boolean b) {
-    //    	this.migration = b;
-    //    }
     public static PolicyRule mergePolicies(List<PolicyRule> policies) {
         PolicyRule resultPolicy = null;
 

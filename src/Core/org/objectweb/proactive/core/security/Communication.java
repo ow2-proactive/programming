@@ -170,8 +170,8 @@ public class Communication implements Serializable {
 
     @Override
     public String toString() {
-        return "\n\tCom : " + this.communication + "\n\tAuth : " + this.authentication + "\n\tConf : " +
-            this.confidentiality + "\n\tIntegrity : " + this.integrity + "\n";
+        return "Com : " + (this.communication ? 1 : 0) + this.authentication.getValue() +
+            this.confidentiality.getValue() + this.integrity.getValue();
     }
 
     /**

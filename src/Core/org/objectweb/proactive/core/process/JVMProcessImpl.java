@@ -77,7 +77,7 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
             .getProperty("java.class.path"));
     public final static String DEFAULT_JAVAPATH = System.getProperty("java.home") + File.separator + "bin" +
         File.separator + "java";
-    public static String DEFAULT_POLICY_FILE = PAProperties.SECURITY_POLICY.getValue();
+    public static String DEFAULT_POLICY_FILE = PAProperties.JAVA_SECURITY_POLICY.getValue();
     public static String DEFAULT_LOG4J_FILE = PAProperties.LOG4J.getValue();
 
     static {

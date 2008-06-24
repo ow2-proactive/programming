@@ -70,7 +70,7 @@ public class NamedRuleEntity extends RuleEntity {
 
     @Override
     public String toString() {
-        return super.toString() + "\n\tName : " + this.name;
+        return super.toString() + "," + this.name;
     }
 
     @Override

@@ -22,7 +22,10 @@
 					<pathElement base="proactive" relpath="classes/Tests"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
 				</proactiveClasspath>		
-				
+		      <!--   <proactiveSecurity>
+		          <applicationPolicy base="proactive" relpath="descriptors/security/applicationPolicy1.xml"/>
+		          <runtimePolicy base="proactive" relpath="descriptors/security/applicationPolicy1.xml"/>
+		       </proactiveSecurity> -->
 			</configuration>
 			
 			<virtualNode id="nodes">

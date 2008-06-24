@@ -36,6 +36,12 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
+import org.objectweb.proactive.core.security.PolicyServer;
+import org.objectweb.proactive.core.security.ProActiveSecurityDescriptorHandler;
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
+import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
+import org.objectweb.proactive.core.security.exceptions.InvalidPolicyFile;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
@@ -59,6 +65,7 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
     private static final String XPATH_USER_PROPERTIES = "app:userProperties";
     protected static final String NODE_NAME = "proactive";
     protected TechnicalServicesProperties appTechnicalServicesProperties;
+    protected ProActiveSecurityManager proactiveApplicationSecurityManager;
 
     @Override
     protected CommandBuilder createCommandBuilder() {
@@ -97,9 +104,12 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
 
             if (configNode != null) {
                 parseProActiveConfiguration(xpath, commandBuilderProActive, configNode);
+                applicationParser.setProactiveApplicationSecurityManager(proactiveApplicationSecurityManager);
+
             }
 
             commandBuilderProActive.setVirtualNodes(applicationParser.getVirtualNodes());
+
         } catch (XPathExpressionException e) {
             GCMDeploymentLoggers.GCMA_LOGGER.fatal(e.getMessage(), e);
         }
@@ -148,6 +158,36 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
         if (applicationSecurityPolicyNode != null) {
             PathElement pathElement = GCMParserHelper.parsePathElementNode(applicationSecurityPolicyNode);
             commandBuilderProActive.setApplicationPolicy(pathElement);
+
+            /** security rules */
+
+            PolicyServer policyServer;
+
+            try {
+
+                System.out.println("CommandBuilderProActive.setApplicationPolicy()" +
+                    pathElement.getRelPath());
+
+                policyServer = ProActiveSecurityDescriptorHandler
+                        .createPolicyServer(pathElement.getRelPath());
+
+                proactiveApplicationSecurityManager = new ProActiveSecurityManager(EntityType.APPLICATION,
+                    policyServer);
+
+                System.out.println("ApplicationParserProactive.parseProActiveConfiguration()" +
+                    proactiveApplicationSecurityManager);
+
+                // set the security policyserver to the default proactive meta object
+                // by the way, the HalfBody will be associated to a security manager
+                // derivated from this one.
+                ProActiveSecurityManager psm = proactiveApplicationSecurityManager
+                        .generateSiblingCertificate(EntityType.OBJECT, "HalfBody");
+                ProActiveMetaObjectFactory.newInstance().setProActiveSecurityManager(psm);
+
+            } catch (InvalidPolicyFile e) {
+                e.printStackTrace();
+            }
+
         }
 
         Node runtimeSecurityPolicyNode = (Node) xpath.evaluate(XPATH_PROACTIVE_SECURITY + "/" +

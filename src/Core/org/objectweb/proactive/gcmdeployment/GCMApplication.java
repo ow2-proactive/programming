@@ -30,14 +30,15 @@
  */
 package org.objectweb.proactive.gcmdeployment;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.net.URL;
 import java.util.Set;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.xml.VariableContract;
 
 
@@ -209,4 +210,9 @@ public interface GCMApplication {
      * @return descriptor url
      */
     public URL getDescriptorURL();
+
+    public ProActiveSecurityManager getProActiveApplicationSecurityManager();
+
+    public void setProActiveApplicationSecurityManager(
+            ProActiveSecurityManager proactiveApplicationSecurityManager);
 }

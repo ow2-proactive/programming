@@ -32,6 +32,7 @@ package org.objectweb.proactive.core.body.request;
 
 import java.io.IOException;
 import java.io.StreamCorruptedException;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -46,7 +47,9 @@ import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
+import org.objectweb.proactive.core.security.SecurityContext;
 import org.objectweb.proactive.core.security.SecurityEntity;
+import org.objectweb.proactive.core.security.TypedCertificate;
 import org.objectweb.proactive.core.security.crypto.SessionException;
 import org.objectweb.proactive.core.security.crypto.Session.ActAs;
 import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenException;
@@ -283,14 +286,15 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
                 .getProActiveSecurityManager();
         if (psm != null) {
             try {
-                if (!psm.getSessionTo(destinationBody.getCertificate()).getSecurityContext().getSendRequest()
-                        .getCommunication()) {
-                    throw new CommunicationForbiddenException();
+		TypedCertificate targetCert = destinationBody.getCertificate();
+		SecurityContext sc = psm.getSessionTo(targetCert).getSecurityContext();
+                if (!sc.getSendRequest().getCommunication()) {
+                    throw new CommunicationForbiddenException("Policy is " + sc.toString());
                 }
             } catch (SecurityNotAvailableException e) {
-                throw new CommunicationForbiddenException();
+                throw new CommunicationForbiddenException("Remote target " + destinationBody + " does not have security enabled",e);
             } catch (SessionException e) {
-                throw new CommunicationForbiddenException();
+                throw new CommunicationForbiddenException("Exception during session handshake",e);
             }
             this.crypt(psm, destinationBody);
         }

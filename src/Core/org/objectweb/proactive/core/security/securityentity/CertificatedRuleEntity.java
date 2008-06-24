@@ -65,7 +65,7 @@ public class CertificatedRuleEntity extends RuleEntity {
 
     @Override
     public String toString() {
-        return super.toString() + "\n\tCertificate : " + this.certificate.toString();
+        return super.toString() + "," + this.certificate.toString();
     }
 
     @Override

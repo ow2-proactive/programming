@@ -79,7 +79,7 @@ public class TypedCertificate implements Serializable {
 
     @Override
     public String toString() {
-        return getType() + ":" + getCert().toString();
+        return getType().toString() + ":" + getCert().getSubjectDN();
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {
@@ -125,4 +125,5 @@ public class TypedCertificate implements Serializable {
     public int hashCode() {
         return this.cert.hashCode();
     }
+
 }

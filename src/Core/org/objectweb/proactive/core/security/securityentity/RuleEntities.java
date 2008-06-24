@@ -90,8 +90,7 @@ public class RuleEntities extends ArrayList<RuleEntity> {
     public String toString() {
         String result = new String();
         for (RuleEntity rule : this) {
-            result += rule.toString();
-            result += "\n";
+            result += rule.toString() + ",";
         }
         return result;
     }

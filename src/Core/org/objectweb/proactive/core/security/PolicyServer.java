@@ -133,10 +133,8 @@ public class PolicyServer implements Serializable, Cloneable {
         }
 
         if (ProActiveLogger.getLogger(Loggers.SECURITY_POLICYSERVER).isDebugEnabled()) {
-            String s = "================================\nLocal : " + local.toString();
-            s += ("\nDistant : " + distant.toString());
-            ProActiveLogger.getLogger(Loggers.SECURITY_POLICYSERVER).debug(
-                    s + "\n=================================\n");
+            String s = "Local : " + local.toString() + "--> Distant : " + distant.toString();
+            log.debug(s);
         }
 
         // getting all rules matching the context
@@ -152,8 +150,8 @@ public class PolicyServer implements Serializable, Cloneable {
 
             Match matchingTo = policyEntitiesTo.match(distant);
 
-            if (ProActiveLogger.getLogger(Loggers.SECURITY_POLICYSERVER).isDebugEnabled()) {
-                ProActiveLogger.getLogger(Loggers.SECURITY_POLICYSERVER).debug("evaluating policy " + policy);
+            if (log.isDebugEnabled()) {
+                log.debug("evaluating policy " + policy);
             }
 
             //

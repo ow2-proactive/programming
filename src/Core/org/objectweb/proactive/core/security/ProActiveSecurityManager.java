@@ -95,8 +95,8 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
     private static Logger logger = ProActiveLogger.getLogger(Loggers.SECURITY_MANAGER);
 
     /* contains all active sessions for the current active object */
-    private final Hashtable<Long, Session> sessions;
-    private final Hashtable<TypedCertificate, Long> sessionIDs;
+    private  Hashtable<Long, Session> sessions;
+    private  Hashtable<TypedCertificate, Long> sessionIDs;
 
     /* random generator used for generating sesssion key */
     //    private transient RandomLongGenerator randomLongGenerator;
@@ -233,8 +233,11 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
         // retrieves communication policy for local object
         SecurityContext scLocal = this.policyServer.getPolicy(local, distant);
 
+        //        System.out.println("ProActiveSecurityManager.initiateSession()" + scLocal);
+
         if (scLocal.isEverythingForbidden()) {
-            throw new CommunicationForbiddenException("No communication is allowed with the target.");
+            throw new CommunicationForbiddenException("No communication is allowed from " + local + "to " +
+                distant);
         }
 
         // retrieves communication policy for distant object
@@ -937,7 +940,7 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
 
             //   System.out.println("Server: Sending my HELLO to client");
         } catch (Exception e) {
-            System.out.println("Server: Hello failed");
+            logger.warn("Server: Hello failed");
             e.printStackTrace();
         }
 
@@ -993,7 +996,7 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
             sig.update(session.getDistantCertificate().getCert().getEncoded()); // Incorporate encoded certificate.
 
             if (!sig.verify(signature)) {
-                System.out.println(session);
+                logger.debug(session);
                 logger.warn("Signature failed on Public key exchange data unit");
                 throw new Exception("Signature failed on Public key exchange data unit");
             }
@@ -1343,9 +1346,9 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
                 entities = this.parent.getEntities();
             } catch (SecurityNotAvailableException e) {
                 // forget it
-                e.printStackTrace();
+                //  e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         if (entities == null) {

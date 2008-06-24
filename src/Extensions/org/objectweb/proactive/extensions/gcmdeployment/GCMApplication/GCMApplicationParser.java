@@ -32,8 +32,10 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication;
 
 import java.io.IOException;
 import java.util.Map;
+
 import javax.xml.xpath.XPathExpressionException;
 
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserConstants;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
@@ -82,4 +84,10 @@ public interface GCMApplicationParser extends GCMParserConstants {
      * @return the technical services for the defined application
      */
     public TechnicalServicesProperties getAppTechnicalServices();
+
+    public ProActiveSecurityManager getProactiveApplicationSecurityManager();
+
+    public void setProactiveApplicationSecurityManager(
+            ProActiveSecurityManager proactiveApplicationSecurityManager);
+
 }

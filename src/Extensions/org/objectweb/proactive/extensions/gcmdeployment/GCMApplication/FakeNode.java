@@ -37,6 +37,8 @@ import org.objectweb.proactive.core.descriptor.services.TechnicalService;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
+import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
 
 
@@ -71,7 +73,17 @@ public class FakeNode {
             String jobIb = new Long(gcma.getDeploymentId()).toString();
 
             try {
-                node = part.createGCMNode(null, vn.getName(), jobIb, tsList);
+
+                //create the node
+                ProActiveSecurityManager siblingPSM = null;
+                System.out.println("FakeNode.create()" + this.gcma.getProActiveApplicationSecurityManager());
+
+                if (this.gcma.getProActiveApplicationSecurityManager() != null) {
+                    siblingPSM = this.gcma.getProActiveApplicationSecurityManager()
+                            .generateSiblingCertificate(EntityType.NODE, vn.getName());
+                }
+
+                node = part.createGCMNode(siblingPSM, vn.getName(), jobIb, tsList);
             } catch (NodeException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

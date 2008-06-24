@@ -50,6 +50,10 @@ public enum Authorization {
         return realValue(this.value + that.value);
     }
 
+    public int getValue() {
+        return value;
+    }
+
     private Authorization realValue(int value) {
         if (value > 0) {
             return REQUIRED;

@@ -32,7 +32,7 @@ package org.objectweb.proactive.core.security;
 
 /**
  * @author The ProActive Team
- * Defines usefull constants for security
+ * Defines useful constants for security
  *
  */
 public abstract class SecurityConstants {
@@ -89,5 +89,6 @@ public abstract class SecurityConstants {
 
             return false;
         }
+
     }
 }

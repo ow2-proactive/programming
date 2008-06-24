@@ -54,6 +54,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
@@ -108,6 +109,7 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
     protected Map<String, GCMVirtualNodeInternal> virtualNodes;
     protected Map<String, ApplicationParser> applicationParsersMap;
     protected TechnicalServicesProperties appTechnicalServices;
+    protected ProActiveSecurityManager proactiveApplicationSecurityManager;
 
     public GCMApplicationParserImpl(URL descriptor, VariableContractImpl vContract) throws Exception {
         this(descriptor, vContract, null);
@@ -436,5 +438,14 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
 
     public TechnicalServicesProperties getAppTechnicalServices() {
         return appTechnicalServices;
+    }
+
+    public ProActiveSecurityManager getProactiveApplicationSecurityManager() {
+        return proactiveApplicationSecurityManager;
+    }
+
+    public void setProactiveApplicationSecurityManager(
+            ProActiveSecurityManager proactiveApplicationSecurityManager) {
+        this.proactiveApplicationSecurityManager = proactiveApplicationSecurityManager;
     }
 }

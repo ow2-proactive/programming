@@ -38,24 +38,10 @@ import org.objectweb.proactive.core.security.TypedCertificate;
 import org.objectweb.proactive.core.security.TypedCertificateList;
 
 
-/**
- * @author The ProActive Team
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 public class Entity implements Serializable {
 
-    /**
-     *
-     */
-
-    //	private static final Logger logger = ProActiveLogger.getLogger(Loggers.SECURITY);
     private final TypedCertificateList certChain;
 
-    //	public Entity() {
-    //		// needed for serializable ?
-    //	}
     public Entity(TypedCertificateList certChain) {
         this.certChain = certChain;
     }
@@ -81,16 +67,6 @@ public class Entity implements Serializable {
 
     @Override
     public String toString() {
-        X509Certificate certificate = getCertificate().getCert();
-        String string = new String();
-        string = "\nType : " + getCertificate().getType();
-        string += "\nCertificate : ";
-
-        if (certificate != null) {
-            string += certificate.toString();
-        } else {
-            string += "*";
-        }
-        return string;
+        return getCertificate().toString();
     }
 }

@@ -11,10 +11,10 @@
 	<Rules>
 		<Rule>
 			<From>
-				<Entity type="node" name="CN=vn1" />
+				<Entity type="node" name="CN=nodes" />
 			</From>
 			<To>
-				<Entity type="node" name="CN=vn2" />
+				<Entity type="node" name="CN=nodes" />
 			</To>
 			<Communication>
 				<Request value="authorized">
@@ -31,10 +31,30 @@
 		</Rule>
 		<Rule>
 			<From>
-				<Entity type="node" name="CN=vn1" />
+				<Entity type="application" name="CN=Garden1" />
 			</From>
 			<To>
-				<Entity type="node" name="CN=vn3" />
+				<Entity type="application" name="CN=Garden1" />
+			</To>
+			<Communication>
+				<Request value="authorized">
+					<Attributes authentication="denied"
+						integrity="optional" confidentiality="required" />
+				</Request>
+				<Reply value="authorized">
+					<Attributes authentication="optional"
+						integrity="optional" confidentiality="optional" />
+				</Reply>
+			</Communication>
+			<Migration>authorized</Migration>
+			<OACreation>authorized</OACreation>
+		</Rule>
+		<Rule>
+			<From>
+				<Entity type="entity" name="CN=HalfBody" />
+			</From>
+			<To>
+				<Entity type="entity" name="CN=functionalTests.activeobject.creation.A" />
 			</To>
 			<Communication>
 				<Request value="authorized">

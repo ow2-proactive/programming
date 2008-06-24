@@ -94,6 +94,6 @@ public abstract class RuleEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "RuleEntity :\n\tLevel : " + this.level;
+        return "RuleEntity: depth=" + this.level + ",";
     }
 }

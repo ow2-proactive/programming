@@ -51,6 +51,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
@@ -103,6 +104,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     private List<Node> nodes;
     private Object deploymentMutex = new Object();
     private boolean isStarted;
+    private ProActiveSecurityManager proactiveApplicationSecurityManager;
 
     private VariableContractImpl vContract;
 
@@ -145,6 +147,8 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             virtualNodes = parser.getVirtualNodes();
             commandBuilder = parser.getCommandBuilder();
             nodeMapper = new NodeMapper(this, virtualNodes.values());
+
+            proactiveApplicationSecurityManager = parser.getProactiveApplicationSecurityManager();
 
             this.vContract.close();
 
@@ -432,5 +436,14 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
     public Set<String> getVirtualNodeNames() {
         return new HashSet<String>(virtualNodes.keySet());
+    }
+
+    public ProActiveSecurityManager getProActiveApplicationSecurityManager() {
+        return proactiveApplicationSecurityManager;
+    }
+
+    public void setProActiveApplicationSecurityManager(
+            ProActiveSecurityManager proactiveApplicationSecurityManager) {
+        this.proactiveApplicationSecurityManager = proactiveApplicationSecurityManager;
     }
 }
