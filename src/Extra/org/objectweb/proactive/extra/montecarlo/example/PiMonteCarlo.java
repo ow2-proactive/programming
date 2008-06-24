@@ -29,11 +29,8 @@
  * ################################################################
  */
 
-
 // TODO: tests
-
 package org.objectweb.proactive.extra.montecarlo.example;
-
 
 import java.io.Serializable;
 import java.net.URL;
@@ -53,81 +50,78 @@ import org.objectweb.proactive.api.PALifeCycle;
 
 
 public class PiMonteCarlo implements EngineTask {
-	
-	private double niter = 0;	   
+
+    private double niter = 0;
     private double tasks = 0;
-    
-    public PiMonteCarlo(double n, double t){
-    	super();
-    	niter = n;
-    	tasks = t;
+
+    public PiMonteCarlo(double n, double t) {
+        super();
+        niter = n;
+        tasks = t;
     }
-	
-	public class MCPi implements ExperienceSet{
-	    	int N;
-	    	
-	    	MCPi(final double d){
-	    		this.N = (int) d;
-	    	}
-	    	
-	    	public double[] simulate(final Random rng){
-	    		final double [] count = new double[1]; 
-	    		 for (int i = 0; i < N; i++) {
-	    			 	double x = rng.nextGaussian();
-	    			 	double y = rng.nextGaussian();
-	    	            double value =  x*x + y*y;
-	    	            if(value <= 1){
-	    	            	count[0] += 1;
-	    	            }
-	    	        }
-	    	        return count;
-	    	}
-	    }
-		
-	
-		
-		public static void main(String[] args) throws ProActiveException, TaskException {
-	    	URL descriptor = PiMonteCarlo.class.getResource("WorkersApplication.xml");
-	        PAMonteCarlo mc = new PAMonteCarlo(descriptor, null, "Workers");
-	        
-	        // total monte carlo iterations and number tasks
-	        
-	        PiMonteCarlo piMonteCarlo = new PiMonteCarlo(1e6, 10); 
-	        
-	        double [] pi = (double []) mc.run(piMonteCarlo);
-	        
-	        System.out.println(" The value of pi is " + pi[0]);
-	        mc.terminate();
-	        PALifeCycle.exitSuccess();
-	    }
-	    	    
 
-	    public Serializable run(Simulator simulator, Executor executor) {
-	    	
-	    	double pival;
-	    	List<ExperienceSet> sets = new ArrayList<ExperienceSet>();
-	        
-	        for (int i = 0; i < tasks; i++) {
-	            sets.add(new MCPi((int)(niter/tasks)));
-	        }
-	        
-	        Enumeration<double[]> simulatedCountList = null;
-	        
-	        try {
-	            simulatedCountList = simulator.solve(sets);
-	        } catch (TaskException e) {
-	            throw new RuntimeException(e);
-	        }
+    public class MCPi implements ExperienceSet {
+        int N;
 
-	        int counter = 0;
-	        while (simulatedCountList.hasMoreElements()) {
-	                   
-	            double[] simulatedCounts = simulatedCountList.nextElement();
-	            counter += simulatedCounts[0];	              
-	        }
-     
-	        pival = counter/(niter*4);
-   
-	        return pival;
-	    }
+        MCPi(final double d) {
+            this.N = (int) d;
+        }
+
+        public double[] simulate(final Random rng) {
+            final double[] count = new double[1];
+            for (int i = 0; i < N; i++) {
+                double x = rng.nextGaussian();
+                double y = rng.nextGaussian();
+                double value = x * x + y * y;
+                if (value <= 1) {
+                    count[0] += 1;
+                }
+            }
+            return count;
+        }
+    }
+
+    public static void main(String[] args) throws ProActiveException, TaskException {
+        URL descriptor = PiMonteCarlo.class.getResource("WorkersApplication.xml");
+        PAMonteCarlo mc = new PAMonteCarlo(descriptor, null, "Workers");
+
+        // total monte carlo iterations and number tasks
+
+        PiMonteCarlo piMonteCarlo = new PiMonteCarlo(1e6, 10);
+
+        double[] pi = (double[]) mc.run(piMonteCarlo);
+
+        System.out.println(" The value of pi is " + pi[0]);
+        mc.terminate();
+        PALifeCycle.exitSuccess();
+    }
+
+    public Serializable run(Simulator simulator, Executor executor) {
+
+        double pival;
+        List<ExperienceSet> sets = new ArrayList<ExperienceSet>();
+
+        for (int i = 0; i < tasks; i++) {
+            sets.add(new MCPi((int) (niter / tasks)));
+        }
+
+        Enumeration<double[]> simulatedCountList = null;
+
+        try {
+            simulatedCountList = simulator.solve(sets);
+        } catch (TaskException e) {
+            throw new RuntimeException(e);
+        }
+
+        int counter = 0;
+        while (simulatedCountList.hasMoreElements()) {
+
+            double[] simulatedCounts = simulatedCountList.nextElement();
+            counter += simulatedCounts[0];
+        }
+
+        pival = counter / (niter * 4);
+
+        return pival;
+    }
 }

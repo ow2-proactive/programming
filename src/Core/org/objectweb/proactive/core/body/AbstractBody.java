@@ -232,7 +232,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         } else {
             this.isSecurityOn = true;
             ProActiveLogger.getLogger(Loggers.SECURITY_BODY).debug(
-                    "Active Object " + this.securityManager.getCertificate().getCert().getSubjectDN() +",application is " + this.securityManager.getApplicationName());
+                    "Active Object " + this.securityManager.getCertificate().getCert().getSubjectDN() +
+                        ",application is " + this.securityManager.getApplicationName());
             this.isSecurityOn = this.securityManager.getCertificate() != null;
             this.internalBodySecurity = new InternalBodySecurity(null); // SECURITY
         }

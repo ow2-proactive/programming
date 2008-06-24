@@ -125,6 +125,7 @@ public interface GCMApplication {
      */
     // @snippet-start GCMApplication_getVirtualNode
     public GCMVirtualNode getVirtualNode(String vnName);
+
     // @snippet-end GCMApplication_getVirtualNode
 
     public Set<String> getVirtualNodeNames();
@@ -137,6 +138,7 @@ public interface GCMApplication {
      */
     // @snippet-start GCMApplication_getVirtualNodes
     public Map<String, GCMVirtualNode> getVirtualNodes();
+
     // @snippet-end GCMApplication_getVirtualNodes
 
     /**

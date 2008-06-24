@@ -95,8 +95,8 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
     private static Logger logger = ProActiveLogger.getLogger(Loggers.SECURITY_MANAGER);
 
     /* contains all active sessions for the current active object */
-    private  Hashtable<Long, Session> sessions;
-    private  Hashtable<TypedCertificate, Long> sessionIDs;
+    private Hashtable<Long, Session> sessions;
+    private Hashtable<TypedCertificate, Long> sessionIDs;
 
     /* random generator used for generating sesssion key */
     //    private transient RandomLongGenerator randomLongGenerator;

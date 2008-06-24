@@ -286,15 +286,16 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
                 .getProActiveSecurityManager();
         if (psm != null) {
             try {
-		TypedCertificate targetCert = destinationBody.getCertificate();
-		SecurityContext sc = psm.getSessionTo(targetCert).getSecurityContext();
+                TypedCertificate targetCert = destinationBody.getCertificate();
+                SecurityContext sc = psm.getSessionTo(targetCert).getSecurityContext();
                 if (!sc.getSendRequest().getCommunication()) {
                     throw new CommunicationForbiddenException("Policy is " + sc.toString());
                 }
             } catch (SecurityNotAvailableException e) {
-                throw new CommunicationForbiddenException("Remote target " + destinationBody + " does not have security enabled",e);
+                throw new CommunicationForbiddenException("Remote target " + destinationBody +
+                    " does not have security enabled", e);
             } catch (SessionException e) {
-                throw new CommunicationForbiddenException("Exception during session handshake",e);
+                throw new CommunicationForbiddenException("Exception during session handshake", e);
             }
             this.crypt(psm, destinationBody);
         }
