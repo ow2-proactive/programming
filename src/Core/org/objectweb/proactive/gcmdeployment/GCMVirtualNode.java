@@ -105,6 +105,7 @@ public interface GCMVirtualNode {
      */
     // @snippet-start GCMVirtualNode_waitReady
     public void waitReady();
+
     // @snippet-end GCMVirtualNode_waitReady
 
     /**
@@ -117,6 +118,7 @@ public interface GCMVirtualNode {
      */
     // @snippet-start GCMVirtualNode_waitReady_timeout
     public void waitReady(int timeout) throws ProActiveTimeoutException;
+
     // @snippet-end GCMVirtualNode_waitReady_timeout
 
     /**
