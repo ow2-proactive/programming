@@ -8,10 +8,7 @@
   <email>proactive@objectweb.org</email> and we'll update the FAQ.</para>
 
  <qandaset>
- 
-  <qandadiv>
-   
-  
+   <qandadiv><title>Frequently Asked Questions</title>
   <qandaentry>
         <question>
           <para>How do I build ProActive from the distribution?</para>
@@ -25,17 +22,17 @@
           <literal>compile</literal> directory and use the script:</para>
          
          <itemizedlist>
-          <listitem> <para>on Windows: <literal>build.bat all</literal></para> </listitem>
-          <listitem> <para>on Unix systems: <literal>build all</literal></para> </listitem>
+          <listitem> <para>on Windows: <literal>build.bat compile.all</literal></para> </listitem>
+          <listitem> <para>on Unix systems: <literal>build compile.all</literal></para> </listitem>
          </itemizedlist>
          
-         <para> <literal>'all'</literal>  represents the target of the 
+         <para> <literal>'compile.all'</literal>  represents the target of the 
           build. It will compile all sources files and generate the documentation.
           To compile only the source files, for example if you 
           have modified the code, you should try</para>          
          <itemizedlist>
-          <listitem> <para>on Windows: <literal>build.bat compile</literal></para> </listitem>
-          <listitem> <para>on Unix systems: <literal>build compile</literal></para> </listitem>
+          <listitem> <para>on Windows: <literal>build.bat compile.core</literal></para> </listitem>
+          <listitem> <para>on Unix systems: <literal>build compile.core</literal></para> </listitem>
          </itemizedlist>
 
           <para>If you want only to compile only parts of ProActive, 
@@ -43,28 +40,67 @@
            As of version v3.2, the result is: </para>
           
           <screen>/home/bob/ProActive/compile/$ build
-           Buildfile: ./proactive.xml
-           
-           Main targets:
-           
-           all            Compile All and build the docs
-           clean          Remove all generated files
-           compile        build the class files
-           core           Compile the ProActive core classes
-           dist           Create the distribution binary
-           docs           Construct the javadoc and the manual
-           examples       Compile all the examples
-           ibis           Everything related to ProActive IBIS
-           ic2d           Compile the IC2D Tool
-           javadoc        Use javadoc to build information on the ProActive classes
-           manual         Build all the different manual version: html, pdf...
-           manualHtml     Make only the html files in the manual
-           manualPdf      Make only the pdf files in the manual
-           rewrite        Rewrite classes to enhance performance with ibis
-           runBench       Run benchmarks
-           runTests       Run all non regression tests
-           runTestsLocal  Run all non regression tests on the current host only
-           Default target: compile </screen>          
+Buildfile: build.xml
+
+Main targets:
+ProActive Documentation.docs               Construct the javadoc and the manual
+ProActive Documentation.javadoc.complete   Make complete Javadoc
+ProActive Documentation.javadoc.published  Make published Javadoc
+ProActive Documentation.manual             Build all the different manual version: html, pdf...
+ProActive Documentation.manualHtml         Make only the html files in the manual
+ProActive Documentation.manualPdf          Make only the pdf files in the manual
+ProActive Documentation.manualSingleHtml   Make only the big html file in the manual
+all                                        build the class files and the documentation
+clean                                      Remove all generated files
+compile                                    Deprecated, see compile.all
+compile.all                                Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)
+compile.benchmarks                         Compile the benchmarks
+compile.core                               Compile ProActive core classes
+compile.examples                           Compile all examples classes
+compile.extensions                         Compile ProActive Extensions classes
+compile.extra                              Compile ProActive Extensions classes
+compile.stubGenerator                      Compile Stub Generator Classes
+compile.tests                              Compile functional and unit tests classes
+compile.trywithcatch                       Compile ProActive Try With Catch classes
+compile.util                               Compile ProActive Utils classes
+copyright_format                           Update Copyright and Version in every text files and format them
+core                                       Deprecated, see compile.core
+deploy                                     Populate dist/ with all needed file
+deploy.all                                 Populate dist/ (with ProActive_examples.jar)
+deploy.examples                            Add examples.jar to the dist/ directory
+docs                                       Construct the javadoc and the manual
+examples                                   Deprecated, see compile.examples
+extensions                                 Deprecated, see compile.extensions
+extra                                      Deprecated, see compile.extra
+format                                     hibernate's eclipse-based formatter
+ibis                                       Everything related to ProActive IBIS
+ic2d.libClean                              Clean all needed libraries to IC2D
+ic2d.libCopy                               Copy all needed libraries to IC2D
+ic2dLib                                    Deprecated, see ic2d.libCopy
+ic2dLibClean                               Deprecated, see ic2d.libClean
+javadoc.complete                           Make complete Javadoc
+javadoc.published                          Make published Javadoc
+jdepend                                    JDepend report
+junit                                      Run all non regression tests on the current host only
+junit.clover                               Same as junit but with code coverage enabled
+junit.distributed                          Run all non regression tests
+junit.emma                                 Same as junit but with code coverage enabled
+manual                                     Build all the different manual version: html, pdf...
+manualHtml                                 Make only the html files in the manual
+manualPdf                                  Make only the pdf files in the manual
+manualSingleHtml                           Make only the big html file in the manual
+microTimer                                 Deprecated, see compile.microTimer
+proActiveJar                               Deprecated, see deploy
+release                                    Source and Binary Releases
+release.all                                Source and Binary Releases
+release.bin                                Binary Release: dist + docs
+release.src                                Source Release: sources + docs
+runPerformanceTest                         Run performance test on the current host.
+stubGenerator                              Deprecated, see compile.stubGenerator
+update_copyright_and_version               Update Copyright and Version in every text files
+uploadSchemas                              upload schemas on web site
+Default target: compile.all
+ </screen>          
 
           </answer>
       </qandaentry>
@@ -106,8 +142,7 @@
         </answer>
       </qandaentry>
 
-     </qandadiv>
-     <qandadiv>
+
        
        
        
@@ -263,18 +298,22 @@
           that represent the activity of the active object.</para>
          
          <para>The body has two representations. One is local and given by
-          the interface Body (see code in <xref role="javaFileSrc" linkend="Body.java"/>). This is the
+          the interface <literal>Body</literal> </para>
+          <programlisting> <textdata> <textobject fileref="core/body/Body.java"> </textobject></textdata></programlisting>
+          <para> This is the
           local view of the body an object can have when being in the same JVM
           as the body. For instance, the implementation of the activity of an
           object done through the method <literal>runActivity(Body)</literal>
           of the interface <literal>RunActive</literal> sees the body locally
           as it is instantiated by the body itself. The other representation,
-          given by the interface UniversalBody 
-          (see code in <xref role="javaFileSrc" linkend="core/body/UniversalBody.java"/>), is
-          remote. It represents the view of the body a remote object can have
+          given by the interface UniversalBody is remote. 
+          
+          It represents the view of the body a remote object can have
           and therefore the methods that can be invoked. That view is the one
           used by the proxy of a remote reference to the active object to send
           request to the body of the active object.</para>
+             <programlisting> <textdata> <textobject fileref="core/body/UniversalBody.java"> </textobject></textdata></programlisting>
+          
         </answer>
        </qandaentry>
        
@@ -347,9 +386,6 @@
        </answer>
       </qandaentry>
 
-      </qandadiv>
-       <qandadiv>
-        
 
       <qandaentry>
         <question>
@@ -532,18 +568,14 @@
        <answer>
         <para>Sometimes, the hosts files (<literal>/etc/hosts</literal> for UNIX)
          contains <literal>127.0.0.1</literal> along with the name of the machine.
-         This troubles ProActive, and JAVA network connexions in general. To circumvent
-         this issue , you should start your programs with the command line argument 
+         This is an issue for ProActive and JAVA network connections in general. To circumvent
+         the problem, start your programs with the command line argument 
          <screen>-Dsun.net.spi.nameservice.provider.1=dns,sun"</screen>
          This tells java not to look at the hosts file, but rather to ask
          the DNS for network information.</para>
        </answer>
       </qandaentry>
       
-     
-     </qandadiv>
-       <qandadiv>
-        
 
         <qandaentry>
          <question>
@@ -870,9 +902,9 @@
          marker interface allowing to change the body and/or the proxy of an
          active object. It was of no use most of the time and was made
          obsolete with the introduction of the MetaObjectFactory 
-         (see code in <xref role="javaFileSrc" linkend="core/body/MetaObjectFactory.java"/>)
          in the <emphasis role="bold">0.9.3</emphasis> release.</para>
-        
+<programlisting><textdata><textobject fileref="core/body/MetaObjectFactory.java"></textobject></textdata></programlisting>        
+
         <para>Up to <emphasis role="bold">ProActive 0.9.3</emphasis> the
          activity of an active object was given by a method
          <literal>live(Body)</literal> called by reflection of the reified
@@ -1048,11 +1080,7 @@
         
        </qandaentry>
        
-      
-     </qandadiv>
-     <qandadiv>
-       
-
+ 
        <qandaentry>
        <question>
         <para>What is the difference between passing parameters in
@@ -1092,9 +1120,7 @@
          the path to point to the correct schema.</para>
        </answer>
       </qandaentry>
-      
-
-    </qandadiv>
+      </qandadiv>
    </qandaset>
 
    </appendix>
