@@ -30,8 +30,6 @@
  */
 package org.objectweb.proactive.extra.hpc.exchange;
 
-import java.util.Stack;
-
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.reply.Reply;
@@ -42,9 +40,6 @@ import org.objectweb.proactive.extra.hpc.MethodCallDummy;
 
 
 public class RequestExchange extends RequestImpl {
-
-    // Some static variables for the factory
-    transient private static Stack<RequestExchange> stack = new Stack<RequestExchange>();
 
     // Variables related to source and destination ranks
     transient private int tagID;
@@ -113,30 +108,11 @@ public class RequestExchange extends RequestImpl {
 
     public static RequestExchange getRequestExchange(int tagID,
             ExchangeableArrayPointer exchangeableArrayPointer, int dstUID) {
-        if (!stack.isEmpty()) {
-            RequestExchange req = stack.pop();
-            req.tagID = tagID;
-            req.destinationUID = dstUID;
-            req.exchangeableArrayPointer = exchangeableArrayPointer;
-
-            return req;
-        } else {
-            return new RequestExchange(tagID, exchangeableArrayPointer, dstUID);
-        }
+        return new RequestExchange(tagID, exchangeableArrayPointer, dstUID);
     }
 
     private static RequestExchange getRequestExchange(int tagID, int offset, int len, int dstUID) {
-        if (!stack.isEmpty()) {
-            RequestExchange req = stack.pop();
-            req.tagID = tagID;
-            req.offsetArray = offset;
-            req.lenArray = len;
-            req.destinationUID = dstUID;
-
-            return req;
-        } else {
-            return new RequestExchange(tagID, offset, len, dstUID);
-        }
+        return new RequestExchange(tagID, offset, len, dstUID);
     }
 
     private RequestExchange setByteArray(byte[] array) {
@@ -215,8 +191,6 @@ public class RequestExchange extends RequestImpl {
                 }
                 break;
         }
-
-        stack.push(this);
     }
 
     @Override
@@ -262,5 +236,4 @@ public class RequestExchange extends RequestImpl {
         manager.setReady(tagID);
         senderNodeURI = DummySender.getDummySender().getNodeURL();
     }
-
 }
