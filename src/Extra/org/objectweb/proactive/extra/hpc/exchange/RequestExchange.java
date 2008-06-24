@@ -43,8 +43,6 @@ import org.objectweb.proactive.extra.hpc.MethodCallDummy;
 
 public class RequestExchange extends RequestImpl {
 
-    private static final long serialVersionUID = 1L;
-
     // Some static variables for the factory
     transient private static Stack<RequestExchange> stack = new Stack<RequestExchange>();
 
