@@ -33,7 +33,7 @@ package org.objectweb.proactive.benchmarks.timit.util;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
-import org.objectweb.proactive.ProActive;
+import org.objectweb.proactive.api.PAVersion;
 
 
 /**
@@ -91,7 +91,7 @@ public class BenchmarkStatistics implements Serializable {
         res += ("\nJava Version : " + System.getProperty("java.version"));
         res += "\nProactive Version : ";
         try {
-            res += (String) ProActive.class.getMethod("getProActiveVersion", new Class[0]).invoke(null,
+            res += (String) PAVersion.class.getMethod("getProActiveVersion", new Class[0]).invoke(null,
                     new Object[0]);
         } catch (InvocationTargetException e) {
             e.printStackTrace();
