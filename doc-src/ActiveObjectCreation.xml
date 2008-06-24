@@ -609,11 +609,11 @@
 
 				<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/CustomInitAndRun.txt"/></textobject></programlisting>
 
-				<para>
 					<example><info><title>
 							Start, stop, suspend, restart a simulation
 							algorithm in runActivity method
-						</title></info>
+						</title></info>					</example>
+						
 						
 						<para>
 							Bellow is the skeleton code for a class that
@@ -622,11 +622,12 @@
 							<literal>RunActive</literal>
 							to provide the necessary control.
 						</para>
+
+			
 						<para>
 							<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/SimulationWithActivity.txt"/></textobject></programlisting>
 						</para>
-					</example>
-				</para>
+			
 
 			</section>
 
@@ -781,10 +782,11 @@
 				</literal>
 				is one convenience method that
 				<literal>ProActiveMetaObjectFactory</literal>
-				(see code in
-				<xref linkend="core/body/ProActiveMetaObjectFactory.java" role="javaFileSrc"/>
-				) provides to simplify the creation of factories as
-				singleton. More explanations can be found in the<!-- This url can only work in the html generated files: in pdf there's no ".." -->
+				 provides to simplify the creation of factories as
+				singleton. 
+				<programlisting><textobject><textdata fileref="core/body/ProActiveMetaObjectFactory.java"></textdata></textobject></programlisting>
+							
+				More explanations can be found in the<!-- This url can only work in the html generated files: in pdf there's no ".." -->
 				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/core/body/ProActiveMetaObjectFactory.html" os="html">
 					javadoc of that class
 				</link>

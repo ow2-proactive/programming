@@ -1255,7 +1255,8 @@ Enter the number of iterations (0 to exit) :  </screen>
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>
+            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>            </example>
+            
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
        
@@ -1269,7 +1270,6 @@ Enter the number of iterations (0 to exit) :  </screen>
     &lt;/exportedVirtualNodes&gt;
        
     &lt;controller desc="primitive"/&gt;</programlisting>
-            </example>
             <para>
                 If you add this code into the adl, you are saying that
                 the
@@ -1303,7 +1303,8 @@ Enter the number of iterations (0 to exit) :  </screen>
                 lookup mechanism. This is very simple to use. Here's the
                 code to do that:
             </para>
-            <example><info><title>Component Lookup and Register</title></info>
+            <example><info><title>Component Lookup and Register</title></info>            </example>
+            
                 
                 <para>The component Registration</para>
                 <para>
@@ -1316,7 +1317,6 @@ Enter the number of iterations (0 to exit) :  </screen>
       UrlBuilder.buildUrl(this.hostName, "Dispatcher", protocol, this.portNumber));
       this.c3dDispatcher = (Dispatcher) a.getFcInterface("user2dispatcher");</programlisting>
                 </para>
-            </example>
             <para>
                 For the registeration, you only need a reference on the
                 component you want to register, and build a url

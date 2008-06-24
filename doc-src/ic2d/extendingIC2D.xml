@@ -1383,7 +1383,8 @@
 					editor to see and modify the source.
 				</para>
 				
-				<example xml:id="manifestMFListing"><info><title>MANIFEST.MF</title></info>
+				<example xml:id="manifestMFListing"><info><title>MANIFEST.MF</title></info>				</example>
+				
 					
 					<para>
 						<screen>
@@ -1398,7 +1399,6 @@ org.eclipse.ui, org.eclipse.core.runtime
 Eclipse-AutoStart: true
 						</screen>
 					</para>
-				</example>
 				
 				<para>
 					<emphasis role="bold">plugin.xml</emphasis>
@@ -1436,7 +1436,8 @@ Eclipse-AutoStart: true
 					the plug-in wizard.
 				</para>
 
-				<example xml:id="pluginClassListing"><info><title>ExamplePlugin.java</title></info>
+				<example xml:id="pluginClassListing"><info><title>ExamplePlugin.java</title></info>				</example>
+				
 					
 					<para>
 					<programlisting xml:lang="java">
@@ -1496,7 +1497,6 @@ public class ExamplePlugin extends AbstractUIPlugin {
 }
 					</programlisting>
 					</para>
-				</example>
 
 			</section><!-- pluginClass -->
 
@@ -1521,7 +1521,8 @@ public class ExamplePlugin extends AbstractUIPlugin {
 					to modify this file that is less error-prone
 					than modifying it by hand.
 				</para>
-					<example xml:id="buildPropertiesListing"><info><title>build.properties</title></info>
+					<example xml:id="buildPropertiesListing"><info><title>build.properties</title></info>				</example>
+					
 					
 					<para>
 					<screen>
@@ -1530,7 +1531,6 @@ output.. = bin/
 bin.includes = META-INF/,\ .
 					</screen>
 					</para>
-				</example>
 			</section><!-- buildProperties -->
 				
 			<section xml:id="addPluginToIC2D"><info><title>How to add your plugin to IC2D</title></info>
@@ -1810,7 +1810,8 @@ bin.includes = META-INF/,\ .
 					shows the plugin.xml file that was created.
 				</para>
 
-				<example xml:id="pluginXMLexample"><info><title>plugin.xml</title></info>
+				<example xml:id="pluginXMLexample"><info><title>plugin.xml</title></info>				</example>
+				
 					
 					<para>
 					<programlisting xml:lang="xml">
@@ -1827,7 +1828,6 @@ bin.includes = META-INF/,\ .
 &lt;/plugin&gt;
 					</programlisting>
 					</para>
-				</example>
 
 
 
@@ -1845,7 +1845,8 @@ bin.includes = META-INF/,\ .
 					interface :
 				</para>
 
-				<example xml:id="examplePlugin"><info><title>ExamplePlugin.java</title></info>
+				<example xml:id="examplePlugin"><info><title>ExamplePlugin.java</title></info>				</example>
+				
 					
 					<para>
 					<programlisting xml:lang="java">
@@ -1866,7 +1867,6 @@ public class ExamplePerspective implements IPerspectiveFactory {
 }
 					</programlisting>
 					</para>
-				</example>
 
 				<para>
 					You have created your first perspective !

@@ -24,7 +24,8 @@
       root logger. Therefore all loggers are hierarchic.</para>
 
       <example><info><title>declaring P2P loggers in the interface
-        org.objectweb.proactive.core.util.Loggers</title></info>
+        org.objectweb.proactive.core.util.Loggers</title></info>      </example>
+        
         
 
         <programlisting xml:lang="java">/** Root logger for ProActive P2P. **/
@@ -38,7 +39,6 @@ public static final String P2P_ACQUAINTANCES = P2P + ".acquaintances";
 
 /** Sub logger for P2P first contact step. */
 public static final String P2P_FIRST_CONTACT = P2P + ".first_contact";</programlisting>
-      </example>
     </section>
 
     <section><info><title>Using declared loggers in your classes</title></info>

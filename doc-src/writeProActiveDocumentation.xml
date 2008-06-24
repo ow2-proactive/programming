@@ -213,19 +213,17 @@
   <para>Within normal text, for instance in a paragraph, you can also just use 
    the LITERAL tag to highlight the  <literal>main</literal> methods.</para>
   
-  <example><info><title>JAVA program listing with file inclusion</title></info>
-   
+  <example><info><title>JAVA program listing with file inclusion</title></info></example>
    <programlisting xml:lang="java"><textobject>
      <textdata fileref="examples/hello/TinyHello.java"/>
     </textobject></programlisting>
-  </example>
   
   <example><info><title>XML program listing with file inclusion</title></info>
+     </example>
    
    <programlisting xml:lang="xml"><textobject>
      <textdata fileref="examples/components/c3d/adl/UserImpl.fractal"/>
     </textobject></programlisting>
-  </example>
   
   
   <para>A screen example, for instance some code inside a unix shell:</para>

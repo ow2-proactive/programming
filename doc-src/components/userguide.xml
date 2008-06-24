@@ -344,7 +344,7 @@
 				debugging purposes.
 			</para>
 		</section>
-		<section xml:id="adl_usage">
+		<section xml:id="adl_usage_userguide">
 			<info>
 				<title>Usage</title>
 			</info>
@@ -1692,7 +1692,7 @@
 		</info>
 
 		<section
-			xml:id="configuration_html_Controllers_and_interceptors_new">
+			xml:id="configuration_html_Controllers_and_interceptors_n">
 			<info>
 				<title>Controllers and interceptors</title>
 			</info>

@@ -36,12 +36,12 @@
         </itemizedlist></para>
 
       <example>
-        <title>A possible implementation for the TinyHello class</title>
+        <title>A possible implementation for the TinyHello class</title>      </example>
+        
 
         <programlisting lang="java"><textobject>
             <textdata fileref="examples/hello/TinyHello.java" />
           </textobject></programlisting>
-      </example>
     </sect2>
 
     <sect2>
