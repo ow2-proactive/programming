@@ -49,7 +49,7 @@ TMP_DIR="${TMP}/ProActive-${VERSION}"
 output=$(mkdir ${TMP_DIR} 2>&1)
 if [ "$?" -ne 0 ] ; then
 	if [ -e ${TMP_DIR} ] ; then
-		echo " [w] ${TMP_DIR} already exist. Delete it !"
+		echo " [w] ${TMP_DIR} already exists. Delete it !"
 		rm -Rf ${TMP_DIR}
 		mkdir ${TMP_DIR}
 		if [ "$?" -ne 0 ] ; then
@@ -83,12 +83,6 @@ rm ./doc-src/guided_tour/examples/SimpleHelloWorld/lib/ProActive.jar
 rm -Rf p2p/
 rm -Rf lib/client.jar dist/lib/client.jar
 find . -type f -a -name "*.svg" -exec rm {} \; # svg are converted in png by hands
-
-# Remove scheduler's crap
-rm -Rf resource-manager-plugin-src
-rm -Rf scheduler-plugins-src
-rm -Rf SCHEDULER_DB
-rm derby.log
 
 # Remove non GPL stuff
 rm -Rf ./compile/lib/clover.*
