@@ -173,7 +173,7 @@
     &MOP;
    </part>
      
-   <part xml:id="Unsupported"><info><title>Unsupported And Deprecated Extensions</title></info>
+   <part xml:id="Unsupported"><info><title>Extensions Under Development  </title></info>
     &bnb;
     &p2p;
    </part>
