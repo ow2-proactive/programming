@@ -103,7 +103,9 @@ public interface GCMVirtualNode {
      * This method can hang forever if application requirements cannot be fulfilled by the
      * deployment.
      */
+    // @snippet-start GCMVirtualNode_waitReady
     public void waitReady();
+    // @snippet-end GCMVirtualNode_waitReady
 
     /**
      * Waits until the Virtual Node is ready or timeout is reached
@@ -113,7 +115,9 @@ public interface GCMVirtualNode {
      * @throws TimeoutException
      *             If the timeout is reached
      */
+    // @snippet-start GCMVirtualNode_waitReady_timeout
     public void waitReady(int timeout) throws ProActiveTimeoutException;
+    // @snippet-end GCMVirtualNode_waitReady_timeout
 
     /**
      * Returns the number of Nodes needed to become ready
@@ -175,7 +179,9 @@ public interface GCMVirtualNode {
      * @return true is returned if a method named methodName with the right signature exists, false
      *         otherwise
      */
+    // @snippet-start GCMVirtualNode_subscribeNodeAttachment
     public void subscribeNodeAttachment(Object client, String methodName, boolean withHistory)
+    // @snippet-end GCMVirtualNode_subscribeNodeAttachment
             throws ProActiveException;
 
     /**

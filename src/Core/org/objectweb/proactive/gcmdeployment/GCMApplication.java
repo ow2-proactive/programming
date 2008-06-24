@@ -122,7 +122,9 @@ public interface GCMApplication {
      *            a GCMVirtualNode name
      * @return A GCMVirtualNode is the identifier is known, null otherwise.
      */
+    // @snippet-start GCMApplication_getVirtualNode
     public GCMVirtualNode getVirtualNode(String vnName);
+    // @snippet-end GCMApplication_getVirtualNode
 
     public Set<String> getVirtualNodeNames();
 
@@ -132,7 +134,9 @@ public interface GCMApplication {
      * 
      * @return All the Virtual Nodes known by this application
      */
+    // @snippet-start GCMApplication_getVirtualNodes
     public Map<String, GCMVirtualNode> getVirtualNodes();
+    // @snippet-end GCMApplication_getVirtualNodes
 
     /**
      * Returns the variable contract associated to this application
