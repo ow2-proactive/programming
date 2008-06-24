@@ -1,7 +1,4 @@
 #! /bin/sh
-#
-#
-#
 
 TMP=/tmp
 if [ -e "/mnt/scratch" ] ; then
@@ -61,7 +58,14 @@ if [ "$?" -ne 0 ] ; then
 fi
 
 cp -Rf ${PROACTIVE_DIR} ${TMP_DIR}
+
 cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
+if [ "$(find src/ -name "*.java" | xargs grep serialVersionUID | wc -l)" -le 50 ] ; then
+	if [ -z "${RELAX}" ] ; then
+		warn_and_exit " [E] serialVersionUID are NOT defined"
+	fi
+fi
+
 
 cd compile || warn_and_exit "Cannot move in compile"
 ./build clean
