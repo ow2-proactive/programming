@@ -31,7 +31,7 @@
 package sources;
 
 import java.io.File;
-
+import java.util.Scanner;
 import java.net.URI;
 
 
@@ -77,6 +77,50 @@ public class UpdateCopyrightAndVersion {
         + " *  Initial developer(s):               The ProActive Team\n"
         + " *                        http://proactive.inria.fr/team_members.htm\n" + " *  Contributor(s):\n"
         + " *\n" + " * ################################################################\n" + " */\n";
+
+    private static String ActiveEonGPLcopyright = "/*\n"
+        + " * ################################################################\n" + " *\n"
+        + " * ProActive: The Java(TM) library for Parallel, Distributed,\n"
+        + " *            Concurrent computing with Security and Mobility\n" + " *\n"
+        + " * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis\n"
+        + " * Contact: proactive@objectweb.org" + "\n" + " *\n"
+        + " * This library is free software; you can redistribute it and/or\n"
+        + " * modify it under the terms of the GNU General Public License\n"
+        + " * as published by the Free Software Foundation; either version\n"
+        + " * 2 of the License, or any later version.\n" + " *\n"
+        + " * This library is distributed in the hope that it will be useful,\n"
+        + " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+        + " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+        + " * General Public License for more details.\n" + " *\n"
+        + " * You should have received a copy of the GNU General Public License\n"
+        + " * along with this library; if not, write to the Free Software\n"
+        + " * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307\n" + " * USA\n" + " *\n"
+        + " *  Initial developer(s):               The ActiveEon Team\n"
+        + " *                        http://www.activeeon.com/\n" + " *  Contributor(s):\n" + " *\n"
+        + " * ################################################################\n" + " */\n";
+
+    private static String ActiveEonContributorsProActiveInitialGPLcopyright = "/*\n"
+        + " * ################################################################\n" + " *\n"
+        + " * ProActive: The Java(TM) library for Parallel, Distributed,\n"
+        + " *            Concurrent computing with Security and Mobility\n" + " *\n"
+        + " * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis\n"
+        + " * Contact: proactive@objectweb.org" + "\n" + " *\n"
+        + " * This library is free software; you can redistribute it and/or\n"
+        + " * modify it under the terms of the GNU General Public License\n"
+        + " * as published by the Free Software Foundation; either version\n"
+        + " * 2 of the License, or any later version.\n" + " *\n"
+        + " * This library is distributed in the hope that it will be useful,\n"
+        + " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+        + " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+        + " * General Public License for more details.\n" + " *\n"
+        + " * You should have received a copy of the GNU General Public License\n"
+        + " * along with this library; if not, write to the Free Software\n"
+        + " * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307\n" + " * USA\n" + " *\n"
+        + " * Initial developer(s):               The ProActive Team\n"
+        + " *                        http://proactive.inria.fr/team_members.htm\n"
+        + " *  Contributor(s):               The ActiveEon Team\n"
+        + " *                        http://www.activeeon.com/\n" + " *\n"
+        + " * ################################################################\n" + " */\n";
 
     private static String PatternBegin = "$$%%";
     private static String PatternEnd = "%%$$";
@@ -145,18 +189,54 @@ public class UpdateCopyrightAndVersion {
         //        }
         int packageStart = program.indexOf("package");
 
+        // it is possible to find a snippet tag between a copyright and the package name
+        // in that case we keep the snippet.
+        int snippetStart = program.indexOf("//@snippet-start");
+
         if (packageStart == -1) {
             return;
         }
+
+        if ((snippetStart != -1) && (snippetStart < packageStart)) {
+            packageStart = snippetStart;
+        }
+
         String copyrightInFile = program.substring(0, packageStart);
-        if (copyrightInFile.contains("Copyright") && !copyrightInFile.contains("ProActive")) {
+
+        if (copyrightInFile.contains("Copyright") &&
+            (copyrightInFile.contains("The ProActive Team") || copyrightInFile.contains("ActiveEon Team"))) {
             System.out.println("Skipping " + file + ", other copyright exists.");
             return;
         }
+
         System.out.println("Processing " + file);
 
+        Scanner in = new Scanner(System.in);
+        int choice = 0;
+        do {
+            System.out
+                    .println("Which licence to apply ? : 1/ ProActive -- 2/ ActiveEon  -- 3/ ActiveEon as contr. ? -- 4 / skip:");
+
+            //String line = in.nextLine();
+            choice = in.nextInt();
+            System.out.println("----> " + choice);
+        } while (!((choice > 0) && (choice < 5)));
+
+        in.close();
+
         String uncopyrightedProgram = program.substring(packageStart);
-        String copyrightedProgram = GPLcopyright + uncopyrightedProgram;
+        String copyrightedProgram = uncopyrightedProgram;
+        switch (choice) {
+            case 1:
+                copyrightedProgram = GPLcopyright + uncopyrightedProgram;
+                break;
+            case 2:
+                copyrightedProgram = ActiveEonGPLcopyright + uncopyrightedProgram;
+                break;
+            case 3:
+                copyrightedProgram = ActiveEonContributorsProActiveInitialGPLcopyright + uncopyrightedProgram;
+        }
+
         b = copyrightedProgram.getBytes();
         file.delete();
 

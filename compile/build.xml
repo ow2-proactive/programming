@@ -592,7 +592,7 @@
 
 
 	<target name="update_copyright_and_version" depends="compile.util" description="Update Copyright and Version in every text files">
-		<java classname="sources.UpdateCopyrightAndVersion" fork="true">
+		<java classname="sources.UpdateCopyrightAndVersion" fork="false">
 			<classpath refid="project.classpath" />
 			<!--  base dir -->
 			<arg value="${base.dir}" />
