@@ -37,7 +37,6 @@ import org.objectweb.proactive.extensions.calcium.Calcium;
 import org.objectweb.proactive.extensions.calcium.Stream;
 import org.objectweb.proactive.extensions.calcium.environment.Environment;
 import org.objectweb.proactive.extensions.calcium.environment.EnvironmentFactory;
-import org.objectweb.proactive.extensions.calcium.environment.proactive.ProActiveEnvironment;
 import org.objectweb.proactive.extensions.calcium.exceptions.PanicException;
 import org.objectweb.proactive.extensions.calcium.futures.CalFuture;
 import org.objectweb.proactive.extensions.calcium.skeletons.DaC;

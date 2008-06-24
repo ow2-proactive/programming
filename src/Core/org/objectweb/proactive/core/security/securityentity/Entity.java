@@ -31,8 +31,6 @@
 package org.objectweb.proactive.core.security.securityentity;
 
 import java.io.Serializable;
-import java.security.cert.X509Certificate;
-
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.core.security.TypedCertificate;
 import org.objectweb.proactive.core.security.TypedCertificateList;

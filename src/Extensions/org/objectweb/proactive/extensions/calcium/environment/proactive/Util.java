@@ -30,8 +30,6 @@
  */
 package org.objectweb.proactive.extensions.calcium.environment.proactive;
 
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;

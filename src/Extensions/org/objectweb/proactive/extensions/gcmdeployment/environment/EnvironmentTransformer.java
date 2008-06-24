@@ -43,7 +43,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 

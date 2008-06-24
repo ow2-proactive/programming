@@ -35,10 +35,7 @@ import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.MasterIntern;
-import org.objectweb.proactive.extensions.masterworker.interfaces.internal.ResultIntern;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 

@@ -30,7 +30,6 @@
  */
 package org.objectweb.proactive.extra.montecarlo;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.io.Serializable;
 

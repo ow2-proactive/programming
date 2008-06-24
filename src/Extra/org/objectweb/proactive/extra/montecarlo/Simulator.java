@@ -30,11 +30,10 @@
  */
 package org.objectweb.proactive.extra.montecarlo;
 
-import org.objectweb.proactive.extensions.masterworker.TaskException;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Enumeration;
+import java.util.List;
+
+import org.objectweb.proactive.extensions.masterworker.TaskException;
 
 
 /**

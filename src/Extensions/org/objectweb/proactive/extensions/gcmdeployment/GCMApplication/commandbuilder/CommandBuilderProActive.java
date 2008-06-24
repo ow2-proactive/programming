@@ -40,14 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
-import org.objectweb.proactive.core.security.PolicyServer;
-import org.objectweb.proactive.core.security.ProActiveSecurityDescriptorHandler;
-import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
-import org.objectweb.proactive.core.security.exceptions.InvalidPolicyFile;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;

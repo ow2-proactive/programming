@@ -30,7 +30,6 @@
  */
 package org.objectweb.proactive.extra.montecarlo.basic;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
