@@ -36,7 +36,7 @@
 	</xsl:attribute-set>
 
 	<xsl:attribute-set name="table.properties">
-		<xsl:attribute name="keep-together.within-page">always</xsl:attribute>
+		<xsl:attribute name="keep-together.within-page">3</xsl:attribute>
 	</xsl:attribute-set>
 
 	<!--  Changing font sizes -->
@@ -1266,7 +1266,7 @@
 					<xsl:copy-of select="$markup" />
 				</fo:basic-link>
 			</fo:inline>
-			<fo:inline keep-together.within-line="always">
+			<fo:inline keep-together.within-line="1">
 				<xsl:call-template name="gentext.space" />
 				<fo:leader leader-pattern="dots"
 					leader-pattern-width="3pt" leader-alignment="reference-area"
