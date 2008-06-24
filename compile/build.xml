@@ -394,6 +394,12 @@
 		</jar>
 	</target>
 
+	<target name="deploy.tests" depends="deploy" description="Add examples.jar to the dist/ directory">
+		<jar destfile="${deploy.lib.dir}/ProActive_tests.jar">
+			<fileset dir="${cl.test.dir}" />
+		</jar>
+	</target>
+
 	<target name="-deploy.mkdir">
 		<!-- Make deploy directories -->
 		<mkdir dir="${deploy.dir}" />
@@ -402,7 +408,7 @@
 	</target>
 
 
-	<target name="deploy.all" depends="deploy.examples" description="Populate dist/ (with ProActive_examples.jar)" />
+	<target name="deploy.all" depends="deploy.examples, deploy.tests" description="Populate dist/ (with ProActive_examples.jar)" />
 
 
 
