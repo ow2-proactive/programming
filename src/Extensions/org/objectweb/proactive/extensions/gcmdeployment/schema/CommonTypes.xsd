@@ -2,17 +2,17 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!-- 
 		Types that allow a data type or variable must:
-			- have OrVariable in their name
-			- be a xsd:union
-	 -->
-	
+		- have OrVariable in their name
+		- be a xsd:union
+	-->
+
 	<xsd:simpleType name="variableRefType">
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="\$\{[A-Za-z0-9._]+\}" />
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="TimeOrVariableType"><!-- hour:mn:sec│hour:mn│hour -->
-		<xsd:union memberTypes="TimeType"/>
+		<xsd:union memberTypes="TimeType" />
 	</xsd:simpleType>
 	<xsd:simpleType name="TimeType">
 		<xsd:restriction base="xsd:string">
@@ -31,7 +31,7 @@
 
 	<xsd:simpleType name="NonEmptyText">
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="1"/>
+			<xsd:minLength value="1" />
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:simpleType name="NonEmptyTextOrVariableType">
@@ -76,7 +76,7 @@
 	</xsd:simpleType>
 	<xsd:simpleType name="pathElementGeneralType">
 		<xsd:restriction base="xsd:string">
-			<xsd:minLength value="1"/>
+			<xsd:minLength value="1" />
 			<xsd:whiteSpace value="collapse"></xsd:whiteSpace>
 		</xsd:restriction>
 	</xsd:simpleType>
@@ -127,6 +127,17 @@
 
 	<xsd:complexType name="environmentElementType" />
 
+	<xsd:complexType name="programVariableType">
+		<xsd:complexContent>
+			<xsd:extension base="environmentElementType">
+				<xsd:attribute name="name">
+					<xsd:simpleType>
+						<xsd:restriction base="NonEmptyText"></xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 	<xsd:complexType name="variableType">
 		<xsd:complexContent>
 			<xsd:extension base="environmentElementType">
@@ -156,7 +167,7 @@
 	<xsd:element name="descriptorVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
 	<xsd:element name="descriptorDefaultVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
 	<xsd:element name="javaPropertyVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
-	<xsd:element name="programVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
+	<xsd:element name="programVariable" substitutionGroup="abstractEnvironmentElement" type="programVariableType"></xsd:element>
 	<xsd:element name="programDefaultVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
 	<xsd:element name="javaPropertyDescriptorDefault" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
 	<xsd:element name="javaPropertyProgramDefault" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
