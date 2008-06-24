@@ -28,21 +28,15 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
+package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported;
 
-import java.util.List;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupSSH;
 
 
-public class GroupGridBus extends AbstractGroup {
-    private List<String> argumentsList;
+public class GroupOARSH extends GroupSSH {
+    private String jobId;
 
-    @Override
-    public List<String> internalBuildCommands() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void setArgumentsList(List<String> argumentsList) {
-        this.argumentsList = argumentsList;
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 }

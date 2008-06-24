@@ -28,11 +28,13 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
+package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported;
 
 import javax.xml.xpath.XPath;
 
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupSSHParser;
 import org.w3c.dom.Node;
 
 

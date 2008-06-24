@@ -4,8 +4,8 @@
 	xmlns="urn:gcm:deployment:1.0"
 	elementFormDefault="qualified">
 
-	<xs:include schemaLocation="../../schema/DeploymentDescriptorSchema.xsd"/>	
-	
+	<xs:include schemaLocation="../../schema/DeploymentDescriptorSchema.xsd"/>
+
 	<xs:complexType name="arcProcessType">
 		<xs:complexContent>
 			<xs:extension base="abstractGroupSchedulerElementType">

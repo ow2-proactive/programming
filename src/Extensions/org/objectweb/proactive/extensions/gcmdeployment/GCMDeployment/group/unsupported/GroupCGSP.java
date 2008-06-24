@@ -28,20 +28,20 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
+package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported;
 
 import java.util.List;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 
-public class GroupGlobus extends AbstractGroup {
-    private String count;
+
+public class GroupCGSP extends AbstractGroup {
+    private String hostName;
     private String queue;
-    private String maxTime;
-    private String stderr;
-    private String stdout;
-    private String stdin;
+    private String count;
     private String directory;
-    private String hostname;
+    private String stdout;
+    private String stderr;
 
     @Override
     public List<String> internalBuildCommands() {
@@ -49,81 +49,27 @@ public class GroupGlobus extends AbstractGroup {
         return null;
     }
 
-    /**
-     * Returns the count.
-     * @return String
-     */
-    public String getCount() {
-        return count;
+    public void setHostName(String hostname) {
+        this.hostName = hostname;
     }
 
-    /**
-     * Sets the count.
-     * @param count The count to set
-     */
-    public void setCount(String count) {
-        this.count = count;
-    }
-
-    /**
-     * @return Returns the queue.
-     */
-    public String getQueue() {
-        return queue;
-    }
-
-    /**
-     * @param queue The queue to set.
-     */
     public void setQueue(String queue) {
         this.queue = queue;
     }
 
-    public String getMaxTime() {
-        return maxTime;
-    }
-
-    public void setMaxTime(String maxTime) {
-        this.maxTime = maxTime;
-    }
-
-    /**
-     * @return Returns the stderr.
-     */
-    public String getStderr() {
-        return stderr;
-    }
-
-    /**
-     * @param stderr The stderr to set.
-     */
-    public void setStderr(String stderr) {
-        this.stderr = stderr;
-    }
-
-    /**
-     * @return Returns the stdout.
-     */
-    public String getStdout() {
-        return stdout;
-    }
-
-    /**
-     * @param stdout The stdout to set.
-     */
-    public void setStdout(String stdout) {
-        this.stdout = stdout;
-    }
-
-    public void setStdin(String stdin) {
-        this.stdin = stdin;
+    public void setCount(String count) {
+        this.count = count;
     }
 
     public void setDirectory(String directory) {
         this.directory = directory;
     }
 
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
+    public void setStdout(String stdout) {
+        this.stdout = stdout;
+    }
+
+    public void setStderr(String stderr) {
+        this.stderr = stderr;
     }
 }

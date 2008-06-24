@@ -28,11 +28,12 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
+package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported;
 
 import java.util.List;
 
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 
 
 public class GroupOARGrid extends AbstractGroup {

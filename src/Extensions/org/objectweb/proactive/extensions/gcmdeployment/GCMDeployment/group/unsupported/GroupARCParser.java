@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
+package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +39,8 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroupSchedulerParser;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 

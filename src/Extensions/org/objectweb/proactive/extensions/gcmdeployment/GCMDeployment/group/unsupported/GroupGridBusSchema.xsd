@@ -3,8 +3,8 @@
 	targetNamespace="urn:gcm:deployment:1.0"
 	xmlns="urn:gcm:deployment:1.0"
 	elementFormDefault="qualified">
-	
-	<xs:include schemaLocation="../../schema/DeploymentDescriptorSchema.xsd"/>	
+
+	<xs:include schemaLocation="../../schema/DeploymentDescriptorSchema.xsd"/>
 
 	<xs:complexType name="gridbusProcessType">
 		<xs:complexContent>

@@ -28,27 +28,31 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
+package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported;
 
 import javax.xml.xpath.XPath;
 
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroupSchedulerParser;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
-public class GroupCGSPParser extends AbstractGroupSchedulerParser {
-    private static final String NODE_NAME_STDERR = "stderr";
-    private static final String NODE_NAME_STDOUT = "stdout";
-    private static final String NODE_NAME_DIRECTORY = "directory";
-    private static final String NODE_NAME_COUNT = "count";
+public class GroupGlobusParser extends AbstractGroupSchedulerParser {
     private static final String ATTR_QUEUE = "queue";
     private static final String ATTR_HOSTNAME = "hostname";
-    private static final String NODE_NAME = "cgspGroup";
+    private static final String NODE_NAME_STDERR = "stderr";
+    private static final String NODE_NAME_STDOUT = "stdout";
+    private static final String NODE_NAME_STDIN = "stdin";
+    private static final String NODE_NAME_DIRECTORY = "directory";
+    private static final String NODE_NAME_MAX_TIME = "maxTime";
+    private static final String NODE_NAME_COUNT = "count";
+    private static final String NODE_NAME = "globusGroup";
 
     @Override
     public AbstractGroup createGroup() {
-        return new GroupCGSP();
+        return new GroupGlobus();
     }
 
     public String getNodeName() {
@@ -57,15 +61,15 @@ public class GroupCGSPParser extends AbstractGroupSchedulerParser {
 
     @Override
     public AbstractGroup parseGroupNode(Node groupNode, XPath xpath) {
-        GroupCGSP cgspGroup = (GroupCGSP) super.parseGroupNode(groupNode, xpath);
+        GroupGlobus globusGroup = (GroupGlobus) super.parseGroupNode(groupNode, xpath);
 
         String hostname = GCMParserHelper.getAttributeValue(groupNode, ATTR_HOSTNAME);
-        cgspGroup.setHostName(hostname);
+
+        globusGroup.setHostname(hostname);
 
         String queue = GCMParserHelper.getAttributeValue(groupNode, ATTR_QUEUE);
-        cgspGroup.setQueue(queue);
 
-        groupNode.getChildNodes();
+        globusGroup.setQueue(queue);
 
         NodeList childNodes = groupNode.getChildNodes();
         for (int j = 0; j < childNodes.getLength(); ++j) {
@@ -74,20 +78,23 @@ public class GroupCGSPParser extends AbstractGroupSchedulerParser {
                 continue;
             }
 
-            String nodeName = child.getNodeName();
             String nodeValue = GCMParserHelper.getElementValue(child);
-
+            String nodeName = child.getNodeName();
             if (nodeName.equals(NODE_NAME_COUNT)) {
-                cgspGroup.setCount(nodeValue);
-            } else if (nodeName.equals(NODE_NAME_DIRECTORY)) {
-                cgspGroup.setDirectory(nodeValue);
+                globusGroup.setCount(nodeValue);
+            } else if (nodeName.equals(NODE_NAME_MAX_TIME)) {
+                globusGroup.setMaxTime(nodeValue);
             } else if (nodeName.equals(NODE_NAME_STDOUT)) {
-                cgspGroup.setStdout(nodeValue);
+                globusGroup.setStdout(nodeValue);
             } else if (nodeName.equals(NODE_NAME_STDERR)) {
-                cgspGroup.setStderr(nodeValue);
+                globusGroup.setStderr(nodeValue);
+            } else if (nodeName.equals(NODE_NAME_STDIN)) {
+                globusGroup.setStdin(nodeValue);
+            } else if (nodeName.equals(NODE_NAME_DIRECTORY)) {
+                globusGroup.setDirectory(nodeValue);
             }
         }
 
-        return cgspGroup;
+        return globusGroup;
     }
 }

@@ -4,18 +4,12 @@
 	xmlns="urn:gcm:deployment:1.0"	
 	elementFormDefault="qualified">
 
-	<xsd:include schemaLocation="../GCMDeployment/group/GroupARCSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupCCSSchema.xsd" />
-	<xsd:include schemaLocation="../GCMDeployment/group/GroupCGSPSchema.xsd" />
-	<xsd:include schemaLocation="../GCMDeployment/group/GroupFuraSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupGLiteSchema.xsd" />
-	<xsd:include schemaLocation="../GCMDeployment/group/GroupGlobusSchema.xsd" />
-	<xsd:include schemaLocation="../GCMDeployment/group/GroupGridBusSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupGridEngineSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupLSFSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupLoadLevelerSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupOARSchema.xsd" />	
-	<xsd:include schemaLocation="../GCMDeployment/group/GroupOARSHSchema.xsd" />	
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupPBSSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupPrunSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupRSHSchema.xsd" />
@@ -25,8 +19,14 @@
 	<xsd:include schemaLocation="../GCMDeployment/bridge/BridgeSSHSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/bridge/BridgeOARSHSchema.xsd" />
 
-	
-	
+<!--
+	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupARCSchema.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupCGSPSchema.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupFuraSchema.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupGlobusSchema.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupGridBusSchema.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupOARSHSchema.xsd" />
+ -->
 </xsd:schema>
 
 

@@ -68,11 +68,12 @@
 				<arguments>\"Hello World\"</arguments>
 			</gLiteGroup>
 
-			<globusGroup hostname="globus_frontend" id="globusgroup" bookedNodesAccess="rsh">
+<!-- 		<globusGroup hostname="globus_frontend" id="globusgroup" bookedNodesAccess="rsh">
 				<count>8</count>
 				<maxTime>120</maxTime>
 				<stderr>${GLOBUS_USER_HOME}/error.txt</stderr>
 			</globusGroup>
+ -->
 
 
 			<oarGroup bookedNodesAccess="ssh" id="oargroup" interactive="true" >
@@ -81,6 +82,7 @@
 				<stderr>trace/err.log</stderr>
 			</oarGroup>
 
+<!--
 			<oarshGroup id="oarshgroup" hostList="host1 host2" jobId="42">
 			</oarshGroup>
 
@@ -89,13 +91,17 @@
 				<stdout>output</stdout>
 				<stderr>error</stderr>
 			</lsfGroup>
+-->
 
+<!--
 			<arcGroup id="arcgroup" jobName="arcjob" bookedNodesAccess="rsh">
 				<scriptPath base="root" relpath="/usr/local/arc/scripts/unix/cluster/startRuntime.sh" />
 				<stderr>trace/err.log</stderr>
 				<maxTime>10000000</maxTime>
 			</arcGroup>
+-->
 
+<!--
 			<furaGroup id="furagroup" jobName="furajob" bookedNodesAccess="rsh">
 				<scriptPath base="root" relpath="/usr/local/fura/scripts/jobscript.sh" />
 				<description>Fura job descriptor sample</description>
@@ -103,6 +109,7 @@
 				<stderr>trace/err.log</stderr>
 				<maxTime>15000000</maxTime>
 			</furaGroup>
+-->
 
 			<loadLevelerGroup id="loadlevelergroup3" bookedNodesAccess="rsh">
 				<scriptPath base="root" relpath="/usr/local/loadleveler/scripts/jobscript.sh" />
@@ -181,7 +188,7 @@
 				</taskRepartition>
 			</loadLevelerGroup>	
 			
-			
+<!--
 			<gridbusGroup id="gridbusgroup" bookedNodesAccess="rsh">
 				<scriptPath base="root" relpath="./calc" />
 				<arguments>
@@ -189,17 +196,17 @@
 					<arg>arg2</arg>
 				</arguments>
 			</gridbusGroup>
+-->
 
-
+<!--
 			<cgspGroup id="cgspgroup" hostname="cgsp.inria.fr" bookedNodesAccess="rsh">
 				<scriptPath base="root" relpath="./calc" />
 				<count>50</count>
 				<directory>datadir/jobdata1</directory>
 				<stdout>trace/results.log</stdout>
 				<stderr>trace/err.log</stderr>
-				
 			</cgspGroup>
-
+-->
 		</groups>
 
 		<bridges>

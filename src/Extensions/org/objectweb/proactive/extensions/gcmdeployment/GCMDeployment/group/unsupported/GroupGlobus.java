@@ -28,24 +28,22 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
+package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported;
 
 import java.util.List;
 
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupARCParser.FileTransfer;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 
 
-public class GroupARC extends AbstractGroup {
-    private String jobName;
+public class GroupGlobus extends AbstractGroup {
     private String count;
-    private List<String> args;
-    private String stdout;
-    private String stderr;
-    private String stdin;
+    private String queue;
     private String maxTime;
-    private String notify;
-    private List<FileTransfer> inputFiles;
-    private List<FileTransfer> outputFiles;
+    private String stderr;
+    private String stdout;
+    private String stdin;
+    private String directory;
+    private String hostname;
 
     @Override
     public List<String> internalBuildCommands() {
@@ -53,43 +51,81 @@ public class GroupARC extends AbstractGroup {
         return null;
     }
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+    /**
+     * Returns the count.
+     * @return String
+     */
+    public String getCount() {
+        return count;
     }
 
+    /**
+     * Sets the count.
+     * @param count The count to set
+     */
     public void setCount(String count) {
         this.count = count;
     }
 
-    public void setArguments(List<String> args) {
-        this.args = args;
+    /**
+     * @return Returns the queue.
+     */
+    public String getQueue() {
+        return queue;
     }
 
-    public void setStdout(String stdout) {
-        this.stdout = stdout;
+    /**
+     * @param queue The queue to set.
+     */
+    public void setQueue(String queue) {
+        this.queue = queue;
     }
 
-    public void setStderr(String stderr) {
-        this.stderr = stderr;
-    }
-
-    public void setStdin(String stdin) {
-        this.stdin = stdin;
+    public String getMaxTime() {
+        return maxTime;
     }
 
     public void setMaxTime(String maxTime) {
         this.maxTime = maxTime;
     }
 
-    public void setNotify(String notify) {
-        this.notify = notify;
+    /**
+     * @return Returns the stderr.
+     */
+    public String getStderr() {
+        return stderr;
     }
 
-    public void setInputFiles(List<FileTransfer> inputFiles) {
-        this.inputFiles = inputFiles;
+    /**
+     * @param stderr The stderr to set.
+     */
+    public void setStderr(String stderr) {
+        this.stderr = stderr;
     }
 
-    public void setOutputFiles(List<FileTransfer> outputFiles) {
-        this.outputFiles = outputFiles;
+    /**
+     * @return Returns the stdout.
+     */
+    public String getStdout() {
+        return stdout;
+    }
+
+    /**
+     * @param stdout The stdout to set.
+     */
+    public void setStdout(String stdout) {
+        this.stdout = stdout;
+    }
+
+    public void setStdin(String stdin) {
+        this.stdin = stdin;
+    }
+
+    public void setDirectory(String directory) {
+        this.directory = directory;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
     }
 }
