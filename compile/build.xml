@@ -909,6 +909,9 @@
 			<fileset dir="${src.extensions.dir}/${extensions.path}/gcmdeployment/GCMDeployment/bridge">
 				<include name="*.xsd" />
 			</fileset>
+			<fileset dir="${src.extensions.dir}/${extensions.path}/gcmdeployment/GCMApplication/commandbuilder">
+				<include name="*.xsd" />
+			</fileset>
 			<fileset dir="${src.extensions.dir}/${extensions.path}/gcmdeployment/schema">
 				<include name="*.xsd" />
 			</fileset>
