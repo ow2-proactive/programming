@@ -43,8 +43,8 @@ public class TestPML extends AbstractFTTezt {
     @org.junit.Test
     public void action() throws Exception {
         this.startFTServer("pml");
-        int res = this.deployAndStartAgents(TestPML.class.getResource(
-                "/functionalTests/ft/pml/testFT_PML.xml").getPath());
+        int res = this.deployAndStartAgents(TestPML.class
+                .getResource("/functionalTests/ft/pml/testFT_PML.xml"));
         this.stopFTServer();
         assertTrue(res == AbstractFTTezt.AWAITED_RESULT);
     }
