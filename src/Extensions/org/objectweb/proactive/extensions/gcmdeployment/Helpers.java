@@ -60,6 +60,9 @@ public class Helpers {
     }
 
     public static URL fileToURL(File file) {
+        if (file == null)
+            return null;
+
         URL answer = null;
         try {
             answer = file.toURI().toURL();
