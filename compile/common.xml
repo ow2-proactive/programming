@@ -104,6 +104,7 @@
 	<path id="deploy.classpath">
 		<fileset dir="${deploy.lib.dir}">
 			<include name="**/*.jar"/>
+			<exclude name="**/ProActive_tests.jar"/>
 		</fileset>
 	</path>
 	
