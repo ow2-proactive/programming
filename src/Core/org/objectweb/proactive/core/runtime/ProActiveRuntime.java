@@ -355,7 +355,7 @@ public interface ProActiveRuntime extends SecurityEntity {
             NoSuchMethodException, ProActiveException;
 
     /**
-     * construct a new instance remotly
+     * construct a new instance remotely
      * @param className class to instance
      * @throws ClassNotFoundException
      * @throws ProActiveException

@@ -918,7 +918,7 @@ public class PAActiveObject {
     public static String[] listActive(String url) throws java.io.IOException {
         String[] activeNames = null;
         try {
-            URI[] uris = RemoteObjectHelper.list(URI.create(url));
+            URI[] uris = PARemoteObject.list(URI.create(url));
             activeNames = new String[uris.length];
             for (int i = 0; i < uris.length; i++) {
                 activeNames[i] = uris[i].toString();

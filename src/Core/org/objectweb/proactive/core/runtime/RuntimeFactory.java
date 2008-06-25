@@ -165,18 +165,19 @@ public abstract class RuntimeFactory {
     public static ProActiveRuntime getProtocolSpecificRuntime(String protocol) throws ProActiveException {
         ProActiveRuntimeImpl proActiveRuntime = ProActiveRuntimeImpl.getProActiveRuntime();
 
-        RemoteRemoteObject rro = proActiveRuntime.getRemoteObjectExposer().getRemoteObject(protocol);
+        RemoteObject<ProActiveRuntime> ro = proActiveRuntime.getRemoteObjectExposer().getRemoteObject(
+                protocol);
 
-        if (rro == null) {
+        if (ro == null) {
             URI url = RemoteObjectHelper.generateUrl(protocol, URIBuilder.getNameFromURI(URI
                     .create(proActiveRuntime.getURL())));
             proActiveRuntime.getRemoteObjectExposer().activateProtocol(url);
-            rro = proActiveRuntime.getRemoteObjectExposer().getRemoteObject(protocol);
+            ro = proActiveRuntime.getRemoteObjectExposer().getRemoteObject(protocol);
 
             //            throw new ProActiveException("Cannot create a ProActiveRuntime based on " + protocol);
         }
 
-        return (ProActiveRuntime) RemoteObjectHelper.generatedObjectStub(new RemoteObjectAdapter(rro));
+        return (ProActiveRuntime) RemoteObjectHelper.generatedObjectStub(ro);
     }
 
     /**

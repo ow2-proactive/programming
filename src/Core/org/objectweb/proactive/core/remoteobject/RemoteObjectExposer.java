@@ -37,6 +37,7 @@ import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
@@ -149,15 +150,15 @@ public class RemoteObjectExposer<T> implements Serializable {
     /**
      *
      * @param protocol
-     * @return return the remote reference on the remote object targeted by the protocol
+     * @return return the reference on the remote object targeted by the protocol
      */
-    public RemoteRemoteObject getRemoteObject(String protocol) {
+    public RemoteObject<T> getRemoteObject(String protocol) throws ProActiveException {
         Enumeration<URI> e = this.activatedProtocols.keys();
 
         while (e.hasMoreElements()) {
             URI url = e.nextElement();
             if (protocol.equals(url.getScheme())) {
-                return this.activatedProtocols.get(url);
+                return new RemoteObjectAdapter(this.activatedProtocols.get(url));
             }
         }
 
@@ -207,7 +208,7 @@ public class RemoteObjectExposer<T> implements Serializable {
             uri = uris.nextElement();
             //RemoteRemoteObject rro = this.activatedProtocols.get(uri);
             try {
-                RemoteObjectHelper.getRemoteObjectFactory(uri.getScheme()).unregister(uri);
+                PARemoteObject.unregister(uri);
             } catch (ProActiveException e) {
                 //  e.printStackTrace();
                 ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).info(
@@ -219,7 +220,7 @@ public class RemoteObjectExposer<T> implements Serializable {
     /**
      * @return return the remote object
      */
-    public RemoteObjectImpl getRemoteObject() {
+    public RemoteObjectImpl<T> getRemoteObject() {
         return this.remoteObject;
     }
 }

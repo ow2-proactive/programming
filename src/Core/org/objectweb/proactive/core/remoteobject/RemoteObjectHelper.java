@@ -121,15 +121,6 @@ public class RemoteObjectHelper {
     }
 
     /**
-     * @param url url of the registry
-     * @return return the list of objects (not only remote objects) registered in the registry identified by the param url
-     * @throws ProActiveException
-     */
-    public static URI[] list(URI url) throws ProActiveException {
-        return getFactoryFromURL(url).list(expandURI(url));
-    }
-
-    /**
      * make the url 'absolute' by explicitly setting all the possibly not set default values
      * @param uri
      * @return the uri with all values set
@@ -154,19 +145,10 @@ public class RemoteObjectHelper {
      * @return return a remote reference on the remote object (aka a RemoteRemoteObject)
      * @throws ProActiveException
      */
-    public static RemoteRemoteObject register(RemoteObject target, URI url, boolean replacePreviousBinding)
+    public static RemoteRemoteObject register(RemoteObject<?> target, URI url, boolean replacePreviousBinding)
             throws ProActiveException {
         return getFactoryFromURL(url).register(new InternalRemoteRemoteObjectImpl(target), expandURI(url),
                 replacePreviousBinding);
-    }
-
-    /**
-     * unregister the object located at the endpoint identified by the url
-     * @param url
-     * @throws ProActiveException
-     */
-    public static void unregister(URI url) throws ProActiveException {
-        getFactoryFromURL(url).unregister(expandURI(url));
     }
 
     /**
@@ -206,27 +188,8 @@ public class RemoteObjectHelper {
             } else {
                 return reifiedObjectStub;
             }
-        } catch (ClassNotReifiableException e) {
-            e.printStackTrace();
-        } catch (ReifiedCastException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw new ProActiveException(e);
         }
-        return null;
     }
 }

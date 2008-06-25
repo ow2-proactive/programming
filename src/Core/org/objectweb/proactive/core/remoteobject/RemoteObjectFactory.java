@@ -94,7 +94,7 @@ public interface RemoteObjectFactory {
      * @return
      * @throws ProActiveException
      */
-    public RemoteObject lookup(URI url) throws ProActiveException;
+    public <T> RemoteObject<T> lookup(URI url) throws ProActiveException;
 
     /**
      * @return return the port number

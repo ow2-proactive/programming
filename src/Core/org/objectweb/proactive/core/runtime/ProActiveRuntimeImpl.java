@@ -182,10 +182,10 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // synchronized set of URL to runtimes in which we are registered
     private java.util.Set<String> runtimeAcquaintancesURL;
     private ProActiveRuntime parentRuntime;
-    protected RemoteObjectExposer roe;
+    protected RemoteObjectExposer<ProActiveRuntime> roe;
 
     // JMX
-    /** The Server Connector to connect remotly to the JMX server */
+    /** The Server Connector to connect remotely to the JMX server */
     private ServerConnector serverConnector;
     private Object mutex = new Object();
 
@@ -267,7 +267,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         this.roe.activateProtocol(URI.create(url));
 
         // logging info
-        //        MDC.remove("runtime");
+        // MDC.remove("runtime");
         MDC.put("runtime", getURL());
     }
 
@@ -495,7 +495,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         String url = URIBuilder.buildURI(hostname, nodeName, protocol).toString();
         Node node = null;
         try {
-            // FIXME acontes PSM ?
             createLocalNode(url, false, nodeSecurityManager, vnName, jobId);
             node = NodeFactory.getNode(url);
             for (TechnicalService ts : tsList) {
@@ -1558,7 +1557,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         return this.nodeMap.get(nodeName).getProperty(key);
     }
 
-    public RemoteObjectExposer getRemoteObjectExposer() {
+    public RemoteObjectExposer<ProActiveRuntime> getRemoteObjectExposer() {
         return this.roe;
     }
 

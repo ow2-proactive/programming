@@ -43,8 +43,8 @@ import org.objectweb.proactive.core.body.request.Request;
 
 
 /**
- * An object implementiong this interface provides services for storing and retreiving
- * checkpoints and checkpointInfos. Its provides also a classserver used during deserialization
+ * An object implementing this interface provides services for storing and retreiving
+ * checkpoints and checkpointInfos. Its provides also a class server used during deserialization
  * of checkpoints for a recovery.
  * This server is an RMI object.
  * @author The ProActive Team
@@ -109,7 +109,7 @@ public interface CheckpointServer extends Remote {
     public void commitHistory(HistoryUpdater rh) throws RemoteException;
 
     /**
-     * The state of the system must be commited before the sent of the message linked to
+     * The state of the system must be committed before the sent of the message linked to
      * the messageInfo mi.
      * @param mi the message information linked to the message that is sent to the outside world
      * @throws RemoteException
@@ -127,7 +127,7 @@ public interface CheckpointServer extends Remote {
     // MESSAGE LOGGING
 
     /**
-     * The request passed in paramter must be synchronously logged on the server. It must
+     * The request passed in parameter must be synchronously logged on the server. It must
      * be associated with the ID passed in parameter.
      * @param receiverId the ID associated to the request.
      * @param request the request to log.
@@ -136,7 +136,7 @@ public interface CheckpointServer extends Remote {
     public void storeRequest(UniqueID receiverId, Request request) throws RemoteException;
 
     /**
-     * The reply passed in paramter must be synchronously logged on the server. It must
+     * The reply passed in parameter must be synchronously logged on the server. It must
      * be associated with the ID passed in parameter.
      * @param receiverID the ID associated to the reply.
      * @param reply the reply to log.
