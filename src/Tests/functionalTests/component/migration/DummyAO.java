@@ -32,6 +32,7 @@ package functionalTests.component.migration;
 
 import java.io.File;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -123,8 +124,8 @@ public class DummyAO implements Serializable {
         Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
         Map<String, Object> context = new HashMap<String, Object>();
 
-        String descriptorPath = Test.class.getResource(
-                "/functionalTests/component/descriptor/applicationDescriptor.xml").getPath();
+        URL descriptorPath = Test.class
+                .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
 
         VariableContractImpl vContract = new VariableContractImpl();
         vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
@@ -134,8 +135,7 @@ public class DummyAO implements Serializable {
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, new Integer(1)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
 
-        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(new File(descriptorPath),
-                vContract);
+        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
 
         newDeploymentDescriptor.startDeployment();
 

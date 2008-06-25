@@ -32,6 +32,7 @@ package functionalTests.gcmdeployment.virtualnode;
 
 import java.io.File;
 import java.io.Serializable;
+import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -80,8 +81,7 @@ public class TestSubscribeAttachmentFromAO extends FunctionalTest {
 
         public void deploy() {
             try {
-                File appDesc = new File(this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml")
-                        .getFile());
+                URL appDesc = this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml");
 
                 VariableContractImpl vContract = new VariableContractImpl();
                 vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_OS, OperatingSystem

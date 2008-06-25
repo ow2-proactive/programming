@@ -31,6 +31,7 @@
 package functionalTests.descriptor.basic;
 
 import java.io.File;
+import java.net.URL;
 
 import junit.framework.Assert;
 
@@ -54,13 +55,12 @@ public class TestBasicDescriptorParsing {
 
     @Test
     public void deploymentDescriptorParse() throws Exception {
-        String descriptorLocation = getClass().getResource("wrong_namespace.xml").getPath();
+        URL descriptorLocation = getClass().getResource("wrong_namespace.xml");
 
         boolean gotException = false;
 
         try {
-            GCMDeploymentParserImpl parser = new GCMDeploymentParserImpl(Helpers.fileToURL(new File(
-                descriptorLocation)), null);
+            GCMDeploymentParserImpl parser = new GCMDeploymentParserImpl(descriptorLocation, null);
         } catch (SAXException e) {
             gotException = e.getException().getMessage().contains("old format");
         }
@@ -72,11 +72,10 @@ public class TestBasicDescriptorParsing {
     //    @Test
     public void applicationDescriptorParse() throws Exception {
 
-        String descriptorLocation = getClass().getResource("application_ProActive_MS_basic.xml").getPath();
+        URL descriptorLocation = getClass().getResource("application_ProActive_MS_basic.xml");
 
         System.out.println("parsing " + descriptorLocation);
-        GCMApplicationParserImpl parser = new GCMApplicationParserImpl(Helpers.fileToURL(new File(
-            descriptorLocation)), null);
+        GCMApplicationParserImpl parser = new GCMApplicationParserImpl(descriptorLocation, null);
 
         parser.getCommandBuilder();
         parser.getVirtualNodes();

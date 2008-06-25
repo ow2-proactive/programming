@@ -31,6 +31,7 @@
 package functionalTests.gcmdeployment.descriptorvariable;
 
 import java.io.File;
+import java.net.URL;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
@@ -41,19 +42,19 @@ public class TestDescriptorVariable {
 
     @Test
     public void simpleTest() throws ProActiveException {
-        File desc = new File(this.getClass().getResource("simple.xml").getPath());
+        URL desc = this.getClass().getResource("simple.xml");
         PAGCMDeployment.loadApplicationDescriptor(desc);
     }
 
     @Test
     public void recursiveTest1() throws ProActiveException {
-        File desc = new File(this.getClass().getResource("recursiveDescriptorVar.xml").getPath());
+        URL desc = this.getClass().getResource("recursiveDescriptorVar.xml");
         PAGCMDeployment.loadApplicationDescriptor(desc);
     }
 
     @Test
     public void recursiveTest2() throws ProActiveException {
-        File desc = new File(this.getClass().getResource("recursiveJavaProp.xml").getPath());
+        URL desc = this.getClass().getResource("recursiveJavaProp.xml");
         PAGCMDeployment.loadApplicationDescriptor(desc);
     }
 }

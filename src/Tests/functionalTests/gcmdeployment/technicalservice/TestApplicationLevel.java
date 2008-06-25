@@ -30,7 +30,7 @@
  */
 package functionalTests.gcmdeployment.technicalservice;
 
-import java.io.File;
+import java.net.URL;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -51,7 +51,7 @@ public class TestApplicationLevel extends FunctionalTest {
 
     @Before
     public void before() throws ProActiveException {
-        File desc = new File(this.getClass().getResource("TestApplicationLevelApplication.xml").getPath());
+        URL desc = this.getClass().getResource("TestApplicationLevelApplication.xml");
         GCMApplication app = PAGCMDeployment.loadApplicationDescriptor(desc);
         app.startDeployment();
         GCMVirtualNode vn = app.getVirtualNode("nodes");

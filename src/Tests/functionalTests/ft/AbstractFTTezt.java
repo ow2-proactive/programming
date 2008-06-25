@@ -32,6 +32,7 @@ package functionalTests.ft;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
@@ -84,7 +85,7 @@ public class AbstractFTTezt extends FunctionalTest {
      * @param gcmApplicationFile the deployment file  
      * @return the result of the computation
      */
-    protected int deployAndStartAgents(String gcmApplicationFile) throws ProActiveException {
+    protected int deployAndStartAgents(URL gcmApplicationFile) throws ProActiveException {
         GCMApplication gcma;
         GCMVirtualNode vnode;
 
@@ -95,7 +96,7 @@ public class AbstractFTTezt extends FunctionalTest {
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
                 VariableContractType.DescriptorDefaultVariable);
 
-        gcma = PAGCMDeployment.loadApplicationDescriptor(new File(gcmApplicationFile), vContract);
+        gcma = PAGCMDeployment.loadApplicationDescriptor(gcmApplicationFile, vContract);
         gcma.startDeployment();
         vnode = gcma.getVirtualNode("Workers");
         Node[] nodes = new Node[2];
