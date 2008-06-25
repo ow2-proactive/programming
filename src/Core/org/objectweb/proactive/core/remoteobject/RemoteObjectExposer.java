@@ -152,6 +152,7 @@ public class RemoteObjectExposer<T> implements Serializable {
      * @param protocol
      * @return return the reference on the remote object targeted by the protocol
      */
+    @SuppressWarnings("unchecked")
     public RemoteObject<T> getRemoteObject(String protocol) throws ProActiveException {
         Enumeration<URI> e = this.activatedProtocols.keys();
 

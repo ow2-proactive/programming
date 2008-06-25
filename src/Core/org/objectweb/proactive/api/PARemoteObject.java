@@ -4,7 +4,12 @@ import java.net.URI;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
+import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 
 
 /**
@@ -14,6 +19,26 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
  */
 @PublicAPI
 public class PARemoteObject {
+
+    public static <T> RemoteObjectExposer<T> newRemoteObject(String className, T target) {
+        return new RemoteObjectExposer<T>(className, target);
+    }
+
+    public static <T> RemoteObjectExposer<T> newRemoteObject(String className, T target,
+            Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
+        return new RemoteObjectExposer<T>(className, target, targetRemoteObjectAdapter);
+    }
+
+    public static <T> T activateProtocol(RemoteObjectExposer<T> roe, URI uri) throws UnknownProtocolException {
+        InternalRemoteRemoteObject irro = roe.activateProtocol(uri);
+        try {
+            return (T) new RemoteObjectAdapter(irro).getObjectProxy();
+        } catch (ProActiveException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     /**
      * List all the remote objects contained within a registry

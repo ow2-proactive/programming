@@ -31,14 +31,12 @@
 package org.objectweb.proactive.core.remoteobject;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.mop.MOP;
-import org.objectweb.proactive.core.mop.ReifiedCastException;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
@@ -141,7 +139,7 @@ public class RemoteObjectHelper {
      * register a remote object at the endpoint identified by the url
      * @param target the remote object to register
      * @param url the url where to register the remote object
-     * @param replacePreviousBinding true if any previous bindng as to be replaced
+     * @param replacePreviousBinding true if any previous binding as to be replaced
      * @return return a remote reference on the remote object (aka a RemoteRemoteObject)
      * @throws ProActiveException
      */
