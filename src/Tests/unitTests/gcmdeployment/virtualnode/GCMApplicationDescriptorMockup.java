@@ -125,7 +125,7 @@ public class GCMApplicationDescriptorMockup implements GCMApplicationInternal {
     }
 
     public ProActiveSecurityManager getProActiveApplicationSecurityManager() {
-        throw new RuntimeException("Not implemented");
+        return null;
     }
 
     public void setProActiveApplicationSecurityManager(
