@@ -45,6 +45,14 @@ public class GeometricBrownianMotion implements ExperienceSet {
     private double s0, mu, sigma, t;
     private int N;
 
+    /**
+     * Simulating geometric Brownian motion. This equation is the exact solution of the geometrix brownian motion SDE.
+     * @param s0 Initial value at t=0 of geometric Brownian
+     * @param mu Drift term
+     * @param sigma Volatility
+     * @param t time
+     * @param N number of experiences
+     */
     public GeometricBrownianMotion(double s0, double mu, double sigma, double t, int N) {
         this.s0 = s0;
         this.mu = mu;

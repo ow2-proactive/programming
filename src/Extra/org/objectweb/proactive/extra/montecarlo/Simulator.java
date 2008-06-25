@@ -30,10 +30,11 @@
  */
 package org.objectweb.proactive.extra.montecarlo;
 
+import org.objectweb.proactive.extensions.masterworker.TaskException;
+
 import java.util.Enumeration;
 import java.util.List;
-
-import org.objectweb.proactive.extensions.masterworker.TaskException;
+import java.io.Serializable;
 
 
 /**
@@ -51,5 +52,5 @@ public interface Simulator {
      * @return a list of double which is a concatenation of each list of double produced by each experience set. The order of the ouput list is guarantied to be coherent with the order of the experience list.
      * @throws TaskException if an exception occured inside the user code
      */
-    public Enumeration<double[]> solve(List<ExperienceSet> experienceSets) throws TaskException;
+    public Enumeration<Serializable> solve(List<ExperienceSet> experienceSets) throws TaskException;
 }

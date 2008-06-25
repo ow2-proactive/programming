@@ -36,9 +36,10 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 import org.objectweb.proactive.extra.montecarlo.Simulator;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Enumeration;
 import java.util.LinkedList;
+import java.util.List;
+import java.io.Serializable;
 
 
 /**
@@ -48,42 +49,60 @@ import java.util.LinkedList;
  */
 public class SimulatorImpl implements Simulator {
 
-    SubMaster<ExperienceTask, double[]> master;
+    private SubMaster<ExperienceTask, Serializable> master;
+    private SubMasterLock lock;
 
-    public SimulatorImpl(SubMaster master) {
+    public SimulatorImpl(SubMaster master, SubMasterLock lock) {
         this.master = master;
+        this.lock = lock;
     }
 
-    public Enumeration<double[]> solve(List<ExperienceSet> experienceSets) throws TaskException {
+    public Enumeration<Serializable> solve(List<ExperienceSet> experienceSets) throws TaskException {
+        lock.useSimulator();
         ArrayList<ExperienceTask> adapterTasks = new ArrayList<ExperienceTask>(experienceSets.size());
         for (ExperienceSet eset : experienceSets) {
             adapterTasks.add(new ExperienceTask(eset));
         }
         master.setResultReceptionOrder(SubMaster.COMPLETION_ORDER);
         master.solve(adapterTasks);
-        return new OutputEnumeration();
+        return new OutputEnumeration(lock, experienceSets.size());
     }
 
-    public class OutputEnumeration implements Enumeration<double[]> {
+    public class OutputEnumeration implements Enumeration<Serializable> {
 
-        private LinkedList<double[]> buffer = new LinkedList<double[]>();
+        private LinkedList<Serializable> buffer = new LinkedList<Serializable>();
+        private SubMasterLock lock;
+        private int pendingTasks;
 
-        public OutputEnumeration() {
-
+        public OutputEnumeration(SubMasterLock lock, int pendingTasks) {
+            this.lock = lock;
+            this.pendingTasks = pendingTasks;
         }
 
         public boolean hasMoreElements() {
-            return buffer.size() > 0 || !master.isEmpty();
+            return buffer.size() > 0 || pendingTasks > 0;
         }
 
-        public double[] nextElement() {
+        public Serializable nextElement() {
             if (buffer.isEmpty()) {
-                try {
-                    buffer.addAll(master.waitSomeResults());
-                } catch (TaskException e) {
-                    throw new RuntimeException(e);
+                if (pendingTasks > 0) {
+                    try {
+                        List<Serializable> res = master.waitSomeResults();
+                        pendingTasks -= res.size();
+                        buffer.addAll(res);
+                    } catch (TaskException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else {
+                    throw new ArrayIndexOutOfBoundsException("No more elements");
                 }
+                if (pendingTasks == 0) {
+                    lock.releaseSimulator();
+                }
+
             }
+
             return buffer.poll();
         }
     }

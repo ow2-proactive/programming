@@ -36,8 +36,10 @@ import org.objectweb.proactive.extra.montecarlo.EngineTask;
 import org.objectweb.proactive.extra.montecarlo.Executor;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -48,18 +50,60 @@ import java.util.ArrayList;
 public class ExecutorImpl implements Executor {
 
     SubMaster<EngineTaskAdapter, Serializable> master;
+    private SubMasterLock lock;
 
-    public ExecutorImpl(SubMaster master) {
+    public ExecutorImpl(SubMaster master, SubMasterLock lock) {
         this.master = master;
+        this.lock = lock;
     }
 
-    public List<Serializable> solve(List<EngineTask> engineTasks) throws TaskException {
+    public Enumeration<Serializable> solve(List<EngineTask> engineTasks) throws TaskException {
         ArrayList<EngineTaskAdapter> adapterTasks = new ArrayList<EngineTaskAdapter>(engineTasks.size());
         for (EngineTask etask : engineTasks) {
             adapterTasks.add(new EngineTaskAdapter(etask));
         }
+        lock.useExecutor();
         master.setResultReceptionOrder(SubMaster.SUBMISSION_ORDER);
         master.solve(adapterTasks);
-        return master.waitAllResults();
+        return new OutputEnumeration(lock, adapterTasks.size());
+    }
+
+    public class OutputEnumeration implements Enumeration<Serializable> {
+
+        private LinkedList<Serializable> buffer = new LinkedList<Serializable>();
+        private SubMasterLock lock;
+        private int pendingTasks;
+
+        public OutputEnumeration(SubMasterLock lock, int pendingTasks) {
+            this.lock = lock;
+            this.pendingTasks = pendingTasks;
+        }
+
+        public boolean hasMoreElements() {
+            return buffer.size() > 0 || pendingTasks > 0;
+        }
+
+        public Serializable nextElement() {
+            if (buffer.isEmpty()) {
+                if (pendingTasks > 0) {
+                    try {
+                        List<Serializable> res = master.waitSomeResults();
+                        pendingTasks -= res.size();
+                        buffer.addAll(res);
+                    } catch (TaskException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else {
+                    throw new ArrayIndexOutOfBoundsException("No more elements");
+                }
+                if (pendingTasks == 0) {
+                    lock.releaseSimulator();
+                }
+
+            }
+
+            return buffer.poll();
+        }
     }
 }

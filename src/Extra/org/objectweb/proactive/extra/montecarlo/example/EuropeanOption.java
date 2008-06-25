@@ -30,12 +30,7 @@
  */
 package org.objectweb.proactive.extra.montecarlo.example;
 
-import java.io.Serializable;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Enumeration;
-
+import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extra.montecarlo.EngineTask;
@@ -44,7 +39,12 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 import org.objectweb.proactive.extra.montecarlo.PAMonteCarlo;
 import org.objectweb.proactive.extra.montecarlo.Simulator;
 import org.objectweb.proactive.extra.montecarlo.basic.GeometricBrownianMotion;
-import org.objectweb.proactive.api.PALifeCycle;
+
+import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 
 public class EuropeanOption implements EngineTask {
@@ -78,9 +78,10 @@ public class EuropeanOption implements EngineTask {
     public Serializable run(Simulator simulator, Executor executor) {
         List<ExperienceSet> sets = new ArrayList<ExperienceSet>(M);
         for (int i = 0; i < M; i++) {
-            sets.add(new GeometricBrownianMotion(spotPrice, interestRate, volatilityRate, maturityDate, N));
+            sets.add(new EuropeanOptionOutputFilter(new GeometricBrownianMotion(spotPrice, interestRate,
+                volatilityRate, maturityDate, N), this.strikePrice));
         }
-        Enumeration<double[]> simulatedPriceList = null;
+        Enumeration<Serializable> simulatedPriceList = null;
         try {
             simulatedPriceList = simulator.solve(sets);
         } catch (TaskException e) {
@@ -89,13 +90,12 @@ public class EuropeanOption implements EngineTask {
 
         double payoffCall = 0;
         double payoffPut = 0;
-        int counter = 1;
         while (simulatedPriceList.hasMoreElements()) {
-            double[] simulatedPrice = simulatedPriceList.nextElement();
-            for (int j = 0; j < N; j++) {
-                payoffCall += Math.max(simulatedPrice[j] - this.strikePrice, 0);
-                payoffPut += Math.max(this.strikePrice - simulatedPrice[j], 0);
-            }
+            EuropeanOptionOutputFilter.PayOff simulatedPayOff = (EuropeanOptionOutputFilter.PayOff) simulatedPriceList
+                    .nextElement();
+
+            payoffCall += simulatedPayOff.getPayoffCall();
+            payoffPut += simulatedPayOff.getPayoffPut();
         }
 
         double call, put;
@@ -110,7 +110,7 @@ public class EuropeanOption implements EngineTask {
         URL descriptor = EuropeanOption.class.getResource("WorkersApplication.xml");
         PAMonteCarlo mc = new PAMonteCarlo(descriptor, null, "Workers");
 
-        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 10000, 1000);
+        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 1000, 1000);
         double[] price = (double[]) mc.run(option);
         System.out.println("Call: " + price[0] + " Put : " + price[1]);
         mc.terminate();

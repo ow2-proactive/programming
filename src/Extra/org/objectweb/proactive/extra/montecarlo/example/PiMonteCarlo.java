@@ -46,38 +46,36 @@ import org.objectweb.proactive.extra.montecarlo.Executor;
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 import org.objectweb.proactive.extra.montecarlo.PAMonteCarlo;
 import org.objectweb.proactive.extra.montecarlo.Simulator;
+import org.objectweb.proactive.extra.montecarlo.AbstractExperienceSetOutputFilter;
 import org.objectweb.proactive.api.PALifeCycle;
 
 
 public class PiMonteCarlo implements EngineTask {
 
-    private double niter = 0;
-    private double tasks = 0;
+    private int niter = 0;
+    private int tasks = 0;
 
-    public PiMonteCarlo(double n, double t) {
+    public PiMonteCarlo(int N, int M) {
         super();
-        niter = n;
-        tasks = t;
+        niter = N;
+        tasks = M;
     }
 
     public class MCPi implements ExperienceSet {
         int N;
 
-        MCPi(final double d) {
-            this.N = (int) d;
+        MCPi(final int d) {
+            this.N = d;
         }
 
         public double[] simulate(final Random rng) {
-            final double[] count = new double[1];
+            final double[] experiences = new double[N];
             for (int i = 0; i < N; i++) {
-                double x = rng.nextGaussian();
-                double y = rng.nextGaussian();
-                double value = x * x + y * y;
-                if (value <= 1) {
-                    count[0] += 1;
-                }
+                double x = rng.nextDouble();
+                double y = rng.nextDouble();
+                experiences[i] = Math.hypot(x, y);
             }
-            return count;
+            return experiences;
         }
     }
 
@@ -87,11 +85,11 @@ public class PiMonteCarlo implements EngineTask {
 
         // total monte carlo iterations and number tasks
 
-        PiMonteCarlo piMonteCarlo = new PiMonteCarlo(1e6, 10);
+        PiMonteCarlo piMonteCarlo = new PiMonteCarlo(10000, 1000);
 
-        double[] pi = (double[]) mc.run(piMonteCarlo);
+        double pi = (Double) mc.run(piMonteCarlo);
 
-        System.out.println(" The value of pi is " + pi[0]);
+        System.out.println(" The value of pi is " + pi);
         mc.terminate();
         PALifeCycle.exitSuccess();
     }
@@ -102,10 +100,21 @@ public class PiMonteCarlo implements EngineTask {
         List<ExperienceSet> sets = new ArrayList<ExperienceSet>();
 
         for (int i = 0; i < tasks; i++) {
-            sets.add(new MCPi((int) (niter / tasks)));
+            sets.add(new AbstractExperienceSetOutputFilter(new MCPi(niter)) {
+                public Serializable filter(Serializable experiencesResults) {
+                    long counter = 0;
+                    double[] simulatedCounts = (double[]) experiencesResults;
+                    for (double exp : simulatedCounts) {
+                        if (exp < 1) {
+                            counter++;
+                        }
+                    }
+                    return counter;
+                }
+            });
         }
 
-        Enumeration<double[]> simulatedCountList = null;
+        Enumeration<Serializable> simulatedCountList = null;
 
         try {
             simulatedCountList = simulator.solve(sets);
@@ -113,14 +122,14 @@ public class PiMonteCarlo implements EngineTask {
             throw new RuntimeException(e);
         }
 
-        int counter = 0;
+        long counter = 0;
         while (simulatedCountList.hasMoreElements()) {
 
-            double[] simulatedCounts = simulatedCountList.nextElement();
-            counter += simulatedCounts[0];
+            long simulatedCounts = (Long) simulatedCountList.nextElement();
+            counter += simulatedCounts;
         }
 
-        pival = counter / (niter * 4);
+        pival = (4 * counter) / ((double) (niter * tasks));
 
         return pival;
     }

@@ -35,6 +35,7 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 
 import java.util.Random;
+import java.io.Serializable;
 
 
 /**
@@ -42,7 +43,7 @@ import java.util.Random;
  *
  * @author The ProActive Team
  */
-public class ExperienceTask implements Task<double[]> {
+public class ExperienceTask implements Task<Serializable> {
 
     private ExperienceSet exp;
 
@@ -50,7 +51,7 @@ public class ExperienceTask implements Task<double[]> {
         this.exp = exp;
     }
 
-    public double[] run(WorkerMemory memory) throws Exception {
+    public Serializable run(WorkerMemory memory) throws Exception {
         final Random random = (Random) memory.load("rng");
         return exp.simulate(random);
     }

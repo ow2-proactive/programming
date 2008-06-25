@@ -46,6 +46,7 @@ import java.io.Serializable;
 public class EngineTaskAdapter implements DivisibleTask<Serializable> {
 
     private EngineTask task;
+    private SubMasterLock lock = new SubMasterLock();
 
     public EngineTaskAdapter(EngineTask task) {
         this.task = task;
@@ -56,6 +57,6 @@ public class EngineTaskAdapter implements DivisibleTask<Serializable> {
     }
 
     public Serializable run(WorkerMemory memory, SubMaster master) throws Exception {
-        return task.run(new SimulatorImpl(master), new ExecutorImpl(master));
+        return task.run(new SimulatorImpl(master, lock), new ExecutorImpl(master, lock));
     }
 }

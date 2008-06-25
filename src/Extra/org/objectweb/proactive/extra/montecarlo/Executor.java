@@ -33,6 +33,7 @@ package org.objectweb.proactive.extra.montecarlo;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 
 import java.io.Serializable;
+import java.util.Enumeration;
 import java.util.List;
 
 
@@ -54,5 +55,5 @@ public interface Executor {
      * @return a list of objects as output
      * @throws TaskException is an exception occured during the execution of the user code 
      */
-    public List<Serializable> solve(List<EngineTask> engineTasks) throws TaskException;
+    public Enumeration<Serializable> solve(List<EngineTask> engineTasks) throws TaskException;
 }
