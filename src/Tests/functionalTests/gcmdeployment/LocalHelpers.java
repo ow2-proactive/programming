@@ -30,25 +30,24 @@
  */
 package functionalTests.gcmdeployment;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URL;
 
 
 public abstract class LocalHelpers {
 
-    static public File getDescriptor(Class<?> cl) throws FileNotFoundException {
+    static public URL getDescriptor(Class<?> cl) throws FileNotFoundException {
         String classname = cl.getSimpleName();
         System.out.println(classname);
-        String resource = cl.getResource(classname + ".xml").getFile();
-        File desc = new File(resource);
-        if (!(desc.exists() && desc.isFile() && desc.canRead())) {
-            throw new FileNotFoundException(desc.getAbsolutePath());
-        }
+        URL resource = cl.getResource(classname + ".xml");
+        //        if (!(desc.exists() && desc.isFile() && desc.canRead())) {
+        //            throw new FileNotFoundException(desc.getAbsolutePath());
+        //        }
 
-        return desc;
+        return resource;
     }
 
-    static public File getDescriptor(Object o) throws FileNotFoundException {
+    static public URL getDescriptor(Object o) throws FileNotFoundException {
         return getDescriptor(o.getClass());
     }
 

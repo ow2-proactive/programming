@@ -31,6 +31,7 @@
 package functionalTests;
 
 import java.io.File;
+import java.net.URL;
 
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.xml.VariableContractType;
@@ -45,8 +46,8 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  */
 public class GCMFunctionalTestDefaultNodes extends GCMFunctionalTest {
 
-    static final private File defaultApplicationDescriptor = new File(FunctionalTest.class.getResource(
-            "/functionalTests/_CONFIG/JunitApp.xml").getFile());
+    static final private URL defaultApplicationDescriptor = FunctionalTest.class
+            .getResource("/functionalTests/_CONFIG/JunitApp.xml");
 
     static public final String VN_NAME = "nodes";
     static public final String VAR_DEPDESCRIPTOR = "deploymentDescriptor";

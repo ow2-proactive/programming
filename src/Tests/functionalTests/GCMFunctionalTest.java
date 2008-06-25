@@ -31,6 +31,7 @@
 package functionalTests;
 
 import java.io.File;
+import java.net.URL;
 
 import org.junit.After;
 import org.junit.Before;
@@ -46,7 +47,7 @@ public class GCMFunctionalTest extends FunctionalTest {
 
     static public final String VAR_OS = "os";
 
-    public File applicationDescriptor;
+    public URL applicationDescriptor;
     public VariableContractImpl vContract;
     public GCMApplication gcmad;
 
@@ -56,7 +57,7 @@ public class GCMFunctionalTest extends FunctionalTest {
                 VariableContractType.DescriptorDefaultVariable);
     }
 
-    public GCMFunctionalTest(File applicationDescriptor) {
+    public GCMFunctionalTest(URL applicationDescriptor) {
         this();
         this.applicationDescriptor = applicationDescriptor;
     }
