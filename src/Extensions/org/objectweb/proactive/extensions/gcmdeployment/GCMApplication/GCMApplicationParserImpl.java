@@ -245,7 +245,13 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
 
                     if (schemeFound) {
                         // if it's an url starting with file: we remove the protocol
-                        path = path.substring(5);
+                        URL urlWithFile = new URL(path);
+                        if (urlWithFile.getHost().length() != 0) {
+                            throw new IOException(
+                                urlWithFile +
+                                    " is using the form <host>/<path> which is not supported. Other possibility is that the url is of the form file:/<path> and it should be file://<path>");
+                        }
+                        path = urlWithFile.getPath();
                     }
                     File file = new File(path);
 
