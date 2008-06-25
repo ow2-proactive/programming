@@ -76,8 +76,6 @@ public class FakeNode {
 
                 //create the node
                 ProActiveSecurityManager siblingPSM = null;
-                System.out.println("FakeNode.create()" + this.gcma.getProActiveApplicationSecurityManager());
-
                 if (this.gcma.getProActiveApplicationSecurityManager() != null) {
                     siblingPSM = this.gcma.getProActiveApplicationSecurityManager()
                             .generateSiblingCertificate(EntityType.NODE, vn.getName());
