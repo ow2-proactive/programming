@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.ui,
  org.objectweb.proactive.ic2d.lib,
  org.objectweb.proactive.ic2d.JMXmonitoring
 Eclipse-LazyStart: true
+Bundle-Vendor: ProActive Team

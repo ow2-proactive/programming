@@ -153,7 +153,7 @@ public class PAActiveObject {
      * in the local JVM if the given node is null.
      * 
      * @param classname
-     *            the name of the class to instanciate as active
+     *            the name of the class to instantiate as active
      * @param constructorParameters
      *            the parameters of the constructor.
      * @param node
@@ -173,7 +173,7 @@ public class PAActiveObject {
      * Creates a new ActiveObject based on classname attached to a default node in the local JVM.
      * 
      * @param classname
-     *            the name of the class to instanciate as active
+     *            the name of the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
      * @param classname)
@@ -196,7 +196,7 @@ public class PAActiveObject {
      * Creates a new ActiveObject based on classname attached to the node of the given URL.
      * 
      * @param classname
-     *            the name of the class to instanciate as active
+     *            the name of the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
      * @param classname)
