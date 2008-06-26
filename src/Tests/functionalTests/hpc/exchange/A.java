@@ -31,13 +31,11 @@
 package functionalTests.hpc.exchange;
 
 import org.objectweb.proactive.api.PASPMD;
-import org.objectweb.proactive.extra.hpc.exchange.Exchanger;
 
 
 public class A {
     public static int QUARTER_SIZE = 10000;
     private double[] array;
-    private Exchanger exchanger;
 
     public A() {
     }
@@ -50,7 +48,6 @@ public class A {
         }
 
         int startIndice, destIndice, destRank;
-        this.exchanger = Exchanger.getExchanger();
         startIndice = PASPMD.getMyRank() * QUARTER_SIZE;
 
         // Fill in my array
@@ -62,13 +59,13 @@ public class A {
         // Step #1 : Exchange with my local neighbor
         destRank = PASPMD.getMyRank() ^ (1 << 0);
         destIndice = destRank * QUARTER_SIZE;
-        exchanger.exchange("step1", destRank, array, startIndice, array, destIndice, QUARTER_SIZE);
+        PASPMD.exchange("step1", destRank, array, startIndice, array, destIndice, QUARTER_SIZE);
 
         // Step #2 : Exchange with my distant neighbor
         destRank = PASPMD.getMyRank() ^ (1 << 1);
         startIndice = PASPMD.getMyRank() < 2 ? 0 : 2 * QUARTER_SIZE;
         destIndice = PASPMD.getMyRank() >= 2 ? 0 : 2 * QUARTER_SIZE;
-        exchanger.exchange("step2", destRank, array, startIndice, array, destIndice, 2 * QUARTER_SIZE);
+        PASPMD.exchange("step2", destRank, array, startIndice, array, destIndice, 2 * QUARTER_SIZE);
     }
 
     public double[] getArray() {

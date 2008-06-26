@@ -28,15 +28,16 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extra.hpc.exchange;
+package org.objectweb.proactive.ext.hpc.exchange;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.RequestImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.extra.hpc.DummySender;
-import org.objectweb.proactive.extra.hpc.MethodCallDummy;
+import org.objectweb.proactive.ext.hpc.DummySender;
+import org.objectweb.proactive.ext.hpc.MethodCallDummy;
+import org.objectweb.proactive.ext.hpc.exchange.ExchangeableArrayPointer;
 
 
 public class RequestExchange extends RequestImpl {

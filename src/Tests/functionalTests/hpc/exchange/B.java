@@ -30,31 +30,29 @@
  */
 package functionalTests.hpc.exchange;
 
-import org.objectweb.proactive.extra.hpc.exchange.Exchanger;
+import org.objectweb.proactive.api.PAActiveObject;
 
 
 public class B {
     public static int HALF_SIZE = 1000;
 
     private ComplexDoubleArray array1, array2;
-    private Exchanger exchanger;
 
     public B() {
     }
 
     public void start(int id, B b1, B b2, B b3) {
-        this.exchanger = Exchanger.getExchanger();
 
         if (id < 3) {
             // Perform a *local* exchange between b1 and b2
             this.array1 = new ComplexDoubleArray(2 * HALF_SIZE, id == 2);
-            exchanger.exchange("local", id == 1 ? b2 : b1, array1, array1);
+            PAActiveObject.exchange("local", id == 1 ? b2 : b1, array1, array1);
         }
 
         if (id > 1) {
             // Perform a *distant* exchange between b2 and b3
             this.array2 = new ComplexDoubleArray(2 * HALF_SIZE, id == 3);
-            exchanger.exchange("distant", id == 2 ? b3 : b2, array2, array2);
+            PAActiveObject.exchange("distant", id == 2 ? b3 : b2, array2, array2);
         }
     }
 

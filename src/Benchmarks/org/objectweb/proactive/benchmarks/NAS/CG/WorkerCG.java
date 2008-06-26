@@ -43,7 +43,6 @@ import org.objectweb.proactive.benchmarks.timit.util.observing.Event;
 import org.objectweb.proactive.benchmarks.timit.util.observing.EventObserver;
 import org.objectweb.proactive.benchmarks.timit.util.observing.defaultobserver.DefaultEventData;
 import org.objectweb.proactive.benchmarks.timit.util.observing.defaultobserver.DefaultEventObserver;
-import org.objectweb.proactive.extra.hpc.exchange.Exchanger;
 
 
 /**
@@ -67,7 +66,6 @@ public class WorkerCG extends Timed {
     /** Group Information */
     private int rank;
     private int groupSize;
-    private Exchanger exchanger;
     private CGProblemClass clss;
     private WorkerCG me;
 
@@ -213,7 +211,7 @@ public class WorkerCG extends Timed {
 
         for (int i = 1; i <= this.l2npcols; i++) {
             double[] destArray = new double[2];
-            exchanger.exchange("reduce" + i, reduce_exch_proc[i], new double[] { this.norm_temp1[1],
+            PASPMD.exchange("reduce" + i, reduce_exch_proc[i], new double[] { this.norm_temp1[1],
                     this.norm_temp1[2] }, 0, destArray, 0, 2);
             this.norm_temp1[1] += destArray[0];
             this.norm_temp1[2] += destArray[1];
@@ -262,7 +260,7 @@ public class WorkerCG extends Timed {
 
             for (int i = 1; i <= this.l2npcols; i++) {
                 double[] destArray = new double[2];
-                exchanger.exchange("reduce" + i, reduce_exch_proc[i], new double[] { this.norm_temp1[1],
+                PASPMD.exchange("reduce" + i, reduce_exch_proc[i], new double[] { this.norm_temp1[1],
                         this.norm_temp1[2] }, 0, destArray, 0, 2);
                 this.norm_temp1[1] += destArray[0];
                 this.norm_temp1[2] += destArray[1];
@@ -319,7 +317,6 @@ public class WorkerCG extends Timed {
         this.groupSize = PASPMD.getMySPMDGroupSize();
         this.rank = PASPMD.getMyRank();
         this.me = (WorkerCG) PAActiveObject.getStubOnThis();
-        this.exchanger = Exchanger.getExchanger();
 
         // Setup the timing system
         E_mflops = new DefaultEventObserver("mflops", DefaultEventData.MIN, DefaultEventData.MIN);
@@ -761,8 +758,8 @@ public class WorkerCG extends Timed {
         // Exchange and sum with procs identified in reduce_exch_proc
         for (i = 1; i <= this.l2npcols; i++) {
             double[] doubleArray = new double[1];
-            exchanger.exchange("reduce" + i, this.reduce_exch_proc[i], new double[] { sum }, 0, doubleArray,
-                    0, 1);
+            PASPMD.exchange("reduce" + i, this.reduce_exch_proc[i], new double[] { sum }, 0, doubleArray, 0,
+                    1);
             sum += doubleArray[0];
         }
         rho = sum;
@@ -782,7 +779,7 @@ public class WorkerCG extends Timed {
             // Sum the partition submatrix-vec A.p's across rows Exchange and sum piece of w with
             // procs identified in reduce_exch_proc
             for (i = this.l2npcols; i >= 1; i--) {
-                exchanger.exchange("reduce" + i, reduce_exch_proc[i], w, this.reduce_send_starts[i], q,
+                PASPMD.exchange("reduce" + i, reduce_exch_proc[i], w, this.reduce_send_starts[i], q,
                         this.reduce_recv_starts[i], this.reduce_recv_lengths[i]);
 
                 temp = ((this.send_start + this.reduce_recv_lengths[i]) - 1);
@@ -797,7 +794,7 @@ public class WorkerCG extends Timed {
                     System.arraycopy(this.w, this.send_start, this.q, 1, this.exch_recv_length);
                     this.currentIter_++;
                 } else {
-                    exchanger.exchange("reduce" + i, this.exch_proc, this.w, this.send_start, q, 1,
+                    PASPMD.exchange("reduce" + i, this.exch_proc, this.w, this.send_start, q, 1,
                             exch_recv_length);
                 }
             } else {
@@ -816,8 +813,8 @@ public class WorkerCG extends Timed {
             // Obtain d with a sum-reduce
             for (i = 1; i <= this.l2npcols; i++) {
                 double[] doubleArray = new double[1];
-                exchanger.exchange("reduce" + i, this.reduce_exch_proc[i], new double[] { sum }, 0,
-                        doubleArray, 0, 1);
+                PASPMD.exchange("reduce" + i, this.reduce_exch_proc[i], new double[] { sum }, 0, doubleArray,
+                        0, 1);
                 sum += doubleArray[0];
             }
             d = sum;
@@ -845,8 +842,8 @@ public class WorkerCG extends Timed {
             // Obtain rho with a sum reduce
             for (i = 1; i <= this.l2npcols; i++) {
                 double[] doubleArray = new double[1];
-                exchanger.exchange("reduce" + i, this.reduce_exch_proc[i], new double[] { sum }, 0,
-                        doubleArray, 0, 1);
+                PASPMD.exchange("reduce" + i, this.reduce_exch_proc[i], new double[] { sum }, 0, doubleArray,
+                        0, 1);
                 sum += doubleArray[0];
             }
             rho = sum;
@@ -874,7 +871,7 @@ public class WorkerCG extends Timed {
 
         // Sum the partition submatrix-vec A.z's across rows
         for (i = this.l2npcols; i >= 1; i--) {
-            exchanger.exchange("reduce" + i, reduce_exch_proc[i], w, this.reduce_send_starts[i], r,
+            PASPMD.exchange("reduce" + i, reduce_exch_proc[i], w, this.reduce_send_starts[i], r,
                     this.reduce_recv_starts[i], this.reduce_recv_lengths[i]);
             temp = ((this.send_start + this.reduce_recv_lengths[i]) - 1);
             for (j = this.send_start; j <= temp; j++) {
@@ -888,8 +885,9 @@ public class WorkerCG extends Timed {
                 System.arraycopy(this.w, this.send_start, this.r, 1, this.exch_recv_length);
                 this.currentIter_++;
             } else {
-                exchanger.exchange("reduce" + i, this.exch_proc, this.w, this.send_start, r, 1,
-                        exch_recv_length);
+                PASPMD
+                        .exchange("reduce" + i, this.exch_proc, this.w, this.send_start, r, 1,
+                                exch_recv_length);
             }
         } else {
             System.arraycopy(this.w, 0, this.r, 0, this.w.length);
@@ -905,8 +903,8 @@ public class WorkerCG extends Timed {
         // Obtain d with a sum-reduce
         for (i = 1; i <= this.l2npcols; i++) {
             double[] doubleArray = new double[1];
-            exchanger.exchange("reduce" + i, this.reduce_exch_proc[i], new double[] { sum }, 0, doubleArray,
-                    0, 1);
+            PASPMD.exchange("reduce" + i, this.reduce_exch_proc[i], new double[] { sum }, 0, doubleArray, 0,
+                    1);
             sum += doubleArray[0];
         }
         d = sum;

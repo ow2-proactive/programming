@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extra.hpc.exchange;
+package org.objectweb.proactive.ext.hpc.exchange;
 
 public interface ExchangeableDouble {
     double get();

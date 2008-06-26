@@ -30,7 +30,7 @@
  */
 package functionalTests.hpc.exchange;
 
-import org.objectweb.proactive.extra.hpc.exchange.ExchangeableDouble;
+import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
 
 
 /**

@@ -76,6 +76,8 @@ import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.profiling.Profiling;
+import org.objectweb.proactive.ext.hpc.exchange.ExchangeManager;
+import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
 
 
 /**
@@ -1157,7 +1159,7 @@ public class PAActiveObject {
      * active thread is calling this method.
      * 
      * @return a Stub-Proxy couple pointing to the local body, or null if the calling thread is not
-     * an active thread.
+     *         an active thread.
      * @see PAActiveObject#getBodyOnThis
      */
     public static StubObject getStubOnThis() {
@@ -1270,6 +1272,69 @@ public class PAActiveObject {
      */
     public static Body getBodyOnThis() {
         return LocalBodyStore.getInstance().getContext().getBody();
+    }
+
+    /**
+     * Performs an exchange on a byte array between two Active Objects.
+     * 
+     * @param tag
+     * @param destAO
+     * @param srcArray
+     * @param srcOffset
+     * @param dstArray
+     * @param dstOffset
+     * @param len
+     */
+    public static void exchange(String tag, Object destAO, byte[] srcArray, int srcOffset, byte[] dstArray,
+            int dstOffset, int len) {
+        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
+                dstOffset, len);
+    }
+
+    /**
+     * Performs an exchange on a double array between two Active Objects.
+     * 
+     * @param tag
+     * @param destAO
+     * @param srcArray
+     * @param srcOffset
+     * @param dstArray
+     * @param dstOffset
+     * @param len
+     */
+    public static void exchange(String tag, Object destAO, double[] srcArray, int srcOffset,
+            double[] dstArray, int dstOffset, int len) {
+        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
+                dstOffset, len);
+    }
+
+    /**
+     * Performs an exchange on an integer array between two Active Objects.
+     * 
+     * @param tag
+     * @param destAO
+     * @param srcArray
+     * @param srcOffset
+     * @param dstArray
+     * @param dstOffset
+     * @param len
+     */
+    public static void exchange(String tag, Object destAO, int[] srcArray, int srcOffset, int[] dstArray,
+            int dstOffset, int len) {
+        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, srcArray, srcOffset, dstArray,
+                dstOffset, len);
+    }
+
+    /**
+     * Performs an exchange on a complex structure of doubles between two Active Objects.
+     * 
+     * @param tag
+     * @param destAO
+     * @param src
+     * @param dst
+     */
+    public static void exchange(String tag, Object destAO, ExchangeableDouble src, ExchangeableDouble dst) {
+        ExchangeManager.getExchangeManager().exchange(tag.hashCode(), destAO, src, dst);
     }
 
     // -------------------------------------------------------------------------------------------

@@ -28,7 +28,10 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extra.hpc.exchange;
+package org.objectweb.proactive.ext.hpc.exchange;
+
+import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
+
 
 public class ExchangeableArrayPointer {
     // Array data type definitions

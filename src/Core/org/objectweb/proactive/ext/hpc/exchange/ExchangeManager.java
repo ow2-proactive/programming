@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extra.hpc.exchange;
+package org.objectweb.proactive.ext.hpc.exchange;
 
 import java.util.HashMap;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -40,6 +40,7 @@ import org.objectweb.proactive.api.PASPMD;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
 import org.objectweb.proactive.core.mop.Proxy;
 import org.objectweb.proactive.core.mop.StubObject;
+import org.objectweb.proactive.ext.hpc.exchange.ExchangeableArrayPointer;
 
 
 public class ExchangeManager {
@@ -79,7 +80,7 @@ public class ExchangeManager {
      * 
      * @return an instance of {@link ExchangeManager}. There is one instance per {@link Body}.
      */
-    protected static ExchangeManager getExchangeManager() {
+    public static ExchangeManager getExchangeManager() {
         Body body = PAActiveObject.getBodyOnThis();
         if (!body.isActive()) {
             throw new RuntimeException("Must be invoked from an active object.");
@@ -178,10 +179,10 @@ public class ExchangeManager {
     }
 
     //
-    // --- PROTECTED EXCHANGE METHODS -----------------------------------------
+    // --- PUBLIC EXCHANGE METHODS -----------------------------------------
     //  
 
-    protected void exchange(int tagID, Object target, byte[] srcArray, int srcOffset, byte[] dstArray,
+    public void exchange(int tagID, Object target, byte[] srcArray, int srcOffset, byte[] dstArray,
             int dstOffset, int len) {
         Proxy dstProxy = ((StubObject) target).getProxy();
         int dstUID = ((UniversalBodyProxy) dstProxy).getBodyID().hashCode();
@@ -191,7 +192,7 @@ public class ExchangeManager {
         internalExchange(tagID, req, target, arrayPointer, dstProxy);
     }
 
-    protected void exchange(int tagID, Object target, double[] srcArray, int srcOffset, double[] dstArray,
+    public void exchange(int tagID, Object target, double[] srcArray, int srcOffset, double[] dstArray,
             int dstOffset, int len) {
         Proxy dstProxy = ((StubObject) target).getProxy();
         int dstUID = ((UniversalBodyProxy) dstProxy).getBodyID().hashCode();
@@ -201,7 +202,7 @@ public class ExchangeManager {
         internalExchange(tagID, req, target, arrayPointer, dstProxy);
     }
 
-    protected void exchange(int tagID, Object target, int[] srcArray, int srcOffset, int[] dstArray,
+    public void exchange(int tagID, Object target, int[] srcArray, int srcOffset, int[] dstArray,
             int dstOffset, int len) {
         Proxy dstProxy = ((StubObject) target).getProxy();
         int dstUID = ((UniversalBodyProxy) dstProxy).getBodyID().hashCode();
@@ -211,7 +212,7 @@ public class ExchangeManager {
         internalExchange(tagID, req, target, arrayPointer, dstProxy);
     }
 
-    protected void exchange(int tagID, Object target, ExchangeableDouble src, ExchangeableDouble dst) {
+    public void exchange(int tagID, Object target, ExchangeableDouble src, ExchangeableDouble dst) {
         Proxy dstProxy = ((StubObject) target).getProxy();
         int dstUID = ((UniversalBodyProxy) dstProxy).getBodyID().hashCode();
         ExchangeableArrayPointer arrayPointer = new ExchangeableArrayPointer(dst);

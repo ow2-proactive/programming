@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extra.hpc;
+package org.objectweb.proactive.ext.hpc;
 
 import java.io.IOException;
 import java.security.AccessControlException;

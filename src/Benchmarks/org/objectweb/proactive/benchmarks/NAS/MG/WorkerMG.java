@@ -46,17 +46,15 @@ import org.objectweb.proactive.benchmarks.timit.util.observing.commobserv.CommEv
 import org.objectweb.proactive.benchmarks.timit.util.observing.commobserv.CommEventObserver;
 import org.objectweb.proactive.benchmarks.timit.util.observing.defaultobserver.DefaultEventData;
 import org.objectweb.proactive.benchmarks.timit.util.observing.defaultobserver.DefaultEventObserver;
-import org.objectweb.proactive.extra.hpc.exchange.ExchangeableDouble;
-import org.objectweb.proactive.extra.hpc.exchange.Exchanger;
+import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
 
 
 /**
  * Kernel MG
- *
- * A simplified multi-grid kernel. It requires highly structured long
- * distance communication and tests both short and long distance data
- * communication.
- * It approximates a solution to the discrete Poisson problem.
+ * 
+ * A simplified multi-grid kernel. It requires highly structured long distance communication and
+ * tests both short and long distance data communication. It approximates a solution to the discrete
+ * Poisson problem.
  */
 public class WorkerMG extends Timed implements Serializable {
 
@@ -127,7 +125,6 @@ public class WorkerMG extends Timed implements Serializable {
     private double[][] buff;
     private int[][][] nbr;
     private WorkerMG.MatrixEchanger matrixExchanger;
-    private Exchanger exchanger;
 
     // Multi-dim variables
     private int ud0;
@@ -184,7 +181,6 @@ public class WorkerMG extends Timed implements Serializable {
         this.body = PAActiveObject.getBodyOnThis();
         this.isLeader = (rank == 0);
         this.matrixExchanger = new MatrixEchanger(this);
-        this.exchanger = Exchanger.getExchanger();
 
         this.reductorRank = ((this.groupSize == 1) ? 0 : 1);
 
@@ -540,8 +536,8 @@ public class WorkerMG extends Timed implements Serializable {
         this.zsetDimension(mm1, mm2, mm3);
         this.usetDimension(n1, n2, n3);
 
-        //		note that m = 1037 but for this only need to be 535 to handle up to
-        //		1024^3
+        // note that m = 1037 but for this only need to be 535 to handle up to
+        // 1024^3
         if ((n1 != 3) && (n2 != 3) && (n3 != 3)) {
             for (int i3 = 1; i3 <= (mm3 - 1); i3++) {
                 for (int i2 = 1; i2 <= (mm2 - 1); i2++) {
@@ -755,7 +751,10 @@ public class WorkerMG extends Timed implements Serializable {
         if (WorkerMG.COMMUNICATION_PATTERN_OBSERVING_MODE) {
             // Notification of a communication to the reductor ( by convention
             // it's the rank 1 ) to the communicator
-            this.notifyOneRank(this.reductorRank, 16 /* the size of the message s and rnmu a doubles */);
+            this.notifyOneRank(this.reductorRank, 16 /*
+             * the size of the message s and rnmu a
+             * doubles
+             */);
 
             // The communicator will compute sum and max and broadcast an
             // array of double
@@ -773,9 +772,9 @@ public class WorkerMG extends Timed implements Serializable {
             for (int axis = 1; axis <= 3; axis++) {
                 if (clss.np != 1) {
                     matrixExchanger.prepare(axis, +1, u, uoff, u, uoff, n1, n2, n3);
-                    exchanger.exchange("pos" + axis, nbr[axis][2][kk], matrixExchanger, matrixExchanger);
+                    PASPMD.exchange("pos" + axis, nbr[axis][2][kk], matrixExchanger, matrixExchanger);
                     matrixExchanger.prepare(axis, -1, u, uoff, u, uoff, n1, n2, n3);
-                    exchanger.exchange("neg" + axis, nbr[axis][0][kk], matrixExchanger, matrixExchanger);
+                    PASPMD.exchange("neg" + axis, nbr[axis][0][kk], matrixExchanger, matrixExchanger);
                 } else {
                     comm1p(++axis, u, uoff, n1, n2, n3, kk);
                 }
@@ -789,9 +788,9 @@ public class WorkerMG extends Timed implements Serializable {
         for (int axis = 1; axis <= 3; axis++) {
             if (clss.np != 1) {
                 matrixExchanger.prepare(axis, +1, u, uoff, u, uoff, n1, n2, n3);
-                exchanger.exchange("pos" + axis, nbr[axis][2][kk], matrixExchanger, matrixExchanger);
+                PASPMD.exchange("pos" + axis, nbr[axis][2][kk], matrixExchanger, matrixExchanger);
                 matrixExchanger.prepare(axis, -1, u, uoff, u, uoff, n1, n2, n3);
-                exchanger.exchange("neg" + axis, nbr[axis][0][kk], matrixExchanger, matrixExchanger);
+                PASPMD.exchange("neg" + axis, nbr[axis][0][kk], matrixExchanger, matrixExchanger);
             } else {
                 comm1p_ex(axis, u, uoff, n1, n2, n3, kk);
             }
@@ -1271,8 +1270,11 @@ public class WorkerMG extends Timed implements Serializable {
             if (WorkerMG.COMMUNICATION_PATTERN_OBSERVING_MODE) {
                 // Notification of a communication to the reductor ( by
                 // convention it's the rank 1 ) to the communicator
-                this
-                        .notifyOneRank(this.reductorRank, TimIt.getObjectSize(jg_temp) /* the size of the message */);
+                this.notifyOneRank(this.reductorRank, TimIt.getObjectSize(jg_temp) /*
+                 * the size
+                 * of the
+                 * message
+                 */);
 
                 // The communicator will compute the max and broadcast it
                 if (this.rank == 1) {
@@ -1325,8 +1327,11 @@ public class WorkerMG extends Timed implements Serializable {
             if (WorkerMG.COMMUNICATION_PATTERN_OBSERVING_MODE) {
                 // Notification of a communication to the reductor ( by
                 // convention it's the rank 1 ) to the communicator
-                this
-                        .notifyOneRank(this.reductorRank, TimIt.getObjectSize(jg_temp) /* the size of the message */);
+                this.notifyOneRank(this.reductorRank, TimIt.getObjectSize(jg_temp) /*
+                 * the size
+                 * of the
+                 * message
+                 */);
 
                 // / The communicator will compute the max and broadcast it
                 if (this.rank == 1) {
@@ -1474,8 +1479,7 @@ public class WorkerMG extends Timed implements Serializable {
     }
 
     /*
-     * Forces the associated worker used to block the treatment of the
-     * requestQueue.
+     * Forces the associated worker used to block the treatment of the requestQueue.
      */
     private final void blockingServe() {
         body.serve(body.getRequestQueue().blockingRemoveOldest());
@@ -1521,7 +1525,7 @@ public class WorkerMG extends Timed implements Serializable {
         private int y1;
         private int z0;
 
-        //        private int z1; // Never used
+        // private int z1; // Never used
 
         public MatrixEchanger(WorkerMG worker) {
             this.worker = worker;
@@ -1546,7 +1550,7 @@ public class WorkerMG extends Timed implements Serializable {
                     y0 = 2;
                     y1 = n2 - 1;
                     z0 = 2;
-                    //                    z1 = n3 - 1;
+                    // z1 = n3 - 1;
 
                     if (dir == -1) {
                         src_x = 2;
@@ -1570,7 +1574,7 @@ public class WorkerMG extends Timed implements Serializable {
                     y0 = 2; // neg
                     y1 = n2 - 1; // pos
                     z0 = 2;
-                    //                    z1 = n3 - 1;
+                    // z1 = n3 - 1;
                     src_x = x0;
                     dst_x = x0;
 
@@ -1594,7 +1598,7 @@ public class WorkerMG extends Timed implements Serializable {
                     y0 = 1;
                     y1 = n2;
                     z0 = 2; // neg
-                    //                    z1 = n3 - 1; // pos
+                    // z1 = n3 - 1; // pos
                     src_x = x0;
                     dst_x = x0;
                     src_y = y0;
