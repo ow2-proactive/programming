@@ -110,11 +110,12 @@ public class TestDocBookize {
     @Test
     public void testTransform() throws Exception {
         final String path[] = { "./" };
-        final String inPath = PATH + XML_FILE;
         final String javaSrc = "";
         final String testPath = PATH + TEST_FILE;
         //copy file to temporary file
-        final InputStream input = new FileInputStream(inPath);
+        final InputStream input = new FileInputStream(this.getClass().getResource(XML_FILE).getFile());
+
+        new File(testPath).deleteOnExit();
         final OutputStream output = new FileOutputStream(testPath);
 
         //copy singleLine.xml to singleLineTest.xml
