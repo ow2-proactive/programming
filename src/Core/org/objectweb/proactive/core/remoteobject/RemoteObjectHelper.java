@@ -54,7 +54,7 @@ public class RemoteObjectHelper {
     public static int getDefaultPortForProtocol(String protocol) throws UnknownProtocolException {
         if (Constants.XMLHTTP_PROTOCOL_IDENTIFIER.equals(protocol)) {
             // http port could change according the availability of the default port when activated
-            // so we first instantiante the factory which will set the new port if necessary
+            // so we first instantiate the factory which will set the new port if necessary
             getRemoteObjectFactory(protocol);
 
             if (PAProperties.PA_XMLHTTP_PORT.getValue() != null) {
