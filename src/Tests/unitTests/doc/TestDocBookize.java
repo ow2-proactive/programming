@@ -93,8 +93,6 @@ public class TestDocBookize {
      * inside programlisting tags.  
      */
     private static final String REGEXP = "(<programlisting.*>)(.*(&lt;).*|(&gt;).*?)(</programlisting>)";
-    /** Path to the files cotaining xml that triggers the bug  */
-    private static final String PATH = "src/Tests/unitTests/doc/";
     /** File containing the xml that triggers the bug  */
     private static final String XML_FILE = "singleLine.xml";
     /** Temporary file that will contain the modified xml   */
@@ -111,12 +109,12 @@ public class TestDocBookize {
     public void testTransform() throws Exception {
         final String path[] = { "./" };
         final String javaSrc = "";
-        final String testPath = PATH + TEST_FILE;
         //copy file to temporary file
         final InputStream input = new FileInputStream(this.getClass().getResource(XML_FILE).getFile());
 
-        new File(testPath).deleteOnExit();
-        final OutputStream output = new FileOutputStream(testPath);
+        File outputFile = File.createTempFile(this.getClass().getName(), null);
+        final OutputStream output = new FileOutputStream(outputFile);
+        outputFile.deleteOnExit();
 
         //copy singleLine.xml to singleLineTest.xml
         final byte[] buf = new byte[1024];
@@ -128,11 +126,11 @@ public class TestDocBookize {
         output.close();
 
         //run DocBookize on singleLineTest file
-        final String mainArgs[] = { testPath, javaSrc, path[0] };
+        final String mainArgs[] = { outputFile.toString(), javaSrc, path[0] };
         DocBookize.main(mainArgs);
 
         //load singleLineText.xml in  String (it's a small file)
-        final File tmp = new File(testPath);
+        final File tmp = new File(outputFile.toString());
         final BufferedReader buff = new BufferedReader(new FileReader(tmp));
         String fileText = "";
         String tmpLine = "";
