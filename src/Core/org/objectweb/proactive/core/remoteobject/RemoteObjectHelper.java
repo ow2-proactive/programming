@@ -187,7 +187,7 @@ public class RemoteObjectHelper {
                 return reifiedObjectStub;
             }
         } catch (Exception e) {
-            throw new ProActiveException(e);
+        	throw new ProActiveException(e);
         }
     }
 }
