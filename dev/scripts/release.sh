@@ -1,7 +1,9 @@
 #! /bin/sh
 
 TMP=/tmp
-if [ -e "/mnt/scratch" ] ; then
+
+# /mnt/scratch is a tmpfs mount point for faster builds on schubby
+if [ -w "/mnt/scratch" ] ; then
 	TMP=/mnt/scratch
 fi
 
@@ -97,5 +99,9 @@ rm -Rf classes/
 rm -Rf docs/tmp/
 rm -Rf doc-src/*_snippets/
 
+sed -i "s/{version}/$VERSION/" README.txt
+
+# Documentation is broken, PROACTIVE-385
+mv *.html docs/manual/ProActive_Manual_html/
 
 tar cvfz ${TMP}/ProActive-${VERSION}.tar.gz ${TMP_DIR}
