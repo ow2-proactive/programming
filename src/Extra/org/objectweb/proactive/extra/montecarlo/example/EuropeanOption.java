@@ -110,7 +110,7 @@ public class EuropeanOption implements EngineTask {
         URL descriptor = EuropeanOption.class.getResource("WorkersApplication.xml");
         PAMonteCarlo mc = new PAMonteCarlo(descriptor, null, "Workers");
 
-        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 1000, 1000);
+        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 1000000, 1000);
         double[] price = (double[]) mc.run(option);
         System.out.println("Call: " + price[0] + " Put : " + price[1]);
         mc.terminate();

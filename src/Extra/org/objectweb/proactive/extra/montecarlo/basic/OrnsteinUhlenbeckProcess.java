@@ -34,6 +34,10 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 
 import java.util.Random;
 
+import umontreal.iro.lecuyer.probdist.NormalDist;
+import umontreal.iro.lecuyer.rng.RandomStream;
+import umontreal.iro.lecuyer.randvar.NormalGen;
+
 
 /**
  * OrnsteinUhlenbeckProcess : Generate scenarios that follow the Ornstein-Uhlenbeck process.
@@ -59,13 +63,13 @@ public class OrnsteinUhlenbeckProcess implements ExperienceSet {
         N = n;
         base = s0 * Math.exp(-lambda * t) + mu * (1 - Math.exp(-lambda * t));
         factor = sigma * Math.sqrt((1 - Math.exp(-2 * lambda * t)) / (2 * lambda));
-
     }
 
-    public double[] simulate(Random rng) {
+    public double[] simulate(RandomStream rng) {
         double[] answer = new double[N];
+        NormalGen ngen = new NormalGen(rng, new NormalDist());
         for (int i = 0; i < N; i++) {
-            answer[i] = base + factor * rng.nextGaussian();
+            answer[i] = base + factor * ngen.nextDouble();
         }
 
         return answer;

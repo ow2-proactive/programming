@@ -34,6 +34,10 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 
 import java.util.Random;
 
+import umontreal.iro.lecuyer.rng.RandomStream;
+import umontreal.iro.lecuyer.probdist.NormalDist;
+import umontreal.iro.lecuyer.randvar.NormalGen;
+
 
 /**
  * GeometricBorwnianMotionCashDividend : Simulating geometric Brownian motion with a cash dividend before T
@@ -69,11 +73,12 @@ public class GeometricBorwnianMotionCashDividend implements ExperienceSet {
         this.N = N;
     }
 
-    public double[] simulate(Random rng) {
+    public double[] simulate(RandomStream rng) {
         double[] answer = new double[N];
+        NormalGen ngen = new NormalGen(rng, new NormalDist());
         for (int i = 0; i < N; i++) {
             answer[i] = (s0 - Dt * Math.exp(-r * t)) *
-                Math.exp((Y - 0.5 * sigma * sigma) * T + sigma * Math.sqrt(T) * rng.nextGaussian());
+                Math.exp((Y - 0.5 * sigma * sigma) * T + sigma * Math.sqrt(T) * ngen.nextDouble());
         }
         return answer;
     }

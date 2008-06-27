@@ -31,11 +31,14 @@
 package org.objectweb.proactive.extra.montecarlo.core;
 
 import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
-import org.objectweb.proactive.extra.montecarlo.prng.mt.MersenneTwisterRNGFactory;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import umontreal.iro.lecuyer.rng.RandomStreamFactory;
+import umontreal.iro.lecuyer.rng.BasicRandomStreamFactory;
+import umontreal.iro.lecuyer.rng.MRG32k3a;
 
 
 /**
@@ -45,15 +48,27 @@ import java.util.Map;
  */
 public class MCMemoryFactory implements MemoryFactory {
 
-    private MersenneTwisterRNGFactory prngfactory;
+    private Class prngClass;
 
-    public MCMemoryFactory() {
-        prngfactory = new MersenneTwisterRNGFactory();
+    private RandomStreamFactory prngfactory = null;
+
+    /**
+     * Creates memory for newly created workers, the memory will contain the provided class as a Random Stream or a MRG32k3a Random Stream if the agrument is null
+     */
+    public MCMemoryFactory(Class randomStreamClass) {
+        if (randomStreamClass == null) {
+            prngClass = MRG32k3a.class;
+        } else {
+            prngClass = randomStreamClass;
+        }
     }
 
     public Map<String, Serializable> newMemoryInstance() {
+        if (prngfactory == null) {
+            prngfactory = new BasicRandomStreamFactory(prngClass);
+        }
         HashMap map = new HashMap(1);
-        map.put("rng", prngfactory.createRandomNumberGenerator());
+        map.put("rng", prngfactory.newInstance());
         return map;
     }
 }

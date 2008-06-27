@@ -34,6 +34,10 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 
 import java.util.Random;
 
+import umontreal.iro.lecuyer.probdist.NormalDist;
+import umontreal.iro.lecuyer.rng.RandomStream;
+import umontreal.iro.lecuyer.randvar.NormalGen;
+
 
 /**
  * @author vddoan
@@ -47,7 +51,7 @@ public class BrownianBridge implements ExperienceSet {
      * @param w0 Known fixed at time 0 value of the Brownian motion
      * @param wT Know fixed at time T value of the Brownian motion
      * @param t  A given time
-     * @param tT Maturity date
+     * @param T Maturity date
      */
     public BrownianBridge(double w0, double wT, double t, double T) {
         super();
@@ -61,9 +65,10 @@ public class BrownianBridge implements ExperienceSet {
      * The Brownian Bridge is used to generate new samples between two known samples of a Brownian motion path.
      * i.e generate sample at time t using sample at time 0 and at T, with 0<t<T
      */
-    public double[] simulate(Random rng) {
+    public double[] simulate(RandomStream rng) {
         final double[] answer = new double[1];
-        answer[0] = w0 + (t / T) * (wT - w0) + Math.sqrt(t * (T - t) / T) * rng.nextGaussian();
+        NormalGen ngen = new NormalGen(rng, new NormalDist());
+        answer[0] = w0 + (t / T) * (wT - w0) + Math.sqrt(t * (T - t) / T) * ngen.nextDouble();
         return answer;
     }
 

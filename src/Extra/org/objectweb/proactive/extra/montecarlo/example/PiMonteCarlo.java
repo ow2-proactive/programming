@@ -48,6 +48,7 @@ import org.objectweb.proactive.extra.montecarlo.PAMonteCarlo;
 import org.objectweb.proactive.extra.montecarlo.Simulator;
 import org.objectweb.proactive.extra.montecarlo.AbstractExperienceSetOutputFilter;
 import org.objectweb.proactive.api.PALifeCycle;
+import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 public class PiMonteCarlo implements EngineTask {
@@ -68,7 +69,7 @@ public class PiMonteCarlo implements EngineTask {
             this.N = d;
         }
 
-        public double[] simulate(final Random rng) {
+        public double[] simulate(final RandomStream rng) {
             final double[] experiences = new double[N];
             for (int i = 0; i < N; i++) {
                 double x = rng.nextDouble();

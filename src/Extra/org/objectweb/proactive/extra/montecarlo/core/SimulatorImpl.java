@@ -80,7 +80,7 @@ public class SimulatorImpl implements Simulator {
         }
 
         public boolean hasMoreElements() {
-            return buffer.size() > 0 || pendingTasks > 0;
+            return !buffer.isEmpty() || (pendingTasks > 0);
         }
 
         public Serializable nextElement() {

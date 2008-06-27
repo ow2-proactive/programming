@@ -37,6 +37,8 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 import java.util.Random;
 import java.io.Serializable;
 
+import umontreal.iro.lecuyer.rng.RandomStream;
+
 
 /**
  * ExperienceTask
@@ -52,7 +54,7 @@ public class ExperienceTask implements Task<Serializable> {
     }
 
     public Serializable run(WorkerMemory memory) throws Exception {
-        final Random random = (Random) memory.load("rng");
+        final RandomStream random = (RandomStream) memory.load("rng");
         return exp.simulate(random);
     }
 }

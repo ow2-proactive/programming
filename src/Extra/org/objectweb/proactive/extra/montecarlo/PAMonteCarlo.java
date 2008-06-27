@@ -53,25 +53,22 @@ public class PAMonteCarlo {
 
     public PAMonteCarlo(URL descriptorURL, String masterVNName, String workersVNName)
             throws ProActiveException {
+        this(descriptorURL, masterVNName, workersVNName, null);
+    }
+
+    public PAMonteCarlo(URL descriptorURL, String masterVNName, String workersVNName, Class randomStreamClass)
+            throws ProActiveException {
         if (masterVNName != null) {
             // Remote master
             master = new ProActiveMaster<EngineTaskAdapter, Serializable>(descriptorURL, masterVNName,
-                new MCMemoryFactory());
+                new MCMemoryFactory(randomStreamClass));
         } else {
             // Local master
-            master = new ProActiveMaster<EngineTaskAdapter, Serializable>(new MCMemoryFactory());
+            master = new ProActiveMaster<EngineTaskAdapter, Serializable>(new MCMemoryFactory(
+                randomStreamClass));
         }
         master.addResources(descriptorURL, workersVNName);
         master.setResultReceptionOrder(SubMaster.SUBMISSION_ORDER);
-    }
-
-    public PAMonteCarlo(String schedulerLocation, String user, String password) throws ProActiveException {
-
-        master = new ProActiveMaster<EngineTaskAdapter, Serializable>(new MCMemoryFactory());
-        master.setInitialTaskFlooding(Integer.MAX_VALUE);
-        master.setResultReceptionOrder(SubMaster.SUBMISSION_ORDER);
-        master.addResources(schedulerLocation, user, password);
-
     }
 
     public Serializable run(EngineTask toplevelTask) throws TaskException {

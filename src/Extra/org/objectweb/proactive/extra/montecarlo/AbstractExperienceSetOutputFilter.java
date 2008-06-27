@@ -30,6 +30,8 @@
  */
 package org.objectweb.proactive.extra.montecarlo;
 
+import umontreal.iro.lecuyer.rng.RandomStream;
+
 import java.io.Serializable;
 
 import java.util.Random;
@@ -48,7 +50,7 @@ public abstract class AbstractExperienceSetOutputFilter implements ExperienceSet
         this.experienceSet = experienceSet;
     }
 
-    public Serializable simulate(final Random rng) {
+    public Serializable simulate(final RandomStream rng) {
         Serializable results = experienceSet.simulate(rng);
         return filter(results);
     }

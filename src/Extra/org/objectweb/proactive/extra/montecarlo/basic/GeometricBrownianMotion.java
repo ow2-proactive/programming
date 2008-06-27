@@ -34,6 +34,10 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 
 import java.util.Random;
 
+import umontreal.iro.lecuyer.rng.RandomStream;
+import umontreal.iro.lecuyer.probdist.NormalDist;
+import umontreal.iro.lecuyer.randvar.NormalGen;
+
 
 /**
  * GeometricBrownianMotion
@@ -59,13 +63,15 @@ public class GeometricBrownianMotion implements ExperienceSet {
         this.sigma = sigma;
         this.t = t;
         this.N = N;
+
     }
 
-    public double[] simulate(Random rng) {
+    public double[] simulate(RandomStream rng) {
         double[] answer = new double[N];
+        NormalGen ngen = new NormalGen(rng, new NormalDist());
         for (int i = 0; i < N; i++) {
             answer[i] = s0 *
-                Math.exp((mu - 0.5 * sigma * sigma) * t + sigma * Math.sqrt(t) * rng.nextGaussian());
+                Math.exp((mu - 0.5 * sigma * sigma) * t + sigma * Math.sqrt(t) * ngen.nextDouble());
         }
         return answer;
     }
