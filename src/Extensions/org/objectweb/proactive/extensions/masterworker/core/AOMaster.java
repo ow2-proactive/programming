@@ -50,11 +50,11 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
+import org.objectweb.proactive.extensions.masterworker.interfaces.DivisibleTask;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Master;
 import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-import org.objectweb.proactive.extensions.masterworker.interfaces.DivisibleTask;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.*;
 import org.objectweb.proactive.extensions.masterworker.util.TaskID;
 import org.objectweb.proactive.extensions.masterworker.util.TaskQueue;
@@ -650,19 +650,20 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                     Request oldest = service.getOldest();
                     while (!isClearing && (oldest != null) && !workersRequestsFilter.acceptRequest(oldest) &&
                         notTerminateFilter.acceptRequest(oldest)) {
-                        service.serveOldest();
                         // Sweep of wait requests
                         sweepWaitRequests(service);
                         // Serving quick requests
+                        service.serveOldest();
+
                         // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
                         maybeServePending(service);
                         oldest = service.getOldest();
                     }
                     if (!isClearing && (oldest != null) && notTerminateFilter.acceptRequest(oldest)) {
-                        service.serveOldest();
                         // Sweep of wait requests
                         sweepWaitRequests(service);
-                        // Serving quick requests
+                        // Serving worker requests
+                        service.serveOldest();
                         // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
                         maybeServePending(service);
                     }
@@ -860,18 +861,20 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     private void maybeServePending(Service service) {
         // We first serve the requests which MUST be served for FT purpose
         isInFTmechanism = true;
-        for (Request req : requestsToServeImmediately) {
-            if (debug) {
-                String originator = (String) req.getParameter(0);
-                logger.debug("forcefully serving waitXXX request from " + originator);
+        if (!requestsToServeImmediately.isEmpty()) {
+            for (Request req : requestsToServeImmediately) {
+                if (debug) {
+                    String originator = (String) req.getParameter(0);
+                    logger.debug("forcefully serving waitXXX request from " + originator);
+                }
+                try {
+                    service.serve(req);
+                } catch (Throwable e) {
+                    // ignore connection errors
+                }
             }
-            try {
-                service.serve(req);
-            } catch (Throwable e) {
-                // ignore connection errors
-            }
+            requestsToServeImmediately.clear();
         }
-        requestsToServeImmediately.clear();
         isInFTmechanism = false;
 
         // To prevent concurrent modification exception, as the servePending method modifies the pendingSubRequests collection
@@ -1034,7 +1037,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 tasksDependencies.put(rootTaskId, set);
             }
             if (debug) {
-                logger.debug("Created dependency : " + rootTaskId + "->" + taskId);
+                logger.debug("Created dependency : " + rootTaskId + "->" + taskId.getID());
             }
 
         }
@@ -1046,7 +1049,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      * Creates an internal wrapper of the given task
      * This wrapper will identify the task internally via an ID
      *
-     * @param task task to be wrapped
+     * @param task           task to be wrapped
      * @param originatorName
      * @return wrapped version
      */
