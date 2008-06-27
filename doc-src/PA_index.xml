@@ -73,6 +73,7 @@
 	  <!ENTITY glossary SYSTEM "glossary.xml">
 	  <!ENTITY reference SYSTEM "definitions.xml">
 	  <!ENTITY HighLevelAPITutorial SYSTEM "high_level_api_tutorial.xml">
+	  <!ENTITY ComponentsTutorial SYSTEM "ComponentsTutorial.xml">
 	  
 	   <!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">
 ]>
@@ -97,6 +98,7 @@
   <!--  
   &hands_on_programming_PRIMES; --> 
   &HighLevelAPITutorial;
+  &ComponentsTutorial;
     <!-- TODO to be removed, have been included in capabilities-intro --> 
 <!--    &StepByStepPi;
    &OOSPMDJacobiexample;
