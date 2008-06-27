@@ -174,6 +174,7 @@ public class AOWorker implements InitActive, Serializable, Worker {
             }
             newTasks = provider.sendResultAndGetTasks(result, name, true);
         } else {
+
             newTasks = provider.sendResultAndGetTasks(result, name, false);
         }
         pendingTasksFutures.offer(newTasks);
@@ -240,7 +241,7 @@ public class AOWorker implements InitActive, Serializable, Worker {
             // suspendWork();
         } else {
             Serializable resultObj = null;
-            ResultInternImpl result = new ResultInternImpl(task);
+            ResultInternImpl result = new ResultInternImpl(task.getId());
 
             // We run the task and listen to exception thrown by the task itself
             try {

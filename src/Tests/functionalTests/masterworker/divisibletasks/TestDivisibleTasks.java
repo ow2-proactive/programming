@@ -55,12 +55,6 @@ public class TestDivisibleTasks extends FunctionalTest {
 
     @org.junit.Test
     public void action() throws Exception {
-        tasks = new ArrayList<DaCSort>();
-        ArrayList<Integer> bigList = new ArrayList<Integer>();
-        for (int i = 0; i < NB_ELEM; i++) {
-            bigList.add((int) Math.round(Math.random() * NB_ELEM));
-        }
-        tasks.add(new DaCSort(bigList));
 
         master.solve(tasks);
 
@@ -87,6 +81,13 @@ public class TestDivisibleTasks extends FunctionalTest {
         master = new ProActiveMaster<DaCSort, ArrayList<Integer>>();
         master.addResources(descriptor);
         master.setResultReceptionOrder(Master.SUBMISSION_ORDER);
+
+        tasks = new ArrayList<DaCSort>();
+        ArrayList<Integer> bigList = new ArrayList<Integer>();
+        for (int i = 0; i < NB_ELEM; i++) {
+            bigList.add((int) Math.round(Math.random() * NB_ELEM));
+        }
+        tasks.add(new DaCSort(bigList));
 
     }
 

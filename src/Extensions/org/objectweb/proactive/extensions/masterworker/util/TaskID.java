@@ -39,10 +39,12 @@ package org.objectweb.proactive.extensions.masterworker.util;
 public class TaskID {
     private final String originator;
     private final Long id;
+    private final boolean isDivisible;
 
-    public TaskID(String originator, long id) {
+    public TaskID(String originator, long id, boolean isDivisible) {
         this.originator = originator;
         this.id = id;
+        this.isDivisible = isDivisible;
     }
 
     public String getOriginator() {
@@ -51,6 +53,10 @@ public class TaskID {
 
     public Long getID() {
         return id;
+    }
+
+    public boolean isDivisible() {
+        return isDivisible;
     }
 
     public boolean equals(Object obj) {

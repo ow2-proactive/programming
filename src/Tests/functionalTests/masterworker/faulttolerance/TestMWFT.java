@@ -51,17 +51,15 @@ import java.util.List;
  * Test load balancing
  */
 public class TestMWFT extends FunctionalTest {
-    private URL descriptor = TestMWFT.class
-            .getResource("/functionalTests/masterworker/faulttolerance/MasterWorkerFT.xml");
-    private URL descriptor2 = TestMWFT.class
-            .getResource("/functionalTests/masterworker/faulttolerance/MasterWorkerFT2.xml");
+    private URL descriptor = TestMWFT.class.getResource("MasterWorkerFT.xml");
+    private URL descriptor2 = TestMWFT.class.getResource("MasterWorkerFT2.xml");
     private Master<A, Integer> master;
     private List<A> tasks;
     private GCMApplication pad;
     private GCMApplication pad2;
     private GCMVirtualNode vn1;
     private GCMVirtualNode vn2;
-    public static final int NB_TASKS = 4;
+    public static final int NB_TASKS = 5;
 
     @org.junit.Test
     public void action() throws Exception {

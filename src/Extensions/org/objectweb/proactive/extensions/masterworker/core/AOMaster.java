@@ -54,6 +54,7 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.Master;
 import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
+import org.objectweb.proactive.extensions.masterworker.interfaces.DivisibleTask;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.*;
 import org.objectweb.proactive.extensions.masterworker.util.TaskID;
 import org.objectweb.proactive.extensions.masterworker.util.TaskQueue;
@@ -92,6 +93,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /** is the master in the process of clearing all activity ? * */
     private boolean isClearing;
 
+    /** is the master in the process of doing some FT mechanism for spawned tasks * */
+    private boolean isInFTmechanism;
+
     // Active objects references :
 
     /** Worker manager entity (deploy workers) */
@@ -125,7 +129,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
 
     /** Names of workers which have been spawned * */
     private Set<String> spawnedWorkerNames;
-    private HashMap<String, HashSet<String>> workersDependencies;
+    private HashMap<String, List<String>> workersDependencies;
     private HashMap<String, String> workersDependenciesRev;
 
     /** Associations of workers and workers names */
@@ -136,6 +140,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
 
     /** Activity of workers, which workers is doing which task */
     private HashMap<String, Set<Long>> workersActivity;
+
+    /** Related to Fault Tolerance Mechanism with divisible tasks * */
+    private HashMap<Long, Set<Long>> tasksDependencies;
+    private HashMap<Long, String> divisibleTasksAssociationWithWorkers;
+    private List<Request> requestsToServeImmediately;
 
     // Task Queues :
 
@@ -286,15 +295,12 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 sleepingGroup.remove(worker);
             }
             Queue<TaskIntern<Serializable>> tasksToDo = new LinkedList<TaskIntern<Serializable>>();
-            Iterator<TaskID> it = pendingTasks.iterator();
 
             // If we are in a flooding scenario, we send at most initial_task_flooding tasks
             int flooding_value = flooding ? initial_task_flooding : 1;
             int i = 0;
-            while (it.hasNext() && i < flooding_value) {
-                TaskID taskId = it.next();
-                // We remove the task from the pending list
-                it.remove();
+            while (!pendingTasks.isEmpty() && i < flooding_value) {
+                TaskID taskId = pendingTasks.poll();
 
                 // We add the task inside the launched list
                 long tid = taskId.getID();
@@ -338,6 +344,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         // General initializations
         terminated = false;
         isClearing = false;
+        isInFTmechanism = false;
         // Queues
         pendingTasks = new TaskQueue();
         launchedTasks = new HashMap<Long, String>();
@@ -346,8 +353,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         subResultQueues = new HashMap<String, ResultQueue<Serializable>>();
         clearedWorkers = new HashSet<Worker>();
         spawnedWorkerNames = new HashSet<String>();
-        workersDependencies = new HashMap<String, HashSet<String>>();
+        workersDependencies = new HashMap<String, List<String>>();
         workersDependenciesRev = new HashMap<String, String>();
+        tasksDependencies = new HashMap<Long, Set<Long>>();
+        divisibleTasksAssociationWithWorkers = new HashMap<Long, String>();
+        requestsToServeImmediately = new ArrayList<Request>();
 
         // Workers
         try {
@@ -408,8 +418,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 // We remove the activity of this worker and every children workers
                 removeActivityOfWorker(workerName);
                 if (workersDependencies.containsKey(workerName)) {
-                    HashSet<String> childrenWorkers = workersDependencies.get(workerName);
-                    for (String childWorkerName : childrenWorkers) {
+                    List<String> childrenWorkers = workersDependencies.get(workerName);
+                    // Reverse walk, latest spawned workers need to be handled before the oldest ones
+                    ListIterator<String> it = childrenWorkers.listIterator(childrenWorkers.size());
+                    while (it.hasPrevious()) {
+                        String childWorkerName = it.previous();
                         removeActivityOfWorker(childWorkerName);
                         workersDependenciesRev.remove(childWorkerName);
                     }
@@ -425,28 +438,140 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
 
     }
 
+    /**
+     * Removes all the activity generated by one dead worker
+     *
+     * @param workerName
+     */
     private void removeActivityOfWorker(String workerName) {
+        Body body = PAActiveObject.getBodyOnThis();
         // if the worker was handling tasks we put the tasks back to the pending queue
-        for (Long taskId : workersActivity.get(workerName)) {
-            if (launchedTasks.containsKey(taskId)) {
-                String submitter = launchedTasks.remove(taskId);
-                if (emptyPending()) {
-                    // if the queue was empty before the task is rescheduled, we wake-up all sleeping workers
-                    if (sleepingGroup.size() > 0) {
+        if (workersActivity.containsKey(workerName)) {
+            for (Long taskId : workersActivity.get(workerName)) {
+                if (launchedTasks.containsKey(taskId)) {
+                    String submitter = launchedTasks.remove(taskId);
+
+                    if (debug) {
+                        logger.debug("Rescheduling task " + taskId);
+                    }
+
+                    if (emptyPending()) {
+                        // if the queue was empty before the task is rescheduled, we wake-up all sleeping workers
+                        if (sleepingGroup.size() > 0) {
+                            if (debug) {
+                                logger.debug("Waking up sleeping workers...");
+                            }
+
+                            // We wake up the sleeping guys
+                            sleepingGroupStub.wakeup();
+                        }
+                    }
+
+                    pendingTasks.offer(new TaskID(submitter, taskId, false));
+
+                    if (divisibleTasksAssociationWithWorkers.containsKey(taskId)) {
+                        spawnedWorkerNames.remove(workerName);
+                        if (subResultQueues.containsKey(workerName)) {
+                            subResultQueues.get(workerName).clear();
+                            subResultQueues.remove(workerName);
+                        }
+                        if (pendingSubRequests.containsKey(workerName)) {
+                            Request req = pendingSubRequests.remove(workerName);
+                            requestsToServeImmediately.add(req);
+                            if (debug) {
+                                logger.debug("waitXXX method from " + workerName +
+                                    " needs to be served immediately");
+                            }
+                        }
+                        divisibleTasksAssociationWithWorkers.remove(taskId);
                         if (debug) {
-                            logger.debug("Waking up sleeping workers...");
+                            logger.debug("Spawned worker " + workerName + " is now obsolete");
                         }
 
-                        // We wake up the sleeping guys
-                        sleepingGroupStub.wakeup();
                     }
-                }
-                pendingTasks.add(new TaskID(submitter, taskId));
 
+                    // Removing all depending Tasks
+                    for (Long childTask : findAllDependingTasks(taskId)) {
+                        if (debug) {
+                            logger.debug("Children task " + childTask + " destroyed");
+                        }
+                        if (divisibleTasksAssociationWithWorkers.containsKey(childTask)) {
+                            String spawnedWorkerName = divisibleTasksAssociationWithWorkers.get(childTask);
+                            workersActivity.remove(spawnedWorkerName);
+                            if (debug) {
+                                logger.debug("Spawned worker " + spawnedWorkerName + " is now obsolete");
+                            }
+                            // TODO remove spawned worker from name set
+                            spawnedWorkerNames.remove(spawnedWorkerName);
+                            // TODO remove task id from repository
+
+                            if (subResultQueues.containsKey(spawnedWorkerName)) {
+                                subResultQueues.get(spawnedWorkerName).clear();
+                                subResultQueues.remove(spawnedWorkerName);
+                            }
+                            if (pendingSubRequests.containsKey(spawnedWorkerName)) {
+                                Request req = pendingSubRequests.remove(spawnedWorkerName);
+                                requestsToServeImmediately.add(req);
+                                if (debug) {
+                                    logger.debug("waitXXX method from " + spawnedWorkerName +
+                                        " needs to be served immediately");
+                                }
+                            }
+                            divisibleTasksAssociationWithWorkers.remove(childTask);
+                        }
+                        if (pendingTasks.contains(childTask)) {
+                            pendingTasks.remove(childTask);
+                            repository.removeTask(childTask);
+                        } else if (launchedTasks.containsKey(childTask)) {
+                            launchedTasks.remove(childTask);
+                            repository.removeTask(childTask);
+                        }
+                        // TODO remove activity of worker with this task in cas of a terminal one
+                    }
+                    removeAllTasksDependencies(taskId);
+                }
             }
+            workersActivity.get(workerName).clear();
+            workersActivity.remove(workerName);
         }
     }
 
+    /**
+     * Find all tasks that is resulting from this task execution (by successive spawning)
+     *
+     * @param rootTask
+     * @return
+     */
+    private Set<Long> findAllDependingTasks(Long rootTask) {
+        Set<Long> answer = new HashSet<Long>();
+        if (tasksDependencies.containsKey(rootTask)) {
+            Set<Long> children = tasksDependencies.get(rootTask);
+            answer.addAll(children);
+            for (Long childTask : children) {
+                answer.addAll(findAllDependingTasks(childTask));
+            }
+        }
+        return answer;
+    }
+
+    /**
+     * Find all tasks that is resulting from this task execution (by successive spawning)
+     *
+     * @param rootTask
+     * @return
+     */
+    private void removeAllTasksDependencies(Long rootTask) {
+        if (tasksDependencies.containsKey(rootTask)) {
+            Set<Long> children = tasksDependencies.get(rootTask);
+            for (Long childTask : children) {
+                removeAllTasksDependencies(childTask);
+            }
+            children.clear();
+            tasksDependencies.remove(rootTask);
+        }
+    }
+
+    /** {@inheritDoc} */
     public void isCleared(Worker worker) {
         if (debug) {
             String workerName = workersByNameRev.get(worker);
@@ -478,6 +603,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         }
     }
 
+    /** {@inheritDoc} */
     public int countPending(String originatorName) throws IsClearingError {
         if (originatorName == null) {
             return resultQueue.countPendingResults();
@@ -513,42 +639,45 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     public void runActivity(final Body body) {
         Service service = new Service(body);
         while (!terminated) {
-            service.waitForRequest();
-            // Sweep of wait requests
-            sweepWaitRequests(service);
-            maybeServePending();
+            try {
+                service.waitForRequest();
+                // Sweep of wait requests
+                sweepWaitRequests(service);
+                maybeServePending(service);
 
-            // Serving methods other than waitXXX
-            while (!isClearing && service.hasRequestToServe()) {
-                Request oldest = service.getOldest();
-                while ((oldest != null) && !workersRequestsFilter.acceptRequest(oldest) &&
-                    notTerminateFilter.acceptRequest(oldest)) {
-                    service.serveOldest();
-                    // Sweep of wait requests
-                    sweepWaitRequests(service);
-                    // Serving quick requests
-                    // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
-                    maybeServePending();
-                    oldest = service.getOldest();
+                // Serving methods other than waitXXX
+                while (!isClearing && service.hasRequestToServe()) {
+                    Request oldest = service.getOldest();
+                    while (!isClearing && (oldest != null) && !workersRequestsFilter.acceptRequest(oldest) &&
+                        notTerminateFilter.acceptRequest(oldest)) {
+                        service.serveOldest();
+                        // Sweep of wait requests
+                        sweepWaitRequests(service);
+                        // Serving quick requests
+                        // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
+                        maybeServePending(service);
+                        oldest = service.getOldest();
+                    }
+                    if (!isClearing && (oldest != null) && notTerminateFilter.acceptRequest(oldest)) {
+                        service.serveOldest();
+                        // Sweep of wait requests
+                        sweepWaitRequests(service);
+                        // Serving quick requests
+                        // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
+                        maybeServePending(service);
+                    }
                 }
-                if ((oldest != null) && notTerminateFilter.acceptRequest(oldest)) {
-                    service.serveOldest();
-                    // Sweep of wait requests
-                    sweepWaitRequests(service);
-                    // Serving quick requests
-                    // we maybe serve the pending waitXXX methods if there are some and if the necessary results are collected
-                    maybeServePending();
+
+                // If a clear request is detected we enter a special mode
+                if (isClearing) {
+                    clearingRunActivity(service);
                 }
 
+                service.serveAll("finalTerminate");
+                service.serveAll("awaitsTermination");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            // If a clear request is detected we enter a special mode
-            if (isClearing) {
-                clearingRunActivity(service);
-            }
-
-            service.serveAll("finalTerminate");
-            service.serveAll("awaitsTermination");
         }
 
         if (logger.isDebugEnabled()) {
@@ -590,7 +719,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         Set<String> newSet = new HashSet<String>(pendingSubRequests.keySet());
         // We first serve the pending sub requests
         for (String originator : newSet) {
-            servePending(originator);
+            servePending(originator, service);
         }
 
         while (isClearing) {
@@ -646,6 +775,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 if (wact.size() == 0) {
                     workersActivity.remove(originatorName);
                 }
+            }
+            if (divisibleTasksAssociationWithWorkers.containsKey(id)) {
+                divisibleTasksAssociationWithWorkers.remove(id);
             }
             // We add the result in the result queue
             if (submitter == null) {
@@ -711,15 +843,37 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         if (workersDependencies.containsKey(oldWorkerName)) {
             workersDependencies.get(oldWorkerName).add(newWorkerName);
         } else {
-            HashSet<String> dependency = new HashSet<String>();
+            List<String> dependency = new ArrayList<String>();
+            dependency.add(newWorkerName);
             workersDependencies.put(oldWorkerName, dependency);
         }
         workersDependenciesRev.put(newWorkerName, oldWorkerName);
+        divisibleTasksAssociationWithWorkers.put(taskId, newWorkerName);
         return new BooleanWrapper(true);
     }
 
-    /** If there is a pending waitXXX method, we serve it if the necessary results are collected */
-    private void maybeServePending() {
+    /**
+     * If there is a pending waitXXX method, we serve it if the necessary results are collected
+     *
+     * @param service
+     */
+    private void maybeServePending(Service service) {
+        // We first serve the requests which MUST be served for FT purpose
+        isInFTmechanism = true;
+        for (Request req : requestsToServeImmediately) {
+            if (debug) {
+                String originator = (String) req.getParameter(0);
+                logger.debug("forcefully serving waitXXX request from " + originator);
+            }
+            try {
+                service.serve(req);
+            } catch (Throwable e) {
+                // ignore connection errors
+            }
+        }
+        requestsToServeImmediately.clear();
+        isInFTmechanism = false;
+
         // To prevent concurrent modification exception, as the servePending method modifies the pendingSubRequests collection
         Set<Map.Entry<String, Request>> newSet = new HashSet<Map.Entry<String, Request>>(pendingSubRequests
                 .entrySet());
@@ -731,13 +885,13 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
             if (rq != null) {
                 if ((methodName.equals("waitOneResult") || methodName.equals("waitSomeResults")) &&
                     rq.isOneResultAvailable()) {
-                    servePending(originator);
+                    servePending(originator, service);
                 } else if (methodName.equals("waitAllResults") && rq.areAllResultsAvailable()) {
-                    servePending(originator);
+                    servePending(originator, service);
                 } else if (methodName.equals("waitKResults")) {
                     int k = (Integer) req.getParameter(1);
                     if (rq.countAvailableResults() >= k) {
-                        servePending(originator);
+                        servePending(originator, service);
                     }
                 }
             }
@@ -749,21 +903,20 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
             String methodName = pendingRequest.getMethodName();
             if ((methodName.equals("waitOneResult") || methodName.equals("waitSomeResults")) &&
                 resultQueue.isOneResultAvailable()) {
-                servePending(null);
+                servePending(null, service);
             } else if (methodName.equals("waitAllResults") && resultQueue.areAllResultsAvailable()) {
-                servePending(null);
+                servePending(null, service);
             } else if (methodName.equals("waitKResults")) {
                 int k = (Integer) pendingRequest.getParameter(1);
                 if (resultQueue.countAvailableResults() >= k) {
-                    servePending(null);
+                    servePending(null, service);
                 }
             }
         }
     }
 
     /** Serve the pending waitXXX method */
-    private void servePending(String originator) {
-        Body body = PAActiveObject.getBodyOnThis();
+    private void servePending(String originator, Service service) {
         if (originator == null) {
             if (debug) {
                 logger.debug("serving pending waitXXX method from main client");
@@ -771,13 +924,13 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
 
             Request req = pendingRequest;
             pendingRequest = null;
-            body.serve(req);
+            service.serve(req);
         } else {
             if (debug) {
                 logger.debug("serving pending waitXXX method from " + originator);
             }
             Request req = pendingSubRequests.remove(originator);
-            body.serve(req);
+            service.serve(req);
         }
     }
 
@@ -828,9 +981,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     }
 
     /** {@inheritDoc} */
-    private void solveIds(final List<Long> taskIds, String originator) {
+    private void solveIds(final List<TaskID> taskIds, String originator) {
 
-        for (Long taskId : taskIds) {
+        for (TaskID taskId : taskIds) {
             solve(taskId, originator);
         }
     }
@@ -841,7 +994,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      * @param taskId id of the task to solve
      * @throws IllegalArgumentException
      */
-    private void solve(final Long taskId, String originator) {
+    private void solve(final TaskID taskId, String originator) {
         if (debug) {
             if (originator == null) {
                 logger.debug("Request for solving task " + taskId + " from main client");
@@ -849,8 +1002,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 logger.debug("Request for solving task " + taskId + " from " + originator);
             }
         }
+        final long id = taskId.getID();
         // If we have sleepers
-        if (pendingTasks.size() == 0 && sleepingGroup.size() > 0) {
+        if (pendingTasks.isEmpty() && sleepingGroup.size() > 0) {
             if (debug) {
                 logger.debug("Waking up sleeping workers...");
             }
@@ -860,18 +1014,32 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         }
         // If the main client is sending the tasks
         if (originator == null) {
-            resultQueue.addPendingTask(taskId);
+            resultQueue.addPendingTask(id);
         } else {
             // If one worker is sending the tasks
             if (subResultQueues.containsKey(originator)) {
-                subResultQueues.get(originator).addPendingTask(taskId);
+                subResultQueues.get(originator).addPendingTask(id);
             } else {
                 ResultQueue rq = new ResultQueue(resultQueue.getMode());
-                rq.addPendingTask(taskId);
+                rq.addPendingTask(id);
                 subResultQueues.put(originator, rq);
             }
+            Long rootTaskId = workersActivity.get(originator).iterator().next();
+
+            if (tasksDependencies.containsKey(rootTaskId)) {
+                tasksDependencies.get(rootTaskId).add(id);
+            } else {
+                HashSet<Long> set = new HashSet<Long>();
+                set.add(id);
+                tasksDependencies.put(rootTaskId, set);
+            }
+            if (debug) {
+                logger.debug("Created dependency : " + rootTaskId + "->" + taskId);
+            }
+
         }
-        pendingTasks.add(new TaskID(originator, taskId));
+        pendingTasks.offer(taskId);
+
     }
 
     /**
@@ -879,10 +1047,15 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      * This wrapper will identify the task internally via an ID
      *
      * @param task task to be wrapped
+     * @param originatorName
      * @return wrapped version
      */
-    private long createId(Task<? extends Serializable> task) {
-        return repository.addTask(task);
+    private TaskID createId(Task<? extends Serializable> task, String originatorName) {
+        Long id = repository.addTask(task);
+        if (task instanceof DivisibleTask) {
+            return new TaskID(originatorName, id, true);
+        }
+        return new TaskID(originatorName, id, false);
     }
 
     /**
@@ -892,10 +1065,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      * @param tasks collection of tasks to be wrapped
      * @return wrapped version
      */
-    private List<Long> createIds(List<? extends Task<? extends Serializable>> tasks) {
-        List<Long> wrappings = new ArrayList<Long>();
+    private List<TaskID> createIds(List<? extends Task<? extends Serializable>> tasks, String originatorName) {
+        List<TaskID> wrappings = new ArrayList<TaskID>();
         for (Task<? extends Serializable> task : tasks) {
-            wrappings.add(createId(task));
+            wrappings.add(createId(task, originatorName));
+
         }
 
         return wrappings;
@@ -911,10 +1085,10 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 logger.debug("solve method received from " + originatorName);
             }
         }
-        if (isClearing) {
+        if (originatorName != null && isClearing) {
             clearingCallFromSpawnedWorker(originatorName);
         }
-        List<Long> wrappers = createIds(tasks);
+        List<TaskID> wrappers = createIds(tasks, originatorName);
         solveIds(wrappers, originatorName);
     }
 
@@ -1025,6 +1199,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     public List<Serializable> waitAllResults(String originatorName) throws TaskException {
         List<Serializable> results = null;
         List<ResultIntern<Serializable>> completed = null;
+        if (isInFTmechanism) {
+            throw new MWFTError();
+        }
         if (originatorName == null) {
             if (debug) {
                 logger.debug("All results received by the main client.");
@@ -1061,6 +1238,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     public List<Serializable> waitKResults(final String originatorName, final int k) {
         List<Serializable> results = new ArrayList<Serializable>(k);
         List<ResultIntern<Serializable>> completed = null;
+        if (isInFTmechanism) {
+            throw new MWFTError();
+        }
         if (originatorName == null) {
 
             if ((resultQueue.countPendingResults() + resultQueue.countAvailableResults()) < k) {
@@ -1107,6 +1287,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /** {@inheritDoc} */
     public Serializable waitOneResult(String originatorName) throws TaskException {
         ResultIntern<Serializable> res = null;
+        if (isInFTmechanism) {
+            throw new MWFTError();
+        }
         if (originatorName == null) {
 
             res = resultQueue.getNext();
@@ -1138,6 +1321,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     public List<Serializable> waitSomeResults(String originatorName) throws TaskException {
         List<Serializable> results = new ArrayList<Serializable>();
         List<ResultIntern<Serializable>> completed = null;
+        if (isInFTmechanism) {
+            throw new MWFTError();
+        }
         if (originatorName == null) {
 
             int k = resultQueue.countAvailableResults();

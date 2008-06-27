@@ -109,7 +109,7 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
     public void handleTask() {
         Serializable resultObj = null;
         boolean gotCancelled = false;
-        ResultInternImpl result = new ResultInternImpl(task);
+        ResultInternImpl result = new ResultInternImpl(task.getId());
         // We run the task and listen to exception thrown by the task itself
         try {
             if (debug) {
@@ -122,6 +122,9 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
                 logger.debug(name + " task " + task.getId() + " is finished");
             }
         } catch (IsClearingError ex) {
+            gotCancelled = true;
+
+        } catch (MWFTError ex) {
             gotCancelled = true;
 
         } catch (Exception e) {

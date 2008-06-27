@@ -71,10 +71,10 @@ public class ResultInternImpl implements ResultIntern<Serializable> {
 
     /**
      * Creates an empty result object for the given task
-     * @param task task associated with the result
+     * @param taskId id of the task associated with the result
      */
-    public ResultInternImpl(TaskIntern<Serializable> task) {
-        this.id = task.getId();
+    public ResultInternImpl(long taskId) {
+        this.id = taskId;
     }
 
     /**
