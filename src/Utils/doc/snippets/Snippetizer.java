@@ -32,6 +32,8 @@ package doc.snippets;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -50,7 +52,12 @@ import org.apache.log4j.Logger;
 public class Snippetizer {
 
     private static Logger logger = Logger.getLogger(Snippetizer.class.getName());
-
+    /**
+     * Files that are excluded from snippet checks. This is necessary as some files might contain
+     * the tag strings for other purposes than extracting code. 
+     */
+    private final List<String> EXCLUDED_FILES = Arrays.asList(new String[] { "SnippetExtractorFactory.java",
+            "UpdateCopyrightAndVersion.java" });
     private final File targetDir;
     private String[] fileTypes = { ".java", ".xml", ".fractal" };
 
@@ -81,8 +88,7 @@ public class Snippetizer {
                 this.startExtraction(file);
             } else
                 for (String extension : this.fileTypes) {
-                    if (file.toString().endsWith(extension) &&
-                        !file.getName().equals("SnippetExtractorFactory.java")) {
+                    if (file.toString().endsWith(extension) && !EXCLUDED_FILES.contains(file.getName())) {
                         //get the correct extractor and start it 
                         try {
                             SnippetExtractorFactory.getExtractor(file, this.targetDir).run();
