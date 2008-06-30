@@ -126,13 +126,11 @@
                 PROACTIVE/scripts/unix/scilab/README :
             </para>
 
-            <para>
-                <programlisting xml:lang="txt">
+                <programlisting xml:lang="screen">
                     <textobject>
                         <textdata fileref="../scripts/unix/scilab/README"/>
                     </textobject>
                 </programlisting>
-            </para>
         </section>
         <section xml:id="SciMat_Matlab_Installation">
             <info>
