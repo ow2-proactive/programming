@@ -33,6 +33,7 @@ package org.objectweb.proactive.extra.montecarlo.example;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
+import org.objectweb.proactive.extra.montecarlo.AbstractExperienceSetPostProcess;
 import org.objectweb.proactive.extra.montecarlo.EngineTask;
 import org.objectweb.proactive.extra.montecarlo.Executor;
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
@@ -40,14 +41,13 @@ import org.objectweb.proactive.extra.montecarlo.PAMonteCarlo;
 import org.objectweb.proactive.extra.montecarlo.Simulator;
 import org.objectweb.proactive.extra.montecarlo.basic.GeometricBrownianMotion;
 
-import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
 
-public class EuropeanOption implements EngineTask {
+public class EuropeanOption implements EngineTask<double[]> {
 
     private double spotPrice, strikePrice, dividend, interestRate, volatilityRate, maturityDate;
     private int N, M;
@@ -75,13 +75,24 @@ public class EuropeanOption implements EngineTask {
         M = m;
     }
 
-    public Serializable run(Simulator simulator, Executor executor) {
-        List<ExperienceSet> sets = new ArrayList<ExperienceSet>(M);
+    public double[] run(Simulator simulator, Executor executor) {
+        List<ExperienceSet<double[]>> sets = new ArrayList<ExperienceSet<double[]>>(M);
         for (int i = 0; i < M; i++) {
-            sets.add(new EuropeanOptionOutputFilter(new GeometricBrownianMotion(spotPrice, interestRate,
-                volatilityRate, maturityDate, N), this.strikePrice));
+            sets.add(new AbstractExperienceSetPostProcess<double[], double[]>(new GeometricBrownianMotion(
+                spotPrice, interestRate, volatilityRate, maturityDate, N)) {
+
+                public double[] postprocess(double[] experiencesResults) {
+                    double[] simulatedPrice = experiencesResults;
+                    double[] payoff = new double[] { 0, 0 };
+                    for (int j = 0; j < simulatedPrice.length; j++) {
+                        payoff[0] += Math.max(simulatedPrice[j] - strikePrice, 0);
+                        payoff[1] += Math.max(strikePrice - simulatedPrice[j], 0);
+                    }
+                    return payoff;
+                }
+            });
         }
-        Enumeration<Serializable> simulatedPriceList = null;
+        Enumeration<double[]> simulatedPriceList = null;
         try {
             simulatedPriceList = simulator.solve(sets);
         } catch (TaskException e) {
@@ -91,11 +102,10 @@ public class EuropeanOption implements EngineTask {
         double payoffCall = 0;
         double payoffPut = 0;
         while (simulatedPriceList.hasMoreElements()) {
-            EuropeanOptionOutputFilter.PayOff simulatedPayOff = (EuropeanOptionOutputFilter.PayOff) simulatedPriceList
-                    .nextElement();
+            double[] simulatedPayOff = simulatedPriceList.nextElement();
 
-            payoffCall += simulatedPayOff.getPayoffCall();
-            payoffPut += simulatedPayOff.getPayoffPut();
+            payoffCall += simulatedPayOff[0];
+            payoffPut += simulatedPayOff[1];
         }
 
         double call, put;
@@ -108,10 +118,10 @@ public class EuropeanOption implements EngineTask {
 
     public static void main(String[] args) throws ProActiveException, TaskException {
         URL descriptor = EuropeanOption.class.getResource("WorkersApplication.xml");
-        PAMonteCarlo mc = new PAMonteCarlo(descriptor, null, "Workers");
+        PAMonteCarlo<double[]> mc = new PAMonteCarlo<double[]>(descriptor, null, "Workers");
 
-        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 1000000, 1000);
-        double[] price = (double[]) mc.run(option);
+        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 10000, 1000);
+        double[] price = mc.run(option);
         System.out.println("Call: " + price[0] + " Put : " + price[1]);
         mc.terminate();
         PALifeCycle.exitSuccess();

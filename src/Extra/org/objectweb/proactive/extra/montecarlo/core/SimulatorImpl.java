@@ -35,11 +35,11 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
 import org.objectweb.proactive.extra.montecarlo.Simulator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.Serializable;
 
 
 /**
@@ -57,7 +57,8 @@ public class SimulatorImpl implements Simulator {
         this.lock = lock;
     }
 
-    public Enumeration<Serializable> solve(List<ExperienceSet> experienceSets) throws TaskException {
+    public <R extends Serializable> Enumeration<R> solve(List<ExperienceSet<R>> experienceSets)
+            throws TaskException {
         lock.useSimulator();
         ArrayList<ExperienceTask> adapterTasks = new ArrayList<ExperienceTask>(experienceSets.size());
         for (ExperienceSet eset : experienceSets) {
@@ -65,12 +66,12 @@ public class SimulatorImpl implements Simulator {
         }
         master.setResultReceptionOrder(SubMaster.COMPLETION_ORDER);
         master.solve(adapterTasks);
-        return new OutputEnumeration(lock, experienceSets.size());
+        return new OutputEnumeration<R>(lock, experienceSets.size());
     }
 
-    public class OutputEnumeration implements Enumeration<Serializable> {
+    public class OutputEnumeration<R extends Serializable> implements Enumeration<R> {
 
-        private LinkedList<Serializable> buffer = new LinkedList<Serializable>();
+        private LinkedList<R> buffer = new LinkedList<R>();
         private SubMasterLock lock;
         private int pendingTasks;
 
@@ -83,11 +84,11 @@ public class SimulatorImpl implements Simulator {
             return !buffer.isEmpty() || (pendingTasks > 0);
         }
 
-        public Serializable nextElement() {
+        public R nextElement() {
             if (buffer.isEmpty()) {
                 if (pendingTasks > 0) {
                     try {
-                        List<Serializable> res = master.waitSomeResults();
+                        List<R> res = (List<R>) master.waitSomeResults();
                         pendingTasks -= res.size();
                         buffer.addAll(res);
                     } catch (TaskException e) {

@@ -31,12 +31,9 @@
 package org.objectweb.proactive.extra.montecarlo.basic;
 
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
-
-import java.util.Random;
-
-import umontreal.iro.lecuyer.rng.RandomStream;
 import umontreal.iro.lecuyer.probdist.NormalDist;
 import umontreal.iro.lecuyer.randvar.NormalGen;
+import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 /**
@@ -44,7 +41,7 @@ import umontreal.iro.lecuyer.randvar.NormalGen;
  *
  * @author The ProActive Team
  */
-public class GeometricBorwnianMotionCashDividend implements ExperienceSet {
+public class GeometricBorwnianMotionCashDividend implements ExperienceSet<double[]> {
 
     private double s0, Y, r, sigma, Dt, t, T;
     private int N;

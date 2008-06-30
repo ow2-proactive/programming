@@ -33,7 +33,6 @@ package org.objectweb.proactive.extra.montecarlo;
 import umontreal.iro.lecuyer.rng.RandomStream;
 
 import java.io.Serializable;
-import java.util.Random;
 
 
 /**
@@ -43,7 +42,7 @@ import java.util.Random;
  *
  * @author The ProActive Team
  */
-public interface ExperienceSet extends Serializable {
+public interface ExperienceSet<T extends Serializable> extends Serializable {
 
     /**
      * Defines a Monte-Carlo set of successive experiences, a Random generator is given and will be used
@@ -54,5 +53,5 @@ public interface ExperienceSet extends Serializable {
      * @param rng random number generator
      * @return a list of double values
      */
-    Serializable simulate(final RandomStream rng);
+    T simulate(final RandomStream rng);
 }

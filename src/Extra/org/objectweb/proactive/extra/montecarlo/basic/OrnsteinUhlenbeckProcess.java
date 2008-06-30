@@ -31,12 +31,9 @@
 package org.objectweb.proactive.extra.montecarlo.basic;
 
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
-
-import java.util.Random;
-
 import umontreal.iro.lecuyer.probdist.NormalDist;
-import umontreal.iro.lecuyer.rng.RandomStream;
 import umontreal.iro.lecuyer.randvar.NormalGen;
+import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 /**
@@ -44,7 +41,7 @@ import umontreal.iro.lecuyer.randvar.NormalGen;
  *
  * @author The ProActive Team
  */
-public class OrnsteinUhlenbeckProcess implements ExperienceSet {
+public class OrnsteinUhlenbeckProcess implements ExperienceSet<double[]> {
 
     private int N;
     private double base;

@@ -30,31 +30,28 @@
  */
 package org.objectweb.proactive.extra.montecarlo;
 
-import org.objectweb.proactive.extensions.masterworker.TaskException;
+import umontreal.iro.lecuyer.rng.RandomStream;
 
 import java.io.Serializable;
-import java.util.Enumeration;
-import java.util.List;
 
 
 /**
- * Executor
- *
- * This interface represents an access to the Monte-Carlo engine for running a list of engine task in parallel
- *  
+ * AbstractExperienceSetOutputFilter
  *
  * @author The ProActive Team
  */
-public interface Executor {
+public abstract class AbstractExperienceSetPostProcess<T extends Serializable, R extends Serializable>
+        implements ExperienceSetPostProcess<T, R>, ExperienceSet<R> {
 
-    /**
-     * Asks the engine to run a list of engine tasks in parallel.<br/>
-     * As each engine task returns a Serializable object the general result of the parallel tasks<br/>
-     * are a list of these objects, with coherent ordering.
-     * @param engineTasks list of tasks to run in parallel
-     * @return a list of objects as output
-     * @throws TaskException is an exception occured during the execution of the user code 
-     */
-    public <T extends Serializable> Enumeration<T> solve(List<EngineTask<T>> engineTasks)
-            throws TaskException;
+    private ExperienceSet<T> experienceSet;
+
+    public AbstractExperienceSetPostProcess(ExperienceSet<T> experienceSet) {
+        this.experienceSet = experienceSet;
+    }
+
+    public R simulate(final RandomStream rng) {
+        T results = experienceSet.simulate(rng);
+        return postprocess(results);
+    }
+
 }

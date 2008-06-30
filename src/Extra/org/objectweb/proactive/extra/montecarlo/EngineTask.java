@@ -52,8 +52,8 @@ import java.io.Serializable;
  *
  * @author The ProActive Team
  */
-public interface EngineTask extends Serializable {
+public interface EngineTask<T extends Serializable> extends Serializable {
 
-    public Serializable run(Simulator simulator, Executor executor);
+    public T run(Simulator simulator, Executor executor);
 
 }

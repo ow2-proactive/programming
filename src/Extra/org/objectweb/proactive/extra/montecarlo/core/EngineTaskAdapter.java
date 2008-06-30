@@ -43,20 +43,20 @@ import java.io.Serializable;
  *
  * @author The ProActive Team
  */
-public class EngineTaskAdapter implements DivisibleTask<Serializable> {
+public class EngineTaskAdapter<T extends Serializable> implements DivisibleTask<T> {
 
-    private EngineTask task;
+    private EngineTask<T> task;
     private SubMasterLock lock = new SubMasterLock();
 
     public EngineTaskAdapter(EngineTask task) {
         this.task = task;
     }
 
-    public Serializable run(WorkerMemory memory) throws Exception {
-        return new UnsupportedOperationException();
+    public T run(WorkerMemory memory) throws Exception {
+        throw new UnsupportedOperationException();
     }
 
-    public Serializable run(WorkerMemory memory, SubMaster master) throws Exception {
+    public T run(WorkerMemory memory, SubMaster master) throws Exception {
         return task.run(new SimulatorImpl(master, lock), new ExecutorImpl(master, lock));
     }
 }

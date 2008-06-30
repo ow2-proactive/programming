@@ -49,7 +49,7 @@ import java.util.List;
  */
 public class ExecutorImpl implements Executor {
 
-    SubMaster<EngineTaskAdapter, Serializable> master;
+    SubMaster<EngineTaskAdapter<Serializable>, Serializable> master;
     private SubMasterLock lock;
 
     public ExecutorImpl(SubMaster master, SubMasterLock lock) {
@@ -57,20 +57,22 @@ public class ExecutorImpl implements Executor {
         this.lock = lock;
     }
 
-    public Enumeration<Serializable> solve(List<EngineTask> engineTasks) throws TaskException {
-        ArrayList<EngineTaskAdapter> adapterTasks = new ArrayList<EngineTaskAdapter>(engineTasks.size());
-        for (EngineTask etask : engineTasks) {
-            adapterTasks.add(new EngineTaskAdapter(etask));
+    public <R extends Serializable> Enumeration<R> solve(List<EngineTask<R>> engineTasks)
+            throws TaskException {
+        List<EngineTaskAdapter<Serializable>> adapterTasks = new ArrayList<EngineTaskAdapter<Serializable>>(
+            engineTasks.size());
+        for (EngineTask<R> etask : engineTasks) {
+            adapterTasks.add(new EngineTaskAdapter<Serializable>(etask));
         }
         lock.useExecutor();
         master.setResultReceptionOrder(SubMaster.SUBMISSION_ORDER);
         master.solve(adapterTasks);
-        return new OutputEnumeration(lock, adapterTasks.size());
+        return new OutputEnumeration<R>(lock, adapterTasks.size());
     }
 
-    public class OutputEnumeration implements Enumeration<Serializable> {
+    public class OutputEnumeration<R extends Serializable> implements Enumeration<R> {
 
-        private LinkedList<Serializable> buffer = new LinkedList<Serializable>();
+        private LinkedList<R> buffer = new LinkedList<R>();
         private SubMasterLock lock;
         private int pendingTasks;
 
@@ -83,11 +85,11 @@ public class ExecutorImpl implements Executor {
             return buffer.size() > 0 || pendingTasks > 0;
         }
 
-        public Serializable nextElement() {
+        public R nextElement() {
             if (buffer.isEmpty()) {
                 if (pendingTasks > 0) {
                     try {
-                        List<Serializable> res = master.waitSomeResults();
+                        List<R> res = (List<R>) master.waitSomeResults();
                         pendingTasks -= res.size();
                         buffer.addAll(res);
                     } catch (TaskException e) {

@@ -1,9 +1,9 @@
 package org.objectweb.proactive.extra.montecarlo.basic;
 
-import umontreal.iro.lecuyer.rng.RandomStream;
-import umontreal.iro.lecuyer.randvar.NormalGen;
-import umontreal.iro.lecuyer.probdist.NormalDist;
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
+import umontreal.iro.lecuyer.probdist.NormalDist;
+import umontreal.iro.lecuyer.randvar.NormalGen;
+import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 /**
@@ -13,7 +13,7 @@ import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
  *
  * @author The ProActive Team
  */
-public class VasisekModelInterestRates implements ExperienceSet {
+public class VasisekModelInterestRates implements ExperienceSet<double[]> {
 
     private double a, b, t;
     private int N;

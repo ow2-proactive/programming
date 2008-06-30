@@ -31,19 +31,16 @@
 package org.objectweb.proactive.extra.montecarlo.basic;
 
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
-
-import java.util.Random;
-
 import umontreal.iro.lecuyer.probdist.NormalDist;
-import umontreal.iro.lecuyer.rng.RandomStream;
 import umontreal.iro.lecuyer.randvar.NormalGen;
+import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 /**
  * @author vddoan
  *
  */
-public class BrownianBridge implements ExperienceSet {
+public class BrownianBridge implements ExperienceSet<double[]> {
 
     private double w0, wT, t, T;
 

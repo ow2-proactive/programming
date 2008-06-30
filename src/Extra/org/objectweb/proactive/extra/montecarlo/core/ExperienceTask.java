@@ -33,11 +33,9 @@ package org.objectweb.proactive.extra.montecarlo.core;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
-
-import java.util.Random;
-import java.io.Serializable;
-
 import umontreal.iro.lecuyer.rng.RandomStream;
+
+import java.io.Serializable;
 
 
 /**
