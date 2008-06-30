@@ -1,9 +1,7 @@
 <!-- Converted by db4-upgrade version 1.0 -->
 
 <chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="IC2D_EclipsePlugin"><info><title>
-        IC2D: Interactive Control and Debugging of Distribution and
-        Eclipse plugin
-    </title></info>
+        IC2D: Interactive Control and Debugging of Distribution</title></info>
     
     <para>
         <emphasis role="bold">IC2D</emphasis>
@@ -17,11 +15,7 @@
         <emphasis role="bold">ProActive</emphasis>
         that provides asynchronous calls and migration.
     </para>
-    <para>IC2D is available in two forms :</para>
-    <itemizedlist>
-        <listitem>
-            <para>
-                A
+    <para>IC2D is available in the form of a
                 <emphasis role="bold">
                     Java standalone application
                 </emphasis>
@@ -29,38 +23,9 @@
                 <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wiki.eclipse.org/index.php/Rich_Client_Platform">
                     Eclipse Rich Client Platform (RCP)
                 </link>
-                , available for any platform (Windows, Linux, Mac
-                OSX,Solaris, ...)
+                , available for several platforms (Windows, Linux, Mac
+                OSX,)
             </para>
-        </listitem>
-        <listitem>
-            <para>
-                A set of
-                <emphasis role="bold">
-                    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.eclipse.org">Eclipse</link>
-                    plugins
-                </emphasis>
-                : with all the functionalities within the standalone
-                application, enhanced with a tool that makes easier the
-                development of Grid Applications, including:
-                <itemizedlist>
-                    <listitem>
-                        <para>
-                            ProActive Editor (error highlighting, ...)
-                        </para>
-                    </listitem>
-                    <listitem>
-                        <para>ProActive Wizards</para>
-                    </listitem>
-                    <listitem>
-                        <para>
-                            Cheat Sheets for ProActive (Guided Tour)
-                        </para>
-                    </listitem>
-                </itemizedlist>
-            </para>
-        </listitem>
-    </itemizedlist>
     <!-- ************************************************************************************ -->
     <section xml:id="MonitoringControl"><info><title>Monitoring and Control</title></info>
         
