@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Policy>
-	<ApplicationName>CN=Garden</ApplicationName>
+	<ApplicationName>CN=Garden1</ApplicationName>
 	<PKCS12KeyStore>keystore1.p12</PKCS12KeyStore>
 	<CertificationAuthority>
 		<Certificate></Certificate>
