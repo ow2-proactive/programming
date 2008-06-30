@@ -32,6 +32,7 @@ package org.objectweb.proactive.extra.p2p.monitoring.event;
 
 import org.objectweb.proactive.extra.p2p.monitoring.Link;
 import org.objectweb.proactive.extra.p2p.monitoring.P2PNode;
+import org.objectweb.proactive.extra.p2p.monitoring.PeerAttribute;
 
 
 /**
@@ -43,4 +44,9 @@ public interface P2PNetworkListener {
     public void newPeer(P2PNode node);
 
     public void newLink(Link link);
+
+    public void addAttribute(P2PNode node, PeerAttribute[] att);
+
+    public void refresh();
+
 }

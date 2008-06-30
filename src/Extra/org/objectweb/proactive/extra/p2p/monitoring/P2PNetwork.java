@@ -35,12 +35,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.objectweb.proactive.extra.p2p.monitoring.color.NetworkColorScheme;
 import org.objectweb.proactive.extra.p2p.monitoring.event.P2PNetworkListener;
 
 
 /**
- * An abstraction of a P2P Network useful for monitoring
- * Manage a list of P2PNetworkListener
+ * An abstraction of a P2P Network useful for monitoring Manage a list of P2PNetworkListener
+ * 
  * @author fhuet
  */
 public class P2PNetwork {
@@ -51,10 +52,15 @@ public class P2PNetwork {
     protected Date date;
     private int index;
 
+    protected NetworkColorScheme colorScheme;
+
     public P2PNetwork() {
+        colorScheme = new NetworkColorScheme();
+        this.addListener(colorScheme);
     }
 
     public P2PNetwork(String n) {
+        this();
         this.name = n;
     }
 
@@ -66,6 +72,7 @@ public class P2PNetwork {
     protected void addAsSender(P2PNode p) {
         this.notifyListenersNewPeer(p);
         senders.put(p.getName(), p);
+
     }
 
     protected void addAsSender(AcquaintanceInfo i) {
@@ -87,6 +94,12 @@ public class P2PNetwork {
         }
     }
 
+    public void addAsSender(String s, PeerAttribute[] data) {
+        if (senders.get(s) == null) {
+            this.addAsSender(new P2PNode(s, data));
+        }
+    }
+
     public void addAsSender(String s, int noa, int maxNoa) {
         P2PNode p = senders.get(s);
         if (p == null) {
@@ -100,15 +113,24 @@ public class P2PNetwork {
         }
     }
 
+    public void addAttribute(P2PNode node, PeerAttribute[] att) {
+        System.out.println("P2PNetwork.addAttribute()");
+        for (int i = 0; i < att.length; i++) {
+            System.out.println("      " + att[i]);
+        }
+        node.addAttribute(att);
+        this.notifyListenersAddAttribute(node, att);
+    }
+
     /**
-     * our links are considered bi-directional
-     * ie a->b and b->a will be a a<->b link
-     * so we switch source/destination based on lexical order
+     * our links are considered bi-directional ie a->b and b->a will be a a<->b link so we switch
+     * source/destination based on lexical order
+     * 
      * @param source
      * @param dest
      */
     public void addLink(String source, String dest) {
-        //System.out.println(source + " <--> " + dest);
+        // System.out.println(source + " <--> " + dest);
         Link l = null;
         Link previousValue = null;
         if (source.compareTo(dest) <= 0) {
@@ -136,21 +158,51 @@ public class P2PNetwork {
     }
 
     protected void notifyListenersNewPeer(P2PNode node) {
-        Iterator<P2PNetworkListener> it = listeners.iterator();
-
-        // System.out.println("P2PNetwork.notifyListenersNewPeer() " + node);
-        while (it.hasNext()) {
-            System.out.println("            P2PNetwork.notifyListenersNewPeer() ");
-            P2PNetworkListener element = (P2PNetworkListener) it.next();
-            element.newPeer(node);
+        for (P2PNetworkListener nl : listeners) {
+            nl.newPeer(node);
         }
     }
 
     protected void notifyListenersNewLink(Link l) {
+        for (P2PNetworkListener nl : listeners) {
+            nl.newLink(l);
+        }
+    }
+
+    protected void notifyListenersAddAttribute(P2PNode n, PeerAttribute[] p) {
+        //        Iterator<P2PNetworkListener> it = listeners.iterator();
+        //        while (it.hasNext()) {
+        //            P2PNetworkListener element = (P2PNetworkListener) it.next();
+        //            element.addAttribute(n, p);
+        //        }
+
+        for (P2PNetworkListener nl : listeners) {
+            nl.addAttribute(n, p);
+        }
+        //        String[] tmp = colorScheme.getMainAttributeList();
+        //     //   System.out.println("P2PNetwork.notifyListenersAddAttribute() main :");
+        //        for (int i = 0; i < tmp.length; i++) {
+        //          
+        //            System.out.println("          "+tmp[i]);
+        //        }
+        //        tmp = colorScheme.getOttherAttributeList();
+        //        System.out.println("P2PNetwork.notifyListenersAddAttribute() other :");
+        //        for (int i = 0; i < tmp.length; i++) {
+        //          
+        //            System.out.println("          "+tmp[i]);
+        //        }
+    }
+
+    public void finished() {
         Iterator<P2PNetworkListener> it = listeners.iterator();
         while (it.hasNext()) {
             P2PNetworkListener element = (P2PNetworkListener) it.next();
-            element.newLink(l);
+            element.refresh();
         }
     }
+
+    public NetworkColorScheme getColorScheme() {
+        return colorScheme;
+    }
+
 }
