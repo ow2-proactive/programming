@@ -46,10 +46,10 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+
 public class EuropeanOption implements EngineTask<double[]> {
 
-    private double spotPrice, strikePrice, dividend, interestRate,
-            volatilityRate, maturityDate;
+    private double spotPrice, strikePrice, dividend, interestRate, volatilityRate, maturityDate;
 
     private int N, M;
 
@@ -73,9 +73,8 @@ public class EuropeanOption implements EngineTask<double[]> {
      *            total number of simulations
      */
 
-    public EuropeanOption(double spotPrice, double strikePrice,
-            double dividend, double interestRate, double volatilityRate,
-            double maturityDate, int n, int m) {
+    public EuropeanOption(double spotPrice, double strikePrice, double dividend, double interestRate,
+            double volatilityRate, double maturityDate, int n, int m) {
         super();
         this.spotPrice = spotPrice;
         this.strikePrice = strikePrice;
@@ -96,24 +95,20 @@ public class EuropeanOption implements EngineTask<double[]> {
      * @return option price
      */
     public double[] run(Simulator simulator, Executor executor) {
-        List<ExperienceSet<double[]>> sets = new ArrayList<ExperienceSet<double[]>>(
-                M);
+        List<ExperienceSet<double[]>> sets = new ArrayList<ExperienceSet<double[]>>(M);
         // Simulate M Monte Carlo simulations to estimate M underlying asset
         // prices at the maturity date.
         for (int i = 0; i < M; i++) {
-            sets.add(new AbstractExperienceSetPostProcess<double[], double[]>(
-                    new GeometricBrownianMotion(spotPrice, interestRate,
-                            volatilityRate, maturityDate, N)) {
+            sets.add(new AbstractExperienceSetPostProcess<double[], double[]>(new GeometricBrownianMotion(
+                spotPrice, interestRate, volatilityRate, maturityDate, N)) {
                 // Compute the payoff of both call [index 1] and put [index 0]
                 // options
                 public double[] postprocess(double[] experiencesResults) {
                     double[] simulatedPrice = experiencesResults;
                     double[] payoff = new double[] { 0, 0 };
                     for (int j = 0; j < simulatedPrice.length; j++) {
-                        payoff[0] += Math.max(simulatedPrice[j] - strikePrice,
-                                0);
-                        payoff[1] += Math.max(strikePrice - simulatedPrice[j],
-                                0);
+                        payoff[0] += Math.max(simulatedPrice[j] - strikePrice, 0);
+                        payoff[1] += Math.max(strikePrice - simulatedPrice[j], 0);
                     }
                     return payoff;
                 }
@@ -138,25 +133,19 @@ public class EuropeanOption implements EngineTask<double[]> {
         }
         double call, put;
         // Discount both call and put payoffs then do the average
-        call = payoffCall * Math.exp(-this.maturityDate * this.interestRate)
-                / (N * M);
-        put = payoffPut * Math.exp(-this.maturityDate * this.interestRate)
-                / (N * M);
+        call = payoffCall * Math.exp(-this.maturityDate * this.interestRate) / (N * M);
+        put = payoffPut * Math.exp(-this.maturityDate * this.interestRate) / (N * M);
         // to return the call and put option prices
         return new double[] { call, put };
     }
 
-    public static void main(String[] args) throws ProActiveException,
-            TaskException {
+    public static void main(String[] args) throws ProActiveException, TaskException {
         // Get the descriptor
-        URL descriptor = EuropeanOption.class
-                .getResource("WorkersApplication.xml");
+        URL descriptor = EuropeanOption.class.getResource("WorkersApplication.xml");
         // Initialize the framework
-        PAMonteCarlo<double[]> mc = new PAMonteCarlo<double[]>(descriptor,
-                null, "Workers");
+        PAMonteCarlo<double[]> mc = new PAMonteCarlo<double[]>(descriptor, null, "Workers");
         // Initialize the top-level task
-        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05,
-                0.2, 1, 10000, 1000);
+        EuropeanOption option = new EuropeanOption(100.0, 100.0, 0.1, 0.05, 0.2, 1, 10000, 1000);
         // Starts the top-level task
         double[] price = mc.run(option);
         System.out.println("Call: " + price[0] + " Put : " + price[1]);
