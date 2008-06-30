@@ -107,7 +107,7 @@ public class MyListener implements NotificationListener{
 				<note><info><title>Warning</title></info>
 				
 				<para>
-					For perfomance reasons, the MBean of an active object (BodyWrapperMBean) sends a set of notification.
+					For performance reasons, the MBean of an active object (BodyWrapperMBean) sends a set of notifications.
 				</para>
 				<para>
 				Type of the notification: Notification.setOfNotifications
