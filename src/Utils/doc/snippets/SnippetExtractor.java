@@ -241,7 +241,7 @@ public abstract class SnippetExtractor {
             if (endValue == null) {
                 SnippetExtractor.logger.error("[" + startValue + "]  Orphaned start tag [" + startKey +
                     "] found at line:" + "[" + startValue + "]. File [" + this.target +
-                    "] will not be parsed and some code parts may" + "not appear in the final document.");
+                    "] will not be parsed and some code parts may " + "not appear in the final document.");
                 fileValid = false;
             } else {
                 // check for order
@@ -272,7 +272,7 @@ public abstract class SnippetExtractor {
         return true;
 
         // the method does not return immediately on finding an error
-        // in order to report as many errors as possible in on try (makes fixing
+        // in order to report as many errors as possible in one try (makes fixing
         // the errors faster)
 
     }
@@ -292,7 +292,7 @@ public abstract class SnippetExtractor {
         String startA;
         line = this.reader.readLine();
         while (line != null) {
-            //if we found an end annotation close the coresponding writer
+            //if we found an end annotation close the corresponding writer
             if ((writers.size() > 0) && (line.contains(this.endAnnotation))) {
                 // close the writer corresponding to the end annotation
                 endA = this.extractAnnotation(line, this.endAnnotation);
