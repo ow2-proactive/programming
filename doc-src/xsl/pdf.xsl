@@ -23,6 +23,10 @@
 		on every image :(
 	-->
 
+	<!-- wraps very long lines -->
+	<xsl:attribute-set name="monospace.verbatim.properties">
+    	<xsl:attribute name="wrap-option">wrap</xsl:attribute>
+	</xsl:attribute-set>
 
 	<!--  center all images in the tag figure horizontally  -->
 	<xsl:attribute-set name="figure.properties">
@@ -628,7 +632,7 @@
 			</fo:block>
 
 			<!-- The three logos, in a 1x3 table: INRIA, UNSA, CNRS/I3S -->
-			<fo:table table-layout="fixed" space-before="27mm">
+			<fo:table table-layout="fixed"  width="100%" space-before="27mm">
 
 				<fo:table-column column-width="proportional-column-width(1)" />
 				<fo:table-column column-width="proportional-column-width(1)"/>
@@ -672,7 +676,7 @@
 			</fo:table>
 
 			<!-- The Revision and copyright -->
-			<fo:table table-layout="fixed" space-before="5mm">
+			<fo:table table-layout="fixed" space-before="5mm" width="100%">
 
 				<fo:table-column column-width="proportional-column-width(1)"/>
 				<fo:table-column column-width="proportional-column-width(1)"/>
@@ -1464,7 +1468,7 @@
 	<xsl:template name="emailF">
 		<xsl:call-template name="inline.charseq">
 			<xsl:with-param name="content">
-				<fo:inline keep-together.within-line="always"
+				<fo:inline keep-together.within-line="1"
 					hyphenate="false">
 					<fo:basic-link>
 						<xsl:attribute name="external-destination">mailto:<xsl:value-of
