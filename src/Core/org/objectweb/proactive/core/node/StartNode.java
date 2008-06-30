@@ -86,7 +86,7 @@ public class StartNode {
         }
 
         try {
-            Class.forName("org.objectweb.proactive.ProActive");
+            Class.forName("org.objectweb.proactive.api.PAActiveObject");
         } catch (ClassNotFoundException e) {
             if (logger.isDebugEnabled()) {
                 logger.fatal("Loading of ProActive class FAILED");
