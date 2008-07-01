@@ -28,9 +28,7 @@ fi
 
 args="-kernel $1 -np ${3-$default_np} -class ${2-$default_class} -descriptor ${4-$default_descriptor}"
 
-echo "args = $args"
-
-$JAVACMD -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8040 -Xdebug -Djava.rmi.server.exceptionTrace=true org.objectweb.proactive.benchmarks.NAS.Benchmark $args
+$JAVACMD org.objectweb.proactive.benchmarks.NAS.Benchmark $args
 
 echo
 echo ---------------------------------------------------------
