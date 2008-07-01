@@ -191,7 +191,7 @@ public class UpdateCopyrightAndVersion {
 
         // it is possible to find a snippet tag between a copyright and the package name
         // in that case we keep the snippet.
-        int snippetStart = program.indexOf("//@snippet-start");
+        int snippetStart = program.indexOf("//@" + "snippet-start");
 
         if (packageStart == -1) {
             return;
