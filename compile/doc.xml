@@ -220,6 +220,10 @@
 			<!-- the date for the first page -->
 			<param name="VERSION" expression="${version}" />
 			<!-- the version number, for the first page -->
+
+			<!-- Output dir for the chunked stylesheet-->
+			<param name="base.dir" expression="${docs.dir}/manual/ProActive_Manual_html/"/>
+
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="**/*.jar" />
