@@ -62,7 +62,7 @@ fi
 cp -Rf ${PROACTIVE_DIR} ${TMP_DIR}
 
 cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
-if [ "$(find src/ -name "*.java" | xargs grep serialVersionUID | wc -l)" -le 50 ] ; then
+if [ "$(find src/ -name "*.java" | xargs grep serialVersionUID | grep -v `echo $VERSION | sed 's@\(.\)\.\(.\)\..@\1\2@'` | wc -l)" -gt 0 ] ; then
 	if [ -z "${RELAX}" ] ; then
 		warn_and_exit " [E] serialVersionUID are NOT defined"
 	fi
