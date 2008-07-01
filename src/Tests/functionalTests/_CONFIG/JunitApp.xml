@@ -21,6 +21,7 @@
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="classes/Tests"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
+					<pathElement base="proactive" relpath="dist/lib/ibis-1.4.jar"/>
 				</proactiveClasspath>		
 		      <!--   <proactiveSecurity>
 		          <applicationPolicy base="proactive" relpath="descriptors/security/applicationPolicy1.xml"/>

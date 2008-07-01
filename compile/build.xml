@@ -433,7 +433,13 @@
 				<jvmarg value="-Dproactive.home=${base.dir}" />
 
 				<classpath>
-					<additionalClasspath />
+					<additionalClasspath >
+						<!--  it  is mandatory to explicity include the ibis jar in the
+			     classpath. Ibis is not able to find the classes if they are
+			     not directly accessible through the classpath.
+			     i.e. we cannot use the jar index tip -->
+						<pathelement location="${lib.dir}/ibis-1.4.jar" />
+					</additionalClasspath>
 					<path refid="test.classpath" />
 				</classpath>
 
@@ -859,7 +865,7 @@
 		<property name="x" value="" />
 		<echo message="Starting the performance test." />
 		<java classname="${performanceTestClass}" fork="true">
-			<classpath refid="project.classpath" />
+			<classpath refid="project.classpath"/>
 			<jvmarg value="-Djava.security.policy=${base.dir}/compile/proactive.java.policy" />
 			<jvmarg value="-Dlog4j.configuration=file:${base.dir}/compile/proactive-log4j" />
 			<arg value="-n" />
