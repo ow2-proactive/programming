@@ -386,7 +386,6 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
         this.updateView();
     }
 
-    @Override
     public void addAttribute(P2PNode node, PeerAttribute[] att) {
         // TODO Auto-generated method stub
 
