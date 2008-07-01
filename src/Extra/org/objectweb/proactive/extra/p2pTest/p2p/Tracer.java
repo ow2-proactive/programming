@@ -80,7 +80,7 @@ public class Tracer implements java.io.Serializable {
             e.printStackTrace();
         }
 
-        dumper.dumpAsText();
+        dumper.dumpPeersAsText();
     }
 
     /**

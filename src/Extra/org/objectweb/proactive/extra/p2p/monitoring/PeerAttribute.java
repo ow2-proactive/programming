@@ -22,7 +22,7 @@ public class PeerAttribute implements Comparable<PeerAttribute> {
         return this.name + " : " + this.value;
     }
 
-    @Override
+    
     public int compareTo(PeerAttribute o) {
         return this.name.compareTo(((PeerAttribute) o).getName());
 

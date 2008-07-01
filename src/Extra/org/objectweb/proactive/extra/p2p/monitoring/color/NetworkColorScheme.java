@@ -205,16 +205,13 @@ public class NetworkColorScheme implements P2PNetworkListener {
         return false;
     }
 
-    @Override
     public void newLink(Link link) {
 
     }
 
-    @Override
     public void newPeer(P2PNode node) {
     }
 
-    @Override
     public void refresh() {
 
     }
