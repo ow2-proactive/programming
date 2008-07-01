@@ -173,6 +173,8 @@
 			<arg line="-srcDir ${cl.proactive.dir} -class org/objectweb/proactive/core/body/UniversalBody" />
 		</java>
 
+	    <antcall target="ibis"/>
+
 		<!-- XXX: MPI should be in Extensions -->
 		<if>
 			<bool>
