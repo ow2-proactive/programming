@@ -11,6 +11,11 @@
             id="org.objectweb.proactive.ic2d.p2p.Monitoring.views.P2PView"
             name="P2PView">
       </view>
+      <view
+            class="org.objectweb.proactive.ic2d.p2p.Monitoring.views.PeersimLogView"
+            id="org.objectweb.proactive.ic2d.p2p.Monitoring.views.PeersimLogView"
+            name="PeersimLogView">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -40,6 +45,13 @@
                id="P2P.menu1"
                label="P2P">
          </menu>
+         <action
+               class="org.objectweb.proactive.ic2d.p2p.Monitoring.actions.DumpPeersimFileChooserAction"
+               id="P2P.action3"
+               label="Load PeerSim Log"
+               menubarPath="P2P.menu1/content"
+               style="push">
+         </action>
       </actionSet>
    </extension>
 

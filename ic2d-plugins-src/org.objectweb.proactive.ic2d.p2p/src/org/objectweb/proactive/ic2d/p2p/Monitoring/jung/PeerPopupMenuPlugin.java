@@ -35,12 +35,12 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
 import javax.swing.AbstractAction;
-import javax.swing.JMenu;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingConstants;
 
 import org.eclipse.swt.widgets.Display;
-import org.objectweb.proactive.ic2d.p2p.Monitoring.dialog.ChangeNOADialog;
-import org.objectweb.proactive.ic2d.p2p.Monitoring.dialog.DumpP2PNetworkDialog;
 
 import edu.uci.ics.jung.visualization.PickSupport;
 import edu.uci.ics.jung.visualization.SettableVertexLocationFunction;
@@ -51,10 +51,12 @@ import edu.uci.ics.jung.visualization.control.AbstractPopupGraphMousePlugin;
 public class PeerPopupMenuPlugin extends AbstractPopupGraphMousePlugin {
     SettableVertexLocationFunction vertexLocations;
     protected Display display;
+    protected JungGUI gui;
 
-    public PeerPopupMenuPlugin(Display d, SettableVertexLocationFunction vertexLocations) {
+    public PeerPopupMenuPlugin(Display d, SettableVertexLocationFunction vertexLocations, JungGUI g) {
         this.vertexLocations = vertexLocations;
         this.display = d;
+        this.gui = g;
     }
 
     @Override
@@ -62,54 +64,93 @@ public class PeerPopupMenuPlugin extends AbstractPopupGraphMousePlugin {
         final VisualizationViewer vv = (VisualizationViewer) e.getSource();
         final Point2D ivp = vv.inverseViewTransform(e.getPoint());
         PickSupport pickSupport = vv.getPickSupport();
+        JPopupMenu popup = new JPopupMenu();
+        System.out.println("PeerPopupMenuPlugin.handlePopup()");
         if (pickSupport != null) {
             final P2PUndirectedSparseVertex vertex = (P2PUndirectedSparseVertex) pickSupport.getVertex(ivp
                     .getX(), ivp.getY());
-            JPopupMenu popup = new JPopupMenu();
+
             if (vertex != null) {
-                JMenu submenu = new JMenu(vertex.getName());
-                JMenu noaSubmenu = new JMenu("Noa : " + vertex.getNoa());
-                JMenu maxNoaSubmenu = new JMenu("Max Noa : " + vertex.getMaxNoa());
+                //JMenu submenu = new JMenu(vertex.getName());
+                // JMenu noaSubmenu = new JMenu("Noa : " + vertex.getNoa());
+                // JMenu maxNoaSubmenu = new JMenu("Max Noa : " + vertex.getMaxNoa());
 
-                submenu.add(noaSubmenu);
-                submenu.add(maxNoaSubmenu);
-                popup.add(submenu);
+                //  submenu.add(noaSubmenu);
+                //   submenu.add(maxNoaSubmenu);
+                //  popup.add(submenu);
+                //                popup.add(new JLabel(vertex.getName(), SwingConstants.RIGHT));
+                popup.add(this.buildDataPanel(vertex));
+                //popup.set(SwingConstants.RIGHT);
 
-                noaSubmenu.add(new AbstractAction("Set Noa") {
-                    public void actionPerformed(ActionEvent e) {
-                        System.out.println(".handlePopup()xxxxxxxxxxxxxxxxxxxxxxxxxxxxx display is " +
-                            display);
+                //
+                //                noaSubmenu.add(new AbstractAction("Set Noa") {
+                //                    public void actionPerformed(ActionEvent e) {
+                //                        System.out.println(".handlePopup()xxxxxxxxxxxxxxxxxxxxxxxxxxxxx display is " +
+                //                            display);
+                //
+                //                        display.asyncExec(new Runnable() {
+                //                            public void run() {
+                //                                new ChangeNOADialog("NOA", vertex.getName(), vertex.getNoa(), display
+                //                                        .getActiveShell());
+                //                                //                    	    	        	   System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ " + display.getActiveShell());
+                //                            }
+                //                        });
+                //
+                //                        //SetValueDialog v = new SetValueDialog("Set Value", "Noa",vertex.getNoa());
+                //                        //v.setVisible(true);
+                //                        //  System.out.println(v.getValue());
+                //                    }
+                //                });
 
-                        display.asyncExec(new Runnable() {
-                            public void run() {
-                                new ChangeNOADialog("NOA", vertex.getName(), vertex.getNoa(), display
-                                        .getActiveShell());
-                                //                    	    	        	   System.out.println("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ " + display.getActiveShell());
-                            }
-                        });
-
-                        //SetValueDialog v = new SetValueDialog("Set Value", "Noa",vertex.getNoa());
-                        //v.setVisible(true);
-                        //  System.out.println(v.getValue());
-                    }
-                });
-
-                maxNoaSubmenu.add(new AbstractAction("Set Max Noa") {
-                    public void actionPerformed(ActionEvent e) {
-                        SetValueDialog v = new SetValueDialog("Set Value", "Max Noa", vertex.getMaxNoa());
-                        v.setVisible(true);
-                        System.out.println(v.getValue());
-                    }
-                });
+                //                maxNoaSubmenu.add(new AbstractAction("Set Max Noa") {
+                //                    public void actionPerformed(ActionEvent e) {
+                //                        SetValueDialog v = new SetValueDialog("Set Value", "Max Noa", vertex.getMaxNoa());
+                //                        v.setVisible(true);
+                //                        System.out.println(v.getValue());
+                //                    }
+                //                });
+                //                popup.add(new AbstractAction("Update") {
+                //                    public void actionPerformed(ActionEvent e) {
+                //                        //SetValueDialog v = new SetValueDialog("Set Value", "Max Noa",vertex.getMaxNoa());
+                //                        //	v.setVisible(true);
+                //                        System.out.println("Update!");
+                //                    }
+                //                });
+            } else {
                 popup.add(new AbstractAction("Update") {
                     public void actionPerformed(ActionEvent e) {
-                        //SetValueDialog v = new SetValueDialog("Set Value", "Max Noa",vertex.getMaxNoa());
-                        //	v.setVisible(true);
-                        System.out.println("Update!");
+                        //       gui.panel.get
+                        System.out.println(".actionPerformed() vv size " + gui.vv.getSize());
+                        System.out.println(".actionPerformed() layout size " + gui.layout.getCurrentSize());
+                        //      System.out.println(".actionPerformed() layout size " + gui.pr.get);
+
+                        System.out.println(".actionPerformed() transformer scaleX " +
+                            gui.vv.getLayoutTransformer().getScaleX());
+                        System.out.println(".actionPerformed() transformer scaleY " +
+                            gui.vv.getLayoutTransformer().getScaleY());
+                        //System.out.println(".actionPerformed() " + gui.pr.getScreenDevice().getSize());
+                        //System.out.println(".actionPerformed() " + gui.);
+
+                        //gui.refresh();
                     }
                 });
             }
             popup.show(vv, e.getX(), e.getY());
         }
     }
+
+    protected JLabel buildDataPanel(P2PUndirectedSparseVertex n) {
+        String[] data = n.getNode().getAttribute();
+        System.out.println("PeerPopupMenuPlugin.buildDataPanel() metadata  " + data);
+        //JLabel l = new JLabel();
+        String s = "<html>" + n.getNode().getName() + "<br>";
+        for (int i = 0; i < data.length; i++) {
+            s += data[i] + "<br>";
+        }
+        s += "</html>";
+        JLabel l = new JLabel(s);
+        l.setHorizontalTextPosition(SwingConstants.LEFT);
+        return l;
+    }
+
 }

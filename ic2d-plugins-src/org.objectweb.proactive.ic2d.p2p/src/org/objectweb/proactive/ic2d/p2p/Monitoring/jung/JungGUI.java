@@ -43,6 +43,8 @@ import org.eclipse.swt.widgets.Display;
 import org.objectweb.proactive.extra.p2p.monitoring.Dumper;
 import org.objectweb.proactive.extra.p2p.monitoring.Link;
 import org.objectweb.proactive.extra.p2p.monitoring.P2PNode;
+import org.objectweb.proactive.extra.p2p.monitoring.PeerAttribute;
+import org.objectweb.proactive.extra.p2p.monitoring.color.NetworkColorScheme;
 import org.objectweb.proactive.extra.p2p.monitoring.event.P2PNetworkListener;
 
 import edu.uci.ics.jung.graph.Edge;
@@ -63,7 +65,6 @@ import edu.uci.ics.jung.visualization.LayoutMutable;
 import edu.uci.ics.jung.visualization.PluggableRenderer;
 import edu.uci.ics.jung.visualization.ShapePickSupport;
 import edu.uci.ics.jung.visualization.SpringLayout;
-import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.contrib.CircleLayout;
 import edu.uci.ics.jung.visualization.contrib.KKLayout;
 import edu.uci.ics.jung.visualization.control.EditingModalGraphMouse;
@@ -71,46 +72,56 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse.Mode;
 
 
 public class JungGUI implements ToolTipFunction, P2PNetworkListener {
-    //the time in ms we wait after a vertex has been added
-    private final int UPDATE_PAUSE = 100;
+    // the time in ms we wait after a vertex has been added
+    private final int UPDATE_PAUSE = 1;
     protected Graph graph;
-    protected VisualizationViewer vv;
+    protected CustomVisualizationViewer vv;
     protected PluggableRenderer pr;
     protected StringLabeller sl;
     protected ConstantEdgeStringer edgesLabeller;
     protected DefaultSettableVertexLocationFunction vertexLocations;
 
-    //protected Integer key = new Integer(1);
+    // protected Integer key = new Integer(1);
     protected Layout layout;
     protected boolean mutable;
     protected GraphZoomScrollPane panel;
+    // protected JPanel testPanel;
+    // protected VertexPaintFunction vertexPaint;
 
-    //the eclipse display 
+    protected NetworkColorScheme colorScheme;
+
+    // the eclipse display
     protected Display display;
 
     public JungGUI(Display d) {
         this.display = d;
 
-        graph = new UndirectedSparseGraph(); //this.createGraph();
+        graph = new UndirectedSparseGraph(); // this.createGraph();
         vertexLocations = new DefaultSettableVertexLocationFunction();
-        //layout = useNonMutableLayout(graph);
-        //layout = useMutableLayout(graph);
-        layout = useLayout(graph, 3);
+        // layout = useNonMutableLayout(graph);
+        // layout = useMutableLayout(graph);
+        layout = useLayout(graph, 2);
 
-        //Layout layout = new ISOMLayout(graph);
+        // Layout layout = new ISOMLayout(graph);
         sl = StringLabeller.getLabeller(graph);
         edgesLabeller = new ConstantEdgeStringer(null);
 
         pr = new PluggableRenderer();
-        //             pr = new CirclePluggableRenderer((CircleLayout) layout);
+        // pr = new CirclePluggableRenderer((CircleLayout) layout);
         pr.setVertexStringer(sl);
-        pr.setVertexPaintFunction(new NOAVertexPaintFunction());
+        pr.setVertexPaintFunction(new PeerVertexPaintFunction());
 
-        // Creer un GraphLabelRenderer qui retourne notre RotateLabel
-
-        //pr.setGraphLabelRenderer()
+        // pr.setGraphLabelRenderer()
         // pr.setVertexLabelCentering(true);
-        vv = new VisualizationViewer(layout, pr, new Dimension(1024, 768));
+        //vv = new VisualizationViewer(layout, pr);
+        vv = new CustomVisualizationViewer(layout, pr);
+
+        layout.initialize(new Dimension(1900, 1200));
+        //        vv.getModel().setGraphLayout(layout, new Dimension(1900,1200));
+        //        vv.getModel().restart();
+        //vv.setRe
+        //vv = new VisualizationViewer(layout, pr,new Dimension(1900, 1200));
+        // vv.setPreferredSize(new Dimension(1900, 1200));
         vv.setPickSupport(new ShapePickSupport());
         pr.setEdgeShapeFunction(new EdgeShape.QuadCurve());
         vv.setBackground(Color.white);
@@ -119,9 +130,26 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
         EditingModalGraphMouse gm = new EditingModalGraphMouse();
         gm.setVertexLocations(vertexLocations);
         gm.setMode(Mode.PICKING);
-        gm.add(new PeerPopupMenuPlugin(display, vertexLocations));
+        gm.add(new PeerPopupMenuPlugin(display, vertexLocations, this));
         vv.setGraphMouse(gm);
         panel = new GraphZoomScrollPane(vv);
+
+        //        vv.addChangeListener(new ChangeListener() { 
+        //            
+        //            public void stateChanged(ChangeEvent e) { 
+        //             
+        ////            MultiLayerTransformer mlt = (MultiLayerTransformer)e.getSource(); 
+        //            MutableTransformer lt = mlt.getTransformer(Layer.LAYOUT); 
+        //            MutableTransformer vt = mlt.getTransformer(Layer.VIEW); 
+        //            double scale = vt.getScale() * lt.getScale(); 
+        //            zoomLabel.setText(scale+" %"); 
+        //             
+        //            }}); 
+
+        //   JLabel label = new JLabel("tototot");
+        //  panel.add(label);
+        // testPanel = new JPanel();
+        // testPanel.add(vv);
     }
 
     public void changeLayout(int i) {
@@ -132,13 +160,11 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
     }
 
     /**
-     * Indicates which layout to use
-     * 0 : circle layout
-     * 1 : KK Layout
-     * 2 : FR Layout
-     * 3 : Spring Layout
+     * Indicates which layout to use 0 : circle layout 1 : KK Layout 2 : FR Layout 3 : Spring Layout
+     * 
      * @param g
-     * @param i the number of the layout to use
+     * @param i
+     *            the number of the layout to use
      * @return
      */
     public Layout useLayout(Graph g, int i) {
@@ -160,18 +186,18 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
                 return this.useSpringLayout(g);
             }
 
-                //return this.useFadingVertexLayout(g);
-                //         return this.useTreeLayout(g);
+                // return this.useFadingVertexLayout(g);
+                // return this.useTreeLayout(g);
             default:
                 return null;
         }
     }
 
-    //    public Layout useMutableLayout(Graph g) {
-    //    	this.mutable = true;
-    //    	return this.useSpringLayout(g);
-    //    //	return  this.useFRLayout(g);
-    //    }
+    // public Layout useMutableLayout(Graph g) {
+    // this.mutable = true;
+    // return this.useSpringLayout(g);
+    // // return this.useFRLayout(g);
+    // }
     //    
     public LayoutMutable useFRLayout(Graph g) {
         return new FRLayout(g);
@@ -179,6 +205,7 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
 
     /**
      * Mutable layout
+     * 
      * @param g
      * @return
      */
@@ -191,6 +218,7 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
 
     /**
      * Non mutable layout
+     * 
      * @param g
      * @return
      */
@@ -215,12 +243,13 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
             P2PNode node = ((P2PNode) entry.getValue());
             this.addVertex(node);
         }
-        layout.restart();
+        // layout.restart();
+        this.updateView();
     }
 
     protected void generateGraphLinks(Dumper dump) {
-        //now dump the links
-        //   int i = 0;
+        // now dump the links
+        // int i = 0;
         Set<Map.Entry<String, Link>> map2 = (Set<Map.Entry<String, Link>>) dump.getP2PNetwork().getLinks()
                 .entrySet();
 
@@ -228,39 +257,44 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
         while (it.hasNext()) {
             Link entry = ((Map.Entry<String, Link>) it.next()).getValue();
 
-            //  System.out.println("---- looking for sender " + entry.getSource());
+            // System.out.println("---- looking for sender " + entry.getSource());
             String source = entry.getSource();
             String dest = entry.getDestination();
-            //this.addVertex(source);
-            //this.addVertex(dest);
+            // this.addVertex(source);
+            // this.addVertex(dest);
             this.addEdge(source, dest);
-            //            vv.repaint();
-            //System.out.println("JungGUI.generateGraph()");
+            // vv.repaint();
+            // System.out.println("JungGUI.generateGraph()");
             this.updateView();
         }
     }
 
+    protected void generateGraph(Dumper dump) {
+        this.generateGraphNodes(dump);
+        this.generateGraphLinks(dump);
+    }
+
     protected void updateView() {
-        //vv.suspend();
+        // vv.suspend();
         if (mutable) {
             ((LayoutMutable) layout).update();
             if (!vv.isVisRunnerRunning()) {
                 vv.init();
             }
         } else {
-            //vv.setGraphLayout(this.useNonMutableLayout(graph));
+            // vv.setGraphLayout(this.useNonMutableLayout(graph));
             // this.layout.restart();
         }
-        try {
-            Thread.sleep(UPDATE_PAUSE);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        // try {
+        // Thread.sleep(UPDATE_PAUSE);
+        // } catch (InterruptedException e) {
+        // e.printStackTrace();
+        // }
 
-        //    	  // make your changes to the graph here
-        //    	 	graph.addVertex(new SparseVertex());
+        // // make your changes to the graph here
+        // graph.addVertex(new SparseVertex());
         //    	 
-        //vv.unsuspend();
+        // vv.unsuspend();
         vv.repaint();
     }
 
@@ -269,19 +303,20 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
         P2PUndirectedSparseVertex v = (P2PUndirectedSparseVertex) sl.getVertex(s);
         if (v == null) {
             // we haven't seen this peer
-            //    System.out.println(" *** Adding peer  --" + s + "--" + p.getNoa() + " " + p.getMaxNOA());
-            v = (P2PUndirectedSparseVertex) graph.addVertex(new P2PUndirectedSparseVertex());
+            // System.out.println(" *** Adding peer --" + s + "--" + p.getNoa() + " " +
+            // p.getMaxNOA());
+            v = (P2PUndirectedSparseVertex) graph.addVertex(new P2PUndirectedSparseVertex(p));
             try {
                 sl.setLabel(v, s);
             } catch (UniqueLabelException e) {
                 e.printStackTrace();
             }
-            v.setName(s);
+            // v.setName(s);
         }
         // in all cases we set its values
         // because they might not be correct
-        v.setMaxNoa(p.getMaxNOA());
-        v.setNoa(p.getNoa());
+        // v.setMaxNoa(p.getMaxNOA());
+        // v.setNoa(p.getNoa());
     }
 
     protected void addEdge(String source, String dest) {
@@ -293,7 +328,7 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
 
     /**
      * Remove the current P2P Network
-     *
+     * 
      */
     public void clear() {
         vv.stop();
@@ -305,6 +340,7 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
 
     public JPanel getPanel() {
         return this.panel;
+        //return this.testPanel;
     }
 
     public void setRepulsionRange(int i) {
@@ -313,56 +349,80 @@ public class JungGUI implements ToolTipFunction, P2PNetworkListener {
     }
 
     public String getToolTipText(Vertex v) {
-        //System.out.println("JungGUI.getToolTipText() " + v);
-        return "<html> " + sl.getLabel(v) + " <br> noa = " + ((P2PUndirectedSparseVertex) v).getNoa() +
-            "</html>";
-        //return null;
+        // System.out.println("JungGUI.getToolTipText() " + v);
+        // return "<html> " + sl.getLabel(v) + " <br> noa = " + ((P2PUndirectedSparseVertex)
+        // v).getNoa() +
+        // "</html>";
+        return "<html> " + sl.getLabel(v) + "</html>";
+        // return null;
     }
 
     public String getToolTipText(Edge e) {
-        // TODO Raccord de m�thode auto-g�n�r�
         return null;
     }
 
     public String getToolTipText(MouseEvent event) {
-        // TODO Raccord de m�thode auto-g�n�r�
         return null;
     }
 
     public void newPeer(P2PNode node) {
         this.addVertex(node);
-        //  layout.restart();
-        this.updateView();
+        // layout.restart();
+        // this.updateView();
     }
 
     public void newLink(Link link) {
         String source = link.getSource();
         String dest = link.getDestination();
-        //this.addVertex(source);
-        //this.addVertex(dest);
+        // this.addVertex(source);
+        // this.addVertex(dest);
         this.addEdge(source, dest);
-        //            vv.repaint();
-        //System.out.println("JungGUI.generateGraph()");
+        // vv.repaint();
+        // System.out.println("JungGUI.generateGraph()");
+        // this.updateView();
+    }
+
+    public void refresh() {
         this.updateView();
     }
 
-    //    public static void main(String[] args) {
-    //        JFrame f = new JFrame();
-    //        JungGUI gui = new JungGUI();
+    @Override
+    public void addAttribute(P2PNode node, PeerAttribute[] att) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public PeerVertexPaintFunction getVertexPaint() {
+        return (PeerVertexPaintFunction) pr.getVertexPaintFunction();
+    }
+
+    public void setColorScheme(NetworkColorScheme colorScheme) {
+        vv.setColorScheme(colorScheme);
+
+    }
+
+    // public void setVertexPaint(VertexPaintFunction vertexPaint) {
+    // // this.vertexPaint = vertexPaint;
+    // pr.setVertexPaintFunction(vertexPaint);
+    // }
+
+    // public static void main(String[] args) {
+    // JFrame f = new JFrame();
+    // JungGUI gui = new JungGUI();
     //
-    //        f.add(gui.getPanel());
-    //        f.pack();
-    //        f.setVisible(true);
-    //        Dumper dump = new Dumper();
-    //        dump.getP2PNetwork().addListener(gui);
-    //        //dump.createGraphFromFile2(args[0]);
-    //        try {
-    //            Dumper aDump = (Dumper) ProActive.turnActive(dump);
-    //            Dumper.requestAcquaintances(args[0], aDump);
-    //        } catch (ActiveObjectCreationException e) {
-    //            e.printStackTrace();
-    //        } catch (NodeException e) {
-    //            e.printStackTrace();
-    //        }
-    //    }
+    // f.add(gui.getPanel());
+    // f.pack();
+    // f.setVisible(true);
+    // Dumper dump = new Dumper();
+    // dump.getP2PNetwork().addListener(gui);
+    // //dump.createGraphFromFile2(args[0]);
+    // try {
+    // Dumper aDump = (Dumper) ProActive.turnActive(dump);
+    // Dumper.requestAcquaintances(args[0], aDump);
+    // } catch (ActiveObjectCreationException e) {
+    // e.printStackTrace();
+    // } catch (NodeException e) {
+    // e.printStackTrace();
+    // }
+    // }
 }

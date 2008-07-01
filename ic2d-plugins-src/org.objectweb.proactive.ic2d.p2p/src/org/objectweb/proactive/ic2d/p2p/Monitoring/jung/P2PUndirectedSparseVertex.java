@@ -30,39 +30,60 @@
  */
 package org.objectweb.proactive.ic2d.p2p.Monitoring.jung;
 
+import org.objectweb.proactive.extra.p2p.monitoring.P2PNode;
+
 import edu.uci.ics.jung.graph.impl.UndirectedSparseVertex;
 
 
 public class P2PUndirectedSparseVertex extends UndirectedSparseVertex {
-    protected int noa;
-    protected int maxNoa;
-    protected String name;
+    P2PNode node;
+
+    //    protected int noa;
+    //    protected int maxNoa;
+    //    protected String name;
 
     public P2PUndirectedSparseVertex() {
         super();
     }
 
-    public int getMaxNoa() {
-        return maxNoa;
+    public P2PUndirectedSparseVertex(P2PNode p) {
+        super();
+        this.node = p;
     }
 
-    public void setMaxNoa(int maxNOA) {
-        this.maxNoa = maxNOA;
+    public void setNode(P2PNode p) {
+        this.node = p;
     }
 
-    public int getNoa() {
-        return noa;
+    public P2PNode getNode() {
+        return this.node;
     }
 
-    public void setNoa(int noa) {
-        this.noa = noa;
-    }
+    //    public P2PNodeColor getColor() {
+    //        return this.node.getColor();
+    //    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    //    public int getMaxNoa() {
+    //        return maxNoa;
+    //    }
+
+    //    public void setMaxNoa(int maxNOA) {
+    //        this.maxNoa = maxNOA;
+    //    }
+
+    //    public int getNoa() {
+    //        return noa;
+    //    }
+
+    //    public void setNoa(int noa) {
+    //        this.noa = noa;
+    //    }
+    //
+    //    public void setName(String name) {
+    //        this.name = name;
+    //    }
 
     public String getName() {
-        return this.name;
+        return this.node.getName();
     }
 }
