@@ -31,6 +31,7 @@
 package org.objectweb.proactive.api;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
@@ -173,7 +174,7 @@ public class PAFuture {
      * @param futures
      *            a collection of futures
      */
-    public static void waitForAll(java.util.Vector futures) {
+    public static void waitForAll(List<?> futures) {
         try {
             PAFuture.waitForAll(futures, 0);
         } catch (ProActiveTimeoutException e) {
@@ -196,7 +197,7 @@ public class PAFuture {
      * @throws ProActiveException
      *             if the timeout expires
      */
-    public static void waitForAll(java.util.Vector futures, long timeout) throws ProActiveTimeoutException {
+    public static void waitForAll(List<?> futures, long timeout) throws ProActiveTimeoutException {
         TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
         for (Object future : futures) {
             if (time.isTimeoutElapsed()) {
@@ -216,7 +217,7 @@ public class PAFuture {
      *            a collection of futures
      * @return index of the available future in the vector
      */
-    public static int waitForAny(java.util.Vector futures) {
+    public static int waitForAny(List<?> futures) {
         try {
             return PAFuture.waitForAny(futures, 0);
         } catch (ProActiveException e) {
@@ -289,11 +290,11 @@ public class PAFuture {
      * @return <code>true</code> if all futures are awaited, else <code>false
      * </code>.
      */
-    public static boolean allAwaited(java.util.Vector<Object> futures) {
+    public static boolean allAwaited(List<?> futures) {
         FuturePool fp = PAActiveObject.getBodyOnThis().getFuturePool();
 
         synchronized (fp) {
-            Iterator<Object> it = futures.iterator();
+            Iterator<?> it = futures.iterator();
 
             while (it.hasNext()) {
                 Object current = it.next();
