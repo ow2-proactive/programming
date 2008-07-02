@@ -85,6 +85,7 @@ public class Main {
             String path = (args.length == 0) ? "descriptors/Matrix.xml" : args[0];
             GCMApplication pad = PAGCMDeployment.loadApplicationDescriptor(new File(path));
             GCMVirtualNode dispatcher = pad.getVirtualNode("matrixNode");
+            pad.startDeployment();
             dispatcher.waitReady();
             List<Node> nodes = dispatcher.getCurrentNodes();
             Sum s = new Sum(nodes);
