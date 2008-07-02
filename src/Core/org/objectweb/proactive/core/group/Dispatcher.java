@@ -213,7 +213,9 @@ public class Dispatcher {
         }
 
         public Thread newThread(Runnable r) {
-            return new Thread(r, poolName + " - thread " + threadIndex++);
+            Thread t = new Thread(r, poolName + " - thread " + threadIndex++);
+            t.setDaemon(true);
+            return t;
         }
 
     }
