@@ -134,7 +134,7 @@ public class BasicTaskFactory implements TaskFactory {
 
     public Queue<AbstractProcessForGroup> generateTasks(MethodCall originalMethodCall,
             List<MethodCall> methodCalls, Object result, ExceptionListException exceptionList,
-            CountDownLatch doneSignal, ProxyForGroup groupProxy) {
+            CountDownLatch doneSignal, ProxyForGroup<?> groupProxy) {
 
         Queue<AbstractProcessForGroup> taskList = new ConcurrentLinkedQueue<AbstractProcessForGroup>();
 

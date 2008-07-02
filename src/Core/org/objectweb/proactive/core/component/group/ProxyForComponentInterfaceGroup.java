@@ -322,8 +322,7 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
     //			return super.getMemberList();
     //		}
     //	}
-    
-    
+
     /*
      * ---------- PRIVATE METHODS FOR SERIALIZATION ----------
      */

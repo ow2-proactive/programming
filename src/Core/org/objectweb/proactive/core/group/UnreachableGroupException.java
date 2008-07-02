@@ -31,7 +31,7 @@
 package org.objectweb.proactive.core.group;
 
 /**
- * This Exception occurs when a reference on a group is requiered and a null value is returned.
+ * This Exception occurs when a reference on a group is required and a null value is returned.
  *
  * @author The ProActive Team
  */

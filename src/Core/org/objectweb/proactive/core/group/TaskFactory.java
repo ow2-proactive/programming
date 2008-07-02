@@ -51,7 +51,7 @@ public interface TaskFactory {
     /**
      * 
      * @param methodCalls maps each method call generated to the index of the target member it should be assigned to
-     * This is overriden when performing dynamic dispatch.
+     * This is overridden when performing dynamic dispatch.
      * @param result
      * @param exceptionList
      * @param doneSignal
@@ -61,7 +61,7 @@ public interface TaskFactory {
      */
     public Queue<AbstractProcessForGroup> generateTasks(MethodCall originalMethodCall,
             List<MethodCall> methodCalls, Object result, ExceptionListException exceptionList,
-            CountDownLatch doneSignal, ProxyForGroup groupProxy);
+            CountDownLatch doneSignal, ProxyForGroup<?> groupProxy);
 
     /**
      * 
