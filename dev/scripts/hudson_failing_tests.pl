@@ -23,12 +23,12 @@ foreach my $node ($nodeset->get_nodelist) {
 
 	my $nodeset = $job_xml->find('//*/child/child[statu=\'REGRESSION\']/className/text()'); 
 	foreach my $node ($nodeset->get_nodelist) {
-		print "\t", "NEW " XML::XPath::XMLParser::as_string($node), "\n";
+		print "\t", "NEW ", XML::XPath::XMLParser::as_string($node), "\n";
 	}
 
-	my $nodeset = $job_xml->find('//*/child/child[statu=\'FAILED\']/className/text()'); 
+	$nodeset = $job_xml->find('//*/child/child[statu=\'FAILED\']/className/text()');
 	foreach my $node ($nodeset->get_nodelist) {
-		print "\t", "    " XML::XPath::XMLParser::as_string($node), "\n";
+		print "\t", "    ", XML::XPath::XMLParser::as_string($node), "\n";
 	}
 }
 
