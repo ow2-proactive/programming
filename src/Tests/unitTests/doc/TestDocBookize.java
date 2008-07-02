@@ -1,33 +1,3 @@
-/*
- * ################################################################
- *
- * ProActive: The Java(TM) library for Parallel, Distributed,
- *            Concurrent computing with Security and Mobility
- *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version
- * 2 of the License, or any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- */
 package unitTests.doc;
 
 /*
@@ -93,6 +63,8 @@ public class TestDocBookize {
      * inside programlisting tags.  
      */
     private static final String REGEXP = "(<programlisting.*>)(.*(&lt;).*|(&gt;).*?)(</programlisting>)";
+    /** Path to the files cotaining xml that triggers the bug  */
+    private static final String PATH = "src/Tests/unitTests/doc/";
     /** File containing the xml that triggers the bug  */
     private static final String XML_FILE = "singleLine.xml";
     /** Temporary file that will contain the modified xml   */
@@ -108,13 +80,12 @@ public class TestDocBookize {
     @Test
     public void testTransform() throws Exception {
         final String path[] = { "./" };
+        final String inPath = PATH + XML_FILE;
         final String javaSrc = "";
+        final String testPath = PATH + TEST_FILE;
         //copy file to temporary file
-        final InputStream input = new FileInputStream(this.getClass().getResource(XML_FILE).getFile());
-
-        File outputFile = File.createTempFile(this.getClass().getName(), null);
-        final OutputStream output = new FileOutputStream(outputFile);
-        outputFile.deleteOnExit();
+        final InputStream input = new FileInputStream(inPath);
+        final OutputStream output = new FileOutputStream(testPath);
 
         //copy singleLine.xml to singleLineTest.xml
         final byte[] buf = new byte[1024];
@@ -126,11 +97,11 @@ public class TestDocBookize {
         output.close();
 
         //run DocBookize on singleLineTest file
-        final String mainArgs[] = { outputFile.toString(), javaSrc, path[0] };
+        final String mainArgs[] = { testPath, javaSrc, path[0] };
         DocBookize.main(mainArgs);
 
         //load singleLineText.xml in  String (it's a small file)
-        final File tmp = new File(outputFile.toString());
+        final File tmp = new File(testPath);
         final BufferedReader buff = new BufferedReader(new FileReader(tmp));
         String fileText = "";
         String tmpLine = "";
