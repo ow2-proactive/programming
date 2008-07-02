@@ -131,7 +131,7 @@
 		Compilation		
 	-->
 
-	<target name="compile.all" depends="compile.core, compile.extensions, compile.extra, compile.util, compile.examples, compile.tests" description="Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)" />
+	<target name="compile.all" depends="compile.core, compile.extensions, compile.extra, compile.util, compile.examples, compile.tests, compile.benchmarks" description="Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)" />
 
 
 	<target name="compile.core" depends="-configurationCopy" description="Compile ProActive core classes">
@@ -393,6 +393,7 @@
 	<target name="deploy.examples" depends="examples, deploy" description="Add examples.jar to the dist/ directory">
 		<jar destfile="${deploy.lib.dir}/ProActive_examples.jar">
 			<fileset dir="${cl.examples.dir}" />
+			<fileset dir="${cl.benchmarks.dir}" />
 		</jar>
 	</target>
 
