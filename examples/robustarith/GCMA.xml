@@ -6,6 +6,9 @@
 	<environment>
 		<javaPropertyVariable name="proactive.home" />
 		<javaPropertyVariable name="user.dir" />
+		
+		<descriptorVariable name="hostCapacity" value="2"/>
+		<descriptorVariable name="vmCapacity" value="2"/>
 	</environment>
 
 

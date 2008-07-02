@@ -5,6 +5,8 @@
 
 	<environment>
 		<javaPropertyVariable name="user.dir" />
+		
+		<javaPropertyDescriptorDefault name="os" value="windows"/>
 	</environment>
 
 	<resources>
@@ -14,7 +16,7 @@
 	<infrastructure>
 
 		<hosts>
-			<host id="hLocalhost" os="unix" hostCapacity="${hostCapacity}" vmCapacity="${vmCapacity}">
+			<host id="hLocalhost" os="${os}" hostCapacity="${hostCapacity}" vmCapacity="${vmCapacity}">
 				<homeDirectory base="root" relpath="${user.dir}" />
 			</host>
 
