@@ -47,6 +47,7 @@ import javax.xml.parsers.SAXParserFactory;
 /** Check an xml file follows its dtd.  Greatly inspired from the apache xalan samples 'Validate'  */
 public class Validate extends DefaultHandler implements LexicalHandler {
     private String inputFile;
+    /** Flag set to true when the file is not well formed  */
     boolean troubleFound = false;
     boolean hasDTD = false;
     StringBuffer errorBuffer;
@@ -65,13 +66,19 @@ public class Validate extends DefaultHandler implements LexicalHandler {
 
             return;
         }
+        StringBuffer errorBuffer = new StringBuffer();
 
-        System.out.print(parse(args[0]));
+        Validate validator = new Validate(args[0], errorBuffer);
+
+        System.out.print(validator.parse(args[0]));
+
+        if (!validator.isValid())
+            System.exit(1);
     }
 
     /** Parse an XML file, and validate it.
      * @return a buffer containing the errors (and a comment) */
-    static StringBuffer parse(String filename) {
+    private StringBuffer parse(String filename) {
         StringBuffer returnedBuffer = new StringBuffer();
 
         try {
@@ -157,5 +164,9 @@ public class Validate extends DefaultHandler implements LexicalHandler {
     }
 
     public void comment(char[] ch, int start, int length) throws SAXException {
+    }
+
+    public boolean isValid() {
+        return troubleFound;
     }
 }
