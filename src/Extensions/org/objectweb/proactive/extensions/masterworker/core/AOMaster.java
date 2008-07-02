@@ -463,7 +463,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                             }
 
                             // We wake up the sleeping guys
-                            sleepingGroupStub.wakeup();
+                            try {
+                                sleepingGroupStub.wakeup();
+                            } catch (Exception e) {
+                                // We ignore NFE pinger is responsible for that
+                            }
                         }
                     }
 
@@ -1013,7 +1017,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
             }
 
             // We wake up the sleeping guys
-            sleepingGroupStub.wakeup();
+            try {
+                sleepingGroupStub.wakeup();
+            } catch (Exception e) {
+                // We ignore NFE pinger is responsible for that
+            }
         }
         // If the main client is sending the tasks
         if (originator == null) {
