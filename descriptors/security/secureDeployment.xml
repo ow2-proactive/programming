@@ -56,7 +56,7 @@
 					class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<!--
 						<classpath>
-						<absolutePath  value="/net/home/acontes/dev/ProActive/classes"/>					
+						<absolutePath  value="/net/home/acontes/dev/ProActive/classes"/>
 						<absolutePath  value="/net/home/acontes/dev/ProActive/lib/asm.jar"/>
 						<absolutePath  value="/net/home/acontes/dev/ProActive/lib/bcel.jar"/>
 						<absolutePath  value="/net/home/acontes/dev/ProActive/lib/bouncycastle.jar"/>
@@ -95,7 +95,7 @@
 					class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<!--
 						<classpath>
-						<absolutePath  value="/net/home/acontes/dev/ProActive/classes"/>				
+						<absolutePath  value="/net/home/acontes/dev/ProActive/classes"/>
 						<absolutePath  value="/net/home/acontes/dev/ProActive/lib/asm.jar"/>
 						<absolutePath  value="/net/home/acontes/dev/ProActive/lib/bcel.jar"/>
 						<absolutePath  value="/net/home/acontes/dev/ProActive/lib/bouncycastle.jar"/>
