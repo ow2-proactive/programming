@@ -13,7 +13,7 @@ goto end
 SETLOCAL ENABLEDELAYEDEXPANSION
 IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\..
 
-call "%PROACTIVE%\scripts\windows\init.bat"
+call "..\init.bat"
 
 %JAVA_CMD%  org.objectweb.proactive.examples.jmx.TestServer %1
 ENDLOCAL

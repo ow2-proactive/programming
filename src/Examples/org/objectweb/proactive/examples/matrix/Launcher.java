@@ -30,6 +30,7 @@
  */
 package org.objectweb.proactive.examples.matrix;
 
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -41,12 +42,12 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class Launcher implements java.io.Serializable {
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
-    Set<Node> nodesList;
+    List<Node> nodesList;
 
     public Launcher() {
     }
 
-    public Launcher(Set<Node> nodesList) throws NodeException {
+    public Launcher(List<Node> nodesList) throws NodeException {
         this.nodesList = nodesList;
     }
 

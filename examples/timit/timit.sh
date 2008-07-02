@@ -4,8 +4,9 @@ echo
 echo --- TimIt --------------------------------------------------
 
 workingDir=`dirname $0`
-PROACTIVE=$workingDir/../../../.
-. $PROACTIVE/scripts/unix/env.sh
+. ${workingDir}/../env.sh
+
+cd ${workingDir}
 
 $JAVACMD org.objectweb.proactive.benchmarks.timit.TimIt -c config.xml
 

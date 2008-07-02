@@ -22,7 +22,9 @@
 				<jvmarg value="-Dproactive.communication.protocol=${COM_PROTO}"/>
 				<jvmarg value="-Dproactive.timit.activation=${TIMIT_ACTIVATE}"/>
 				<jvmarg value="${VMARGS}"/>
-
+				<applicationClasspath>
+					<pathElement base="proactive" relpath="dist/lib/ProActive_examples.jar"/>
+				</applicationClasspath>
 			</configuration>
 			<virtualNode id="Workers" capacity="1">
 				<nodeProvider refid="workers" />

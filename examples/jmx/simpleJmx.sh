@@ -3,13 +3,8 @@
 echo
 echo --- JMC Test client connector---------------------------------------------
 
-if [ -z "$PROACTIVE" ]
-then
 workingDir=`dirname $0`
-PROACTIVE=$workingDir/../../../.
-CLASSPATH=.
-fi
-. $PROACTIVE/scripts/unix/env.sh
+. ${workingDir}/../env.sh
 
 
 
