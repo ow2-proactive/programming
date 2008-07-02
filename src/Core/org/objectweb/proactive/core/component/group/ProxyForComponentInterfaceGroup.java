@@ -40,6 +40,7 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.component.collectiveitfs.MulticastHelper;
 import org.objectweb.proactive.core.component.exceptions.ParameterDispatchException;
 import org.objectweb.proactive.core.component.exceptions.ReductionException;
@@ -74,7 +75,7 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
     protected Class<?> itfSignatureClass = null;
     protected ProActiveComponent owner;
     protected ProxyForComponentInterfaceGroup<E> delegatee = null;
-    protected ProxyForComponentInterfaceGroup parent = null; // for a delegatee
+    protected ProxyForComponentInterfaceGroup<E> parent = null; // for a delegatee
 
     public ProxyForComponentInterfaceGroup() throws ConstructionOfReifiedObjectFailedException {
         super();
@@ -255,11 +256,11 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
         taskFactory = new CollectiveItfsTaskFactory(delegatee);
     }
 
-    public void setParent(ProxyForComponentInterfaceGroup parent) {
+    public void setParent(ProxyForComponentInterfaceGroup<E> parent) {
         this.parent = parent;
     }
 
-    public ProxyForComponentInterfaceGroup getParent() {
+    public ProxyForComponentInterfaceGroup<E> getParent() {
         return parent;
     }
 
@@ -321,5 +322,16 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
     //			return super.getMemberList();
     //		}
     //	}
+    
+    
+    /*
+     * ---------- PRIVATE METHODS FOR SERIALIZATION ----------
+     */
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        this.proxyForGroupID = new UniqueID();
+        dispatcher = new Dispatcher(this, false, bufferSize);
+        taskFactory = new CollectiveItfsTaskFactory(this);
+    }
 
 }

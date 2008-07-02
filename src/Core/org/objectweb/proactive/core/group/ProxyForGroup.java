@@ -126,7 +126,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
     /** A pool of thread to serve the request */
     // transient protected ExecutorService threadpool;
     transient protected Dispatcher dispatcher;
-    int bufferSize = 1; // size of buffer of requests on server side when
+    protected int bufferSize = 1; // size of buffer of requests on server side when
     // dynamically dispatching requests
     transient protected TaskFactory taskFactory;
 
@@ -409,10 +409,11 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
                 returnTypeClassName = mc.getReifiedMethod().getReturnType().getName();
             }
 
+            // FIXME the returnTypeClassName maybe an other type for multicast interface 
             result = MOP.newInstance(returnTypeClassName, null, null, ProxyForGroup.class.getName(),
                     paramProxy);
 
-            ((ProxyForGroup) ((StubObject) result).getProxy()).className = returnTypeClassName;
+            ((ProxyForGroup<?>) ((StubObject) result).getProxy()).className = returnTypeClassName;
         } catch (ClassNotReifiableException e1) {
             throw new InvocationTargetException(e1, "Method " + mc.getReifiedMethod().toGenericString() +
                 " : cannot return a group of results for the non reifiable type " + returnTypeClassName);
@@ -647,10 +648,10 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
      */
     @Override
     public boolean equals(Object o) {
-        ProxyForGroup p = PAGroup.findProxyForGroup(o);
+        ProxyForGroup<?> p = PAGroup.findProxyForGroup(o);
         if (p != null) {
             // comparing with another group
-            return this.memberList.equals(((ProxyForGroup) p).memberList);
+            return this.memberList.equals(p.memberList);
         } else {
             return false;
         }
