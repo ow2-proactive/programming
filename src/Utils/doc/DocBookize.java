@@ -544,9 +544,13 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
             return fileContent.toString().replaceAll(DocBookize.AMPERSAND, DocBookize.AMPERSAND_REPLACE)
                     .replaceAll(DocBookize.TAG_START, DocBookize.LT);
         } catch (final FileNotFoundException e1) {
-            DocBookize.logger.info("Could not read file: " + fullFileName, e1);
+            DocBookize.logger.info("Could not read file: " + fullFileName);
+            //displays the full stack trace, not necessary on regular runs
+            DocBookize.logger.debug("Could not find file: " + fullFileName, e1);
         } catch (final IOException e) {
-            DocBookize.logger.info("Could not read or write to file: " + fullFileName, e);
+            DocBookize.logger.info("Could not read or write to file: " + fullFileName);
+            //the full stack trace, not necessary on regular runs
+            DocBookize.logger.debug("Could not read or write to file: " + fullFileName, e);
         }
         return null;
     }
