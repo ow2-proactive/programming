@@ -1,5 +1,3 @@
-package unitTests.doc;
-
 /*
  * ################################################################
  *
@@ -30,6 +28,8 @@ package unitTests.doc;
  *
  * ################################################################
  */
+package unitTests.doc;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,12 +63,10 @@ public class TestDocBookize {
      * inside programlisting tags.  
      */
     private static final String REGEXP = "(<programlisting.*>)(.*(&lt;).*|(&gt;).*?)(</programlisting>)";
-    /** Path to the files cotaining xml that triggers the bug  */
-    private static final String PATH = "src/Tests/unitTests/doc/";
     /** File containing the xml that triggers the bug  */
     private static final String XML_FILE = "singleLine.xml";
-    /** Temporary file that will contain the modified xml   */
-    private static final String TEST_FILE = "singleLineTest.xml";
+    /** The name of the snippet file   */
+    private static final String SNIP_FILE = "oneline.snip";
 
     /**
      * Tests for bug PROACTIVE-346: 
@@ -80,14 +78,15 @@ public class TestDocBookize {
     @Test
     public void testTransform() throws Exception {
         final String path[] = { "./" };
-        final String inPath = PATH + XML_FILE;
         final String javaSrc = "";
-        final String testPath = PATH + TEST_FILE;
         //copy file to temporary file
-        final InputStream input = new FileInputStream(inPath);
-        final OutputStream output = new FileOutputStream(testPath);
+        final InputStream input = new FileInputStream(this.getClass().getResource(XML_FILE).getFile());
 
-        //copy singleLine.xml to singleLineTest.xml
+        File outputFile = File.createTempFile(this.getClass().getName(), null);
+        final OutputStream output = new FileOutputStream(outputFile);
+        outputFile.deleteOnExit();
+
+        //copy singleLine.xml to the temporary file
         final byte[] buf = new byte[1024];
         int len;
         while ((len = input.read(buf)) > 0) {
@@ -96,12 +95,23 @@ public class TestDocBookize {
         input.close();
         output.close();
 
+        //copy online.snip to the temporary folder
+        final InputStream inputSnip = new FileInputStream(this.getClass().getResource(SNIP_FILE).getFile());
+        final File outputSnipFile = new File(outputFile.getParent() + "/" + SNIP_FILE);
+        outputSnipFile.deleteOnExit();
+        final OutputStream outputSnip = new FileOutputStream(outputSnipFile);
+        while ((len = inputSnip.read(buf)) > 0) {
+            outputSnip.write(buf, 0, len);
+        }
+        inputSnip.close();
+        outputSnip.close();
+
         //run DocBookize on singleLineTest file
-        final String mainArgs[] = { testPath, javaSrc, path[0] };
+        final String mainArgs[] = { outputFile.toString(), javaSrc, path[0] };
         DocBookize.main(mainArgs);
 
         //load singleLineText.xml in  String (it's a small file)
-        final File tmp = new File(testPath);
+        final File tmp = new File(outputFile.toString());
         final BufferedReader buff = new BufferedReader(new FileReader(tmp));
         String fileText = "";
         String tmpLine = "";
