@@ -390,7 +390,7 @@ public class PiBBP implements Serializable {
             int deployment = new Integer(args[2]).intValue();
             switch (deployment) {
                 case 1:
-                    deploymentDescriptorLocation_ = "localhost.xml";
+                    deploymentDescriptorLocation_ = "applicationDescriptor.xml";
                     break;
                 case 2:
                     deploymentDescriptorLocation_ = "LAN.xml";
@@ -405,7 +405,7 @@ public class PiBBP implements Serializable {
                     deploymentDescriptorLocation_ = "custom-descriptor.xml";
                     break;
                 default:
-                    deploymentDescriptorLocation_ = "localhost.xml";
+                    deploymentDescriptorLocation_ = "applicationDescriptor.xml";
             }
         }
     }

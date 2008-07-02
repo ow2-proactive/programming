@@ -14,6 +14,8 @@
 	<path id="tutorial.classpath">
 		<pathelement location="${proactive.dir}/classes/Core"/>
 		<pathelement location="${proactive.dir}/classes/Examples"/>
+		<pathelement location="${proactive.dir}/classes/Extra"/>
+		<pathelement location="${proactive.dir}/classes/Extensions"/>
 		<fileset dir="${proactive.dir}/lib">
 			<include name="*.jar" />
 			<include name="components/*.jar" />
@@ -80,7 +82,7 @@
 	</target>
 
 	<target name="compileP2P" depends="init, configurationCopy">
-		<javac srcdir="${src.dir}" destdir="${classes.dir}/Exmaples" deprecation="on" source="${source}" debug="${debug}">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}/Examples" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="p2p.classpath" />
 			<include name="**/*.java" />
 		</javac>
@@ -184,6 +186,7 @@
 			<classpath refid="tutorial.classpath" />
 			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy" />
 			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/compile/proactive-log4j" />
+			<jvmarg value="-Dproactive.home=${proactive.dir}" />
 			<!--<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config.xml" /> -->
 			<arg value="${nb-decimals}" />
 			<arg value="${run-mode}" />
@@ -199,6 +202,7 @@
 			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy" />
 			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/scripts/proactive-log4j" />
 			<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config-p2p.xml" />
+			<jvmarg value="-Dproactive.home=${proactive.dir}" />
 			<arg value="${nb-decimals}" />
 			<arg value="${run-mode}" />
 			<arg value="${deployment}" />
@@ -214,6 +218,7 @@
 			<jvmarg value="-Dproactive.dir=${proactive.dir}" />
 			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy" />
 			<jvmarg value="-Dlog4j.configuration=file:../onthefly/proactive-log4j" />
+			<jvmarg value="-Dproactive.home=${proactive.dir}" />
 			<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config.xml" />
 			<jvmarg value="-Dproactive.rmi.port=3012" />
 			<arg value="${nb-decimals}" />
@@ -225,12 +230,13 @@
 		<antcall target="clean"/>
 		<antcall target="compile"/>
 		<property name="decimals"  value="10" />
-		<property name="descriptor"  value="../descriptors/localhost.xml" />
+		<property name="descriptor"  value="../descriptors/deploymentLocal.xml" />
 		<java classname="org.objectweb.proactive.examples.pi.MyPi" fork="true">
 			<classpath refid="tutorial.classpath" />
 			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy" />
 			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/scripts/proactive-log4j" />
 			<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config.xml" />
+			<jvmarg value="-Dproactive.home=${proactive.dir}" />
 			<arg value="${decimals}" />
 			<arg value="${descriptor}" />
 		</java>

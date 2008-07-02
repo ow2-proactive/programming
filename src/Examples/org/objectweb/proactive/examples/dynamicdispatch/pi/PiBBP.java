@@ -30,16 +30,17 @@
  */
 package org.objectweb.proactive.examples.dynamicdispatch.pi;
 
+import java.io.File;
 import java.io.Serializable;
 
-import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.descriptor.data.VirtualNode;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.group.DispatchMode;
 import org.objectweb.proactive.core.group.Group;
-import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.api.PADeployment;
-import org.objectweb.proactive.api.PAGroup;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
@@ -54,7 +55,7 @@ import org.objectweb.proactive.api.PAGroup;
 public class PiBBP implements Serializable {
     protected int nbDecimals;
     private String deploymentDescriptorLocation_;
-    private ProActiveDescriptor deploymentDescriptor_;
+    private GCMApplication deploymentDescriptor_;
     private boolean ws_ = false;
     protected PiComputer piComputer;
     int nbIntervals;
@@ -94,9 +95,11 @@ public class PiBBP implements Serializable {
             // *************************************************************/
             System.out.println("\nStarting deployment of virtual nodes");
             // parse the descriptor file
-            deploymentDescriptor_ = PADeployment.getProactiveDescriptor(deploymentDescriptorLocation_);
-            deploymentDescriptor_.activateMappings();
-            VirtualNode computersVN = deploymentDescriptor_.getVirtualNode("workers");
+            deploymentDescriptor_ = PAGCMDeployment.loadApplicationDescriptor(new File(
+                deploymentDescriptorLocation_));
+            deploymentDescriptor_.startDeployment();
+            deploymentDescriptor_.waitReady();
+            GCMVirtualNode computersVN = deploymentDescriptor_.getVirtualNode("workers");
 
             // // create the remote nodes for the virtual node computersVN
             // computersVN.activate();
@@ -107,17 +110,14 @@ public class PiBBP implements Serializable {
 
             // create a group of computers on the virtual node computersVN
             piComputer = (PiComputer) PAGroup.newGroupInParallel(PiComputer.class.getName(),
-                    new Object[] { Integer.valueOf(nbDecimals) }, computersVN.getNodes());
+                    new Object[] { Integer.valueOf(nbDecimals) }, (Node[]) computersVN.getCurrentNodes()
+                            .toArray());
 
             return computeOnGroup(piComputer);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                deploymentDescriptor_.killall(true);
-            } catch (ProActiveException e) {
-                e.printStackTrace();
-            }
+            deploymentDescriptor_.kill();
         }
         return "";
     }
@@ -222,5 +222,7 @@ public class PiBBP implements Serializable {
         nbDecimals = new Integer(args[0]).intValue();
         nbIntervals = new Integer(args[1]).intValue();
         deploymentDescriptorLocation_ = args[2];
+        System.err.println("PiBBP : deploymentDescriptorLocation = " + deploymentDescriptorLocation_);
+        System.exit(0);
     }
 }
