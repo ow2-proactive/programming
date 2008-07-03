@@ -30,7 +30,10 @@
  */
 package org.objectweb.proactive.extensions.scilab;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
@@ -43,6 +46,9 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
@@ -64,17 +70,13 @@ public class MSDeployEngine {
             logger.debug("->MSDeployEngine In:getListVirtualNode:" + pathDescriptor);
         }
 
-        ProActiveDescriptor desc;
-        VirtualNode[] arrayVn;
+        GCMApplication desc;
+        Map<String, GCMVirtualNode> arrayVn;
         String[] arrayNameVn = null;
         try {
-            desc = PADeployment.getProactiveDescriptor("file:" + pathDescriptor);
+            desc = PAGCMDeployment.loadApplicationDescriptor(new File(pathDescriptor));
             arrayVn = desc.getVirtualNodes();
-            arrayNameVn = new String[arrayVn.length];
-
-            for (int i = 0; i < arrayVn.length; i++) {
-                arrayNameVn[i] = arrayVn[i].getName();
-            }
+            arrayNameVn = arrayVn.keySet().toArray(new String[] {});
         } catch (ProActiveException e) {
             e.printStackTrace();
         }
@@ -83,12 +85,12 @@ public class MSDeployEngine {
     }
 
     public static synchronized int getNbMappedNodes(String nameVirtualNode, String pathDescriptor) {
-        ProActiveDescriptor desc;
-        VirtualNode vn;
+        GCMApplication desc;
+        GCMVirtualNode vn;
         try {
-            desc = PADeployment.getProactiveDescriptor("file:" + pathDescriptor);
+            desc = PAGCMDeployment.loadApplicationDescriptor(new File(pathDescriptor));
             vn = desc.getVirtualNode(nameVirtualNode);
-            return vn.getNbMappedNodes();
+            return (int) vn.getNbRequiredNodes();
         } catch (ProActiveException e) {
             e.printStackTrace();
         }
@@ -108,22 +110,23 @@ public class MSDeployEngine {
             logger.debug("->MSDeployEngine In:deploy:" + pathDescriptor);
         }
 
-        ProActiveDescriptor desc;
-        VirtualNode vn;
-        Node[] nodes;
+        GCMApplication desc;
+        GCMVirtualNode vn;
+        List<Node> nodes;
         MSEngine mSEngine;
         HashMap<String, MSEngine> mapEngine = new HashMap<String, MSEngine>();
 
         try {
-            desc = PADeployment.getProactiveDescriptor("file:" + pathDescriptor);
+            desc = PAGCMDeployment.loadApplicationDescriptor(new File(pathDescriptor));
+            desc.startDeployment();
             vn = desc.getVirtualNode(nameVirtualNode);
-            vn.activate();
-            nodes = vn.getNodes();
+            vn.waitReady();
+            nodes = vn.getCurrentNodes();
 
-            int length = (nodes.length > arrayIdEngine.length) ? arrayIdEngine.length : nodes.length;
+            int length = Math.min(nodes.size(), arrayIdEngine.length);
 
             for (int i = 0; i < length; i++) {
-                mSEngine = deploy(arrayIdEngine[i], nodes[i]);
+                mSEngine = deploy(arrayIdEngine[i], nodes.get(i));
                 mapEngine.put(arrayIdEngine[i], mSEngine);
             }
         } catch (ProActiveException e) {
