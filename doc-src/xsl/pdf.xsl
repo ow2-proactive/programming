@@ -43,6 +43,11 @@
 		<xsl:attribute name="keep-together.within-page">3</xsl:attribute>
 	</xsl:attribute-set>
 
+	<xsl:attribute-set name="informaltable.properties">
+	  <xsl:attribute name="font-family">Lucida Sans Typewriter</xsl:attribute>
+	  <xsl:attribute name="font-size">8pt</xsl:attribute>
+	</xsl:attribute-set>
+
 	<!--  Changing font sizes -->
 	<xsl:param name="monospace.font.family">Helvetica</xsl:param>
 
