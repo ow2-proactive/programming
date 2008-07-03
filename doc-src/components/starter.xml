@@ -1,3 +1,5 @@
+<!--  <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd"> -->
+
 <chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
 	xml:id="starter">
 	<info>
@@ -61,9 +63,7 @@
 
 	<para>
 		All the source files are available at the end of the part in
-		<xref linkend="annex" />
-		.
+		<xref linkend="annex" />.
 	</para>
-	.
 </chapter>
 
