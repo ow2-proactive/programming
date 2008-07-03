@@ -273,10 +273,9 @@
     came first, then foo. If one wants wait for foo, then wait for bar, then
     wait for gee, three calls can be successively done:</para>
 
-    
-      <para><programlisting xml:lang="java">   PASPMD.methodBarrier({'foo'});
+    <programlisting xml:lang="java">   PASPMD.methodBarrier({'foo'});
    PASPMD.methodBarrier({'bar'});
-   PASPMD.methodBarrier({'gee'}); </programlisting></para>
+   PASPMD.methodBarrier({'gee'}); </programlisting>
     
 
     <para>A method barrier is used without any group (SPMD or not). To learn

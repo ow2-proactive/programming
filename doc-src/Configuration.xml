@@ -446,7 +446,7 @@
 
     <para>A configuration file could have following structure:</para>
 
-    <example><info><title>A configuration file example</title></info></example>
+    <example><info><title>A configuration file example</title></info>
     
      
     <screen>&lt;ProActiveUserProperties&gt;
@@ -460,7 +460,7 @@
  ....
  &lt;/properties&gt;
 &lt;/ProActiveUserProperties&gt;</screen>
-
+</example>
     <note><para>
       In order to have ProActive parse correctly the document, the following are mandatory:
       <itemizedlist>

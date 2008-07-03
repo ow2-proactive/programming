@@ -244,8 +244,8 @@
                     </mediaobject>
                 </figure>
             </para>
-            <para />
-        </section><para>The task interface is
+        
+        <para>The task interface is
                 <literal>org.objectweb.proactive.extensions.masterworker.interfaces.Task</literal>
             </para>
 
@@ -272,7 +272,8 @@
                 </para>
             </warning>
 
-
+       </section>
+ 
         <section xml:id="ms_principle_gathering">
             <info>
                 <title>Results retrieval and reception order</title>
@@ -319,7 +320,6 @@
                     </listitem>
                 </itemizedlist>
             </para>
-        </section>
         
         
             <para>Result reception order can be switched from
@@ -360,6 +360,7 @@
 
             <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_collection.snip"/></textobject></programlisting>
 
+        </section>
 
 
         <section>

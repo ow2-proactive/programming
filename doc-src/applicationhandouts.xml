@@ -835,7 +835,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 <literal>ProActive/script/[unix|windows]</literal>
                 do:
             </para>
-        <programlisting xml:lang="screen"><textobject><textdata fileref="guided_tour/code_snippets/nbody_run.txt"/></textobject></programlisting>
+        <programlisting><textobject><textdata fileref="guided_tour/code_snippets/nbody_run.txt"/></textobject></programlisting>
             <itemizedlist>
                 <listitem>
                     <para>
@@ -1255,7 +1255,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>            </example>
+            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>            
             
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
@@ -1270,6 +1270,7 @@ Enter the number of iterations (0 to exit) :  </screen>
     &lt;/exportedVirtualNodes&gt;
        
     &lt;controller desc="primitive"/&gt;</programlisting>
+    </example>
             <para>
                 If you add this code into the adl, you are saying that
                 the
@@ -1303,7 +1304,6 @@ Enter the number of iterations (0 to exit) :  </screen>
                 lookup mechanism. This is very simple to use. Here's the
                 code to do that:
             </para>
-            <example><info><title>Component Lookup and Register</title></info>            </example>
             
                 
                 <para>The component Registration</para>

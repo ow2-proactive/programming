@@ -612,7 +612,7 @@
 					<example><info><title>
 							Start, stop, suspend, restart a simulation
 							algorithm in runActivity method
-						</title></info>					</example>
+						</title></info>					
 						
 						
 						<para>
@@ -627,7 +627,7 @@
 						<para>
 							<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/SimulationWithActivity.txt"/></textobject></programlisting>
 						</para>
-			
+			</example>
 
 			</section>
 

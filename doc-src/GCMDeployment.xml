@@ -1088,8 +1088,6 @@
 		</section><!-- end of Deployment Descriptor Tutorial -->
 
 
-		<para>Now we can look at the Application Descriptor</para>
-
 		<!-- 
 			
 			Application Descriptor Tutorial
@@ -1240,7 +1238,7 @@
 				To deploy your application on the grid, you need to get your application descriptor as a
 				<code>java.io.File</code>
 				. You then pass it to
-				<code>org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.PAGCMDeployment.loadApplicationDescriptor()</code>
+				<code>org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.loadApplicationDescriptor()</code>
 				which will return a GCMApplication object. To actually start the deployment, simply call the
 				<code>startDeployment()</code>
 				method.
@@ -1287,7 +1285,7 @@ app.startDeployment();
 				In the case of a stand-alone application, it will simply be deployed on all the available nodes without any special intervention on
 				your side. In the case of a ProActive-based application, there are two ways for an application to handle the deployment process. The
 				simplest one is to call the
-				<programlisting xml:lang="screen">
+				<programlisting>
 					<textobject>
 						<textdata fileref="automatic_snippets/GCMVirtualNode_waitReady.snip" />
 					</textobject>
@@ -1296,7 +1294,7 @@ app.startDeployment();
 				will block until all virtual nodes are ready, that is that they have acquired the minimum number of nodes they need. This method
 				should not be used if one of the virtual nodes is "greedy", in which case it will never be in a "ready" state. There's another version
 				of the method with a timeout parameter :
-				<programlisting xml:lang="screen">
+				<programlisting>
 					<textobject>
 						<textdata fileref="automatic_snippets/GCMVirtualNode_waitReady_timeout.snip" />
 					</textobject>
@@ -1305,7 +1303,7 @@ app.startDeployment();
 
 				However, a more flexible way is for your application to listen to the availability of new nodes on each virtual node, and act
 				accordingly. The method for this is
-				<programlisting xml:lang="screen">
+				<programlisting>
 					<textobject>
 						<textdata fileref="automatic_snippets/GCMVirtualNode_subscribeNodeAttachment.snip" />
 					</textobject>
@@ -1321,14 +1319,14 @@ app.startDeployment();
 				. This method will be called by the virtual node for each new available node.
 
 				To get the list of virtual nodes for your GCMApplication, use
-				<programlisting xml:lang="screen">
+				<programlisting>
 					<textobject>
 						<textdata fileref="automatic_snippets/GCMApplication_getVirtualNodes.snip" />
 					</textobject>
 				</programlisting>
 
 				You can also get a specific virtual node if you know its name :
-				<programlisting xml:lang="screen">
+				<programlisting>
 					<textobject>
 						<textdata fileref="automatic_snippets/GCMApplication_getVirtualNode.snip" />
 					</textobject>

@@ -1,11 +1,11 @@
-<!-- Converted by db4-upgrade version 1.0 -->
+<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">    -->
 
 <appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="FAQ"><info><title>Frequently Asked Questions</title></info>
   
 
   <para><emphasis role="bold">Note:</emphasis> This FAQ is under construction.
   If one of your question is not answered here, just send it at 
-  <email>proactive@objectweb.org</email> and we'll update the FAQ.</para>
+  <email>proactive@ow2.org</email> and we'll update the FAQ.</para>
 
  <qandaset>
    <qandadiv><title>Frequently Asked Questions</title>
@@ -299,7 +299,7 @@ Default target: compile.all
          
          <para>The body has two representations. One is local and given by
           the interface <literal>Body</literal> </para>
-          <programlisting> <textdata> <textobject fileref="core/body/Body.java"> </textobject></textdata></programlisting>
+          <programlisting xml:lang="java"><textobject><textdata fileref="Body.java"/></textobject></programlisting>
           <para> This is the
           local view of the body an object can have when being in the same JVM
           as the body. For instance, the implementation of the activity of an
@@ -312,7 +312,7 @@ Default target: compile.all
           and therefore the methods that can be invoked. That view is the one
           used by the proxy of a remote reference to the active object to send
           request to the body of the active object.</para>
-             <programlisting> <textdata> <textobject fileref="core/body/UniversalBody.java"> </textobject></textdata></programlisting>
+           <programlisting xml:lang="java"><textobject><textdata fileref="core/body/UniversalBody.java"/></textobject></programlisting>
           
         </answer>
        </qandaentry>
@@ -903,7 +903,7 @@ Default target: compile.all
          active object. It was of no use most of the time and was made
          obsolete with the introduction of the MetaObjectFactory 
          in the <emphasis role="bold">0.9.3</emphasis> release.</para>
-<programlisting><textdata><textobject fileref="core/body/MetaObjectFactory.java"></textobject></textdata></programlisting>        
+<programlisting><textobject><textdata fileref="core/body/MetaObjectFactory.java"></textdata></textobject></programlisting>        
 
         <para>Up to <emphasis role="bold">ProActive 0.9.3</emphasis> the
          activity of an active object was given by a method

@@ -213,12 +213,13 @@
   <para>Within normal text, for instance in a paragraph, you can also just use 
    the LITERAL tag to highlight the  <literal>main</literal> methods.</para>
   
-  <example><info><title>JAVA program listing with file inclusion</title></info></example>
+  <example><info><title>JAVA program listing with file inclusion</title></info><para/></example>
    <programlisting xml:lang="java"><textobject>
      <textdata fileref="examples/hello/TinyHello.java"/>
     </textobject></programlisting>
   
   <example><info><title>XML program listing with file inclusion</title></info>
+     <para/>
      </example>
    
    <programlisting xml:lang="xml"><textobject>

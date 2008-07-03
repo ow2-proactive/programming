@@ -249,7 +249,7 @@
 				  below the expected output. The first lines are ProActive
 				  log, and at the end, information printed in the component and in the Main class is visible.
 				  </para>
-					 <programlisting xml:lang="screen"><textobject><textdata fileref="guided_tour/code_snippets/components/simple_run_output.txt"/></textobject></programlisting>
+					 <programlisting><textobject><textdata fileref="guided_tour/code_snippets/components/simple_run_output.txt"/></textobject></programlisting>
 							</section>
 			<section><info><title>Define an assembly</title></info>
 				
@@ -369,7 +369,7 @@
 
 				 <para> Now we can run this example; uncomment the
 				  line calling the launchPrimitiveADLAndDeployment method, launch it and see
-				   below the expected output. The first lines are
+				    the  output. The first lines are
 				    ProActive log; it’s more verbose than during previous 
 				    execution because we deploy the two JVMs defined in the
 				     deployment descriptor file. After that, you can see information
@@ -377,7 +377,6 @@
 				      . And finally, the ProActive log again when the created JVMs are killed.
 				      </para>
 				      
-				      <programlisting xml:lang="screen"><textobject><textdata fileref="guided_tour/code_snippets/components/adl_run_and_deploy_output.txt"/></textobject></programlisting>
 				      
 				      
 				      <!--  TODO  launchPrimitiveADLAndDeployment Output

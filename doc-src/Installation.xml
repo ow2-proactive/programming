@@ -1,3 +1,4 @@
+<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">  -->
 <chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Installation"><info><title>ProActive And IC2D Installation</title></info>
 
   <para>ProActive is available for <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/download_proactive_latest.htm"> download </link>under 
@@ -208,7 +209,7 @@
       <listitem>
         <para><literal>lib/components/fractal.jar</literal>
         - component model used for ProActive Components (see
-        <xref linkend="comp_configuration"/>).</para>
+        <xref linkend="configuration_html_Controllers_and_interceptors_n"/>).</para>
       </listitem>
 
       <listitem>
@@ -299,12 +300,12 @@
  	<literal>proactive.java.policy</literal>
  	will be used by default.
 	</para></note></section>
-    <section><info><title>Create A <literal>log4j</literal> Configuration File</title></info><indexterm>
+    <section>    <info><title>A simple proactive-log4j file</title></info>
+<indexterm>
       <primary>Log4j</primary>
 
       <secondary>configuration</secondary>
     </indexterm>
-    <info><title>A simple proactive-log4j file</title></info>
      
 
 		
@@ -533,8 +534,9 @@
 		 	
 		 	<para>
 		 		ProActive has a job scheduler that can be used for submitting tasks and examining results. 
-		 		For an introduction on how to use the job scheduler read <xref linkend="scheduler_tutorial"/> 
-		 		and for a for an exhaustive explanation read <xref linkend="ProActive_Scheduler"/> 
+		 		For an introduction on how to use the job scheduler read the  
+		 		<link xlink:href="http://proactive.inria.fr/index.php?page=manual_proactive">scheduler documentation</link> 
+		 		present on the ProActive site
 		 		
 		 	</para>
 		 	<section><info><title>Normal Usage Installation</title></info>

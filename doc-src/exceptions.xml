@@ -90,7 +90,7 @@
       the first example code in the second. Here is a sample session with the
       tool:</para>
 
-      <programlisting xml:lang="screen"><textobject><textdata fileref="code_snippets/exceptions/trywithcatch_annotator_session.txt"/></textobject></programlisting>
+      <programlisting><textobject><textdata fileref="code_snippets/exceptions/trywithcatch_annotator_session.txt"/></textobject></programlisting>
 
       <para>As we can see, ProActive method calls are added to make sure all
       calls within <literal>try/catch</literal> blocks are handled asynchronously. The tool can be
