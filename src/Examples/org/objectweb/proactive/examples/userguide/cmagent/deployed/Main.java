@@ -29,7 +29,7 @@
  * ################################################################
  */
 
-//snippet-start cma_deploy_full
+//@snippet-start cma_deploy_full
 package org.objectweb.proactive.examples.userguide.cmagent.deployed;
 
 import org.objectweb.proactive.api.PAActiveObject;
@@ -44,7 +44,7 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 
 
 public class Main {
-    //snippet-start cma_deploy_method
+    //@snippet-start cma_deploy_method
     //deployment method
     private static VirtualNode deploy(String descriptor) {
         try {
@@ -67,16 +67,16 @@ public class Main {
         return null;
     }
 
-    //snippet-end cma_deploy_method
+    //@snippet-end cma_deploy_method
     public static void main(String args[]) {
         try {
             //TODO 5. Get the virtual node through the deploy method
             VirtualNode vn = deploy(args[0]);
-            //snippet-start cma_deploy_object
+            //@snippet-start cma_deploy_object
             //TODO 6. Create the active object using a node on the virtual node
             CMAgentInitialized ao = (CMAgentInitialized) PAActiveObject.newActive(CMAgentInitialized.class
                     .getName(), new Object[] {}, vn.getNode());
-            //snippet-end cma_deploy_object
+            //@snippet-end cma_deploy_object
             //TODO 7. Get the current state from the active object
             String currentState = ao.getCurrentState().toString();
 
@@ -96,4 +96,4 @@ public class Main {
         }
     }
 }
-//snippet-end cma_deploy_full
+//@snippet-end cma_deploy_full
