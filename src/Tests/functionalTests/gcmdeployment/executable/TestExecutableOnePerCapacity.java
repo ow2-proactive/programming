@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderExecutable.Instances;
 
 
-public class TestExecutableOnePerCapacity extends AbstractTestExecutable {
+public class TestExecutableOnePerCapacity extends AbstractTExecutable {
 
     public TestExecutableOnePerCapacity() {
         super(Instances.onePerCapacity);
