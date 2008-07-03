@@ -77,11 +77,8 @@
                     <para>
                         For both Scilab and Matlab , the ability to write simple Matlab or Scilab tasks workflows and
                         submit these workflows to the ProActive Scheduler (with the possibility to define dependencies
-                        between tasks and transfering results from one task to the other). The usage of this feature is
-                        explained in chapters :
-                        <xref linkend="ProActive_Scheduler_Matlab"/>
-                        and
-                        <xref linkend="ProActive_Scheduler_Scilab"/>
+                        between tasks and transfering results from one task to the other). To learn how to use this feature
+                        read the scheduler documentation.
                     </para>
                 </listitem>
                 <listitem>
@@ -126,7 +123,7 @@
                 PROACTIVE/scripts/unix/scilab/README :
             </para>
 
-                <programlisting xml:lang="screen">
+                <programlisting>
                     <textobject>
                         <textdata fileref="../scripts/unix/scilab/README"/>
                     </textobject>
@@ -152,7 +149,7 @@
                 are described in the file PROACTIVE/scripts/unix/matlab/README :
             </para>
 
-            <programlisting xml:lang="txt">
+            <programlisting>
                 <textobject>
                     <textdata fileref="../scripts/unix/matlab/README"/>
                 </textobject>
@@ -165,13 +162,9 @@
 
             <para>
                 For both Scilab and Matlab, a configuration step is required, this step is described
-                in PROACTIVE/scripts/unix/scilab/README :
+                in PROACTIVE/scripts/unix/scilab/README above.
             </para>
-            <programlisting xml:lang="txt">
-                <textobject>
-                    <textdata fileref="../scripts/unix/scilab/README_conf"/>
-                </textobject>
-            </programlisting>
+
 
 
         </section>
@@ -422,11 +415,9 @@
                 <emphasis>ProActive Scheduler</emphasis>
                 and<emphasis>Resource Manager</emphasis>. In consequence the scheduler needs to be installed and
                 running. Explanation on how to install and use the ProActive Scheduler and Resource Manager are detailed
-                in<xref
-                    linkend="ProActive_Scheduler"/>. When a parallel script is executed, the toolkit wraps the scripts
+                in the Scheduler documentation. When a parallel script is executed, the toolkit wraps the scripts
                 inside a job definition and submits it to the running scheduler. Execution of the job can therefore be
-                monitored using the Scheduler SWT client interface described in<xref
-                    linkend="Scheduler_Eclipse_Plugin"/>. The scheduler will run Matlab engines in order to parallelize
+                monitored using the Scheduler SWT client interface described. The scheduler will run Matlab engines in order to parallelize
                 scripts. In consequence, these engines will need a Matlab licence (up to 4 engines
                 running on the same computer will take only one licence though). Finally, the Scheduler will need to
                 have acces to the native Java interface to Matlab in order to launch the Matlab engines. It's already
@@ -489,8 +480,7 @@
                     <para>
                         In any case, if the scheduler can be found on the machine you specified, a pop up window will
                         appear asking you to enter your login information. In order to create accounts for the
-                        scheduler, read the section
-                        <xref linkend="start_scheduler_xml"/>
+                        scheduler, read the scheduler documentation.
                     </para>
                 </listitem>
                 <listitem>
@@ -752,7 +742,7 @@
                     <title>Example: Interface Matlab/Scilab</title>
                 </info>
 
-            </example>
+            
 
                 <programlisting xml:lang="java">
                     <textobject>
@@ -760,18 +750,19 @@
                                 fileref="../src/Extensions/org/objectweb/proactive/extensions/scilab/test/SciTest2.java"/>
                     </textobject>
                 </programlisting>
-
+			</example>
             <example xml:id="sciex2">
                 <info>
                     <title>Descriptor deployment</title>
                 </info>
-            </example>
+            
 
                 <programlisting xml:lang="xml">
                     <textobject>
                         <textdata fileref="../scripts/unix/scilab/ProActiveScilab.xml"/>
                     </textobject>
                 </programlisting>
+             </example>   
         </section>
     </section>
 </chapter>
