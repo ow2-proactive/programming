@@ -30,25 +30,26 @@
  */
 package org.objectweb.proactive.examples.cs;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
  * <p>
- * A client/server example made using ProActive. In one window you
- * can launch the server using the script cs_server without
- * parameters. Then, in different windows, you can launch several
- * clients using the script cs_client and passing the name of the
- * client as a argument. Each client declares itself to the server
- * and sends messages. The server broadcasts the messages to all
- * referenced clients.
+ * A client/server example made using ProActive. In one window you can launch the server using the
+ * script cs_server without parameters. Then, in different windows, you can launch several clients
+ * using the script cs_client and passing the name of the client as a argument. Each client declares
+ * itself to the server and sends messages. The server broadcasts the messages to all referenced
+ * clients.
  * </p>
  *
  * @author The ProActive Team
- * @version 1.0,  2001/10/23
- * @since   ProActive 0.9
+ * @version 1.0, 2001/10/23
+ * @since ProActive 0.9
  *
  */
 public class Client {
@@ -56,6 +57,7 @@ public class Client {
     protected String myName;
     protected String serverHostName;
     protected Server theServer;
+    protected boolean connected = false;
     private java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public Client() {
@@ -64,22 +66,30 @@ public class Client {
     public Client(String clientName, String serverHostName) throws Exception {
         this.myName = clientName;
         this.serverHostName = serverHostName;
-        // Looks up for the server
-        String urlAsString = "//" + serverHostName + "/theServer";
-        logger.info("Client " + clientName + " is looking up server at " + urlAsString);
-        this.theServer = (Server) org.objectweb.proactive.api.PAActiveObject.lookupActive(Server.class
-                .getName(), urlAsString);
-        logger.info("Client " + this.myName + " successfully found the server");
     }
 
-    public void init() {
-        // Registers myself with the server
-        Client myself = (Client) org.objectweb.proactive.api.PAActiveObject.getStubOnThis();
-        if (myself != null) {
-            theServer.register(myself);
-        } else {
-            logger.info("Cannot get a stub on myself");
+    public boolean init() throws ActiveObjectCreationException {
+        // Looks up for the server
+        String urlAsString = "//" + serverHostName + "/theServer";
+        logger.info("Client " + myName + " is looking up server at " + urlAsString);
+        try {
+            this.theServer = (Server) org.objectweb.proactive.api.PAActiveObject.lookupActive(Server.class
+                    .getName(), urlAsString);
+            logger.info("Client " + this.myName + " successfully found the server");
+            // Registers myself with the server
+            Client myself = (Client) org.objectweb.proactive.api.PAActiveObject.getStubOnThis();
+            if (myself != null) {
+                theServer.register(myself);
+            } else {
+                logger.info("Cannot get a stub on myself");
+                return false;
+            }
+
+        } catch (IOException e) {
+            logger.error("Server not found at " + urlAsString);
+            return false;
         }
+        return true;
     }
 
     public void doStuff() {
@@ -113,13 +123,16 @@ public class Client {
             // Creates an active object for the client
             Client theClient = (Client) org.objectweb.proactive.api.PAActiveObject.newActive(Client.class
                     .getName(), new Object[] { clientName, serverHostName });
-            theClient.init();
-            Thread t = new Thread(new RunClient(theClient));
-            t.start();
+            if (theClient.init()) {
+                Thread t = new Thread(new RunClient(theClient));
+                t.start();
+                t.join();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
+        System.exit(0);
     }
 
     private static class RunClient implements Runnable {
