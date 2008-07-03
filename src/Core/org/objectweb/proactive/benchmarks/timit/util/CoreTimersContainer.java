@@ -623,4 +623,30 @@ public class CoreTimersContainer implements TimerProvidable {
         userTimer.setUserLevel(true);
         return userTimer;
     }
+
+    /* *
+     * Attaches a new Timer to the userComputation timer of the current method 
+     * this.currentMethodTimerIndex + timerId
+     */
+
+    public final BasicTimer attachTimerToUserComputation(String timerName) {
+        // First check if the timerName is already used
+        for (final BasicTimer t : this.timersList) {
+            if (t.getName().equals(timerName)) {
+                throw new RuntimeException("This timer name is already used : " + timerName);
+            }
+        }
+
+        // Get the instance of UserComputation timer
+        final BasicTimer ucTimer = this.getTimer(TimerWarehouse.USER_COMPUTATION);
+        if (ucTimer == null) {
+            return null;
+        }
+
+        // Create the users timer
+        final BasicTimer userTimer = new BasicTimer(timerName, ucTimer);
+        this.timersList.add(userTimer);
+        userTimer.setUserLevel(true);
+        return userTimer;
+    }
 }
