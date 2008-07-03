@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GCMApplication
+	xmlns="urn:gcm:application:1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:gcm:application:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ApplicationDescriptorSchema.xsd">
+
+	<environment>
+		<javaPropertyVariable name="proactive.home"/>
+		<javaPropertyVariable name="java.home"/>
+
+		<descriptorDefaultVariable name="deploymentDescriptor" value="../../_CONFIG/localhost/generic.xml" />
+		<descriptorDefaultVariable name="jvmargDefinedByTest" value=" "/>
+		
+		<descriptorDefaultVariable name="tmpDir" value=" "/>
+		<descriptorDefaultVariable name="instances" value=" "/>
+	</environment>
+	
+	<application>
+		<executable instances="${instances}">
+			<command name="${java.home}/bin/java">
+				<arg>-cp ${proactive.home}/classes/Tests</arg>
+				<arg>functionalTests.gcmdeployment.executable.Executable</arg>
+				<arg>${tmpDir}</arg>
+			</command>
+			<nodeProvider refid="remote"/>
+		</executable>
+		
+	</application>
+	<resources>	
+		<nodeProvider id="remote">
+			<file path="${deploymentDescriptor}"/>
+		</nodeProvider>
+	</resources>
+</GCMApplication>

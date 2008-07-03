@@ -54,7 +54,7 @@ public class ApplicationParserExecutable extends AbstractApplicationParser {
 
     @Override
     protected CommandBuilder createCommandBuilder() {
-        return new CommandBuilderScript();
+        return new CommandBuilderExecutable();
     }
 
     public String getNodeName() {
@@ -66,7 +66,7 @@ public class ApplicationParserExecutable extends AbstractApplicationParser {
             throws Exception {
         super.parseApplicationNode(appNode, applicationParser, xpath);
 
-        CommandBuilderScript commandBuilderScript = (CommandBuilderScript) commandBuilder;
+        CommandBuilderExecutable commandBuilderScript = (CommandBuilderExecutable) commandBuilder;
 
         String instancesValue = GCMParserHelper.getAttributeValue(appNode, "instances");
 

@@ -39,7 +39,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeProvi
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 
 
-public class CommandBuilderScript implements CommandBuilder {
+public class CommandBuilderExecutable implements CommandBuilder {
 
     /** List of providers to be used */
     private List<NodeProvider> providers;
@@ -48,7 +48,7 @@ public class CommandBuilderScript implements CommandBuilder {
     /** The path to the command */
     private PathElement path;
 
-    /** The arguments*/
+    /** The arguments */
     private List<String> args;
 
     public enum Instances {
@@ -57,7 +57,7 @@ public class CommandBuilderScript implements CommandBuilder {
 
     private Instances instances;
 
-    public CommandBuilderScript() {
+    public CommandBuilderExecutable() {
         providers = new ArrayList<NodeProvider>();
         args = new ArrayList<String>();
         instances = Instances.onePerHost;
@@ -91,7 +91,40 @@ public class CommandBuilderScript implements CommandBuilder {
             sb.append(" " + arg);
         }
 
-        return sb.toString();
+        int nbCmd = 0;
+        switch (instances) {
+            case onePerCapacity:
+                nbCmd = hostInfo.getHostCapacity() * hostInfo.getVmCapacity();
+                break;
+            case onePerVM:
+                nbCmd = hostInfo.getHostCapacity();
+                break;
+            case onePerHost:
+                nbCmd = 1;
+                break;
+        }
+
+        StringBuilder ret = new StringBuilder();
+        switch (hostInfo.getOS()) {
+            case unix:
+                for (int i = 0; i < nbCmd; i++) {
+                    ret.append(sb);
+                    ret.append(" &");
+                }
+                ret.deleteCharAt(ret.length() - 1);
+                break;
+
+            case windows:
+                if (nbCmd > 1) {
+                    throw new IllegalStateException(
+                        "Multiple command per machine is not yet supported on windows");
+                } else {
+                    ret.append(sb);
+                }
+                break;
+        }
+
+        return ret.toString();
     }
 
     public String getPath(HostInfo hostInfo) {
@@ -99,12 +132,6 @@ public class CommandBuilderScript implements CommandBuilder {
     }
 
     public void setInstances(String instancesValue) {
-        if (instancesValue.equals("onePerHost")) {
-            instances = Instances.onePerHost;
-        } else if (instancesValue.equals("onePerVM")) {
-            instances = Instances.onePerVM;
-        } else if (instancesValue.equals("onePerCapacity")) {
-            instances = Instances.onePerCapacity;
-        }
+        instances = Instances.valueOf(instancesValue);
     }
 }

@@ -45,7 +45,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplic
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.TechnicalServicesProperties;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.AbstractApplicationParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderScript;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderExecutable;
 import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.w3c.dom.Node;
 
@@ -83,7 +83,7 @@ public class TestApplicationDescriptorParser {
     protected static class UserApplicationNodeParser extends AbstractApplicationParser {
         @Override
         protected CommandBuilder createCommandBuilder() {
-            return new CommandBuilderScript();
+            return new CommandBuilderExecutable();
         }
 
         public String getNodeName() {
