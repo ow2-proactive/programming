@@ -47,8 +47,8 @@ import javax.xml.parsers.SAXParserFactory;
 /** Check an xml file follows its dtd.  Greatly inspired from the apache xalan samples 'Validate'  */
 public class Validate extends DefaultHandler implements LexicalHandler {
     private String inputFile;
-    /** Flag set to true when the file is not well formed  */
-    boolean troubleFound = false;
+    /** Flag set to false when the file is not well formed  */
+    boolean valid = true;
     boolean hasDTD = false;
     StringBuffer errorBuffer;
 
@@ -104,7 +104,7 @@ public class Validate extends DefaultHandler implements LexicalHandler {
 
             if (!handler.hasDTD) {
                 returnedBuffer.append("[WARNING] NO DOCTYPE DECLARATION in " + filename + "\n");
-            } else if (handler.troubleFound) {
+            } else if (!handler.valid) {
                 returnedBuffer.append("[ERROR] XML is NOT VALID: it does not comply to dtd in " + filename +
                     "\n");
                 returnedBuffer
@@ -132,7 +132,7 @@ public class Validate extends DefaultHandler implements LexicalHandler {
             this.errorBuffer.append("[HINT] The dtd does not allow such a tag! ");
         }
 
-        this.troubleFound = true;
+        this.valid = false;
     }
 
     /** When a warning is encountered, store it for future recall */
@@ -140,7 +140,7 @@ public class Validate extends DefaultHandler implements LexicalHandler {
     public void warning(SAXParseException exc) {
         this.errorBuffer.append("[WARNING] " + this.inputFile + "[" + exc.getLineNumber() + "] " +
             exc.getMessage() + "\n");
-        this.troubleFound = true;
+        this.valid = false;
     }
 
     /** Set hasDTD to true when dtd is found. */
@@ -167,6 +167,6 @@ public class Validate extends DefaultHandler implements LexicalHandler {
     }
 
     public boolean isValid() {
-        return troubleFound;
+        return valid;
     }
 }
