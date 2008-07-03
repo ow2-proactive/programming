@@ -86,27 +86,33 @@ import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 /**
  * <i><font size="-1" color="#FF0000">**For internal use only** </font></i><br>
  * <p>
- * This class gives a common implementation of the Body interface. It provides all
- * the non specific behavior allowing sub-class to write the detail implementation.
- * </p><p>
- * Each body is identify by an unique identifier.
- * </p><p>
- * All active bodies that get created in one JVM register themselves into a table that allows
- * to tack them done. The registering and deregistering is done by the AbstractBody and
- * the table is managed here as well using some static methods.
- * </p><p>
- * In order to let somebody customize the body of an active object without subclassing it,
- * AbstractBody delegates lot of tasks to satellite objects that implements a given
- * interface. Abstract protected methods instantiate those objects allowing subclasses
- * to create them as they want (using customizable factories or instance).
+ * This class gives a common implementation of the Body interface. It provides
+ * all the non specific behavior allowing sub-class to write the detail
+ * implementation.
  * </p>
- *
+ * <p>
+ * Each body is identify by an unique identifier.
+ * </p>
+ * <p>
+ * All active bodies that get created in one JVM register themselves into a
+ * table that allows to tack them done. The registering and deregistering is
+ * done by the AbstractBody and the table is managed here as well using some
+ * static methods.
+ * </p>
+ * <p>
+ * In order to let somebody customize the body of an active object without
+ * subclassing it, AbstractBody delegates lot of tasks to satellite objects that
+ * implements a given interface. Abstract protected methods instantiate those
+ * objects allowing subclasses to create them as they want (using customizable
+ * factories or instance).
+ * </p>
+ * 
  * @author The ProActive Team
- * @version 1.0,  2001/10/23
- * @since   ProActive 0.9
+ * @version 1.0, 2001/10/23
+ * @since ProActive 0.9
  * @see org.objectweb.proactive.Body
  * @see UniqueID
- *
+ * 
  */
 public abstract class BodyImpl extends AbstractBody implements java.io.Serializable, BodyImplMBean {
     //
@@ -131,18 +137,21 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     //
 
     /**
-     * Creates a new AbstractBody.
-     * Used for serialization.
+     * Creates a new AbstractBody. Used for serialization.
      */
     public BodyImpl() {
     }
 
     /**
      * Creates a new AbstractBody for an active object attached to a given node.
-     * @param reifiedObject the active object that body is for
-     * @param nodeURL the URL of the node that body is attached to
-     * @param factory the factory able to construct new factories for each type of meta objects
-     *                needed by this body
+     * 
+     * @param reifiedObject
+     *            the active object that body is for
+     * @param nodeURL
+     *            the URL of the node that body is attached to
+     * @param factory
+     *            the factory able to construct new factories for each type of
+     *            meta objects needed by this body
      */
     public BodyImpl(Object reifiedObject, String nodeURL, MetaObjectFactory factory, String jobId)
             throws ActiveObjectCreationException {
@@ -195,8 +204,9 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                         }
                     } else {
                         // target body is not serilizable
-                        bodyLogger
-                                .error("**ERROR** Activated object is not serializable. Fault-tolerance is disabled");
+                        bodyLogger.error("**WARNING** Activated object is not serializable (" +
+                            this.localBodyStrategy.getReifiedObject().getClass() +
+                            "). Fault-tolerance is disabled for this active object");
                         this.ftmanager = null;
                     }
                 }
@@ -210,7 +220,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
         this.gc = new GarbageCollector(this);
 
-        // JMX registration        
+        // JMX registration
         if (!super.isProActiveInternalObject) {
             MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
             ObjectName oname = FactoryName.createActiveObjectName(this.bodyID);
@@ -235,10 +245,13 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     //
 
     /**
-     * Receives a request for later processing. The call to this method is non blocking
-     * unless the body cannot temporary receive the request.
-     * @param request the request to process
-     * @exception java.io.IOException if the request cannot be accepted
+     * Receives a request for later processing. The call to this method is non
+     * blocking unless the body cannot temporary receive the request.
+     * 
+     * @param request
+     *            the request to process
+     * @exception java.io.IOException
+     *                if the request cannot be accepted
      */
     @Override
     protected int internalReceiveRequest(Request request) throws java.io.IOException,
@@ -257,7 +270,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // END JMX Notification
 
         // request queue length = number of requests in queue
-        //							+ the one to add now
+        // + the one to add now
         try {
             return this.requestReceiver.receiveRequest(request, this);
         } catch (CommunicationForbiddenException e) {
@@ -269,8 +282,11 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
     /**
      * Receives a reply in response to a former request.
-     * @param reply the reply received
-     * @exception java.io.IOException if the reply cannot be accepted
+     * 
+     * @param reply
+     *            the reply received
+     * @exception java.io.IOException
+     *                if the reply cannot be accepted
      */
     @Override
     protected int internalReceiveReply(Reply reply) throws java.io.IOException {
@@ -284,9 +300,13 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     }
 
     /**
-     * Signals that the activity of this body, managed by the active thread has just stopped.
-     * @param completeACs if true, and if there are remaining AC in the futurepool, the AC thread
-     * is not killed now; it will be killed after the sending of the last remaining AC.
+     * Signals that the activity of this body, managed by the active thread has
+     * just stopped.
+     * 
+     * @param completeACs
+     *            if true, and if there are remaining AC in the futurepool, the
+     *            AC thread is not killed now; it will be killed after the
+     *            sending of the last remaining AC.
      */
     @Override
     protected void activityStopped(boolean completeACs) {
@@ -295,7 +315,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         try {
             this.localBodyStrategy.getRequestQueue().destroy();
         } catch (ProActiveRuntimeException e) {
-            // this method can be called twos times if the automatic continuation thread
+            // this method can be called twos times if the automatic
+            // continuation thread
             // is killed *after* the activity thread.
             bodyLogger.debug("Terminating already terminated body " + this.getID());
         }
@@ -316,24 +337,25 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
     public void setImmediateService(String methodName) {
         // FIXME uncomment this code after PROACTIVE-309 issue has been resolved
-        //    	if (!checkMethod(methodName)) {
-        //            throw new NoSuchMethodError(methodName + " is not defined in " +
-        //                getReifiedObject().getClass().getName());
-        //        }
+        // if (!checkMethod(methodName)) {
+        // throw new NoSuchMethodError(methodName + " is not defined in " +
+        // getReifiedObject().getClass().getName());
+        // }
         ((RequestReceiverImpl) this.requestReceiver).setImmediateService(methodName);
     }
 
     public void setImmediateService(String methodName, Class<?>[] parametersTypes) {
         // FIXME uncomment this code after PROACTIVE-309 issue has been resolved
-        //    	if (!checkMethod(methodName, parametersTypes)) {
-        //    		String signature = methodName+"(";
-        //    		for (int i = 0 ; i < parametersTypes.length; i++) {
-        //    			signature+=parametersTypes[i] + ((i < parametersTypes.length - 1)?",":"");
-        //    		}
-        //    		signature += " is not defined in " +
-        //            getReifiedObject().getClass().getName();
-        //            throw new NoSuchMethodError(signature);
-        //        }
+        // if (!checkMethod(methodName, parametersTypes)) {
+        // String signature = methodName+"(";
+        // for (int i = 0 ; i < parametersTypes.length; i++) {
+        // signature+=parametersTypes[i] + ((i < parametersTypes.length -
+        // 1)?",":"");
+        // }
+        // signature += " is not defined in " +
+        // getReifiedObject().getClass().getName();
+        // throw new NoSuchMethodError(signature);
+        // }
         ((RequestReceiverImpl) this.requestReceiver).setImmediateService(methodName, parametersTypes);
     }
 
@@ -357,7 +379,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     public boolean checkMethod(String methodName, Class<?>[] parametersTypes) {
         if (this.checkedMethodNames.containsKey(methodName)) {
             if (parametersTypes != null) {
-                // the method name with the right signature has already been checked
+                // the method name with the right signature has already been
+                // checked
                 List<Class<?>> parameterTlist = Arrays.asList(parametersTypes);
                 HashSet<List<Class<?>>> signatures = this.checkedMethodNames.get(methodName);
 
@@ -385,9 +408,13 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     }
 
     /**
-     * Stores the given method name with the given parameters types inside our method signature cache to avoid re-testing them
-     * @param methodName name of the method
-     * @param parametersTypes parameter type list
+     * Stores the given method name with the given parameters types inside our
+     * method signature cache to avoid re-testing them
+     * 
+     * @param methodName
+     *            name of the method
+     * @param parametersTypes
+     *            parameter type list
      */
     private void storeInMethodCache(String methodName, Class<?>[] parametersTypes) {
         List<Class<?>> parameterTlist = null;
@@ -396,7 +423,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             parameterTlist = Arrays.asList(parametersTypes);
         }
 
-        // if we already know a version of this method, we store the new version in the existing set
+        // if we already know a version of this method, we store the new version
+        // in the existing set
         if (this.checkedMethodNames.containsKey(methodName) && (parameterTlist != null)) {
             HashSet<List<Class<?>>> signatures = this.checkedMethodNames.get(methodName);
             signatures.add(parameterTlist);
@@ -444,7 +472,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // -- PUBLIC METHODS -----------------------------------------------
         //
         //
-        // -- implements LocalBody -----------------------------------------------
+        // -- implements LocalBody
+        // -----------------------------------------------
         //
         public FuturePool getFuturePool() {
             return this.futures;
@@ -462,9 +491,11 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             return this.reifiedObject.getClass().getName();
         }
 
-        /** Serves the request. The request should be removed from the request queue
-         * before serving, which is correctly done by all methods of the Service class.
-         * However, this condition is not ensured for custom calls on serve.
+        /**
+         * Serves the request. The request should be removed from the request
+         * queue before serving, which is correctly done by all methods of the
+         * Service class. However, this condition is not ensured for custom
+         * calls on serve.
          */
         public void serve(Request request) {
             if (Profiling.TIMERS_COMPILED) {
@@ -500,15 +531,16 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             // END JMX Notification
             Reply reply = null;
 
-            //If the request is not a "terminate Active Object" request,
-            //it is served normally.
+            // If the request is not a "terminate Active Object" request,
+            // it is served normally.
             if (!isTerminateAORequest(request)) {
                 reply = request.serve(BodyImpl.this);
             }
 
             if (reply == null) {
                 if (!isActive()) {
-                    return; //test if active in case of terminate() method otherwise eventProducer would be null
+                    return; // test if active in case of terminate() method
+                    // otherwise eventProducer would be null
                 }
 
                 // JMX Notification
@@ -539,22 +571,24 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             if (BodyImpl.this.ftmanager != null) {
                 BodyImpl.this.ftmanager.sendReply(reply, request.getSender());
             } else {
-                // if the reply cannot be sent, try to sent the thrown exception as result
-                // Useful if the exception is due to the content of the result (e.g. InvalidClassException)
+                // if the reply cannot be sent, try to sent the thrown exception
+                // as result
+                // Useful if the exception is due to the content of the result
+                // (e.g. InvalidClassException)
                 try {
                     reply.send(request.getSender());
                 } catch (IOException e1) {
                     try {
                         this.retrySendReplyWithException(reply, e1, request.getSender());
                     } catch (Exception retryException1) {
-                        // the stacktraced exception must be the first one 
+                        // the stacktraced exception must be the first one
                         sendReplyExceptionsLogger.error(e1.getMessage(), e1);
                     }
                 } catch (ProActiveRuntimeException e2) {
                     try {
                         this.retrySendReplyWithException(reply, e2, request.getSender());
                     } catch (Exception retryException2) {
-                        // the stacktraced exception must be the first one 
+                        // the stacktraced exception must be the first one
                         sendReplyExceptionsLogger.error(e2.getMessage(), e2);
                     }
                 }
@@ -593,12 +627,14 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
 
             // JMX Notification
             // TODO Write this section, after the commit of Arnaud
-            // TODO Send a notification only if the destination doesn't implement ProActiveInternalObject
+            // TODO Send a notification only if the destination doesn't
+            // implement ProActiveInternalObject
             if (!isProActiveInternalObject && (mbean != null)) {
                 ServerConnector serverConnector = ProActiveRuntimeImpl.getProActiveRuntime()
                         .getJMXServerConnector();
 
-                // If the connector server is not active the connectorID can be null
+                // If the connector server is not active the connectorID can be
+                // null
                 if ((serverConnector != null) && serverConnector.getConnectorServer().isActive()) {
                     UniqueID connectorID = serverConnector.getUniqueID();
 
@@ -623,7 +659,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         /**
          * Returns a unique identifier that can be used to tag a future, a
          * request
-         *
+         * 
          * @return a unique identifier that can be used to tag a future, a
          *         request.
          */
@@ -636,10 +672,13 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         //
 
         /**
-         * Test if the MethodName of the request is "terminateAO" or "terminateAOImmediately".
-         * If true, AbstractBody.terminate() is called
-         * @param request The request to serve
-         * @return true if the name of the method is "terminateAO" or "terminateAOImmediately".
+         * Test if the MethodName of the request is "terminateAO" or
+         * "terminateAOImmediately". If true, AbstractBody.terminate() is called
+         * 
+         * @param request
+         *            The request to serve
+         * @return true if the name of the method is "terminateAO" or
+         *         "terminateAOImmediately".
          */
         private boolean isTerminateAORequest(Request request) {
             boolean terminateRequest = (request.getMethodName()).startsWith("_terminateAO");
@@ -672,7 +711,8 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         // -- PUBLIC METHODS -----------------------------------------------
         //
         //
-        // -- implements LocalBody -----------------------------------------------
+        // -- implements LocalBody
+        // -----------------------------------------------
         //
         public FuturePool getFuturePool() {
             return this.futures;
