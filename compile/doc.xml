@@ -199,7 +199,7 @@
 	<!-- ==================================================================== -->
 	<target name="-docbookTransform"	>
 		<!-- Profiling step: keep only the tags which have the attribute os="${docbook.profile}" or no os attribute -->
-		<xslt basedir="${doc.src}" processor="trax" in="${docs.tmp.dir}/${docbookInputFile}" out="${docs.tmp.dir}/profiled.xml" style="${doc.src}/xsl/profiling.xsl" force="yes">
+		<xslt basedir="${doc.src}"  in="${docs.tmp.dir}/${docbookInputFile}" out="${docs.tmp.dir}/profiled.xml" style="${doc.src}/xsl/profiling.xsl" force="yes">
 			<param name="profile.os" expression="${docbook.profile}" />
 			<!--docbook.profile can be html, pdf or empty-->
 			<xmlcatalog refid="docbookcatalog" />
@@ -214,7 +214,7 @@
 		</xslt>
 
 		<!-- Do the real conversion, docbook to pdf or html -->
-		<xslt basedir="${doc.src}" processor="trax" in="${docs.tmp.dir}/profiled.xml" out="${docbookOutputFile}" style="${docbookStyle}" force="yes">
+		<xslt basedir="${doc.src}" in="${docs.tmp.dir}/profiled.xml" out="${docbookOutputFile}" style="${docbookStyle}" force="yes">
 			<xmlcatalog refid="docbookcatalog" />
 			<param name="TODAY" expression="${TODAY}" />
 			<!-- the date for the first page -->
@@ -318,6 +318,78 @@
 
 	</target>
 
+	<!-- ==================================================================== -->
+	<!--    Checks if the XML is valid and if the manual can be built properly-->
+	<!--   this should catch if the XML is malformed  or files are missing    -->
+	<!-- ==================================================================== -->
+	<target name="-docbookBeautifyFailCheck" depends="compile.util">
+		
+		<java classname="doc.DocBookize" fork="true" failonerror="true">
+			<classpath refid="project.classpath"/>
+			<!-- The xml file to parse -->
+			<arg value="${docs.tmp.dir}/${docbookInputFile}" />
+			<!-- The path to find java files in html -->
+			<arg value="ProActive_src_html/${proactive.path}/" />
+			
+			<!-- the path for java file inclusion -->
+			<arg value="${src.proactive.dir}/${proactive.path}/" />
+			<arg value="${src.examples.dir}/${proactive.path}/" />
+			
+			<!-- the path for xml file inclusion -->
+			<arg value="${descriptors.dir}/" />
+			
+		</java>
+
+		<java classname="doc.Validate" fork="true" failonerror="true">
+			<classpath refid="project.classpath" />
+			<classpath>
+				<fileset dir="${base.dir}/dev/lib/docbook/">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<arg value="${docs.tmp.dir}/${docbookInputFile}" />
+		</java>
+
+	</target>
+
+
+	<!-- ==================================================================== -->
+	<!--       XML Check by running everthying up to the XSLT processor       -->
+	<!-- ==================================================================== -->
+	<target name="checkXML">
+
+		<!-- Call the code for generating the snippets -->
+		<antcall target="-snippetscreation"/>
+
+		<!-- as this file gets edited, make sure it's a fresh copy-->
+		<delete file="${docs.tmp.dir}/${docs.mainFile}" />
+
+		<!-- Copy the files needed for the html files (pics and maybe others) -->
+		<copy toDir="${docs.dir}/manual/ProActive_Manual_html/">
+			<fileset dir="${doc.src}">
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.svg" />
+				<include name="**/*.gif" />
+				<include name="ProActive.css" />
+			</fileset>
+		</copy>
+
+		<!-- Copying xml files so they can be edited (beautify programlistings) -->
+		<copy toDir="${docs.tmp.dir}" includeemptydirs="no">
+			<fileset dir="${doc.src}">
+				<include name="**/*" />
+				<exclude name="**/.svn" />
+				<exclude name="xsl" />
+			</fileset>
+		</copy>
+
+		<!-- Decorate the code a bit (code examples in programlistings) -->
+		<antcall target="-docbookBeautifyFailCheck">
+			<param name="docbookInputFile" value="${docs.mainFile}" />
+		</antcall>
+
+	</target>
 
 	<!-- ==================================================================== -->
 	<!-- preprocessing for the manual: copy files and add tags to source code -->
