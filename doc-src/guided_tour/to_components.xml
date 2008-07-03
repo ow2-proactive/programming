@@ -205,7 +205,7 @@
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>            </example>
+            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>            
             
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
@@ -220,6 +220,7 @@
     &lt;/exportedVirtualNodes&gt;
        
     &lt;controller desc="primitive"/&gt;</programlisting>
+    </example>
             <para>
                 If you add this code into the adl, you are saying that
                 the
@@ -253,7 +254,7 @@
                 lookup mechanism. This is very simple to use. Here's the
                 code to do that:
             </para>
-            <example><info><title>Component Lookup and Register</title></info>            </example>
+            <example><info><title>Component Lookup and Register</title></info>
             
                 
                 <para>The component Registration</para>
@@ -267,6 +268,7 @@
       UrlBuilder.buildUrl(this.hostName, "Dispatcher", protocol, this.portNumber));
       this.c3dDispatcher = (Dispatcher) a.getFcInterface("user2dispatcher");</programlisting>
                 </para>
+             </example>
             <para>
                 For the registeration, you only need a reference on the
                 component you want to register, and build a url

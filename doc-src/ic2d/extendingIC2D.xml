@@ -1162,7 +1162,7 @@
 								File &gt; New &gt; Project
 							</emphasis>
 							from the menu bar to open the new project
-							wizard.
+							wizard 
 						</para>
 					</listitem>
 					<listitem>
@@ -1175,7 +1175,7 @@
 							<emphasis role="bold">
 								Plug-in Development
 							</emphasis>
-							.
+							
 						</para>
 					</listitem>
 				</orderedlist>
@@ -1196,7 +1196,7 @@
 						<para>
 							Click
 							<emphasis role="bold">Next</emphasis>
-							.
+							
 						</para>
 					</listitem>
 					<listitem>
@@ -1206,8 +1206,8 @@
 								Project name
 							</emphasis>
 							field, enter a name for the plug-in. For
-							example, we chose
-							org.objectweb.proactive.ic2d.example. You
+							example, we chose <literal>
+							org.objectweb.proactive.ic2d.example.</literal> You
 							must use the fully-qualified name to ensure
 							its uniqueness.
 						</para>
@@ -1215,7 +1215,7 @@
 					<listitem>
 						<para>
 							In the Project contents pane, accept the
-							default directory value.
+							default directory value
 						</para>
 					</listitem>
 					<listitem>
@@ -1226,7 +1226,7 @@
 							</emphasis>
 							option is selected since we want our project
 							to contain Java files. Accept the default
-							values of the other options.
+							values of the other options
 						</para>
 					</listitem>
 					<listitem>
@@ -1234,15 +1234,12 @@
 							Beginning in Eclipse 3.1 you will get best
 							results by using the
 							<emphasis role="bold">
-								OSGi bundle manifest
-							</emphasis>
-							. In contrast to previous versions, this is
+								OSGi bundle manifest</emphasis>.
+								 In contrast to previous versions, this is
 							now the default.
 						</para>
 					</listitem>
 				</orderedlist>
-				
-				<para>
 					<figure xml:id="newPluginProject"><info><title>Specify name and plug-in structure</title></info>
 						
 						<mediaobject>
@@ -1251,35 +1248,33 @@
 							</imageobject>
 						</mediaobject>
 					</figure>
-				</para>
-				
+
 				<orderedlist continuation="continues">
 					<listitem>
 						<para>
 							Click
 							<emphasis role="bold">Next</emphasis>
-							.
+							
 						</para>
 					</listitem>
 					<listitem>
 						<para>
-							Now enter the fully qualified
+							Enter the fully qualified
 							<emphasis role="bold">
 								ID of the plug-in
 							</emphasis>
-							. By default it is the same as its project
-							name.
+							which by default it is the same as the project
+							name
 						</para>
 					</listitem>
 					<listitem>
 						<para>
 							Accept the default values of the other
-							options.
+							options
 						</para>
 					</listitem>
 				</orderedlist>
 				
-				<para>
 					<figure xml:id="newPluginProject2"><info><title>Specify plug-in content</title></info>
 						
 						<mediaobject>
@@ -1288,14 +1283,12 @@
 							</imageobject>
 						</mediaobject>
 					</figure>
-				</para>
 				
 				<orderedlist continuation="continues">
 					<listitem>
 						<para>
 							Click
 							<emphasis role="bold">Finish</emphasis>
-							.
 						</para>
 					</listitem>
 				</orderedlist>
@@ -1311,7 +1304,6 @@
 					illustrated in the followed figure.
 				</para>
 				
-				<para>
 					<figure xml:id="pluginStructureScreenshot"><info><title>The plug-in structure</title></info>
 						
 						<mediaobject>
@@ -1320,7 +1312,6 @@
 							</imageobject>
 						</mediaobject>
 					</figure>
-				</para>
 				
 			</section><!-- pluginStructure -->
 			
@@ -1383,7 +1374,7 @@
 					editor to see and modify the source.
 				</para>
 				
-				<example xml:id="manifestMFListing"><info><title>MANIFEST.MF</title></info>				</example>
+				<example xml:id="manifestMFListing"><info><title>MANIFEST.MF</title></info>	
 				
 					
 					<para>
@@ -1399,7 +1390,7 @@ org.eclipse.ui, org.eclipse.core.runtime
 Eclipse-AutoStart: true
 						</screen>
 					</para>
-				
+			</example>				
 				<para>
 					<emphasis role="bold">plugin.xml</emphasis>
 				</para>
@@ -1436,7 +1427,7 @@ Eclipse-AutoStart: true
 					the plug-in wizard.
 				</para>
 
-				<example xml:id="pluginClassListing"><info><title>ExamplePlugin.java</title></info>				</example>
+				<example xml:id="pluginClassListing"><info><title>ExamplePlugin.java</title></info>
 				
 					
 					<para>
@@ -1497,7 +1488,7 @@ public class ExamplePlugin extends AbstractUIPlugin {
 }
 					</programlisting>
 					</para>
-
+				</example>
 			</section><!-- pluginClass -->
 
 			<section xml:id="buildProperties"><info><title>Build properties</title></info>
@@ -1521,7 +1512,7 @@ public class ExamplePlugin extends AbstractUIPlugin {
 					to modify this file that is less error-prone
 					than modifying it by hand.
 				</para>
-					<example xml:id="buildPropertiesListing"><info><title>build.properties</title></info>				</example>
+					<example xml:id="buildPropertiesListing"><info><title>build.properties</title></info>				
 					
 					
 					<para>
@@ -1531,6 +1522,7 @@ output.. = bin/
 bin.includes = META-INF/,\ .
 					</screen>
 					</para>
+					</example>
 			</section><!-- buildProperties -->
 				
 			<section xml:id="addPluginToIC2D"><info><title>How to add your plugin to IC2D</title></info>
@@ -1810,7 +1802,7 @@ bin.includes = META-INF/,\ .
 					shows the plugin.xml file that was created.
 				</para>
 
-				<example xml:id="pluginXMLexample"><info><title>plugin.xml</title></info>				</example>
+				<example xml:id="pluginXMLexample"><info><title>plugin.xml</title></info>
 				
 					
 					<para>
@@ -1828,6 +1820,7 @@ bin.includes = META-INF/,\ .
 &lt;/plugin&gt;
 					</programlisting>
 					</para>
+					</example>
 
 
 
@@ -1845,7 +1838,7 @@ bin.includes = META-INF/,\ .
 					interface :
 				</para>
 
-				<example xml:id="examplePlugin"><info><title>ExamplePlugin.java</title></info>				</example>
+				<example  xml:id="examplePlugin"><info><title>ExamplePlugin.java</title></info>
 				
 					
 					<para>
@@ -1867,7 +1860,7 @@ public class ExamplePerspective implements IPerspectiveFactory {
 }
 					</programlisting>
 					</para>
-
+			</example>
 				<para>
 					You have created your first perspective !
 				</para>

@@ -755,7 +755,7 @@ private static void printMessageAndWait() {
         you can specify the number of workers from the command line. Feel free
         to edit scripts to specify another deployment descriptor.</para>
 
-        <screen>bash-3.00$ ./integralpi.sh
+        <programlisting>bash-3.00$ ./integralpi.sh
 
 --- IntegralPi --------------------------------------------------
 The number of workers is 4
@@ -811,7 +811,7 @@ Generating class : pa.stub.org.objectweb.proactive.examples.integralpi.Stub_Work
 
 Calculated PI is 3.141592653598117 error is 8.324008149429574E-12
 
-Enter the number of iterations (0 to exit) :  </screen>
+Enter the number of iterations (0 to exit) : </programlisting>
     </section>
   </section>
 </chapter>

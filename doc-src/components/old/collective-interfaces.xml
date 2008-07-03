@@ -688,9 +688,7 @@
 				Timeouts for gathercast invocations are specified by an
 				annotation on the method subject to the timeout, the
 				value of the timeout is specified in milliseconds:
-				<programlisting xml:lang="java">
-					@org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro(timeout=20)
-				</programlisting>
+				<programlisting xml:lang="java">@org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro(timeout=20)</programlisting>
 			</para>
 
 			<para>
@@ -718,9 +716,7 @@
 			<para>
 				Thus, this specific feature can be used by the same annotation
 				as for the timeout but with a different attribute:
-				<programlisting xml:lang="java">
-					@org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro(waitForAll=false)
-				</programlisting>
+				<programlisting xml:lang="java">@org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro(waitForAll=false)</programlisting>
 				Therefore, the waitForAll attribute accepts boolean values
 				and has for default value "true" (same behavior as if
 				the annotation is not specified).
