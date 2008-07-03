@@ -129,6 +129,7 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
     private List<String> listOFids;
     private final Map<String, String> srcContentsToAdd = new HashMap<String, String>();
     private final List<String> srcFilesAlreadyAdded = new Vector<String>();
+    private boolean valid = true;
 
     /**
      * @param fileName
@@ -195,6 +196,11 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
             if (!resultFile.renameTo(inputFile)) {
                 throw new IOException("Could not rename file " + resultFile + " to " + inputFile + ".");
             }
+            if (!handler.isValid())
+                System.exit(1);
+            else {
+                System.exit(0);
+            }
         } catch (final IOException t) {
             DocBookize.logger.error(t.getMessage(), t);
         } catch (final SAXNotRecognizedException e) {
@@ -206,6 +212,8 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
         } catch (final ParserConfigurationException e) {
             DocBookize.logger.error(e.getMessage(), e);
         }
+        //reacheable only if there was an exception
+        System.exit(1);
     }
 
     /**
@@ -222,8 +230,10 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
             this.writeToOutputFile(DocBookize.DOC_RUN_COMMENT + DocBookize.EOL);
         } catch (final UnsupportedEncodingException e) {
             DocBookize.logger.error(e.getMessage(), e);
+            valid = false;
         } catch (final FileNotFoundException e) {
             DocBookize.logger.error("Cannot create file: " + this.outputFileName + "\n" + e.getMessage(), e);
+            valid = false;
         }
 
     }
@@ -234,6 +244,7 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
         try {
             this.out.close();
         } catch (final IOException e) {
+            valid = false;
             DocBookize.logger.error("Could not close file: " + this.out + "\n" + e.getMessage(), e);
         }
     }
@@ -544,10 +555,12 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
             return fileContent.toString().replaceAll(DocBookize.AMPERSAND, DocBookize.AMPERSAND_REPLACE)
                     .replaceAll(DocBookize.TAG_START, DocBookize.LT);
         } catch (final FileNotFoundException e1) {
+            valid = false;
             DocBookize.logger.info("Could not read file: " + fullFileName);
             //displays the full stack trace, not necessary on regular runs
             DocBookize.logger.debug("Could not find file: " + fullFileName, e1);
         } catch (final IOException e) {
+            valid = false;
             DocBookize.logger.info("Could not read or write to file: " + fullFileName);
             //the full stack trace, not necessary on regular runs
             DocBookize.logger.debug("Could not read or write to file: " + fullFileName, e);
@@ -571,6 +584,7 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
             try {
                 this.out.write(s);
             } catch (final IOException e) {
+                valid = false;
                 throw new SAXException("I/O error writing to temp file", e);
             }
         }
@@ -656,5 +670,9 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
      * @see org.xml.sax.ext.LexicalHandler#endEntity(java.lang.String)
      */
     public void endEntity(final String ent) throws SAXException {
+    }
+
+    public boolean isValid() {
+        return valid;
     }
 }
