@@ -49,14 +49,14 @@ import org.apache.log4j.Logger;
 public final class SnippetExtractorFactory {
     private static Logger logger = Logger.getLogger(SnippetExtractorFactory.class.getName());
 
-    static String startAnnotationFractal = "<!--@snippet-start";
-    static String endAnnotationFractal = "<!--@snippet-end";
+    static String startAnnotationFractal = "@snippet-start";
+    static String endAnnotationFractal = "@snippet-end";
 
     static String startAnnotationJava = "@snippet-start";
     static String endAnnotationJava = "@snippet-end";
 
-    static String startAnnotationXML = "<!--@snippet-start";
-    static String endAnnotationXML = "<!--@snippet-end";
+    static String startAnnotationXML = "@snippet-start";
+    static String endAnnotationXML = "@snippet-end";
 
     /**
      * This class will not be instantiated 
