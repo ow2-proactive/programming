@@ -57,7 +57,7 @@ public class Snippetizer {
      * the tag strings for other purposes than extracting code. 
      */
     private final List<String> EXCLUDED_FILES = Arrays.asList(new String[] { "SnippetExtractorFactory.java",
-            "UpdateCopyrightAndVersion.java" });
+            "UpdateCopyrightAndVersion.java", "PA_index.xml" });
     private final File targetDir;
     private String[] fileTypes = { ".java", ".xml", ".fractal" };
 
