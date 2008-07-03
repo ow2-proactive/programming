@@ -47,24 +47,23 @@ public class ProcessForGroupCreation extends AbstractProcessForGroup implements 
     private Class<?>[] genericParameters;
     private Object[] param;
     private Node node;
-    private int index;
     private CountDownLatch doneSignal;
 
     public ProcessForGroupCreation(ProxyForGroup proxyGroup, String className, Class<?>[] genericParameters,
-            Object[] param, Node node, int index, CountDownLatch doneSignal) {
+            Object[] param, Node node, int groupIndex, CountDownLatch doneSignal) {
         this.proxyGroup = proxyGroup;
         this.className = className;
         this.genericParameters = genericParameters;
         this.param = param;
         this.node = node;
-        this.index = index;
+        this.groupIndex = groupIndex;
         this.doneSignal = doneSignal;
     }
 
     public void run() {
         try {
-            this.proxyGroup.set(this.index, PAActiveObject.newActive(className, genericParameters, param,
-                    node));
+            this.proxyGroup.set(this.groupIndex, PAActiveObject.newActive(className, genericParameters,
+                    param, node));
         } catch (Exception e) {
             e.printStackTrace();
             // FIXME throw exception (using Callable task)
