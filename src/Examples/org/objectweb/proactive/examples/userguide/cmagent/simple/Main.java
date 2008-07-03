@@ -29,6 +29,7 @@
  * ################################################################
  */
 
+//@snippet-start CMA_Main
 package org.objectweb.proactive.examples.userguide.cmagent.simple;
 
 import org.objectweb.proactive.api.PAActiveObject;
@@ -61,3 +62,5 @@ public class Main {
         }
     }
 }
+//@snippet-end CMA_Main
+
