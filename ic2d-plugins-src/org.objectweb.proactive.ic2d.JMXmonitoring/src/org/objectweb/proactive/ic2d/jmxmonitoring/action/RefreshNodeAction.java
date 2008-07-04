@@ -32,12 +32,12 @@ package org.objectweb.proactive.ic2d.jmxmonitoring.action;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 
 
 public class RefreshNodeAction extends Action {
     public static final String REFRESH_NODE = "Refresh Node";
-    private NodeObject node;
+    private ProActiveNodeObject node;
 
     public RefreshNodeAction() {
         this.setId(REFRESH_NODE);
@@ -46,7 +46,7 @@ public class RefreshNodeAction extends Action {
         this.setToolTipText("Look for new Active Objects");
     }
 
-    public void setNode(NodeObject node) {
+    public void setNode(ProActiveNodeObject node) {
         this.node = node;
     }
 

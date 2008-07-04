@@ -30,17 +30,20 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.editpart;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
-import org.eclipse.draw2d.ConnectionLayer;
-import org.eclipse.draw2d.FreeformLayeredPane;
+import org.eclipse.draw2d.ConnectionAnchor;
+import org.eclipse.draw2d.EllipseAnchor;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.gef.ConnectionEditPart;
+import org.eclipse.gef.NodeEditPart;
+import org.eclipse.gef.Request;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.Communication;
 import org.objectweb.proactive.ic2d.jmxmonitoring.editpart.WorldEditPart.RefreshMode;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.AOFigure;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.NodeFigure;
@@ -50,35 +53,34 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
 
 
-public class AOEditPart extends AbstractMonitoringEditPart {
+public class AOEditPart extends AbstractMonitoringEditPart implements NodeEditPart {
 
     /**
-     * An empty list used to feed GEF for all instances of AO edit parts
-     * This list is empty beacause AO model has no children !
+     * The default color of an arrow used in <code>getArrowColor()</code>
+     * method of this class
      */
-    public static final List<AbstractData> emptyList = new java.util.ArrayList<AbstractData>(0);
+    public static final Color DEFAULT_ARROW_COLOR = new Color(Display.getCurrent(), 108, 108, 116);
 
     /**
-     * The default color of an arrow used in getArrowColor() method
+     * The anchor used to hook connections for communications representation
      */
-    private static final Color DEFAULT_ARROW_COLOR = new Color(Display.getCurrent(), 108, 108, 116);
-    private Integer length;
-
-    /*private Set<IFigure> figuresToUpdate;
-    private Set<GraphicalCommunication> communicationsToDraw;
-
-    private boolean shouldRepaint = true;*/
-    private AOFigure castedFigure;
-    private ActiveObject castedModel;
-    private NodeEditPart castedParentEditPart;
-    private NodeFigure castedParentFigure;
-    private IFigure globalPanel;
+    private ConnectionAnchor anchor;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
+
+    /**
+     * Creates a new instance of the class
+     * 
+     * @param model
+     *            The active object model
+     */
     public AOEditPart(ActiveObject model) {
         super(model);
+        // Initialize lists for source and target connections edit parts
+        super.sourceConnections = new ArrayList<CommunicationEditPart>(10);
+        super.targetConnections = new ArrayList<CommunicationEditPart>(10);
     }
 
     //
@@ -88,7 +90,7 @@ public class AOEditPart extends AbstractMonitoringEditPart {
     /**
      * This method is called whenever the observed object is changed. It calls
      * the method <code>refresh()</code>.
-     *
+     * 
      * @param o
      *            the observable object (instance of AbstractDataObject).
      * @param arg
@@ -105,85 +107,169 @@ public class AOEditPart extends AbstractMonitoringEditPart {
                 case STATE_CHANGED: {
                     final State state = (State) notificationdata;
                     if (state == State.NOT_MONITORED) {
-                        //       getCastedModel().removeAllConnections();
+                        // getCastedModel().removeAllConnections();
                         // getCastedFigure().removeConnections(getGlobalPanel());
 
-                        // If this clear is too brutal just filter on this (source||tagret) on clear
-                        //                        if (getWorldEditPart().getModel() == RefreshMode.FULL)
-                        //                            getWorldEditPart().clearCommunicationsAndRepaintFigure();
+                        // If this clear is too brutal just filter on this
+                        // (source||tagret) on clear
+                        // if (getWorldEditPart().getModel() == RefreshMode.FULL)
+                        // getWorldEditPart().clearCommunicationsAndRepaintFigure();
 
                     } else {
                         // COMMON REFRESH IE THE AO IS MONITORED JUST DO A REPAINT
                         // Set the new state directly
                         getCastedFigure().setState(state);
-                        // The state of this controller has changed repaint at the next 
+                        // The state of this controller has changed repaint at the
+                        // next
                         // reasonable opportunity
                         if (getWorldEditPart().getRefreshMode() == RefreshMode.FULL)
                             getViewer().getControl().getDisplay().syncExec(new Runnable() {
                                 public final void run() {
-                                    //getCastedFigure().refresh();
+                                    // getCastedFigure().refresh();
                                     getCastedFigure().repaint();
                                 }
                             });
-                    } //if else NOT_MONITORED
+                    } // if else NOT_MONITORED
                     break;
-                } //  case CTATE_CHANGED
-
-                    // Add communication
-                    //else if (arg instanceof HashSet) {
-                case ACTIVE_OBJECT_RESET_COMMUNICATIONS: {
-                    //   final AOFigure destination = getCastedFigure();
-                    //   final IFigure panel = getGlobalPanel();
-                    //               getViewer().getControl().getDisplay().syncExec(new Runnable() {
-                    //                   public final void run() {
-                    getCastedModel().removeAllConnections();
-                    //     	destination.removeConnections(panel);
-                    //                   }
-                    //               });
-                    //                getWorldEditPart().clearCommunications();
-                    break;
-                } //case ACTIVE_OBJECT_RESET_COMMUNICATIONS
-                case ACTIVE_OBJECT_ADD_COMMUNICATION: {
-                    //                     final ActiveObject aoSource = (ActiveObject) notificationdata;
-                    //                    final AOFigure destination = getCastedFigure();
-                    //                    final IFigure panel = getGlobalPanel();
-                    //                    //final IFigure panel=getConnectionLayer();
-                    //                    final AbstractMonitoringEditPart editPart = AbstractMonitoringEditPart.registry
-                    //                            .get(aoSource);
-                    //                    if (editPart != null) {
-                    //                        AOFigure source = (AOFigure) editPart.getFigure();
-                    //                        if (source != null) {
-                    //                            addGraphicalCommunication(new GraphicalCommunication(source, destination, panel,
-                    //                                getArrowColor()));
-                    //                        } else {
-                    //                            System.out.println("[Error] Unable to find the source");
-                    //                        }
-                    //                    }
-                    break;
-                } // case ACTIVE_OBJECT_ADD_COMMUNICATION 
-                case ACTIVE_OBJECT_REQUEST_QUEUE_LENGHT_CHANGED: {
-                    length = (Integer) notificationdata;
-                    getCastedFigure().setRequestQueueLength(length);
+                } // case STATE_CHANGED
+                case ACTIVE_OBJECT_ADD_OUTGOING_COMMUNICATION: {
+                    // The outgoing communication to add is in the notification
+                    final Communication communicationToAdd = (Communication) notificationdata;
+                    // IMPORTANT NOTE : Usually the Thread that executes this code
+                    // is NOT an SWT Thread.
+                    // Therefore we have to submit a runnable that will be executed
+                    // by the SWT Thread.
+                    Display.getDefault().asyncExec(new Runnable() {
+                        @SuppressWarnings("unchecked")
+                        public final void run() {
+                            // Create new connection edit part
+                            final ConnectionEditPart connection = createOrFindConnection(communicationToAdd);
+                            sourceConnections.add(connection);
+                            final AOEditPart source = (AOEditPart) connection.getSource();
+                            if (source != null)
+                                source.getSourceConnections().remove(connection);
+                            connection.setSource(AOEditPart.this);
+                        }
+                    });
                     break;
                 }
-                    //                case SOURCE_CONNECTIONS_CHANGED:
-                    //                {
-                    //                	//System.out.println("...................refresh source for "+getModel());
-                    //                	//this.refreshSourceConnections();
-                    //                	//this.refresh();
-                    //                }
-                    //                case TARGET_CONNECTIONS_CHANGED:
-                    //                {
-                    //                	//System.out.println("...................refresh target for "+getModel());
-                    //                	//this.refreshTargetConnections();
-                    //                	//this.refresh();
-                    //                }
-                    //                
-                    //case ACTIVE_OBJECT_REQUEST_QUEUE_LENGHT_CHANGED:
+                case ACTIVE_OBJECT_ADD_INCOMING_COMMUNICATION: {
+                    // The incoming communication to add is in the notification
+                    final Communication communicationToAdd = (Communication) notificationdata;
+                    // IMPORTANT NOTE : Usually the Thread that executes this code
+                    // is NOT an SWT Thread.
+                    // Therefore we have to submit a runnable that will be executed
+                    // by the SWT Thread.
+                    Display.getDefault().asyncExec(new Runnable() {
+                        @SuppressWarnings("unchecked")
+                        public final void run() {
+                            // Create a new connection edit part
+                            final ConnectionEditPart connection = createOrFindConnection(communicationToAdd);
+                            targetConnections.add(connection);
+                            final AOEditPart target = (AOEditPart) connection.getTarget();
+                            if (target != null)
+                                target.getTargetConnections().remove(connection);
+                            connection.setTarget(AOEditPart.this);
+                        }
+                    });
+                    break;
+                }
+                case ACTIVE_OBJECT_REMOVE_OUTGOING_COMMUNICATION: {
+                    // The model of the outgoing communication to remove
+                    final Communication communicationToRemove = (Communication) notificationdata;
+                    CommunicationEditPart partToRemove = null;
+                    // Find the corresponding edit part of the communication
+                    for (final Object object : this.getSourceConnections()) {
+                        final CommunicationEditPart ep = (CommunicationEditPart) object;
+                        if (communicationToRemove == ep.getModel()) {
+                            partToRemove = ep;
+                            break;
+                        }
+                    }
+                    // If the part of the model is not found throw an exception
+                    if (partToRemove == null) {
+                        throw new IllegalArgumentException(
+                            "Cannot remove a source connection edit part for communication " +
+                                communicationToRemove + " of the active object " + getCastedModel().getName());
+                    }
+                    final CommunicationEditPart finalPartToRemove = partToRemove;
+                    // IMPORTANT NOTE : If the Thread that executes this instruction
+                    // is an SWT Thread (see Display.getDefault().asyncExec())
+                    // we MUST NOT submit a runnable asynchronously or GEF will
+                    // throw a NullPointerException
+                    Display.getDefault().asyncExec(new Runnable() {
+                        public final void run() {
+                            removeSourceConnection(finalPartToRemove);
+                        }
+                    });
+                    break;
+                }
+                case ACTIVE_OBJECT_REMOVE_INCOMING_COMMUNICATION: {
+                    // The model of the incoming communication to remove
+                    final Communication communicationToRemove = (Communication) notificationdata;
+                    CommunicationEditPart partToRemove = null;
+                    // Find the corresponding edit part of the communication
+                    for (final Object object : this.getTargetConnections()) {
+                        final CommunicationEditPart ep = (CommunicationEditPart) object;
+                        if (communicationToRemove == ep.getModel()) {
+                            partToRemove = ep;
+                            break;
+                        }
+                    }
+                    // If the part of the model is not found throw an exception
+                    if (partToRemove == null) {
+                        throw new IllegalArgumentException(
+                            "Cannot remove a target connection edit part for communication " +
+                                communicationToRemove + " of the active object " + getCastedModel().getName());
+                    }
+                    final CommunicationEditPart finalPartToRemove = partToRemove;
+                    // IMPORTANT NOTE : If the Thread that executes this instruction
+                    // is an SWT Thread (see Display.getDefault().asyncExec())
+                    // we MUST NOT submit a runnable asynchronously or GEF will
+                    // throw a NullPointerException
+                    Display.getDefault().asyncExec(new Runnable() {
+                        public final void run() {
+                            removeTargetConnection(finalPartToRemove);
+                        }
+                    });
+                    break;
+                }
+                case ACTIVE_OBJECT_REMOVE_ALL_OUTGOING_COMMUNICATION: {
+                    // Simply refresh all source connections
+
+                    // IMPORTANT NOTE : If the Thread that executes this instruction
+                    // is an SWT Thread (see Display.getDefault().asyncExec())
+                    // we MUST NOT submit a runnable asynchronously or GEF can
+                    // throw a NullPointerException
+                    Display.getDefault().asyncExec(new Runnable() {
+                        public final void run() {
+                            refreshSourceConnections();
+                        }
+                    });
+                    break;
+                }
+                case ACTIVE_OBJECT_REMOVE_ALL_INCOMING_COMMUNICATION: {
+                    // Simply refresh all target connections
+
+                    // IMPORTANT NOTE : If the Thread that executes this instruction
+                    // is an SWT Thread (see Display.getDefault().asyncExec())
+                    // we MUST NOT submit a runnable asynchronously or GEF can
+                    // throw a NullPointerException
+                    Display.getDefault().asyncExec(new Runnable() {
+                        public final void run() {
+                            refreshTargetConnections();
+                        }
+                    });
+                    break;
+                }
+                case ACTIVE_OBJECT_REQUEST_QUEUE_LENGHT_CHANGED: {
+                    getCastedFigure().setRequestQueueLength((Integer) notificationdata);
+                    break;
+                }
                 default:
                     super.update(o, arg);
-            } //switch 
-        } //if arg is Notification     
+            } // switch
+        } // if arg is Notification
     }
 
     //
@@ -193,10 +279,11 @@ public class AOEditPart extends AbstractMonitoringEditPart {
     /**
      * Returns a new view associated with the type of model object the EditPart
      * is associated with. So here, it returns a new NodeFigure.
+     * 
      * @return a new NodeFigure view associated with the NodeObject model.
      */
     protected IFigure createFigure() {
-        AOFigure figure = new AOFigure(getCastedModel().getName() /*getFullName()*/);
+        AOFigure figure = new AOFigure(getCastedModel().getName() /* getFullName() */);
         AOListener listener = new AOListener(getCastedModel(), figure, getMonitoringView(),
             getCastedParentFigure());
         figure.addMouseListener(listener);
@@ -206,94 +293,76 @@ public class AOEditPart extends AbstractMonitoringEditPart {
 
     protected Color getArrowColor() {
         // Avoid creating a new instance of color by returning a default one
-        return DEFAULT_ARROW_COLOR; //new Color(Display.getCurrent(), 108, 108, 116);
-    }
-
-    /**
-     * Returns a List containing the children model objects.
-     * @return the List of children
-     */
-    protected List<AbstractData> getModelChildren() {
-        // NO CHILDREN FOR THIS MODEL !!!
-        return emptyList;
+        return DEFAULT_ARROW_COLOR; // new Color(Display.getCurrent(), 108, 108,
+        // 116);
     }
 
     @Override
     protected void createEditPolicies() { /* Do nothing */
     }
 
-    //
-    // -- PRIVATE METHODS -----------------------------------------------
-    //
-
     /**
-     * Convert the result of EditPart.getModel()
-     * to AOObject (the real type of the model).
+     * Convert the result of EditPart.getModel() to AOObject (the real type of
+     * the model).
+     * 
      * @return the casted model
      */
-    @SuppressWarnings("unchecked")
     @Override
     public ActiveObject getCastedModel() {
-        if (castedModel == null) {
-            castedModel = (ActiveObject) getModel();
-        }
-        return castedModel;
+        return (ActiveObject) getModel();
     }
 
     /**
-     * Convert the result of EditPart.getFigure()
-     * to AOFigure (the real type of the figure).
+     * Convert the result of EditPart.getFigure() to AOFigure (the real type of
+     * the figure).
+     * 
      * @return the casted figure
      */
-    @SuppressWarnings("unchecked")
     @Override
     public AOFigure getCastedFigure() {
-        if (castedFigure == null) {
-            castedFigure = (AOFigure) getFigure();
-        }
-        return castedFigure;
+        return (AOFigure) super.getFigure();
     }
 
-    private NodeEditPart getCastedParentEditPart() {
-        if (castedParentEditPart == null) {
-            castedParentEditPart = (NodeEditPart) getParent();
-        }
-        return castedParentEditPart;
+    private ProActiveNodeEditPart getCastedParentEditPart() {
+        return (ProActiveNodeEditPart) super.getParent();
     }
 
     private NodeFigure getCastedParentFigure() {
-        if (castedParentFigure == null) {
-            castedParentFigure = (NodeFigure) getCastedParentEditPart().getFigure();
-        }
-        return castedParentFigure;
+        return (NodeFigure) this.getCastedParentEditPart().getFigure();
     }
 
-    private IFigure getGlobalPanel() {
-        if (globalPanel == null) {
-            globalPanel = getWorldEditPart().getFigure().getParent();
+    //
+    // -- GEF NodeEditPart IMPLEMENTATION ----------------------------
+    //
+
+    protected ConnectionAnchor getConnectionAnchor() {
+        if (anchor == null) {
+            anchor = new EllipseAnchor(getFigure());
         }
-        return globalPanel;
+        return anchor;
     }
 
-    private IFigure getConnectionLayer() {
-        FreeformLayeredPane flp = (FreeformLayeredPane) getWorldEditPart().getFigure().getParent()
-                .getParent();
-        @SuppressWarnings("unchecked")
-        Iterator c = flp.getChildren().iterator();
-        IFigure conLayer = null;
-        while (c.hasNext()) {
-            IFigure f = (IFigure) c.next();
-            if (f instanceof ConnectionLayer)
-                conLayer = f;
-        }
-
-        return conLayer;
-
+    public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart connection) {
+        return this.getConnectionAnchor();
     }
 
-    @Override
-    public void deactivate() {
-        getCastedModel().resetCommunications();
-        super.deactivate();
+    public ConnectionAnchor getSourceConnectionAnchor(Request request) {
+        return this.getConnectionAnchor();
+    }
+
+    public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart connection) {
+        return this.getConnectionAnchor();
+    }
+
+    public ConnectionAnchor getTargetConnectionAnchor(Request request) {
+        return this.getConnectionAnchor();
+    }
+
+    protected List<Communication> getModelSourceConnections() {
+        return getCastedModel().getOutgoingCommunications();
+    }
+
+    protected List<Communication> getModelTargetConnections() {
+        return getCastedModel().getIncomingCommunications();
     }
 }

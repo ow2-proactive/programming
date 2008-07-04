@@ -62,6 +62,12 @@ public enum MVCNotificationTag {
      */
     REMOVE_CHILD,
     /**
+     * Notification message sent when a set of children (ActieObject(s)) has been removed from an
+     * <code> org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject </code> object.
+     * Use a list with the keys corresponding to the child as data in the MVCNotificatio
+     */
+    REMOVE_CHILDREN,
+    /**
      * Notification message sent when a child of a
      * <code> org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData </code> object
      * is no longer monitored.
@@ -121,18 +127,47 @@ public enum MVCNotificationTag {
      */
     RUNTIME_OBJECT_RUNTIME_NOT_MONITORED,
     /**
-     * Notification message sent when an <code> ActiveObject </code> has received a communication.
+     * Notification message sent when an <code>ActiveObject</code> has received an outgoing communication (ie the active object is the source of the communication).
+     * Us an <code> org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject </code> representing
+     * the source of the communication as data in the MVCNotification object.
+     */
+    ACTIVE_OBJECT_ADD_OUTGOING_COMMUNICATION,
+    /**
+     * Notification message sent when an <code> ActiveObject </code> has received an incoming communication (ie the active object is the destination of the communication).
      * Us an <code> org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject </code> representing
      * the source of the communication  as data in the MVCNotification object.
      */
-    ACTIVE_OBJECT_ADD_COMMUNICATION,
+    ACTIVE_OBJECT_ADD_INCOMING_COMMUNICATION,
+    /**
+     * Notification message sent when an <code> ActiveObject </code> has removed an outgoing communication (ie the active object is the source of the communication).
+     * Us an <code> org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject </code> representing
+     * the source of the communication  as data in the MVCNotification object.
+     */
+    ACTIVE_OBJECT_REMOVE_OUTGOING_COMMUNICATION,
+    /**
+     * Notification message sent when an <code> ActiveObject </code> has removed an incoming communication (ie the active object is the destination of the communication). 
+     * Us an <code> org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject </code> representing
+     * the source of the communication  as data in the MVCNotification object.
+     */
+    ACTIVE_OBJECT_REMOVE_INCOMING_COMMUNICATION,
+    /**
+     * Notification message sent when an <code> ActiveObject </code> has removed all outgoing communication (ie the active object is the source of the communication). 
+     * Us an <code> org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject </code> representing
+     * the source of the communication  as data in the MVCNotification object.
+     */
+    ACTIVE_OBJECT_REMOVE_ALL_OUTGOING_COMMUNICATION,
+    /**
+     * Notification message sent when an <code> ActiveObject </code> has removed all incoming communication (ie the active object is the destination of the communication). 
+     * Us an <code> org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject </code> representing
+     * the source of the communication  as data in the MVCNotification object.
+     */
+    ACTIVE_OBJECT_REMOVE_ALL_INCOMING_COMMUNICATION,
     /**
      * Notification message sent when the communications to and from an <code> ActiveObject </code> have
      * been reseted.
      * No data has to be sent in the MVCNotification object.
      */
     ACTIVE_OBJECT_RESET_COMMUNICATIONS,
-
     /**
      * Notification message sent when the request queue length
      * has been changed for an <code> ActiveObject </code>.

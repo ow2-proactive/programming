@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Observable;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.swt.widgets.Display;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.HostObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.HostFigure;
@@ -43,7 +44,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
 
 
-public class HostEditPart extends AbstractMonitoringEditPart {
+public final class HostEditPart extends AbstractMonitoringEditPart {
     private HostObject castedModel;
     private HostFigure castedFigure;
 
@@ -93,7 +94,12 @@ public class HostEditPart extends AbstractMonitoringEditPart {
         switch (mvcNotif) {
             case STATE_CHANGED: {
                 if (data == State.NOT_MONITORED) {
-                    deactivate();
+                    Display.getDefault().asyncExec(new Runnable() {
+                        public final void run() {
+                            refreshChildren();
+                        }
+                    });
+                    return;
                 }
             }
             case HOST_OBJECT_UPDATED_OSNAME_AND_VERSON: {

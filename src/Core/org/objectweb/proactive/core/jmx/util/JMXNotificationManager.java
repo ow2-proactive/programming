@@ -316,6 +316,7 @@ public class JMXNotificationManager implements NotificationListener {
             @SuppressWarnings("unchecked")
             ConcurrentLinkedQueue<Notification> notifications = (ConcurrentLinkedQueue<Notification>) notification
                     .getUserData();
+
             String msg = notification.getMessage();
 
             try {

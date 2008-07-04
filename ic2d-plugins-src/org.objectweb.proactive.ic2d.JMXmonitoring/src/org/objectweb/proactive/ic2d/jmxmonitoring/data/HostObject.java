@@ -30,11 +30,9 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.data;
 
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.management.MBeanServerInvocationHandler;
@@ -43,7 +41,6 @@ import javax.management.ObjectName;
 
 import org.objectweb.proactive.core.jmx.ProActiveConnection;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
-import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.ic2d.jmxmonitoring.finder.RemoteObjectHostRTFinder;
 import org.objectweb.proactive.ic2d.jmxmonitoring.finder.RuntimeFinder;
@@ -54,7 +51,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 /**
  * Holder class for the host data representation.
  */
-public class HostObject extends AbstractData {
+public final class HostObject extends AbstractData {
     private WorldObject parent;
     private String url;
     private String hostName;
@@ -63,10 +60,15 @@ public class HostObject extends AbstractData {
     private int rank;
     private final static String DEFAULT_NAME = "undefined";
 
-    //Warning: Don't use this variavle directly, use getOSName().
+    /**
+     * This variable is used to avoid blocking calls to explore method ie lock-free call to explore method
+     */
+    private volatile boolean isExploring = false;
+
+    //Warning: Don't use this variable directly, use getOSName().
     private String osName;
 
-    //Warning: Don't use this vaiable directly, use getOSVersion().
+    //Warning: Don't use this variable directly, use getOSVersion().
     private String osVersion;
 
     /**
@@ -145,8 +147,8 @@ public class HostObject extends AbstractData {
     }
 
     /**
-     * Returns the operating sytem version.
-     * @return The operating sytem version.
+     * Returns the operating system version.
+     * @return The operating system version.
      */
     public String getOSVersion() {
         if (osVersion == null) {
@@ -158,8 +160,15 @@ public class HostObject extends AbstractData {
 
     @Override
     public void explore() {
-        //    System.out.println(this);
-        refreshRuntimes();
+        // If this host is already being explored then return silently
+        if (this.isExploring) {
+            return;
+        }
+        if (super.isMonitored) {
+            this.isExploring = true;
+            refreshRuntimes();
+            this.isExploring = false;
+        }
     }
 
     @Override
@@ -180,34 +189,19 @@ public class HostObject extends AbstractData {
     }
 
     /**
-     * Propose à l'host de s'ajouter s'il y arrive le fils donné en paramètre.
-     */
-    public void proposeChild() {
-    }
-
-    /**
      * Updates the set of IC2D's RuntimeObjects so that it is in sync with the ProActive Runtimes on the monitored Host.
      * The update is performed by comparing the existing RuntimeObjects with the set of ProActive Runtimes
      * returned from <code> RemoteObjectHostRTFinder.getRuntimeObjects(HostObject host) </code>
      *
      */
-    @SuppressWarnings("unchecked")
     private void refreshRuntimes() {
         RuntimeFinder rfinder = new RemoteObjectHostRTFinder();
         Collection<RuntimeObject> runtimeObjects = rfinder.getRuntimeObjects(this);
 
         Map<String, AbstractData> childrenToRemoved = this.getMonitoredChildrenAsMap();
 
-        Iterator<RuntimeObject> it = runtimeObjects.iterator();
-        while (it.hasNext()) {
-            RuntimeObject runtimeObject = it.next();
-
-            // If this child is a NOT monitored child.
-            if (containsChildInNOTMonitoredChildren(runtimeObject.getKey())) {
-                continue;
-            }
-
-            RuntimeObject child = (RuntimeObject) this.getMonitoredChild(runtimeObject.getKey());
+        for (final RuntimeObject runtimeObject : runtimeObjects) {
+            RuntimeObject child = (RuntimeObject) this.getChild(runtimeObject.getKey());
 
             // If this child is not yet monitored.
             if (child == null) {
@@ -215,17 +209,16 @@ public class HostObject extends AbstractData {
                 addChild(runtimeObject);
                 updateOSNameAndVersion(runtimeObject.getProActiveConnection());
             }
-            // This child is already monitored, but this child maybe contains some not monitord objects.
+            // This child is already monitored, but this child maybe contains some not monitored objects.
             child.explore();
 
-            // Removes from the model the not monitored or termined runtimes.
+            // Removes from the model the not monitored or terminated runtimes.
             childrenToRemoved.remove(child.getKey());
         }
 
         // Some child have to be removed
-        for (Iterator<AbstractData> iter = childrenToRemoved.values().iterator(); iter.hasNext();) {
-            RuntimeObject child = (RuntimeObject) iter.next();
-            child.destroy();
+        for (final AbstractData data : childrenToRemoved.values()) {
+            ((RuntimeObject) data).destroy();
         }
     }
 
@@ -235,10 +228,8 @@ public class HostObject extends AbstractData {
             try {
                 OSoname = new ObjectName(ManagementFactory.OPERATING_SYSTEM_MXBEAN_NAME);
             } catch (MalformedObjectNameException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (NullPointerException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -263,19 +254,9 @@ public class HostObject extends AbstractData {
     public synchronized void addChild(AbstractData child) {
         if (child instanceof RuntimeObject) {
             RuntimeObject runtimeObject = (RuntimeObject) child;
-            ObjectName oname = runtimeObject.getObjectName();
-            try {
-                JMXNotificationManager.getInstance().subscribe(oname, runtimeObject.getListener(),
-                        runtimeObject.getUrl());
-
+            if (runtimeObject.subscribeListener()) {
                 super.addChild(child);
-
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                System.out.println("HostObject: could not add child: " + child.getName());
-                e.printStackTrace();
             }
         }
-
     }
 }

@@ -54,7 +54,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
  * @author The ProActive Team
  *
  */
-public class MonitorThread implements Observer {
+public final class MonitorThread implements Observer {
     private static org.apache.log4j.Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
     private final static int DEFAULT_TTR = 10;
     private final static int DEFAULT_TIME_SELECTIVE_REFRESH = 10;
@@ -204,7 +204,9 @@ public class MonitorThread implements Observer {
                     Console
                             .getInstance(Activator.CONSOLE_NAME)
                             .err(
-                                    "Refresh could not be performed. See logged errors for more details. Make shure the same ProActive version is used for IC2D and all monitored ressources.");
+                                    "Refresh could not be performed. See logged errors for more details. Make sure the same ProActive version is used for IC2D and all monitored ressources. Reason : " +
+                                        e);
+                    e.printStackTrace();
                 }
 
                 try {
@@ -226,7 +228,7 @@ public class MonitorThread implements Observer {
                 objectsToRefreshSelectively.clear();
 
                 try {
-                    Thread.sleep(timeForSelectiveRefresh * 1000);
+                    Thread.sleep(timeForSelectiveRefresh * 2000);
                 } catch (InterruptedException e) {
                     System.out.println("Ic2d selective exploring thread has been interupted.");
                 }

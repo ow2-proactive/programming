@@ -46,20 +46,20 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.action.RefreshNodeAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.SetUpdateFrequenceAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.StopMonitoringAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.dnd.DragAndDrop;
 import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.NodeFigure;
 import org.objectweb.proactive.ic2d.jmxmonitoring.view.MonitoringView;
 
 
-public class NodeListener implements MouseListener, MouseMotionListener {
-    private ActionRegistry registry;
-    private NodeObject node;
-    private NodeFigure figure;
-    private DragAndDrop dnd;
+public final class NodeListener implements MouseListener, MouseMotionListener {
+    private final ActionRegistry registry;
+    private final ProActiveNodeObject node;
+    private final NodeFigure figure;
+    private final DragAndDrop dnd;
 
-    public NodeListener(NodeObject node, NodeFigure figure, MonitoringView monitoringView) {
+    public NodeListener(ProActiveNodeObject node, NodeFigure figure, MonitoringView monitoringView) {
         this.registry = monitoringView.getGraphicalViewer().getActionRegistry();
         this.node = node;
         this.figure = figure;
@@ -113,11 +113,17 @@ public class NodeListener implements MouseListener, MouseMotionListener {
     public void mouseReleased(MouseEvent me) {
         if (me.button == 1) {
             final ActiveObject source = dnd.getSource();
-            NodeObject sourceNode = dnd.getSourceNode();
+            final ProActiveNodeObject sourceNode = dnd.getSourceNode();
             if (source != null) {
                 if (sourceNode.equals(this.node)) {
-                    figure.setHighlight(null);
-                    dnd.reset();
+                    this.internalCancel();
+                    return;
+                }
+                // If the destination node is not monitored the migration is prohibited
+                if (!this.node.isMonitored()) {
+                    this.internalCancel();
+                    Console.getInstance(Activator.CONSOLE_NAME)
+                            .log("Cannot migrate on a not monitored node.");
                     return;
                 }
                 if ((sourceNode.getParent().equals(node.getParent())) ||
@@ -133,22 +139,25 @@ public class NodeListener implements MouseListener, MouseMotionListener {
                                         " )  " +
                                         "target node = " +
                                         node.getName() + "  (RT: " + node.getParent().getName() + " ) ");
-                    figure.setHighlight(null);
-                    dnd.reset();
+                    this.internalCancel();
                     return;
                 }
 
                 /*------------ Migration ------------*/
                 new Thread(new Runnable() {
                     public void run() {
-                        source.migrateTo(node.getUrl());
+                        source.migrateTo(node);
                     }
                 }).start();
                 /*----------------------------------*/
-                figure.setHighlight(null);
-                dnd.reset();
+                this.internalCancel();
             }
         }
+    }
+
+    private void internalCancel() {
+        figure.setHighlight(null);
+        dnd.reset();
     }
 
     //---- MouseMotionListener 

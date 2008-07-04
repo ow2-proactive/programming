@@ -118,7 +118,7 @@ public class RemoteObjectHostRTFinder implements RuntimeFinder {
                     try {
 
                         /*RemoteObject ro = RemoteObjectFactory.getRemoteObjectFactory(host.getProtocol()).lookup(url);*/
-                        RemoteObject ro = null;
+                        RemoteObject<?> ro = null;
                         try {
                             ro = RemoteObjectHelper.lookup(url);
                         } catch (ProActiveException e) {
@@ -131,7 +131,7 @@ public class RemoteObjectHostRTFinder implements RuntimeFinder {
                         Object stub = null;
                         try {
                             stub = RemoteObjectHelper.generatedObjectStub(ro);
-                        } catch (ProActiveException e) {
+                        } catch (Exception e) {
                             nbZombieStubs++;
                             System.out.println("Could not generate stub for " + url);
                             continue;

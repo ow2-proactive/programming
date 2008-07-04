@@ -34,7 +34,7 @@ import org.objectweb.proactive.core.jmx.ProActiveConnection;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 
 
-public class VirtualNodeObject extends AbstractData {
+public final class VirtualNodeObject extends AbstractData {
     private WorldObject parent;
 
     /** The virtual node name */

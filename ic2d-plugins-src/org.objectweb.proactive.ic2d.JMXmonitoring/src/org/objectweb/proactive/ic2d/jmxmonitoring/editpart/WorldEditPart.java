@@ -43,13 +43,16 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.WorldListener;
 import org.objectweb.proactive.ic2d.jmxmonitoring.view.MonitoringView;
 
 
-public class WorldEditPart extends AbstractMonitoringEditPart {
-    private FreeformLayer layer;
-    private MonitoringView monitoringView;
-    private WorldObject castedModel;
-    private IFigure castedFigure;
+public final class WorldEditPart extends AbstractMonitoringEditPart {
+
     public static final boolean DEFAULT_DISPLAY_TOPOLOGY = true;
     private static boolean displayTopology = DEFAULT_DISPLAY_TOPOLOGY;
+
+    private FreeformLayer layer;
+    private final MonitoringView monitoringView;
+    private final WorldObject castedModel;
+    private IFigure castedFigure;
+
     /*
      * A repaint will be done each TIME_TO_REFRESH mls 
      */
@@ -65,23 +68,11 @@ public class WorldEditPart extends AbstractMonitoringEditPart {
 
     private RefreshMode mode = RefreshMode.OPTIMAL;
 
-    //private final Set<IFigure> figuresToUpdate;
-    //    private final java.util.Map<Integer, GraphicalCommunication> communicationsToDraw;
     private boolean shouldRepaint = true;
+
     private final Runnable drawRunnable = new Runnable() {
         public final void run() {
-            //            for (final GraphicalCommunication communication : communicationsToDraw.values()) {
-            //                communication.draw();
-            //            }
-            //            communicationsToDraw.clear();
             getFigure().repaint();
-
-        }
-    };
-
-    private final Runnable resetCommunicationsRunnable = new Runnable() {
-        public final void run() {
-            ((WorldObject) WorldEditPart.this.getModel()).resetCommunications();
 
         }
     };
@@ -89,12 +80,10 @@ public class WorldEditPart extends AbstractMonitoringEditPart {
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
-    public WorldEditPart(WorldObject model, MonitoringView monitoringView) {
+    public WorldEditPart(final WorldObject model, final MonitoringView monitoringView) {
         super(model);
+        this.castedModel = model;
         this.monitoringView = monitoringView;
-
-        //this.figuresToUpdate = Collections.synchronizedSet(new HashSet<IFigure>());
-        //        this.communicationsToDraw = new java.util.concurrent.ConcurrentHashMap<Integer, GraphicalCommunication>(); //Collections.synchronizedSet(new HashSet<GraphicalCommunication>());
 
         new Thread() {
             @Override
@@ -114,45 +103,11 @@ public class WorldEditPart extends AbstractMonitoringEditPart {
                 }
             }
         }.start();
-
-        //TODO: use this for resetting the commmunications
-        //        final int timeToReset=this.castedModel.getAutoResetTime();
-        //    
-        //        new Thread() {
-        //            @Override
-        //            public final void run() {
-        //                try {
-        //                    Control control;
-        //                    while (true) {
-        //                        Thread.sleep(timeToReset*1000);
-        //
-        //                        control = getViewer().getControl();
-        //                        if (control != null) {
-        //                            control.getDisplay().syncExec(WorldEditPart.this.resetCommunicationsRunnable);
-        //                        }
-        //                    }
-        //                } catch (InterruptedException e) {
-        //                    e.printStackTrace();
-        //                }
-        //            }
-        //        }.start();
     }
 
     //
     // -- PUBLICS METHODS -----------------------------------------------
     //
-    //    @Override
-    //    public final void addGraphicalCommunication(final GraphicalCommunication communication) {
-    //        if (!communicationsToDraw.containsKey(communication.hashCode())) {
-    //            this.communicationsToDraw.put(communication.hashCode(), communication);
-    //        }
-    //
-    //    }
-
-    //    @Override
-    //    public void addFigureToUpdtate(IFigure figure) {
-    //        //figuresToUpdate.add(figure);
-    //    }
 
     /**
      * Convert the result of EditPart.getModel()
@@ -162,49 +117,22 @@ public class WorldEditPart extends AbstractMonitoringEditPart {
     @SuppressWarnings("unchecked")
     @Override
     public WorldObject getCastedModel() {
-        if (castedModel == null) {
-            castedModel = (WorldObject) getModel();
-        }
-        return castedModel;
+        return this.castedModel;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public IFigure getCastedFigure() {
-        if (castedFigure == null) {
-            castedFigure = getFigure();
+        if (this.castedFigure == null) {
+            this.castedFigure = getFigure();
         }
-        return castedFigure;
+        return this.castedFigure;
     }
 
     @Override
     public IFigure getContentPane() {
-        return layer;
+        return this.layer;
     }
-
-    //    public void clearCommunicationsAndRepaintFigure() {
-    //        // Clear the communications
-    //        this.communicationsToDraw.clear();
-    //        final IFigure f = getFigure();
-    //
-    //        // Since the edit part has changed first force
-    //        // calling threads to execute the repaint one-by-one
-    //        // Each calling thread will execute the repaint at a reasonable opportunity
-    //        synchronized (f) {
-    //            getViewer().getControl().getDisplay().syncExec(new Runnable() {
-    //                public final void run() {
-    //                    f.repaint();
-    //                }
-    //            });
-    //        }
-    //    }
-
-    //    /**
-    //     * Clears all communications to draw
-    //     */
-    //    public void clearCommunications() {
-    //        this.communicationsToDraw.clear();
-    //    }
 
     @Override
     public MonitoringView getMonitoringView() {
@@ -272,11 +200,11 @@ public class WorldEditPart extends AbstractMonitoringEditPart {
     }
 
     public RefreshMode getRefreshMode() {
-        return mode;
+        return this.mode;
     }
 
     public void setRefreshMode(RefreshMode m) {
-        mode = m;
+        this.mode = m;
     }
 
     /**

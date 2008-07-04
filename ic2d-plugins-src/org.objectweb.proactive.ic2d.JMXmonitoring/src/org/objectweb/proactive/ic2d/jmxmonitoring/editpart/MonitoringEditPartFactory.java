@@ -35,10 +35,9 @@ import org.eclipse.gef.EditPartFactory;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.Communication;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.HostObject;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.RuntimeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.WorldObject;
-import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
 import org.objectweb.proactive.ic2d.jmxmonitoring.view.MonitoringView;
 
 
@@ -60,15 +59,14 @@ public class MonitoringEditPartFactory implements EditPartFactory {
         } else if (model instanceof HostObject) {
             return new HostEditPart((HostObject) model);
         } else if (model instanceof RuntimeObject) {
-            return new VMEditPart((RuntimeObject) model);
-        } else if (model instanceof NodeObject) {
-            return new NodeEditPart((NodeObject) model);
+            return new RuntimeEditPart((RuntimeObject) model);
+        } else if (model instanceof ProActiveNodeObject) {
+            return new ProActiveNodeEditPart((ProActiveNodeObject) model);
         } else if (model instanceof ActiveObject) {
-            if (((ActiveObject) model).getState().equals(State.MIGRATING))
-                System.out
-                        .println("------------------------------------------------------------------------------------------monitoringEditPartFactory bug here!!!!!!!");
-
-            return new AOEditPart((ActiveObject) model);
+            ActiveObject ao = (ActiveObject) model;
+            AOEditPart aoep = new AOEditPart(ao);
+            //ao.canHandleCommunications = true;
+            return aoep;
         } else if (model instanceof Communication) {
             return new CommunicationEditPart((Communication) model);
         } else {

@@ -36,7 +36,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 
 
 public class StopMonitoringAction extends Action {
-    public static final String STOP_MONITORING = "Stop monitoring";
+    public static final String STOP_MONITORING = "Set/Unset Monitoring";
     private AbstractData object;
 
     public StopMonitoringAction() {
@@ -46,12 +46,24 @@ public class StopMonitoringAction extends Action {
 
     public void setObject(AbstractData object) {
         this.object = object;
-        this.setText("Stop monitoring this " + object.getType());
-        this.setToolTipText("Stop monitoring this " + object.getType());
+        String msg;
+        // The user can set to NOT MONITORED object
+        if (this.object.isMonitored()) {
+            msg = "Stop monitoring this " + object.getType();
+        } else { // If not monitored the user can set to MONITORED object
+            msg = "Monitor this " + object.getType();
+        }
+        this.setText(msg);
+        this.setToolTipText(msg);
     }
 
     @Override
     public void run() {
-        object.stopMonitoring(true);
+        // The user can set to NOT MONITORED object
+        if (this.object.isMonitored()) {
+            this.object.setNotMonitored();
+        } else { // If not monitored the user can set to MONITORED object
+            this.object.setMonitored();
+        }
     }
 }

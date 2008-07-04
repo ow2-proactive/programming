@@ -31,15 +31,14 @@
 package org.objectweb.proactive.ic2d.jmxmonitoring.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.management.MalformedObjectNameException;
 
-import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotification;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
@@ -47,9 +46,10 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 
 /**
  * Holder class for all monitored hosts and virtual nodes
+ * 
  * @author The ProActive Team
  */
-public class WorldObject extends AbstractData {
+public final class WorldObject extends AbstractData {
     // -------------------------------------------
     // --- Constants -----------------------------
     // -------------------------------------------
@@ -68,10 +68,6 @@ public class WorldObject extends AbstractData {
     public static int DEFAULT_AUTO_RESET_TIME = 7;
     private static int DEFAULT_MAX_DEPTH = 3;
 
-    public enum methodName {
-        ADD_CHILD, REMOVE_CHILD, RESET_COMMUNICATIONS;
-    };
-
     // -------------------------------------------
     // --- Variables -----------------------------
     // -------------------------------------------
@@ -80,24 +76,25 @@ public class WorldObject extends AbstractData {
     private String name;
     private boolean enableMonitoring = true;
 
-    //private static Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
+    // private static Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
 
     /** Contains all virtual nodes. */
-    private Map<String, VirtualNodeObject> vnChildren;
+    private final Map<String, VirtualNodeObject> vnChildren;
 
     /**
-     * A map of all known active objects.
-     * This map is used to have good performances.
+     * A map of all known active objects. It's intentionally typed as a
+     * {@link java.util.concurrent.ConcurrentHashMap} in order to add objects
+     * atomically with
+     * {@link java.util.concurrent.ConcurrentHashMap#putIfAbsent(Object, Object)}
+     * method.
      */
-    private Map<UniqueID, ActiveObject> activeObjects;
-    private Map<UniqueID, ActiveObject> migrations;
+    private final ConcurrentHashMap<String, ActiveObject> activeObjects;
     private int maxDepth = DEFAULT_MAX_DEPTH;
 
     /**
      * Thread
      */
-    private MonitorThread monitorThread;
-    private JMXNotificationManager notificationManager;
+    private final MonitorThread monitorThread;
     private boolean hideP2P = HIDE_P2PNODE_MONITORING;
 
     // -------------------------------------------
@@ -105,24 +102,25 @@ public class WorldObject extends AbstractData {
     // -------------------------------------------
 
     /**
-     * Create a new WorldObject
-     * @param connection A ProActiveConnection
+     * Create a new WorldObject 0617896139 Herve
+     * 
+     * @param connection
+     *            A ProActiveConnection
      */
     public WorldObject() {
         super(null);
-        this.activeObjects = new ConcurrentHashMap<UniqueID, ActiveObject>();
-        this.migrations = new ConcurrentHashMap<UniqueID, ActiveObject>();
+        this.activeObjects = new ConcurrentHashMap<String, ActiveObject>();
         this.vnChildren = new ConcurrentHashMap<String, VirtualNodeObject>();
 
         // Record the model
         this.name = ModelRecorder.getInstance().addModel(this);
 
         // Adds a MonitorTread refresher
-        monitorThread = new MonitorThread(this);
+        this.monitorThread = new MonitorThread(this);
         addObserver(monitorThread);
 
-        // Creates a notification manager
-        notificationManager = JMXNotificationManager.getInstance();
+        // Initialize the notification manager
+        JMXNotificationManager.getInstance();
     }
 
     // -------------------------------------------
@@ -131,27 +129,28 @@ public class WorldObject extends AbstractData {
 
     /**
      * Add a host to the WorldObject
-     * @param url The url of the host.
-     * @param rank The rank of the depth.(0 if the user want ot monitor this host,
-     * 1,2,3...if this host was discovered.)
+     * 
+     * @param url
+     *            The url of the host.
+     * @param rank
+     *            The rank of the depth.(0 if the user want ot monitor this
+     *            host, 1,2,3...if this host was discovered.)
      */
     public void addHost(String url, int rank) {
         try {
             addChild(new HostObject(this, url, rank));
-            //TODO emil: I have removed this line 
-            //check if it was here with a purpuse
-            //notifyObservers();
+            // TODO emil: I have removed this line
+            // check if it was here with a purpuse
+            // notifyObservers();
         } catch (MalformedObjectNameException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (NullPointerException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         setChanged();
 
-        //this notification will be handled by the MonitorThread only for 
-        //the first child added. It will start a refreshing thread
+        // this notification will be handled by the MonitorThread only for
+        // the first child added. It will start a refreshing thread
         if (getMonitoredChildrenSize() == 1) {
             notifyObservers(new MVCNotification(MVCNotificationTag.WORLD_OBJECT_FIRST_CHILD_ADDED));
         }
@@ -161,7 +160,9 @@ public class WorldObject extends AbstractData {
 
     /**
      * Add a host to the WorldObject
-     * @param url The url of the host.
+     * 
+     * @param url
+     *            The url of the host.
      */
     public void addHost(String url) {
         this.addHost(url, 0);
@@ -171,8 +172,8 @@ public class WorldObject extends AbstractData {
     public void removeChild(AbstractData child) {
         super.removeChild(child);
         setChanged();
-        //this notification will be handled by the MonitorThread only for 
-        //the last child added. It will stop a refreshing thread
+        // this notification will be handled by the MonitorThread only for
+        // the last child added. It will stop a refreshing thread
         if (getMonitoredChildrenSize() == 0) {
             notifyObservers(new MVCNotification(MVCNotificationTag.WORLD_OBJECT_LAST_CHILD_REMOVED));
         }
@@ -181,67 +182,57 @@ public class WorldObject extends AbstractData {
 
     /**
      * Find an active object in the map of the known active objects.
-     * @param id The Unique id of the active object.
+     * 
+     * @param key
+     *            The key of the active object.
      * @return an active object.
      */
-    public ActiveObject findActiveObject(UniqueID id) {
-        return this.activeObjects.get(id);
+    public ActiveObject findActiveObject(String key) {
+        return this.activeObjects.get(key);
     }
 
     /**
-     * Records a new active object in the map of the known active objects.
-     * @param ao The active object to add.
+     * Records a new active object in the map of the known active objects. Note:
+     * until now, this method is only called in the constructor of an
+     * ActiveObject
+     * 
+     * @param ao
+     *            The active object to add.
      */
-    public void addActiveObject(ActiveObject ao) {
-        //Note: until now, this method is only called in the constructor of an (ic2d) ActiveObject
-        synchronized (activeObjects) {
-            synchronized (migrations) {
-                ActiveObject oldAO = this.activeObjects.get(ao.getUniqueID());
-                if (oldAO != null) {
-                    // It's maybe a migration
-                    // If the url of the two active objects are different, this is a migration
-                    if (!ao.getParent().getUrl().equals(oldAO.getParent().getUrl())) {
-                        migrations.put(ao.getUniqueID(), oldAO);
-                    }
-                }
-                this.activeObjects.put(ao.getUniqueID(), ao);
-            } //synchronized (migrations)
-        } //  synchronized (activeObjects) 
+    public void addActiveObject(final ActiveObject ao) {
+        this.activeObjects.putIfAbsent(ao.getKey(), ao);
     }
 
     /**
      * Removes an active object in the map of the known active objects.
-     * @param ao The active object to remove.
+     * 
+     * @param key
+     *            The active object to remove.
      */
-    public void removeActiveObject(UniqueID id) {
-        ActiveObject ao = null;
-        synchronized (migrations) {
-            ao = migrations.remove(id);
+    public void removeActiveObject(final String key) {
+        this.activeObjects.remove(key);
+    }
+
+    /**
+     * Calls reset communications on all active objects in this world
+     */
+    public void resetAllCommunications() {
+        Collection<ActiveObject> aos = this.activeObjects.values();
+        for (final ActiveObject activeObject : aos) {
+            activeObject.canHandleCommunications = false;
         }
-        if (ao == null) {
-            synchronized (activeObjects) {
-                ao = this.activeObjects.remove(id);
-            }
+
+        for (final ActiveObject activeObject : aos) {
+            activeObject.removeAllCommunications(false);
         }
 
-        if (ao == null) {
-            System.out.println("Represntation of Active Object " + id + " already removed.");
-        } else {
-            System.out.println("Stop monitoring " + ao + ", on " + ao.getParent());
-
-            //    getMonitorThread().addObjectToExplore(ao.getParent().getParent().getParent());
-            //   ao.getParent().getParent().getParent().explore();
-
-            ao.setDestroyed(true);
-            ao.resetCommunications();
-            ao.removeAllConnections();
-            ao.getParent().removeChild(ao);
-            // ao.getParent().getParent().getParent().explore();
+        for (final ActiveObject activeObject : aos) {
+            activeObject.canHandleCommunications = true;
         }
     }
 
     @Override
-    public <T extends AbstractData> T getParent() {
+    public AbstractData getParent() {
         return null;
     }
 
@@ -277,7 +268,9 @@ public class WorldObject extends AbstractData {
 
     /**
      * Changes the max depth.
-     * @param depth The new max depth.
+     * 
+     * @param depth
+     *            The new max depth.
      */
     public void setDepth(int depth) {
         this.maxDepth = depth;
@@ -287,19 +280,11 @@ public class WorldObject extends AbstractData {
         return this.monitorThread;
     }
 
-    //
-    //    public void addMigration(ActiveObject ao) {
-    //        this.migrations.put(ao.getUniqueID(), ao);
-    //    }
-
-    public JMXNotificationManager getNotificationManager() {
-        return this.notificationManager;
-    }
-
-    ////////// NEW DATA
+    // //////// NEW DATA
 
     /**
      * Returns the name of this world.
+     * 
      * @return The name of this world.
      */
     public String getName() {
@@ -308,6 +293,7 @@ public class WorldObject extends AbstractData {
 
     /**
      * Enables the auto reset action
+     * 
      * @param enable
      */
     public void setEnableAutoResetTime(boolean enable) {
@@ -316,6 +302,7 @@ public class WorldObject extends AbstractData {
 
     /**
      * Returns true if the auto reset time is enabled, false otherwise
+     * 
      * @return true if the auto reset time is enabled, false otherwise
      */
     public boolean enableAutoResetTime() {
@@ -332,7 +319,9 @@ public class WorldObject extends AbstractData {
 
     /**
      * Change the current auto reset time
-     * @param time The new time
+     * 
+     * @param time
+     *            The new time
      */
     public void setAutoResetTime(int time) {
         currentAutoResetTime = time;
@@ -340,6 +329,7 @@ public class WorldObject extends AbstractData {
 
     /**
      * Returns the current auto reset time
+     * 
      * @return The current auto reset time
      */
     public int getAutoResetTime() {
@@ -348,6 +338,7 @@ public class WorldObject extends AbstractData {
 
     /**
      * Add a virtual node to this object
+     * 
      * @param vn
      */
     protected void addVirtualNode(VirtualNodeObject vn) {
@@ -355,12 +346,13 @@ public class WorldObject extends AbstractData {
         setChanged();
         Hashtable<String, VirtualNodeObject> data = new Hashtable<String, VirtualNodeObject>();
         data.put(ADD_VN_MESSAGE, vn);
-        //VirtualNodesGroup object will use the information within data
+        // VirtualNodesGroup object will use the information within data
         notifyObservers(new MVCNotification(MVCNotificationTag.WORLD_OBJECT_ADD_VIRTUAL_NODE, data));
     }
 
     /**
      * Remove a virtual node to this object
+     * 
      * @param vn
      */
     protected void removeVirtualNode(VirtualNodeObject vn) {
@@ -381,15 +373,18 @@ public class WorldObject extends AbstractData {
 
     /**
      * Use to hide or nor the p2p objects.
-     * @param hide true for hide the p2p object, false otherwise
+     * 
+     * @param hide
+     *            true for hide the p2p object, false otherwise
      */
     public void hideP2P(boolean hide) {
         this.hideP2P = hide;
-        getMonitorThread().forceRefresh();
+        this.monitorThread.forceRefresh();
     }
 
     /**
      * Return true if the p2p objects ars hidden, false otherwise
+     * 
      * @return true if the p2p objects ars hidden, false otherwise
      */
     public boolean isP2PHidden() {
@@ -402,21 +397,17 @@ public class WorldObject extends AbstractData {
     }
 
     public int getNumberOfActiveObjects() {
-        if (activeObjects == null)
-            return 0;
-        return activeObjects.size();
+        return this.activeObjects.size();
     }
 
-    public int getNumbberOfHosts() {
+    public int getNumberOfHosts() {
         return this.getMonitoredChildrenSize();
     }
 
-    public int getNumbberOfJVMs() {
+    public int getNumberOfJVMs() {
         int n = 0;
-        Iterator<AbstractData> i = this.getMonitoredChildrenAsList().iterator();
-        while (i.hasNext()) {
-            HostObject h = (HostObject) i.next();
-            n += h.getMonitoredChildrenSize();
+        for (final AbstractData data : this.getMonitoredChildrenAsList()) {
+            n += data.getMonitoredChildrenSize();
         }
         return n;
     }

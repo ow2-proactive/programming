@@ -162,8 +162,9 @@ public class MigrationManagerImpl extends AbstractEventProducer implements Migra
         // JMX Notification
         BodyWrapperMBean mbean = body.getMBean();
         if (mbean != null) {
-            mbean.sendNotification(NotificationType.migrationAboutToStart, node.getProActiveRuntime()
-                    .getURL());
+            mbean
+                    .sendNotification(NotificationType.migrationAboutToStart, node.getNodeInformation()
+                            .getURL());
         }
 
         // End JMX Notification

@@ -47,7 +47,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.VirtualNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.WorldObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.VNColors;
@@ -157,7 +157,7 @@ public class VirtualNodesGroup implements Observer {
             VirtualNodeObject vn = buttons.get(e.widget);
             List<AbstractData> nodes = vn.getMonitoredChildrenAsList();
             for (int i = 0, size = nodes.size(); i < size; i++) {
-                NodeObject node = (NodeObject) nodes.get(i);
+                ProActiveNodeObject node = (ProActiveNodeObject) nodes.get(i);
                 node.setHighlight(((Button) e.widget).getSelection());
             }
         }

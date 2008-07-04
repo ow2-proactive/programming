@@ -115,17 +115,16 @@ public class ActiveObjectListener implements NotificationListener {
                 }
                 // --- MigrationEvent -------------------
                 else if (type.equals(NotificationType.migratedBodyRestarted)) {
-                    logger.debug("...............................Migration body restarted : " + ao.getName());
+                    // logger.debug("...............................Migration body restarted : " + ao.getName());                                    	                  
                 } else if (type.equals(NotificationType.migrationAboutToStart)) {
-                    logger.debug("...............................Migration about to start " + ao + ", node=" +
-                        ao.getParent());
-                    ao.setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.MIGRATING);
+                    // logger.debug("...............................Migration about to start " + ao + ", node=" + ao.getParent());
+                    ao.prepareToMigrate((String) notification.getUserData());
                 } else if (type.equals(NotificationType.migrationExceptionThrown)) {
-                    logger.debug("...............................Migration Exception thrown : " +
-                        ao.getName());
+                    // logger.debug("...............................Migration Exception thrown : " + ao.getName());
                     ao.migrationFailed((MigrationException) notification.getUserData());
                 } else if (type.equals(NotificationType.migrationFinished)) {
-                    logger.debug("...............................Migration finished : " + ao.getName());
+                    //logger.debug("...............................Migration finished : " + ao.getName());                    
+                    ao.finishMigration((String) notification.getUserData());
                 }
                 // --- FuturEvent -------------------
                 else if (type.equals(NotificationType.waitByNecessity)) {
@@ -154,7 +153,6 @@ public class ActiveObjectListener implements NotificationListener {
         if (!ao.getWorldObject().getEnableMonitoring()) {
             return;
         }
-
         ConcurrentLinkedQueue notifs = (ConcurrentLinkedQueue<Notification>) notifications.getUserData();
         IC2DThreadPool.execute(new Task(notifs));
     }
@@ -167,10 +165,7 @@ public class ActiveObjectListener implements NotificationListener {
      * @param type
      */
     private void addRequest(RequestNotificationData request, ActiveObject ao, Type type) {
-        if (ao.getState() == State.MIGRATING)
-            return;
-
-        if (ao.isDestroyed())
+        if (!ao.isMonitored() || ao.getState() == State.MIGRATING)
             return;
 
         UniqueID sourceID = request.getSource();
@@ -229,8 +224,6 @@ public class ActiveObjectListener implements NotificationListener {
             }
         } else {
             if (type == Type.SENDER) {
-                //  ao.addCommunicationTo(destinationID);
-                //  System.out.println(ao + "---->" +destinationID);
                 ao.addOutCommunication(destinationID);
                 return;
             }
@@ -240,10 +233,7 @@ public class ActiveObjectListener implements NotificationListener {
 
             // Add a communication
             if (type == Type.RECEIVER) {
-                //   System.out.println(ao + "<----" +sourceID);
                 ao.addInCommunication(sourceID);
-                //ao.addCommunicationFrom(sourceID);
-                //TODO: DO we need this? 
             }
 
         }

@@ -56,6 +56,14 @@ public class NotificationType {
     public final static String migratedBodyRestarted = "migratedBodyRestarted";
     public final static String migrationAboutToStart = "migrationAboutToStart";
     public final static String migrationExceptionThrown = "migrationExceptionThrown";
+    /**
+     * Emitted by {@link org.objectweb.proactive.core.body.migration.MigrationManagerImpl} 
+     * when the migration is finished.
+     * <p>
+     * The associated notification data is the destination runtime url. This data is used 
+     * to update all JMX related stuff (migration of the mbean and its listeners). 
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean
+     */
     public final static String migrationFinished = "migrationFinished";
 
     // --- Corresponds to the FuturEvent ---------------------------

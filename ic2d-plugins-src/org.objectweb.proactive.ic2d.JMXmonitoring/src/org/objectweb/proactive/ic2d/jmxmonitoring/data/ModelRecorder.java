@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * This class is used to have several monitoring models.
  */
-public class ModelRecorder extends Observable {
+public final class ModelRecorder extends Observable {
     private static ModelRecorder instance;
     private static Integer counter = 1;
     private Map<String, WorldObject> models = new ConcurrentHashMap<String, WorldObject>();

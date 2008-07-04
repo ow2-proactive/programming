@@ -30,18 +30,10 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.editpart;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.eclipse.draw2d.ConnectionAnchor;
-import org.eclipse.draw2d.EllipseAnchor;
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.gef.ConnectionEditPart;
-import org.eclipse.gef.NodeEditPart;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.AbstractFigure;
@@ -49,17 +41,15 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.view.MonitoringView;
 
 
 public abstract class AbstractMonitoringEditPart extends AbstractGraphicalEditPart implements Observer,
-        Runnable, NodeEditPart {
-    protected static Map<AbstractData, AbstractMonitoringEditPart> registry = new java.util.concurrent.ConcurrentHashMap<AbstractData, AbstractMonitoringEditPart>();
+        Runnable {
+    //protected static Map<AbstractData, AbstractMonitoringEditPart> registry = new java.util.concurrent.ConcurrentHashMap<AbstractData, AbstractMonitoringEditPart>();
     private WorldEditPart worldEditPart;
-    private ConnectionAnchor anchor;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
     public AbstractMonitoringEditPart(AbstractData model) {
         setModel(model);
-        registry.put(model, this);
     }
 
     //
@@ -85,7 +75,7 @@ public abstract class AbstractMonitoringEditPart extends AbstractGraphicalEditPa
     public void deactivate() {
         if (isActive()) {
             getCastedModel().deleteObserver(this);
-            ((Figure) getFigure()).removeAll();
+            //((Figure) getFigure()).removeAll();
         }
         super.deactivate();
     }
@@ -127,17 +117,14 @@ public abstract class AbstractMonitoringEditPart extends AbstractGraphicalEditPa
     public void run() {
         try {
             refresh();
-        } catch (java.lang.IllegalArgumentException e) {
-            System.out.println("Exception occured in AbstractMonitoringEditPart.run()" + e);
+        } catch (Exception e) {
+            System.out.println("Exception occured in AbstractMonitoringEditPart.run() : " + e +
+                " figure was : " + getFigure());
+            e.printStackTrace();
         }
     }
 
-    //    public void addGraphicalCommunication(GraphicalCommunication communication) {
-    //        getWorldEditPart().addGraphicalCommunication(communication);
-    //    }
-
     public void addFigureToUpdtate(IFigure figure) {
-        //getWorldEditPart().addFigureToUpdtate(figure);
     }
 
     /**
@@ -145,44 +132,13 @@ public abstract class AbstractMonitoringEditPart extends AbstractGraphicalEditPa
      * to the real type of the model.
      * @return the casted model
      */
-    public abstract <T extends AbstractData> T getCastedModel();
+    public abstract AbstractData getCastedModel();
 
     /**
      * Convert the result of EditPart.getFigure()
      * to the real type of the figure.
      * @return the casted figure
      */
-    public abstract <T extends IFigure> T getCastedFigure();
-
-    protected ConnectionAnchor getConnectionAnchor() {
-        if (anchor == null) {
-            anchor = new EllipseAnchor(getFigure());
-        }
-        return anchor;
-    }
-
-    public ConnectionAnchor getSourceConnectionAnchor(ConnectionEditPart connection) {
-        return getConnectionAnchor();
-    }
-
-    public ConnectionAnchor getSourceConnectionAnchor(Request request) {
-        return getConnectionAnchor();
-    }
-
-    public ConnectionAnchor getTargetConnectionAnchor(ConnectionEditPart connection) {
-        return getConnectionAnchor();
-    }
-
-    public ConnectionAnchor getTargetConnectionAnchor(Request request) {
-        return getConnectionAnchor();
-    }
-
-    protected List getModelSourceConnections() {
-        return getCastedModel().getSourceConnections();
-    }
-
-    protected List getModelTargetConnections() {
-        return getCastedModel().getTargetConnections();
-    }
+    public abstract IFigure getCastedFigure();
 
 }

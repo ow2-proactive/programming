@@ -42,16 +42,17 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.figure.VMFigure;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.JVMListener;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotification;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
+import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
 
 
-public class VMEditPart extends AbstractMonitoringEditPart {
+public final class RuntimeEditPart extends AbstractMonitoringEditPart {
     private RuntimeObject castedModel;
     private VMFigure castedFigure;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
-    public VMEditPart(RuntimeObject model) {
+    public RuntimeEditPart(RuntimeObject model) {
         super(model);
     }
 
@@ -67,7 +68,8 @@ public class VMEditPart extends AbstractMonitoringEditPart {
             return;
         }
 
-        final MVCNotificationTag mvcNotification = ((MVCNotification) arg).getMVCNotification();
+        final MVCNotification notif = ((MVCNotification) arg);
+        final MVCNotificationTag mvcNotification = notif.getMVCNotification();
         getViewer().getControl().getDisplay().asyncExec(new Runnable() {
             public void run() {
                 switch (mvcNotification) {
@@ -75,6 +77,12 @@ public class VMEditPart extends AbstractMonitoringEditPart {
                         Console.getInstance(Activator.CONSOLE_NAME).log(getModel() + " killed!");
                         getCastedFigure().notResponding();
                         break;
+                    case STATE_CHANGED: {
+                        if (notif.getData() == State.NOT_MONITORED) {
+                            refreshChildren();
+                            return;
+                        }
+                    }
                     default:
                         // Refresh only if this editpart is active
                         // remember edit parts are active after activate() is called

@@ -92,6 +92,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.editpart.WorldEditPart;
 import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.DragHost;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.WorldListener;
+import org.objectweb.proactive.ic2d.jmxmonitoring.util.IC2DThreadPool;
 
 
 public class MonitoringView extends ViewPart {
@@ -102,7 +103,7 @@ public class MonitoringView extends ViewPart {
     private MonitoringViewer graphicalViewer;
 
     /** the overview outline page */
-    //private OverviewOutlinePage overviewOutlinePage;
+    // private OverviewOutlinePage overviewOutlinePage;
     private Button bProportional;
     private Button bRatio;
     private Button bFixed;
@@ -115,27 +116,30 @@ public class MonitoringView extends ViewPart {
     /** The graphical set of virtual nodes */
     private VirtualNodesGroup virtualNodesGroup;
 
-    //CODE FOR UPDATING THE NUMBER OF MONITORED OBJECTS
+    // CODE FOR UPDATING THE NUMBER OF MONITORED OBJECTS
     /**
-    * Labels for showing number of monitored objects
-    */
+     * Labels for showing number of monitored objects
+     */
     Label aosLLabel;
     Label hostsLabel;
     Label jvmsLabel;
     private static int TIME_TO_REFRESH_NUMBER_OF_MONITORED_OBJECTS = 2000;
 
-    /**
-     * This runnable interogates world object for the numbber of monitored ojects
-     * TODO: A better implementation would be that this MonitoringView Object should be an observer of World Object 
-     */
+    private Button resetTopology;
 
+    /**
+     * This runnable asks world object for the number of monitored objects.
+     * TODO: A better implementation would be that this MonitoringView
+     * Object should be an observer of World Object
+     */
     private final Runnable updateNbOfMonitoredObjects = new Runnable() {
         public final void run() {
-            if ((aosLLabel == null) || (hostsLabel == null) || (jvmsLabel == null))
+            if ((aosLLabel == null) || aosLLabel.isDisposed() || (hostsLabel == null) ||
+                hostsLabel.isDisposed() || (jvmsLabel == null) || jvmsLabel.isDisposed())
                 return;
             int aosNb = world.getNumberOfActiveObjects();
-            int hosts = world.getNumbberOfHosts();
-            int jvms = world.getNumbberOfJVMs();
+            int hosts = world.getNumberOfHosts();
+            int jvms = world.getNumberOfJVMs();
             aosLLabel.setText(aosNb + " Active Objects");
             jvmsLabel.setText("     " + jvms + " JVMs  ");
             hostsLabel.setText(hosts + " Hosts   ");
@@ -151,23 +155,23 @@ public class MonitoringView extends ViewPart {
         world = new WorldObject();
         title = world.getName();
 
-        new Thread() {
+        Thread t = new Thread() {
             @Override
             public final void run() {
                 try {
                     while (true) {
                         Thread.sleep(TIME_TO_REFRESH_NUMBER_OF_MONITORED_OBJECTS);
 
-                        MonitoringView.this.getGraphicalViewer().getControl().getDisplay().asyncExec(
-                                MonitoringView.this.updateNbOfMonitoredObjects);
-
+                        Display.getDefault().asyncExec(updateNbOfMonitoredObjects);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-        }.start();
-
+        };
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.setDaemon(true);
+        t.start();
     }
 
     //
@@ -202,7 +206,7 @@ public class MonitoringView extends ViewPart {
         graphicalViewerData.bottom = new FormAttachment(100, -limit);
         graphicalViewer.getControl().setLayoutData(graphicalViewerData);
 
-        //--- To change the arrow style
+        // --- To change the arrow style
         FormData drawingStyleData = new FormData();
         drawingStyleData.left = new FormAttachment(0, 0);
         drawingStyleData.right = new FormAttachment(100, 0);
@@ -304,7 +308,7 @@ public class MonitoringView extends ViewPart {
         topology.setSelection(WorldEditPart.DEFAULT_DISPLAY_TOPOLOGY);
         topology.addSelectionListener(new DisplayTopologyListener(parent));
 
-        Button resetTopology = new Button(topologyGroup, SWT.NONE);
+        this.resetTopology = new Button(topologyGroup, SWT.PUSH);
         resetTopology.setText("Reset");
         resetTopology.setToolTipText("Reset the topology");
         resetTopology.setSize(3, 3);
@@ -313,7 +317,7 @@ public class MonitoringView extends ViewPart {
         Group numberOfObjectsResetGroup = new Group(groupD, SWT.NONE);
         numberOfObjectsResetGroup.setText("Monitored Objects");
         GridLayout nbObjsLayout = new org.eclipse.swt.layout.GridLayout(2, false);
-        //RowLayout nbObjsLayout = new RowLayout();
+        // RowLayout nbObjsLayout = new RowLayout();
         numberOfObjectsResetGroup.setLayout(nbObjsLayout);
         aosLLabel = new Label(numberOfObjectsResetGroup, SWT.NONE);
         aosLLabel.setText("0 Active Objects     ");
@@ -339,7 +343,7 @@ public class MonitoringView extends ViewPart {
         SetTTRAction toolBarTTR = new SetTTRAction(parent.getDisplay(), world.getMonitorThread());
         toolBarManager.add(toolBarTTR);
 
-        //Add label with numbber of AOs
+        // Add label with numbber of AOs
 
         // Adds refresh action to the view's toolbar
         RefreshAction toolBarRefresh = new RefreshAction(world.getMonitorThread());
@@ -380,6 +384,7 @@ public class MonitoringView extends ViewPart {
 
     /**
      * Returns the <code>GraphicalViewer</code> of this editor.
+     * 
      * @return the <code>GraphicalViewer</code>
      */
     public MonitoringViewer getGraphicalViewer() {
@@ -407,21 +412,21 @@ public class MonitoringView extends ViewPart {
 
     @Override
     public void dispose() {
-        //TODO A faire
-        //world.stopMonitoring(true);
+        // TODO A faire
+        // world.stopMonitoring(true);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
      */
 
-    /*   public Object getAdapter(Class adapter) {
-        if (adapter == IContentOutlinePage.class) {
-        return getOverviewOutlinePage();
-        }
-        // the super implementation handles the rest
-    return super.getAdapter(adapter);
-    }*/
+    /*
+     * public Object getAdapter(Class adapter) { if (adapter ==
+     * IContentOutlinePage.class) { return getOverviewOutlinePage(); } // the
+     * super implementation handles the rest return super.getAdapter(adapter); }
+     */
 
     //
     // -- PROTECTED METHODS -------------------------------------------
@@ -429,6 +434,7 @@ public class MonitoringView extends ViewPart {
     /**
      * Returns the <code>EditPartFactory</code> that the
      * <code>GraphicalViewer</code> will use.
+     * 
      * @return the <code>EditPartFactory</code>
      */
     protected EditPartFactory getEditPartFactory() {
@@ -437,21 +443,19 @@ public class MonitoringView extends ViewPart {
 
     /**
      * Returns the overview for the outline view.
-     *
+     * 
      * @return the overview
      */
 
-    /* protected OverviewOutlinePage getOverviewOutlinePage() {
-    if (null == overviewOutlinePage && null != getGraphicalViewer()) {
-        RootEditPart rootEditPart = getGraphicalViewer().getRootEditPart();
-        if (rootEditPart instanceof ScalableFreeformRootEditPart) {
-            overviewOutlinePage =
-                new OverviewOutlinePage((ScalableFreeformRootEditPart) rootEditPart);
-        }
-    }
-
-    return overviewOutlinePage;
-    }*/
+    /*
+     * protected OverviewOutlinePage getOverviewOutlinePage() { if (null ==
+     * overviewOutlinePage && null != getGraphicalViewer()) { RootEditPart
+     * rootEditPart = getGraphicalViewer().getRootEditPart(); if (rootEditPart
+     * instanceof ScalableFreeformRootEditPart) { overviewOutlinePage = new
+     * OverviewOutlinePage((ScalableFreeformRootEditPart) rootEditPart); } }
+     * 
+     * return overviewOutlinePage; }
+     */
 
     //
     // -- PRIVATE METHODS -------------------------------------------
@@ -502,8 +506,8 @@ public class MonitoringView extends ViewPart {
         // Added for ChartIt
         registry.registerAction(new ChartItAction());
 
-        // Get all available actions defined by possibly provided 
-        // extensions for the extension point monitoring_action	
+        // Get all available actions defined by possibly provided
+        // extensions for the extension point monitoring_action
         try {
             IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(
                     Activator.PLUGIN_ID + ".actions_extension");
@@ -568,11 +572,13 @@ public class MonitoringView extends ViewPart {
                     CommunicationEditPart.setDrawingStyle(CommunicationEditPart.DrawingStyle.FIXED);
                 }
 
-                // We need to have the monitoring panel in order to update the display.
+                // We need to have the monitoring panel in order to update the
+                // display.
                 // Warning : If the order of the graphics objects change then
                 // it is also necessary to change the index of the table.
                 // (The index of the array is 1, because :
-                // In 0 we have the virtual nodes view, and in 2 we have the panel
+                // In 0 we have the virtual nodes view, and in 2 we have the
+                // panel
                 // containing the buttons for the drawing style.)
                 Control[] children = this.globalcontainer.getChildren();
                 if ((children.length >= 2) && (children[1] != null)) {
@@ -591,7 +597,8 @@ public class MonitoringView extends ViewPart {
 
         public void widgetSelected(SelectionEvent e) {
             WorldEditPart.setDisplayTopology(((Button) e.widget).getSelection());
-            // We need to have the monitoring panel in order to update the display.
+            // We need to have the monitoring panel in order to update the
+            // display.
             // Warning : If the order of the graphics objects change then
             // it is also necessary to change the index of the table.
             // (The index of the array is 1, because :
@@ -606,7 +613,28 @@ public class MonitoringView extends ViewPart {
 
     private class ResetTopologyListener extends SelectionAdapter {
         public void widgetSelected(SelectionEvent e) {
-            world.resetCommunications();
+            // Fast click action can be disturbing for reseting world
+            // communications this action must take care of multiple fast clicks
+            // and be
+            // blocking
+            if (resetTopology.isEnabled()) {
+                resetTopology.setEnabled(false);
+                world.resetAllCommunications();
+                IC2DThreadPool.execute(new Runnable() {
+                    public void run() {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                        Display.getDefault().asyncExec(new Runnable() {
+                            public final void run() {
+                                resetTopology.setEnabled(true);
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 }

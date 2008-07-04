@@ -31,7 +31,7 @@
 package org.objectweb.proactive.ic2d.jmxmonitoring.dnd;
 
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.AOFigure;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.NodeFigure;
 
@@ -45,7 +45,7 @@ public class DragAndDrop {
     private ActiveObject source;
 
     /** The source node */
-    private NodeObject sourceNode;
+    private ProActiveNodeObject sourceNode;
 
     /** The source figure */
     private AOFigure sourceFigure;
@@ -65,7 +65,7 @@ public class DragAndDrop {
         return this.source;
     }
 
-    public NodeObject getSourceNode() {
+    public ProActiveNodeObject getSourceNode() {
         return this.sourceNode;
     }
 
@@ -78,7 +78,7 @@ public class DragAndDrop {
         if (source == null) {
             this.sourceNode = null;
         } else {
-            this.sourceNode = (NodeObject) source.getParent();
+            this.sourceNode = (ProActiveNodeObject) source.getParent();
         }
     }
 

@@ -42,7 +42,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 
 
 public class SetUpdateFrequenceDialog extends Dialog {
@@ -52,7 +52,7 @@ public class SetUpdateFrequenceDialog extends Dialog {
     private Button okButton;
     private Button cancelButton;
 
-    public SetUpdateFrequenceDialog(Shell parent, NodeObject node) {
+    public SetUpdateFrequenceDialog(Shell parent, ProActiveNodeObject node) {
         super(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 
         //this.node = node;

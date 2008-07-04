@@ -36,23 +36,39 @@ import java.util.Map;
 import org.objectweb.proactive.core.UniqueID;
 
 
-public class NamesFactory {
-    private static NamesFactory instance;
+/**
+ * This class handles the atomical generation of names associated with the name of an active object.
+ * <p>
+ * For example if the class name of the active object is <code>Worker</code> then the first resulted
+ * associated name to the id of the active object will be <code>Worker#1</code>.
+ * The counter will be incremented each time the class name <code>Worker</code> appears with another id.
+ * 
+ * @author vbodnart
+ */
+public final class NamesFactory {
 
-    // <ID, Name>
-    private Map<UniqueID, String> names;
-    private Integer counter;
+    private final static NamesFactory instance = new NamesFactory();
+
+    /**
+     * A map that contains associations
+     */
+    private final Map<UniqueID, String> names;
+    /**
+     * A counter that will be incremented each time a name is associated
+     */
+    private int counter;
+
+    /**
+     * Returns the single instance of this class. 
+     * @return the singleton 
+     */
+    public static NamesFactory getInstance() {
+        return NamesFactory.instance;
+    }
 
     private NamesFactory() {
         this.names = new HashMap<UniqueID, String>();
         this.counter = 1;
-    }
-
-    public static NamesFactory getInstance() {
-        if (instance == null) {
-            instance = new NamesFactory();
-        }
-        return instance;
     }
 
     /**
@@ -63,18 +79,14 @@ public class NamesFactory {
      * @param name The name to associated to the unique id.
      * @return The active object name associated to this unique id.
      */
-    public synchronized String associateName(UniqueID id, String name) {
-        if (id == null) {
-            return null;
-        }
+    public synchronized String associateName(final UniqueID id, final String name) {
         String recordedName = this.names.get(id);
-        if (recordedName != null) {
+        if (recordedName == null) {
+            recordedName = name.substring(name.lastIndexOf(".") + 1) + "#" + (this.counter++);
+            this.names.put(id, recordedName);
             return recordedName;
-        } else {
-            name = name.substring(name.lastIndexOf(".") + 1) + "#" + (counter++);
-            this.names.put(id, name);
-            return name;
         }
+        return recordedName;
     }
 
     /**
@@ -82,7 +94,7 @@ public class NamesFactory {
      * @param id An unique id.
      * @return The name associated to the given id.
      */
-    public String getName(UniqueID id) {
+    public String getName(final UniqueID id) {
         return names.get(id);
     }
 }
