@@ -129,7 +129,7 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
                 RO ro = new RO();
                 RemoteObjectExposer<RO> roe = new RemoteObjectExposer<RO>(RO.class.getName(), ro);
                 URI uri = RemoteObjectHelper.generateUrl("remoteObject");
-                roe.activateProtocol(uri);
+                roe.createRemoteObject(uri);
                 return roe.getURL();
             } catch (UnknownProtocolException e) {
                 e.printStackTrace();
