@@ -53,7 +53,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * references on already activated protocols, allows to unexpose one or more protocols.
  */
 public class RemoteObjectExposer<T> implements Serializable {
-    protected Hashtable<URI, RemoteRemoteObject> activatedProtocols;
+    protected Hashtable<URI, RemoteRemoteObject> activeRemoteRemoteObjects;
     private String className;
     private RemoteObjectImpl<T> remoteObject;
 
@@ -94,7 +94,7 @@ public class RemoteObjectExposer<T> implements Serializable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        this.activatedProtocols = new Hashtable<URI, RemoteRemoteObject>();
+        this.activeRemoteRemoteObjects = new Hashtable<URI, RemoteRemoteObject>();
     }
 
     /**
@@ -103,7 +103,8 @@ public class RemoteObjectExposer<T> implements Serializable {
      * @return a remote reference to the remote object ie a RemoteRemoteObject
      * @throws UnknownProtocolException thrown if the protocol specified within the url is unknow
      */
-    public synchronized InternalRemoteRemoteObject activateProtocol(URI url) throws UnknownProtocolException {
+    public synchronized InternalRemoteRemoteObject createRemoteObject(URI url)
+            throws UnknownProtocolException {
         String protocol = null;
 
         // check if the url contains a scheme (protocol)
@@ -135,7 +136,7 @@ public class RemoteObjectExposer<T> implements Serializable {
             irro.setRemoteRemoteObject(rmo);
 
             // put the url within the list of the activated protocols
-            this.activatedProtocols.put(url, rmo);
+            this.activeRemoteRemoteObjects.put(url, rmo);
 
             return irro;
         } catch (ProActiveException e) {
@@ -154,12 +155,12 @@ public class RemoteObjectExposer<T> implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public RemoteObject<T> getRemoteObject(String protocol) throws ProActiveException {
-        Enumeration<URI> e = this.activatedProtocols.keys();
+        Enumeration<URI> e = this.activeRemoteRemoteObjects.keys();
 
         while (e.hasMoreElements()) {
             URI url = e.nextElement();
             if (protocol.equals(url.getScheme())) {
-                return new RemoteObjectAdapter(this.activatedProtocols.get(url));
+                return new RemoteObjectAdapter(this.activeRemoteRemoteObjects.get(url));
             }
         }
 
@@ -170,9 +171,9 @@ public class RemoteObjectExposer<T> implements Serializable {
      * @return return the activated urls
      */
     public String[] getURLs() {
-        String[] urls = new String[this.activatedProtocols.size()];
+        String[] urls = new String[this.activeRemoteRemoteObjects.size()];
 
-        Enumeration<URI> e = this.activatedProtocols.keys();
+        Enumeration<URI> e = this.activeRemoteRemoteObjects.keys();
         int i = 0;
         while (e.hasMoreElements()) {
             urls[i] = e.nextElement().toString();
@@ -183,7 +184,7 @@ public class RemoteObjectExposer<T> implements Serializable {
     }
 
     public String getURL(String protocol) {
-        Enumeration<URI> e = this.activatedProtocols.keys();
+        Enumeration<URI> e = this.activeRemoteRemoteObjects.keys();
 
         while (e.hasMoreElements()) {
             URI url = e.nextElement();
@@ -202,8 +203,8 @@ public class RemoteObjectExposer<T> implements Serializable {
     /**
      * unregister all the remote references on the remote object.
      */
-    public void unregisterAll() {
-        Enumeration<URI> uris = this.activatedProtocols.keys();
+    public void unregisterAll() throws ProActiveException {
+        Enumeration<URI> uris = this.activeRemoteRemoteObjects.keys();
         URI uri = null;
         while (uris.hasMoreElements()) {
             uri = uris.nextElement();
@@ -211,9 +212,9 @@ public class RemoteObjectExposer<T> implements Serializable {
             try {
                 PARemoteObject.unregister(uri);
             } catch (ProActiveException e) {
-                //  e.printStackTrace();
                 ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).info(
                         "Could not unregister " + uri + ". Error message: " + e.getMessage());
+                throw e;
             }
         }
     }
@@ -224,4 +225,11 @@ public class RemoteObjectExposer<T> implements Serializable {
     public RemoteObjectImpl<T> getRemoteObject() {
         return this.remoteObject;
     }
+
+    public void unexport(URI url) throws ProActiveException {
+        RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(url);
+        RemoteObjectFactory rof = RemoteObjectHelper.getRemoteObjectFactory(url.getScheme());
+        rof.unexport(rro);
+    }
+
 }

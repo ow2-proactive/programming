@@ -35,6 +35,9 @@ import ibis.rmi.RemoteException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.rmi.NoSuchObjectException;
+import java.rmi.Remote;
+import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
@@ -214,4 +217,18 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     public String getProtocolId() {
         return this.protocolIdentifier;
     }
+
+    public void unexport(RemoteRemoteObject rro) throws ProActiveException {
+        if (rro instanceof IbisRemoteObject) {
+            try {
+                UnicastRemoteObject.unexportObject((Remote) rro, false);
+            } catch (NoSuchObjectException e) {
+                throw new ProActiveException(e);
+            }
+        } else {
+            throw new ProActiveException("the remote object is not a rmi remote object");
+        }
+
+    }
+
 }

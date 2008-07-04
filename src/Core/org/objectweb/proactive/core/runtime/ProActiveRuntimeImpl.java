@@ -264,7 +264,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         String url = URIBuilder.buildURIFromProperties(URIBuilder.getHostNameFromUrl(getInternalURL()),
                 URIBuilder.getNameFromURI(getInternalURL())).toString();
 
-        this.roe.activateProtocol(URI.create(url));
+        this.roe.createRemoteObject(URI.create(url));
 
         // logging info
         // MDC.remove("runtime");
@@ -784,7 +784,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         String url;
         url = URIBuilder.buildURIFromProperties(URIBuilder.getHostNameFromUrl(getInternalURL()),
                 virtualNodeName).toString();
-        this.roe.activateProtocol(URI.create(url));
+        this.roe.createRemoteObject(URI.create(url));
     }
 
     public void unregisterVirtualNode(String virtualNodeName) {

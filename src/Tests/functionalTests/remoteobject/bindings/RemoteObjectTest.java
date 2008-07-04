@@ -65,7 +65,7 @@ public class RemoteObjectTest extends FunctionalTest {
         // generate an uri where to rebind the runtime
         URI uri = RemoteObjectHelper.generateUrl("myruntime");
 
-        ProActiveRuntime p1 = PARemoteObject.activateProtocol(roe, uri);
+        ProActiveRuntime p1 = PARemoteObject.bind(roe, uri);
 
         assertTrue(p.getURL().equals(p1.getURL()));
     }
@@ -84,7 +84,7 @@ public class RemoteObjectTest extends FunctionalTest {
         // generate an uri where to rebind the runtime
         URI uri = RemoteObjectHelper.generateUrl("myruntime-1");
 
-        ProActiveRuntime p1 = PARemoteObject.activateProtocol(roe, uri);
+        ProActiveRuntime p1 = PARemoteObject.bind(roe, uri);
 
         // registering on a second url
         URI uri2 = RemoteObjectHelper.generateUrl("myruntime-2");
@@ -112,12 +112,12 @@ public class RemoteObjectTest extends FunctionalTest {
         // generate an uri where to rebind the runtime
         URI uri = RemoteObjectHelper.generateUrl("myruntimeA");
 
-        ProActiveRuntime p1 = PARemoteObject.activateProtocol(roe, uri);
+        ProActiveRuntime p1 = PARemoteObject.bind(roe, uri);
 
         // second binding
         URI uri2 = RemoteObjectHelper.generateUrl(Constants.XMLHTTP_PROTOCOL_IDENTIFIER, "myruntimeB");
 
-        ProActiveRuntime p2 = PARemoteObject.activateProtocol(roe, uri2);
+        ProActiveRuntime p2 = PARemoteObject.bind(roe, uri2);
 
         assertTrue(p2.getURL().equals(p1.getURL()));
     }
@@ -135,7 +135,7 @@ public class RemoteObjectTest extends FunctionalTest {
         URI uri = RemoteObjectHelper.generateUrl("myruntime");
 
         // let's bind the object on the given endpoint
-        PARemoteObject.activateProtocol(roe, uri);
+        PARemoteObject.bind(roe, uri);
 
         // looking for the remote object
         RemoteObject<ProActiveRuntime> ro = RemoteObjectHelper.lookup(uri);

@@ -102,4 +102,6 @@ public interface RemoteObjectFactory {
     public int getPort();
 
     public String getProtocolId();
+
+    public void unexport(RemoteRemoteObject rro) throws ProActiveException;
 }

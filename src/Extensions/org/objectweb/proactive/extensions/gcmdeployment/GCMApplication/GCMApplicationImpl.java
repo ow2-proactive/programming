@@ -184,14 +184,14 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             RemoteObjectExposer<GCMApplication> roe = new RemoteObjectExposer<GCMApplication>(
                 GCMApplication.class.getName(), this, GCMApplicationRemoteObjectAdapter.class);
             URI uri = RemoteObjectHelper.generateUrl(deploymentId + "/GCMApplication");
-            roe.activateProtocol(uri);
+            roe.createRemoteObject(uri);
 
             // Export all VirtualNodes as remote objects
             for (GCMVirtualNode vn : virtualNodes.values()) {
                 RemoteObjectExposer<GCMVirtualNode> vnroe = new RemoteObjectExposer<GCMVirtualNode>(
                     GCMVirtualNode.class.getName(), vn, GCMVirtualNodeRemoteObjectAdapter.class);
                 uri = RemoteObjectHelper.generateUrl(deploymentId + "/VirtualNode/" + vn.getName());
-                vnroe.activateProtocol(uri);
+                vnroe.createRemoteObject(uri);
             }
         } catch (Exception e) {
             throw new ProActiveException("Failed to create GCMApplication: " + e.getMessage() +

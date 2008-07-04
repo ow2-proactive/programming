@@ -59,6 +59,7 @@ import javax.management.ReflectionException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.ProActiveInternalObject;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.UniversalBody;
@@ -510,7 +511,12 @@ public class ProActiveConnection implements Serializable, MBeanServerConnection,
         Body myBody = PAActiveObject.getBodyOnThis();
         if (myBody instanceof AbstractBody) {
             RemoteObjectExposer<UniversalBody> roe = ((AbstractBody) myBody).getRemoteObjectExposer();
-            roe.unregisterAll();
+            try {
+                roe.unregisterAll();
+            } catch (ProActiveException e) {
+                // see PROACTIVE-416
+                e.printStackTrace();
+            }
         }
     }
 }

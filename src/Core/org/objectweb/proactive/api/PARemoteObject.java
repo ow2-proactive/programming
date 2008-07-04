@@ -59,8 +59,8 @@ public class PARemoteObject {
         return new RemoteObjectExposer<T>(className, target, targetRemoteObjectAdapter);
     }
 
-    public static <T> T activateProtocol(RemoteObjectExposer<T> roe, URI uri) throws UnknownProtocolException {
-        InternalRemoteRemoteObject irro = roe.activateProtocol(uri);
+    public static <T> T bind(RemoteObjectExposer<T> roe, URI uri) throws UnknownProtocolException {
+        InternalRemoteRemoteObject irro = roe.createRemoteObject(uri);
         try {
             return (T) new RemoteObjectAdapter(irro).getObjectProxy();
         } catch (ProActiveException e) {

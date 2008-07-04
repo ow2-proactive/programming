@@ -52,7 +52,7 @@ public class DummyProtocol implements RemoteObjectFactory {
         return new URI[] {};
     }
 
-    public RemoteObject lookup(URI url) throws ProActiveException {
+    public <T> RemoteObject<T> lookup(URI url) throws ProActiveException {
         return null;
     }
 
@@ -67,4 +67,8 @@ public class DummyProtocol implements RemoteObjectFactory {
 
     public void unregister(URI url) throws ProActiveException {
     }
+
+    public void unexport(RemoteRemoteObject rro) throws ProActiveException {
+    }
+
 }

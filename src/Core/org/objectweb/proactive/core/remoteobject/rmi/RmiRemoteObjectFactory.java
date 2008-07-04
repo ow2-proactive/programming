@@ -33,9 +33,11 @@ package org.objectweb.proactive.core.remoteobject.rmi;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
@@ -182,7 +184,7 @@ public class RmiRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
     /* (non-Javadoc)
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#lookup(java.net.URI)
      */
-    public RemoteObject lookup(URI uri) throws ProActiveException {
+    public <T> RemoteObject<T> lookup(URI uri) throws ProActiveException {
         Object o = null;
 
         URI modifiedURI = uri;
@@ -223,5 +225,18 @@ public class RmiRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
 
     public String getProtocolId() {
         return this.protocolIdentifier;
+    }
+
+    public void unexport(RemoteRemoteObject rro) throws ProActiveException {
+        if (rro instanceof RmiRemoteObject) {
+            try {
+                UnicastRemoteObject.unexportObject((RmiRemoteObject) rro, false);
+            } catch (NoSuchObjectException e) {
+                throw new ProActiveException(e);
+            }
+        } else {
+            throw new ProActiveException("the remote object is not a rmi remote object");
+        }
+
     }
 }

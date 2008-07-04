@@ -141,7 +141,7 @@ public class LocalNode implements SecurityEntity {
     }
 
     public void activateProtocol(URI nodeURL) throws UnknownProtocolException {
-        this.runtimeRoe.activateProtocol(nodeURL);
+        this.runtimeRoe.createRemoteObject(nodeURL);
     }
 
     /**
@@ -297,7 +297,11 @@ public class LocalNode implements SecurityEntity {
             }
         }
 
-        this.runtimeRoe.unregisterAll();
+        try {
+            this.runtimeRoe.unregisterAll();
+        } catch (Exception e) {
+            logger.info(e.toString());
+        }
 
         // JMX Notification
         ProActiveRuntimeWrapperMBean runtimeMBean = ProActiveRuntimeImpl.getProActiveRuntime().getMBean();

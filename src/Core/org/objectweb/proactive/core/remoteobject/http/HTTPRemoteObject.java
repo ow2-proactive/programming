@@ -22,18 +22,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.masterworker.core;
+package org.objectweb.proactive.core.remoteobject.http;
 
-/**
- * MWFTError
- *
- * @author The ProActive Team
- */
-public class MWFTError extends Error {
+import java.io.Serializable;
+
+import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
+
+
+public interface HTTPRemoteObject extends RemoteRemoteObject, Serializable {
+
 }

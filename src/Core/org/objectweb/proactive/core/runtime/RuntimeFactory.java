@@ -171,7 +171,7 @@ public abstract class RuntimeFactory {
         if (ro == null) {
             URI url = RemoteObjectHelper.generateUrl(protocol, URIBuilder.getNameFromURI(URI
                     .create(proActiveRuntime.getURL())));
-            proActiveRuntime.getRemoteObjectExposer().activateProtocol(url);
+            proActiveRuntime.getRemoteObjectExposer().createRemoteObject(url);
             ro = proActiveRuntime.getRemoteObjectExposer().getRemoteObject(protocol);
 
             //            throw new ProActiveException("Cannot create a ProActiveRuntime based on " + protocol);

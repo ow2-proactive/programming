@@ -33,6 +33,9 @@ package org.objectweb.proactive.core.remoteobject.http;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.rmi.NoSuchObjectException;
+import java.rmi.server.UnicastRemoteObject;
+
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
@@ -46,6 +49,7 @@ import org.objectweb.proactive.core.remoteobject.http.message.HttpRegistryListRe
 import org.objectweb.proactive.core.remoteobject.http.message.HttpRemoteObjectLookupMessage;
 import org.objectweb.proactive.core.remoteobject.http.util.HTTPRegistry;
 import org.objectweb.proactive.core.remoteobject.http.util.exceptions.HTTPRemoteException;
+import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObject;
 import org.objectweb.proactive.core.rmi.ClassServer;
 import org.objectweb.proactive.core.rmi.ClassServerHelper;
 import org.objectweb.proactive.core.util.URIBuilder;
@@ -205,4 +209,9 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     public String getProtocolId() {
         return this.protocolIdentifier;
     }
+
+    public void unexport(RemoteRemoteObject rro) throws ProActiveException {
+        // see PROACTIVE-419
+    }
+
 }

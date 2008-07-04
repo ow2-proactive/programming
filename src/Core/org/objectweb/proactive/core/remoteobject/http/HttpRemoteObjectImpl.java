@@ -45,7 +45,7 @@ import org.objectweb.proactive.core.remoteobject.http.message.HTTPRemoteObjectRe
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 
 
-public class HttpRemoteObjectImpl implements RemoteRemoteObject, Serializable {
+public class HttpRemoteObjectImpl implements HTTPRemoteObject {
     private boolean isLocal;
     private URI remoteObjectURL;
     protected transient InternalRemoteRemoteObject remoteObject;
