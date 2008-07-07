@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GCMDeployment xmlns="urn:gcm:deployment:1.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<GCMDeployment xmlns="urn:gcm:deployment:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="urn:gcm:deployment:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd	">
 
 	<environment>
 		<javaPropertyVariable name="user.dir" />
-		
-		<javaPropertyDescriptorDefault name="os" value="windows"/>
+
+		<javaPropertyDescriptorDefault name="os" value="windows" />
+		<javaPropertyDescriptorDefault name="hostCapacity" value="4" />
+		<javaPropertyDescriptorDefault name="vmCapacity" value="1" />
 	</environment>
 
 	<resources>
