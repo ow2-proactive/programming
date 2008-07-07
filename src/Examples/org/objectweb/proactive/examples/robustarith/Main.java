@@ -81,9 +81,11 @@ public class Main {
 
         //ProActive.tryWithCatch(java.io.IOException.class);
         PAException.tryWithCatch(Exception.class);
+        GCMApplication pad = null;
+
         try {
             String path = (args.length == 0) ? "descriptors/Matrix.xml" : args[0];
-            GCMApplication pad = PAGCMDeployment.loadApplicationDescriptor(new File(path));
+            pad = PAGCMDeployment.loadApplicationDescriptor(new File(path));
             GCMVirtualNode dispatcher = pad.getVirtualNode("matrixNode");
             pad.startDeployment();
             dispatcher.waitReady();
@@ -97,6 +99,8 @@ public class Main {
         } finally {
             PAException.removeTryWithCatch();
         }
+
+        pad.kill();
         System.exit(0);
     }
 }
