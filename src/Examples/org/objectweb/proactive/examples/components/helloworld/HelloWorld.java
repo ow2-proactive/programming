@@ -41,6 +41,7 @@ import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
@@ -187,5 +188,6 @@ public class HelloWorld {
             // call main method
             ((Runnable) rComp.getFcInterface("r")).run();
         }
+        PALifeCycle.exitSuccess();
     }
 }
