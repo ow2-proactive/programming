@@ -6,8 +6,6 @@
 		<javaPropertyVariable name="user.dir" />
 
 		<javaPropertyDescriptorDefault name="os" value="windows" />
-		<javaPropertyDescriptorDefault name="hostCapacity" value="4" />
-		<javaPropertyDescriptorDefault name="vmCapacity" value="1" />
 	</environment>
 
 	<resources>
