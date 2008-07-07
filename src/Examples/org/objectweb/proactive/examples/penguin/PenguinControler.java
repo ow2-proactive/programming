@@ -36,6 +36,7 @@ import java.util.List;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.migration.MigrationStrategyManagerImpl;
 import org.objectweb.proactive.core.node.Node;
@@ -130,6 +131,12 @@ public class PenguinControler implements org.objectweb.proactive.RunActive, Peng
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (proActiveDescriptor != null) {
+                proActiveDescriptor.kill();
+            }
         }
+
+        PALifeCycle.exitSuccess();
     }
 }

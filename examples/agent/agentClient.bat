@@ -13,7 +13,7 @@ goto end
 SETLOCAL ENABLEDELAYEDEXPANSION
 IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\..
 
-call "..\..\init.bat"
+call "..\init.bat"
 
 set XMLDESCRIPTOR=GCMA.xml
 

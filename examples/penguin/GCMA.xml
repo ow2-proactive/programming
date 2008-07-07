@@ -7,8 +7,8 @@
 		<javaPropertyVariable name="proactive.home" />
 		<javaPropertyVariable name="user.dir" />
 
-		<descriptorVariable name="hostCapacity" value="4"/>
-		<descriptorVariable name="vmCapacity" value="1"/>
+		<descriptorVariable name="hostCapacity" value="2"/>
+		<descriptorVariable name="vmCapacity" value="2"/>
 	</environment>
 
 
@@ -19,15 +19,13 @@
 					<pathElement base="proactive" relpath="dist/lib/ProActive_examples.jar"/>
 				</applicationClasspath>
 			</configuration>
-
-			<virtualNode id="Agent" capacity="4"/>
-
+			<virtualNode id="penguinNode" capacity="4"/>
 		</proactive>
 	</application>
 
 	<resources>
 		<nodeProvider id="LOCAL">
-			<file path="../../GCMD_Local.xml" />
+			<file path="../GCMD_Local.xml" />
 		</nodeProvider>
 	</resources>
 

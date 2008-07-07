@@ -33,6 +33,7 @@ package org.objectweb.proactive.examples.migration;
 import java.io.File;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -52,7 +53,7 @@ public class AgentClient {
         Agent myServer;
         String nodeName;
         String hostName;
-        GCMApplication proActiveDescriptor;
+        GCMApplication proActiveDescriptor = null;
         ProActiveConfiguration.load();
         try {
             proActiveDescriptor = PAGCMDeployment.loadApplicationDescriptor(new File(args[0]));
@@ -81,7 +82,13 @@ public class AgentClient {
         } catch (Exception e) {
             logger.error("Could not reach/create server object");
             e.printStackTrace();
-            System.exit(1);
+        } finally {
+            if (proActiveDescriptor != null) {
+                proActiveDescriptor.kill();
+            }
+
+            PALifeCycle.exitSuccess();
         }
+
     }
 }

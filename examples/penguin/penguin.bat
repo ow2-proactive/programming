@@ -13,9 +13,9 @@ goto end
 SETLOCAL ENABLEDELAYEDEXPANSION
 IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\..
 
-call "%PROACTIVE%\scripts\windows\init.bat"
+call "..\init.bat"
 
-set XMLDESCRIPTOR=..\..\..\descriptors\Penguin.xml
+set XMLDESCRIPTOR=GCMA.xml
 
 %JAVA_CMD% org.objectweb.proactive.examples.penguin.PenguinControler %XMLDESCRIPTOR%
 ENDLOCAL

@@ -6,6 +6,9 @@
 	<environment>
 		<javaPropertyVariable name="proactive.home" />
 		<javaPropertyVariable name="user.dir" />
+
+		<descriptorVariable name="hostCapacity" value="4"/>
+		<descriptorVariable name="vmCapacity" value="1"/>
 	</environment>
 
 
@@ -16,7 +19,9 @@
 					<pathElement base="proactive" relpath="dist/lib/ProActive_examples.jar"/>
 				</applicationClasspath>
 			</configuration>
-			<virtualNode id="penguinNode" capacity="4"/>
+
+			<virtualNode id="Agent" capacity="4"/>
+
 		</proactive>
 	</application>
 
