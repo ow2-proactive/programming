@@ -83,8 +83,6 @@ public class Main {
         //ProActive.tryWithCatch(java.io.IOException.class);
         GCMApplication pad = null;
         PAException.tryWithCatch(Exception.class);
-        GCMApplication pad = null;
-
         try {
             String path = args[0];
             pad = PAGCMDeployment.loadApplicationDescriptor(new File(path));
