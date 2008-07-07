@@ -66,12 +66,12 @@ public class ApplicationParserExecutable extends AbstractApplicationParser {
             throws Exception {
         super.parseApplicationNode(appNode, applicationParser, xpath);
 
-        CommandBuilderExecutable commandBuilderScript = (CommandBuilderExecutable) commandBuilder;
+        CommandBuilderExecutable commandBuilderExecutable = (CommandBuilderExecutable) commandBuilder;
 
         String instancesValue = GCMParserHelper.getAttributeValue(appNode, "instances");
 
         if (instancesValue != null) {
-            commandBuilderScript.setInstances(instancesValue);
+            commandBuilderExecutable.setInstances(instancesValue);
         }
 
         Node techServicesNode = (Node) xpath.evaluate(XPATH_TECHNICAL_SERVICES, appNode, XPathConstants.NODE);
@@ -88,26 +88,29 @@ public class ApplicationParserExecutable extends AbstractApplicationParser {
 
         // resource providers
         //
-        for (int i = 0; i < nodeProviderNodes.getLength(); ++i) {
-            Node rpNode = nodeProviderNodes.item(i);
-            String refid = GCMParserHelper.getAttributeValue(rpNode, "refid");
-            NodeProvider nodeProvider = nodeProvidersMap.get(refid);
-            if (nodeProvider != null) {
-                commandBuilderScript.addDescriptor(nodeProvider);
-            } else {
-                // TODO - log warning
+
+        if (nodeProviderNodes.getLength() != 0) {
+            for (int i = 0; i < nodeProviderNodes.getLength(); ++i) {
+                Node rpNode = nodeProviderNodes.item(i);
+                String refid = GCMParserHelper.getAttributeValue(rpNode, "refid");
+                NodeProvider nodeProvider = nodeProvidersMap.get(refid);
+                commandBuilderExecutable.addNodeProvider(nodeProvider);
+            }
+        } else {
+            for (NodeProvider provider : nodeProvidersMap.values()) {
+                commandBuilderExecutable.addNodeProvider(provider);
             }
         }
 
         Node commandNode = (Node) xpath.evaluate(XPATH_COMMAND, appNode, XPathConstants.NODE);
 
         String name = GCMParserHelper.getAttributeValue(commandNode, "name");
-        commandBuilderScript.setCommand(name);
+        commandBuilderExecutable.setCommand(name);
 
         Node pathNode = (Node) xpath.evaluate(XPATH_PATH, commandNode, XPathConstants.NODE);
         if (pathNode != null) {
             // path tag is optional
-            commandBuilderScript.setPath(GCMParserHelper.parsePathElementNode(pathNode));
+            commandBuilderExecutable.setPath(GCMParserHelper.parsePathElementNode(pathNode));
         }
 
         // command args
@@ -116,7 +119,7 @@ public class ApplicationParserExecutable extends AbstractApplicationParser {
         for (int i = 0; i < argNodes.getLength(); ++i) {
             Node argNode = argNodes.item(i);
             String argVal = argNode.getFirstChild().getNodeValue();
-            commandBuilderScript.addArg(argVal);
+            commandBuilderExecutable.addArg(argVal);
         }
     }
 

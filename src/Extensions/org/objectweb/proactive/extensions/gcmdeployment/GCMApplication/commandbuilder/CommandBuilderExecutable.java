@@ -75,7 +75,7 @@ public class CommandBuilderExecutable implements CommandBuilder {
         args.add(arg);
     }
 
-    public void addDescriptor(NodeProvider nodeProvider) {
+    public void addNodeProvider(NodeProvider nodeProvider) {
         providers.add(nodeProvider);
     }
 
