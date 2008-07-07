@@ -34,6 +34,7 @@ import java.io.File;
 import java.math.BigInteger;
 import java.util.List;
 import org.objectweb.proactive.api.PAException;
+import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
@@ -80,11 +81,12 @@ public class Main {
         };
 
         //ProActive.tryWithCatch(java.io.IOException.class);
+        GCMApplication pad = null;
         PAException.tryWithCatch(Exception.class);
         GCMApplication pad = null;
 
         try {
-            String path = (args.length == 0) ? "descriptors/Matrix.xml" : args[0];
+            String path = args[0];
             pad = PAGCMDeployment.loadApplicationDescriptor(new File(path));
             GCMVirtualNode dispatcher = pad.getVirtualNode("matrixNode");
             pad.startDeployment();
@@ -98,9 +100,10 @@ public class Main {
             e.printStackTrace();
         } finally {
             PAException.removeTryWithCatch();
+            if (pad != null) {
+                pad.kill();
+            }
         }
-
-        pad.kill();
-        System.exit(0);
+        PALifeCycle.exitSuccess();
     }
 }
