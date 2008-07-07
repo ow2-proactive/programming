@@ -73,7 +73,7 @@ public class Validate extends DefaultHandler implements LexicalHandler {
         System.out.print(validator.parse(args[0]));
 
         if (!validator.isValid())
-            System.exit(1);
+            throw new Error("The XML is not valid or files are missing.");
     }
 
     /** Parse an XML file, and validate it.

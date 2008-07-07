@@ -190,30 +190,39 @@ public class DocBookize extends DefaultHandler implements LexicalHandler {
             final File resultFile = handler.getOutputFile();
 
             if (!inputFile.delete()) {
-                throw new IOException("Could not delete file " + inputFile + ".");
+                throw new Error("Could not delete file " + inputFile + ".");
             }
 
             if (!resultFile.renameTo(inputFile)) {
-                throw new IOException("Could not rename file " + resultFile + " to " + inputFile + ".");
+                throw new Error("Could not rename file " + resultFile + " to " + inputFile + ".");
             }
             if (!handler.isValid())
-                System.exit(1);
+                throw new Error("The XML is not valid or files are missing.");
             else {
-                System.exit(0);
+                //System.exit(0);
             }
         } catch (final IOException t) {
             DocBookize.logger.error(t.getMessage(), t);
+            throw new Error("File error.");
+            //reachable only if there was an exception
         } catch (final SAXNotRecognizedException e) {
             DocBookize.logger.error(e.getMessage(), e);
+            //reachable only if there was an exception
+            throw new Error("SAX error.");
         } catch (final SAXNotSupportedException e) {
             DocBookize.logger.error(e.getMessage(), e);
+            //reachable only if there was an exception
+            throw new Error("SAX error.");
         } catch (final SAXException e) {
             DocBookize.logger.error(e.getMessage(), e);
+            //reachable only if there was an exception
+            throw new Error("SAX error.");
         } catch (final ParserConfigurationException e) {
             DocBookize.logger.error(e.getMessage(), e);
+            //reachable only if there was an exception
+            throw new Error("Parser configuration error.");
         }
-        //reacheable only if there was an exception
-        System.exit(1);
+
     }
 
     /**
