@@ -120,13 +120,13 @@
 					</listitem>
 					<listitem>
 						<para>
-							2: The syntax of the document is validated
+							2-3: The syntax of the document is validated
 							against a DTD retrieved from the classpath.
 						</para>
 					</listitem>
 					<listitem>
 						<para>
-							4: The
+							5: The
 							<emphasis role="bold">definition</emphasis>
 							element has a name (which must be the same
 							name that the file's) and inheritance is
@@ -135,7 +135,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							5: The
+							6: The
 							<emphasis role="bold">interface</emphasis>
 							element allows to specify interfaces of the
 							current enclosing component.
@@ -143,7 +143,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							7-16: Nesting is allowed for composite
+							9-21: Nesting is allowed for composite
 							components and is done by adding other
 							<emphasis role="bold">component</emphasis>
 							elements. Components can be specified and
@@ -154,7 +154,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							10: Primitive components specify the
+							14: Primitive components specify the
 							<emphasis role="bold">content</emphasis>
 							element, which indicates the implementation
 							class containing the business logic for this
@@ -163,7 +163,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							11-14: Components can specify a
+							15-19: Components can specify a
 							<emphasis role="bold">attributes</emphasis>
 							element, which allows to initialize
 							attributes of a component.
@@ -175,7 +175,7 @@
 							<secondary>adl</secondary>
 						</indexterm>
 						<para>
-							18-19: The
+							23-24: The
 							<emphasis role="bold">binding</emphasis>
 							element specifies bindings between
 							interfaces of components and specifying
@@ -185,7 +185,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							21: The
+							26: The
 							<emphasis role="bold">controller</emphasis>
 							elements can have the following 'desc'
 							values: 'composite' or 'primitive'.
@@ -193,7 +193,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							23: The
+							28: The
 							<emphasis role="bold">
 								virtual-node
 							</emphasis>

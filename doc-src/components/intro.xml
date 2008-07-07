@@ -5,6 +5,10 @@
 		<primary>Component</primary>
 	</indexterm>
 
+	<info>
+		<title>Introduction</title>
+	</info>
+	<para />
 	<para>
 		Computing Grids and Peer-to-Peer networks are inherently
 		heterogeneous and distributed, and for this reason they present
