@@ -406,6 +406,7 @@ public class CommandBuilderProActive implements CommandBuilder {
 
                 case windows:
                     char fs = hostInfo.getOS().fileSeparator();
+                    ret.append(getPath(hostInfo));
                     ret.append(fs);
                     ret.append("dist");
                     ret.append(fs);

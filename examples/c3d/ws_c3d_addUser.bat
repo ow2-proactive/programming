@@ -12,11 +12,11 @@ goto end
 
 :doit
 SETLOCAL ENABLEDELAYEDEXPANSION
-IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\..
+IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
 
-call "%PROACTIVE%\scripts\windows\init.bat"
+call "..\init.bat"
 
-set XMLDESCRIPTOR=..\..\..\descriptors\C3D_User.xml
+set XMLDESCRIPTOR=GCMA_User.xml
 %JAVA_CMD% org.objectweb.proactive.examples.webservices.c3dWS.C3DUser %XMLDESCRIPTOR%
 ENDLOCAL
 
