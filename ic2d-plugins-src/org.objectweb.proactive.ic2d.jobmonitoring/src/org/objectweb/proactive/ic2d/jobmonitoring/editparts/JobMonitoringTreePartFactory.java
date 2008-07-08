@@ -34,7 +34,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.HostObject;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.RuntimeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.VirtualNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.WorldObject;
@@ -63,10 +63,10 @@ public class JobMonitoringTreePartFactory implements EditPartFactory {
             return new HostTreeEditPart((HostObject) model);
         }
         if (model instanceof RuntimeObject) {
-            return new JVMTreeEditPart((RuntimeObject) model);
+            return new RuntimeTreeEditPart((RuntimeObject) model);
         }
-        if (model instanceof NodeObject) {
-            return new NodeTreeEditPart((NodeObject) model);
+        if (model instanceof ProActiveNodeObject) {
+            return new NodeTreeEditPart((ProActiveNodeObject) model);
         }
         if (model instanceof ActiveObject) {
             return new AOTreeEditPart((ActiveObject) model);

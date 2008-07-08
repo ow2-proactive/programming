@@ -39,7 +39,6 @@ import javax.management.ReflectionException;
 
 import org.eclipse.draw2d.Label;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.AOFigure;
 
 
@@ -75,7 +74,6 @@ public class DgcAOFigure extends AOFigure {
     }
 
     public void updateDgcState(ActiveObject model) {
-        NodeObject node = model.getParent();
         String state = "";
         try {
             state = (String) model.getAttribute("DgcState");

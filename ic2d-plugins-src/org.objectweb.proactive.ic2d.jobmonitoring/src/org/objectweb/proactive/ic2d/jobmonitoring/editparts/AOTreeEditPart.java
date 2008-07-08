@@ -30,14 +30,13 @@
  */
 package org.objectweb.proactive.ic2d.jobmonitoring.editparts;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
-import org.objectweb.proactive.ic2d.jmxmonitoring.editpart.AOEditPart;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotification;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
@@ -53,7 +52,7 @@ public class AOTreeEditPart extends JobMonitoringTreeEditPart<ActiveObject> {
             .getResourceAsStream("ao_icon.png"));
 
     /**
-     * The contructor of this controller part.
+     * The constructor of this controller part.
      * @param model The instance ActiveObject model associated to this controller
      */
     public AOTreeEditPart(final ActiveObject model) {
@@ -92,8 +91,8 @@ public class AOTreeEditPart extends JobMonitoringTreeEditPart<ActiveObject> {
      * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
      */
     @Override
-    protected final List<AbstractData> getModelChildren() {
-        return AOEditPart.emptyList;
+    protected final List<?> getModelChildren() {
+        return Collections.EMPTY_LIST;
     }
 
     /**
