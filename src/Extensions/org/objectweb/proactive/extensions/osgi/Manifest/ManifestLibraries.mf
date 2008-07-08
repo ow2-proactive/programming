@@ -3,12 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Mandatory_libraires Plug-in
 Bundle-Version: 1.0.0
 Bundle-Location: file:bundles/proactiveLibraries.jar
-Bundle-ClassPath: bouncycastle.jar,
- components/fractal.jar,
- javassist.jar,
- log4j.jar,
- xercesImpl.jar,
- .
+Bundle-ClassPath: bouncycastle.jar, fractal.jar, javassist.jar,
+ log4j.jar, xercesImpl.jar, .
 Export-Package: com.jcraft.jsch,
  com.jcraft.jsch.jce,
  com.jcraft.jsch.jcraft,
@@ -140,3 +136,5 @@ Export-Package: com.jcraft.jsch,
  org.objectweb.fractal.util,
  org.w3c.dom.html,
  org.w3c.dom.ls
+
+

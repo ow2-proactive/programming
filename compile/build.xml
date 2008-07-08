@@ -827,7 +827,7 @@
 				<include name="log4j.jar" />
 				<include name="xercesImpl.jar" />
 				<include name="bouncycastle.jar" />
-				<include name="components/fractal.jar" />
+				<include name="fractal.jar" />
 			</fileset>
 		</jar>
 	</target>

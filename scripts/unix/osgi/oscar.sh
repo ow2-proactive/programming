@@ -25,5 +25,5 @@ echo $MYHOSTNAME
 
 rm -rf cache/${MYHOSTNAME}/*
 
-${JAVA_HOME}/bin/java -Doscar.cache.profiledir="${OSCAR_HOME}/cache/${MYHOSTNAME}"  -Doscar.cache.profile="${MYHOSTNAME}"  -Djava.security.policy="${OSCAR_HOME}/etc/java.policy"  -Dcom.sun.management.jmxremote -Dproactive.http.servlet=enabled -Dproactive.communication.protocol=http -Dproactive.http.port=8080  -Doscar.system.properties="${OSCAR_HOME}/etc/system.properties"   -jar "$OSCAR_HOME/../../../lib/osgi/oscar.jar"
+${JAVA_HOME}/bin/java -Doscar.cache.profiledir="${OSCAR_HOME}/cache/${MYHOSTNAME}"  -Doscar.cache.profile="${MYHOSTNAME}"  -Djava.security.policy="${OSCAR_HOME}/etc/java.policy"  -Dcom.sun.management.jmxremote -Dproactive.http.servlet=true -Dproactive.communication.protocol=http -Dproactive.http.port=8080  -Doscar.system.properties="${OSCAR_HOME}/etc/system.properties"   -jar "$OSCAR_HOME/../../../lib/oscar.jar"
 #-Djava.security.manager
