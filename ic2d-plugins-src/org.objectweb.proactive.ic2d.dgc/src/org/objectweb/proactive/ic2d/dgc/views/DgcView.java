@@ -57,7 +57,7 @@ public class DgcView extends MonitoringView implements Runnable {
         Set<Map.Entry<ActiveObject, Collection<ActiveObject>>> s = graph.entrySet();
         for (Map.Entry<ActiveObject, Collection<ActiveObject>> e : s) {
             ActiveObject ao = e.getKey();
-            ao.resetCommunications();
+            ao.removeAllCommunications(true);
         }
         for (Map.Entry<ActiveObject, Collection<ActiveObject>> e : s) {
             ActiveObject srcAO = e.getKey();

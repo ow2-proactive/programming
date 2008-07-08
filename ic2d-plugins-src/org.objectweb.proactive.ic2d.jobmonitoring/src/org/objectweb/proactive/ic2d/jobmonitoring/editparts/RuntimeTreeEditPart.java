@@ -35,7 +35,7 @@ import java.util.Observable;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.RuntimeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.VirtualNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotification;
@@ -48,8 +48,8 @@ import org.objectweb.proactive.ic2d.jobmonitoring.util.JobMonitoringTreeUtil;
  * @author The ProActive Team
  *
  */
-public class JVMTreeEditPart extends JobMonitoringTreeEditPart<RuntimeObject> {
-    public static final Image JVM_IMAGE = new Image(Display.getCurrent(), JVMTreeEditPart.class
+public class RuntimeTreeEditPart extends JobMonitoringTreeEditPart<RuntimeObject> {
+    public static final Image JVM_IMAGE = new Image(Display.getCurrent(), RuntimeTreeEditPart.class
             .getResourceAsStream("jvm_icon.png"));
 
     //
@@ -60,7 +60,7 @@ public class JVMTreeEditPart extends JobMonitoringTreeEditPart<RuntimeObject> {
      * The contructor of this controller part.
      * @param model The instance RuntimeObject model associated to this controller
      */
-    public JVMTreeEditPart(final RuntimeObject model) {
+    public RuntimeTreeEditPart(final RuntimeObject model) {
         super(model);
     }
 
@@ -99,15 +99,15 @@ public class JVMTreeEditPart extends JobMonitoringTreeEditPart<RuntimeObject> {
      * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
      */
     @Override
-    protected final List<NodeObject> getModelChildren() {
-        List<NodeObject> res;
+    protected final List<ProActiveNodeObject> getModelChildren() {
+        List<ProActiveNodeObject> res;
         if ((getParent() != null) && (getParent().getParent() != null) &&
             (getParent().getParent().getModel() != null)) {
             res = JobMonitoringTreeUtil.getJVMChildren(getCastedModel(), (VirtualNodeObject) getParent()
                     .getParent().getModel());
         } else {
             // Return an empty list to avoid NullPointerException
-            res = new java.util.ArrayList<NodeObject>(0);
+            res = new java.util.ArrayList<ProActiveNodeObject>(0);
         }
         return res;
     }

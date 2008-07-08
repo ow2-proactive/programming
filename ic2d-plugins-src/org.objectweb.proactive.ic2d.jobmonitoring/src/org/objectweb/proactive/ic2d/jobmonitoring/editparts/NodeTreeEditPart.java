@@ -35,8 +35,7 @@ import java.util.Observable;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotification;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
@@ -47,7 +46,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
  * @author The ProActive Team
  *
  */
-public class NodeTreeEditPart extends JobMonitoringTreeEditPart<NodeObject> {
+public class NodeTreeEditPart extends JobMonitoringTreeEditPart<ProActiveNodeObject> {
     public static final Image NODE_IMAGE = new Image(Display.getCurrent(), NodeTreeEditPart.class
             .getResourceAsStream("node_icon.png"));
 
@@ -55,7 +54,7 @@ public class NodeTreeEditPart extends JobMonitoringTreeEditPart<NodeObject> {
      * The contructor of this controller part.
      * @param model The instance NodeObject model associated to this controller
      */
-    public NodeTreeEditPart(final NodeObject model) {
+    public NodeTreeEditPart(final ProActiveNodeObject model) {
         super(model);
     }
 
@@ -94,7 +93,7 @@ public class NodeTreeEditPart extends JobMonitoringTreeEditPart<NodeObject> {
      * @see org.eclipse.gef.editparts.AbstractEditPart#getModelChildren()
      */
     @Override
-    protected final List<AbstractData> getModelChildren() {
+    protected final List<?> getModelChildren() {
         return getCastedModel().getMonitoredChildrenAsList();
     }
 
