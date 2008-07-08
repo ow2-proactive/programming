@@ -4,8 +4,8 @@ Bundle-Name: JMXmonitoring Plug-in
 Bundle-SymbolicName: org.objectweb.proactive.ic2d.JMXmonitoring;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.objectweb.proactive.ic2d.jmxmonitoring.Activator
+Eclipse-LazyStart: true
 Bundle-Vendor: ProActive Team
-Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.gef,
@@ -14,7 +14,6 @@ Require-Bundle: org.eclipse.ui,
  org.objectweb.proactive.ic2d.console,
  org.eclipse.ui.console,
  org.eclipse.ui.views
-Eclipse-LazyStart: true
 Export-Package: org.objectweb.proactive.ic2d.jmxmonitoring,
  org.objectweb.proactive.ic2d.jmxmonitoring.action,
  org.objectweb.proactive.ic2d.jmxmonitoring.data,
