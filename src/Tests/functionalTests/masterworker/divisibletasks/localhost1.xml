@@ -6,6 +6,8 @@
 	
 	<environment>
 		<javaPropertyVariable name="user.home"/>
+
+		<descriptorDefaultVariable name="os" value="unix"/>
 	</environment>
 	
 	<resources>              
@@ -15,7 +17,7 @@
 	<infrastructure>
 		
 		<hosts>
-			<host id="hLocalhost1" os="unix" hostCapacity="1" vmCapacity="1">
+			<host id="hLocalhost1" os="${os}" hostCapacity="1" vmCapacity="1">
 				<homeDirectory base="root" relpath="${user.home}"/>				
 			</host>
 		</hosts>
