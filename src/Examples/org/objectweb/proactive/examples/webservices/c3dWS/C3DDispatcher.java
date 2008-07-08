@@ -49,10 +49,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -74,7 +76,10 @@ import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
 import org.objectweb.proactive.examples.webservices.c3dWS.prim.Light;
 import org.objectweb.proactive.examples.webservices.c3dWS.prim.Primitive;
 import org.objectweb.proactive.examples.webservices.c3dWS.prim.Sphere;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.WebServices;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
@@ -1012,7 +1017,7 @@ public class C3DDispatcher implements org.objectweb.proactive.RunActive, Seriali
      * @param argv Name of the hosts file
      */
     public static void main(String[] argv) throws NodeException {
-        ProActiveDescriptor proActiveDescriptor = null;
+        GCMApplication proActiveDescriptor = null;
         ProActiveConfiguration.load();
 
         String hostWS = "localhost:8080";
@@ -1025,8 +1030,8 @@ public class C3DDispatcher implements org.objectweb.proactive.RunActive, Seriali
         Node node = null;
 
         try {
-            proActiveDescriptor = PADeployment.getProactiveDescriptor("file:" + argv[0]);
-            proActiveDescriptor.activateMappings();
+            proActiveDescriptor = PAGCMDeployment.loadApplicationDescriptor(new File(argv[0]));
+            proActiveDescriptor.startDeployment();
 
             //Thread.sleep(20000);		
         } catch (Exception e) {
@@ -1035,13 +1040,24 @@ public class C3DDispatcher implements org.objectweb.proactive.RunActive, Seriali
         }
 
         //Object param[] = new Object[]{ proActiveDescriptor };
-        VirtualNode dispatcher = proActiveDescriptor.getVirtualNode("Dispatcher");
+        GCMVirtualNode dispatcher = proActiveDescriptor.getVirtualNode("Dispatcher");
+        dispatcher.waitReady();
 
-        VirtualNode renderer = proActiveDescriptor.getVirtualNode("Renderer");
-        String[] rendererNodes = renderer.getNodesURL();
+        GCMVirtualNode renderer = proActiveDescriptor.getVirtualNode("Renderer");
+        renderer.waitReady();
+
+        java.util.List<Node> currentNodes = renderer.getCurrentNodes();
+
+        String[] rendererNodes = new String[currentNodes.size()];
+        int i = 0;
+
+        for (Node n : currentNodes) {
+            rendererNodes[i++] = n.getNodeInformation().getName();
+        }
+
         Object[] param = new Object[] { rendererNodes, dispatcher, proActiveDescriptor };
 
-        node = dispatcher.getNode();
+        node = dispatcher.getANode();
 
         try {
             C3DDispatcher c3dd = (C3DDispatcher) PAActiveObject.newActive(
