@@ -8,7 +8,6 @@ workingDir=`dirname $0`
 
 $JAVACMD org.objectweb.proactive.core.node.StartNode vm1 &
 $JAVACMD org.objectweb.proactive.core.node.StartNode vm2 &
-sleep 4
 
 $JAVACMD org.objectweb.proactive.examples.garden.Flower
 
