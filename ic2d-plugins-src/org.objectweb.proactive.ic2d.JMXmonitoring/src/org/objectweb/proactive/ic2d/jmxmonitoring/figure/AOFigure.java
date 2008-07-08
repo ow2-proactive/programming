@@ -419,17 +419,11 @@ public class AOFigure extends AbstractFigure {
     }
 
     public boolean isSecure() {
-        return isSecure;
+        return this.isSecure;
     }
 
     public void setSecure(boolean isSecure) {
         this.isSecure = isSecure;
-    }
-
-    public void setParent(IFigure p) {
-        //System.out.println(this.label.getText()+" AOFigure.setParent()" + p);
-        //new Exception().printStackTrace();
-        super.setParent(p);
     }
 
 }

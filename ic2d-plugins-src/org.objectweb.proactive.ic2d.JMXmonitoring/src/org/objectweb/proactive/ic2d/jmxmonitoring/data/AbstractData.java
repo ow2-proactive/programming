@@ -54,9 +54,15 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
 
 
 /**
- * Holder class for the data representation.
+ * The Holder class for the data representation.
+ * 
+ * @author vbodnart
+ * 
+ * @param <P> The class of the parent object
+ * @param <C> The class of the child object
  */
-public abstract class AbstractData extends Observable {
+@SuppressWarnings("unchecked")
+public abstract class AbstractData<P extends AbstractData, C extends AbstractData> extends Observable {
     // -------------------------------------------
     // --- Variables -----------------------------
     // -------------------------------------------
@@ -74,7 +80,7 @@ public abstract class AbstractData extends Observable {
     /**
      * The monitored children
      */
-    protected final Map<String, AbstractData> monitoredChildren;
+    protected final Map<String, C> monitoredChildren;
 
     /**
      * The object name associated to this object.
@@ -94,7 +100,7 @@ public abstract class AbstractData extends Observable {
      *            An instance of ObjectName for this model
      */
     public AbstractData(final ObjectName objectName) {
-        this(objectName, new ConcurrentHashMap<String, AbstractData>());
+        this(objectName, new ConcurrentHashMap<String, C>());
     }
 
     /**
@@ -106,7 +112,7 @@ public abstract class AbstractData extends Observable {
      * @param monitoredChildren
      *            An instance of map for monitored children
      */
-    public AbstractData(final ObjectName objectName, final Map<String, AbstractData> monitoredChildren) {
+    public AbstractData(final ObjectName objectName, final Map<String, C> monitoredChildren) {
         this.objectName = objectName;
         this.monitoredChildren = monitoredChildren;
     }
@@ -130,7 +136,7 @@ public abstract class AbstractData extends Observable {
      * @param child
      *            The child to explore
      */
-    public synchronized void addChild(AbstractData child) {
+    public synchronized void addChild(C child) {
         if (!this.monitoredChildren.containsKey(child.getKey())) {
             this.monitoredChildren.put(child.getKey(), child);
             setChanged();
@@ -145,7 +151,7 @@ public abstract class AbstractData extends Observable {
      * @param child
      *            The child to delete.
      */
-    public void removeChild(AbstractData child) {
+    public void removeChild(C child) {
         if (child == null) {
             return;
         }
@@ -161,7 +167,7 @@ public abstract class AbstractData extends Observable {
      * @param child
      *            The child to add to the NOT monitored children.
      */
-    public void removeChildFromMonitoredChildren(AbstractData child) {
+    public void removeChildFromMonitoredChildren(C child) {
         this.monitoredChildren.remove(child.getKey());
         setChanged();
         notifyObservers(new MVCNotification(MVCNotificationTag.REMOVE_CHILD_FROM_MONITORED_CHILDREN, child
@@ -173,8 +179,12 @@ public abstract class AbstractData extends Observable {
      * 
      * @return The list of monitored children
      */
-    public List<AbstractData> getMonitoredChildrenAsList() {
-        return new ArrayList<AbstractData>(this.monitoredChildren.values());
+    public List<C> getMonitoredChildrenAsList() {
+        if (this.monitoredChildren == null) {
+            System.out.println("AbstractData.getMonitoredChildrenAsList() -----------------> " +
+                this.getName());
+        }
+        return new ArrayList<C>(this.monitoredChildren.values());
     }
 
     /**
@@ -182,8 +192,8 @@ public abstract class AbstractData extends Observable {
      * 
      * @return
      */
-    public Map<String, AbstractData> getMonitoredChildrenAsMap() {
-        return new HashMap<String, AbstractData>(this.monitoredChildren);
+    public Map<String, C> getMonitoredChildrenAsMap() {
+        return new HashMap<String, C>(this.monitoredChildren);
     }
 
     /**
@@ -201,7 +211,7 @@ public abstract class AbstractData extends Observable {
      * @param key
      * @return the child
      */
-    public AbstractData getChild(String key) {
+    public C getChild(String key) {
         return this.monitoredChildren.get(key);
     }
 
@@ -220,7 +230,7 @@ public abstract class AbstractData extends Observable {
      * 
      * @return the object's parent
      */
-    public abstract AbstractData getParent();
+    public abstract P getParent();
 
     /**
      * Updates the set of the children of this object so that they are in sync
@@ -233,7 +243,7 @@ public abstract class AbstractData extends Observable {
      * Explores each child of monitored children.
      */
     public void exploreEachChild() {
-        for (AbstractData child : getMonitoredChildrenAsList()) {
+        for (C child : getMonitoredChildrenAsList()) {
             child.explore();
         }
     }
@@ -388,7 +398,7 @@ public abstract class AbstractData extends Observable {
      * @return
      */
     public boolean isMonitored() {
-        return isMonitored;
+        return this.isMonitored;
     }
 
     /**
@@ -411,7 +421,7 @@ public abstract class AbstractData extends Observable {
         this.isMonitored = false;
         Console.getInstance(Activator.CONSOLE_NAME).log(
                 getType() + " " + getName() + " is no more monitored.");
-        for (final AbstractData child : this.monitoredChildren.values()) {
+        for (final C child : this.monitoredChildren.values()) {
             child.destroy();
         }
         setChanged();

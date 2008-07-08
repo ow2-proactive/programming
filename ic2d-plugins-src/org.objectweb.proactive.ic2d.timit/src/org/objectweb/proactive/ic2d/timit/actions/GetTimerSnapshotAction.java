@@ -59,7 +59,7 @@ import org.objectweb.proactive.ic2d.timit.views.TimItView;
  */
 public class GetTimerSnapshotAction extends Action implements IActionExtPoint {
     public static final String GET_TIMER_SNAPSHOT = "Get timer snapshot";
-    private AbstractData object;
+    private AbstractData<?, ?> object;
     private BasicChartContainerObject container;
 
     public GetTimerSnapshotAction() {
@@ -101,7 +101,7 @@ public class GetTimerSnapshotAction extends Action implements IActionExtPoint {
     /**
      * Implements IActionExtPoint setAbstractDataObject(AbstractDataObject) method
      */
-    public final void setAbstractDataObject(final AbstractData object) {
+    public final void setAbstractDataObject(final AbstractData<?, ?> object) {
         this.object = object;
 
         if (this.object instanceof WorldObject) {
@@ -112,7 +112,7 @@ public class GetTimerSnapshotAction extends Action implements IActionExtPoint {
         }
     }
 
-    public void setActiveSelect(AbstractData ref) {
+    public void setActiveSelect(AbstractData<?, ?> ref) {
         if ((this.container != null) && (ref instanceof ActiveObject)) {
             BasicChartObject basicChartObject = this.container.getChartObjectById(((ActiveObject) ref)
                     .getUniqueID());

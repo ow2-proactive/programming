@@ -34,7 +34,7 @@ import org.objectweb.proactive.core.jmx.ProActiveConnection;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 
 
-public final class VirtualNodeObject extends AbstractData {
+public final class VirtualNodeObject extends AbstractData<WorldObject, ProActiveNodeObject> {
     private WorldObject parent;
 
     /** The virtual node name */
@@ -92,21 +92,20 @@ public final class VirtualNodeObject extends AbstractData {
     }
 
     @Override
-    public void addChild(AbstractData child) {
+    public void addChild(ProActiveNodeObject child) {
         if (!monitoredChildren.containsKey(child.getKey())) {
             monitoredChildren.put(child.getKey(), child);
         }
     }
 
     @Override
-    public void removeChild(AbstractData child) {
+    public void removeChild(ProActiveNodeObject child) {
         monitoredChildren.remove(child.getKey());
         if (monitoredChildren.isEmpty()) {
             parent.removeVirtualNode(this);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public WorldObject getParent() {
         return parent;

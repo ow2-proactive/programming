@@ -60,7 +60,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
  * 
  * @author The ProActive Team
  */
-public final class RuntimeObject extends AbstractData {
+public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeObject> {
 
     private final HostObject parent;
     private final String url;
@@ -87,7 +87,6 @@ public final class RuntimeObject extends AbstractData {
         this.listener = new RuntimeObjectListener(this);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public HostObject getParent() {
         return this.parent;
@@ -132,7 +131,7 @@ public final class RuntimeObject extends AbstractData {
     @Override
     public void destroy() {
         this.unsubscribeListener();
-        for (final AbstractData child : this.getMonitoredChildrenAsList()) {
+        for (final ProActiveNodeObject child : this.getMonitoredChildrenAsList()) {
             child.destroy();
         }
         super.destroy();
@@ -217,7 +216,11 @@ public final class RuntimeObject extends AbstractData {
                     "Could not get node list from runtime MBean of " + this.getName());
         }
 
-        final Map<String, AbstractData> childrenToRemove = this.getMonitoredChildrenAsMap();
+        if (nodeNames == null) {
+            return;
+        }
+
+        final Map<String, ProActiveNodeObject> childrenToRemove = this.getMonitoredChildrenAsMap();
 
         for (final ObjectName name : nodeNames) {
             // Search if the node is a P2P node
@@ -284,7 +287,7 @@ public final class RuntimeObject extends AbstractData {
         }
 
         // Some child have to be removed
-        for (final AbstractData child : childrenToRemove.values()) {
+        for (final ProActiveNodeObject child : childrenToRemove.values()) {
             child.destroy();
         }
     }

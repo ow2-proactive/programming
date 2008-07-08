@@ -30,27 +30,23 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.editpart;
 
-import java.util.List;
-
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.FreeformLayer;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.widgets.Control;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.WorldObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.WorldListener;
 import org.objectweb.proactive.ic2d.jmxmonitoring.view.MonitoringView;
 
 
-public final class WorldEditPart extends AbstractMonitoringEditPart {
+public final class WorldEditPart extends AbstractMonitoringEditPart<WorldObject> {
 
     public static final boolean DEFAULT_DISPLAY_TOPOLOGY = true;
     private static boolean displayTopology = DEFAULT_DISPLAY_TOPOLOGY;
 
     private FreeformLayer layer;
     private final MonitoringView monitoringView;
-    private final WorldObject castedModel;
     private IFigure castedFigure;
 
     /*
@@ -82,7 +78,6 @@ public final class WorldEditPart extends AbstractMonitoringEditPart {
     //
     public WorldEditPart(final WorldObject model, final MonitoringView monitoringView) {
         super(model);
-        this.castedModel = model;
         this.monitoringView = monitoringView;
 
         new Thread() {
@@ -108,17 +103,6 @@ public final class WorldEditPart extends AbstractMonitoringEditPart {
     //
     // -- PUBLICS METHODS -----------------------------------------------
     //
-
-    /**
-     * Convert the result of EditPart.getModel()
-     * to WorldObject (the real type of the model).
-     * @return the casted model
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public WorldObject getCastedModel() {
-        return this.castedModel;
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -169,15 +153,6 @@ public final class WorldEditPart extends AbstractMonitoringEditPart {
         layer.addMouseMotionListener(listener);
 
         return layer;
-    }
-
-    /**
-     * Returns a List containing the children model objects.
-     * @return the List of children
-     */
-    @Override
-    protected List<AbstractData> getModelChildren() {
-        return getCastedModel().getMonitoredChildrenAsList();
     }
 
     /**

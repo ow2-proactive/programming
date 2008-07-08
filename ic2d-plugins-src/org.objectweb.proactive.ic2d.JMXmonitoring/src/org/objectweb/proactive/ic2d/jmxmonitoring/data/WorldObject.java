@@ -49,7 +49,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
  * 
  * @author The ProActive Team
  */
-public final class WorldObject extends AbstractData {
+public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObject> {
     // -------------------------------------------
     // --- Constants -----------------------------
     // -------------------------------------------
@@ -169,7 +169,7 @@ public final class WorldObject extends AbstractData {
     }
 
     @Override
-    public void removeChild(AbstractData child) {
+    public void removeChild(HostObject child) {
         super.removeChild(child);
         setChanged();
         // this notification will be handled by the MonitorThread only for
@@ -232,7 +232,7 @@ public final class WorldObject extends AbstractData {
     }
 
     @Override
-    public AbstractData getParent() {
+    public AbstractData<?, ?> getParent() {
         return null;
     }
 
@@ -406,7 +406,7 @@ public final class WorldObject extends AbstractData {
 
     public int getNumberOfJVMs() {
         int n = 0;
-        for (final AbstractData data : this.getMonitoredChildrenAsList()) {
+        for (final HostObject data : this.getMonitoredChildrenAsList()) {
             n += data.getMonitoredChildrenSize();
         }
         return n;

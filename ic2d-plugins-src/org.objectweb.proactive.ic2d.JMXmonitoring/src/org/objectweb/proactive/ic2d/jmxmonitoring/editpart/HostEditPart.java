@@ -30,12 +30,10 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.editpart;
 
-import java.util.List;
 import java.util.Observable;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.swt.widgets.Display;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.HostObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.HostFigure;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.HostListener;
@@ -44,8 +42,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
 
 
-public final class HostEditPart extends AbstractMonitoringEditPart {
-    private HostObject castedModel;
+public final class HostEditPart extends AbstractMonitoringEditPart<HostObject> {
     private HostFigure castedFigure;
 
     //
@@ -58,20 +55,6 @@ public final class HostEditPart extends AbstractMonitoringEditPart {
     //
     // -- PUBLICS METHODS -----------------------------------------------
     //
-
-    /**
-     * Convert the result of EditPart.getModel()
-     * to HostObject (the real type of the model).
-     * @return the casted model
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public HostObject getCastedModel() {
-        if (castedModel == null) {
-            castedModel = (HostObject) getModel();
-        }
-        return castedModel;
-    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -133,14 +116,6 @@ public final class HostEditPart extends AbstractMonitoringEditPart {
         figure.addMouseListener(listener);
         figure.addMouseMotionListener(listener);
         return figure;
-    }
-
-    /**
-     * Returns a List containing the children model objects.
-     * @return the List of children
-     */
-    protected List<AbstractData> getModelChildren() {
-        return getCastedModel().getMonitoredChildrenAsList();
     }
 
     /**

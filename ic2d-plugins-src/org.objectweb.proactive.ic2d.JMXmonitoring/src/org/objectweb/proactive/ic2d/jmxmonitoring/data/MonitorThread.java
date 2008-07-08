@@ -43,24 +43,28 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 
 
 /**
- * This class is used to perform a refresh over the model data (the IC2D representations of the monitored objects).
- * It defines a thread (<code>MonitorThreadRefresher</code>) that explores all the data in order to guaranty the
- * sync between the monitored objects and their representations.
- *
- * It also defines a thread (<code> MonitorThreadSelectiveRefresher </code>) that will performed an explore on objects
- * for which an explore have been specifically asked. This thread is used to explore new found objects in the system.
- * The time between two executions of the MonitorThreadSelectiveRefresher (timeForSelectiveRefresh * 1000) should allways be less that
- *
+ * This class is used to perform a refresh over the model data (the IC2D
+ * representations of the monitored objects). It defines a thread (<code>MonitorThreadRefresher</code>)
+ * that explores all the data in order to guaranty the sync between the
+ * monitored objects and their representations.
+ * 
+ * It also defines a thread (<code> MonitorThreadSelectiveRefresher </code>)
+ * that will performed an explore on objects for which an explore have been
+ * specifically asked. This thread is used to explore new found objects in the
+ * system. The time between two executions of the
+ * MonitorThreadSelectiveRefresher (timeForSelectiveRefresh * 1000) should
+ * allways be less that
+ * 
  * @author The ProActive Team
- *
+ * 
  */
 public final class MonitorThread implements Observer {
     private static org.apache.log4j.Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
     private final static int DEFAULT_TTR = 10;
     private final static int DEFAULT_TIME_SELECTIVE_REFRESH = 10;
 
-    //	/** Hosts will be recursively searched up to this depth */
-    //	private int depth;
+    // /** Hosts will be recursively searched up to this depth */
+    // private int depth;
 
     /** Thread which refresh the objects */
     private Thread refresher;
@@ -75,7 +79,7 @@ public final class MonitorThread implements Observer {
     /** Time To Refresh (in seconds) */
     private int ttr;
     private int timeForSelectiveRefresh = DEFAULT_TIME_SELECTIVE_REFRESH;
-    private ConcurrentHashMap<String, AbstractData> objectsToRefreshSelectively = new ConcurrentHashMap<String, AbstractData>();
+    private ConcurrentHashMap<String, AbstractData<?, ?>> objectsToRefreshSelectively;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
@@ -83,14 +87,17 @@ public final class MonitorThread implements Observer {
 
     /**
      * Creates a new MonitorThread
-     * @param worl A world object
+     * 
+     * @param world
+     *            A world object
      */
     public MonitorThread(WorldObject world) {
         this.ttr = DEFAULT_TTR;
         this.worldObj = world;
+        this.objectsToRefreshSelectively = new ConcurrentHashMap<String, AbstractData<?, ?>>();
         this.refresh = false;
         this.refresher = new Thread(new MonitorThreadRefresher(world), "Ic2d refresh thread");
-        selectiveRefresh = true;
+        this.selectiveRefresh = true;
         this.selectiveRefresher = new Thread(new MonitorThreadSelectiveRefresher(),
             "Ic2d selective refresh thread");
         selectiveRefresher.start();
@@ -100,25 +107,26 @@ public final class MonitorThread implements Observer {
     // -- PUBLICS METHODS -----------------------------------------------
     //
 
-    //	/**
-    //	 * Hosts will be recursively searched up to 
-    //	 * the depth returned by this method.
-    //	 * @return depth depth used to searched up hosts
-    //	 */
-    //	public int getDepth(){
-    //		return this.depth;
-    //	}
+    // /**
+    // * Hosts will be recursively searched up to
+    // * the depth returned by this method.
+    // * @return depth depth used to searched up hosts
+    // */
+    // public int getDepth(){
+    // return this.depth;
+    // }
     //
-    //	/**
-    //	 * Sets the depth used to searched up hosts.
-    //	 * @param depth the news depth
-    //	 */
-    //	public void setDepth(int depth){
-    //		this.depth = depth;
-    //	}
+    // /**
+    // * Sets the depth used to searched up hosts.
+    // * @param depth the news depth
+    // */
+    // public void setDepth(int depth){
+    // this.depth = depth;
+    // }
 
     /**
      * Returns the Time To Refresh (in seconds).
+     * 
      * @return time to refresh
      */
     public int getTTR() {
@@ -127,20 +135,24 @@ public final class MonitorThread implements Observer {
 
     /**
      * Sets the Time To Refresh (in seconds).
-     * @param ttr the new time to refresh
+     * 
+     * @param ttr
+     *            the new time to refresh
      */
     public void setTTR(int ttr) {
         this.ttr = ttr;
     }
 
     /**
-     * Adds an object to be explored
-     * When a new Object is discovered (i.e. a new Runtime) this method is to be called in order to explore the new object.
-     * Calling this method instead of directly calling explore on the new object is recommended as it would avoid exploring the object several times.
-     *
-     * @param data the object to explore
+     * Adds an object to be explored When a new Object is discovered (i.e. a new
+     * Runtime) this method is to be called in order to explore the new object.
+     * Calling this method instead of directly calling explore on the new object
+     * is recommended as it would avoid exploring the object several times.
+     * 
+     * @param data
+     *            the object to explore
      */
-    public void addObjectToExplore(AbstractData data) {
+    public void addObjectToExplore(AbstractData<?, ?> data) {
         this.objectsToRefreshSelectively.put(data.getKey(), data);
     }
 
@@ -170,7 +182,7 @@ public final class MonitorThread implements Observer {
             refresher.start();
         }
 
-        //the thread has not yet been started. We start it now. 
+        // the thread has not yet been started. We start it now.
         if (refresher.getState() == Thread.State.NEW) {
             refresher.start();
         }
@@ -186,7 +198,7 @@ public final class MonitorThread implements Observer {
     //
     private class MonitorThreadRefresher implements Runnable {
 
-        /** The World to refresh*/
+        /** The World to refresh */
         private WorldObject world;
 
         public MonitorThreadRefresher(WorldObject world) {
@@ -220,18 +232,20 @@ public final class MonitorThread implements Observer {
 
     private class MonitorThreadSelectiveRefresher implements Runnable {
         public void run() {
-            while (selectiveRefresh) {
-                for (AbstractData ad : objectsToRefreshSelectively.values()) {
-                    ad.explore();
-                    //System.out.println("Selective monitoring thread explores "+ad);								
-                }
-                objectsToRefreshSelectively.clear();
+            try {
+                while (selectiveRefresh) {
+                    for (AbstractData<?, ?> ad : objectsToRefreshSelectively.values()) {
+                        ad.explore();
+                        // System.out.println("Selective monitoring thread
+                        // explores
+                        // "+ad);
+                    }
+                    objectsToRefreshSelectively.clear();
 
-                try {
                     Thread.sleep(timeForSelectiveRefresh * 2000);
-                } catch (InterruptedException e) {
-                    System.out.println("Ic2d selective exploring thread has been interupted.");
                 }
+            } catch (InterruptedException e) {
+                System.out.println("Ic2d selective exploring thread has been interupted.");
             }
         }
     }

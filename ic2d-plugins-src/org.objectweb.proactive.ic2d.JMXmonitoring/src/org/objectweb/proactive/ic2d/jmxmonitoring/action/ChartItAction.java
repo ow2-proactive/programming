@@ -57,7 +57,8 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint;
 
 /**
  * This action allows the user to open a ChartIt editor using as input a
- * resource descriptor based on an {@link org.objectweb.proactive.ic2d.data.AbstractData}.
+ * resource descriptor based on an
+ * {@link org.objectweb.proactive.ic2d.data.AbstractData}.
  * 
  * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>.
  */
@@ -73,7 +74,7 @@ public final class ChartItAction extends Action implements IActionExtPoint {
     /**
      * The target data
      */
-    private AbstractData target;
+    private AbstractData<?, ?> target;
 
     /**
      * Creates a new instance of <code>ChartItAction</code>.
@@ -92,7 +93,7 @@ public final class ChartItAction extends Action implements IActionExtPoint {
      * 
      * @see org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint#setAbstractDataObject(org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData)
      */
-    public void setAbstractDataObject(final AbstractData object) {
+    public void setAbstractDataObject(final AbstractData<?, ?> object) {
         if (object.getClass() == WorldObject.class || object.getClass() == HostObject.class)
             return;
         this.target = object;
@@ -105,7 +106,7 @@ public final class ChartItAction extends Action implements IActionExtPoint {
      * 
      * @see org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint#setActiveSelect(org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData)
      */
-    public void setActiveSelect(final AbstractData ref) {
+    public void setActiveSelect(final AbstractData<?, ?> ref) {
         this.handleData(ref, false);
     }
 
@@ -118,7 +119,7 @@ public final class ChartItAction extends Action implements IActionExtPoint {
      * @param createNewIfNotFound
      *            Creates new editor if not found
      */
-    private void handleData(final AbstractData abstractData, final boolean createNewIfNotFound) {
+    private void handleData(final AbstractData<?, ?> abstractData, final boolean createNewIfNotFound) {
         try {
             if (abstractData == null)
                 return;
@@ -190,7 +191,7 @@ public final class ChartItAction extends Action implements IActionExtPoint {
         /**
          * The abstract data described as a resource
          */
-        final AbstractData abstractData;
+        final AbstractData<?, ?> abstractData;
 
         /**
          * Some custom data providers
@@ -206,7 +207,7 @@ public final class ChartItAction extends Action implements IActionExtPoint {
          *             Thrown if a problem occurred during custom providers
          *             creation
          */
-        public AbstractDataDescriptor(final AbstractData abstractData) throws IOException {
+        public AbstractDataDescriptor(final AbstractData<?, ?> abstractData) throws IOException {
             this.abstractData = abstractData;
             this.customProviders = new IDataProvider[0];
         }

@@ -51,15 +51,33 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 /**
  * Holder class for the host data representation.
  */
-public final class HostObject extends AbstractData {
-    private WorldObject parent;
-    private String url;
-    private String hostName;
-    private int port;
-    private String protocol;
-    private int rank;
+public final class HostObject extends AbstractData<WorldObject, RuntimeObject> {
     private final static String DEFAULT_NAME = "undefined";
 
+    /**
+     * The parent world object
+     */
+    private final WorldObject parent;
+    /**
+     * The hostname of this host
+     */
+    private final String hostName;
+    /**
+     * The port used to communicate with this host
+     */
+    private final int port;
+    /**
+     * The protocol used to communicate with this host
+     */
+    private final String protocol;
+    /**
+     * The url of this host
+     */
+    private final String url;
+    /**
+     * The rank of this host
+     */
+    private final int rank;
     /**
      * This variable is used to avoid blocking calls to explore method ie lock-free call to explore method
      */
@@ -72,28 +90,26 @@ public final class HostObject extends AbstractData {
     private String osVersion;
 
     /**
-     * Creates a new HostObject. Use the method addHost(String url) of the WorldObject class instead.
-     * @param url du host
-     * @throws NullPointerException
+     * Creates a new HostObject. Use the method addHost(String url) of the WorldObject class instead.	
+     * @param parent The parent world object
+     * @param url The url of this host
+     * @param rank The rank of this host
      * @throws MalformedObjectNameException
+     * @throws NullPointerException
      */
     protected HostObject(WorldObject parent, String url, int rank) throws MalformedObjectNameException,
             NullPointerException {
         super(new ObjectName(FactoryName.HOST));
 
-        this.hostName = URIBuilder.getHostNameFromUrl(url);
-        String name = URIBuilder.getNameFromURI(url);
-        this.protocol = URIBuilder.getProtocol(url);
-        this.port = URIBuilder.getPortNumber(url);
-
-        this.url = URIBuilder.buildURI(hostName, name, protocol, port).toString();
-
-        this.rank = rank;
-
         this.parent = parent;
+        final String name = URIBuilder.getNameFromURI(url);
+        this.hostName = URIBuilder.getHostNameFromUrl(url);
+        this.port = URIBuilder.getPortNumber(url);
+        this.protocol = URIBuilder.getProtocol(url);
+        this.url = URIBuilder.buildURI(hostName, name, protocol, port).toString();
+        this.rank = rank;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public WorldObject getParent() {
         return this.parent;
@@ -160,32 +176,18 @@ public final class HostObject extends AbstractData {
 
     @Override
     public void explore() {
-        // If this host is already being explored then return silently
-        if (this.isExploring) {
+        // If this host is not monitored or already being explored then return silently
+        if (!super.isMonitored || this.isExploring) {
             return;
         }
-        if (super.isMonitored) {
-            this.isExploring = true;
-            refreshRuntimes();
-            this.isExploring = false;
-        }
+        this.isExploring = true;
+        this.refreshRuntimes();
+        this.isExploring = false;
     }
 
     @Override
     public int getHostRank() {
         return this.rank;
-    }
-
-    @Override
-    public String toString() {
-        String result = this.hostName + ":" + this.port;
-        if (!getOSName().equals(DEFAULT_NAME)) {
-            result += (":" + getOSName());
-        }
-        if (!getOSVersion().equals(DEFAULT_NAME)) {
-            result += ("(OS version: " + getOSVersion() + ")");
-        }
-        return result;
     }
 
     /**
@@ -195,10 +197,10 @@ public final class HostObject extends AbstractData {
      *
      */
     private void refreshRuntimes() {
-        RuntimeFinder rfinder = new RemoteObjectHostRTFinder();
+        RuntimeFinder rfinder = RemoteObjectHostRTFinder.getInstance();
         Collection<RuntimeObject> runtimeObjects = rfinder.getRuntimeObjects(this);
 
-        Map<String, AbstractData> childrenToRemoved = this.getMonitoredChildrenAsMap();
+        Map<String, RuntimeObject> childrenToRemoved = this.getMonitoredChildrenAsMap();
 
         for (final RuntimeObject runtimeObject : runtimeObjects) {
             RuntimeObject child = (RuntimeObject) this.getChild(runtimeObject.getKey());
@@ -217,7 +219,7 @@ public final class HostObject extends AbstractData {
         }
 
         // Some child have to be removed
-        for (final AbstractData data : childrenToRemoved.values()) {
+        for (final RuntimeObject data : childrenToRemoved.values()) {
             ((RuntimeObject) data).destroy();
         }
     }
@@ -251,12 +253,24 @@ public final class HostObject extends AbstractData {
     }
 
     @Override
-    public synchronized void addChild(AbstractData child) {
+    public synchronized void addChild(RuntimeObject child) {
         if (child instanceof RuntimeObject) {
             RuntimeObject runtimeObject = (RuntimeObject) child;
             if (runtimeObject.subscribeListener()) {
                 super.addChild(child);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        String result = this.hostName + ":" + this.port;
+        if (!getOSName().equals(DEFAULT_NAME)) {
+            result += (":" + getOSName());
+        }
+        if (!getOSVersion().equals(DEFAULT_NAME)) {
+            result += ("(OS version: " + getOSVersion() + ")");
+        }
+        return result;
     }
 }

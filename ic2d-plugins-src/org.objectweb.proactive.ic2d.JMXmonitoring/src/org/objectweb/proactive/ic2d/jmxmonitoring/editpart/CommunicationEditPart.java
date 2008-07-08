@@ -47,6 +47,11 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotification;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 
 
+/**
+ * This class represents the controller part (edit part) of a communication object
+ * @author vbodnart
+ *
+ */
 public final class CommunicationEditPart extends AbstractConnectionEditPart implements Observer {
     private static final Color DEFAULT_ARROW_COLOR = new Color(Display.getCurrent(), 108, 108, 116);
     private static final int MAX_STROKE_WIDTH_RATIO = 12;

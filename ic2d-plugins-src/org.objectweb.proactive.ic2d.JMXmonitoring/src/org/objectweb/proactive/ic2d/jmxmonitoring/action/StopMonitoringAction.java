@@ -37,14 +37,14 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 
 public class StopMonitoringAction extends Action {
     public static final String STOP_MONITORING = "Set/Unset Monitoring";
-    private AbstractData object;
+    private AbstractData<?, ?> object;
 
     public StopMonitoringAction() {
         this.setId(STOP_MONITORING);
         this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "stop_monitoring.gif"));
     }
 
-    public void setObject(AbstractData object) {
+    public void setObject(AbstractData<?, ?> object) {
         this.object = object;
         String msg;
         // The user can set to NOT MONITORED object
