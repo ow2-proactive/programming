@@ -43,6 +43,11 @@ import org.objectweb.proactive.core.util.profiling.Timer;
  *
  */
 public class AverageMicroTimer implements Timer, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     protected String name;
 
     //the number of values in tis timer so far

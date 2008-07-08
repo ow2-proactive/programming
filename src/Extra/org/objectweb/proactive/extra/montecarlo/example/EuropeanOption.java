@@ -49,6 +49,11 @@ import java.util.List;
 
 public class EuropeanOption implements EngineTask<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     private double spotPrice, strikePrice, dividend, interestRate, volatilityRate, maturityDate;
 
     private int N, M;
@@ -101,6 +106,11 @@ public class EuropeanOption implements EngineTask<double[]> {
         for (int i = 0; i < M; i++) {
             sets.add(new AbstractExperienceSetPostProcess<double[], double[]>(new GeometricBrownianMotion(
                 spotPrice, interestRate, volatilityRate, maturityDate, N)) {
+                /**
+                     * 
+                     */
+                private static final long serialVersionUID = 40L;
+
                 // Compute the payoff of both call [index 1] and put [index 0]
                 // options
                 public double[] postprocess(double[] experiencesResults) {

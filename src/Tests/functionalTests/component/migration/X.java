@@ -38,6 +38,10 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 public class X implements E, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     int i = 0;

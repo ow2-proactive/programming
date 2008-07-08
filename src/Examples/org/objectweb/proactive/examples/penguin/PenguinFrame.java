@@ -31,6 +31,10 @@
 package org.objectweb.proactive.examples.penguin;
 
 public class PenguinFrame extends javax.swing.JFrame {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     //The image panel
     private javax.swing.JPanel imagePanel;
     private javax.swing.JLabel imageLabel;

@@ -42,6 +42,10 @@ import org.objectweb.proactive.examples.nbody.common.Planet;
 
 
 public class Domain implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private int identification; // a unique number to differentiate this Domain from the others
     private Domain[] neighbours; // the list of all the Domains

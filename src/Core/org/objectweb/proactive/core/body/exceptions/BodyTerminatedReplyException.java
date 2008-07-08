@@ -36,6 +36,10 @@ package org.objectweb.proactive.core.body.exceptions;
  * @since 4.0
  */
 public class BodyTerminatedReplyException extends BodyTerminatedException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private static final String TERMINATED_BODY_REPLY = " while receiving reply to request ";
 
     public BodyTerminatedReplyException(String objectName, String methodName) {

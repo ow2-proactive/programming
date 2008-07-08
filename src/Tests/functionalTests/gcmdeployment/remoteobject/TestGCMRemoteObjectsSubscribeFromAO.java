@@ -64,6 +64,10 @@ public class TestGCMRemoteObjectsSubscribeFromAO extends GCMFunctionalTestDefaul
     }
 
     static public class RemoteAO implements Serializable, RunActive {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         GCMApplication gcma;
         boolean success = false;
 

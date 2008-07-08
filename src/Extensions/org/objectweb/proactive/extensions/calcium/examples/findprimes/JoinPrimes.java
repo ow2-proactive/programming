@@ -37,6 +37,11 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
 
 
 public class JoinPrimes implements Conquer<Primes, Primes> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public Primes conquer(Primes[] p, SkeletonSystem system) {
         Primes conquered = new Primes();
 

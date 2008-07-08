@@ -34,6 +34,10 @@ import java.io.Serializable;
 
 
 public class AuthenticationTicketProperty implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public long random1;
     public long random2;
     public String identity;

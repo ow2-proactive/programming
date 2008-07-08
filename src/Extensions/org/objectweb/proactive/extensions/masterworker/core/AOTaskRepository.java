@@ -63,6 +63,10 @@ import java.util.zip.Inflater;
 public class AOTaskRepository implements TaskRepository, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      * logger of the task repository
      */
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER_REPOSITORY);

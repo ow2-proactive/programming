@@ -64,6 +64,10 @@ import javax.swing.JTextField;
 public class DialogResult extends javax.swing.JDialog {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private JPanel pnlMain;

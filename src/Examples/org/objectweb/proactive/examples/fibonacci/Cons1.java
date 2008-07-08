@@ -44,6 +44,10 @@ import org.objectweb.proactive.Service;
  *
  */
 public class Cons1 implements Serializable, InitActive, RunActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Add add;
     private Cons2 cons2;
     private BigInteger fibN;

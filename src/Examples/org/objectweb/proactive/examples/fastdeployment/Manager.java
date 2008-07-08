@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.util.wrapper.LongWrapper;
 
 public class Manager implements Serializable, InitActive, RunActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     /** The application logger */
     final static private Logger logger = ProActiveLogger.getLogger(Loggers.CORE + ".app");
     /** List of slaves already in the computation */

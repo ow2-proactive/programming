@@ -35,6 +35,10 @@ import java.util.Map;
 
 
 public class TopologyRootImpl extends TopologyImpl {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected Map<Long, TopologyImpl> nodeMap;
 
     public TopologyRootImpl() {

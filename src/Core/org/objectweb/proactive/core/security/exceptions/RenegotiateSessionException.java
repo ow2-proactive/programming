@@ -44,6 +44,10 @@ import org.objectweb.proactive.core.body.UniversalBody;
 public class RenegotiateSessionException extends Exception implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     protected UniversalBody body;

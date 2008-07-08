@@ -40,6 +40,10 @@ import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 public class NamedRuleEntity extends RuleEntity {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private final String name;

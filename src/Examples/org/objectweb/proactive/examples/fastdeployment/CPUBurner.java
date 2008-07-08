@@ -41,6 +41,10 @@ import org.objectweb.proactive.core.util.wrapper.LongWrapper;
 
 
 public class CPUBurner implements Serializable, InitActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     int id;
     Manager manager;
 

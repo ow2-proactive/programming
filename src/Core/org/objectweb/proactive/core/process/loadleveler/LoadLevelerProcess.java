@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 
 
 public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private static final String DEFAULT_OUTPUTFILE_NAME = "proactive-loadleveler";
     public final static String DEFAULT_LLPATH = File.separator + "usr" + File.separator + "lpp" +
         File.separator + "LoadL" + File.separator + "full" + File.separator + "bin";
@@ -534,6 +538,11 @@ public class LoadLevelerProcess extends AbstractExternalProcessDecorator {
      * Implementation of a RemoteProcessMessageLogger that look for the jobID of the launched job
      */
     private class LoadLevelerParserMessageLogger implements RemoteProcessMessageLogger, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public LoadLevelerParserMessageLogger() {
         }
 

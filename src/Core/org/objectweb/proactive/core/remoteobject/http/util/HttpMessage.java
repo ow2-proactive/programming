@@ -41,6 +41,10 @@ import org.objectweb.proactive.core.remoteobject.http.util.exceptions.HTTPRemote
  * @see java.io.Serializable
  */
 public abstract class HttpMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected Object returnedObject;
     protected String url;
 

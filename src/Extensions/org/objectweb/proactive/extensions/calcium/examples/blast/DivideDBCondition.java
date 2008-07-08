@@ -43,6 +43,10 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
 
 @PrefetchFilesMatching(name = "db.*")
 public class DivideDBCondition implements Condition<BlastParams> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_APPLICATION);
 
     public boolean condition(BlastParams param, SkeletonSystem system) throws IOException {

@@ -49,6 +49,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 @PublicAPI
 public abstract class Task implements Serializable, Comparable<Task> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.P2P_SKELETONS_MANAGER);
     protected Result initLowerBound;
     protected Result initUpperBound;

@@ -47,6 +47,11 @@ import org.objectweb.proactive.core.node.NodeException;
  */
 public abstract class Kernel implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public abstract void runKernel(ProActiveDescriptor pad) throws ProActiveException;
 
     public abstract void killKernel();

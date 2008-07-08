@@ -40,6 +40,10 @@ package org.objectweb.proactive.core.util;
  * @since   ProActive 0.9.2
  */
 public class ThreadStoreImpl implements ThreadStore, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private int counter;
     private boolean defaultOpenState;
     private transient boolean open;

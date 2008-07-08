@@ -40,6 +40,10 @@ import org.objectweb.proactive.examples.nbody.common.Deployer;
  * Synchronization of the computation of the Domains
  */
 public class Maestro implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Domain domainGroup;
     private int nbFinished = 0;
     private int iter = 0;

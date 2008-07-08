@@ -43,6 +43,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  */
 public class GeometricBrownianMotion implements ExperienceSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private double s0, mu, sigma, t;
     private int N;
 

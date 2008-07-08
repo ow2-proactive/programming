@@ -51,6 +51,11 @@ import org.objectweb.proactive.core.util.wrapper.DoubleWrapper;
  */
 public class Worker implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     /** The number that identifies the worker in a group */
     private int rank;
 

@@ -40,6 +40,10 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 
 public abstract class Message implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.P2P_MESSAGE);
     protected int TTL;
     protected UniversalUniqueID uuid;

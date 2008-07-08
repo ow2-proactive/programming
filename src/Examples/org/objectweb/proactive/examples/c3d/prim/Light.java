@@ -37,6 +37,10 @@ import org.objectweb.proactive.examples.c3d.geom.Vec;
  * Represents a punctual light source
  */
 public class Light implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public Vec pos;
     public double brightness;
 

@@ -39,6 +39,11 @@ import org.objectweb.proactive.examples.userguide.cmagent.initialized.CMAgentIni
 
 
 public class CMAgentMigrator extends CMAgentInitialized implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public void migrateTo(Node whereTo) {
         try {
             //TODO 1. Migrate the active object to the Node received as parameter

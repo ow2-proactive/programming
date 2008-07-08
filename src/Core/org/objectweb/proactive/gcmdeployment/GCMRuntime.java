@@ -42,6 +42,10 @@ import org.objectweb.proactive.core.runtime.VMInformation;
 
 @PublicAPI
 public class GCMRuntime implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected VMInformation vmInfo;
     protected List<Node> nodes;
 

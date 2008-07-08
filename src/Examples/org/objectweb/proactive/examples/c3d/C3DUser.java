@@ -61,6 +61,11 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  */
 public class C3DUser implements InitActive, java.io.Serializable, User, UserLogic {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     /** useful for showing information, if no GUI is available, or for error messages */
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

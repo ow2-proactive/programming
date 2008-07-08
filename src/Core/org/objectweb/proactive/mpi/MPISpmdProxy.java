@@ -44,6 +44,11 @@ import org.objectweb.proactive.mpi.MPISpmdImpl.LateDeploymentHelper;
 
 
 public class MPISpmdProxy implements MPISpmd, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     protected final static Logger MPI_PROXY_LOGGER = ProActiveLogger.getLogger(Loggers.MPI);
 
     /** the status of this MPISpmd object */

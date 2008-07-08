@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class StoredFile implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_SYSTEM);
     public long fileId;
     public File location;

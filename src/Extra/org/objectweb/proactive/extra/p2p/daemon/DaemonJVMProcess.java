@@ -37,6 +37,10 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 
 public class DaemonJVMProcess extends JVMProcessImpl {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected WinProcess wp;
 
     public DaemonJVMProcess(RemoteProcessMessageLogger messageLogger) {

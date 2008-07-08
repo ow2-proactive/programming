@@ -51,6 +51,11 @@ import org.objectweb.proactive.core.process.JVMNodeProcess;
 public class MPIDependentProcess extends MPIProcess implements DependentProcess {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * Create a new MPIProcess
      * Used with XML Descriptors
      */

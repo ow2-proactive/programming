@@ -42,6 +42,11 @@ import org.objectweb.proactive.examples.nbody.common.Deployer;
  */
 public class BigMaestro implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     /** Counts the number of Maestro that have respond */
     private int nbFinished = 0;
 

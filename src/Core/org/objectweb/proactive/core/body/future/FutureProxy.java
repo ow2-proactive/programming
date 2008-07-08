@@ -73,6 +73,11 @@ import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
  *
  */
 public class FutureProxy implements Future, Proxy, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     //
     // -- STATIC MEMBERS -----------------------------------------------
     //

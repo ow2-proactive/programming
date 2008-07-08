@@ -39,6 +39,11 @@ import org.objectweb.proactive.core.node.Node;
 
 public class MigratableHello extends InitializedHelloWorld implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public void packUpMyVariablesAndHitTheRoad(Node whereTo) {
         try {
             System.out.println("Packing up and starting migration to " +

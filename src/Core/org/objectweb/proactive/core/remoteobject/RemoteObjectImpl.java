@@ -64,6 +64,10 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
  *
  */
 public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected Object target;
     protected String className;
     protected String proxyClassName;

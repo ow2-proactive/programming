@@ -46,6 +46,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class MigrationManagerWithLocationServer extends MigrationManagerImpl {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     transient private LocationServer locationServer;
     protected Body myBody;

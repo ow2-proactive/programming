@@ -121,6 +121,11 @@ public class TestDeploymentDescriptorParser {
     // Examples of custom group & bridge parsers
     //
     protected static class UserGroup extends AbstractGroup {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         @Override
         public List<String> internalBuildCommands() {
             return new ArrayList<String>();
@@ -128,6 +133,11 @@ public class TestDeploymentDescriptorParser {
     }
 
     protected static class UserBridge extends AbstractBridge {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         @Override
         public String internalBuildCommand() {
             return "";

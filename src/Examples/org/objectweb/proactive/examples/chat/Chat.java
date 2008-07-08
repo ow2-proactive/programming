@@ -58,6 +58,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class Chat implements java.io.Serializable, RunActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** The name of the user */

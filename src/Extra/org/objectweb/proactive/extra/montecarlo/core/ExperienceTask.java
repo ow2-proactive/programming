@@ -45,6 +45,10 @@ import java.io.Serializable;
  */
 public class ExperienceTask implements Task<Serializable> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private ExperienceSet exp;
 
     public ExperienceTask(ExperienceSet exp) {

@@ -37,6 +37,10 @@ import org.objectweb.proactive.ext.util.FutureList;
 
 
 public class FutureReceiver implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     int etape = 0; // this is to count the jumps we have made so far
     BlockedObject blocked;

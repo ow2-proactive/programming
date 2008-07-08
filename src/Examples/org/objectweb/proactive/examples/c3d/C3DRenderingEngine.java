@@ -44,6 +44,11 @@ import org.objectweb.proactive.examples.c3d.prim.View;
  * When fed a scene and an Interval, returns a 2D picture of the 3D scene.
  */
 public class C3DRenderingEngine implements java.io.Serializable, RenderingEngine {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     private static final double INFINITE = 1e6;
 
     // Alpha channel

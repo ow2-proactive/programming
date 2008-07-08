@@ -121,6 +121,10 @@ public class StartP2P {
      * permit start ProActive P2P via the "main" of StartP2PService
      */
     public static class P2PLauncher implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private String[] args = null;
 
         //For ProActive

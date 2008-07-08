@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition;
 public abstract class MPIProcess extends AbstractExternalProcessDecorator implements FileDependant {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      * Firsts parameters
      */
     protected static final String DEFAULT_HOSTSFILENAME_PATH = ".machinefile";

@@ -40,6 +40,10 @@ import java.io.Serializable;
  */
 public class SubMasterLock implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private boolean simulatorInUse = false;
     private boolean executorInUse = false;
 

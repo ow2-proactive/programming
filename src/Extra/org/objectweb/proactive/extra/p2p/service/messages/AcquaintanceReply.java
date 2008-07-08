@@ -38,6 +38,10 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 
 public class AcquaintanceReply extends Message implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected String senderURL;
     protected Vector<String> urls;
 

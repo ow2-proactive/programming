@@ -45,6 +45,10 @@ import java.io.Serializable;
  */
 public class EngineTaskAdapter<T extends Serializable> implements DivisibleTask<T> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private EngineTask<T> task;
     private SubMasterLock lock = new SubMasterLock();
 

@@ -53,6 +53,11 @@ public class TestInternalClassAO extends FunctionalTest {
     }
 
     public class AO implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public AO() {
             // Empty
         }

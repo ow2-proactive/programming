@@ -58,6 +58,11 @@ import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
  */
 public class WorkerMG extends Timed implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     /*
      * TimIt related variables
      */

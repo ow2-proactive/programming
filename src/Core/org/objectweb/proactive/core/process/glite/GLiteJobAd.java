@@ -43,6 +43,11 @@ import org.glite.wms.jdlj.JobAdException;
  *
  */
 public class GLiteJobAd extends JobAd implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public GLiteJobAd() {
         super();
     }

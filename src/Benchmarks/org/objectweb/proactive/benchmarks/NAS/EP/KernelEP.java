@@ -54,6 +54,10 @@ import org.objectweb.proactive.core.node.NodeException;
  */
 public class KernelEP extends Kernel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private EPProblemClass problemClass;
     private Node[] nodes;
 

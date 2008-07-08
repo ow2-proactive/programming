@@ -37,6 +37,11 @@ import org.objectweb.proactive.core.ssh.rmissh.SshRMIServerSocketFactory;
 
 
 public class RmiSshRemoteObjectImpl extends RmiRemoteObjectImpl {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public RmiSshRemoteObjectImpl(InternalRemoteRemoteObject target) throws java.rmi.RemoteException {
         super(target, new SshRMIServerSocketFactory(), new SshRMIClientSocketFactory());
     }

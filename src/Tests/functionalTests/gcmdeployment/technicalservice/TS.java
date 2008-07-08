@@ -38,6 +38,10 @@ import org.objectweb.proactive.core.node.Node;
 
 
 public class TS implements TechnicalService {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String arg1;
     private String arg2;
 

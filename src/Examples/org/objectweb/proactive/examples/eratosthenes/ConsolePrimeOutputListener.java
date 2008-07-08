@@ -40,6 +40,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * Serves to print newly found prime numbers to the console.
  */
 public class ConsolePrimeOutputListener implements PrimeOutputListener, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private long startTime;
     private int numberCounter;

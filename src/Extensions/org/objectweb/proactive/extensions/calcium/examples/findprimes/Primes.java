@@ -35,6 +35,10 @@ import java.util.Vector;
 
 
 public class Primes implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public Vector<Integer> primes;
 
     public Primes() {

@@ -41,6 +41,10 @@ import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLogg
 
 
 public class HostInfoImpl implements HostInfo {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String username;
     private String homeDirectory;
     private String id;

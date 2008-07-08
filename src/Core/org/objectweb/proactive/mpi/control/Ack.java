@@ -34,6 +34,11 @@ import java.io.Serializable;
 
 
 public class Ack implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public Ack() {
     }
 }

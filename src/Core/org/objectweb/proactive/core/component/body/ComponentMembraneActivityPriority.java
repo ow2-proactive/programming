@@ -49,6 +49,11 @@ import org.objectweb.proactive.core.component.controller.PriorityController;
  */
 public class ComponentMembraneActivityPriority extends ComponentActivityPriority {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public ComponentMembraneActivityPriority() {
         super();
     }

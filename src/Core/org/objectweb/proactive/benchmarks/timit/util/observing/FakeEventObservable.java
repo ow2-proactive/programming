@@ -39,6 +39,11 @@ package org.objectweb.proactive.benchmarks.timit.util.observing;
  */
 public class FakeEventObservable implements EventObservable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     /** Construct an FakeObservable with zero Observers. */
     public FakeEventObservable() {
     }

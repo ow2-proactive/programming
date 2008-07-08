@@ -46,6 +46,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * and moves it to user-specified node (node must be created manually previously)
  */
 public class SimpleAgent implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** ProActive compulsory empty no-args constructor */

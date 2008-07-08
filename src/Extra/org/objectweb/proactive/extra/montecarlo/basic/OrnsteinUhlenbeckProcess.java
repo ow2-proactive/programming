@@ -43,6 +43,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  */
 public class OrnsteinUhlenbeckProcess implements ExperienceSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private int N;
     private double base;
     private double factor;

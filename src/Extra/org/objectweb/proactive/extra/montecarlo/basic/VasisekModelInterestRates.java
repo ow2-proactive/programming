@@ -45,6 +45,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  */
 public class VasisekModelInterestRates implements ExperienceSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private double a, b, t;
     private int N;
 

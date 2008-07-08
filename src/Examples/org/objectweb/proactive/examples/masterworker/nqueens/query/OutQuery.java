@@ -34,6 +34,10 @@ import java.util.Vector;
 
 
 public class OutQuery extends Query {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public int bound1;
     public int bound2;
     public int bbound1;

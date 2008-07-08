@@ -91,6 +91,10 @@ import org.objectweb.proactive.core.node.Node;
  *
  */
 public class GatherFuturesHandler implements RunActive, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     List<ItfID> senders;
     List<?> resultOfGatheredInvocation;
     Throwable exceptionToRaise;

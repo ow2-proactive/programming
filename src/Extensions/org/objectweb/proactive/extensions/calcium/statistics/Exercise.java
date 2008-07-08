@@ -46,6 +46,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class Exercise implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public final static Comparator<Exercise> compareByComputationTime = new CompareByComputationTime();
     public final static Comparator<Exercise> compareByInvokedTimes = new CompareByInvokedTimes();
     private Class<?> c;

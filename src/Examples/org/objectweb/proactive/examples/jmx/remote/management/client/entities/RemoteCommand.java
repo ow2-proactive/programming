@@ -40,6 +40,10 @@ import org.objectweb.proactive.core.jmx.ProActiveConnection;
 public class RemoteCommand extends ManageableEntity implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private RemoteTransaction parent;

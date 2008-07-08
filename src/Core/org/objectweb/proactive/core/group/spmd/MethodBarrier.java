@@ -39,6 +39,10 @@ import java.io.Serializable;
  * @author The ProActive Team
  */
 public class MethodBarrier implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String[] methodNames;
     private boolean[] arrivedMethods;
 

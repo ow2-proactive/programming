@@ -33,6 +33,11 @@ package org.objectweb.proactive.core.security.exceptions;
 public class ComputePolicyException extends RuntimeException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      *
      */
     public ComputePolicyException() {

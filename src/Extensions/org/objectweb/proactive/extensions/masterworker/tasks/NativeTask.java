@@ -54,6 +54,10 @@ import java.util.ArrayList;
 public class NativeTask implements Task<ArrayList<String>> {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private String[] commandArray = null;

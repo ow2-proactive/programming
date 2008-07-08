@@ -52,6 +52,10 @@ import org.objectweb.proactive.extensions.calcium.statistics.Timer;
  * @author The ProActive Team
  */
 public class ProxyFile extends File {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_SYSTEM);
     File wspace;
     public File relative;

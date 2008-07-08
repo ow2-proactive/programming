@@ -59,6 +59,10 @@ public class TestGCMRemoteObjects extends GCMFunctionalTestDefaultNodes {
     }
 
     static public class AO implements Serializable, InitActive {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         GCMApplication gcma;
         boolean success = true;
 

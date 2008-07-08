@@ -31,6 +31,10 @@
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge;
 
 public class BridgeSSH extends AbstractBridge {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public final static String DEFAULT_SSHPATH = "ssh";
 
     public BridgeSSH() {

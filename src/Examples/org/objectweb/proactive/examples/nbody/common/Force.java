@@ -37,6 +37,10 @@ import java.io.Serializable;
  * Class implementing physical gravitation force between bodies.
  */
 public class Force implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     double x = 0;
     double y = 0;
     double z = 0;

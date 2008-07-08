@@ -43,6 +43,10 @@ package org.objectweb.proactive.benchmarks.timit.util;
 public class MigratableCounter extends TimerCounter {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private TimItReductor netclock;

@@ -37,6 +37,11 @@ import java.io.Serializable;
 public class MethodCallExceptionContext implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * If the caller catches some RuntimeException, we have to wait for all calls
      * generated in the block at its end because any of these calls could throw one.
      */

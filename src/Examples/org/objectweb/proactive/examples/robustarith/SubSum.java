@@ -41,6 +41,10 @@ import java.math.BigInteger;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class SubSum implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String name;
 
     public SubSum() {

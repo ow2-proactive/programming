@@ -41,6 +41,10 @@ import java.util.Date;
  * <br>created    July 19, 2001
  */
 public class CertificateProperty implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Date deliveryDate;
     private Date expirationDate;
     private byte[] randomData;

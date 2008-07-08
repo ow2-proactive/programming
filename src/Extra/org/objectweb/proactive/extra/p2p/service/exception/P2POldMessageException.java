@@ -38,6 +38,11 @@ package org.objectweb.proactive.extra.p2p.service.exception;
 public class P2POldMessageException extends Exception {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      *
      */
     public P2POldMessageException() {

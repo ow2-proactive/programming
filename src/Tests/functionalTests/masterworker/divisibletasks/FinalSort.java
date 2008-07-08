@@ -44,6 +44,10 @@ import java.util.Collections;
  */
 public class FinalSort implements Task<ArrayList<Integer>> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private ArrayList<Integer> input;
 
     public FinalSort(ArrayList<Integer> input) {

@@ -65,6 +65,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class ProActiveContentControllerImpl extends AbstractProActiveController implements
         ProActiveContentController, Serializable, ControllerStateDuplication {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     protected List<Component> fcSubComponents;
 
@@ -379,6 +383,10 @@ public class ProActiveContentControllerImpl extends AbstractProActiveController 
     }
 
     class ContentControllerState implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private ArrayList<Component> fcSubComponents;
 
         public ContentControllerState(ArrayList<Component> fcSubComponents) {

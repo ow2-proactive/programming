@@ -42,6 +42,10 @@ import javax.swing.JPanel;
 public class CruiseControlPanel extends JPanel {
     // Fields
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     /** constants : represents the controller on */
     final static int ACTIVE = 1;
     final static int INACTIVE = 0;

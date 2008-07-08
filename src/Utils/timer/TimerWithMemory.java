@@ -39,6 +39,10 @@ import org.objectweb.proactive.core.util.profiling.Timer;
  * A timer which retains the values measured in addition to calculating the average
  */
 public class TimerWithMemory extends AverageMicroTimer implements Timer, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected long[] memory;
     protected int position;
 

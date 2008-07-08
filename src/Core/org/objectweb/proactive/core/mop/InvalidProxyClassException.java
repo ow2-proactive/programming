@@ -31,6 +31,11 @@
 package org.objectweb.proactive.core.mop;
 
 public class InvalidProxyClassException extends StructuralException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public InvalidProxyClassException() {
     }
 

@@ -37,6 +37,11 @@ package org.objectweb.proactive.core.component.exceptions;
  *
  */
 public class NoSuchComponentException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public NoSuchComponentException() {
         super();
     }

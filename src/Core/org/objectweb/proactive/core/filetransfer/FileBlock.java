@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class FileBlock implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.FILETRANSFER);
     public static final int DEFAULT_BLOCK_SIZE = PAProperties.PA_FILETRANSFER_MAX_BLOCK_SIZE.getValueAsInt() * 1024; //Bytes
     private byte[] buffer;

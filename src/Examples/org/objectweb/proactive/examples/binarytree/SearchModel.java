@@ -31,6 +31,10 @@
 package org.objectweb.proactive.examples.binarytree;
 
 public class SearchModel extends javax.swing.table.AbstractTableModel {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected static int NUM_COLUMNS = 3;
     protected static int START_NUM_ROWS = 17;
     protected int nextEmptyRow = 0;

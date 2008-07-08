@@ -37,6 +37,11 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
 
 
 public class SolveBT1 extends SolveBoard {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public SolveBT1() {
         super();
     }

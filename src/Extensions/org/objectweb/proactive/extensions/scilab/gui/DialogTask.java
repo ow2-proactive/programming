@@ -56,6 +56,10 @@ import javax.swing.filechooser.FileFilter;
 public class DialogTask extends javax.swing.JDialog {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private JPanel pnlPath;

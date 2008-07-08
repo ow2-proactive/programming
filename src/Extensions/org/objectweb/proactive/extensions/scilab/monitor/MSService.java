@@ -63,6 +63,10 @@ import org.objectweb.proactive.extensions.scilab.SciTask;
 public class MSService implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private HashMap<String, MSEngineInfo> mapEngine;

@@ -43,6 +43,10 @@ import org.objectweb.proactive.benchmarks.timit.util.observing.EventObserver;
 public class DefaultEventObserver implements EventObserver {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private DefaultEventData eventData;

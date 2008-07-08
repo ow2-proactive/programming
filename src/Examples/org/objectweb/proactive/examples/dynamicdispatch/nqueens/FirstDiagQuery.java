@@ -34,6 +34,10 @@ import java.util.Vector;
 
 
 public class FirstDiagQuery extends Query {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     int scale;
 
     public FirstDiagQuery(int n, int s) {

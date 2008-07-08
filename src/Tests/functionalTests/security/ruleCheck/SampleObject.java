@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.security.exceptions.SecurityNotAvailableExce
 public class SampleObject implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private String name;

@@ -38,6 +38,10 @@ import org.objectweb.proactive.api.PAActiveObject;
 public class Collector implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private int result = 0;

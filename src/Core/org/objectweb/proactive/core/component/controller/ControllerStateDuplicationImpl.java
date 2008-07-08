@@ -47,6 +47,11 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
 public class ControllerStateDuplicationImpl extends AbstractProActiveController implements
         ControllerStateDuplication {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public ControllerStateDuplicationImpl(Component owner) {
         super(owner);
 

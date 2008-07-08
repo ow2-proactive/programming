@@ -51,6 +51,10 @@ import java.util.List;
 
 public class PiMonteCarlo implements EngineTask<Double> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private int niter = 0;
     private int tasks = 0;
 
@@ -64,6 +68,10 @@ public class PiMonteCarlo implements EngineTask<Double> {
      * Definition of Monte-Carlo simulations to compute pi
      */
     public class MCPi implements ExperienceSet<double[]> {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         int N;
 
         MCPi(final int n) {
@@ -127,6 +135,11 @@ public class PiMonteCarlo implements EngineTask<Double> {
         List<ExperienceSet<Long>> sets = new ArrayList<ExperienceSet<Long>>();
         for (int i = 0; i < tasks; i++) {
             sets.add(new AbstractExperienceSetPostProcess<double[], Long>(new MCPi(niter)) {
+                /**
+                 * 
+                 */
+                private static final long serialVersionUID = 40L;
+
                 public Long postprocess(double[] experiencesResults) {
                     long counter = 0;
                     double[] simulatedCounts = experiencesResults;

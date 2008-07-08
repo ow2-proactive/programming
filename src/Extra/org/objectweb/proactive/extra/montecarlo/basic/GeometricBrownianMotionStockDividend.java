@@ -43,6 +43,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  */
 public class GeometricBrownianMotionStockDividend implements ExperienceSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private double s0, Y, r, sigma, D;
     private int T, N;
     private NormalDist normal = null;

@@ -51,6 +51,10 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 public class InternalBodySecurity implements SecurityEntity {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     protected SecurityEntity distantBody;

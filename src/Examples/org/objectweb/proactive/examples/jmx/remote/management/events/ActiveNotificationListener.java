@@ -46,6 +46,11 @@ import org.objectweb.proactive.examples.jmx.remote.management.client.entities.Ma
 public class ActiveNotificationListener implements Serializable, NotificationListener {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      *
      */
     public ActiveNotificationListener() {

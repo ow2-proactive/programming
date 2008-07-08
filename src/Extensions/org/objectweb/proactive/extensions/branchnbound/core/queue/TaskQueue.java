@@ -58,6 +58,11 @@ import org.objectweb.proactive.extensions.branchnbound.core.exception.NoResultsE
  */
 public abstract class TaskQueue implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     /** The logger. */
     public final static Logger logger = ProActiveLogger.getLogger(Loggers.P2P_SKELETONS_MANAGER);
 

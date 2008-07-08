@@ -39,6 +39,10 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
  * The swing GUI is attached as a field of the Active Object, so it can be recreated
  * from scratch. */
 public class Displayer implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private transient NBodyFrame nbf;
     private boolean displayft;
     private int nbBodies;

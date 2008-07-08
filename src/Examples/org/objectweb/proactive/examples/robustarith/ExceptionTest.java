@@ -37,12 +37,22 @@ import org.objectweb.proactive.api.PAException;
 
 
 class DangerousException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     DangerousException(String str) {
         super(str);
     }
 }
 
 public class ExceptionTest implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
 
     /* Empty constructor for ProActive */
     public ExceptionTest() {

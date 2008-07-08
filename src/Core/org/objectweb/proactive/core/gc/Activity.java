@@ -42,6 +42,11 @@ import org.objectweb.proactive.core.UniqueID;
 public class Activity implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * Who increased the counter?
      */
     private final UniqueID bodyID;

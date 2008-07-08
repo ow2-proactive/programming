@@ -70,6 +70,10 @@ import timer.AverageMicroTimer;
  * It also allows users to hold conversations, in a chat-like way.
  */
 public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispatcher, DispatcherLogic {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private static int IMAGE_HEIGHT = 500;
     private static int IMAGE_WIDTH = 500;

@@ -83,6 +83,11 @@ import org.objectweb.proactive.examples.webservices.c3dWS.prim.Sphere;
 
 
 public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /**
@@ -525,6 +530,11 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
     }
 
     public class UserFrame extends Frame implements ActionListener, ItemListener {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
 
         /**
          * Button UP
@@ -1211,6 +1221,11 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
          * AWT 1.1 event handling for window events
          */
         class MyWindowListener extends WindowAdapter implements java.io.Serializable {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 40L;
+
             @Override
             public void windowClosing(WindowEvent e) {
                 setVisible(false);
@@ -1231,6 +1246,10 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
      * The about box
      */
     class MyDialog extends Dialog implements ActionListener, MouseListener, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private Label d_title = new Label("ProActive PDC", Label.CENTER);
         private Label d_url = new Label("http://www.inria.fr/proactive/", Label.CENTER);
 
@@ -1312,6 +1331,10 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
  * and hides the drawing and scaling issues inherent to image displaying
  */
 class MyImageContainer extends Canvas implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Image img;
     private Image scaled_img;
     private int minwidth;

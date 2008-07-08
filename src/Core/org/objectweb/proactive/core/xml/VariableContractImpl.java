@@ -53,6 +53,10 @@ import org.xml.sax.SAXException;
  * @author The ProActive Team
  */
 public class VariableContractImpl implements VariableContract, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT);
     public static VariableContractImpl xmlproperties = null;
     public static final Lock lock = new Lock();
@@ -61,6 +65,10 @@ public class VariableContractImpl implements VariableContract, Serializable {
     private static final Pattern legalPattern = Pattern.compile("^\\$\\{[\\w\\.]+\\}$");
 
     private class PropertiesDatas implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         public String value;
         public VariableContractType type;
         public String setFrom; //Descriptor, Program

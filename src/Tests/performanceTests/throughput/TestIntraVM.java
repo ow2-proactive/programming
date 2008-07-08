@@ -53,6 +53,10 @@ public class TestIntraVM extends FunctionalTest {
     }
 
     static public class Server implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         boolean firstRequest = true;
         long count = 0;
         long startTime;
@@ -82,6 +86,10 @@ public class TestIntraVM extends FunctionalTest {
     }
 
     static public class Client implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private Server server;
 
         public Client() {

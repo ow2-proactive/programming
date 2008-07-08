@@ -48,6 +48,11 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 public class JVMNodeProcess extends JVMProcessImpl implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * Creates a new instance of JVMNodeProcess.
      */
     public JVMNodeProcess() {

@@ -43,6 +43,10 @@ import java.io.Serializable;
 public abstract class AbstractExperienceSetPostProcess<T extends Serializable, R extends Serializable>
         implements ExperienceSetPostProcess<T, R>, ExperienceSet<R> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private ExperienceSet<T> experienceSet;
 
     public AbstractExperienceSetPostProcess(ExperienceSet<T> experienceSet) {

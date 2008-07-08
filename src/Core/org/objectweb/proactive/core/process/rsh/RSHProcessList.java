@@ -44,6 +44,11 @@ import org.objectweb.proactive.core.process.ExternalProcessDecorator;
 public class RSHProcessList extends AbstractListProcessDecorator {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      *
      */
     public RSHProcessList() {

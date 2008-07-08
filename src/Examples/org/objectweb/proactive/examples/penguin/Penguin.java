@@ -41,6 +41,10 @@ import org.objectweb.proactive.core.node.NodeFactory;
 
 
 public class Penguin implements org.objectweb.proactive.RunActive, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private boolean onItinerary;
     private boolean initialized;
     private transient PenguinFrame myFrame;

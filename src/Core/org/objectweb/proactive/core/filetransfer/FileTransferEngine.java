@@ -138,6 +138,10 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
     }
 
     protected class RequestFilterOnAllowedMethods implements RequestFilter, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private String allowedMethodNames;
 
         public RequestFilterOnAllowedMethods(String allowedMethodNames) {

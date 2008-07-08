@@ -41,6 +41,11 @@ import javax.swing.JPanel;
 
 public class LinearColor extends JPanel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     protected Color base;
 
     protected String name;

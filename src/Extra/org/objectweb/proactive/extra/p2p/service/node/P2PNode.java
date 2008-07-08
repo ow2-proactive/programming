@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.node.Node;
  * Created on Jan 13, 2005
  */
 public class P2PNode implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Node node = null;
     private P2PNodeManager nodeManager = null;
 

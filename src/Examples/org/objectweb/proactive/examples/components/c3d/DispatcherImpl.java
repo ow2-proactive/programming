@@ -60,6 +60,11 @@ import org.objectweb.proactive.examples.c3d.RenderingEngine;
  */
 public class DispatcherImpl extends C3DDispatcher implements Dispatcher, DispatcherLogic,
         DispatcherAttributes, BindingController, ComponentRunActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     // Engine component bindings

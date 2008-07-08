@@ -44,6 +44,10 @@ import org.objectweb.proactive.extensions.calcium.stateness.Stateness;
 
 
 public class TaskFamily<T> implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS);
     Task<T> parent;
     public Vector<Task<T>> childrenReady; //sub tasks ready for execution

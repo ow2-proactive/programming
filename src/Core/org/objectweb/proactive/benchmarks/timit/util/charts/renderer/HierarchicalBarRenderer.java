@@ -64,6 +64,10 @@ import org.jfree.util.ObjectList;
 public class HierarchicalBarRenderer extends BarRenderer {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     public static final int INCLUSION_MARGIN = 3;

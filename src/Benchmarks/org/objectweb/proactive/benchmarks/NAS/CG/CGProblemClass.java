@@ -45,6 +45,10 @@ import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
  * employing unstructured matrix vector multiplication.
  */
 public class CGProblemClass extends NASProblemClass {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public int na;
     public int nonzer;
     public int shift;

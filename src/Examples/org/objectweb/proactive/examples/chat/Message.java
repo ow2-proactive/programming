@@ -40,6 +40,10 @@ import java.io.Serializable;
  */
 public class Message implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     /** The message */
     private String s;
 

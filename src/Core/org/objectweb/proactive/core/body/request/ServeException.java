@@ -38,6 +38,11 @@ import org.objectweb.proactive.core.ProActiveException;
 public class ServeException extends ProActiveException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * Constructs a <code>ServeException</code> with no specified
      * detail message.
      */

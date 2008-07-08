@@ -48,6 +48,10 @@ import org.objectweb.proactive.extensions.branchnbound.core.exception.NoResultsE
  */
 @PublicAPI
 public class Result implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Object theSolution = null;
     private Exception exception = null;
 

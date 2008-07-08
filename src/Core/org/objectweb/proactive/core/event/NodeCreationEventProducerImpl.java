@@ -35,6 +35,11 @@ import org.objectweb.proactive.core.node.Node;
 
 
 public class NodeCreationEventProducerImpl extends AbstractEventProducer implements NodeCreationEventProducer {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public NodeCreationEventProducerImpl() {
         super(false, false);
     }

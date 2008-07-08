@@ -66,6 +66,10 @@ import org.objectweb.proactive.extensions.branchnbound.core.queue.TaskQueue;
  */
 @PublicAPI
 public class Manager implements Serializable, InitActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.P2P_SKELETONS_MANAGER);
     private static final boolean enableRealloc = false; // TODO turn it
     private static final boolean enableBackup = false; // TODO turn it

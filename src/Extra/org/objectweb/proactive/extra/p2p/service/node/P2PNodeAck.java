@@ -40,6 +40,10 @@ import java.io.Serializable;
  * Created on May 19, 2005
  */
 public class P2PNodeAck implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private boolean bool = false;
 
     /**

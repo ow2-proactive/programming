@@ -78,6 +78,10 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
  */
 public class ProActiveBindingControllerImpl extends AbstractProActiveController implements
         ProActiveBindingController, Serializable, ControllerStateDuplication {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected Bindings bindings; // key = clientInterfaceName ; value = Binding
 
     //    private Map<String, Map<ProActiveComponent, List<String>>> bindingsOnServerItfs = new HashMap<String, Map<ProActiveComponent,List<String>>>(0);

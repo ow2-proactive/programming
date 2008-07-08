@@ -91,6 +91,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class ProActiveComponentImpl implements ProActiveComponent, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     private transient ProActiveComponent representativeOnMyself = null;
     private ComponentParameters componentParameters;

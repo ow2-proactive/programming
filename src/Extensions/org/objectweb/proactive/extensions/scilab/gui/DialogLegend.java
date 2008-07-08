@@ -55,6 +55,10 @@ import javax.swing.JPanel;
 public class DialogLegend extends javax.swing.JDialog {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private JPanel pnlTaskWait;
@@ -104,6 +108,11 @@ public class DialogLegend extends javax.swing.JDialog {
                 pnlIconWait = new JPanel() {
 
                     /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
+
+                    /**
                      *
                      */
                     @Override
@@ -123,6 +132,11 @@ public class DialogLegend extends javax.swing.JDialog {
                 lblLegendWait.setPreferredSize(new java.awt.Dimension(100, 28));
                 lblLegendWait.setSize(100, 28);
                 pnlIconCancel = new JPanel() {
+
+                    /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
 
                     /**
                      *
@@ -163,6 +177,11 @@ public class DialogLegend extends javax.swing.JDialog {
                 pnlIconRun = new JPanel() {
 
                     /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
+
+                    /**
                      *
                      */
                     @Override
@@ -182,6 +201,11 @@ public class DialogLegend extends javax.swing.JDialog {
                 lblLegendRun.setPreferredSize(new java.awt.Dimension(100, 28));
                 lblLegendRun.setSize(100, 28);
                 pnlIconKill = new JPanel() {
+
+                    /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
 
                     /**
                      *
@@ -220,6 +244,11 @@ public class DialogLegend extends javax.swing.JDialog {
                 pnlIconSuccess = new JPanel() {
 
                     /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
+
+                    /**
                      *
                      */
                     @Override
@@ -239,6 +268,11 @@ public class DialogLegend extends javax.swing.JDialog {
                 lblLegendSuccess.setPreferredSize(new java.awt.Dimension(100, 28));
                 lblLegendSuccess.setSize(100, 28);
                 pnlIconAbort = new JPanel() {
+
+                    /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
 
                     /**
                      *

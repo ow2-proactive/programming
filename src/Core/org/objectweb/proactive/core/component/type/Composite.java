@@ -39,6 +39,11 @@ package org.objectweb.proactive.core.component.type;
 public class Composite implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * Constructor for Composite.
      */
     public Composite() {

@@ -94,6 +94,10 @@ import org.objectweb.proactive.extensions.scilab.monitor.MSService;
 public class MSFrame extends javax.swing.JFrame {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private JMenuBar menuBar;
@@ -315,6 +319,11 @@ public class MSFrame extends javax.swing.JFrame {
                 tableTaskWait = new JTable() {
 
                     /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
+
+                    /**
                      *
                      */
                     @Override
@@ -378,6 +387,11 @@ public class MSFrame extends javax.swing.JFrame {
                         "Id Engine", "Global Time(ms)", "State" });
 
                 tableTaskRun = new JTable() {
+
+                    /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
 
                     /**
                      *
@@ -455,6 +469,11 @@ public class MSFrame extends javax.swing.JFrame {
                         "Execution Time(ms)", "Global Time(ms)", "State" });
 
                 tableTaskEnd = new JTable() {
+
+                    /**
+                     * 
+                     */
+                    private static final long serialVersionUID = 40L;
 
                     /**
                      *
@@ -541,6 +560,11 @@ public class MSFrame extends javax.swing.JFrame {
                         pnlProActive = new JPanel() {
 
                             /**
+                             * 
+                             */
+                            private static final long serialVersionUID = 40L;
+
+                            /**
                              *
                              */
                             @Override
@@ -556,6 +580,11 @@ public class MSFrame extends javax.swing.JFrame {
                         pnlProActive.setPreferredSize(new java.awt.Dimension(200, 30));
                         pnlProActive.setSize(200, 70);
                         pnlScilab = new JPanel() {
+
+                            /**
+                             * 
+                             */
+                            private static final long serialVersionUID = 40L;
 
                             /**
                              *

@@ -36,6 +36,10 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 
 public class DumpACQWithCallback extends DumpAcquaintancesMessage {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected Dumper d;
 
     public DumpACQWithCallback(int ttl, UniversalUniqueID id, P2PService sender) {

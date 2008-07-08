@@ -53,6 +53,10 @@ import org.objectweb.proactive.benchmarks.timit.util.TimerCounter;
 public class Root extends Timed {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     public static final String TNAME_FOO = "foo";

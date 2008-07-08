@@ -39,6 +39,10 @@ import org.objectweb.proactive.core.security.securityentity.RuleEntities;
 public class PolicyRule implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private final RuleEntities from;

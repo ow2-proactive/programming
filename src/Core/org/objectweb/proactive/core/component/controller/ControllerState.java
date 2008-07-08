@@ -39,6 +39,10 @@ import java.io.Serializable;
  *
  */
 public class ControllerState implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Serializable state;
 
     public ControllerState(Serializable state) {

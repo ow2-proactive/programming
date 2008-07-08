@@ -49,6 +49,11 @@ import org.objectweb.proactive.examples.webservices.c3dWS.prim.Surface;
 public class C3DRenderingEngine implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * Alpha channel
      */
     private static final int alpha = 255 << 24;

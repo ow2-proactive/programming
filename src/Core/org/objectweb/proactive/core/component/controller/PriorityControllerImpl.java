@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
  *
  */
 public class PriorityControllerImpl extends AbstractProActiveController implements PriorityController {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private static final String ANY_PARAMETERS = "any-parameters";
     private Map<String, Object> nf2s;
     private Map<String, Object> nf3s;

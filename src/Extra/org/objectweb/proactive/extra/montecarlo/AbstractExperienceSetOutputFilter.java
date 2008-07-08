@@ -44,6 +44,10 @@ import java.util.Random;
  */
 public abstract class AbstractExperienceSetOutputFilter implements ExperienceSetOutputFilter, ExperienceSet {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private ExperienceSet experienceSet;
 
     public AbstractExperienceSetOutputFilter(ExperienceSet experienceSet) {

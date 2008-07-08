@@ -48,6 +48,10 @@ import org.objectweb.proactive.core.remoteobject.http.util.HttpMessage;
  * @see HttpMessage
  */
 public class HttpRemoteObjectLookupMessage extends HttpMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String urn;
 
     //Caller Side

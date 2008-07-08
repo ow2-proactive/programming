@@ -57,6 +57,10 @@ import org.objectweb.proactive.core.node.NodeFactory;
  */
 public class KernelFT extends Kernel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private FTProblemClass problemClass;
     private WorkerFT workers;
 

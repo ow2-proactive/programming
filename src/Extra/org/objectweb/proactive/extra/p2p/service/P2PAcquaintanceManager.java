@@ -75,6 +75,10 @@ public class P2PAcquaintanceManager implements InitActive, RunActive, Serializab
         ProActiveInternalObject {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      * The maximum waiting time before considering an ACQ request is lost and
      * should be resent
      */

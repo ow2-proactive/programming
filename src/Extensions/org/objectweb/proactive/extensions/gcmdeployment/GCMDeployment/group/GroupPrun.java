@@ -40,6 +40,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.core.StartRuntime;
 
 public class GroupPrun extends AbstractGroup {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String resources = null;
     private String wallTime = null;
     private int nodes = 0;

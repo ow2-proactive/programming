@@ -31,6 +31,10 @@
 package org.objectweb.proactive.examples.webservices.c3dWS.ws;
 
 public class ArrayOfInt implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     // Type metadata
     private static org.apache.axis.description.TypeDesc typeDesc = new org.apache.axis.description.TypeDesc(
         ArrayOfInt.class, true);

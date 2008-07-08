@@ -53,6 +53,10 @@ public class TimItReductor implements ProActiveInternalObject, Serializable {
      *
      */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     /** timeout (in seconds) when gatehering statistics from Timeds */
     public static final int TIMEOUT = 5000;
     private transient Service service;

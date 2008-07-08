@@ -47,6 +47,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 
 
 public class GroupGLite extends AbstractGroup {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private static final String JDLPREFIX = "proactiveJDL-";
     private static final String JDLSUFFIX = ".jdl";
     private static final String JOBTYPE_SINGLE = "single";

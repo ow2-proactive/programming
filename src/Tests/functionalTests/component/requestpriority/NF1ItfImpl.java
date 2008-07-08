@@ -44,6 +44,10 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
  *
  */
 public class NF1ItfImpl extends AbstractProActiveController implements NF1Itf {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     FItf me = null;
 
     public NF1ItfImpl(Component owner) {

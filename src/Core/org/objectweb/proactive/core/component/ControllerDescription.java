@@ -57,6 +57,10 @@ import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
  */
 @PublicAPI
 public class ControllerDescription implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected String hierarchicalType;
     protected String name;
     protected boolean synchronous = false;

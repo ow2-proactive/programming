@@ -48,6 +48,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class RequestReceiverImpl implements RequestReceiver, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public static Logger logger = ProActiveLogger.getLogger(Loggers.REQUESTS);
 
     private static List<Class<?>[]> ANY_PARAMETERS = null;
@@ -62,6 +67,11 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
      *
      */
     private static class AnyParametersClass implements Serializable {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
     }
 
     //private java.util.Vector immediateServices;

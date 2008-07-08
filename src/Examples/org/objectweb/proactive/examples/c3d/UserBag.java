@@ -40,6 +40,10 @@ import java.util.Iterator;
  * This is a Bag, because keys can be the same [even though they shouldn't be!].
  */
 public class UserBag implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private ArrayList<Troika> list = new ArrayList<Troika>();
 
     /** Create an empty Bag. */
@@ -143,6 +147,10 @@ public class UserBag implements Serializable {
     //    }
     // A container for (int -> C3DUser -> String)
     private class Troika implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         int key;
         User user;
         String name;

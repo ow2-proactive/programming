@@ -39,6 +39,11 @@ import org.objectweb.proactive.extra.p2p.service.P2PService;
 
 
 public class AcquaintanceRequest extends Message implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public AcquaintanceRequest(int i) {
         super(i);
     }

@@ -41,6 +41,10 @@ package org.objectweb.proactive.benchmarks.timit.util;
 public class SecuredHierarchicalTimer extends HierarchicalTimer {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private int headCounterID = -1;

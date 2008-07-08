@@ -33,6 +33,10 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge;
 
 public class BridgeGSISSH extends BridgeSSH {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String port;
     private String certificate;
 

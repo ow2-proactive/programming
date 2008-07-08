@@ -42,6 +42,10 @@ import org.objectweb.proactive.benchmarks.timit.util.observing.EventData;
 public class DefaultEventData implements EventData {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     public static final int MIN = 0;

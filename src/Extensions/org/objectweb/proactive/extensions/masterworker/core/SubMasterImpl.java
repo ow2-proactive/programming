@@ -48,6 +48,10 @@ import java.util.List;
  */
 public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable>, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private final MasterIntern master;
     private final String originatorName;
     private boolean initCalled = false;

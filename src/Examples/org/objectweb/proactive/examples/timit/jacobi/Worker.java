@@ -47,6 +47,11 @@ import org.objectweb.proactive.benchmarks.timit.util.observing.commobserv.CommEv
 public class Worker extends Timed implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      *
      */
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = true;

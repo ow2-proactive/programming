@@ -36,6 +36,11 @@ import java.util.ArrayList;
 public class Entities extends ArrayList<Entity> {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      *
      */
 }

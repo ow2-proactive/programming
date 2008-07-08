@@ -44,6 +44,10 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
  */
 public class FindPrimeTask implements Task<Boolean> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private long begin;
     private long end;
     private long taskCandidate;

@@ -53,6 +53,11 @@ import org.objectweb.proactive.core.component.controller.MembraneController;
 public class ComponentMembraneActivity extends ComponentActivity implements RunActive, InitActive, EndActive,
         Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public ComponentMembraneActivity() {
         super();
     }

@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.util.URIBuilder;
 
 
 public class ClassServerServlet extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     //	public static final String WEB_ROOT = "/proactive";
     public static final String SERVLET_NAME = "ProActiveHTTP";
     private HttpServletRequest request;

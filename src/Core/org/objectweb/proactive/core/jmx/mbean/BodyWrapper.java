@@ -79,6 +79,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class BodyWrapper extends NotificationBroadcasterSupport implements Serializable, BodyWrapperMBean {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * The name of the attribute used to know if the reified object implements {@link java.io.Serializable}
      */
     public static final String IS_REIFIED_OBJECT_SERIALIZABLE_ATTRIBUTE_NAME = "IsReifiedObjectSerializable";

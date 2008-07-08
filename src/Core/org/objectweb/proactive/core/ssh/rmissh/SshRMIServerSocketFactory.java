@@ -36,6 +36,11 @@ import java.rmi.server.RMIServerSocketFactory;
 
 
 public class SshRMIServerSocketFactory implements RMIServerSocketFactory, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public SshRMIServerSocketFactory() {
     }
 

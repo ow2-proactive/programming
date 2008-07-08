@@ -42,6 +42,10 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
  */
 public class Plan<E> extends Line<E> { // implements Topology2D {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     /** height of the two-dimensional topology group */
     protected int height; //  => Y => number of lines
 

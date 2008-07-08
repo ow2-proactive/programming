@@ -42,6 +42,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 
 public class GroupLoadLeveler extends AbstractGroup {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private static final String LLTAG_QUEUE = "queue";
     private static final String DEFAULT_OUTPUTFILE_NAME = "proactive-loadleveler";
     public final static String DEFAULT_LLPATH = File.separator + "usr" + File.separator + "lpp" +

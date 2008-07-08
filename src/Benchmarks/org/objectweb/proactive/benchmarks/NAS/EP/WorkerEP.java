@@ -58,6 +58,10 @@ import org.objectweb.proactive.core.node.NodeException;
  */
 public class WorkerEP extends Timed {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
     private static final boolean TIMERS_ENABLED = true;
 
@@ -446,6 +450,11 @@ public class WorkerEP extends Timed {
     }
 
     public static class ReduceSumOp extends ReduceAll {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
 
         public ReduceSumOp() {
         }

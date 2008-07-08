@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.node.NodeException;
  *
  */
 public class Add implements Serializable, InitActive, RunActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Cons1 cons1;
     private BigInteger fibN_1;
     private BigInteger fibN_2;

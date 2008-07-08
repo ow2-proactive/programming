@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.node.NodeException;
 
 public class AODeadlock1 implements Serializable, InitActive, RunActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private AODeadlock1 stub;
     private AODeadlock2 ao2;
 

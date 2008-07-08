@@ -40,6 +40,10 @@ package org.objectweb.proactive.benchmarks.NAS.util;
  */
 public class Random implements java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private long T46m1;
     private long lseed, lgmult;
     private double seed, gmult;

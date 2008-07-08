@@ -51,6 +51,11 @@ import org.objectweb.proactive.core.mop.Utils;
 public class GatherBindingChecker implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * client method <code>B foo (A) throws E;<code><br>
      * must be matched by <br>
      *  server method <code><pre>List<B> foo(List&lst;A&gt;) throws E;</pre></code>

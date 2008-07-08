@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.util.wrapper.StringMutableWrapper;
  * The object has only one public method, sayHello()
  * The object does nothing but reflect the host its on. */
 public class TinyHello implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private final String message = "Hello World!";
 

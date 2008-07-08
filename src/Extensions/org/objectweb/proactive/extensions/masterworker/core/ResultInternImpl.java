@@ -50,6 +50,11 @@ public class ResultInternImpl implements ResultIntern<Serializable> {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * The id of the task
      */
     private long id = -1;

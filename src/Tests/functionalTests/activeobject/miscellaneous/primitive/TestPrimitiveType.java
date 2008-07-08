@@ -83,6 +83,11 @@ public class TestPrimitiveType extends FunctionalTest {
     }
 
     static public class Boolean implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public Boolean() {
         }
 
@@ -91,6 +96,11 @@ public class TestPrimitiveType extends FunctionalTest {
     }
 
     static public class Byte implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public Byte() {
         }
 
@@ -99,6 +109,11 @@ public class TestPrimitiveType extends FunctionalTest {
     }
 
     static public class Char implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public Char() {
         }
 
@@ -107,6 +122,11 @@ public class TestPrimitiveType extends FunctionalTest {
     }
 
     static public class Short implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public Short() {
         }
 
@@ -115,6 +135,11 @@ public class TestPrimitiveType extends FunctionalTest {
     }
 
     static public class Int implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public Int() {
         }
 
@@ -123,6 +148,11 @@ public class TestPrimitiveType extends FunctionalTest {
     }
 
     static public class Long implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public Long() {
         }
 
@@ -131,6 +161,11 @@ public class TestPrimitiveType extends FunctionalTest {
     }
 
     static public class Float implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public Float() {
         }
 
@@ -139,6 +174,11 @@ public class TestPrimitiveType extends FunctionalTest {
     }
 
     static public class Double implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         public Double() {
         }
 

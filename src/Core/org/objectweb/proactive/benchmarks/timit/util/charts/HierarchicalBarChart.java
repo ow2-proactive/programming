@@ -57,6 +57,10 @@ import org.objectweb.proactive.benchmarks.timit.util.charts.renderer.Hierarchica
 public class HierarchicalBarChart implements Chart {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private static double CATEGORY_MARGIN = 0.0;

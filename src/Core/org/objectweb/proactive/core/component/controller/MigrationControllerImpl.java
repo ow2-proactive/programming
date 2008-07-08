@@ -47,6 +47,11 @@ import org.objectweb.proactive.core.node.NodeFactory;
 
 
 public class MigrationControllerImpl extends AbstractProActiveController implements MigrationController {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public MigrationControllerImpl(Component owner) {
         super(owner);
     }

@@ -38,6 +38,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class TaskPriority implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS);
     public static int DEFAULT_PRIORITY = 0;
     public static int DEFAULT_INTRA_FAMILY_PRIORITY = 0;

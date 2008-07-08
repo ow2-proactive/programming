@@ -36,6 +36,10 @@ import org.objectweb.proactive.core.UniqueID;
 
 
 public class RequestNotificationData implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private UniqueID source;
     private UniqueID destination;
     private String methodName;

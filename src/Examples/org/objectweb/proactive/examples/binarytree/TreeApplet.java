@@ -59,6 +59,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class TreeApplet extends org.objectweb.proactive.examples.StandardFrame {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private javax.swing.JPanel rootPanel;
     private javax.swing.Box pCmd;
@@ -334,6 +338,10 @@ public class TreeApplet extends org.objectweb.proactive.examples.StandardFrame {
     }
 
     public class TreePanel extends javax.swing.JPanel {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private TreeDisplay display;
 
         public TreePanel(TreeDisplay display) {

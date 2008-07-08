@@ -34,6 +34,10 @@ import java.io.Serializable;
 
 
 public class AcquaintanceInfo implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected String sender;
     protected String[] acq;
     protected int noa;

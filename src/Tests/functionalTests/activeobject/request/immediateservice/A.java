@@ -40,6 +40,10 @@ import org.objectweb.proactive.api.PAActiveObject;
 public class A implements Serializable, RunActive {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     DummyObject dum;

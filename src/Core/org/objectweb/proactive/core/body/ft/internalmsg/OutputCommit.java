@@ -44,6 +44,10 @@ import org.objectweb.proactive.core.body.ft.protocols.cic.managers.FTManagerCIC;
 public class OutputCommit implements FTMessage {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private long lastIndexToRetreive;

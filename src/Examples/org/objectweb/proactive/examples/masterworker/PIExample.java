@@ -93,6 +93,11 @@ public class PIExample {
     public static class ComputePIMonteCarlo implements Task<Long> {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
+        /**
          *
          */
         public ComputePIMonteCarlo() {

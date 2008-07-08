@@ -40,6 +40,10 @@ import org.objectweb.proactive.examples.userguide.cmagent.simple.State;
 
 
 public class CMAgentChained extends CMAgentInitialized implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private CMAgentChained previousNeighbour;
     private CMAgentChained nextNeighbour;
 

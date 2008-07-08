@@ -40,6 +40,11 @@ import org.objectweb.proactive.examples.c3d.RenderingEngine;
  */
 public class EngineImpl extends C3DRenderingEngine implements RenderingEngine, EngineAttributes {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     /** The name of the Engine, which is used to be displayed */
     public String getName() {
         return this.name;

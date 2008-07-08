@@ -36,6 +36,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class BlockedObject implements org.objectweb.proactive.RunActive, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     public BlockedObject() {

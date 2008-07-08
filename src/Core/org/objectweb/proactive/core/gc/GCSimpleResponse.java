@@ -34,6 +34,10 @@ import java.io.Serializable;
 
 
 public class GCSimpleResponse implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected final Activity consensusActivity;
     private final boolean hasParent;
 

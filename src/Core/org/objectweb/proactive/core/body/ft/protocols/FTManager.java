@@ -66,6 +66,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since ProActive 2.2
  */
 public abstract class FTManager implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     //logger
     final protected static Logger logger = ProActiveLogger.getLogger(Loggers.FAULT_TOLERANCE);
 

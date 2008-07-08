@@ -34,6 +34,10 @@ import java.io.Serializable;
 
 
 public class NodeDestination implements Destination, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String nodeURL;
     private String methodName;
 

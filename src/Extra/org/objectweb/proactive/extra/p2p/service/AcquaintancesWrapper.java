@@ -42,6 +42,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class AcquaintancesWrapper implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.P2P_ACQUAINTANCES);
     private P2PService acquaintances_active = null;
     private Group<P2PService> groupOfAcquaintances = null;

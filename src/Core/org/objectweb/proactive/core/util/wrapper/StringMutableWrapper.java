@@ -47,6 +47,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class StringMutableWrapper extends StringWrapper implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * The no arguments constructor for ProActive.
      */
     public StringMutableWrapper() {

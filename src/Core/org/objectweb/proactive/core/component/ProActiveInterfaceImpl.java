@@ -45,6 +45,10 @@ import org.objectweb.fractal.api.Type;
  * @author The ProActive Team
  */
 public abstract class ProActiveInterfaceImpl implements ProActiveInterface, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Component owner;
     private String name;
     private Type type;

@@ -46,6 +46,10 @@ import org.objectweb.proactive.core.body.migration.MigrationException;
  *
  */
 public class MigrationEvent extends ProActiveEvent implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public static final int BEFORE_MIGRATION = 10;
     public static final int AFTER_MIGRATION = 20;
     public static final int RESTARTING_AFTER_MIGRATING = 30;

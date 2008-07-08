@@ -59,6 +59,11 @@ import org.objectweb.proactive.core.util.wrapper.IntWrapper;
  * Activate a set of ProActive descriptor
  */
 public class VNActivator implements Serializable, RunActive, NodeCreationEventListener, InitActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** Created slave are returned to this manager */

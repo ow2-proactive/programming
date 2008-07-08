@@ -46,6 +46,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public abstract class AbstractGeneralTask implements GeneralTask {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     String id;
     String job;
     String jobInit;

@@ -36,6 +36,11 @@ package org.objectweb.proactive.core.remoteobject.http.util.exceptions;
  * @see java.rmi.UnexpectedException
  */
 public class HTTPUnexpectedException extends HTTPRemoteException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public HTTPUnexpectedException(String s) {
         super(s);
     }

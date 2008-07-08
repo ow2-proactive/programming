@@ -39,6 +39,10 @@ package org.objectweb.proactive.benchmarks.timit.util;
 public class FakeTimer extends HierarchicalTimer {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private static HierarchicalTimer timer = new FakeTimer();

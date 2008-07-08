@@ -54,6 +54,11 @@ import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 
 
 public class FuturePool extends Object implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     protected boolean newState;
 
     // table of future and ACs
@@ -599,6 +604,11 @@ public class FuturePool extends Object implements java.io.Serializable {
      * @see ActiveACQueue
      */
     private class ACService implements java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
+
         // bodies that have to be updated
         private ArrayList<UniversalBody> dests;
 

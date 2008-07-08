@@ -43,6 +43,11 @@ import java.util.List;
  *
  */
 public class IndependentListProcess extends AbstractSequentialListProcessDecorator {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public IndependentListProcess() {
         super();
     }

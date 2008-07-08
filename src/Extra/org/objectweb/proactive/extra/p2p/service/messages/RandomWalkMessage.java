@@ -36,6 +36,11 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 
 public abstract class RandomWalkMessage extends Message {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public RandomWalkMessage() {
     }
 

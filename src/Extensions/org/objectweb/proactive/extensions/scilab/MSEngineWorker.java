@@ -42,6 +42,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class MSEngineWorker implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private GeneralTask genTask;

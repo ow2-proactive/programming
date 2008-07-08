@@ -34,6 +34,10 @@ import java.io.Serializable;
 
 
 public class Tool implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String id;
     private String path;
 

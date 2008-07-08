@@ -53,6 +53,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @version ProActive 1.0 (March 2002)
  */
 public class SimpleObjectMigration implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private static final int SLEEP_TIME = 9000;
     private String name; // The name of the instance

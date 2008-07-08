@@ -41,6 +41,10 @@ import java.rmi.dgc.VMID;
  * @author The ProActive Team
  */
 public class UniqueRuntimeID implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private java.rmi.dgc.VMID vmID;
     private String vmName;
 

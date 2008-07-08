@@ -44,6 +44,10 @@ import org.objectweb.proactive.core.component.controller.ControllerState;
 public class NameControllerComponent extends AbstractProActiveComponentController implements NameController,
         ControllerStateDuplication {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private String name;
 
     public String getFcName() {

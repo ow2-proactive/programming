@@ -42,6 +42,10 @@ import org.objectweb.proactive.api.PAActiveObject;
  */
 public class Communicator implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private double total, max, min;
     private int[] maxArray;
 

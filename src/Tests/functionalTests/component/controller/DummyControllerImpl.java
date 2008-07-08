@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
 public class DummyControllerImpl extends AbstractProActiveController implements DummyController {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private String dummyValue = null;

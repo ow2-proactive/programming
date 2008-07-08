@@ -60,6 +60,11 @@ import org.objectweb.proactive.core.node.NodeFactory;
  */
 public class KernelIS extends Kernel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     private ISProblemClass problemClass;
 
     /** The reference for the typed group of Workers */

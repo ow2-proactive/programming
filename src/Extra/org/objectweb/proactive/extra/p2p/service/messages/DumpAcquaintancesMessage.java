@@ -37,6 +37,11 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 
 public class DumpAcquaintancesMessage extends BreadthFirstMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public DumpAcquaintancesMessage() {
     }
 

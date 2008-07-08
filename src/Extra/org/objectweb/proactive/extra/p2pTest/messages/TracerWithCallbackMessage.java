@@ -37,6 +37,10 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 
 public class TracerWithCallbackMessage extends BreadthFirstMessage {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     Tracer tracer = null;
 
     public TracerWithCallbackMessage(int ttl, UniversalUniqueID id, Tracer t) {

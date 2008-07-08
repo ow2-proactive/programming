@@ -34,6 +34,10 @@ import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
 
 
 public class Surface implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public Vec color;
     public double kd;
     public double ks;

@@ -42,6 +42,11 @@ import org.objectweb.fractal.api.Component;
 public class ProActiveNFLifeCycleControllerImpl extends ProActiveLifeCycleControllerImpl {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * Constructor for ProActiveNFLifeCycleController
      * @param owner The Component owner object
      */

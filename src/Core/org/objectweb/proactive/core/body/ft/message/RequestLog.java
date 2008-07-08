@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.body.request.Request;
 public class RequestLog implements MessageLog {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
 

@@ -157,6 +157,10 @@ public class LogFinderExample extends AbstractExample {
      */
     public static class GrepCountNativeTask extends NativeTask {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private static final String GREP_COMMAND = "grep -c -i";
         private static final String COPY_COMMAND = "cp";
         private String fileName;
@@ -204,6 +208,10 @@ public class LogFinderExample extends AbstractExample {
      */
     public static class ListLogFiles extends NativeTask {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private static final String LIST_COMMAND = "ls " + LOG_PATH;
 
         /** Constructs a new ListLogFiles. */

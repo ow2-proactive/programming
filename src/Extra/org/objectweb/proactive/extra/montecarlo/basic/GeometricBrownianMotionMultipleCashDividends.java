@@ -43,6 +43,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  */
 public class GeometricBrownianMotionMultipleCashDividends implements ExperienceSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private double Y, sigma;
     private double T;
     private int N;

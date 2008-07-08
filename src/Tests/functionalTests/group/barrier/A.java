@@ -37,6 +37,10 @@ import org.objectweb.proactive.api.PASPMD;
 public class A implements Active, java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private String name;

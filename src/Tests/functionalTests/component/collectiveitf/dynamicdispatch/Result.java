@@ -35,6 +35,10 @@ import java.io.Serializable;
 
 public class Result implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     int workerIndex = -1;
     int value = -1;
 

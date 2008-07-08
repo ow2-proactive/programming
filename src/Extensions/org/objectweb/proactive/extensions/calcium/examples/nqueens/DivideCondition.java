@@ -37,6 +37,11 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
 public class DivideCondition implements Condition<Board> {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      * Divide while condition holds
      * @param board
      * @return true if board should be divided, false otherwise

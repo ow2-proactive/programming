@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.security.SecurityEntity;
 
 
 public class BodyRequest extends MessageImpl implements Request, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     protected MethodCall methodCall;
     protected boolean isPriority;
     protected boolean isNFRequest;

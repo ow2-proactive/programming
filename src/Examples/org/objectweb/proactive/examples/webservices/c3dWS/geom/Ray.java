@@ -31,6 +31,10 @@
 package org.objectweb.proactive.examples.webservices.c3dWS.geom;
 
 final public class Ray implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public Vec P;
     public Vec D;
 

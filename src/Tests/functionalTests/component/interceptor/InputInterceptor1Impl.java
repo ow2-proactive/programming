@@ -49,6 +49,10 @@ import functionalTests.component.controller.DummyController;
 public class InputInterceptor1Impl extends AbstractProActiveController implements InputInterceptor1 {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private int beforeInvocationCounter = 0;

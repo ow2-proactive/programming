@@ -40,6 +40,10 @@ import java.math.BigDecimal;
  *
  */
 public class Result implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private BigDecimal bd;
     private long computedTime;
 

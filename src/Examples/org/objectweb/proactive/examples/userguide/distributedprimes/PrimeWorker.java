@@ -36,6 +36,10 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 
 public class PrimeWorker implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private Vector<Long> primes = new Vector<Long>();
 
     public PrimeWorker() {

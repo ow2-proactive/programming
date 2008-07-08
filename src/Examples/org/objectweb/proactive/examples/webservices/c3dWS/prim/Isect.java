@@ -31,6 +31,10 @@
 package org.objectweb.proactive.examples.webservices.c3dWS.prim;
 
 public class Isect implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     public double t;
     public int enter;
     public Primitive prim;

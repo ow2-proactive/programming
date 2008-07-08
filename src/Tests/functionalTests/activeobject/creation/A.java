@@ -38,6 +38,10 @@ import org.objectweb.proactive.api.PAActiveObject;
 public class A implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     String name;

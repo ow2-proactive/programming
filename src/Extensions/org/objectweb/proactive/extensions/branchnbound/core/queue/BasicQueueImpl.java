@@ -56,6 +56,10 @@ import org.objectweb.proactive.extensions.branchnbound.core.Task;
  * Created on Nov 3, 2005
  */
 public class BasicQueueImpl extends TaskQueue {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     private static final String BCK_SEPARTOR = "End pending tasks backup -- Starting not started tasks backup";
     private Vector<Task> queue = new Vector<Task>();
     private int hungryLevel;

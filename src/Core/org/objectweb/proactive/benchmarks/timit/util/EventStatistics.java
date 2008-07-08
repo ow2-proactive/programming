@@ -45,6 +45,10 @@ import org.objectweb.proactive.benchmarks.timit.util.observing.EventDataBag;
 public class EventStatistics implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private String[] counterName;

@@ -42,6 +42,11 @@ public class GroupCreationException extends Exception {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
+    /**
      *
      *
      */

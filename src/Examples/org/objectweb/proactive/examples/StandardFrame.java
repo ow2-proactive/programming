@@ -58,6 +58,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @version 1.1
  */
 public abstract class StandardFrame extends javax.swing.JFrame {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     protected final static int MESSAGE_ZONE_HEIGHT = 250;
     protected String name;

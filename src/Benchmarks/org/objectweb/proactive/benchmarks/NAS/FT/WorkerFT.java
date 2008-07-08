@@ -66,6 +66,11 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
  */
 public class WorkerFT extends Timed implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
 
     // Timers

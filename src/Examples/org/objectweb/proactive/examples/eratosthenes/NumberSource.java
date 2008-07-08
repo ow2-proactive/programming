@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class NumberSource implements java.io.Serializable, RunActive, Slowable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private ActivePrimeContainer first;
     private boolean pause;

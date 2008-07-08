@@ -48,6 +48,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * This class represents a migratable Agent
  */
 public class Agent implements InitActive, RunActive, EndActive, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private String name;
     private String nodename;

@@ -31,6 +31,11 @@
 package org.objectweb.proactive.core.mop;
 
 public class ConstructorCallExecutionFailedException extends BehavioralException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public ConstructorCallExecutionFailedException() {
     }
 

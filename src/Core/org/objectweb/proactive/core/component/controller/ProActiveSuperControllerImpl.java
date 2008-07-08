@@ -47,6 +47,11 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
  */
 public class ProActiveSuperControllerImpl extends AbstractProActiveController implements Serializable,
         ProActiveSuperController, ControllerStateDuplication {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public ProActiveSuperControllerImpl(Component owner) {
         super(owner);
     }
@@ -114,6 +119,10 @@ public class ProActiveSuperControllerImpl extends AbstractProActiveController im
     }
 
     class SuperControllerState implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 40L;
         private Component[] parents;
 
         public SuperControllerState(Component[] parents) {

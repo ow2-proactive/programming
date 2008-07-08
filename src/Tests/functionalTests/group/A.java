@@ -44,6 +44,10 @@ import org.objectweb.proactive.core.util.URIBuilder;
 public class A implements InitActive, RunActive, EndActive, java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+    /**
      *
      */
     private String name = "anonymous";

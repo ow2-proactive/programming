@@ -46,6 +46,11 @@ import timer.MicroTimer;
 
 
 public class TimedRequestWithLocationServer extends RequestImpl implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     private static final int MAX_TRIES = 30;
 
     /**

@@ -36,4 +36,9 @@ package org.objectweb.proactive.extensions.masterworker.core;
  * @author The ProActive Team
  */
 public class IsClearingError extends Error {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
 }

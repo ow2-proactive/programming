@@ -65,6 +65,11 @@ import org.objectweb.proactive.core.node.NodeException;
  */
 public class KernelCG extends Kernel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public static boolean ROUND_ROBIN_MAPPING_MODE = true;
 
     private CGProblemClass problemClass;

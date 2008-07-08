@@ -34,6 +34,11 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 
 
 public class FutureCreationException extends ProActiveRuntimeException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 40L;
+
     public FutureCreationException(String message, Throwable cause) {
         super(message, cause);
     }
