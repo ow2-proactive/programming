@@ -228,7 +228,7 @@ public class CommandBuilderProActive implements CommandBuilder {
                 javaCommand = javaTool.getPath();
             }
         }
-        return javaCommand;
+        return "\"" + javaCommand + "\"";
     }
 
     /**
@@ -395,30 +395,39 @@ public class CommandBuilderProActive implements CommandBuilder {
         if (hostInfo.getHostCapacity() == 0) {
             ret.append(command);
         } else {
-            for (int i = 0; i < hostInfo.getHostCapacity(); i++) {
-                ret.append(command);
-                ret.append(" &");
+            switch (hostInfo.getOS()) {
+                case unix:
+                    for (int i = 0; i < hostInfo.getHostCapacity(); i++) {
+                        ret.append(command);
+                        ret.append(" &");
+                    }
+                    ret.deleteCharAt(ret.length() - 1);
+                    break;
+
+                case windows:
+                    char fs = hostInfo.getOS().fileSeparator();
+                    ret.append(fs);
+                    ret.append("dist");
+                    ret.append(fs);
+                    ret.append("scripts");
+                    ret.append(fs);
+                    ret.append("gcmdeployment");
+                    ret.append(fs);
+                    ret.append("startn.bat");
+
+                    ret.append(" ");
+                    ret.append(hostInfo.getHostCapacity());
+
+                    ret.append(" ");
+                    ret.append("\"");
+                    ret.append(command);
+                    ret.append("\"");
+                    break;
             }
-            ret.deleteCharAt(ret.length() - 1);
         }
 
         GCMD_LOGGER.trace(ret);
         return ret.toString();
-    }
-
-    private PathElement getDefaultSecurityPolicy() {
-        // TODO Return the default PathElement for Security Policy
-        return null;
-    }
-
-    private List<PathElement> getDefaultProActiveClassPath() {
-        // TODO Return the default PathElements for ProActive ClassPath
-        return null;
-    }
-
-    private PathElement getDefaultLog4jProperties() {
-        // TODO Return the default PathElemen for log4jProperties
-        return null;
     }
 
     public void setProActivePath(String proActivePath) {
