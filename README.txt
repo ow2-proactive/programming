@@ -18,20 +18,20 @@ In order to start experimenting with ProActive:
 
 	* Set JAVA_HOME environment variable to the directory where 1.5 or greater JDK is installed
 
-	Run the examples by going in the scripts directory (scripts/<platform>) and launching the suitable scripts for your platform.
+	Run the examples by going in the examples directory and launching the suitable scripts for your platform.
 	
 	For instance:
           o Under Linux:
             export JAVA_HOME=<JDK_INSTALL_PATH> (Bash syntax)
-            cd scripts/unix
-            ./c3d_one_user.sh
+            cd examples/nbody
+	    ./nbody.sh
             If you get a "permission denied" when running scripts, check the permissions of the scripts and change them accordingly.
             chmod -R 755 .
 
           o Under Windows:
             set JAVA_HOME=<JDK_INSTALL_PATH>
-            cd scripts\windows
-            c3d_one_user.bat
+            cd examples\nbody
+            nbody.bat
 
 
 	Check ProActive version and configuration:
