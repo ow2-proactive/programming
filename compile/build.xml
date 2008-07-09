@@ -137,7 +137,6 @@
 	<target name="compile.core" depends="-configurationCopy" description="Compile ProActive core classes">
 		<!-- update ProActive.getVersion(). If -Dversion is not set, then ${version} is a timestamp for this build -->
 		<replaceregexp file="${src.proactive.dir}/${proactive.path}/Main.java" match="\$Id.*\$" replace="${version}" byline="true" />
-		<replaceregexp file="${base.dir}/README.html" match="\$Id.*\$" replace="${version}" byline="true" />
 		<replaceregexp file="${base.dir}/README.txt" match="\$Id.*\$" replace="${version}" byline="true" />
 
 		<javac srcdir="${src.proactive.dir}:${src.utils.dir}" destdir="${cl.proactive.dir}" deprecation="on" source="${source}" debug="${debug}">
