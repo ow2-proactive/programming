@@ -102,3 +102,6 @@ rm -Rf doc-src/*_snippets/
 sed -i "s/{version}/$VERSION/" README.txt
 
 tar cvfz ${TMP}/ProActive-${VERSION}.tar.gz ${TMP_DIR}
+
+cd ${TMP}
+zip -r ProActive-${VERSION}.zip ProActive-${VERSION}
