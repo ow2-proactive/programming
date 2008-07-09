@@ -273,7 +273,7 @@ export CLASSPATH
 
 JAVACMD="${JAVA_HOME}/bin/java -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n -Djava.security.manager -Djava.library.path=$PROACTIVE/lib -Djava.security.policy=$PWD/proactive.java.policy -Dlog4j.configuration=file:$workingDir/proactive-log4j -Dproactive.runtime.security=$workingDir/../descriptor/jvm1-sec.xml"
 
-#JAVACMD=$JAVA_HOME"/bin/java -Djava.security.manager -Djava.security.policy=$PROACTIVE/scripts/proactive.java.policy -Dlog4j.configuration=file:$PROACTIVE/scripts/proactive-log4j "
+#JAVACMD=$JAVA_HOME"/bin/java -Djava.security.manager -Djava.security.policy=$PROACTIVE/dist/proactive.java.policy -Dlog4j.configuration=file:$PROACTIVE/dist/proactive-log4j "
 
 export LD_LIBRARY_PATH=~/softs/yjp/bin/linux-amd64
 JAVACMD="$JAVACMD -agentlib:yjpagent -Dcom.sun.management.jmxremote "

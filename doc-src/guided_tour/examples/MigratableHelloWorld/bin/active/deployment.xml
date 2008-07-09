@@ -81,11 +81,11 @@
 					</javaPath>
 					<policyFile>
 						<absolutePath
-							value="${REMOTE_PROACTIVE_HOME}/scripts/proactive.java.policy" />
+							value="${REMOTE_PROACTIVE_HOME}/dist/proactive.java.policy" />
 					</policyFile>
 					<log4jpropertiesFile>
 						<absolutePath
-							value="${REMOTE_PROACTIVE_HOME}/scripts/proactive-log4j" />
+							value="${REMOTE_PROACTIVE_HOME}/dist/proactive-log4j" />
 					</log4jpropertiesFile>
 				</jvmProcess>
 			</processDefinition>

@@ -40,8 +40,7 @@
 	<section><info><title>How to use C3D</title></info>
 		
 	<para>
-	The C3D application uses three scripts that can be found under <literal>ProActive/scripts/unix</literal>
-	or  <literal>ProActive\scripts\windows</literal>:
+	The C3D application uses three scripts that can be found under <literal>examples/c3d</literal>:
 	</para>
 	<itemizedlist>
 		<listitem>
@@ -117,10 +116,7 @@
       <section><info><title>How to use the Readers/Writers</title></info>
         
 
-        <para>To start the application use <literal>Proactive/scripts/unix/readers.sh</literal>
-        or <literal>Proactive\scripts\windows\readers.bat</literal> depending on your operating
-        system.
-        </para>
+        <para>To start the application use <literal>examples/readers</literal>.</para>
 
         <para>ProActive starts a node (i.e. a JVM) on the current machine, and
         creates 3 Writers, 3 Readers, a ReaderWrite (the controller of the
@@ -165,8 +161,8 @@
       <section><info><title>How to use the philosophers application</title></info>
         
 
-      <para>To start the application use <literal>Proactive/scripts/unix/philosophers.sh</literal>
-        or <literal>Proactive\scripts\windows\philosophers.bat</literal> depending on your operating
+      <para>To start the application use <literal>examples/philosophers/philosophers.sh</literal>
+        or <literal>examples\philosophers\philosophers.bat</literal> depending on your operating
         system.
         </para>
 
@@ -266,7 +262,7 @@
     <section><info><title>How to use the penguin application</title></info>
       
       
-      <para>Use the <literal>ProActive/scripts/unix/migration/penguin.sh</literal>
+      <para>Use the <literal>examples/penguin/penguin.sh</literal>
        script to start the penguin controller. The controller allows you to add
        a new agent (penguin), and control its itinerary. </para>
     
@@ -334,7 +330,7 @@
 			
 		<para>
 			To start a chat client run <literal>chat.sh</literal>
-			or <literal>chat.bat</literal> from the <literal>ProActive/scripts/unix|windows/groups</literal>folder. 
+			or <literal>chat.bat</literal> from the <literal>examples/chat/</literal>folder. 
 			The syntax is <literal> chat.sh|bat user_name host_to_connect_to user_to_connect_to </literal>.
 		</para>
 		<para>
@@ -431,9 +427,9 @@
 
         <para>To run the Jacobi example, you have to
         run:</para>
-        <screen>ProActive/scripts/unix/group/jacobi.sh</screen>
+        <screen>examples/jacobi/jacobi.sh</screen>
 or
-        <screen>ProActive\scripts\unix\group\jacobi.bat</screen>
+        <screen>examples\jacobi\jacobi.bat</screen>
 
         <para>The computation stops after a minimal difference is reached
         between two iterations (constant MINDIFF in class Jacobi.java), or
@@ -651,7 +647,7 @@ or
     <section><info><title>Running the PI example</title></info>
       
 
-        <para>In ProActive/scripts/unix or windows run integralpi.sh or .bat,
+        <para>In examples/integralPi run integralpi.sh or .bat,
         you can specify the number of workers from the command line. Feel free
         to edit scripts to specify another deployment descriptor.</para>
 
@@ -1344,7 +1340,7 @@ Enter the number of iterations (0 to exit) :  </screen>
             There is only one access point for this example in the
             scripts directory:
         </para>
-        <screen>ProActive/scripts/unix/components$ ./c3d.sh
+        <screen>examples/c3d$ ./c3d_component.sh
 --- Fractal C3D example ---------------------------------------------
 Parameters : descriptor_file [fractal_ADL_file]
         The first file describes your deployment of computing nodes.
@@ -1356,14 +1352,14 @@ Parameters : descriptor_file [fractal_ADL_file]
             There are two  ways to start the components C3D. If you only
             want to start the Composite (Dispatcher + Renderer): 
         </para>
-        <screen>ProActive/scripts/unix/components$ ./c3d.sh \
+        <screen>examples/c3d$ ./c3d_component.sh \
 ../../../descriptors/components/C3D_all.xml \
 org.objectweb.proactive.examples.components.c3d.adl.compositeOfDispRend</screen>
         <para>
             If you want to start only a User, you will be asked for the
             address of a Dispatcher to which to connect to:
         </para>
-        <screen>ProActive/scripts/unix/components$ ./c3d.sh \
+        <screen>examples/c3d$ ./c3d_component.sh \
 ../../../descriptors/components/C3D_all.xml \
 org.objectweb.proactive.examples.components.c3d.adl.UserImpl</screen>
         </section>

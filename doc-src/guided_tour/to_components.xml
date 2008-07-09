@@ -298,7 +298,7 @@
             scripts directory:
         </para>
         <screen>
-            scripts/unix/components$ ./c3d.sh --- Fractal C3D example
+            examples/c3d$ ./c3d_component.sh --- Fractal C3D example
             --------------------------------------------- Parameters :
             descriptor_file [fractal_ADL_file] The first file describes
             your deployment of computing nodes. You may want to try
@@ -313,7 +313,7 @@
             this (don't insert the new lines):
         </para>
         <screen>
-            scripts/unix/components$ ./c3d.sh
+            examples/c3d$ ./c3d_component.sh
             ../../../descriptors/components/C3D_all.xml \
             org.objectweb.proactive.examples.components.c3d.adl.compositeOfDispRend
         </screen>
@@ -322,7 +322,7 @@
             address of a Dispatcher to which to connect to:
         </para>
         <screen>
-            scripts/unix/components$ ./c3d.sh
+            examples/c3d$ ./c3d_component.sh
             ../../../descriptors/components/C3D_all.xml \
             org.objectweb.proactive.examples.components.c3d.adl.UserImpl
         </screen>

@@ -369,8 +369,8 @@
 			<fileset dir="${lib.dir}">
 				<include name="**/*.jar" />
 				<include name="**/*.so" />
-                <include name="**/*.dll" />
-            </fileset>
+				<include name="**/*.dll" />
+			</fileset>
 		</copy>
 
 		<copy todir="${deploy.scripts.dir}">
@@ -381,6 +381,14 @@
 				<include name="gcmdeployment/**" />
 			</fileset>
 		</copy>
+
+		<copy todir="${deploy.dir}">
+			<fileset dir="${compile.dir}">
+				<include name="proactive-log4j"/>
+				<include name="proactive.java.policy"/>
+			</fileset>
+		</copy>
+
 		<chmod perm="755">
 			<fileset dir="${deploy.scripts.dir}" />
 			<include name="**/*.sh" />

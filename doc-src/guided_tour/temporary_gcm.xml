@@ -99,9 +99,9 @@ In order to illustrate these different ways, a new class, Main, containing the p
 java 
   -Dfractal.provider=org.objectweb.proactive.core.component.Fractive 
   -Djava.security.policy=file:<change_this_part>/
-                              ProActive/scripts/proactive.java.policy 
+                              ProActive/dist/proactive.java.policy 
   -Dlog4j.configuration=file:<change_this_part>/
-                             ProActive/scripts/proactive-log4j 
+                             ProActive/dist/proactive-log4j 
   org.objectweb.proactive.examples.components.userguide.Main
 Class Main
 package org.objectweb.proactive.examples.components.userguide;

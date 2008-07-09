@@ -116,8 +116,8 @@
           <echo message="Make accessible Pi computation by web services" />
               <java classname="org.objectweb.proactive.examples.pi.PiBBP" fork="true">
 			<classpath refid="tutorial.classpath"/>
-			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy"/>
-			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/scripts/proactive-log4j"/>
+			<jvmarg value="-Djava.security.policy=${proactive.dir}/dist/proactive.java.policy"/>
+			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/dist/proactive-log4j"/>
 			<jvmarg value="-Dproactive.configuration=file:${base}/config/ProActiveConfigurationWS.xml"/>
 		</java>
 
@@ -184,7 +184,7 @@
 		<property name="classpath" refid="tutorial.classpath" />
 		<java classname="org.objectweb.proactive.examples.pi.PiBBP" fork="true">
 			<classpath refid="tutorial.classpath" />
-			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy" />
+			<jvmarg value="-Djava.security.policy=${proactive.dir}/dist/proactive.java.policy" />
 			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/compile/proactive-log4j" />
 			<jvmarg value="-Dproactive.home=${proactive.dir}" />
 			<!--<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config.xml" /> -->
@@ -199,8 +199,8 @@
 		<antcall target="compileP2P" />
 		<java classname="org.objectweb.proactive.examples.pi.PiBBP" fork="true">
 			<classpath refid="p2p.classpath" />
-			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy" />
-			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/scripts/proactive-log4j" />
+			<jvmarg value="-Djava.security.policy=${proactive.dir}/dist/proactive.java.policy" />
+			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/dist/proactive-log4j" />
 			<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config-p2p.xml" />
 			<jvmarg value="-Dproactive.home=${proactive.dir}" />
 			<arg value="${nb-decimals}" />
@@ -216,7 +216,7 @@
 		<java classname="org.objectweb.proactive.examples.pi.MyPiSolved" fork="yes">
 			<classpath refid="tutorial.classpath" />
 			<jvmarg value="-Dproactive.dir=${proactive.dir}" />
-			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy" />
+			<jvmarg value="-Djava.security.policy=${proactive.dir}/dist/proactive.java.policy" />
 			<jvmarg value="-Dlog4j.configuration=file:../onthefly/proactive-log4j" />
 			<jvmarg value="-Dproactive.home=${proactive.dir}" />
 			<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config.xml" />
@@ -233,8 +233,8 @@
 		<property name="descriptor"  value="../descriptors/deploymentLocal.xml" />
 		<java classname="org.objectweb.proactive.examples.pi.MyPi" fork="true">
 			<classpath refid="tutorial.classpath" />
-			<jvmarg value="-Djava.security.policy=${proactive.dir}/scripts/proactive.java.policy" />
-			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/scripts/proactive-log4j" />
+			<jvmarg value="-Djava.security.policy=${proactive.dir}/dist/proactive.java.policy" />
+			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/dist/proactive-log4j" />
 			<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config.xml" />
 			<jvmarg value="-Dproactive.home=${proactive.dir}" />
 			<arg value="${decimals}" />

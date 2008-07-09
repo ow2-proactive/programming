@@ -3,8 +3,8 @@
 	<variables>
 		<descriptorVariable name="CLUSTER_PROACTIVE_HOME" value="/home/pnaoumen/ProActiveCluster/ProActive"/> <!--CHANGE ME!!!! -->
 		<descriptorVariable name="CLUSTER_JARS_FOLDER" value="/home/pnaoumen/proactivefiles"/> <!--CHANGE ME!!!! -->
-		<descriptorVariable name="PROACTIVE_POLICY_FILE" value="/home/pnaoumen/ProActiveCluster/ProActive/scripts/proactive.java.policy"/> <!--CHANGE ME!!!! -->
-		<descriptorVariable name="LOG4J_FILE" value="/home/pnaoumen/ProActiveCluster/ProActive/scripts/proactive-log4j"/> <!--CHANGE ME!!!! -->
+		<descriptorVariable name="PROACTIVE_POLICY_FILE" value="/home/pnaoumen/ProActiveCluster/ProActive/dist/proactive.java.policy"/> <!--CHANGE ME!!!! -->
+		<descriptorVariable name="LOG4J_FILE" value="/home/pnaoumen/ProActiveCluster/ProActive/dist/proactive-log4j"/> <!--CHANGE ME!!!! -->
 		<descriptorVariable name="JAVA_HOME" value="/usr/java/jdk1.5.0_05/bin"/> <!--CHANGE ME!!!! -->
 		<descriptorVariable name="QSUB_PATH" value="/opt/torque/bin/qsub"/>
 	</variables>

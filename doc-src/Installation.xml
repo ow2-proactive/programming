@@ -57,7 +57,7 @@
           <para>Launch the JVM with a <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/j2se/1.5/docs/guide/security/permissions.html"> security policy
           file</link> using the option
           <literal> -Djava.security.policy=pathToFile</literal>. A basic policy file
-          can be found at <literal>ProActive/scripts/proactive.java.policy</literal>. You can also specify a 
+          can be found at <literal>ProActive/dist/proactive.java.policy</literal>. You can also specify a 
           <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://logging.apache.org/log4j/docs/manual.html">log4j configuration
           file</link> with the property <literal>-Dlog4j.configuration=file:pathToFile</literal>.
           If a configuration file is not specified a default logger that logs on the console will be created.</para>
@@ -317,7 +317,7 @@
 		
 			
 		</para>
-      <programlisting><textobject><textdata fileref="../scripts/proactive-log4j"/></textobject></programlisting>
+      <programlisting><textobject><textdata fileref="../dist/proactive-log4j"/></textobject></programlisting>
     
     <note>
       <para>If you use the scripts provided with the distribution to run the

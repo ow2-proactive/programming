@@ -41,8 +41,8 @@
      <file src="lib/bouncycastle.jar" dest="bouncycastle.jar" />
      <file src="lib/log4j.jar" dest="log4j.jar" />
      <file src="lib/xercesImpl.jar" dest="xercesImpl.jar" />
-     <file src="scripts/proactive-log4j" dest="proactive-log4j" />
-     <file src="scripts/proactive.java.policy" dest="proactive.java.policy" />
+     <file src="dist/proactive-log4j" dest="proactive-log4j" />
+     <file src="dist/proactive.java.policy" dest="proactive.java.policy" />
   </fileTransfer>
 </fileTransferDefinitions>
 	<infrastructure>

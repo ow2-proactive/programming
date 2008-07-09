@@ -57,8 +57,7 @@
     </figure>
 
 	<para>
-	The C3D application uses three scripts that can be found under <literal>ProActive/scripts/unix</literal>
-	or  <literal>ProActive/scripts/windows</literal>:
+	The C3D application uses three scripts that can be found under <literal>ProActive/examples/c3d</literal>:
 	<itemizedlist>
 		<listitem>
 			<para><literal>c3d_one_user.sh</literal> or <literal>c3d_one_user.bat
@@ -107,8 +106,8 @@
     <section><info><title>Start a user from the local machine</title></info>
       
 
-      <para>To add a new user start <literal>Proactive/scripts/unix/c3d_add_user.sh</literal> or
-      <literal>Proactive\scripts\windows\c3d_add_user.bat</literal> depending on your
+      <para>To add a new user start <literal>Proactive/examples/c3d/c3d_add_user.sh</literal> or
+      <literal>Proactive\examples\c3d\c3d_add_user.bat</literal> depending on your
       operating system.</para>
       
             <para><figure><info><title>Add User dialog</title></info>
@@ -236,8 +235,8 @@
       <section><info><title>Start the application</title></info>
         
 
-        <para>To start the application use <literal>Proactive/scripts/unix/readers.sh</literal>
-        or <literal>Proactive\scripts\windows\readers.bat</literal> depending on your operating
+        <para>To start the application use <literal>Proactive/examples/readers/readers.sh</literal>
+        or <literal>Proactive\examples\readers\readers.bat</literal> depending on your operating
         system.
         </para>
 
@@ -288,8 +287,8 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       <section><info><title>Start the philosophers application</title></info>
         
 
-      <para>To start the application use <literal>Proactive/scripts/unix/philosophers.sh</literal>
-        or <literal>Proactive\scripts\windows\philosophers.bat</literal> depending on your operating
+      <para>To start the application use <literal>Proactive/examples/philosophers/philosophers.sh</literal>
+        or <literal>Proactive\examples\philosophers\philosophers.bat</literal> depending on your operating
         system.
         </para>
 
@@ -590,7 +589,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>Each ProActive example comes with an easy to launch script for
         both Unix and Windows. Thus, to run the Jacobi example, you have to
         run:</para>
-        <screen>ProActive/scripts/[unix|windows]/group/jacobi.[sh|bat]</screen>
+        <screen>ProActive/examples/jacobi/jacobi.[sh|bat]</screen>
 
         <para>The computation stops after a minimal difference is reached
         between two iterations (constant MINDIFF in class Jacobi.java), or
@@ -1209,7 +1208,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
     <section><info><title>Running the ProActive example</title></info>
       
 
-        <para>In ProActive/scripts/unix or windows run integralpi.sh or .bat,
+        <para>In ProActive/examples/integralPi or windows run integralpi.sh or .bat,
         you can specify the number of workers from the command line. Feel free
         to edit scripts to specify another deployment descriptor.</para>
 
@@ -2464,7 +2463,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             scripts directory:
         </para>
         <screen>
-            scripts/unix/components$ ./c3d.sh --- Fractal C3D example
+            examples/c3d$ ./c3d_component.sh --- Fractal C3D example
             --------------------------------------------- Parameters :
             descriptor_file [fractal_ADL_file] The first file describes
             your deployment of computing nodes. You may want to try
@@ -2479,7 +2478,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             this (don't insert the new lines):
         </para>
         <screen>
-            scripts/unix/components$ ./c3d.sh
+            examples/c3d$ ./c3d_component.sh
             ../../../descriptors/components/C3D_all.xml \
             org.objectweb.proactive.examples.components.c3d.adl.compositeOfDispRend
         </screen>
@@ -2488,7 +2487,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             address of a Dispatcher to which to connect to:
         </para>
         <screen>
-            scripts/unix/components$ ./c3d.sh
+            examples/c3d$ ./c3d_component.sh
             ../../../descriptors/components/C3D_all.xml \
             org.objectweb.proactive.examples.components.c3d.adl.UserImpl
         </screen>

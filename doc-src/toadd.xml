@@ -92,8 +92,8 @@
     <sect2>
       <title>Launching</title>
 
-      <para>To launch the example, type:<screen>linux&gt; java -cp $CLASSPATH -Djava.security.policy=scripts/proactive.java.policy 
-            -Dlog4j.configuration=file:scripts/proactive-log4j 
+      <para>To launch the example, type:<screen>linux&gt; java -cp $CLASSPATH -Djava.security.policy=dist/proactive.java.policy 
+            -Dlog4j.configuration=file:dist/proactive-log4j 
             org.objectweb.proactive.examples.hello.TinyHello</screen> <screen>windows&gt; java -cp $CLASSPATH -Djava.security.policy=scripts\proactive.java.policy 
               -Dlog4j.configuration=file:scripts\proactive-log4j 
                org.objectweb.proactive.examples.hello.TinyHello</screen></para>
