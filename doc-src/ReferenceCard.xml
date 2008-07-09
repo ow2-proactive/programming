@@ -481,7 +481,7 @@
     server</emphasis></para>
 
     <para>The global fault-tolerance server can be launched using the
-    ProActive/scripts/[unix|windows]/FT/startGlobalFTServer.[sh|bat] script,
+    bin/startGlobalFTServer.[sh|bat] script,
     with 5 optional parameters:</para>
 
     <itemizedlist>
@@ -527,7 +527,7 @@
     <para>Firstly, you have to start P2P Services on each shared
     machine:</para>
 
-    <para><screen>$ cd ProActive/scripts/unix/p2p</screen></para>
+    <para><screen>$ cd ProActive/bin</screen></para>
 
     <para><screen>$ ./startP2PService [-acq acquisitionMethod] [-port portNumber] [-s Peer ...]</screen></para>
 

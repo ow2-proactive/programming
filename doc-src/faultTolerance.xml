@@ -118,7 +118,7 @@
       classpath</emphasis>.</para>
 
       <para>The global fault-tolerance server can be launched using the
-      <literal>ProActive/scripts/[unix|windows]/FT/startGlobalFTServer.[sh|bat]</literal>
+      <literal>ProActive/bin/FT/startGlobalFTServer.[sh|bat]</literal>
       script, with 5 optional parameters:</para>
 
       <itemizedlist>
@@ -469,10 +469,10 @@ rvice(body);
       
 
       <para>You can find in
-      <literal>ProActive/scripts/[unix|windows]/FT/nbodyft.[sh|bat]</literal>
+      <literal>ProActive/examples/nbody/nbodyFaultTolerance.[sh|bat]</literal>
       a script that starts a fault-tolerant version of the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/apps/nbody.html">ProActive
       NBody</link> example. This script actually call the
-      <literal>ProActive/scripts/[unix|windows]/nbody.[sh|bat]</literal>
+      <literal>ProActive/examples/nbody/nbody.[sh|bat]</literal>
       script with the option <literal>-displayft</literal>. The java source
       code is the same as the standard version. The only difference is the
       'Execution Control' panel added in the graphical interface, which allows
@@ -552,14 +552,14 @@ rvice(body);
  ...</screen>
 
 	  <para> Before running the application itself, you should start the Fault-Tolerance
-	  server, using  <literal>ProActive/scripts/[unix|windows]/FT/startGlobalFTServer.[sh|bat]</literal>
+	  server, using  <literal>ProActive/bin/startGlobalFTServer.[sh|bat]</literal>
       script (see 'Fault-Tolerance servers' section).</para>
 
 
       <para>Finally, you can start the fault-tolerant ProActive NBody and
       choose the version you want to run:</para>
 
-      <screen>~/ProActive/scripts/unix/FT&gt; ./nbodyFT.sh
+      <screen>~/ProActive/examples/nbody&gt; ./nbodyFaultTolerance.sh
 Starting Fault-Tolerant version of ProActive NBody...
 --- N-body with ProActive ---------------------------------
  **WARNING**: $PROACTIVE/descriptors/FaultTolerantWorkers.xml MUST BE SET \

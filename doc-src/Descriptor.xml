@@ -1237,7 +1237,7 @@
      &lt;processor&gt;6&lt;/processor&gt;
      &lt;scriptPath&gt;
       &lt;absolutePath
- value='/home/ProActive/scripts/cluster/startRuntime.sh'/&gt;
+ value='/home/ProActive/dist/scripts/unix/cluster/startRuntime.sh'/&gt;
      &lt;/scriptPath&gt;
     &lt;/bsubOption&gt;
    &lt;/bsubProcess&gt;
@@ -1270,9 +1270,9 @@
           processor per machine. It represents the <emphasis role="bold">-R</emphasis> option of LSF. At last &lt;scriptPath&gt;
           defines the path on the cluster front end of the script
           startRuntime.sh which is necessary to run ProActive on a cluster.
-          This script is located under Proactive/scripts/unix/cluster. If not
+          This script is located under Proactive/dist/scripts/unix/cluster. If not
           set the default location is set as
-          ~/Proactive/scripts/unix/cluster.</para>
+          ~/Proactive/dist/scripts/unix/cluster.</para>
 
           <para>It is exactly the same with <emphasis role="bold">rlogin</emphasis> instead of <emphasis role="bold">ssh.</emphasis></para>
 
@@ -1301,7 +1301,7 @@
  cluster_machine2&lt;hostlist/&gt;
      &lt;processor&gt;6&lt;/processor&gt;
      &lt;scriptPath&gt;
-      &lt;absolutePath value='/home/ProActive/scripts/unix/cluster/startRuntime.sh'/&gt;
+      &lt;absolutePath value='/home/ProActive/dist/scripts/unix/cluster/startRuntime.sh'/&gt;
      &lt;/scriptPath&gt;
     &lt;/bsubOption&gt;
    &lt;/bsubProcess&gt;
@@ -1357,7 +1357,7 @@
      &lt;bookingDuration&gt;00:15:00&lt;/bookingDuration&gt;
      &lt;outputFile&gt;/home1/rquilici/out.log&lt;/outputFile&gt;
      &lt;scriptPath&gt;
-      &lt;absolutePath value='/home/ProActive/scripts/unix/cluster/pbsStartRuntime.sh'/&gt;
+      &lt;absolutePath value='/home/ProActive/dist/scripts/unix/cluster/pbsStartRuntime.sh'/&gt;
      &lt;/scriptPath&gt;
     &lt;/pbsOption&gt;
    &lt;/pbsProcess&gt;
@@ -1378,7 +1378,7 @@
           the job(default is 1 minute), <emphasis role="bold">outputFile</emphasis> represents the file where to put
           the ouput of the job(default is specified by pbs), <emphasis role="bold">scriptPath</emphasis> represents the location on the
           frontend_host of the script pbsStartRuntime.sh(default is
-          /user.home/ProActive/scripts/unix/cluster/pbsStartRuntime.sh).</para>
+          /user.home/ProActive/dist/scripts/unix/cluster/pbsStartRuntime.sh).</para>
 		
 		<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_PBS_Example.xml"></textdata></textobject></programlisting>
 
@@ -1422,7 +1422,7 @@
      &lt;hostsNumber&gt;4&lt;/hostsNumber&gt;
      &lt;bookingDuration&gt;00:15:00&lt;/bookingDuration&gt;
      &lt;scriptPath&gt;
-      &lt;absolutePath value='/home/ProActive/scripts/unix/cluster/gridEngineStartRuntime.sh'/&gt;
+      &lt;absolutePath value='/home/ProActive/dist/scripts/unix/cluster/gridEngineStartRuntime.sh'/&gt;
      &lt;/scriptPath&gt;
      &lt;parallelEnvironment&gt;mpi&lt;/parallelEnvironment&gt;
     &lt;/gridEngineOption&gt;
@@ -1441,7 +1441,7 @@
           <para>As mentionned previously, many options exist, and correspond
           to the main options specified in an SGE system. <emphasis role="bold">ScriptPath</emphasis> represents the location on the
           frontend_host of the script gridEngineStartRuntime.sh (default is
-          /user.home/ProActive/scripts/unix/cluster/gridEngineStartRuntime.sh).</para>
+          /user.home/ProActive/dist/scripts/unix/cluster/gridEngineStartRuntime.sh).</para>
 
 	<programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSH_SGE_Example.xml"></textdata></textobject></programlisting>
           
@@ -1485,7 +1485,7 @@
     &lt;oarOption&gt;
      &lt;resources&gt;node=2,weight=2&lt;/resources&gt;
      &lt;scriptPath&gt;
-      &lt;absolutePath value='/home/ProActive/scripts/unix/cluster/oarStartRuntime.sh'/&gt;
+      &lt;absolutePath value='/home/ProActive/dist/scripts/unix/cluster/oarStartRuntime.sh'/&gt;
      &lt;/scriptPath&gt;
     &lt;/oarOption&gt;
    &lt;/oarProcess&gt;
@@ -1503,7 +1503,7 @@
           <para>As mentionned previously, many options exist, and correspond
           to the main options specified in an OAR system. <emphasis role="bold">ScriptPath</emphasis> represents the location on the
           frontend_host of the script oarStartRuntime.sh (default is
-          /user.home/ProActive/scripts/unix/cluster/oarStartRuntime.sh).</para>
+          /user.home/ProActive/dist/scripts/unix/cluster/oarStartRuntime.sh).</para>
 			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_Example.xml"></textdata></textobject></programlisting>
           <para> and </para>
           <programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_OARGRID_Example.xml"></textdata></textobject></programlisting>
@@ -1658,7 +1658,7 @@
   &lt;mpiOptions&gt;
     &lt;hostsNumber&gt;16&lt;/hostsNumber&gt;
     &lt;localRelativePath&gt;
-      &lt;relativePath origin="user.home" value='/ProActive/scripts/unix' /&gt;
+      &lt;relativePath origin="user.home" value='/ProActive/dist/scripts/unix' /&gt;
       &lt;/localRelativePath&gt;
       &lt;remoteAbsolutePath&gt;
        &lt;absolutePath value='/home/user' /&gt;
@@ -1782,7 +1782,7 @@
  value='span[ptile=2]'/&gt;
       &lt;scriptPath&gt;
        &lt;absolutePath
- value='/home/ProActive/scripts/unix/cluster/startRuntime.sh'/&gt;
+ value='/home/ProActive/dist/scripts/unix/cluster/startRuntime.sh'/&gt;
       &lt;/scriptPath&gt;
      &lt;/bsubOption&gt;
     &lt;/bsubProcess&gt;

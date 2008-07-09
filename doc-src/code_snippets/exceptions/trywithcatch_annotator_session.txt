@@ -1,4 +1,4 @@
-$ ProActive/scripts/unix/trywithcatch.sh MyClass.java 
+$ ProActive/bin/trywithcatch.sh MyClass.java 
 --- ProActive TryWithCatch annotator -----------------------
 $ diff -u MyClass.java~ MyClass.java
 --- MyClass.java~
