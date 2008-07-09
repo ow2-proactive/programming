@@ -147,6 +147,7 @@ public final class RemoteObjectHostRTFinder implements RuntimeFinder {
                         try {
                             ro = RemoteObjectHelper.lookup(url);
                         } catch (ProActiveException e) {
+                            RemoteObjectHostRTFinder.handleException(e, urlString);
                             nbZombieStubs++;
                             continue;
                         }
@@ -156,8 +157,8 @@ public final class RemoteObjectHostRTFinder implements RuntimeFinder {
                         try {
                             stub = RemoteObjectHelper.generatedObjectStub(ro);
                         } catch (Exception e) {
+                            RemoteObjectHostRTFinder.handleException(e, urlString);
                             nbZombieStubs++;
-                            System.out.println("Could not generate stub for " + url);
                             continue;
                         }
 
@@ -204,5 +205,23 @@ public final class RemoteObjectHostRTFinder implements RuntimeFinder {
                 ":" + hostObject.getPort());
         }
         return runtimeObjects.values();
+    }
+
+    /**
+     * Seeks {@link java.io.InvalidClassException} recursively through causes of the exception given in parameter.
+     * @param e The exception to handle
+     * @param url The problematic url
+     */
+    private static final void handleException(final Exception e, final String url) {
+        final Console console = Console.getInstance(Activator.CONSOLE_NAME);
+        Throwable cause = e;
+        do {
+            cause = cause.getCause();
+            if (cause instanceof java.io.InvalidClassException) {
+                console.log("A different version of ProActive has been detected when trying to contact " +
+                    url);
+                break;
+            }
+        } while (cause != null);
     }
 }
