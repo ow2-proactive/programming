@@ -72,7 +72,7 @@ fi
 cd compile || warn_and_exit "Cannot move in compile"
 ./build clean
 ./build -Dversion="${VERSION}" deploy.all
-./build -Dversion="${VERSION}" manualHtml manualPdf
+./build -Dversion="${VERSION}" manualPdf
 
 cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
 echo " [i] Clean"
@@ -100,8 +100,5 @@ rm -Rf docs/tmp/
 rm -Rf doc-src/*_snippets/
 
 sed -i "s/{version}/$VERSION/" README.txt
-
-# Documentation is broken, PROACTIVE-385
-mv *.html docs/manual/ProActive_Manual_html/
 
 tar cvfz ${TMP}/ProActive-${VERSION}.tar.gz ${TMP_DIR}
