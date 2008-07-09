@@ -82,7 +82,7 @@
 						<parameter value="-Dproactive.rmi.port=7199" />
 						<parameter value="-Dproactive.skeletons.filetransfer.policy=hybrid"/>
 					</jvmParameters>
-					<policyFile><absolutePath value="${PROACTIVE_HOME}/scripts/proactive.java.policy"/></policyFile>
+					<policyFile><absolutePath value="${PROACTIVE_HOME}/dist/proactive.java.policy"/></policyFile>
 					
 				</jvmProcess>
 			</processDefinition>

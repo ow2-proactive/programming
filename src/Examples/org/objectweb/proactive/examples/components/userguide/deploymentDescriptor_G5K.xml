@@ -91,11 +91,11 @@
 					<jvmParameters><parameter value="-Dproactive.net.interface=eth0"/></jvmParameters>
 					<policyFile>
 						<absolutePath
-							value="${PROACTIVE_HOME}/scripts/proactive.java.policy" />
+							value="${PROACTIVE_HOME}/dist/proactive.java.policy" />
 					</policyFile>
 					<log4jpropertiesFile>
 						<absolutePath
-							value="${PROACTIVE_HOME}/scripts/proactive-log4j" />
+							value="${PROACTIVE_HOME}/dist/proactive-log4j" />
 					</log4jpropertiesFile>
 				</jvmProcess>
 			</processDefinition>

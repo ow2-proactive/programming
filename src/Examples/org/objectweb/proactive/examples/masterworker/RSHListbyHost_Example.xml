@@ -58,10 +58,10 @@
                         <absolutePath value="${PROACTIVE}/lib/xercesImpl.jar"/>
                     </classpath>
                     <policyFile>
-                        <absolutePath value="${PROACTIVE}/scripts/proactive.java.policy"/>
+                        <absolutePath value="${PROACTIVE}/dist/proactive.java.policy"/>
                     </policyFile>
                     <log4jpropertiesFile>
-                        <absolutePath value="${PROACTIVE}/scripts/proactive-log4j"/>
+                        <absolutePath value="${PROACTIVE}/dist/proactive-log4j"/>
                     </log4jpropertiesFile>
                     <jvmParameters>
                         <parameter value="-Dproactive.rmi.port=${ID}"/>

@@ -56,9 +56,9 @@
 				dest="${PROACTIVE_HOME}/trilead-ssh2.jar" />
 			<file src="${proactive.home}/dist/lib/javassist.jar"
 				dest="${PROACTIVE_HOME}/javassist.jar" />
-			<file src="${proactive.home}/scripts/proactive.java.policy"
+			<file src="${proactive.home}/dist/proactive.java.policy"
 				dest="${PROACTIVE_HOME}/proactive.java.policy" />
-			<file src="${proactive.home}/scripts/proactive-log4j"
+			<file src="${proactive.home}/dist/proactive-log4j"
 				dest="${PROACTIVE_HOME}/proactive-log4j" />
 		</fileTransfer>
 	</fileTransferDefinitions>

@@ -82,7 +82,7 @@
 					</javaPath>
 					<policyFile>
 						<absolutePath
-							value="${REMOTE_PROACTIVE_HOME}/scripts/proactive.java.policy" />
+							value="${REMOTE_PROACTIVE_HOME}/dist/proactive.java.policy" />
 					</policyFile>
 					<log4jpropertiesFile>
 						<absolutePath

@@ -839,11 +839,11 @@
      &lt;/javaPath&gt;
      &lt;policyFile&gt;
       &lt;absolutePath
- value='/home/ProActive/scripts/proactive.java.policy'/&gt;
+ value='/home/ProActive/dist/proactive.java.policy'/&gt;
      &lt;/policyFile&gt;
      &lt;log4jpropertiesFile&gt;
       &lt;relativePath origin='user.home'
- value='ProActive/scripts/proactive-log4j'/&gt;
+ value='ProActive/dist/proactive-log4j'/&gt;
      &lt;/log4jpropertiesFile&gt;
      &lt;ProActiveUserPropertiesFile&gt;
       &lt;absolutePath
@@ -1756,11 +1756,11 @@
      &lt;/javaPath&gt;
       &lt;policyFile&gt;
       &lt;absolutePath
- value='/home/ProActive/scripts/proactive.java.policy'/&gt;
+ value='/home/ProActive/dist/proactive.java.policy'/&gt;
      &lt;/policyFile&gt;
      &lt;log4jpropertiesFile&gt;
       &lt;absolutePath
- value='/home/ProActive/scripts/proactive-log4j'/&gt;
+ value='/home/ProActive/dist/proactive-log4j'/&gt;
      &lt;/log4jpropertiesFile&gt;
      &lt;ProActiveUserPropertiesFile&gt;
       &lt;absolutePath

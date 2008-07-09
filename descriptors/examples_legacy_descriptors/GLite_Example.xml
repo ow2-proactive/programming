@@ -82,8 +82,8 @@
                             ${PROACTIVE_HOME}/dist/lib/servlet-api.jar
                             ${PROACTIVE_HOME}/dist/lib/glite-wms-jdlj.jar
                             ${PROACTIVE_HOME}/dist/lib/classad.jar
-                            ${PROACTIVE_HOME}/scripts/proactive.java.policy
-                            ${PROACTIVE_HOME}/scripts/proactive-log4j
+                            ${PROACTIVE_HOME}/dist/proactive.java.policy
+                            ${PROACTIVE_HOME}/dist/proactive-log4j
 						    ${PROACTIVE_HOME}/scripts/unix/cluster/gLiteStartRuntime.sh
                             <!--complete with your classes and input files -->
 						</inputSandbox>

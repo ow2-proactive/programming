@@ -74,7 +74,7 @@ then
 	echo "***********************************************************************" 
 
 else	
-	JAVACMD=$JAVA_HOME"/bin/java -Djava.security.manager -Djava.security.policy=$PROACTIVE/scripts/proactive.java.policy -Dlog4j.configuration=file:${PROACTIVE}/compile/proactive-log4j -Dproactive.home=$PROACTIVE "
+	JAVACMD=$JAVA_HOME"/bin/java -Djava.security.manager -Djava.security.policy=$PROACTIVE/dist/proactive.java.policy -Dlog4j.configuration=file:${PROACTIVE}/compile/proactive-log4j -Dproactive.home=$PROACTIVE "
 	$JAVACMD $@
 fi
 
