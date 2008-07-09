@@ -204,6 +204,14 @@ public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObje
     }
 
     /**
+     * Returns a map of active objects known by this world
+     * @return The map of active objects
+     */
+    public Map<String, ActiveObject> getActiveObjects() {
+        return this.activeObjects;
+    }
+
+    /**
      * Removes an active object in the map of the known active objects.
      * 
      * @param key
