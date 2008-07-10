@@ -59,7 +59,7 @@ import org.objectweb.proactive.core.security.securityentity.CertificatedRuleEnti
 import org.objectweb.proactive.core.security.securityentity.RuleEntities;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
-import org.objectweb.proactive.ic2d.jmxmonitoring.data.NodeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.RuntimeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint;
 import org.objectweb.proactive.ic2d.jmxmonitoring.perspective.MonitoringPerspective;
@@ -213,7 +213,7 @@ public class SetSecurityManager extends Action implements IActionExtPoint {
     public void setAbstractDataObject(AbstractData ref) {
         this.object = ref;
         super.setEnabled(this.object instanceof ActiveObject || this.object instanceof RuntimeObject ||
-            this.object instanceof NodeObject);
+            this.object instanceof ProActiveNodeObject);
     }
 
     public void setActiveSelect(AbstractData ref) {
