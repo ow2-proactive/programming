@@ -4,7 +4,7 @@ rem
 rem This variable should be set to the directory where is installed ProActive
 rem
 
-IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
+IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\
 
 rem ----------------------------------------------------------------------------
 
@@ -24,18 +24,17 @@ IF DEFINED CLASSPATHEXT (
 
 
 IF EXIST "%PROACTIVE%\classes" (
-	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\classes\Core;%PROACTIVE%\classes\Extensions;%PROACTIVE%\classes\Extra;%PROACTIVE%\classes\Examples;%PROACTIVE%\classes\IC2D-old
-	SET JARS=%PROACTIVE%\lib\
+	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\classes\Core;%PROACTIVE%\classes\Extensions;%PROACTIVE%\classes\Extra;%PROACTIVE%\classes\Examples
+	SET JARS=%PROACTIVE%\lib
 	FOR %%j IN ("%PROACTIVE%\lib\*.jar") DO SET JARS=!JARS!;%%j
+	SET CLASSPATH=%CLASSPATH%;%JARS%
+	IF EXIST "%PROACTIVE%\ProActive_examples.jar" set CLASSPATH=%CLASSPATH%;"%PROACTIVE%\ProActive_examples.jar"
 ) ELSE (
-	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive.jar
-	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive_examples.jar
+	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive.jar;%PROACTIVE%\dist\lib\ProActive_examples.jar
 )
 
-SET CLASSPATH=%CLASSPATH%;%JARS%
-IF EXIST "%PROACTIVE%\ProActive_examples.jar" set CLASSPATH=%CLASSPATH%;%PROACTIVE%\ProActive_examples.jar
 
-set JAVA_CMD="%JAVA_HOME%\bin\java.exe" -Dproactive.home="%PROACTIVE%"  -Djava.security.manager -Djava.security.policy="%PROACTIVE%\scripts\proactive.java.policy"
+set JAVA_CMD="%JAVA_HOME%\bin\java.exe" -Dproactive.home="%PROACTIVE%"  -Djava.security.manager -Djava.security.policy="%PROACTIVE%\examples\proactive.java.policy"
 
 rem Adding java tools to the path
 SET OK=1
