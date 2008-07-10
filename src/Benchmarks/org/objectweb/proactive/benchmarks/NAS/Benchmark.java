@@ -36,10 +36,10 @@ import org.objectweb.proactive.benchmarks.NAS.EP.KernelEP;
 import org.objectweb.proactive.benchmarks.NAS.FT.KernelFT;
 import org.objectweb.proactive.benchmarks.NAS.IS.KernelIS;
 import org.objectweb.proactive.benchmarks.NAS.MG.KernelMG;
-import org.objectweb.proactive.benchmarks.timit.TimIt;
-import org.objectweb.proactive.benchmarks.timit.util.Startable;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
+import org.objectweb.proactive.extensions.timitspmd.TimIt;
+import org.objectweb.proactive.extensions.timitspmd.util.Startable;
 
 
 public class Benchmark implements Startable {
