@@ -32,17 +32,18 @@ package org.objectweb.proactive.examples.timit.example1;
 
 import java.io.File;
 import java.util.List;
+
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAException;
 import org.objectweb.proactive.api.PASPMD;
-import org.objectweb.proactive.benchmarks.timit.util.BenchmarkStatistics;
-import org.objectweb.proactive.benchmarks.timit.util.Startable;
-import org.objectweb.proactive.benchmarks.timit.util.TimItManager;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.extensions.timitspmd.util.BenchmarkStatistics;
+import org.objectweb.proactive.extensions.timitspmd.util.Startable;
+import org.objectweb.proactive.extensions.timitspmd.util.TimItManager;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
