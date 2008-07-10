@@ -42,6 +42,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.tasks.NativeTask;
+import org.objectweb.proactive.api.PALifeCycle;
 
 
 /**
@@ -56,20 +57,23 @@ public class NativeExample extends AbstractExample {
     /**
      * @param args
      * @throws ProActiveException 
-     * @throws SchedulerException 
      * @throws LoginException 
      */
     public static void main(String[] args) throws MalformedURLException, ProActiveException, LoginException {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 
-        if (schedulerURL != null) {
-            master.addResources(schedulerURL, login, password);
-        } else if (master_vn_name == null) {
+        if (master_vn_name == null) {
             master = new ProActiveMaster<SimpleNativeTask, ArrayList<String>>();
         } else {
             master = new ProActiveMaster<SimpleNativeTask, ArrayList<String>>(descriptor_url, master_vn_name);
         }
+
+        registerShutdownHook(new Runnable() {
+            public void run() {
+                master.terminate(true);
+            }
+        });
 
         // Adding ressources
         if (vn_name == null) {
@@ -101,7 +105,7 @@ public class NativeExample extends AbstractExample {
             }
         }
 
-        System.exit(0);
+        PALifeCycle.exitSuccess();
     }
 
     /**

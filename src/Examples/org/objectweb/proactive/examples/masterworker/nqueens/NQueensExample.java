@@ -44,6 +44,7 @@ import org.objectweb.proactive.examples.masterworker.nqueens.query.QueryGenerato
 import org.objectweb.proactive.examples.masterworker.util.Pair;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
+import org.objectweb.proactive.api.PALifeCycle;
 
 
 /**
@@ -68,12 +69,19 @@ public class NQueensExample extends AbstractExample {
         } else {
             master = new ProActiveMaster<QueryExtern, Pair<Long, Long>>(descriptor_url, master_vn_name);
         }
+
+        // handling termination even if something fails
+        registerShutdownHook(new Runnable() {
+            public void run() {
+                master.terminate(true);
+            }
+        });
+
+        // NQueens tasks are small, therefore, workers should have a big pool of tasks to solve
         master.setInitialTaskFlooding(20);
 
         // Adding ressources
-        if (schedulerURL != null) {
-            master.addResources(schedulerURL, login, password);
-        } else if (vn_name == null) {
+        if (vn_name == null) {
             master.addResources(descriptor_url);
         } else {
             master.addResources(descriptor_url, vn_name);
@@ -129,9 +137,7 @@ public class NQueensExample extends AbstractExample {
         System.out.println("Total workers calculation time : " + (sumTime / 3600000) +
             String.format("h %1$tMm %1$tSs %1$tLms", sumTime));
 
-        master.terminate(true);
-
-        System.exit(0);
+        PALifeCycle.exitSuccess();
     }
 
     protected static void init(String[] args) throws MalformedURLException {

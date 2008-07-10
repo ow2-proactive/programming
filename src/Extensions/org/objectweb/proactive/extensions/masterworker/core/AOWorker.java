@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
+import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.Cache;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
@@ -321,6 +322,8 @@ public class AOWorker implements InitActive, Serializable, Worker {
     public void clear() {
         pendingTasks.clear();
         pendingTasksFutures.clear();
+        Service service = new Service(PAActiveObject.getBodyOnThis());
+        service.flushAll();
         provider.isCleared(stubOnThis);
     }
 }

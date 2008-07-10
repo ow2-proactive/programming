@@ -38,6 +38,7 @@ import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
+import org.objectweb.proactive.api.PALifeCycle;
 
 
 public class PIExample {
@@ -45,13 +46,14 @@ public class PIExample {
     public static final int NUMBER_OF_TASKS = 30;
 
     public static void main(String[] args) throws TaskException, ProActiveException {
+
+        findOS();
         //@snippet-start masterworker_montecarlopi_master_creation
         // creation of the master
         ProActiveMaster<ComputePIMonteCarlo, Long> master = new ProActiveMaster<ComputePIMonteCarlo, Long>();
 
         // adding resources
-        master.addResources(PIExample.class
-                .getResource("/org/objectweb/proactive/examples/masterworker/WorkersLocal.xml"));
+        master.addResources(PIExample.class.getResource("MWApplication.xml"));
         //@snippet-end masterworker_montecarlopi_master_creation
         //@snippet-start masterworker_montecarlopi_tasks_submit
         // defining tasks
@@ -81,6 +83,18 @@ public class PIExample {
         //@snippet-start masterworker_montecarlopi_terminate
         master.terminate(true);
         //@snippet-end masterworker_montecarlopi_terminate
+
+        PALifeCycle.exitSuccess();
+    }
+
+    public static void findOS() {
+        // Finding current os
+        String osName = System.getProperty("os.name");
+        if (osName.toLowerCase().contains("windows")) {
+            System.setProperty("os", "windows");
+        } else {
+            System.setProperty("os", "unix");
+        }
     }
 
     //@snippet-start masterworker_montecarlopi

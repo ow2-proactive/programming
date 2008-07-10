@@ -87,8 +87,12 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /** stub on this active object */
     private AOMaster stubOnThis;
 
+    /** is the master terminating */
+    private Object terminationResourceManagerAnswer;
+
     /** is the master terminated */
     private boolean terminated;
+    private boolean terminating;
 
     /** is the master in the process of clearing all activity ? * */
     private boolean isClearing;
@@ -184,6 +188,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     private final FindWorkersRequests workersRequestsFilter = new FindWorkersRequests();
     private final FindWaitFilter findWaitFilter = new FindWaitFilter();
     private final NotTerminateFilter notTerminateFilter = new NotTerminateFilter();
+    private final FinalNotTerminateFilter finalNotTerminateFilter = new FinalNotTerminateFilter();
     private final IsClearingFilter clearingFilter = new IsClearingFilter();
 
     /** Proactive empty no arg constructor */
@@ -233,13 +238,6 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     }
 
     /** {@inheritDoc} */
-    public void addResources(final String schedulerURL, final String user, final String password)
-            throws ProActiveException {
-        (smanager).addResources(schedulerURL, user, password);
-
-    }
-
-    /** {@inheritDoc} */
     public int countAvailableResults(String originatorName) {
         if (originatorName == null) {
             return resultQueue.countAvailableResults();
@@ -271,6 +269,10 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 logger.debug("new worker " + workerName + " recorded by the master");
             }
             recordWorker(worker, workerName);
+            if (isClearing) {
+                // If the master is clearing we send the clearing message to this new worker
+                worker.clear();
+            }
         }
 
         if (emptyPending()) {
@@ -343,6 +345,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         stubOnThis = (AOMaster) PAActiveObject.getStubOnThis();
         // General initializations
         terminated = false;
+        terminating = false;
         isClearing = false;
         isInFTmechanism = false;
         // Queues
@@ -630,13 +633,15 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      * @param workerName the name of the worker
      */
     public void recordWorker(final Worker worker, final String workerName) {
-        // We record the worker in our system
-        workersByName.put(workerName, worker);
-        workersByNameRev.put(worker, workerName);
-        workerGroup.add(worker);
+        if (!terminating) {
+            // We record the worker in our system
+            workersByName.put(workerName, worker);
+            workersByNameRev.put(worker, workerName);
+            workerGroup.add(worker);
 
-        // We tell the pinger to watch for this new worker
-        pinger.addWorkerToWatch(worker);
+            // We tell the pinger to watch for this new worker
+            pinger.addWorkerToWatch(worker);
+        }
     }
 
     /** {@inheritDoc} */
@@ -678,6 +683,10 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                     clearingRunActivity(service);
                 }
 
+                service.serveAll("secondTerminate");
+                while (PAFuture.isAwaited(terminationResourceManagerAnswer)) {
+                    service.serveAll(finalNotTerminateFilter);
+                }
                 service.serveAll("finalTerminate");
                 service.serveAll("awaitsTermination");
             } catch (Exception e) {
@@ -1004,9 +1013,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     private void solve(final TaskID taskId, String originator) {
         if (debug) {
             if (originator == null) {
-                logger.debug("Request for solving task " + taskId + " from main client");
+                logger.debug("Request for solving task " + taskId.getID() + " from main client");
             } else {
-                logger.debug("Request for solving task " + taskId + " from " + originator);
+                logger.debug("Request for solving task " + taskId.getID() + " from " + originator);
             }
         }
         final long id = taskId.getID();
@@ -1154,11 +1163,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
             logger.debug("Terminating Master...");
         }
 
-        // The cleaner way is to first clearing the activity
+        // The cleaner way is to first clear the activity
         clear();
 
         // then delay final termination
-        stubOnThis.finalTerminate(freeResources);
+        stubOnThis.secondTerminate(freeResources);
 
         return new BooleanWrapper(true);
 
@@ -1168,10 +1177,35 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         return true;
     }
 
-    protected BooleanWrapper finalTerminate(final boolean freeResources) {
+    protected BooleanWrapper secondTerminate(final boolean freeResources) {
 
         // We empty pending queues
         pendingTasks.clear();
+        launchedTasks.clear();
+        workersActivity.clear();
+
+        // We terminate the pinger
+        PAFuture.waitFor(pinger.terminate());
+
+        // We terminate the repository
+        repository.terminate();
+
+        // We terminate the worker manager asynchronously to avoid a deadlock occuring
+        // when a newly created worker asks for tasks during the termination algorithm
+        terminationResourceManagerAnswer = smanager.terminate(freeResources);
+
+        // Last terminate message
+        stubOnThis.finalTerminate();
+
+        terminating = true;
+
+        return new BooleanWrapper(true);
+    }
+
+    protected BooleanWrapper finalTerminate() {
+
+        workersByName.clear();
+        workersByNameRev.clear();
 
         // we empty groups
         workerGroup.purgeExceptionAndNull();
@@ -1184,21 +1218,9 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         clearedWorkers.clear();
         pendingRequest = null;
 
-        // We terminate the pinger
-        PAFuture.waitFor(pinger.terminate());
         pinger = null;
-        // We terminate the worker manager
-        PAFuture.waitFor(smanager.terminate(freeResources));
-        smanager = null;
-        // We terminate the repository
-        repository.terminate();
         repository = null;
-
-        launchedTasks.clear();
-
-        workersActivity.clear();
-        workersByName.clear();
-        workersByNameRev.clear();
+        smanager = null;
 
         stubOnThis = null;
 
@@ -1396,6 +1418,25 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
 
         /** Creates a filter */
         public NotTerminateFilter() {
+        }
+
+        /** {@inheritDoc} */
+        public boolean acceptRequest(final Request request) {
+            // We find all the requests that are not servable yet
+            String name = request.getMethodName();
+            return !name.equals("secondTerminate") && !name.equals("awaitsTermination") &&
+                !name.equals("secondTerminate") && !name.equals("finalTerminate");
+        }
+    }
+
+    /**
+    * @author The ProActive Team
+    *         Internal class for filtering requests in the queue
+    */
+    private class FinalNotTerminateFilter implements RequestFilter {
+
+        /** Creates a filter */
+        public FinalNotTerminateFilter() {
         }
 
         /** {@inheritDoc} */

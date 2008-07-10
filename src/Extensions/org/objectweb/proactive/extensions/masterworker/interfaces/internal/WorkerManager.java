@@ -68,15 +68,6 @@ public interface WorkerManager extends WorkerDeadListener {
     void addResources(Collection<Node> nodes);
 
     /**
-     * Connects to a running scheduler by providing URL, login and password
-     * @param schedulerURL url of the running scheduler
-     * @param user username
-     * @param password password
-     * @throws ProActiveException if the scheduler cannot be found or if the login fails
-     */
-    void addResources(final String schedulerURL, String user, String password) throws ProActiveException;
-
-    /**
      * Terminates the worker manager and free every resources (if asked)
      * @param freeResources tells if the Worker Manager should as well free the node resources
      * @return success
