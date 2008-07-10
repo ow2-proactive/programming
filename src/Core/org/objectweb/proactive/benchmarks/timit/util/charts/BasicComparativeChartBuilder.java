@@ -39,6 +39,7 @@ import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryLabelPositions;
@@ -47,7 +48,6 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.title.TextTitle;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.objectweb.proactive.benchmarks.timit.util.XMLHelper;
 
 
 /**
@@ -145,10 +145,25 @@ public class BasicComparativeChartBuilder {
             res = this.documentCache.get(file.getName());
         } else {
             // Read the xml document
-            res = XMLHelper.readFile(file);
+            res = readFile(file);
             this.documentCache.put(file.getName(), res);
         }
         return res;
+    }
+
+    /**
+     * Get XML Document thanks to its filename
+     *
+     * @param the XML file
+     * @return the XML Document
+     */
+    public static Document readFile(File file) {
+        try {
+            return new SAXBuilder().build(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private void collectAllClassNamesFrom(File file) {

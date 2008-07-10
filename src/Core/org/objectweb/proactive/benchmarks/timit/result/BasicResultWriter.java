@@ -40,11 +40,11 @@ import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.objectweb.proactive.benchmarks.timit.TimIt;
-import org.objectweb.proactive.benchmarks.timit.util.XMLHelper;
 import org.objectweb.proactive.benchmarks.timit.util.basic.BasicTimer;
 import org.objectweb.proactive.benchmarks.timit.util.basic.ResultBag;
 import org.objectweb.proactive.core.mop.Utils;
+import org.objectweb.proactive.extensions.timitspmd.TimIt;
+import org.objectweb.proactive.extensions.timitspmd.util.XMLHelper;
 
 
 /**
