@@ -31,15 +31,19 @@
 package org.objectweb.proactive.extra.montecarlo.basic;
 
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
+import org.objectweb.proactive.annotation.PublicAPI;
 import umontreal.iro.lecuyer.probdist.NormalDist;
 import umontreal.iro.lecuyer.randvar.NormalGen;
 import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 /**
- * @author vddoan
+ * BrownianBridge
+ * 
+ * @author The ProActive Team
  *
  */
+@PublicAPI
 public class BrownianBridge implements ExperienceSet<double[]> {
 
     private double w0, wT, t, T;

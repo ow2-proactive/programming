@@ -31,6 +31,7 @@
 package org.objectweb.proactive.extra.montecarlo;
 
 import org.objectweb.proactive.extensions.masterworker.TaskException;
+import org.objectweb.proactive.annotation.PublicAPI;
 
 import java.io.Serializable;
 import java.util.Enumeration;
@@ -44,6 +45,7 @@ import java.util.List;
  *
  * @author The ProActive Team
  */
+@PublicAPI
 public interface Simulator {
 
     /**

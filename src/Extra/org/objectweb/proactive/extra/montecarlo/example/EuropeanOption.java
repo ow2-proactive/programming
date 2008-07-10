@@ -140,6 +140,8 @@ public class EuropeanOption implements EngineTask<double[]> {
     }
 
     public static void main(String[] args) throws ProActiveException, TaskException {
+
+        findOS();
         // Get the descriptor
         URL descriptor = EuropeanOption.class.getResource("WorkersApplication.xml");
         // Initialize the framework
@@ -152,6 +154,16 @@ public class EuropeanOption implements EngineTask<double[]> {
         mc.terminate();
         PALifeCycle.exitSuccess();
 
+    }
+
+    public static void findOS() {
+        // Finding current os
+        String osName = System.getProperty("os.name");
+        if (osName.toLowerCase().contains("windows")) {
+            System.setProperty("os", "windows");
+        } else {
+            System.setProperty("os", "unix");
+        }
     }
 
 }

@@ -30,6 +30,8 @@
  */
 package org.objectweb.proactive.extra.montecarlo.prng;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
 import java.io.Serializable;
 import java.util.Random;
 
@@ -39,6 +41,7 @@ import java.util.Random;
  *
  * @author The ProActive Team
  */
+@PublicAPI
 public interface RandomNumberGeneratorFactory extends Serializable {
 
     /**
