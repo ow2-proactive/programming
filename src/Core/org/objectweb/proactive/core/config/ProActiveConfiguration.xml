@@ -67,21 +67,6 @@
         <!-- Compressing tasks in the repository -->
         <prop key="proactive.masterworker.compresstasks" value="false" />
         
-        <!-- ***************************************************** -->
-        <!-- SCHEDULER PROPERTIES VALUE -->
-        
-        
-        <!-- ***************************************************** -->
-        <!-- SCHEDULER EXTENSION PROPERTIES VALUE -->
-        <!-- Paths to scripts used to find matlab and scilab -->
-        <prop key="proactive.scheduler.ext.matlab.script.linux"
-            value="find_matlab_command.sh" />
-        <prop key="proactive.scheduler.ext.matlab.script.windows"
-            value="find_matlab_command.bat" />
-        <prop key="proactive.scheduler.ext.scilab.script.linux"
-            value="find_scilab_command.sh" />
-        <prop key="proactive.scheduler.ext.scilab.script.windows"
-            value="find_scilab_command.bat" />
 
 		<!-- Workaround to fix rmissh/unicore conflict -->
         <prop key="proactive.unicore.forkclient" value="true" />
