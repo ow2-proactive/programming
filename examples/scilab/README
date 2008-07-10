@@ -48,7 +48,7 @@ For every machines that you will be using:
 
 STEP 1: If you plan to use Matlab, you must have Matlab installed and a valid licence.
 
-STEP 2: IMPORTANT ! you need to compile and install Matlab Java Interface libraries, in order to do that, follow the guidelines in PROACTIVE/scripts/unix/matlab/README
+STEP 2: IMPORTANT ! you need to compile and install Matlab Java Interface libraries, in order to do that, follow the guidelines in PROACTIVE/examples/matlab/README
 
 
 --------------------------------------------- For Both ---------------------------------------------------

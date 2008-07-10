@@ -317,7 +317,7 @@
 		
 			
 		</para>
-      <programlisting><textobject><textdata fileref="../dist/proactive-log4j"/></textobject></programlisting>
+      <programlisting><textobject><textdata fileref="../compile/proactive-log4j"/></textobject></programlisting>
     
     <note>
       <para>If you use the scripts provided with the distribution to run the
