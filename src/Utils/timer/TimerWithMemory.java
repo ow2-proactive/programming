@@ -32,8 +32,6 @@ package timer;
 
 import java.io.Serializable;
 
-import org.objectweb.proactive.core.util.profiling.Timer;
-
 
 /**
  * A timer which retains the values measured in addition to calculating the average

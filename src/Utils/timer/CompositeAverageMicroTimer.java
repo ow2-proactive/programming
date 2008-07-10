@@ -38,9 +38,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
-import org.objectweb.proactive.core.util.profiling.PAProfilerEngine;
-import org.objectweb.proactive.core.util.profiling.Timer;
-
 
 /**
  * A CompositeMicroTimer maintains many timer at once. To switch between them, use the setTimer method

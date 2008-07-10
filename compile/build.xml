@@ -306,7 +306,7 @@
 	</target>
 
 
-	<target name="compile.util" depends="-init, compile.core" description="Compile ProActive Utils classes">
+	<target name="compile.util" depends="-init" description="Compile ProActive Utils classes">
 		<!-- XXX Timer is in core.util.Profiling -->
 		<javac srcdir="${src.utils.dir}" destdir="${cl.utils.dir}" includes="**" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
