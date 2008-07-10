@@ -1,4 +1,4 @@
-import org.objectweb.proactive.extensions.branchnbound.core.Task; 
+import org.objectweb.proactive.extra.branchnbound.core.Task; 
 public class YourTask extends Task { 
    
   public Result execute() { 

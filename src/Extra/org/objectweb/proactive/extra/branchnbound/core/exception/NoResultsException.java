@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.branchnbound.core.exception;
+package org.objectweb.proactive.extra.branchnbound.core.exception;
 
 import java.io.Serializable;
 

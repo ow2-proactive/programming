@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.branchnbound.core;
+package org.objectweb.proactive.extra.branchnbound.core;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,7 +36,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.extensions.branchnbound.core.exception.NoResultsException;
+import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsException;
 
 
 /**

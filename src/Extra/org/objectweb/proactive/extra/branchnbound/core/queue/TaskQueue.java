@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.branchnbound.core.queue;
+package org.objectweb.proactive.extra.branchnbound.core.queue;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -42,9 +42,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.core.util.wrapper.IntMutableWrapper;
-import org.objectweb.proactive.extensions.branchnbound.core.Result;
-import org.objectweb.proactive.extensions.branchnbound.core.Task;
-import org.objectweb.proactive.extensions.branchnbound.core.exception.NoResultsException;
+import org.objectweb.proactive.extra.branchnbound.core.Result;
+import org.objectweb.proactive.extra.branchnbound.core.Task;
+import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsException;
 
 
 /**

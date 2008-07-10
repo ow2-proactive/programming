@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.branchnbound.core;
+package org.objectweb.proactive.extra.branchnbound.core;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -43,8 +43,8 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
-import org.objectweb.proactive.extensions.branchnbound.core.exception.NoResultsException;
-import org.objectweb.proactive.extensions.branchnbound.core.queue.TaskQueue;
+import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsException;
+import org.objectweb.proactive.extra.branchnbound.core.queue.TaskQueue;
 
 
 /**

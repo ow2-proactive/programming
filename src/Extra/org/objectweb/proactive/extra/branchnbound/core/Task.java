@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.branchnbound.core;
+package org.objectweb.proactive.extra.branchnbound.core;
 
 import java.io.Serializable;
 import java.util.Vector;

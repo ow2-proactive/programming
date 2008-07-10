@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extensions.branchnbound;
+package org.objectweb.proactive.extra.branchnbound;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
@@ -41,9 +41,9 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.branchnbound.core.Manager;
-import org.objectweb.proactive.extensions.branchnbound.core.Task;
-import org.objectweb.proactive.extensions.branchnbound.core.queue.TaskQueue;
+import org.objectweb.proactive.extra.branchnbound.core.Manager;
+import org.objectweb.proactive.extra.branchnbound.core.Task;
+import org.objectweb.proactive.extra.branchnbound.core.queue.TaskQueue;
 
 
 /**
@@ -52,7 +52,7 @@ import org.objectweb.proactive.extensions.branchnbound.core.queue.TaskQueue;
  * <p>The returned <i>Manager</i> is a ProActive Active Object. This object aims
  * to configure and to handle the computation.</p>
  *
- * @see org.objectweb.proactive.branchnbound.core.Manager
+ * @see org.objectweb.proactive.extra.branchnbound.core.Manager
  *
  * @author The ProActive Team
  *
@@ -86,7 +86,7 @@ public class ProActiveBranchNBound {
      * the Manager.
      * @throws NodeException a problem with <code>managerNode</code>.
      *
-     * @see org.objectweb.proactive.branchnbound.core.Manager
+     * @see org.objectweb.proactive.extra.branchnbound.core.Manager
      * @see Task
      * @see TaskQueue
      */
@@ -116,7 +116,7 @@ public class ProActiveBranchNBound {
      * the Manager.
      * @throws NodeException a problem with the default node.
      *
-     * @see org.objectweb.proactive.branchnbound.core.Manager
+     * @see org.objectweb.proactive.extra.branchnbound.core.Manager
      * @see Task
      * @see TaskQueue
      */
@@ -149,7 +149,7 @@ public class ProActiveBranchNBound {
      * the Manager.
      * @throws NodeException a problem with <code>managerNode</code>.
      *
-     * @see org.objectweb.proactive.branchnbound.core.Manager
+     * @see org.objectweb.proactive.extra.branchnbound.core.Manager
      * @see Task
      * @see TaskQueue
      */
@@ -185,7 +185,7 @@ public class ProActiveBranchNBound {
      * the Manager.
      * @throws NodeException a problem with the default node.
      *
-     * @see org.objectweb.proactive.branchnbound.core.Manager
+     * @see org.objectweb.proactive.extra.branchnbound.core.Manager
      * @see Task
      * @see TaskQueue
      */
@@ -223,7 +223,7 @@ public class ProActiveBranchNBound {
      * the Manager.
      * @throws NodeException a problem with the manager node.
      *
-     * @see org.objectweb.proactive.branchnbound.core.Manage
+     * @see org.objectweb.proactive.extra.branchnbound.core.Manage
      */
     private static Manager activingTheManager(Object[] args) throws ActiveObjectCreationException,
             NodeException {

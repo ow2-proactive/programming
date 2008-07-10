@@ -72,7 +72,7 @@
 				<group title="ProActive P2P : P2P infrastructure" packages="org.objectweb.proactive.extra.p2p*" />
 				<group title="ProActive Extensions : Security" packages="org.objectweb.proactive.ext.security*" />
 				<group title="ProActive Extensions" packages="org.objectweb.proactive.ext*" />
-				<group title="ProActive Branch and Bound API" packages="org.objectweb.proactive.branchnbound*" />
+				<group title="ProActive Branch and Bound API" packages="org.objectweb.proactive.extra.branchnbound*" />
 				<group title="ProActive Calcium API" packages="org.objectweb.proactive.calcium*" />
 				<group title="ProActive Load Balancing API" packages="org.objectweb.proactive.loadbalancing*" />
 				<group title="ProActive MPI API" packages="org.objectweb.proactive.mpi*" />
