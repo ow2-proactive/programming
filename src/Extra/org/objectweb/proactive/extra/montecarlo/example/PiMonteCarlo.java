@@ -96,6 +96,8 @@ public class PiMonteCarlo implements EngineTask<Double> {
 
     public static void main(String[] args) throws ProActiveException, TaskException {
 
+        findOS();
+
         // Get the example descriptor
         URL descriptor = PiMonteCarlo.class.getResource("WorkersApplication.xml");
 
@@ -112,6 +114,16 @@ public class PiMonteCarlo implements EngineTask<Double> {
         System.out.println(" The value of pi is " + pi);
         mc.terminate();
         PALifeCycle.exitSuccess();
+    }
+
+    public static void findOS() {
+        // Finding current os
+        String osName = System.getProperty("os.name");
+        if (osName.toLowerCase().contains("windows")) {
+            System.setProperty("os", "windows");
+        } else {
+            System.setProperty("os", "unix");
+        }
     }
 
     /**

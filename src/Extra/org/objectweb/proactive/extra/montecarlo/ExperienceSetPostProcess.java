@@ -30,6 +30,8 @@
  */
 package org.objectweb.proactive.extra.montecarlo;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
 import java.io.Serializable;
 
 
@@ -40,6 +42,7 @@ import java.io.Serializable;
  *
  * @author The ProActive Team
  */
+@PublicAPI
 public interface ExperienceSetPostProcess<T extends Serializable, R extends Serializable> {
 
     R postprocess(T experiencesResults);

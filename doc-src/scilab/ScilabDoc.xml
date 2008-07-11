@@ -120,12 +120,12 @@
 
             <para>
                 First, scilab needs to be installed or compiled, the instructions are in the file
-                PROACTIVE/scripts/unix/scilab/README :
+                PROACTIVE/examples/scilab/README :
             </para>
 
                 <programlisting>
                     <textobject>
-                        <textdata fileref="../scripts/unix/scilab/README"/>
+                        <textdata fileref="../examples/scilab/README"/>
                     </textobject>
                 </programlisting>
         </section>
@@ -146,12 +146,12 @@
                 <link xlink:href="http://ptolemy.eecs.berkeley.edu/ptolemyII/index.htm">ptolemy</link>
                 project
                 ) needs to be compiled, the instructions for compiling it
-                are described in the file PROACTIVE/scripts/unix/matlab/README :
+                are described in the file PROACTIVE/dev/matlab/README :
             </para>
 
             <programlisting>
                 <textobject>
-                    <textdata fileref="../scripts/unix/matlab/README"/>
+                    <textdata fileref="../dev/matlab/README"/>
                 </textobject>
             </programlisting>
         </section>
@@ -162,7 +162,7 @@
 
             <para>
                 For both Scilab and Matlab, a configuration step is required, this step is described
-                in PROACTIVE/scripts/unix/scilab/README above.
+                in PROACTIVE/examples/scilab/README above.
             </para>
 
 
@@ -182,18 +182,18 @@
 
             <para>On Unix:</para>
 
-            <screen>cd scripts/unix scilab.sh</screen>
+            <screen>cd examples/scilab scilab.sh</screen>
 
             <para>On Windows:</para>
 
-            <screen>cd scripts\windows scilab.bat</screen>
+            <screen>cd examples\scilab scilab.bat</screen>
 
             <para>
                 if you use a local version of Matlab or Scilab, you must
                 declare the environment variables in the file:
             </para>
 
-            <screen>scripts/[unix|windows]/scilab_env.[sh|bat]</screen>
+            <screen>examples/scilab/scilab_env.[sh|bat]</screen>
 
             <para>
                 Once the application is started, the main frame is
@@ -464,7 +464,7 @@
                 </listitem>
                 <listitem>
                     <para>
-                        Add the scripts contained in PROACTIVE/scripts/unix/matlab/embedded to your Matlab path.
+                        Add the scripts contained in PROACTIVE/dev/matlab/embedded to your Matlab path.
                     </para>
                 </listitem>
                 <listitem>
@@ -759,7 +759,7 @@
 
                 <programlisting xml:lang="xml">
                     <textobject>
-                        <textdata fileref="../scripts/unix/scilab/ProActiveScilab.xml"/>
+                        <textdata fileref="../examples/scilab/ProActiveScilab.xml"/>
                     </textobject>
                 </programlisting>
              </example>   

@@ -34,6 +34,8 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 
 import java.io.Serializable;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
 
 /**
  * ExperienceSet
@@ -42,6 +44,7 @@ import java.io.Serializable;
  *
  * @author The ProActive Team
  */
+@PublicAPI
 public interface ExperienceSet<T extends Serializable> extends Serializable {
 
     /**

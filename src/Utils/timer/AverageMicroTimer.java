@@ -35,8 +35,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.objectweb.proactive.core.util.profiling.Timer;
-
 
 /**
  * @author The ProActive Team

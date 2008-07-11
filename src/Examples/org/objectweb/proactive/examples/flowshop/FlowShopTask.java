@@ -34,9 +34,9 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.extensions.branchnbound.core.Result;
-import org.objectweb.proactive.extensions.branchnbound.core.Task;
-import org.objectweb.proactive.extensions.branchnbound.core.exception.NoResultsException;
+import org.objectweb.proactive.extra.branchnbound.core.Result;
+import org.objectweb.proactive.extra.branchnbound.core.Task;
+import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsException;
 
 
 /**
@@ -236,7 +236,7 @@ public class FlowShopTask extends Task {
      * Explore all permutation between currentPerm and lastPerm. May decide
      * also to split in sub Task.
      *
-     * @see org.objectweb.proactive.branchnbound.core.Task#execute()
+     * @see org.objectweb.proactive.extra.branchnbound.core.Task#execute()
      */
     @Override
     public Result execute() {
@@ -332,7 +332,7 @@ public class FlowShopTask extends Task {
      * Split the root Task in subtask. Can be called by the method execute() if
      * we want to split again.
      *
-     * @see org.objectweb.proactive.branchnbound.core.Task#split()
+     * @see org.objectweb.proactive.extra.branchnbound.core.Task#split()
      */
     @Override
     public Vector split() {
@@ -370,7 +370,7 @@ public class FlowShopTask extends Task {
     /**
      *
      * @throws NoResultsException
-     * @see org.objectweb.proactive.branchnbound.core.Task#gather(org.objectweb.proactive.branchnbound.core.Result[])
+     * @see org.objectweb.proactive.extra.branchnbound.core.Task#gather(org.objectweb.proactive.extra.branchnbound.core.Result[])
      */
     @Override
     public Result gather(Result[] results) {

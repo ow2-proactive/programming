@@ -214,11 +214,6 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
     }
 
     /** {@inheritDoc} */
-    public void addResources(String schedulerURL, String user, String password) throws ProActiveException {
-        aomaster.addResources(schedulerURL, user, password);
-    }
-
-    /** {@inheritDoc} */
     public int countAvailableResults() {
         return aomaster.countAvailableResults(null);
     }

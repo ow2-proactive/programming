@@ -32,9 +32,9 @@ package org.objectweb.proactive.examples.timit.example2;
 
 import java.util.Random;
 
-import org.objectweb.proactive.benchmarks.timit.util.TimItStore;
-import org.objectweb.proactive.benchmarks.timit.util.Timed;
-import org.objectweb.proactive.benchmarks.timit.util.TimerCounter;
+import org.objectweb.proactive.extensions.timitspmd.util.TimItStore;
+import org.objectweb.proactive.extensions.timitspmd.util.Timed;
+import org.objectweb.proactive.extensions.timitspmd.util.TimerCounter;
 
 
 /**

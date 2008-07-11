@@ -30,6 +30,8 @@
  */
 package org.objectweb.proactive.benchmarks.timit.result;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -40,8 +42,8 @@ import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.objectweb.proactive.benchmarks.timit.TimIt;
-import org.objectweb.proactive.benchmarks.timit.util.XMLHelper;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.objectweb.proactive.benchmarks.timit.util.basic.BasicTimer;
 import org.objectweb.proactive.benchmarks.timit.util.basic.ResultBag;
 import org.objectweb.proactive.core.mop.Utils;
@@ -288,14 +290,45 @@ public class BasicResultWriter {
      * Writes this document to a file
      */
     public void writeToFile() {
-        XMLHelper.writeFile(this.document, this.filename);
+        try {
+            XMLOutputter out = new XMLOutputter(Format.getPrettyFormat());
+
+            FileOutputStream fos = new FileOutputStream(createFileWithDirs(this.filename));
+            out.output(this.document, fos);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            System.err.println("Unable to write the XML file: " + filename);
+            e.printStackTrace();
+        }
+    }
+
+    public static File createFileWithDirs(String filename) {
+        try {
+            File file = new File(filename);
+
+            String path = file.getParent();
+            if (path != null) {
+                new File(path).mkdirs();
+            }
+            return file;
+        } catch (Exception e) {
+            System.err.println("Unable to create file: " + filename);
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
      * Prints the XML tree.
      */
     public void printMe() {
-        XMLHelper.printOut(this.document);
+        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+        try {
+            xmlOutputter.output(this.document, System.out);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -334,7 +367,8 @@ public class BasicResultWriter {
                 }
             }
         }
-        return TimIt.df.format(result) + " " + format;
+        return new DecimalFormat("##0.000", new DecimalFormatSymbols(java.util.Locale.US)).format(result) +
+            " " + format;
     }
 
     /**

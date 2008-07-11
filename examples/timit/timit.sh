@@ -8,7 +8,7 @@ workingDir=`dirname $0`
 
 cd ${workingDir}
 
-$JAVACMD org.objectweb.proactive.benchmarks.timit.TimIt -c config.xml
+$JAVACMD org.objectweb.proactive.extensions.timitspmd.TimIt -c config.xml
 
 echo
 echo ------------------------------------------------------------

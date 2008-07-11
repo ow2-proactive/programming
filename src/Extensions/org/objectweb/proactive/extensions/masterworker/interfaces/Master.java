@@ -85,15 +85,6 @@ public interface Master<T extends Task<R>, R extends Serializable> extends SubMa
      */
     void addResources(URL descriptorURL, String virtualNodeName) throws ProActiveException;
 
-    /**
-     * Adds a connection to the given Scheduler
-     * @param schedulerURL URL to this scheduler
-     * @param user user name
-     * @param password password
-     * @throws ProActiveException if a problem occurs while adding resources
-     */
-    void addResources(final String schedulerURL, String user, String password) throws ProActiveException;
-
     //@snippet-end masterworker_addresources
 
     /**

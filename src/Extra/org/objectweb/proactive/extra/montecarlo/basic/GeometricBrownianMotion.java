@@ -31,16 +31,19 @@
 package org.objectweb.proactive.extra.montecarlo.basic;
 
 import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
+import org.objectweb.proactive.annotation.PublicAPI;
 import umontreal.iro.lecuyer.probdist.NormalDist;
 import umontreal.iro.lecuyer.randvar.NormalGen;
 import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 /**
- * GeometricBrownianMotion
+ * GeometricBrownianMotion : Simulating geometric Brownian motion.<br/>
+ * This equation is the exact solution of the geometrix brownian motion SDE.
  *
  * @author The ProActive Team
  */
+@PublicAPI
 public class GeometricBrownianMotion implements ExperienceSet<double[]> {
 
     /**

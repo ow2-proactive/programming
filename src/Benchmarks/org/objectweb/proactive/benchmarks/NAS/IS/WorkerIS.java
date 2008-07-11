@@ -39,17 +39,17 @@ import org.objectweb.proactive.benchmarks.NAS.Kernel;
 import org.objectweb.proactive.benchmarks.NAS.util.Random;
 import org.objectweb.proactive.benchmarks.NAS.util.wrapper.IntWrapper;
 import org.objectweb.proactive.benchmarks.NAS.util.wrapper.TabWrapper;
-import org.objectweb.proactive.benchmarks.timit.TimIt;
-import org.objectweb.proactive.benchmarks.timit.util.Timed;
-import org.objectweb.proactive.benchmarks.timit.util.TimerCounter;
-import org.objectweb.proactive.benchmarks.timit.util.observing.Event;
-import org.objectweb.proactive.benchmarks.timit.util.observing.EventObserver;
-import org.objectweb.proactive.benchmarks.timit.util.observing.commobserv.CommEvent;
-import org.objectweb.proactive.benchmarks.timit.util.observing.commobserv.CommEventObserver;
-import org.objectweb.proactive.benchmarks.timit.util.observing.defaultobserver.DefaultEventData;
-import org.objectweb.proactive.benchmarks.timit.util.observing.defaultobserver.DefaultEventObserver;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
+import org.objectweb.proactive.extensions.timitspmd.TimIt;
+import org.objectweb.proactive.extensions.timitspmd.util.Timed;
+import org.objectweb.proactive.extensions.timitspmd.util.TimerCounter;
+import org.objectweb.proactive.extensions.timitspmd.util.observing.Event;
+import org.objectweb.proactive.extensions.timitspmd.util.observing.EventObserver;
+import org.objectweb.proactive.extensions.timitspmd.util.observing.commobserv.CommEvent;
+import org.objectweb.proactive.extensions.timitspmd.util.observing.commobserv.CommEventObserver;
+import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserver.DefaultEventData;
+import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserver.DefaultEventObserver;
 
 
 /**

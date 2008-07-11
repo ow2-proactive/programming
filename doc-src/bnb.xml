@@ -182,7 +182,7 @@
                 <emphasis role="bold">Task</emphasis>
                 object is located in this followed package:
             </para>
-            <screen>org.objectweb.proactive.branchnbound.core</screen>
+            <screen>org.objectweb.proactive.extra.branchnbound.core</screen>
             <para>All methods are described bellow:</para>
             <section><info><title>public Result execute()</title></info>
                 
@@ -350,9 +350,9 @@ Result futureResult = manager.start(); // this call is asynchronous</programlist
             :
         </para>
         <programlisting xml:lang="java">import org.objectweb.proactive.ProActive;
-import org.objectweb.proactive.branchnbound.core.Result;
-import org.objectweb.proactive.branchnbound.core.Task;
-import org.objectweb.proactive.branchnbound.core.exception.NoResultsExcepti\
+import org.objectweb.proactive.extra.branchnbound.core.Result;
+import org.objectweb.proactive.extra.branchnbound.core.Task;
+import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsExcepti\
 on;
 public class FlowShopTask extends Task {
  public FlowShopTask() {

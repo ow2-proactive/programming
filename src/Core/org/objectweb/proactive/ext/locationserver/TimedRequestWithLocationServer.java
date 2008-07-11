@@ -42,8 +42,6 @@ import org.objectweb.proactive.core.body.request.RequestImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.StubObject;
 
-import timer.MicroTimer;
-
 
 public class TimedRequestWithLocationServer extends RequestImpl implements java.io.Serializable {
     /**
@@ -71,13 +69,7 @@ public class TimedRequestWithLocationServer extends RequestImpl implements java.
 
     @Override
     public Reply serve(Body targetBody) {
-        MicroTimer timer = new MicroTimer();
-        timer.start();
-
         Reply r = super.serve(targetBody);
-        timer.stop();
-        System.out.println("TimedRequestWithLocationServer: " + timer.getCumulatedTime() + " for method " +
-            methodName);
         return r;
     }
 

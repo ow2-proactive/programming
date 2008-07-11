@@ -37,16 +37,16 @@ import org.objectweb.proactive.api.PASPMD;
 import org.objectweb.proactive.benchmarks.NAS.Kernel;
 import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
 import org.objectweb.proactive.benchmarks.NAS.util.Reduce;
-import org.objectweb.proactive.benchmarks.timit.util.BenchmarkStatistics;
-import org.objectweb.proactive.benchmarks.timit.util.EventStatistics;
-import org.objectweb.proactive.benchmarks.timit.util.HierarchicalTimerStatistics;
-import org.objectweb.proactive.benchmarks.timit.util.TimItManager;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
+import org.objectweb.proactive.extensions.timitspmd.util.BenchmarkStatistics;
+import org.objectweb.proactive.extensions.timitspmd.util.EventStatistics;
+import org.objectweb.proactive.extensions.timitspmd.util.HierarchicalTimerStatistics;
+import org.objectweb.proactive.extensions.timitspmd.util.TimItManager;
 
 
 /**

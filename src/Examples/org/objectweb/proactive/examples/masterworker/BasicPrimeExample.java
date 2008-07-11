@@ -39,10 +39,13 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
+import org.objectweb.proactive.api.PALifeCycle;
 
 
 /**
@@ -107,7 +110,6 @@ public class BasicPrimeExample extends AbstractExample {
      * @throws TaskException
      * @throws MalformedURLException
      * @throws ProActiveException 
-     * @throws SchedulerException 
      * @throws LoginException 
      */
     public static void main(String[] args) throws TaskException, MalformedURLException, ProActiveException,
@@ -129,9 +131,7 @@ public class BasicPrimeExample extends AbstractExample {
         });
 
         // Adding ressources
-        if (schedulerURL != null) {
-            master.addResources(schedulerURL, login, password);
-        } else if (vn_name == null) {
+        if (vn_name == null) {
             master.addResources(descriptor_url);
         } else {
             master.addResources(descriptor_url, vn_name);
@@ -151,7 +151,9 @@ public class BasicPrimeExample extends AbstractExample {
         // Displaying results, the slavepoolSize method displays the number of workers used by the master
         displayResult(results, startTime, endTime, master.workerpoolSize());
 
-        System.exit(0);
+        JMXNotificationManager.getInstance().kill();
+
+        PALifeCycle.exitSuccess();
     }
 
     protected static void init(String[] args) throws MalformedURLException {

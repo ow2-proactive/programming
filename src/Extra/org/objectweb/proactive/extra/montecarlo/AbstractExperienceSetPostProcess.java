@@ -34,12 +34,15 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 
 import java.io.Serializable;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
 
 /**
  * AbstractExperienceSetOutputFilter
  *
  * @author The ProActive Team
  */
+@PublicAPI
 public abstract class AbstractExperienceSetPostProcess<T extends Serializable, R extends Serializable>
         implements ExperienceSetPostProcess<T, R>, ExperienceSet<R> {
 

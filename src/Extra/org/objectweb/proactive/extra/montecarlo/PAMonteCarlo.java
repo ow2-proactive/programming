@@ -36,6 +36,7 @@ import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extra.montecarlo.core.EngineTaskAdapter;
 import org.objectweb.proactive.extra.montecarlo.core.MCMemoryFactory;
+import org.objectweb.proactive.annotation.PublicAPI;
 
 import java.io.Serializable;
 import java.net.URL;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
  *
  * @author The ProActive Team
  */
+@PublicAPI
 public class PAMonteCarlo<T extends Serializable> {
 
     ProActiveMaster<EngineTaskAdapter<T>, T> master = null;
@@ -92,7 +94,7 @@ public class PAMonteCarlo<T extends Serializable> {
      * @param descriptorURL url of a descriptor
      * @param masterVNName virtual node name corresponding to the master
      * @param workersVNName virtual node name corresponding to workers
-     * @param randomStreamClass
+     * @param randomStreamClass Random Number Generator class that workers will be using
      * @throws ProActiveException
      */
     public PAMonteCarlo(URL descriptorURL, String workersVNName, String masterVNName, Class randomStreamClass)
