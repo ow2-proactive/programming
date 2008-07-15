@@ -28,49 +28,33 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extra.montecarlo.basic;
+package org.objectweb.proactive.extra.montecarlo;
 
-import org.objectweb.proactive.extra.montecarlo.SimulationSet;
-import org.objectweb.proactive.annotation.PublicAPI;
-import umontreal.iro.lecuyer.probdist.NormalDist;
-import umontreal.iro.lecuyer.randvar.NormalGen;
 import umontreal.iro.lecuyer.rng.RandomStream;
+
+import java.io.Serializable;
+
+import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**
- * OrnsteinUhlenbeckProcess : Generate scenarios that follow the Ornstein-Uhlenbeck process.
+ * ExperienceSet
+ *
+ * This interface defines a Monte-Carlo set of successive experiences, using the provided random generator
  *
  * @author The ProActive Team
  */
 @PublicAPI
-public class OrnsteinUhlenbeckProcess implements SimulationSet<double[]> {
-
-    private int N;
-    private double base;
-    private double factor;
+public interface SimulationSet<T extends Serializable> extends Serializable {
 
     /**
-     * 
-     * @param s0 The present value of the asset
-     * @param mu Mean reversion level
-     * @param lambda Mean reversion rate
-     * @param sigma volatility
-     * @param t time
-     * @param n number of experiences
+     * Defines a Monte-Carlo set of successive experiences, a Random generator is given and will be used
+     *
+     * A list of double values is expected as output, result of the successive experiences.
+     * These experiences can be independant or correlated, this choice is left to the user inside the implementation of this method.
+     *
+     * @param rng random number generator
+     * @return a list of double values
      */
-    public OrnsteinUhlenbeckProcess(double s0, double mu, double lambda, double sigma, int t, int n) {
-        N = n;
-        base = s0 * Math.exp(-lambda * t) + mu * (1 - Math.exp(-lambda * t));
-        factor = sigma * Math.sqrt((1 - Math.exp(-2 * lambda * t)) / (2 * lambda));
-    }
-
-    public double[] simulate(RandomStream rng) {
-        double[] answer = new double[N];
-        NormalGen ngen = new NormalGen(rng, new NormalDist());
-        for (int i = 0; i < N; i++) {
-            answer[i] = base + factor * ngen.nextDouble();
-        }
-
-        return answer;
-    }
+    T simulate(final RandomStream rng);
 }

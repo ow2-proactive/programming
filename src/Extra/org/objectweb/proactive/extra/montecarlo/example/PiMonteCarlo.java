@@ -35,24 +35,39 @@ package org.objectweb.proactive.extra.montecarlo.example;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
-import org.objectweb.proactive.extra.montecarlo.AbstractExperienceSetPostProcess;
+import org.objectweb.proactive.extra.montecarlo.AbstractSimulationSetPostProcess;
 import org.objectweb.proactive.extra.montecarlo.EngineTask;
 import org.objectweb.proactive.extra.montecarlo.Executor;
-import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
+import org.objectweb.proactive.extra.montecarlo.SimulationSet;
 import org.objectweb.proactive.extra.montecarlo.PAMonteCarlo;
 import org.objectweb.proactive.extra.montecarlo.Simulator;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.PosixParser;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.CommandLine;
 import umontreal.iro.lecuyer.rng.RandomStream;
 
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.io.File;
 
 
 public class PiMonteCarlo implements EngineTask<Double> {
 
-    private int niter = 0;
-    private int tasks = 0;
+    public static final String DEFAULT_DESCRIPTOR = "WorkersApplication.xml";
+    public static final String DEFAULT_WORKERS_NAME = "Workers";
+    public static final int DEFAULT_NITER = 1000;
+    public static final int DEFAULT_NB_TASKS = 10000;
+
+    private static int niter = 0;
+    private static int tasks = 0;
+    private static URL descriptor_url;
+    private static String vn_name;
+    private static String master_vn_name;
 
     public PiMonteCarlo(int N, int M) {
         super();
@@ -63,7 +78,7 @@ public class PiMonteCarlo implements EngineTask<Double> {
     /**
      * Definition of Monte-Carlo simulations to compute pi
      */
-    public class MCPi implements ExperienceSet<double[]> {
+    public class MCPi implements SimulationSet<double[]> {
         int N;
 
         MCPi(final int n) {
@@ -86,18 +101,88 @@ public class PiMonteCarlo implements EngineTask<Double> {
         }
     }
 
-    public static void main(String[] args) throws ProActiveException, TaskException {
+    /**
+     * Init the example with command line arguments
+     * @param args
+     * @throws MalformedURLException
+     */
+    public static void init(String[] args) throws MalformedURLException {
 
         findOS();
 
-        // Get the example descriptor
-        URL descriptor = PiMonteCarlo.class.getResource("WorkersApplication.xml");
+        Options command_options = new Options();
+        command_options.addOption("d", true, "descriptor in use");
+        command_options.addOption("w", true, "workers virtual node name");
+        command_options.addOption("m", true, "master virtual node name");
+        command_options.addOption("i", true, "number of iterations");
+        command_options.addOption("e", true, "number of Monte-Carlo experience on each iteration");
+
+        CommandLineParser parser = new PosixParser();
+        CommandLine cmd = null;
+        try {
+            cmd = parser.parse(command_options, args);
+        } catch (ParseException e) {
+            System.err.println("Parsing failed, reason, " + e.getMessage());
+            System.exit(1);
+        }
+
+        // get descriptor option value
+        String descPath = cmd.getOptionValue("d");
+
+        if (descPath == null) {
+            descriptor_url = PiMonteCarlo.class.getResource(DEFAULT_DESCRIPTOR);
+            if (descriptor_url == null) {
+                System.err.println("Couldn't find internal ressource: " + DEFAULT_DESCRIPTOR);
+                System.exit(1);
+            }
+        } else {
+            // check provided descriptor
+            File descriptorFile = new File(descPath);
+            if (!descriptorFile.exists()) {
+                System.err.println("" + descriptorFile + " does not exist");
+                System.exit(1);
+            } else if (!descriptorFile.canRead()) {
+                System.err.println("" + descriptorFile + " can't be read");
+                System.exit(1);
+            } else if (!descriptorFile.isFile()) {
+                System.err.println("" + descriptorFile + " is not a regular file");
+                System.exit(1);
+            }
+            descriptor_url = descriptorFile.toURI().toURL();
+        }
+
+        // get vn option value
+        vn_name = cmd.getOptionValue("w");
+        if (vn_name == null) {
+            vn_name = DEFAULT_WORKERS_NAME;
+        }
+
+        master_vn_name = cmd.getOptionValue("m");
+
+        String niter_string = cmd.getOptionValue("i");
+        if (niter_string == null) {
+            niter = DEFAULT_NITER;
+        } else {
+            niter = Integer.parseInt(niter_string);
+        }
+        String ntasks_string = cmd.getOptionValue("e");
+        if (ntasks_string == null) {
+            tasks = DEFAULT_NB_TASKS;
+        } else {
+            tasks = Integer.parseInt(ntasks_string);
+        }
+
+    }
+
+    public static void main(String[] args) throws ProActiveException, TaskException, MalformedURLException {
+
+        init(args);
 
         // initialize the framework
-        PAMonteCarlo<Double> mc = new PAMonteCarlo<Double>(descriptor, null, "Workers");
+        PAMonteCarlo<Double> mc = new PAMonteCarlo<Double>(descriptor_url, master_vn_name, vn_name);
 
         // initialization of the top-level task
-        PiMonteCarlo piMonteCarlo = new PiMonteCarlo(100000, 1000);
+        PiMonteCarlo piMonteCarlo = new PiMonteCarlo(tasks, niter);
 
         // starts the top-level task
         double pi = mc.run(piMonteCarlo);
@@ -136,9 +221,9 @@ public class PiMonteCarlo implements EngineTask<Double> {
         // The main reason is that experience sets will produce a large amount of data as output.
         // Without a post-process method, this large output would be transferred through the network and induce a big overhead.
         // The post-process method allow (depending on the problem of course) to directly compute some statistics and return a much smaller output through the network.
-        List<ExperienceSet<Long>> sets = new ArrayList<ExperienceSet<Long>>();
+        List<SimulationSet<Long>> sets = new ArrayList<SimulationSet<Long>>();
         for (int i = 0; i < tasks; i++) {
-            sets.add(new AbstractExperienceSetPostProcess<double[], Long>(new MCPi(niter)) {
+            sets.add(new AbstractSimulationSetPostProcess<double[], Long>(new MCPi(niter)) {
                 public Long postprocess(double[] experiencesResults) {
                     long counter = 0;
                     double[] simulatedCounts = experiencesResults;

@@ -28,49 +28,33 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extra.montecarlo.basic;
+package org.objectweb.proactive.extra.montecarlo;
 
-import org.objectweb.proactive.extra.montecarlo.SimulationSet;
-import org.objectweb.proactive.annotation.PublicAPI;
-import umontreal.iro.lecuyer.probdist.NormalDist;
-import umontreal.iro.lecuyer.randvar.NormalGen;
 import umontreal.iro.lecuyer.rng.RandomStream;
+
+import java.io.Serializable;
+
+import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**
- * OrnsteinUhlenbeckProcess : Generate scenarios that follow the Ornstein-Uhlenbeck process.
+ * AbstractExperienceSetOutputFilter
  *
  * @author The ProActive Team
  */
 @PublicAPI
-public class OrnsteinUhlenbeckProcess implements SimulationSet<double[]> {
+public abstract class AbstractSimulationSetPostProcess<T extends Serializable, R extends Serializable>
+        implements SimulationSetPostProcess<T, R>, SimulationSet<R> {
 
-    private int N;
-    private double base;
-    private double factor;
+    private SimulationSet<T> simulationSet;
 
-    /**
-     * 
-     * @param s0 The present value of the asset
-     * @param mu Mean reversion level
-     * @param lambda Mean reversion rate
-     * @param sigma volatility
-     * @param t time
-     * @param n number of experiences
-     */
-    public OrnsteinUhlenbeckProcess(double s0, double mu, double lambda, double sigma, int t, int n) {
-        N = n;
-        base = s0 * Math.exp(-lambda * t) + mu * (1 - Math.exp(-lambda * t));
-        factor = sigma * Math.sqrt((1 - Math.exp(-2 * lambda * t)) / (2 * lambda));
+    public AbstractSimulationSetPostProcess(SimulationSet<T> simulationSet) {
+        this.simulationSet = simulationSet;
     }
 
-    public double[] simulate(RandomStream rng) {
-        double[] answer = new double[N];
-        NormalGen ngen = new NormalGen(rng, new NormalDist());
-        for (int i = 0; i < N; i++) {
-            answer[i] = base + factor * ngen.nextDouble();
-        }
-
-        return answer;
+    public R simulate(final RandomStream rng) {
+        T results = simulationSet.simulate(rng);
+        return postprocess(results);
     }
+
 }

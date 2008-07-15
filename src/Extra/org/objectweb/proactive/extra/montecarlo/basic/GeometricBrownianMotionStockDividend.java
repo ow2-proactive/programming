@@ -30,7 +30,7 @@
  */
 package org.objectweb.proactive.extra.montecarlo.basic;
 
-import org.objectweb.proactive.extra.montecarlo.ExperienceSet;
+import org.objectweb.proactive.extra.montecarlo.SimulationSet;
 import org.objectweb.proactive.annotation.PublicAPI;
 import umontreal.iro.lecuyer.probdist.NormalDist;
 import umontreal.iro.lecuyer.randvar.NormalGen;
@@ -43,7 +43,7 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  * @author The ProActive Team
  */
 @PublicAPI
-public class GeometricBrownianMotionStockDividend implements ExperienceSet<double[]> {
+public class GeometricBrownianMotionStockDividend implements SimulationSet<double[]> {
 
     private double s0, Y, r, sigma, D;
     private int T, N;

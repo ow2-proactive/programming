@@ -28,51 +28,31 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.extra.montecarlo.basic;
+package org.objectweb.proactive.extra.montecarlo.core;
 
+import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
+import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 import org.objectweb.proactive.extra.montecarlo.SimulationSet;
-import org.objectweb.proactive.annotation.PublicAPI;
-import umontreal.iro.lecuyer.probdist.NormalDist;
-import umontreal.iro.lecuyer.randvar.NormalGen;
 import umontreal.iro.lecuyer.rng.RandomStream;
+
+import java.io.Serializable;
 
 
 /**
- * GeometricBrownianMotion : Simulating geometric Brownian motion.<br/>
- * This equation is the exact solution of the geometrix brownian motion SDE.
+ * ExperienceTask
  *
  * @author The ProActive Team
  */
-@PublicAPI
-public class GeometricBrownianMotion implements SimulationSet<double[]> {
+public class SimulationSetTask implements Task<Serializable> {
 
-    private double s0, mu, sigma, t;
-    private int N;
+    private SimulationSet exp;
 
-    /**
-     * Simulating geometric Brownian motion. This equation is the exact solution of the geometrix brownian motion SDE.
-     * @param s0 Initial value at t=0 of geometric Brownian
-     * @param mu Drift term
-     * @param sigma Volatility
-     * @param t time
-     * @param N number of experiences
-     */
-    public GeometricBrownianMotion(double s0, double mu, double sigma, double t, int N) {
-        this.s0 = s0;
-        this.mu = mu;
-        this.sigma = sigma;
-        this.t = t;
-        this.N = N;
-
+    public SimulationSetTask(SimulationSet exp) {
+        this.exp = exp;
     }
 
-    public double[] simulate(RandomStream rng) {
-        double[] answer = new double[N];
-        NormalGen ngen = new NormalGen(rng, new NormalDist());
-        for (int i = 0; i < N; i++) {
-            answer[i] = s0 *
-                Math.exp((mu - 0.5 * sigma * sigma) * t + sigma * Math.sqrt(t) * ngen.nextDouble());
-        }
-        return answer;
+    public Serializable run(WorkerMemory memory) throws Exception {
+        final RandomStream random = (RandomStream) memory.load("rng");
+        return exp.simulate(random);
     }
 }
