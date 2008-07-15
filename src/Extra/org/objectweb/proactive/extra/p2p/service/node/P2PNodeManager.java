@@ -53,6 +53,7 @@ import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
+import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.p2p.service.util.P2PConstants;
@@ -183,7 +184,7 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
         try {
             // Kill the node
             if (this.descriptorPath == null) {
-                this.proactiveRuntime.killNode(nodeUrl);
+                this.proactiveRuntime.killNode(URIBuilder.getNameFromURI(nodeUrl));
                 logger.info("Node @" + nodeUrl + " left");
                 // Creating a new node
                 this.createNewNode();
