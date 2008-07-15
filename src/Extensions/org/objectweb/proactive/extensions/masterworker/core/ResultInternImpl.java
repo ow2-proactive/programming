@@ -32,8 +32,6 @@ package org.objectweb.proactive.extensions.masterworker.core;
 
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Identifiable;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.ResultIntern;
-import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskIntern;
-
 import java.io.Serializable;
 
 

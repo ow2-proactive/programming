@@ -31,7 +31,6 @@
 package org.objectweb.proactive.core.remoteobject.http;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -39,7 +38,6 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
-import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.remoteobject.http.message.HTTPRemoteObjectRequest;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;

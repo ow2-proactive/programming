@@ -30,7 +30,6 @@
  */
 package functionalTests.gcmdeployment.technicalservice;
 
-import java.io.File;
 import java.net.URL;
 
 import org.junit.Assert;

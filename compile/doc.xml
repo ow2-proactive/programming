@@ -456,7 +456,10 @@
 	<!-- ==================================================================== -->
 	<!--               Make just the pdf files for the manual                 -->
 	<!-- ==================================================================== -->
-	<target name="manualPdf" description="Make only the pdf files in the manual" depends="-docbookPreProcess">
+	<target name="manualPdf" description="Make only the pdf files in the manual">
+		<antcall target="-docbookPreProcess">
+			<param name="html.docs.dir"  value="${docs.dir}/manual/pdf/" />
+		</antcall>
 		<antcall target="-docbookToPdf">
 			<param name="docbookInputFile" value="${docs.mainFile}" />
 			<param name="pdfOutputFile" value="${docs.dir}/manual/pdf/ProActive_Manual.pdf" />

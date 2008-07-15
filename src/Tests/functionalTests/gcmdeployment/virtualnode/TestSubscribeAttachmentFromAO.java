@@ -30,7 +30,6 @@
  */
 package functionalTests.gcmdeployment.virtualnode;
 
-import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
 

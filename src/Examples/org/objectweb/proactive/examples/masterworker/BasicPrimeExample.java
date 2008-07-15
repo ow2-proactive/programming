@@ -39,7 +39,6 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
