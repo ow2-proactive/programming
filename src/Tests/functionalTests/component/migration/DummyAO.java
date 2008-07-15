@@ -30,7 +30,6 @@
  */
 package functionalTests.component.migration;
 
-import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.HashMap;

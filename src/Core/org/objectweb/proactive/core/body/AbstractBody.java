@@ -35,7 +35,6 @@ import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.security.AccessControlException;
 import java.security.PublicKey;
-import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.HashSet;
 

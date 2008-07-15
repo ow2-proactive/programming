@@ -32,7 +32,6 @@ package functionalTests.activeobject.request.forgetonsend;
 
 import static junit.framework.Assert.assertTrue;
 
-import java.io.File;
 import java.net.URL;
 
 import org.objectweb.proactive.api.PAActiveObject;

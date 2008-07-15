@@ -38,7 +38,6 @@ import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 import java.io.FileNotFoundException;
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 

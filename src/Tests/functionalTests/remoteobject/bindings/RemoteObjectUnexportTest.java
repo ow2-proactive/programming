@@ -33,9 +33,7 @@ package functionalTests.remoteobject.bindings;
 import java.net.URI;
 
 import org.objectweb.proactive.api.PARemoteObject;
-import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
@@ -44,8 +42,6 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 import functionalTests.FunctionalTest;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

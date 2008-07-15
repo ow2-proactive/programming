@@ -31,8 +31,6 @@
 package functionalTests.masterworker.divisibletasks;
 
 import functionalTests.FunctionalTest;
-import functionalTests.masterworker.A;
-
 import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
