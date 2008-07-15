@@ -489,7 +489,7 @@ rvice(body);
 
       <para>The GCMA descriptor must also specify the GlobalFTServer and ResourceServer
       location by setting the <literal>global</literal> and <literal>resource</literal>
-      technical service properties.
+      technical service properties.</para>
 	  <para> Before running the application itself, you should start the Fault-Tolerance
 	  server, using  <literal>ProActive/bin/startGlobalFTServer.[sh|bat]</literal>
       script (see 'Fault-Tolerance servers' section).</para>
