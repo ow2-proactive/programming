@@ -1,14 +1,15 @@
+<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">  --> 
+
 <chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
 	xml:id="intro">
-
+	<info>
+		<title>Introduction</title>
+	</info>
 	<indexterm>
 		<primary>Component</primary>
 	</indexterm>
 
-	<info>
-		<title>Introduction</title>
-	</info>
-	<para />
+<section><info><title>Introduction</title> </info>
 	<para>
 		Computing Grids and Peer-to-Peer networks are inherently
 		heterogeneous and distributed, and for this reason they present
@@ -48,6 +49,7 @@
 		</link>
 		.
 	</para>
+	</section>
 	<!-- 
 		<para>It presents:</para>
 		
