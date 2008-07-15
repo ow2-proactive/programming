@@ -23,8 +23,9 @@
 			<technicalServices>
 				<class name="org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService">
 					<property name="global" value="rmi://localhost:1100/FTServer" />
+					<property name="resource" value="rmi://localhost:1100/FTServer" />
 					<property name="ttc" value="5" />
-					<property name="protocol" value="pml" />
+					<property name="protocol" value="cic" />
 				</class>
 			</technicalServices>
 

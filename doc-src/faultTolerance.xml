@@ -175,20 +175,19 @@ this.server.startProcess();</screen></para>
       
 
       <para>Fault-tolerance capabilities of a ProActive application are set in
-      the deployment descriptor, using the <literal>faultTolerance</literal>
-      service. This service is attached to <emphasis>a virtual
-      node</emphasis>: active objects that are deployed on this virtual node
+      the deployment descriptor, using a faultTolerance
+      technical service, defined by the class <literal>org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService</literal>. 
+      This service is defined in the GCMA descriptor: active objects that are deployed with this technical service
       are turned fault-tolerant. This service must first defines the protocol
       that have to be used for this application. The user can select the
-      appropriate protocol with the entry <literal>&lt;protocol
-      type='[cic|pml]'/&gt;</literal> in the definition of the service.</para>
+      appropriate protocol with the entry <literal>&lt;property name='protocol' value='[cic|pml]'/&gt;</literal> in the definition of the service.</para>
 
       <para>The service also defines <emphasis role="bold">servers
       URLs</emphasis>:</para>
 
       <itemizedlist>
         <listitem>
-          <para><literal>&lt;globalServer url='...'/&gt;</literal> set the URL
+          <para><literal>&lt;property name='global' value='rmi://...'/&gt;</literal> set the URL
           of a <emphasis>global</emphasis> server, i.e. a server that
           implements all needed methods for fault-tolerance mechanism (stable
           storage, fault detection, localization). If this value is set, all
@@ -196,33 +195,32 @@ this.server.startProcess();</screen></para>
         </listitem>
 
         <listitem>
-          <para><literal>&lt;checkpointServer url='...'/&gt;</literal> set the
+          <para><literal>&lt;property name='checkpoint' value='rmi://...'/&gt;</literal> set the
           URL of the checkpoint server, i.e. the server where checkpoints are
           stored.</para>
         </listitem>
 
         <listitem>
-          <para><literal>&lt;locationServer url='...'/&gt;</literal> set the
+          <para><literal>&lt;property name='location' value='rmi://...'/&gt;</literal> set the
           URL of the location server, i.e. the server responsible for giving
           references on failed and recovered active objects.</para>
         </listitem>
 
         <listitem>
-          <para><literal>&lt;recoveryProcess url='...'/&gt;</literal> set the
+          <para><literal>&lt;property name='recovery' value='rmi://...'/&gt;</literal> set the
           URL of the recovery process, i.e. the process responsible for
           launching the recovery of the application after a failure.</para>
         </listitem>
 
         <listitem>
-          <para><literal>&lt;resourceServer url='...'/&gt;</literal> set the
+          <para><literal>&lt;property name='resource' value='rmi://...'/&gt;</literal> set the
           URL of the resource server, i.e. the server responsible for
           providing free nodes that can host a recovered active object.</para>
         </listitem>
       </itemizedlist>
 
       <para>Finally, the <emphasis role="bold">TTC</emphasis> value is set in
-      fault-tolerance service, using <literal>&lt;ttc
-      value='x'/&gt;</literal>, where x is expressed in
+      fault-tolerance service, using <literal>&lt;property name='ttc' value='x'/&gt;</literal>, where x is expressed in
       <emphasis>seconds</emphasis>. If not, the default value (30 sec) is
       used.</para>
     </section>
@@ -230,91 +228,59 @@ this.server.startProcess();</screen></para>
     <section><info><title>A deployment descriptor example</title></info>
       
 
-      <para>Here is an example of deployment descriptor that deploys 3 virtual
-      nodes: one for deploying fault-tolerant active objects, one for
-      deploying non-fault-tolerant active object (if needed), and one as
+      <para>Here is an example of GCMA descriptor that deploys 2 virtual
+      nodes: one for deploying fault-tolerant active objects and one as
       resource for recovery. The two fault-tolerance behaviors correspond to
-      two fault-tolerance services, <literal>appli</literal> and
-      <literal>resource</literal>. Note that non-fault-tolerant active objects
+      two fault-tolerance services, <literal>Workers</literal> and
+      <literal>Resource</literal>. Note that non-fault-tolerant active objects
       can communicate with fault-tolerant active objects as usual. Chosen
       protocol is CIC and TTC is set to 5 sec for all the application.</para>
 
-      <screen> &lt;ProActiveDescriptor&gt;                        
-  &lt;componentDefinition&gt;
-   &lt;virtualNodesDefinition&gt;
-    &lt;virtualNode name='NonFT-Workers' property='multiple'/&gt;
-    &lt;virtualNode name='FT-Workers' property='multiple' <emphasis role="bold">ftServiceId='appli'</emphasis>/&gt;
-    &lt;virtualNode name='Failed' property='multiple' <emphasis role="bold">ftServiceId='resource'</emphasis>/&gt;
-   &lt;/virtualNodesDefinition&gt;
-  &lt;/componentDefinition&gt;
-  &lt;deployment&gt;
-   &lt;mapping&gt;
-    &lt;map virtualNode='NonFT-Workers'&gt;
-     &lt;jvmSet&gt;
-      &lt;vmName value='Jvm1'/&gt;
-     &lt;/jvmSet&gt;
-    &lt;/map&gt;
-    &lt;map virtualNode='FT-Workers'&gt;
-     &lt;jvmSet&gt;
-      &lt;vmName value='Jvm2'/&gt;
-     &lt;/jvmSet&gt;
-    &lt;/map&gt;
-    &lt;map virtualNode='Failed'&gt;
-     &lt;jvmSet&gt;
-      &lt;vmName value='JvmS1'/&gt;
-      &lt;vmName value='JvmS2'/&gt;
-     &lt;/jvmSet&gt;
-    &lt;/map&gt;
-   &lt;/mapping&gt;
-   &lt;jvms&gt;
-    &lt;jvm name='Jvm1'&gt;
-     &lt;creation&gt;
-      &lt;processReference refid='linuxJVM'/&gt;
-     &lt;/creation&gt;
-   &lt;/jvm&gt;
-   &lt;jvm name='Jvm2'&gt;
-    &lt;creation&gt;
-     &lt;processReference refid='linuxJVM'/&gt;
-    &lt;/creation&gt;
-   &lt;/jvm&gt;
-   &lt;jvm name='JvmS1'&gt;
-    &lt;creation&gt;
-     &lt;processReference refid='linuxJVM'/&gt;
-    &lt;/creation&gt;
-   &lt;/jvm&gt;
-   &lt;jvm name='JvmS2'&gt;
-    &lt;creation&gt;
-     &lt;processReference refid='linuxJVM'/&gt;
-    &lt;/creation&gt;
-   &lt;/jvm&gt;
-  &lt;/jvms&gt;
- &lt;/deployment&gt;
- &lt;infrastructure&gt;
-  &lt;processes&gt;
-   &lt;processDefinition id='linuxJVM'&gt;
-    &lt;jvmProcess
- class='org.objectweb.proactive.core.process.JVMNodeProcess'/&gt;
-   &lt;/processDefinition&gt;
-  &lt;/processes&gt;
-  &lt;services&gt;
-   &lt;<emphasis role="bold">serviceDefinition id='appli'</emphasis>&gt;
-    &lt;faultTolerance&gt;
-   &lt;protocol type='cic'&gt;&lt;/protocol&gt;
-       &lt;globalServer url='rmi://localhost:1100/FTServer'&gt;&lt;/globalServer&gt;
-     &lt;ttc value='5'&gt;&lt;/ttc&gt;
-    &lt;/faultTolerance&gt;
-   &lt;/serviceDefinition&gt;
-   &lt;<emphasis role="bold">serviceDefinition id='resource'</emphasis>&gt;
-    &lt;faultTolerance&gt;
-   &lt;protocol type='cic'&gt;&lt;/protocol&gt;
-       &lt;globalServer  url='rmi://localhost:1100/FTServer'&gt;&lt;/globalServer&gt;
-       &lt;resourceServer url='rmi://localhost:1100/FTServer'&gt;&lt;/resourceServer&gt;
-     &lt;ttc value='5'&gt;&lt;/ttc&gt;
-    &lt;/faultTolerance&gt;
-   &lt;/serviceDefinition&gt;
-  &lt;/services&gt;
- &lt;/infrastructure&gt;
-&lt;/ProActiveDescriptor&gt;</screen>
+      <screen> 
+     &lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;GCMApplication
+	xmlns='urn:gcm:application:1.0'
+	xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xsi:schemaLocation='urn:gcm:application:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ApplicationDescriptorSchema.xsd'&gt;
+	&lt;environment&gt;
+		&lt;javaPropertyVariable name='proactive.home'/&gt;
+		&lt;javaPropertyVariable name='java.home'/&gt;
+		&lt;descriptorDefaultVariable name='deploymentDescriptor' value='../../_CONFIG/localhost/generic.xml' /&gt;
+		&lt;descriptorDefaultVariable name='jvmargDefinedByTest' value=' '/&gt;
+	&lt;/environment&gt;
+	&lt;application&gt;		
+		&lt;proactive relpath='${proactive.home}' base='root'&gt;
+			&lt;configuration&gt;
+				&lt;java base='root' relpath='${java.home}/bin/java' /&gt;
+			&lt;/configuration&gt;
+			&lt;virtualNode id='Workers' capacity='2'&gt;
+				&lt;technicalServices&gt;
+					&lt;class name='org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService'&gt;
+						&lt;property name='global' value='rmi://localhost:1100/FTServer' /&gt;
+						&lt;property name='ttc' value='5' /&gt;
+						&lt;property name='protocol' value='cic' /&gt;
+					&lt;/class&gt;
+				&lt;/technicalServices&gt;
+			&lt;/virtualNode&gt;
+			&lt;virtualNode id='Resource' capacity='1'&gt;
+				&lt;technicalServices&gt;
+					&lt;class name='org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalService'&gt;
+						&lt;property name='global' value='rmi://localhost:1100/FTServer' /&gt;
+						&lt;property name='ttc' value='5' /&gt;
+						&lt;property name='protocol' value='cic' /&gt;
+						&lt;property name='resource' value='rmi://localhost:1100/FTServer' /&gt;
+					&lt;/class&gt;
+				&lt;/technicalServices&gt;
+			&lt;/virtualNode&gt;
+		&lt;/proactive&gt;
+	&lt;/application&gt;
+	&lt;resources&gt;	
+		&lt;nodeProvider id='remote'&gt;
+			&lt;file path='${deploymentDescriptor}'/&gt;
+		&lt;/nodeProvider&gt;
+	&lt;/resources&gt;
+&lt;/GCMApplication&gt;
+     </screen>
     </section>
   </section>
 
@@ -506,51 +472,24 @@ rvice(body);
       
 
       <para>Before starting the fault-tolerant body example, you have to edit
-      the <literal>ProActive/descriptors/FaultTolerantWorkers.xml</literal>
-      deployment descriptor so as to deploy on your own hosts (<emphasis role="bold">HOSTNAME</emphasis>), as follow:</para>
+      the <literal>ProActive/examples/nbody/GCMA_FautlTolerance.xml</literal>
+      GCMA descriptor, to load a GCMD with your own hosts, as follow:</para>
 
       <screen> ...
-  &lt;processDefinition id='jvmAppli1'&gt;
-    &lt;rshProcess
- class='org.objectweb.proactive.core.process.rsh.RSHJVMProcess'
- hostname='<emphasis role="bold">HOSTNAME</emphasis>'&gt;
-    &lt;processReference refid='jvmProcess'/&gt;
-   &lt;/rshProcess&gt;
-  &lt;/processDefinition&gt;
+	&lt;resources&gt;
+		&lt;nodeProvider id='worker'&gt;
+        	&lt;file path='../TO/YOUR/GCMD.xml' /&gt;
+       	&lt;/nodeProvider&gt;
+   	&lt;/resources&gt;
  ...</screen>
 
       <para>Of course, more than one host is needed to run this example, as
       failure are triggered by killing all Java processes on the selected
       host.</para>
 
-      <para>The deployment descriptor must also specify the GlobalFTServer
-      location as follow, assuming that the script
-      <literal>startGlobalFTServer.sh</literal> has been started on the host
-      <emphasis role="bold">SERVER_HOSTAME</emphasis>:</para>
-
-      <screen>...                        
-  &lt;services&gt;
-   &lt;serviceDefinition id='appli'&gt;
-    &lt;faultTolerance&gt;
-    &lt;protocol type='cic'&gt;&lt;/protocol&gt;
-     &lt;globalServer
- url='rmi://<emphasis role="bold">SERVER_HOSTAME</emphasis>:1100/FTServer'&gt;&lt;/globalServer&gt;
-     &lt;ttc value='5'&gt;&lt;/ttc&gt;
-    &lt;/faultTolerance&gt;
-   &lt;/serviceDefinition&gt;
-   &lt;serviceDefinition id='ressource'&gt;
-    &lt;faultTolerance&gt;
-    &lt;protocol type='cic'&gt;&lt;/protocol&gt;
-     &lt;globalServer
- url='rmi://<emphasis role="bold">SERVER_HOSTAME</emphasis>:1100/FTServer'&gt;&lt;/globalServer&gt;
-     &lt;resourceServer
- url='rmi://<emphasis role="bold">SERVER_HOSTAME</emphasis>:1100/FTServer'&gt;&lt;/resourceServer&gt;
-     &lt;ttc value='5'&gt;&lt;/ttc&gt;
-    &lt;/faultTolerance&gt;
-   &lt;/serviceDefinition&gt;
-  &lt;/services&gt;
- ...</screen>
-
+      <para>The GCMA descriptor must also specify the GlobalFTServer and ResourceServer
+      location by setting the <literal>global</literal> and <literal>resource</literal>
+      technical service properties.</para>
 	  <para> Before running the application itself, you should start the Fault-Tolerance
 	  server, using  <literal>ProActive/bin/startGlobalFTServer.[sh|bat]</literal>
       script (see 'Fault-Tolerance servers' section).</para>
