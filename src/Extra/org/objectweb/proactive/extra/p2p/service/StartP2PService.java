@@ -365,7 +365,7 @@ public class StartP2PService implements P2PConstants {
     // Main method
     // -------------------------------------------------------------------------
     public static void main(String[] args) {
-        ProActiveLogger.getLogger(Loggers.P2P).setLevel(Level.DEBUG);
+        // ProActiveLogger.getLogger(Loggers.P2P).setLevel(Level.DEBUG);
 
         // Parsing command line
         Args parsed = parseArgs(args);

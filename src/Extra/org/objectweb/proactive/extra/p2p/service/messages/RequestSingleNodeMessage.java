@@ -32,19 +32,19 @@ package org.objectweb.proactive.extra.p2p.service.messages;
 
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extra.p2p.service.P2PService;
+import org.objectweb.proactive.extra.p2p.service.node.P2PLookupInt;
 import org.objectweb.proactive.extra.p2p.service.node.P2PNode;
-import org.objectweb.proactive.extra.p2p.service.node.P2PNodeLookup;
 import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 
 public class RequestSingleNodeMessage extends RandomWalkMessage {
     protected String vnName;
     protected String jobId;
-    protected P2PNodeLookup lookup;
+    protected P2PLookupInt lookup;
     protected Boolean active;
 
-    public RequestSingleNodeMessage(int ttl, UniversalUniqueID uuid, P2PService service,
-            P2PNodeLookup lookup, String vnName, String jobId) {
+    public RequestSingleNodeMessage(int ttl, UniversalUniqueID uuid, P2PService service, P2PLookupInt lookup,
+            String vnName, String jobId) {
         this.TTL = ttl;
         this.uuid = uuid;
         this.sender = service;
