@@ -100,5 +100,4 @@ public class CMAgentInitialized extends CMAgent implements InitActive, RunActive
     }
     //@snippet-end cma_init_full
 
-
 }
