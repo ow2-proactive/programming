@@ -1,10 +1,8 @@
 #!/bin/sh
 
 workingDir=`dirname $0`
+. $workingDir/env.sh
 
-cd $PWD/..
-. env.sh
-cd $workingDir
 
 #FT
 if [ "$1" = "-ft" ]; then
