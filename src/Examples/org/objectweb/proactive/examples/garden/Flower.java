@@ -42,8 +42,6 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
-import clover.edu.emory.mathcs.backport.java.util.concurrent.af;
-
 
 /**
  * <p>
