@@ -215,8 +215,9 @@
       <listitem>
         <para><literal>lib/bouncycastle.jar</literal> - used by the ProActive security framework (see <xref linkend="Security"/>).</para>
       </listitem>
-    </itemizedlist><para>You do not need to modify your <literal>CLASSPATH</literal> permanently if you
-    include the entries above using a Java IDE or a shell script.</para>
+    </itemizedlist>
+    <note><para>You do not need to modify your <literal>CLASSPATH</literal> permanently if you
+    include the entries above using a Java IDE or a shell script.</para> </note>
    
     <para>Under Linux/Unix:</para>
 
@@ -328,7 +329,7 @@
      Each example comes with a script to launch the application. Depending on your
       operating system, the script you need to launch is located either in<literal> ProActive/scripts/unix </literal> or
     <literal>ProActive/scripts/windows</literal>. The source code of all the examples can be found in the directory <literal>ProActive/src/Examples/org/objectweb/proactive/examples/</literal>.</para>
-    	<section><info><title>Local Example 2: Reader/Writer</title></info><para>This example is the ProActive version of the Readers/Writers
+    	<section><info><title>Reader/Writer</title></info><para>This example is the ProActive version of the Readers/Writers
       canonical problem. To illustrate the ease-of-use of the ProActive model,
       different synchronization policies can be applied without even stopping the application. This example is based on a easy to use Swing
       GUI.</para><itemizedlist>
@@ -341,7 +342,7 @@
           <para>source : <literal>examples/readers</literal></para>
         </listitem>
       </itemizedlist></section>
-    	<section><info><title>Local Example 3: The Dining Philosophers</title></info>
+    	<section><info><title>The Dining Philosophers</title></info>
     	<para>This example is one possible implementation of the well-known Dining
     	 Philosophers synchronization problem. This
       example is based on a easy to use Swing GUI.</para>
@@ -355,7 +356,7 @@
         </listitem>
       </itemizedlist></section>
       
-    	<section><info><title>Local Example 4: The N-Body Simulation</title></info><para>This example can be used later on as a deployment example for
+    	<section><info><title>The N-Body Simulation</title></info><para>This example can be used later on as a deployment example for
     	 several machines, and also for the fault-tolerance features. <itemizedlist>
           <listitem>
             <para>script : <literal>nbody.sh</literal> or
