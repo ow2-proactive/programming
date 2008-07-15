@@ -54,7 +54,6 @@ public class CMAgentInitialized extends CMAgent implements InitActive, RunActive
         startTime = System.currentTimeMillis();
     }
 
-    //@snippet-end cma_init_full
     public void runActivity(Body body) {
         Service service = new Service(body);
         long currentRequestDuration = 0;
@@ -99,5 +98,7 @@ public class CMAgentInitialized extends CMAgent implements InitActive, RunActive
         //TODO 10. Use wrappers for primitive types so the calls are asynchronous
         return new LongWrapper(lastRequestDuration);
     }
+    //@snippet-end cma_init_full
+
 
 }
