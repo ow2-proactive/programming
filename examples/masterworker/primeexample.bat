@@ -12,10 +12,6 @@ goto end
 SETLOCAL ENABLEDELAYEDEXPANSION
 call ..\init.bat
 
-IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
-
-REM JUST the hello launcher. No parameter. batch file asks a question.
-if errorlevel 1 GOTO remote
 
 
 :start
@@ -28,6 +24,8 @@ for %%i in (%*) do (
 
 
 :launch
+
+echo on
 
 if %found% EQU 1 (
   %JAVA_CMD% org.objectweb.proactive.examples.masterworker.BasicPrimeExample %*

@@ -12,8 +12,6 @@ goto end
 SETLOCAL ENABLEDELAYEDEXPANSION
 call ..\init.bat
 
-IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
-
 REM JUST the hello launcher. No parameter. batch file asks a question.
 if errorlevel 1 GOTO remote
 
@@ -38,7 +36,7 @@ set GCMD=helloDeploymentRemote.xml
 
 :launch
 
-%JAVA_CMD% -Dgcmdfile=%GCMD% org.objectweb.proactive.examples.hello.Hello "%XMLDESCRIPTOR%"
+%JAVA_CMD% -Dgcmdfile=%GCMD% -Dos=windows org.objectweb.proactive.examples.hello.Hello "%XMLDESCRIPTOR%"
 ENDLOCAL
 
 pause

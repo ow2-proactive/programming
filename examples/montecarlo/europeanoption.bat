@@ -10,12 +10,9 @@ goto end
 
 :doit
 SETLOCAL ENABLEDELAYEDEXPANSION
-call ..\init.bat
+call "..\init.bat"
 
 IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
-
-REM JUST the hello launcher. No parameter. batch file asks a question.
-if errorlevel 1 GOTO remote
 
 
 :start
