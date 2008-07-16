@@ -341,7 +341,7 @@
 		Deployment		
 	-->
 
-	<target name="deploy.core" depends="compile.all, -deploy.mkdir" description="Populate dist/ with all needed file">
+	<target name="deploy.core" depends="compile.all, -deploy.mkdir" description="Populate dist/ with all the files needed">
 		<!-- Update Implementation-Version -->
 		<if name="isRelease" exists="true">
 			<replaceregexp file="${compile.dir}/Manifest-base.mf" match="\$ID.*\$" replace="${version}" byline="true" />
@@ -397,14 +397,14 @@
 	</target>
 
 
-	<target name="deploy.examples" depends="examples, deploy.core" description="Add examples.jar to the dist/ directory">
+	<target name="deploy.examples" depends="examples, deploy.core" description="Add ProActive_examples.jar to the dist/ directory">
 		<jar destfile="${deploy.lib.dir}/ProActive_examples.jar">
 			<fileset dir="${cl.examples.dir}" />
 			<fileset dir="${cl.benchmarks.dir}" />
 		</jar>
 	</target>
 
-	<target name="deploy.tests" depends="deploy.core" description="Add examples.jar to the dist/ directory">
+	<target name="deploy.tests" depends="deploy.core" description="Add ProActive_tests.jar to the dist/ directory">
 		<jar destfile="${deploy.lib.dir}/ProActive_tests.jar">
 			<fileset dir="${cl.test.dir}" />
 		</jar>
