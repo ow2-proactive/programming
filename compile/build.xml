@@ -283,7 +283,7 @@
 
 	<target name="compile.examples" depends="compile.core, compile.extensions, compile.extra" description="Compile all examples classes">
 		<!-- XXX, MicroTimer should be in core or not used by examples-->
-		<javac srcdir="${src.examples.dir}:${src.utils.dir}" destdir="${cl.examples.dir}" includes="**/*.java" excludes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
+		<javac srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="**/*.java" excludes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
 			<classpath refid="examples.classpath" />
 		</javac>
 
@@ -410,6 +410,12 @@
 		</jar>
 	</target>
 
+	<target name="deploy.utils" description="Add ProActive_utils.jar to the dist/ directory">
+		<jar destfile="${deploy.lib.dir}/ProActive_utils.jar">
+			<fileset dir="${cl.utils.dir}" />
+		</jar>
+	</target>
+
 	<target name="-deploy.mkdir">
 		<!-- Make deploy directories -->
 		<mkdir dir="${deploy.dir}" />
@@ -418,7 +424,7 @@
 	</target>
 
 
-	<target name="deploy.all" depends="deploy.core, deploy.examples, deploy.tests" description="Populate dist/ (with ProActive_examples.jar)" />
+	<target name="deploy.all" depends="deploy.core, deploy.examples, deploy.tests, deploy.utils" description="Populate dist/ with all ProActive Programming dependencies and JARs" />
 
 	<target name="deploy" depends="deploy.all" description="Populate dist/ (with ProActive_examples.jar)" />
 
