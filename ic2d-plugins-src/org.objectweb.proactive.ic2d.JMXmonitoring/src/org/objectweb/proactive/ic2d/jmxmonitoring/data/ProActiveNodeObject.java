@@ -165,9 +165,11 @@ public final class ProActiveNodeObject extends AbstractData<RuntimeObject, Activ
             }
             // If the aoID is unknown create a new ActiveObject from the
             // aoObjectName
-            final ActiveObject newChild = ActiveObject.createActiveObjectFrom(aoObjectName, this);
-            super.monitoredChildren.put(aoID, newChild);
-            newChildren.add(newChild);
+            if (!super.monitoredChildren.containsKey(aoID)) {
+                final ActiveObject newChild = ActiveObject.createActiveObjectFrom(aoObjectName, this);
+                super.monitoredChildren.put(aoID, newChild);
+                newChildren.add(newChild);
+            }
         }
         // In order to avoid sending costly notifications to observers each time
         // this method is called
