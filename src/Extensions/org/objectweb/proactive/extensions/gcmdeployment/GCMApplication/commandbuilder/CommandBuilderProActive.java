@@ -406,6 +406,7 @@ public class CommandBuilderProActive implements CommandBuilder {
 
                 case windows:
                     char fs = hostInfo.getOS().fileSeparator();
+                    ret.append("\"");
                     ret.append(getPath(hostInfo));
                     ret.append(fs);
                     ret.append("dist");
@@ -415,6 +416,7 @@ public class CommandBuilderProActive implements CommandBuilder {
                     ret.append("gcmdeployment");
                     ret.append(fs);
                     ret.append("startn.bat");
+                    ret.append("\"");
 
                     ret.append(" ");
                     ret.append(hostInfo.getHostCapacity());
