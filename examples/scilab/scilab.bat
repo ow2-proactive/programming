@@ -5,9 +5,9 @@ echo --- Scilab example ---------------------------------------------
 
 :doit
 SETLOCAL ENABLEDELAYEDEXPANSION
-IF NOT DEFINED PROACTIVE set PROACTIVE=..\..\..
+IF NOT DEFINED PROACTIVE set PROACTIVE=..\..
 
-call "%PROACTIVE%\scripts\windows\init.bat"
+call "%..\init.bat"
 call scilab_env.bat
 %JAVA_CMD% org.objectweb.proactive.extensions.scilab.gui.MSFrame
 

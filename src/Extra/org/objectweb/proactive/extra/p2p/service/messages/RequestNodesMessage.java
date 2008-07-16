@@ -35,9 +35,9 @@ import java.util.Vector;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extra.p2p.service.P2PService;
+import org.objectweb.proactive.extra.p2p.service.node.P2PLookupInt;
 import org.objectweb.proactive.extra.p2p.service.node.P2PNode;
 import org.objectweb.proactive.extra.p2p.service.node.P2PNodeAck;
-import org.objectweb.proactive.extra.p2p.service.node.P2PNodeLookup;
 import org.objectweb.proactive.extra.p2p.service.util.P2PConstants;
 import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
@@ -48,7 +48,7 @@ public class RequestNodesMessage extends BreadthFirstMessage {
      */
     private static final long serialVersionUID = 40L;
     protected int numberOfNodes;
-    protected P2PNodeLookup lookup;
+    protected P2PLookupInt lookup;
     protected String vnName;
     protected String jobId;
     protected boolean underloadedOnly;
@@ -66,8 +66,7 @@ public class RequestNodesMessage extends BreadthFirstMessage {
      * @param underloadedOnly determines if it replies with normal "askingNode" method or discard the call
      */
     public RequestNodesMessage(int ttl, UniversalUniqueID uuid, P2PService remoteService, int numberOfNodes,
-            P2PNodeLookup lookup, String vnName, String jobId, boolean underloadedOnly,
-            String nodeFamilyRegexp) {
+            P2PLookupInt lookup, String vnName, String jobId, boolean underloadedOnly, String nodeFamilyRegexp) {
         super(ttl, uuid, remoteService);
         this.numberOfNodes = numberOfNodes;
         this.lookup = lookup;

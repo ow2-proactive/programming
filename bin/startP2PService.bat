@@ -11,9 +11,9 @@ goto end
 
 :doit
 SETLOCAL ENABLEDELAYEDEXPANSION enabledelayedexpansion
-IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\..
+IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..
 
-call "%PROACTIVE%\scripts\windows\init.bat"
+call "init.bat"
 
 
 %JAVA_CMD% org.objectweb.proactive.extra.p2p.service.StartP2PService %*

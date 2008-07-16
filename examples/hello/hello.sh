@@ -16,7 +16,7 @@ then
 else
   GCMD=helloDeploymentLocal.xml
 fi
-$JAVACMD  -Dgcmdfile=${GCMD} org.objectweb.proactive.examples.hello.Hello  $XMLDESCRIPTOR
+$JAVACMD  -Dgcmdfile=${GCMD} -Dos=unix org.objectweb.proactive.examples.hello.Hello $XMLDESCRIPTOR
 
 echo
 echo ------------------------------------------------------------

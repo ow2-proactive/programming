@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
@@ -44,6 +45,8 @@ import org.objectweb.proactive.core.body.ft.service.FaultToleranceTechnicalServi
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.runtime.LocalNode;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class FutureMonitoring implements Runnable {
@@ -57,16 +60,28 @@ public class FutureMonitoring implements Runnable {
      */
     private static final ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>> futuresToMonitor = new ConcurrentHashMap<UniqueID, ConcurrentLinkedQueue<FutureProxy>>();
 
+    static final Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
     static {
 
         /* Dynamically configurable to make shorter tests */
         String ttm = PAProperties.PA_FUTUREMONITORING_TTM.getValue();
         if (ttm != null) {
-            TTM = Integer.parseInt(ttm);
+            int tmp = Integer.parseInt(ttm);
+            if (tmp >= 0) {
+                TTM = tmp;
+            } else {
+                logger.error(PAProperties.PA_FUTUREMONITORING_TTM.getKey() +
+                    " must be positive. This value is ignored");
+            }
         }
-        Thread t = new Thread(new FutureMonitoring(), "Monitoring the Futures");
-        t.setDaemon(true);
-        t.start();
+
+        if (TTM > 0) {
+            Thread t = new Thread(new FutureMonitoring(), "Monitoring the Futures");
+            t.setDaemon(true);
+            t.start();
+        } else {
+            logger.info("Future Monitoring is disabled");
+        }
     }
 
     /** To avoid copy-pasting */

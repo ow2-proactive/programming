@@ -152,6 +152,8 @@ public enum PAProperties {
 
     /**
      * Period of the future monitoring ping, in milliseconds
+     * 
+     * If set to 0, then future monitoring is disabled
      */
     PA_FUTUREMONITORING_TTM("proactive.futuremonitoring.ttm", PAPropertiesType.INTEGER),
 

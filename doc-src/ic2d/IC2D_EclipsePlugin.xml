@@ -491,7 +491,7 @@
                                 <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/timit/timit-context-menu.png" format="PNG"/>
                             </imageobject>
                         </mediaobject>
-                    </figure>
+                 </figure>
             
             <para>
                 For that, 3 views are available.
@@ -853,7 +853,228 @@
                 </section>
         </section><!-- The TimIt for IC2D plugin -->
         <!-- ******************************************************************************** -->
-    </section><!-- Monitoring and Control -->
+
+        <!-- ************************************************************************************ -->
+        <!-- The ChartIt plugin -->
+        <!-- ************************************************************************************ -->
+        <section>
+        	<info>
+        		<title>The ChartIt plugin</title>
+        	</info>
+        	<para>
+        		The ChartIt plugin allows users to chart in real time
+        		any numerical values provided by
+        		<emphasis role="bold">ProActive</emphasis>
+        		resources such as runtimes (jvms), nodes and active objects
+        		involved in a distributed application.
+        	</para>
+        	
+        	<para>
+        		To understand the following explanation the reader should be familiar with <emphasis role="bold">JMX</emphasis> technology.
+        		More precisely, the default behavior uses numerical values that are based on attributes of  
+        		<emphasis role="bold">JMX</emphasis> MBeans associated with each <emphasis role="bold">ProActive</emphasis> resource.
+        		Meanwhile it is possible to provide custom resources to the ChartIt plugin with user-defined providers of numerical values.
+        	</para>
+
+        	<para>
+        		Many chart types are available including bars, lines,
+        		pies and time based series. ChartIt uses 2 external APIs
+        		for chart rendering :
+        		<itemizedlist>
+        			<!-- BIRT -->
+        			<listitem>
+        				<para>
+        					<link
+        						xmlns:xlink="http://www.w3.org/1999/xlink"
+        						xlink:href="http://www.eclipse.org/birt/phoenix/">
+        						BIRT
+        					</link>
+        					For bars, lines, pies and area charts.
+        				</para>
+        			</listitem>
+        			<!-- RRD4J -->
+        			<listitem>
+        				<para>
+        					<link
+        						xmlns:xlink="http://www.w3.org/1999/xlink"
+        						xlink:href="https://rrd4j.dev.java.net/">
+        						RRD4J
+        					</link>
+        					For time based series (including values
+        					sampling).
+        				</para>
+        			</listitem>
+        		</itemizedlist>
+        	</para>
+
+        	<para>
+        		For a quick start, as shown in
+        		<xref linkend="chartit-context-menu" />
+        		simply right-click on a ProActive runtime (a jvm)
+        		representation in the Monitoring View then click on
+        		<emphasis role="bold">Show XXXX in ChartIt</emphasis>
+        		.
+        	</para>
+
+        	<figure xml:id="chartit-context-menu">
+        		<info>
+        			<title>
+        				Show XXXX in ChartIt (right-click in Monitoring
+        				View).
+        			</title>
+        		</info>
+
+        		<mediaobject>
+        			<imageobject>
+        				<imagedata scalefit="1" width="100%"
+        					contentdepth="100%"
+        					fileref="ic2d/images/chartit/chartit-context-menu.png"
+        					format="PNG" />
+        			</imageobject>
+        		</mediaobject>
+        	</figure>
+
+        	<para>
+        		An editor-based view will appear with a predefined set of different charts
+        		representing various numerical values such as heap-size
+        		of the selected ProActive runtime (jvm), threads and
+        		others.         		
+        	</para>
+
+        	<figure xml:id="chartit-charts-tab-view">
+        		<info>
+        			<title>ChartIt Charts tab view.</title>
+        		</info>
+
+        		<mediaobject>
+        			<imageobject>
+        				<imagedata scalefit="1" width="100%"
+        					contentdepth="100%"
+        					fileref="ic2d/images/chartit/chartit-charts-tab-view.png"
+        					format="PNG" />
+        			</imageobject>
+        		</mediaobject>
+        	</figure>
+
+        	<para>
+        		The current set of charts is predefined for a ProActive
+        		runtime (a jvm), ChartIt offers a way to change the
+        		current configuration with other chart types in the <emphasis role="bold">Overview</emphasis> tab of the ChartIt editor.        		        	
+        	</para>
+        	
+        	<para>
+        		To do so, click on the <emphasis role="bold">Clear</emphasis> button at the top-left corner of the ChartIt editor then click on 
+        		<emphasis role="bold">Overview</emphasis> tab as shown <xref linkend="chartit-overview-tab-view" />.        		
+        	</para>
+        	
+        	<figure xml:id="chartit-overview-tab-view">
+        		<info>
+        			<title>ChartIt Overview tab view.</title>
+        		</info>
+
+        		<mediaobject>
+        			<imageobject>
+        				<imagedata scalefit="1" width="100%"
+        					contentdepth="100%"
+        					fileref="ic2d/images/chartit/chartit-overview-tab-view.png"
+        					format="PNG" />
+        			</imageobject>
+        		</mediaobject>
+        	</figure>        	
+        	
+          	<para>
+        		The <emphasis role="bold">Overview</emphasis> tab is composed of following sections :
+        		<itemizedlist>
+        			<!-- Resource Description -->
+        			<listitem>
+        				<para>
+        					<emphasis role="bold">Resource Description</emphasis>
+        					contains various information about the monitored resource.
+        				</para>
+        			</listitem>
+        			<!-- Available Data Providers -->
+        			<listitem>
+        				<para>
+							<emphasis role="bold">Available Data Providers</emphasis>
+        					contains a table of all available data providers (based by default on MBean's attributes).
+        					Only numerical type based data providers can be used as input for a chart, such data providers
+        					are represented with a blue circle icon in the table.
+        				</para>
+        			</listitem>
+        			<!-- Data Provider Details -->
+        			<listitem>
+        				<para>
+							<emphasis role="bold">Data Provider Details</emphasis>
+							contains the description and the value of the selected data provider. 
+        				</para>
+        			</listitem>
+        			<!-- Chart Description -->
+        			<listitem>
+        				<para>
+        					<emphasis role="bold">Chart Description</emphasis>
+        					contains the description of the current chart. More precisely, the chart's name, the chart type, the refresh period (in seconds) and
+        					a list of used data providers. These data providers <emphasis role="bold">MUST</emphasis> be numerical.        					
+        				</para>
+        			</listitem>
+        			<!-- Charts -->
+        			<listitem>
+        				<para>
+							<emphasis role="bold">Charts</emphasis>
+        					contains a list of available charts, buttons to create/remove a chart and save/load the current configuration.
+        					The selected chart in the list will be described in the <emphasis role="bold">Chart Description</emphasis> section.
+        				</para>
+        			</listitem>        			
+        		</itemizedlist>
+        	</para>
+        	
+        	<para>
+        		Let's add another chart to the current configuration as shown in <xref linkend="chartit-overview-tab-create-new" />.
+        		To do so, simply click on <emphasis role="bold">Create</emphasis> button in the <emphasis role="bold">Charts</emphasis> section.
+        		A new chart will appear in the charts list, with a default name (automatically selected in the description section where you can change it's name).
+        		Then add some data providers from the <emphasis role="bold">Available Data Providers</emphasis> section
+        		by selecting one or more in the table (you can select multiple providers by pressing CTRL key on your keyboard).        		
+        	</para>
+        	
+        	<figure xml:id="chartit-overview-tab-create-new">
+        		<info>
+        			<title>ChartIt Overview tab create new.</title>
+        		</info>
+
+        		<mediaobject>
+        			<imageobject>
+        				<imagedata scalefit="1" width="100%"
+        					contentdepth="100%"
+        					fileref="ic2d/images/chartit/chartit-overview-tab-create-new.png"
+        					format="PNG" />
+        			</imageobject>
+        		</mediaobject>
+        	</figure> 
+        	
+        	<para>
+        		Once your chart has been created simply click back on the Charts tab in the ChartIt view to see your chart as shown in the <xref linkend="chartit-charts-tab-custom-chart" />.
+        		For instance, the custom pie chart represent the percentage of user/internal bodies on the monitored ProActive runtime (ie the monitored jvm).          		        	
+        	</para>
+        	
+        	<figure xml:id="chartit-charts-tab-custom-chart">
+        		<info>
+        			<title>ChartIt Charts tab with custom chart.</title>
+        		</info>
+
+        		<mediaobject>
+        			<imageobject>
+        				<imagedata scalefit="1" width="100%"
+        					contentdepth="100%"
+        					fileref="ic2d/images/chartit/chartit-charts-tab-with-custom-chart.png"
+        					format="PNG" />
+        			</imageobject>
+        		</mediaobject>
+        	</figure>         	
+
+        </section>
+    </section>
+
+    <!-- ************************************************************************************ -->
+    <!-- Monitoring and Control -->
     <!-- ************************************************************************************ -->
     <section xml:id="Launcher"><info><title>Launcher</title></info>
         

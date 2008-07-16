@@ -11,7 +11,7 @@ goto end
 
 :doit
 SETLOCAL ENABLEDELAYEDEXPANSION
-IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\..
+IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
 
 call "..\init.bat"
 
@@ -19,5 +19,6 @@ call "..\init.bat"
 ENDLOCAL
 
 :end
+pause
 echo.
 echo ---------------------------------------------------------

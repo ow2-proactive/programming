@@ -11,11 +11,11 @@ goto end
 
 :doit
 SETLOCAL ENABLEDELAYEDEXPANSION
-IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\..
+IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
 
-call "%PROACTIVE%\scripts\windows\init.bat"
+call "..\init.bat"
 
-set XMLDESCRIPTOR=..\..\..\descriptors\MatrixApplication.xml
+set XMLDESCRIPTOR=GCMA.xml
 %JAVA_CMD% org.objectweb.proactive.examples.matrix.Main 300 %XMLDESCRIPTOR%
 ENDLOCAL
 

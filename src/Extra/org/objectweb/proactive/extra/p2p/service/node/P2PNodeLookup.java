@@ -67,7 +67,7 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
  */
 @PublicAPI
 public class P2PNodeLookup implements InitActive, RunActive, EndActive, P2PConstants, Serializable,
-        ProActiveInternalObject {
+        ProActiveInternalObject, P2PLookupInt {
     /**
      * 
      */
@@ -346,15 +346,10 @@ public class P2PNodeLookup implements InitActive, RunActive, EndActive, P2PConst
             m = new RequestSingleNodeMessage(TTL, uuid, this.localP2pService_active, this.stub, this.vnName,
                 this.jobId);
         } else {
-            //         //       if (onlyUnderloadedAnswer) {
-            //                    m = new RequestNodesMessage(TTL, uuid, this.localP2pService,
-            //                            this.numberOfAskedNodes - this.acquiredNodes, stub,
-            //                            this.vnName, this.jobId, onlyUnderloadedAnswer, null);
-            //                } else {
+
             m = new RequestNodesMessage(TTL, uuid, this.localP2pService_active, this.numberOfAskedNodes -
                 this.acquiredNodes, stub, this.vnName, this.jobId, true, this.nodeFamilyRegexp);
         }
-        //            }
         this.localP2pService_active.requestNodes(m);
 
         while (true) {

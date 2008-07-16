@@ -15,8 +15,8 @@ fi
 # Internal ProActive scripts can override $PROACTIVE
 if [ -z "$PROACTIVE" ]
 then
-	workingDir=`dirname $0`
 	PROACTIVE=$(cd $workingDir/.././ || (echo "Broken PROACTIVE installation" ; exit 1) && echo $PWD)
+
 fi
 
 

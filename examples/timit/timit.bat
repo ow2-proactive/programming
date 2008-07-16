@@ -3,7 +3,7 @@ echo.
 echo --- TimIt --------------------------------------------------
 
 SETLOCAL ENABLEDELAYEDEXPANSION
-IF NOT DEFINED PROACTIVE set PROACTIVE=..\..\..
+IF NOT DEFINED PROACTIVE set PROACTIVE=..\..
 
 call "..\init.bat"
 

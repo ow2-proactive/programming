@@ -136,7 +136,7 @@
 
       <mediaobject>
         <imageobject>
-          <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/oospmd_barriers_schema.svg" format="SVG"/>
+          <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/oospmd_barriers_schema.png" format="PNG"/>
         </imageobject>
       </mediaobject>
     </figure>
