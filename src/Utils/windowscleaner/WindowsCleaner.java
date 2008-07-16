@@ -31,6 +31,7 @@
 package windowscleaner;
 
 import org.jvnet.winp.WinProcess;
+import org.jvnet.winp.WinpException;
 
 
 /**
@@ -49,10 +50,22 @@ public class WindowsCleaner {
         Iterable<WinProcess> allProcess = WinProcess.all();
 
         for (WinProcess process : allProcess) {
-            String commandLine = process.getCommandLine();
-            if (commandLine.matches(regex)) {
-                System.out.println("Killing " + process.getPid() + " " + process.getCommandLine());
-                process.killRecursively();
+            try {
+                String commandLine = process.getCommandLine();
+                // System.out.println("COMMAND LINE: " + commandLine);
+                if (commandLine.matches(".*" + WindowsCleaner.class.getName() + ".*")) {
+                    // System.out.println(process.getPid() + " is a Windows Cleaner");
+                } else {
+                    if (commandLine.matches(regex)) {
+                        // System.out.println(process.getPid() + " matches " + regex);
+                        process.killRecursively();
+                        System.out.println("Killed " + process.getPid() + " " + commandLine);
+                    } else {
+                        // System.out.println(process.getPid() + " do not match " + regex);
+                    }
+                }
+            } catch (WinpException e) {
+                // Miam Miam Miam
             }
         }
     }

@@ -17,7 +17,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 call .\init.bat
 SET CLASSPATH=%CLASSPATH%;%CD%\..\dev\lib\winp-1.5.jar
 %JAVA_CMD% windowscleaner.WindowsCleaner ".*ProActive.jar.*"
-%JAVA_CMD% windowscleaner.WindowsCleaner ".*proactive.home*"
+%JAVA_CMD% windowscleaner.WindowsCleaner ".*proactive.home.*"
 ENDLOCAL
 
 :end
