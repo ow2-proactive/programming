@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.examples.timit.example1;
+package org.objectweb.proactive.examples.timitspmd.example1;
 
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAGroup;

@@ -28,19 +28,15 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.examples.timit.example2;
+package org.objectweb.proactive.examples.timitspmd.example1;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAException;
-import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.api.PASPMD;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -54,31 +50,38 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 /**
  * A simple distributed application that use TimIt.<br>
- * The application have three classes : Launcher, Worker and Root<br>
- * Launcher will deploy some Workers to do a job. Theses Workers will use a Root
- * instance to do it.
+ * The application have two classes : Launcher, Worker<br>
+ * Launcher will deploy some Workers to do a job.
  *
- * See the source code of these classes to know how use TimIt
+ * Notice that TimIt will automatically invoke the start and kill methods<br>
+ *
+ * See the source code of these classes to know how use TimIt.
  *
  * @author The ProActive Team
  *
  */
-
-// You have to implements Startable implements
 public class Launcher implements Startable {
-    private Worker workers; // Our typed group of workers
-    private GCMApplication pad; // A reference to the descriptor
 
-    // TimIt needs an noarg constructor (can be implicit)
+    /** The typed group of workers */
+    private Worker workers;
+    private GCMApplication pad;
+
+    /** TimIt needs an noarg constructor (can be implicit) */
     public Launcher() {
     }
 
-    // If you need a main method
+    /** The main method, not used by TimIt */
     public static void main(String[] args) {
         new Launcher().start(args);
     }
 
-    // Entry point to implements called by TimIt
+    /**
+     * Part of Startable implementation. TimIt will invoke this method with
+     * arguments provided by the xml deployement descriptor.
+     *
+     * @params The array of parameters.
+     * @see org.objectweb.proactive.benchmarks.timit.util.Startable
+     */
     public void start(String[] args) {
         try {
             // Common stuff about ProActive deployement
@@ -103,15 +106,22 @@ public class Launcher implements Startable {
 
             this.workers = (Worker) PASPMD.newSPMDGroup(Worker.class.getName(), params, nodeArray);
 
-            // You must create a TimItManager instance and give to it
-            // typed group of Timed workers
+            // You must create a TimItManager instance and give it
+            // a typed group of Timed workers.
+            // Remember that there must be 1 typed group per 1
+            // TimeIt instance.
             TimItManager tManager = TimItManager.getInstance();
             tManager.setTimedObjects(this.workers);
-            // Just start your workers...
+
+            // Workers starts their job
             this.workers.start();
 
+            // ... and finalize the TimIt.
+            // Notice that you don't have to wait for the end of your workers
             BenchmarkStatistics bstats = tManager.getBenchmarkStatistics();
             System.out.println(bstats);
+
+            System.out.println(tManager.getBenchmarkStatistics());
         } catch (NumberFormatException e) {
             e.printStackTrace();
         } catch (ClassNotReifiableException e) {
@@ -127,20 +137,18 @@ public class Launcher implements Startable {
         }
     }
 
-    // You have to implement a kill() method called by TimIt between each run.
-    // Here you can terminate all your workers as here
+    /**
+     * Part of the Startable implementation. TimIt will invoke this method
+     * between each run.
+     *
+     * @see org.objectweb.proactive.benchmarks.timit.util.Startable
+     */
     public void kill() {
-        Group<Worker> gWorkers = PAGroup.getGroup(workers);
-        Iterator<Worker> it = gWorkers.iterator();
-
-        while (it.hasNext()) {
-            PAActiveObject.terminateActiveObject(it.next(), true);
-        }
+        this.workers.terminate();
         PAException.waitForPotentialException();
-
-        this.pad.kill();
     }
 
     public void masterKill() {
+        this.pad.kill();
     }
 }

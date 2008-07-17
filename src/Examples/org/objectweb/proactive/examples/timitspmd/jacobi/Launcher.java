@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.examples.timit.jacobi;
+package org.objectweb.proactive.examples.timitspmd.jacobi;
 
 import java.io.File;
 import java.util.List;
