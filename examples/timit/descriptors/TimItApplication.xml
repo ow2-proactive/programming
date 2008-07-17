@@ -26,7 +26,7 @@
 					<pathElement base="proactive" relpath="dist/lib/ProActive_examples.jar"/>
 				</applicationClasspath>
 			</configuration>
-			<virtualNode id="Workers" capacity="1">
+			<virtualNode id="Workers" capacity="${NODES}">
 				<nodeProvider refid="workers" />
 			</virtualNode>
 
