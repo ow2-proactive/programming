@@ -1,126 +1,19 @@
-/*
- * ################################################################
- *
- * ProActive: The Java(TM) library for Parallel, Distributed,
- *            Concurrent computing with Security and Mobility
- *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version
- * 2 of the License, or any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- */
 package sources;
 
+
 import java.io.File;
-import java.util.Scanner;
+import java.io.IOException;
 import java.net.URI;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class UpdateCopyrightAndVersion {
-    private static String LGPLcopyright = "/*\n"
-        + " * ################################################################\n" + " *\n"
-        + " * ProActive: The Java(TM) library for Parallel, Distributed,\n"
-        + " *            Concurrent computing with Security and Mobility\n" + " *\n"
-        + " * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis\n"
-        + " * Contact: proactive@objectweb.org" + "\n" + " *\n"
-        + " * This library is free software; you can redistribute it and/or\n"
-        + " * modify it under the terms of the GNU Lesser General Public\n"
-        + " * License as published by the Free Software Foundation; either\n"
-        + " * version 2.1 of the License, or any later version.\n" + " *\n"
-        + " * This library is distributed in the hope that it will be useful,\n"
-        + " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-        + " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-        + " * Lesser General Public License for more details.\n" + " *\n"
-        + " * You should have received a copy of the GNU Lesser General Public\n"
-        + " * License along with this library; if not, write to the Free Software\n"
-        + " * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307\n" + " * USA\n" + " *\n"
-        + " *  Initial developer(s):               The ProActive Team\n"
-        + " *                        http://proactive.inria.fr/team_members.htm\n" + " *  Contributor(s):\n"
-        + " *\n" + " * ################################################################\n" + " */\n";
 
-    private static String GPLcopyright = "/*\n"
-        + " * ################################################################\n" + " *\n"
-        + " * ProActive: The Java(TM) library for Parallel, Distributed,\n"
-        + " *            Concurrent computing with Security and Mobility\n" + " *\n"
-        + " * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis\n"
-        + " * Contact: proactive@objectweb.org" + "\n" + " *\n"
-        + " * This library is free software; you can redistribute it and/or\n"
-        + " * modify it under the terms of the GNU General Public License\n"
-        + " * as published by the Free Software Foundation; either version\n"
-        + " * 2 of the License, or any later version.\n" + " *\n"
-        + " * This library is distributed in the hope that it will be useful,\n"
-        + " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-        + " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-        + " * General Public License for more details.\n" + " *\n"
-        + " * You should have received a copy of the GNU General Public License\n"
-        + " * along with this library; if not, write to the Free Software\n"
-        + " * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307\n" + " * USA\n" + " *\n"
-        + " *  Initial developer(s):               The ProActive Team\n"
-        + " *                        http://proactive.inria.fr/team_members.htm\n" + " *  Contributor(s):\n"
-        + " *\n" + " * ################################################################\n" + " */\n";
-
-    private static String ActiveEonGPLcopyright = "/*\n"
-        + " * ################################################################\n" + " *\n"
-        + " * ProActive: The Java(TM) library for Parallel, Distributed,\n"
-        + " *            Concurrent computing with Security and Mobility\n" + " *\n"
-        + " * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis\n"
-        + " * Contact: proactive@objectweb.org" + "\n" + " *\n"
-        + " * This library is free software; you can redistribute it and/or\n"
-        + " * modify it under the terms of the GNU General Public License\n"
-        + " * as published by the Free Software Foundation; either version\n"
-        + " * 2 of the License, or any later version.\n" + " *\n"
-        + " * This library is distributed in the hope that it will be useful,\n"
-        + " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-        + " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-        + " * General Public License for more details.\n" + " *\n"
-        + " * You should have received a copy of the GNU General Public License\n"
-        + " * along with this library; if not, write to the Free Software\n"
-        + " * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307\n" + " * USA\n" + " *\n"
-        + " *  Initial developer(s):               The ActiveEon Team\n"
-        + " *                        http://www.activeeon.com/\n" + " *  Contributor(s):\n" + " *\n"
-        + " * ################################################################\n" + " */\n";
-
-    private static String ActiveEonContributorsProActiveInitialGPLcopyright = "/*\n"
-        + " * ################################################################\n" + " *\n"
-        + " * ProActive: The Java(TM) library for Parallel, Distributed,\n"
-        + " *            Concurrent computing with Security and Mobility\n" + " *\n"
-        + " * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis\n"
-        + " * Contact: proactive@objectweb.org" + "\n" + " *\n"
-        + " * This library is free software; you can redistribute it and/or\n"
-        + " * modify it under the terms of the GNU General Public License\n"
-        + " * as published by the Free Software Foundation; either version\n"
-        + " * 2 of the License, or any later version.\n" + " *\n"
-        + " * This library is distributed in the hope that it will be useful,\n"
-        + " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-        + " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-        + " * General Public License for more details.\n" + " *\n"
-        + " * You should have received a copy of the GNU General Public License\n"
-        + " * along with this library; if not, write to the Free Software\n"
-        + " * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307\n" + " * USA\n" + " *\n"
-        + " * Initial developer(s):               The ProActive Team\n"
-        + " *                        http://proactive.inria.fr/team_members.htm\n"
-        + " *  Contributor(s):               The ActiveEon Team\n"
-        + " *                        http://www.activeeon.com/\n" + " *\n"
-        + " * ################################################################\n" + " */\n";
+    private static String GPLcopyright;
+    private static String ActiveEonGPLcopyright;
+    private static String ActiveEonContributorsProActiveInitialGPLcopyright;
 
     private static String PatternBegin = "$$%%";
     private static String PatternEnd = "%%$$";
@@ -149,9 +42,25 @@ public class UpdateCopyrightAndVersion {
             { FirstYearShortCopyrightPattern, FirstYearShortCopyright } };
     private static URI rootDir;
     private static File[] excludeDirs;
+    private static int stats_proactive = 0;
+    private static int stats_activeeon = 0;
+    private static int stats_activeeon_contrib = 0;
+    private static boolean update_mode;
 
     public static void main(String[] arg) throws java.io.IOException {
 
+	// load copyrights
+	ActiveEonGPLcopyright = new String(getBytesFromInputStream(UpdateCopyrightAndVersion.class.getResourceAsStream("activeeon_initialdev.txt")));
+	ActiveEonContributorsProActiveInitialGPLcopyright = new String( getBytesFromInputStream(UpdateCopyrightAndVersion.class.getResourceAsStream("activeeon_contrib.txt")));
+	GPLcopyright = new String(getBytesFromInputStream(UpdateCopyrightAndVersion.class.getResourceAsStream("proactive_gpl.txt")));
+
+
+	 update_mode = "true".equals(System.getProperty("copyright.update"));
+	 if (update_mode) {
+             System.out.println("Coryright Update mode on");
+          }
+
+	 System.out.println(System.getProperty("copyright.update"));
         java.io.File sourceDir = new java.io.File(arg[0]);
         rootDir = sourceDir.toURI();
 
@@ -172,6 +81,10 @@ public class UpdateCopyrightAndVersion {
         }
 
         addCopyrightToDir(sourceDir);
+
+        System.out.println("Stats :\nProActive Initial Dev. Copyright = " + stats_proactive +
+            "\nActiveEon Initial Dev Copyright = " + stats_activeeon + "\nActiveEon Contributor = " +
+            stats_activeeon_contrib);
     }
 
     private static void addCopyrightToFile(java.io.File file) throws java.io.IOException {
@@ -200,19 +113,53 @@ public class UpdateCopyrightAndVersion {
         if ((snippetStart != -1) && (snippetStart < packageStart)) {
             packageStart = snippetStart;
         }
-
+        int choice = 4;
         String copyrightInFile = program.substring(0, packageStart);
 
         if (copyrightInFile.contains("Copyright") &&
             (copyrightInFile.contains("The ProActive Team") || copyrightInFile.contains("ActiveEon Team"))) {
-            System.out.println("Skipping " + file + ", other copyright exists.");
+
+            String copyright = null;
+
+            Pattern p = Pattern.compile("^.*Initial deve.*ActiveEon.*$", Pattern.MULTILINE |
+                Pattern.UNIX_LINES);
+            Matcher m = p.matcher(copyrightInFile);
+            boolean bool = m.find();
+            if (bool) {
+                System.out.println("Skipping " + file + ", activeeon initial exists.");
+                stats_activeeon++;
+                choice = 2;
+            }
+
+            p = Pattern.compile("^.*Initial deve.*ProActive.*$", Pattern.MULTILINE | Pattern.UNIX_LINES);
+            m = p.matcher(copyrightInFile);
+            bool = m.find();
+            if (bool) {
+
+                p = Pattern.compile("^.*Contributor.*ActiveEon.*$", Pattern.MULTILINE | Pattern.UNIX_LINES);
+                m = p.matcher(copyrightInFile);
+                bool = m.find();
+                if (bool) {
+                    System.out.println("Skipping " + file + ", activeeon contributor exists.");
+                    stats_activeeon_contrib++;
+                    choice = 3;
+                } else {
+                    System.out.println("Skipping " + file + ", proactive initial exists.");
+                    stats_proactive++;
+                    choice = 1;
+                }
+            }
+            if (!update_mode) {
             return;
+            }
         }
 
         System.out.println("Processing " + file);
 
+        if (!update_mode) {
+
         Scanner in = new Scanner(System.in);
-        int choice = 0;
+
         do {
             System.out
                     .println("Which licence to apply ? : 1/ ProActive -- 2/ ActiveEon  -- 3/ ActiveEon as contr. ? -- 4 / skip:");
@@ -223,6 +170,8 @@ public class UpdateCopyrightAndVersion {
         } while (!((choice > 0) && (choice < 5)));
 
         in.close();
+
+        }
 
         String uncopyrightedProgram = program.substring(packageStart);
         String copyrightedProgram = uncopyrightedProgram;
@@ -235,16 +184,22 @@ public class UpdateCopyrightAndVersion {
                 break;
             case 3:
                 copyrightedProgram = ActiveEonContributorsProActiveInitialGPLcopyright + uncopyrightedProgram;
+            case 4:
+		copyrightedProgram = new String(copyrightInFile) + uncopyrightedProgram;
         }
 
-        b = copyrightedProgram.getBytes();
-        file.delete();
-
-        java.io.OutputStream out = new java.io.BufferedOutputStream(new java.io.FileOutputStream(file));
-        out.write(b, 0, b.length);
-        out.flush();
-        out.close();
+        update_copyright_in_file(file,copyrightedProgram.getBytes());
     }
+
+    public static void update_copyright_in_file(File file, byte[] b) throws IOException {
+         file.delete();
+         java.io.OutputStream out = new java.io.BufferedOutputStream(new java.io.FileOutputStream(file));
+         out.write(b, 0, b.length);
+         out.flush();
+         out.close();
+
+    }
+
 
     private static void patternReplacementsInFile(java.io.File file) throws java.io.IOException {
         String name = file.getName();
