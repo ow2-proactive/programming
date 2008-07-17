@@ -5,8 +5,7 @@
     <indexterm>
         <primary>TimIt</primary>
     </indexterm>
-    <section><info><title>Overview</title></info>
-        
+    <section><info><title>Overview</title></info>        
         <para>
             TimIt offer a complete solution to benchmark an application.
             It is an API which provide some advanced timing and event
@@ -15,6 +14,11 @@
             <emphasis>generated statistics charts</emphasis>
             , you will be able to determine critical points of your
             application.
+        </para>
+        <para>
+            TimIt is best suited for SPMD applications. Using TimIt for other purposes is not recommended but possible.
+            All TimIt SPMD classes are located in <emphasis>org.objectweb.proactive.extensions.timitspmd</emphasis> package 
+            in the ProActive sources folder.
         </para>
         <para>
             Different kind of statistics can be done. You can setup
