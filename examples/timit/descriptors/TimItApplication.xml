@@ -3,8 +3,6 @@
 	xsi:schemaLocation="urn:gcm:application:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ApplicationDescriptorSchema.xsd">
 
 	<environment>
-		<descriptorVariable name="TIMIT_HOME" value="../../../../classes/org/objectweb/proactive/benchmarks/timit" />
-		<descriptorVariable name="PROACTIVE_HOME" value="../" />
 		<descriptorVariable name="RMI_PORT" value="5000" />
 		<descriptorVariable name="COM_PROTO" value="rmi" />
 		<descriptorVariable name="VMARGS" value="-Xmx16M -Xms16M" />
