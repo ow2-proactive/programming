@@ -52,7 +52,7 @@
  <!-- the 3 institutes images -->
  <xsl:param name="threeinstitutes.image.filename">images/logo-cnrs-inria-unsa.png</xsl:param>
  <!--  The objectweb logo -->
- <xsl:param name="objectweb.image.filename">images/logo-ObjectWeb.png</xsl:param>
+ <xsl:param name="objectweb.image.filename">images/logoOW2.png</xsl:param>
 
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
