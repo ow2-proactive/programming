@@ -1,5 +1,6 @@
 #! /bin/sh
 
+VERSION=$2
 TMP=/tmp
 
 # /mnt/scratch is a tmpfs mount point for faster builds on schubby
@@ -7,66 +8,37 @@ if [ -w "/mnt/scratch" ] ; then
 	TMP=/mnt/scratch
 fi
 
-PROACTIVE_DIR=$1
-VERSION=$2
-JAVA_HOME=$3
+workingDir=`dirname $0`
 
-TMP_DIR=""
-
-echo " [i] PROACTIVE_DIR: $PROACTIVE_DIR"
-echo " [i] VERSION:       $VERSION"
-echo " [i] JAVA_HOME:     $JAVA_HOME"
-echo " [i] TMP:           $TMP"
 function warn_and_exit {
 	echo "$1" 1>&2
 	exit 1
 }
 
-function warn_print_usage_and_exit {
-	echo "$1" 1>&2
-	echo "" 1>&2
-	echo "Usage: $0 PROACTIVE_DIR VERSION JAVA_HOME" 1>&2
-	exit 1
+
+function check_dir {
+	if [ ! -d "$1" ] ; then
+		warn_and_exit "$1 does not exist"
+	fi
 }
 
 
-if [ -z "$PROACTIVE_DIR" ] ; then
-	warn_print_usage_and_exit "PROACTIVE_DIR is not defined"
+
+DOC_BASE=/net/servers/www-sop/teams/oasis/proactive/doc
+check_dir "$DOC_BASE"
+
+DOC_PA=$DOC_BASE/ProActive
+check_dir "$DOC_PA"
+
+DOC_PAPROG=$DOC_PA/Programming
+check_dir "$DOC_PAPROG"
+
+RELEASE_DIR=$DOC_PAPROG/$VERSION
+if [ -d "$RELEASE_DIR" ] ; then
+	warn_and_exit "Release directory already exists. Aborted..."
 fi
 
-if [ -z "$VERSION" ] ; then
-	warn_print_usage_and_exit "VERSION is not defined"
-fi
-
-if [ -z "$JAVA_HOME" ] ; then
-	warn_print_usage_and_exit "JAVA_HOME is not defined"
-fi
-export JAVA_HOME=${JAVA_HOME}
-
-
-TMP_DIR="${TMP}/ProActive-doc-${VERSION}"
-output=$(mkdir ${TMP_DIR} 2>&1)
-if [ "$?" -ne 0 ] ; then
-	if [ -e ${TMP_DIR} ] ; then
-		echo " [w] ${TMP_DIR} already exists. Delete it !"
-		rm -Rf ${TMP_DIR}
-		mkdir ${TMP_DIR}
-		if [ "$?" -ne 0 ] ; then
-			warn_and_exit "Cannot create ${TMP_DIR}: $output"
-		fi
-	else
-		warn_and_exit "Cannot create ${TMP_DIR}"
-	fi
-fi
-
-cp -Rf ${PROACTIVE_DIR} ${TMP_DIR}
-
-cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
-
-
-cd compile || warn_and_exit "Cannot move in compile"
-./build clean
-./build -Dversion="${VERSION}" manualHtml manualSingleHtml manualPdf javadoc.published javadoc.complete
-
-cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
-echo " [i] Clean"
+echo "Building the release"
+#$workingDir/build_documentation.sh "$@" $TMP || warn_and_exit "Build failed"
+mkdir "$RELEASE_DIR"
+cp -r $TMP/ProActive-doc-${VERSION}/docs/* "$RELEASE_DIR"
