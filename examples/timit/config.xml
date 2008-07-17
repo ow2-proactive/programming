@@ -6,7 +6,7 @@
 	<globalVariables>
 		<descriptorVariable name="VMARGS" value="-Xmx32M -Xms32M" />
 		<descriptorVariable name="CLASS_PREFIX"
-			value="org.objectweb.proactive.examples.timit" />
+			value="org.objectweb.proactive.examples.timitspmd" />
 		<descriptorVariable name="NP" value="4,8" />
 		<descriptorVariable name="RUN" value="1" />
 		<descriptorVariable name="WARMUP" value="0" />
