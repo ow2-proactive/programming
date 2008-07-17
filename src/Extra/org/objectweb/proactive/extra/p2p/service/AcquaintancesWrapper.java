@@ -68,7 +68,10 @@ public class AcquaintancesWrapper implements Serializable {
         //this.groupOfAcquaintances.indexOf(p);
         if (result) {
             //            try {
-            logger.info("----- Adding " + peerUrl);
+            if (logger.isDebugEnabled()) {
+                logger.debug("----- Adding " + peerUrl);
+            }
+
             urlList.add(P2PService.getHostNameAndPortFromUrl(peerUrl));
             //            } catch (UnknownHostException e) {
             //                e.printStackTrace();
