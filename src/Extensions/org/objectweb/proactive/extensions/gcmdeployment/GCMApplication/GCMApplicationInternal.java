@@ -31,6 +31,7 @@
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication;
 
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 
@@ -41,6 +42,8 @@ public interface GCMApplicationInternal extends GCMApplication {
      * @param node a Node to be attached to the application
      */
     public void addNode(Node node);
+
+    public void addDeployedRuntime(ProActiveRuntime part);
 
     /**
      * Returns the Node Provider mapped to this deployment ID

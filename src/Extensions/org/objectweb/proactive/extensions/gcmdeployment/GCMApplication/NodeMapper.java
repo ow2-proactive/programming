@@ -114,6 +114,8 @@ public class NodeMapper implements NotificationListener {
                     return;
                 }
 
+                gcma.addDeployedRuntime(data.getChildRuntime());
+
                 ProActiveRuntime nodePart = data.getChildRuntime();
                 NodeProvider nodeProvider = gcma.getNodeProviderFromTopologyId(data.getTopologyId());
 

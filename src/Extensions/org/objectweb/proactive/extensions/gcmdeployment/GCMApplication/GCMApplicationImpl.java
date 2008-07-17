@@ -102,7 +102,12 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     /** The node allocator in charge of Node dispatching */
     private NodeMapper nodeMapper;
     private ArrayList<String> currentDeploymentPath;
+
+    /** All the nodes created by this GCM Application */
     private List<Node> nodes;
+
+    /** All the runtime created by this GCM Application */
+    private List<ProActiveRuntime> deployedRuntimes;
     private Object deploymentMutex = new Object();
     private boolean isStarted;
     private ProActiveSecurityManager proactiveApplicationSecurityManager;
@@ -146,6 +151,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             currentDeploymentPath = new ArrayList<String>();
             topologyIdToNodeProviderMapping = new HashMap<Long, NodeProvider>();
             nodes = new LinkedList<Node>();
+            deployedRuntimes = new LinkedList<ProActiveRuntime>();
             isStarted = false;
 
             if (vContract == null) {
@@ -237,20 +243,12 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
     public void kill() {
         synchronized (deploymentMutex) {
-            Set<String> cache = new HashSet<String>();
-
-            synchronized (nodes) {
-                for (Node node : nodes) {
-                    try {
-                        ProActiveRuntime part = node.getProActiveRuntime();
-                        String url = part.getURL();
-                        if (!cache.contains(url)) {
-                            cache.add(url);
-                            part.killRT(false);
-                        }
-                    } catch (Exception e) {
-                        // Miam Miam Miam
-                    }
+            for (ProActiveRuntime part : deployedRuntimes) {
+                try {
+                    part.killRT(false);
+                } catch (Exception e) {
+                    // Connection between the two runtimes will be interrupted 
+                    // Eat the exception: Miam Miam Miam
                 }
             }
         }
@@ -260,6 +258,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         if (!virtualNodes.isEmpty())
             throw new ProActiveException("getTopology cannot be called if a VirtualNode is defined");
 
+        this.updateNodes();
         // To not block other threads too long we make a snapshot of the node set
         Set<Node> nodesCopied;
         synchronized (nodes) {
@@ -273,12 +272,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             throw new IllegalStateException("getAllNodes cannot be called if a VirtualNode is defined");
         }
 
-        Set<FakeNode> fakeNodes = nodeMapper.getUnusedNode(true);
-        List<Node> nodes = new ArrayList<Node>();
-        for (FakeNode fakeNode : fakeNodes) {
-            nodes.add(fakeNode.create(GCMVirtualNodeImpl.DEFAULT_VN, null));
-        }
-
+        this.updateNodes();
         return nodes;
     }
 
@@ -296,6 +290,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         if (!virtualNodes.isEmpty())
             throw new ProActiveException("updateTopology cannot be called if a VirtualNode is defined");
 
+        this.updateNodes();
         // To not block other threads too long we make a snapshot of the node set
         Set<Node> nodesCopied;
         synchronized (nodes) {
@@ -327,6 +322,10 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         synchronized (nodes) {
             nodes.add(node);
         }
+    }
+
+    public void addDeployedRuntime(ProActiveRuntime part) {
+        deployedRuntimes.add(part);
     }
 
     /*
@@ -459,4 +458,22 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             ProActiveSecurityManager proactiveApplicationSecurityManager) {
         this.proactiveApplicationSecurityManager = proactiveApplicationSecurityManager;
     }
+
+    /*
+     * MUST NOT BE USED IF A VIRTUAL NODE IS DEFINED
+     * 
+     * Asks all unused fakeNodes to the node mapper and creates corresponding
+     * nodes.
+     */
+    private void updateNodes() {
+        Set<FakeNode> fakeNodes = nodeMapper.getUnusedNode(true);
+        for (FakeNode fakeNode : fakeNodes) {
+            // create should not be synchronized since it's remote call
+            Node node = fakeNode.create(GCMVirtualNodeImpl.DEFAULT_VN, null);
+            synchronized (nodes) {
+                nodes.add(node);
+            }
+        }
+    }
+
 }
