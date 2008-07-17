@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,19 +27,22 @@
  *  Contributor(s):
  *
  * ################################################################
+ * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.examples.masterworker;
 
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
+import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.tasks.NativeTask;
 import org.objectweb.proactive.api.PALifeCycle;
+import org.objectweb.proactive.examples.masterworker.util.Grep;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -59,22 +62,27 @@ import java.util.TreeSet;
  */
 public class LogFinderExample extends AbstractExample {
 
-    static ProActiveMaster<? extends NativeTask, ArrayList<String>> master;
+    static ProActiveMaster<? extends Task, ArrayList> master;
 
-    private static final String DEFAULT_LOG_PATH = "/net/servers/logs/www-sop/";
-    private static final String DEFAULT_LOCAL_PATH = "/tmp/";
-    private static final String[] DEFAULT_PATTERNS = { "ProActive", "Oasis", "Caromel", "Viale" };
+    private static final String DEFAULT_LOG_PATH = "logs";
+    private static final String DEFAULT_LOG_PATTERN = ".*\\.log";
+    private static final String DEFAULT_UNIX_LOCAL_PATH = "/tmp/";
+    private static final String DEFAULT_WINDOWS_LOCAL_PATH = "c:\\Temp";
 
-    private static String logDirectory;
-    private static String tmpDir;
-    private static String[] patterns;
+    private static final String[] DEFAULT_PATTERNS = { "fviale", "JavaThread" };
+
+    private static File logDirectory;
+    private static String logPattern;
+    private static File tmpDir;
+    private static String[] patternsToFind;
 
     /**
      * @param args
      * @throws TaskException
      * @throws ProActiveException
      */
-    public static void main(String[] args) throws MalformedURLException, TaskException, ProActiveException {
+    public static void main(String[] args) throws MalformedURLException, TaskException, ProActiveException,
+            InterruptedException {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 
@@ -88,6 +96,7 @@ public class LogFinderExample extends AbstractExample {
             public void run() {
                 master.terminate(true);
             }
+
         });
 
         // Adding ressources
@@ -99,18 +108,18 @@ public class LogFinderExample extends AbstractExample {
 
         // Submitting the listing task
         List tasks = new ArrayList();
-        tasks.add(new ListLogFiles());
+        tasks.add(new ListLogFiles(logDirectory, logPattern));
         master.solve(tasks);
 
         tasks.clear();
 
-        ArrayList<String> listFiles = master.waitOneResult();
-        for (String fileName : listFiles) {
-            tasks.add(new GrepCountNativeTask(fileName));
+        ArrayList<File> listFiles = master.waitOneResult();
+        for (File file : listFiles) {
+            tasks.add(new GrepCountTask(file, tmpDir, patternsToFind));
         }
         master.solve(tasks);
 
-        int[] totalCount = new int[DEFAULT_PATTERNS.length];
+        int[] totalCount = new int[patternsToFind.length];
         for (int i = 0; i < totalCount.length; i++) {
             totalCount[i] = 0;
         }
@@ -118,14 +127,9 @@ public class LogFinderExample extends AbstractExample {
         // Collecting the results
         try {
             while (!master.isEmpty()) {
-                ArrayList<String> lines = master.waitOneResult();
-                if (lines.size() > 0) {
-                    for (int i = 0; i < totalCount.length; i++) {
-                        int count = Integer.parseInt(lines.get(i));
-                        totalCount[i] += count;
-                        System.out.println("Found " + totalCount[i] + " occurences of \"" + patterns[i] +
-                            "\" so far.");
-                    }
+                ArrayList<Integer> answer = master.waitOneResult();
+                for (int i = 0; i < totalCount.length; i++) {
+                    totalCount[i] += answer.get(i);
                 }
 
             }
@@ -133,12 +137,14 @@ public class LogFinderExample extends AbstractExample {
             // We catch user exceptions
             e.printStackTrace();
         }
+        // wait for logs finition
+        Thread.sleep(2000);
         for (int i = 0; i < totalCount.length; i++) {
-            System.out.println("Found a total of " + totalCount[i] + " occurences of \"" + patterns[i] +
+            System.out.println("Found a total of " + totalCount[i] + " occurences of \"" + patternsToFind[i] +
                 "\" in server log.");
         }
-
         PALifeCycle.exitSuccess();
+
     }
 
     /**
@@ -149,33 +155,64 @@ public class LogFinderExample extends AbstractExample {
      */
     protected static void init(String[] args) throws MalformedURLException {
 
-        command_options.addOption("p", true, "directory where the log files are stored");
-        command_options.addOption("l", true, "local path where to store temporary files (e.g. /tmp/)");
+        command_options.addOption(OptionBuilder.withArgName("logDirectory").hasArg().withDescription(
+                "directory where the log files are stored").create("logs"));
+        command_options.addOption(OptionBuilder.withArgName("logPattern").hasArg().withDescription(
+                "pattern for log files (e.g. *.log)").create("pattern"));
+        command_options.addOption(OptionBuilder.withArgName("tmpDir").hasArg().withDescription(
+                "local path where to store temporary files (e.g. /tmp/)").create("tmp"));
 
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("NativeExample", command_options);
+        formatter.printHelp("LogFinderExample", command_options);
         AbstractExample.init(args);
 
-        String directory = cmd.getOptionValue("p");
+        String directory = cmd.getOptionValue("logs");
         if (directory == null) {
-            logDirectory = DEFAULT_LOG_PATH;
+            logDirectory = new File(DEFAULT_LOG_PATH);
         } else {
-            logDirectory = directory;
+            logDirectory = new File(directory);
         }
 
-        String tmp = cmd.getOptionValue("l");
+        if (!(logDirectory.exists() && logDirectory.canRead())) {
+            throw new IllegalArgumentException(logDirectory + " does not exist or is not readable");
+        }
+
+        if (!(logDirectory.isDirectory())) {
+            throw new IllegalArgumentException(logDirectory + " is not a directory");
+        }
+
+        String tmp = cmd.getOptionValue("tmp");
         if (tmp == null) {
-            tmpDir = DEFAULT_LOCAL_PATH;
+            if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                tmpDir = new File(DEFAULT_WINDOWS_LOCAL_PATH);
+            } else {
+                tmpDir = new File(DEFAULT_UNIX_LOCAL_PATH);
+            }
         } else {
-            tmpDir = tmp;
+            tmpDir = new File(tmp);
+        }
+
+        if (!(tmpDir.exists() && tmpDir.canWrite())) {
+            throw new IllegalArgumentException(tmpDir + " does not exist or is not writeable");
+        }
+
+        if (!(tmpDir.isDirectory())) {
+            throw new IllegalArgumentException(tmpDir + " is not a directory");
+        }
+
+        String lpatt = cmd.getOptionValue("pattern");
+        if (lpatt == null) {
+            logPattern = DEFAULT_LOG_PATTERN;
+        } else {
+            logPattern = lpatt;
         }
 
         String[] patt = cmd.getArgs();
         if (patt.length == 0) {
-            patterns = DEFAULT_PATTERNS;
+            patternsToFind = DEFAULT_PATTERNS;
         } else {
-            patterns = patt;
+            patternsToFind = patt;
         }
     }
 
@@ -184,81 +221,111 @@ public class LogFinderExample extends AbstractExample {
      *
      * @author fviale
      */
-    public static class GrepCountNativeTask extends NativeTask {
+    public static class GrepCountTask implements Task<ArrayList<Integer>> {
 
         /**
          * 
          */
         private static final long serialVersionUID = 40L;
-        private static final String GREP_COMMAND = "grep -c -i";
-        private static final String COPY_COMMAND = "cp";
-        private String fileName;
-        private boolean runCopy;
+        private File srcFile;
+        private File tmpFile;
+        private File tmpDir;
+        private String[] patterns;
 
         /**
          *  Creating the task with the given filename
          */
-        public GrepCountNativeTask(String fileName) {
-            super("");
-            if (!new File(tmpDir + fileName).exists()) {
-                super.setCommand(COPY_COMMAND + " " + logDirectory + fileName + " " + tmpDir, null, null);
-                runCopy = true;
-            } else {
-                runCopy = false;
+        public GrepCountTask(File file, File tmpDir, String[] patterns) {
+            this.srcFile = file;
+            this.tmpDir = tmpDir;
+            this.patterns = patterns;
+
+        }
+
+        /**
+         * Copies a file to the given destination file
+         * @param srFile origin file
+         * @param dtFile destination file
+         * @throws IOException
+         */
+        private static void copyfile(File srFile, File dtFile) throws IOException {
+            InputStream in = new FileInputStream(srFile);
+            OutputStream out = new FileOutputStream(dtFile);
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
             }
-            this.fileName = fileName;
+            in.close();
+            out.close();
+        }
+
+        /**
+         * Performs a grep on the given file using the given patterns
+         * @param srFile file to grep
+         * @param patterns text to find
+         * @return number of occurences found for each pattern
+         * @throws IOException
+         */
+        private static ArrayList<Integer> grepFile(File srFile, String[] patterns) throws IOException {
+
+            ArrayList<Integer> answer = new ArrayList<Integer>(patterns.length);
+            for (String pattern : patterns) {
+                Grep.compile(pattern);
+                answer.add(Grep.grep(srFile));
+
+            }
+            return answer;
         }
 
         /** {@inheritDoc} */
-        public ArrayList<String> run(WorkerMemory memory) throws IOException, URISyntaxException {
-            // Run Copy command
-            if (runCopy) {
-                super.run(memory);
+        public ArrayList<Integer> run(WorkerMemory memory) throws IOException, URISyntaxException {
+            tmpFile = new File(tmpDir, srcFile.getName());
+            if (!tmpFile.exists()) {
+                copyfile(srcFile, tmpFile);
             }
-            // Run Grep commands
-            ArrayList<String> answer = new ArrayList<String>();
-            for (int i = 0; i < patterns.length; i++) {
-                String newCommand = GREP_COMMAND + " " + patterns[i] + " " + tmpDir + fileName;
-                //System.out.println(newCommand);
-                setCommand(newCommand, null, null);
-                ArrayList<String> partAnswer = super.run(memory);
-                if (partAnswer.size() > 0) {
-                    answer.add(partAnswer.get(0));
-                } else {
-                    System.out.println("WARNING NO RESULT");
-                }
-            }
-            return answer;
+
+            return grepFile(tmpFile, patterns);
         }
     }
 
     /**
      * Task which lists the log files in the specified folder 
      */
-    public static class ListLogFiles extends NativeTask {
+    public static class ListLogFiles implements Task<ArrayList<File>> {
 
         /**
          * 
          */
         private static final long serialVersionUID = 40L;
-        private static final String LIST_COMMAND = "ls " + logDirectory;
+        private File directory;
+        private String pattern;
 
         /** Constructs a new ListLogFiles. */
-        public ListLogFiles() {
-            super(LIST_COMMAND);
+        public ListLogFiles(File directory, String pattern) {
+            this.directory = directory;
+            this.pattern = pattern;
         }
 
         /** {@inheritDoc} */
-        public ArrayList<String> run(WorkerMemory memory) throws IOException, URISyntaxException {
-            ArrayList<String> all_files = super.run(memory);
-            ArrayList<String> all_logs = new ArrayList<String>();
-            for (String line : all_files) {
-                if (line.indexOf("_log") > -1) {
-                    all_logs.add(line);
-                    System.out.println(line);
+        public ArrayList<File> run(WorkerMemory memory) throws IOException, URISyntaxException {
+            ArrayList<File> all_files = findMatchingLogFiles();
+            return decreasingSizeFileList(all_files);
+        }
+
+        /**
+         * Finds file in the specified directory which match the specified log file pattern
+         * @return
+         */
+        private ArrayList<File> findMatchingLogFiles() {
+            ArrayList<File> answer = new ArrayList<File>();
+            File[] files = directory.listFiles();
+            for (File f : files) {
+                if (f.getName().matches(pattern)) {
+                    answer.add(f);
                 }
             }
-            return decreasingSizeFileList(all_logs);
+            return answer;
         }
 
         /**
@@ -266,8 +333,8 @@ public class LogFinderExample extends AbstractExample {
          * @param input list of pathnames
          * @return sorted list of pathnames
          */
-        private ArrayList<String> decreasingSizeFileList(ArrayList<String> input) {
-            ArrayList<String> answer = new ArrayList<String>();
+        private ArrayList<File> decreasingSizeFileList(ArrayList<File> input) {
+            ArrayList<File> answer = new ArrayList<File>();
 
             SortedSet<File> files = new TreeSet<File>(new Comparator<File>() {
 
@@ -282,12 +349,11 @@ public class LogFinderExample extends AbstractExample {
 
                 }
             });
-            File parent = new File(logDirectory);
-            for (String fileName : input) {
-                files.add(new File(parent, fileName));
+            for (File file : input) {
+                files.add(file);
             }
             for (File file : files) {
-                answer.add(file.getName());
+                answer.add(file);
             }
             return answer;
 

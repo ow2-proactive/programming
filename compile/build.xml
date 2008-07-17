@@ -306,7 +306,7 @@
 	</target>
 
 
-	<target name="compile.util" depends="-init" description="Compile ProActive Utils classes">
+	<target name="compile.util" depends="-configurationCopy" description="Compile ProActive Utils classes">
 		<!-- XXX Timer is in core.util.Profiling -->
 		<javac srcdir="${src.utils.dir}" destdir="${cl.utils.dir}" includes="**" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
@@ -633,6 +633,7 @@
 			<arg value="${test.classes.dir}" />
 			<arg value="${lib.dir}" />
 			<arg value="${dev.dir}" />
+		    <sysproperty key="copyright.update" value="${copyright.update}"/>
 		</java>
 	</target>
 
@@ -770,6 +771,11 @@
 				<include name="org/**/*.png" />
 				<include name="org/objectweb/proactive/core/component/adl/xml/proactive.dtd" />
 				<include name="org/**/jaas.config" />
+			</fileset>
+		</copy>
+		<copy toDir="${cl.utils.dir}">
+			<fileset dir="${src.utils.dir}">
+				<include name="sources/*.txt" />
 			</fileset>
 		</copy>
 	</target>

@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
  *  Contributor(s):
  *
  * ################################################################
+ * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.examples.masterworker;
 
@@ -38,6 +39,7 @@ import java.util.List;
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
@@ -156,8 +158,10 @@ public class BasicPrimeExample extends AbstractExample {
     }
 
     protected static void init(String[] args) throws MalformedURLException {
-        command_options.addOption("p", true, "number to check for primality");
-        command_options.addOption("i", true, "number of dividing intervals");
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "number to check for primality").create("p"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "number of dividing intervals").create("i"));
 
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();

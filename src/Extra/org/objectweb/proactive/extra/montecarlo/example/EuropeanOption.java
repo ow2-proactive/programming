@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
  *  Contributor(s):
  *
  * ################################################################
+ * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extra.montecarlo.example;
 
@@ -37,11 +38,7 @@ import org.objectweb.proactive.extra.montecarlo.AbstractSimulationSetPostProcess
 import org.objectweb.proactive.extra.montecarlo.SimulationSet;
 import org.objectweb.proactive.extra.montecarlo.*;
 import org.objectweb.proactive.extra.montecarlo.basic.GeometricBrownianMotion;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.PosixParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
 import java.net.URL;
 import java.net.MalformedURLException;
@@ -157,20 +154,35 @@ public class EuropeanOption implements EngineTask<double[]> {
         findOS();
 
         Options command_options = new Options();
-        command_options.addOption("d", true, "descriptor in use");
-        command_options.addOption("w", true, "workers virtual node name");
-        command_options.addOption("m", true, "master virtual node name");
-        command_options.addOption("spot", true,
-                "The initial underlying asset price at the start time of the option contract");
-        command_options.addOption("strike", true, "The price to exercise the option contract");
-        command_options.addOption("dividend", true, "Dividend rate of the underlying asset");
-        command_options.addOption("interest", true, "Constant interest rate");
-        command_options.addOption("volatility", true, "Volatility rate of the underlying asset");
-        command_options.addOption("maturity", true, "The maturity date of the option contract");
-        command_options.addOption("e", true, "number of Monte-Carlo experience on each iteration");
-        command_options.addOption("i", true, "number of iterations");
+        command_options.addOption(OptionBuilder.withArgName("file").hasArg().withDescription(
+                "descriptor in use").create("d"));
+        command_options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription(
+                "workers virtual node name").create("w"));
+        command_options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription(
+                "master virtual node name").create("m"));
+        command_options
+                .addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                        "The initial underlying asset price at the start time of the option contract")
+                        .create("spot"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "The price to exercise the option contract").create("strike"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "Dividend rate of the underlying asset").create("dividend"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "Constant interest rate").create("interest"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "Volatility rate of the underlying asset").create("volatility"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "The maturity date of the option contract").create("maturity"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "number of Monte-Carlo experience on each iteration").create("e"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "number of iterations").create("i"));
 
-        CommandLineParser parser = new PosixParser();
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("EuropeanOption", command_options);
+
+        CommandLineParser parser = new GnuParser();
         CommandLine cmd = null;
         try {
             cmd = parser.parse(command_options, args);
@@ -216,41 +228,41 @@ public class EuropeanOption implements EngineTask<double[]> {
         if (spot_string == null) {
             spotPrice = DEFAULT_SPOT_PRICE;
         } else {
-            spotPrice = Integer.parseInt(spot_string);
+            spotPrice = Double.parseDouble(spot_string);
         }
 
         String strike_string = cmd.getOptionValue("strike");
         if (strike_string == null) {
             strikePrice = DEFAULT_STRIKEPRICE;
         } else {
-            strikePrice = Integer.parseInt(strike_string);
+            strikePrice = Double.parseDouble(strike_string);
         }
         String dividend_string = cmd.getOptionValue("dividend");
         if (dividend_string == null) {
             dividend = DEFAULT_DIVIDEND;
         } else {
-            dividend = Integer.parseInt(dividend_string);
+            dividend = Double.parseDouble(dividend_string);
         }
 
         String interest_string = cmd.getOptionValue("interest");
         if (interest_string == null) {
             interestRate = DEFAULT_INTERESTRATE;
         } else {
-            interestRate = Integer.parseInt(interest_string);
+            interestRate = Double.parseDouble(interest_string);
         }
 
         String volatility_string = cmd.getOptionValue("volatility");
         if (volatility_string == null) {
             volatilityRate = DEFAULT_VOLATILITYRATE;
         } else {
-            volatilityRate = Integer.parseInt(volatility_string);
+            volatilityRate = Double.parseDouble(volatility_string);
         }
 
         String maturity_string = cmd.getOptionValue("maturity");
         if (maturity_string == null) {
             maturityDate = DEFAULT_MATURITYDATE;
         } else {
-            maturityDate = Integer.parseInt(maturity_string);
+            maturityDate = Double.parseDouble(maturity_string);
         }
 
         String nsim_string = cmd.getOptionValue("e");

@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
  *  Contributor(s):
  *
  * ################################################################
+ * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.examples.masterworker;
 
@@ -34,11 +35,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.PosixParser;
+import org.apache.commons.cli.*;
 
 
 public abstract class AbstractExample {
@@ -50,9 +47,12 @@ public abstract class AbstractExample {
     public static final String DEFAULT_DESCRIPTOR = "MWApplication.xml";
 
     static {
-        command_options.addOption("d", true, "descriptor in use");
-        command_options.addOption("n", true, "virtual node name");
-        command_options.addOption("m", true, "master virtual node name");
+        command_options.addOption(OptionBuilder.withArgName("file").hasArg().withDescription(
+                "descriptor in use").create("d"));
+        command_options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription(
+                "workers virtual node name").create("w"));
+        command_options.addOption(OptionBuilder.withArgName("name").hasArg().withDescription(
+                "master virtual node name").create("m"));
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class AbstractExample {
      * @throws MalformedURLException
      */
     protected static void init(String[] args) throws MalformedURLException {
-        CommandLineParser parser = new PosixParser();
+        CommandLineParser parser = new GnuParser();
 
         try {
             cmd = parser.parse(command_options, args);
@@ -136,7 +136,7 @@ public abstract class AbstractExample {
         }
 
         // get vn option value
-        vn_name = cmd.getOptionValue("n");
+        vn_name = cmd.getOptionValue("w");
 
         master_vn_name = cmd.getOptionValue("m");
     }

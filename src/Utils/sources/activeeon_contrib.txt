@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,37 +24,8 @@
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
-package org.objectweb.proactive.extra.montecarlo;
-
-import umontreal.iro.lecuyer.rng.RandomStream;
-
-import java.io.Serializable;
-
-import org.objectweb.proactive.annotation.PublicAPI;
-
-
-/**
- * ExperienceSet
- *
- * This interface defines a Monte-Carlo set of successive experiences, using the provided random generator
- *
- * @author The ProActive Team
- */
-@PublicAPI
-public interface ExperienceSet<T extends Serializable> extends Serializable {
-
-    /**
-     * Defines a Monte-Carlo set of successive experiences, a Random generator is given and will be used
-     *
-     * A list of double values is expected as output, result of the successive experiences.
-     * These experiences can be independant or correlated, this choice is left to the user inside the implementation of this method.
-     *
-     * @param rng random number generator
-     * @return a list of double values
-     */
-    T simulate(final RandomStream rng);
-}

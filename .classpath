@@ -72,21 +72,6 @@
 	<classpathentry kind="lib" path="lib/wsdl4j.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
-	<classpathentry kind="lib" path="dev/lib/cenquatasks.jar"/>
-	<classpathentry kind="lib" path="dev/lib/getopt-1.0.9.jar"/>
-	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
-	<classpathentry kind="lib" path="compile/lib/AntelopeTasks_3.2.19.jar"/>
-	<classpathentry kind="lib" path="compile/lib/ant-javah.jar"/>
-	<classpathentry kind="lib" path="compile/lib/ant-jdepend.jar"/>
-	<classpathentry kind="lib" path="compile/lib/ant-junit.jar"/>
-	<classpathentry kind="lib" path="compile/lib/ant-launcher.jar"/>
-	<classpathentry kind="lib" path="compile/lib/ant-replaceregexp.jar"/>
-	<classpathentry kind="lib" path="compile/lib/ant-trax.jar"/>
-	<classpathentry kind="lib" path="compile/lib/clover.jar"/>
-	<classpathentry kind="lib" path="compile/lib/emma_ant.jar"/>
-	<classpathentry kind="lib" path="compile/lib/emma.jar"/>
-	<classpathentry kind="lib" path="compile/lib/jdepend.jar"/>
-	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
 	<classpathentry kind="lib" path="lib/ptolemy.jar"/>
 	<classpathentry kind="lib" path="lib/commons-discovery.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
@@ -95,5 +80,6 @@
 	<classpathentry kind="lib" path="lib/sunxacml.jar"/>
 	<classpathentry kind="lib" path="lib/winp-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/ssj.jar"/>
+	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

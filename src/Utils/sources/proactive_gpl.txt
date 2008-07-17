@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,38 +27,5 @@
  *  Contributor(s):
  *
  * ################################################################
+ * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extra.montecarlo;
-
-import umontreal.iro.lecuyer.rng.RandomStream;
-
-import java.io.Serializable;
-
-import org.objectweb.proactive.annotation.PublicAPI;
-
-
-/**
- * AbstractExperienceSetOutputFilter
- *
- * @author The ProActive Team
- */
-@PublicAPI
-public abstract class AbstractExperienceSetPostProcess<T extends Serializable, R extends Serializable>
-        implements ExperienceSetPostProcess<T, R>, ExperienceSet<R> {
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 40L;
-    private ExperienceSet<T> experienceSet;
-
-    public AbstractExperienceSetPostProcess(ExperienceSet<T> experienceSet) {
-        this.experienceSet = experienceSet;
-    }
-
-    public R simulate(final RandomStream rng) {
-        T results = experienceSet.simulate(rng);
-        return postprocess(results);
-    }
-
-}

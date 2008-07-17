@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,18 +26,9 @@
  *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
- * Was taken from : http://www.javawiki.org/2006_03_03/enhancing-the-combo-widget-with-images/
- *
- * Copyright (c) 2000, 2005 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *     Tom Seidel      - enhancements for image-handling
- *******************************************************************************/
+ * ################################################################
+ * $$ACTIVEEON_CONTRIBUTOR$$
+ */
 package org.objectweb.proactive.ic2d.chartit.editor.page;
 
 import java.util.Arrays;

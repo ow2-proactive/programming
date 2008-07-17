@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
  *  Contributor(s):
  *
  * ################################################################
+ * $$PROACTIVE_INITIAL_DEV$$
  */
 package org.objectweb.proactive.extra.p2p.service;
 
@@ -406,9 +407,9 @@ public class P2PAcquaintanceManager implements InitActive, RunActive, Serializab
             logger.debug("P2PAcquaintanceManager.acqAccepted() adding " + "--" + url + "--");
         }
         this.preferedAcquaintancesURLs.add(url);
-        Iterator<String> it = this.preferedAcquaintancesURLs.iterator();
-        while (it.hasNext()) {
-            if (logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
+            Iterator<String> it = this.preferedAcquaintancesURLs.iterator();
+            while (it.hasNext()) {
                 logger.debug("            " + it.next());
             }
         }
@@ -427,14 +428,16 @@ public class P2PAcquaintanceManager implements InitActive, RunActive, Serializab
     }
 
     public void removeFromAwaited(String url) {
-        String[] tmp = this.getAwaitedRepliesUrls();
-        for (int i = 0; i < tmp.length; i++) {
-            if (logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
+            String[] tmp = this.getAwaitedRepliesUrls();
+            for (int i = 0; i < tmp.length; i++) {
                 logger.debug("--" + tmp[i] + "--");
             }
         }
+
+        awaitedReplies.remove(url);
         if (logger.isDebugEnabled()) {
-            logger.debug("Removing --" + url + "-- from awaited peers " + awaitedReplies.remove(url));
+            logger.debug("Removing --" + url + "-- from awaited peers ");
         }
     }
 

@@ -4,8 +4,8 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2007 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@objectweb.org
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,9 @@
  *                        http://www.activeeon.com/
  *  Contributor(s):
  *
+ *
  * ################################################################
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
 //@snippet-start primes_distributedmw_example
 package org.objectweb.proactive.examples.userguide.primes.distributedmw;
