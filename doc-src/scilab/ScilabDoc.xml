@@ -759,7 +759,7 @@
 
                 <programlisting xml:lang="xml">
                     <textobject>
-                        <textdata fileref="../examples/scilab/ProActiveScilab.xml"/>
+                        <textdata fileref="../examples/scilab/GCMA.xml"/>
                     </textobject>
                 </programlisting>
              </example>   
