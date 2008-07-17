@@ -74,7 +74,6 @@
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="dev/lib/cenquatasks.jar"/>
 	<classpathentry kind="lib" path="dev/lib/getopt-1.0.9.jar"/>
-	<classpathentry kind="lib" path="dev/lib/j2h.jar"/>
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
 	<classpathentry kind="lib" path="compile/lib/AntelopeTasks_3.2.19.jar"/>
 	<classpathentry kind="lib" path="compile/lib/ant-javah.jar"/>

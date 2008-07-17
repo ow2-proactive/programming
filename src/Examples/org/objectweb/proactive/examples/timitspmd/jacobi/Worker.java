@@ -28,7 +28,7 @@
  *
  * ################################################################
  */
-package org.objectweb.proactive.examples.timit.jacobi;
+package org.objectweb.proactive.examples.timitspmd.jacobi;
 
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.extensions.timitspmd.TimIt;

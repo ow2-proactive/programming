@@ -10,6 +10,10 @@ fi
 PROACTIVE_DIR=$1
 VERSION=$2
 JAVA_HOME=$3
+if [ ! -z "$4" ] ; then
+	TMP=$4
+fi
+
 
 TMP_DIR=""
 
