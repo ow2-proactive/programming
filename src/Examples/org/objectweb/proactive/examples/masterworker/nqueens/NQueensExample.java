@@ -37,6 +37,7 @@ import java.util.Vector;
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.examples.masterworker.AbstractExample;
 import org.objectweb.proactive.examples.masterworker.nqueens.query.Query;
@@ -54,7 +55,7 @@ import org.objectweb.proactive.api.PALifeCycle;
  *
  */
 public class NQueensExample extends AbstractExample {
-    private static final int DEFAULT_BOARD_SIZE = 18;
+    private static final int DEFAULT_BOARD_SIZE = 17;
     private static final int DEFAULT_ALGORITHM_DEPTH = 1;
     public static int nqueen_board_size;
     public static int nqueen_algorithm_depth;
@@ -142,8 +143,10 @@ public class NQueensExample extends AbstractExample {
     }
 
     protected static void init(String[] args) throws MalformedURLException {
-        command_options.addOption("S", true, "nqueen board size");
-        command_options.addOption("D", true, "nqueen algorithm depth");
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "nqueen board size").create("size"));
+        command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
+                "nqueen algorithm depth").create("depth"));
 
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
@@ -152,14 +155,14 @@ public class NQueensExample extends AbstractExample {
         // Initialisation of common arguments
         AbstractExample.init(args);
 
-        String board_sizeString = cmd.getOptionValue("S");
+        String board_sizeString = cmd.getOptionValue("size");
         if (board_sizeString == null) {
             nqueen_board_size = DEFAULT_BOARD_SIZE;
         } else {
             nqueen_board_size = Integer.parseInt(board_sizeString);
         }
 
-        String algodepthString = cmd.getOptionValue("D");
+        String algodepthString = cmd.getOptionValue("depth");
         if (algodepthString == null) {
             nqueen_algorithm_depth = DEFAULT_ALGORITHM_DEPTH;
         } else {

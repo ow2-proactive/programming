@@ -1,0 +1,605 @@
+#
+# An unexpected error has been detected by Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0xb3288286, pid=31971, tid=3018427296
+#
+# Java VM: Java HotSpot(TM) Client VM (1.6.0-b105 mixed mode, sharing)
+# Problematic frame:
+# C  [libjavasci.so+0x1ef286]  Java_javasci_Scilab_receiveDataByName+0x4e
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0xb5034800):  JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_in_native, id=32285]
+
+siginfo:si_signo=11, si_errno=0, si_code=1, si_addr=0x00000000
+
+Registers:
+EAX=0x09fd2cf0, EBX=0x09fd2cd8, ECX=0x00000001, EDX=0x00000000
+ESP=0xb3e977f0, EBP=0xb3e97818, ESI=0x00000000, EDI=0xb50348e8
+EIP=0xb3288286, CR2=0x00000000, EFLAGS=0x00010282
+
+Top of Stack: (sp=0xb3e977f0)
+0xb3e977f0:   09fd2cd8 b3e97864 09fd2cd8 b5034a48
+0xb3e97800:   b5034a38 906daab0 906daaac 906daab0
+0xb3e97810:   906daaac b5034800 b3e97854 b5eaa68e
+0xb3e97820:   b50348e8 b3e9785c b3e97864 b5034800
+0xb3e97830:   b5ea2c71 b3e97834 906daaac b3e97864
+0xb3e97840:   906dad78 00000000 906daab0 00000000
+0xb3e97850:   b3e97864 b3e97890 b5ea2d37 906dacd8
+0xb3e97860:   b5ea85f6 8c9cafb8 00000000 8c2315c0 
+
+Instructions: (pc=0xb3288286)
+0xb3288276:   8b 55 10 89 54 24 04 89 3c 24 ff 90 a8 02 00 00
+0xb3288286:   8b 16 83 fa 01 74 0c b8 00 00 00 00 83 fa 0a 75 
+
+Stack: [0xb3e48000,0xb3e99000),  sp=0xb3e977f0,  free space=317k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libjavasci.so+0x1ef286]  Java_javasci_Scilab_receiveDataByName+0x4e
+j  javasci.Scilab.receiveDataByName(Ljava/lang/String;)Ljavasci/SciData;+0
+j  org.objectweb.proactive.extra.scheduler.ext.scilab.AOSimpleScilab.execute([Lorg/objectweb/proactive/extra/scheduler/common/task/TaskResult;)Ljava/lang/Object;+262
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x20967d]
+V  [libjvm.so+0x3057d8]
+V  [libjvm.so+0x209510]
+V  [libjvm.so+0x32c18f]
+V  [libjvm.so+0x32eb8c]
+V  [libjvm.so+0x2755f8]
+C  [libjava.so+0x15224]  Java_sun_reflect_NativeMethodAccessorImpl_invoke0+0x34
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+87
+J  sun.reflect.DelegatingMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+J  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+j  org.objectweb.proactive.core.mop.MethodCall.execute(Ljava/lang/Object;)Ljava/lang/Object;+183
+j  org.objectweb.proactive.core.body.request.RequestImpl.serveInternal(Lorg/objectweb/proactive/Body;)Lorg/objectweb/proactive/core/body/future/MethodCallResult;+14
+j  org.objectweb.proactive.core.body.request.RequestImpl.serve(Lorg/objectweb/proactive/Body;)Lorg/objectweb/proactive/core/body/reply/Reply;+39
+j  org.objectweb.proactive.core.body.BodyImpl$ActiveLocalBodyStrategy.serveInternal(Lorg/objectweb/proactive/core/body/request/Request;)V+99
+j  org.objectweb.proactive.core.body.BodyImpl$ActiveLocalBodyStrategy.serve(Lorg/objectweb/proactive/core/body/request/Request;)V+45
+j  org.objectweb.proactive.core.body.AbstractBody.serve(Lorg/objectweb/proactive/core/body/request/Request;)V+43
+j  org.objectweb.proactive.Service.blockingServeOldest(Lorg/objectweb/proactive/core/body/request/RequestFilter;J)V+24
+j  org.objectweb.proactive.Service.blockingServeOldest()V+3
+j  org.objectweb.proactive.Service.fifoServing()V+52
+j  org.objectweb.proactive.core.body.ActiveBody$FIFORunActive.runActivity(Lorg/objectweb/proactive/Body;)V+8
+j  org.objectweb.proactive.core.body.ActiveBody.run()V+55
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x20967d]
+V  [libjvm.so+0x3057d8]
+V  [libjvm.so+0x208f90]
+V  [libjvm.so+0x20901d]
+V  [libjvm.so+0x279215]
+V  [libjvm.so+0x38035f]
+V  [libjvm.so+0x3066b3]
+C  [libpthread.so.0+0x5433]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  javasci.Scilab.receiveDataByName(Ljava/lang/String;)Ljavasci/SciData;+0
+j  org.objectweb.proactive.extra.scheduler.ext.scilab.AOSimpleScilab.execute([Lorg/objectweb/proactive/extra/scheduler/common/task/TaskResult;)Ljava/lang/Object;+262
+v  ~StubRoutines::call_stub
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+87
+J  sun.reflect.DelegatingMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+J  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+j  org.objectweb.proactive.core.mop.MethodCall.execute(Ljava/lang/Object;)Ljava/lang/Object;+183
+j  org.objectweb.proactive.core.body.request.RequestImpl.serveInternal(Lorg/objectweb/proactive/Body;)Lorg/objectweb/proactive/core/body/future/MethodCallResult;+14
+j  org.objectweb.proactive.core.body.request.RequestImpl.serve(Lorg/objectweb/proactive/Body;)Lorg/objectweb/proactive/core/body/reply/Reply;+39
+j  org.objectweb.proactive.core.body.BodyImpl$ActiveLocalBodyStrategy.serveInternal(Lorg/objectweb/proactive/core/body/request/Request;)V+99
+j  org.objectweb.proactive.core.body.BodyImpl$ActiveLocalBodyStrategy.serve(Lorg/objectweb/proactive/core/body/request/Request;)V+45
+j  org.objectweb.proactive.core.body.AbstractBody.serve(Lorg/objectweb/proactive/core/body/request/Request;)V+43
+j  org.objectweb.proactive.Service.blockingServeOldest(Lorg/objectweb/proactive/core/body/request/RequestFilter;J)V+24
+j  org.objectweb.proactive.Service.blockingServeOldest()V+3
+j  org.objectweb.proactive.Service.fifoServing()V+52
+j  org.objectweb.proactive.core.body.ActiveBody$FIFORunActive.runActivity(Lorg/objectweb/proactive/Body;)V+8
+j  org.objectweb.proactive.core.body.ActiveBody.run()V+55
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x09e52000 JavaThread "RMI TCP Connection(idle)" daemon [_thread_blocked, id=1454]
+  0xb5035400 JavaThread "RMI RenewClean-[138.96.218.76:57281]" daemon [_thread_blocked, id=32300]
+=>0xb5034800 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_in_native, id=32285]
+  0xb5033400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e05--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32284]
+  0xb5032800 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32280]
+  0xb5031400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e18--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32279]
+  0xb5030400 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32266]
+  0xb502f400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e2a--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32265]
+  0xb502e800 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32261]
+  0xb502d400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e3c--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32260]
+  0xb502c000 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32247]
+  0xb502b000 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e4e--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32246]
+  0xb502a400 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32242]
+  0xb5029400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e60--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32241]
+  0xb5028800 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32228]
+  0xb5027800 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e73--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32227]
+  0xb5026c00 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32223]
+  0xb5025c00 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e85--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32222]
+  0xb5024c00 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32209]
+  0xb5024000 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7e97--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32208]
+  0xb5023000 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32204]
+  0xb5022400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7ea9--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32203]
+  0xb5021400 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32190]
+  0xb5020800 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7ebb--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32189]
+  0xb501fc00 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32185]
+  0xb501ec00 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7ecd--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32184]
+  0xb501e000 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32171]
+  0xb501d400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7ee0--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32170]
+  0xb501c400 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32166]
+  0xb501b000 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7ef2--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32165]
+  0xb501a000 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32152]
+  0xb5019000 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f04--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32151]
+  0xb5017c00 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32147]
+  0xb5016c00 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f16--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32146]
+  0xb5015c00 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32133]
+  0xb5015000 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f28--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32132]
+  0xb5013c00 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32127]
+  0xb5013000 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f3b--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32126]
+  0xb5012000 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32113]
+  0xb5011000 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f4d--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32112]
+  0xb5010000 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32108]
+  0xb500f400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f5f--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32107]
+  0xb500e800 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32094]
+  0xb500dc00 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f71--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32093]
+  0xb500b000 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32089]
+  0xb500a000 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f83--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32088]
+  0xb5009400 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32075]
+  0xb5008400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7f95--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32074]
+  0xb5007800 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32070]
+  0xb5006400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7fa7--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32069]
+  0xb5005400 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32055]
+  0xb5004800 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7fb9--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32054]
+  0xb5003800 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32050]
+  0xb5002400 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7fcb--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32049]
+  0xb5001400 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32036]
+  0x0a152800 JavaThread "RMI TCP Connection(idle)" daemon [_thread_blocked, id=32035]
+  0xb5000800 JavaThread "RMI RenewClean-[138.96.218.76:59490]" daemon [_thread_blocked, id=32034]
+  0x0a150800 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7fde--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32033]
+  0x0a148c00 JavaThread "AOSimpleScilab on //bebita.inria.fr/Scilab1195749690613" daemon [_thread_blocked, id=32024]
+  0x0a142c00 JavaThread "JMXNotificationThread for org.objectweb.proactive.core.body:type=AO,aoID=76b4d25e-116683c5068--7ff3--4d4924157db00ddd-76b4d25e-116683c5068--8000" daemon [_thread_blocked, id=32015]
+  0x09acf800 JavaThread "DestroyJavaVM" [_thread_blocked, id=31977]
+  0x0a12a400 JavaThread "GC Daemon" daemon [_thread_blocked, id=32004]
+  0x0a129000 JavaThread "RMI Reaper" [_thread_blocked, id=32003]
+  0x0a128400 JavaThread "RMI TCP Accept-0" daemon [_thread_in_native, id=32002]
+  0x0a11c400 JavaThread "RMI Scheduler(0)" daemon [_thread_blocked, id=32001]
+  0x0a116400 JavaThread "ClassServer-138.96.218.76:2034" daemon [_thread_in_native, id=31998]
+  0x09b03c00 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=31987]
+  0x09b02400 JavaThread "CompilerThread0" daemon [_thread_blocked, id=31986]
+  0x09b01000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=31985]
+  0x09af8c00 JavaThread "Finalizer" daemon [_thread_blocked, id=31980]
+  0x09af7800 JavaThread "Reference Handler" daemon [_thread_blocked, id=31979]
+
+Other Threads:
+  0x09aee400 VMThread [id=31978]
+  0x09b05800 WatcherThread [id=31988]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 960K, used 390K [0x8c1e0000, 0x8c2e0000, 0x8c6c0000)
+  eden space 896K,  36% used [0x8c1e0000, 0x8c231ab8, 0x8c2c0000)
+  from space 64K, 100% used [0x8c2c0000, 0x8c2d0000, 0x8c2d0000)
+  to   space 64K,   0% used [0x8c2d0000, 0x8c2d0000, 0x8c2e0000)
+ tenured generation   total 4096K, used 3148K [0x8c6c0000, 0x8cac0000, 0x901e0000)
+   the space 4096K,  76% used [0x8c6c0000, 0x8c9d33b8, 0x8c9d3400, 0x8cac0000)
+ compacting perm gen  total 12288K, used 5105K [0x901e0000, 0x90de0000, 0x941e0000)
+   the space 12288K,  41% used [0x901e0000, 0x906dc508, 0x906dc600, 0x90de0000)
+    ro space 8192K,  73% used [0x941e0000, 0x947be548, 0x947be600, 0x949e0000)
+    rw space 12288K,  57% used [0x949e0000, 0x950d16c0, 0x950d1800, 0x955e0000)
+
+Dynamic libraries:
+00101000-001e0000 r-xp 00000000 08:06 23409870   /usr/lib/libtk8.4.so
+001e0000-001ec000 rwxp 000df000 08:06 23409870   /usr/lib/libtk8.4.so
+001ee000-002a9000 r-xp 00000000 08:06 23415991   /usr/lib/libtcl8.4.so
+002a9000-002af000 rwxp 000bb000 08:06 23415991   /usr/lib/libtcl8.4.so
+00379000-003ce000 r-xp 00000000 08:06 23410164   /usr/lib/libXt.so.6.0.0
+003ce000-003d2000 rwxp 00054000 08:06 23410164   /usr/lib/libXt.so.6.0.0
+0040e000-00508000 r-xp 00000000 08:06 23400880   /usr/lib/libX11.so.6.2.0
+00508000-0050c000 rwxp 000f9000 08:06 23400880   /usr/lib/libX11.so.6.2.0
+007c6000-007d8000 r-xp 00000000 08:06 32867843   /lib/libnsl-2.4.so
+007d8000-007d9000 r-xp 00011000 08:06 32867843   /lib/libnsl-2.4.so
+007d9000-007da000 rwxp 00012000 08:06 32867843   /lib/libnsl-2.4.so
+007da000-007dc000 rwxp 007da000 00:00 0 
+007ef000-007f5000 r-xp 00000000 08:06 32867848   /lib/librt-2.4.so
+007f5000-007f6000 r-xp 00006000 08:06 32867848   /lib/librt-2.4.so
+007f6000-007f7000 rwxp 00007000 08:06 32867848   /lib/librt-2.4.so
+00914000-0092d000 r-xp 00000000 08:06 32867834   /lib/ld-2.4.so
+0092d000-0092e000 r-xp 00018000 08:06 32867834   /lib/ld-2.4.so
+0092e000-0092f000 rwxp 00019000 08:06 32867834   /lib/ld-2.4.so
+00935000-00a62000 r-xp 00000000 08:06 32867835   /lib/libc-2.4.so
+00a62000-00a64000 r-xp 0012d000 08:06 32867835   /lib/libc-2.4.so
+00a64000-00a65000 rwxp 0012f000 08:06 32867835   /lib/libc-2.4.so
+00a65000-00a68000 rwxp 00a65000 00:00 0 
+00a6a000-00a8d000 r-xp 00000000 08:06 32867836   /lib/libm-2.4.so
+00a8d000-00a8e000 r-xp 00022000 08:06 32867836   /lib/libm-2.4.so
+00a8e000-00a8f000 rwxp 00023000 08:06 32867836   /lib/libm-2.4.so
+00a91000-00a93000 r-xp 00000000 08:06 32867837   /lib/libdl-2.4.so
+00a93000-00a94000 r-xp 00001000 08:06 32867837   /lib/libdl-2.4.so
+00a94000-00a95000 rwxp 00002000 08:06 32867837   /lib/libdl-2.4.so
+00a97000-00a99000 r-xp 00000000 08:06 23425192   /usr/lib/libXau.so.6.0.0
+00a99000-00a9a000 rwxp 00001000 08:06 23425192   /usr/lib/libXau.so.6.0.0
+00a9c000-00aa1000 r-xp 00000000 08:06 23425193   /usr/lib/libXdmcp.so.6.0.0
+00aa1000-00aa2000 rwxp 00004000 08:06 23425193   /usr/lib/libXdmcp.so.6.0.0
+00aa4000-00ab3000 r-xp 00000000 08:06 23401940   /usr/lib/libXext.so.6.4.0
+00ab3000-00ab4000 rwxp 0000e000 08:06 23401940   /usr/lib/libXext.so.6.4.0
+00ab6000-00b01000 r-xp 00000000 08:06 23414614   /usr/lib/libXaw3d.so.7.0
+00b01000-00b07000 rwxp 0004a000 08:06 23414614   /usr/lib/libXaw3d.so.7.0
+00b07000-00b19000 rwxp 00b07000 00:00 0 
+00b3d000-00b44000 r-xp 00000000 08:06 23412561   /usr/lib/libXp.so.6.2.0
+00b44000-00b45000 rwxp 00007000 08:06 23412561   /usr/lib/libXp.so.6.2.0
+00b5e000-00b74000 r-xp 00000000 08:06 23410216   /usr/lib/libXmu.so.6.2.0
+00b74000-00b75000 rwxp 00016000 08:06 23410216   /usr/lib/libXmu.so.6.2.0
+00b77000-00b87000 r-xp 00000000 08:06 23410086   /usr/lib/libXpm.so.4.11.0
+00b87000-00b88000 rwxp 00010000 08:06 23410086   /usr/lib/libXpm.so.4.11.0
+00bca000-00bda000 r-xp 00000000 08:06 32867839   /lib/libpthread-2.4.so
+00bda000-00bdb000 r-xp 0000f000 08:06 32867839   /lib/libpthread-2.4.so
+00bdb000-00bdc000 rwxp 00010000 08:06 32867839   /lib/libpthread-2.4.so
+00bdc000-00bde000 rwxp 00bdc000 00:00 0 
+00be0000-00be8000 r-xp 00000000 08:06 23425205   /usr/lib/libSM.so.6.0.0
+00be8000-00be9000 rwxp 00008000 08:06 23425205   /usr/lib/libSM.so.6.0.0
+00beb000-00c02000 r-xp 00000000 08:06 23425204   /usr/lib/libICE.so.6.3.0
+00c02000-00c03000 rwxp 00016000 08:06 23425204   /usr/lib/libICE.so.6.3.0
+00c03000-00c05000 rwxp 00c03000 00:00 0 
+00cc4000-00ccf000 r-xp 00000000 08:06 32866449   /lib/libgcc_s-4.1.1-20070108.so.1
+00ccf000-00cd0000 rwxp 0000a000 08:06 32866449   /lib/libgcc_s-4.1.1-20070108.so.1
+02ce6000-02d26000 r-xp 00000000 08:06 23412429   /usr/lib/libncurses.so.5.5
+02d26000-02d2e000 rwxp 00040000 08:06 23412429   /usr/lib/libncurses.so.5.5
+02d2e000-02d2f000 rwxp 02d2e000 00:00 0 
+06000000-06412000 r-xp 00000000 08:06 34078724   /home/fviale/bin/jdk1.6.0/jre/lib/i386/client/libjvm.so
+06412000-0642b000 rwxp 00411000 08:06 34078724   /home/fviale/bin/jdk1.6.0/jre/lib/i386/client/libjvm.so
+0642b000-0684a000 rwxp 0642b000 00:00 0 
+08048000-08052000 r-xp 00000000 08:06 32604194   /home/fviale/bin/jdk1.6.0/jre/bin/java
+08052000-08053000 rwxp 00009000 08:06 32604194   /home/fviale/bin/jdk1.6.0/jre/bin/java
+09ac4000-0a162000 rwxp 09ac4000 00:00 0 
+8c1e0000-8c2e0000 rwxp 8c1e0000 00:00 0 
+8c2e0000-8c6c0000 rwxp 8c2e0000 00:00 0 
+8c6c0000-8cac0000 rwxp 8c6c0000 00:00 0 
+8cac0000-901e0000 rwxp 8cac0000 00:00 0 
+901e0000-90de0000 rwxp 901e0000 00:00 0 
+90de0000-941e0000 rwxp 90de0000 00:00 0 
+941e0000-947bf000 r-xs 00001000 08:06 34078723   /home/fviale/bin/jdk1.6.0/jre/lib/i386/client/classes.jsa
+947bf000-949e0000 rwxp 947bf000 00:00 0 
+949e0000-950d2000 rwxp 005e0000 08:06 34078723   /home/fviale/bin/jdk1.6.0/jre/lib/i386/client/classes.jsa
+950d2000-955e0000 rwxp 950d2000 00:00 0 
+955e0000-956b9000 rwxp 00cd2000 08:06 34078723   /home/fviale/bin/jdk1.6.0/jre/lib/i386/client/classes.jsa
+956b9000-959e0000 rwxp 956b9000 00:00 0 
+959e0000-959e4000 r-xs 00dab000 08:06 34078723   /home/fviale/bin/jdk1.6.0/jre/lib/i386/client/classes.jsa
+959e4000-95de0000 rwxp 959e4000 00:00 0 
+b28f7000-b3099000 rwxp b28f7000 00:00 0 
+b3099000-b387c000 r-xp 00000000 08:06 26018547   /usr/lib/scilab-4.1.2/bin/libjavasci.so
+b387c000-b389f000 rwxp 007e2000 08:06 26018547   /usr/lib/scilab-4.1.2/bin/libjavasci.so
+b389f000-b3df7000 rwxp b389f000 00:00 0 
+b3df7000-b3dfa000 ---p b3df7000 00:00 0 
+b3dfa000-b3e48000 rwxp b3dfa000 00:00 0 
+b3e48000-b3e4b000 ---p b3e48000 00:00 0 
+b3e4b000-b3e99000 rwxp b3e4b000 00:00 0 
+b3e99000-b3e9c000 ---p b3e99000 00:00 0 
+b3e9c000-b3eea000 rwxp b3e9c000 00:00 0 
+b3eea000-b3eed000 ---p b3eea000 00:00 0 
+b3eed000-b3f3b000 rwxp b3eed000 00:00 0 
+b3f3b000-b3f3e000 ---p b3f3b000 00:00 0 
+b3f3e000-b3f8c000 rwxp b3f3e000 00:00 0 
+b3f8c000-b3f8f000 ---p b3f8c000 00:00 0 
+b3f8f000-b3fdd000 rwxp b3f8f000 00:00 0 
+b3fdd000-b3fe0000 ---p b3fdd000 00:00 0 
+b3fe0000-b402e000 rwxp b3fe0000 00:00 0 
+b402e000-b4031000 ---p b402e000 00:00 0 
+b4031000-b407f000 rwxp b4031000 00:00 0 
+b407f000-b4082000 ---p b407f000 00:00 0 
+b4082000-b40d0000 rwxp b4082000 00:00 0 
+b40d0000-b40d3000 ---p b40d0000 00:00 0 
+b40d3000-b4121000 rwxp b40d3000 00:00 0 
+b4121000-b4124000 ---p b4121000 00:00 0 
+b4124000-b4172000 rwxp b4124000 00:00 0 
+b4172000-b4175000 ---p b4172000 00:00 0 
+b4175000-b41c3000 rwxp b4175000 00:00 0 
+b41c3000-b41c6000 ---p b41c3000 00:00 0 
+b41c6000-b4214000 rwxp b41c6000 00:00 0 
+b4214000-b4217000 ---p b4214000 00:00 0 
+b4217000-b4265000 rwxp b4217000 00:00 0 
+b4265000-b4268000 ---p b4265000 00:00 0 
+b4268000-b42b6000 rwxp b4268000 00:00 0 
+b42b6000-b42b9000 ---p b42b6000 00:00 0 
+b42b9000-b4307000 rwxp b42b9000 00:00 0 
+b4307000-b430a000 ---p b4307000 00:00 0 
+b430a000-b4358000 rwxp b430a000 00:00 0 
+b4358000-b435b000 ---p b4358000 00:00 0 
+b435b000-b43a9000 rwxp b435b000 00:00 0 
+b43a9000-b43ac000 ---p b43a9000 00:00 0 
+b43ac000-b43fa000 rwxp b43ac000 00:00 0 
+b43fa000-b43fd000 ---p b43fa000 00:00 0 
+b43fd000-b444b000 rwxp b43fd000 00:00 0 
+b444b000-b444e000 ---p b444b000 00:00 0 
+b444e000-b449c000 rwxp b444e000 00:00 0 
+b449c000-b449f000 ---p b449c000 00:00 0 
+b449f000-b44ed000 rwxp b449f000 00:00 0 
+b44ed000-b44f0000 ---p b44ed000 00:00 0 
+b44f0000-b453e000 rwxp b44f0000 00:00 0 
+b453e000-b4541000 ---p b453e000 00:00 0 
+b4541000-b458f000 rwxp b4541000 00:00 0 
+b458f000-b4592000 ---p b458f000 00:00 0 
+b4592000-b45e0000 rwxp b4592000 00:00 0 
+b45e0000-b45e3000 ---p b45e0000 00:00 0 
+b45e3000-b4631000 rwxp b45e3000 00:00 0 
+b4631000-b4634000 ---p b4631000 00:00 0 
+b4634000-b4682000 rwxp b4634000 00:00 0 
+b4682000-b4685000 ---p b4682000 00:00 0 
+b4685000-b46d3000 rwxp b4685000 00:00 0 
+b46d3000-b46d6000 ---p b46d3000 00:00 0 
+b46d6000-b4724000 rwxp b46d6000 00:00 0 
+b4724000-b4727000 ---p b4724000 00:00 0 
+b4727000-b4775000 rwxp b4727000 00:00 0 
+b4775000-b4778000 ---p b4775000 00:00 0 
+b4778000-b47c6000 rwxp b4778000 00:00 0 
+b47c6000-b47c9000 ---p b47c6000 00:00 0 
+b47c9000-b4817000 rwxp b47c9000 00:00 0 
+b4817000-b481a000 ---p b4817000 00:00 0 
+b481a000-b4868000 rwxp b481a000 00:00 0 
+b4868000-b486b000 ---p b4868000 00:00 0 
+b486b000-b48b9000 rwxp b486b000 00:00 0 
+b48b9000-b48bc000 ---p b48b9000 00:00 0 
+b48bc000-b490a000 rwxp b48bc000 00:00 0 
+b490a000-b490d000 ---p b490a000 00:00 0 
+b490d000-b495b000 rwxp b490d000 00:00 0 
+b495b000-b495e000 ---p b495b000 00:00 0 
+b495e000-b49ac000 rwxp b495e000 00:00 0 
+b49ac000-b49af000 ---p b49ac000 00:00 0 
+b49af000-b49fd000 rwxp b49af000 00:00 0 
+b49fd000-b4a00000 ---p b49fd000 00:00 0 
+b4a00000-b4a4e000 rwxp b4a00000 00:00 0 
+b4a4e000-b4a51000 ---p b4a4e000 00:00 0 
+b4a51000-b4a9f000 rwxp b4a51000 00:00 0 
+b4a9f000-b4aa2000 ---p b4a9f000 00:00 0 
+b4aa2000-b4af0000 rwxp b4aa2000 00:00 0 
+b4af0000-b4af3000 ---p b4af0000 00:00 0 
+b4af3000-b4b41000 rwxp b4af3000 00:00 0 
+b4b41000-b4b44000 ---p b4b41000 00:00 0 
+b4b44000-b4b92000 rwxp b4b44000 00:00 0 
+b4b92000-b4b95000 ---p b4b92000 00:00 0 
+b4b95000-b4be3000 rwxp b4b95000 00:00 0 
+b4be3000-b4be6000 ---p b4be3000 00:00 0 
+b4be6000-b4c34000 rwxp b4be6000 00:00 0 
+b4c34000-b4c37000 ---p b4c34000 00:00 0 
+b4c37000-b4c85000 rwxp b4c37000 00:00 0 
+b4c85000-b4c88000 ---p b4c85000 00:00 0 
+b4c88000-b4cd6000 rwxp b4c88000 00:00 0 
+b4cd6000-b4cd9000 ---p b4cd6000 00:00 0 
+b4cd9000-b4d27000 rwxp b4cd9000 00:00 0 
+b4d27000-b4d2a000 ---p b4d27000 00:00 0 
+b4d2a000-b4d78000 rwxp b4d2a000 00:00 0 
+b4d78000-b4d7b000 ---p b4d78000 00:00 0 
+b4d7b000-b4dc9000 rwxp b4d7b000 00:00 0 
+b4dc9000-b4dcc000 ---p b4dc9000 00:00 0 
+b4dcc000-b4e1a000 rwxp b4dcc000 00:00 0 
+b4e1a000-b4e1d000 ---p b4e1a000 00:00 0 
+b4e1d000-b4e6b000 rwxp b4e1d000 00:00 0 
+b4e6b000-b4e6e000 ---p b4e6b000 00:00 0 
+b4e6e000-b4ebc000 rwxp b4e6e000 00:00 0 
+b4ebc000-b4ebf000 ---p b4ebc000 00:00 0 
+b4ebf000-b4f0d000 rwxp b4ebf000 00:00 0 
+b4f0d000-b4f10000 ---p b4f0d000 00:00 0 
+b4f10000-b4f5e000 rwxp b4f10000 00:00 0 
+b4f5e000-b4f61000 ---p b4f5e000 00:00 0 
+b4f61000-b4faf000 rwxp b4f61000 00:00 0 
+b4faf000-b4fb2000 ---p b4faf000 00:00 0 
+b4fb2000-b5038000 rwxp b4fb2000 00:00 0 
+b5038000-b5100000 ---p b5038000 00:00 0 
+b5112000-b512c000 r-xp 00000000 08:06 23400085   /usr/lib/libg2c.so.0.0.0
+b512c000-b512d000 rwxp 0001a000 08:06 23400085   /usr/lib/libg2c.so.0.0.0
+b512d000-b5130000 rwxp b512d000 00:00 0 
+b5149000-b514b000 rwxp b5149000 00:00 0 
+b514b000-b514e000 ---p b514b000 00:00 0 
+b514e000-b519c000 rwxp b514e000 00:00 0 
+b519c000-b519f000 rwxp b519c000 00:00 0 
+b519f000-b51ed000 rwxp b519f000 00:00 0 
+b51ed000-b51f0000 ---p b51ed000 00:00 0 
+b51f0000-b523e000 rwxp b51f0000 00:00 0 
+b523e000-b5241000 ---p b523e000 00:00 0 
+b5241000-b528f000 rwxp b5241000 00:00 0 
+b528f000-b5292000 rwxp b528f000 00:00 0 
+b5292000-b52e0000 rwxp b5292000 00:00 0 
+b52e0000-b52e3000 r-xs 00013000 08:06 32735261   /home/fviale/bin/jdk1.6.0/jre/lib/jce.jar
+b52e3000-b52e9000 r-xp 00000000 08:06 34045982   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libmanagement.so
+b52e9000-b52ea000 rwxp 00005000 08:06 34045982   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libmanagement.so
+b52ea000-b52ed000 rwxp b52ea000 00:00 0 
+b52ed000-b533b000 rwxp b52ed000 00:00 0 
+b533b000-b533e000 ---p b533b000 00:00 0 
+b533e000-b538c000 rwxp b533e000 00:00 0 
+b538c000-b538f000 ---p b538c000 00:00 0 
+b538f000-b53dd000 rwxp b538f000 00:00 0 
+b53dd000-b53e0000 ---p b53dd000 00:00 0 
+b53e0000-b542e000 rwxp b53e0000 00:00 0 
+b542e000-b5431000 ---p b542e000 00:00 0 
+b5431000-b547f000 rwxp b5431000 00:00 0 
+b547f000-b5480000 r-xp 00000000 08:06 34045989   /home/fviale/bin/jdk1.6.0/jre/lib/i386/librmi.so
+b5480000-b5481000 rwxp 00000000 08:06 34045989   /home/fviale/bin/jdk1.6.0/jre/lib/i386/librmi.so
+b5481000-b5484000 ---p b5481000 00:00 0 
+b5484000-b54d2000 rwxp b5484000 00:00 0 
+b54d2000-b54d5000 r-xs 00027000 08:06 33980424   /home/fviale/bin/jdk1.6.0/jre/lib/ext/sunjce_provider.jar
+b54d5000-b54db000 r-xs 00091000 08:06 32735263   /home/fviale/bin/jdk1.6.0/jre/lib/jsse.jar
+b54db000-b54e2000 r-xs 00106000 08:06 32735272   /home/fviale/bin/jdk1.6.0/jre/lib/resources.jar
+b54e2000-b5517000 r-xs 00000000 08:06 34472829   /var/db/nscd/hosts
+b5517000-b552a000 r-xp 00000000 08:06 34045986   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libnet.so
+b552a000-b552b000 rwxp 00013000 08:06 34045986   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libnet.so
+b552b000-b552c000 r-xs 00000000 08:06 30933009   /home/fviale/eclipse_workspace/ProActive_Latest/lib/US_export_policy.jar
+b552c000-b552d000 r-xs 00003000 08:06 17989688   /home/fviale/eclipse_workspace/ProActive_Latest/lib/tablelayout.jar
+b552d000-b5532000 r-xs 0002b000 08:06 17989941   /home/fviale/eclipse_workspace/ProActive_Latest/lib/sunxacml.jar
+b5532000-b5536000 r-xs 00035000 08:06 17989750   /home/fviale/eclipse_workspace/ProActive_Latest/lib/soap.jar
+b5536000-b5538000 r-xs 00000000 08:06 17989694   /home/fviale/eclipse_workspace/ProActive_Latest/lib/simple.jar
+b5538000-b5539000 r-xs 00001000 08:06 17989693   /home/fviale/eclipse_workspace/ProActive_Latest/lib/shelltui.jar
+b5539000-b553b000 r-xs 00006000 08:06 17989745   /home/fviale/eclipse_workspace/ProActive_Latest/lib/shellplugin.jar
+b553b000-b553d000 r-xs 00008000 08:06 17989701   /home/fviale/eclipse_workspace/ProActive_Latest/lib/shell.jar
+b553d000-b553e000 r-xs 00002000 08:06 17989719   /home/fviale/eclipse_workspace/ProActive_Latest/lib/shellgui.jar
+b553e000-b553f000 r-xs 0000f000 08:06 17989687   /home/fviale/eclipse_workspace/ProActive_Latest/lib/servlet.jar
+b553f000-b5542000 r-xs 00014000 08:06 17989696   /home/fviale/eclipse_workspace/ProActive_Latest/lib/servlet-api.jar
+b5542000-b5544000 r-xs 00010000 08:06 17989726   /home/fviale/eclipse_workspace/ProActive_Latest/lib/servicebinder.jar
+b5544000-b5545000 r-xs 00006000 08:06 17989708   /home/fviale/eclipse_workspace/ProActive_Latest/lib/scriptPlugin.jar
+b5545000-b555b000 r-xs 00379000 08:06 17989773   /home/fviale/eclipse_workspace/ProActive_Latest/lib/saxon8.jar
+b555b000-b555c000 r-xs 00015000 08:06 17989776   /home/fviale/eclipse_workspace/ProActive_Latest/lib/saxon8-dom.jar
+b555c000-b555d000 r-xs 00008000 08:06 17989744   /home/fviale/eclipse_workspace/ProActive_Latest/lib/saaj-api.jar
+b555d000-b5561000 r-xs 0002b000 08:06 17989732   /home/fviale/eclipse_workspace/ProActive_Latest/lib/puretls.jar
+b5561000-b556a000 r-xs 000aa000 08:06 17989654   /home/fviale/eclipse_workspace/ProActive_Latest/lib/ptolemy.jar
+b556a000-b556d000 r-xs 00003000 08:06 17989695   /home/fviale/eclipse_workspace/ProActive_Latest/lib/ow_deployment_scheduling.jar
+b556d000-b556f000 r-xs 00004000 08:06 17989714   /home/fviale/eclipse_workspace/ProActive_Latest/lib/osgi.jar
+b556f000-b5572000 r-xs 00021000 08:06 17989736   /home/fviale/eclipse_workspace/ProActive_Latest/lib/oscar.jar
+b5572000-b5576000 r-xs 00033000 08:06 30081146   /home/fviale/eclipse_workspace/ProActive_Latest/lib/xsdlib.jar
+b5576000-b5577000 r-xs 00004000 08:06 30081155   /home/fviale/eclipse_workspace/ProActive_Latest/lib/relaxngDatatype.jar
+b5577000-b5586000 r-xs 00095000 08:06 30081149   /home/fviale/eclipse_workspace/ProActive_Latest/lib/msv.jar
+b5586000-b5588000 r-xs 00006000 08:06 17989703   /home/fviale/eclipse_workspace/ProActive_Latest/lib/moduleloader.jar
+b5588000-b558d000 r-xs 00040000 08:06 17989707   /home/fviale/eclipse_workspace/ProActive_Latest/lib/mail.jar
+b558d000-b558e000 r-xs 00000000 08:06 30933010   /home/fviale/eclipse_workspace/ProActive_Latest/lib/local_policy.jar
+b558e000-b55a1000 r-xs 000cc000 08:06 17989716   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jung-1.7.4.jar
+b55a1000-b55a3000 r-xs 00008000 08:06 17989743   /home/fviale/eclipse_workspace/ProActive_Latest/lib/julia-runtime.jar
+b55a3000-b55a6000 r-xs 0000d000 08:06 17989738   /home/fviale/eclipse_workspace/ProActive_Latest/lib/julia-mixins.jar
+b55a6000-b55a9000 r-xs 00012000 08:06 17989723   /home/fviale/eclipse_workspace/ProActive_Latest/lib/julia-asm.jar
+b55a9000-b55b6000 r-xs 000ff000 08:06 17989680   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jfreechart-1.0.2.jar
+b55b6000-b55b9000 r-xs 00022000 08:06 17989691   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jdom.jar
+b55b9000-b55bf000 r-xs 00046000 08:06 17989698   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jcommon-1.0.6.jar
+b55bf000-b55c5000 r-xs 0006d000 08:06 17989641   /home/fviale/eclipse_workspace/ProActive_Latest/lib/javassist.jar
+b55c5000-b55c7000 r-xs 00002000 08:06 17989720   /home/fviale/eclipse_workspace/ProActive_Latest/lib/javasci.jar
+b55c7000-b55d5000 r-xs 000d5000 08:06 17989729   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jai_imageio.jar
+b55d5000-b55e8000 r-xs 0016e000 08:06 17989717   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jai_core.jar
+b55e8000-b55ec000 r-xs 00031000 08:06 17989697   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jai_codec.jar
+b55ec000-b55ef000 r-xs 0002d000 08:06 30081148   /home/fviale/eclipse_workspace/ProActive_Latest/lib/isorelax.jar
+b55ef000-b55f0000 r-xs 0000a000 08:06 17989730   /home/fviale/eclipse_workspace/ProActive_Latest/lib/ibis-util-1.0.jar
+b55f0000-b55f3000 r-xs 00015000 08:06 17989681   /home/fviale/eclipse_workspace/ProActive_Latest/lib/ibis-connect-1.0.jar
+b55f3000-b5604000 r-xs 0012e000 08:06 17989689   /home/fviale/eclipse_workspace/ProActive_Latest/lib/ibis-1.4.jar
+b5604000-b5605000 r-xs 00089000 08:06 17989685   /home/fviale/eclipse_workspace/ProActive_Latest/lib/http.jar
+b5605000-b5606000 r-xs 00007000 08:06 17989692   /home/fviale/eclipse_workspace/ProActive_Latest/lib/glite-wms-jdlj.jar
+b5606000-b560a000 r-xs 00038000 08:06 17995715   /home/fviale/eclipse_workspace/ProActive_Latest/lib/ganymed-ssh2-build210.jar
+b560a000-b560b000 r-xs 00002000 08:06 17989704   /home/fviale/eclipse_workspace/ProActive_Latest/lib/fractal.jar
+b560b000-b5610000 r-xs 0001e000 08:06 17989702   /home/fviale/eclipse_workspace/ProActive_Latest/lib/fractal-adl.jar
+b5610000-b5612000 r-xs 0000a000 08:06 17989710   /home/fviale/eclipse_workspace/ProActive_Latest/lib/dtdparser.jar
+b5612000-b5615000 r-xs 00024000 08:06 17990035   /home/fviale/eclipse_workspace/ProActive_Latest/lib/derbytools.jar
+b5615000-b5638000 r-xs 00218000 08:06 17989864   /home/fviale/eclipse_workspace/ProActive_Latest/lib/derby.jar
+b5638000-b563a000 r-xs 00010000 08:06 17989735   /home/fviale/eclipse_workspace/ProActive_Latest/lib/cryptix-asn1.jar
+b563a000-b5640000 r-xs 00071000 08:06 17989678   /home/fviale/eclipse_workspace/ProActive_Latest/lib/cryptix32.jar
+b5640000-b5642000 r-xs 00006000 08:06 17989741   /home/fviale/eclipse_workspace/ProActive_Latest/lib/commons-cli-1.0.jar
+b5642000-b5650000 r-xs 00081000 08:06 17989734   /home/fviale/eclipse_workspace/ProActive_Latest/lib/colt.jar
+b5650000-b5652000 r-xs 0000c000 08:06 17989748   /home/fviale/eclipse_workspace/ProActive_Latest/lib/colobus-0.1.jar
+b5652000-b566b000 r-xs 001a6000 08:06 17989725   /home/fviale/eclipse_workspace/ProActive_Latest/lib/cog-ogce.jar
+b566b000-b5676000 r-xs 000a2000 08:06 17989739   /home/fviale/eclipse_workspace/ProActive_Latest/lib/cog-jglobus-1.2.jar
+b5676000-b56a6000 rwxp b5676000 00:00 0 
+b56a6000-b5820000 r-xs 02c68000 08:06 32735273   /home/fviale/bin/jdk1.6.0/jre/lib/rt.jar
+b5820000-b5827000 r-xs 00053000 08:06 17991219   /home/fviale/eclipse_workspace/ProActive_Latest/lib/log4j.jar
+b5827000-b5828000 r-xs 00007000 08:06 17990030   /home/fviale/eclipse_workspace/ProActive_Latest/lib/commons-logging.jar
+b5828000-b5829000 r-xs 00000000 08:06 17989749   /home/fviale/eclipse_workspace/ProActive_Latest/lib/cryptix.jar
+b5829000-b5834000 r-xs 0009f000 08:06 17989718   /home/fviale/eclipse_workspace/ProActive_Latest/lib/cog-jglobus.jar
+b5834000-b5837000 r-xs 0000f000 08:06 17989890   /home/fviale/eclipse_workspace/ProActive_Latest/lib/commons-discovery.jar
+b5837000-b583f000 r-xs 00028000 08:06 17989711   /home/fviale/eclipse_workspace/ProActive_Latest/lib/xml-apis.jar
+b583f000-b5855000 r-xs 00110000 08:06 17995573   /home/fviale/eclipse_workspace/ProActive_Latest/lib/xercesImpl.jar
+b5855000-b5857000 r-xs 00006000 08:06 17989727   /home/fviale/eclipse_workspace/ProActive_Latest/lib/njs_client.jar
+b5857000-b585b000 r-xs 00018000 08:06 17989679   /home/fviale/eclipse_workspace/ProActive_Latest/lib/wsdl4j.jar
+b585b000-b5861000 r-xs 0004f000 08:06 17989733   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jh.jar
+b5861000-b5863000 r-xs 00007000 08:06 17989690   /home/fviale/eclipse_workspace/ProActive_Latest/lib/jaxrpc.jar
+b5863000-b5878000 r-xs 00318000 08:06 17989684   /home/fviale/eclipse_workspace/ProActive_Latest/lib/client.jar
+b5878000-b587a000 r-xs 00007000 08:06 17989686   /home/fviale/eclipse_workspace/ProActive_Latest/lib/clibwrapper_jiio.jar
+b587a000-b587b000 r-xs 00012000 08:06 17989740   /home/fviale/eclipse_workspace/ProActive_Latest/lib/classad.jar
+b587b000-b587c000 r-xs 00013000 08:06 17989682   /home/fviale/eclipse_workspace/ProActive_Latest/lib/bundlerepository.jar
+b587c000-b589b000 r-xs 0013c000 08:06 19562562   /home/fviale/eclipse_workspace/ProActive_Latest/lib/bouncycastle.jar
+b589b000-b589c000 r-xs 00004000 08:06 17989728   /home/fviale/eclipse_workspace/ProActive_Latest/lib/batik-xml.jar
+b589c000-b589e000 r-xs 00012000 08:06 17989699   /home/fviale/eclipse_workspace/ProActive_Latest/lib/batik-util.jar
+b589e000-b58a3000 r-xs 00024000 08:06 17989722   /home/fviale/eclipse_workspace/ProActive_Latest/lib/batik-svggen.jar
+b58a3000-b58a6000 r-xs 00013000 08:06 17989677   /home/fviale/eclipse_workspace/ProActive_Latest/lib/batik-dom.jar
+b58a6000-b58af000 r-xs 00052000 08:06 17989712   /home/fviale/eclipse_workspace/ProActive_Latest/lib/batik-awt-util.jar
+b58af000-b58c1000 r-xs 00135000 08:06 17989676   /home/fviale/eclipse_workspace/ProActive_Latest/lib/axis.jar
+b58c1000-b58c8000 r-xs 00024000 08:06 17989683   /home/fviale/eclipse_workspace/ProActive_Latest/lib/ajo.jar
+b58c8000-b58c9000 ---p b58c8000 00:00 0 
+b58c9000-b5949000 rwxp b58c9000 00:00 0 
+b5949000-b594c000 ---p b5949000 00:00 0 
+b594c000-b599a000 rwxp b594c000 00:00 0 
+b599a000-b599d000 ---p b599a000 00:00 0 
+b599d000-b5a1b000 rwxp b599d000 00:00 0 
+b5a1b000-b5a1e000 ---p b5a1b000 00:00 0 
+b5a1e000-b5a6c000 rwxp b5a1e000 00:00 0 
+b5a6c000-b5c6c000 r-xp 00000000 08:06 23424357   /usr/lib/locale/locale-archive
+b5c6c000-b5c6f000 ---p b5c6c000 00:00 0 
+b5c6f000-b5cbd000 rwxp b5c6f000 00:00 0 
+b5cbd000-b5cc0000 ---p b5cbd000 00:00 0 
+b5cc0000-b5d0e000 rwxp b5cc0000 00:00 0 
+b5d0e000-b5d0f000 ---p b5d0e000 00:00 0 
+b5d0f000-b5d9d000 rwxp b5d0f000 00:00 0 
+b5d9d000-b5db7000 rwxp b5d9d000 00:00 0 
+b5db7000-b5dba000 rwxp b5db7000 00:00 0 
+b5dba000-b5dd5000 rwxp b5dba000 00:00 0 
+b5dd5000-b5dd6000 rwxp b5dd5000 00:00 0 
+b5dd6000-b5dd7000 rwxp b5dd6000 00:00 0 
+b5dd7000-b5dda000 rwxp b5dd7000 00:00 0 
+b5dda000-b5df5000 rwxp b5dda000 00:00 0 
+b5df5000-b5dfb000 rwxp b5df5000 00:00 0 
+b5dfb000-b5e15000 rwxp b5dfb000 00:00 0 
+b5e15000-b5e26000 rwxp b5e15000 00:00 0 
+b5e26000-b5ea0000 rwxp b5e26000 00:00 0 
+b5ea0000-b6008000 rwxp b5ea0000 00:00 0 
+b6008000-b7ea0000 rwxp b6008000 00:00 0 
+b7ea0000-b7eaf000 r-xp 00000000 08:06 34045994   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libzip.so
+b7eaf000-b7eb1000 rwxp 0000e000 08:06 34045994   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libzip.so
+b7eb1000-b7ed4000 r-xp 00000000 08:06 34045971   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libjava.so
+b7ed4000-b7ed6000 rwxp 00023000 08:06 34045971   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libjava.so
+b7ed6000-b7ee1000 r-xp 00000000 08:06 34045993   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libverify.so
+b7ee1000-b7ee2000 rwxp 0000b000 08:06 34045993   /home/fviale/bin/jdk1.6.0/jre/lib/i386/libverify.so
+b7ee2000-b7f17000 r-xs 00000000 08:06 34472827   /var/db/nscd/passwd
+b7f17000-b7f1a000 ---p b7f17000 00:00 0 
+b7f1a000-b7f6a000 rwxp b7f1a000 00:00 0 
+b7f6a000-b7f71000 r-xp 00000000 08:06 34177026   /home/fviale/bin/jdk1.6.0/jre/lib/i386/jli/libjli.so
+b7f71000-b7f73000 rwxp 00006000 08:06 34177026   /home/fviale/bin/jdk1.6.0/jre/lib/i386/jli/libjli.so
+b7f73000-b7f75000 r-xs 00009000 08:06 17989737   /home/fviale/eclipse_workspace/ProActive_Latest/lib/mlibwrapper_jai.jar
+b7f75000-b7f76000 r-xs 00008000 08:06 17989705   /home/fviale/eclipse_workspace/ProActive_Latest/lib/asm-2.2.1.jar
+b7f76000-b7f78000 r-xs 0000a000 08:06 17989715   /home/fviale/eclipse_workspace/ProActive_Latest/lib/activation.jar
+b7f78000-b7f7d000 rwxp b7f78000 00:00 0 
+b7f7d000-b7f85000 rwxs 00000000 08:06 30081178   /tmp/hsperfdata_fviale/31971
+b7f85000-b7f8b000 r-xp 00000000 08:06 34242563   /home/fviale/bin/jdk1.6.0/jre/lib/i386/native_threads/libhpi.so
+b7f8b000-b7f8c000 rwxp 00006000 08:06 34242563   /home/fviale/bin/jdk1.6.0/jre/lib/i386/native_threads/libhpi.so
+b7f8c000-b7f8d000 rwxp b7f8c000 00:00 0 
+b7f8d000-b7f8e000 r-xp b7f8d000 00:00 0 
+b7f8e000-b7f8f000 rwxp b7f8e000 00:00 0 
+b7f8f000-b7f90000 r-xp b7f8f000 00:00 0          [vdso]
+bf83b000-bf852000 rwxp bf83b000 00:00 0          [stack]
+
+VM Arguments:
+jvm_args: -Djava.library.path=/home/fviale/bin/jdk1.6.0/jre/lib/i386/client:/home/fviale/bin/jdk1.6.0/jre/lib/i386:/home/fviale/bin/jdk1.6.0/jre/../lib/i386:/usr/lib/scilab-4.1.2/bin -Djava.security.policy=/user/fviale/home/eclipse_workspace/ProActive_Latest/scripts/unix/scheduler/../../../scripts/proactive.java.policy -Dlog4j.configuration=file:/user/fviale/home/eclipse_workspace/ProActive_Latest/scripts/unix/scheduler/../../../scripts/proactive-log4j
+java_command: org.objectweb.proactive.core.node.StartNode //bebita.inria.fr/Scilab1195749690613
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=/user/fviale/home/bin/jdk1.6.0
+PATH=/usr/lib/qt-3.3/bin:/user/fviale/home/bin:/user/fviale/home/bin/eclipse:/user/fviale/home/bin/firefox:/user/fviale/home/bin/ArgoUml:/user/fviale/home/bin/xxe-std-3_5_0/bin:/user/fviale/home/bin/chainsaw:/user/fviale/home/bin/jdk1.6.0/bin:/user/fviale/home/bin/nvu-1.0/:/user/fviale/home/bin/glassfish/bin:/user/fviale/home/bin/vex:/user/fviale/home/bin/etrace-2.1/src:/user/fviale/home/bin/idea-6197/bin:/usr/local/bin:/bin:/usr/bin:/usr/lib/scilab-4.1.2/bin
+LD_LIBRARY_PATH=/home/fviale/bin/jdk1.6.0/jre/lib/i386/client:/home/fviale/bin/jdk1.6.0/jre/lib/i386:/home/fviale/bin/jdk1.6.0/jre/../lib/i386:/usr/lib/scilab-4.1.2/bin
+SHELL=/bin/bash
+DISPLAY=localhost:10.0
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x3aea90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x3aea90], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x304e70], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: [libjvm.so+0x304e70], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x304e70], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x306e80], sa_mask[0]=0x00000004, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x3068a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: [libjavasci.so+0x5fe705], sa_mask[0]=0x00000002, sa_flags=0x10000000
+SIGQUIT: [libjvm.so+0x3068a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGTERM: [libjvm.so+0x3068a0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR2: [libjvm.so+0x306e80], sa_mask[0]=0x00000004, sa_flags=0x10000004
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Fedora Core release 5 (Bordeaux)
+
+uname:Linux 2.6.20-1.2320.fc5smp #1 SMP Tue Jun 12 19:40:16 EDT 2007 i686
+libc:glibc 2.4 NPTL 2.4 
+rlimit: STACK 10240k, CORE 0k, NPROC 32744, NOFILE 1024, AS infinity
+load average:0.30 0.64 0.73
+
+CPU:total 2 family 15, cmov, cx8, fxsr, mmx, sse, sse2, ht
+
+Memory: 4k page, physical 2069976k(233744k free), swap 2096440k(1349200k free)
+
+vm_info: Java HotSpot(TM) Client VM (1.6.0-b105) for linux-x86, built on Nov 29 2006 01:24:38 by "java_re" with gcc 3.2.1-7a (J2SE release)
+
