@@ -98,10 +98,10 @@ public class ProActiveConfiguration {
         this.properties.putAllFromConfigFile(this.getDefaultProperties());
 
         // 2- User config file
-        this.properties.putAllFromSystem(this.getUserProperties());
+        this.properties.putAllFromConfigFile(this.getUserProperties());
 
         // 3- System java properties
-        this.properties.putAll(this.getsystemProperties());
+        this.properties.putAllFromSystem(this.getsystemProperties());
     }
 
     class CustomProperties extends Properties {
