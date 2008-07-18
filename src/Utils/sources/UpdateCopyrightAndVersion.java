@@ -62,10 +62,6 @@ public class UpdateCopyrightAndVersion {
             getBytesFromInputStream(UpdateCopyrightAndVersion.class
                     .getResourceAsStream("activeeon_contrib.txt")));
 
-        System.out.println(ActiveEonGPLcopyright);
-        System.out.println(GPLcopyright);
-        System.out.println(ActiveEonContributorsProActiveInitialGPLcopyright);
-
         update_mode = "true".equals(System.getProperty("copyright.update"));
         if (update_mode) {
             System.out.println("Coryright Update mode on");
