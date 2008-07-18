@@ -62,34 +62,13 @@
                 <title>Features</title>
             </info>
             <para>
-                The interface with Matlab and Scilab inside ProActive comes in three different ways:
+                The interface with Matlab and Scilab inside ProActive comes as a a GUI that can launch remote Matlab or
+                Scilab scripts and visualize
+                results (without dependencies between tasks or transfering results from one task to the other).
+                The usage of this application is explained in the following section :
+                <xref linkend="SciMat_GUI"/>. More possibilities exist inside the ProActive Scheduler. Please refer to
+                the scheduler documentation for more info.
             </para>
-            <itemizedlist>
-                <listitem>
-                    <para>
-                        For both Scilab and Matlab , a GUI that can launch remote Matlab or Scilab scripts and visualize
-                        results (without dependencies between tasks or transfering results from one task to the other).
-                        The usage of this application is explained in the following section :
-                        <xref linkend="SciMat_GUI"/>
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        For both Scilab and Matlab , the ability to write simple Matlab or Scilab tasks workflows and
-                        submit these workflows to the ProActive Scheduler (with the possibility to define dependencies
-                        between tasks and transfering results from one task to the other). To learn how to use this feature
-                        read the scheduler documentation.
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        For Matlab only, a parallelization facility directly integrated in the Matlab environment (such
-                        as Mathworks Parallel Computing Toolbox). The usage of this feature is explained below in this
-                        chapter :
-                        <xref linkend="SciMat_Embedded"/>
-                    </para>
-                </listitem>
-            </itemizedlist>
         </section>
     </section>
 
@@ -123,11 +102,11 @@
                 PROACTIVE/examples/scilab/README :
             </para>
 
-                <programlisting>
-                    <textobject>
-                        <textdata fileref="../examples/scilab/README"/>
-                    </textobject>
-                </programlisting>
+            <programlisting>
+                <textobject>
+                    <textdata fileref="../examples/scilab/README"/>
+                </textobject>
+            </programlisting>
         </section>
         <section xml:id="SciMat_Matlab_Installation">
             <info>
@@ -164,7 +143,6 @@
                 For both Scilab and Matlab, a configuration step is required, this step is described
                 in PROACTIVE/examples/scilab/README above.
             </para>
-
 
 
         </section>
@@ -396,125 +374,6 @@
         </section>
     </section>
 
-    <section xml:id="SciMat_Embedded">
-        <info>
-            <title>Matlab embedded parallelization</title>
-        </info>
-        <para>
-            The purpose of this toolkit is to allow parallel execution directly inside the Matlab environment. The user
-            can transparently launch parallel scripts and functions using its familiar way of programming within Matlab.
-            The feature currently supports embarassingly parrallel problems only, meaning that for a set of scripts
-            launched in parallel, each script's execution must be independant from other script's execution.
-        </para>
-        <section xml:id="SciMat_Embedded_installation">
-            <info>
-                <title>Installation</title>
-            </info>
-            <para>
-                The toolkit requires a connection to the
-                <emphasis>ProActive Scheduler</emphasis>
-                and<emphasis>Resource Manager</emphasis>. In consequence the scheduler needs to be installed and
-                running. Explanation on how to install and use the ProActive Scheduler and Resource Manager are detailed
-                in the Scheduler documentation. When a parallel script is executed, the toolkit wraps the scripts
-                inside a job definition and submits it to the running scheduler. Execution of the job can therefore be
-                monitored using the Scheduler SWT client interface described. The scheduler will run Matlab engines in order to parallelize
-                scripts. In consequence, these engines will need a Matlab licence (up to 4 engines
-                running on the same computer will take only one licence though). Finally, the Scheduler will need to
-                have acces to the native Java interface to Matlab in order to launch the Matlab engines. It's already
-                compiled for a set of Matlab versions and architectures as shown in the following list (it's not
-                compatible with Matlab versions prior to 7.1):
-            </para>
-            <itemizedlist>
-                <listitem>
-                    <para>
-                        Linux 32 bits / Matlab 7.1,7.2,7.3,7.4,7.5
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        Linux 64 bits / Matlab 7.1,7.2,7.3,7.4,7.5
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        Windows XP 32 bits / Matlab 7.1,7.2,7.3,7.4,7.5
-                    </para>
-                </listitem>
-            </itemizedlist>
-            <para>
-                If your architecture/version is not in the list, you'll need to compile the interface as described in
-                <xref linkend="SciMat_Matlab_Installation"/>. The compilation process will
-                put the generated native library inside the ProActive library directory. You can then launch the
-                Scheduler : it will have access to the native libraries you've compiled.
-            </para>
-
-        </section>
-        <section xml:id="SciMat_Embedded_Usage">
-            <info>
-                <title>Usage</title>
-            </info>
-            <para>
-                Once the Scheduler and Resource Mananger are running, here is the procedure to use the toolkit :
-            </para>
-            <orderedlist>
-                <listitem>
-                    <para>
-                        Start a Matlab session.
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        Add the scripts contained in PROACTIVE/dev/matlab/embedded to your Matlab path.
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        Execute the following command on the Matlab prompt:
-                    </para>
-                    <screen><![CDATA[>> PAconnect('//machine-where-the scheduler-is-running');]]></screen>
-                    <para>
-                        This will trigger a download of the ProActive libraries from the ProActive website. If you don't
-                        have access to internet, or if you want to use a specific version of ProActive, run the command
-                        as PAconnect('path-to-the-proactive-jar','//machine-where-the scheduler-is-running').
-                    </para>
-                    <para>
-                        In any case, if the scheduler can be found on the machine you specified, a pop up window will
-                        appear asking you to enter your login information. In order to create accounts for the
-                        scheduler, read the scheduler documentation.
-                    </para>
-                </listitem>
-                <listitem>
-                    <para>
-                        You're now ready to run some parallel scripts. We provide a little script, PAwarmup() which
-                        "warm up" the Matlab Engines by executing a set of vanilla tasks. If ever any problem exist in
-                        your configuration, they will probably appear here. Don't use PAwarmup each time ! Matlab
-                        Engines, once started will remain in activity with the scheduler. Reuse the script only if you
-                        needed to restart the scheduler.
-                    </para>
-                    <screen><![CDATA[>> PAwarmup();]]></screen>
-                </listitem>
-                <listitem>
-                    <para>
-                        In order to run a Matlab function in parallel you'll need to call the function PAsolve() as
-                        follows:
-                    </para>
-                    <screen><![CDATA[>> PAsolve( {1, 2, 3, 4, 5}, @factorial);]]></screen>
-                    <para>
-                        This by example will execute the factorial method on 5 different machines, the first machine
-                        using the parameter 1, the second, the parameter 2, etc...
-                    </para>
-                    <para>
-                        The file system between your Matlab session and the remote engines needs to be shared (through
-                        NFS or something equivalent). Your local user path will be automatically copied to the remote
-                        engine. Meaning that if you are using a Matlab function f located in the m-file f.m at path P,
-                        then the remote engine will try to look at the function at the same path P.
-                    </para>
-                </listitem>
-            </orderedlist>
-
-        </section>
-    </section>
-
     <section xml:id="SciMat_Advanced">
         <info>
             <title>Advanced Usage</title>
@@ -742,7 +601,6 @@
                     <title>Example: Interface Matlab/Scilab</title>
                 </info>
 
-            
 
                 <programlisting xml:lang="java">
                     <textobject>
@@ -750,19 +608,18 @@
                                 fileref="../src/Extensions/org/objectweb/proactive/extensions/scilab/test/SciTest2.java"/>
                     </textobject>
                 </programlisting>
-			</example>
+            </example>
             <example xml:id="sciex2">
                 <info>
                     <title>Descriptor deployment</title>
                 </info>
-            
 
                 <programlisting xml:lang="xml">
                     <textobject>
                         <textdata fileref="../examples/scilab/GCMA.xml"/>
                     </textobject>
                 </programlisting>
-             </example>   
+            </example>
         </section>
     </section>
 </chapter>
