@@ -32,6 +32,7 @@
 package org.objectweb.proactive;
 
 import org.objectweb.proactive.api.PAVersion;
+import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
@@ -58,6 +59,7 @@ public class Main {
         String localAddress = null;
         localAddress = URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress());
         System.out.println("Local IP Address: " + localAddress);
+        System.out.println("Config dir: " + Constants.USER_CONFIG_DIR);
         System.out.println("Available properties:");
         for (PAProperties p : PAProperties.values()) {
             String type = p.isBoolean() ? "Boolean" : "String";

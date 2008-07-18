@@ -69,6 +69,10 @@ public class ProActiveConfigurationParser {
     static final String ATTR_KEY = "key";
     static final String ATTR_VALUE = "value";
 
+    public static Properties parse(String filename) {
+        return parse(filename, null);
+    }
+
     public static Properties parse(String filename, Properties properties) {
         if (properties == null) {
             properties = new Properties();
