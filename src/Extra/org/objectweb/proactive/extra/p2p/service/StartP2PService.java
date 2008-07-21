@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.rmi.AlreadyBoundException;
 import java.util.Vector;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Job;
 import org.objectweb.proactive.annotation.PublicAPI;
@@ -478,12 +477,15 @@ public class StartP2PService implements P2PConstants {
         // can change the port values
 
         if (vals.length > 0) {
-
+            //TODO gsigety : set the good port value for each acquisition method
             if (!acquisitionMethod.equals("ibis")) {
-                bckPortValue = System.getProperty("proactive." + acquisitionMethod + ".port");
-                System.setProperty("proactive." + acquisitionMethod + ".port", portNumber);
-                System.out.println("BckPortValue: " + bckPortValue);
-                System.out.println("Port number: " + portNumber);
+                bckPortValue = PAProperties.getProperty("proactive." + acquisitionMethod + ".port")
+                        .toString();
+                PAProperties.PA_RMI_PORT.setValue(portNumber);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("BckPortValue: " + bckPortValue);
+                    logger.debug("Port number: " + portNumber);
+                }
             } else {
                 bckPortValue = PAProperties.PA_RMI_PORT.getValue();
                 PAProperties.PA_RMI_PORT.setValue(portNumber);
