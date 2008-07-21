@@ -135,6 +135,12 @@ public class ProActiveConfiguration {
                     logger.warn("Invalid value, " + value + " for key " + key + ". Must be a " +
                         prop.getType().toString());
                 }
+                if (prop.isSystemProperty()) {
+                    logger.debug("Exported <" + key + ", " + value + "> as System property");
+
+                    exportedKeys.put(key, System.getProperty(key));
+                    System.setProperty(key, value);
+                }
             } else {
                 // This property is not known by ProActive
                 if (key.startsWith("proactive.")) {
@@ -243,7 +249,7 @@ public class ProActiveConfiguration {
             logger.debug("User Config File is: " + userConfigFile);
             userProps = ProActiveConfigurationParser.parse(userConfigFile, userProps);
         } else {
-            if (fname != PROACTIVE_CONFIG_FILENAME) {
+            if (!fname.equals(PROACTIVE_CONFIG_FILENAME)) {
                 // don't print a warning if the default user config file does not exist
                 logger.warn("Configuration file " + fname + " not found");
             }

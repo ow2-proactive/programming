@@ -77,7 +77,7 @@ public enum PAProperties {
      * Indicate the Fractal provider class, to the ProActive implementation of
      * Fractal/GCM set it to org.objectweb.proactive.core.component.Fractive
      */
-    FRACTAL_PROVIDER("fractal.provider", PAPropertiesType.STRING),
+    FRACTAL_PROVIDER("fractal.provider", PAPropertiesType.STRING, true),
 
     /* ------------------------------------
      *  PROACTIVE
@@ -489,7 +489,7 @@ public enum PAProperties {
     /**
      * TODO vlegrand Describe this property
      */
-    CATALINA_BASE("catalina.base", PAPropertiesType.STRING),
+    CATALINA_BASE("catalina.base", PAPropertiesType.STRING, true),
 
     /**
      * TODO
@@ -498,12 +498,19 @@ public enum PAProperties {
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
     public static final String TRUE = "true";
     public static final String FALSE = "false";
+
     private String key;
     private PAPropertiesType type;
+    private boolean isSystemProperty;
 
     PAProperties(String str, PAPropertiesType type) {
+        this(str, type, false);
+    }
+
+    PAProperties(String str, PAPropertiesType type, boolean isSystemProperty) {
         this.key = str;
         this.type = type;
+        this.isSystemProperty = isSystemProperty;
     }
 
     /**
@@ -616,6 +623,10 @@ public enum PAProperties {
 
     public boolean isBoolean() {
         return type == PAPropertiesType.BOOLEAN;
+    }
+
+    public boolean isSystemProperty() {
+        return isSystemProperty;
     }
 
     public boolean isValid(String value) {
