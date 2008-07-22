@@ -91,51 +91,16 @@ public class MasterImpl implements BindingController, Master {
         }
     }
 
-    public void run() {
-        List<List<String>> multicastArgsList = new ArrayList<List<String>>();
-        for (int i = 0; i < 6; i++) {
-            multicastArgsList.add(i, new ArrayList<String>());
-
-            for (int j = 0; j < i; j++) {
-                multicastArgsList.get(i).add("arg " + j);
-            }
-        }
-
-        //        System.err.println("Async call with non-reifiable type");
-        //        for (List<String> list : multicastArgsList) {
-        //            System.err.println("Avec " + list.size() + " arguments.");
-        //            Object[] sw = ((List<String>) slaves.computeSync(list,
-        //                    "Sync")).toArray();
-        //            for (Object object : sw) {
-        //                System.err.println("Object result: " + object);
-        //            }
-        //            System.err.println();
-        //        }
-        System.err.println();
-
-        for (List<String> list : multicastArgsList) {
-            System.err.println("Async calls with " + list.size() + " arguments.");
-            Object[] sw = (slaves.computeAsync(list, "Async")).toArray();
-            for (Object object : sw) {
-                System.err.println("Object result: " + object);
-            }
-            System.err.println();
-        }
-        System.err.println();
-
-        for (List<String> list : multicastArgsList) {
-            System.err.println("OneWay calls with " + list.size() + " arguments.");
-            slaves.computeOneWay(list, "OneWay");
-        }
-        System.err.println();
-    }
-
     public void computeOneWay(List<String> args, String other) {
         slaves.computeOneWay(args, other);
     }
 
     public List<StringWrapper> computeAsync(List<String> args, String other) {
         return slaves.computeAsync(args, other);
+    }
+
+    public List<StringWrapper> computeRoundRobinBroadcastAsync(List<String> args, List<String> other) {
+        return slaves.computeRoundRobinBroadcastAsync(args, other);
     }
 
     public List<GenericTypeWrapper<String>> computeAsyncGenerics(List<String> args, String other) {
@@ -156,4 +121,5 @@ public class MasterImpl implements BindingController, Master {
         }
         return listResult;
     }
+
 }

@@ -173,6 +173,57 @@ public class TestMulticast extends Conformtest {
         }
     }
 
+    @Test
+    public void testMixedRoundRobinBroadcastParameterDispatch() throws Exception {
+        Component master = gf.newFcInstance(tMaster, "primitive", MasterImpl.class.getName());
+        Component slave1 = gf.newFcInstance(tSlave, "primitive", SlaveImpl.class.getName());
+        Component slave2 = gf.newFcInstance(tSlave, "primitive", SlaveImpl.class.getName());
+
+        Fractal.getBindingController(master).bindFc(MasterImpl.ITF_CLIENTE_MULTICAST,
+                slave1.getFcInterface("server-multicast"));
+        Fractal.getBindingController(master).bindFc(MasterImpl.ITF_CLIENTE_MULTICAST,
+                slave2.getFcInterface("server-multicast"));
+
+        Fractal.getLifeCycleController(master).startFc();
+        Fractal.getLifeCycleController(slave1).startFc();
+        Fractal.getLifeCycleController(slave2).startFc();
+
+        Master masterItf = (Master) master.getFcInterface("server");
+
+        List<List<String>> listOfParameters = generateParameter();
+        for (List<String> stringList : listOfParameters) {
+            masterItf.computeOneWay(stringList, "OneWay call");
+        }
+        List<String> broadcastArg = new ArrayList<String>();
+        broadcastArg.add("mix RoundRobinBroadcast arg1");
+        broadcastArg.add("mix RoundRobinBroadcast arg2");
+        broadcastArg.add("mix RoundRobinBroadcast arg3");
+        String broadcastArgs = "mix RoundRobinBroadcast arg1" + "mix RoundRobinBroadcast arg2"
+            + "mix RoundRobinBroadcast arg3";
+        for (List<String> stringList : listOfParameters) {
+            List<StringWrapper> results = masterItf.computeRoundRobinBroadcastAsync(stringList, broadcastArg);
+            ArrayList<String> resultsAL = new ArrayList<String>();
+            for (StringWrapper sw : results) {
+                Assert.assertNotNull("One result is null", sw);
+                resultsAL.add(sw.stringValue());
+            }
+            checkResult(stringList, broadcastArgs, resultsAL);
+            System.err.println("TM: async call" + results);
+        }
+        for (List<String> stringList : listOfParameters) {
+            //FIXME
+            //List<GenericTypeWrapper<String>> results = masterItf.computeAsyncGenerics(stringList,
+            //        "Asynchronous call");
+            //System.err.println("TM: async gen call" + results);
+        }
+        for (List<String> stringList : listOfParameters) {
+            //FIXME
+            //List<String> results = masterItf.computeSync(stringList,
+            //        "With non reifiable return type call");
+            //System.err.println("TM: sync call" +  results);
+        }
+    }
+
     private static List<List<String>> generateParameter() {
         List<List<String>> multicastArgsList = new ArrayList<List<String>>();
         for (int i = 0; i < 6; i++) {

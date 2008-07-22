@@ -38,11 +38,13 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public interface Master {
-    void computeOneWay(List<String> args, String other);
+    public void computeOneWay(List<String> args, String other);
 
-    List<StringWrapper> computeAsync(List<String> args, String other);
+    public List<StringWrapper> computeAsync(List<String> args, String other);
 
-    List<GenericTypeWrapper<String>> computeAsyncGenerics(List<String> args, String other);
+    public List<StringWrapper> computeRoundRobinBroadcastAsync(List<String> args, List<String> other);
 
-    List<String> computeSync(List<String> args, String other);
+    public List<GenericTypeWrapper<String>> computeAsyncGenerics(List<String> args, String other);
+
+    public List<String> computeSync(List<String> args, String other);
 }

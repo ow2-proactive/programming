@@ -40,16 +40,22 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public interface SlaveMulticast {
-    void computeOneWay(@ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN)
+    public void computeOneWay(@ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN)
     List<String> args, String other);
 
-    List<StringWrapper> computeAsync(@ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN)
+    public List<StringWrapper> computeAsync(@ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN)
     List<String> args, String other);
 
-    List<GenericTypeWrapper<String>> computeAsyncGenerics(
+    public List<StringWrapper> computeRoundRobinBroadcastAsync(
+            @ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN)
+            List<String> args, @ParamDispatchMetadata(mode = ParamDispatchMode.BROADCAST)
+            List<String> other);
+
+    public List<GenericTypeWrapper<String>> computeAsyncGenerics(
             @ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN)
             List<String> args, String other);
 
-    List<String> computeSync(@ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN)
+    public List<String> computeSync(@ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN)
     List<String> args, String other);
+
 }

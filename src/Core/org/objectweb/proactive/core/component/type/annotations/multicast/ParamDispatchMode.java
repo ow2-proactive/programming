@@ -176,7 +176,7 @@ public enum ParamDispatchMode implements ParamDispatch, Serializable {
 
         switch (this) {
             case BROADCAST:
-                result = nbOutputReceivers;
+                result = -1;
                 break;
             case ONE_TO_ONE:
                 if (inputParameter.size() != nbOutputReceivers) {
