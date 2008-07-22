@@ -91,11 +91,7 @@ public enum ParamDispatchMode implements ParamDispatch, Serializable {
      * parameter, as a class signature.
      */
     CUSTOM;
-    /*
-     * 
-     * @see org.objectweb.proactive.core.component.type.annotations.ParametersDispatch#dispatch(java.util.List,
-     *      int, int)
-     */
+
     private List<Object> partition(List<?> inputParameter, int nbOutputReceivers)
             throws ParameterDispatchException {
         List<Object> result = new ArrayList<Object>();
