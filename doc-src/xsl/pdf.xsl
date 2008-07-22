@@ -557,12 +557,28 @@
 	<!--  The appearance of the Subtitle -->
 	<xsl:template match="bookinfo/subtitle"
 		mode="book.titlepage.recto.mode">
-		<fo:inline color="#0010FF">
-			<xsl:attribute name="font-weight">bold</xsl:attribute>
-			<xsl:attribute name="font-size">38pt</xsl:attribute>
-			<xsl:apply-templates mode="titlepage.mode" />
-		</fo:inline>
 
+		<!-- Main title -->
+		<xsl:choose>
+			<xsl:when test="@role='main'">
+				<fo:block color="#0010FF" space-after="50mm" space-before="20mm">
+					<xsl:attribute name="font-weight">bold</xsl:attribute>
+					<xsl:attribute name="font-size">38pt</xsl:attribute>
+					<xsl:apply-templates mode="titlepage.mode" />
+				</fo:block>
+			</xsl:when>
+		</xsl:choose>
+
+		<!-- motto -->
+		<xsl:choose>
+			<xsl:when test="@role='motto'">
+				<fo:block color="#0010FF" space-before="-15mm" space-after="49mm">
+					<xsl:attribute name="font-weight">bold</xsl:attribute>
+					<xsl:attribute name="font-size">15pt</xsl:attribute>
+					<xsl:apply-templates mode="titlepage.mode" />
+				</fo:block>
+			</xsl:when>
+		</xsl:choose>
 	</xsl:template>
 
 
@@ -607,14 +623,6 @@
 	<xsl:template name="book.titlepage.recto">
 		<fo:block break-after="page">
 
-			<!-- The ObjectWeb Logo -->
-			<fo:block text-align="center">
-				<fo:external-graphic>
-					<xsl:attribute name="src">images/logoOW2.png</xsl:attribute>
-					<xsl:attribute name="height">25pt</xsl:attribute>
-					<xsl:attribute name="content-height">25pt</xsl:attribute>
-				</fo:external-graphic>
-			</fo:block>
 
 			<!-- The Main Title -->
 			<fo:block text-align="center" space-before="-1cm">
@@ -623,7 +631,7 @@
 			</fo:block>
 
 			<!-- The Subtitle -->
-			<fo:block text-align="center" space-before="15mm"
+			<fo:block text-align="center" space-before="5mm"
 				margin-left="0cm" margin-right="0cm" line-height="15mm"
 				padding-top="5mm">
 				<xsl:apply-templates mode="book.titlepage.recto.mode"
@@ -637,7 +645,7 @@
 			</fo:block>
 
 			<!-- The three logos, in a 1x3 table: INRIA, UNSA, CNRS/I3S -->
-			<fo:table table-layout="fixed"  width="100%" space-before="27mm">
+			<fo:table table-layout="fixed"  width="100%" space-before="3mm">
 
 				<fo:table-column column-width="proportional-column-width(1)" />
 				<fo:table-column column-width="proportional-column-width(1)"/>
@@ -686,6 +694,7 @@
 				<fo:table-column column-width="proportional-column-width(1)"/>
 				<fo:table-column column-width="proportional-column-width(1)"/>
 				<fo:table-column column-width="proportional-column-width(1)"/>
+				
 				<fo:table-body>
 					<fo:table-row>
 						<fo:table-cell>
@@ -704,6 +713,18 @@
 							</fo:block>
 
 						</fo:table-cell>
+
+						<!-- The ObjectWeb Logo -->
+						<fo:table-cell>			
+								<fo:block text-align="center" space-after="15mm">
+									<fo:external-graphic>
+										<xsl:attribute name="src">images/logoOW2.png</xsl:attribute>
+										<xsl:attribute name="height">25pt</xsl:attribute>
+										<xsl:attribute name="content-height">25pt</xsl:attribute>
+									</fo:external-graphic>
+								</fo:block>
+						</fo:table-cell>
+						
 						<fo:table-cell>
 							<fo:block text-align="right"
 								font-size="12pt" font-weight="bold">

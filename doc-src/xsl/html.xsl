@@ -84,12 +84,26 @@
  </xsl:template> 
 
 
- <xsl:template match="bookinfo/subtitle" mode="book.titlepage.recto.mode">
-   <h2 class="subtitle">A Comprehensive Solution For <br/>Multithreaded,
-  Parallel, Distributed,<br/> And Concurrent Computing
-</h2>
- </xsl:template> 
+	<!--  The appearance of the Subtitle -->
+	<xsl:template match="bookinfo/subtitle"
+		mode="book.titlepage.recto.mode">
 
+		<!-- Main title -->
+		<xsl:choose>
+			<xsl:when test="@role='main'">
+				<h1>ProActive Programming &amp;</h1>
+				<h1>ProActive Optimizing</h1>
+			</xsl:when>
+		</xsl:choose>
+
+		<!-- motto -->
+		<xsl:choose>
+			<xsl:when test="@role='motto'">
+				<h5>An Open Source Middleware For Parallel, Distributed, Multicore Computing</h5>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+	
 <!--- - - - - - - - - - - - - - - - - - - - - - - - --> 
 <!-- Specifying how the titlepage should look like -->
 <!--- - - - - - - - - - - - - - - - - - - - - - - - -->
