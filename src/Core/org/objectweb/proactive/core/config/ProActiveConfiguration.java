@@ -39,6 +39,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.xml.ProActiveConfigurationParser;
+import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -102,6 +103,9 @@ public class ProActiveConfiguration {
 
         // 3- System java properties
         this.properties.putAllFromSystem(this.getsystemProperties());
+
+        // Can't use setValue in this constructor
+        System.setProperty(PAProperties.PA_OS.getKey(), OperatingSystem.getOperatingSystem().toString());
     }
 
     class CustomProperties extends Properties {

@@ -71,7 +71,7 @@ public class ProActiveLogger extends Logger {
                     Properties p = new Properties();
                     p.load(in);
                     PropertyConfigurator.configure(p);
-                    System.setProperty("log4j.configuration", f.toURI().toString());
+                    PAProperties.LOG4J.setValue(f.toURI().toString());
 
                 } catch (Exception e) {
                     System.err.println("the user's log4j configuration file (" + f.getAbsolutePath() +

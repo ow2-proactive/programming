@@ -102,14 +102,6 @@ public abstract class AbstractExample {
             System.exit(1);
         }
 
-        // Finding current os
-        String osName = System.getProperty("os.name");
-        if (osName.toLowerCase().contains("windows")) {
-            System.setProperty("os", "windows");
-        } else {
-            System.setProperty("os", "unix");
-        }
-
         // get descriptor option value
         String descPath = cmd.getOptionValue("d");
 

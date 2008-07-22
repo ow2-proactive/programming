@@ -44,6 +44,7 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.objectweb.proactive.core.config.PAProperties;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -71,7 +72,7 @@ class EnvironmentTransformer {
             valueList[i] = valueList[i].replaceAll("\\$", "\\\\\\$");
         }
 
-        System.setProperty("javax.xml.transform.TransformerFactory", "net.sf.saxon.TransformerFactoryImpl");
+        PAProperties.JAVAX_XML_TRANSFORM_TRANSFORMERFACTORY.setValue("net.sf.saxon.TransformerFactoryImpl");
         DOMSource domSource = new DOMSource(document);
         TransformerFactory tfactory = TransformerFactory.newInstance();
 

@@ -353,7 +353,7 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
                 throw new RenegotiateSessionException("");
             }
 
-            //    System.setProperty("java.rmi.server.codebase",localCodeBase);
+            // PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(localCodeBase);
         }
 
         return false;

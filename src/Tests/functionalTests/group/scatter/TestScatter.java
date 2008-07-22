@@ -35,6 +35,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PAGroup;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
@@ -98,24 +99,5 @@ public class TestScatter extends GCMFunctionalTestDefaultNodes {
         }
 
         // is the result of the n-th group member called with the n-th parameter at the n-th position in the result group ?
-    }
-
-    public static void main(String[] args) {
-        try {
-            System.setProperty("fractal.provider", "org.objectweb.proactive.core.component.Fractive");
-            System.setProperty("java.security.policy", System.getProperty("user.dir") +
-                "/compile/proactive.java.policy");
-            System.setProperty("log4j.configuration", System.getProperty("user.dir") +
-                "/compile/proactive-log4j");
-            System.setProperty("log4j.configuration", "file:" + System.getProperty("user.dir") +
-                "/compile/proactive-log4j");
-            System.setProperty("functionalTests.descriptor.defaultnodes.file",
-                    "/functionalTests/descriptor/defaultnodes/NodesLocal.xml");
-            TestScatter test = new TestScatter();
-            test.action();
-            System.exit(0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

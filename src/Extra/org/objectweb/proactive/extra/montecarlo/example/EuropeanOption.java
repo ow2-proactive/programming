@@ -146,8 +146,6 @@ public class EuropeanOption implements EngineTask<double[]> {
      */
     public static void init(String[] args) throws MalformedURLException {
 
-        findOS();
-
         Options command_options = new Options();
         command_options.addOption(OptionBuilder.withArgName("file").hasArg().withDescription(
                 "descriptor in use").create("d"));
@@ -306,16 +304,6 @@ public class EuropeanOption implements EngineTask<double[]> {
 
         PALifeCycle.exitSuccess();
 
-    }
-
-    public static void findOS() {
-        // Finding current os
-        String osName = System.getProperty("os.name");
-        if (osName.toLowerCase().contains("windows")) {
-            System.setProperty("os", "windows");
-        } else {
-            System.setProperty("os", "unix");
-        }
     }
 
 }

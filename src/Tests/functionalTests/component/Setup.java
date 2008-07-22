@@ -47,6 +47,7 @@ import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
 import org.objectweb.proactive.core.component.type.Composite;
 import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.node.Node;
 
 
@@ -69,7 +70,7 @@ public class Setup {
 
     private static void init() throws InstantiationException, NoSuchInterfaceException {
         if ((tf == null) || (gf == null)) {
-            System.setProperty("fractal.provider", "org.objectweb.proactive.core.component.Fractive");
+            PAProperties.FRACTAL_PROVIDER.setValue("org.objectweb.proactive.core.component.Fractive");
             Component boot = Fractal.getBootstrapComponent();
             if (tf == null) {
                 tf = (ProActiveTypeFactory) Fractal.getTypeFactory(boot);

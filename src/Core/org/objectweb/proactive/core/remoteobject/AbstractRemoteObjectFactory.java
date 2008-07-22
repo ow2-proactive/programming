@@ -33,6 +33,7 @@ package org.objectweb.proactive.core.remoteobject;
 
 import java.util.Hashtable;
 
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.rmi.ClassServerHelper;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -59,7 +60,7 @@ public abstract class AbstractRemoteObjectFactory {
      * @return the new codebase
      */
     protected static synchronized String addCodebase(String newLocationURL) {
-        String oldCodebase = System.getProperty("java.rmi.server.codebase");
+        String oldCodebase = PAProperties.JAVA_RMI_SERVER_CODEBASE.getValue();
         String newCodebase = null;
         if (oldCodebase != null) {
             // RMI support multiple class server locations
@@ -68,7 +69,7 @@ public abstract class AbstractRemoteObjectFactory {
             newCodebase = newLocationURL;
         }
 
-        System.setProperty("java.rmi.server.codebase", newCodebase);
+        PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(newCodebase);
 
         return newCodebase;
     }

@@ -80,7 +80,6 @@ public class ExecuteReport {
 
             // Set up the engine configuration
             final EngineConfig config = new EngineConfig();
-            System.setProperty("RUN_UNDER_ECLIPSE", "true");
 
             final IReportEngineFactory factory = (IReportEngineFactory) Platform
                     .createFactoryObject(IReportEngineFactory.EXTENSION_REPORT_ENGINE_FACTORY);

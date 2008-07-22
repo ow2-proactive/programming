@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 
@@ -55,7 +56,7 @@ public class ClassServerServlet extends HttpServlet {
     public ClassServerServlet(int newport) {
         ClassServerServlet.port = newport;
         ClassServerHelper helper = new ClassServerHelper();
-        System.setProperty("proactive.http.port", ClassServerServlet.port + "");
+        PAProperties.PA_XMLHTTP_PORT.setValue(ClassServerServlet.port);
         try {
             helper.initializeClassServer();
         } catch (IOException e) {

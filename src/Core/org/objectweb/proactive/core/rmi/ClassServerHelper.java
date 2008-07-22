@@ -107,7 +107,7 @@ public class ClassServerHelper {
         }
         String codebase = this.getCodebase();
 
-        //        System.setProperty("java.rmi.server.codebase", codebase);
+        // PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(codebase);
         return codebase;
     }
 

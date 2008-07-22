@@ -113,7 +113,7 @@ public class TestDeployRetrieve extends FunctionalTest {
 
         // We save the current state of the schema validation and set it to false for this example
         String validatingProperyOld = PAProperties.SCHEMA_VALIDATION.getValue();
-        System.setProperty("schema.validation", "false");
+        PAProperties.SCHEMA_VALIDATION.setValue(false);
 
         VariableContractImpl vc = new VariableContractImpl();
         vc.setVariableFromProgram("HOST_NAME", hostName, VariableContractType.DescriptorDefaultVariable);
@@ -121,7 +121,7 @@ public class TestDeployRetrieve extends FunctionalTest {
         pad = PADeployment.getProactiveDescriptor(XML_LOCATION, vc);
 
         // we restore the old state of the schema validation
-        System.setProperty("schema.validation", validatingProperyOld);
+        PAProperties.SCHEMA_VALIDATION.setValue(validatingProperyOld);
 
         VirtualNode testVNode = pad.getVirtualNode("test");
         long initDeployment = System.currentTimeMillis();

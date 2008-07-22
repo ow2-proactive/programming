@@ -36,6 +36,7 @@ import java.util.Map;
 
 import javax.security.auth.login.LoginException;
 
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.extensions.security.loginmodule.FileLogin;
 import org.objectweb.proactive.extensions.security.loginmodule.Login;
 
@@ -56,7 +57,7 @@ public class FileLoginBackendExample {
         // example) with the jvm parameter
         // -Djava.security.auth.login.config==jaas.config or like this
         // :
-        System.setProperty("java.security.auth.login.config", Login.class.getResource("jaas.config")
+        PAProperties.JAVA_SECURITY_AUTH_LOGIN_CONFIG.setValue(Login.class.getResource("jaas.config")
                 .getFile());
 
         Map<String, Object> params = new HashMap<String, Object>(3);

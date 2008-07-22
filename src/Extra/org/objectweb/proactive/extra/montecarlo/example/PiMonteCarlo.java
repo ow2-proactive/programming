@@ -107,8 +107,6 @@ public class PiMonteCarlo implements EngineTask<Double> {
      */
     public static void init(String[] args) throws MalformedURLException {
 
-        findOS();
-
         Options command_options = new Options();
         command_options.addOption("d", true, "descriptor in use");
         command_options.addOption("w", true, "workers virtual node name");
@@ -190,16 +188,6 @@ public class PiMonteCarlo implements EngineTask<Double> {
         System.out.println(" The value of pi is " + pi);
         mc.terminate();
         PALifeCycle.exitSuccess();
-    }
-
-    public static void findOS() {
-        // Finding current os
-        String osName = System.getProperty("os.name");
-        if (osName.toLowerCase().contains("windows")) {
-            System.setProperty("os", "windows");
-        } else {
-            System.setProperty("os", "unix");
-        }
     }
 
     /**

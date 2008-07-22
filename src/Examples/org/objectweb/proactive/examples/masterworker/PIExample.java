@@ -89,13 +89,7 @@ public class PIExample {
     }
 
     public static void findOS() {
-        // Finding current os
-        String osName = System.getProperty("os.name");
-        if (osName.toLowerCase().contains("windows")) {
-            System.setProperty("os", "windows");
-        } else {
-            System.setProperty("os", "unix");
-        }
+
     }
 
     //@snippet-start masterworker_montecarlopi

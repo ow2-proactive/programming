@@ -33,6 +33,7 @@ package functionalTests.activeobject.request.forgetonsend;
 
 import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.config.PAProperties;
 
 import functionalTests.FunctionalTest;
 import functionalTests.GCMDeploymentReady;
@@ -91,7 +92,7 @@ public class TestGarbageCollection extends FunctionalTest {
     @Before
     public void initTest() throws Exception {
         /* This must be done before initializing ProGCObjectctive, and the DGC */
-        System.setProperty("proactive.dgc", "true");
-        System.setProperty("proactive.dgc.ttb", "500");
+        PAProperties.PA_DGC.setValue(true);
+        PAProperties.PA_DGC_TTB.setValue(500);
     }
 }

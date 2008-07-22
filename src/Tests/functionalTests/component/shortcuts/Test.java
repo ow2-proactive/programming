@@ -41,6 +41,7 @@ import org.objectweb.fractal.api.control.IllegalContentException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.api.PAFuture;
+import org.objectweb.proactive.core.config.PAProperties;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.I1;
@@ -211,11 +212,11 @@ public class Test extends ComponentTest {
 
     @Before
     public void initTest() throws Exception {
-        System.setProperty("proactive.components.use_shortcuts", "true");
+        PAProperties.PA_COMPONENT_USE_SHORTCUTS.setValue("true");
     }
 
     @After
     public void endTest() throws Exception {
-        System.setProperty("proactive.components.use_shortcuts", "false");
+        PAProperties.PA_COMPONENT_USE_SHORTCUTS.setValue("false");
     }
 }
