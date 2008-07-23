@@ -624,6 +624,7 @@
 
 
 	<target name="update_copyright_and_version" depends="compile.util" description="Update Copyright and Version in every text files">
+
 		<java classname="sources.UpdateCopyrightAndVersion" fork="false">
 			<classpath refid="project.classpath" />
 			<!--  base dir -->
@@ -635,7 +636,8 @@
 			<arg value="${test.classes.dir}" />
 			<arg value="${lib.dir}" />
 			<arg value="${dev.dir}" />
-		    <sysproperty key="copyright.update" value="${copyright.update}"/>
+			<arg value="${extra.format.dir}"/>
+		<sysproperty key="copyright.update" value="${copyright.update}"/>
 		</java>
 	</target>
 
@@ -669,6 +671,7 @@
 			<sourcefileset>
 				<fileset dir="${src.dir}" includes="**/*.java" />
 				<fileset dir="${ic2d-plugin.dir}" includes="**/*.java" />
+				<fileset dir="${extra.format.dir}" includes="**/*.java" />
 			</sourcefileset>
 		</eclipse_format_m>
 	</target>
