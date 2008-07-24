@@ -255,7 +255,13 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
      */
     public void unbindFcMulticast(String clientItfName, ProActiveInterface serverItf) {
         if (multicastItfs.containsKey(clientItfName)) {
-            if (PAGroup.getGroup(multicastItfs.get(clientItfName)).remove(serverItf)) {
+            Group<ProActiveInterface> g = null;
+            ProxyForComponentInterfaceGroup clientSideProxy = (ProxyForComponentInterfaceGroup) clientSideProxies
+                    .get(clientItfName);
+            g = clientSideProxy.getDelegatee();
+            //ProActiveInterface itf = multicastItfs.get(clientItfName);
+            //Group<ProActiveInterface> g = PAGroup.getGroup(itf);
+            if (g.remove(serverItf)) {
                 logger.debug("removed connected interface from multicast interface : " + clientItfName);
             } else {
                 logger.error("cannot remove connected interface from multicast interface : " + clientItfName);
