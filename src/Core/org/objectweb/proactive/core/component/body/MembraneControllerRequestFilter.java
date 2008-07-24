@@ -51,7 +51,7 @@ public class MembraneControllerRequestFilter implements RequestFilter {
             String itfName = mc.getComponentMetadata().getComponentInterfaceName();
             return itfName.equals(Constants.MEMBRANE_CONTROLLER) ||
                 itfName.equals(Constants.CONTENT_CONTROLLER) || itfName.equals(Constants.NAME_CONTROLLER) ||
-                itfName.equals(Constants.SUPER_CONTROLLER);
+                itfName.equals(Constants.SUPER_CONTROLLER) || itfName.equals(Constants.BINDING_CONTROLLER);
         }
         return false;
     }
