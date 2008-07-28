@@ -46,7 +46,6 @@ public abstract class RandomWalkMessage extends Message {
 
     @Override
     public void transmit(P2PService acq) {
-        System.out.println("RequestSingleNodeMessage.transmit()");
         try {
             P2PService rndPeer = acq.randomPeer();
             System.out.println(rndPeer);

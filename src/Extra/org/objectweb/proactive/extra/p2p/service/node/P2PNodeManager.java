@@ -341,7 +341,7 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
                 logger.warn("Couldn't create default shared node", e);
             }
         }
-        logger.info(nodes + " shared nodes deployed");
+        logger.debug(nodes + " shared nodes deployed");
     }
 
     /**
