@@ -53,6 +53,7 @@
 	<property name="docs.mainFile" 		value="PA_index.xml" />
 	<property name="snippets.location"	value="${doc.src}/automatic_snippets" />
 	
+	 <property name="extra.format.dir" value=""/>
 
 	<!-- Javac properties -->
 	<property name="debug" value="on" />

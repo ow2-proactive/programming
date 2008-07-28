@@ -15,14 +15,10 @@
 	<!-- ************
 		Imports		
 	-->
-
+   
 	<property file="${user.home}/.proactive/build.properties" />
 	<import file="common.xml" />
 	<import file="doc.xml" />
-
-
-
-
 
 	<!-- ************
 		Taskdefs		
