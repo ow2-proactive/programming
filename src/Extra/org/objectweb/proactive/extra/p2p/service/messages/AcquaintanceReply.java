@@ -57,9 +57,9 @@ public class AcquaintanceReply extends Message implements Serializable {
     @Override
     public void execute(P2PService target) {
         if (urls == null) {
-            target.acquaintanceManager_active.acqAccepted(senderURL, this.sender);
+            target.getAcquaintanceManager().acqAccepted(senderURL, this.sender);
         } else {
-            target.acquaintanceManager_active.acqRejected(senderURL, this.urls);
+            target.getAcquaintanceManager().acqRejected(senderURL, this.urls);
         }
     }
 

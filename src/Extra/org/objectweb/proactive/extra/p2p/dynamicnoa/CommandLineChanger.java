@@ -39,12 +39,27 @@ import org.objectweb.proactive.extra.p2p.service.P2PService;
 import org.objectweb.proactive.extra.p2p.service.messages.Message;
 
 
+/**
+ * This Class with main function permits by command line to change NOA
+ *  of an already P2P service launched
+ * 
+ * @author ProActive team
+ *
+ */
 public class CommandLineChanger {
+
+    /**
+     * Constructor 
+     */
     public CommandLineChanger() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
+    /**
+     * Connect to the P2PService and change its NOA
+     * @param ref URL of a P2P Node
+     * @param noa new NOA to set
+     */
     public void changeNOA(String ref, int noa) {
         P2PService p2p = null;
         Node distNode = null;

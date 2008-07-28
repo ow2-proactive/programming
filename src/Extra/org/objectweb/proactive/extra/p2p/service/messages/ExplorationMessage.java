@@ -55,12 +55,14 @@ public class ExplorationMessage extends BreadthFirstMessage implements Serializa
                 String[] result = null; //this.sender.registerRequest(target.stubOnThis).toArray(new String[] {});
 
                 if (result == null) {
-                    logger.info("ExplorationMessage me = " +
-                        P2PService.getHostNameAndPortFromUrl(PAActiveObject
-                                .getActiveObjectNodeUrl(target.stubOnThis)) +
-                        " adding " +
-                        P2PService.getHostNameAndPortFromUrl(PAActiveObject
-                                .getActiveObjectNodeUrl(this.sender)));
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("ExplorationMessage me = " +
+                            P2PService.getHostNameAndPortFromUrl(PAActiveObject
+                                    .getActiveObjectNodeUrl(target.stubOnThis)) +
+                            " adding " +
+                            P2PService.getHostNameAndPortFromUrl(PAActiveObject
+                                    .getActiveObjectNodeUrl(this.sender)));
+                    }
                     //indeed, the peer really wants us
                     //     target.registerRequest(this.sender);
                     target.getAcquaintanceManager().startAcquaintanceHandShake(
@@ -69,7 +71,7 @@ public class ExplorationMessage extends BreadthFirstMessage implements Serializa
                 }
             } catch (Exception e) {
                 logger.info("Trouble with registering remote peer", e);
-                target.acquaintanceManager_active.remove(this.sender, null);
+                target.getAcquaintanceManager().remove(this.sender, null);
             }
         }
     }

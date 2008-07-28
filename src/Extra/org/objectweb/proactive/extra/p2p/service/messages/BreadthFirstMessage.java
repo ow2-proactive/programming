@@ -44,7 +44,7 @@ public abstract class BreadthFirstMessage extends Message {
     }
 
     @Override
-    public void transmit(P2PService acq) {
-        acq.acquaintanceManager_active.getAcquaintances().message(this);
+    public void transmit(P2PService service) {
+        service.getAcquaintanceManager().dispatchMessage(this);
     }
 }

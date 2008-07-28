@@ -50,7 +50,7 @@ public class AcquaintanceRequest extends Message implements Serializable {
     @Override
     public void execute(P2PService target) {
         if (!target.stubOnThis.equals(this.sender)) {
-            Vector<String> result = target.acquaintanceManager_active.add(this.sender);
+            Vector<String> result = target.getAcquaintanceManager().add(this.sender);
             result = (Vector<String>) PAFuture.getFutureValue(result);
 
             if (result == null) {

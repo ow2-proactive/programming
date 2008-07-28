@@ -31,10 +31,10 @@
  */
 package org.objectweb.proactive.extra.p2pTest.messages;
 
-import org.objectweb.proactive.extra.p2pTest.p2p.Tracer;
 import org.objectweb.proactive.extra.p2p.service.P2PService;
 import org.objectweb.proactive.extra.p2p.service.messages.BreadthFirstMessage;
 import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
+import org.objectweb.proactive.extra.p2pTest.p2p.Tracer;
 
 
 public class TracerWithCallbackMessage extends BreadthFirstMessage {

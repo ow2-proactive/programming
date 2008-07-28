@@ -35,22 +35,37 @@ import org.objectweb.proactive.extra.p2p.service.P2PService;
 import org.objectweb.proactive.extra.p2p.service.messages.Message;
 
 
+/**
+ * Message send to ask to remote peers to change their NOA
+ * @author ProActive team
+ *
+ */
 public class ChangeMaxNOAMessage extends Message {
     protected int noa;
 
+    /**
+     * Constructor
+     * @param ttl Time to live of message.
+     * @param noa the new value of NOA to set
+     */
     public ChangeMaxNOAMessage(int ttl, int noa) {
         super(ttl);
         this.noa = noa;
         // TODO Auto-generated constructor stub
     }
 
+    /**
+     * Execute the message command on the local target
+     * @see org.objectweb.proactive.extra.p2p.service.messages.Message#execute(org.objectweb.proactive.extra.p2p.service.P2PService)
+     * 
+     */
     @Override
     public void execute(P2PService target) {
         target.getAcquaintanceManager().setMaxNOA(this.noa);
     }
 
     /**
-     * Nothing to do, the message should not be transmited
+     * Nothing to do, the message should not be transmitted
      */
     @Override
     public void transmit(P2PService acq) {

@@ -38,7 +38,7 @@ import org.objectweb.proactive.extra.p2p.service.messages.Message;
 public class DecreaseNOAMessage extends Message {
     @Override
     public void execute(P2PService target) {
-        target.acquaintanceManager_active.setMaxNOA(target.acquaintanceManager_active.getMaxNOA() / 2);
+        target.getAcquaintanceManager().setMaxNOA(target.getAcquaintanceManager().getMaxNOA() / 2);
     }
 
     @Override

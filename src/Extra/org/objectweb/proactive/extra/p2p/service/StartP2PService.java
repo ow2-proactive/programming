@@ -55,7 +55,7 @@ import org.objectweb.proactive.extra.p2p.service.util.P2PConstants;
 
 
 /**
- * @author Alexandre di Costanzo
+ * @author ProActive team
  *
  * Created on Jan 4, 2005
  */
@@ -113,6 +113,14 @@ public class StartP2PService implements P2PConstants {
         // nothing to do
     }
 
+    /**
+     * Launch P2PService
+     * @param portNumber listening port
+     * @param noa specified NOA
+     * @param ttu update frequency
+     * @param ttl TTL of messages
+     * @param peers initial list of peers.
+     */
     public StartP2PService(int portNumber, int noa, int ttu, int ttl, Vector<String> peers) {
         PAProperties.PA_P2P_PORT.setValue(portNumber);
         PAProperties.PA_P2P_NOA.setValue(noa);
@@ -361,9 +369,10 @@ public class StartP2PService implements P2PConstants {
         }
     }
 
-    // -------------------------------------------------------------------------
-    // Main method
-    // -------------------------------------------------------------------------
+    /**
+     * Main method
+     * @param args
+     */
     public static void main(String[] args) {
         // ProActiveLogger.getLogger(Loggers.P2P).setLevel(Level.DEBUG);
 
@@ -432,6 +441,8 @@ public class StartP2PService implements P2PConstants {
 
     /**
      * Add acquisition method and port number to URL of peers.
+     * @param peerList
+     * @return Vector of valid peers URLs
      */
     public static Vector<String> checkingPeersUrl(Vector peerList) {
         int nbUrls = peerList.size();
@@ -529,16 +540,12 @@ public class StartP2PService implements P2PConstants {
         }
 
         logger.info("/////////////////  STARTING P2P SERVICE //////////////////");
-
-        // Record the ProActiveRuntime in other from Servers List File
-        // if (!this.peers.isEmpty()) {
-        //    this.p2pService.firstContact(this.peers);
-        // }
     }
 
-    // -------------------------------------------------------------------------
-    // Getters
-    // -------------------------------------------------------------------------
+    /**
+     * Get the current P2PService
+     * @return Stub of a P2PService
+     */
     public P2PService getP2PService() {
         return this.p2pService;
     }
@@ -556,7 +563,7 @@ public class StartP2PService implements P2PConstants {
         private String multi_proc_nodes = PAProperties.PA_P2P_MULTI_PROC_NODES.getValue();
         private String xml_path = PAProperties.PA_P2P_XML_PATH.getValue();
         private String peerListFile = null;
-        private final Vector peers = new Vector();
+        private final Vector<String> peers = new Vector<String>();
         private String no_sharing = PAProperties.PA_P2P_NO_SHARING.getValue();
     }
 }
