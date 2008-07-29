@@ -31,10 +31,13 @@
  */
 package org.objectweb.proactive.extra.p2p.service.messages;
 
+import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extra.p2p.service.P2PService;
 import org.objectweb.proactive.extra.p2p.service.node.P2PLookupInt;
 import org.objectweb.proactive.extra.p2p.service.node.P2PNode;
+import org.objectweb.proactive.extra.p2p.service.node.P2PNodeAck;
+import org.objectweb.proactive.extra.p2p.service.util.P2PConstants;
 import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 
@@ -57,37 +60,54 @@ public class RequestSingleNodeMessage extends RandomWalkMessage {
 
     @Override
     public void execute(P2PService target) {
-        P2PNode askedNode = target.nodeManager.askingNode(null);
+
+        P2PNode askedNode = target.getNodeManager().askingNode(null);
         Node nodeAvailable = askedNode.getNode();
         if (nodeAvailable != null) {
-            if (vnName != null) {
-                try {
-                    nodeAvailable.getProActiveRuntime().registerVirtualNode(vnName, true);
-                } catch (Exception e) {
-                    logger.warn("Couldn't register " + vnName + " in the PAR", e);
-                }
-            }
-            if (jobId != null) {
-                nodeAvailable.getNodeInformation().setJobID(jobId);
-            }
+            P2PNodeAck nodeAck = null;
             try {
-                lookup.giveNode(nodeAvailable, askedNode.getNodeManager());
+                nodeAck = lookup.giveNode(nodeAvailable, askedNode.getNodeManager());
                 this.active = false;
-                //                target.acquaintanceManager_active
-                //                        .setMaxNOA(target.acquaintanceManager_active.getMaxNOA() - 1);
             } catch (Exception lookupExcption) {
                 logger.info("Cannot contact the remote lookup", lookupExcption);
-                target.nodeManager.noMoreNodeNeeded(nodeAvailable);
+                target.getNodeManager().noMoreNodeNeeded(nodeAvailable);
+                return;
+            }
+
+            long endTime = System.currentTimeMillis() + P2PService.ACQ_TO;
+            while ((System.currentTimeMillis() < endTime) && PAFuture.isAwaited(nodeAck)) {
+                target.service.blockingServeOldest(2000);
+            }
+            if (PAFuture.isAwaited(nodeAck)) {
+                // Do not forward the message, Prevent  deadlock
+                target.getNodeManager().noMoreNodeNeeded(nodeAvailable);
+                return;
+            }
+            // Waiting ACK or NACK
+            if (nodeAck.ackValue()) {
+                // Setting vnInformation and JobId
+                if (vnName != null) {
+                    try {
+                        nodeAvailable.getProActiveRuntime().registerVirtualNode(vnName, true);
+                    } catch (Exception e) {
+                        logger.warn("Couldn't register " + vnName + " in the PAR", e);
+                    }
+                }
+                if (jobId != null) {
+                    nodeAvailable.getNodeInformation().setJobID(jobId);
+                }
+                logger.info("Giving 1 node to vn: " + vnName);
+                target.getNodeManager().useNode(nodeAvailable);
+            } else {
+                // It's a NACK node
+                target.getNodeManager().noMoreNodeNeeded(nodeAvailable);
+                logger.debug("NACK node received");
+                // No more nodes needed
                 return;
             }
         }
     }
 
-    //    @Override
-    //    public void transmit(P2PService acq) {
-    //    	System.out.println("RequestSingleNodeMessage.transmit()");
-    //        acq.randomPeer().getANode(this);
-    //    }
     @Override
     public boolean shouldExecute() {
         return active;

@@ -33,6 +33,7 @@ package org.objectweb.proactive.extra.p2p.service.node;
 
 import java.io.Serializable;
 import java.rmi.AlreadyBoundException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -71,9 +72,9 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
     private static final int PROC = Runtime.getRuntime().availableProcessors();
     private Node p2pServiceNode = null;
     private ProActiveRuntime proactiveRuntime = null;
-    private Vector availableNodes = new Vector();
-    private Vector bookedNodes = new Vector();
-    private Vector usingNodes = new Vector();
+    private ArrayList<Node> availableNodes = new ArrayList<Node>();
+    private ArrayList<Node> bookedNodes = new ArrayList<Node>();
+    private ArrayList<Node> usingNodes = new ArrayList<Node>();
     private int nodeCounter = 0;
     private final String descriptorPath = PAProperties.PA_P2P_XML_PATH.getValue();
     private ProActiveDescriptor pad = null;
@@ -109,14 +110,14 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
             }
             if (this.availableNodes.size() > 0) {
                 Node node = (Node) this.availableNodes.remove(0);
-                this.bookedNodes.add(new Booking(node));
+                this.bookedNodes.add(node);
                 logger.debug("Yes the manager has a node");
                 return new P2PNode(node, (P2PNodeManager) PAActiveObject.getStubOnThis());
             }
         }
 
         // All nodes is already assigned
-        logger.debug("Sorry no availbale node for the moment");
+        logger.debug("Sorry no available node for the moment");
         return new P2PNode(null, null);
     }
 
@@ -130,8 +131,8 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
                 this.deployingDefaultSharedNodes();
             }
             if (this.availableNodes.size() > 0) {
-                Vector allNodes = new Vector(this.availableNodes);
-                this.availableNodes.removeAllElements();
+                Vector<Node> allNodes = new Vector<Node>(this.availableNodes);
+                this.availableNodes.clear();
                 this.bookedNodes.addAll(allNodes);
                 logger.debug("Yes the manager has some nodes");
                 return allNodes;
@@ -140,7 +141,7 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
 
         // All nodes is already assigned
         logger.debug("Sorry no availbale node for the moment");
-        return new Vector();
+        return new Vector<Node>();
     }
 
     public P2PNode askingNode(boolean evenIfItIsShared) {
@@ -154,11 +155,11 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
         }
         if (this.availableNodes.size() > 0) {
             Node node = (Node) this.availableNodes.remove(0);
-            this.bookedNodes.add(new Booking(node));
+            this.bookedNodes.add(node);
             logger.debug("Yes, the manager has an empty node");
             return new P2PNode(node, (P2PNodeManager) PAActiveObject.getStubOnThis());
         } else if (this.bookedNodes.size() > 0) {
-            Node node = ((Booking) this.bookedNodes.get(0)).getNode();
+            Node node = this.bookedNodes.get(0);
             logger.debug("Yes, the manager has a shared node");
             return new P2PNode(node, (P2PNodeManager) PAActiveObject.getStubOnThis());
         } else {
@@ -177,11 +178,26 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
     public void leaveNode(Node nodeToFree, String vnName) {
         String nodeUrl = nodeToFree.getNodeInformation().getURL();
         logger.debug("LeaveNode message received for node @" + nodeUrl);
-        logger.debug("using size: " + this.usingNodes.size() + " booked size: " + this.bookedNodes.size() +
-            " available size: " + this.availableNodes.size());
-        this.usingNodes.remove(nodeToFree);
-        logger.debug("using size: " + this.usingNodes.size() + " booked size: " + this.bookedNodes.size() +
-            " available size: " + this.availableNodes.size());
+
+        boolean found = false;
+        Iterator<Node> it = this.usingNodes.iterator();
+        while (it.hasNext()) {
+            Node node = it.next();
+            if (node.getNodeInformation().getURL().equals(nodeUrl)) {
+                usingNodes.remove(node);
+                found = true;
+                logger.debug("node removed from used list: " + nodeUrl);
+                break;
+            }
+        }
+        if (!found) {
+            logger.error("A remote peer has given back an unknown node !!!!!");
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("using size: " + this.usingNodes.size() + " booked size: " +
+                this.bookedNodes.size() + " available size: " + this.availableNodes.size());
+        }
+
         try {
             // Kill the node
             if (this.descriptorPath == null) {
@@ -193,7 +209,7 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
                 this.availableNodes.add(nodeToFree);
             }
         } catch (Exception e) {
-            logger.fatal("Coudln't delete or create a shared node", e);
+            logger.fatal("Couldn't delete or create a shared node", e);
         }
     }
 
@@ -203,20 +219,26 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
      */
     public void noMoreNodeNeeded(Node givenNode) {
         logger.debug("noMoreNeeded() start " + givenNode);
-        Iterator it = this.bookedNodes.iterator();
+        String nodeURL = givenNode.getNodeInformation().getURL();
+
+        boolean found = false;
+        Iterator<Node> it = this.bookedNodes.iterator();
         while (it.hasNext()) {
-            Booking current = (Booking) it.next();
-            logger.debug("Analyzing: " + current.getNode().getNodeInformation().getURL());
-            if (current.getNode().getNodeInformation().getURL().equals(
-                    givenNode.getNodeInformation().getURL())) {
+            Node current = it.next();
+            logger.debug("Analyzing: " + current.getNodeInformation().getURL());
+            if (current.getNodeInformation().getURL().equals(nodeURL)) {
                 logger.debug("noMoreNeeded() match");
                 this.bookedNodes.remove(current);
+                this.availableNodes.add(current);
+                if (logger.isInfoEnabled()) {
+                    logger.info("Booked node " + nodeURL + " is now shared");
+                }
+                found = true;
                 break;
             }
         }
-        this.availableNodes.add(givenNode);
-        if (logger.isInfoEnabled()) {
-            logger.info("Booked node " + givenNode.getNodeInformation().getURL() + " is now shared");
+        if (!found) {
+            logger.error("A remote peer no more need an unknown node !!!!!");
         }
     }
 
@@ -272,13 +294,14 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
      */
 
     public boolean useNode(Node n) {
-        Iterator it = bookedNodes.iterator();
-
+        logger.debug("booked node is now used : " + n.getNodeInformation().getURL());
+        Iterator<Node> it = bookedNodes.iterator();
         while (it.hasNext()) {
-            Booking booking = (Booking) it.next();
-            if (booking.getNode().getNodeInformation().getURL().equals(n.getNodeInformation().getURL())) {
-                it.remove();
+            Node booking = it.next();
+            if (booking.getNodeInformation().getURL().equals(n.getNodeInformation().getURL())) {
+                bookedNodes.remove(booking);
                 usingNodes.add(booking);
+                logger.debug("node moved from booked list to used list: " + n.getNodeInformation().getURL());
                 return true;
             }
         }
@@ -374,36 +397,5 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
         Runtime.getRuntime().addShutdownHook(new Thread(killer));
 
         logger.info(this.availableNodes.size() + " shared nodes deployed");
-    }
-
-    // -------------------------------------------------------------------------
-    // Inner class
-    // -------------------------------------------------------------------------
-
-    /**
-     *
-     * Representing a booking node.
-     *
-     * @author The ProActive Team
-     *
-     * Created on Jan 14, 2005
-     */
-    private class Booking {
-        private Node node = null;
-
-        /**
-         * Construct a new <code>Booking</code> for a node.
-         * @param node the node to book.
-         */
-        public Booking(Node node) {
-            this.node = node;
-        }
-
-        /**
-         * @return Returns the booked node.
-         */
-        public Node getNode() {
-            return this.node;
-        }
     }
 }

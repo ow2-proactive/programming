@@ -86,7 +86,7 @@ public class RequestNodesMessage extends BreadthFirstMessage {
         if ((uuid != null) || (numberOfNodes == P2PConstants.MAX_NODE)) {
             // Asking a node to the node manager
             if (numberOfNodes == P2PConstants.MAX_NODE) {
-                Vector<Node> nodes = target.nodeManager.askingAllNodes(nodeFamilyRegexp);
+                Vector<Node> nodes = target.getNodeManager().askingAllNodes(nodeFamilyRegexp);
                 for (int i = 0; i < nodes.size(); i++) {
                     Node current = nodes.get(i);
                     if (vnName != null) {
@@ -101,53 +101,39 @@ public class RequestNodesMessage extends BreadthFirstMessage {
                     }
                 }
                 if (nodes.size() > 0) {
-                    lookup.giveNodeForMax(nodes, target.nodeManager);
+                    lookup.giveNodeForMax(nodes, target.getNodeManager());
                     numberOfNodes -= nodes.size();
                     if (numberOfNodes <= 0) {
                         this.active = false;
                     }
-                    //                    target.acquaintanceManager_active
-                    //                            .setMaxNOA(target.acquaintanceManager_active.getMaxNOA() - 1);
                 }
             } else {
-                P2PNode askedNode = target.nodeManager.askingNode(nodeFamilyRegexp);
+                P2PNode askedNode = target.getNodeManager().askingNode(nodeFamilyRegexp);
 
                 // Asking node available?
                 Node nodeAvailable = askedNode.getNode();
                 if (nodeAvailable != null) {
                     P2PNodeAck nodeAck = null;
-
                     try {
                         nodeAck = lookup.giveNode(nodeAvailable, askedNode.getNodeManager());
                     } catch (Exception lookupExcption) {
                         logger.info("Cannot contact the remote lookup", lookupExcption);
-                        target.nodeManager.noMoreNodeNeeded(nodeAvailable);
+                        target.getNodeManager().noMoreNodeNeeded(nodeAvailable);
                         return;
                     }
-                    if (nodeAck != null) {
-                        // Waitng the ACK
-                        long endTime = System.currentTimeMillis() + P2PService.ACQ_TO;
-                        while ((System.currentTimeMillis() < endTime) && PAFuture.isAwaited(nodeAck)) {
-                            if (target.service.hasRequestToServe()) {
-                                target.service.serveAll(target.filter);
-                            } else {
-                                try {
-                                    Thread.sleep(100);
-                                } catch (InterruptedException e) {
-                                    logger.debug(e);
-                                }
-                            }
-                        }
 
-                        // Testing future is here or timeout is expired??
-                        if (PAFuture.isAwaited(nodeAck)) {
-                            // Do not forward the message
-                            // Prevent  deadlock
-                            target.nodeManager.noMoreNodeNeeded(nodeAvailable);
-                            return;
-                        }
+                    long endTime = System.currentTimeMillis() + P2PService.ACQ_TO;
+                    while ((System.currentTimeMillis() < endTime) && PAFuture.isAwaited(nodeAck)) {
+                        target.service.blockingServeOldest(2000);
                     }
 
+                    // Testing future is here or timeout is expired??
+                    if (PAFuture.isAwaited(nodeAck)) {
+                        // Do not forward the message
+                        // Prevent  deadlock
+                        target.getNodeManager().noMoreNodeNeeded(nodeAvailable);
+                        return;
+                    }
                     // Waiting ACK or NACK
                     if (nodeAck.ackValue()) {
                         // Setting vnInformation and JobId
@@ -164,11 +150,10 @@ public class RequestNodesMessage extends BreadthFirstMessage {
                         numberOfNodes = (numberOfNodes == P2PConstants.MAX_NODE) ? P2PConstants.MAX_NODE
                                 : (numberOfNodes - 1);
                         logger.info("Giving 1 node to vn: " + vnName);
-                        logger.info("Moving node from booked to using list");
-                        target.nodeManager.useNode(nodeAvailable);
+                        target.getNodeManager().useNode(nodeAvailable);
                     } else {
                         // It's a NACK node
-                        target.nodeManager.noMoreNodeNeeded(nodeAvailable);
+                        target.getNodeManager().noMoreNodeNeeded(nodeAvailable);
                         logger.debug("NACK node received");
                         // No more nodes needed
                         return;
@@ -191,7 +176,6 @@ public class RequestNodesMessage extends BreadthFirstMessage {
 
     @Override
     public boolean shouldTransmit() {
-        //System.out.println("ACTIVE: " + active);
         return active;
     }
 }

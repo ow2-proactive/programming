@@ -117,7 +117,7 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
     /**
      * Local Nodes manager 
      */
-    public P2PNodeManager nodeManager = null;
+    private P2PNodeManager nodeManager = null;
 
     /**
      * A collection of not full <code>P2PNodeLookup</code>.
@@ -258,8 +258,6 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
         if (logger.isDebugEnabled()) {
             logger.debug("AFTER EXECUTE");
         }
-        //m.transmit(this.acquaintanceManager.getAcquaintances());
-        //this.acquaintanceManager_active.transmit(m);
         try {
             if (shouldTransmit(m)) {
                 if (logger.isDebugEnabled()) {
@@ -279,12 +277,11 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
      * @param message
      */
     public void message(Message message) {
-        //		System.out.println("P2PService.message()"+Thread.currentThread());
         UniversalUniqueID uuid = message.getUuid();
         int ttl = message.getTTL();
         if (uuid != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Message " + message + "  received with #" + uuid);
+            if (logger.isTraceEnabled()) {
+                logger.trace("Message " + message + "  received with #" + uuid);
             }
             ttl--;
             message.setTTL(ttl);
@@ -294,8 +291,8 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
         try {
             transmit = shouldTransmit(message);
         } catch (P2POldMessageException e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("P2PService.message() received an old message");
+            if (logger.isTraceEnabled()) {
+                logger.trace("P2PService.message() received an old message");
             }
             return;
         }
@@ -417,6 +414,14 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
     }
 
     /**
+    * Return  a stub of the P2PNodeManager active object
+    * @return stub of local P2PNodeManager active object 
+    */
+    public P2PNodeManager getNodeManager() {
+        return this.nodeManager;
+    }
+
+    /**
      * Remove a remote acquaintance
      * @param p remote acquaintance to remove.
      * @param acquaintancesURLs
@@ -497,8 +502,8 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
         // NO REMOVE the isDebugEnabled message
         if (logger.isDebugEnabled()) {
             if (isAnOldMessage) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Old message request with #" + uuid);
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Old message request with #" + uuid);
                 }
             } else {
                 if (logger.isDebugEnabled()) {
