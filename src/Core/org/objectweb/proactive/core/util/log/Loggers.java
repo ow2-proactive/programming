@@ -132,25 +132,6 @@ public interface Loggers {
     static final public String SKELETONS_DIAGNOSIS = SKELETONS + ".diagnosis";
     static final public String SKELETONS_SYSTEM = SKELETONS + ".system";
 
-    // Scheduler loggers
-    static final public String SCHEDULER = CORE + ".scheduler";
-    static final public String RESOURCE_MANAGER = CORE + ".resourceManager";
-    static final public String SCHEDULER_MATLAB_EXT = SCHEDULER + ".matlab";
-    static final public String SCHEDULER_SCILAB_EXT = SCHEDULER + ".scilab";
-
-    // Infrastructure Manager loggers
-    static final public String RM = CORE + ".rm";
-    static final public String RM_FACTORY = RM + ".factory";
-    static final public String RM_CORE = RM + ".core";
-    static final public String RM_ADMIN = RM + ".admin";
-    static final public String RM_MONITORING = RM + ".monitoring";
-    static final public String RM_USER = RM + ".user";
-    static final public String RM_DEPLOYMENT_FACTORY = RM + ".deployfactory";
-    static final public String RM_DEPLOY = RM_DEPLOYMENT_FACTORY + ".deploy";
-    static final public String RM_DATARESOURCE = RM + ".dataresource";
-    static final public String RM_TEST = RM + ".test";
-    static final public String RM_ACTIVITY_NODES = RM + ".activitynodes";
-
     //  Master Worker loggers
     static final public String MASTERWORKER = CORE + ".masterworker";
     static final public String MASTERWORKER_WORKERMANAGER = MASTERWORKER + ".workermanager";

@@ -75,8 +75,11 @@ log4j.logger.testsuite = TRACE
 #log4j.logger.proactive.skeletons.diagnosis	 = DEBUG
 #log4j.logger.proactive.skeletons.system = DEBUG
 
-#log4j.logger.proactive.scheduler = DEBUG
-#log4j.logger.proactive.resourceManager = DEBUG
+#log4j.logger.proactive.masterworker = DEBUG
+#log4j.logger.proactive.masterworker.workermanager = DEBUG
+#log4j.logger.proactive.masterworker.pinger = DEBUG
+#log4j.logger.proactive.masterworker.repository = DEBUG
+#log4j.logger.proactive.masterworker.workers = DEBUG
 
 #log4j.logger.proactive.configuration = DEBUG
 #log4j.logger.proactive.remoteobject = DEBUG,CONSOLE
