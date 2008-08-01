@@ -161,11 +161,12 @@ public class LocalBodyStore {
     /**
      * Pop the current context. The current context is popped from the stack
      * associated to the calling thread and returned.
-     * @return the current context associated to the calling thread.
+     * @return the current context associated to the calling thread if any, null otherwise.
      * @see org.objectweb.proactive.core.body.Context
      */
     public Context popContext() {
-        return this.contexts.get().pop();
+        Stack<Context> stack = this.contexts.get();
+        return stack != null ? stack.pop() : null;
     }
 
     /**
@@ -195,6 +196,14 @@ public class LocalBodyStore {
         } else {
             return s.peek();
         }
+    }
+
+    /**
+     * Delete the stack of context associated to the calling thread.
+     * @see org.objectweb.proactive.core.body.Context
+     */
+    public void clearAllContexts() {
+        this.contexts.remove();
     }
 
     /**
@@ -304,7 +313,6 @@ public class LocalBodyStore {
 
     void unregisterBody(AbstractBody body) {
         localBodyMap.removeBody(body.bodyID);
-
         // ProActiveEvent
         //        bodyEventProducer.fireBodyRemoved(body);
         // END ProActiveEvent

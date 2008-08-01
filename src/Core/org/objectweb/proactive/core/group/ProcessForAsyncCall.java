@@ -100,6 +100,8 @@ public class ProcessForAsyncCall extends AbstractProcessForGroup implements Runn
         }
 
         doneSignal.countDown();
+        // delete contexts for this thread
+        LocalBodyStore.getInstance().clearAllContexts();
     }
 
     public void executeMC(MethodCall mc, Object object) throws Throwable {

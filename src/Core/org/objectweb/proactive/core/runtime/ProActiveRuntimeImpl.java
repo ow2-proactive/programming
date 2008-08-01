@@ -946,8 +946,8 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         try {
             ((AbstractBody) ret).getFTManager().beforeRestartAfterRecovery(ckpt.getCheckpointInfo(), inc);
         } finally {
-            // remove context for the current thread
-            LocalBodyStore.getInstance().popContext();
+            // remove contexts for the current thread
+            LocalBodyStore.getInstance().clearAllContexts();
         }
 
         // register the body

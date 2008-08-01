@@ -76,6 +76,9 @@ public class ProcessForOneWayCall extends AbstractProcessForGroup {
         try {
             object = this.memberList.get(this.groupIndex);
         } catch (ArrayIndexOutOfBoundsException e) {
+            // TODO cdelbe acontes : WTF ?
+            // delete contexts for this thread
+            LocalBodyStore.getInstance().clearAllContexts();
             return;
         }
 
@@ -88,6 +91,8 @@ public class ProcessForOneWayCall extends AbstractProcessForGroup {
             }
             doneSignal.countDown();
         }
+        // delete contexts for this thread
+        LocalBodyStore.getInstance().clearAllContexts();
     }
 
     public void executeMC(MethodCall mc, Object target) throws Throwable {

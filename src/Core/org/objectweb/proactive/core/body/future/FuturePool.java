@@ -534,53 +534,58 @@ public class FuturePool extends Object implements java.io.Serializable {
         public void run() {
             // push an initial context for this thread : associate this thread to the owner body
             LocalBodyStore.getInstance().pushContext(new Context(FuturePool.this.getOwnerBody(), null));
-
-            while (true) {
-                // if there is no AC to do, wait...
-                waitForAC();
-                // if body is dead, kill the thread
-                if (status == KillStatus.KILL_NOW) {
-                    break;
-                }
-
-                // there are ACs to do !
-                try {
-                    // enter in the threadStore
-                    FuturePool.this.getOwnerBody().enterInThreadStore();
-
-                    // if body has migrated, kill the thread
+            try {
+                while (true) {
+                    // if there is no AC to do, wait...
+                    waitForAC();
+                    // if body is dead, kill the thread
                     if (status == KillStatus.KILL_NOW) {
                         break;
                     }
 
-                    ACService toDo = this.removeACRequest();
-                    if (toDo != null) {
-                        toDo.doAutomaticContinuation();
+                    // there are ACs to do !
+                    try {
+                        // enter in the threadStore
+                        FuturePool.this.getOwnerBody().enterInThreadStore();
+
+                        // if body has migrated, kill the thread
+                        if (status == KillStatus.KILL_NOW) {
+                            break;
+                        }
+
+                        ACService toDo = this.removeACRequest();
+                        if (toDo != null) {
+                            toDo.doAutomaticContinuation();
+                        }
+
+                        // exit from the threadStore
+                        FuturePool.this.getOwnerBody().exitFromThreadStore();
+                    } catch (Exception e2) {
+                        // to unblock active object
+                        e2.printStackTrace();
+                        FuturePool.this.getOwnerBody().exitFromThreadStore();
+                        throw new ProActiveRuntimeException("Error while sending reply for AC ", e2);
                     }
 
-                    // exit from the threadStore
-                    FuturePool.this.getOwnerBody().exitFromThreadStore();
-                } catch (Exception e2) {
-                    // to unblock active object
-                    e2.printStackTrace();
-                    FuturePool.this.getOwnerBody().exitFromThreadStore();
-                    throw new ProActiveRuntimeException("Error while sending reply for AC ", e2);
-                }
-
-                // kill it after completion of the remaining ACs...
-                if ((status == KillStatus.KILL_AFTER_COMPLETION) &&
-                    (!FuturePool.this.getOwnerBody().getFuturePool().remainingAC())) {
-                    // if the body is not active, the ACthread has been killed by a call to terminateAC().
-                    // Then complete the termination.
-                    if (!FuturePool.this.getOwnerBody().isActive()) {
-                        FuturePool.this.getOwnerBody().terminate(false);
+                    // kill it after completion of the remaining ACs...
+                    if ((status == KillStatus.KILL_AFTER_COMPLETION) &&
+                        (!FuturePool.this.getOwnerBody().getFuturePool().remainingAC())) {
+                        // if the body is not active, the ACthread has been killed by a call to terminateAC().
+                        // Then complete the termination.
+                        if (!FuturePool.this.getOwnerBody().isActive()) {
+                            FuturePool.this.getOwnerBody().terminate(false);
+                        }
+                        // else the ACthread has been killed by a call to disableAC().
+                        // no need to terminate the body.
+                        status = KillStatus.KILL_NOW;
+                        break;
                     }
-                    // else the ACthread has been killed by a call to disableAC().
-                    // no need to terminate the body.
-                    status = KillStatus.KILL_NOW;
-                    break;
                 }
+            } finally {
+                // remove contexts stack for this thread
+                LocalBodyStore.getInstance().clearAllContexts();
             }
+
         }
 
         // synchronized wait on ACRequest queue
