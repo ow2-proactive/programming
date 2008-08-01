@@ -38,6 +38,7 @@ import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.body.exceptions.SendRequestCommunicationException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -333,7 +334,11 @@ public class AOWorkerManager implements WorkerManager, InitActive, Serializable 
 
             for (GCMVirtualNode vn : vnlist) {
                 // we wait for every node creation, in case some nodes were not already deployed
-                vn.waitReady(3 * 1000);
+                try {
+                    vn.waitReady(10 * 1000);
+                } catch (ProActiveTimeoutException e) {
+                    e.printStackTrace();
+                }
             }
 
             // we wait that all threads creating active objects finish
