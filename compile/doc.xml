@@ -15,6 +15,7 @@
 
 
 		<target name="javadoc.complete" depends="compile.util, deploy" description="Make complete Javadoc">
+			<mkdir dir="${docs.tmp.dir}" />
 			<javadoc  
 				destdir="${docs.api.complete.dir}" 
 				author="true" 
@@ -61,7 +62,7 @@
 		</target>
 	
 		<target name="javadoc.published" depends="compile.util, deploy" description="Make published Javadoc">
-			
+			<mkdir dir="${docs.tmp.dir}" />
 			<javadoc source="${source}"	classpathref="compile.libs">
 				<doclet name="doc.PublishedAPIDoclet" path="${cl.utils.dir}">
 					<param name="-file" value="${docs.published.coreclasses}" />
