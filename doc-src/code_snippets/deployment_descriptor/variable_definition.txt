@@ -1,4 +1,4 @@
-	<variables>
+	<environment>
 		<!-- LOCAL PATHS -->
 		<descriptorVariable name="PROACTIVE_HOME"
 			value="/user/vjuresch/home/workspace/ProActive" />
@@ -9,4 +9,4 @@
 			value="/user/vjuresch/home/workspace/ProActive" />
 		<descriptorVariable name="REMOTE_JAVA_HOME"
 			value="/user/vjuresch/home/work/jdk1.6.0_02" />
-	</variables>
+	</environment>

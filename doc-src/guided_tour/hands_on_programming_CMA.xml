@@ -491,15 +491,10 @@
   			hosting Active Objects. There is of course a
   			correspondence between Virtual Nodes and Nodes: the
   			function created by the deployment, the mapping. This
-  			mapping can be specified in an XML descriptor. By
-  			definition, the following operations can be configured in
-  			such a deployment descriptor:
+  			mapping is specified in the Application Descriptor.
+  			The grid facilities are described in the Deployment Descriptor.
+  			In the Deployment Descriptor are configured 
   			<itemizedlist>
-  				<listitem>
-  					<para>
-  						the mapping of VNs to Nodes and to JVMs
-  					</para>
-  				</listitem>
   				<listitem>
   					<para>the way to create or to acquire JVMs</para>
   				</listitem>
@@ -511,7 +506,7 @@
   		</para>
   	</section>
 
-  	<section><info><title>Deployment Descriptor File</title></info>
+  	<section><info><title>Deployment Descriptor Files and Application Descriptor Files</title></info>
   		
   		<para>
   			The deployment descriptor is an <literal>XML</literal> file containing
@@ -526,21 +521,22 @@
   		</para>
   		<para>
   			The document uses the
-  			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/schemas/deployment/3.3/deployment.xsd">
+  			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd">
   				XML Schema
   			</link>
   			present at the Oasis website.
   		</para>
   		<para>
   			To avoid mistakes when building <literal>XML</literal> descriptors, ProActive
-  			provides an <literal>XML</literal> Schema called DescriptorSchema.xsd. To
-  			validate your file against this schema, the following line
+  			provides two <literal>XML</literal> Schemas, one for each descriptor type. To
+  			validate your file against the appropriate schema, the following line
   			must be put at the top of the <literal>XML</literal> document.
   		</para>
 
   		<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/schema_location.txt"/></textobject></programlisting>
   		<para>
-  			The <literal>XML</literal> file has a section for defining variables needed
+  			We start with the Deployment Descriptor.
+  			Both <literal>XML</literal> files have a section for defining variables needed
   			later in the document. In our case, we define the
   			location of the ProActive and Java installations on the
   			local and remote machine. To start the JVM and use
@@ -553,45 +549,70 @@
   			.
   			<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/variable_definition.txt"/></textobject></programlisting>
   		</para>
-  		<para>
-  			Next, we define the virtual nodes that will be used. In
-  			our case we define a node that can contain several JVMs by
-  			setting the <literal>multiple</literal> property.
-  			<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/component_definition.txt"/></textobject></programlisting>
-  		</para>
-  		<para>
-  			The deployment part of the <literal>XML</literal> file specifies how the JVMs
-  			are started and mapped on the Virtual Nodes It has two
-  			parts one dealing with the mapping of the JVMs to the
-  			Virtual Nodes and another related to how the JVMs are
-  			created. In our case we map one JVM to the remote node and
-  			define a process reference that will be used later in the
-  			file (infrastructure section) to describe how the JVM is
-  			started.
-  			<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/jvms.txt"/></textobject></programlisting>
-  		</para>
-  		<para>
-  			Next is the infrastructure part that defines the paths to
-  			the files needed, the hosts on which the JVMs are deployed
-  			and which protocols are used for communication.
 
-  			The process definition with the id
-  			<literal>genericRemoteJVM</literal>
-  			is necessary to tell the JVM machine how to start a node
-  			on the machine that has a reference to it (
-  			<literal>processReference</literal>
-  			). It will use the paths provided to locate the Java and
-  			ProActive files on the remote machine. Here we are using
-  			<literal>rsh</literal> to start the JVM but several other protocols can be
-  			used as described in
-  			<xref linkend="XML_Descriptors"/>
+  		<para>
+  			We first need to specify how the grid resources are organized together.
+  			This is done in the resources section, in which we describe a tree-like structure
+  			corresponding to the grid setup. There are three types of elements :
+  			<itemizedlist>
+  				<listitem>
+  					<para>host : a single machine</para>
+  				</listitem>
+  				<listitem>
+  					<para>bridge : a gateway to a set of machines
+  					which cannot be reached individually</para>
+  				</listitem>
+  				<listitem>
+  					<para>group : a group of machine sharing an identical
+  					configuration (which is described by a host)</para>
+  				</listitem>
+  			</itemizedlist>
+
+  			<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/resources.txt"/></textobject></programlisting>
+
+  		</para>
+  		  		
+  		<para> 
+  			Next is the infrastructure part that defines the elements (hosts, bridges, groups)
+  			which are referenced in the resources part. Hosts define the needed file paths to
+  			access the JVM, and the machine's workload capacity, among other things. Bridges and groups
+  			define what kind of configuration they are. In this case we have a single machine accessible
+  			through rsh. The machine's configuration is described by the 'cheypa' host. The way
+  			to access it (through rsh) is defined by the 'rsh_cheypa' bridge.  
   		</para>
   		
-  			<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/infrastructure.txt"/></textobject></programlisting>
-  			<para>The following figure ilustrates a simplified view of the deployment process. The ProActive application loads the deployment descriptor and
+		<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/infrastructure.txt"/></textobject></programlisting>
+
+  		<para> 
+  			Next, we create the Application Descriptor, where we define the application
+  			and its requirements.
+  		</para>
+  		<para>
+  			Like a Deployment Descriptor, an Application Descriptor starts with an environment section,
+  			which follows the same syntax. Next is the application section in which the application itself
+  			is described : its type (ProActive or stand-alone executable), its configuration (dependencies,
+  			invocation options) and its resource requirements (the virtual nodes).
+  			In this example we have a single virtual node named 'Hello'.
+  			The virtual nodes refer to node providers, which are defined in the next section,
+  			as sources of physical nodes.
+  			<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/app_desc_application.txt"/></textobject></programlisting>
+
+  		</para>
+  		
+  		<para>
+  			Finally we link the Application Descriptor to one or several Deployment Descriptors 
+  			through its resources part. In here you can define the node providers that are referenced
+  			by the virtual nodes in the previous section.   
+  			<programlisting xml:lang="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/application_descriptor.txt"/></textobject></programlisting>
+  		</para>
+  		
+  		
+
+  		<para>The following figure ilustrates a simplified view of the deployment process. The ProActive application loads the deployment descriptor and
   			deploys on the remote machine according to the settings in the descriptor. Although the process behind the deployment is fairly complicated it is
   			made seamless by ProActive. In the application we only need to specify the deployment descriptor and tell ProActive to start the virtual nodes, nodes and 
-  			active objects. The communication details are handled by ProActive according to the descriptor. </para>
+  			active objects. The communication details are handled by ProActive according to the descriptor.
+  		</para>
   			
   				<figure><info><title> Deployment process </title></info> 
 		  <mediaobject>
@@ -616,10 +637,10 @@
 		
 		<itemizedlist><info><title>New classes</title></info>
 			
-			<listitem><para><literal> org.objectweb.proactive.api.PADeployment</literal> - used to create an object representation of the descriptor file </para> </listitem>
-			<listitem> <para><literal>org.objectweb.proactive.core.ProActiveException</literal> - used to catch exception </para> </listitem>
-			<listitem><para><literal> org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor</literal> - the class from which the object representation of the descriptor file is instantiated</para> </listitem>
-			<listitem><para><literal> org.objectweb.proactive.core.descriptor.data.VirtualNode</literal> - used to control and instantiate virtual node objects</para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment</literal> - used to create a GCMApplication from an Application Descriptor</para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMApplication</literal> - represents the application which is being deployed </para> </listitem>
+			<listitem><para><literal>org.objectweb.proactive.core.ProActiveException</literal> - used to catch exception </para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMVirtualNode</literal> - used to control and instantiate virtual node objects</para> </listitem>
 			<listitem><para><literal> org.objectweb.proactive.core.node.Node </literal> - used to control and instantiate node objects</para></listitem>
 		</itemizedlist>
 		<itemizedlist><info><title>Previously used classes</title></info>		
@@ -666,13 +687,13 @@
   		<section><info><title>Proposed Work</title></info>
   			
   			<orderedlist>
-  			<listitem><para>Create object representation of the deployment file using <literal> PADeployment.getProactiveDescriptor(String descriptor)</literal></para></listitem>
-  			<listitem><para>Activate all the virtual nodes using <literal>org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor.activateMappings()</literal></para></listitem>
-  			<listitem><para>Get and return the first virtual node in using <literal>org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor.getVirtualNodes()</literal></para></listitem>
+  			<listitem><para>Create GCMApplication from the application descriptor file using <literal> PAGCMDeployment.loadDescriptor(String descriptor)</literal></para></listitem>
+  			<listitem><para>Start the deployment of all the virtual nodes using <literal>GCMApplication.startDeployment()</literal></para></listitem>
+  			<listitem><para>Get a virtual node using <literal>GCMApplication.getVirtualNode(String virtualNodeName)</literal></para></listitem>
   			<listitem><para>Create a virtual object node using the deployment method</para></listitem>
   			<listitem><para>Create the active object using an node from the virtual node<literal/></para></listitem>
   			<listitem><para>Get and print the state from the active object<literal/></para></listitem>
-  			<listitem><para>Stop the virtual node using <literal>org.objectweb.proactive.core.descriptor.data.VirtualNode.killAll(boolean)</literal></para></listitem>
+  			<listitem><para>Stop the application using <literal>GCMApplication.kill()</literal></para></listitem>
 			<listitem><para>Change the <literal>State</literal> class so the initialization of the variables takes place in the <literal>toString()</literal> method.
 			 Run the deployed application again and explain the different results. </para></listitem>
   			</orderedlist>
@@ -733,10 +754,10 @@
   			</para>
   				<itemizedlist><info><title>Previously used classes</title></info>		
 			
-			<listitem><para><literal> org.objectweb.proactive.api.PADeployment</literal> - </para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment</literal> - </para> </listitem>
 			<listitem> <para><literal>org.objectweb.proactive.core.ProActiveException</literal></para> </listitem>
-			<listitem><para><literal> org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor</literal></para> </listitem>
-			<listitem><para><literal> org.objectweb.proactive.core.descriptor.data.VirtualNode</literal></para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMApplication</literal></para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMVirtualNode</literal></para> </listitem>
 			<listitem><para><literal> org.objectweb.proactive.core.node.Node </literal></para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.Body</literal> - used to access the body of the active object</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.Service</literal> - used to access the queue of the active object</para></listitem>
