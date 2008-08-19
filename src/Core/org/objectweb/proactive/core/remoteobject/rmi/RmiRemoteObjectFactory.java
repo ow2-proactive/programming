@@ -231,7 +231,7 @@ public class RmiRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
     public void unexport(RemoteRemoteObject rro) throws ProActiveException {
         if (rro instanceof RmiRemoteObject) {
             try {
-                UnicastRemoteObject.unexportObject((RmiRemoteObject) rro, false);
+                UnicastRemoteObject.unexportObject((RmiRemoteObject) rro, true);
             } catch (NoSuchObjectException e) {
                 throw new ProActiveException(e);
             }
