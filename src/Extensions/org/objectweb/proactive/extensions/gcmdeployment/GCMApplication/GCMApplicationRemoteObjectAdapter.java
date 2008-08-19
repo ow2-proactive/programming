@@ -41,11 +41,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
+import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.xml.VariableContract;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
@@ -56,11 +58,14 @@ import org.objectweb.proactive.gcmdeployment.Topology;
 public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> implements GCMApplication {
     long deploymentId;
     Set<String> virtualNodeNames;
+    URI baseUri;
 
     @Override
     protected void construct() {
         deploymentId = target.getDeploymentId();
         virtualNodeNames = target.getVirtualNodeNames();
+        baseUri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "",
+                PAProperties.PA_COMMUNICATION_PROTOCOL.getValue());
     }
 
     public VariableContract getVariableContract() {
@@ -71,17 +76,15 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
         GCMVirtualNode vn = null;
         long deploymentId = target.getDeploymentId();
         String name = deploymentId + "/VirtualNode/" + vnName;
-        URI uri = URIBuilder.buildURI("localhost", name);
-        try {
 
+        URI uri = URIBuilder.buildURI(baseUri.getHost(), name, baseUri.getScheme(), baseUri.getPort());
+        try {
             RemoteObject ro = RemoteObjectHelper.lookup(uri);
             vn = (GCMVirtualNode) RemoteObjectHelper.generatedObjectStub(ro);
         } catch (ProActiveException e) {
             GCMA_LOGGER.error("Virtual Node \"" + vnName + "\" is not exported as " + uri);
         }
-
         return vn;
-
     }
 
     public Map<String, GCMVirtualNode> getVirtualNodes() {
