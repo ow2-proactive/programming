@@ -27,20 +27,43 @@
 			<title>ProActive Deployment API</title>
 		</info>
 
+		<para>There are several ways the grid resources can be used by a deployed application.
+		The application may require a fixed set of resources, or it may be flexible enough to work on any
+		amount of resources, or finally may require a minimum amount of resources and yet be able to scale
+		as more resources become available.</para>
+
 		<section>
 			<info>
-				<title>Resources fixed by applications (SPMD)</title>
+				<title>Resources fixed by the application (SPMD)</title>
 			</info>
 
-			<para></para>
+			<para>In this case the application knows the amount of resources it requires. The acquisition of these resources
+			 by the application is done as follows.
+			 
+			 <itemizedlist>
+					<listitem>
+						<para>get the required virtual nodes through GCMApplication.getVirtualNode(String vnName),
+						 or GCMApplication.getVirtualNodes()</para>
+					</listitem>
+					<listitem>
+						<para>For each virtual node, use GCMVirtualNode.getNewNodes() as many times as needed,
+						until the virtual node has the expected numbers of physical nodes to run on.
+						</para>
+					</listitem>
+			</itemizedlist>
+			
 		</section>
 
 		<section>
 			<info>
-				<title>Resources fixed by the deployer</title>
+				<title>Resources fixed by the application deployer</title>
 			</info>
 
-			<para></para>
+			<para>In this case the application has no specific requirement on the resources it uses : the more the better.
+			The application should call GCMApplication.getVirtualNodes() to obtain the list of configured virtual nodes,
+			and then subscribe to the node attachment notifications for each of them (GCMVirtualNode.subscribeNodeAttachment(Object client, String methodName, boolean withHistory) ).
+			This way the application will work no matter how many resources are defined in the Application Descriptor.			
+			</para>
 		</section>
 
 		<section>
