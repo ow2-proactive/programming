@@ -39,7 +39,8 @@
 	  <!ENTITY OSGi SYSTEM "OSGi.xml">
 	  <!ENTITY JMX SYSTEM "Jmx.xml">
 	  <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
-	  <!ENTITY mpi SYSTEM "mpi.xml">
+      <!ENTITY MonteCarlo SYSTEM "monteCarlo.xml">
+      <!ENTITY mpi SYSTEM "mpi.xml">
 	  <!ENTITY IC2D SYSTEM "IC2D.xml">
 	  <!ENTITY plugin SYSTEM "development/plugin.xml">
 	  <!ENTITY scilab SYSTEM "scilab/ScilabDoc.xml">
@@ -175,9 +176,10 @@
     &MOP;
    </part>
      
-   <part xml:id="Unsupported"><info><title>Extensions Under Development  </title></info>
+   <part xml:id="Unsupported"><info><title>ProActive Extra Packages / Extensions Under Development  </title></info>
     &bnb;
     &p2p;
+    &MonteCarlo;
    </part>
          
    <part xml:id="backMattersPart"><info><title>Back matters</title></info>
