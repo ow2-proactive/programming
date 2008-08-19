@@ -38,7 +38,7 @@
 			</info>
 
 			<para>In this case the application knows the amount of resources it requires. The acquisition of these resources
-			 by the application is done as follows.
+			 by the application is done as follows.</para>
 			 
 			 <itemizedlist>
 					<listitem>
@@ -60,9 +60,8 @@
 			</info>
 
 			<para>In this case the application has no specific requirement on the resources it uses : the more the better.
-			The application should call GCMApplication.getVirtualNodes() to obtain the list of configured virtual nodes,
-			and then subscribe to the node attachment notifications for each of them (GCMVirtualNode.subscribeNodeAttachment(Object client, String methodName, boolean withHistory) ).
-			This way the application will work no matter how many resources are defined in the Application Descriptor.			
+			This is the simplest of the cases : the application only has to call GCMApplication.waitReady().
+			
 			</para>
 		</section>
 
@@ -71,7 +70,12 @@
 				<title>On demand Scalability</title>
 			</info>
 
-			<para></para>
+			<para>In the case the application is able to expand on new resources as they are made available to it.
+			This is a extension of the two other cases, in that it can work whether the application has fixed requirements
+			or not. Once the initial deployment phase is finished, the application should call GCMApplication.getVirtualNodes() to obtain the list of configured virtual nodes,
+			and then subscribe to the node attachment notifications for each of them (GCMVirtualNode.subscribeNodeAttachment(Object client, String methodName, boolean withHistory) ).			
+			In the notification handler, the application should deal with the newly acquired node appropriately.
+			</para>
 		</section>
 
 
