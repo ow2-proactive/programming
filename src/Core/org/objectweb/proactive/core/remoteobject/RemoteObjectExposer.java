@@ -51,7 +51,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  * The RemoteObjectExposer is in charge of exposing an object as a remote object.
  * It allows the exposition of the object it represents on one or multiple protocols, keeps
- * references on already activated protocols, allows to unexpose one or more protocols.
+ * references on already activated protocols, allows to unregister and unexport one or more protocols.
  */
 public class RemoteObjectExposer<T> implements Serializable {
     protected Hashtable<URI, RemoteRemoteObject> activeRemoteRemoteObjects;
@@ -231,6 +231,18 @@ public class RemoteObjectExposer<T> implements Serializable {
         RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(url);
         RemoteObjectFactory rof = RemoteObjectHelper.getRemoteObjectFactory(url.getScheme());
         rof.unexport(rro);
+    }
+
+    public void unexportAll() throws ProActiveException {
+        Enumeration<URI> uris = this.activeRemoteRemoteObjects.keys();
+        URI uri = null;
+        while (uris.hasMoreElements()) {
+            uri = uris.nextElement();
+            RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(uri);
+            RemoteObjectFactory rof = RemoteObjectHelper.getRemoteObjectFactory(uri.getScheme());
+            rof.unexport(rro);
+        }
+
     }
 
 }
