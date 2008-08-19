@@ -37,14 +37,24 @@ import java.io.Serializable;
 
 
 /**
- * ExperienceSetOutputFilter
- *
- * This interface defines a post processing task executed  
+ * SimulationSetPostProcess
+ * <p/>
+ * This interface defines a post processing task executed on the result of a SimulationSet.
+ * In many cases, raw results from a Monte-Carlo Simulation need to be post-processed.
+ * And it's much more efficient to do this directly on the worker, where the simulation is done,
+ * than on the master (the amount of data tranferred on the network is much smaller).
  *
  * @author The ProActive Team
  */
 @PublicAPI
+//@snippet-start montecarlo_simulationsetpostprocess
 public interface SimulationSetPostProcess<T extends Serializable, R extends Serializable> {
 
+    /**
+     * Defines a post-processing of results received from a simulation set
+     * @param experiencesResults results receive from a Simulation Set task
+     * @return the result of the post processing
+     */
     R postprocess(T experiencesResults);
 }
+//@snippet-end montecarlo_simulationsetpostprocess

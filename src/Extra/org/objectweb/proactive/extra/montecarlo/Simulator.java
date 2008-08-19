@@ -47,6 +47,7 @@ import java.util.List;
  * @author The ProActive Team
  */
 @PublicAPI
+//@snippet-start montecarlo_simulator
 public interface Simulator {
 
     /**
@@ -58,3 +59,4 @@ public interface Simulator {
     public <T extends Serializable> Enumeration<T> solve(List<SimulationSet<T>> simulationSets)
             throws TaskException;
 }
+//@snippet-end montecarlo_simulator

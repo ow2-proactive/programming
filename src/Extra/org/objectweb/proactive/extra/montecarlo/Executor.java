@@ -48,6 +48,7 @@ import java.util.List;
  * @author The ProActive Team
  */
 @PublicAPI
+//@snippet-start montecarlo_executor
 public interface Executor {
 
     /**
@@ -61,3 +62,4 @@ public interface Executor {
     public <T extends Serializable> Enumeration<T> solve(List<EngineTask<T>> engineTasks)
             throws TaskException;
 }
+//@snippet-end montecarlo_executor

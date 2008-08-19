@@ -56,8 +56,17 @@ import java.io.Serializable;
  * @author The ProActive Team
  */
 @PublicAPI
+//@snippet-start montecarlo_enginetask
 public interface EngineTask<T extends Serializable> extends Serializable {
 
+    /**
+     * Defines a general purpose task which can be run by the Monte-Carlo framework
+     *
+     * @param simulator gives the possibility to schedule children simulation sets
+     * @param executor  gives the possibility to schedule children engine tasks
+     * @return the result of this task
+     */
     public T run(Simulator simulator, Executor executor);
 
 }
+//@snippet-end montecarlo_enginetask

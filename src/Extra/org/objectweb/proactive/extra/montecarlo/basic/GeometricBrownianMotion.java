@@ -50,6 +50,7 @@ public class GeometricBrownianMotion implements SimulationSet<double[]> {
     private double s0, mu, sigma, t;
     private int N;
 
+    //@snippet-start montecarlo_geometricbrownianmotion
     /**
      * Simulating geometric Brownian motion. This equation is the exact solution of the geometrix brownian motion SDE.
      * @param s0 Initial value at t=0 of geometric Brownian
@@ -58,7 +59,9 @@ public class GeometricBrownianMotion implements SimulationSet<double[]> {
      * @param t time
      * @param N number of experiences
      */
-    public GeometricBrownianMotion(double s0, double mu, double sigma, double t, int N) {
+    public GeometricBrownianMotion(double s0, double mu, double sigma, double t, int N)
+    //@snippet-end montecarlo_geometricbrownianmotion            
+    {
         this.s0 = s0;
         this.mu = mu;
         this.sigma = sigma;

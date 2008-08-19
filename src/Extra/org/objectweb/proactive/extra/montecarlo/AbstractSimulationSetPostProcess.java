@@ -39,7 +39,9 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**
- * AbstractExperienceSetOutputFilter
+ * AbstractSimulationSetPostProcess
+ *
+ * A user wanting to define a SimulationSetPostProcess should inherit from this abstract class.
  *
  * @author The ProActive Team
  */

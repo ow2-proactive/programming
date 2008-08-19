@@ -85,6 +85,7 @@ public class PAMonteCarlo<T extends Serializable> {
         this(descriptorURL, masterVNName, workersVNName, null);
     }
 
+    //@snippet-start montecarlo_constructor
     /**
      * Initialize the Monte-Carlo toolkit by giving a descriptor and two virtual node names.
      * Workers will be instanciated on resources created by the first one.
@@ -99,7 +100,9 @@ public class PAMonteCarlo<T extends Serializable> {
      * @throws ProActiveException
      */
     public PAMonteCarlo(URL descriptorURL, String workersVNName, String masterVNName, Class randomStreamClass)
-            throws ProActiveException {
+            throws ProActiveException
+    //@snippet-end montecarlo_constructor
+    {
         if (masterVNName != null) {
             // Remote master
             master = new ProActiveMaster<EngineTaskAdapter<T>, T>(descriptorURL, masterVNName,
@@ -112,6 +115,7 @@ public class PAMonteCarlo<T extends Serializable> {
         master.setResultReceptionOrder(SubMaster.SUBMISSION_ORDER);
     }
 
+    //@snippet-start montecarlo_run
     /**
      * Runs the simulation by giving the definition of a top-level task.
      * This task is not directly a Monte Carlo simulation, but should rather contain the code of your general algorithm.
@@ -120,17 +124,22 @@ public class PAMonteCarlo<T extends Serializable> {
      * @return the result of the top-level task
      * @throws TaskException if an exception occured during the execution of the top-level task.
      */
-    public T run(EngineTask<T> toplevelTask) throws TaskException {
+    public T run(EngineTask<T> toplevelTask) throws TaskException
+    //@snippet-end montecarlo_run
+    {
         ArrayList<EngineTaskAdapter<T>> singletask = new ArrayList<EngineTaskAdapter<T>>(1);
         singletask.add(new EngineTaskAdapter<T>(toplevelTask));
         master.solve(singletask);
         return master.waitOneResult();
     }
 
+    //@snippet-start montecarlo_terminate
     /**
      * Terminates the Monte-Carlo toolkit and free created resources.
      */
-    public void terminate() {
+    public void terminate()
+    //@snippet-end montecarlo_terminate
+    {
         master.terminate(true);
     }
 

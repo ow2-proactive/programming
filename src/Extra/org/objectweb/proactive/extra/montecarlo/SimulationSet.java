@@ -46,10 +46,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * @author The ProActive Team
  */
 @PublicAPI
+//@snippet-start montecarlo_simulationset
 public interface SimulationSet<T extends Serializable> extends Serializable {
 
     /**
-     * Defines a Monte-Carlo set of successive experiences, a Random generator is given and will be used
+     * Defines a Monte-Carlo set of successive experiences, a Random generator is given as a parameter
      *
      * A list of double values is expected as output, result of the successive experiences.
      * These experiences can be independant or correlated, this choice is left to the user inside the implementation of this method.
@@ -59,3 +60,4 @@ public interface SimulationSet<T extends Serializable> extends Serializable {
      */
     T simulate(final RandomStream rng);
 }
+//@snippet-end montecarlo_simulationset
