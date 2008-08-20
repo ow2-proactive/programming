@@ -80,6 +80,7 @@
 	<property name="docs.xsl.pdf"	value="${docs.xsl}/pdf.xsl" />
 	<property name="docs.xsl.html.chunked"	value="${docs.xsl}/chunkedhtml.xsl" />
 	<property name="docs.xsl.html.one"	value="${docs.xsl}/onehtml.xsl" />
+	<property name="docs.xsl.removenewlines"	value="${docs.xsl}/remove_newlines.xsl" />
 
 	<property name="docs.html.multiple.zip"	value="${docs.dir}/ProActive_Manual_html.zip" />
 	<property name="docs.html.single.zip"	value="${docs.dir}/ProActive_Manual_html_single.zip" />
