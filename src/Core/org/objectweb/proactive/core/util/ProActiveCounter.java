@@ -47,27 +47,14 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class ProActiveCounter {
     static Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
-    static Object lock = new Object();
     static long counter = 0;
-    static boolean loop = false;
 
     synchronized static public long getUniqID() {
-        long ret;
-
-        if (loop) {
+        if (counter == Long.MAX_VALUE) {
             throw new IllegalStateException(ProActiveCounter.class.getSimpleName() +
                 " counter reached max value");
+        } else {
+            return counter++;
         }
-
-        synchronized (lock) {
-            ret = counter;
-            counter++;
-        }
-
-        if (ret == Long.MAX_VALUE) {
-            loop = true;
-        }
-
-        return ret;
     }
 }
