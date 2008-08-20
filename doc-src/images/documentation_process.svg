@@ -8,28 +8,32 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
+   width="618.09003"
+   height="819.35999"
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
    sodipodi:docbase="/user/vjuresch/home/workspace/ProActive/doc-src/images"
    sodipodi:docname="documentation_process.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.0"
+   inkscape:export-filename="/user/vjuresch/home/workspace/ProActive/doc-src/images/documentation_process.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs4">
     <marker
        inkscape:stockid="Arrow1Mend"
        orient="auto"
-       refY="0.0"
-       refX="0.0"
+       refY="0"
+       refX="0"
        id="Arrow1Mend"
-       style="overflow:visible;">
+       style="overflow:visible">
       <path
          id="path3521"
-         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
-         transform="scale(0.4) rotate(180) translate(10,0)" />
+         d="M 0,0 L 5,-5 L -12.5,0 L 5,5 L 0,0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
     </marker>
   </defs>
   <sodipodi:namedview
@@ -42,9 +46,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="468.92831"
-     inkscape:cy="727.12459"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="440.31671"
+     inkscape:cy="727.65581"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:window-width="1672"
@@ -52,7 +56,10 @@
      inkscape:window-x="0"
      inkscape:window-y="0"
      showguides="true"
-     inkscape:guide-bbox="true" />
+     inkscape:guide-bbox="true"
+     width="618.09003px"
+     height="819.36px"
+     units="px" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -70,37 +77,8 @@
      id="layer1">
     <flowRoot
        xml:space="preserve"
-       id="flowRoot2180"
-       transform="translate(435.71429,27.142857)"><flowRegion
-         id="flowRegion2182"><rect
-           id="rect2184"
-           width="276.42856"
-           height="533.57141"
-           x="391.42856"
-           y="93.076469" /></flowRegion><flowPara
-         id="flowPara2186">manualHtml</flowPara><flowPara
-         id="flowPara2194">-docbookPreProcess</flowPara><flowPara
-         id="flowPara2188">  -snippetsCreation</flowPara><flowPara
-         id="flowPara2190">  -docbookBeautify</flowPara><flowPara
-         id="flowPara2192">-docbookTransform</flowPara><flowPara
-         id="flowPara2196" /><flowPara
-         id="flowPara2198" /><flowPara
-         id="flowPara2212">manualSingleHtml</flowPara><flowPara
-         id="flowPara2214">-docbookPreProcess</flowPara><flowPara
-         id="flowPara2220">  -snippetsCreation</flowPara><flowPara
-         id="flowPara2249">  -docbookBeautify</flowPara><flowPara
-         id="flowPara2251">-docbookTransform</flowPara><flowPara
-         id="flowPara2222" /><flowPara
-         id="flowPara2224" /><flowPara
-         id="flowPara2200">manualPdf</flowPara><flowPara
-         id="flowPara2202">-docbookPreProcess</flowPara><flowPara
-         id="flowPara2208">  -snippetsCreation</flowPara><flowPara
-         id="flowPara2258">  -docbookBeautify</flowPara><flowPara
-         id="flowPara2260">-docbookToPdf</flowPara><flowPara
-         id="flowPara2210">-docbookTransform</flowPara></flowRoot>    <flowRoot
-       xml:space="preserve"
        id="flowRoot2483"
-       transform="translate(0.7142848,184.28572)"><flowRegion
+       transform="matrix(0.8677129,0,0,0.9038832,-2.035476,49.8575)"><flowRegion
          id="flowRegion2485"><rect
            id="rect2487"
            width="309.28571"
@@ -115,7 +93,7 @@
    style="font-family:Aharoni CLM"
    id="flowSpan8796">fop</flowSpan> file is transformed to pdf by using a fop processor.</flowPara></flowRoot>    <g
        id="g2493"
-       transform="translate(18.214291,-111.6036)">
+       transform="matrix(0.8677129,0,0,0.9038832,17.602739,88.39347)">
       <flowRoot
          transform="translate(134.28571,-100.71429)"
          id="flowRoot2280"
@@ -137,9 +115,9 @@
     </g>
     <g
        id="g2509"
-       transform="translate(11.607147,-121.42851)">
+       transform="matrix(0.8677129,0,0,0.9038832,11.869634,79.5129)">
       <flowRoot
-         transform="translate(182.60727,-197.56505)"
+         transform="translate(184.59667,-197.56505)"
          id="flowRoot2350"
          xml:space="preserve"><flowRegion
            id="flowRegion2352"><rect
@@ -158,9 +136,9 @@
     </g>
     <g
        id="g2517"
-       transform="translate(11.607147,-112.31789)">
+       transform="matrix(0.8677129,0,0,0.9038832,11.869634,87.74784)">
       <flowRoot
-         transform="translate(-0.7226639,-131.15433)"
+         transform="translate(12.042388,-131.15433)"
          id="flowRoot2358"
          xml:space="preserve"><flowRegion
            id="flowRegion2360"><rect
@@ -182,9 +160,9 @@
     </g>
     <g
        id="g2526"
-       transform="translate(11.607147,-92.8571)">
+       transform="matrix(0.8677129,0,0,0.9038832,11.869634,105.33812)">
       <flowRoot
-         transform="translate(-161.24191,-59.716827)"
+         transform="translate(-159.22266,-59.716827)"
          id="flowRoot2403"
          xml:space="preserve"><flowRegion
            id="flowRegion2405"><rect
@@ -203,29 +181,29 @@
          y="265.21933" />
     </g>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
-       d="M 483.89285,60.657666 L 409.85,86.626116"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
+       d="M 421.67803,244.09754 L 357.43009,267.56998"
        id="path2534"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g2509"
        inkscape:connection-end="#g2493" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
-       d="M 483.89285,115.75858 L 409.85,115.75858"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
+       d="M 421.67803,293.90233 L 357.43009,293.90233"
        id="path2536"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g2517"
        inkscape:connection-end="#g2493" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
-       d="M 483.89285,171.08889 L 409.85,145.01233"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
+       d="M 421.67803,343.91446 L 357.43009,320.3443"
        id="path2538"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g2526"
        inkscape:connection-end="#g2493" />
     <g
        id="g3707"
-       transform="translate(-435.70153,-37.317887)">
+       transform="matrix(0.8677129,0,0,0.9038832,-376.26589,155.53908)">
       <flowRoot
          transform="translate(176.99999,-198.27934)"
          id="flowRoot3709"
@@ -245,15 +223,15 @@
          y="125.21932" />
     </g>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
-       d="M 243.72142,115.75858 L 202.01275,115.75858"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
+       d="M 213.27819,293.90232 L 177.08702,293.90232"
        id="path3723"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g2493"
        inkscape:connection-end="#g3707" />
     <g
        id="g4694"
-       transform="translate(18.214291,79.642836)">
+       transform="matrix(0.8677129,0,0,0.9038832,17.602739,235.25792)">
       <flowRoot
          transform="translate(134.28571,-100.71429)"
          id="flowRoot4696"
@@ -274,9 +252,9 @@
     </g>
     <g
        id="g4710"
-       transform="translate(11.607147,153.92855)">
+       transform="matrix(0.8677129,0,0,0.9038832,11.869634,302.40353)">
       <flowRoot
-         transform="translate(175.46441,-198.27934)"
+         transform="translate(179.47851,-198.27934)"
          id="flowRoot4712"
          xml:space="preserve"><flowRegion
            id="flowRegion4714"><rect
@@ -297,9 +275,9 @@
     </g>
     <g
        id="g4730"
-       transform="translate(11.607147,160.71432)">
+       transform="matrix(0.8677129,0,0,0.9038832,11.869634,308.53708)">
       <flowRoot
-         transform="translate(18.56305,-129.72576)"
+         transform="translate(18.012032,-129.72576)"
          id="flowRoot4732"
          xml:space="preserve"><flowRegion
            id="flowRegion4734"><rect
@@ -321,22 +299,22 @@
          y="200.21933" />
     </g>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
-       d="M 483.89285,307.00501 L 409.85,307.00501"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
+       d="M 421.67803,440.76677 L 357.43009,440.76677"
        id="path4755"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g4710"
        inkscape:connection-end="#g4694" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
-       d="M 483.89285,360.58292 L 409.85,335.33225"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
+       d="M 421.67803,489.19495 L 357.43009,466.37129"
        id="path4759"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g4730"
        inkscape:connection-end="#g4694" />
     <g
        id="g5734"
-       transform="translate(-428.55867,136.42855)">
+       transform="matrix(0.8677129,0,0,0.9038832,-370.06793,286.58558)">
       <flowRoot
          transform="translate(159.85713,-197.56505)"
          id="flowRoot5736"
@@ -362,15 +340,15 @@
          y="125.95911" />
     </g>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
-       d="M 243.72142,307.00501 L 208.41582,307.00501"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
+       d="M 213.27819,440.76678 L 182.64305,440.76678"
        id="path5746"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g4694"
        inkscape:connection-end="#g5734" />
     <g
        id="g6717"
-       transform="translate(18.214291,275.71431)">
+       transform="matrix(0.8677129,0,0,0.9038832,17.602739,374.48364)">
       <flowRoot
          transform="translate(134.28571,-100.71429)"
          id="flowRoot6719"
@@ -390,49 +368,9 @@
          style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#080808;stroke-width:4.69999981;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
-       id="g6729"
-       transform="translate(11.607147,351)">
-      <flowRoot
-         transform="translate(169.03584,-191.13649)"
-         id="flowRoot6731"
-         xml:space="preserve"><flowRegion
-           id="flowRegion6733"><rect
-             y="328.07648"
-             x="309.28571"
-             height="55.000023"
-             width="165.71428"
-             id="rect6735" /></flowRegion><flowPara
-           id="flowPara6737">The previously processed <flowSpan
-   style="font-family:Aharoni CLM"
-   id="flowSpan8752">PA_index.xml</flowSpan></flowPara></flowRoot>      <rect
-         style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#0000ff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         id="rect6739"
-         width="161.42857"
-         height="55.714287"
-         x="474.28571"
-         y="125.21932" />
-    </g>
-    <g
        id="g6755"
-       transform="translate(11.607147,432.28574)">
-      <flowRoot
-         transform="translate(173.32155,-202.4222)"
-         id="flowRoot6743"
-         xml:space="preserve"><flowRegion
-           id="flowRegion6745"><rect
-             y="328.07648"
-             x="309.28571"
-             height="92.85717"
-             width="182.85715"
-             id="rect6747" /></flowRegion><flowPara
-           id="flowPara6749">type of transform: </flowPara><flowPara
-           id="flowPara8780">pdf, html, or single html</flowPara><flowPara
-           id="flowPara8774"
-           style="font-family:Aharoni CLM">pdf.xsl</flowPara><flowPara
-           id="flowPara8776"
-           style="font-family:Aharoni CLM">chunked.xsl</flowPara><flowPara
-           id="flowPara8778"
-           style="font-family:Aharoni CLM">onehtml.xsl</flowPara></flowRoot>      <rect
+       transform="matrix(0.8677129,0,0,0.9038832,11.869634,437.23896)">
+      <rect
          style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#0000ff;stroke-width:4.71789265;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect6751"
          width="160.71068"
@@ -441,10 +379,10 @@
          y="125.57827" />
     </g>
     <g
-       transform="matrix(0.9747249,0,0,1,25.135633,547)"
+       transform="matrix(0.8457814,0,0,0.9038832,-3.068653,521.88843)"
        id="g6762">
       <flowRoot
-         transform="translate(173.32155,-190.4222)"
+         transform="translate(172.44208,-200.4222)"
          id="flowRoot6764"
          xml:space="preserve"><flowRegion
            id="flowRegion6766"><rect
@@ -453,38 +391,38 @@
              height="103.57146"
              width="159.28572"
              id="rect6768" /></flowRegion><flowPara
-           id="flowPara6770">transform profile: html or pdf - necessary for including/excluding parts that appear only in one type of document</flowPara></flowRoot>      <rect
-         style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#0000ff;stroke-width:4.05152893;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="flowPara6770">Transform profile: html or pdf - necessary for including/excluding parts that appear only in one type of document</flowPara></flowRoot>      <rect
+         style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#0000ff;stroke-width:3.76699448;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect6772"
-         width="165.56268"
-         height="96.991257"
-         x="475.07578"
-         y="126.00942" />
+         width="165.85088"
+         height="83.700745"
+         x="474.93167"
+         y="125.86897" />
     </g>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
-       d="M 483.89285,503.73157 L 409.85,503.42284"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
+       d="M 159.80366,482.90342 L 250.04639,552.68876"
        id="path7755"
        inkscape:connector-type="polyline"
-       inkscape:connection-start="#g6729"
+       inkscape:connection-start="#g5734"
        inkscape:connection-end="#g6717" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
-       d="M 483.89285,556.9819 L 409.85,531.57688"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
+       d="M 421.67803,583.88366 L 357.43009,582.0498"
        id="path7757"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g6755"
        inkscape:connection-end="#g6717" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
-       d="M 512.89473,670.98366 L 360.26744,533.28363"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
+       d="M 397.02669,636.92079 L 338.9141,607.29622"
        id="path7759"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g6762"
        inkscape:connection-end="#g6717" />
     <g
        id="g8754"
-       transform="translate(-437.14285,343.07143)">
+       transform="matrix(0.8677129,0,0,0.9038832,-377.51654,435.36661)">
       <flowRoot
          transform="translate(159.85713,-197.56505)"
          id="flowRoot8756"
@@ -495,7 +433,7 @@
              height="94.285721"
              width="161.42854"
              id="rect8760" /></flowRegion><flowPara
-           id="flowPara8762">output file(s) depending on the type of transform: single html, multiple, html, pdf </flowPara></flowRoot>      <rect
+           id="flowPara8762">Output file(s) depending on the type of transform: single html, multiple html, pdf </flowPara></flowRoot>      <rect
          style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#02ff02;stroke-width:3.55717611;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect8770"
          width="174.67754"
@@ -504,54 +442,227 @@
          y="125.73769" />
     </g>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
-       d="M 243.72142,503.43345 L 199.83165,503.62206"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
+       d="M 213.27819,580.31514 L 175.19445,580.48563"
        id="path8772"
        inkscape:connector-type="polyline"
        inkscape:connection-start="#g6717"
        inkscape:connection-end="#g8754" />
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot8782"><flowRegion
-         id="flowRegion8784"><rect
-           id="rect8786"
-           width="285"
-           height="31.428572"
-           x="27.142857"
-           y="19.505039" /></flowRegion><flowPara
-         id="flowPara8788"
-         style="font-family:Aharoni CLM;font-size:14">Main steps in documentation generation</flowPara></flowRoot>    <g
-       transform="matrix(0.9747249,0,0,1,-161.61436,563.57142)"
-       id="g8800">
-      <rect
-         style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#0000ff;stroke-width:4.05152893;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         id="rect8810"
-         width="165.56268"
-         height="96.991257"
-         x="475.07578"
-         y="126.00942" />
-    </g>
-    <flowRoot
-       transform="matrix(0.9747249,0,0,1,7.8977932,369.22066)"
-       id="flowRoot8828"
-       xml:space="preserve"><flowRegion
-         id="flowRegion8830"><rect
-           y="328.07648"
-           x="309.28571"
-           height="103.57146"
-           width="159.28572"
-           id="rect8832" /></flowRegion><flowPara
-         id="flowPara8834">Parameters for document version and timestamp:</flowPara><flowPara
-         id="flowPara8836" /><flowPara
-         id="flowPara8838"
-         style="font-family:Aharoni CLM">TODAY</flowPara><flowPara
-         id="flowPara8840"
-         style="font-family:Aharoni CLM">VERSION</flowPara></flowRoot>    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
-       d="M 370.24192,687.55508 L 333.90138,533.28363"
+    <g
+       id="g8848"
+       transform="matrix(0.8677129,0,0,0.9038832,70.74126,103.66329)">
+      <g
+         id="g8800"
+         transform="matrix(0.9747249,0,0,1,-161.61436,563.57142)">
+        <rect
+           y="125.85355"
+           x="474.91586"
+           height="82.303001"
+           width="165.88251"
+           id="rect8810"
+           style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#0000ff;stroke-width:3.73576522;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      </g>
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot8828"
+         transform="matrix(0.9747249,0,0,1,5.8462626,365.22066)"><flowRegion
+           id="flowRegion8830"><rect
+             id="rect8832"
+             width="159.28572"
+             height="103.57146"
+             x="309.28571"
+             y="328.07648" /></flowRegion><flowPara
+           id="flowPara8834">Document version and timestamp:</flowPara><flowPara
+           id="flowPara8836" /><flowPara
+           style="font-family:Aharoni CLM"
+           id="flowPara8838">TODAY</flowPara><flowPara
+           style="font-family:Aharoni CLM"
+           id="flowPara8840">VERSION</flowPara></flowRoot>    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
+       d="M 377.62808,725.15607 L 302.70989,607.29622"
        id="path8842"
        inkscape:connector-type="polyline"
-       inkscape:connection-end="#g6717"
-       inkscape:connection-start="#g8800" />
-  </g>
+       inkscape:connection-start="#g8848"
+       inkscape:connection-end="#g6717" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.88561344px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1;display:inline"
+       d="M 138.39826,320.8897 L 251.88282,413.46304"
+       id="path8846"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g3707"
+       inkscape:connection-end="#g4694" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot8859"
+       transform="matrix(0.8677129,0,0,0.9038832,31.362663,194.6934)"><flowRegion
+         id="flowRegion8861"><rect
+           id="rect8863"
+           width="106.42857"
+           height="13.571428"
+           x="513.57141"
+           y="-21.923532" /></flowRegion><flowPara
+         id="flowPara8865"
+         style="font-family:Aharoni CLM">Inputs</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot8867"
+       transform="matrix(0.8677129,0,0,0.9038832,23.724344,194.6934)"><flowRegion
+         id="flowRegion8869"><rect
+           id="rect8871"
+           width="110"
+           height="13.571428"
+           x="70"
+           y="65.219322" /></flowRegion><flowPara
+         id="flowPara8873"
+         style="font-family:Aharoni CLM">Outputs</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot8875"
+       transform="matrix(0.8677129,0,0,0.9038832,32.08959,194.17689)"><flowRegion
+         id="flowRegion8877"><rect
+           id="rect8879"
+           width="113.57143"
+           height="15"
+           x="258.57144"
+           y="64.505035" /></flowRegion><flowPara
+         id="flowPara8881"
+         style="font-family:Aharoni CLM">Ant targets</flowPara></flowRoot>    <g
+       id="g9214"
+       transform="translate(0,-8)">
+      <g
+         transform="matrix(0.8677129,0,0,0.9038832,-161.61994,-95.06215)"
+         id="g8883">
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot8885"
+           transform="translate(124.28571,-109.28572)"><flowRegion
+             id="flowRegion8887"><rect
+               id="rect8889"
+               width="155.00002"
+               height="96.428566"
+               x="120.71429"
+               y="320.21933" /></flowRegion><flowPara
+             style="font-family:Aharoni CLM"
+             id="flowPara8891">manualHtml</flowPara><flowPara
+             id="flowPara8933">-docbookPreProcess</flowPara><flowPara
+             id="flowPara8935">  -snippetsCreation  </flowPara><flowPara
+             id="flowPara9130">  -docbookBeautify</flowPara><flowPara
+             id="flowPara9132">-docbookTransform</flowPara><flowPara
+             id="flowPara8937" /><flowPara
+             id="flowPara8939" /></flowRoot>        <rect
+           style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#080808;stroke-width:6.1761632;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect8893"
+           width="159.95241"
+           height="97.095268"
+           x="228.59521"
+           y="199.87276" />
+      </g>
+      <g
+         transform="matrix(0.8677129,0,0,0.9038832,31.841759,-95.06215)"
+         id="g8941">
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot8943"
+           transform="translate(124.28571,-109.28572)"><flowRegion
+             id="flowRegion8945"><rect
+               id="rect8947"
+               width="155.00002"
+               height="96.428566"
+               x="120.71429"
+               y="320.21933" /></flowRegion><flowPara
+             style="font-family:Aharoni CLM"
+             id="flowPara9014">manualSingleHtml</flowPara><flowPara
+             id="flowPara9016">-docbookPreProcess</flowPara><flowPara
+             id="flowPara9018">   -snippetsCreation</flowPara><flowPara
+             id="flowPara9020">   -docbookBeautify</flowPara><flowPara
+             id="flowPara9136">-docbookTransform</flowPara><flowPara
+             id="flowPara9022" /></flowRoot>        <rect
+           style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#080808;stroke-width:6.1761632;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect8959"
+           width="159.95241"
+           height="97.095268"
+           x="228.59521"
+           y="199.87276" />
+      </g>
+      <g
+         transform="matrix(0.8677129,0,0,0.9038832,225.30347,-96.417975)"
+         id="g9030">
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot9032"
+           transform="translate(122.28571,-115.28572)"><flowRegion
+             id="flowRegion9034"><rect
+               id="rect9036"
+               width="155.00002"
+               height="96.428566"
+               x="120.71429"
+               y="320.21933" /></flowRegion><flowPara
+             style="font-family:Aharoni CLM"
+             id="flowPara9112">manualPdf</flowPara><flowPara
+             id="flowPara9114">-docbookPreProcess</flowPara><flowPara
+             id="flowPara9116">   -snippetsCreation</flowPara><flowPara
+             id="flowPara9118">   -docbookBeautify</flowPara><flowPara
+             id="flowPara9138">-docbookToPdf</flowPara><flowPara
+             id="flowPara9134">   -docbookTransform</flowPara><flowPara
+             id="flowPara9120" /><flowPara
+             id="flowPara9122" /></flowRoot>        <rect
+           style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#080808;stroke-width:6.1761632;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect9048"
+           width="159.95241"
+           height="97.095268"
+           x="228.59521"
+           y="201.37276" />
+      </g>
+    </g>
+    <g
+       id="g9200"
+       transform="translate(3.0832078,-8)">
+      <flowRoot
+         transform="matrix(0.8677129,0,0,0.9038832,-1.3135277,-4.2497258)"
+         id="flowRoot9176"
+         xml:space="preserve"><flowRegion
+           id="flowRegion9178"><rect
+             y="65.219322"
+             x="70"
+             height="31.452547"
+             width="126.29819"
+             id="rect9180" /></flowRegion><flowPara
+           style="font-family:Aharoni CLM"
+           id="flowPara9182">Generates multiple HTML files</flowPara></flowRoot>      <flowRoot
+         transform="matrix(0.8677129,0,0,0.9038832,184.80354,-4.2497258)"
+         id="flowRoot9184"
+         xml:space="preserve"><flowRegion
+           id="flowRegion9186"><rect
+             y="65.219322"
+             x="70"
+             height="31.452547"
+             width="126.29819"
+             id="rect9188" /></flowRegion><flowPara
+           style="font-family:Aharoni CLM"
+           id="flowPara9190">Generates one large HTML file</flowPara></flowRoot>      <flowRoot
+         transform="matrix(0.8677129,0,0,0.9038832,370.58499,-4.2497258)"
+         id="flowRoot9192"
+         xml:space="preserve"><flowRegion
+           id="flowRegion9194"><rect
+             y="65.219322"
+             x="70"
+             height="31.452547"
+             width="126.29819"
+             id="rect9196" /></flowRegion><flowPara
+           style="font-family:Aharoni CLM"
+           id="flowPara9198">Generates one PDF file</flowPara></flowRoot>    </g>
+    <flowRoot
+       transform="matrix(0.8457814,0,0,0.9038832,177.9651,258.8181)"
+       id="flowRoot9296"
+       xml:space="preserve"><flowRegion
+         id="flowRegion9298"><rect
+           y="328.07648"
+           x="309.28571"
+           height="66.691673"
+           width="153.314"
+           id="rect9300" /></flowRegion><flowPara
+         id="flowPara9302">XSLT transform type as defined by one of the files: <flowSpan
+   style="font-family:Aharoni CLM"
+   id="flowSpan9308">pdf.xsl, chunked.xsl,</flowSpan> or <flowSpan
+   style="font-family:Aharoni CLM"
+   id="flowSpan9310">onehtml.xsl</flowSpan></flowPara></flowRoot>  </g>
 </svg>
