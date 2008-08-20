@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="implementation"><info><title>An implementation of the Grid Component Model</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="implementation"><info><title>An implementation of the Grid Component Model</title></info>
   
 
   <para>
@@ -59,7 +57,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="components/pics/fractal.png" format="PNG"/>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/fractal.png" format="PNG"/>
           </imageobject>
 
         </mediaobject>
@@ -71,7 +69,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="components/pics/fractal-proactive-distributed.png" format="PNG"/>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/fractal-proactive-distributed.png" format="PNG"/>
           </imageobject>
 
         </mediaobject>
@@ -83,7 +81,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="components/pics/fractal-proactive-aos.png" format="PNG"/>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/fractal-proactive-aos.png" format="PNG"/>
           </imageobject>
 
         </mediaobject>
@@ -297,7 +295,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="components/pics/standard-mop.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/standard-mop.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -333,7 +331,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="components/pics/components-mop.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/components-mop.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>

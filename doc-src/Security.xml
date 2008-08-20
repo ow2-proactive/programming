@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Security"><info><title>Security Framework</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Security"><info><title>Security Framework</title></info>
   
 
   <para>In order to use the Proactive Security features, you have to
@@ -49,7 +47,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/secureDeployment.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/secureDeployment.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -70,7 +68,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="security_images/certificateGeneration.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/certificateGeneration.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -110,7 +108,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="security_images/security-hierarchy.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/security-hierarchy.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -161,7 +159,7 @@
       <para><informalfigure>
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/img3.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/img3.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </informalfigure></para>
@@ -201,7 +199,7 @@
       <para><informalfigure>
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/img4.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/img4.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </informalfigure></para>
@@ -234,7 +232,7 @@
       <para><informalfigure>
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/img6.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/img6.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </informalfigure></para>
@@ -252,7 +250,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="security_images/img8.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/img8.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -373,7 +371,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="security_images/img11.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/img11.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -440,7 +438,7 @@
               <entry align="center"><para><informalfigure xml:id="SecurityNegotiation">
                   <mediaobject>
                     <imageobject>
-                      <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="security_images/negotiation.png" format="PNG"/>
+                      <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/negotiation.png" format="PNG"/>
                     </imageobject>
                   </mediaobject>
                 </informalfigure></para></entry>
@@ -521,7 +519,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/gui-oasis.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/gui-oasis.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -539,7 +537,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/gui-proactive.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/gui-proactive.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -551,7 +549,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/security_gui_cert_chain_edit.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/security_gui_cert_chain_edit.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -561,7 +559,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/security_gui_cert_chain_edit_activeks.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/security_gui_cert_chain_edit_activeks.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -571,7 +569,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/security_gui_ks_edit.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/security_gui_ks_edit.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -582,7 +580,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="security_images/security_gui_rule_edit.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="security_images/security_gui_rule_edit.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>

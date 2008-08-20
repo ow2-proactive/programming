@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="TimIt"><info><title>TimIt API</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="TimIt"><info><title>TimIt API</title></info>
     
     <indexterm>
         <primary>TimIt</primary>
@@ -36,7 +34,7 @@
         <para>
             <mediaobject>
                 <imageobject>
-                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="timit/pics/chartsExamples.png" format="PNG"/>
+                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="timit/pics/chartsExamples.png" format="PNG"/>
                 </imageobject>
             </mediaobject>
             <programlisting xml:lang="xml">&lt;timit&gt;

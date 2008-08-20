@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="bnb"><info><title>Branch and Bound API</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="bnb"><info><title>Branch and Bound API</title></info>
     
     <!--  File: /home/irosenbe/PA_new_doc/docbook-tuto/bnb.html  -->
     <para>The outline of this short handbook:</para>
@@ -79,7 +77,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/bnb_api_archi.png" format="PNG"  />
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/bnb_api_archi.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -129,7 +127,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/bnb_api_com.png" format="PNG"  />
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/bnb_api_com.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>

@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="DescriptorProcess"><info><title>Adding a Deployment Protocol</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="DescriptorProcess"><info><title>Adding a Deployment Protocol</title></info>
     
 
     <section xml:id="DescriptorProcess_html_objectives"><info><title>Objectives</title></info>
@@ -87,7 +85,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="development/imgs/descriptorProcessClassDiagram.png" format="PNG"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="development/imgs/descriptorProcessClassDiagram.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>

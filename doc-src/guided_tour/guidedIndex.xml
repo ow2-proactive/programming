@@ -1,4 +1,4 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="guidedIndex"><info><title>Introduction To The Guided Tour and Tutorial</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="guidedIndex"><info><title>Introduction To The Guided Tour and Tutorial</title></info>
   
 
   <section xml:id="guidedOverview"><info><title>Overview</title></info>
@@ -71,7 +71,7 @@
     <informalfigure>
       <mediaobject>
         <imageobject>
-          <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="./eclipse_files/wizard_new_project.jpg" format="JPG"/>
+          <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="./eclipse_files/wizard_new_project.jpg" format="JPG"/>
         </imageobject>
       </mediaobject>
     </informalfigure>
@@ -95,7 +95,7 @@
     <informalfigure>
       <mediaobject>
         <imageobject>
-          <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="./eclipse_files/wizard_java_settings.jpg" format="JPG"/>
+          <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="./eclipse_files/wizard_java_settings.jpg" format="JPG"/>
         </imageobject>
       </mediaobject>
     </informalfigure>
@@ -107,7 +107,7 @@
     <informalfigure>
       <mediaobject>
         <imageobject>
-          <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="./eclipse_files/navigator.jpg" format="JPG"/>
+          <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="./eclipse_files/navigator.jpg" format="JPG"/>
         </imageobject>
       </mediaobject>
     </informalfigure>

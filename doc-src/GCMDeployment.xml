@@ -1,6 +1,4 @@
-<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">  -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="GCMDeployment">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="GCMDeployment">
 	<info>
 		<title>ProActive GCM Deployment</title>
 	</info>
@@ -501,27 +499,27 @@
 					host list is a whitespace-separated list of name patterns or hostnames. A name pattern describes a set of hostnames with a common
 					root. The format is as follows.
 					<programlisting>
-						<![CDATA[
-<root name><interval> 
-]]>
+						
+&lt;root name&gt;&lt;interval&gt; 
+
 					</programlisting>
 
 					with root name being an alphanumeric string (only letters and digits, no spaces or punctuation signs), and interval defining a set
 					of numerical values in the form of an interval or list of values, possibly followed by an exclusion interval or list of values.
 					The general form of an interval is:
 					<programlisting>
-						<![CDATA[
+						
 
-[<value set>]^[<value set>]
-]]>
+[&lt;value set&gt;]^[&lt;value set&gt;]
+
 					</programlisting>
 
 					or simply
 					<programlisting>
-						<![CDATA[
+						
 
-[<value set>] 
-]]>
+[&lt;value set&gt;] 
+
 					</programlisting>
 
 					if no exclusion interval is needed.
@@ -798,7 +796,7 @@
 			<title>FAQ</title>
 		</info>
 
-		<para></para>
+		<para/>
 	</section>
 
 	<section>
@@ -830,44 +828,44 @@
 				A deployment descriptor has the following XML structure:
 
 				<programlisting>
-					<![CDATA[
-<environment>
-		<descriptorVariable …/>
+					
+&lt;environment&gt;
+		&lt;descriptorVariable …/&gt;
 …
-</environment>
+&lt;/environment&gt;
 
-<resources>
-		<bridge …/>
-		<group>
-			<host …/>
-			<host …/>
+&lt;resources&gt;
+		&lt;bridge …/&gt;
+		&lt;group&gt;
+			&lt;host …/&gt;
+			&lt;host …/&gt;
 			…
-		</group>
+		&lt;/group&gt;
 	…
-</resources>
+&lt;/resources&gt;
 
-<acquisition>
-		<lookup …/>
-		<p2p …/>
+&lt;acquisition&gt;
+		&lt;lookup …/&gt;
+		&lt;p2p …/&gt;
 	…
-</acquisition>
+&lt;/acquisition&gt;
 
-<infrastructure>
-		<hosts>
-			<host…/>
-		</hosts>
+&lt;infrastructure&gt;
+		&lt;hosts&gt;
+			&lt;host…/&gt;
+		&lt;/hosts&gt;
 
-		<groups>
-			<groupType …/>
-		</group>
+		&lt;groups&gt;
+			&lt;groupType …/&gt;
+		&lt;/group&gt;
 
-		<bridges>
-			<bridgeType …/>
-		</bridges>
+		&lt;bridges&gt;
+			&lt;bridgeType …/&gt;
+		&lt;/bridges&gt;
 	…
-</infrastructure>
+&lt;/infrastructure&gt;
 
-]]>
+
 
 				</programlisting>
 
@@ -908,21 +906,21 @@
 			</para>
 
 			<programlisting>
-				<![CDATA[
-<resources>
-	<hosts>
-		<host refid="host1"  />
-		<host refid="host2"  />
-	</hosts>
-</resources>
+				
+&lt;resources&gt;
+	&lt;hosts&gt;
+		&lt;host refid="host1"  /&gt;
+		&lt;host refid="host2"  /&gt;
+	&lt;/hosts&gt;
+&lt;/resources&gt;
 
-<infrastructure>	
-    <hosts>
-		<host id="host1"  />
-		<host id="host2"  />
-	</hosts>
-</infrastructure>
-]]>
+&lt;infrastructure&gt;	
+    &lt;hosts&gt;
+		&lt;host id="host1"  /&gt;
+		&lt;host id="host2"  /&gt;
+	&lt;/hosts&gt;
+&lt;/infrastructure&gt;
+
 			</programlisting>
 
 			<para>
@@ -932,26 +930,26 @@
 			</para>
 
 			<programlisting>
-				<![CDATA[
-<resources>
-		<group refid="LSF_GROUP">
-			<host refid="LSF_GROUP_MEMBER" />
-		</group>
-</resources>
+				
+&lt;resources&gt;
+		&lt;group refid="LSF_GROUP"&gt;
+			&lt;host refid="LSF_GROUP_MEMBER" /&gt;
+		&lt;/group&gt;
+&lt;/resources&gt;
 
-<infrastructure>
-	<hosts>
-		<host id="LSF_GROUP_MEMBER" />
-	</hosts>
+&lt;infrastructure&gt;
+	&lt;hosts&gt;
+		&lt;host id="LSF_GROUP_MEMBER" /&gt;
+	&lt;/hosts&gt;
 
-	<groups>
-		<lsfGroup id="LSF_GROUP" >
-			<resources processorNumber="12" />
-		</lsfGroup>
-	</groups>
-</infrastructure>
+	&lt;groups&gt;
+		&lt;lsfGroup id="LSF_GROUP" &gt;
+			&lt;resources processorNumber="12" /&gt;
+		&lt;/lsfGroup&gt;
+	&lt;/groups&gt;
+&lt;/infrastructure&gt;
 
-]]>
+
 			</programlisting>
 
 			<para>
@@ -972,12 +970,12 @@
 					simple list of &lt;descriptorVariable&gt; elements. For example:
 
 					<programlisting>
-						<![CDATA[
-<environment>
-	<descriptorVariable name="usertype" value="admin" />
-  <descriptorVariable name="username" value="jsmith" />
-</environment>
-]]>
+						
+&lt;environment&gt;
+	&lt;descriptorVariable name="usertype" value="admin" /&gt;
+  &lt;descriptorVariable name="username" value="jsmith" /&gt;
+&lt;/environment&gt;
+
 
 					</programlisting>
 
@@ -1040,31 +1038,31 @@
 					For example, the following constructions are correct: Single host:
 
 					<programlisting>
-						<![CDATA[
-<host refid="A_HOST" />
-]]>
+						
+&lt;host refid="A_HOST" /&gt;
+
 					</programlisting>
 
 					Group:
 
 					<programlisting>
-						<![CDATA[
-<group refid="CLUSTER">
-	<host refid="CLUSTER_NODE" />
-</group>
-]]>
+						
+&lt;group refid="CLUSTER"&gt;
+	&lt;host refid="CLUSTER_NODE" /&gt;
+&lt;/group&gt;
+
 					</programlisting>
 
 					Group behind a bridge:
 
 					<programlisting>
-						<![CDATA[
-<bridge refid="CLUSTER_FRONT_END" />
-	<group refid="CLUSTER">
-		<host refid="CLUSTER_NODE" />
-	</group>
-</bridge>
-]]>
+						
+&lt;bridge refid="CLUSTER_FRONT_END" /&gt;
+	&lt;group refid="CLUSTER"&gt;
+		&lt;host refid="CLUSTER_NODE" /&gt;
+	&lt;/group&gt;
+&lt;/bridge&gt;
+
 					</programlisting>
 
 				</para>
@@ -1133,23 +1131,23 @@
 				The overall structure of an Application Descriptor is as follows :
 
 				<programlisting>
-					<![CDATA[
-<environment>
+					
+&lt;environment&gt;
 		…
-</environment>
+&lt;/environment&gt;
 
-<application>
+&lt;application&gt;
 …
-</application>
+&lt;/application&gt;
 
-<resources>
-		<nodeProvider>
-			<file …/>
+&lt;resources&gt;
+		&lt;nodeProvider&gt;
+			&lt;file …/&gt;
 			…
-		</nodeProvider>
+		&lt;/nodeProvider&gt;
 		…
-</resources>
-]]>
+&lt;/resources&gt;
+
 				</programlisting>
 
 			</para>
@@ -1177,26 +1175,26 @@
 					the application will be run on all the physical nodes these providers can yield.
 
 					<programlisting>
-						<![CDATA[
-	<application>
-		<executable>
-			<command name="ls">
-				<arg>-lh</arg>
-				<arg>--sort=time</arg>
-				<arg>*</arg>
-			</command>
-			<nodeProvider refid="COMPANY_LAN" />
-		</executable>
-	</application>
+						
+	&lt;application&gt;
+		&lt;executable&gt;
+			&lt;command name="ls"&gt;
+				&lt;arg&gt;-lh&lt;/arg&gt;
+				&lt;arg&gt;--sort=time&lt;/arg&gt;
+				&lt;arg&gt;*&lt;/arg&gt;
+			&lt;/command&gt;
+			&lt;nodeProvider refid="COMPANY_LAN" /&gt;
+		&lt;/executable&gt;
+	&lt;/application&gt;
 
-	<resources>
-		<nodeProvider id="COMPANY_LAN">
-			<file path="deployment.xml" />
-		</nodeProvider>
-	</resources>
+	&lt;resources&gt;
+		&lt;nodeProvider id="COMPANY_LAN"&gt;
+			&lt;file path="deployment.xml" /&gt;
+		&lt;/nodeProvider&gt;
+	&lt;/resources&gt;
 								
 								
-]]>
+
 					</programlisting>
 
 				</para>
@@ -1215,37 +1213,37 @@
 					as available (its capacity is set to "MAX") from both the COMPANY_LAN and REMOTE_CLUSTER providers.
 
 					<programlisting>
-						<![CDATA[
+						
 				
-	<application>
-		<proactive relpath="Scratch/ProActive/">
+	&lt;application&gt;
+		&lt;proactive relpath="Scratch/ProActive/"&gt;
 
-			<configuration>
-			<!-- ommitted for clarity -->
-			</configuration>
+			&lt;configuration&gt;
+			&lt;!-- ommitted for clarity --&gt;
+			&lt;/configuration&gt;
 
-			<virtualNode id="master" capacity="1">
-				<nodeProvider refid="COMPANY_LAN" />
-			</virtualNode>
+			&lt;virtualNode id="master" capacity="1"&gt;
+				&lt;nodeProvider refid="COMPANY_LAN" /&gt;
+			&lt;/virtualNode&gt;
 
-			<virtualNode id="slaves" capacity="max">
-				<nodeProvider refid="COMPANY_LAN" />
-				<nodeProvider refid="REMOTE_CLUSTER" />
-			</virtualNode>
-		</proactive>
-	</application>
+			&lt;virtualNode id="slaves" capacity="max"&gt;
+				&lt;nodeProvider refid="COMPANY_LAN" /&gt;
+				&lt;nodeProvider refid="REMOTE_CLUSTER" /&gt;
+			&lt;/virtualNode&gt;
+		&lt;/proactive&gt;
+	&lt;/application&gt;
 
-	<resources>
-		<nodeProvider id="COMPANY_LAN">
-			<file path="deployment.xml" />
-		</nodeProvider>
-		<nodeProvider id="REMOTE_CLUSTER">
-			<file path="deployment_cluster.xml" />
-		</nodeProvider>
-	</resources>
+	&lt;resources&gt;
+		&lt;nodeProvider id="COMPANY_LAN"&gt;
+			&lt;file path="deployment.xml" /&gt;
+		&lt;/nodeProvider&gt;
+		&lt;nodeProvider id="REMOTE_CLUSTER"&gt;
+			&lt;file path="deployment_cluster.xml" /&gt;
+		&lt;/nodeProvider&gt;
+	&lt;/resources&gt;
 
 				
-]]>
+
 					</programlisting>
 
 
@@ -1271,7 +1269,7 @@
 				method.
 
 				<programlisting>
-					<![CDATA[
+					
 GCMApplication app;
 									
 File desc = new File(this.getClass().getResource("MyApplicationDescriptor.xml").getPath());
@@ -1279,7 +1277,7 @@ File desc = new File(this.getClass().getResource("MyApplicationDescriptor.xml").
 app = PAGCMDeployment.loadApplicationDescriptor(desc);
 app.startDeployment();
 
-				]]>
+				
 				</programlisting>
 
 			</para>
@@ -1289,7 +1287,7 @@ app.startDeployment();
 				loadApplicationDescriptor() :
 
 				<programlisting>
-					<![CDATA[
+					
 VariableContractImpl vContract = new VariableContractImpl();
 vContract.setVariableFromProgram("HOST_CAPACITY", "4",
 				VariableContractType.DescriptorDefaultVariable);
@@ -1303,7 +1301,7 @@ File desc = new File(this.getClass().getResource("MyApplicationDescriptor.xml").
 app = PAGCMDeployment.loadApplicationDescriptor(desc, vContract);
 app.startDeployment();
 
-]]>
+
 				</programlisting>
 
 			</para>
@@ -1312,29 +1310,17 @@ app.startDeployment();
 				In the case of a stand-alone application, it will simply be deployed on all the available nodes without any special intervention on
 				your side. In the case of a ProActive-based application, there are two ways for an application to handle the deployment process. The
 				simplest one is to call the
-				<programlisting>
-					<textobject>
-						<textdata fileref="automatic_snippets/GCMVirtualNode_waitReady.snip" />
-					</textobject>
-				</programlisting>
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMVirtualNode_waitReady.snip"/></textobject></programlisting>
 				method on your GCMApplication object. As the name of the method indicates, it amounts to "wait until everything is ready". The call
 				will block until all virtual nodes are ready, that is that they have acquired the minimum number of nodes they need. This method
 				should not be used if one of the virtual nodes is "greedy", in which case it will never be in a "ready" state. There's another version
 				of the method with a timeout parameter :
-				<programlisting>
-					<textobject>
-						<textdata fileref="automatic_snippets/GCMVirtualNode_waitReady_timeout.snip" />
-					</textobject>
-				</programlisting>
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMVirtualNode_waitReady_timeout.snip"/></textobject></programlisting>
 
 
 				However, a more flexible way is for your application to listen to the availability of new nodes on each virtual node, and act
 				accordingly. The method for this is
-				<programlisting>
-					<textobject>
-						<textdata fileref="automatic_snippets/GCMVirtualNode_subscribeNodeAttachment.snip" />
-					</textobject>
-				</programlisting>
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMVirtualNode_subscribeNodeAttachment.snip"/></textobject></programlisting>
 				in
 				<code>GCMVirtualNode</code>
 				.
@@ -1346,18 +1332,10 @@ app.startDeployment();
 				. This method will be called by the virtual node for each new available node.
 
 				To get the list of virtual nodes for your GCMApplication, use
-				<programlisting>
-					<textobject>
-						<textdata fileref="automatic_snippets/GCMApplication_getVirtualNodes.snip" />
-					</textobject>
-				</programlisting>
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMApplication_getVirtualNodes.snip"/></textobject></programlisting>
 
 				You can also get a specific virtual node if you know its name :
-				<programlisting>
-					<textobject>
-						<textdata fileref="automatic_snippets/GCMApplication_getVirtualNode.snip" />
-					</textobject>
-				</programlisting>
+				<programlisting><textobject><textdata fileref="automatic_snippets/GCMApplication_getVirtualNode.snip"/></textobject></programlisting>
 			</para>
 
 		</section>

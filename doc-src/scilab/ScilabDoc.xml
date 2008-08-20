@@ -1,7 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"
-         xml:id="ScilabDoc">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="ScilabDoc">
     <info>
         <title>Interface with Matlab/Scilab</title>
     </info>
@@ -102,11 +99,7 @@
                 PROACTIVE/examples/scilab/README :
             </para>
 
-            <programlisting>
-                <textobject>
-                    <textdata fileref="../examples/scilab/README"/>
-                </textobject>
-            </programlisting>
+            <programlisting><textobject><textdata fileref="../examples/scilab/README"/></textobject></programlisting>
         </section>
         <section xml:id="SciMat_Matlab_Installation">
             <info>
@@ -128,11 +121,7 @@
                 are described in the file PROACTIVE/dev/matlab/README :
             </para>
 
-            <programlisting>
-                <textobject>
-                    <textdata fileref="../dev/matlab/README"/>
-                </textobject>
-            </programlisting>
+            <programlisting><textobject><textdata fileref="../dev/matlab/README"/></textobject></programlisting>
         </section>
         <section xml:id="SciMat_Configuration">
             <info>
@@ -206,8 +195,7 @@
 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"
-                                   fileref="scilab/pics/ScilabToolBox.png"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="scilab/pics/ScilabToolBox.png"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -236,8 +224,7 @@
 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"
-                                   fileref="scilab/pics/ScilabToolBox1.png"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="scilab/pics/ScilabToolBox1.png"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -266,8 +253,7 @@
 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"
-                                   fileref="scilab/pics/ScilabToolBox2.png"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="scilab/pics/ScilabToolBox2.png"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -295,8 +281,7 @@
 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"
-                                   fileref="scilab/pics/ScilabToolBox4.png"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="scilab/pics/ScilabToolBox4.png"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -366,8 +351,7 @@
 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"
-                                   fileref="scilab/pics/ScilabToolBox3.png"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="scilab/pics/ScilabToolBox3.png"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -602,23 +586,14 @@
                 </info>
 
 
-                <programlisting xml:lang="java">
-                    <textobject>
-                        <textdata
-                                fileref="../src/Extensions/org/objectweb/proactive/extensions/scilab/test/SciTest2.java"/>
-                    </textobject>
-                </programlisting>
+                <programlisting xml:lang="java"><textobject><textdata fileref="../src/Extensions/org/objectweb/proactive/extensions/scilab/test/SciTest2.java"/></textobject></programlisting>
             </example>
             <example xml:id="sciex2">
                 <info>
                     <title>Descriptor deployment</title>
                 </info>
 
-                <programlisting xml:lang="xml">
-                    <textobject>
-                        <textdata fileref="../examples/scilab/GCMA.xml"/>
-                    </textobject>
-                </programlisting>
+                <programlisting xml:lang="xml"><textobject><textdata fileref="../examples/scilab/GCMA.xml"/></textobject></programlisting>
             </example>
         </section>
     </section>

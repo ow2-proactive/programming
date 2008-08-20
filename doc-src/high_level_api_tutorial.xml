@@ -1,4 +1,4 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="high_level_api_tutorial"><info><title> High-Level API Tutorials</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="high_level_api_tutorial"><info><title> High-Level API Tutorials</title></info>
 	
   	<section xml:id="MWDP"><info><title>Master-Worker DistributedPrimes Application</title></info>
 		
@@ -40,7 +40,7 @@
 		  <mediaobject>
           <imageobject>
 
-            <imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/masterworker/DistributedPrimesMWdia.jpg" format="JPG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/masterworker/DistributedPrimesMWdia.jpg" format="JPG"/>
           </imageobject>
         </mediaobject>
       </figure>

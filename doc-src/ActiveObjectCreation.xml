@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ActiveObjectCreation"><info><title>Active Objects: Creation And Advanced Concepts</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ActiveObjectCreation"><info><title>Active Objects: Creation And Advanced Concepts</title></info>
 	
 
 	<section><info><title>Overview</title></info>
@@ -51,7 +49,7 @@
 			
 			<mediaobject>
 				<imageobject>
-					<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/PAActiveObject.png"  format="PNG"  align="center"/>
+					<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/PAActiveObject.png" format="PNG" align="center"/>
 
 				</imageobject>
 			</mediaobject>
@@ -577,7 +575,7 @@
 			<!--  		<imagedata scalefit="1" width="100%" contentdepth="100%"    depth="5.5in" scalefit="0" format="PNG" 
 						fileref="images/init_run_end_Activity.png" />
 				-->
-					<imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="images/init_run_end_Activity.png"/>
+					<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/init_run_end_Activity.png"/>
 				
 				</imageobject>
 			</mediaobject>
@@ -784,7 +782,7 @@
 				<literal>ProActiveMetaObjectFactory</literal>
 				 provides to simplify the creation of factories as
 				singleton. 
-				<programlisting><textobject><textdata fileref="core/body/ProActiveMetaObjectFactory.java"></textdata></textobject></programlisting>
+				<programlisting><textobject><textdata fileref="core/body/ProActiveMetaObjectFactory.java"/></textobject></programlisting>
 							
 				More explanations can be found in the<!-- This url can only work in the html generated files: in pdf there's no ".." -->
 				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/core/body/ProActiveMetaObjectFactory.html" os="html">
@@ -864,7 +862,7 @@
 
 				<mediaobject>
 					<imageobject>
-						<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/workerActiveObject.png"  format="PNG" />
+						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/workerActiveObject.png" format="PNG"/>
 					</imageobject>
 				</mediaobject>
 			</figure>
@@ -1327,7 +1325,7 @@
 					
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/stubProxyFuture.png" format="PNG"/>
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/stubProxyFuture.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -1493,7 +1491,7 @@
 
 						<mediaobject>
 							<imageobject>
-								<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/sequentialCall.png" format="PNG"/>
+								<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/sequentialCall.png" format="PNG"/>
 							</imageobject>
 						</mediaobject>
 					</figure>
@@ -1540,7 +1538,7 @@
 
 				<mediaobject>
 					<imageobject>
-						<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/workerActiveObject.png" format="PNG" />
+						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/workerActiveObject.png" format="PNG"/>
 					</imageobject>
 				</mediaobject>
 			</figure>
@@ -1572,7 +1570,7 @@
 
 								<mediaobject>
 									<imageobject>
-										<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/workerActiveObjectWithFuture.png" format="PNG" />
+										<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/workerActiveObjectWithFuture.png" format="PNG"/>
 									</imageobject>
 								</mediaobject>
 							</figure>
@@ -1603,7 +1601,7 @@
 
 								<mediaobject>
 									<imageobject>
-										<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/workerActiveObjectWithUpdatedFuture.png" format="PNG" />
+										<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/workerActiveObjectWithUpdatedFuture.png" format="PNG"/>
 									</imageobject>
 								</mediaobject>
 							</figure>
@@ -1716,7 +1714,7 @@
 
 						<mediaobject>
 							<imageobject>
-								<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/threadedCallWithFuture.png"/>
+								<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/threadedCallWithFuture.png"/>
 							</imageobject>
 						</mediaobject>
 					</figure>
@@ -1736,7 +1734,7 @@
 
 						<mediaobject>
 							<imageobject>
-								<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/threadedCallWithWaitForFuture.png" format="PNG" />
+								<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/threadedCallWithWaitForFuture.png" format="PNG"/>
 							</imageobject>
 						</mediaobject>
 					</figure>
@@ -2029,7 +2027,7 @@
 				<informalfigure>
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/automaticContinuation1.png" format="PNG"/>
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/automaticContinuation1.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</informalfigure>
@@ -2045,7 +2043,7 @@
 				<informalfigure>
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/automaticContinuation2.png" format="PNG"/>
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/automaticContinuation2.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</informalfigure>
@@ -2056,7 +2054,7 @@
 				<informalfigure>
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/automaticContinuation3.png" format="PNG"/>
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/automaticContinuation3.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</informalfigure>
@@ -2073,7 +2071,7 @@
 				<informalfigure>
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/automaticContinuation4.png" format="PNG"/>
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/automaticContinuation4.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</informalfigure>
@@ -2089,7 +2087,7 @@
 				<informalfigure>
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/automaticContinuation5.png" format="PNG"/>
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/automaticContinuation5.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</informalfigure>
@@ -2105,7 +2103,7 @@
 				<informalfigure>
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/automaticContinuation6.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/automaticContinuation6.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</informalfigure>
@@ -2121,7 +2119,7 @@
 				<informalfigure>
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/automaticContinuation7.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/automaticContinuation7.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</informalfigure>
@@ -2134,7 +2132,7 @@
 				<informalfigure>
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/automaticContinuation8.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/automaticContinuation8.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</informalfigure>
@@ -2209,9 +2207,7 @@
 		</para>
 		
 		<para>
-			<programlisting xml:lang="java">
-				<textobject><textdata fileref="code_snippets/exchangeOperator.txt"/></textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/exchangeOperator.txt"/></textobject></programlisting>
 		</para>
 		
 		<para>
@@ -2222,9 +2218,7 @@
 		</para>
 		
 		<para>
-			<programlisting xml:lang="java">
-				<textobject><textdata fileref="code_snippets/exchangeableDouble.txt"/></textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/exchangeableDouble.txt"/></textobject></programlisting>
 		</para>
 	</section>
 	

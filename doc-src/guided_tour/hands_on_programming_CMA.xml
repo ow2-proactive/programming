@@ -1,4 +1,4 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="hands_on_programming_CMA"><info><title>Active Object Tutorial</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="hands_on_programming_CMA"><info><title>Active Object Tutorial</title></info>
   
 <para>In this chapter we present a step by step introduction to
   programming with ProActive.</para>
@@ -141,7 +141,7 @@
 	a client and uses the <literal>CMAgent</literal> class as a server</title></info> 
 		  <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/cma/simpleCMA.jpg" format="JPG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/cma/simpleCMA.jpg" format="JPG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -300,7 +300,7 @@
       		 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/cma/initCMA.jpg" format="JPG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/cma/initCMA.jpg" format="JPG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -617,7 +617,7 @@
   				<figure><info><title> Deployment process </title></info> 
 		  <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/deployment_process.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/deployment_process.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1191,11 +1191,7 @@
 				For this example a prime number is given as candidate by
 				default.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_sequential_main.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_sequential_main.snip"/></textobject></programlisting>
 		</section>
 
 		<!-- RUNNING -->
@@ -1321,7 +1317,7 @@
 					
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/primes/primes_dg.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/primes/primes_dg.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -1337,7 +1333,7 @@
 					
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/cma/primes_distrib.jpg" format="JPEG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/cma/primes_distrib.jpg" format="JPEG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -1368,23 +1364,11 @@
 
 			<!-- SKELETON CODE -->
 
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_manager_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_manager_skeleton.txt"/></textobject></programlisting>
 
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_worker_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_worker_skeleton.txt"/></textobject></programlisting>
 			
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_main_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_main_skeleton.txt"/></textobject></programlisting>
 
 			<!-- FT-TEST -->
 			
@@ -1410,7 +1394,7 @@
 					
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/primes/primes_dg_killing_jvm_screen.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/primes/primes_dg_killing_jvm_screen.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -1438,31 +1422,19 @@
 				The <literal>Main</literal>
 				class that deploys the manager and the workers.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributed_main.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_main.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>CMAgentPrimeManager</literal>
 				class that distributes the intervals to workers.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributed_manager.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_manager.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>CMAgentPrimeWorker</literal>
 				class that tests if a candidate is prime.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributed_worker.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_worker.snip"/></textobject></programlisting>
 		</section>
 
 		<!-- RUNNING -->
@@ -1571,7 +1543,7 @@
 					<mediaobject>
 						<imageobject>
 							<!-- CHANGE ME !! -->
-							<imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/cma/primes_distrib_mw.jpg" format="JPEG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/cma/primes_distrib_mw.jpg" format="JPEG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -1591,17 +1563,9 @@
 			
 			<!-- SKELETON CODE -->
 
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_task_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_task_skeleton.txt"/></textobject></programlisting>
 			
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_skeleton.txt"/></textobject></programlisting>
 			
 			<!-- FT-TEST -->
 			
@@ -1639,21 +1603,13 @@
 				The <literal>FindPrimeTask</literal>
 				class that performs the computation.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributedmw_task.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_task.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>PrimeExampleMW</literal>
 				class that deploys the master and the workers.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributedmw_example.snip"/>
-				</textobject>
-			</programlisting>								
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_example.snip"/></textobject></programlisting>								
 		</section>		
 		
 		<!-- RUNNING -->

@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="hands_on_programming_PRIMES"><info><title>Primality test tutorial</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="hands_on_programming_PRIMES"><info><title>Primality test tutorial</title></info>
 	
 	<para>
 		This chapter presents a step by step tutorial whose the purpose is to develop a distributed application to test if a number is prime using a self-made master/worker.
@@ -68,7 +66,7 @@
 					<mediaobject>
 						<imageobject>
 							<!-- CHANGE ME !! -->
-							<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/DistributedPrimes.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/DistributedPrimes.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -91,11 +89,7 @@
 				For this example a prime number is given as candidate by
 				default.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_sequential_main.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_sequential_main.snip"/></textobject></programlisting>
 		</section>
 
 		<!-- RUNNING -->
@@ -221,7 +215,7 @@
 					
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/primes/primes_dg.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/primes/primes_dg.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -259,23 +253,11 @@
 
 			<!-- SKELETON CODE -->
 
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_manager_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_manager_skeleton.txt"/></textobject></programlisting>
 
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_worker_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_worker_skeleton.txt"/></textobject></programlisting>
 			
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_main_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_main_skeleton.txt"/></textobject></programlisting>
 
 			<!-- FT-TEST -->
 			
@@ -301,7 +283,7 @@
 					
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/primes/primes_dg_killing_jvm_screen.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/primes/primes_dg_killing_jvm_screen.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -329,31 +311,19 @@
 				The <literal>Main</literal>
 				class that deploys the manager and the workers.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributed_main.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_main.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>CMAgentPrimeManager</literal>
 				class that distributes the intervals to workers.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributed_manager.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_manager.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>CMAgentPrimeWorker</literal>
 				class that tests if a candidate is prime.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributed_worker.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_worker.snip"/></textobject></programlisting>
 		</section>
 
 		<!-- RUNNING -->
@@ -462,7 +432,7 @@
 					<mediaobject>
 						<imageobject>
 							<!-- CHANGE ME !! -->
-							<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/DistributedPrimes.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/DistributedPrimes.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -482,17 +452,9 @@
 			
 			<!-- SKELETON CODE -->
 
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_task_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_task_skeleton.txt"/></textobject></programlisting>
 			
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_skeleton.txt"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_skeleton.txt"/></textobject></programlisting>
 			
 			<!-- FT-TEST -->
 			
@@ -530,21 +492,13 @@
 				The <literal>FindPrimeTask</literal>
 				class that performs the computation.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributedmw_task.snip"/>
-				</textobject>
-			</programlisting>
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_task.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>PrimeExampleMW</literal>
 				class that deploys the master and the workers.
 			</para>
-			<programlisting xml:lang="java">
-				<textobject>
-					<textdata fileref="./automatic_snippets/primes_distributedmw_example.snip"/>
-				</textobject>
-			</programlisting>								
+			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_example.snip"/></textobject></programlisting>								
 		</section>		
 		
 		<!-- RUNNING -->

@@ -1,7 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"
-         xml:id="monte_carlo">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="monte_carlo">
 
     <info>
         <title>Monte-Carlo API</title>
@@ -79,30 +76,18 @@
                 name that will correspond to a remote deployment of the master. The final argument is to allow changing
                 the default Random Number Generator from the SSJ package.
             </para>
-            <programlisting xml:lang="java">
-                <textobject>
-                    <textdata fileref="automatic_snippets/montecarlo_constructor.snip"/>
-                </textobject>
-            </programlisting>
+            <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_constructor.snip"/></textobject></programlisting>
             <para>
                 The run method from the PAMonteCarlo class, is the starting point of the computation. It runs a single
                 task, called a top-level engine task. This task, while running, will most likely generate new children
                 subtasks. The different tasks existing in the framework are described in<xref linkend="mc_api_tasks"/>.
             </para>
-            <programlisting xml:lang="java">
-                <textobject>
-                    <textdata fileref="automatic_snippets/montecarlo_run.snip"/>
-                </textobject>
-            </programlisting>
+            <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_run.snip"/></textobject></programlisting>
             <para>
                 Finally, the terminate method will shut down the framework and every remote JVM created during the
                 initialization phase.
             </para>
-            <programlisting xml:lang="java">
-                <textobject>
-                    <textdata fileref="automatic_snippets/montecarlo_terminate.snip"/>
-                </textobject>
-            </programlisting>
+            <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_terminate.snip"/></textobject></programlisting>
         </section>
         <section xml:id="mc_api_tasks">
             <info>
@@ -122,11 +107,7 @@
                     An engine task can, through the access to two interfaces (the Executor and the Simulator), spawn
                     children engine tasks or simulation sets.
                 </para>
-                <programlisting xml:lang="java">
-                    <textobject>
-                        <textdata fileref="automatic_snippets/montecarlo_enginetask.snip"/>
-                    </textobject>
-                </programlisting>
+                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_enginetask.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_simulation_set">
                 <info>
@@ -140,11 +121,7 @@
                     Unlike the Engine Task, the Simulation Set cannot spawn other tasks and is therefore a "terminal
                     task".
                 </para>
-                <programlisting xml:lang="java">
-                    <textobject>
-                        <textdata fileref="automatic_snippets/montecarlo_simulationset.snip"/>
-                    </textobject>
-                </programlisting>
+                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_simulationset.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_simulation_set_post_process">
                 <info>
@@ -163,11 +140,7 @@
                     The Simulation Set Post Process avoids this tranfer, and allows to do some computations on the same
                     machine which generated the Monte-Carlo simulations.
                 </para>
-                <programlisting xml:lang="java">
-                    <textobject>
-                        <textdata fileref="automatic_snippets/montecarlo_simulationsetpostprocess.snip"/>
-                    </textobject>
-                </programlisting>
+                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_simulationsetpostprocess.snip"/></textobject></programlisting>
             </section>
         </section>
         <section xml:id="mc_example">
@@ -183,11 +156,7 @@
                     financial risk management theory.
                     An example of such a process is the Geometric Brownian Motion:
                 </para>
-                <programlisting xml:lang="java">
-                    <textobject>
-                        <textdata fileref="automatic_snippets/montecarlo_geometricbrownianmotion.snip"/>
-                    </textobject>
-                </programlisting>
+                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_geometricbrownianmotion.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_basic_applications">
                 <info>

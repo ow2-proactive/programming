@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ReferenceCard"><info><title>Reference Card</title></info>
+<?xml version="1.0" encoding="utf-8"?><appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ReferenceCard"><info><title>Reference Card</title></info>
   
 
   <para><emphasis role="bold">ProActive</emphasis> is a Java library for
@@ -419,8 +417,7 @@
     <para><emphasis role="bold">Descriptor example that creates three JVMs on the
     local machine: </emphasis></para>
 
- 		<programlisting xml:lang="XML"><textobject><textdata 
- 			fileref="../src/Tests/functionalTests/activeobject/creation/parallel/4_local.xml"/></textobject></programlisting>
+ 		<programlisting xml:lang="XML"><textobject><textdata fileref="../src/Tests/functionalTests/activeobject/creation/parallel/4_local.xml"/></textobject></programlisting>
     
     <para>We can also specify lists of hosts for deployment: </para>
  		<programlisting xml:lang="XML"><textobject><textdata fileref="examples_legacy_descriptors/RSHListbyHost_Example.xml"/></textobject></programlisting>

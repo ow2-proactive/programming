@@ -1,6 +1,4 @@
-<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">  --> 
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
-	xml:id="userguide">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="userguide">
 	<info>
 		<title>User guide</title>
 	</info>
@@ -19,7 +17,7 @@
 			<primary>ADL</primary>
 			<secondary>definition</secondary>
 		</indexterm>
-		<para />
+		<para/>
 		<para>
 			The Architecture Description Languages (ADL) are a way to
 			describe software and/or system architectures. ADLs
@@ -37,8 +35,7 @@
 			In the case of ProActive we have developed the Grid
 			Component Model which is an extension of the Fractal ADL.
 			For detailed information on Fractal read
-			<link xmlns:xlink="http://www.w3.org/1999/xlink"
-				xlink:href="http://fractal.objectweb.org/tutorials/adl/index.html">
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://fractal.objectweb.org/tutorials/adl/index.html">
 				Fractal ADL tutorial
 			</link>
 			.
@@ -87,30 +84,30 @@
 				Examples/org.objectweb.proactive.examples.components.helloworld.
 			</para>
 
-			<programlisting xml:lang="xml" linenumbering="numbered"><![CDATA[  <?xml version="1.0" encoding="ISO-8859-1" ?>
-  <!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+			<programlisting xml:lang="xml" linenumbering="numbered">  &lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+  &lt;!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd"&gt;
 
-  <definition name="org.objectweb.proactive.examples.components.helloworld.HelloWorld">
-    <interface name="m" role="server" signature="org.objectweb.proactive.examples.components.helloworld.Main"/>
+  &lt;definition name="org.objectweb.proactive.examples.components.helloworld.HelloWorld"&gt;
+    &lt;interface name="m" role="server" signature="org.objectweb.proactive.examples.components.helloworld.Main"/&gt;
 
-    <component name="client" definition="org.objectweb.proactive.examples.components.helloworld.ClientImpl"/>
-    <component name="server">
-      <interface name="s" role="server" signature="org.objectweb.proactive.examples.components.helloworld.Service"/>
-     <content class="ServerImpl"/>
-     <attributes signature="org.objectweb.proactive.examples.components.helloworld.ServiceAttributes">
-       <attribute name="header" value="-> "/>
-       <attribute name="count" value="1"/>
-     </attributes>
-     <controller desc="primitive"/>
-   </component>
+    &lt;component name="client" definition="org.objectweb.proactive.examples.components.helloworld.ClientImpl"/&gt;
+    &lt;component name="server"&gt;
+      &lt;interface name="s" role="server" signature="org.objectweb.proactive.examples.components.helloworld.Service"/&gt;
+     &lt;content class="ServerImpl"/&gt;
+     &lt;attributes signature="org.objectweb.proactive.examples.components.helloworld.ServiceAttributes"&gt;
+       &lt;attribute name="header" value="-&gt; "/&gt;
+       &lt;attribute name="count" value="1"/&gt;
+     &lt;/attributes&gt;
+     &lt;controller desc="primitive"/&gt;
+   &lt;/component&gt;
 
-   <binding client="this.m" server="client.m"/>
-   <binding client="client.s" server="server.s"/>
+   &lt;binding client="this.m" server="client.m"/&gt;
+   &lt;binding client="client.s" server="server.s"/&gt;
 
-   <controller desc="composite"/>
+   &lt;controller desc="composite"/&gt;
 
-   <virtual-node name="helooworld-node" cardinality="single"/>
- </definition>]]></programlisting>
+   &lt;virtual-node name="helooworld-node" cardinality="single"/&gt;
+ &lt;/definition&gt;</programlisting>
 
 			<para>
 				Now, here is a detailed description of each lines:
@@ -354,9 +351,9 @@
 				ADL definitions correspond to component factories. ADL
 				definition can be used directly:
 				<programlisting xml:lang="java">
-					<![CDATA[Factory factory = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
+					Factory factory = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
 					Map context = new HashMap();
-					Component c = (Component) factory.newComponent("myADLDefinition",context);]]>
+					Component c = (Component) factory.newComponent("myADLDefinition",context);
 				</programlisting>
 			</para>
 			<para>
@@ -392,7 +389,7 @@
 		<info>
 			<title>Deployment</title>
 		</info>
-		<para></para>
+		<para/>
 	</section>
 
 	<section xml:id="collective-interfaces">
@@ -552,9 +549,7 @@
 
 						<mediaobject>
 							<imageobject>
-								<imagedata scalefit="1" width="100%"
-									contentdepth="100%" align="center"
-									fileref="components/pics/multicast-itfs.png" format="PNG" />
+								<imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="components/pics/multicast-itfs.png" format="PNG"/>
 							</imageobject>
 						</mediaobject>
 					</figure>
@@ -612,10 +607,7 @@
 
 						<mediaobject>
 							<imageobject>
-								<imagedata scalefit="1" width="100%"
-									contentdepth="100%"
-									fileref="components/pics/parameters-broadcast-scatter.png"
-									format="PNG" />
+								<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/parameters-broadcast-scatter.png" format="PNG"/>
 							</imageobject>
 						</mediaobject>
 					</figure>
@@ -778,11 +770,11 @@
 
 						<para>
 							<programlisting xml:lang="java">
-								<![CDATA[@ClassDispatchMetadata(mode=@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST))
+								@ClassDispatchMetadata(mode=@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST))
 								interface MyMulticastItf {
 
-									public void foo(List&lt;T&gt; parameters);
-								}]]>
+									public void foo(List&amp;lt;T&amp;gt; parameters);
+								}
 							</programlisting>
 						</para>
 					</section>
@@ -813,8 +805,8 @@
 
 						<para>
 							<programlisting xml:lang="java">
-								<![CDATA[@MethodDispatchMetadata(mode=@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST))
-								public void foo(List&lt;T&gt; parameters);]]>
+								@MethodDispatchMetadata(mode=@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST))
+								public void foo(List&amp;lt;T&amp;gt; parameters);
 							</programlisting>
 						</para>
 					</section>
@@ -837,8 +829,8 @@
 
 						<para>
 							<programlisting xml:lang="java">
-								<![CDATA[public void foo(@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST)
-														List&lt;T&gt; parameters);]]>
+								public void foo(@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST)
+														List&amp;lt;T&amp;gt; parameters);
 							</programlisting>
 						</para>
 					</section>
@@ -996,10 +988,7 @@
 
 						<mediaobject>
 							<imageobject>
-								<imagedata scalefit="1" width="100%"
-									contentdepth="100%" align="center"
-									fileref="components/pics/multicast-signatures-lists.png"
-									format="PNG" />
+								<imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="components/pics/multicast-signatures-lists.png" format="PNG"/>
 							</imageobject>
 						</mediaobject>
 					</figure>
@@ -1131,9 +1120,7 @@
 
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%"
-								contentdepth="100%" align="center"
-								fileref="components/pics/gathercast-itfs.png" format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="components/pics/gathercast-itfs.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -1181,10 +1168,7 @@
 
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%"
-										contentdepth="100%" align="center"
-										fileref="components/pics/gathercast-aggregation.png"
-										format="PNG" />
+									<imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="components/pics/gathercast-aggregation.png" format="PNG"/>
 								</imageobject>
 							</mediaobject>
 						</figure>
@@ -1279,10 +1263,7 @@
 
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%"
-								contentdepth="100%" align="center"
-								fileref="components/pics/gathercast-signatures.png"
-								format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="components/pics/gathercast-signatures.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -1425,7 +1406,7 @@
 			<para>
 				As this implementation is based on ProActive, several
 				conditions are required (more in
-				<xref linkend="ActiveObjectCreation" />
+				<xref linkend="ActiveObjectCreation"/>
 				):
 			</para>
 
@@ -1442,7 +1423,7 @@
 					<para>
 						asynchronous method calls with transparent
 						futures is a core feature of ProActive (
-						<xref linkend="FutureObjectCreation" />
+						<xref linkend="FutureObjectCreation"/>
 						), and it allows concurrent processing. Indeed,
 						suppose a caller invokes a method on a callee.
 						This method returns a result on a component.
@@ -1549,7 +1530,7 @@
 						<para>
 							the activity as defined in the ProActive
 							model (optional). See
-							<xref linkend="ActiveObjectCreation" />
+							<xref linkend="ActiveObjectCreation"/>
 							for more informations about activity in
 							ProActive.
 						</para>
@@ -1577,7 +1558,7 @@
 			<para>
 				Collective interactions are an extension to the Fractal
 				model, described in section
-				<xref linkend="collective-interfaces" />
+				<xref linkend="collective-interfaces"/>
 				, that relies on collective interfaces.
 			</para>
 
@@ -1643,8 +1624,7 @@
 					org.objectweb.proactive.core.component.controller.PriorityController
 				</literal>
 				, has to be used:
-				<programlisting xml:lang="java"><textobject><textdata
-					fileref="core/component/controller/PriorityController.java" /></textobject></programlisting>
+				<programlisting xml:lang="java"><textobject><textdata fileref="core/component/controller/PriorityController.java"/></textobject></programlisting>
 			</para>
 		</section>
 
@@ -1684,8 +1664,7 @@
 			<title>Advanced</title>
 		</info>
 
-		<section
-			xml:id="configuration_html_Controllers_and_interceptors_n">
+		<section xml:id="configuration_html_Controllers_and_interceptors_n">
 			<info>
 				<title>Controllers and interceptors</title>
 			</info>
@@ -1716,17 +1695,17 @@
 				</para>
 
 				<programlisting xml:lang="xml">
-					<![CDATA[<componentConfiguration>
-						<controllers>
-							<controller>
-								<interface>
+					&lt;componentConfiguration&gt;
+						&lt;controllers&gt;
+							&lt;controller&gt;
+								&lt;interface&gt;
 									ControllerInterface
-								</interface>
-								<implementation>
+								&lt;/interface&gt;
+								&lt;implementation&gt;
 									ControllerImplementation
-								</implementation>
-							</controller>
-							...]]>
+								&lt;/implementation&gt;
+							&lt;/controller&gt;
+							...
 				</programlisting>
 
 				<para>
@@ -1751,9 +1730,9 @@
 				</para>
 
 				<programlisting xml:lang="java">
-					<![CDATA[componentInstance = componentFactory.newFcInstance(myComponentType,
+					componentInstance = componentFactory.newFcInstance(myComponentType,
 												new ControllerDescription("name",myHierarchicalType,thePathToMyControllerConfigFile),
-												myContentDescription);]]>
+												myContentDescription);
 				</programlisting>
 			</section>
 
@@ -1796,9 +1775,9 @@
 				</orderedlist>
 
 				<programlisting xml:lang="java">
-					<![CDATA[public ControllerImplementation(Component owner) {
+					public ControllerImplementation(Component owner) {
 						super(owner);
-					}]]>
+					}
 				</programlisting>
 
 				<orderedlist>
@@ -1813,7 +1792,7 @@
 				</orderedlist>
 
 				<programlisting xml:lang="java">
-					<![CDATA[protected void setControllerItfType() {
+					protected void setControllerItfType() {
 						try {
 							setItfType(ProActiveTypeFactory.instance().createFcItfType(
 								"Name of the controller", TypeFactory.SINGLE));
@@ -1822,7 +1801,7 @@
 							throw new ProActiveRuntimeException("cannot create controller type: "
 								+ this.getClass().getName());
 						}
-					}]]>
+					}
 				</programlisting>
 
 				<orderedlist>
@@ -1872,18 +1851,18 @@
 				</para>
 
 				<programlisting xml:lang="xml">
-					<![CDATA[<componentConfiguration>
-						<controllers>
+					&lt;componentConfiguration&gt;
+						&lt;controllers&gt;
 							...
-							<controller input-interceptor="true" output-interceptor="true">
-								<interface>
+							&lt;controller input-interceptor="true" output-interceptor="true"&gt;
+								&lt;interface&gt;
 									InterceptorControllerInterface
-								</interface>
-								<implementation>
+								&lt;/interface&gt;
+								&lt;implementation&gt;
 									ControllerImplementation
-								</implementation>
-							</controller>
-							...]]>
+								&lt;/implementation&gt;
+							&lt;/controller&gt;
+							...
 				</programlisting>
 
 				<para>
@@ -1917,10 +1896,10 @@
 				</para>
 
 				<screen>
-					<![CDATA[--> caller --> InputInterceptor1.beforeInputMethodInvocation -->
-						InputInterceptor2.beforeInputMethodInvocation --> callee.invocation -->
-						InputInterceptor2.afterInputMethodInvocation -->
-						InputInterceptor1.afterInputMethodInvocation]]>
+					--&gt; caller --&gt; InputInterceptor1.beforeInputMethodInvocation --&gt;
+						InputInterceptor2.beforeInputMethodInvocation --&gt; callee.invocation --&gt;
+						InputInterceptor2.afterInputMethodInvocation --&gt;
+						InputInterceptor1.afterInputMethodInvocation
 				</screen>
 
 				<para>
@@ -1950,10 +1929,10 @@
 				</para>
 
 				<screen>
-					<![CDATA[--> currentComponent --> OutputInterceptor1.beforeOutputMethodInvocation -->
-						OutputInterceptor2.beforeOutputMethodInvocation --> callee.invocation -->
-						OutputInterceptor2.afterOutputMethodInvocation -->
-						OutputInterceptor1.afterOutputMethodInvocation]]>
+					--&gt; currentComponent --&gt; OutputInterceptor1.beforeOutputMethodInvocation --&gt;
+						OutputInterceptor2.beforeOutputMethodInvocation --&gt; callee.invocation --&gt;
+						OutputInterceptor2.afterOutputMethodInvocation --&gt;
+						OutputInterceptor1.afterOutputMethodInvocation
 				</screen>
 			</section>
 
@@ -1982,7 +1961,7 @@
 				</para>
 
 				<programlisting xml:lang="java">
-					<![CDATA[public class MyInputInterceptor extends AbstractProActiveController
+					public class MyInputInterceptor extends AbstractProActiveController
 															implements InputInterceptor, MyController {
 						public MyInputInterceptor(Component owner) {
 							super(owner);
@@ -2015,30 +1994,29 @@
 							System.out.println("pre processing an intercepted an incoming functional invocation");
 							// interception code
 						}
-					}]]>
+					}
 				</programlisting>
 
 				<para>The configuration file would state:</para>
 
 				<programlisting xml:lang="xml">
-					<![CDATA[<componentConfiguration>
-						<controllers>
+					&lt;componentConfiguration&gt;
+						&lt;controllers&gt;
 							...
-							<controller input-interceptor="true">
-								<interface>
+							&lt;controller input-interceptor="true"&gt;
+								&lt;interface&gt;
 									MyController
-								</interface>
-								<implementation>
+								&lt;/interface&gt;
+								&lt;implementation&gt;
 									MyInputInterceptor
-								</implementation>
-							</controller>
-							...]]>
+								&lt;/implementation&gt;
+							&lt;/controller&gt;
+							...
 				</programlisting>
 			</section>
 		</section>
 
-		<section
-			xml:id="Lifecycle_encapsulation_of_functional_activity_in_component_lifecycle">
+		<section xml:id="Lifecycle_encapsulation_of_functional_activity_in_component_lifecycle">
 			<info>
 				<title>
 					Lifecycle: encapsulation of functional activity in
@@ -2162,7 +2140,7 @@
 					externals. Finally, our approach gives the necessary tools for membrane reconfiguration, providing flexibility and evolution abilities. The API we present can
 					be split in two parts:
 					
-					<itemizedlist mark='opencircle'>
+					<itemizedlist mark="opencircle">
 						<listitem>
 							<para>
 								Methods dedicated to component instantiation: they allow the specification
@@ -2223,9 +2201,7 @@
 						</info>
 						<mediaobject>
 							<imageobject>
-								<imagedata scalefit="1" width="100%"
-									contentdepth="100%" fileref="components/pics/Significant_example.png"
-									format="PNG"/>
+								<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/Significant_example.png" format="PNG"/>
 							</imageobject>
 						</mediaobject>
 					</figure>
@@ -2247,9 +2223,7 @@
 						</info>
 						<mediaobject>
 							<imageobject>
-								<imagedata scalefit="1" width="100%"
-									contentdepth="100%" fileref="components/pics/Overall_picture.png"
-									format="PNG" />
+								<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/Overall_picture.png" format="PNG"/>
 							</imageobject>
 						</mediaobject>
 					</figure>
@@ -2396,7 +2370,7 @@
 								defines the following methods:
 								
 								
-								<itemizedlist mark='opencircle'>
+								<itemizedlist mark="opencircle">
 									<listitem>
 										<para>
 											addNFSubComponent(Component component): adds the NF component
@@ -2622,9 +2596,7 @@
 
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%"
-								contentdepth="100%" fileref="components/pics/shortcuts.png"
-								format="PNG" />
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/shortcuts.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
@@ -2646,8 +2618,8 @@
 				</para>
 
 				<programlisting xml:lang="java">
-					<![CDATA[ControllerDescription controllerDescription = new ControllerDescription("name", Constants.COMPOSITE,
-																									Constants.SYNCHRONOUS);]]>
+					ControllerDescription controllerDescription = new ControllerDescription("name", Constants.COMPOSITE,
+																									Constants.SYNCHRONOUS);
 				</programlisting>
 
 				<para>

@@ -1,5 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Principles">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Principles">
 
 <info><title>ProActive Overview</title></info>
   
@@ -82,7 +81,7 @@
         <mediaobject>
         
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/ProActive_Features.png" format="PNG"/>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/ProActive_Features.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -239,7 +238,7 @@
         <mediaobject>
         
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/MetaObject_Architecture.png" format="PNG"/>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/MetaObject_Architecture.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>

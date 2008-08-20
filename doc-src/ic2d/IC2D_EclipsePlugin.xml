@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="IC2D_EclipsePlugin"><info><title>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="IC2D_EclipsePlugin"><info><title>
         IC2D: Interactive Control and Debugging of Distribution</title></info>
     
     <para>
@@ -117,7 +115,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/monitoringPerspective4.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/monitoringPerspective4.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -163,7 +161,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/monitor_new_host.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/monitor_new_host.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -177,7 +175,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/monitorNewHostButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/monitorNewHostButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -189,7 +187,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/SetDepthControlButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/SetDepthControlButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -207,7 +205,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/SetTimeRefreshButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/SetTimeRefreshButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -220,7 +218,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/RefreshButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/RefreshButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -229,7 +227,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/EnableMonitoringButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/EnableMonitoringButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -240,7 +238,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/P2PButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/P2PButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -249,7 +247,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/ZoomInButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/ZoomInButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -257,7 +255,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/ZoomOutButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/ZoomOutButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -265,7 +263,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/NewMonitoringViewButton.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/NewMonitoringViewButton.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -288,7 +286,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/virtualnodes.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/virtualnodes.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -392,7 +390,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/showViewJobMonitoring.png" format="PNG"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/showViewJobMonitoring.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -405,7 +403,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/jobMonitoringButton.png" format="PNG"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/jobMonitoringButton.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -413,7 +411,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/monitoringadded.png" format="PNG"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/monitoringadded.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -427,7 +425,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/RunMonitoring3.png" format="PNG"/>
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/RunMonitoring3.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -488,7 +486,7 @@
                         
                         <mediaobject>
                             <imageobject>
-                                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/timit/timit-context-menu.png" format="PNG"/>
+                                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/timit/timit-context-menu.png" format="PNG"/>
                             </imageobject>
                         </mediaobject>
                  </figure>
@@ -513,7 +511,7 @@
                             
                             <mediaobject>
                                 <imageobject>
-                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/timit/timit-main-view.png" format="PNG"/>
+                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/timit/timit-main-view.png" format="PNG"/>
                                 </imageobject>
                             </mediaobject>
                         </figure>
@@ -822,7 +820,7 @@
                             
                             <mediaobject>
                                 <imageobject>
-                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/timit/timit-tree-view.png" format="PNG"/>
+                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/timit/timit-tree-view.png" format="PNG"/>
                                 </imageobject>
                             </mediaobject>
                         </figure>
@@ -846,7 +844,7 @@
                             
                             <mediaobject>
                                 <imageobject>
-                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/timit/timit-timeline-view.png" format="PNG"/>
+                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/timit/timit-timeline-view.png" format="PNG"/>
                                 </imageobject>
                             </mediaobject>
                         </figure>
@@ -884,9 +882,7 @@
         			<!-- BIRT -->
         			<listitem>
         				<para>
-        					<link
-        						xmlns:xlink="http://www.w3.org/1999/xlink"
-        						xlink:href="http://www.eclipse.org/birt/phoenix/">
+        					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.eclipse.org/birt/phoenix/">
         						BIRT
         					</link>
         					For bars, lines, pies and area charts.
@@ -895,9 +891,7 @@
         			<!-- RRD4J -->
         			<listitem>
         				<para>
-        					<link
-        						xmlns:xlink="http://www.w3.org/1999/xlink"
-        						xlink:href="https://rrd4j.dev.java.net/">
+        					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://rrd4j.dev.java.net/">
         						RRD4J
         					</link>
         					For time based series (including values
@@ -909,7 +903,7 @@
 
         	<para>
         		For a quick start, as shown in
-        		<xref linkend="chartit-context-menu" />
+        		<xref linkend="chartit-context-menu"/>
         		simply right-click on a ProActive runtime (a jvm)
         		representation in the Monitoring View then click on
         		<emphasis role="bold">Show XXXX in ChartIt</emphasis>
@@ -926,10 +920,7 @@
 
         		<mediaobject>
         			<imageobject>
-        				<imagedata scalefit="1" width="100%"
-        					contentdepth="100%"
-        					fileref="ic2d/images/chartit/chartit-context-menu.png"
-        					format="PNG" />
+        				<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/chartit/chartit-context-menu.png" format="PNG"/>
         			</imageobject>
         		</mediaobject>
         	</figure>
@@ -948,10 +939,7 @@
 
         		<mediaobject>
         			<imageobject>
-        				<imagedata scalefit="1" width="100%"
-        					contentdepth="100%"
-        					fileref="ic2d/images/chartit/chartit-charts-tab-view.png"
-        					format="PNG" />
+        				<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/chartit/chartit-charts-tab-view.png" format="PNG"/>
         			</imageobject>
         		</mediaobject>
         	</figure>
@@ -964,7 +952,7 @@
         	
         	<para>
         		To do so, click on the <emphasis role="bold">Clear</emphasis> button at the top-left corner of the ChartIt editor then click on 
-        		<emphasis role="bold">Overview</emphasis> tab as shown <xref linkend="chartit-overview-tab-view" />.        		
+        		<emphasis role="bold">Overview</emphasis> tab as shown <xref linkend="chartit-overview-tab-view"/>.        		
         	</para>
         	
         	<figure xml:id="chartit-overview-tab-view">
@@ -974,10 +962,7 @@
 
         		<mediaobject>
         			<imageobject>
-        				<imagedata scalefit="1" width="100%"
-        					contentdepth="100%"
-        					fileref="ic2d/images/chartit/chartit-overview-tab-view.png"
-        					format="PNG" />
+        				<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/chartit/chartit-overview-tab-view.png" format="PNG"/>
         			</imageobject>
         		</mediaobject>
         	</figure>        	
@@ -1028,7 +1013,7 @@
         	</para>
         	
         	<para>
-        		Let's add another chart to the current configuration as shown in <xref linkend="chartit-overview-tab-create-new" />.
+        		Let's add another chart to the current configuration as shown in <xref linkend="chartit-overview-tab-create-new"/>.
         		To do so, simply click on <emphasis role="bold">Create</emphasis> button in the <emphasis role="bold">Charts</emphasis> section.
         		A new chart will appear in the charts list, with a default name (automatically selected in the description section where you can change it's name).
         		Then add some data providers from the <emphasis role="bold">Available Data Providers</emphasis> section
@@ -1042,16 +1027,13 @@
 
         		<mediaobject>
         			<imageobject>
-        				<imagedata scalefit="1" width="100%"
-        					contentdepth="100%"
-        					fileref="ic2d/images/chartit/chartit-overview-tab-create-new.png"
-        					format="PNG" />
+        				<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/chartit/chartit-overview-tab-create-new.png" format="PNG"/>
         			</imageobject>
         		</mediaobject>
         	</figure> 
         	
         	<para>
-        		Once your chart has been created simply click back on the Charts tab in the ChartIt view to see your chart as shown in the <xref linkend="chartit-charts-tab-custom-chart" />.
+        		Once your chart has been created simply click back on the Charts tab in the ChartIt view to see your chart as shown in the <xref linkend="chartit-charts-tab-custom-chart"/>.
         		For instance, the custom pie chart represent the percentage of user/internal bodies on the monitored ProActive runtime (ie the monitored jvm).          		        	
         	</para>
         	
@@ -1062,10 +1044,7 @@
 
         		<mediaobject>
         			<imageobject>
-        				<imagedata scalefit="1" width="100%"
-        					contentdepth="100%"
-        					fileref="ic2d/images/chartit/chartit-charts-tab-with-custom-chart.png"
-        					format="PNG" />
+        				<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/chartit/chartit-charts-tab-with-custom-chart.png" format="PNG"/>
         			</imageobject>
         		</mediaobject>
         	</figure>         	
@@ -1267,7 +1246,7 @@
                         
                         <mediaobject>
                             <imageobject>
-                                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/perspectiveLauncher.png" format="PNG"  />
+                                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/perspectiveLauncher.png" format="PNG"/>
                             </imageobject>
                         </mediaobject>
                     </figure>
@@ -1298,7 +1277,7 @@
                         
                         <mediaobject>
                             <imageobject>
-                                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="ic2d/images/features/openWith.png" format="PNG"  />
+                                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/openWith.png" format="PNG"/>
                             </imageobject>
                         </mediaobject>
                     </figure>
@@ -1341,7 +1320,7 @@
                         
                         <mediaobject>
                             <imageobject>
-                                <imagedata scalefit="1" width="100%" contentdepth="100%"  align="center" fileref="ic2d/images/features/LauncherPerspective.png" format="PNG"  />
+                                <imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="ic2d/images/features/LauncherPerspective.png" format="PNG"/>
                             </imageobject>
                         </mediaobject>
                     </figure>
@@ -1380,7 +1359,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="development/plugin_files/wizard_active.jpg" format="JPG"  />
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="development/plugin_files/wizard_active.jpg" format="JPG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -1396,7 +1375,7 @@
                 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="development/plugin_files/editor.jpg" format="JPG"  />
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="development/plugin_files/editor.jpg" format="JPG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -1413,7 +1392,7 @@
             
             <mediaobject>
                 <imageobject>
-                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="development/plugin_files/guided_tour.jpg" format="JPG"  />
+                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="development/plugin_files/guided_tour.jpg" format="JPG"/>
                 </imageobject>
             </mediaobject>
         </figure>

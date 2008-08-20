@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="WrappingMpiAndLegacyCode"><info><title>Wrapping Application Legacy code</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="WrappingMpiAndLegacyCode"><info><title>Wrapping Application Legacy code</title></info>
   
 
   <para>The <emphasis role="bold">Message Passing Interface (MPI)</emphasis>
@@ -87,7 +85,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/deployment.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/deployment.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -286,7 +284,7 @@ public int <emphasis role="bold">getReturnValue</emphasis>();</programlisting>
 
                 <mediaobject>
                   <imageobject>
-                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/status.png" format="PNG"/>
+                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/status.png" format="PNG"/>
                   </imageobject>
                 </mediaobject>
               </figure></para>
@@ -1107,7 +1105,7 @@ public class MyClass{
 
                 <mediaobject>
                   <imageobject>
-                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/MPItoPA.png" format="PNG" />
+                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/MPItoPA.png" format="PNG"/>
                   </imageobject>
                 </mediaobject>
               </figure></para>
@@ -1418,7 +1416,7 @@ public class MyClass{
 
                 <mediaobject>
                   <imageobject>
-                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/MPItoPAtoMPI.png" format="PNG" />
+                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/MPItoPAtoMPI.png" format="PNG"/>
                   </imageobject>
                 </mediaobject>
               </figure></para>
@@ -1445,7 +1443,7 @@ public class MyClass{
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/MPItoMPI.jpg" format="JPG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/MPItoMPI.jpg" format="JPG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1691,7 +1689,7 @@ public class MyClass{
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/jacobi_schema.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/jacobi_schema.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -1739,9 +1737,7 @@ public class MyClass{
         <para>For more details about writing a file descriptor, please refer
         to <xref linkend="Using_the_Infrastructure"/>.</para>
 
-        <programlisting xml:lang="xml"><textobject>
-            <textdata fileref="mpi_files/MPI-Jacobi-nina-nef.xml"/>
-          </textobject></programlisting>
+        <programlisting xml:lang="xml"><textobject><textdata fileref="mpi_files/MPI-Jacobi-nina-nef.xml"/></textobject></programlisting>
 
         <note>
           <para>To be interfaced with some native code, each wrapper/proxy
@@ -1760,9 +1756,7 @@ public class MyClass{
         <para>Place the source file in <emphasis role="bold">org/objectweb/proactive/mpi/control/config/src</emphasis>
         directory</para>
 
-        <programlisting xml:lang="java"><textobject>
-            <textdata fileref="mpi_files/jacobi.c"/>
-          </textobject></programlisting>
+        <programlisting xml:lang="java"><textobject><textdata fileref="mpi_files/jacobi.c"/></textobject></programlisting>
       </section>
 
       <section><info><title>Compiling the MPI source code</title></info>
@@ -1785,9 +1779,7 @@ linux&gt; make mpicode=jacobi</screen></para>
       <section><info><title>Writing the ProActive Main program</title></info>
         
 
-        <programlisting xml:lang="java"><textobject>
-            <textdata fileref="mpi_files/Main.java"/>
-          </textobject></programlisting>
+        <programlisting xml:lang="java"><textobject><textdata fileref="mpi_files/Main.java"/></textobject></programlisting>
       </section>
 
       <section><info><title>Executing application</title></info>
@@ -1937,7 +1929,7 @@ created VirtualNode name=Cluster_Nina
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/ic2dShot16x16.jpg" format="JPG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/ic2dShot16x16.jpg" format="JPG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -1961,7 +1953,7 @@ created VirtualNode name=Cluster_Nina
 
             <mediaobject>
               <imageobject>
-                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/Design.png" format="PNG" />
+                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/Design.png" format="PNG"/>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -1985,7 +1977,7 @@ created VirtualNode name=Cluster_Nina
 
             <mediaobject>
               <imageobject>
-                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="mpi_files/architecture.png" format="PNG" />
+                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="mpi_files/architecture.png" format="PNG"/>
               </imageobject>
             </mediaobject>
           </figure></para>

@@ -1,4 +1,4 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsTutorial"><info><title>GCM Components Tutorial</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsTutorial"><info><title>GCM Components Tutorial</title></info>
 	<section><info><title>Introduction</title></info> 
 		
 		<para>
@@ -29,7 +29,7 @@
       	<figure><info><title> Component with inner component distributed </title></info> 
 		  <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/gcm/gcm_nodes.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/gcm_nodes.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -112,7 +112,7 @@
       	<figure><info><title> Component parameters </title></info> 
 		  <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/gcm/gcm_parameters.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/gcm_parameters.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -136,7 +136,7 @@
       	<figure><info><title> Invocation parameter with a gathercast interface </title></info> 
 		  <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/gcm/gcm_gathercast_invocation.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/gcm_gathercast_invocation.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -146,7 +146,7 @@
       	<figure><info><title> Distribution policies </title></info> 
 		  <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/gcm/distribution_policies.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/distribution_policies.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -266,7 +266,7 @@
 	      	<figure xml:id="component_assembly"><info><title>Component assembly </title></info> 
 			  <mediaobject>
 	          <imageobject>
-	            <imagedata scalefit="1" width="100%" contentdepth="100%"    fileref="guided_tour/pics/gcm/component_assembly.png" format="PNG" />
+	            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/component_assembly.png" format="PNG"/>
 	          </imageobject>
 	        </mediaobject>
 	      </figure>

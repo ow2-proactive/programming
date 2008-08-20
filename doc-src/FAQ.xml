@@ -1,6 +1,4 @@
-<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">    -->
-
-<appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="FAQ"><info><title>Frequently Asked Questions</title></info>
+<?xml version="1.0" encoding="utf-8"?><appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="FAQ"><info><title>Frequently Asked Questions</title></info>
   
 
   <para><emphasis role="bold">Note:</emphasis> This FAQ is under construction.
@@ -903,7 +901,7 @@ Default target: compile.all
          active object. It was of no use most of the time and was made
          obsolete with the introduction of the MetaObjectFactory 
          in the <emphasis role="bold">0.9.3</emphasis> release.</para>
-<programlisting><textobject><textdata fileref="core/body/MetaObjectFactory.java"></textdata></textobject></programlisting>        
+<programlisting><textobject><textdata fileref="core/body/MetaObjectFactory.java"/></textobject></programlisting>        
 
         <para>Up to <emphasis role="bold">ProActive 0.9.3</emphasis> the
          activity of an active object was given by a method

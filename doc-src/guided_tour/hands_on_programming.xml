@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="hands_on_programming"><info><title>Step by step tutorial</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="hands_on_programming"><info><title>Step by step tutorial</title></info>
   
 <para>In this chapter we present a step by step introduction to
   programming with ProActive.</para>
@@ -49,7 +47,7 @@
 	<figure><info><title> Client-Server architecture</title></info> 
 		  <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/clientserver.png" format="PNG" />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/clientserver.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -178,7 +176,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
       		 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/ic2d_simplehello.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/ic2d_simplehello.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -223,7 +221,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
       		 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/initializedhello.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/initializedhello.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -294,7 +292,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
       		 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/ic2d_initialized_hello.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/ic2d_initialized_hello.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -548,7 +546,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
   				
   				<mediaobject>
   					<imageobject>
-  						<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/DeployedHelloWorld.png" format="PNG" />
+  						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/DeployedHelloWorld.png" format="PNG"/>
   					</imageobject>
   				</mediaobject>
   			</figure>
@@ -638,7 +636,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
   				
   				<mediaobject>
   					<imageobject>
-  						<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/ic2d_deployed_hello.png" format="PNG" />
+  						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/ic2d_deployed_hello.png" format="PNG"/>
   					</imageobject>
   				</mediaobject>
   			</figure>
@@ -681,7 +679,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
       	
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/MigratableHelloWorld.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/MigratableHelloWorld.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -787,7 +785,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
       		 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/ic2d_migratable_hello_started.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/ic2d_migratable_hello_started.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -802,7 +800,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
       		 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/ic2d_migratable_hello_final.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/ic2d_migratable_hello_final.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -827,7 +825,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
       	
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/DistributedPrimes.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/DistributedPrimes.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -841,7 +839,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
 			
 		  <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/distributed_primes_bootstrap.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/distributed_primes_bootstrap.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -856,7 +854,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
 			
 		  <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/hello/distributed_primes_regular.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/hello/distributed_primes_regular.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -955,7 +953,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
       		 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/ic2d_primes.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/ic2d_primes.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -975,7 +973,7 @@ java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:pro
           
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/ic2d_primes_migrated.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/ic2d_primes_migrated.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>

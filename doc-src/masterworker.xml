@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="MasterWorker">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="MasterWorker">
     <info>
         <title>Master-Worker API</title>
     </info>
@@ -73,9 +72,7 @@
 
             <mediaobject>
                 <imageobject>                    
-                    <imagedata scalefit="1" width="100%" contentdepth="100%"
-                               fileref="images/ProActiveMasterUML.png"
-                               format="PNG"/>
+                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/ProActiveMasterUML.png" format="PNG"/>
                 </imageobject>            
             </mediaobject>
         </figure>
@@ -125,7 +122,7 @@
 
             <para>For a full explanation of the ProActive deployment mechanism and of ProActive deployment descriptors,
                 see
-                <xref linkend="XML_Descriptors" />
+                <xref linkend="XML_Descriptors"/>
                 .
             </para>
 
@@ -139,7 +136,7 @@
 
                 <mediaobject>
                     <imageobject>
-                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/masterWorkerDeployment.png" format="PNG" />
+                        <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/masterWorkerDeployment.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
@@ -239,7 +236,7 @@
 
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/masterWorkerTasks.png" format="PNG" />
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/masterWorkerTasks.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -294,7 +291,7 @@
 
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/masterWorkerResults.png" format="PNG" />
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/masterWorkerResults.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>

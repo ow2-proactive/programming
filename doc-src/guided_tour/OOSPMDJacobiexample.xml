@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="OOSPMDJacobiexample"><info><title>OO SPMD PROGRAMMING</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="OOSPMDJacobiexample"><info><title>OO SPMD PROGRAMMING</title></info>
   
 
   <para>If you want to learn more about the OO SPMD programming model before
@@ -350,7 +348,7 @@ private static void printMessageAndWait() {
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/jacobiic2d.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/jacobiic2d.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -385,7 +383,7 @@ private static void printMessageAndWait() {
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/jacobi9-allcoms.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/jacobi9-allcoms.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -395,7 +393,7 @@ private static void printMessageAndWait() {
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/jacobi9-ratio-ligne.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/jacobi9-ratio-ligne.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -459,7 +457,7 @@ private static void printMessageAndWait() {
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="guided_tour/pics/screenshots/jacobiic2d9vm.png" format="PNG" />
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/screenshots/jacobiic2d9vm.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure>
@@ -492,9 +490,7 @@ private static void printMessageAndWait() {
         can be defined, for instance in order to specify different jvm
         configurations (e.g classpath, java path,...).</para>
         
-		<programlisting><textobject><textdata fileref="../descriptors/Matrix.xml"/>
-			</textobject>
-		</programlisting>
+		<programlisting><textobject><textdata fileref="../descriptors/Matrix.xml"/></textobject></programlisting>
 
         <para>Modify your XML deployment file to use the current JVM (i.e the
         JVM reading the descriptor) and also to start 4 JVMs on remote

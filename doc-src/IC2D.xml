@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="IC2D"><info><title>IC2D: Interactive Control and Debugging of Distribution</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="IC2D"><info><title>IC2D: Interactive Control and Debugging of Distribution</title></info>
   
 
   <para>
@@ -88,7 +86,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/ic2d_c3d.png" format="PNG"/>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/ic2d_c3d.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -108,7 +106,7 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/RemoteControl.png" format="PNG"/>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/RemoteControl.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -118,7 +116,7 @@
 
       <mediaobject>
         <imageobject>
-         <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/ic2d_migrate_witharrow.png" format="PNG"  />
+         <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/ic2d_migrate_witharrow.png" format="PNG"/>
         </imageobject>
       </mediaobject>
     </figure>
@@ -138,7 +136,7 @@
     <informalfigure>
       <mediaobject>
         <imageobject>
-          <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/jobmonitor2_logo.png" format="PNG"/>
+          <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/jobmonitor2_logo.png" format="PNG"/>
         </imageobject>
       </mediaobject>
     </informalfigure>
@@ -146,7 +144,7 @@
     <informalfigure>
       <mediaobject>
         <imageobject>
-          <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/jobmonitor1_logo.png" format="PNG"/>
+          <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/jobmonitor1_logo.png" format="PNG"/>
         </imageobject>
       </mediaobject>
     </informalfigure>
@@ -164,7 +162,7 @@
        
        <mediaobject>
         <imageobject>
-         <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/fractal_GUI_launch.png" format="PNG"/>
+         <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/fractal_GUI_launch.png" format="PNG"/>
         </imageobject>
        </mediaobject>
       </figure></para>
@@ -316,7 +314,7 @@
 
           <mediaobject>
             <imageobject>
-               <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/launcher_menu.png" format="PNG"  />
+               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/launcher_menu.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -332,7 +330,7 @@
 
           <mediaobject>
             <imageobject>
-               <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/launcher_frame.png" format="PNG"  />
+               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/launcher_frame.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -359,7 +357,7 @@
       
       <mediaobject>
         <imageobject>
-          <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/clusterLogo.png" format="PNG"/>
+          <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/clusterLogo.png" format="PNG"/>
         </imageobject>
         <caption><para>This is between a globus cluster and an LSF cluster</para></caption>
       </mediaobject>
@@ -368,7 +366,7 @@
     <para>This experiment was partly sponsored by 
      <inlinemediaobject>
       <imageobject>
-       <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/logoSun.png" format="PNG"/>
+       <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/logoSun.png" format="PNG"/>
       </imageobject>
      </inlinemediaobject> .
     </para>

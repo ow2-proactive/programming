@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="nbody"><info><title>The nbody example</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="nbody"><info><title>The nbody example</title></info>
     
     <section><info><title>
             Using facilities provided by ProActive on a complete example
@@ -34,7 +32,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/gui.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/gui.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -47,7 +45,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/gui3d.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/gui3d.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -88,7 +86,7 @@
                                         <informalfigure>
                                             <mediaobject>
                                                 <imageobject>
-                                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/interactions.png" format="PNG"/>
+                                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/interactions.png" format="PNG"/>
                                                 </imageobject>
                                             </mediaobject>
                                         </informalfigure>
@@ -99,7 +97,7 @@
                                         <informalfigure>
                                             <mediaobject>
                                                 <imageobject>
-                                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/forces_simple.png" format="PNG"/>
+                                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/forces_simple.png" format="PNG"/>
                                                 </imageobject>
                                             </mediaobject>
                                         </informalfigure>
@@ -124,7 +122,7 @@
                                         <informalfigure>
                                             <mediaobject>
                                                 <imageobject>
-                                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/forces_sum.png" format="PNG"/>
+                                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/forces_sum.png" format="PNG"/>
                                                 </imageobject>
                                             </mediaobject>
                                         </informalfigure>
@@ -147,7 +145,7 @@
                                         <informalfigure>
                                             <mediaobject>
                                                 <imageobject>
-                                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/acc.png" format="PNG"/>
+                                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/acc.png" format="PNG"/>
                                                 </imageobject>
                                             </mediaobject>
                                         </informalfigure>
@@ -163,7 +161,7 @@
                                         <informalfigure>
                                             <mediaobject>
                                                 <imageobject>
-                                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/movement_equations.png" format="PNG"/>
+                                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/movement_equations.png" format="PNG"/>
                                                 </imageobject>
                                             </mediaobject>
                                         </informalfigure>
@@ -298,7 +296,7 @@
                     
                     <mediaobject>
                         <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/directory.png" format="PNG"/>
+                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/directory.png" format="PNG"/>
                         </imageobject>
                     </mediaobject>
                 </figure>
@@ -387,7 +385,7 @@
                             
                             <mediaobject>
                                 <imageobject>
-                                    <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/forces_simple.png" format="PNG"/>
+                                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/forces_simple.png" format="PNG"/>
                                 </imageobject>
                             </mediaobject>
                         </figure>
@@ -917,7 +915,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                                     <informalfigure>
                                         <mediaobject>
                                             <imageobject>
-                                                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/Domain_subdivision.png" format="PNG"/>
+                                                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/Domain_subdivision.png" format="PNG"/>
                                             </imageobject>
                                         </mediaobject>
                                     </informalfigure>
@@ -928,7 +926,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                                     <informalfigure>
                                         <mediaobject>
                                             <imageobject>
-                                                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="guided_tour/pics/nbody/tree.png" format="PNG"/>
+                                                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/nbody/tree.png" format="PNG"/>
                                             </imageobject>
                                         </mediaobject>
                                     </informalfigure>

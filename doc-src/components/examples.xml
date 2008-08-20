@@ -1,4 +1,4 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="componentExamples"><info><title>Component examples</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="componentExamples"><info><title>Component examples</title></info>
   
 
   <para>Three examples are presented: code snippets for visualizing the transition
@@ -149,9 +149,7 @@ ComponentType aType = tf.createFcType(new InterfaceType[] {
 
       <para>The Service interface is the following:</para>
 
-      <programlisting xml:lang="java"><textobject>
-        <textdata fileref="examples/components/helloworld/Service.java"/>
-       </textobject></programlisting>
+      <programlisting xml:lang="java"><textobject><textdata fileref="examples/components/helloworld/Service.java"/></textobject></programlisting>
 
 
       <para>And the AImpl class is:</para>
@@ -267,7 +265,7 @@ public class AImpl implements A, BindingController {
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="components/pics/model.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/model.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -304,7 +302,7 @@ public class AImpl implements A, BindingController {
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="components/pics/distributed-components-no-wrappers.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/distributed-components-no-wrappers.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -315,7 +313,7 @@ public class AImpl implements A, BindingController {
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="components/pics/distributed-components-wrappers.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/distributed-components-wrappers.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -528,38 +526,28 @@ ssfully
       <para>
       org.objectweb.proactive.examples.components.helloworld.helloworld-distributed-wrappers.fractal</para>
 
-     <programlisting xml:lang="xml"><textobject>
-       <textdata fileref="examples/components/helloworld/helloworld-distributed-wrappers.fractal"/>
-      </textobject></programlisting>
+     <programlisting xml:lang="xml"><textobject><textdata fileref="examples/components/helloworld/helloworld-distributed-wrappers.fractal"/></textobject></programlisting>
  
 
       <para>
       org.objectweb.proactive.examples.components.helloworld.ClientType.fractal</para>
 
-     <programlisting xml:lang="xml"><textobject>
-       <textdata fileref="examples/components/helloworld/ClientType.fractal"/>
-      </textobject></programlisting>
+     <programlisting xml:lang="xml"><textobject><textdata fileref="examples/components/helloworld/ClientType.fractal"/></textobject></programlisting>
      
       <para>
       org.objectweb.proactive.examples.components.helloworld.ClientImpl.fractal</para>
 
-     <programlisting xml:lang="xml"><textobject>
-       <textdata fileref="examples/components/helloworld/ClientImpl.fractal"/>
-      </textobject></programlisting>
+     <programlisting xml:lang="xml"><textobject><textdata fileref="examples/components/helloworld/ClientImpl.fractal"/></textobject></programlisting>
      
       <para>
       org.objectweb.proactive.examples.components.ServerType</para>
      
-     <programlisting xml:lang="xml"><textobject>
-       <textdata fileref="examples/components/helloworld/ServerType.fractal"/>
-      </textobject></programlisting>
+     <programlisting xml:lang="xml"><textobject><textdata fileref="examples/components/helloworld/ServerType.fractal"/></textobject></programlisting>
       
      <para>
       org.objectweb.proactive.examples.components.helloworld.ServerImpl</para>
      
-     <programlisting xml:lang="xml"><textobject>
-       <textdata fileref="examples/components/helloworld/ServerImpl.fractal"/>
-      </textobject></programlisting>
+     <programlisting xml:lang="xml"><textobject><textdata fileref="examples/components/helloworld/ServerImpl.fractal"/></textobject></programlisting>
         </section>
   </section>
 </chapter>

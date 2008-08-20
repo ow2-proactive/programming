@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="writingProActiveDocumentation"><info><title>How to write ProActive documentation</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="writingProActiveDocumentation"><info><title>How to write ProActive documentation</title></info>
  
   
  
@@ -75,24 +73,22 @@
     </listitem>
     
     <listitem>
-     <para>When you're done, there is a spellchecker intergated, as well
+     <para>When you're done, there is a spellchecker integrated, as well
       as a DocBook validator. Please use these tools!</para>
     </listitem>
    </itemizedlist>
   </listitem>
   
   <listitem>
-   <para>Make sure your new additions make a nice new document. 
+   <para>
     Run the ant target <literal>build manualHtml</literal>, and  you should have 
-    an html copy of the doc. If you want to generate all the possible output formats, 
+    an HTML copy of the doc. If you want to generate all the possible output formats, 
     call <literal>build manual</literal>. You can also see what the results seem to be 
-    without compiling! Try to open one of the docbook xml files in a browser
-    (mozilla/firefox do it) and you have a preview of what it might look like. Those 
-    who dislike XXE should be more than happy of it... </para>
+    without compiling! </para>
   </listitem>
   
   <listitem>
-   <para>Commit your changes to the svn repository</para>
+   <para>Commit your changes to the SVN repository</para>
   </listitem>
   
  </orderedlist>
@@ -127,7 +123,7 @@
    </listitem>
    
    <listitem>
-    <para>&lt;para&gt; to start a paragraph, &lt;sectX&gt;, with X=1..4 to have headings,
+    <para>&lt;para&gt; to start a paragraph, &lt;section&gt;, to have headings,
      and &lt;emphasis&gt; when you want some particular bit to stick out. </para>
    </listitem>
    
@@ -166,9 +162,10 @@
    
    <mediaobject>
     <imageobject>
-     <imagedata scalefit="1" width="100%" contentdepth="100%"  align="center" fileref="images/e1.png" format="PNG"/>
+     <imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="images/e1.png" format="PNG"/>
     </imageobject>
    </mediaobject>
+   
   </figure>
  </section>
  
@@ -214,17 +211,13 @@
    the LITERAL tag to highlight the  <literal>main</literal> methods.</para>
   
   <example><info><title>JAVA program listing with file inclusion</title></info><para/></example>
-   <programlisting xml:lang="java"><textobject>
-     <textdata fileref="examples/hello/TinyHello.java"/>
-    </textobject></programlisting>
+   <programlisting xml:lang="java"><textobject><textdata fileref="examples/hello/TinyHello.java"/></textobject></programlisting>
   
   <example><info><title>XML program listing with file inclusion</title></info>
      <para/>
      </example>
    
-   <programlisting xml:lang="xml"><textobject>
-     <textdata fileref="examples/components/c3d/adl/UserImpl.fractal"/>
-    </textobject></programlisting>
+   <programlisting xml:lang="xml"><textobject><textdata fileref="examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
   
   
   <para>A screen example, for instance some code inside a unix shell:</para>
@@ -290,7 +283,7 @@ public class Dummy {
    
    <para>Use XREF tags to point to the Figures id (<xref linkend="Figures"/>) 
     which is in the doc above. The LINKEND attribute points to the id which 
-   is referenced, for example, in a SECT1 tag. The ENDTERM tag (example with the biblio)
+   is referenced, for example, in a SECTION tag. The ENDTERM tag (example with the biblio)
    is used to customize the string which will be used to point to the reference. </para>
   <para>You can also use XREF to include files which are in the html hierararchy already.
   This goes for java files, and deployment descriptors. You have a few examples in
@@ -349,7 +342,6 @@ public class Dummy {
  
  
   
-
  <section xml:id="DocBookLimitations"><info><title>DocBok limitations imposed</title></info>
   
   
@@ -374,7 +366,6 @@ public class Dummy {
    </itemizedlist>  
    </para>
 </section>
-
 <section xml:id="DocBookCustomization"><info><title>Stylesheet Customization</title></info>
  
  
@@ -524,6 +515,24 @@ public class Dummy {
  </section>
  
  </section>
-
+ 
+<section xml:id="DocAntTargets"><info><title>Ant targets for building the documentation</title></info>
+	<section xml:id="JavadocTargets"><info><title>Javadoc ant targets</title></info>
+	<para>
+	</para>
+	</section>
+	<section xml:id="ManualTargets"><info><title>Manual generation ant targets</title></info>
+	<para>
+	</para>
+	<figure><info><title>Main ant targets used in manual generation</title></info>
+	<mediaobject>
+    <imageobject>
+     <imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="images/documentation_process.png" format="PNG"/>
+    </imageobject>
+   </mediaobject>
+  </figure>
+	
+	</section>
+</section>
 
 </chapter>

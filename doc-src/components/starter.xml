@@ -1,7 +1,4 @@
-  <!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd"> --> 
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
-	xml:id="starter">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="starter">
 	<info>
 		<title>Getting started</title>
 	</info>
@@ -21,8 +18,7 @@
 
 	<mediaobject>
 		<imageobject>
-			<imagedata scalefit="1" width="100%" contentdepth="100%"
-				fileref="components/pics/distributed_components.png" format="PNG" />
+			<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/distributed_components.png" format="PNG"/>
 		</imageobject>
 	</mediaobject>
 
@@ -52,15 +48,13 @@ vmCapacity="1"&gt;</programlisting>
 
 	<mediaobject>
 		<imageobject>
-			<imagedata scalefit="1" width="100%" contentdepth="100%"
-				fileref="components/pics/2components_2jvms.png" format="PNG" />
+			<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/2components_2jvms.png" format="PNG"/>
 		</imageobject>
 	</mediaobject>
 
 	<para>
 		All the source files are available at the end of the part in
-		<xref linkend="annex" />.
+		<xref linkend="annex"/>.
 	</para>
 	</section>
 </chapter>
-

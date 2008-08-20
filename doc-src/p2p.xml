@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="p2p"><info><title>P2P Infrastructure With ProActivee</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="p2p"><info><title>P2P Infrastructure With ProActivee</title></info>
   
 
   <indexterm><primary>P2P</primary></indexterm>
@@ -225,7 +223,7 @@
 
             <mediaobject>
               <imageobject>
-                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/example.png" format="PNG"/>
+                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/example.png" format="PNG"/>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -554,7 +552,7 @@
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/descriptor.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/descriptor.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -639,7 +637,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/overlaynetwork.png" format="PNG"/>
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/overlaynetwork.png" format="PNG"/>
           </imageobject>
           <caption><para> Example of a ProActive P2P infrastructure.</para></caption>
         </mediaobject>
@@ -782,7 +780,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 
             <mediaobject>
               <imageobject>
-                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/firstContact.png" format="PNG"/>
+                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/firstContact.png" format="PNG"/>
               </imageobject>
               <caption><para> Example of first contact (Bootstrapping).</para></caption>
 
@@ -941,7 +939,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 
             <mediaobject>
               <imageobject>
-                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/heartbeat.png" format="PNG"/>
+                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/heartbeat.png" format="PNG"/>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -1094,7 +1092,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 
             <mediaobject>
               <imageobject>
-                <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/sendingNode.png" format="PNG"/>
+                <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/sendingNode.png" format="PNG"/>
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -1169,7 +1167,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/implementation.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/implementation.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1234,7 +1232,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/dynamicGroup.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/dynamicGroup.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>
@@ -1330,7 +1328,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 
           <mediaobject>
             <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="p2p_files/screenshot.png" format="PNG"/>
+              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="p2p_files/screenshot.png" format="PNG"/>
             </imageobject>
           </mediaobject>
         </figure></para>

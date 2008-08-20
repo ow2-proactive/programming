@@ -1,7 +1,4 @@
-<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">  --> 
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
-	xml:id="intro">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="intro">
 	<info>
 		<title>Introduction</title>
 	</info>
@@ -23,18 +20,15 @@
 		problems through the implementation for ProActive of an
 		extensible, dynamical and hierarchical component model, Grid
 		Component Model (GCM) based on
-		<link xmlns:xlink="http://www.w3.org/1999/xlink"
-			xlink:href="http://fractal.objectweb.org">
+		<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://fractal.objectweb.org">
 			Fractal
 		</link>
 		. The GCM was defined by the
-		<link xmlns:xlink="http://www.w3.org/1999/xlink"
-			xlink:href="http://www.coregrid.net/">
+		<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.coregrid.net/">
 			CoreGRID NoE project
 		</link>
 		and is available
-		<link xmlns:xlink="http://www.w3.org/1999/xlink"
-			xlink:href="http://www.coregrid.net/mambo/images/stories/Deliverables/d.pm.04.pdf">
+		<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.coregrid.net/mambo/images/stories/Deliverables/d.pm.04.pdf">
 			here
 		</link>
 		.
@@ -43,8 +37,7 @@
 	<para>
 		This part documents the ProActive/GCM reference implementation
 		developed by the
-		<link xmlns:xlink="http://www.w3.org/1999/xlink"
-			xlink:href="http://gridcomp.ercim.org/">
+		<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://gridcomp.ercim.org/">
 			GridCOMP European project
 		</link>
 		.

@@ -1,5 +1,4 @@
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
-	xml:id="perspectives">
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="perspectives">
 	<info>
 		<title>
 			Component perspectives: a support for advanced research
@@ -131,8 +130,7 @@
 
 		<para>
 			The
-			<link xmlns:xlink="http://www.w3.org/1999/xlink"
-				xlink:href="http://www-sop.inria.fr/oasis/Vercors/">
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/Vercors/">
 				Vercors
 			</link>
 			platform investigates such kinds of scenarii.
@@ -151,26 +149,26 @@
 			nonexistent) dynamic specification of the component
 			behaviour. In fact, state-of-the-art implementations of
 			component models such as SOFA
-			<xref linkend="Plasil02" />
+			<xref linkend="Plasil02"/>
 			, Fractal
-			<xref linkend="Fractal04" />
+			<xref linkend="Fractal04"/>
 			and CORBA Component Model
-			<xref linkend="CCM" />
+			<xref linkend="CCM"/>
 			only consider interface type-compatibility (through
 			Interface Description Languages or IDLs) for binding
 			interfaces. Nonetheless, a sound static compatibility check
 			of bound interfaces can be achieved if behavioural
 			information is added to the components. There are several
 			related works, that either introduce Behavioural IDLs
-			<xref linkend="JavaA05" />
+			<xref linkend="JavaA05"/>
 			,
-			<xref linkend="InterfaceAutomata2001" />
+			<xref linkend="InterfaceAutomata2001"/>
 			,
-			<xref linkend="Reussnerm" />
+			<xref linkend="Reussnerm"/>
 			,
-			<xref linkend="FACS-06" />
+			<xref linkend="FACS-06"/>
 			, or that describe behaviour of components
-			<xref linkend="JKP05" />
+			<xref linkend="JKP05"/>
 		</para>
 
 		<para>
@@ -201,9 +199,9 @@
 			specifying the synchronisations. Instead of proving that
 			legacy code is safe, we take a constructive approach similar
 			to
-			<xref linkend="ifip05" />
+			<xref linkend="ifip05"/>
 			,
-			<xref linkend="STSLib07" />
+			<xref linkend="STSLib07"/>
 			. The idea is to specify the system, prove that the
 			specification is correct, and then generate (Java) code
 			skeletons guaranteed to conform to the specification. pNets
@@ -269,10 +267,3 @@
 	</section>
 
 </chapter>
-
-
-
-
-
-
-

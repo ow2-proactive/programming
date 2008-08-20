@@ -1,6 +1,4 @@
-<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">  -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="XML_Descriptors"><info><title>XML Deployment Descriptors</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="XML_Descriptors"><info><title>XML Deployment Descriptors</title></info>
   
 
   <indexterm>
@@ -992,7 +990,7 @@
 
           <para>The following is a complete RSH deployment example.</para>
           
-          <programlisting xml:lang="xml"> <textobject><textdata fileref="examples_legacy_descriptors/RSH_Example.xml"> </textdata></textobject></programlisting>
+          <programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/RSH_Example.xml"> </textdata></textobject></programlisting>
 
         </listitem>
 
@@ -1080,7 +1078,7 @@
 
           <para>The following is a complete SSH deployment example.</para>
           
-          <programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSH_Example.xml"></textdata></textobject></programlisting>
+          <programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSH_Example.xml"/></textobject></programlisting>
         </listitem>
 
         <listitem xml:id="Descriptor_html_processlist" xreflabel="Process list">
@@ -1124,18 +1122,18 @@
           values: <itemizedlist>
               <listitem>
                 <para>org.objectweb.proactive.core.process.ssh.SSHProcessList</para>
-                <programlisting><textobject><textdata fileref="core/process/ssh/SSHProcessList.java"></textdata></textobject></programlisting>
+                <programlisting><textobject><textdata fileref="core/process/ssh/SSHProcessList.java"/></textobject></programlisting>
 
               </listitem>
 
               <listitem>
                 <para>org.objectweb.proactive.core.process.rsh.RSHProcessList</para>
-                <programlisting><textobject><textdata fileref="core/process/rsh/RSHProcessList.java"></textdata></textobject></programlisting>
+                <programlisting><textobject><textdata fileref="core/process/rsh/RSHProcessList.java"/></textobject></programlisting>
               </listitem>
 
               <listitem>
                 <para>org.objectweb.proactive.core.process.rlogin.RLoginProcessList</para>
-                <programlisting><textobject><textdata fileref="core/process/rlogin/RLoginProcessList.java"></textdata></textobject></programlisting>
+                <programlisting><textobject><textdata fileref="core/process/rlogin/RLoginProcessList.java"/></textobject></programlisting>
               </listitem>
             </itemizedlist> according to the protocol being used is ssh, rsh
           or rlogin. The <emphasis role="bold">fixedName</emphasis> attribute
@@ -1190,9 +1188,9 @@
 
           <para>The following are example of SSH deployment using lists of hosts.</para>
           
-          <programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSHList_example.xml"></textdata></textobject></programlisting>
+          <programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSHList_example.xml"/></textobject></programlisting>
            <para>and</para>
-           <programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSHListbyHost_Example.xml"></textdata></textobject></programlisting>
+           <programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSHListbyHost_Example.xml"/></textobject></programlisting>
           
         </listitem>
 
@@ -1314,7 +1312,7 @@
           in the bsub command: interactive mode, and the name of the
           queue.</para>
 
-		<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_LSF_Example.xml"></textdata></textobject></programlisting>
+		<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_LSF_Example.xml"/></textobject></programlisting>
 
         </listitem>
 
@@ -1380,7 +1378,7 @@
           frontend_host of the script pbsStartRuntime.sh(default is
           /user.home/ProActive/dist/scripts/unix/cluster/pbsStartRuntime.sh).</para>
 		
-		<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_PBS_Example.xml"></textdata></textobject></programlisting>
+		<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_PBS_Example.xml"/></textobject></programlisting>
 
         </listitem>
 
@@ -1443,7 +1441,7 @@
           frontend_host of the script gridEngineStartRuntime.sh (default is
           /user.home/ProActive/dist/scripts/unix/cluster/gridEngineStartRuntime.sh).</para>
 
-	<programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSH_SGE_Example.xml"></textdata></textobject></programlisting>
+	<programlisting xml:lang="xml"><textobject><textdata fileref="examples_legacy_descriptors/SSH_SGE_Example.xml"/></textobject></programlisting>
           
         </listitem>
 
@@ -1504,9 +1502,9 @@
           to the main options specified in an OAR system. <emphasis role="bold">ScriptPath</emphasis> represents the location on the
           frontend_host of the script oarStartRuntime.sh (default is
           /user.home/ProActive/dist/scripts/unix/cluster/oarStartRuntime.sh).</para>
-			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_Example.xml"></textdata></textobject></programlisting>
+			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_Example.xml"/></textobject></programlisting>
           <para> and </para>
-          <programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_OARGRID_Example.xml"></textdata></textobject></programlisting>
+          <programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_OARGRID_Example.xml"/></textobject></programlisting>
 
         </listitem>
 
@@ -1523,7 +1521,7 @@
           <literal>org.objectweb.proactive.core.process.prun.PrunSubProcess</literal>
           to use such protocol.</para>
 
-			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_PRUN_Example.xml"></textdata></textobject></programlisting>
+			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_PRUN_Example.xml"/></textobject></programlisting>
 
         </listitem>
 
@@ -1597,7 +1595,7 @@
           &lt;globusOption&gt; is neither manatory. Default value for
           &lt;count&gt; element is 1. It represents the number of processor
           requested.</para>
-			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/Globus_Example.xml"></textdata></textobject></programlisting>
+			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/Globus_Example.xml"/></textobject></programlisting>
         </listitem>
 
         <listitem>
@@ -1606,7 +1604,7 @@
           <para>ProActive provides
           <literal>org.objectweb.proactive.core.process.unicore.UnicoreProcess</literal>
           to use such protocol.</para>
-			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/Unicore_Example.xml"></textdata></textobject></programlisting>
+			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/Unicore_Example.xml"/></textobject></programlisting>
 
         </listitem>
 
@@ -1619,7 +1617,7 @@
 
           <para>To use ARC you will need to download the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://ftp.nordugrid.org/download/index.php">ARC
           Client</link></para>
-			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/NorduGrid_Example.xml"></textdata></textobject></programlisting>
+			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/NorduGrid_Example.xml"/></textobject></programlisting>
 
         </listitem>
 
@@ -1637,7 +1635,7 @@
           to use such protocol.</para>
 
 
-          <programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_GLite_Example.xml"></textdata></textobject></programlisting>
+          <programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_GLite_Example.xml"/></textobject></programlisting>
         </listitem>
 
         <listitem>
@@ -1648,7 +1646,7 @@
           to use such protocol. You have to couple this process with the
           DependentListProcessDecorator explained below.</para>
 			
-			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_MPI_Example.xml"></textdata></textobject></programlisting>
+			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_MPI_Example.xml"/></textobject></programlisting>
 
 
           <para><screen>
@@ -1858,7 +1856,7 @@
       one must be a DependentProcess thus has to implement the
       org.objectweb.proactive.core.process.DependentProcess interface.</para>
 
-		<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_MPI_Example.xml"></textdata></textobject></programlisting>
+		<programlisting><textobject><textdata fileref="examples_legacy_descriptors/SSH_MPI_Example.xml"/></textobject></programlisting>
      
       <para><screen>   &lt;processDefinition id='<emphasis role="bold">dependentProcessSequence</emphasis>'&gt;
     &lt;dependentProcessSequence class='<emphasis role="bold">org.objectweb.proactive.core.process.DependentListProcessDecorator</emphasis>'&gt;
@@ -2015,7 +2013,7 @@
     an XML descriptor with the method: killall(boolean softly) in class
     ProActiveDescriptor.</para>
     
-    <programlisting><textobject><textdata fileref="core/descriptor/data/ProActiveDescriptor.java"></textdata></textobject></programlisting>
+    <programlisting><textobject><textdata fileref="core/descriptor/data/ProActiveDescriptor.java"/></textobject></programlisting>
 
     <para><programlisting xml:lang="java">ProActiveDescriptor pad = PADeployment.getProactiveDescriptor(String xmlFileLocation);
 //----------- Returns a ProActiveDescriptor object from the xml file

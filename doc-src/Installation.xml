@@ -1,9 +1,8 @@
-<!-- <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd">  -->
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Installation"><info><title>ProActive And IC2D Installation</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="Installation"><info><title>ProActive And IC2D Installation</title></info>
 
-  <para>ProActive is available for <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/download_proactive_latest.htm"> download </link>under 
-  the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html"> GPL 2</link>
-   license. ProActive requires <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/j2se/1.5/">JDK 1.5</link> or later to be installed 
+  <para>ProActive is available for <link xlink:href="http://proactive.inria.fr/download_proactive_latest.htm"> download </link>under 
+  the <link xlink:href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html"> GPL 2</link>
+   license. ProActive requires <link xlink:href="http://java.sun.com/j2se/1.5/">JDK 1.5</link> or later to be installed 
   on your computer. Please note that ProActive will NOT run with any 
   version prior to 1.5 since some features introduced in JDK 1.5 are essential.</para>
 
@@ -54,11 +53,11 @@
         </listitem>
 
         <listitem>
-          <para>Launch the JVM with a <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/j2se/1.5/docs/guide/security/permissions.html"> security policy
+          <para>Launch the JVM with a <link xlink:href="http://java.sun.com/j2se/1.5/docs/guide/security/permissions.html"> security policy
           file</link> using the option
           <literal> -Djava.security.policy=pathToFile</literal>. A basic policy file
           can be found at <literal>ProActive/dist/proactive.java.policy</literal>. You can also specify a 
-          <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://logging.apache.org/log4j/docs/manual.html">log4j configuration
+          <link xlink:href="http://logging.apache.org/log4j/docs/manual.html">log4j configuration
           file</link> with the property <literal>-Dlog4j.configuration=file:pathToFile</literal>.
           If a configuration file is not specified a default logger that logs on the console will be created.</para>
         </listitem>
@@ -75,14 +74,14 @@
     <section><info><title>Download And Expand The Archive</title></info>
     	
     	<para>You can download the archive file (a standard zip file) containing 
-    	ProActive from the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/download_proactive_latest.htm">
+    	ProActive from the <link xlink:href="http://proactive.inria.fr/download_proactive_latest.htm">
     	 download section </link> of the ProActive home page. You will be asked to accept 
     	 the license agreement and provide a few details including your email address.
     	 Within a few minutes you will  receive an email containing 
     	 a password and an URL where you will be able to download the latest release of ProActive.</para>
     	 <para>Unzip the archive using your favorite ZIP program, such as 
-    	 <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.winzip.com/">Winzip</link> under Windows or 
-    	 the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.info-zip.org/pub/infozip/"> unzip </link>
+    	 <link xlink:href="http://www.winzip.com/">Winzip</link> under Windows or 
+    	 the <link xlink:href="http://www.info-zip.org/pub/infozip/"> unzip </link>
     	 command-line utility under most Linux/Unix systems. 
     	 Unzipping the archive creates a ProActive directory and all the files contained in 
     	 the archive go into this directory and its subdirectories.</para><para>Here is a quick 
@@ -144,16 +143,11 @@
           </row>
 
           <row>
-            <entry><para><emphasis role="bold"><literal>scripts/unix</literal></emphasis></para></entry>
+            <entry><para><emphasis role="bold"><literal>examples</literal></emphasis></para></entry>
 
-            <entry><para>Unix sh scripts for running the examples</para></entry>
+            <entry><para>Unix sh scripts and Windows bat files for running the examples</para></entry>
           </row>
 
-          <row>
-            <entry><para><emphasis role="bold"><literal>scripts/windows</literal></emphasis></para></entry>
-
-            <entry><para>Windows bat batch files for running the examples</para></entry>
-          </row>
 
           <row>
             <entry><para><emphasis role="bold"><literal>src</literal></emphasis></para></entry>
@@ -195,7 +189,7 @@
 
       <listitem>
        
-        <para><literal>lib/log4j.jar</literal> - <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://logging.apache.org/log4j/docs/manual.html">logging</link>
+        <para><literal>lib/log4j.jar</literal> - <link xlink:href="http://logging.apache.org/log4j/docs/manual.html">logging</link>
           mechanism used in ProActive.</para>
       </listitem>
 
@@ -286,7 +280,7 @@
     </para>
     </section>
     <section><info><title xml:id="Create_Java_Policy">Create a <literal>java.policy</literal> File To Set
-    Permissions</title></info><para>See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/j2se/1.5/docs/guide/security/permissions.html">Permissions
+    Permissions</title></info><para>See <link xlink:href="http://java.sun.com/j2se/1.5/docs/guide/security/permissions.html">Permissions
     in the JavaTM 2 SDK</link> to learn more about Java permissions. The
     option <literal>-Djava.security.policy=pathToFile</literal> will specify which security policy file to
     use within ProActive. As a first approximation, you can create a simple security
@@ -311,7 +305,7 @@
 
 		
 	<para>See  for logging using
-    the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://logging.apache.org/log4j/1.2/index.html">Apache log4j</link>. The
+    the <link xlink:href="http://logging.apache.org/log4j/1.2/index.html">Apache log4j</link>. The
     option <literal>-Dlog4j.configuration=file:pathToFile</literal> will specify which logging policy file to
     use within ProActive. As a first approximation, you can create a simple logging
     policy file:
@@ -374,14 +368,14 @@
 	 	<section><info><title>Normal Usage Installation</title></info>
 	 		
 	    	<para>You can download the archive file (a standard zip file) containing 
-	    	IC2D from the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/download_ic2d_latest.htm">
+	    	IC2D from the <link xlink:href="http://proactive.inria.fr/download_ic2d_latest.htm">
 	    	 download section </link> of the ProActive home page. You will be asked to accept 
 	    	 the license agreement and provide a few details including your email address.
 	    	 Within a few minutes you will  receive an email containing 
 	    	 a password and an URL where you will be able to download the latest release of IC2D.</para>
 	    	 <para>Unzip the archive using your favorite ZIP program, such as 
-	    	 <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.winzip.com/">Winzip</link> under Windows or 
-	    	 the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.info-zip.org/pub/infozip/"> unzip </link>
+	    	 <link xlink:href="http://www.winzip.com/">Winzip</link> under Windows or 
+	    	 the <link xlink:href="http://www.info-zip.org/pub/infozip/"> unzip </link>
 	    	 command-line utility under most Linux/Unix systems. 
 	    	 Unzipping the archive creates an IC2D directory and all the files contained in 
 	    	 the archive go into this directory and its subdirectories.</para>
@@ -400,20 +394,20 @@
 		 	
 		 		<listitem>
 		 		<para>
-		 			Download and unpack the RCP/Plug-in Developers version of <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.eclipse.org/downloads/">Eclipse</link>.
+		 			Download and unpack the RCP/Plug-in Developers version of <link xlink:href="http://www.eclipse.org/downloads/">Eclipse</link>.
 		 		</para>
 		 		</listitem>
 		 		<listitem>
 		 		<para>
-		 			Install <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://subclipse.tigris.org/install.html">Subversion
+		 			Install <link xlink:href="http://subclipse.tigris.org/install.html">Subversion
 		 			</link> or your SVN client of choice.</para>
 		 		</listitem>
 		 		<listitem>
 		 		<para>
 		 			Download ProActive for development through the anonymous or authenticated SVN.
-		 			The <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://gforge.inria.fr/scm/?group_id=180">SVN</link>  and 
-		 			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://siteadmin.gforge.inria.fr/eclipse-ssh.html">Eclipse</link> configuration
-		 			information can be found on the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://gforge.inria.fr/">INRIA gForge</link> website.  
+		 			The <link xlink:href="https://gforge.inria.fr/scm/?group_id=180">SVN</link>  and 
+		 			<link xlink:href="http://siteadmin.gforge.inria.fr/eclipse-ssh.html">Eclipse</link> configuration
+		 			information can be found on the <link xlink:href="http://gforge.inria.fr/">INRIA gForge</link> website.  
 		 		</para>
 		 		</listitem>
 		 		<listitem>
@@ -428,7 +422,7 @@
 						<informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/eclipse_import.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/eclipse_import.png"/>
 								</imageobject>
 							</mediaobject>
 						</informalfigure></para>
@@ -436,7 +430,7 @@
 						<para><informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/eclipse_import_browse.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/eclipse_import_browse.png"/>
 								</imageobject>
 							</mediaobject>
 						</informalfigure></para>
@@ -447,7 +441,7 @@
 						<informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/browse_window.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/browse_window.png"/>
 								</imageobject>
 							</mediaobject>
 						</informalfigure>
@@ -458,7 +452,7 @@
 						<informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/eclipse_with_plugins.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/eclipse_with_plugins.png"/>
 								</imageobject>
 							</mediaobject>
 						</informalfigure>						
@@ -466,7 +460,7 @@
 		 		</listitem>
 		 		<listitem>
 		 		<para>
-		 			Install  the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.eclipse.org/birt/phoenix/">Business Intelligence and Reporting Tools </link> 
+		 			Install  the <link xlink:href="http://www.eclipse.org/birt/phoenix/">Business Intelligence and Reporting Tools </link> 
 		 			used by TimIt for profiling.
 		 			To install go to Help-&gt; Software Updates -&gt; Find And Install.
 		 		
@@ -475,7 +469,7 @@
 		 				<informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/update_manager.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/update_manager.png"/>
 								</imageobject>
 							</mediaobject>
 						</informalfigure>
@@ -484,7 +478,7 @@
 		 			<para>	<informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/europa_discovery.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/europa_discovery.png"/>
 								</imageobject>
 							</mediaobject>
 						</informalfigure>		
@@ -493,7 +487,7 @@
 		 			<para>	<informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/birt_selected.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/birt_selected.png"/>
 								</imageobject>
 							</mediaobject>
 						</informalfigure>
@@ -507,7 +501,7 @@
 		 				<informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/ic2dproduct.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/ic2dproduct.png"/>
 								</imageobject>
 							</mediaobject>
 						</informalfigure>
@@ -522,7 +516,7 @@
 		 				<informalfigure>
 							<mediaobject>
 								<imageobject>
-									<imagedata scalefit="1" width="100%" contentdepth="100%"   fileref="images/IC2D_development_installation/select_run_plugins.png"/>
+									<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/IC2D_development_installation/select_run_plugins.png"/>
 								</imageobject>
 							</mediaobject>
 							</informalfigure>

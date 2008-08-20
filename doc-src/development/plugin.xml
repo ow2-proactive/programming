@@ -1,6 +1,4 @@
-<!-- Converted by db4-upgrade version 1.0 -->
-
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="plugin"><info><title>ProActive Eclipse plugin</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="plugin"><info><title>ProActive Eclipse plugin</title></info>
   
     <section><info><title>Overview</title></info>
       
@@ -29,7 +27,7 @@
        
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="development/plugin_files/guided_tour.jpg" format="JPG"  />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="development/plugin_files/guided_tour.jpg" format="JPG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -69,7 +67,7 @@
        
         <mediaobject>
           <imageobject>
-           <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="development/plugin_files/wizard_active.jpg" format="JPG"  />
+           <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="development/plugin_files/wizard_active.jpg" format="JPG"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -82,7 +80,7 @@
        
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="development/plugin_files/editor.jpg" format="JPG"  />
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="development/plugin_files/editor.jpg" format="JPG"/>
           </imageobject>
         </mediaobject>
       </figure>
