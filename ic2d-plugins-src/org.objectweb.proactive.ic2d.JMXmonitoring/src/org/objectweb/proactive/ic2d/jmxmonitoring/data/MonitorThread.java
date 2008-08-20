@@ -225,7 +225,7 @@ public final class MonitorThread implements Observer {
                 try {
                     Thread.sleep(ttr * 1000);
                 } catch (InterruptedException e) { /* Do nothing */
-                    System.out.println("Ic2d exploring thread has been interupted.");
+                    System.out.println("Ic2d exploring thread has been interrupted.");
                 }
             }
         }
