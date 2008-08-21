@@ -30,22 +30,28 @@
 		amount of resources, or finally may require a minimum amount of resources and yet be able to scale
 		as more resources become available.</para>
 
+		<para>In all cases, the application must start by creating a <code>GCMApplication</code> object through
+		<code>PAGCMDeployment.loadApplicationDescriptor()</code>, and call <code>GCMApplication.startDeployment()</code>. The
+		application must quit through <code>GCMApplication.kill()</code>.</para>
+		
 		<section>
 			<info>
 				<title>Resources fixed by the application (SPMD)</title>
 			</info>
 
 			<para>In this case the application knows the amount of resources it requires. The acquisition of these resources
-			 by the application is done as follows.</para>
+			 by the application is done as follows :</para>
 			 
 			 <itemizedlist>
 					<listitem>
-						<para>get the required virtual nodes through GCMApplication.getVirtualNode(String vnName),
-						 or GCMApplication.getVirtualNodes()</para>
+						<para>get the required virtual nodes through <code>GCMApplication.getVirtualNode(String vnName)</code>,
+						 or <code>GCMApplication.getVirtualNodes()</code></para>
 					</listitem>
 					<listitem>
-						<para>For each virtual node, use GCMVirtualNode.getNewNodes() as many times as needed,
+						<para>For each virtual node, use <code>GCMVirtualNode.getNewNodes()</code> as many times as needed,
 						until the virtual node has the expected numbers of physical nodes to run on.
+						<code>getNewNodes()</code> will return the list of Nodes that have been acquired since the last time
+						it was called. Calls to it should be separated by calls to <code>Thread.sleep()</code>. 
 						</para>
 					</listitem>
 			</itemizedlist>
@@ -58,7 +64,10 @@
 			</info>
 
 			<para>In this case the application has no specific requirement on the resources it uses : the more the better.
-			This is the simplest of the cases : the application only has to call GCMApplication.waitReady().
+			This is the simplest of the cases : the application only has to call <code>GCMApplication.waitReady()</code>.
+			This will block until all Virtual Nodes have their configured number of physical Nodes.
+			Note that this may block forever if a Virtual Node does not to have a limited number of nodes after which it
+			is in 'ready' state	(the Virtual Node is said to be 'greedy', <code>GCMVirtualNode.isGreedy()</code> will return true).   
 			
 			</para>
 		</section>
@@ -68,10 +77,11 @@
 				<title>On demand Scalability</title>
 			</info>
 
-			<para>In the case the application is able to expand on new resources as they are made available to it.
-			This is a extension of the two other cases, in that it can work whether the application has fixed requirements
-			or not. Once the initial deployment phase is finished, the application should call GCMApplication.getVirtualNodes() to obtain the list of configured virtual nodes,
-			and then subscribe to the node attachment notifications for each of them (GCMVirtualNode.subscribeNodeAttachment(Object client, String methodName, boolean withHistory) ).			
+			<para>In the case the application is able to expand on new resources as they become available.
+			This is a extension of the two other cases, in that it can work whether the application has fixed minimum requirements
+			or not. Once the initial deployment phase is finished, the application should call <code>GCMApplication.getVirtualNodes()</code>
+			to obtain the list of configured virtual nodes,
+			and then subscribe to the node attachment notifications for each of them (<code>GCMVirtualNode.subscribeNodeAttachment()</code> ).			
 			In the notification handler, the application should deal with the newly acquired node appropriately.
 			</para>
 		</section>
