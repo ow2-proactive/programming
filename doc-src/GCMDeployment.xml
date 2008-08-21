@@ -1274,7 +1274,7 @@
 				<code>java.io.File</code>
 				. You then pass it to
 				<code>org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.loadApplicationDescriptor()</code>
-				which will return a GCMApplication object. To actually start the deployment, simply call the
+				which will return a <code>GCMApplication</code> object. To actually start the deployment, simply call the
 				<code>startDeployment()</code>
 				method.
 
@@ -1321,7 +1321,7 @@ app.startDeployment();
 				your side. In the case of a ProActive-based application, there are two ways for an application to handle the deployment process. The
 				simplest one is to call the
 				<programlisting><textobject><textdata fileref="automatic_snippets/GCMVirtualNode_waitReady.snip"/></textobject></programlisting>
-				method on your GCMApplication object. As the name of the method indicates, it amounts to "wait until everything is ready". The call
+				method on your <code>GCMApplication</code> object. As the name of the method indicates, it amounts to "wait until everything is ready". The call
 				will block until all virtual nodes are ready, that is that they have acquired the minimum number of nodes they need. This method
 				should not be used if one of the virtual nodes is "greedy", in which case it will never be in a "ready" state. There's another version
 				of the method with a timeout parameter :
@@ -1341,7 +1341,7 @@ app.startDeployment();
 				<code>method(GCMVirtualNode node, String virtualNodeName)</code>
 				. This method will be called by the virtual node for each new available node.
 
-				To get the list of virtual nodes for your GCMApplication, use
+				To get the list of virtual nodes for your <code>GCMApplication</code>, use
 				<programlisting><textobject><textdata fileref="automatic_snippets/GCMApplication_getVirtualNodes.snip"/></textobject></programlisting>
 
 				You can also get a specific virtual node if you know its name :
