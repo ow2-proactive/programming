@@ -102,7 +102,16 @@ public interface RemoteObjectFactory {
      */
     public int getPort();
 
+    /**
+     *  the id string of the protocol
+     * @return returns the id string of the protocol (i.e. rmi, ibis, ...)
+     */
     public String getProtocolId();
 
+    /**
+     * Unexports the remote object if the protocol supports it.  
+     * @param rro the Remote Remote Object
+     * @throws ProActiveException if the unexport fails
+     */
     public void unexport(RemoteRemoteObject rro) throws ProActiveException;
 }
