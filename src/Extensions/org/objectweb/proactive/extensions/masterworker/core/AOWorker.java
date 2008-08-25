@@ -224,9 +224,10 @@ public class AOWorker implements InitActive, Serializable, Worker {
             subWorkerNameCounter = (subWorkerNameCounter + 1) % (Long.MAX_VALUE - 1);
             AODivisibleTaskWorker spawnedWorker = null;
             try {
-                spawnedWorker = (AODivisibleTaskWorker) PAActiveObject
-                        .newActive(AODivisibleTaskWorker.class.getName(), new Object[] { newWorkerName,
-                                provider, stubOnThis, initialMemory, task });
+                spawnedWorker = (AODivisibleTaskWorker) PAActiveObject.newActive(AODivisibleTaskWorker.class
+                        .getName(),
+                        new Object[] { newWorkerName, provider, stubOnThis, initialMemory, task },
+                        PAActiveObject.getNode());
 
             } catch (ActiveObjectCreationException e) {
                 e.printStackTrace();
