@@ -50,6 +50,8 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.examples.c3d.C3DDispatcher;
@@ -235,9 +237,11 @@ public class NameAndHostDialog extends JDialog implements ActionListener, Proper
         int port = -1;
         String protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
 
-        if (!protocol.equals(Constants.IBIS_PROTOCOL_IDENTIFIER)) {
-            port = Integer.parseInt(ProActiveConfiguration.getInstance().getProperty(
-                    "proactive." + protocol + ".port"));
+        try {
+            port = RemoteObjectHelper.getDefaultPortForProtocol(protocol);
+        } catch (UnknownProtocolException e) {
+            // Well should not happen ...
+            e.printStackTrace();
         }
 
         localhost = URIBuilder.buildURI(
