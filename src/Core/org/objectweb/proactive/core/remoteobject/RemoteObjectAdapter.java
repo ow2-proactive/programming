@@ -62,9 +62,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
- * @author The ProActive Team
- * The RemoteObjectAdapter is used to hide the fact that the remote object
- * called is distant.
+ * @author The ProActive Team The RemoteObjectAdapter is used to hide the fact
+ *         that the remote object called is distant.
  */
 public class RemoteObjectAdapter implements RemoteObject {
 
@@ -86,20 +85,20 @@ public class RemoteObjectAdapter implements RemoteObject {
     protected URI uri;
 
     /**
-     * Array of methods belonging to the RemoteObject class.
-     * These methods are reified using the RemoteObjectRequest class
+     * Array of methods belonging to the RemoteObject class. These methods are
+     * reified using the RemoteObjectRequest class
      */
     protected static Method[] methods;
 
     /**
-     * Array of methods belonging to the SecurityEntity class
-     * These methods are reified using the InternalRemoteRemoteObjectRequest class
+     * Array of methods belonging to the SecurityEntity class These methods are
+     * reified using the InternalRemoteRemoteObjectRequest class
      */
     protected static Method[] securityMethods;
 
     /**
-     * Array of methods belonging to the InternalRemoteRemoteObject class.
-     * These methods are reified using the InternalRemoteRemoteObjectRequest class
+     * Array of methods belonging to the InternalRemoteRemoteObject class. These
+     * methods are reified using the InternalRemoteRemoteObjectRequest class
      */
     protected static Method[] internalRROMethods;
 
@@ -113,7 +112,9 @@ public class RemoteObjectAdapter implements RemoteObject {
             methods[3] = RemoteObject.class.getDeclaredMethod("getTargetClass", new Class<?>[0]);
             methods[4] = RemoteObject.class.getDeclaredMethod("getProxyName", new Class<?>[0]);
             methods[5] = RemoteObject.class.getDeclaredMethod("getAdapterClass", new Class<?>[0]);
-            //            methods[6] = RemoteObject.class.getDeclaredMethod("getRemoteObjectProperties", new Class<?>[0]);
+            // methods[6] =
+            // RemoteObject.class.getDeclaredMethod("getRemoteObjectProperties",
+            // new Class<?>[0]);
             methods[7] = RemoteObject.class.getDeclaredMethod("getAdapter", new Class<?>[0]);
 
             securityMethods = new Method[20];
@@ -153,7 +154,7 @@ public class RemoteObjectAdapter implements RemoteObject {
 
     public RemoteObjectAdapter(RemoteRemoteObject ro) throws ProActiveException {
         this.remoteObject = ro;
-        //        this.remoteObjectProperties = this.getRemoteObjectProperties();
+        // this.remoteObjectProperties = this.getRemoteObjectProperties();
         this.uri = this.getURI();
     }
 
@@ -174,7 +175,7 @@ public class RemoteObjectAdapter implements RemoteObject {
             return new SynchronousReplyImpl(new MethodCallResult(null, e));
         }
 
-        //        return new SynchronousReplyImpl();
+        // return new SynchronousReplyImpl();
     }
 
     // Implements SecurityEntity
@@ -203,10 +204,10 @@ public class RemoteObjectAdapter implements RemoteObject {
         return null;
     }
 
-    //    public byte[] getCertificateEncoded()
-    //        throws SecurityNotAvailableException, IOException {
-    //        return this.remoteObject.getCertificateEncoded();
-    //    }
+    // public byte[] getCertificateEncoded()
+    // throws SecurityNotAvailableException, IOException {
+    // return this.remoteObject.getCertificateEncoded();
+    // }
     public Entities getEntities() throws SecurityNotAvailableException, IOException {
         try {
             MethodCall mc = MethodCall.getMethodCall(securityMethods[6], new Object[0],
@@ -415,7 +416,7 @@ public class RemoteObjectAdapter implements RemoteObject {
     // RemoteObjects
     public Object getObjectProxy() throws ProActiveException {
         if (this.stub == null) {
-            //                this.stub = this.remoteObject.getObjectProxy();
+            // this.stub = this.remoteObject.getObjectProxy();
             try {
                 MethodCall mc = MethodCall.getMethodCall(internalRROMethods[0], new Object[0],
                         new HashMap<TypeVariable, Class<?>>());
@@ -620,7 +621,7 @@ public class RemoteObjectAdapter implements RemoteObject {
         return;
     }
 
-    //TODO: write a public method which does't throw exception.
+    // TODO: write a public method which does't throw exception.
     protected URI getURI() throws ProActiveException {
         try {
             MethodCall mc = MethodCall.getMethodCall(internalRROMethods[2], new Object[0],
