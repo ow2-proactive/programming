@@ -32,6 +32,7 @@
 package org.objectweb.proactive.core.config;
 
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -78,7 +79,7 @@ public class ProActiveConfiguration {
     public static final String PROACTIVE_LOG_PROPERTIES_FILE = "ProActiveLoggers.properties";
 
     /** User configuration directory */
-    protected static final String PROACTIVE_USER_CONFIG_FILENAME = Constants.USER_CONFIG_DIR +
+    protected static final String PROACTIVE_USER_CONFIG_FILENAME = "file:///" + Constants.USER_CONFIG_DIR +
         File.separator + PROACTIVE_CONFIG_FILENAME;
 
     protected final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
@@ -244,19 +245,14 @@ public class ProActiveConfiguration {
         if (fname == null) {
             fname = PROACTIVE_USER_CONFIG_FILENAME;
         }
-
-        /* Check that this file exists */
-        File file = new File(fname);
-        if (file.exists()) {
-            String userConfigFile = file.getAbsolutePath();
-
-            logger.debug("User Config File is: " + userConfigFile);
-            userProps = ProActiveConfigurationParser.parse(userConfigFile, userProps);
-        } else {
-            if (!fname.equals(PROACTIVE_CONFIG_FILENAME)) {
-                // don't print a warning if the default user config file does not exist
-                logger.warn("Configuration file " + fname + " not found");
-            }
+        URL u = null;
+        try {
+            u = new URL(fname);
+            u.openStream();
+            logger.debug("User Config File is: " + u.toExternalForm());
+            userProps = ProActiveConfigurationParser.parse(u.toString(), userProps);
+        } catch (Exception e) {
+            logger.warn("Configuration file " + u.toExternalForm() + " not found");
         }
 
         return userProps;
