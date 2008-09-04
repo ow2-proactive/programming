@@ -35,6 +35,7 @@ import java.io.Serializable;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Type;
+import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentativeImpl;
 
 
 /**
@@ -133,6 +134,25 @@ public abstract class ProActiveInterfaceImpl implements ProActiveInterface, Seri
      * @see org.objectweb.proactive.core.component.ProActiveInterface#setFcItfImpl(java.lang.Object)
      */
     public abstract void setFcItfImpl(final Object impl);
+
+    @Override
+    public boolean equals(Object anObject) {
+        if (anObject instanceof ProActiveComponentRepresentativeImpl) {
+            return super.equals(anObject);
+
+        }
+        ProActiveInterfaceImpl itf = (ProActiveInterfaceImpl) anObject;
+        boolean one = itf.getFcItfName().equals(name);
+        ProActiveComponentRepresentativeImpl pr1 = (ProActiveComponentRepresentativeImpl) itf.getFcItfOwner();
+        ProActiveComponentRepresentativeImpl pr2 = (ProActiveComponentRepresentativeImpl) owner;
+        boolean two = pr1.getID().equals(pr2.getID());
+        return one & two;
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode() + owner.hashCode();
+    }
 
     @Override
     public String toString() {
