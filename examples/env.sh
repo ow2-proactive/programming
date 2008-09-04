@@ -38,7 +38,8 @@ fi
 # Set up the classpath using classes dir or jar files
 #
 
-if [ -d $PROACTIVE/classes ]
+# Test if classes exists and is not empty
+if [ -d $PROACTIVE/classes/Core ]if [ -d $PROACTIVE/classes ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Core
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Extensions
