@@ -36,10 +36,10 @@ import java.net.URI;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
+import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 
@@ -62,7 +62,7 @@ public class PARemoteObject {
     }
 
     public static <T> T bind(RemoteObjectExposer<T> roe, URI uri) throws UnknownProtocolException {
-        InternalRemoteRemoteObject irro = roe.createRemoteObject(uri);
+        RemoteRemoteObject irro = roe.createRemoteObject(uri);
         try {
             return (T) new RemoteObjectAdapter(irro).getObjectProxy();
         } catch (ProActiveException e) {

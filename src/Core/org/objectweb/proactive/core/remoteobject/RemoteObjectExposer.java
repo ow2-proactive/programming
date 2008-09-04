@@ -58,7 +58,7 @@ public class RemoteObjectExposer<T> implements Serializable {
      * 
      */
     private static final long serialVersionUID = 40L;
-    protected Hashtable<URI, RemoteRemoteObject> activeRemoteRemoteObjects;
+    protected Hashtable<URI, InternalRemoteRemoteObject> activeRemoteRemoteObjects;
     private String className;
     private RemoteObjectImpl<T> remoteObject;
 
@@ -99,7 +99,7 @@ public class RemoteObjectExposer<T> implements Serializable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        this.activeRemoteRemoteObjects = new Hashtable<URI, RemoteRemoteObject>();
+        this.activeRemoteRemoteObjects = new Hashtable<URI, InternalRemoteRemoteObject>();
     }
 
     /**
@@ -108,8 +108,7 @@ public class RemoteObjectExposer<T> implements Serializable {
      * @return a remote reference to the remote object ie a RemoteRemoteObject
      * @throws UnknownProtocolException thrown if the protocol specified within the url is unknow
      */
-    public synchronized InternalRemoteRemoteObject createRemoteObject(URI url)
-            throws UnknownProtocolException {
+    public synchronized RemoteRemoteObject createRemoteObject(URI url) throws UnknownProtocolException {
         String protocol = null;
 
         // check if the url contains a scheme (protocol)
@@ -141,9 +140,9 @@ public class RemoteObjectExposer<T> implements Serializable {
             irro.setRemoteRemoteObject(rmo);
 
             // put the url within the list of the activated protocols
-            this.activeRemoteRemoteObjects.put(url, rmo);
+            this.activeRemoteRemoteObjects.put(url, irro);
 
-            return irro;
+            return rmo;
         } catch (ProActiveException e) {
             ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).warn(
                     "unable to activate a remote object at endpoint " + url.toString(), e);
@@ -165,7 +164,8 @@ public class RemoteObjectExposer<T> implements Serializable {
         while (e.hasMoreElements()) {
             URI url = e.nextElement();
             if (protocol.equals(url.getScheme())) {
-                return new RemoteObjectAdapter(this.activeRemoteRemoteObjects.get(url));
+                return new RemoteObjectAdapter(this.activeRemoteRemoteObjects.get(url)
+                        .getRemoteRemoteObject());
             }
         }
 
@@ -232,7 +232,7 @@ public class RemoteObjectExposer<T> implements Serializable {
     }
 
     public void unexport(URI url) throws ProActiveException {
-        RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(url);
+        RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(url).getRemoteRemoteObject();
         RemoteObjectFactory rof = RemoteObjectHelper.getRemoteObjectFactory(url.getScheme());
         rof.unexport(rro);
     }
@@ -242,7 +242,7 @@ public class RemoteObjectExposer<T> implements Serializable {
         URI uri = null;
         while (uris.hasMoreElements()) {
             uri = uris.nextElement();
-            RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(uri);
+            RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(uri).getRemoteRemoteObject();
             RemoteObjectFactory rof = RemoteObjectHelper.getRemoteObjectFactory(uri.getScheme());
             rof.unexport(rro);
         }
