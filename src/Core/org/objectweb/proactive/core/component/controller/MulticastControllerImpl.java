@@ -348,8 +348,9 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
                     throw new ParameterDispatchException(
                         "cannot generate invocation for multicast interface " + itfType.getFcItfName() +
                             " because the specified distribution of parameters is incorrect in method " +
-                            matchingMethodInClientInterface.getName() + "(" +
-                            dispatchSizes.get(i).intValue() + " instead of " + expectedMethodCallsNb + ")");
+                            matchingMethodInClientInterface.getName() + "(expect " +
+                            dispatchSizes.get(i).intValue() + " method calls for the " + i +
+                            "th parameter instead of " + expectedMethodCallsNb + ")");
                 }
             }
         } else {

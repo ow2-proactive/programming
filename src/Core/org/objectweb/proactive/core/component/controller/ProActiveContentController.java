@@ -61,7 +61,7 @@ public interface ProActiveContentController extends ContentController {
      * @param subComponents the components to be added inside this component.
      * @throws ContentControllerExceptionListException if the addition of one or several components
      *         failed. This exception lists the components that were not added and the
-     *         exception that occured.
+     *         exception that occurred.
      */
     public void addFcSubComponent(List<Component> subComponents)
             throws ContentControllerExceptionListException;
@@ -76,7 +76,7 @@ public interface ProActiveContentController extends ContentController {
      * @param subComponents the list of components to be removed from this component.
      * @throws ContentControllerExceptionListException if the addition of one or several components
      *         failed. This exception lists the components that were not added and the
-     *         exception that occured.
+     *         exception that occurred.
      */
     void removeFcSubComponent(List<Component> subComponents) throws ContentControllerExceptionListException;
 }

@@ -31,6 +31,8 @@
  */
 package functionalTests.component.conform.components;
 
+import java.util.List;
+
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
@@ -49,6 +51,14 @@ public class SlaveImpl implements Slave {
         return new StringWrapper(computeSync(arg, other));
     }
 
+    public StringWrapper computeRoundRobinBroadcastAsync(String arg, List<String> other) {
+        String aggregOther = "";
+        for (String string : other) {
+            aggregOther += string;
+        }
+        return new StringWrapper(computeSync(arg, aggregOther));
+    }
+
     public GenericTypeWrapper<String> computeAsyncGenerics(String arg, String other) {
         return new GenericTypeWrapper<String>(computeSync(arg, other));
     }
@@ -57,4 +67,5 @@ public class SlaveImpl implements Slave {
         computeOneWay(arg, other);
         return "arg: '" + arg + "',other: '" + other + "'";
     }
+
 }

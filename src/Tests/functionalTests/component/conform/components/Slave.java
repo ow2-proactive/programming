@@ -31,16 +31,20 @@
  */
 package functionalTests.component.conform.components;
 
+import java.util.List;
+
 import org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public interface Slave {
-    void computeOneWay(String arg, String other);
+    public void computeOneWay(String arg, String other);
 
-    StringWrapper computeAsync(String arg, String other);
+    public StringWrapper computeAsync(String arg, String other);
 
-    GenericTypeWrapper<String> computeAsyncGenerics(String arg, String other);
+    public StringWrapper computeRoundRobinBroadcastAsync(String args, List<String> other);
 
-    String computeSync(String arg, String other);
+    public GenericTypeWrapper<String> computeAsyncGenerics(String arg, String other);
+
+    public String computeSync(String arg, String other);
 }
