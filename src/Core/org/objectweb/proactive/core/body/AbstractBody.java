@@ -1044,6 +1044,9 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         // We are no longer an active body
         LocalBodyStore.getInstance().unregisterBody(this);
 
+        // Thus, contexts are no more needed
+        LocalBodyStore.getInstance().clearAllContexts();
+
         // JMX unregistration
         if (this.mbean != null) {
             MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
