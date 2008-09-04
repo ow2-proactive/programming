@@ -331,6 +331,10 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                     logger.debug("Task " + tid + " given to " + workerName);
                 }
                 i++;
+                // In case of a divisible task we don't want to do a flooding
+                if (taskId.isDivisible()) {
+                    break;
+                }
             }
 
             return tasksToDo;
