@@ -22,7 +22,8 @@ IF DEFINED CLASSPATHEXT (
 	SET CLASSPATH=.
 )
 
-IF EXIST "%PROACTIVE%\classes" (
+rem Test if classes exists and is not empty
+IF EXIST "%PROACTIVE%\classes\Core" (
  	SET CLASSPATH=!CLASSPATH!;%PROACTIVE%\classes\Core;%PROACTIVE%\classes\Extensions;%PROACTIVE%\classes\Extra;%PROACTIVE%\classes\Examples
 	SET JARS=%PROACTIVE%\lib
 	FOR %%j IN ("%PROACTIVE%\lib\*.jar") DO SET JARS=!JARS!;%%j
