@@ -69,14 +69,16 @@ public class PiMonteCarlo implements EngineTask<Double> {
 
     private static int niter = 0;
     private static int tasks = 0;
+    private int ni = 0;
+    private int t = 0;
     private static URL descriptor_url;
     private static String vn_name;
     private static String master_vn_name;
 
     public PiMonteCarlo(int N, int M) {
         super();
-        niter = N;
-        tasks = M;
+        ni = N;
+        t = M;
     }
 
     /**
@@ -230,8 +232,8 @@ public class PiMonteCarlo implements EngineTask<Double> {
         // Without a post-process method, this large output would be transferred through the network and induce a big overhead.
         // The post-process method allow (depending on the problem of course) to directly compute some statistics and return a much smaller output through the network.
         List<SimulationSet<Long>> sets = new ArrayList<SimulationSet<Long>>();
-        for (int i = 0; i < tasks; i++) {
-            sets.add(new AbstractSimulationSetPostProcess<double[], Long>(new MCPi(niter)) {
+        for (int i = 0; i < t; i++) {
+            sets.add(new AbstractSimulationSetPostProcess<double[], Long>(new MCPi(ni)) {
                 /**
                  * 
                  */
@@ -267,7 +269,7 @@ public class PiMonteCarlo implements EngineTask<Double> {
         }
 
         // Final computation of pi
-        pival = (4 * counter) / ((double) (niter * tasks));
+        pival = (4 * counter) / ((double) (ni * t));
 
         return pival;
     }
