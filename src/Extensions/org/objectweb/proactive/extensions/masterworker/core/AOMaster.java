@@ -695,6 +695,8 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
                 service.serveAll("secondTerminate");
                 while (PAFuture.isAwaited(terminationResourceManagerAnswer)) {
                     service.serveAll(finalNotTerminateFilter);
+                    // avoids devouring CPU cycles
+                    Thread.sleep(100);
                 }
                 service.serveAll("finalTerminate");
                 service.serveAll("awaitsTermination");
