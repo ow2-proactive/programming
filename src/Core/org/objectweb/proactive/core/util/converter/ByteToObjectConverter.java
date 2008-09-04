@@ -233,7 +233,8 @@ public class ByteToObjectConverter {
             if (cl == null) {
                 return super.resolveClass(v);
             } else {
-                return cl.loadClass(v.getName());
+                // should not use directly loadClass due to jdk bug 6434149
+                return Class.forName(v.getName(), true, this.cl);
             }
         }
     }
