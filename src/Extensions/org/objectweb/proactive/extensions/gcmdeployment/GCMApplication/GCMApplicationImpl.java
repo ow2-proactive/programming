@@ -43,7 +43,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
@@ -108,9 +110,10 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     private List<Node> nodes;
 
     /** All the runtime created by this GCM Application */
-    private List<ProActiveRuntime> deployedRuntimes;
+    private Queue<ProActiveRuntime> deployedRuntimes;
     private Object deploymentMutex = new Object();
     private boolean isStarted;
+    private boolean isKilled;
     private ProActiveSecurityManager proactiveApplicationSecurityManager;
 
     private VariableContractImpl vContract;
@@ -152,8 +155,9 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             currentDeploymentPath = new ArrayList<String>();
             topologyIdToNodeProviderMapping = new HashMap<Long, NodeProvider>();
             nodes = new LinkedList<Node>();
-            deployedRuntimes = new LinkedList<ProActiveRuntime>();
+            deployedRuntimes = new ConcurrentLinkedQueue<ProActiveRuntime>();
             isStarted = false;
+            isKilled = false;
 
             if (vContract == null) {
                 vContract = new VariableContractImpl();
@@ -213,6 +217,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         synchronized (deploymentMutex) {
             if (isStarted) {
                 GCMA_LOGGER.warn("A GCM Application descriptor cannot be started twice", new Exception());
+                return;
             }
 
             isStarted = true;
@@ -243,14 +248,13 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     }
 
     public void kill() {
-        synchronized (deploymentMutex) {
-            for (ProActiveRuntime part : deployedRuntimes) {
-                try {
-                    part.killRT(false);
-                } catch (Exception e) {
-                    // Connection between the two runtimes will be interrupted 
-                    // Eat the exception: Miam Miam Miam
-                }
+        isKilled = true;
+        for (ProActiveRuntime part : deployedRuntimes) {
+            try {
+                part.killRT(false);
+            } catch (Exception e) {
+                // Connection between the two runtimes will be interrupted 
+                // Eat the exception: Miam Miam Miam
             }
         }
     }
@@ -326,7 +330,16 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     }
 
     public void addDeployedRuntime(ProActiveRuntime part) {
-        deployedRuntimes.add(part);
+        if (isKilled) {
+            try {
+                part.killRT(false);
+            } catch (Exception e) {
+                // Connection between the two runtimes will be interrupted 
+                // Eat the exception: Miam Miam Miam
+            }
+        } else {
+            deployedRuntimes.add(part);
+        }
     }
 
     /*
@@ -463,8 +476,7 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     /*
      * MUST NOT BE USED IF A VIRTUAL NODE IS DEFINED
      * 
-     * Asks all unused fakeNodes to the node mapper and creates corresponding
-     * nodes.
+     * Asks all unused fakeNodes to the node mapper and creates corresponding nodes.
      */
     private void updateNodes() {
         Set<FakeNode> fakeNodes = nodeMapper.getUnusedNode(true);
