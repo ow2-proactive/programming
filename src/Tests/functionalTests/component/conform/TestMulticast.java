@@ -98,20 +98,20 @@ public class TestMulticast extends Conformtest {
     public void testPrimitiveWithMulticast() throws Exception {
         Component master = gf.newFcInstance(tMaster, "primitive", MasterImpl.class.getName());
         checkComponent(master, new HashSet<Object>(Arrays.asList(new Object[] { COMP, BC, LC, SC, NC, MCC,
-                GC, MC, serverMaster, clientSlaveMulticast })));
+                GC, MC, MoC, serverMaster, clientSlaveMulticast })));
         Component slave = gf.newFcInstance(tSlave, "primitive", SlaveImpl.class.getName());
         checkComponent(slave, new HashSet<Object>(Arrays.asList(new Object[] { COMP, LC, SC, NC, MCC, GC, MC,
-                serverSlave })));
+                MoC, serverSlave })));
     }
 
     @Test
     public void testCompositeWithMulticast() throws Exception {
         Component master = gf.newFcInstance(tMaster, "composite", null);
         checkComponent(master, new HashSet<Object>(Arrays.asList(new Object[] { COMP, BC, CC, LC, SC, NC,
-                MCC, GC, MC, serverMaster, clientSlaveMulticast })));
+                MCC, GC, MC, MoC, serverMaster, clientSlaveMulticast })));
         Component slave = gf.newFcInstance(tSlave, "composite", null);
         checkComponent(slave, new HashSet<Object>(Arrays.asList(new Object[] { COMP, BC, CC, LC, SC, NC, MCC,
-                GC, MC, serverSlave })));
+                GC, MC, MoC, serverSlave })));
     }
 
     @Test(expected = InstantiationException.class)

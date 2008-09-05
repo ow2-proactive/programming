@@ -44,6 +44,7 @@ import org.objectweb.fractal.api.control.ContentController;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.controller.MonitorController;
 import org.objectweb.proactive.core.component.controller.PriorityController;
 
 import functionalTests.ComponentTest;
@@ -67,6 +68,8 @@ public abstract class Conformtest extends ComponentTest {
     //protected final static String CP = "component-parameters-controller/org.objectweb.proactive.core.component.controller.ComponentParametersController/false,false,false";
     protected final static String PC = Constants.REQUEST_PRIORITY_CONTROLLER + "/" +
         PriorityController.class.getCanonicalName() + "/false,false,false";
+    protected final static String MoC = Constants.MONITOR_CONTROLLER + "/" +
+        MonitorController.class.getCanonicalName() + "/false,false,false";
 
     //  protected final static String COMP = "component/"+ComponentItf.TYPE.getFcItfSignature()+"/false,false,false";
     //  protected final static String BC = "binding-controller/"+BindingControllerDef.TYPE.getFcItfSignature()+"/false,false,false";
