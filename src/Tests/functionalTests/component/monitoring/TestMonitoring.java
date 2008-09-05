@@ -34,14 +34,6 @@ public class TestMonitoring extends ComponentTest {
         root = (Component) factory.newComponent("functionalTests.component.monitoring.adl.TestPrimitive",
                 context);
 
-        Component[] subComponents = Fractal.getContentController(root).getFcSubComponents();
-        for (int i = 0; i < subComponents.length; i++) {
-            if (((NameController) subComponents[i].getFcInterface(Constants.NAME_CONTROLLER)).getFcName()
-                    .equals("server"))
-                monitor = (MonitorController) subComponents[i].getFcInterface(Constants.MONITOR_CONTROLLER);
-        }
-
-        Fractal.getLifeCycleController(root).startFc();
         start();
     }
 
@@ -52,14 +44,16 @@ public class TestMonitoring extends ComponentTest {
         root = (Component) factory.newComponent("functionalTests.component.monitoring.adl.TestComposite",
                 context);
 
-        Component[] subComponents = Fractal.getContentController(root).getFcSubComponents();
-        for (int i = 0; i < subComponents.length; i++) {
-            if (((NameController) subComponents[i].getFcInterface(Constants.NAME_CONTROLLER)).getFcName()
-                    .equals("servercomposite"))
-                monitor = (MonitorController) subComponents[i].getFcInterface(Constants.MONITOR_CONTROLLER);
-        }
+        start();
+    }
 
-        Fractal.getLifeCycleController(root).startFc();
+    @org.junit.Test
+    public void testMonitoringCompositeComponentWithMulticast() throws Exception {
+        factory = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
+        Map<Object, Object> context = new HashMap<Object, Object>();
+        root = (Component) factory.newComponent(
+                "functionalTests.component.monitoring.adl.TestCompositeMulticast", context);
+
         start();
     }
 
@@ -81,6 +75,15 @@ public class TestMonitoring extends ComponentTest {
     }
 
     public void start() throws Exception {
+        Component[] subComponents = Fractal.getContentController(root).getFcSubComponents();
+        for (int i = 0; i < subComponents.length; i++) {
+            if (((NameController) subComponents[i].getFcInterface(Constants.NAME_CONTROLLER)).getFcName()
+                    .equals("server"))
+                monitor = (MonitorController) subComponents[i].getFcInterface(Constants.MONITOR_CONTROLLER);
+        }
+
+        Fractal.getLifeCycleController(root).startFc();
+
         Runner runner1 = ((Runner) root.getFcInterface("runner1"));
         Runner runner2 = ((Runner) root.getFcInterface("runner2"));
         monitor.startMonitoring();

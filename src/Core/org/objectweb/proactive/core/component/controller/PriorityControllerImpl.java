@@ -67,7 +67,7 @@ public class PriorityControllerImpl extends AbstractProActiveController implemen
                     Constants.REQUEST_PRIORITY_CONTROLLER, PriorityController.class.getName(),
                     TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE));
         } catch (InstantiationException e) {
-            throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName());
+            throw new ProActiveRuntimeException("cannot create controller " + this.getClass().getName(), e);
         }
     }
 

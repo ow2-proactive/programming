@@ -87,26 +87,30 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
                     (!itfType.isFcClientItf())) {
                     List<MonitorController> subcomponentMonitors = new ArrayList<MonitorController>();
                     if (isComposite()) {
-                        Iterator<ProActiveInterface> bindedProActiveinterfaces = null;
+                        Iterator<Component> bindedComponentsIterator = null;
                         if (!((ProActiveInterfaceType) itfType).isFcMulticastItf()) {
-                            List<ProActiveInterface> bindedProActiveinterface = new ArrayList<ProActiveInterface>();
-                            bindedProActiveinterface.add((ProActiveInterface) itf);
-                            bindedProActiveinterfaces = bindedProActiveinterface.iterator();
+                            List<Component> bindedComponent = new ArrayList<Component>();
+                            bindedComponent.add(((ProActiveInterface) ((ProActiveInterface) itf)
+                                    .getFcItfImpl()).getFcItfOwner());
+                            bindedComponentsIterator = bindedComponent.iterator();
                         } else {
                             try {
-                                MulticastControllerImpl multicastController = (MulticastControllerImpl) owner
-                                        .getFcInterface(Constants.MULTICAST_CONTROLLER);
-                                bindedProActiveinterfaces = multicastController.getDelegatee(
+                                MulticastControllerImpl multicastController = (MulticastControllerImpl) ((ProActiveInterface) owner
+                                        .getFcInterface(Constants.MULTICAST_CONTROLLER)).getFcItfImpl();
+                                Iterator<ProActiveInterface> delegatee = multicastController.getDelegatee(
                                         itf.getFcItfName()).iterator();
+                                List<Component> bindedComponents = new ArrayList<Component>();
+                                while (delegatee.hasNext())
+                                    bindedComponents.add(delegatee.next().getFcItfOwner());
+                                bindedComponentsIterator = bindedComponents.iterator();
                             } catch (NoSuchInterfaceException e) {
                                 e.printStackTrace();
                             }
                         }
                         try {
-                            while (bindedProActiveinterfaces.hasNext()) {
-                                MonitorController monitor = (MonitorController) ((ProActiveInterface) bindedProActiveinterfaces
-                                        .next().getFcItfImpl()).getFcItfOwner().getFcInterface(
-                                        Constants.MONITOR_CONTROLLER);
+                            while (bindedComponentsIterator.hasNext()) {
+                                MonitorController monitor = (MonitorController) bindedComponentsIterator
+                                        .next().getFcInterface(Constants.MONITOR_CONTROLLER);
                                 monitor.startMonitoring();
                                 subcomponentMonitors.add(monitor);
                             }
@@ -259,7 +263,7 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
                 handleNotification(iterator.next(), handback);
         }
     }
-    
+
     /*
      * ---------- PRIVATE METHODS FOR SERIALIZATION ----------
      */

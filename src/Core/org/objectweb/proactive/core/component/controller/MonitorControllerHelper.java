@@ -1,8 +1,5 @@
 package org.objectweb.proactive.core.component.controller;
 
-import org.objectweb.proactive.core.util.wrapper.StringWrapper;
-
-
 public class MonitorControllerHelper {
     private static final String KEY_INFO_SEPARATOR = "-";
 
