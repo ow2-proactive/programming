@@ -41,7 +41,7 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
         NotificationListener {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
 
-    private JMXNotificationManager jmxNotificationManager;
+    private transient JMXNotificationManager jmxNotificationManager;
 
     private boolean started;
 
@@ -258,5 +258,13 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
             for (Iterator<Notification> iterator = notificationsList.iterator(); iterator.hasNext();)
                 handleNotification(iterator.next(), handback);
         }
+    }
+    
+    /*
+     * ---------- PRIVATE METHODS FOR SERIALIZATION ----------
+     */
+    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        jmxNotificationManager = JMXNotificationManager.getInstance();
     }
 }
