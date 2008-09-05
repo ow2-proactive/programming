@@ -229,6 +229,12 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
         return true;
     }
 
+    protected Group<ProActiveInterface> getDelegatee(String clientItfName) {
+        ProxyForComponentInterfaceGroup clientSideProxy = (ProxyForComponentInterfaceGroup) clientSideProxies
+                .get(clientItfName);
+        return clientSideProxy.getDelegatee();
+    }
+
     /*
      * @see org.objectweb.proactive.core.component.controller.MulticastController#bindFc(java.lang.String,
      *      org.objectweb.proactive.core.component.ProActiveInterface)
