@@ -1,5 +1,16 @@
 package org.objectweb.proactive.core.component.controller;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
+
+/**
+ * Useful methods for the monitor controller.
+ * 
+ * @author The ProActive Team
+ * @see org.objectweb.proactive.core.component.controller.MonitorController
+ *
+ */
+@PublicAPI
 public class MonitorControllerHelper {
     private static final String KEY_INFO_SEPARATOR = "-";
 

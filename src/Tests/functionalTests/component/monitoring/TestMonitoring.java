@@ -23,6 +23,7 @@ import functionalTests.ComponentTest;
  * @author The ProActive Team
  */
 public class TestMonitoring extends ComponentTest {
+    private static final long OVERHEAD = 400;
     private Factory factory;
     private Component root;
     private MonitorController monitor;
@@ -59,12 +60,13 @@ public class TestMonitoring extends ComponentTest {
 
     private void printStats() {
         Iterator<MethodStatistics> stats = monitor.getAllStatistics().values().iterator();
-        while (stats.hasNext())
+        while (stats.hasNext()) {
             System.out.println(stats.next().toString());
+        }
     }
 
     private boolean checkTime(double supposedTime, double realTime) {
-        return ((supposedTime * 0.70) <= realTime);
+        return ((supposedTime * 0.7) <= realTime) && (realTime <= ((supposedTime * 1.3) + OVERHEAD));
     }
 
     private void checkMethodStatistics(String itfName, String methodName, int nbCalls, int nbMethods,
@@ -78,8 +80,9 @@ public class TestMonitoring extends ComponentTest {
         Component[] subComponents = Fractal.getContentController(root).getFcSubComponents();
         for (int i = 0; i < subComponents.length; i++) {
             if (((NameController) subComponents[i].getFcInterface(Constants.NAME_CONTROLLER)).getFcName()
-                    .equals("server"))
+                    .equals("server")) {
                 monitor = (MonitorController) subComponents[i].getFcInterface(Constants.MONITOR_CONTROLLER);
+            }
         }
 
         Fractal.getLifeCycleController(root).startFc();

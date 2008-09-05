@@ -2,12 +2,24 @@ package org.objectweb.proactive.core.component.controller;
 
 import java.util.List;
 
+import org.objectweb.proactive.annotation.PublicAPI;
 
+
+/**
+ * This class manages the statistics for a method exposed by a component server interface.
+ * <br>
+ * The MethodStatistics instances of each method are managed by the monitor controller.
+ * 
+ * @author The ProActive Team
+ * @see org.objectweb.proactive.core.component.controller.MonitorController
+ *
+ */
+@PublicAPI
 public interface MethodStatistics {
     /**
      * Maximum number of requests saved.
      */
-    public static int maxNbRequests = 10000;
+    public static int maxNbRequests = 1000;
 
     /**
      * Get the current length of the requests incoming queue related to the monitored method.

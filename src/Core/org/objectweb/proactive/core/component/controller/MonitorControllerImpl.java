@@ -69,6 +69,7 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
         PAActiveObject.setImmediateService("getStatistics", new Class[] { String.class, String.class,
                 (new Class<?>[] {}).getClass() });
         PAActiveObject.setImmediateService("getAllStatistics");
+
         statistics = Collections.synchronizedMap(new HashMap<String, MethodStatistics>());
         keysList = new HashMap<String, String>();
         NameController nc = null;
@@ -100,8 +101,9 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
                                 Iterator<ProActiveInterface> delegatee = multicastController.getDelegatee(
                                         itf.getFcItfName()).iterator();
                                 List<Component> bindedComponents = new ArrayList<Component>();
-                                while (delegatee.hasNext())
+                                while (delegatee.hasNext()) {
                                     bindedComponents.add(delegatee.next().getFcItfOwner());
+                                }
                                 bindedComponentsIterator = bindedComponents.iterator();
                             } catch (NoSuchInterfaceException e) {
                                 e.printStackTrace();
@@ -127,10 +129,10 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
                         String key = MonitorControllerHelper.generateKey(itf.getFcItfName(), m.getName(),
                                 parametersTypes);
                         keysList.put(m.getName(), key);
-                        if (subcomponentMonitors.isEmpty())
+                        if (subcomponentMonitors.isEmpty()) {
                             statistics.put(key, new MethodStatisticsPrimitiveImpl(itf.getFcItfName(), m
                                     .getName(), parametersTypes));
-                        else {
+                        } else {
                             statistics.put(key, new MethodStatisticsCompositeImpl(itf.getFcItfName(), m
                                     .getName(), parametersTypes, subcomponentMonitors));
                         }
@@ -156,8 +158,9 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
     }
 
     public void startMonitoring() {
-        if (statistics == null)
+        if (statistics == null) {
             registerMethods();
+        }
         if (!started) {
             initMethodStatistics();
             try {
@@ -194,31 +197,34 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
         String supposedCorrespondingKey = MonitorControllerHelper.generateKey(itfName, methodName,
                 parametersTypes);
         MethodStatistics methodStats = statistics.get(supposedCorrespondingKey);
-        if (methodStats != null)
+        if (methodStats != null) {
             return methodStats;
-        else if (parametersTypes.length == 0) {
+        } else if (parametersTypes.length == 0) {
             String correspondingKey = null;
             String[] keys = statistics.keySet().toArray(new String[] {});
             for (int i = 0; i < keys.length; i++) {
                 if (keys[i].startsWith(supposedCorrespondingKey)) {
-                    if (correspondingKey == null)
+                    if (correspondingKey == null) {
                         correspondingKey = keys[i];
-                    else
+                    } else {
                         throw new ProActiveRuntimeException("The method name: " + methodName +
                             " of the interface " + itfName + " is ambiguous: more than 1 method found");
+                    }
                 }
             }
-            if (correspondingKey != null)
+            if (correspondingKey != null) {
                 return statistics.get(correspondingKey);
-            else
+            } else {
                 throw new ProActiveRuntimeException("The method: " + methodName + "() of the interface " +
                     itfName + " cannot be found so no statistics are available");
+            }
         } else {
             String msg = "The method: " + methodName + "(";
             for (int i = 0; i < parametersTypes.length; i++) {
                 msg += parametersTypes[i].getName();
-                if (i + 1 < parametersTypes.length)
+                if (i + 1 < parametersTypes.length) {
                     msg += ", ";
+                }
             }
             msg += ") of the interface " + itfName + " cannot be found so no statistics are available";
             throw new ProActiveRuntimeException(msg);
@@ -234,33 +240,38 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
         if (type.equals(NotificationType.requestReceived)) {
             RequestNotificationData data = (RequestNotificationData) notification.getUserData();
             String key = keysList.get(data.getMethodName());
-            if (key != null)
+            if (key != null) {
                 ((MethodStatisticsAbstract) statistics.get(key)).notifyArrivalOfRequest(notification
                         .getTimeStamp());
+            }
         } else if (type.equals(NotificationType.servingStarted)) {
             RequestNotificationData data = (RequestNotificationData) notification.getUserData();
             String key = keysList.get(data.getMethodName());
-            if (key != null)
+            if (key != null) {
                 ((MethodStatisticsAbstract) statistics.get(key)).notifyDepartureOfRequest(notification
                         .getTimeStamp());
+            }
         } else if (type.equals(NotificationType.replySent)) {
             RequestNotificationData data = (RequestNotificationData) notification.getUserData();
             String key = keysList.get(data.getMethodName());
-            if (key != null)
+            if (key != null) {
                 ((MethodStatisticsAbstract) statistics.get(key)).notifyReplyOfRequestSent(notification
                         .getTimeStamp());
+            }
         } else if (type.equals(NotificationType.voidRequestServed)) {
             RequestNotificationData data = (RequestNotificationData) notification.getUserData();
             String key = keysList.get(data.getMethodName());
-            if (key != null)
+            if (key != null) {
                 ((MethodStatisticsAbstract) statistics.get(key)).notifyReplyOfRequestSent(notification
                         .getTimeStamp());
+            }
         } else if (type.equals(NotificationType.setOfNotifications)) {
             @SuppressWarnings("unchecked")
             ConcurrentLinkedQueue<Notification> notificationsList = (ConcurrentLinkedQueue<Notification>) notification
                     .getUserData();
-            for (Iterator<Notification> iterator = notificationsList.iterator(); iterator.hasNext();)
+            for (Iterator<Notification> iterator = notificationsList.iterator(); iterator.hasNext();) {
                 handleNotification(iterator.next(), handback);
+            }
         }
     }
 

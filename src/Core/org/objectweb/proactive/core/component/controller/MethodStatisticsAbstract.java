@@ -24,7 +24,7 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
 
     // Sometimes a replySent notification is received before the corresponding servingStarted notification
     // Therefore the notification is stored and will be used when the corresponding servingStarted notification will be received
-    protected ArrayList<Long> replyInAdvance;
+    protected List<Long> replyInAdvance;
 
     /*
      * Reset all the statistics for the monitored method.
@@ -38,21 +38,6 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
         this.replyInAdvance = new ArrayList<Long>();
     }
 
-    // TODO Use this method
-    @SuppressWarnings("unused")
-    private void clean() {
-        int shift = requestsStats.size() - maxNbRequests;
-        if (shift > 0) {
-            requestsStats = requestsStats.subList(shift, requestsStats.size() - 1);
-            indexNextDepartureRequest = indexNextDepartureRequest - shift;
-            if (indexNextDepartureRequest < 0)
-                indexNextDepartureRequest = 0;
-            indexNextReply = indexNextReply - shift;
-            if (indexNextReply < 0)
-                indexNextReply = 0;
-        }
-    }
-
     /*
      * Notify the arrival of a new request in the incoming queue related to the monitored method.
      * 
@@ -62,8 +47,9 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
         if (!requestsStats.isEmpty()) {
             requestsStats.add(new RequestStatistics(arrivalTime, requestsStats.get(requestsStats.size() - 1)
                     .getArrivalTime()));
-        } else
+        } else {
             requestsStats.add(new RequestStatistics(arrivalTime, startTime));
+        }
         currentLengthQueue++;
     }
 
@@ -77,9 +63,30 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
             requestsStats.get(indexNextDepartureRequest).setDepartureTime(departureTime);
             indexNextDepartureRequest++;
             currentLengthQueue--;
-            if (!replyInAdvance.isEmpty() && (replyInAdvance.get(0) > departureTime))
+            if (!replyInAdvance.isEmpty() && (replyInAdvance.get(0) > departureTime)) {
                 notifyReplyOfRequestSent(replyInAdvance.remove(0));
+            }
         } catch (IndexOutOfBoundsException e) {
+        }
+    }
+
+    /*
+     * Erase the maxNbRequests oldest requests.
+     */
+    private void clean() {
+        int shift = requestsStats.size() - maxNbRequests;
+        if (shift > 0) {
+            requestsStats.subList(shift, requestsStats.size()).clear();
+            startTime = requestsStats.get(0).getArrivalTime();
+            indexNextDepartureRequest = indexNextDepartureRequest - shift;
+            if (indexNextDepartureRequest < 0) {
+                indexNextDepartureRequest = 0;
+            }
+            indexNextReply = indexNextReply - shift;
+            if (indexNextReply < 0) {
+                indexNextReply = 0;
+            }
+            currentLengthQueue = requestsStats.size() - indexNextDepartureRequest;
         }
     }
 
@@ -93,8 +100,12 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
             if (indexNextReply < indexNextDepartureRequest) {
                 requestsStats.get(indexNextReply).setReplyTime(replyTime);
                 indexNextReply++;
-            } else
+                if (indexNextReply == (2 * maxNbRequests)) {
+                    clean();
+                }
+            } else {
                 replyInAdvance.add(replyTime);
+            }
         } catch (IndexOutOfBoundsException e) {
         }
     }
@@ -102,8 +113,9 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
     protected int findNumberOfRequests(long time, int indexToStart) {
         long currentTime = System.nanoTime() / 1000;
         for (int i = indexToStart - 1; i >= 0; i--) {
-            if (((currentTime - requestsStats.get(i).getArrivalTime()) / 1000) > time)
+            if (((currentTime - requestsStats.get(i).getArrivalTime()) / 1000) > time) {
                 return indexToStart - (i + 1);
+            }
         }
 
         return indexToStart;
@@ -135,12 +147,14 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
         if (lastNRequest != 0) {
             double res = 0;
             int indexToReach = Math.max(requestsStats.size() - 1 - lastNRequest, 0); // To avoid to have negative index
-            for (int i = requestsStats.size() - 1; i >= indexToReach; i--)
+            for (int i = requestsStats.size() - 1; i >= indexToReach; i--) {
                 res += requestsStats.get(i).getInterArrivalTime();
+            }
 
             return res / lastNRequest / 1000;
-        } else
+        } else {
             return 0;
+        }
     }
 
     public double getAverageInterArrivalTime(long pastXMilliseconds) {
@@ -155,12 +169,14 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
         if (lastNRequest != 0) {
             double res = 0;
             int indexToReach = Math.max(indexNextDepartureRequest - 1 - lastNRequest, 0); // To avoid to have negative index
-            for (int i = indexNextDepartureRequest - 1; i >= indexToReach; i--)
+            for (int i = indexNextDepartureRequest - 1; i >= indexToReach; i--) {
                 res += requestsStats.get(i).getPermanenceTimeInQueue();
+            }
 
             return res / lastNRequest / 1000;
-        } else
+        } else {
             return 0;
+        }
     }
 
     public double getAveragePermanenceTimeInQueue(long pastXMilliseconds) {
@@ -178,8 +194,9 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
         int nbParameters = parametersTypes.length;
         for (int i = 0; i < nbParameters; i++) {
             res += parametersTypes[i].getName();
-            if (i + 1 < nbParameters)
+            if (i + 1 < nbParameters) {
                 res += ", ";
+            }
         }
         res += ") of the interface " + itfName + ":\n";
         res += "Average length of the queue: " + getAverageLengthQueue() + "\n";

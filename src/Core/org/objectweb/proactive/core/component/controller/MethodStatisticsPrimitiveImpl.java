@@ -1,8 +1,7 @@
 package org.objectweb.proactive.core.component.controller;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Vector;
 
 
 public class MethodStatisticsPrimitiveImpl extends MethodStatisticsAbstract implements Serializable {
@@ -11,7 +10,7 @@ public class MethodStatisticsPrimitiveImpl extends MethodStatisticsAbstract impl
         this.itfName = itfName;
         this.methodName = methodName;
         this.parametersTypes = parametersTypes;
-        this.requestsStats = Collections.synchronizedList(new ArrayList<RequestStatistics>());
+        this.requestsStats = new Vector<RequestStatistics>();
         reset();
     }
 
@@ -32,8 +31,9 @@ public class MethodStatisticsPrimitiveImpl extends MethodStatisticsAbstract impl
             }
 
             return res / lastNRequest / 1000;
-        } else
+        } else {
             return 0;
+        }
     }
 
     public double getAverageServiceTime(long pastXMilliseconds) {
