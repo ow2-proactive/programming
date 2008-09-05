@@ -15,13 +15,13 @@ public class MonitorControllerHelper {
      * @param parametersTypes Types of the parameters of the method.
      * @return Key built like this itfName-MethodName-ClassNameParam1-ClassNameParam2-...
      */
-    public static StringWrapper generateKey(String itfName, String methodName, Class<?>[] parametersTypes) {
+    public static String generateKey(String itfName, String methodName, Class<?>[] parametersTypes) {
         String key = itfName + KEY_INFO_SEPARATOR + methodName;
 
         for (int i = 0; i < parametersTypes.length; i++) {
             key += KEY_INFO_SEPARATOR + parametersTypes[i].getName();
         }
 
-        return new StringWrapper(key);
+        return key;
     }
 }

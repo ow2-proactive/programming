@@ -121,7 +121,7 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
                     for (Method m : methods) {
                         Class<?>[] parametersTypes = m.getParameterTypes();
                         String key = MonitorControllerHelper.generateKey(itf.getFcItfName(), m.getName(),
-                                parametersTypes).stringValue();
+                                parametersTypes);
                         keysList.put(m.getName(), key);
                         if (subcomponentMonitors.isEmpty())
                             statistics.put(key, new MethodStatisticsPrimitiveImpl(itf.getFcItfName(), m
@@ -188,7 +188,7 @@ public class MonitorControllerImpl extends AbstractProActiveController implement
     public MethodStatistics getStatistics(String itfName, String methodName, Class<?>[] parametersTypes)
             throws ProActiveRuntimeException {
         String supposedCorrespondingKey = MonitorControllerHelper.generateKey(itfName, methodName,
-                parametersTypes).stringValue();
+                parametersTypes);
         MethodStatistics methodStats = statistics.get(supposedCorrespondingKey);
         if (methodStats != null)
             return methodStats;
