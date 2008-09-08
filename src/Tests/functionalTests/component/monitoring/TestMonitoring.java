@@ -23,7 +23,7 @@ import functionalTests.ComponentTest;
  * @author The ProActive Team
  */
 public class TestMonitoring extends ComponentTest {
-    private static final long OVERHEAD = 400;
+    private static final long OVERHEAD = 1000;
     private Factory factory;
     private Component root;
     private MonitorController monitor;
