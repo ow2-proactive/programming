@@ -31,12 +31,16 @@
  */
 package org.objectweb.proactive.core.component.exceptions;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
+
 /**
  * Exception thrown when a named component cannot be found
  *
  * @author The ProActive Team
  *
  */
+@PublicAPI
 public class NoSuchComponentException extends Exception {
     /**
      * 

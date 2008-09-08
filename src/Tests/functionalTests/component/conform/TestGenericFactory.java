@@ -99,7 +99,7 @@ public class TestGenericFactory extends Conformtest {
     public void testPrimitive() throws Exception {
         Component c = gf.newFcInstance(t, "primitive", C.class.getName());
         checkComponent(c, new HashSet<Object>(Arrays.asList(new Object[] { COMP, BC, LC, SC, NC, MCC, GC, MC,
-                sI, cI })));
+                MoC, sI, cI })));
     }
 
     @Test
@@ -113,7 +113,7 @@ public class TestGenericFactory extends Conformtest {
     public void testComposite() throws Exception {
         Component c = gf.newFcInstance(t, "composite", null);
         checkComponent(c, new HashSet<Object>(Arrays.asList(new Object[] { COMP, BC, CC, LC, SC, NC, MCC, GC,
-                MC, sI, cI })));
+                MC, MoC, sI, cI })));
     }
 
     @Test
