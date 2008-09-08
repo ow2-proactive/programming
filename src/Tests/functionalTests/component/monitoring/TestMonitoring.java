@@ -65,15 +65,18 @@ public class TestMonitoring extends ComponentTest {
         }
     }
 
-    private boolean checkTime(double supposedTime, double realTime) {
-        return ((supposedTime * 0.7) <= realTime) && (realTime <= ((supposedTime * 1.3) + OVERHEAD));
+    private void checkTime(double supposedTime, double realTime) {
+        assertTrue("Measured time is lesser than expected (" + realTime + " instead of " +
+            (supposedTime * 0.7) + ")", (supposedTime * 0.7) <= realTime);
+        assertTrue("Measured time is greater than expected (" + realTime + " instead of " +
+            ((supposedTime * 1.3) + OVERHEAD) + ")", realTime <= ((supposedTime * 1.3) + OVERHEAD));
     }
 
     private void checkMethodStatistics(String itfName, String methodName, int nbCalls, int nbMethods,
             long sleepTimeCallMethod) throws Exception {
         MethodStatistics methodStats = monitor.getStatistics(itfName, methodName);
-        assertTrue(checkTime(ServerImpl.EXECUTION_TIME, methodStats.getAverageServiceTime()));
-        assertTrue(checkTime(nbMethods * sleepTimeCallMethod, methodStats.getAverageInterArrivalTime()));
+        checkTime(ServerImpl.EXECUTION_TIME, methodStats.getAverageServiceTime());
+        checkTime(nbMethods * sleepTimeCallMethod, methodStats.getAverageInterArrivalTime());
     }
 
     public void start() throws Exception {
