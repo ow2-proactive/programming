@@ -39,7 +39,7 @@ fi
 #
 
 # Test if classes exists and is not empty
-if [ -d $PROACTIVE/classes/Core ]if [ -d $PROACTIVE/classes ]
+if [ -d $PROACTIVE/classes/Core ]
 then
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Core
     CLASSPATH=$CLASSPATH:$PROACTIVE/classes/Extensions
