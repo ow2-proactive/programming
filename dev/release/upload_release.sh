@@ -23,6 +23,7 @@ function check_dir {
 }
 
 
+RELEASE_BASENAME="ProActiveScheduling"
 
 DIST_BASE=/net/servers/www-sop/teams/oasis/proactive/dist
 check_dir "$DIST_BASE"
@@ -30,10 +31,10 @@ check_dir "$DIST_BASE"
 DIST_PA=$DIST_BASE/ProActive
 check_dir "$DIST_PA"
 
-DIST_PAPROG=$DIST_PA/Programming
-check_dir "$DIST_PAPROG"
+DIST_PASCHED=$DIST_PA/Scheduling
+check_dir "$DIST_PASCHED"
 
-RELEASE_DIR=$DIST_PAPROG/$VERSION
+RELEASE_DIR=$DIST_PASCHED/$VERSION
 if [ -d "$RELEASE_DIR" ] ; then
 	warn_and_exit "Release directory already exists. Aborted..."
 fi
@@ -42,5 +43,5 @@ echo "Building the release"
 $workingDir/build_release.sh "$@" $TMP || warn_and_exit "Build failed"
 
 mkdir "$RELEASE_DIR"
-cp $TMP/ProActive-${VERSION}.tar.gz "$RELEASE_DIR"
-cp $TMP/ProActive-${VERSION}.zip    "$RELEASE_DIR"
+cp $TMP/$RELEASE_BASENAME-${VERSION}.tar.gz "$RELEASE_DIR"
+cp $TMP/$RELEASE_BASENAME-${VERSION}.zip    "$RELEASE_DIR"
