@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="classes/xen" path="src/xen/src"/>
+	<classpathentry kind="src" output="classes/vmware-test" path="src/vmware/tests"/>
+	<classpathentry kind="src" output="classes/vmware" path="src/vmware/src"/>
+	<classpathentry kind="src" output="classes/core-test" path="src/core/tests"/>
+	<classpathentry kind="src" output="classes/virtualbox-test" path="src/virtualbox/tests"/>
+	<classpathentry kind="src" output="classes/xen-test" path="src/xen/tests"/>
+	<classpathentry kind="src" output="classes/qemu" path="src/qemu/src"/>
+	<classpathentry kind="src" output="classes/qemu-test" path="src/qemu/tests"/>
+	<classpathentry kind="src" output="classes/core" path="src/core/src"/>
+	<classpathentry kind="src" output="classes/virtualbox" path="src/virtualbox/src"/>
+	<classpathentry kind="lib" path="compile/lib/ant-junit.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-replaceregexp.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-trax.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
+	<classpathentry kind="lib" path="compile/lib/AntelopeTasks_3.2.19.jar"/>
+	<classpathentry kind="lib" path="compile/lib/clover.jar"/>
+	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

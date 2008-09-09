@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="compile">
+	<taskdef name="if" classname="ise.antelope.tasks.IfTask"/>
+
+	<property environment="env" />
+
+	<!-- junit properties -->
+	<property name="junit.showoutput" value="true"/>
+
+	<property name="base.dir"            value="${basedir}/.." />
+	
+	<property name="compile.dir"         value="${base.dir}/compile" />
+	<property name="dev.dir"             value="${base.dir}/dev" />
+	<property name="classes.dir"         value="${base.dir}/classes" />
+	<property name="junit.dir"           value="${base.dir}/junitReports" />
+
+	<!-- ================================================================ -->
+	<!--                   		Source paths                              -->
+	<!--  =============================================================== -->
+	
+	<property name="src.dir"             value="${base.dir}/src" />	
+	<property name="src.core.dir"   value="${src.dir}/scheduler/src" />
+
+	<!--                   		Class  paths                              -->
+	<!--  =============================================================== -->
+
+	<property name="cl.scheduler.dir"    value="${classes.dir}/scheduler" />
+	<property name="cl.scheduler.tests.dir"    value="${classes.dir}/schedulerTests" />
+	<property name="cl.rm.dir"           value="${classes.dir}/resource-manager" />
+	<property name="cl.rm.tests.dir"     value="${classes.dir}/resource-managerTests" />
+	
+	<property name="rcp.plugins.dir"     value="${base.dir}/scheduler_plugins/" />
+	<property name="scheduler.plugin.lib"	value="org.ow2.proactive.scheduler.lib" />
+	
+	<property name="proactive.path" 	value="org/ow2/proactive" />
+
+	<property name="proactive.core.path" value="${proactive.path}/core" />
+	<property name="proactive.ext.path" value="${proactive.path}/ext" />
+	<property name="scheduler.path"    value="${proactive.path}/scheduler"/>
+	<property name="rm.path"    		value="${proactive.path}/resourcemanager"/>
+
+	<!-- ================================================================ -->
+	<!--                   Doc directories paths                          -->
+	<!--  =============================================================== -->
+	<property name="doc.src"       		value="${base.dir}/doc-src" />
+	<property name="docs.dir"      		value="${base.dir}/docs" />
+	<property name="docs.tmp.dir"  		value="${docs.dir}/tmp" />
+	<property name="docs.api.complete.dir"	value="${docs.dir}/javadoc/api_complete" />
+	<property name="docs.api.published.dir"	value="${docs.dir}/javadoc/api_published" />
+	<property name="docs.html.multiple.dir"	value="${docs.dir}/manual/Scheduler_Manual_html/" />
+	<property name="docs.html.single.dir"	value="${docs.dir}/manual/Scheduler_Manual_Single_html/" />
+
+	<property name="docs.pdf.dir"	value="${docs.dir}/manual/pdf" />
+
+	<property name="docs.docbook"	value="${base.dir}/dev/lib/docbook/" />
+	<property name="docs.xsl"	value="${doc.src}/xsl" />
+	
+	<property name="snippets.location"	value="${doc.src}/automatic_snippets" />
+	
+	
+	<!-- ================================================================ -->
+	<!--                Documentation files:   XSL,XML,PDF,CSS,etc            -->
+	<!--  =============================================================== -->
+	<property name="docs.pdf.name"	value="SchedulerManual.pdf" />
+	
+	<property name="docs.mainFile" 		value="PA_index.xml" />
+	<property name="docs.published.coreclasses" 		value="${docs.tmp.dir}/publishedCoreClasses" />
+	<property name="docs.xsl.profiling"	value="${docs.xsl}/profiling.xsl" />
+	<property name="docs.xsl.pdf"	value="${docs.xsl}/pdf.xsl" />
+	<property name="docs.xsl.html.chunked"	value="${docs.xsl}/chunkedhtml.xsl" />
+	<property name="docs.xsl.html.one"	value="${docs.xsl}/onehtml.xsl" />
+	<property name="docs.xsl.removenewlines"	value="${docs.xsl}/remove_newlines.xsl" />
+
+	<property name="docs.html.multiple.output"	value="${docs.html.multiple.dir}/index.html" />
+	<property name="docs.html.single.name"	value="SchedulerManual.html" />
+	<property name="docs.html.single.output"	value="${docs.html.single.dir}/${docs.html.single.name}" />
+	<property name="docs.html.multiple.zip"	value="${docs.dir}/SchedulerManualMultipleHtml.zip" />
+	<property name="docs.html.single.zip"	value="${docs.dir}/SchedulerManualSingleHtml.zip" />
+	<property name="docs.pdf.output"	value="${docs.pdf.dir}/${docs.pdf.name}" />
+
+	<property name="docs.docbook.dtd.name"	value="docbook.dtd" />
+	<property name="docs.docbook.dtd"	value="${docs.dir}/${docs.docbook.dtd.name}" />
+	<property name="docs.html.css.name"	value="Scheduler.css" />
+	
+	
+	
+	<property name="scheduler-plugin.dir" value="${base.dir}/scheduler-plugins-src" />
+	<property name="resourcemanager-plugin.dir" value="${base.dir}/resource-manager-plugin-src" />
+		
+
+	<!-- Javac properties -->
+	<property name="debug" value="on" />
+	<property name="source" value="1.5" />
+
+	<!-- Clover -->
+	<property name="clover.report.dir"        value="${base.dir}/clover" />
+	<property name="clover.historyreport.dir" value="${base.dir}/clover_history" />
+	<property name="clover.historypoint.dir"  value="${base.dir}/clover_db" />
+
+	<property name="stubgenerator.class" value="org.objectweb.proactive.ext.util.StubGenerator" />
+
+	<!-- DocBook -->
+	<property name="docbook.version" value="1.73.2" />
+	
+	<!-- ================================================================ -->
+	<!--                   define the different classpaths                -->
+	<!--  =============================================================== -->
+
+	<path id="rm.libs">
+		<fileset dir="${lib.dir}">
+			<include name="ProActive/**/*.jar"/>		
+			<include name="common/**/*.jar"/>		
+			<include name="resource-manager/**/*.jar"/>	
+		</fileset>		
+		<pathelement location="${base.dir}/compile/lib/junit-4.3.jar"/>
+	</path>
+
+	<path id="scheduler.libs">
+		<fileset dir="${lib.dir}">
+			<include name="ProActive/**/*.jar"/>		
+			<include name="common/**/*.jar"/>		
+			<include name="scheduler/**/*.jar"/>	
+		</fileset>
+		
+		<pathelement location="${base.dir}/compile/lib/junit-4.3.jar"/>
+	</path>
+	
+	<path id="project.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="ProActive/**/*.jar"/>
+			<include name="common/**/*.jar"/>		
+			<include name="resource-manager/**/*.jar"/>	
+			<include name="scheduler/**/*.jar"/>
+		</fileset>		
+		<pathelement location="${cl.scheduler.dir}" />
+		<pathelement location="${cl.scheduler.tests.dir}" />
+		<pathelement location="${cl.rm.dir}" />
+		<pathelement location="${cl.rm.tests.dir}" />
+	</path>
+	
+	<path id="test.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="ProActive/**/*.jar"/>		
+			<include name="common/**/*.jar"/>		
+			<include name="resource-manager/**/*.jar"/>	
+			<include name="scheduler/**/*.jar"/>
+			
+		</fileset>
+		<pathelement path="${cl.rm.dir}"/>
+		<pathelement path="${cl.scheduler.dir}"/>
+		<pathelement path="${cl.rm.tests.dir}"/>
+		<pathelement path="${cl.scheduler.tests.dir}"/>
+		<pathelement location="${base.dir}/compile/lib/junit-4.3.jar"/>
+	</path>
+</project>
