@@ -97,7 +97,9 @@ public class ActiveObjectListener implements NotificationListener {
                 } else if (type.equals(NotificationType.replySent)) {
                     logger.debug("...............................Reply sent : " + ao.getName());
                     ao.setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.ACTIVE);
-                    Integer requestQueueLength = (Integer) notification.getUserData();
+                    RequestNotificationData notificationData = (RequestNotificationData) notification
+                            .getUserData();
+                    Integer requestQueueLength = notificationData.getRequestQueueLength();
                     ao.setRequestQueueLength(requestQueueLength);
                 } else if (type.equals(NotificationType.requestSent)) {
                     logger.debug("...............................Request sent : " + ao.getName());
@@ -106,12 +108,16 @@ public class ActiveObjectListener implements NotificationListener {
                 } else if (type.equals(NotificationType.servingStarted)) {
                     logger.debug("...............................Serving started : " + ao.getName());
                     ao.setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.SERVING_REQUEST);
-                    Integer requestQueueLength = (Integer) notification.getUserData();
+                    RequestNotificationData notificationData = (RequestNotificationData) notification
+                            .getUserData();
+                    Integer requestQueueLength = notificationData.getRequestQueueLength();
                     ao.setRequestQueueLength(requestQueueLength);
                 } else if (type.equals(NotificationType.voidRequestServed)) {
                     logger.debug("...............................Void request served : " + ao.getName());
                     ao.setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.ACTIVE);
-                    Integer requestQueueLength = (Integer) notification.getUserData();
+                    RequestNotificationData notificationData = (RequestNotificationData) notification
+                            .getUserData();
+                    Integer requestQueueLength = notificationData.getRequestQueueLength();
                     ao.setRequestQueueLength(requestQueueLength);
                 }
                 // --- MigrationEvent -------------------
