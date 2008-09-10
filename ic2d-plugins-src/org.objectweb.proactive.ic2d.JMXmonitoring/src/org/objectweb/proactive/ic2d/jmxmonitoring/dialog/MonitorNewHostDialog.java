@@ -38,6 +38,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -64,6 +67,7 @@ import org.eclipse.swt.widgets.Text;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.ic2d.console.Console;
@@ -400,9 +404,19 @@ public class MonitorNewHostDialog extends Dialog {
         public void widgetSelected(SelectionEvent e) {
             if (e.widget == okButton) {
                 hostname = hostCombo.getText();
+                try {
+                    hostname = InetAddress.getByName(hostname).getCanonicalHostName();
+                } catch (UnknownHostException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+
                 port = Integer.parseInt(portText.getText());
                 protocol = protocolCombo.getText();
-                final String url = URIBuilder.buildURI(hostname, "", protocol, port).toString();
+                URI uri = URIBuilder.buildURI(hostname, "", protocol, port);
+
+                final String url = RemoteObjectHelper.expandURI(uri).toString();
+
                 recordUrl(url);
                 world.setDepth(Integer.parseInt(depthText.getText()));
                 //				new Thread() {
