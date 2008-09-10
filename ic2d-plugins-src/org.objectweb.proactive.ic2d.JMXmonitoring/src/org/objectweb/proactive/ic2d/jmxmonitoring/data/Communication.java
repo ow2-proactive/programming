@@ -68,9 +68,6 @@ public final class Communication extends Observable {
      * @param target The target of the communication
      */
     public Communication(final ActiveObject source, final ActiveObject target) {
-        if (source == null || target == null || source == target) {
-            throw new IllegalArgumentException();
-        }
         this.source = source;
         this.target = target;
         this.connect();
