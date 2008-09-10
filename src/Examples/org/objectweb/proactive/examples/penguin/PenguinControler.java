@@ -133,15 +133,29 @@ public class PenguinControler implements org.objectweb.proactive.RunActive, Peng
                 nodesURLs.add(node.getNodeInformation().getURL());
             }
             new PenguinControler(nodesURLs.toArray(new String[0]));
-
+            Runtime.getRuntime().addShutdownHook(new MyShutdownHook(proActiveDescriptor));
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (proActiveDescriptor != null) {
-                proActiveDescriptor.kill();
-            }
         }
 
-        PALifeCycle.exitSuccess();
     }
+
+    /**
+     * Shutdown hook for killing the deployed runtimes
+     * when the Gui exits
+     *
+     */
+    static class MyShutdownHook extends Thread {
+
+        private GCMApplication gcma;
+
+        public MyShutdownHook(GCMApplication gcma) {
+            this.gcma = gcma;
+        }
+
+        public void run() {
+            gcma.kill();
+        }
+    }
+
 }
