@@ -34,10 +34,9 @@ package org.objectweb.proactive.core.remoteobject;
 import java.util.Hashtable;
 
 import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.rmi.ClassServerHelper;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 
 /**
@@ -46,12 +45,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public abstract class AbstractRemoteObjectFactory {
-    protected static ClassServerHelper classServerHelper;
-    protected static Hashtable<String, RemoteObjectFactory> activatedRemoteObjectFactories;
+    final protected static Hashtable<String, RemoteObjectFactory> activatedRemoteObjectFactories;
 
     static {
-        createClassServer();
         activatedRemoteObjectFactories = new Hashtable<String, RemoteObjectFactory>();
+        createClassServer();
     }
 
     /**
@@ -60,17 +58,19 @@ public abstract class AbstractRemoteObjectFactory {
      * @return the new codebase
      */
     protected static synchronized String addCodebase(String newLocationURL) {
+        // Local class server is useful when an object migrate
+        // Other class servers  are used only if local class server fail
         String oldCodebase = PAProperties.JAVA_RMI_SERVER_CODEBASE.getValue();
+        ProActiveRuntimeImpl.getProActiveRuntime();
         String newCodebase = null;
         if (oldCodebase != null) {
             // RMI support multiple class server locations
-            newCodebase = oldCodebase + " " + newLocationURL;
+            newCodebase = newLocationURL + " " + oldCodebase;
         } else {
             newCodebase = newLocationURL;
         }
 
         PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(newCodebase);
-
         return newCodebase;
     }
 
@@ -78,17 +78,9 @@ public abstract class AbstractRemoteObjectFactory {
      *        create the class server -- mandatory for class file transfer
      */
     protected static synchronized void createClassServer() {
-        if (classServerHelper == null) {
-            try {
-                classServerHelper = new ClassServerHelper();
-                String codebase = classServerHelper.initializeClassServer();
-
-                addCodebase(codebase);
-            } catch (Exception e) {
-                ProActiveLogger.getLogger(Loggers.CLASS_SERVER).warn(
-                        "Error with the ClassServer : " + e.getMessage());
-            }
-        }
+        ClassServerServlet classServerServlet = ClassServerServlet.get();
+        String codebase = classServerServlet.getCodeBase();
+        addCodebase(codebase);
     }
 
     /**

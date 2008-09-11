@@ -47,7 +47,6 @@ import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.rmi.ClassServerServlet;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -242,9 +241,6 @@ public class UrlBuilder {
             path = path.substring(1);
         }
 
-        if (path.contains(ClassServerServlet.SERVLET_NAME)) {
-            path = path.substring(ClassServerServlet.SERVLET_NAME.length() + 1);
-        }
         return path;
     }
 

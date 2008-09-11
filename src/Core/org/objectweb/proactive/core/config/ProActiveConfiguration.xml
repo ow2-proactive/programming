@@ -22,11 +22,10 @@
         <prop key="schema.validation" value="true" />
         <prop key="proactive.communication.protocol" value="rmi" />
         <prop key="proactive.rmi.port" value="1099" />
-        <prop key="proactive.http.port" value="2026" /> 
-		<!--<prop key="proactive.java.policy" value="../../../../../../scripts/unix/proactive.java.policy"/>-->
+       
+       <!--<prop key="proactive.java.policy" value="../../../../../../scripts/unix/proactive.java.policy"/>-->
         <prop key="fractal.provider" value="org.objectweb.proactive.core.component.Fractive" />
-        <prop key="proactive.http.servlet" value="false" />
-		<!-- <prop key="proactive.tunneling.connect_timeout" value="2000"/> -->
+       <!-- <prop key="proactive.tunneling.connect_timeout" value="2000"/> -->
         <prop key="proactive.tunneling.try_normal_first" value="true" />
         <prop key="proactive.tunneling.use_gc" value="true" />
         <prop key="proactive.tunneling.gc_period" value="10000" />

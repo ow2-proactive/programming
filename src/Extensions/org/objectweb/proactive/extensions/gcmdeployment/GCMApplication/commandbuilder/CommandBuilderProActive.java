@@ -42,6 +42,7 @@ import java.util.Map;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
@@ -386,6 +387,10 @@ public class CommandBuilderProActive implements CommandBuilder {
         command.append(" ");
 
         command.append("-" + StartRuntime.Params.deploymentId.shortOpt() + " " + gcma.getDeploymentId());
+        command.append(" ");
+
+        command.append("-" + StartRuntime.Params.codebase.shortOpt() + " " +
+            ClassServerServlet.get().getCodeBase());
         command.append(" ");
 
         // TODO cdelbe Check FT properties here

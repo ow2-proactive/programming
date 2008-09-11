@@ -272,8 +272,28 @@ public enum PAProperties {
      */
     PA_XMLHTTP_PORT("proactive.http.port", PAPropertiesType.INTEGER),
 
-    /** TODO vlegrand Describe this property */
-    PA_HTTP_SERVLET("proactive.http.servlet", PAPropertiesType.BOOLEAN),
+    /** 
+     * Define a Connector to be used by Jetty
+     * 
+     * By default a SelectChannelConnector is used. It is well suited to handle a lot
+     * of mainly idle clients workload (like coarse grained master worker). If you have a
+     * few very busy client better performances can be achieved by using a SocketConnect
+     * 
+     * You can use a SocketConnect, a BlockingChannelConnector or a SelectChannelConnector
+     * You CANNOT use a SSL connector. 
+     * 
+     * {@link http://docs.codehaus.org/display/JETTY/Architecture}
+     */
+    PA_HTTP_JETTY_CONNECTOR("proactive.http.jetty.connector", PAPropertiesType.STRING),
+
+    /**
+     * Jetty configuration file
+     * 
+     * Jetty can be configuration by providing a jetty.xml file.
+     * {@link http://docs.codehaus.org/display/JETTY/jetty.xml} 
+     * {@link http://docs.codehaus.org/display/JETTY/Syntax+Reference}
+     */
+    PA_HTTP_JETTY_XML("proactive.http.jetty.xml", PAPropertiesType.STRING),
 
     /* ------------------------------------
      *  COMPONENTS

@@ -45,7 +45,7 @@ import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 import javax.management.ObjectName;
 
-import org.objectweb.proactive.core.rmi.ClassServer;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.examples.jmx.remote.management.command.osgi.InstallCommand;
 import org.objectweb.proactive.examples.jmx.remote.management.command.osgi.OSGiCommand;
@@ -98,7 +98,7 @@ public class OSGiFramework extends NotificationBroadcasterSupport implements OSG
             this.context = context;
             OSGiStore.getInstance().setContext(this.context);
             this.url = ProActiveInet.getInstance().getInetAddress().getCanonicalHostName();
-            this.port = ClassServer.getServerSocketPort();
+            this.port = PAProperties.PA_XMLHTTP_PORT.getValueAsInt();
             OSGiStore.getInstance().setUrl(url);
             UrlMBean urlMbean = new Url(this.url + '(' + this.port + ')');
             this.transactionsManager = TransactionsManager.getInstance(this.url);

@@ -47,13 +47,13 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class FileProcess {
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.CLASSLOADING);
     private java.io.File[] codebases;
-    protected RequestInfo info;
+    protected String className;
 
-    public FileProcess(String paths, RequestInfo info) {
+    public FileProcess(String paths, String className) {
         if (paths != null) {
             codebases = findClasspathRoots(paths);
         }
-        this.info = info;
+        this.className = className;
     }
 
     /**
@@ -71,17 +71,17 @@ public class FileProcess {
         if (codebases == null) {
             try {
                 // reading from resources in the classpath
-                b = getBytesFromResource(info.getClassFileName());
+                b = getBytesFromResource(className);
             } catch (IOException e) {
-                throw new ClassNotFoundException("Cannot find class " + info.getClassFileName(), e);
+                throw new ClassNotFoundException("Cannot find class " + className, e);
             }
         } else {
             for (int i = 0; i < codebases.length; i++) {
                 try {
                     if (codebases[i].isDirectory()) {
-                        b = getBytesFromDirectory(info.getClassFileName(), codebases[i]);
+                        b = getBytesFromDirectory(className, codebases[i]);
                     } else {
-                        b = getBytesFromArchive(info.getClassFileName(), codebases[i]);
+                        b = getBytesFromArchive(className, codebases[i]);
                     }
                 } catch (java.io.IOException e) {
                 }
@@ -93,15 +93,14 @@ public class FileProcess {
 
         // try to get the class as a generated stub
         // generate it if necessary
-        b = org.objectweb.proactive.core.mop.MOPClassLoader.getMOPClassLoader().getClassData(
-                info.getClassFileName());
+        b = org.objectweb.proactive.core.mop.MOPClassLoader.getMOPClassLoader().getClassData(className);
         if (b != null) {
             return b;
         }
 
         // COMPONENTS
         // try to get the class as a generated component interface reference
-        b = Utils.getClassData(info.getClassFileName());
+        b = Utils.getClassData(className);
         if (b != null) {
             return b;
         }
@@ -110,7 +109,7 @@ public class FileProcess {
         //    System.out.println("ClassServer sent class " + info.path +
         //        " successfully");
         //}
-        throw new ClassNotFoundException("Cannot find class " + info.getClassFileName());
+        throw new ClassNotFoundException("Cannot find class " + className);
     }
 
     //

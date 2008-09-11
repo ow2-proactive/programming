@@ -119,7 +119,7 @@ public class ProActiveDeployer extends WSConstants {
         ServiceManagerClient serviceManagerClient = null;
 
         try {
-            serviceManagerClient = new ServiceManagerClient(new URL(url + ROUTER));
+            serviceManagerClient = new ServiceManagerClient(new URL(url + SERV_RPC_ROUTER));
             serviceManagerClient.undeploy(urn);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -158,17 +158,17 @@ public class ProActiveDeployer extends WSConstants {
 
         /* first we need to generate a WSDL description of the object we want to deploy */
         if (componentInterface) {
-            wsdl = WSDLGenerator.getWSDL(o.getClass(), urn, url + ROUTER, DOCUMENTATION, methods);
+            wsdl = WSDLGenerator.getWSDL(o.getClass(), urn, url + SERV_RPC_ROUTER, DOCUMENTATION, methods);
         } else {
-            wsdl = WSDLGenerator.getWSDL(o.getClass().getSuperclass(), urn, url + ROUTER, DOCUMENTATION,
-                    methods);
+            wsdl = WSDLGenerator.getWSDL(o.getClass().getSuperclass(), urn, url + SERV_RPC_ROUTER,
+                    DOCUMENTATION, methods);
         }
 
         /*For deploying an active object we need a ServiceManagerClient that will contact the Serlvet */
         ServiceManagerClient serviceManagerClient = null;
 
         try {
-            serviceManagerClient = new ServiceManagerClient(new URL(url + ROUTER));
+            serviceManagerClient = new ServiceManagerClient(new URL(url + SERV_RPC_ROUTER));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

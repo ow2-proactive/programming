@@ -38,18 +38,16 @@ import java.rmi.registry.Registry;
 
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.http.HTTPTransportServlet;
 import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObject;
 import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectFactory;
-import org.objectweb.proactive.core.rmi.ClassServer;
-import org.objectweb.proactive.core.rmi.ClassServerHelper;
 import org.objectweb.proactive.core.ssh.rmissh.SshRMIClientSocketFactory;
 import org.objectweb.proactive.core.util.URIBuilder;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class RmiSshRemoteObjectFactory extends RmiRemoteObjectFactory {
@@ -60,20 +58,12 @@ public class RmiSshRemoteObjectFactory extends RmiRemoteObjectFactory {
     }
 
     protected static synchronized void createClassServer() {
-        try {
-            if (classServerHelper == null) {
-                classServerHelper = new ClassServerHelper();
-            }
-            String codebase = classServerHelper.initializeClassServer();
+        HTTPTransportServlet.get();
+        ClassServerServlet.get();
 
-            codebase = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(codebase), "/",
-                    Constants.HTTPSSH_PROTOCOL_IDENTIFIER, ClassServer.getServerSocketPort()).toString();
-
-            codebase = addCodebase(codebase);
-        } catch (Exception e) {
-            ProActiveLogger.getLogger(Loggers.CLASS_SERVER).warn(
-                    "Error with the ClassServer : " + e.getMessage());
-        }
+        String codebase = ClassServerServlet.get().getCodeBase();
+        addCodebase(codebase);
+        // FIXME: add HTTP SSH ?
     }
 
     @Override

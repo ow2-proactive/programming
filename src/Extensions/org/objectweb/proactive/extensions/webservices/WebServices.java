@@ -31,13 +31,56 @@
  */
 package org.objectweb.proactive.extensions.webservices;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.soap.server.DOMFaultListener;
+import org.apache.soap.server.http.MessageRouterServlet;
+import org.apache.soap.server.http.RPCRouterServlet;
+import org.mortbay.jetty.servlet.ServletHolder;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.httpserver.HTTPServer;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.soap.ProActiveDeployer;
+import org.objectweb.proactive.extensions.webservices.soap.WsdlServlet;
 
 
 @PublicAPI
 public final class WebServices {
+
+    static {
+        HTTPServer httpServer = HTTPServer.get();
+
+        RPCRouterServlet rpcRouterServlet = new RPCRouterServlet();
+        ServletHolder rpcRouterServletHolder = new ServletHolder(rpcRouterServlet);
+        rpcRouterServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
+        try {
+            File deployedServices = null;
+            deployedServices = File.createTempFile("DeployedServices", "ds");
+            deployedServices.deleteOnExit();
+            rpcRouterServletHolder.setInitParameter("ServicesStore", deployedServices.toString());
+        } catch (IOException e) {
+            ProActiveLogger.getLogger(Loggers.WEB_SERVICES).warn(
+                    "Failed to create a temporary Service Store, " + System.getProperty("user.dir") +
+                        "/DeployedService.ds will be used", e);
+        }
+        httpServer.registerServlet(rpcRouterServletHolder, WSConstants.SERV_RPC_ROUTER);
+
+        MessageRouterServlet messageRouterServlet = new MessageRouterServlet();
+        ServletHolder messaggeRouterServletHolder = new ServletHolder(messageRouterServlet);
+        messaggeRouterServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
+        httpServer.registerServlet(messaggeRouterServletHolder, WSConstants.SERV_MESSAGE_ROUTER);
+
+        WsdlServlet wsdlServlet = new WsdlServlet();
+        ServletHolder wsdlServletHolder = new ServletHolder(wsdlServlet);
+        wsdlServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
+        httpServer.registerServlet(wsdlServletHolder, WSConstants.SERV_WSDL);
+
+        ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info("Deployed SOAP Web Services servlets");
+
+    }
 
     /**
      * Expose an active object as a web service

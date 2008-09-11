@@ -44,7 +44,8 @@ import org.objectweb.proactive.core.body.LocalBodyStore;
  */
 public class HttpUtils {
     public static final String SERVICE_REQUEST_CONTENT_TYPE = "application/java";
-    public static final String SERVICE_REQUEST_URI = "/ProActiveHTTP";
+
+    //    public static final String SERVICE_REQUEST_URI = "/ProActiveHTTP";
 
     /**
      *  Search a Body matching with a given unique ID

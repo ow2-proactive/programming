@@ -49,11 +49,14 @@ import org.objectweb.proactive.extensions.webservices.soap.ProActiveProvider;
  * Utility constants for deploying active objects and components as Web Services
  */
 public class WSConstants {
+
+    public static final String SERV_WSDL = "/webservices/wsdl";
+    public static final String SERV_RPC_ROUTER = "/webservices/rpcrouter";
+    public static final String SERV_MESSAGE_ROUTER = "/webservices/messagerouter";
+
     public static final String PROACTIVE_PROVIDER = ProActiveProvider.class.getName();
     public static final String PROACTIVE_STUB = "Stub";
     public static final String WSDL_FILE = "Wsdl";
-    public static final String WEBAPP_NAME = "proactive";
-    public static final String ROUTER = "/" + WEBAPP_NAME + "/servlet/rpcrouter";
     public static final String DOCUMENTATION = "ProActive Active Object";
     public static final String COMPONENT_INTERFACE = "Compoment Interface";
     public static final String URL_PUBLICATION = "URL";

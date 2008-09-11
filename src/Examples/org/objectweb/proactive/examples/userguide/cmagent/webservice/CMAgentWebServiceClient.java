@@ -59,7 +59,7 @@ public class CMAgentWebServiceClient {
             address = "http://" + address;
         }
 
-        address += WSConstants.ROUTER;
+        address += WSConstants.SERV_RPC_ROUTER;
         String namespaceURI = "cmAgentService";
         String serviceName = "cmAgentService";
         String portName = "getLastRequestServeTime";

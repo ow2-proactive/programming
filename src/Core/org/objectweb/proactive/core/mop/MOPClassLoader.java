@@ -82,7 +82,7 @@ public class MOPClassLoader extends URLClassLoader {
             try {
                 this.loadClass(classname);
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+                logger.debug(e);
             }
             cb = classDataCache.get(classname);
         }

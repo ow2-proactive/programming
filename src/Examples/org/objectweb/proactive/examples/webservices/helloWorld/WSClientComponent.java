@@ -58,7 +58,7 @@ public class WSClientComponent {
             address = "http://" + address;
         }
 
-        address += WSConstants.ROUTER;
+        address += WSConstants.SERV_RPC_ROUTER;
         System.err.println("address " + address);
 
         //        String namespaceURI = "helloWorld";

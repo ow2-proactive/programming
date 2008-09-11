@@ -43,6 +43,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 
 import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.remoteobject.http.HTTPTransportServlet;
 import org.objectweb.proactive.core.remoteobject.http.util.exceptions.HTTPRemoteException;
 import org.objectweb.proactive.core.util.URIBuilder;
 
@@ -54,11 +55,8 @@ import org.objectweb.proactive.core.util.URIBuilder;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class HttpMessageSender {
-    public static final String SERVICE_REQUEST_URI = "/ProActiveHTTP";
     public static final String SERVICE_REQUEST_CONTENT_TYPE = "application/java";
     private String url;
-
-    //    private int port
 
     /**
      *
@@ -66,7 +64,6 @@ public class HttpMessageSender {
      */
     public HttpMessageSender(String url) {
         this.url = url;
-        //        this.port =  port;       
     }
 
     /**
@@ -99,16 +96,7 @@ public class HttpMessageSender {
             }
             int lastIndex = url.lastIndexOf(":");
 
-            //            if (port == 0) {
-            //                 System.out.println(url.length() + " -- " + url);
-            //                 port = Integer.parseInt(url.substring(lastIndex + 1,
-            //                                lastIndex + 5));
-            //                }
-            //
-            //            if (lastIndex == 4) {
-            //                  url = url + ":" + port;
-            //        }
-            URL u = new URL(url + SERVICE_REQUEST_URI);
+            URL u = new URL(url + HTTPTransportServlet.NS);
 
             //connection to the specified url
             HttpURLConnection connection = (HttpURLConnection) u.openConnection();

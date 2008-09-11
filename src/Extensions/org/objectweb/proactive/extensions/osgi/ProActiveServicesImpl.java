@@ -33,6 +33,7 @@ package org.objectweb.proactive.extensions.osgi;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.rmi.AlreadyBoundException;
 
@@ -47,7 +48,6 @@ import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
-import org.objectweb.proactive.core.rmi.ClassServerServlet;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
@@ -63,7 +63,7 @@ public class ProActiveServicesImpl implements ProActiveService {
     private Node node;
     private Servlet servlet;
     private BundleContext bc;
-    private static final String aliasServlet = "/" + ClassServerServlet.SERVLET_NAME;
+    private static final String aliasServlet = "/"; // + ClassServerServlet.SERVLET_NAME;
     private static final String OSGI_NODE_NAME = "OSGiNode";
     private HttpService http;
     private int port;
@@ -129,7 +129,7 @@ public class ProActiveServicesImpl implements ProActiveService {
      *
      */
     private void createProActiveService() {
-        this.servlet = new ClassServerServlet(port);
+        //        this.servlet = new ClassServerServlet(port);
         boolean b = registerServlet();
         createNode();
     }

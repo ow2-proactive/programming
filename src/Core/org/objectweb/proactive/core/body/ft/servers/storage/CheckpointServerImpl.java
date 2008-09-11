@@ -44,9 +44,9 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
 import org.objectweb.proactive.core.body.ft.servers.FTServer;
 import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
-import org.objectweb.proactive.core.rmi.ClassServerHelper;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -65,8 +65,7 @@ public abstract class CheckpointServerImpl implements CheckpointServer {
     // global server
     protected FTServer server;
 
-    // ClassFileServer and the assiociated codebase
-    protected static ClassServerHelper classServerHelper = new ClassServerHelper();
+    // ClassServerServlet assiociated codebase
     protected String codebase;
 
     // The stable storage (idCheckpointer --> [list of] [checkpoints])
@@ -80,17 +79,8 @@ public abstract class CheckpointServerImpl implements CheckpointServer {
 
         this.checkpointStorage = new Hashtable<UniqueID, List<Checkpoint>>();
 
-        // classloader
-        try {
-            CheckpointServerImpl.classServerHelper.setShouldCreateClassServer(true);
-            this.codebase = CheckpointServerImpl.classServerHelper.initializeClassServer();
-            PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(this.codebase);
-            logger.info("ClassServer is bound on " + this.codebase);
-        } catch (IOException e) {
-            this.codebase = "NO CODEBASE";
-            System.err.println("** ERROR ** Unable to launch FT server : ");
-            e.printStackTrace();
-        }
+        ClassServerServlet.get();
+        this.codebase = ClassServerServlet.get().getCodeBase();
 
         try {
             NodeFactory.getDefaultNode();

@@ -67,13 +67,7 @@ public class WsdlServlet extends HttpServlet {
             }
 
             Hashtable<String, String> options = new Hashtable<String, String>();
-            String catalinaBase = PAProperties.CATALINA_BASE.getValue();
-            options.put("filename", catalinaBase + "/webapps/" + WSConstants.WEBAPP_NAME +
-                "/DeployedServices.ds");
-            cm.setOptions(options);
             cm.loadRegistry();
-
-            String[] liste = cm.list();
 
             DeploymentDescriptor dd = cm.query(id);
             if (dd == null) {

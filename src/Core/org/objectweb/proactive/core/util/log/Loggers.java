@@ -75,6 +75,7 @@ public interface Loggers {
     public static final String LOAD_BALANCING = CORE + ".loadbalancing";
     public static final String IC2D = CORE + ".ic2d";
     public static final String EXAMPLES = CORE + ".examples";
+    public static final String HTTPSERVER = CORE + ".httpserver";
 
     // P2P loggers
     public static final String P2P = CORE + ".p2p";
@@ -152,4 +153,6 @@ public interface Loggers {
     public static final String EXCEPTIONS = CORE + ".exceptions";
     public static final String EXCEPTIONS_ONE_WAY = EXCEPTIONS + ".one_way";
     public static final String EXCEPTIONS_SEND_REPLY = EXCEPTIONS + ".send_reply";
+
+    public static final String WEB_SERVICES = CORE + "webservices";
 }
