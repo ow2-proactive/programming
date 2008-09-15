@@ -81,14 +81,14 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
     public ProxyForComponentInterfaceGroup() throws ConstructionOfReifiedObjectFailedException {
         super();
         className = Interface.class.getName();
-        taskFactory = new CollectiveItfsTaskFactory(this);
+        taskFactory = ComponentTaskFactoryFactory.getTaskFactory(delegatee);
     }
 
     public ProxyForComponentInterfaceGroup(ConstructorCall c, Object[] p)
             throws ConstructionOfReifiedObjectFailedException {
         super(c, p);
         className = Interface.class.getName();
-        taskFactory = new CollectiveItfsTaskFactory(this);
+        taskFactory = ComponentTaskFactoryFactory.getTaskFactory(delegatee);
     }
 
     public ProxyForComponentInterfaceGroup(String nameOfClass)
@@ -254,7 +254,7 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
         delegatee.setParent(this);
         // replace dispatcher and task factory so that they use this delegatee
         dispatcher = new Dispatcher(delegatee, false, dispatcher.getBufferSize());
-        taskFactory = new CollectiveItfsTaskFactory(delegatee);
+        taskFactory = ComponentTaskFactoryFactory.getTaskFactory(delegatee);
     }
 
     public void setParent(ProxyForComponentInterfaceGroup<E> parent) {
@@ -331,7 +331,7 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
         in.defaultReadObject();
         this.proxyForGroupID = new UniqueID();
         dispatcher = new Dispatcher(this, false, bufferSize);
-        taskFactory = new CollectiveItfsTaskFactory(this);
+        taskFactory = ComponentTaskFactoryFactory.getTaskFactory(delegatee);
     }
 
 }
