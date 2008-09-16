@@ -125,9 +125,6 @@ public class GroupOAR extends AbstractGroup {
         if (resources != null) {
             commandBuf.append(resources);
         } else {
-            if (wallTime != null) {
-                commandBuf.append("walltime=" + wallTime + ",");
-            }
             if (nodes != 0) {
                 commandBuf.append("/nodes=" + nodes);
             }
@@ -137,6 +134,10 @@ public class GroupOAR extends AbstractGroup {
             if (core != 0) {
                 commandBuf.append("/core=" + core);
             }
+            if (wallTime != null) {
+                commandBuf.append(",walltime=" + wallTime);
+            }
+
             // Remove extra ','
             if (commandBuf.charAt(commandBuf.length() - 1) == ',') {
                 commandBuf.setCharAt(commandBuf.length() - 1, ' ');
