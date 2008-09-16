@@ -44,6 +44,7 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -571,8 +572,15 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         return nodeNames;
     }
 
+    /**
+     * Returns a snapshot of all the local nodes 
+     * 
+     * The collection is a copy and is never updated by the ProActive Runtime.
+     * 
+     * @return all the local nodes
+     */
     public Collection<LocalNode> getLocalNodes() {
-        return this.nodeMap.values();
+        return new HashSet<LocalNode>(this.nodeMap.values());
     }
 
     /**
