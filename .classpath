@@ -69,12 +69,10 @@
 	<classpathentry kind="lib" path="lib/simple.jar"/>
 	<classpathentry kind="lib" path="lib/soap.jar"/>
 	<classpathentry kind="lib" path="lib/tablelayout.jar"/>
-	<classpathentry kind="lib" path="lib/wsdl4j.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/ptolemy.jar"/>
 	<classpathentry kind="lib" path="lib/commons-discovery.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8-dom.jar"/>
 	<classpathentry kind="lib" path="lib/sunxacml.jar"/>
