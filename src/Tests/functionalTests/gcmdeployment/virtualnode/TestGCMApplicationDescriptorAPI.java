@@ -107,4 +107,10 @@ public class TestGCMApplicationDescriptorAPI extends FunctionalTest {
         gcma.updateTopology(t);
     }
 
+    @Test
+    public void testGetVirtualNode() {
+        GCMVirtualNode vn = gcma.getVirtualNode("IDontExist");
+        Assert.assertNull(vn);
+    }
+
 }
