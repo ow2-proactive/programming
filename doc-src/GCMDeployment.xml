@@ -775,8 +775,8 @@
 				</listitem>
 				<listitem>
 					<para>
-						capacity (positive integer or “max”) : the capacity requested by this virtual node (that is, the total number of nodes it will
-						request from the node providers which are affected to it).
+						capacity (positive integer) : the capacity requested by this virtual node (that is, the total number of nodes it will
+						request from the node providers which are affected to it). If no capacity is specified, then the Virtual Node will try to get as many nodes as possible. A such Virtual Node is called greedy.
 					</para>
 				</listitem>
 			</itemizedlist>

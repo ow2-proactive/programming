@@ -45,12 +45,12 @@
 				</nodeProvider>
 			</virtualNode>
 
-			<virtualNode id="slaves" capacity="max">
+			<virtualNode id="slaves">
 				<nodeProvider refid="INRIA_LAN"/>
 				<nodeProvider refid="INRIA_CLUSTERS"/>
 			</virtualNode>
 
-			<virtualNode id="slaves2" capacity="max">
+			<virtualNode id="slaves2">
 				<nodeProvider refid="INRIA_LAN"/>
 				<nodeProvider refid="INRIA_CLUSTERS"/>
 			</virtualNode>
