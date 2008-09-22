@@ -32,6 +32,7 @@
 package org.objectweb.proactive.examples.userguide.cmagent.groups;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Vector;
@@ -50,18 +51,23 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.examples.userguide.cmagent.migration.CMAgentMigrator;
 import org.objectweb.proactive.examples.userguide.cmagent.simple.State;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 public class Main {
-    private static VirtualNode deploy(String descriptor) {
+    private static GCMApplication pad;
+
+    private static GCMVirtualNode deploy(String descriptor) {
         try {
-            //create object representation of the deployment file
-            ProActiveDescriptor pad = PADeployment.getProactiveDescriptor(descriptor);
+            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
             //active all Virtual Nodes
-            pad.activateMappings();
+            pad.startDeployment();
+            pad.waitReady();
             //get the first Node available in the first Virtual Node 
             //specified in the descriptor file
-            VirtualNode vn = pad.getVirtualNodes()[0];
+            GCMVirtualNode vn = pad.getVirtualNode("remoteNode");
             return vn;
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
@@ -76,14 +82,14 @@ public class Main {
         try {
             Vector<CMAgentMigrator> agents = new Vector<CMAgentMigrator>();
             BufferedReader inputBuffer = new BufferedReader(new InputStreamReader(System.in));
-            VirtualNode vn = deploy(args[0]);
+            GCMVirtualNode vn = deploy(args[0]);
             //@snippet-start groups_group_creation	
             //TODO 1. Create a new empty group
             CMAgentMigrator monitorsGroup = (CMAgentMigrator) PAGroup.newGroup(CMAgentMigrator.class
                     .getName());
 
             //TODO 2. Create a collection of active objects with on object on each node
-            for (Node node : vn.getNodes()) {
+            for (Node node : vn.getCurrentNodes()) {
                 CMAgentMigrator ao = (CMAgentMigrator) PAActiveObject.newActive(CMAgentMigrator.class
                         .getName(), new Object[] {}, node);
                 agents.add(ao);
@@ -143,7 +149,7 @@ public class Main {
             }
 
             //stopping all the objects and JVMS
-            vn.killAll(true);
+            pad.kill();
             PALifeCycle.exitSuccess();
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());

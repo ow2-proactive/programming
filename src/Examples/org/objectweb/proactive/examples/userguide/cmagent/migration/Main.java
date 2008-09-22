@@ -32,6 +32,7 @@
 package org.objectweb.proactive.examples.userguide.cmagent.migration;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -42,19 +43,24 @@ import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.ActiveObjectCreationException;
 
 
 public class Main {
-    private static VirtualNode deploy(String descriptor) {
+    private static GCMApplication pad;
+
+    private static GCMVirtualNode deploy(String descriptor) {
         try {
-            //create object representation of the deployment file
-            ProActiveDescriptor pad = PADeployment.getProactiveDescriptor(descriptor);
+            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
             //active all Virtual Nodes
-            pad.activateMappings();
+            pad.startDeployment();
+            pad.waitReady();
             //get the first Node available in the first Virtual Node 
             //specified in the descriptor file
-            VirtualNode vn = pad.getVirtualNodes()[0];
+            GCMVirtualNode vn = pad.getVirtualNode("remoteNode"); // not sure - which deployment descriptor is used ??
             return vn;
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
@@ -67,11 +73,11 @@ public class Main {
     public static void main(String args[]) {
         try {
             BufferedReader inputBuffer = new BufferedReader(new InputStreamReader(System.in));
-            VirtualNode vn = deploy(args[0]);
+            GCMVirtualNode vn = deploy(args[0]);
 
             //create the active object
             CMAgentMigrator ao = (CMAgentMigrator) PAActiveObject.newActive(CMAgentMigrator.class.getName(),
-                    new Object[] {}, vn.getNode());
+                    new Object[] {}, vn.getANode());
 
             int k = 1;
             int choice;
@@ -79,12 +85,14 @@ public class Main {
 
                 //display the menu with the available nodes 
                 k = 1;
-                for (Node node : vn.getNodes()) {
+                for (Node node : vn.getCurrentNodes()) {
                     //TODO 2. Add the node URL to the menu 
                     System.out.println(k + ".  Statistics for node :" + node.getNodeInformation().getURL());
                     k++;
                 }
                 System.out.println("0.  Exit");
+
+                Node[] nodeArray = vn.getCurrentNodes().toArray(new Node[] {});
 
                 //select a node
                 do {
@@ -100,7 +108,7 @@ public class Main {
                     break;
 
                 //TODO 3. Migrate the active object to the selected node:  choice-1
-                ao.migrateTo(vn.getNodes()[choice - 1]); //migrate
+                ao.migrateTo(nodeArray[choice - 1]); //migrate
 
                 //TODO 4. Get the state and the last request time and print them out
                 String currentState = ao.getCurrentState().toString(); //get the state
@@ -112,7 +120,7 @@ public class Main {
 
             //stopping all the objects and JVMS
             PAActiveObject.terminateActiveObject(ao, false);
-            vn.killAll(true);
+            pad.kill();
             PALifeCycle.exitSuccess();
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());

@@ -31,30 +31,33 @@
  */
 package org.objectweb.proactive.examples.userguide.deployedhello;
 
+import java.io.File;
 import java.io.IOException;
+
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 
 public class Main {
     //deployment method
     private static Node deploy(String descriptor) {
-        ProActiveDescriptor pad;
+        GCMApplication pad;
         Node node;
         try {
             //create object representation of the deployment file
-            pad = PADeployment.getProactiveDescriptor(descriptor);
+            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
             //active all Virtual Nodes
-            pad.activateMappings();
+            pad.startDeployment();
+            pad.waitReady();
             //get the first Node available in the first Virtual Node 
             //specified in the descriptor file
-            node = pad.getVirtualNodes()[0].getNode();
+            node = pad.getVirtualNode("remoteNode1").getANode();
             return node;
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());

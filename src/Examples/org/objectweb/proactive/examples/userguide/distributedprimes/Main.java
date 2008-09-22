@@ -31,6 +31,9 @@
  */
 package org.objectweb.proactive.examples.userguide.distributedprimes;
 
+import java.io.File;
+import java.util.Map;
+
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.ProActiveException;
@@ -38,16 +41,20 @@ import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.api.PAActiveObject;
 
 
 public class Main {
-    private static VirtualNode[] deploy(String descriptor) {
-        ProActiveDescriptor pad;
+    private static Map<String, GCMVirtualNode> deploy(String descriptor) {
+        GCMApplication pad;
         try {
-            pad = PADeployment.getProactiveDescriptor(descriptor);
+            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
             //active all Virtual Nodes
-            pad.activateMappings();
+            pad.startDeployment();
+            pad.waitReady();
             //get the first Node available in the first Virtual Node 
             //specified in the descriptor file
             return pad.getVirtualNodes();
@@ -61,19 +68,21 @@ public class Main {
 
     public static void main(String args[]) {
         try {
-            VirtualNode[] listOfVN = deploy(args[0]);
+            Map<String, GCMVirtualNode> listOfVN = deploy(args[0]);
+            GCMVirtualNode masterNode = listOfVN.get("remoteNode1");
+
             //create the active object on the first node on
             //the first virtual node available
             //start the master
             PrimeManager master = (PrimeManager) PAActiveObject.newActive(PrimeManager.class.getName(),
-                    new Object[] {}, listOfVN[0].getNode());
+                    new Object[] {}, masterNode.getANode());
 
             //iterate through all the nodes and deploy
             //a worker on the first node on each VN available
             Node node;
             PrimeWorker worker;
-            for (VirtualNode vn : listOfVN) {
-                node = vn.getNode();
+            for (GCMVirtualNode vn : listOfVN.values()) {
+                node = vn.getANode();
                 //deploy
                 worker = (PrimeWorker) PAActiveObject.newActive(PrimeWorker.class.getName(), new Object[] {},
                         node);
