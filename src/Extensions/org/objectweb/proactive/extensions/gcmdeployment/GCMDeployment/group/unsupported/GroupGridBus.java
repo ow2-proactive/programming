@@ -33,6 +33,7 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.uns
 
 import java.util.List;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 
 
@@ -40,7 +41,7 @@ public class GroupGridBus extends AbstractGroup {
     private List<String> argumentsList;
 
     @Override
-    public List<String> internalBuildCommands() {
+    public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
         // TODO Auto-generated method stub
         return null;
     }

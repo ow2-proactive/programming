@@ -32,8 +32,12 @@
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge;
 
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.w3c.dom.Node;
 
 
@@ -44,16 +48,26 @@ public class BridgeSSHParser extends AbstractBridgeParser {
 
     @Override
     public AbstractBridge parseBridgeNode(Node bridgeNode, XPath xpath) {
-        BridgeSSH bridge = (BridgeSSH) super.parseBridgeNode(bridgeNode, xpath);
+        BridgeSSH bridgeSSH = (BridgeSSH) super.parseBridgeNode(bridgeNode, xpath);
 
         String hostname = GCMParserHelper.getAttributeValue(bridgeNode, ATTR_HOSTNAME);
         String username = GCMParserHelper.getAttributeValue(bridgeNode, ATTR_USERNAME);
 
-        BridgeSSH bridgeSSH = (bridge);
+        try {
+            Node privateKeyNode = (Node) xpath.evaluate("dep:privateKey", bridgeNode, XPathConstants.NODE);
+            if (privateKeyNode != null) {
+                PathElement privateKey = GCMParserHelper.parsePathElementNode(privateKeyNode);
+                bridgeSSH.setPrivateKey(privateKey);
+            }
+
+        } catch (XPathExpressionException e) {
+            GCMDeploymentLoggers.GCMD_LOGGER.error(e.getMessage(), e);
+        }
+
         bridgeSSH.setHostname(hostname);
         bridgeSSH.setUsername(username);
 
-        return bridge;
+        return bridgeSSH;
     }
 
     @Override

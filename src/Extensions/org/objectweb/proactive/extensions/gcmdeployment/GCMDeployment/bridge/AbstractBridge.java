@@ -159,7 +159,7 @@ public abstract class AbstractBridge implements Bridge {
         // Prefix each command with this bridge
         List<String> ret = new ArrayList<String>();
         for (String command : commands) {
-            ret.add(internalBuildCommand() + " " + Helpers.escapeCommand(command));
+            ret.add(internalBuildCommand(commandBuilder) + " " + Helpers.escapeCommand(command));
         }
 
         return ret;
@@ -171,8 +171,9 @@ public abstract class AbstractBridge implements Bridge {
      * This method is called by the generic AbstractBridge.buildCommand
      * method to prepend this bridge to retrieved command for children nodes
      * of the tree
+     * @param commandBuilder TODO
      *
      * @return
      */
-    abstract public String internalBuildCommand();
+    abstract public String internalBuildCommand(CommandBuilder commandBuilder);
 }

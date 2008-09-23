@@ -31,13 +31,16 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
+
+
 public class BridgeGSISSH extends BridgeSSH {
 
     private String port;
     private String certificate;
 
     @Override
-    public String internalBuildCommand() {
+    public String internalBuildCommand(CommandBuilder commandBuilder) {
         // TODO Implements internalBuildCommand for GSISSH
         return null;
     }
