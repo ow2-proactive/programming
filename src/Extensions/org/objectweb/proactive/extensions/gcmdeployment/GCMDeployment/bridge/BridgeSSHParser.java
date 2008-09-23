@@ -42,6 +42,7 @@ import org.w3c.dom.Node;
 
 
 public class BridgeSSHParser extends AbstractBridgeParser {
+    private static final String ATTR_COMMAND_OPTIONS = "commandOptions";
     private static final String ATTR_USERNAME = "username";
     private static final String ATTR_HOSTNAME = "hostname";
     static final String NODE_NAME = "sshBridge";
@@ -52,6 +53,7 @@ public class BridgeSSHParser extends AbstractBridgeParser {
 
         String hostname = GCMParserHelper.getAttributeValue(bridgeNode, ATTR_HOSTNAME);
         String username = GCMParserHelper.getAttributeValue(bridgeNode, ATTR_USERNAME);
+        String commandOptions = GCMParserHelper.getAttributeValue(bridgeNode, ATTR_COMMAND_OPTIONS);
 
         try {
             Node privateKeyNode = (Node) xpath.evaluate("dep:privateKey", bridgeNode, XPathConstants.NODE);
@@ -64,8 +66,17 @@ public class BridgeSSHParser extends AbstractBridgeParser {
             GCMDeploymentLoggers.GCMD_LOGGER.error(e.getMessage(), e);
         }
 
-        bridgeSSH.setHostname(hostname);
-        bridgeSSH.setUsername(username);
+        if (hostname != null) {
+            bridgeSSH.setHostname(hostname);
+        }
+
+        if (username != null) {
+            bridgeSSH.setUsername(username);
+        }
+
+        if (commandOptions != null) {
+            bridgeSSH.setCommandOptions(commandOptions);
+        }
 
         return bridgeSSH;
     }

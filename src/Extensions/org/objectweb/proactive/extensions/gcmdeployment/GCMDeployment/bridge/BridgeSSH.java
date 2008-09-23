@@ -38,10 +38,12 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 public class BridgeSSH extends AbstractBridge {
     public final static String DEFAULT_SSHPATH = "ssh";
     private PathElement privateKey;
+    private String commandOptions;
 
     public BridgeSSH() {
         setCommandPath(DEFAULT_SSHPATH);
         privateKey = null;
+        commandOptions = null;
     }
 
     @Override
@@ -59,6 +61,12 @@ public class BridgeSSH extends AbstractBridge {
             command.append(privateKey.getFullPath(getHostInfo(), commandBuilder));
         }
 
+        if (commandOptions != null) {
+            command.append(" ");
+            command.append(commandOptions);
+            command.append(" ");
+        }
+
         // append host
         command.append(" ");
         command.append(getHostname());
@@ -69,5 +77,13 @@ public class BridgeSSH extends AbstractBridge {
 
     public void setPrivateKey(PathElement privateKey) {
         this.privateKey = privateKey;
+    }
+
+    public String getCommandOptions() {
+        return commandOptions;
+    }
+
+    public void setCommandOptions(String commandOptions) {
+        this.commandOptions = commandOptions;
     }
 }
