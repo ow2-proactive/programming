@@ -34,6 +34,7 @@ package org.objectweb.proactive.extensions.gcmdeployment;
 import java.io.Serializable;
 import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
+import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tool;
@@ -151,7 +152,9 @@ public class PathElement implements Cloneable, Serializable {
 
         // If s1 ends with fp remove it
         if (sb.length() > 0) {
-            if (sb.charAt(sb.length() - 1) == hostInfo.getOS().fileSeparator()) {
+            char lastChar = sb.charAt(sb.length() - 1);
+            if (lastChar == OperatingSystem.unix.fileSeparator() ||
+                lastChar == OperatingSystem.windows.fileSeparator()) {
                 sb.deleteCharAt(sb.length() - 1);
             }
         }
@@ -160,7 +163,9 @@ public class PathElement implements Cloneable, Serializable {
         sb.append(hostInfo.getOS().fileSeparator());
 
         // If s2 begins with fp remove it
-        if (s2.charAt(0) == hostInfo.getOS().fileSeparator()) {
+        char firstChar = s2.charAt(0);
+        if (firstChar == OperatingSystem.unix.fileSeparator() ||
+            firstChar == OperatingSystem.windows.fileSeparator()) {
             sb.append(s2.substring(1));
         } else {
             sb.append(s2);
