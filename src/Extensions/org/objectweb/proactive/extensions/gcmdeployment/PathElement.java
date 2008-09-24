@@ -40,6 +40,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.H
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tool;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tools;
 
+import sun.misc.Regexp;
+
 
 public class PathElement implements Cloneable, Serializable {
     protected String relPath;
@@ -171,7 +173,17 @@ public class PathElement implements Cloneable, Serializable {
             sb.append(s2);
         }
 
-        return sb.toString();
+        String result = sb.toString();
+        char fileSeperatorToReplace;
+        if (hostInfo.getOS().equals(OperatingSystem.windows)) {
+            fileSeperatorToReplace = '/';
+        } else {
+            fileSeperatorToReplace = '\\';
+        }
+
+        result.replace(fileSeperatorToReplace, hostInfo.getOS().fileSeparator());
+
+        return result;
     }
 
     @Override
