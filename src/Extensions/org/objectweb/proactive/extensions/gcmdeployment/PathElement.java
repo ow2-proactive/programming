@@ -181,7 +181,7 @@ public class PathElement implements Cloneable, Serializable {
             fileSeperatorToReplace = '\\';
         }
 
-        result.replace(fileSeperatorToReplace, hostInfo.getOS().fileSeparator());
+        result = result.replace(fileSeperatorToReplace, hostInfo.getOS().fileSeparator());
 
         return result;
     }
