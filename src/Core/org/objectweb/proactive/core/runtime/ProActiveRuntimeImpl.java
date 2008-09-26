@@ -816,9 +816,12 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     /**
      * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#getJobID(java.lang.String)
      */
-    public String getJobID(String nodeUrl) {
+    public String getJobID(String nodeUrl) throws ProActiveException {
         String name = URIBuilder.getNameFromURI(nodeUrl);
         LocalNode localNode = this.nodeMap.get(name);
+        if (localNode == null) {
+            throw new ProActiveException("Node " + nodeUrl + " does not exist on the local runtime");
+        }
         return localNode.getJobId();
     }
 
