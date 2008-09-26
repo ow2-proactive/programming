@@ -16,7 +16,7 @@
             <nodeProvider refid="INRIA_LAN"/>
         </virtualNode>
             
-          <virtualNode id="slaves" capacity="max">
+          <virtualNode id="slaves">
               <nodeProvider refid="INRIA_LAN"/>
            </virtualNode>
     </ProActive>
