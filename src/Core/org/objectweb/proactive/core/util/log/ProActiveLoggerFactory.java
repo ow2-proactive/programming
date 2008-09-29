@@ -37,6 +37,8 @@ import java.net.UnknownHostException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.apache.log4j.spi.LoggerFactory;
+import org.objectweb.proactive.core.UniqueID;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 
 /**
@@ -52,6 +54,16 @@ public class ProActiveLoggerFactory implements LoggerFactory {
         if (MDC.get("hostname") == null) {
             MDC.put("hostname", getHostName());
         }
+
+        if (MDC.get("id@hostname") == null) {
+            MDC.put("id@hostname", UniqueID.getCurrentVMID() + "@" + getHostName());
+        }
+
+        if (MDC.get("shortid@hostname") == null) {
+            MDC.put("shortid@hostname", Math.abs(UniqueID.getCurrentVMID().hashCode() % 100000) + "@" +
+                getHostName());
+        }
+
         if (MDC.get("runtime") == null) {
             MDC.put("runtime", "unknown runtime");
         }

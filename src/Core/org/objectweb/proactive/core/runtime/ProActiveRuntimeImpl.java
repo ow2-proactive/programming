@@ -269,7 +269,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         this.roe.createRemoteObject(URI.create(url));
 
         // logging info
-        // MDC.remove("runtime");
+        MDC.remove("runtime");
         MDC.put("runtime", getURL());
     }
 

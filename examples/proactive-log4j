@@ -5,9 +5,10 @@
 # The root logger logs in the test.log file
 
 log4j.rootLogger=INFO,CONSOLE
-log4j.logger.testsuite=INFO,CONSOLE
+ 
+# If INFO is enabled Jetty is too verbose at startup
+log4j.logger.org.mortbay = WARN
 
-log4j.logger.testsuite = TRACE
 
 ########### The following are existing categories in ProActive
 #log4j.logger.proactive = INFO
@@ -18,7 +19,7 @@ log4j.logger.testsuite = TRACE
 #log4j.logger.proactive.mop = DEBUG
 #log4j.logger.proactive.groups = DEBUG
 #log4j.logger.proactive.sync_call = DEBUG
-#log4j.logger.proactive.deployment = TRACE
+#log4j.logger.proactive.deployment = DEBUG
 #log4j.logger.proactive.deployment.log = DEBUG
 #log4j.logger.proactive.deployment.process = DEBUG
 #log4j.logger.proactive.deployment.filetransfer = DEBUG,CONSOLE
@@ -81,35 +82,44 @@ log4j.logger.testsuite = TRACE
 #log4j.logger.proactive.masterworker.repository = DEBUG
 #log4j.logger.proactive.masterworker.workers = DEBUG
 
+
 #log4j.logger.proactive.configuration = DEBUG
-#log4j.logger.proactive.remoteobject = DEBUG,CONSOLE
+#log4j.logger.proactive.remoteobject = DEBUG
 
 #log4j.logger.proactive.jmx = DEBUG
 #log4j.logger.proactive.jmx.mbean = DEBUG
 #log4j.logger.proactive.jmx.notification = DEBUG
 
+
+################ Appenders ####################
+#
+# Appender output can be configured by using a pattern layout
+# See: http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html
+#
+#   - %c the category of the logging event
+#   - %d the date
+#   - %m he application supplied message
+#   - %n the platform dependent line separator character or characters
+#   - %p the priority of the logging event
+#   - %t the name of the thread that generated the logging event
+#   - %X{hostname}         the hostname 
+#   - %X{id@hostname}      the VMID and the hostname 
+#   - %X{shortid@hostname} the short VMID and the hostname (a collision can occur between two shortids, you should use id@hostname) 
+#   - %X{runtime}          the ProActive runtime url (does not work very well since a different MDC is associated to each thread)
+
+
+# CONSOLE appender is used by default
+log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+log4j.appender.CONSOLE.layout.ConversionPattern=%n%X{shortid@hostname} - [%p %20.20c{2}] %m
+
 # Appender FILE writes to the file "tests.log".
+# This file is recreated a file for each run
 log4j.appender.FILE=org.apache.log4j.FileAppender
 log4j.appender.FILE.File=tests.log
-# the following recreates a file for each run
 log4j.appender.FILE.Append=false
-# Appender FILE uses the PatternLayout.
 log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
-# %X{hostname} adds the hostname
-# %X{runtime} adds the runtime url
 log4j.appender.FILE.layout.ConversionPattern=%5p [%t]: %m%n
 
 
-#CONSOLE uses PatternLayout
-#and displays the associated message (%m)
-#using the platform dependant separator (%n)
-#Use %M for method names,
-#%X{hostname} for hostname and %X{runtime} for runtime url
-#see log4j documentation for details
 
-log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
-log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
-# %X{hostname} adds the hostname
-# %X{runtime} adds the runtime url
-#log4j.appender.CONSOLE.layout.ConversionPattern=%n%X{runtime} - [%20.20c{2}] %m
-log4j.appender.CONSOLE.layout.ConversionPattern=%m %n
