@@ -46,7 +46,7 @@ public class TestVirtualNode1 extends GCMFunctionalTest {
         super(LocalHelpers.getDescriptor(TestVirtualNode1.class));
     }
 
-    @Test(timeout = 10000)
+    @Test(timeout = 60000)
     public void test() throws ProActiveException, FileNotFoundException {
         // failure = timeout reached
 

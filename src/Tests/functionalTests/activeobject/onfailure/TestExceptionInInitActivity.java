@@ -46,7 +46,7 @@ public class TestExceptionInInitActivity extends FunctionalTest {
     @Before
     public void before() {
         // Disable future monitoring
-        PAProperties.PA_FUTUREMONITORING_TTM.setValue(10000);
+        PAProperties.PA_FUTUREMONITORING_TTM.setValue(600000);
     }
 
     @Test(expected = BodyTerminatedException.class)
