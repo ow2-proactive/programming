@@ -107,6 +107,7 @@ public class GroupSSH extends AbstractGroup {
         if (privateKey != null) {
             res.append(" -i ");
             res.append(privateKey.getFullPath(getHostInfo(), commandBuilder));
+            res.append(" ");
         }
 
         if (commandOptions != null) {
