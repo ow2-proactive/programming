@@ -57,8 +57,8 @@ public class HostInfoImpl implements HostInfo {
         username = null;
         homeDirectory = null;
         id = null;
-        hostCapacity = 0;
-        vmCapacity = 0;
+        hostCapacity = 1;
+        vmCapacity = 1;
         os = null;
         tools = new HashSet<Tool>();
         topologyId = 0;
@@ -69,9 +69,9 @@ public class HostInfoImpl implements HostInfo {
         this.id = id;
     }
 
-    /**
+    /*
      * Checks that all required fields have been set.
-     *
+     * 
      * @throws IllegalStateException If a required field has not been set
      */
     public void check() throws IllegalStateException {
