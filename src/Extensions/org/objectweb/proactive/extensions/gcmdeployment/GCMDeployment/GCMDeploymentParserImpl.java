@@ -643,11 +643,20 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         }
 
         String hostCapacityStr = GCMParserHelper.getAttributeValue(hostNode, "hostCapacity");
+        String vmCapacityStr = GCMParserHelper.getAttributeValue(hostNode, "vmCapacity");
+
+        if (hostCapacityStr != null && vmCapacityStr == null) {
+            vmCapacityStr = "1";
+        }
+
+        if (hostCapacityStr == null && vmCapacityStr != null) {
+            hostCapacityStr = "1";
+        }
+
         if (hostCapacityStr != null) {
             hostInfo.setHostCapacity(Integer.parseInt(hostCapacityStr));
         }
 
-        String vmCapacityStr = GCMParserHelper.getAttributeValue(hostNode, "vmCapacity");
         if (vmCapacityStr != null) {
             hostInfo.setVmCapacity(Integer.parseInt(vmCapacityStr));
         }

@@ -57,8 +57,8 @@ public class HostInfoImpl implements HostInfo {
         username = null;
         homeDirectory = null;
         id = null;
-        hostCapacity = 1;
-        vmCapacity = 1;
+        hostCapacity = 0;
+        vmCapacity = 0;
         os = null;
         tools = new HashSet<Tool>();
         topologyId = 0;
