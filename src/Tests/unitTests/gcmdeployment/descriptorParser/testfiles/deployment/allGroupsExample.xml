@@ -187,8 +187,14 @@
 						<taskGeometry> {(0)(1,2)(3)} </taskGeometry>
 					</modeGeometry>
 				</taskRepartition>
-			</loadLevelerGroup>	
-			
+			</loadLevelerGroup>
+				
+            <mpiGroup 
+            	id="LAN_MPI" 
+            	hostList="host10 host11 host12 host13" 
+            	distributionPath="/usr/bin/lam"
+				commandPath="./scripts/gcmdeployment/executable_mpi_lam.sh">
+            </mpiGroup>					
 <!--
 			<gridbusGroup id="gridbusgroup" bookedNodesAccess="rsh">
 				<scriptPath base="root" relpath="./calc" />

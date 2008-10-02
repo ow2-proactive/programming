@@ -6,4 +6,5 @@
 
 	<xsd:include schemaLocation="../GCMApplication/commandbuilder/ProActiveSchema.xsd" />
 	<xsd:include schemaLocation="../GCMApplication/commandbuilder/ExecutableSchema.xsd" />
+	<xsd:include schemaLocation="../GCMApplication/commandbuilder/ExecutableMPISchema.xsd" />	
 </xsd:schema>

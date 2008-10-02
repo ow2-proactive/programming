@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="urn:gcm:deployment:1.0"
+	xmlns="urn:gcm:deployment:1.0"
+	elementFormDefault="qualified">
+
+	<xs:include schemaLocation="../../schema/DeploymentDescriptorSchema.xsd"/>	
+	
+	<xs:complexType name="groupTypeMPI">
+		<xs:complexContent>
+			<xs:extension base="abstractGroupElementType">
+				<xs:attribute name="commandOptions" type="xs:string" />
+				<xs:attribute name="hostList" type="xs:string"
+					use="required" />
+				<xs:attribute name="distributionPath" type="xs:string"
+					use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="mpiGroup" substitutionGroup="abstractShElement" type="groupTypeMPI"/>
+</xs:schema>

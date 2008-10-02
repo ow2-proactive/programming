@@ -40,7 +40,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeProvi
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 
 
-public class CommandBuilderExecutable implements CommandBuilder {
+public class CommandBuilderExecutableMPI implements CommandBuilder {
 
     /** List of providers to be used */
     private List<NodeProvider> providers;
@@ -49,19 +49,12 @@ public class CommandBuilderExecutable implements CommandBuilder {
     /** The path to the command */
     private PathElement path;
 
-    /** The arguments */
+    /** The arguments*/
     private List<String> args;
 
-    public enum Instances {
-        onePerHost, onePerVM, onePerCapacity;
-    }
-
-    private Instances instances;
-
-    public CommandBuilderExecutable() {
+    public CommandBuilderExecutableMPI() {
         providers = new ArrayList<NodeProvider>();
         args = new ArrayList<String>();
-        instances = Instances.onePerHost;
     }
 
     public void setCommand(String command) {
@@ -76,7 +69,7 @@ public class CommandBuilderExecutable implements CommandBuilder {
         args.add(arg);
     }
 
-    public void addNodeProvider(NodeProvider nodeProvider) {
+    public void addDescriptor(NodeProvider nodeProvider) {
         providers.add(nodeProvider);
     }
 
@@ -92,40 +85,7 @@ public class CommandBuilderExecutable implements CommandBuilder {
             sb.append(" " + arg);
         }
 
-        int nbCmd = 0;
-        switch (instances) {
-            case onePerCapacity:
-                nbCmd = hostInfo.getHostCapacity() * hostInfo.getVmCapacity();
-                break;
-            case onePerVM:
-                nbCmd = hostInfo.getHostCapacity();
-                break;
-            case onePerHost:
-                nbCmd = 1;
-                break;
-        }
-
-        StringBuilder ret = new StringBuilder();
-        switch (hostInfo.getOS()) {
-            case unix:
-                for (int i = 0; i < nbCmd; i++) {
-                    ret.append(sb);
-                    ret.append(" &");
-                }
-                ret.deleteCharAt(ret.length() - 1);
-                break;
-
-            case windows:
-                if (nbCmd > 1) {
-                    throw new IllegalStateException(
-                        "Multiple command per machine is not yet supported on windows");
-                } else {
-                    ret.append(sb);
-                }
-                break;
-        }
-
-        return ret.toString();
+        return sb.toString();
     }
 
     public String getPath(HostInfo hostInfo) {
@@ -136,7 +96,4 @@ public class CommandBuilderExecutable implements CommandBuilder {
         }
     }
 
-    public void setInstances(String instancesValue) {
-        instances = Instances.valueOf(instancesValue);
-    }
 }
