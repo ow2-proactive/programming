@@ -129,11 +129,7 @@ public class CommandBuilderExecutable implements CommandBuilder {
     }
 
     public String getPath(HostInfo hostInfo) {
-        if (path != null) {
-            return path.getFullPath(hostInfo, this);
-        } else {
-            return "";
-        }
+        return path.getFullPath(hostInfo, this);
     }
 
     public void setInstances(String instancesValue) {
