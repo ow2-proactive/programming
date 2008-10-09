@@ -49,6 +49,7 @@ import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.TimeoutAccounter;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.FakeNode;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeProvider;
@@ -466,47 +467,56 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
                 }
             }
 
-            node = fakeNode.create(this, tsList);
+            try {
+                node = fakeNode.create(this, tsList);
 
-            if (contract != null) {
-                contract.addNode(node);
-            }
+                // If node creation failed, then following code blocks are NOT reached
+                // and the node is not added to this virtual node.
 
-            nodes.add(node);
-            nodes.notifyAll();
-        }
-
-        synchronized (nodeAttachmentSubscribers) {
-            for (Subscriber subscriber : nodeAttachmentSubscribers) {
-                Class<?> cl = subscriber.getClient().getClass();
-                try {
-                    Method m = cl.getMethod(subscriber.getMethod(), Node.class, String.class);
-                    m.invoke(subscriber.getClient(), node, this.getName());
-                } catch (Exception e) {
-                    GCM_NODEMAPPER_LOGGER.warn("Notification on node attachement failed", e);
+                if (contract != null) {
+                    contract.addNode(node);
                 }
-            }
-        }
 
-        if (isReady() && !readyNotifSent) {
-            synchronized (isReadyMonitor) {
-                isReadyMonitor.notifyAll();
-            }
+                nodes.add(node);
+                nodes.notifyAll();
 
-            synchronized (isReadySubscribers) {
-                for (Subscriber subscriber : isReadySubscribers) {
-                    Class<?> cl = subscriber.getClient().getClass();
-                    try {
-                        Method m = cl.getMethod(subscriber.getMethod(), String.class);
-                        m.invoke(subscriber.getClient(), this.getName());
-                        isReadySubscribers.remove(subscriber);
-                    } catch (Exception e) {
-                        GCM_NODEMAPPER_LOGGER.warn(e);
+                synchronized (nodeAttachmentSubscribers) {
+                    for (Subscriber subscriber : nodeAttachmentSubscribers) {
+                        Class<?> cl = subscriber.getClient().getClass();
+                        try {
+                            Method m = cl.getMethod(subscriber.getMethod(), Node.class, String.class);
+                            m.invoke(subscriber.getClient(), node, this.getName());
+                        } catch (Exception e) {
+                            GCM_NODEMAPPER_LOGGER.warn("Notification on node attachement failed", e);
+                        }
                     }
                 }
+
+                if (isReady() && !readyNotifSent) {
+                    synchronized (isReadyMonitor) {
+                        isReadyMonitor.notifyAll();
+                    }
+
+                    synchronized (isReadySubscribers) {
+                        for (Subscriber subscriber : isReadySubscribers) {
+                            Class<?> cl = subscriber.getClient().getClass();
+                            try {
+                                Method m = cl.getMethod(subscriber.getMethod(), String.class);
+                                m.invoke(subscriber.getClient(), this.getName());
+                                isReadySubscribers.remove(subscriber);
+                            } catch (Exception e) {
+                                GCM_NODEMAPPER_LOGGER.warn(e);
+                            }
+                        }
+                    }
+                    readyNotifSent = true;
+                }
+            } catch (NodeException e) {
+                GCMA_LOGGER.warn("GCM Deployment failed to create a node on " + fakeNode.getRuntimeURL() +
+                    ". Please check your network configuration", e);
             }
-            readyNotifSent = true;
         }
+
     }
 
     /*
