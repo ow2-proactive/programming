@@ -91,8 +91,7 @@
 		<!-- Main title -->
 		<xsl:choose>
 			<xsl:when test="@role='main'">
-				<h1>ProActive Programming &amp;</h1>
-				<h1>ProActive Optimizing</h1>
+				<h1>ProActive Programming</h1>
 			</xsl:when>
 		</xsl:choose>
 
