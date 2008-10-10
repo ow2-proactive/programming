@@ -33,8 +33,10 @@ package org.objectweb.proactive.core.process.ssh;
 
 import org.objectweb.proactive.core.process.AbstractExternalProcessDecorator;
 import org.objectweb.proactive.core.process.ExternalProcess;
+import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.SimpleExternalProcess;
 import org.objectweb.proactive.core.process.UniversalProcess;
+import org.objectweb.proactive.core.util.OperatingSystem;
 
 
 /**
@@ -145,7 +147,14 @@ public class SSHProcess extends AbstractExternalProcessDecorator {
         if (logger.isDebugEnabled()) {
             logger.debug(command.toString());
         }
-        command.append(" -- ");
+
+        // Fix for PROACTIVE-472
+        // Only the local operating is checked so it will not work if several SSHProcess are chained 
+        // with different type of Operating Systems. For example: Unix -SSH-> Windows -SSH-> Unix
+        // We don't have enough information to be able to handle all the cases.
+        if (OperatingSystem.getOperatingSystem() == OperatingSystem.unix) {
+            command.append(" -- ");
+        }
         return command.toString();
     }
 
