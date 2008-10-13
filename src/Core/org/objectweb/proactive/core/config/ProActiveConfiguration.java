@@ -78,9 +78,11 @@ public class ProActiveConfiguration {
      */
     public static final String PROACTIVE_LOG_PROPERTIES_FILE = "ProActiveLoggers.properties";
 
+    protected static final String FILE_PROTOCOL_PREFIX = "file:///";
+
     /** User configuration directory */
-    protected static final String PROACTIVE_USER_CONFIG_FILENAME = "file:///" + Constants.USER_CONFIG_DIR +
-        File.separator + PROACTIVE_CONFIG_FILENAME;
+    protected static final String PROACTIVE_USER_CONFIG_FILENAME = FILE_PROTOCOL_PREFIX +
+        Constants.USER_CONFIG_DIR + File.separator + PROACTIVE_CONFIG_FILENAME;
 
     protected final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
 
@@ -245,6 +247,13 @@ public class ProActiveConfiguration {
         if (fname == null) {
             fname = PROACTIVE_USER_CONFIG_FILENAME;
         }
+
+        if (!fname.matches("^\\w+://.*$")) {
+            // protocol prefix was not specified
+            // using "file" protocol by default
+            fname = FILE_PROTOCOL_PREFIX + fname;
+        }
+
         URL u = null;
         try {
             u = new URL(fname);
