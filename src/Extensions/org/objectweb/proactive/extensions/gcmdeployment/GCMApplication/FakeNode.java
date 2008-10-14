@@ -67,7 +67,7 @@ public class FakeNode {
         return part.getVMInformation().getCapacity();
     }
 
-    public Node create(GCMVirtualNodeInternal vn, List<TechnicalService> tsList) {
+    public Node create(GCMVirtualNodeInternal vn, List<TechnicalService> tsList) throws NodeException {
 
         Node node = null;
         if (!created) {
@@ -83,14 +83,10 @@ public class FakeNode {
                 }
 
                 node = part.createGCMNode(siblingPSM, vn.getName(), jobIb, tsList);
-            } catch (NodeException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                gcma.addNode(node);
             } catch (AlreadyBoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                new NodeException(e);
             }
-            gcma.addNode(node);
         }
         return node;
     }
