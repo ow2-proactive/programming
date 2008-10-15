@@ -1,13 +1,44 @@
+/*
+ * ################################################################
+ *
+ * ProActive: The Java(TM) library for Parallel, Distributed,
+ *            Concurrent computing with Security and Mobility
+ *
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@ow2.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version
+ * 2 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
+ *  Contributor(s):
+ *
+ * ################################################################
+ * $$PROACTIVE_INITIAL_DEV$$
+ */
+//@snippet-start cma_deploy_full
 package org.objectweb.proactive.examples.userguide.cmagent.deployed;
 
 import java.io.File;
-import java.util.List;
 
+import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.ProActiveConfiguration;
-import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.examples.userguide.cmagent.initialized.CMAgentInitialized;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
@@ -15,31 +46,39 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 public class Main {
+    private static GCMApplication pad;
 
-    private static GCMApplication proActiveDescriptor = null;
+    //@snippet-start cma_deploy_method
+    //deployment method
+    private static GCMVirtualNode deploy(String descriptor) {
+        try {
+            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
+            //TODO 2. Activate all Virtual Nodes
+            pad.startDeployment();
+            pad.waitReady();
 
-    private static GCMVirtualNode deploy(String appDeploymentDescriptor) throws ProActiveException {
-        ProActiveConfiguration.load();
+            //TODO 3. Get the first Virtual Node specified in the descriptor file
+            GCMVirtualNode vn = pad.getVirtualNode("remoteNode");
 
-        proActiveDescriptor = PAGCMDeployment.loadApplicationDescriptor(new File(appDeploymentDescriptor));
-        proActiveDescriptor.startDeployment();
-        GCMVirtualNode result = proActiveDescriptor.getVirtualNodes().values().iterator().next();
-        result.waitReady();
-        return result;
-
+            //TODO 4. Return the virtual node
+            return vn;
+        } catch (NodeException nodeExcep) {
+            System.err.println(nodeExcep.getMessage());
+        } catch (ProActiveException proExcep) {
+            System.err.println(proExcep.getMessage());
+        }
+        return null;
     }
 
-    public static void main(String[] args) {
-
+    //@snippet-end cma_deploy_method
+    public static void main(String args[]) {
         try {
-            GCMVirtualNode agent = deploy(args[0]);
-
-            List<Node> nodeList = agent.getCurrentNodes();
-            Node firstNode = nodeList.get(0);
-
+            //TODO 5. Get the virtual node through the deploy method
+            GCMVirtualNode vn = deploy(args[0]);
+            //@snippet-start cma_deploy_object
+            //TODO 6. Create the active object using a node on the virtual node
             CMAgentInitialized ao = (CMAgentInitialized) PAActiveObject.newActive(CMAgentInitialized.class
-                    .getName(), new Object[] {}, firstNode);
-
+                    .getName(), new Object[] {}, vn.getANode());
             //@snippet-end cma_deploy_object
             //TODO 7. Get the current state from the active object
             String currentState = ao.getCurrentState().toString();
@@ -50,17 +89,14 @@ public class Main {
             //TODO 9. Stop the active object
             PAActiveObject.terminateActiveObject(ao, false);
 
+            //TODO 10. Stop the virtual node
+            pad.kill();
             PALifeCycle.exitSuccess();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (proActiveDescriptor != null) {
-                proActiveDescriptor.kill();
-            }
-
-            PALifeCycle.exitSuccess();
+        } catch (NodeException nodeExcep) {
+            System.err.println(nodeExcep.getMessage());
+        } catch (ActiveObjectCreationException aoExcep) {
+            System.err.println(aoExcep.getMessage());
         }
-
     }
 }
+//@snippet-end cma_deploy_full
