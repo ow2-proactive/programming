@@ -148,6 +148,7 @@ public class Test extends ComponentTest {
         newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
 
         newDeploymentDescriptor.startDeployment();
+        newDeploymentDescriptor.waitReady();
 
         context.put("deployment-descriptor", newDeploymentDescriptor);
         Component root = (Component) f.newComponent(
