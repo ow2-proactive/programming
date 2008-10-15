@@ -61,17 +61,15 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  */
 public class Main {
 
-	
-
     private static GCMApplication pad;
-    
+
     private static Collection<GCMVirtualNode> deploy(String descriptor) {
         try {
             pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
             //active all Virtual Nodes
             pad.startDeployment();
             pad.waitReady();
-            
+
             return pad.getVirtualNodes().values();
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
@@ -81,8 +79,6 @@ public class Main {
         return null;
     }
 
-    
-	
     public static void main(String[] args) {
         // The default value for the candidate to test (is prime)
         long candidate = 2147483647l;
@@ -108,17 +104,15 @@ public class Main {
 
             // iterate through all nodes and deploy
             // a worker per node
-          
+
             Iterator<Node> nodesIt = vNode.getCurrentNodes().iterator();
-            while(nodesIt.hasNext())
-            {
-            	Node node = nodesIt.next();
+            while (nodesIt.hasNext()) {
+                Node node = nodesIt.next();
                 CMAgentPrimeWorker worker = (CMAgentPrimeWorker) PAActiveObject.newActive(
                         CMAgentPrimeWorker.class.getName(), new Object[] {}, node);
                 manager.addWorker(worker);
             }
-            
-            
+
             // Check the primality (Send a synchronous method call to the manager)
             boolean isPrime = manager.isPrime(candidate);
             // Display the result
@@ -131,9 +125,6 @@ public class Main {
             System.exit(0);
         }
     }
-
-
-
 
 }
 // @snippet-end primes_distributed_main

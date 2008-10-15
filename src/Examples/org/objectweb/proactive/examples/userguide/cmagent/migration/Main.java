@@ -60,10 +60,10 @@ public class Main {
             pad.waitReady();
             //get the first Node available in the first Virtual Node 
             //specified in the descriptor file
-            
+
             //should eater pass in argument the virtual node name or just take the first one: 
             //we'lll take the fisrt one here
-            
+
             GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
             return vn;
         } catch (NodeException nodeExcep) {
