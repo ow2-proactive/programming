@@ -33,12 +33,21 @@
 //@snippet-start primes_distributed_main
 package org.objectweb.proactive.examples.userguide.primes.distributed;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PADeployment;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.examples.userguide.cmagent.simple.CMAgent;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
@@ -52,6 +61,28 @@ import org.objectweb.proactive.examples.userguide.cmagent.simple.CMAgent;
  */
 public class Main {
 
+	
+
+    private static GCMApplication pad;
+    
+    private static Collection<GCMVirtualNode> deploy(String descriptor) {
+        try {
+            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
+            //active all Virtual Nodes
+            pad.startDeployment();
+            pad.waitReady();
+            
+            return pad.getVirtualNodes().values();
+        } catch (NodeException nodeExcep) {
+            System.err.println(nodeExcep.getMessage());
+        } catch (ProActiveException proExcep) {
+            System.err.println(proExcep.getMessage());
+        }
+        return null;
+    }
+
+    
+	
     public static void main(String[] args) {
         // The default value for the candidate to test (is prime)
         long candidate = 2147483647l;
@@ -66,31 +97,34 @@ public class Main {
         }
 
         try {
-            VirtualNode[] vNodes = deploy(args[0]);
-            VirtualNode vNode = vNodes[0];
+            Collection<GCMVirtualNode> vNodes = deploy(args[0]);
+            GCMVirtualNode vNode = vNodes.iterator().next();
 
             // create the active object on the first node on
             // the first virtual node available
             // start the master
             CMAgentPrimeManager manager = (CMAgentPrimeManager) PAActiveObject.newActive(
-                    CMAgentPrimeManager.class.getName(), new Object[] {}, vNode.getNode());
+                    CMAgentPrimeManager.class.getName(), new Object[] {}, vNode.getANode());
 
             // iterate through all nodes and deploy
             // a worker per node
-            for (Node node : vNode.getNodes()) {
+          
+            Iterator<Node> nodesIt = vNode.getCurrentNodes().iterator();
+            while(nodesIt.hasNext())
+            {
+            	Node node = nodesIt.next();
                 CMAgentPrimeWorker worker = (CMAgentPrimeWorker) PAActiveObject.newActive(
                         CMAgentPrimeWorker.class.getName(), new Object[] {}, node);
                 manager.addWorker(worker);
             }
-
+            
+            
             // Check the primality (Send a synchronous method call to the manager)
             boolean isPrime = manager.isPrime(candidate);
             // Display the result
             System.out.println("\n" + candidate + (isPrime ? " is prime." : " is not prime.") + "\n");
             // Free all resources
-            for (VirtualNode vn : vNodes) {
-                vn.killAll(true);
-            }
+            pad.kill();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -98,19 +132,8 @@ public class Main {
         }
     }
 
-    private static VirtualNode[] deploy(String descriptor) {
-        ProActiveDescriptor pad;
-        try {
-            pad = PADeployment.getProactiveDescriptor(descriptor);
-            // active all Virtual Nodes
-            pad.activateMappings();
-            // get the first Node available in the first Virtual Node
-            // specified in the descriptor file
-            return pad.getVirtualNodes();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
+
+
 }
 // @snippet-end primes_distributed_main

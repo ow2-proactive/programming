@@ -67,7 +67,7 @@ public class Main {
             pad.waitReady();
             //get the first Node available in the first Virtual Node 
             //specified in the descriptor file
-            GCMVirtualNode vn = pad.getVirtualNode("remoteNode");
+            GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
             return vn;
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
