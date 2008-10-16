@@ -35,8 +35,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.factory.InstantiationException;
+import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
@@ -44,6 +48,8 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  * @author The ProActive Team
  */
 public class ADLNodeProvider {
+    private static final int TIMEOUT = 60000;
+    protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
     private static Map<String, List<Node>> nodeLists = new HashMap<String, List<Node>>();
     private static Map<String, Integer> nodeIndex = new HashMap<String, Integer>();
 
@@ -67,6 +73,17 @@ public class ADLNodeProvider {
                     return getNode(gcmDeploymentVN);
                 }
             } else {
+                boolean waiting = true;
+                while (waiting) {
+                    try {
+                        gcmDeploymentVN.waitReady(TIMEOUT);
+                        waiting = false;
+                    } catch (ProActiveTimeoutException e) {
+                        logger.warn("The virtual node: " + gcmVNName +
+                            " is still not ready after having waited " + (TIMEOUT / 1000) +
+                            " seconds. Awaiting further " + (TIMEOUT / 1000) + " seconds.");
+                    }
+                }
                 if (gcmDeploymentVN.getNbCurrentNodes() == 0) {
                     throw new InstantiationException("Cannot create component on virtual node " + gcmVNName +
                         " as no node is associated with this virtual node");

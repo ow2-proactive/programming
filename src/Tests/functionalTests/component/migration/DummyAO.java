@@ -138,7 +138,6 @@ public class DummyAO implements Serializable {
         newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
 
         newDeploymentDescriptor.startDeployment();
-        newDeploymentDescriptor.waitReady();
 
         context.put("deployment-descriptor", newDeploymentDescriptor);
 
