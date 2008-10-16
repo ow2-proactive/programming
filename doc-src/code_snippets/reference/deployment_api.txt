@@ -14,13 +14,13 @@ pad.waitReady();
 //Obtain all the virtual nodes 
  Map<String,GCMVirtualNode> vNodes = pad.getVirtualNodes();
  
-//Get the fisrt visrtual node
+//Get the first virtual node
  GCMVirtualNode vn =nodes.values().iterator().next();
 
 // Get all nodes mapped to the target Virtual Node 
 List<Node> nodes =  vn.getCurrentNodes();
 
-//Get the fisrt node
+//Get the first node
 Node node= nodes.get(0);
 
 // Returns a reference to all AOs deployed on the target Node 
