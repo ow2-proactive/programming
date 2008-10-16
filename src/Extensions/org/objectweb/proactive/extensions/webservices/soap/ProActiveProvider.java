@@ -32,11 +32,13 @@
 package org.objectweb.proactive.extensions.webservices.soap;
 
 import java.io.StringWriter;
+import java.lang.reflect.Method;
 import java.util.Hashtable;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.soap.Constants;
 import org.apache.soap.Envelope;
 import org.apache.soap.SOAPException;
@@ -46,10 +48,12 @@ import org.apache.soap.rpc.SOAPContext;
 import org.apache.soap.server.DeploymentDescriptor;
 import org.apache.soap.server.RPCRouter;
 import org.apache.soap.util.Provider;
-import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
@@ -67,6 +71,8 @@ public class ProActiveProvider extends WSConstants implements Provider {
             e.printStackTrace();
         }
     }
+
+    private static Logger logger = logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
 
     private DeploymentDescriptor dd;
     private Envelope envelope;
@@ -88,13 +94,13 @@ public class ProActiveProvider extends WSConstants implements Provider {
         HttpServlet servlet = (HttpServlet) reqContext.getProperty(Constants.BAG_HTTPSERVLET);
         HttpSession session = (HttpSession) reqContext.getProperty(Constants.BAG_HTTPSESSION);
 
-        System.out.println("================================================");
-        System.out.println("In ProActiveProvider.locate()");
-        System.out.println("Method: " + methodName);
-        System.out.println("URI: " + targetObjectURI);
-        System.out.println("DD.ServiceClass: " + dd.getServiceClass());
-        System.out.println("DD.ProviderClass: " + dd.getProviderClass());
-        System.out.println("Call.MethodName: " + call.getMethodName());
+        logger.info("================================================");
+        logger.info("In ProActiveProvider.locate()");
+        logger.info("Method: " + methodName);
+        logger.info("URI: " + targetObjectURI);
+        logger.info("DD.ServiceClass: " + dd.getServiceClass());
+        logger.info("DD.ProviderClass: " + dd.getProviderClass());
+        logger.info("Call.MethodName: " + call.getMethodName());
 
         @SuppressWarnings("unchecked")
         Hashtable props = dd.getProps();
@@ -118,15 +124,26 @@ public class ProActiveProvider extends WSConstants implements Provider {
         byte[] serObj = (byte[]) props.get("Stub");
 
         boolean isInterfaceComponent = ((String) props.get(WSConstants.COMPONENT_INTERFACE)).equals("true");
-
         try {
             if (!isInterfaceComponent) {
+                logger.info("Normal object");
                 targetObject = HttpMarshaller.unmarshallObject(serObj);
             } else {
-                Object o = HttpMarshaller.unmarshallObject(serObj);
+                logger.info("target object is a component interface");
+                Object component = HttpMarshaller.unmarshallObject(serObj);
+                logger.info("component class :" + component.getClass());
+
                 String actualName = targetObjectURI.substring(targetObjectURI.lastIndexOf('_') + 1);
-                Component c = (Component) o;
-                targetObject = c.getFcInterface(actualName);
+
+                targetObject = ((ProActiveComponentRepresentative) component).getFcInterface(actualName);
+                logger.info("target Object class  = " + targetObject.getClass());
+                Class c = targetObject.getClass();
+                Method[] meths = c.getMethods();
+                for (int i = 0; i < meths.length; i++) {
+                    logger.info("--> " + meths[i]);
+                }
+                logger.info("target object superclass : " + targetObject.getClass().getSuperclass());
+
             }
         } catch (Exception e) {
             System.out.println("Exception : " + e.getMessage());
@@ -148,8 +165,10 @@ public class ProActiveProvider extends WSConstants implements Provider {
         //dd.setProviderClass(targetObject.getClass().getName());
         // Add logic to invoke the service and get back the result here
         try {
+            System.out.println("avant invoke");
+            //	System.out.println("target Object = " + targetObject);
             Response resp = RPCRouter.invoke(dd, call, targetObject, reqContext, resContext);
-
+            System.out.println("apres invoke");
             //build the enveloppe that contains the response
             Envelope env = resp.buildEnvelope();
             System.out.println(env);

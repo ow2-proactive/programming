@@ -33,6 +33,7 @@ package org.objectweb.proactive.examples.webservices.helloWorld;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
+import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
@@ -85,9 +86,14 @@ public class HelloWorldComponent implements HelloWorldItf {
             // create server component
             comp = cf.newFcInstance(sType, new ControllerDescription("server", Constants.PRIMITIVE),
                     new ContentDescription(HelloWorldComponent.class.getName()));
+            //start the component ...
+            Fractal.getLifeCycleController(comp).startFc();
         } catch (InstantiationException e1) {
             e1.printStackTrace();
         } catch (NoSuchInterfaceException e) {
+            e.printStackTrace();
+        } catch (IllegalLifeCycleException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

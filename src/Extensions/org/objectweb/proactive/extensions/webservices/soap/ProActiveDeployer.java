@@ -39,6 +39,7 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.apache.soap.SOAPException;
 import org.apache.soap.server.DeploymentDescriptor;
 import org.apache.soap.server.ServiceManagerClient;
@@ -47,8 +48,17 @@ import org.apache.soap.util.xml.QName;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.control.LifeCycleController;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.component.Fractive;
+import org.objectweb.proactive.core.component.identity.ProActiveComponent;
+import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
 import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
+import org.objectweb.proactive.core.mop.Proxy;
+import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
+import org.objectweb.proactive.core.runtime.ProActiveRuntime;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 import org.objectweb.proactive.extensions.webservices.wsdl.WSDLGenerator;
 
@@ -60,6 +70,8 @@ import org.objectweb.proactive.extensions.webservices.wsdl.WSDLGenerator;
  * */
 public class ProActiveDeployer extends WSConstants {
 
+    public static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
+
     /**
      *  Deploy an active object as a web service
      * @param urn The name of the web service
@@ -68,28 +80,33 @@ public class ProActiveDeployer extends WSConstants {
      * @param methods The methods of the active object you  want to be accessible. If null, all public methods will be exposed.
      */
     public static void deploy(String urn, String url, Object o, String[] methods) {
-        deploy(urn, url, o, null, methods, false);
+        deploy(urn, url, o, methods, false);
     }
 
     /**
-     *  Deploy a component as a webservice. Each interface of the component will be accessible by
+     *  Deploy a component as a web service. Each interface of the component will be accessible by
      * the urn <componentName>_<interfaceName> in order to identify the component an interface belongs to.
      * All the interfaces public  methods will be exposed.
      * @param componentName The name of the component
-     * @param url  The web server url  where to deploy the service - typically "http://localhost:8080"
+     * @param url  The web server URL  where to deploy the service - typically "http://localhost:8080"
      * @param component The component owning the interfaces that will be deployed as web services.
      */
     public static void deployComponent(String componentName, String url, Component component) {
+        logger.info("deploying ws Component name  : " + componentName);
+
         Object[] interfaces = component.getFcInterfaces();
 
         for (int i = 0; i < interfaces.length; i++) {
             Interface interface_ = ((Interface) interfaces[i]);
+            logger.info("interface class = " + interface_.getClass());
+            /* only expose server interfaces and not the attributes controller */
+            if (!(interface_.getFcItfName().contains("-controller")) &&
+                !interface_.getFcItfName().equals("component")) {
 
-            /* only expose server interfaces and not the lifecycle controller */
-            if (!(interface_ instanceof LifeCycleController)) {
                 if (!((ProActiveInterfaceType) interface_.getFcItfType()).isFcClientItf()) {
-                    String name = interface_.getFcItfName();
 
+                    String name = interface_.getFcItfName();
+                    logger.info("exposing interface = " + name);
                     /* get all the public methods */
                     Method[] methods = interface_.getClass().getMethods();
                     Vector<String> meths = new Vector<String>();
@@ -98,16 +115,20 @@ public class ProActiveDeployer extends WSConstants {
                         String methodName = methods[j].getName();
 
                         if (isAllowedMethod(methodName)) {
+                            logger.info("exposing method : " + methodName);
                             meths.addElement(methodName);
                         }
                     }
 
                     String[] methsArray = new String[meths.size()];
                     meths.toArray(methsArray);
-                    deploy(componentName + "_" + name, url, interface_, component, methsArray, true);
+                    String wsName = componentName + "_" + name;
+                    logger.info("web Service Name = " + wsName);
+                    deploy(wsName, url, component, methsArray, true);
                 }
             }
         }
+
     }
 
     /**
@@ -152,12 +173,12 @@ public class ProActiveDeployer extends WSConstants {
     /*
      * deploy services.
      */
-    private static void deploy(String urn, String url, Object o, Component c, String[] methods,
-            boolean componentInterface) {
+    private static void deploy(String urn, String url, Object o, String[] methods, boolean componentInterface) {
         String wsdl;
 
         /* first we need to generate a WSDL description of the object we want to deploy */
         if (componentInterface) {
+            logger.info("deploying interface : " + urn);
             wsdl = WSDLGenerator.getWSDL(o.getClass(), urn, url + SERV_RPC_ROUTER, DOCUMENTATION, methods);
         } else {
             wsdl = WSDLGenerator.getWSDL(o.getClass().getSuperclass(), urn, url + SERV_RPC_ROUTER,
@@ -176,6 +197,7 @@ public class ProActiveDeployer extends WSConstants {
         /* The informations about services will be put in a deployment descriptor */
         DeploymentDescriptor dd = new DeploymentDescriptor();
         dd.setID(urn);
+
         dd.setProviderType(DeploymentDescriptor.PROVIDER_USER_DEFINED);
 
         dd.setServiceClass(PROACTIVE_PROVIDER);
@@ -203,7 +225,7 @@ public class ProActiveDeployer extends WSConstants {
 
             dd.setMethods(methods);
         }
-
+        logger.info("Deploying an object of the class :" + o.getClass());
         dd.setProviderClass(o.getClass().getName());
 
         /* Here we put the serialized stub into a dd property */
@@ -212,11 +234,15 @@ public class ProActiveDeployer extends WSConstants {
         props.put(WSDL_FILE, wsdl);
 
         if (componentInterface) {
+            logger.info("INTERFACE");
             props.put(COMPONENT_INTERFACE, "true");
-            props.put(PROACTIVE_STUB, HttpMarshaller.marshallObject(c));
+            props.put(PROACTIVE_STUB, HttpMarshaller.marshallObject(o));
+
         } else {
+            logger.info("PAS INTERFACE");
             props.put(COMPONENT_INTERFACE, "false");
             props.put(PROACTIVE_STUB, HttpMarshaller.marshallObject(o));
+
         }
 
         dd.setProps(props);
@@ -236,7 +262,7 @@ public class ProActiveDeployer extends WSConstants {
     }
 
     /*
-     *  Gets the types mapping for custonize returned types
+     *  Gets the types mapping for customize returned types
      * Only Java Beans are supported
      */
     private static TypeMapping[] getMappings(Class<?> c, String[] methods) {

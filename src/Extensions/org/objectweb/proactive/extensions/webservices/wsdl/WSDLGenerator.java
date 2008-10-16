@@ -82,7 +82,6 @@ public class WSDLGenerator extends WSConstants {
             emitter.setServiceElementName(serviceName);
 
             String wsdl = emitter.emitToString(Emitter.MODE_ALL);
-            System.out.println(wsdl);
             return wsdl;
         } catch (WSDLException e) {
             e.printStackTrace();
