@@ -67,7 +67,7 @@
 		First we define the resources to be used by specifying a deployment  descriptor:
 	</para>
 	
-	 <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/masterworker/acquire_resources.txt"/></textobject></programlisting>
+     	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/mw_primes_resources.snip"/></textobject></programlisting>
 	
 	
 	<para>To learn how deployment descriptors work read <xref linkend="deployment_guide_CMA"/>
@@ -76,7 +76,7 @@
 	<para>After specifying the resources we need to create a master to coordinate the
 	computation: </para>
 	
-	<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/masterworker/master.txt"/></textobject></programlisting>
+     	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/mw_primes_master_creation.snip"/></textobject></programlisting>
 	
 	<para>The master has as a type <literal>ComputePrime</literal> which is a
 	inner class that extends the <literal>Task</literal> interface. To create
@@ -96,7 +96,7 @@
 		
 	</para>
 
-	<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/masterworker/task.txt"/></textobject></programlisting>
+     	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_task.snip"/></textobject></programlisting>
 
 	<para>
 		Because we do not know ahead of time how many primes numbers 
@@ -114,7 +114,7 @@
 	Instead we just specify a deployment descriptor and ProActive
 	takes care of the rest.  </para>
 
-	 <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/examples/DistributedPrimesMW/src/active/DistributedPrimesMW.java"/></textobject></programlisting>
+     	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_example.snip"/></textobject></programlisting>
 	
 	</section>
 	<section><info><title>Running master-worker Distributed Primes</title></info>

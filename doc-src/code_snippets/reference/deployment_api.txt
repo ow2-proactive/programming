@@ -1,31 +1,35 @@
-// Returns a ProActiveDescriptor object from the xml 
-// descriptor file name 
-ProActiveDescriptor pad = PADeployment.getProActiveDescriptor(String File); 
+// Load the application descriptor from an external file 
+//Obtain GCMAplication 
+GCMApplication pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
 
-// Activates the given Virtual Node: launches or acquires 
-// all the JVMs the VN is mapped onto
-pad.activateMapping(String VN); 
+//Activate all Virtual Nodes
+//Start the deployment of this application instance.
+//Processes described in the GCM Application Descriptor are started on remote resources 
+//described by all GCM Deployment Descriptors XML files.
+pad.startDeployment();
 
-// Activates all VNs defined in the ProActiveDescriptor 
-pad.activateMappings(); 
+//Wait for all the virtual nodes to become ready
+pad.waitReady();
 
-// Created  at once a group of AO of type 'A' in the JVMs specified 
-// by the given VN. The Virtual Node is automatically activated if not 
-// explicitly done before 
-VirtualNode vn = pad.getVirtualNode(String) 
+//Obtain all the virtual nodes 
+ Map<String,GCMVirtualNode> vNodes = pad.getVirtualNodes();
+ 
+//Get the fisrt visrtual node
+ GCMVirtualNode vn =nodes.values().iterator().next();
 
-// Returns all nodes mapped to the target Virtual Node 
-Node[] n = vn.getNodes(); 
+// Get all nodes mapped to the target Virtual Node 
+List<Node> nodes =  vn.getCurrentNodes();
+
+//Get the fisrt node
+Node node= nodes.get(0);
 
 // Returns a reference to all AOs deployed on the target Node 
-Object[] n[0].getActiveObjects(); 
+Object[] node.getActiveObjects(); 
 
 // Returns a reference to the ProActive Runtime (the JVM) where the 
 // node has been created 
-ProActiveRuntime part = n[0].getProActiveRuntime(); 
+ProActiveRuntime part = node.getProActiveRuntime(); 
 
-// Kills all the JVMs deployed with the descriptor 
-// not softly(false): all JVMs are killed abruptly 
-// softly(true): all JVMs that originated the creation of a RMI registry 
-// wait until the registry is empty before dying
-pad.killall(boolean softly); 
+//Terminates all the ProActive Runtimes that have been started by this Application.
+// Acquired resources are freed too.
+pad.kill();

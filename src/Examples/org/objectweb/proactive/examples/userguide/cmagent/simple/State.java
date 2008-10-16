@@ -68,7 +68,7 @@ public class State implements Serializable {
 
     public String toString() {
 
-        return new String("======= [" + "State at " + timePoint + " on " + hostname + "] =======" +
+        return new String("\n======= [" + "State at " + timePoint + " on " + hostname + "] =======" +
             "\nCommited memory: " + commitedMemory + " bytes\nInitial memory requested: " + initMemory +
             " bytes\nMaximum memory available: " + maxMemory + " bytes\nUsed memory: " + usedMemory +
             " bytes\nOperating System: " + osName + " " + osVersion + " " + osArch + "\nProcessors: " +

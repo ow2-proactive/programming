@@ -16,25 +16,21 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 
 
 public class Main {
-	protected GCMApplication gcmApp;
+    private static GCMApplication pad;
 
-    private static VirtualNode deploy(String descriptor) {               
-        try {
-            //create object representation of the deployment file
-            gcmApp = PAGCMDeployment.getProactiveDescriptor(descriptor);
-            //active all Virtual Nodes
-            gcmApp.startDeployment();
-            //get the first Node available in the first Virtual Node 
-            //specified in the descriptor file
-            GCMVirtualNode vn = gcmApp.getVirtualNodes("remoteNode");
-            vn.waitReady();
-            return vn;
-        } catch (NodeException nodeExcep) {
-            System.err.println(nodeExcep.getMessage());
-        } catch (ProActiveException proExcep) {
-            System.err.println(proExcep.getMessage());
-        }
-        return null;
+    private static GCMVirtualNode deploy(String descriptor) throws NodeException, ProActiveException {
+        
+        //Create object representation of the deployment file
+        pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
+        //Activate all Virtual Nodes
+        pad.startDeployment();
+        //Wait for all the virtual nodes to become ready
+        pad.waitReady();
+
+        //Get the first Virtual Node specified in the descriptor file
+        GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
+
+        return vn;
     }
 
     public static void main(String args[]) {
@@ -73,19 +69,22 @@ public class Main {
                     break;
                 
                 //TODO 3. Migrate the active object to the selected node:  choice-1
-                //TODO 4. Get the state and the last request time and print them out           
+                //TODO 4. Get the state and the last request time and print them out    
+                //TODO 5. Display information for the selected node 
+                       
             }
-
-            //stopping all the objects and JVMS
-            PAActiveObject.terminateActiveObject(ao, false);
-            gcmApp.kill();
-            PALifeCycle.exitSuccess();
-        } catch (NodeException nodeExcep) {
+       } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
-        } catch (ActiveObjectCreationException aoExcep) {
+        } 
+        catch (ActiveObjectCreationException aoExcep) {
             System.err.println(aoExcep.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+        } catch (ProActiveException e) {
+            System.err.println(e.getMessage());
+		}
+        finally{
+            //TODO 6. Stop all the objects and JVMS
         }
     }
 }

@@ -36,11 +36,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
@@ -52,26 +49,19 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 public class Main {
     private static GCMApplication pad;
 
-    private static GCMVirtualNode deploy(String descriptor) {
-        try {
-            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
-            //active all Virtual Nodes
-            pad.startDeployment();
-            pad.waitReady();
-            //get the first Node available in the first Virtual Node 
-            //specified in the descriptor file
+    private static GCMVirtualNode deploy(String descriptor) throws NodeException, ProActiveException {
 
-            //should eater pass in argument the virtual node name or just take the first one: 
-            //we'lll take the fisrt one here
+        //Create object representation of the deployment file
+        pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
+        //Activate all Virtual Nodes
+        pad.startDeployment();
+        //Wait for all the virtual nodes to become ready
+        pad.waitReady();
 
-            GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
-            return vn;
-        } catch (NodeException nodeExcep) {
-            System.err.println(nodeExcep.getMessage());
-        } catch (ProActiveException proExcep) {
-            System.err.println(proExcep.getMessage());
-        }
-        return null;
+        //Get the first Virtual Node specified in the descriptor file
+        GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
+
+        return vn;
     }
 
     public static void main(String args[]) {
@@ -117,21 +107,23 @@ public class Main {
                 //TODO 4. Get the state and the last request time and print them out
                 String currentState = ao.getCurrentState().toString(); //get the state
                 System.out.println("\n" + currentState);
-                //display information for the selected node 
+                //TODO 5. Display information for the selected node 
                 System.out.println("Calculating the statistics took " +
                     ao.getLastRequestServeTime().longValue() + "ms \n");
             }
-
-            //stopping all the objects and JVMS
-            PAActiveObject.terminateActiveObject(ao, false);
-            pad.kill();
-            PALifeCycle.exitSuccess();
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
         } catch (ActiveObjectCreationException aoExcep) {
             System.err.println(aoExcep.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+        } catch (ProActiveException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            //TODO 6. Stop all the objects and JVMS
+            if (pad != null)
+                pad.kill();
+            PALifeCycle.exitSuccess();
         }
     }
 }

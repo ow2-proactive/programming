@@ -66,19 +66,20 @@ public class PrimeExampleMW {
             }
         }
         try {
+            //@snippet-start mw_primes_master_creation
             // Create the Master
             ProActiveMaster<FindPrimeTask, Boolean> master = new ProActiveMaster<FindPrimeTask, Boolean>();
+            //@snippet-end mw_primes_master_creation
+            //@snippet-start mw_primes_resources
             // Deploy resources
             master.addResources(new URL("file://" + args[0]));
+            //@snippet-end mw_primes_resources
             // Create and submit the tasks
             master.solve(createTasks(candidate));
 
-            /*************************************************/
-            /* 3. Wait all results from master */
-            /*************************************************/
+            //TODO 3. Wait all results from master */
             // Collect results            
             List<Boolean> results = master.waitAllResults();
-            /*************************************************/
 
             // Test the primality
             boolean isPrime = true;
@@ -119,13 +120,10 @@ public class PrimeExampleMW {
 
         for (int i = 0; i <= nbOfIntervals; i++) {
 
-            /********************************************************/
-            /* 4. Create a new task for the current interval and */
-            /* add it to the list of tasks */
-            /********************************************************/
+            //TODO 4. Create a new task for the current interval and 
+            // add it to the list of tasks 
             // Adds the task for the current interval to the list of tasks
             tasks.add(new FindPrimeTask(number, begin, end));
-            /********************************************************/
 
             // Update the begin and the end of the interval
             begin = end + 1;
@@ -134,20 +132,5 @@ public class PrimeExampleMW {
 
         return tasks;
     }
-
-    //    private static Map<String, ? extends GCMVirtualNode> deploy(String descriptor) {
-    //        GCMApplication pad;
-    //        try {
-    //            pad = PAGCMDeployment.getProactiveDescriptor(descriptor);
-    //            // active all Virtual Nodes
-    //            pad.startDeployment();
-    //            // get the first Node available in the first Virtual Node
-    //            // specified in the descriptor file
-    //            return pad.getVirtualNodes();
-    //        } catch (Exception e) {
-    //            e.printStackTrace();
-    //        }
-    //        return null;
-    //    }
 }
 //@snippet-end primes_distributedmw_example

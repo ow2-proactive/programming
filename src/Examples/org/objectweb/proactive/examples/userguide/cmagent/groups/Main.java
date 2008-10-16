@@ -39,12 +39,9 @@ import java.util.Vector;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
@@ -59,22 +56,19 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 public class Main {
     private static GCMApplication pad;
 
-    private static GCMVirtualNode deploy(String descriptor) {
-        try {
-            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
-            //active all Virtual Nodes
-            pad.startDeployment();
-            pad.waitReady();
-            //get the first Node available in the first Virtual Node 
-            //specified in the descriptor file
-            GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
-            return vn;
-        } catch (NodeException nodeExcep) {
-            System.err.println(nodeExcep.getMessage());
-        } catch (ProActiveException proExcep) {
-            System.err.println(proExcep.getMessage());
-        }
-        return null;
+    private static GCMVirtualNode deploy(String descriptor) throws NodeException, ProActiveException {
+
+        //Create object representation of the deployment file
+        pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
+        //Activate all Virtual Nodes
+        pad.startDeployment();
+        //Wait for all the virtual nodes to become ready
+        pad.waitReady();
+
+        //Get the first Virtual Node specified in the descriptor file
+        GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
+
+        return vn;
     }
 
     //@snippet-start groups_cma_full
@@ -148,19 +142,24 @@ public class Main {
                 }
             }
 
-            //stopping all the objects and JVMS
-            pad.kill();
-            PALifeCycle.exitSuccess();
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
         } catch (ActiveObjectCreationException aoExcep) {
             System.err.println(aoExcep.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         } catch (ClassNotReifiableException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
+        } catch (ProActiveException e) {
+            // TODO Auto-generated catch block
+            System.err.println(e.getMessage());
+        } finally {
+            //stopping all the objects and JVMS
+            if (pad != null)
+                pad.kill();
+            PALifeCycle.exitSuccess();
         }
     }
     //@snippet-end groups_cma_full

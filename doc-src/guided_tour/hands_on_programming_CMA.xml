@@ -492,14 +492,32 @@
   			correspondence between Virtual Nodes and Nodes: the
   			function created by the deployment, the mapping. This
   			mapping is specified in the Application Descriptor.
-  			The grid facilities are described in the Deployment Descriptor.
-  			In the Deployment Descriptor are configured 
+  			The grid facilities are described in two deployment descriptor 
+  			separated by the different concerns of the application developer
+  			and grid infrastructure administrator.
+
+			In the grid  deployment descriptor we describe 
   			<itemizedlist>
   				<listitem>
-  					<para>the way to create or to acquire JVMs</para>
+  					<para>the resources provided by the infrastructure</para>
   				</listitem>
   				<listitem>
-  					<para>the way to register or to lookup VNs</para>
+  					<para>how to acquire the resources provided by the infrastructure</para>
+  				</listitem>
+  			</itemizedlist>
+  			
+
+			In the application deployment descriptor we describe 
+  			
+  			<itemizedlist>
+  				<listitem>
+  					<para>how to launch the application</para>
+  				</listitem>
+  				<listitem>
+  					<para>the resources needed by the application</para>
+  				</listitem>
+  				<listitem>
+  					<para>the resource providers</para>
   				</listitem>
   			</itemizedlist>
 
@@ -516,7 +534,10 @@
   			parts, each with different options. For our example we
   			will use a simple version. To find out more about
   			deployment and deployment descriptors read
-  			<xref linkend="XML_Descriptors"/>
+  			<xref linkend="GCMDeployment"/>. 
+  			To read about the deprecated deployment structure read 
+  			<xref linkend="XML_Descriptors"/>. 
+  			
   			.
   		</para>
   		<para>
@@ -646,6 +667,8 @@
 		<itemizedlist><info><title>Previously used classes</title></info>		
 			
 				<listitem><para><literal>org.objectweb.proactive.Body</literal> - used to access the body of the active object</para></listitem>
+				<listitem><para><literal>org.objectweb.proactive.PALifeCycle</literal> - controls the lifecycle of the ProActive application</para></listitem>
+
 				<listitem><para><literal>org.objectweb.proactive.Service</literal> - used to access the queue of the active object</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.InitActive</literal> - used for defining the <literal>initActivity(Body body)</literal> method, which is run at active object initialization</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.EndActive</literal> - used for defining the <literal>endActivity(Body body)</literal> method, which is run at active object destruction </para></listitem>
@@ -760,6 +783,8 @@
 			<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMVirtualNode</literal></para> </listitem>
 			<listitem><para><literal> org.objectweb.proactive.core.node.Node </literal></para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.Body</literal> - used to access the body of the active object</para></listitem>
+				<listitem><para><literal>org.objectweb.proactive.PALifeCycle</literal> - controls the lifecycle of the ProActive application</para></listitem>
+
 				<listitem><para><literal>org.objectweb.proactive.Service</literal> - used to access the queue of the active object</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.InitActive</literal> - used for defining the <literal>initActivity(Body body)</literal> method, which is run at active object initialization</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.EndActive</literal> - used for defining the <literal>endActivity(Body body)</literal> method, which is run at active object destruction </para></listitem>
@@ -842,12 +867,16 @@
 		</itemizedlist>
 		<itemizedlist><info><title>Previously used classes</title></info>		
 			
-			<listitem><para><literal> org.objectweb.proactive.api.PADeployment</literal> - </para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment</literal> - </para> </listitem>
 			<listitem> <para><literal>org.objectweb.proactive.core.ProActiveException</literal></para> </listitem>
-			<listitem><para><literal> org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor</literal></para> </listitem>
-			<listitem><para><literal> org.objectweb.proactive.core.descriptor.data.VirtualNode</literal></para> </listitem>
+		<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMApplication</literal></para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMVirtualNode</literal></para> </listitem>
+
+			
 			<listitem><para><literal> org.objectweb.proactive.core.node.Node </literal></para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.Body</literal> - used to access the body of the active object</para></listitem>
+				<listitem><para><literal>org.objectweb.proactive.PALifeCycle</literal> - controls the lifecycle of the ProActive application</para></listitem>
+
 				<listitem><para><literal>org.objectweb.proactive.Service</literal> - used to access the queue of the active object</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.InitActive</literal> - used for defining the <literal>initActivity(Body body)</literal> method, which is run at active object initialization</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.EndActive</literal> - used for defining the <literal>endActivity(Body body)</literal> method, which is run at active object destruction </para></listitem>
@@ -920,22 +949,16 @@
     </para>
       
       
-      
-      <para>
-      	In the deployment descriptor file we will define several nodes and machines mappings,
-	 
-      </para>
-       		<programlisting xml:lang="xml"><textobject><textdata fileref="./automatic_snippets/jvm_definition.snip"/></textobject></programlisting>
-      <para>Infrastructure specification:</para>	 
-      		<programlisting xml:lang="xml"><textobject><textdata fileref="./automatic_snippets/infrastructure_definition.snip"/></textobject></programlisting>
-      <para>
-
-
-    	The full deployment descriptor file is:
-		</para>
+	<para>      
+    	The full deployment descriptor files are:
+	</para>
 		
-	<programlisting xml:lang="xml"><textobject><textdata fileref="../src/Examples/org/objectweb/proactive/examples/userguide/cmagent/migration/deployment.xml"/></textobject></programlisting>
-	</section>
+		<programlisting xml:lang="xml"><textobject><textdata fileref="../src/Examples/org/objectweb/proactive/examples/userguide/cmagent/migration/GCMA.xml"/></textobject></programlisting>
+    	<para>and</para>
+	
+    	<programlisting xml:lang="xml"><textobject><textdata fileref="../src/Examples/org/objectweb/proactive/examples/userguide/cmagent/migration/GCMD_Local.xml"/></textobject></programlisting>
+    	
+    </section>
 
 	
 	
@@ -976,12 +999,14 @@
 
 			<itemizedlist><info><title>Previously used classes</title></info>		
 			
-			<listitem><para><literal> org.objectweb.proactive.api.PADeployment</literal> - used to create a object version of the deployment descriptor</para> </listitem>
+			<listitem><para><literal> org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment</literal> - used to create a object version of the deployment descriptor</para> </listitem>
 			<listitem> <para><literal>org.objectweb.proactive.core.ProActiveException</literal> - used to handle ProActive exceptions</para> </listitem>
-			<listitem><para><literal> org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor</literal> - used to create a object version of the deployment descriptor</para> </listitem>
-			<listitem><para><literal> org.objectweb.proactive.core.descriptor.data.VirtualNode</literal> - used to instantiate and control Node objects</para></listitem>
+				<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMApplication</literal></para> </listitem>
+				<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMVirtualNode</literal></para> </listitem>
 			<listitem><para><literal> org.objectweb.proactive.core.node.Node </literal> - used to instantiate and control Node objects</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.Body</literal> - used to access the body of the active object</para></listitem>
+				<listitem><para><literal>org.objectweb.proactive.PALifeCycle</literal> - controls the lifecycle of the ProActive application</para></listitem>
+
 				<listitem><para><literal>org.objectweb.proactive.Service</literal> - used to access the queue of the active object</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.InitActive</literal> - used for defining the <literal>initActivity(Body body)</literal> method, which is run at active object initialization</para></listitem>
 				<listitem><para><literal>org.objectweb.proactive.EndActive</literal> - used for defining the <literal>endActivity(Body body)</literal> method, which is run at active object destruction </para></listitem>
@@ -1243,7 +1268,7 @@
 				<listitem>
 					<para>
 						<literal>
-							org.objectweb.proactive.api.PADeployment
+							org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment
 						</literal>
 						- used for the deployement
 					</para>
@@ -1265,22 +1290,9 @@
 						- used to wrap the primitive boolean type
 					</para>
 				</listitem>
-				<listitem>
-					<para>
-						<literal>
-							org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor
-						</literal>
-						- used for handling the deployment descriptor
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						<literal>
-							org.objectweb.proactive.core.descriptor.data.VirtualNode
-						</literal>
-						- used to acquire resources and use them
-					</para>
-				</listitem>
+					<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMApplication</literal></para> </listitem>
+					<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMVirtualNode</literal></para> </listitem>
+					
 			</itemizedlist>
 			<itemizedlist><info><title>Other</title></info>
 				
@@ -1369,6 +1381,7 @@
 			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_worker_skeleton.txt"/></textobject></programlisting>
 			
 			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_main_skeleton.txt"/></textobject></programlisting>
+
 
 			<!-- FT-TEST -->
 			
@@ -1480,27 +1493,14 @@
 				<listitem>
 					<para>
 						<literal>
-							org.objectweb.proactive.api.PADeployment
+							org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment
 						</literal>
 						- used for the deployement
 					</para>
 				</listitem>
-				<listitem>
-					<para>
-						<literal>
-							org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor
-						</literal>
-						- used for handling the deployment descriptor
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						<literal>
-							org.objectweb.proactive.core.descriptor.data.VirtualNode
-						</literal>
-						- used to acquire resources and use them
-					</para>
-				</listitem>
+				<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMApplication</literal></para> </listitem>
+				<listitem><para><literal> org.objectweb.proactive.gcmdeployment.GCMVirtualNode</literal></para> </listitem>
+				
 				<listitem>
 					<para>
 						<literal>
@@ -1627,7 +1627,7 @@
 				to test:
 			</para>
 			<para>
-				<screen>java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:proactive-log4j PrimeExampleMW deployment.xml 2147483647</screen>
+				<screen>java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:proactive-log4j PrimeExampleMW GCMA.xml 2147483647</screen>
 			</para>
 		</section>
 		

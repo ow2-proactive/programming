@@ -4,20 +4,21 @@ import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 
 public class Main {
     //deployment method
-    private static VirtualNode deploy(String descriptor) {
-        //TODO 1. Create object representation of the deployment file
-        //TODO 2. Activate all Virtual Nodes
-        //TODO 3. Get the first Virtual Node specified in the descriptor file
-        //TODO 4. Return the virtual node
-        return null;
+    private static GCMVirtualNode deploy(String descriptor) throws NodeException, ProActiveException {
+       		//TODO 1. Create object representation of the deployment file
+            //TODO 2. Activate all Virtual Nodes
+            //TODO 3. Wait for all the virtual nodes to become ready
+            //TODO 4. Get the first Virtual Node specified in the descriptor file
+            //TODO 5. Return the virtual node
     }
 
     public static void main(String args[]) {
-        //TODO 5. Get the virtual node through the deploy method
-        //TODO 6. Create the active object using a node on the virtual node
-        //TODO 7. Get the current state from the active object
-        //TODO 8. Print the state
-        //TODO 9. Stop the active object
-        //TODO 10. Stop the virtual node
+        //TODO 6. Get the virtual node through the deploy method
+        //TODO 7. Create the active object using a node on the virtual node
+        //TODO 8. Get the current state from the active object
+        //TODO 9. Print the state
+        //TODO 10. Stop the active object
+        //TODO 11. Stop the virtual node
     }
+   
 }

@@ -89,19 +89,15 @@ public class CMAgentPrimeManager {
             int workerIndex = i % workers.size();
             CMAgentPrimeWorker worker = workers.get(workerIndex);
 
-            /*******************************************************/
-            /* 1. Send asynchronous method call to the worker */
-            /*******************************************************/
+            //TODO 1. Send asynchronous method call to the worker 
+
             // Send asynchronous method call to the worker
             BooleanWrapper res = worker.isPrime(number, begin, end);
-            /*******************************************************/
 
-            /*******************************************************/
-            /* 2. Add the future result to the vector of answers */
-            /*******************************************************/
+            //TODO 2. Add the future result to the vector of answers 
+
             // Adds the future to the vector
             answers.add(res);
-            /*******************************************************/
 
             // Update the begin and the end of the interval
             begin = end + 1;
@@ -113,13 +109,10 @@ public class CMAgentPrimeManager {
         // Loop until a worker returns false or vector is empty (all results have been checked)
         while (!answers.isEmpty() && prime) {
 
-            /***************************************************************************/
-            /* 3. Block until a new response is available */
-            /* by using a static method from org.objectweb.proactive.api.PAFuture */
-            /***************************************************************************/
+            // TODO 3. Block until a new response is available 
+            // by using a static method from org.objectweb.proactive.api.PAFuture 
             // Will block until a new response is available                             
             int intervalNumber = PAFuture.waitForAny(answers);
-            /***************************************************************************/
 
             // Check the answer
             prime = answers.get(intervalNumber).booleanValue();

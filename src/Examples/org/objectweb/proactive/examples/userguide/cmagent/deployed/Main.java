@@ -50,52 +50,52 @@ public class Main {
 
     //@snippet-start cma_deploy_method
     //deployment method
-    private static GCMVirtualNode deploy(String descriptor) {
-        try {
-            pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
-            //TODO 2. Activate all Virtual Nodes
-            pad.startDeployment();
-            pad.waitReady();
+    private static GCMVirtualNode deploy(String descriptor) throws NodeException, ProActiveException {
 
-            //TODO 3. Get the first Virtual Node specified in the descriptor file
-            GCMVirtualNode vn = pad.getVirtualNode("remoteNode");
+        //TODO 1. Create object representation of the deployment file
+        pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
+        //TODO 2. Activate all Virtual Nodes
+        pad.startDeployment();
+        //TODO 3. Wait for all the virtual nodes to become ready
+        pad.waitReady();
 
-            //TODO 4. Return the virtual node
-            return vn;
-        } catch (NodeException nodeExcep) {
-            System.err.println(nodeExcep.getMessage());
-        } catch (ProActiveException proExcep) {
-            System.err.println(proExcep.getMessage());
-        }
-        return null;
+        //TODO 4. Get the first Virtual Node specified in the descriptor file
+        GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
+
+        //TODO 5. Return the virtual node
+        return vn;
     }
 
     //@snippet-end cma_deploy_method
     public static void main(String args[]) {
         try {
-            //TODO 5. Get the virtual node through the deploy method
+            //TODO 6. Get the virtual node through the deploy method
             GCMVirtualNode vn = deploy(args[0]);
             //@snippet-start cma_deploy_object
-            //TODO 6. Create the active object using a node on the virtual node
+            //TODO 7. Create the active object using a node on the virtual node
             CMAgentInitialized ao = (CMAgentInitialized) PAActiveObject.newActive(CMAgentInitialized.class
                     .getName(), new Object[] {}, vn.getANode());
             //@snippet-end cma_deploy_object
-            //TODO 7. Get the current state from the active object
+            //TODO 8. Get the current state from the active object
             String currentState = ao.getCurrentState().toString();
 
-            //TODO 8. Print the state
+            //TODO 9. Print the state
             System.out.println(currentState);
 
-            //TODO 9. Stop the active object
+            //TODO 10. Stop the active object
             PAActiveObject.terminateActiveObject(ao, false);
 
-            //TODO 10. Stop the virtual node
-            pad.kill();
-            PALifeCycle.exitSuccess();
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
         } catch (ActiveObjectCreationException aoExcep) {
             System.err.println(aoExcep.getMessage());
+        } catch (ProActiveException poExcep) {
+            System.err.println(poExcep.getMessage());
+        } finally {
+            //TODO 11. Stop the virtual node
+            if (pad != null)
+                pad.kill();
+            PALifeCycle.exitSuccess();
         }
     }
 }

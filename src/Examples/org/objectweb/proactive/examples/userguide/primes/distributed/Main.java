@@ -102,8 +102,8 @@ public class Main {
             CMAgentPrimeManager manager = (CMAgentPrimeManager) PAActiveObject.newActive(
                     CMAgentPrimeManager.class.getName(), new Object[] {}, vNode.getANode());
 
-            // iterate through all nodes and deploy
-            // a worker per node
+            //TODO 5:  iterate through all nodes, deploy
+            // a worker per node and add it to the manager
 
             Iterator<Node> nodesIt = vNode.getCurrentNodes().iterator();
             while (nodesIt.hasNext()) {

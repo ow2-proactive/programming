@@ -98,7 +98,7 @@
   &hands_on_programming_CMA;
   <!--  
    &hands_on_programming_PRIMES; --> 
-  &HighLevelAPITutorial;
+  <!--&HighLevelAPITutorial; -->
   &ComponentsTutorial;
   <!-- TODO to be removed, have been included in capabilities-intro --> 
   <!--    &StepByStepPi;
