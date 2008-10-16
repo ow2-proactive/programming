@@ -105,14 +105,14 @@ public class CMAgentPrimeManager {
         }
         // Once all requests was sent
         boolean prime = true;
-
+        int intervalNumber = 0;
         // Loop until a worker returns false or vector is empty (all results have been checked)
         while (!answers.isEmpty() && prime) {
 
             // TODO 3. Block until a new response is available 
             // by using a static method from org.objectweb.proactive.api.PAFuture 
             // Will block until a new response is available                             
-            int intervalNumber = PAFuture.waitForAny(answers);
+            intervalNumber = PAFuture.waitForAny(answers);
 
             // Check the answer
             prime = answers.get(intervalNumber).booleanValue();
