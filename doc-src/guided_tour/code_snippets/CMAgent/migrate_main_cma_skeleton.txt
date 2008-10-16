@@ -40,7 +40,7 @@ public class Main {
 
             //create the active object
             CMAgentMigrator ao = (CMAgentMigrator) PAActiveObject.newActive(CMAgentMigrator.class.getName(),
-                    new Object[] {}, vn.getNode());
+                    new Object[] {}, vn.getANode());
   
             int k = 1;
             int choice;
@@ -48,7 +48,7 @@ public class Main {
 
                 //display the menu with the available nodes 
                 k = 1;
-                for (Node node : vn.getNodes()) {
+                for (Node node : vn.getCurrentNodes()) {
                 	//TODO 2. Add the node URL to the menu 
                     System.out.println(k + ".  Statistics for node :" );
                     k++;

@@ -70,6 +70,7 @@ public class CMAgentPrimeManager {
         boolean prime = true;
 
         // Loop until a worker returns false or vector is empty (all results have been checked)
+        int intervalNumber = 0;
         while (!answers.isEmpty() && prime) {
 
 

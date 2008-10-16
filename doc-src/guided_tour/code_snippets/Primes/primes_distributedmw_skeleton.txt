@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.net.URL;
 
+import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
+
 
 /**
  * 
