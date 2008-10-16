@@ -414,12 +414,12 @@
     descriptors allow to abstract away from source code: machines, creation,
     lookup and registry protocols.</para>
 
-    <para><emphasis role="bold">Example of a deployment descriptor that provides the localhost as resource with a capacity of <code>hostCapacity</code> jvms, each jvm hosting <code> vmCapacity</code>  nodes. </emphasis></para>
+    <para>Example of a deployment descriptor that provides the localhost as resource with a capacity of <code>hostCapacity</code> jvms, each jvm hosting <code> vmCapacity</code>  nodes.</para>
 
     <programlisting xml:lang="XML"><textobject><textdata fileref="../examples/GCMD_Local.xml"/></textobject></programlisting>
     
     <para>An example of application deployment: </para>
- 		<programlisting xml:lang="XML"><textobject><textdata fileref="../examples/GCMA.xml"/></textobject></programlisting>
+ 		<programlisting xml:lang="XML"><textobject><textdata fileref="../examples/agent/GCMA.xml"/></textobject></programlisting>
 
 
 
