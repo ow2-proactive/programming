@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GCMDeployment xmlns="urn:gcm:deployment:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:gcm:deployment:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd">
+
+	<environment>
+		<javaPropertyVariable name="user.dir" />
+		<javaPropertyDescriptorDefault name="os" value="windows" />
+		<!-- LOCAL PATHS -->
+		<descriptorVariable name="PROACTIVE_HOME" value="/user/vjuresch/home/workspace/ProActive" />
+		<descriptorVariable name="JAVA_HOME" value="/user/vjuresch/home/work/jdk1.6.0_02" />
+		<!-- REMOTE PATHS -->
+		<descriptorVariable name="REMOTE_PROACTIVE_HOME" value="/user/vjuresch/home/workspace/ProActive" />
+		<descriptorVariable name="REMOTE_JAVA_HOME" value="/user/vjuresch/home/work/jdk1.6.0_02" />
+	</environment>
+
+	<resources>
+		<bridge refid="rsh_cheypa">
+			<host refid="cheypa" />
+		</bridge>
+	</resources>
+
+	<infrastructure>
+
+		<hosts>
+			<host id="cheypa" os="unix" hostCapacity="2" vmCapacity="1">
+				<homeDirectory base="root" relpath="/user/${USERNAME}/home" />
+				<tool id="java" path="/usr/java/j2sdk/bin/java" />
+			</host>
+		</hosts>
+
+		<bridges>
+			<rshBridge id="rsh_chepypa" hostname="cheypa.inria.fr" />
+		</bridges>
+
+	</infrastructure>
+
+</GCMDeployment>
+

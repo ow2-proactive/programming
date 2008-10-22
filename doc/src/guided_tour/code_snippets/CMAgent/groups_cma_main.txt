@@ -1,0 +1,133 @@
+package org.objectweb.proactive.examples.userguide.cmagent.groups;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Vector;
+
+import org.objectweb.proactive.ActiveObjectCreationException;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PAGroup;
+import org.objectweb.proactive.api.PALifeCycle;
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.group.Group;
+import org.objectweb.proactive.core.mop.ClassNotReifiableException;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.examples.userguide.cmagent.migration.CMAgentMigrator;
+import org.objectweb.proactive.examples.userguide.cmagent.simple.State;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+
+
+public class Main {
+    private static GCMApplication pad;
+
+    private static GCMVirtualNode deploy(String descriptor) throws NodeException, ProActiveException {
+        
+        //Create object representation of the deployment file
+        pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
+        //Activate all Virtual Nodes
+        pad.startDeployment();
+        //Wait for all the virtual nodes to become ready
+        pad.waitReady();
+
+        //Get the first Virtual Node specified in the descriptor file
+        GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
+
+        return vn;
+}
+
+    
+    public static void main(String args[]) {
+        try {
+            Vector<CMAgentMigrator> agents = new Vector<CMAgentMigrator>();
+            BufferedReader inputBuffer = new BufferedReader(new InputStreamReader(System.in));
+            GCMVirtualNode vn = deploy(args[0]);
+            
+            //TODO 1. Create a new empty group
+            CMAgentMigrator monitorsGroup = null;
+
+            //TODO 2. Create a collection of active objects with on object on each node
+            for (Node node : vn.getCurrentNodes()) {
+                CMAgentMigrator ao = null;
+                agents.add(ao);
+            }
+
+            //TODO 3. Get a management representation of the monitors group
+            Group<CMAgentMigrator> gA = null;
+            
+            //ask for adding or removing nodes
+            //get statistics
+            int k = 1;
+            int choice;
+            while (k != 0) {
+                //display the menu 
+                k = 1;
+                System.out.println("Toggle monitored nodes (*) or display statistics: ");
+                for (CMAgentMigrator agent : agents) {
+                    if (gA.contains(agent))
+
+                        //TODO 5. Print the node URL
+                        System.out.println(" " + k + ".* " + " TODO: write node url here");
+                    else
+                        System.out.println(" " + k + ".  " + "TODO: write node url here");
+                    k++;
+                }
+                System.out.println("-1.  Display statistics for monitored nodes");
+                System.out.println(" 0.  Exit");
+
+                //select a node
+                do {
+                    System.out.print("Choose a node to add or remove  :> ");
+                    try {
+                        // Read am option from keyboard
+                        choice = Integer.parseInt(inputBuffer.readLine().trim());
+                    } catch (NumberFormatException noExcep) {
+                        choice = -1;
+                    }
+                } while (!(choice >= 1 && choice < k || choice == 0 || choice == -1));
+                if (choice == 0)
+                    break;
+                if (choice == -1) {
+
+                    State resultsGroup = monitorsGroup.getCurrentState();
+                    while (PAGroup.size(resultsGroup) > 0) {
+                        
+                        //TODO 6. Use PAGroup.waitAndGetOneThenRemoveIt() to control the list of State futures
+                        State statistic = null;
+                        
+                        System.out.println(statistic.toString());
+                    }
+                } else {
+                    if (gA.contains(agents.elementAt(choice - 1)))
+                        gA.remove(agents.elementAt(choice - 1));
+                    else
+                        gA.add(agents.elementAt(choice - 1));
+                }
+            }
+
+        } catch (NodeException nodeExcep) {
+            System.err.println(nodeExcep.getMessage());
+        } catch (ActiveObjectCreationException aoExcep) {
+            System.err.println(aoExcep.getMessage());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } catch (ClassNotReifiableException e) {
+            System.err.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println(e.getMessage());
+        } catch (ProActiveException e) {
+			// TODO Auto-generated catch block
+            System.err.println(e.getMessage());
+        }
+        finally{
+            //stopping all the objects and JVMS
+        	if (pad!=null) pad.kill();
+            PALifeCycle.exitSuccess();
+        }
+    }
+    
+}

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="high_level_api_tutorial"><info><title> High-Level API Tutorials</title></info>
+	
+  	<section xml:id="MWDP"><info><title>Master-Worker DistributedPrimes Application</title></info>
+		
+	<para>
+		In the previous Distributed Primes example, we have used 
+		a basic master-worker architecture in order to distribute the
+		computation. However, the algorithm used is very inefficient as
+		the master has to wait for all the workers to finish the computation
+		before sending a new number to be computed. In this chapter we will rewrite the 
+		algorithm to take advantage of the Master-Worker API already included
+		in ProActive. 
+		</para>
+		<para>
+		The Master-Worker API aims to simplify the distribution of computations 
+		which are embarrassingly parallel. The Master-Worker API hides the active object details from
+		the user allowing the distribution of computation without explicitly specifying 
+		the creation and deployment of active objects.  
+		
+	</para>
+	<para>
+		We will rewrite the Primes example to take advantage of the Master-Worker 
+		API. Each Worker will check if a number is prime by using the simple Euclid's 
+		sieve algorithm. We are not aiming for a efficient algorithm, as there are much
+		faster and more complex methods of checking for primes, but for an illustration
+		of how the Master-Worker API works.   
+	</para>
+
+      <para> The Master-Worker API uses a logical partition of computations and resources: </para>
+      <itemizedlist>
+      	<listitem> <para><emphasis> task </emphasis> - a task is logical partition of the 
+	      	computation. The computation will be split into several tasks that will
+	      	be assigned to workers. </para></listitem>
+      	<listitem> <para> <emphasis>worker</emphasis> - a worker is logical partition of the 
+	      	resources available. The workers retrieve tasks, compute them and send
+	      	the results back to the master.</para>
+      	</listitem>
+      </itemizedlist>
+      	<figure><info><title> Architecture of Distributed Primes  Using Master-Worker API </title></info> 
+		  <mediaobject>
+          <imageobject>
+
+            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/masterworker/DistributedPrimesMWdia.jpg" format="JPG"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+     <section><info><title>Application components</title></info>
+     	  
+      	<para>
+      		The general simple algorithm for using the Master-Worker API is the following:
+      	</para>
+      		<orderedlist>
+	      		<listitem><para>Define the resources</para></listitem>
+      			<listitem><para>Define the master</para></listitem>
+      			<listitem><para>Define the tasks</para></listitem>
+      			<listitem><para>Tell the master to solve the tasks</para></listitem>
+      			<listitem><para>Retrieve the results from the workers</para></listitem>
+      		</orderedlist>
+      <para>
+      	While this is the basic structure possible with the Master-Worker API, 
+     	more complex algorithms are of course possible. 
+      </para>
+    <para>
+		We follow this algorithm in our simple example.
+	</para>	
+	<para>
+		First we define the resources to be used by specifying a deployment  descriptor:
+	</para>
+	
+     	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/mw_primes_resources.snip"/></textobject></programlisting>
+	
+	
+	<para>To learn how deployment descriptors work read <xref linkend="deployment_guide_CMA"/>
+	and <xref linkend="XML_Descriptors"/>. </para>
+	
+	<para>After specifying the resources we need to create a master to coordinate the
+	computation: </para>
+	
+     	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/mw_primes_master_creation.snip"/></textobject></programlisting>
+	
+	<para>The master has as a type <literal>ComputePrime</literal> which is a
+	inner class that extends the <literal>Task</literal> interface. To create
+	the master we need to specify a task the master will control and the return
+	type of the method <literal>run()</literal> in the task (in our case <literal>
+	Long</literal>).</para>
+	
+	<para>
+		We define a task by implementing the interface
+		<literal> Task</literal> and overriding the method
+		<literal>run(WorkerMemory memory)</literal>. The
+		method <literal>run(WorkerMemory memory)</literal>
+		is designed to hold the computation part of the task.
+		In our case it returns a type <literal>Long</literal>
+		after checking if the number passed to the constructor 
+		is prime.
+		
+	</para>
+
+     	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_task.snip"/></textobject></programlisting>
+
+	<para>
+		Because we do not know ahead of time how many primes numbers 
+		we have in an interval we set a number of tasks <literal>
+		NUMBER_OF_TASKS</literal> that reprezents the number of
+		numbers to be checked in one run. Then we assign the tasks to the
+		workers, calculate how many primes numbers we found and 
+		display them. We repeat the same process until the desired
+		number of prime numbers has been found.  
+	</para>
+	
+	<para>Following is the code for the entire application. As
+	you may notice it is much shorter than the previous example
+	and it does not use any explicit active object instantiation.
+	Instead we just specify a deployment descriptor and ProActive
+	takes care of the rest.  </para>
+
+     	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_example.snip"/></textobject></programlisting>
+	
+	</section>
+	<section><info><title>Running master-worker Distributed Primes</title></info>
+	
+		
+	    <para> To compile and run the application you need the 
+		<literal> DistributedPrimesMW </literal>class and to
+		include the following jar files: 
+		  	<literal>ProActive/dist/lib/ProActive.jar</literal>,
+          	<literal>ProActive/dist/lib/javassist.jar</literal>,
+          		<literal>ProActive/dist/lib/log4j.jar</literal>, 
+          		<literal>ProActive/dist/lib/xercesImpl.jar</literal>, 
+          		<literal>ProActive/dist/lib/fractal.jar</literal>,  
+          		and <literal>ProActive/dist/lib/bouncycastle.jar</literal>
+           and explicitly set the Java security policy with the  <literal>-Djava.security.policy=pathToFile</literal>
+           and the logging policy with  <literal>-Dlog4j.configuration=file:proactive-log4j</literal>.
+            The steps necessary are explained in <xref linkend="Installation"/>.
+            </para>
+ 		<para>	The command line for running the application is: </para> 
+	<para>
+			<screen>
+java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:proactive-log4j DistributedPrimesMW</screen>
+ 	</para>
+	</section>
+	 </section>
+</chapter>

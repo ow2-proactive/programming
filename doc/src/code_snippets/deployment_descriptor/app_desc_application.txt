@@ -1,0 +1,12 @@
+	<application>
+		<proactive base="root" relpath="${proactive.home}">
+			<configuration>
+				<applicationClasspath>
+					<pathElement base="proactive" relpath="dist/lib/ProActive_examples.jar"/>
+				</applicationClasspath>
+			</configuration>
+			<virtualNode id="Hello" capacity="1">
+				<nodeProvider refid="provider" />
+			</virtualNode>
+		</proactive>
+	</application>
