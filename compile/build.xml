@@ -18,7 +18,7 @@
    
 	<property file="${user.home}/.proactive/build.properties" />
 	<import file="common.xml" />
-	<import file="doc.xml" />
+	<import file="../doc/toolchain/doc.xml" />
 
 	<!-- ************
 		Taskdefs		
@@ -738,7 +738,7 @@
 		<delete dir="${classes.dir}" />
 		<delete dir="${release.dir}" />
 		<delete dir="${deploy.dir}" />
-		<delete dir="${docs.dir}" />
+		<delete dir="${docs.built.dir}" />
 		<delete dir="${classlibs.dir}" />
 		<delete dir="${test.classes.dir}" />
 		<delete file="tests.log" />
