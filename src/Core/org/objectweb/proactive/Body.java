@@ -74,6 +74,7 @@ import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
  * @since ProActive 0.9
  */
 @PublicAPI
+//@snippet-start body
 public interface Body extends LocalBodyStrategy, UniversalBody {
 
     /**
@@ -284,3 +285,4 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
 
     public void registerIncomingFutures();
 }
+//@snippet-end body

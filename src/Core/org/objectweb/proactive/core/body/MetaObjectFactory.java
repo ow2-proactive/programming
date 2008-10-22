@@ -55,6 +55,7 @@ import org.objectweb.proactive.core.util.ThreadStoreFactory;
  * @version 1.0,  2002/05
  * @since   ProActive 0.9.2
  */
+//@snippet-start metaobjectfactory
 public interface MetaObjectFactory {
 
     /**
@@ -165,3 +166,4 @@ public interface MetaObjectFactory {
      */
     public Object getTimItReductor();
 }
+//@snippet-end metaobjectfactory

@@ -62,6 +62,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @see org.objectweb.proactive.Body
  * @see org.objectweb.proactive.core.body.rmi.RmiBodyAdapter
  */
+//@snippet-start universalbody
 public interface UniversalBody extends Job, Serializable, SecurityEntity {
     public static Logger bodyLogger = ProActiveLogger.getLogger(Loggers.BODY);
     public static Logger sendReplyExceptionsLogger = ProActiveLogger.getLogger(Loggers.EXCEPTIONS_SEND_REPLY);
@@ -178,3 +179,4 @@ public interface UniversalBody extends Job, Serializable, SecurityEntity {
      */
     public void register(String url) throws IOException, UnknownProtocolException;
 }
+//@snippet-end universalbody

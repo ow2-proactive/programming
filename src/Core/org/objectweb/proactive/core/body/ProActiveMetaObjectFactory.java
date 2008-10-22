@@ -109,6 +109,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @version 1.0,  2002/05
  * @since   ProActive 0.9.2
  */
+//@snippet-start proactivemetaobjectfactory
 public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Serializable, Cloneable {
     public static final String COMPONENT_PARAMETERS_KEY = "component-parameters";
     public static final String SYNCHRONOUS_COMPOSITE_COMPONENT_KEY = "synchronous-composite";
@@ -480,3 +481,4 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         return this.timItReductor;
     }
 }
+//@snippet-end proactivemetaobjectfactory

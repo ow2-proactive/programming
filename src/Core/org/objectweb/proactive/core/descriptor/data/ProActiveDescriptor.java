@@ -52,6 +52,7 @@ import org.objectweb.proactive.core.xml.VariableContract;
  * @see VirtualNodeInternal
  */
 @PublicAPI
+//@snippet-start proactivedescriptor
 public interface ProActiveDescriptor extends Serializable {
 
     /**
@@ -119,3 +120,4 @@ public interface ProActiveDescriptor extends Serializable {
      */
     public VariableContract getVariableContract();
 }
+//@snippet-end proactivedescriptor

@@ -45,6 +45,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * @author The ProActive Team
  */
 @PublicAPI
+//@snippet-start prioritycontroller
 public interface PriorityController {
 
     /**
@@ -115,3 +116,4 @@ public interface PriorityController {
      */
     public RequestPriority getPriority(String interfaceName, String methodName, Class<?>[] parametersTypes);
 }
+//@snippet-end prioritycontroller

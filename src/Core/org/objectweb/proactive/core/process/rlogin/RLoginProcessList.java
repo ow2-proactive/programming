@@ -42,6 +42,7 @@ import org.objectweb.proactive.core.process.ExternalProcessDecorator;
  * @since ProActive 2.2
  *
  */
+//@snippet-start rloginprocesslist
 public class RLoginProcessList extends AbstractListProcessDecorator {
 
     /**
@@ -59,3 +60,4 @@ public class RLoginProcessList extends AbstractListProcessDecorator {
         return new RLoginProcess();
     }
 }
+//@snippet-end rloginprocesslist

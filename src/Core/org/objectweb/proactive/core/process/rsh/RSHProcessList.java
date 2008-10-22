@@ -42,6 +42,7 @@ import org.objectweb.proactive.core.process.ExternalProcessDecorator;
  * @since ProActive 2.2
  *
  */
+//@snippet-start rshprocesslist
 public class RSHProcessList extends AbstractListProcessDecorator {
 
     /**
@@ -59,3 +60,4 @@ public class RSHProcessList extends AbstractListProcessDecorator {
         return new RSHProcess();
     }
 }
+//@snippet-end rshprocesslist

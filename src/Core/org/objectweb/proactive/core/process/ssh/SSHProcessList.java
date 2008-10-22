@@ -42,6 +42,7 @@ import org.objectweb.proactive.core.process.ExternalProcessDecorator;
  * @since ProActive 2.2
  *
  */
+//@snippet-start sshprocesslist
 public class SSHProcessList extends AbstractListProcessDecorator {
 
     /**
@@ -59,3 +60,4 @@ public class SSHProcessList extends AbstractListProcessDecorator {
         return new SSHProcess();
     }
 }
+//@snippet-end sshprocesslist
