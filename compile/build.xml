@@ -667,7 +667,6 @@
 			<sourcefileset>
 				<fileset dir="${src.dir}" includes="**/*.java" />
 				<fileset dir="${ic2d-plugin.dir}" includes="**/*.java" />
-				<fileset dir="${extra.format.dir}" includes="**/*.java" />
 			</sourcefileset>
 		</eclipse_format_m>
 	</target>
