@@ -52,6 +52,18 @@ public class BridgeSSH extends AbstractBridge {
             command.append(getUsername());
         }
 
+        if (privateKey != null) {
+            command.append(" -i ");
+            command.append(privateKey.getFullPath(getHostInfo(), commandBuilder));
+            command.append(" ");
+        }
+
+        if (commandOptions != null) {
+            command.append(" ");
+            command.append(commandOptions);
+            command.append(" ");
+        }
+
         // append host
         command.append(" ");
         command.append(getHostname());
