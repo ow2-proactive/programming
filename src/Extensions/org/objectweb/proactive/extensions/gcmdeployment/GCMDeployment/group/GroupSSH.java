@@ -99,6 +99,12 @@ public class GroupSSH extends AbstractGroup {
             res.append(" ");
         }
 
+        if (privateKey != null) {
+            res.append(" -i ");
+            res.append(privateKey.getFullPath(getHostInfo(), commandBuilder));
+            res.append(" ");
+        }
+
         if (commandOptions != null) {
             res.append(" ");
             res.append(commandOptions);
