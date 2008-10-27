@@ -31,6 +31,9 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
+
+
 public class BridgeOARSH extends BridgeSSH {
     /**
      * 
@@ -39,7 +42,7 @@ public class BridgeOARSH extends BridgeSSH {
     private String jobId;
 
     @Override
-    public String internalBuildCommand() {
+    public String internalBuildCommand(CommandBuilder commandBuilder) {
         // TODO Implements internalBuildCommand for OARSH
         return null;
     }

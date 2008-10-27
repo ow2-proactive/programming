@@ -31,6 +31,9 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
+
+
 public class BridgeRSH extends AbstractBridge {
     /**
      * 
@@ -43,7 +46,7 @@ public class BridgeRSH extends AbstractBridge {
     }
 
     @Override
-    public String internalBuildCommand() {
+    public String internalBuildCommand(CommandBuilder commandBuilder) {
         StringBuilder command = new StringBuilder();
         command.append(getCommandPath());
         // append username

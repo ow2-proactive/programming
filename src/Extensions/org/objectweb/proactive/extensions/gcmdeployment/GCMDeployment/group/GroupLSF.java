@@ -151,7 +151,7 @@ public class GroupLSF extends AbstractGroup {
     }
 
     @Override
-    public List<String> internalBuildCommands() {
+    public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
         // TODO Auto-generated method stub
         return null;
     }

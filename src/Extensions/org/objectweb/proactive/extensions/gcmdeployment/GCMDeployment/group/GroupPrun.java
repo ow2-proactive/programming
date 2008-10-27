@@ -106,7 +106,7 @@ public class GroupPrun extends AbstractGroup {
     }
 
     @Override
-    public List<String> internalBuildCommands() {
+    public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
         return null;
     }
 

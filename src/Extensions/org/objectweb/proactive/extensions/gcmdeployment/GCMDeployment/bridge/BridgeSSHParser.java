@@ -32,28 +32,53 @@
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge;
 
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.w3c.dom.Node;
 
 
 public class BridgeSSHParser extends AbstractBridgeParser {
+    private static final String ATTR_COMMAND_OPTIONS = "commandOptions";
     private static final String ATTR_USERNAME = "username";
     private static final String ATTR_HOSTNAME = "hostname";
     static final String NODE_NAME = "sshBridge";
 
     @Override
     public AbstractBridge parseBridgeNode(Node bridgeNode, XPath xpath) {
-        BridgeSSH bridge = (BridgeSSH) super.parseBridgeNode(bridgeNode, xpath);
+        BridgeSSH bridgeSSH = (BridgeSSH) super.parseBridgeNode(bridgeNode, xpath);
 
         String hostname = GCMParserHelper.getAttributeValue(bridgeNode, ATTR_HOSTNAME);
         String username = GCMParserHelper.getAttributeValue(bridgeNode, ATTR_USERNAME);
+        String commandOptions = GCMParserHelper.getAttributeValue(bridgeNode, ATTR_COMMAND_OPTIONS);
 
-        BridgeSSH bridgeSSH = (bridge);
-        bridgeSSH.setHostname(hostname);
-        bridgeSSH.setUsername(username);
+        try {
+            Node privateKeyNode = (Node) xpath.evaluate("dep:privateKey", bridgeNode, XPathConstants.NODE);
+            if (privateKeyNode != null) {
+                PathElement privateKey = GCMParserHelper.parsePathElementNode(privateKeyNode);
+                bridgeSSH.setPrivateKey(privateKey);
+            }
 
-        return bridge;
+        } catch (XPathExpressionException e) {
+            GCMDeploymentLoggers.GCMD_LOGGER.error(e.getMessage(), e);
+        }
+
+        if (hostname != null) {
+            bridgeSSH.setHostname(hostname);
+        }
+
+        if (username != null) {
+            bridgeSSH.setUsername(username);
+        }
+
+        if (commandOptions != null) {
+            bridgeSSH.setCommandOptions(commandOptions);
+        }
+
+        return bridgeSSH;
     }
 
     @Override

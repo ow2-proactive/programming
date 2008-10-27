@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.objectweb.proactive.extensions.gcmdeployment.ListGenerator;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 
 
 public class GroupRSH extends AbstractGroup {
@@ -57,7 +58,7 @@ public class GroupRSH extends AbstractGroup {
     }
 
     @Override
-    public List<String> internalBuildCommands() {
+    public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
         List<String> commands = new ArrayList<String>();
 
         for (String hostname : ListGenerator.generateNames(hostList)) {

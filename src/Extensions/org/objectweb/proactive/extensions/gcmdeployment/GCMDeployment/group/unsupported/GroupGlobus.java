@@ -33,6 +33,7 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.uns
 
 import java.util.List;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 
 
@@ -51,7 +52,7 @@ public class GroupGlobus extends AbstractGroup {
     private String hostname;
 
     @Override
-    public List<String> internalBuildCommands() {
+    public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.objectweb.proactive.extensions.gcmdeployment.ListGenerator;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 
 
 public class GroupSSH extends AbstractGroup {
@@ -46,6 +48,23 @@ public class GroupSSH extends AbstractGroup {
     private String hostList;
     private String username;
     private String commandOptions;
+    private PathElement privateKey;
+
+    public GroupSSH() {
+        setCommandPath(DEFAULT_SSHPATH);
+        hostList = "";
+        username = null;
+        commandOptions = null;
+        privateKey = null;
+    }
+
+    public GroupSSH(GroupSSH groupSSH) {
+        super(groupSSH);
+        this.hostList = groupSSH.hostList;
+        this.username = groupSSH.username;
+        this.commandOptions = groupSSH.commandOptions;
+        this.privateKey = groupSSH.privateKey;
+    }
 
     public String getCommandOption() {
         return commandOptions;
@@ -55,27 +74,16 @@ public class GroupSSH extends AbstractGroup {
         this.commandOptions = commandOption;
     }
 
-    public GroupSSH() {
-        setCommandPath(DEFAULT_SSHPATH);
-        hostList = "";
-    }
-
-    public GroupSSH(GroupSSH groupSSH) {
-        super(groupSSH);
-        this.hostList = groupSSH.hostList;
-        this.username = groupSSH.username;
-    }
-
     public void setHostList(String hostList) {
         this.hostList = hostList;
     }
 
     @Override
-    public List<String> internalBuildCommands() {
+    public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
         List<String> commands = new ArrayList<String>();
 
         for (String hostname : ListGenerator.generateNames(hostList)) {
-            String command = makeSingleCommand(hostname);
+            String command = makeSingleCommand(hostname, commandBuilder);
             commands.add(command);
         }
 
@@ -88,9 +96,10 @@ public class GroupSSH extends AbstractGroup {
      * ssh -l username hostname.domain
      *
      * @param hostname
+     * @param commandBuilder
      * @return
      */
-    private String makeSingleCommand(String hostname) {
+    private String makeSingleCommand(String hostname, CommandBuilder commandBuilder) {
         StringBuilder res = new StringBuilder(getCommandPath());
         res.append(" ");
 
@@ -123,5 +132,9 @@ public class GroupSSH extends AbstractGroup {
 
     public String getUsername() {
         return username;
+    }
+
+    public void setPrivateKey(PathElement privateKey) {
+        this.privateKey = privateKey;
     }
 }

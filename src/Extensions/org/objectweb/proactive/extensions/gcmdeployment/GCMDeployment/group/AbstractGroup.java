@@ -130,7 +130,7 @@ public abstract class AbstractGroup implements Group {
     }
 
     public List<String> buildCommands(CommandBuilder commandBuilder, GCMApplicationInternal gcma) {
-        List<String> commands = internalBuildCommands();
+        List<String> commands = internalBuildCommands(commandBuilder);
         List<String> ret = new ArrayList<String>();
         for (String comnand : commands) {
             ret.add(comnand + " " + Helpers.escapeCommand(commandBuilder.buildCommand(hostInfo, gcma)));
@@ -139,7 +139,7 @@ public abstract class AbstractGroup implements Group {
         return ret;
     }
 
-    abstract public List<String> internalBuildCommands();
+    abstract public List<String> internalBuildCommands(CommandBuilder commandBuilder);
 
     public void setUsername(String username) {
         this.username = username;

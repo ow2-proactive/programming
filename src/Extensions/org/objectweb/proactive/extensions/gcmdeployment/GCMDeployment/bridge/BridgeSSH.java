@@ -31,19 +31,27 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge;
 
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
+
+
 public class BridgeSSH extends AbstractBridge {
     /**
      * 
      */
     private static final long serialVersionUID = 40L;
     public final static String DEFAULT_SSHPATH = "ssh";
+    private PathElement privateKey;
+    private String commandOptions;
 
     public BridgeSSH() {
         setCommandPath(DEFAULT_SSHPATH);
+        privateKey = null;
+        commandOptions = null;
     }
 
     @Override
-    public String internalBuildCommand() {
+    public String internalBuildCommand(CommandBuilder commandBuilder) {
         StringBuilder command = new StringBuilder();
         command.append(getCommandPath());
         // append username
@@ -64,11 +72,29 @@ public class BridgeSSH extends AbstractBridge {
             command.append(" ");
         }
 
+        if (commandOptions != null) {
+            command.append(" ");
+            command.append(commandOptions);
+            command.append(" ");
+        }
+
         // append host
         command.append(" ");
         command.append(getHostname());
         command.append(" ");
 
         return command.toString();
+    }
+
+    public void setPrivateKey(PathElement privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public String getCommandOptions() {
+        return commandOptions;
+    }
+
+    public void setCommandOptions(String commandOptions) {
+        this.commandOptions = commandOptions;
     }
 }

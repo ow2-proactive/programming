@@ -101,7 +101,7 @@ public class GroupGLite extends AbstractGroup {
         this.gcmaCommand = Helpers.escapeCommand(commandBuilder.buildCommand(hostInfo, gcma)).replaceFirst(
                 "java .* org.objectweb.proactive.extensions.gcmdeployment.core.StartRuntime",
                 "org.objectweb.proactive.extensions.gcmdeployment.core.StartRuntime");
-        List<String> commands = internalBuildCommands();
+        List<String> commands = internalBuildCommands(null);
 
         for (String comnand : commands) {
             ret.add(comnand + ""); //+ Helpers.escapeCommand(commandBuilder.buildCommand(hostInfo, gcma)));
@@ -111,7 +111,7 @@ public class GroupGLite extends AbstractGroup {
     }
 
     @Override
-    public List<String> internalBuildCommands() {
+    public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
         List<String> commands = new ArrayList<String>();
         JobAd jad = createBasicJobAd();
         int jobNumber;

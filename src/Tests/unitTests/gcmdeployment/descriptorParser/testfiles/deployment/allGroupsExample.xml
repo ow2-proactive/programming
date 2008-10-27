@@ -31,6 +31,7 @@
 
 			<sshGroup id="LAN_INRIA" hostList="node2 node4 host[10-20]" username="${USERNAME}"
 				commandPath="/usr/local/bin/ssh">
+				<privateKey base="proactive" relpath="id_rsa" />
 			</sshGroup>
 
 			<pbsGroup id="pbsgroup1" queue="queue01@pbsserver" jobName="demoJob"

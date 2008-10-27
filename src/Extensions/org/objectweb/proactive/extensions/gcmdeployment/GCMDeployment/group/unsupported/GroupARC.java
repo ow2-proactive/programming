@@ -33,6 +33,7 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.uns
 
 import java.util.List;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported.GroupARCParser.FileTransfer;
 
@@ -54,7 +55,7 @@ public class GroupARC extends AbstractGroup {
     private List<FileTransfer> outputFiles;
 
     @Override
-    public List<String> internalBuildCommands() {
+    public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
         // TODO Auto-generated method stub
         return null;
     }

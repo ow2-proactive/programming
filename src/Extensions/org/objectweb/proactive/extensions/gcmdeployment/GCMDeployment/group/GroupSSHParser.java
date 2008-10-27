@@ -32,8 +32,12 @@
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
 
 import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.w3c.dom.Node;
 
 
@@ -53,6 +57,17 @@ public class GroupSSHParser extends AbstractGroupParser {
         String commandOptions = GCMParserHelper.getAttributeValue(groupNode, ATTR_COMMAND_OPTIONS);
         if (commandOptions != null) {
             groupSSH.setCommandOption(commandOptions);
+        }
+
+        try {
+            Node privateKeyNode = (Node) xpath.evaluate("dep:privateKey", groupNode, XPathConstants.NODE);
+            if (privateKeyNode != null) {
+                PathElement privateKey = GCMParserHelper.parsePathElementNode(privateKeyNode);
+                groupSSH.setPrivateKey(privateKey);
+            }
+
+        } catch (XPathExpressionException e) {
+            GCMDeploymentLoggers.GCMD_LOGGER.error(e.getMessage(), e);
         }
 
         return groupSSH;

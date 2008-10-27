@@ -43,6 +43,7 @@ import java.util.List;
 import javax.xml.xpath.XPath;
 import org.junit.Assert;
 import org.junit.Test;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentAcquisition;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentParserImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.P2PEntry;
@@ -128,7 +129,7 @@ public class TestDeploymentDescriptorParser {
         private static final long serialVersionUID = 40L;
 
         @Override
-        public List<String> internalBuildCommands() {
+        public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
             return new ArrayList<String>();
         }
     }
@@ -140,7 +141,7 @@ public class TestDeploymentDescriptorParser {
         private static final long serialVersionUID = 40L;
 
         @Override
-        public String internalBuildCommand() {
+        public String internalBuildCommand(CommandBuilder commandBuilder) {
             return "";
         }
     }
