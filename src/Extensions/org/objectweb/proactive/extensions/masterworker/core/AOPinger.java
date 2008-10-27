@@ -48,6 +48,7 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worke
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.ArrayList;
 
 
 /**
@@ -130,7 +131,8 @@ public class AOPinger implements WorkerWatcher, RunActive, InitActive, Serializa
             try {
 
                 long checkpoint1 = System.currentTimeMillis();
-                for (Worker worker : workerGroup) {
+                ArrayList<Worker> workers = new ArrayList<Worker>(workerGroup);
+                for (Worker worker : workers) {
                     try {
                         if (debug) {
                             logger.debug("Pinging " + worker.getName());
