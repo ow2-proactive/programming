@@ -46,6 +46,7 @@ import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.adl.RegistryManager;
+import org.objectweb.proactive.core.component.adl.nodes.ADLNodeProvider;
 import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 import org.objectweb.proactive.core.component.adl.vnexportation.ExportedVirtualNodesList;
 import org.objectweb.proactive.core.component.adl.vnexportation.LinkedVirtualNode;
@@ -304,19 +305,8 @@ public class ProActiveImplementationBuilderImpl implements ProActiveImplementati
             ProActiveGenericFactory genericFactory = (ProActiveGenericFactory) Fractal
                     .getGenericFactory(bootstrap);
 
-            if (gcmDeploymentVN != null) {
-                gcmDeploymentVN.waitReady();
-
-                if (gcmDeploymentVN.getNbCurrentNodes() == 0) {
-                    throw new InstantiationException(
-                        "Cannot create component on virtual node as no node is associated with this virtual node");
-                }
-
-                result = genericFactory.newFcInstance((ComponentType) type, controllerDesc, contentDesc,
-                        gcmDeploymentVN.getCurrentNodes().get(0));
-            } else {
-                result = genericFactory.newFcInstance(type, controllerDesc, contentDesc, (Node) null);
-            }
+            result = genericFactory.newFcInstance(type, controllerDesc, contentDesc, ADLNodeProvider
+                    .getNode(gcmDeploymentVN));
 
             return result;
         }
@@ -343,5 +333,4 @@ public class ProActiveImplementationBuilderImpl implements ProActiveImplementati
             throw ie;
         }
     }
-
 }
