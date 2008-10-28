@@ -303,6 +303,7 @@ public class Launcher implements Startable {
         for (Worker element : this.workers) {
             element.terminate();
         }
+        this.pad.kill();
     }
 
     /**
@@ -312,6 +313,5 @@ public class Launcher implements Startable {
      * @see org.objectweb.proactive.benchmarks.timit.util.Startable
      */
     public void masterKill() {
-        this.pad.kill();
     }
 }

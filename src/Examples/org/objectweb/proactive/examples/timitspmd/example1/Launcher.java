@@ -146,9 +146,9 @@ public class Launcher implements Startable {
     public void kill() {
         this.workers.terminate();
         PAException.waitForPotentialException();
+        this.pad.kill();
     }
 
     public void masterKill() {
-        this.pad.kill();
     }
 }
