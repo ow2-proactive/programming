@@ -53,7 +53,7 @@ public class Test extends GCMFunctionalTestDefaultNodes {
         super(1, 1);
         super.vContract.setVariableFromProgram("jvmargDefinedByTest", "-Xmx512M",
                 VariableContractType.DescriptorDefaultVariable);
-        PAProperties.PA_FUTUREMONITORING_TTM.setValue(100000);
+        PAProperties.PA_FUTUREMONITORING_TTM.setValue(0);
 
     }
 
