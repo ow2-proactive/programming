@@ -47,7 +47,7 @@ public class TestVirtualNodeAPI extends GCMFunctionalTest {
     public TestVirtualNodeAPI() throws FileNotFoundException {
         super(LocalHelpers.getDescriptor(TestVirtualNodeAPI.class));
     }
-    
+
     @Test
     public void metaTest() throws InterruptedException {
         /*
@@ -62,8 +62,8 @@ public class TestVirtualNodeAPI extends GCMFunctionalTest {
         testGetCurrentNodes();
         testGetNewNodes();
     }
-    
-//    @Test
+
+    //    @Test
     public void testGetName() {
         GCMVirtualNode vn1 = gcmad.getVirtualNode("vn1");
         GCMVirtualNode vn2 = gcmad.getVirtualNode("vn2");
@@ -74,7 +74,7 @@ public class TestVirtualNodeAPI extends GCMFunctionalTest {
         Assert.assertEquals("vn3", vn3.getName());
     }
 
-//    @Test
+    //    @Test
     public void testIsGreedy() {
         GCMVirtualNode vn1 = gcmad.getVirtualNode("vn1");
         GCMVirtualNode vn2 = gcmad.getVirtualNode("vn2");
@@ -86,7 +86,7 @@ public class TestVirtualNodeAPI extends GCMFunctionalTest {
         Assert.assertFalse(vn2.isGreedy());
     }
 
-//    @Test
+    //    @Test
     public void testIsReady() {
         GCMVirtualNode vn1 = gcmad.getVirtualNode("vn1");
         GCMVirtualNode vn2 = gcmad.getVirtualNode("vn2");
@@ -100,7 +100,7 @@ public class TestVirtualNodeAPI extends GCMFunctionalTest {
         Assert.assertFalse(vn3.isReady());
     }
 
-//    @Test
+    //    @Test
     public void testGetNbRequiredNodes() {
         GCMVirtualNode vn1 = gcmad.getVirtualNode("vn1");
         GCMVirtualNode vn2 = gcmad.getVirtualNode("vn2");
@@ -117,7 +117,7 @@ public class TestVirtualNodeAPI extends GCMFunctionalTest {
         Assert.assertEquals(3, vn5.getNbRequiredNodes());
     }
 
-//    @Test
+    //    @Test
     public void testGetNbCurrentNodes() throws InterruptedException {
         // failure = timeout reached
 
@@ -135,7 +135,7 @@ public class TestVirtualNodeAPI extends GCMFunctionalTest {
         }
     }
 
-//    @Test
+    //    @Test
     public void testGetCurrentNodes() throws InterruptedException {
         GCMVirtualNode vn5 = gcmad.getVirtualNode("vn5");
 
@@ -150,7 +150,7 @@ public class TestVirtualNodeAPI extends GCMFunctionalTest {
         Assert.assertTrue(vn5.getCurrentNodes().size() == ((vn5Nodes.size()) + 1));
     }
 
-//    @Test
+    //    @Test
     public void testGetNewNodes() throws InterruptedException {
         GCMVirtualNode vn1 = gcmad.getVirtualNode("vn1");
 
