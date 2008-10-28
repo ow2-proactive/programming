@@ -45,12 +45,16 @@ public class PAEventProgramming {
      * Register a method in the calling active object to be called when the specified future is
      * updated. The registered method takes a java.util.concurrent.Future as parameter.
      * 
+     * This method must be called from a Body.
+     * 
      * @param future
      *            the future to watch
      * @param methodName
      *            the name of the method to call on the current active object
      * @throws IllegalArgumentException
      *             if the first argument is not a future or if the method could not be found
+     * @throws IllegalStateException
+     *             if the caller is not a Body
      */
     public static void addActionOnFuture(Object future, String methodName) {
         FutureProxy f;
