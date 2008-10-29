@@ -1,3 +1,0 @@
-		<nodeProvider id="providerXXX">
-		     <file path="${deployment.paXXX.gcmd}" />
-        </nodeProvider>
