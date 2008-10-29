@@ -261,7 +261,9 @@ public class ProActiveConfiguration {
             logger.debug("User Config File is: " + u.toExternalForm());
             userProps = ProActiveConfigurationParser.parse(u.toString(), userProps);
         } catch (Exception e) {
-            logger.warn("Configuration file " + u.toExternalForm() + " not found");
+            if (!fname.equals(PROACTIVE_CONFIG_FILENAME)) {
+                logger.warn("Configuration file " + u.toExternalForm() + " not found");
+            }
         }
 
         return userProps;
