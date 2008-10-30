@@ -255,7 +255,7 @@ public class PAFileTransfer {
      * @return true if the remote file is a file, false otherwise
      * @throws IOException If an initialization error was detected.
      */
-    public RemoteFile mkdirs(Node node, File path) throws IOException {
+    public static RemoteFile mkdirs(Node node, File path) throws IOException {
         FileTransferServiceReceive ftsDst;
 
         try {
