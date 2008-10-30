@@ -90,6 +90,5 @@
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
-	<classpathentry kind="lib" path="/usr/java/jdk1.6.0_02/lib/tools.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
