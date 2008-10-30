@@ -33,7 +33,6 @@ package org.objectweb.proactive.core.process.ssh;
 
 import org.objectweb.proactive.core.process.AbstractExternalProcessDecorator;
 import org.objectweb.proactive.core.process.ExternalProcess;
-import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.SimpleExternalProcess;
 import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.util.OperatingSystem;

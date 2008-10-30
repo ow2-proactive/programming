@@ -34,7 +34,6 @@ package org.objectweb.proactive.core.remoteobject;
 import java.lang.reflect.Constructor;
 import java.net.URI;
 
-import org.apache.axis.transport.http.HTTPTransport;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;

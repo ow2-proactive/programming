@@ -43,7 +43,6 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
 import org.objectweb.proactive.core.body.ft.servers.FTServer;
-import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;

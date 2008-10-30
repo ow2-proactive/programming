@@ -37,7 +37,6 @@ import org.objectweb.proactive.extra.p2p.service.P2PService;
 import org.objectweb.proactive.extra.p2p.service.node.P2PLookupInt;
 import org.objectweb.proactive.extra.p2p.service.node.P2PNode;
 import org.objectweb.proactive.extra.p2p.service.node.P2PNodeAck;
-import org.objectweb.proactive.extra.p2p.service.util.P2PConstants;
 import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 
 

@@ -35,7 +35,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PAGroup;
-import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;

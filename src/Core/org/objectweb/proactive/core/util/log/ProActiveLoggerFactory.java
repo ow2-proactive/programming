@@ -38,7 +38,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.apache.log4j.spi.LoggerFactory;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 
 /**

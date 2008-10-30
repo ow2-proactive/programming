@@ -42,7 +42,6 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;

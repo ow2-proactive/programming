@@ -38,7 +38,6 @@ import java.net.URL;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;

@@ -38,10 +38,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.examples.userguide.cmagent.simple.CMAgent;

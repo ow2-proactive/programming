@@ -47,9 +47,7 @@ import javax.swing.JTextField;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.ProActiveInet;

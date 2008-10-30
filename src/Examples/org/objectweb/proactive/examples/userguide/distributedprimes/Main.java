@@ -35,10 +35,7 @@ import java.io.File;
 import java.util.Map;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
-import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;

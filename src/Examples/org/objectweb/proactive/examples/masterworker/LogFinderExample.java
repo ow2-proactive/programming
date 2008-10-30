@@ -38,7 +38,6 @@ import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-import org.objectweb.proactive.extensions.masterworker.tasks.NativeTask;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.examples.masterworker.util.Grep;
 

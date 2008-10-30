@@ -42,8 +42,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.soap.SOAPException;
 import org.apache.soap.server.DefaultConfigManager;
 import org.apache.soap.server.DeploymentDescriptor;
-import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
 /**
