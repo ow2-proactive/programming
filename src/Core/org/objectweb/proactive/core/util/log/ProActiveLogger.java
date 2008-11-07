@@ -64,14 +64,16 @@ public class ProActiveLogger extends Logger {
                 ProActiveConfiguration.PROACTIVE_LOG_PROPERTIES_FILE);
 
             if (f.exists()) {
-
                 try {
                     InputStream in = new FileInputStream(f);
                     // testing the availability of the file
                     Properties p = new Properties();
                     p.load(in);
                     PropertyConfigurator.configure(p);
-                    PAProperties.LOG4J.setValue(f.toURI().toString());
+                    // PROACTIVE-524 this one *MUST* be set through System.setProperty
+                    // and not by PAProperties.LOG4J.setValue(...) as it introduces
+                    // a race condition on the logger initialization. 
+                    System.setProperty("log4j.configuration", f.toURI().toString());
 
                 } catch (Exception e) {
                     System.err.println("the user's log4j configuration file (" + f.getAbsolutePath() +
@@ -90,7 +92,6 @@ public class ProActiveLogger extends Logger {
                 }
 
             } else {
-
                 InputStream in = PAProperties.class.getResourceAsStream("proactive-log4j");
                 // testing the availability of the file
                 Properties p = new Properties();
