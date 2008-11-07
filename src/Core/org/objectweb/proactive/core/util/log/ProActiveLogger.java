@@ -60,8 +60,8 @@ public class ProActiveLogger extends Logger {
             // if logger is not defined create default logger with level info that logs
             // on the console
 
-            File f = new File(System.getProperty("user.home") + File.separator + Constants.USER_CONFIG_DIR +
-                File.separator + ProActiveConfiguration.PROACTIVE_LOG_PROPERTIES_FILE);
+            File f = new File(Constants.USER_CONFIG_DIR + File.separator +
+                ProActiveConfiguration.PROACTIVE_LOG_PROPERTIES_FILE);
 
             if (f.exists()) {
 
