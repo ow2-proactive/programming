@@ -52,7 +52,7 @@
         </javadoc>			
     </target>
     
-    <target name="javadoc.published" depends="compile.util, deploy" description="Make published Javadoc">
+    <target name="javadoc.published" depends="compile.util, deploy, compile.doc.utils" description="Make published Javadoc">
         <mkdir dir="${docs.tmp.dir}" />
         <javadoc source="${source}"	classpathref="compile.libs">
             <doclet name="doc.PublishedAPIDoclet" path="${docs.java.classes.dir}">
