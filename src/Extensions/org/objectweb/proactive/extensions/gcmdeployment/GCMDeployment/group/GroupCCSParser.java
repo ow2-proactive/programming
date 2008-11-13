@@ -79,6 +79,7 @@ public class GroupCCSParser extends AbstractGroupSchedulerParser {
 
     private static final String ATTR_RESOURCES_CPUS = "cpus";
     private static final String ATTR_RESOURCES_RUNTIME = "runtime";
+    private static final String NODE_NAME_PRECMD = "preCommand";
 
     @Override
     public AbstractGroup createGroup() {
@@ -116,6 +117,8 @@ public class GroupCCSParser extends AbstractGroupSchedulerParser {
                 ccsGroup.setStdout(nodeValue);
             } else if (nodeName.equals(NODE_NAME_STDERR)) {
                 ccsGroup.setStderr(nodeValue);
+            } else if (nodeName.equals(NODE_NAME_PRECMD)) {
+                ccsGroup.setPreCommand(nodeValue);
             }
         }
         return ccsGroup;

@@ -38,6 +38,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderProActive;
 
 
 public class GroupCCS extends AbstractGroup {
@@ -46,6 +47,7 @@ public class GroupCCS extends AbstractGroup {
     private int cpus = 0;
     private String stdout = null;
     private String stderr = null;
+    private String preCommand = null;
 
     private PathElement scriptLocation = new PathElement("dist\\scripts\\gcmdeployment\\ccs.vbs",
         PathElement.PathBase.PROACTIVE);
@@ -62,11 +64,22 @@ public class GroupCCS extends AbstractGroup {
         command.append("/tasks:" + cpus);
         command.append(" ");
 
-        String cbCommand = commandBuilder.buildCommand(hostInfo, gcma);
-        cbCommand = Helpers.escapeWindowsCommand(cbCommand);
-        cbCommand += " -c 1 ";
+        String classpath = ((CommandBuilderProActive) commandBuilder).getClasspathwithoutArg(hostInfo);
         command.append(" ");
-        command.append("/application:\"" + cbCommand + "\"");
+        command.append("/classpath:" + classpath);
+        command.append(" ");
+
+        String cbCommand = ((CommandBuilderProActive) commandBuilder).buildCommandWithoutClassPath(hostInfo,
+                gcma);
+        //cbCommand = Helpers.escapeWindowsCommand(cbCommand);
+        cbCommand += " -c 1 ";
+
+        command.append(" ");
+        if (preCommand != null && !"".equals(preCommand)) {
+            command.append("/application:\"" + preCommand + " & " + cbCommand + "\"");
+        } else {
+            command.append("/application:\"" + cbCommand + "\"");
+        }
         command.append(" ");
 
         if (getStdout() != null) {
@@ -124,5 +137,9 @@ public class GroupCCS extends AbstractGroup {
 
     public void setStderr(String stderr) {
         this.stderr = stderr;
+    }
+
+    public void setPreCommand(String preCmd) {
+        this.preCommand = preCmd;
     }
 }

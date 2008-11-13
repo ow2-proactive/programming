@@ -475,4 +475,207 @@ public class CommandBuilderProActive implements CommandBuilder {
         this.overwriteClasspath = overwriteClasspath;
     }
 
+    /**
+     * build ProActive's command to launch, without '-cp' parameter.
+     * Useful for setting CLASSPATH by environment variable, for example and not directly
+     * set CP in the command (for systems that's doesn't support long command lines...
+     * @param hostInfo representing target host properties
+     * @param gcma application to launch
+     * @return a String which is the command to launch  
+     */
+    public String buildCommandWithoutClassPath(HostInfo hostInfo, GCMApplicationInternal gcma) {
+
+        if ((proActivePath == null) && (hostInfo.getTool(Tools.PROACTIVE.id) == null)) {
+            throw new IllegalStateException(
+                "ProActive installation path must be specified with the relpath attribute inside the proactive element (GCMA), or as tool in all hostInfo elements (GCMD). HostInfo=" +
+                    hostInfo.getId());
+        }
+
+        if (!hostInfo.isCapacitiyValid()) {
+            throw new IllegalStateException(
+                "To enable capacity autodetection nor VM Capacity nor Host Capacity must be specified. HostInfo=" +
+                    hostInfo.getId());
+        }
+
+        StringBuilder command = new StringBuilder();
+        // Java
+
+        command.append(getJava(hostInfo));
+        command.append(" ");
+
+        //another ack
+        //command.append("java ");
+
+        for (String arg : jvmArgs) {
+            command.append(arg);
+            command.append(" ");
+        }
+
+        if (PAProperties.PA_TEST.isTrue()) {
+            command.append(PAProperties.PA_TEST.getCmdLine());
+            command.append("true ");
+        }
+
+        if (PAProperties.PA_CLASSLOADER.isTrue() ||
+            "org.objectweb.proactive.core.classloader.ProActiveClassLoader".equals(System
+                    .getProperty("java.system.class.loader"))) {
+            command
+                    .append(" -Djava.system.class.loader=org.objectweb.proactive.core.classloader.ProActiveClassLoader ");
+            // the following allows the deserializing of streams that were annotated with rmi utilities
+            command
+                    .append(" -Djava.rmi.server.RMIClassLoaderSpi=org.objectweb.proactive.core.classloader.ProActiveRMIClassLoaderSpi");
+            // to avoid clashes due to multiple classloader, we initiate the
+            // configuration of log4j ourselves 
+            // (see StartRuntime.main)
+            command.append(" -Dlog4j.defaultInitOverride=true ");
+        }
+
+        // Log4j
+        if (log4jProperties != null) {
+            command.append(PAProperties.LOG4J.getCmdLine());
+            command.append("\"");
+            command.append("file:");
+            command.append(log4jProperties.getFullPath(hostInfo, this));
+            command.append("\"");
+            command.append(" ");
+        }
+
+        // Java Security Policy
+        if (javaSecurityPolicy != null) {
+            command.append(PAProperties.JAVA_SECURITY_POLICY.getCmdLine());
+            command.append("\"");
+            command.append(javaSecurityPolicy.getFullPath(hostInfo, this));
+            command.append("\"");
+            command.append(" ");
+        } else {
+            command.append(PAProperties.JAVA_SECURITY_POLICY.getCmdLine());
+            command.append("\"");
+            command.append(PAProperties.JAVA_SECURITY_POLICY.getValue());
+            command.append("\"");
+            command.append(" ");
+        }
+
+        if (hostInfo.getNetworkInterface() != null) {
+            command.append(PAProperties.PA_NET_INTERFACE.getCmdLine() + hostInfo.getNetworkInterface());
+            command.append(" ");
+        }
+
+        if (runtimePolicy != null) {
+            command.append(PAProperties.PA_RUNTIME_SECURITY.getCmdLine());
+            command.append("\"");
+            command.append(runtimePolicy.getFullPath(hostInfo, this));
+            command.append("\"");
+            command.append(" ");
+        }
+
+        // Class to be started and its arguments
+        command.append(StartRuntime.class.getName());
+        command.append(" ");
+
+        String parentURL;
+        try {
+            parentURL = RuntimeFactory.getDefaultRuntime().getURL();
+        } catch (ProActiveException e) {
+            GCMD_LOGGER.error(
+                    "Cannot determine the URL of this runtime. Childs will not be able to register", e);
+            parentURL = "unkownParentURL";
+        }
+        command.append("-" + StartRuntime.Params.parent.shortOpt() + " " + parentURL);
+        command.append(" ");
+
+        if (hostInfo.getVmCapacity() != 0) {
+            command.append("-" + StartRuntime.Params.capacity.shortOpt() + " " + hostInfo.getVmCapacity());
+            command.append(" ");
+        }
+
+        command.append("-" + StartRuntime.Params.topologyId.shortOpt() + " " + hostInfo.getToplogyId());
+        command.append(" ");
+
+        command.append("-" + StartRuntime.Params.deploymentId.shortOpt() + " " + gcma.getDeploymentId());
+        command.append(" ");
+
+        command.append("-" + StartRuntime.Params.codebase.shortOpt() + " " +
+            ClassServerServlet.get().getCodeBase());
+        command.append(" ");
+
+        // TODO cdelbe Check FT properties here
+        // was this.ftService.buildParamsLine();
+
+        StringBuilder ret = new StringBuilder();
+
+        if (hostInfo.getHostCapacity() == 0) {
+            ret.append(command);
+        } else {
+            switch (hostInfo.getOS()) {
+                case unix:
+                    for (int i = 0; i < hostInfo.getHostCapacity(); i++) {
+                        ret.append(command);
+                        ret.append(" &");
+                    }
+                    ret.deleteCharAt(ret.length() - 1);
+                    break;
+
+                case windows:
+                    char fs = hostInfo.getOS().fileSeparator();
+                    ret.append("\"");
+                    ret.append(getPath(hostInfo));
+                    ret.append(fs);
+                    ret.append("dist");
+                    ret.append(fs);
+                    ret.append("scripts");
+                    ret.append(fs);
+                    ret.append("gcmdeployment");
+                    ret.append(fs);
+                    ret.append("startn.bat");
+                    ret.append("\"");
+
+                    ret.append(" ");
+                    ret.append(hostInfo.getHostCapacity());
+
+                    ret.append(" ");
+                    ret.append("\"");
+                    ret.append(command);
+                    ret.append("\"");
+                    break;
+            }
+        }
+
+        GCMD_LOGGER.trace(ret);
+        return ret.toString();
+    }
+
+    public String getClasspathwithoutArg(HostInfo hostInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\"");
+        if (!overwriteClasspath) {
+            // ProActive.jar contains a JAR index
+            // see: http://java.sun.com/j2se/1.3/docs/guide/jar/jar.html#JAR%20Index
+            char fs = hostInfo.getOS().fileSeparator();
+            sb.append(getPath(hostInfo));
+            sb.append(fs);
+            sb.append("dist");
+            sb.append(fs);
+            sb.append("lib");
+            sb.append(fs);
+            sb.append(PROACTIVE_JAR);
+            sb.append(hostInfo.getOS().pathSeparator());
+        }
+
+        if (proactiveClasspath != null) {
+            for (PathElement pe : proactiveClasspath) {
+                sb.append(pe.getFullPath(hostInfo, this));
+                sb.append(hostInfo.getOS().pathSeparator());
+            }
+        }
+
+        if (applicationClasspath != null) {
+            for (PathElement pe : applicationClasspath) {
+                sb.append(pe.getFullPath(hostInfo, this));
+                sb.append(hostInfo.getOS().pathSeparator());
+            }
+        }
+
+        // Trailing pathSeparator don't forget to remove it later
+        return sb.substring(0, sb.length() - 1) + "\"";
+    }
 }
