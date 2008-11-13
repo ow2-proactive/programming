@@ -13,6 +13,7 @@
 					<xs:element name="resources" type="ccsResourcesType" minOccurs="1" />
 					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0" />										
 					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0" />
+					<xs:element name="preCommand" type="TextOrVariableType" minOccurs="0" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
