@@ -31,7 +31,7 @@
  */
 package org.objectweb.proactive.benchmarks.NAS.CG;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAGroup;
@@ -41,7 +41,6 @@ import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
 import org.objectweb.proactive.benchmarks.NAS.util.NpbMath;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.group.ProxyForGroup;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
@@ -51,6 +50,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.BenchmarkStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.EventStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.HierarchicalTimerStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.TimItManager;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 
 /**
@@ -81,25 +81,20 @@ public class KernelCG extends Kernel {
     public KernelCG() {
     }
 
-    public KernelCG(NASProblemClass pclass) {
+    public KernelCG(NASProblemClass pclass, GCMApplication gcma) {
         this.problemClass = (CGProblemClass) pclass;
+        this.gcma = gcma;
     }
 
-    public void runKernel(ProActiveDescriptor pad) throws ProActiveException {
+    public void runKernel() throws ProActiveException {
         // String buff to have a print order
         String printBuffer = "";
         // Some int values
         int i, k, tempValue = 0;
-        // The Array of virtual nodes
-        VirtualNode[] vnodeArray;
-        // The virtual node
-        VirtualNode vnode;
-        // The ArrayList of node for the multicluster case
-        ArrayList<Node> nodeList;
-        // The nodes array
-        Node[] nodes = null;
+        // The nodes to use
+        List<Node> nodes = null;
         // Temp node array
-        Node[] tempArray = null;
+        //        Node[] tempArray = null;
         // The array of parameters for each worker
         Object[] param;
         // The array of parameters for all workers
@@ -136,68 +131,12 @@ public class KernelCG extends Kernel {
                 System.exit(1);
             }
 
-            // Get vitualNodes from the descriptor pad
-            vnodeArray = pad.getVirtualNodes();
-
-            // Begin the distribution
-            pad.activateMappings();
-
-            printBuffer += "-- Detecting " + vnodeArray.length + " virtual nodes ...\n";
-
-            if (vnodeArray.length > 1) {
-
-                // Create the final list of nodes
-                nodeList = new ArrayList<Node>();
-
-                // The round robin fashion mapping strategy
-                if (KernelCG.ROUND_ROBIN_MAPPING_MODE) {
-                    nodes = super.vnodeMapping(vnodeArray, this.problemClass.NUM_PROCS, this.npcols);
-
-                } else {
-                    // Get the total number of nodes
-                    for (i = 0; i < vnodeArray.length; ++i) {
-                        tempValue += vnodeArray[i].getNodes().length;
-                    }
-
-                    // If total number of nodes is smaller than the problem class one
-                    if (tempValue < this.problemClass.NUM_PROCS) {
-                        printBuffer += "-- Warning !! There is not enough nodes. Probably there will be several workers mapped to a single node !\n";
-                    }
-
-                    // The mapping strategy is to put a max workers per virtualNode
-                    for (i = 0; i < vnodeArray.length; i++) {
-                        // Get the array of node from current virtualNode
-                        tempArray = vnodeArray[i].getNodes();
-                        // If there is enough nodes in this virtualNode
-                        if (tempArray.length >= npcols) {
-                            tempValue = (tempArray.length / npcols) * npcols;
-                            printBuffer += "-- Mapping " + tempValue + " workers to the virtualNode " +
-                                vnodeArray[i].getName() + "\n";
-                            // Adding nodes to the final nodeList
-                            for (k = 0; k < tempValue; k++) {
-                                nodeList.add(tempArray[k]);
-                            }
-                        } else {
-                            printBuffer += "-- Warning !! There is not enough nodes on the virtualNode " +
-                                vnodeArray[i].getName() + " : " + " there are currently only " +
-                                tempArray.length + " nodes " + " there should be at minimum " + npcols +
-                                " nodes.\n" + "-- BE AWARE : The mapping will NOT be optimal !\n";
-                            for (k = 0; k < tempArray.length; k++) {
-                                nodeList.add(tempArray[k]);
-                            }
-                        }
-                    }
-                    nodes = nodeList.toArray(new Node[0]);
-                }
-            } else {
-                vnode = vnodeArray[0];
-                nodes = vnode.getNodes();
-            }
+            nodes = super.getNodes(this.problemClass.NUM_PROCS);
             if (nodes == null) {
                 throw new ProActiveException("No nodes found");
             }
 
-            printBuffer += "" + nodes.length + " node" + (nodes.length == 1 ? "" : "s") + " found\n";
+            printBuffer += "" + nodes.size() + " node" + (nodes.size() == 1 ? "" : "s") + " found\n";
             System.out.println(printBuffer);
 
             // Pre-calculate the nzz value
@@ -217,7 +156,8 @@ public class KernelCG extends Kernel {
             }
 
             // Create the workers group
-            workers = (WorkerCG) PASPMD.newSPMDGroup(WorkerCG.class.getName(), params, nodes);
+            workers = (WorkerCG) PASPMD.newSPMDGroup(WorkerCG.class.getName(), params, nodes
+                    .toArray(new Node[] {}));
 
             TimItManager tManager = TimItManager.getInstance();
             tManager.setTimedObjects(workers);

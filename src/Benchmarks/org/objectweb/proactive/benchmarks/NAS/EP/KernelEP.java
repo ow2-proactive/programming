@@ -44,6 +44,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.BenchmarkStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.EventStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.HierarchicalTimerStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.TimItManager;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 
 /**
@@ -64,11 +65,12 @@ public class KernelEP extends Kernel {
     public KernelEP() {
     }
 
-    public KernelEP(NASProblemClass pclass) {
+    public KernelEP(NASProblemClass pclass, GCMApplication gcma) {
         this.problemClass = (EPProblemClass) pclass;
+        this.gcma = gcma;
     }
 
-    public void runKernel(ProActiveDescriptor pad) throws ProActiveException {
+    public void runKernel() throws ProActiveException {
         Object[] param = new Object[] { problemClass };
 
         Object[][] params = new Object[problemClass.NUM_PROCS][];
@@ -77,11 +79,7 @@ public class KernelEP extends Kernel {
         }
 
         try {
-            pad.activateMappings();
-            nodes = super.vnodeMapping(pad.getVirtualNodes(), problemClass.NUM_PROCS);
-            if (nodes == null) {
-                throw new ProActiveException("No nodes found");
-            }
+            nodes = super.getNodes(this.problemClass.NUM_PROCS).toArray(new Node[] {});
 
             if (nodes.length < this.problemClass.NUM_PROCS) {
                 System.err.println("Not enough nodes: get " + nodes.length + ", need " +

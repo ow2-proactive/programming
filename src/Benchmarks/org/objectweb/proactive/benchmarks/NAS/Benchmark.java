@@ -31,6 +31,8 @@
  */
 package org.objectweb.proactive.benchmarks.NAS;
 
+import java.io.File;
+
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.benchmarks.NAS.CG.KernelCG;
 import org.objectweb.proactive.benchmarks.NAS.EP.KernelEP;
@@ -38,16 +40,17 @@ import org.objectweb.proactive.benchmarks.NAS.FT.KernelFT;
 import org.objectweb.proactive.benchmarks.NAS.IS.KernelIS;
 import org.objectweb.proactive.benchmarks.NAS.MG.KernelMG;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.timitspmd.TimIt;
 import org.objectweb.proactive.extensions.timitspmd.util.Startable;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 
 public class Benchmark implements Startable {
     public static String DEFAULT_LOCAL_DESCRIPTOR = "descriptors/local-1.xml";
 
     private static Kernel kernel;
-    private ProActiveDescriptor pad;
+    private GCMApplication gcma;
     private BenchmarkArgs benchArgs;
     private NASProblemClass pcl;
 
@@ -74,7 +77,7 @@ public class Benchmark implements Startable {
      *            The command line arguments.
      */
     public void start(String[] args) {
-        pad = null;
+        gcma = null;
         benchArgs = parseArgs(args);
         pcl = NASClassesFactory.getNASClass(benchArgs.getKernel(), benchArgs.getClss(), benchArgs.getNp());
 
@@ -83,8 +86,8 @@ public class Benchmark implements Startable {
             System.exit(1);
         }
         try {
-            System.out.println("descriptor is : " + benchArgs.getDesc());
-            pad = PADeployment.getProactiveDescriptor(benchArgs.getDesc());
+            System.out.println("GCMApplication is : " + benchArgs.getDesc());
+            gcma = PAGCMDeployment.loadApplicationDescriptor(new File(benchArgs.getDesc()));
 
             // Launch the adequate kernel
             this.launchKernel();
@@ -92,6 +95,7 @@ public class Benchmark implements Startable {
         } catch (ProActiveException e) {
             System.err.println("An error occur during the deployment of the application");
             e.printStackTrace();
+            gcma.kill();
             System.exit(1);
         }
     }
@@ -106,11 +110,7 @@ public class Benchmark implements Startable {
             System.exit(1);
         }
         Benchmark.kernel.killKernel();
-        try {
-            pad.killall(false);
-        } catch (ProActiveException e) {
-            e.printStackTrace();
-        }
+        gcma.kill();
     }
 
     /**
@@ -163,30 +163,23 @@ public class Benchmark implements Startable {
      */
     public void launchKernel() {
         if (new String(pcl.KERNEL_NAME).compareToIgnoreCase("IS") == 0) {
-            kernel = new KernelIS(pcl);
+            kernel = new KernelIS(pcl, gcma);
         } else if (pcl.KERNEL_NAME.compareToIgnoreCase("CG") == 0) {
-            kernel = new KernelCG(pcl);
+            kernel = new KernelCG(pcl, gcma);
         } else if (pcl.KERNEL_NAME.compareToIgnoreCase("FT") == 0) {
-            kernel = new KernelFT(pcl);
+            kernel = new KernelFT(pcl, gcma);
         } else if (pcl.KERNEL_NAME.compareToIgnoreCase("EP") == 0) {
-            kernel = new KernelEP(pcl);
+            kernel = new KernelEP(pcl, gcma);
         } else if (pcl.KERNEL_NAME.compareToIgnoreCase("MG") == 0) {
-            kernel = new KernelMG(pcl);
+            kernel = new KernelMG(pcl, gcma);
         } else {
             System.err.println("Kernel not yet implemented.");
         }
         try {
-            kernel.runKernel(pad);
-        } catch (ProActiveException e) {
-            System.err.println("ProActiveException. Try again...");
-            try {
-                pad.killall(false);
-                pad = PADeployment.getProactiveDescriptor(benchArgs.getDesc());
-                kernel.runKernel(pad);
-            } catch (Exception pe) {
-                pe.printStackTrace();
-                return;
-            }
+            kernel.runKernel();
+        } catch (Exception pe) {
+            pe.printStackTrace();
+            return;
         }
     }
 

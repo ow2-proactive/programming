@@ -48,6 +48,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.BenchmarkStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.EventStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.HierarchicalTimerStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.TimItManager;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 
 /**
@@ -64,11 +65,12 @@ public class KernelFT extends Kernel {
     public KernelFT() {
     }
 
-    public KernelFT(NASProblemClass pclass) {
+    public KernelFT(NASProblemClass pclass, GCMApplication gcma) {
         this.problemClass = (FTProblemClass) pclass;
+        this.gcma = gcma;
     }
 
-    public void runKernel(ProActiveDescriptor pad) throws ProActiveException {
+    public void runKernel() throws ProActiveException {
 
         // Check if number of procs is a power of two.
         if (this.problemClass.NUM_PROCS != 1 &&
@@ -89,11 +91,7 @@ public class KernelFT extends Kernel {
         }
 
         try {
-            pad.activateMappings();
-            nodes = super.vnodeMapping(pad.getVirtualNodes(), problemClass.NUM_PROCS);
-            if (nodes == null) {
-                throw new ProActiveException("No nodes found");
-            }
+            nodes = super.getNodes(this.problemClass.NUM_PROCS).toArray(new Node[] {});
 
             workers = (WorkerFT) PASPMD.newSPMDGroup(WorkerFT.class.getName(), paramsWokers, nodes);
 

@@ -33,13 +33,17 @@ package org.objectweb.proactive.benchmarks.NAS;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.objectweb.proactive.api.PAVersion;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
@@ -47,8 +51,9 @@ import org.objectweb.proactive.core.node.NodeException;
  * 
  */
 public abstract class Kernel implements Serializable {
+    protected GCMApplication gcma;
 
-    public abstract void runKernel(ProActiveDescriptor pad) throws ProActiveException;
+    public abstract void runKernel() throws ProActiveException;
 
     public abstract void killKernel();
 
@@ -89,85 +94,51 @@ public abstract class Kernel implements Serializable {
         System.out.println(" Middleware       =  " + proactiveVersion);
     }
 
-    public Node[] vnodeMapping(VirtualNode[] vnodeArray, int nbProcs) {
-        return vnodeMapping(vnodeArray, nbProcs, 1);
-    }
-
-    public Node[] vnodeMapping(VirtualNode[] vnodeArray, int nbProcs, int subGroupSize) {
-        Node[] tempNodeArray;
-        Node[] nodes;
-        ArrayList<Node> nodeList;
-        int wantedVirtualNodeSize = nbProcs / vnodeArray.length;
-        String printBuffer = "";
-        printBuffer += "-- Mapping sub group of workers in a ROUND ROBIN fashion. [ wantedVirtualNodeSize = " +
-            wantedVirtualNodeSize + ", NUMPROCS = " + nbProcs + " ]\n";
-        int localIndex = 0;
-        int localIndexGsize;
-        int tempValue = 0;
-
-        try {
-            if (vnodeArray.length > 1) {
-                nodeList = new ArrayList<Node>();
-
-                // Get the total number of nodes
-                for (int i = 0; i < vnodeArray.length; ++i) {
-                    tempValue += vnodeArray[i].getNodes().length;
-                }
-
-                // If total number of nodes is smaller than the problem class one
-                if (tempValue < nbProcs) {
-                    printBuffer += "-- Warning !! There is not enough nodes. Probably there will be several workers mapped to a single node !\n";
-                }
-
-                // while ( roundRobinIndex <= nbProcs ) {
-                while (nodeList.size() < nbProcs) {
-                    localIndexGsize = localIndex + subGroupSize;
-                    for (int i = 0; i < vnodeArray.length; i++) {
-                        if (nodeList.size() < nbProcs) { // check if there is enough harvested
-                            // nodes
-                            // Get the array of node from current virtualNode
-                            tempNodeArray = vnodeArray[i].getNodes();
-                            // If there is enough nodes in this virtualNode
-                            if (tempNodeArray.length >= wantedVirtualNodeSize) {
-                                printBuffer += "-- Mapping " + subGroupSize + " workers to the virtualNode " +
-                                    vnodeArray[i].getName() + " [ localIndex = " + localIndex + " ]\n";
-                                // Adding nodes to the final nodeList
-                                for (int k = localIndex; k < localIndexGsize && k < tempNodeArray.length; k++) {
-                                    printBuffer += "           ----> adding node " +
-                                        tempNodeArray[k].getNodeInformation().getName() + "\n";
-                                    nodeList.add(tempNodeArray[k]);
-                                }
-                            } else {
-                                printBuffer += "-- Warning !! There is not enough nodes on the virtualNode " +
-                                    vnodeArray[i].getName() + " : " + " there are currently only " +
-                                    tempNodeArray.length + " nodes " + " there should be at minimum " +
-                                    wantedVirtualNodeSize + " nodes.\n" +
-                                    "-- BE AWARE : HAZARDOUS MAPPING !!! \n";
-                                for (int k = 0; k < tempNodeArray.length; k++) {
-                                    nodeList.add(tempNodeArray[k]);
-                                }
-                            }
-                        } else {
-                            printBuffer += "-- There is enough recolted nodes : " + nodeList.size() + "\n";
-                            break;
-                        }
-                    }
-                    localIndex += subGroupSize;
-                    // roundRobinIndex += ( subGroupSize == 1 ? subGroupSize : wantedVirtualNodeSize
-                    // );
-                }
-
-                nodes = (Node[]) nodeList.toArray(new Node[0]);
-            } else {
-                nodes = vnodeArray[0].getNodes();
-            }
-            printBuffer += "" + nodes.length + " node" + (nodes.length == 1 ? "" : "s") + " found\n";
-            System.out.println(printBuffer);
-
-            return nodes;
-        } catch (NodeException e) {
-            e.printStackTrace();
+    public List<Node> getNodes(int count) {
+        GCMVirtualNode vn = gcma.getVirtualNode("Workers");
+        if (!vn.isGreedy() && vn.getNbRequiredNodes() < count) {
+            throw new IllegalStateException("Not enough node available: " + vn.getNbRequiredNodes() +
+                " in GCMA but nproc is " + count);
         }
-        return null;
+
+        ArrayList<Node> nodes = new ArrayList<Node>();
+
+        gcma.startDeployment();
+        // Wait for all nodes to be able to use the best combination of nodes
+        gcma.waitReady();
+
+        // Group nodes by TopologyID
+        Map<Long, List<Node>> nodesByTID = new HashMap<Long, List<Node>>();
+        for (Node node : vn.getCurrentNodes()) {
+            long tid = node.getVMInformation().getTopologyId();
+            List<Node> nByTid = nodesByTID.get(tid);
+            if (nByTid == null) {
+                nByTid = new ArrayList<Node>();
+                nodesByTID.put(tid, nByTid);
+            }
+            nByTid.add(node);
+        }
+
+        // Sort group by # of nodes
+        SortedMap<Long, List<Node>> nodesBySize = new TreeMap<Long, List<Node>>();
+        for (Long tid : nodesByTID.keySet()) {
+            List<Node> tempNodes = nodesByTID.get(tid);
+            nodesBySize.put(new Long(tempNodes.size()), tempNodes);
+        }
+
+        // Return count nodes by using the largest list first
+        while (nodes.size() < count) {
+            List<Node> currentList = null;
+            do {
+                currentList = nodesBySize.get(nodesBySize.lastKey());
+                if (currentList.isEmpty()) {
+                    nodesBySize.remove(nodesBySize.lastKey());
+                }
+            } while (currentList == null);
+
+            nodes.add(currentList.remove(0));
+        }
+
+        return nodes;
     }
 }

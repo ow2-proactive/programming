@@ -49,6 +49,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.BenchmarkStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.EventStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.HierarchicalTimerStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.TimItManager;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 
 /**
@@ -69,11 +70,13 @@ public class KernelMG extends Kernel {
     private Communicator communicator;
 
     /** The main constructor */
-    public KernelMG(NASProblemClass pclass) {
+    public KernelMG(NASProblemClass pclass, GCMApplication gcma) {
         this.problemClass = (MGProblemClass) pclass;
+        this.gcma = gcma;
     }
 
-    public void runKernel(ProActiveDescriptor pad) throws ProActiveException {
+    public void runKernel() throws ProActiveException {
+
         // The Array of virtual nodes
         VirtualNode[] vnodeArray;
         // The Array of nodes
@@ -84,17 +87,7 @@ public class KernelMG extends Kernel {
         Object[][] params;
 
         try {
-            // Get vitualNodes from the descriptor pad
-            vnodeArray = pad.getVirtualNodes();
-
-            // Begin the distribution
-            pad.activateMappings();
-
-            // Map nodes in a round robin mode
-            nodes = super.vnodeMapping(vnodeArray, this.problemClass.NUM_PROCS);
-            if (nodes == null) {
-                throw new ProActiveException("No nodes found");
-            }
+            nodes = super.getNodes(this.problemClass.NUM_PROCS).toArray(new Node[] {});
 
             // Fill the constructor arguments
             param = new Object[] { this.problemClass };
