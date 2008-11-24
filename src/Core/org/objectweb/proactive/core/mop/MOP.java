@@ -294,11 +294,8 @@ public abstract class MOP {
     //	}
     /**
      * Reifies an object
-     *
-     * @param proxyParameters
-     *            Array holding the proxy parameters
-     * @param target
-     *            the object to reify
+     * @param proxyParameters Array holding the proxy parameters
+     * @param target the object to reify
      */
 
     //	  public static Object turnReified(Object[] proxyParameters, Object target)
@@ -350,15 +347,10 @@ public abstract class MOP {
     //	}
     /**
      * Reifies an object
-     *
-     * @param nameOfProxyClass
-     *            the name of the object's proxy
-     * @param nameOfStubClass
-     *            The name of the object's stub class
-     * @param proxyParameters
-     *            Array holding the proxy parameters
-     * @param target
-     *            the object to reify
+     * @param nameOfProxyClass the name of the object's proxy
+     * @param nameOfStubClass The name of the object's stub class
+     * @param proxyParameters Array holding the proxy parameters
+     * @param target the object to reify
      */
     public static Object turnReified(String nameOfStubClass, String nameOfProxyClass,
             Object[] proxyParameters, Object target, Class<?>[] genericParameters)
@@ -415,20 +407,20 @@ public abstract class MOP {
 
     /**
      * Checks if a stub class can be created for the class <code>cl</code>.
-     *
      * A class cannot be reified if at least one of the following conditions are
-     *  met : <UL>
+     * met :
+     * <UL>
      * <LI>This <code>Class<?></code> objects represents a primitive type
      * (except void)
      * <LI>The class is <code>final</code>
      * <LI>There is an ambiguity in constructors signatures
      * <LI>There is no noargs constructor
      * </UL>
-     *
+     * 
      * @author The ProActive Team
      * @param cl Class<?> to be checked
      * @return <code>true</code> is the class exists and can be reified,
-     *  <code>false</code> otherwise.
+     *         <code>false</code> otherwise.
      */
     static void checkClassIsReifiable(String className) throws ClassNotReifiableException,
             ClassNotFoundException {
@@ -461,7 +453,12 @@ public abstract class MOP {
      */
     protected static boolean checkNoArgsConstructor(Class<?> cl) {
         try {
-            cl.getConstructor(EMPTY_CLASS_ARRAY);
+            // only for member class, use constructor with implicit enclosing class params 
+            if (cl.isMemberClass() && !Modifier.isStatic(cl.getModifiers())) {
+                cl.getConstructor(cl.getEnclosingClass());
+            } else {
+                cl.getConstructor(EMPTY_CLASS_ARRAY);
+            }
             return true;
         } catch (NoSuchMethodException e) {
             return false;
@@ -470,13 +467,12 @@ public abstract class MOP {
 
     /**
      * Checks if an object is a stub object
-     *
      * Being a stub object is equivalent to implementing the StubObject
      * interface
-     *
      * @param o the object to check
      * @return <code>true</code> if it is a stub object, <code>false</code>
-     * otherwise */
+     *         otherwise
+     */
     public static boolean isReifiedObject(Object o) {
         if (o != null) {
             return (STUB_OBJECT_INTERFACE.isAssignableFrom(o.getClass()));
@@ -492,7 +488,9 @@ public abstract class MOP {
      */
     private static Class<?> createStubClass(String nameOfBaseClass, Class<?>[] genericParameters) {
         try {
-            //return Class.forName(Utils.convertClassNameToStubClassName(nameOfClass), true, singleton);
+            // return
+            // Class.forName(Utils.convertClassNameToStubClassName(nameOfClass),
+            // true, singleton);
             return singleton.loadClass(Utils.convertClassNameToStubClassName(nameOfBaseClass,
                     genericParameters));
         } catch (ClassNotFoundException e) {
@@ -504,7 +502,7 @@ public abstract class MOP {
 
     private static Class<?> createStubClass(String nameOfClass, Class<?>[] genericParameters, ClassLoader cl) {
         try {
-            //return Class.forName(Utils.convertClassNameToStubClassName(nameOfClass), true, singleton);
+            // return Class.forName(Utils.convertClassNameToStubClassName(nameOfClass), true, singleton);
             return singleton.loadClass(Utils.convertClassNameToStubClassName(nameOfClass, genericParameters),
                     genericParameters, cl);
         } catch (ClassNotFoundException e) {
@@ -536,7 +534,7 @@ public abstract class MOP {
         // Is it cached in Hashtable ?
         stubConstructor = stubTable.get(new GenericStubKey(nameOfClass, genericParameters));
 
-        //System.out.println("xxxxxx targetClass is " + targetClass);
+        // System.out.println("xxxxxx targetClass is " + targetClass);
         // On cache miss, finds the constructor
         if (stubConstructor == null) {
             Class<?> stubClass;
@@ -545,13 +543,18 @@ public abstract class MOP {
             } catch (ClassNotFoundException e) {
                 // No stub class can be found, let's create it from scratch
                 stubClass = createStubClass(nameOfClass, genericParameters, targetClass.getClassLoader());
-                //                stubClass = createStubClass(nameOfClass,
-                //          targetClass.getClassLoader());
+                // stubClass = createStubClass(nameOfClass,
+                // targetClass.getClassLoader());
             }
 
             // Verifies that the stub has a noargs constructor and caches it
             try {
-                stubConstructor = stubClass.getConstructor(EMPTY_CLASS_ARRAY);
+                if (targetClass.isMemberClass() && !Modifier.isStatic(targetClass.getModifiers())) {
+                    Class enclosing = targetClass.getEnclosingClass();
+                    stubConstructor = stubClass.getConstructor(enclosing);
+                } else {
+                    stubConstructor = stubClass.getConstructor(EMPTY_CLASS_ARRAY);
+                }
                 stubTable.put(new GenericStubKey(nameOfClass, genericParameters), stubConstructor);
             } catch (NoSuchMethodException e) {
                 throw new GenerationOfStubClassFailedException("Stub for class " + nameOfClass +
@@ -573,7 +576,8 @@ public abstract class MOP {
         // Localizes the proxy class constructor
         proxyConstructor = proxyTable.get(proxyClass.getName());
 
-        //System.out.println("MOP: The class of the proxy is " + proxyClass.getName());
+        // System.out.println("MOP: The class of the proxy is " +
+        // proxyClass.getName());
         // Cache miss
         if (proxyConstructor == null) {
             try {
@@ -591,11 +595,27 @@ public abstract class MOP {
     private static StubObject instantiateStubObject(Constructor<?> stubConstructor)
             throws ConstructionOfStubObjectFailedException {
         try {
-            Object o = stubConstructor.newInstance(EMPTY_OBJECT_ARRAY);
+            Object o = null;
+            if (stubConstructor.getParameterTypes().length != 0) {
+                // member class constructor
+                // add the implicit param : an instance of the enclosing class
+                Class realClass = Class.forName(Utils.convertStubClassNameToClassName(stubConstructor
+                        .getDeclaringClass().getName()));
+                try {
+                    o = stubConstructor.newInstance(realClass.getEnclosingClass().newInstance());
+                } catch (InstantiationException e) {
+                    throw new ConstructionOfStubObjectFailedException("Enclosing class " +
+                        realClass.getEnclosingClass().getName() + " does not have no-args constructor.");
+                }
+            } else {
+                try {
+                    o = stubConstructor.newInstance(EMPTY_OBJECT_ARRAY);
+                } catch (InstantiationException e) {
+                    throw new ConstructionOfStubObjectFailedException("Constructor " + stubConstructor +
+                        " belongs to an abstract class.");
+                }
+            }
             return (StubObject) o;
-        } catch (InstantiationException e) {
-            throw new ConstructionOfStubObjectFailedException("Constructor " + stubConstructor +
-                " belongs to an abstract class.");
         } catch (IllegalArgumentException e) {
             throw new ConstructionOfStubObjectFailedException("Wrapping problem with constructor " +
                 stubConstructor);
@@ -605,18 +625,20 @@ public abstract class MOP {
         } catch (InvocationTargetException e) {
             throw new ConstructionOfStubObjectFailedException(
                 "The constructor of the stub has thrown an exception: ", e.getTargetException());
+        } catch (ClassNotFoundException e) {
+            throw new ConstructionOfStubObjectFailedException("The instanciated class has not been found", e);
         }
     }
 
     public static StubObject createStubObject(String nameOfBaseClass, Class<?> targetClass,
             Class<?>[] genericParameters) throws ClassNotFoundException, ReifiedCastException,
             ClassNotReifiableException {
-        //System.out.println("StubClass is " + nameOfBaseClass);
+        // System.out.println("StubClass is " + nameOfBaseClass);
         // BUG ID: #327
-        //this has been added to deal with downloaded classes
-        //if we cannot load the stub class using its name
-        //it is probably because it has been downloaded by another classloader
-        //thus we ask the classloader of the target class to load it
+        // this has been added to deal with downloaded classes
+        // if we cannot load the stub class using its name
+        // it is probably because it has been downloaded by another classloader
+        // thus we ask the classloader of the target class to load it
         Class<?> baseClass = null;
         try {
             baseClass = forName(nameOfBaseClass);
@@ -625,8 +647,10 @@ public abstract class MOP {
             MOP.addClassToCache(nameOfBaseClass, baseClass);
         }
 
-        // Class<?> stubClass = forName(nameOfStubClass,targetClass.getClassLoader());
-        // Check that the type of the class is compatible with the type of the stub
+        // Class<?> stubClass =
+        // forName(nameOfStubClass,targetClass.getClassLoader());
+        // Check that the type of the class is compatible with the type of the
+        // stub
         if (!(baseClass.isAssignableFrom(targetClass))) {
             throw new ReifiedCastException("Cannot convert " + targetClass.getName() + "into " +
                 baseClass.getName());
@@ -646,20 +670,20 @@ public abstract class MOP {
 
     // BUG ID: #327
     protected static void addClassToCache(String name, Class<?> cl) {
-        //        System.out.println("MOP: puting " + nameOfStubClass +
-        //            " in loadedClass");
-        //        loadedClass.put(nameOfStubClass, stubClass);
-        //        Field[] clArray = stubClass.getDeclaredFields();
-        //        System.out.println("MOP: nuumber of declared classes " +
-        //            clArray.length);
-        //        for (int i = 0; i < clArray.length; i++) {
-        //            Field ob1 = clArray[i];
-        //            System.out.println("MOP: field " + ob1.getName());
-        //            Class<?> cl = ob1.getType();
-        //            System.out.println("MOP: key = " + cl.getName() + " value =  " +
-        //                cl);
-        //            loadedClass.put(cl.getName(), cl);
-        //        }
+        // System.out.println("MOP: puting " + nameOfStubClass +
+        // " in loadedClass");
+        // loadedClass.put(nameOfStubClass, stubClass);
+        // Field[] clArray = stubClass.getDeclaredFields();
+        // System.out.println("MOP: nuumber of declared classes " +
+        // clArray.length);
+        // for (int i = 0; i < clArray.length; i++) {
+        // Field ob1 = clArray[i];
+        // System.out.println("MOP: field " + ob1.getName());
+        // Class<?> cl = ob1.getType();
+        // System.out.println("MOP: key = " + cl.getName() + " value = " +
+        // cl);
+        // loadedClass.put(cl.getName(), cl);
+        // }
         loadedClass.put(name, cl);
     }
 
@@ -700,32 +724,35 @@ public abstract class MOP {
         Constructor<?> targetConstructor;
 
         // Locates the right constructor (should use a cache here ?)
-        Class<?>[] targetConstructorArgs = new Class<?>[constructorParameters.length];
-        for (int i = 0; i < constructorParameters.length; i++) {
-            //	System.out.println("MOP: constructorParameters[i] = " + constructorParameters[i]);
+
+        // additional implicit parameters (member classes)
+        // equals to 1 if targetClass is an member class, 0 otherwise
+        int isMemberClass = (targetClass.isMemberClass() && !Modifier.isStatic(targetClass.getModifiers())) ? 1
+                : 0;
+        Class<?>[] targetConstructorArgs = new Class<?>[constructorParameters.length + isMemberClass];
+        if (isMemberClass == 1) {
+            targetConstructorArgs[0] = targetClass.getEnclosingClass();
+        }
+        for (int i = isMemberClass; i < constructorParameters.length + isMemberClass; i++) {
             if (constructorParameters[i] != null) {
                 targetConstructorArgs[i] = constructorParameters[i].getClass();
             } else {
                 targetConstructorArgs[i] = null;
             }
-
-            //	System.out.println("MOP: targetConstructorArgs[i] = " + targetConstructorArgs[i]);
         }
-
-        //System.out.println("MOP: targetClass is " + targetClass);
-        //	System.out.println("MOP: targetConstructorArgs = " + targetConstructorArgs);
-        //	System.out.println("MOP: targetConstructorArgs.length = " + targetConstructorArgs.length);
         try {
-            //MODIFIED 4/5/00
+            // MODIFIED 4/5/00
             if (targetClass.isInterface()) {
-                //there is no point in looking for the constructor of an interface
-                //	System.out.println("MOP: WARNING Interface detected");
+                // there is no point in looking for the constructor of an
+                // interface
+                // System.out.println("MOP: WARNING Interface detected");
                 targetConstructor = null;
             } else {
                 targetConstructor = targetClass.getConstructor(targetConstructorArgs);
             }
         } catch (NoSuchMethodException e) {
-            // This may have failed because getConstructor does not allow subtypes
+            // This may have failed because getConstructor does not allow
+            // subtypes
             targetConstructor = findReifiedConstructor(targetClass, targetConstructorArgs);
 
             if (targetConstructor == null) {
@@ -898,7 +925,7 @@ public abstract class MOP {
             return castInto(sourceObject, cl, null);
         } catch (ClassNotFoundException e) {
             throw new ReifiedCastException("Cannot load class " + targetTypeName);
-            //		throw new ReifiedCastException ("Cannot cast "+sourceObject.getClass().getName()+" into "+targetTypeName);
+            //      throw new ReifiedCastException ("Cannot cast "+sourceObject.getClass().getName()+" into "+targetTypeName);
         }
     }
 
@@ -1026,22 +1053,25 @@ public abstract class MOP {
         public int compare(HashSet<Constructor<?>> set1, HashSet<Constructor<?>> set2) {
             Integer result = null;
 
-            // This function compares each element of set to each element of set2
+            // This function compares each element of set to each element of
+            // set2
             for (Constructor<?> c1 : set1) {
                 for (Constructor<?> c2 : set2) {
                     int test = compareConstructors(c1, c2);
                     if (test == 0) {
-                        // if two elements are equals then the sets are considered equal
+                        // if two elements are equals then the sets are
+                        // considered equal
                         return 0;
                     }
                     if (result == null) {
                         result = test;
                     } else if ((test * result) < 0) {
-                        // if two elements have contradictory orders then the sets are considered equal
+                        // if two elements have contradictory orders then the
+                        // sets are considered equal
                         return 0;
                     }
 
-                    // Otherwise 
+                    // Otherwise
                 }
             }
             return result;
@@ -1053,9 +1083,11 @@ public abstract class MOP {
 
         public int compareConstructors(Constructor<?> c1, Constructor<?> c2) {
             // Compare two constructors using the following principles
-            // if every parameters of c1 are assignable to the corresponding parameters in c2 
+            // if every parameters of c1 are assignable to the corresponding
+            // parameters in c2
             // ==> then c1 is more pertinent than c2 (and resp)
-            // if there exist both one parameter of c1 assignable to the param in c2 and one parameter of c2 assigable to the param in c1, 
+            // if there exist both one parameter of c1 assignable to the param
+            // in c2 and one parameter of c2 assigable to the param in c1,
             // ==> then the constructors are equivalent (ambiguous)
             Class<?>[] c1PT = c1.getParameterTypes();
             Class<?>[] c2PT = c2.getParameterTypes();
@@ -1063,7 +1095,8 @@ public abstract class MOP {
             for (int i = 0; i < c1PT.length; i++) {
                 int currentResult;
                 if (parameterTypes[i] == null) {
-                    // if the specified parameter is null, we can't make any supposition
+                    // if the specified parameter is null, we can't make any
+                    // supposition
                     currentResult = 0;
                 } else if (c1PT[i].equals(c2PT[i])) {
                     // not decidable

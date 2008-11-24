@@ -120,6 +120,16 @@ public class ConstructorCallImpl implements ConstructorCall, Serializable {
     public Object execute() throws InvocationTargetException, ConstructorCallExecutionFailedException {
         // System.out.println("ConstructorCall: The constructor is " + reifiedConstructor); 
         try {
+            // if the reified class is an member class, add the implicit parameter
+            if (getReifiedClass().isMemberClass() && !Modifier.isStatic(getReifiedClass().getModifiers())) {
+                Class enclosingClass = getReifiedClass().getEnclosingClass();
+                Object[] tmp = effectiveArguments;
+                effectiveArguments = new Object[tmp.length + 1];
+                effectiveArguments[0] = enclosingClass.newInstance();
+                for (int i = 1; i < effectiveArguments.length; i++) {
+                    effectiveArguments[i] = tmp[i - 1];
+                }
+            }
             return reifiedConstructor.newInstance(effectiveArguments);
         } catch (IllegalAccessException e) {
             throw new ConstructorCallExecutionFailedException("Access rights to the constructor denied: " + e);
