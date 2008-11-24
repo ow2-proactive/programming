@@ -434,7 +434,7 @@ rvice(body);
 
       <para>You can find in
       <literal>ProActive/examples/nbody/nbodyFaultTolerance.[sh|bat]</literal>
-      a script that starts a fault-tolerant version of the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/apps/nbody.html">ProActive
+      a script that starts a fault-tolerant version of the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/nbody.html">ProActive
       NBody</link> example. This script actually call the
       <literal>ProActive/examples/nbody/nbody.[sh|bat]</literal>
       script with the option <literal>-displayft</literal>. The java source
