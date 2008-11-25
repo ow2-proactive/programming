@@ -70,6 +70,7 @@ import org.objectweb.proactive.core.runtime.VMInformation;
  *
  */
 public class NodeImpl implements Node, Serializable {
+
     protected NodeInformation nodeInformation;
     protected ProActiveRuntime proActiveRuntime;
     protected String vnName;
@@ -83,6 +84,37 @@ public class NodeImpl implements Node, Serializable {
     public NodeImpl(ProActiveRuntime proActiveRuntime, String nodeURL, String protocol, String jobID) {
         this.proActiveRuntime = proActiveRuntime;
         this.nodeInformation = new NodeInformationImpl(nodeURL, protocol, jobID);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((nodeInformation == null) ? 0 : nodeInformation.hashCode());
+        result = prime * result + ((vnName == null) ? 0 : vnName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        NodeImpl other = (NodeImpl) obj;
+        if (nodeInformation == null) {
+            if (other.nodeInformation != null)
+                return false;
+        } else if (!nodeInformation.equals(other.nodeInformation))
+            return false;
+        if (vnName == null) {
+            if (other.vnName != null)
+                return false;
+        } else if (!vnName.equals(other.vnName))
+            return false;
+        return true;
     }
 
     //
@@ -205,6 +237,7 @@ public class NodeImpl implements Node, Serializable {
     //------------------------INNER CLASS---------------------------------------
     //
     protected class NodeInformationImpl implements NodeInformation {
+
         private String nodeName;
         private String nodeURL;
         private String protocol;
@@ -218,6 +251,37 @@ public class NodeImpl implements Node, Serializable {
             this.jobID = (jobID != null) ? jobID : Job.DEFAULT_JOBID;
 
             this.vmInformation = proActiveRuntime.getVMInformation();
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((nodeName == null) ? 0 : nodeName.hashCode());
+            result = prime * result + ((vmInformation == null) ? 0 : vmInformation.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (!(obj instanceof NodeInformationImpl))
+                return false;
+            NodeInformationImpl other = (NodeInformationImpl) obj;
+            if (nodeName == null) {
+                if (other.nodeName != null)
+                    return false;
+            } else if (!nodeName.equals(other.nodeName))
+                return false;
+            if (vmInformation == null) {
+                if (other.vmInformation != null)
+                    return false;
+            } else if (!vmInformation.equals(other.vmInformation))
+                return false;
+            return true;
         }
 
         /**
