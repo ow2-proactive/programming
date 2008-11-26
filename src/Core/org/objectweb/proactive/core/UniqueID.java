@@ -158,7 +158,7 @@ public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
     public boolean equals(Object o) {
         //System.out.println("Now checking for equality");
         if (o instanceof UniqueID) {
-            return ((this.id.equals(((UniqueID) o).id)) && (this.vmID.equals(((UniqueID) o).vmID)));
+            return ((this.id.equals(((UniqueID) o).getUID())) && (this.vmID.equals(((UniqueID) o).getVMID())));
         } else {
             return false;
         }
