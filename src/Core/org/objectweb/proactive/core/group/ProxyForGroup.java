@@ -341,7 +341,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
         }
 
         /*
-         * A barrier of synchronisation to ensure that all calls are done before continuing the
+         * A barrier of synchronization to ensure that all calls are done before continuing the
          * execution
          */
         // try {
