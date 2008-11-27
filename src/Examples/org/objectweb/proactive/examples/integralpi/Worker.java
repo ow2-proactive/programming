@@ -133,7 +133,7 @@ public class Worker implements Serializable {
     /**
      *    4
      * --------
-     * (1 + x²)
+     * (1 + x*x)
      *
      * @param x The x value of the f(x)
      *

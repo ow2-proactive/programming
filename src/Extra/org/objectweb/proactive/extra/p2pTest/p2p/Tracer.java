@@ -45,12 +45,11 @@ import org.objectweb.proactive.extra.p2pTest.messages.TracerWithCallbackMessage;
 
 
 /**
- * TODO bravo la javadoc en français !!
  * @author The ProActive Team
- * Main et CallBack pour TracerWithCallbackMessage
- * Main soit: -d�marre le dump de la topologie � partir d'une addresse
- *            -trace le nombre d'acquaintance pour l'ensemble des noeuds p2p
- *            -fait une requete pour obtenir un noeud ProActive
+ * Main and CallBack and TracerWithCallbackMessage
+ * Main can: -starts the topology dump from an address
+ *            -trace the number of acquaintance for all the p2p nodes
+ *            -perform a request to get a ProActive node
  */
 public class Tracer implements java.io.Serializable {
     public static final boolean DEBUG = true;
@@ -68,8 +67,8 @@ public class Tracer implements java.io.Serializable {
     }
 
     /**
-     * Dump la topologie a l'aide de org.objectweb.proactive.extra.p2p.v2.monitoring.Dumper pour @param addr
-     * @param addr l'addresse du point d'entr� pour le dump de la topologie
+     * Dump the topology thanks to org.objectweb.proactive.extra.p2p.v2.monitoring
+     * @param addr entry point address
      */
     public static void dumpP2PNetwork(String addr) {
         Dumper dumper = null;
@@ -85,8 +84,8 @@ public class Tracer implements java.io.Serializable {
     }
 
     /**
-     * Envoi au P2PService un message TracerWithCallbackMessage avec ProActive.getStubOnThis() pour les Callbacks
-     * @param distP2PService P2PService distant
+     * Sending to P2PService a TracerWithCallbackMessage with ProActive.getStubOnThis() for the callbacks
+     * @param distP2PService distant P2PService
      */
     public void sendTrace(P2PService distP2PService) {
         try {
@@ -112,9 +111,9 @@ public class Tracer implements java.io.Serializable {
     }
 
     /**
-     * Permet de r�cup�rer ou de creer un index identifiant de mani�re unique tout au long de l'execution l'adresse d'un noeud
-     * @param addr addresse du noeud
-     * @return un index associ� de mani�re unique tout au long de l'execution � l'adresse pass�e en param�tre
+     * Offers a way to retrieve or create an unique identifier for the node address, during all the runtime
+     * @param addr node address
+     * @return an unique identifier for the node address
      */
     public int getTabPositionOf(String addr) {
         int current;
@@ -130,10 +129,9 @@ public class Tracer implements java.io.Serializable {
     }
 
     /**
-     * CallBack des Messages TracerWithCallbackMessage
-     * met a jour le nombre de voisin @param nbAcquaintance pour le noeud d'adresse @param addr
-     * @param addr addresse du noeud qui fait le CallBack
-     * @param nbAcquaintances nombre d'acquaintance du noeud qui effectue le Callback
+     * TracerWithCallbackMessage callbacks. Updates the number of neighbors
+     * @param addr address of the node making the callback
+     * @param nbAcquaintances number of acquaintance of the node making the callback
      */
     public void trace(String addr, int nbAcquaintances) {
         if (DEBUG) {

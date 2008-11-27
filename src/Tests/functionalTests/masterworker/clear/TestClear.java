@@ -74,7 +74,7 @@ public class TestClear extends FunctionalTest {
         // We check that we received the results of the last set of tasks (and only these ones)
         Iterator<Integer> it = ids.iterator();
         int last = it.next();
-        assertTrue("First received should be n°" + NB_TASKS * 2 + " here it's " + last, last == NB_TASKS * 2);
+        assertTrue("First received should be n0" + NB_TASKS * 2 + " here it's " + last, last == NB_TASKS * 2);
         while (it.hasNext()) {
             int next = it.next();
             assertTrue("Results recieved in submission order", last < next);
