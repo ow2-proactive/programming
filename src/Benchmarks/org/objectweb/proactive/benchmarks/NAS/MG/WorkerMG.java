@@ -746,7 +746,7 @@ public class WorkerMG extends Timed implements Serializable {
         }
 
         T_reduce_sum.start();
-        sum_max = this.communicator.sumAndMax(s, rnmu); // XXX sumAndMax
+        sum_max = this.communicator.sumAndMax(s, rnmu);
         T_reduce_sum.stop();
 
         if (WorkerMG.COMMUNICATION_PATTERN_OBSERVING_MODE) {
@@ -1179,7 +1179,7 @@ public class WorkerMG extends Timed implements Serializable {
             best = z[zresolve(j1[i1][1], j2[i1][1], j3[i1][1]) + zoff];
 
             T_reduce_max.start();
-            temp = this.communicator.max(best); // XXX REDUCES MAX
+            temp = this.communicator.max(best);
             T_reduce_max.stop();
 
             if (WorkerMG.COMMUNICATION_PATTERN_OBSERVING_MODE) {
@@ -1210,7 +1210,6 @@ public class WorkerMG extends Timed implements Serializable {
 
             ten[i][1] = best;
 
-            // XXX Reduce Max array
             T_reduce_max_array.start();
             jg_temp = this.communicator.max(new int[] { jg[0][i][1], jg[1][i][1], jg[2][i][1], jg[3][i][1] });
             T_reduce_max_array.stop();
@@ -1236,7 +1235,6 @@ public class WorkerMG extends Timed implements Serializable {
             jg[3][i][1] = jg_temp[3];
             best = z[zresolve(j1[i0][0], j2[i0][0], j3[i0][0]) + zoff];
 
-            // XXX Reduce Min
             T_reduce_min.start();
             best = this.communicator.min(best);
             T_reduce_min.stop();
@@ -1267,7 +1265,6 @@ public class WorkerMG extends Timed implements Serializable {
 
             ten[i][0] = best;
 
-            // XXX Reduce Max array
             T_reduce_max_array.start();
             jg_temp = this.communicator.max(new int[] { jg[0][i][0], jg[1][i][0], jg[2][i][0], jg[3][i][0] });
             T_reduce_max_array.stop();
