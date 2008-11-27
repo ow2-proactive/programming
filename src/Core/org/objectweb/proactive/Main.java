@@ -45,7 +45,7 @@ public class Main {
      * @return String
      */
     public static String getProActiveVersion() {
-        return "4.0.2";
+        return "4.0.3";
     }
 
     public static void main(String[] args) {
