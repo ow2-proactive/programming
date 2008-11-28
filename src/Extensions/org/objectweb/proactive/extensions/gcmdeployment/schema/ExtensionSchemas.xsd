@@ -5,7 +5,6 @@
 	elementFormDefault="qualified">
 
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupCCSSchema.xsd" />
-	<xsd:include schemaLocation="../GCMDeployment/group/GroupEC2Schema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupGLiteSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupGridEngineSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupLSFSchema.xsd" />
