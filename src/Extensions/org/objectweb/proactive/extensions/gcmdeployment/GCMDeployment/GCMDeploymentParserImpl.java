@@ -67,6 +67,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bri
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Group;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupCCSParser;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupEC2Parser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupGLiteParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupGridEngineParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupLSFParser;
@@ -208,6 +209,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         registerGroupParser(new GroupARCParser());
         registerGroupParser(new GroupCCSParser());
         registerGroupParser(new GroupCGSPParser());
+        registerGroupParser(new GroupEC2Parser());
         registerGroupParser(new GroupFuraParser());
         registerGroupParser(new GroupGLiteParser());
         registerGroupParser(new GroupGlobusParser());

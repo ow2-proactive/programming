@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="urn:gcm:deployment:1.0"
+	xmlns="urn:gcm:deployment:1.0"
+	elementFormDefault="qualified">
+
+	<xs:include schemaLocation="../../schema/DeploymentDescriptorSchema.xsd"/>
+
+	<xs:complexType name="groupTypeEC2">
+		<xs:complexContent>
+			<xs:extension base="abstractGroupElementType">
+				<xs:sequence>
+					<xs:element name="privateKey" type="pathElementType" minOccurs="0" maxOccurs="1" />
+					<xs:element name="certification" type="pathElementType" minOccurs="0" maxOccurs="1" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="ec2Group" substitutionGroup="abstractShElement" type="groupTypeEC2"/>
+</xs:schema>
