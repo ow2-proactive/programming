@@ -1,0 +1,46 @@
+package org.objectweb.proactive.examples.components.userguide;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.objectweb.fractal.adl.Factory;
+import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.control.LifeCycleController;
+import org.objectweb.fractal.api.factory.GenericFactory;
+import org.objectweb.fractal.api.type.ComponentType;
+import org.objectweb.fractal.api.type.InterfaceType;
+import org.objectweb.fractal.api.type.TypeFactory;
+import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.api.PADeployment;
+import org.objectweb.proactive.core.component.Constants;
+import org.objectweb.proactive.core.component.ContentDescription;
+import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
+import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
+import org.objectweb.proactive.core.descriptor.data.VirtualNode;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.examples.components.userguide.primitive.ComputeItf;
+import org.objectweb.proactive.examples.components.userguide.primitive.PrimitiveComputer;
+import org.objectweb.proactive.examples.components.userguide.primitive.PrimitiveMaster;
+
+
+public class Main {
+   public static void main(String[] args) {
+       //        System.out.println("Launch primitive component example");
+       //        Main.launchFirstPrimitive();
+       System.out.println("Launch component assembly example");
+       Main.launchWithoutADL();
+
+       //        System.out.println("Launch and deploy component assembly example");
+       //        Main.launchAndDeployWithoutADL();
+
+       //        System.out.println("Launch component assembly example with ADL");
+       //        Main.launchOneWithADL();
+       //
+       //        System.out.println("Launch and deploy component assembly example with ADL");
+       //        Main.launchAndDeployWithADL();
+
+       //System.err.println("The END...");
+       //System.exit(0);
+   }
+

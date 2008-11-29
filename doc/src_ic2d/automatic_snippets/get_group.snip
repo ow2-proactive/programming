@@ -1,0 +1,9 @@
+       Object[][] params = { { "Agent0" }, { "Agent1" }, { "Agent2" } };
+       Node[] nodes = { NodeFactory.getDefaultNode(), super.getANode(), super.getANode() };
+       this.typedGroup = (A) PAGroup.newGroup(A.class.getName(), params, nodes);
+
+       Group<A> g = PAGroup.getGroup(this.typedGroup);
+
+       g.add(new A("Agent3"));
+       g.add(new A("Agent4"));
+       g.add(new A("Agent5"));

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <!-- uncomment when building IC2D manual  
+    <property name="doc.name"               value="IC2D" />
+    <property name="docs.src.dir"           value="../doc/src_ic2d" />  
+       -->
+    <import file="toolchain/doc.xml"/>
+</project>    

@@ -1,0 +1,50 @@
+   private static void launchWithoutADL() {
+       try {
+           Component boot = Fractal.getBootstrapComponent();
+           TypeFactory typeFact = Fractal.getTypeFactory(boot);
+           GenericFactory genericFact = Fractal.getGenericFactory(boot);
+
+           // component types: PrimitiveComputer, PrimitiveMaster, CompositeWrapper
+           ComponentType computerType = typeFact.createFcType(new InterfaceType[] { typeFact
+                   .createFcItfType("compute-itf", ComputeItf.class.getName(), TypeFactory.SERVER,
+                           TypeFactory.MANDATORY, TypeFactory.SINGLE) });
+           ComponentType masterType = typeFact.createFcType(new InterfaceType[] {
+                   typeFact.createFcItfType("run", Runnable.class.getName(), TypeFactory.SERVER,
+                           TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                   typeFact.createFcItfType("compute-itf", ComputeItf.class.getName(), TypeFactory.CLIENT,
+                           TypeFactory.MANDATORY, TypeFactory.SINGLE) });
+           ComponentType wrapperType = typeFact.createFcType(new InterfaceType[] { typeFact.createFcItfType(
+                   "run", Runnable.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                   TypeFactory.SINGLE) });
+
+           // components creation
+           Component primitiveComputer = genericFact.newFcInstance(computerType, new ControllerDescription(
+               "PrimitiveComputer", Constants.PRIMITIVE), new ContentDescription(PrimitiveComputer.class
+                   .getName()));
+           Component primitiveMaster = genericFact.newFcInstance(masterType, new ControllerDescription(
+               "PrimitiveMaster", Constants.PRIMITIVE), new ContentDescription(PrimitiveMaster.class
+                   .getName()));
+           Component compositeWrapper = genericFact.newFcInstance(wrapperType, new ControllerDescription(
+               "CompositeWrapper", Constants.COMPOSITE), null);
+
+           // component assembling
+           Fractal.getContentController(compositeWrapper).addFcSubComponent(primitiveComputer);
+           Fractal.getContentController(compositeWrapper).addFcSubComponent(primitiveMaster);
+           Fractal.getBindingController(compositeWrapper).bindFc("run",
+                   primitiveMaster.getFcInterface("run"));
+           Fractal.getBindingController(primitiveMaster).bindFc("compute-itf",
+                   primitiveComputer.getFcInterface("compute-itf"));
+
+           // start CompositeWrapper component
+           Fractal.getLifeCycleController(compositeWrapper).startFc();
+
+           // get the run interface
+           Runnable itf = ((Runnable) compositeWrapper.getFcInterface("run"));
+
+           // call component
+           itf.run();
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+

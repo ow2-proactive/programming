@@ -1,0 +1,15 @@
+/**
+* Initialize the Monte-Carlo toolkit by giving a descriptor and two virtual node names.
+* Workers will be instanciated on resources created by the first one.
+* The second one should create one single resource. The master will be deployed on that resource
+* The last parameter is a Class object holding the definition of the RandomStream to use.
+* By default, the generator in use is the MRG32k3a one.
+*
+* @param descriptorURL url of a descriptor
+* @param masterVNName virtual node name corresponding to the master
+* @param workersVNName virtual node name corresponding to workers
+* @param randomStreamClass Random Number Generator class that workers will be using
+* @throws ProActiveException
+*/
+public PAMonteCarlo(URL descriptorURL, String workersVNName, String masterVNName, Class randomStreamClass)
+       throws ProActiveException

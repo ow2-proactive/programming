@@ -1,0 +1,9 @@
+/**
+* Runs the simulation by giving the definition of a top-level task.
+* This task is not directly a Monte Carlo simulation, but should rather contain the code of your general algorithm.
+* The top-level task can submit nested general tasks or nested Monte-Carlo simulations (Experience Set).
+* @param toplevelTask top-level task
+* @return the result of the top-level task
+* @throws TaskException if an exception occured during the execution of the top-level task.
+*/
+public T run(EngineTask<T> toplevelTask) throws TaskException

@@ -18,7 +18,7 @@
    
 	<property file="${user.home}/.proactive/build.properties" />
 	<import file="common.xml" />
-	<import file="../doc/toolchain/doc.xml" optional="true"/>
+	<import file="../doc/manual.xml" optional="true"/>
 
 	<!-- ************
 		Taskdefs		

@@ -1,0 +1,13 @@
+       // waiting for results
+       List<Long> successesList = master.waitAllResults();
+
+       // computing PI using the results
+       long sumSuccesses = 0;
+
+       for (long successes : successesList) {
+           sumSuccesses += successes;
+       }
+
+       double pi = (4 * sumSuccesses) / ((double) NUMBER_OF_EXPERIENCES * NUMBER_OF_TASKS);
+
+       System.out.println("Computed PI by Monte-Carlo method : " + pi);

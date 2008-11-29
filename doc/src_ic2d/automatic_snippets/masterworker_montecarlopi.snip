@@ -1,0 +1,32 @@
+   /**
+    * Task which creates randomly a set of points belonging to the [0, 1[x[0, 1[ interval<br>
+    * and tests how many points are inside the uniter circle.
+    * @author The ProActive Team
+    *
+    */
+   public static class ComputePIMonteCarlo implements Task<Long> {
+
+       /**
+        *
+        */
+       public ComputePIMonteCarlo() {
+       }
+
+       public Long run(WorkerMemory memory) throws Exception {
+           long remaining = NUMBER_OF_EXPERIENCES;
+           long successes = 0;
+           while (remaining > 0) {
+               remaining--;
+               if (experience()) {
+                   successes++;
+               }
+           }
+           return successes;
+       }
+
+       public boolean experience() {
+           double x = Math.random();
+           double y = Math.random();
+           return Math.hypot(x, y) < 1;
+       }
+   }

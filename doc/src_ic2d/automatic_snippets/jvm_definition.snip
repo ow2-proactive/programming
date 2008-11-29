@@ -1,0 +1,46 @@
+<!-- JVMS MAPPING AND CREATION -->
+<deployment>
+<!-- MAPPING -->
+<mapping>
+ <map virtualNode="remoteNode">
+  <jvmSet>
+  
+   <vmName value="JVM1" />
+   <vmName value="JVM2" />
+   <vmName value="JVM3" />
+   <vmName value="JVM4" />
+   <vmName value="JVM5" />
+   
+  </jvmSet>
+ </map>
+</mapping>
+<!-- CREATION -->
+<jvms>
+ <jvm name="JVM1">
+  <creation>
+   <processReference refid="rsh_cheypa" />
+  </creation>
+ </jvm>
+ <jvm name="JVM2">
+  <creation>
+   <processReference refid="rsh_predadab" />
+  </creation>
+ </jvm>
+ <jvm name="JVM3">
+  <creation>
+   <processReference refid="rsh_amda" />
+  </creation>
+ </jvm>
+ <jvm name="JVM4">
+  <creation>
+   <processReference refid="rsh_bebita" />
+  </creation>
+ </jvm>
+ <jvm name="JVM5">
+  <creation>
+   <processReference refid="rsh_bebita" />
+  </creation>
+ </jvm>
+ 
+</jvms>
+</deployment>

@@ -1,0 +1,33 @@
+   private static void launchFirstPrimitive() {
+       try {
+           Component boot = Fractal.getBootstrapComponent();
+           TypeFactory typeFact = Fractal.getTypeFactory(boot);
+           GenericFactory genericFact = Fractal.getGenericFactory(boot);
+           Component primitiveComputer = null;
+
+           // type of PrimitiveComputer component
+           ComponentType computerType = typeFact.createFcType(new InterfaceType[] { typeFact
+                   .createFcItfType("compute-itf", ComputeItf.class.getName(), TypeFactory.SERVER,
+                           TypeFactory.MANDATORY, TypeFactory.SINGLE) });
+
+           // component creation
+           primitiveComputer = genericFact.newFcInstance(computerType, new ControllerDescription("root",
+               Constants.PRIMITIVE), new ContentDescription(PrimitiveComputer.class.getName()));
+
+           // start PrimitiveComputer component
+           Fractal.getLifeCycleController(primitiveComputer).startFc();
+           ((LifeCycleController) primitiveComputer.getFcInterface("lifecycle-controller")).startFc();
+
+           // get the compute-itf interface
+           ComputeItf itf = ((ComputeItf) primitiveComputer.getFcInterface("compute-itf"));
+           ;
+           // call component
+           itf.doNothing();
+           int result = itf.compute(5);
+
+           System.out.println("Result of computation whith 5 is: " + result); //display 10
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+

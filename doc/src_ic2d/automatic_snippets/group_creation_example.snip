@@ -1,0 +1,8 @@
+       node0 = NodeFactory.getDefaultNode();
+       node1 = super.getANode();
+       node2 = super.getANode();
+
+       Object[][] params = { { "Agent0" }, { "Agent1" }, { "Agent2" } };
+       Node[] nodes = { node0, node1, node2 };
+
+       this.typedGroup = (A) PAGroup.newGroup(A.class.getName(), params, nodes);

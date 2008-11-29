@@ -1,0 +1,22 @@
+   private static void launchWithADL() {
+       try {
+           Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
+           Map<String, Object> context = new HashMap<String, Object>();
+
+           // component creation
+           Component compositeWrapper = (Component) f.newComponent(
+                   "org.objectweb.proactive.examples.components.userguide.adl.CompositeWrapper", context);
+
+           // start PrimitiveComputer component
+           Fractal.getLifeCycleController(compositeWrapper).startFc();
+
+           // get the run interface
+           Runnable itf = ((Runnable) compositeWrapper.getFcInterface("run"));
+
+           // call component
+           itf.run();
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+

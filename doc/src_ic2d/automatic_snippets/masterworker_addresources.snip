@@ -1,0 +1,23 @@
+   /**
+    * Adds the given Collection of nodes to the master <br/>
+    * @param nodes a collection of nodes
+    */
+   void addResources(Collection<Node> nodes);
+
+   /**
+    * Adds the given descriptor to the master<br>
+    * Every virtual nodes inside the given descriptor will be activated<br/>
+    * @param descriptorURL URL of a deployment descriptor
+    * @throws ProActiveException if a problem occurs while adding resources
+    */
+   void addResources(URL descriptorURL) throws ProActiveException;
+
+   /**
+    * Adds the given descriptor to the master<br>
+    * Only the specified virtual node inside the given descriptor will be activated <br/>
+    * @param descriptorURL URL of a deployment descriptor
+    * @param virtualNodeName name of the virtual node to activate
+    * @throws ProActiveException if a problem occurs while adding resources
+    */
+   void addResources(URL descriptorURL, String virtualNodeName) throws ProActiveException;
+
