@@ -1,8 +1,0 @@
-       // defining tasks
-       Vector<ComputePIMonteCarlo> tasks = new Vector<ComputePIMonteCarlo>();
-       for (int i = 0; i < NUMBER_OF_TASKS; i++) {
-           tasks.add(new ComputePIMonteCarlo());
-       }
-
-       // adding tasks to the queue
-       master.solve(tasks);
