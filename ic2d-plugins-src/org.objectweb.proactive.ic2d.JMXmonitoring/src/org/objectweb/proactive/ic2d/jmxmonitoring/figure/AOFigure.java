@@ -43,6 +43,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
 
@@ -68,6 +69,10 @@ public class AOFigure extends AbstractFigure {
     public static final int REQUEST_FIGURE_SIZE = 4;
     public static final Display device;
 
+    // Flags
+    private Image flagStepByStepEnable;
+    private Image flagStepByStepMotion;
+
     static {
         device = Display.getCurrent();
         COLOR_WHEN_WAITING_FOR_REQUEST = new Color(device, 225, 225, 225);
@@ -82,6 +87,9 @@ public class AOFigure extends AbstractFigure {
         COLOR_REQUEST_SINGLE = new Color(device, 0, 255, 0); // green
         COLOR_REQUEST_SEVERAL = new Color(device, 255, 0, 0); // red
         COLOR_REQUEST_MANY = new Color(device, 150, 0, 255); // violet
+
+        // For Step By Step
+
     }
 
     /** Request queue length (used to display small square int the active object) */
@@ -96,9 +104,28 @@ public class AOFigure extends AbstractFigure {
     //    private final Map<AOFigure, RoundedLineConnection> targetConnections;
     private MouseListener mouseListener;
 
+    /* Boolean for the displaying a flag or not */
+
+    // Flag 'Paused'
+    private boolean isStepByStep = false;
+
+    // Flag 'Slow Motion'
+    private boolean isStepByStepMotion = false;
+
+    // Flag 'Immediate Service'
+    private boolean hasImmediateServiceBlocked = false;
+
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
+
+    public boolean isHasImmediateServiceBlocked() {
+        return hasImmediateServiceBlocked;
+    }
+
+    public void setHasImmediateServiceBlocked(boolean hasImmediateServiceBlocked) {
+        this.hasImmediateServiceBlocked = hasImmediateServiceBlocked;
+    }
 
     /**
      * @param text Text to display
@@ -107,6 +134,11 @@ public class AOFigure extends AbstractFigure {
     public AOFigure(String text) {
         super(text);
         this.requestQueueLength = 0;
+
+        // Initialize the image for the flag
+        flagStepByStepEnable = new Image(device, this.getClass().getResourceAsStream("pause.gif"));
+        flagStepByStepMotion = new Image(device, this.getClass().getResourceAsStream("step_motion.png"));
+
         //        this.sourceConnections = new java.util.concurrent.ConcurrentHashMap<AOFigure, RoundedLineConnection>(); // Collections.synchronizedMap(new Hashtable<AOFigure, RoundedLineConnection>());
         //        this.targetConnections = new java.util.concurrent.ConcurrentHashMap<AOFigure, RoundedLineConnection>(); //Collections.synchronizedMap(new Hashtable<AOFigure, RoundedLineConnection>());
         //   new Exception("Create AOFigure:"+text){}.printStackTrace();
@@ -121,6 +153,11 @@ public class AOFigure extends AbstractFigure {
         this.setState(state);
         this.requestQueueLength = requestQueueLength;
         this.isSecure = secure;
+
+        // Initialize the image for the flag
+        flagStepByStepEnable = new Image(device, this.getClass().getResourceAsStream("pause.gif"));
+        flagStepByStepMotion = new Image(device, this.getClass().getResourceAsStream("step_motion.png"));
+
         //        this.sourceConnections = null;
         //        this.targetConnections = null;
     }
@@ -195,6 +232,22 @@ public class AOFigure extends AbstractFigure {
         if (isSecure) {
             graphics.setForegroundColor(device.getSystemColor(SWT.COLOR_RED));
             graphics.drawText("S", 4, (bounds.height / 4) - 2);
+        }
+
+        // Draw Paused Flag
+        if (isStepByStep()) {
+            graphics.drawImage(flagStepByStepEnable, bounds.x + bounds.width - 16, bounds.y);
+        } else
+
+        // Draw Slow Motion Flag
+        if (isStepByStepMotion()) {
+            graphics.drawImage(flagStepByStepMotion, bounds.x + bounds.width - 16, bounds.y);
+        }
+
+        // Draw Immediate Service Flag
+        if (isHasImmediateServiceBlocked()) {
+            graphics.setForegroundColor(device.getSystemColor(SWT.COLOR_RED));
+            graphics.drawText("IS", bounds.x + 8, bounds.y);
         }
 
         // Cleanups
@@ -425,6 +478,28 @@ public class AOFigure extends AbstractFigure {
 
     public void setSecure(boolean isSecure) {
         this.isSecure = isSecure;
+    }
+
+    public void setParent(IFigure p) {
+        //System.out.println(this.label.getText()+" AOFigure.setParent()" + p);
+        //new Exception().printStackTrace();
+        super.setParent(p);
+    }
+
+    public boolean isStepByStep() {
+        return isStepByStep;
+    }
+
+    public void setStepByStep(boolean isStepByStep) {
+        this.isStepByStep = isStepByStep;
+    }
+
+    public boolean isStepByStepMotion() {
+        return isStepByStepMotion;
+    }
+
+    public void setStepByStepMotion(boolean isStepByStepMotion) {
+        this.isStepByStepMotion = isStepByStepMotion;
     }
 
 }

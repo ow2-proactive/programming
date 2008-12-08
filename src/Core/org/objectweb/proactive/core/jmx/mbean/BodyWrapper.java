@@ -54,6 +54,8 @@ import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.migration.Migratable;
 import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.core.debug.stepbystep.BreakpointType;
+import org.objectweb.proactive.core.debug.stepbystep.DebugInfo;
 import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.gc.ObjectGraph;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
@@ -72,15 +74,16 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 /**
  * Implementation of a BodyWrapperMBean.
  * <p>
- * Such wrapper is NOT created if the reified object of a body 
- * implements {@link org.objectweb.proactive.ProActiveInternalObject}.
+ * Such wrapper is NOT created if the reified object of a body implements
+ * {@link org.objectweb.proactive.ProActiveInternalObject}.
  *
  * @author The ProActive Team
  */
 public class BodyWrapper extends NotificationBroadcasterSupport implements Serializable, BodyWrapperMBean {
 
     /**
-     * The name of the attribute used to know if the reified object implements {@link java.io.Serializable}
+     * The name of the attribute used to know if the reified object implements
+     * {@link java.io.Serializable}
      */
     public static final String IS_REIFIED_OBJECT_SERIALIZABLE_ATTRIBUTE_NAME = "IsReifiedObjectSerializable";
 
@@ -104,8 +107,8 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
     private String bodyName;
 
     /**
-     * A <code>Boolean</code> attribute used to know
-     * if the reified object implements {@link java.io.Serializable} 
+     * A <code>Boolean</code> attribute used to know if the reified object
+     * implements {@link java.io.Serializable}
      */
     private boolean isReifiedObjectSerializable;
 
@@ -133,8 +136,10 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
     /**
      * Creates a new BodyWrapper MBean, representing an active object.
      *
-     * @param oname The JMX name of this wrapper
-     * @param body The wrapped active object's body
+     * @param oname
+     *            The JMX name of this wrapper
+     * @param body
+     *            The wrapped active object's body
      */
     public BodyWrapper(ObjectName oname, AbstractBody body) {
         this.objectName = oname;
@@ -227,7 +232,8 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
                     }
                 }
 
-                // and once the body is activated, we can forward the notifications
+                // and once the body is activated, we can forward the
+                // notifications
                 while (BodyWrapper.this.body.isActive()) {
                     try {
                         Thread.sleep(updateFrequence);
@@ -261,7 +267,7 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
         }
 
         // not sure if the synchronize is needed here, let's see ...
-        //		synchronized (notifications) {
+        // synchronized (notifications) {
         if (!this.notifications.isEmpty()) {
             ObjectName source = getObjectName();
             Notification n = new Notification(NotificationType.setOfNotifications, source, counter++,
@@ -269,7 +275,7 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
             n.setUserData(this.notifications);
             super.sendNotification(n);
             this.notifications.clear();
-            //		}
+            // }
         }
     }
 
@@ -395,4 +401,75 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
     public boolean getIsReifiedObjectSerializable() {
         return this.isReifiedObjectSerializable;
     }
+
+    //
+    // -- STEPBYSTEP METHODS -----------------------------------------------
+    //
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#enableStepByStep()
+     */
+    public void enableStepByStep() {
+        body.getDebugger().setStepByStep(true);
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#disableStepByStep()
+     */
+    public void disableStepByStep() {
+        body.getDebugger().resume();
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#nextStep()
+     */
+    public void nextStep() {
+        body.getDebugger().nextStep();
+    }
+
+    public void nextStep(long id) {
+        body.getDebugger().nextStep(id);
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#nextStep(Collection)
+     */
+    public void nextStep(Collection<Long> ids) {
+        body.getDebugger().nextStep(ids);
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#getState()
+     */
+    public DebugInfo getDebugInfo() {
+        return body.getDebugger().getDebugInfo();
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#slowMotion(long)
+     */
+    public void slowMotion(long slowMotionDelay) {
+        body.getDebugger().slowMotion(slowMotionDelay);
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#initBreakpointTypes()
+     */
+    public void initBreakpointTypes() {
+        body.getDebugger().initBreakpointTypes();
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#enableBreakpointTypes(BreakpointType[])
+     */
+    public void enableBreakpointTypes(BreakpointType[] types) {
+        body.getDebugger().enableBreakpointTypes(types);
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#disableBreakpointTypes(BreakpointType[])
+     */
+    public void disableBreakpointTypes(BreakpointType[] types) {
+        body.getDebugger().disableBreakpointTypes(types);
+    }
+
 }

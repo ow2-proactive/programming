@@ -38,7 +38,11 @@ import javax.management.ObjectName;
 
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.migration.MigrationException;
+import org.objectweb.proactive.core.debug.dconnection.DebuggerInformation;
+import org.objectweb.proactive.core.debug.stepbystep.BreakpointType;
+import org.objectweb.proactive.core.debug.stepbystep.DebugInfo;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
+import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.securityentity.Entity;
@@ -46,38 +50,48 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 
 /**
  * MBean representing an active object.
+ *
  * @author The ProActive Team
  */
 public interface BodyWrapperMBean extends Serializable {
 
     /**
      * Returns the unique id.
+     *
      * @return The unique id of this active object.
      */
     public UniqueID getID();
 
     /**
-     * Returns the name of the body of the active object that can be used for displaying information
+     * Returns the name of the body of the active object that can be used for
+     * displaying information
+     *
      * @return the name of the body of the active object
      */
     public String getName();
 
     /**
      * Returns the url of the node containing the active object.
+     *
      * @return Returns the url of the node containing the active object
      */
     public String getNodeUrl();
 
     /**
      * Send a new notification.
-     * @param type The type of the notification. See {@link NotificationType}
+     *
+     * @param type
+     *            The type of the notification. See {@link NotificationType}
      */
     public void sendNotification(String type);
 
     /**
      * Send a new notification.
-     * @param type Type of the notification. See {@link NotificationType}
-     * @param userData The user data.
+     *
+     * @param type
+     *            Type of the notification. See {@link NotificationType}
+     * @param userData
+     *            The user data.
      */
     public void sendNotification(String type, Object userData);
 
@@ -94,13 +108,17 @@ public interface BodyWrapperMBean extends Serializable {
     public Object[] getTimersSnapshotFromBody() throws Exception;
 
     /**
-     * Returns <code>True</code> if the reified object of the body implements {@link java.io.Serializable} <code>False</code> otherwise.
-     * @return <code>True</code> if the reified object of the body implements {@link java.io.Serializable} <code>False</code> otherwise
+     * Returns <code>True</code> if the reified object of the body implements
+     * {@link java.io.Serializable} <code>False</code> otherwise.
+     *
+     * @return <code>True</code> if the reified object of the body implements
+     *         {@link java.io.Serializable} <code>False</code> otherwise
      */
     public boolean getIsReifiedObjectSerializable();
 
     /**
      * Returns the security manager.
+     *
      * @param user
      * @return the security manager
      */
@@ -108,6 +126,7 @@ public interface BodyWrapperMBean extends Serializable {
 
     /**
      * Modify the security manager.
+     *
      * @param user
      * @param policyServer
      */
@@ -115,15 +134,78 @@ public interface BodyWrapperMBean extends Serializable {
 
     /**
      * Migrate the body to the given node.
+     *
      * @param nodeUrl
      * @throws MigrationException
      */
     public void migrateTo(String nodeUrl) throws MigrationException;
 
     /**
-     *  returns a list of outgoing active object references.
+     * returns a list of outgoing active object references.
      */
     public Collection<UniqueID> getReferenceList();
 
     public String getDgcState();
+
+    //
+    // -- STEPBYSTEP METHODS -----------------------------------------------
+    //
+    /**
+     * Enable the debugger
+     */
+    public void enableStepByStep();
+
+    /**
+     * Disable the debugger
+     */
+    public void disableStepByStep();
+
+    /**
+     * Resume all the threads blocked in current breakpoint.
+     * The next active breakpoints will block them if the step by step mode is enable.
+     */
+    public void nextStep();
+
+    /**
+     * Resume one thread blocked in current breakpoint.
+     * The next active breakpoints will block them if the step by step mode is enable.
+     * @param id the id of the thread.
+     */
+    public void nextStep(long id);
+
+    /**
+     * Resume some threads blocked in current breakpoint.
+     * The next active breakpoints will block them if the step by step mode is enable.
+     * @param ids the collection of the threads.
+     */
+    public void nextStep(Collection<Long> ids);
+
+    /**
+     * return the state of the ActivableObject
+     */
+    public DebugInfo getDebugInfo();
+
+    /**
+     * set the time between every breakpoint
+     * @param waitTime the time in millisecond
+     */
+    public void slowMotion(long slowMotionDelay);
+
+    /**
+     * enable all breakpointTypes used by stepByStep
+     */
+    public void initBreakpointTypes();
+
+    /**
+     * enable some breakpointTypes used by stepByStep
+     * @param types, a table of BreakpointType
+     */
+    public void enableBreakpointTypes(BreakpointType[] types);
+
+    /**
+     * disable some breakpointTypes used by stepByStep
+     * @param types, a table of BreakpointType
+     */
+    public void disableBreakpointTypes(BreakpointType[] types);
+
 }

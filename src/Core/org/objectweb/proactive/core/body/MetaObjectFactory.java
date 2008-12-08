@@ -40,6 +40,7 @@ import org.objectweb.proactive.core.body.request.RequestFactory;
 import org.objectweb.proactive.core.body.request.RequestQueueFactory;
 import org.objectweb.proactive.core.body.request.RequestReceiverFactory;
 import org.objectweb.proactive.core.component.identity.ProActiveComponentFactory;
+import org.objectweb.proactive.core.debug.stepbystep.DebuggerFactory;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManagerFactory;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ThreadStoreFactory;
@@ -122,6 +123,11 @@ public interface MetaObjectFactory {
 
     // COMPONENTS
     public ProActiveComponentFactory newComponentFactory();
+
+    /** Creates a DebuggerFactory
+     * @return a new DebuggerFactory
+     */
+    public DebuggerFactory newDebuggerFactory();
 
     /**
      * accessor to the parameters of the factory (object-based configurations)

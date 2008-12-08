@@ -91,6 +91,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.editpart.CommunicationEditPart
 import org.objectweb.proactive.ic2d.jmxmonitoring.editpart.MonitoringEditPartFactory;
 import org.objectweb.proactive.ic2d.jmxmonitoring.editpart.WorldEditPart;
 import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint;
+import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IWorkbenchWindowsActionExtPoint;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.DragHost;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.WorldListener;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.IC2DThreadPool;
@@ -381,6 +382,31 @@ public class MonitoringView extends ViewPart {
         // Adds "New Monitoring view" action to the view's toolbar
         NewViewAction toolBarNewView = new NewViewAction();
         toolBarManager.add(toolBarNewView);
+
+        // Add Debug Action
+        toolBarManager.add(new Separator());
+
+        // Get all available actions defined by possibly provided
+        // extensions for the extension point workbenchWindowActions_extension
+        try {
+            IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(
+                    Activator.PLUGIN_ID + ".workbenchWindowActions_extension");
+            if (extensionPoint == null) {
+                return;
+            }
+            IConfigurationElement[] configs = extensionPoint.getConfigurationElements();
+
+            for (int x = 0; x < configs.length; x++) {
+                IWorkbenchWindowsActionExtPoint providedAction = (IWorkbenchWindowsActionExtPoint) configs[x]
+                        .createExecutableExtension("class");
+                providedAction.setWorldObject(world);
+                toolBarManager.add(providedAction);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        toolBarManager.add(new Separator());
     }
 
     /**

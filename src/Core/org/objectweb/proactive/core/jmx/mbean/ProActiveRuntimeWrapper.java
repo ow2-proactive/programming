@@ -45,6 +45,8 @@ import javax.management.ObjectName;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.LocalBodyStore;
+import org.objectweb.proactive.core.debug.dconnection.DebuggerConnection;
+import org.objectweb.proactive.core.debug.dconnection.DebuggerInformation;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -219,5 +221,36 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //
+    // -- DEBUGGERCONNECTION METHODS -----------------------------------------------
+    //
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#getDebugInfo()
+     */
+    public DebuggerInformation getDebugInfo() {
+        return DebuggerConnection.getDebugInfo();
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#removeDebugger()
+     */
+    public void removeDebugger() {
+        DebuggerConnection.removeDebugger();
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#hasDebuggerConnected()
+     */
+    public boolean hasDebuggerConnected() {
+        return DebuggerConnection.hasDebuggerConnected();
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#canBeDebugged()
+     */
+    public boolean canBeDebugged() {
+        return System.getProperty("debugID") != null;
     }
 }

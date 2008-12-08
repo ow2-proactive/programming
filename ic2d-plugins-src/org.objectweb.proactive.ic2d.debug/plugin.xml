@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+       id="org.objectweb.proactive.ic2d.debug.views"
+       name="Debug Views"
+       point="org.eclipse.ui.views">
+       <view
+            allowMultiple="false"
+            category="org.objectweb.proactive.ic2d.debug.DebugCategory"
+            class="org.objectweb.proactive.ic2d.debug.views.AOInformationView"
+            icon="icons/aoinfo.png"
+            id="org.objectweb.proactive.ic2d.debug.views.AOStateProperties"
+            name="Active Object Information"/>
+       <category
+            id="org.objectweb.proactive.ic2d.debug.DebugCategory"
+            name="Debug"/>
+   </extension>
+   <extension
+         point="org.objectweb.proactive.ic2d.JMXmonitoring.actions_extension">
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.DisplayAOInformationAction">
+         </action_class>
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.DebugConnectAction">
+         </action_class>
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.DebugStepByStepEnableAction">
+         </action_class>
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.DebugStepByStepNextStepAction">
+         </action_class>
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.DebugStepByStepSetFilterAction">
+         </action_class>
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.DebugStepByStepDisableAction">
+         </action_class>
+   </extension>
+   <extension
+         point="org.objectweb.proactive.ic2d.JMXmonitoring.workbenchWindowActions_extension">
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.DebugStepByStepEnableDisableAction">
+         </action_class>
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.DebugStepByStepNextStepAction">
+         </action_class>
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.SetSlowMotionAction">
+         </action_class>
+         <action_class
+		class="org.objectweb.proactive.ic2d.debug.actions.SetStepByStepFilterAction">
+         </action_class>
+   </extension>
+</plugin>

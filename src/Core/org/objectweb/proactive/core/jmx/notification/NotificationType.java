@@ -89,6 +89,16 @@ public class NotificationType {
     // --- GCM Deployment
     public final static String GCMRuntimeRegistered = "GCMRuntimeRegistered";
 
+    // --- Step by Step
+    public final static String stepByStepEnabled = "stepByStepEnabled";
+    public final static String stepByStepDisabled = "stepByStepDisabled";
+    public final static String stepByStepBlocked = "stepByStepBlocked";
+    public final static String stepByStepResumed = "stepByStepResumed";
+    public final static String stepByStepSlowMotionEnabled = "stepByStepSlowMotionEnabled";
+    public final static String stepByStepSlowMotionDisabled = "stepByStepSlowMotionDisabled";
+    public final static String stepByStepISEnabled = "stepByStepISEnabled";
+    public final static String stepByStepISDisabled = "stepByStepISDisabled";
+
     /* TODO Send this notification */
     // public final static String forwarderRuntimeRegistered = "forwarderRuntimeRegistered";
     public final static String runtimeDestroyed = "runtimeDestroyed";

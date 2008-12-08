@@ -58,8 +58,8 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.State;
 public class AOEditPart extends AbstractMonitoringEditPart<ActiveObject> implements NodeEditPart {
 
     /**
-     * The default color of an arrow used in <code>getArrowColor()</code>
-     * method of this class
+     * The default color of an arrow used in <code>getArrowColor()</code> method
+     * of this class
      */
     public static final Color DEFAULT_ARROW_COLOR = new Color(Display.getCurrent(), 108, 108, 116);
 
@@ -74,7 +74,7 @@ public class AOEditPart extends AbstractMonitoringEditPart<ActiveObject> impleme
 
     /**
      * Creates a new instance of the class
-     * 
+     *
      * @param model
      *            The active object model
      */
@@ -92,7 +92,7 @@ public class AOEditPart extends AbstractMonitoringEditPart<ActiveObject> impleme
     /**
      * This method is called whenever the observed object is changed. It calls
      * the method <code>refresh()</code>.
-     * 
+     *
      * @param o
      *            the observable object (instance of AbstractDataObject).
      * @param arg
@@ -108,30 +108,62 @@ public class AOEditPart extends AbstractMonitoringEditPart<ActiveObject> impleme
             switch (mvcNotif) {
                 case STATE_CHANGED: {
                     final State state = (State) notificationdata;
-                    if (state == State.NOT_MONITORED) {
-                        // getCastedModel().removeAllConnections();
-                        // getCastedFigure().removeConnections(getGlobalPanel());
+                    switch (state) {
+                        case NOT_MONITORED: {
+                            // getCastedModel().removeAllConnections();
+                            // getCastedFigure().removeConnections(getGlobalPanel());
 
-                        // If this clear is too brutal just filter on this
-                        // (source||tagret) on clear
-                        // if (getWorldEditPart().getModel() == RefreshMode.FULL)
-                        // getWorldEditPart().clearCommunicationsAndRepaintFigure();
+                            // If this clear is too brutal just filter on this
+                            // (source||tagret) on clear
+                            // if (getWorldEditPart().getModel() == RefreshMode.FULL)
+                            // getWorldEditPart().clearCommunicationsAndRepaintFigure();
+                            break;
+                        }
+                        case STEP_BY_STEP_BLOCKED: {
+                            displayPauseFlag(getCastedFigure());
+                            break;
+                        }
+                        case STEP_BY_STEP_RESUMED: {
+                            displayPauseFlag(getCastedFigure(), false);
+                            break;
+                        }
+                        case STEP_BY_STEP_SLOWMOTION_ENABLED: {
+                            displaySlowMotionFlag(getCastedFigure());
+                            break;
+                        }
+                        case STEP_BY_STEP_SLOWMOTION_DISABLED: {
+                            displaySlowMotionFlag(getCastedFigure(), false);
+                            break;
+                        }
+                        case STEP_BY_STEP_IMMEDIATESERVICE_ENABLED: {
+                            displayImmediateServiceFlag(getCastedFigure());
+                            break;
+                        }
+                        case STEP_BY_STEP_IMMEDIATESERVICE_DISABLED: {
+                            displayImmediateServiceFlag(getCastedFigure(), false);
+                            break;
+                        }
+                        default: {
+                            // COMMON REFRESH IE THE AO IS MONITORED JUST DO A REPAINT
 
-                    } else {
-                        // COMMON REFRESH IE THE AO IS MONITORED JUST DO A REPAINT
-                        // Set the new state directly
-                        getCastedFigure().setState(state);
-                        // The state of this controller has changed repaint at the
-                        // next
-                        // reasonable opportunity
-                        if (getWorldEditPart().getRefreshMode() == RefreshMode.FULL)
-                            getViewer().getControl().getDisplay().syncExec(new Runnable() {
-                                public final void run() {
-                                    // getCastedFigure().refresh();
-                                    getCastedFigure().repaint();
-                                }
-                            });
-                    } // if else NOT_MONITORED
+                            // Set the new state directly
+                            getCastedFigure().setState(state);
+
+                            // Set the figure to display a flag if necessary
+                            // displayFlag(getCastedModel(), getCastedFigure());
+
+                            // The state of this controller has changed repaint at the
+                            // next
+                            // reasonable opportunity
+                            if (getWorldEditPart().getRefreshMode() == RefreshMode.FULL)
+                                getViewer().getControl().getDisplay().syncExec(new Runnable() {
+                                    public final void run() {
+                                        // getCastedFigure().refresh();
+                                        getCastedFigure().repaint();
+                                    }
+                                });
+                        } // if else NOT_MONITORED
+                    }
                     break;
                 } // case STATE_CHANGED
                 case ACTIVE_OBJECT_ADD_OUTGOING_COMMUNICATION: {
@@ -281,7 +313,7 @@ public class AOEditPart extends AbstractMonitoringEditPart<ActiveObject> impleme
     /**
      * Returns a new view associated with the type of model object the EditPart
      * is associated with. So here, it returns a new NodeFigure.
-     * 
+     *
      * @return a new NodeFigure view associated with the NodeObject model.
      */
     protected IFigure createFigure() {
@@ -304,7 +336,7 @@ public class AOEditPart extends AbstractMonitoringEditPart<ActiveObject> impleme
     }
 
     /**
-     * This method is overridden since this class has no model children 
+     * This method is overridden since this class has no model children
      */
     @Override
     protected List<?> getModelChildren() {
@@ -312,9 +344,48 @@ public class AOEditPart extends AbstractMonitoringEditPart<ActiveObject> impleme
     }
 
     /**
+     * Get information from the model and set action on the figure to display a
+     * flag if necessary. Available Flags : Paused, SlowMotion, ImmediateService
+     *
+     * @param model
+     *            the Active Object
+     * @param figure
+     *            the Active Object figure representation
+     */
+    protected void resetFlag(AOFigure figure) {
+        displayPauseFlag(figure, false);
+        displaySlowMotionFlag(figure, false);
+        displayImmediateServiceFlag(figure, false);
+    }
+
+    protected void displayPauseFlag(AOFigure figure) {
+        displayPauseFlag(figure, true);
+    }
+
+    protected void displayPauseFlag(AOFigure figure, boolean value) {
+        figure.setStepByStep(value);
+    }
+
+    protected void displaySlowMotionFlag(AOFigure figure) {
+        displaySlowMotionFlag(figure, true);
+    }
+
+    protected void displaySlowMotionFlag(AOFigure figure, boolean value) {
+        figure.setStepByStepMotion(value);
+    }
+
+    protected void displayImmediateServiceFlag(AOFigure figure) {
+        displayImmediateServiceFlag(figure, true);
+    }
+
+    protected void displayImmediateServiceFlag(AOFigure figure, boolean value) {
+        figure.setHasImmediateServiceBlocked(value);
+    }
+
+    /**
      * Convert the result of EditPart.getFigure() to AOFigure (the real type of
      * the figure).
-     * 
+     *
      * @return the casted figure
      */
     @Override

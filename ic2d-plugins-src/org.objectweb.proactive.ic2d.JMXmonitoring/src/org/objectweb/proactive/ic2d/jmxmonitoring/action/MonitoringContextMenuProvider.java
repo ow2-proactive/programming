@@ -42,6 +42,7 @@ import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.objectweb.proactive.ic2d.jmxmonitoring.view.MonitoringView.MonitoringViewer;
 
 
@@ -60,6 +61,7 @@ public class MonitoringContextMenuProvider extends ContextMenuProvider {
         ActionRegistry registry = ((MonitoringViewer) this.getViewer()).getActionRegistry();
 
         MenuManager layoutMenu = new MenuManager("Layout");
+        MenuManager stepByStepMenu = new MenuManager("Step by Step");
 
         if (actions == null) {
             actions = new ArrayList<IAction>();
@@ -132,6 +134,13 @@ public class MonitoringContextMenuProvider extends ContextMenuProvider {
         // Once the layout menu is filled append it to the manager
         if (!layoutMenu.isEmpty()) {
             manager.appendToGroup(GEFActionConstants.GROUP_REST, layoutMenu);
+        }
+
+        manager.appendToGroup(GEFActionConstants.GROUP_REST, new Separator());
+
+        // Add Step By Step submenu to the manager
+        if (!stepByStepMenu.isEmpty()) {
+            manager.appendToGroup(GEFActionConstants.GROUP_REST, stepByStepMenu);
         }
     }
 }

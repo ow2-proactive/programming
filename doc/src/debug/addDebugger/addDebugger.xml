@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
+	xml:id="addDebugger">
+	<info>
+		<title>Connect a debugger to a remote jvm with IC2D</title>
+	</info>
+	<para> The communication between a debugger (like jdb or eclipse) and a
+		jvm, use a socket connection. The debugger must know the URL of the
+		jvm and the port number enable for this socket connection, but no port
+		is enable by default on the jvm therefore this jvm must be launched
+		with the correct arguments. IC2D allow to monitor many jvm on
+		different host, the IC2D debugger connection tool is intended for give
+		the informations of a jvm to branch a debugger.</para>
+	<section xml:id="Connection">
+		<info>
+			<title>The connection</title>
+		</info>
+		<para> The IC2D debugger connection is a little different than a
+			simple debugger connection. When the user want to connect a debugger
+			on a remote jvm, the debugger is in fact connect on localhost on the
+			IC2D jvm. This is an active object (created when the user send the
+			connection request) that transmit, with a proactive connection, the
+			debugger informations and requests to the jvm.</para>
+		<figure xml:id="connection">
+			<info>
+				<title>connection</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debug/addDebugger/images/debuggerConnection.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+	<section xml:id="Connection">
+		<info>
+			<title>How to use the IC2D debugger connection tools</title>
+		</info>
+		<para> When the user make a right click on a monitored jmv, he can
+			select an option (connect a debugger) that show him the port number
+			to connect his debugger on localhost.</para>
+		<figure xml:id="menu">
+			<info>
+				<title>menu</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debug/addDebugger/images/context.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<figure xml:id="popup">
+			<info>
+				<title>popup</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debug/addDebugger/images/popup.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para> Next the user has just to connect his debugger. For example:
+			The eclipse debugger</para>
+		<figure xml:id="eclipseConnection">
+			<info>
+				<title>eclipse connection</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debug/addDebugger/images/eclipseConnection.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<figure xml:id="eclipseDebugger">
+			<info>
+				<title>eclipse debugger</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debug/addDebugger/images/eclipse.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<figure xml:id="communication">
+			<info>
+				<title>communication</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debug/addDebugger/images/SocketServClient.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+</chapter>

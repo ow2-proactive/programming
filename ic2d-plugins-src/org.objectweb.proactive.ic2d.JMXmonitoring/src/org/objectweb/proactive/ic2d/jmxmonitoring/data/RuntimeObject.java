@@ -39,6 +39,7 @@ import javax.management.ObjectName;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.debug.dconnection.DebuggerInformation;
 import org.objectweb.proactive.core.jmx.ProActiveConnection;
 import org.objectweb.proactive.core.jmx.mbean.NodeWrapperMBean;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
@@ -58,7 +59,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 
 /**
  * Represents a Runtime in the IC2D model.
- * 
+ *
  * @author The ProActive Team
  */
 public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeObject> {
@@ -122,7 +123,7 @@ public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeO
 
     /**
      * Returns the url of this object.
-     * 
+     *
      * @return An url.
      */
     public String getUrl() {
@@ -188,7 +189,7 @@ public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeO
      * ProActive Nodes on the monitored Host. The update is performed by
      * comparing the existing NodeObjects with the set of ProActive Node Objects
      * returned from <code>ProActiveRuntimeWrapperMBean.getNodes() </code>
-     * 
+     *
      */
     private void findNodes() {
         final ProActiveConnection proActiveConnection = this.getProActiveConnection();
@@ -324,7 +325,8 @@ public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeO
     }
 
     /**
-     * This method must be called when ic2d is closed or the parent host object is not monitored or destroyed
+     * This method must be called when ic2d is closed or the parent host object
+     * is not monitored or destroyed
      */
     public void unsubscribeListener() {
         try {
@@ -334,5 +336,30 @@ public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeO
             Console.getInstance(Activator.CONSOLE_NAME).log(
                     "Cannot unsubscribe the JMX listener of " + getType() + " " + getName());
         }
+    }
+
+    //
+    // -- ADD DEBUGGER -----------------------------------------------
+    //
+    /**
+     * Create a tunnel between the JVM of the object and the IC2D host
+     */
+    public DebuggerInformation getDebugInfo() {
+        return proxyMBean.getDebugInfo();
+    }
+
+    /**
+     * Close the tunnel and Kill the VM forked for debug
+     */
+    public void removeDebugger() {
+        proxyMBean.removeDebugger();
+    }
+
+    public boolean hasDebuggerConnected() {
+        return proxyMBean.hasDebuggerConnected();
+    }
+
+    public boolean canBeDebugged() {
+        return proxyMBean.canBeDebugged();
     }
 }

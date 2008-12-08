@@ -140,7 +140,31 @@ public class ActiveObjectListener implements NotificationListener {
                 } else if (type.equals(NotificationType.receivedFutureResult)) {
                     logger.debug("...............................Received Future Result : " + ao.getName());
                     ao.setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.RECEIVED_FUTURE_RESULT);
-                } else {
+                }
+                // --- Step by Step
+                else if (type.equals(NotificationType.stepByStepEnabled)) {
+                    // do nothing
+                } else if (type.equals(NotificationType.stepByStepDisabled)) {
+                    // do nothing
+                } else if (type.equals(NotificationType.stepByStepBlocked)) {
+                    ao.setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.STEP_BY_STEP_BLOCKED);
+                } else if (type.equals(NotificationType.stepByStepResumed)) {
+                    ao.setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.STEP_BY_STEP_RESUMED);
+                } else if (type.equals(NotificationType.stepByStepSlowMotionEnabled)) {
+                    ao
+                            .setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.STEP_BY_STEP_SLOWMOTION_ENABLED);
+                } else if (type.equals(NotificationType.stepByStepSlowMotionDisabled)) {
+                    ao
+                            .setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.STEP_BY_STEP_SLOWMOTION_DISABLED);
+                } else if (type.equals(NotificationType.stepByStepISEnabled)) {
+                    ao
+                            .setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.STEP_BY_STEP_IMMEDIATESERVICE_ENABLED);
+                } else if (type.equals(NotificationType.stepByStepISDisabled)) {
+                    ao
+                            .setState(org.objectweb.proactive.ic2d.jmxmonitoring.util.State.STEP_BY_STEP_IMMEDIATESERVICE_DISABLED);
+                }
+                // --- others
+                else {
                     System.out.println(ao.getName() + " => " + type);
                 }
             }

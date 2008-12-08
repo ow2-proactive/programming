@@ -60,6 +60,9 @@ import org.objectweb.proactive.core.component.identity.ProActiveComponent;
 import org.objectweb.proactive.core.component.identity.ProActiveComponentFactory;
 import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
 import org.objectweb.proactive.core.component.request.SynchronousComponentRequestReceiver;
+import org.objectweb.proactive.core.debug.stepbystep.Debugger;
+import org.objectweb.proactive.core.debug.stepbystep.DebuggerFactory;
+import org.objectweb.proactive.core.debug.stepbystep.DebuggerImpl;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManagerFactory;
 import org.objectweb.proactive.core.mop.MethodCall;
@@ -137,6 +140,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     protected ProActiveComponentFactory componentFactoryInstance;
     protected ProActiveSecurityManager proActiveSecurityManager;
     protected FTManagerFactory ftmanagerFactoryInstance;
+    protected DebuggerFactory debuggerFactoryInstance;
     protected Object timItReductor;
 
     //
@@ -152,6 +156,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         this.threadStoreFactoryInstance = newThreadStoreFactorySingleton();
         this.proActiveSPMDGroupManagerFactoryInstance = newProActiveSPMDGroupManagerFactorySingleton();
         this.ftmanagerFactoryInstance = newFTManagerFactorySingleton();
+        this.debuggerFactoryInstance = newDebuggerFactorySingleton();
     }
 
     /**
@@ -174,6 +179,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
             this.threadStoreFactoryInstance = newThreadStoreFactorySingleton();
             this.proActiveSPMDGroupManagerFactoryInstance = newProActiveSPMDGroupManagerFactorySingleton();
             this.ftmanagerFactoryInstance = newFTManagerFactorySingleton();
+            this.debuggerFactoryInstance = newDebuggerFactorySingleton();
         }
     }
 
@@ -238,6 +244,10 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         return this.ftmanagerFactoryInstance;
     }
 
+    public DebuggerFactory newDebuggerFactory() {
+        return this.debuggerFactoryInstance;
+    }
+
     //
     // -- PROTECTED METHODS -----------------------------------------------
     //
@@ -279,6 +289,10 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     protected FTManagerFactory newFTManagerFactorySingleton() {
         return new FTManagerFactoryImpl();
+    }
+
+    protected DebuggerFactory newDebuggerFactorySingleton() {
+        return new DebuggerFactoryImpl();
     }
 
     //  //
@@ -447,6 +461,12 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
                         "no protocol is associated to selector value " + protocolSelector);
                     return null;
             }
+        }
+    }
+
+    protected static class DebuggerFactoryImpl implements DebuggerFactory, java.io.Serializable {
+        public Debugger newDebugger() {
+            return new DebuggerImpl();
         }
     }
 

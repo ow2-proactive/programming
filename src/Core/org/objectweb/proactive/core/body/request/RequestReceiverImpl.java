@@ -115,7 +115,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
         }
     }
 
-    private boolean immediateExecution(Request request) {
+    public boolean immediateExecution(Request request) {
         if ((request == null) || (request.getMethodCall() == null) ||
             (request.getMethodCall().getReifiedMethod() == null)) {
             return false;

@@ -31,16 +31,24 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.data;
 
+import java.io.IOException;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import javax.management.AttributeNotFoundException;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanException;
 import javax.management.MBeanServerInvocationHandler;
 import javax.management.NotificationListener;
 import javax.management.ObjectName;
+import javax.management.ReflectionException;
 
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.migration.MigrationException;
+import org.objectweb.proactive.core.debug.stepbystep.BreakpointType;
+import org.objectweb.proactive.core.debug.stepbystep.DebugInfo;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
@@ -756,6 +764,65 @@ public final class ActiveObject extends AbstractData<ProActiveNodeObject, Abstra
     @Override
     public String toString() {
         return this.name;
+    }
+
+    //
+    // -- STEPBYSTEP DEBUG METHODS -----------------------------------------------
+    //
+    public void enableStepByStep() {
+        setChanged();
+        proxyMBean.enableStepByStep();
+    }
+
+    public void disableStepByStep() {
+        setChanged();
+        proxyMBean.disableStepByStep();
+    }
+
+    public void nextStep() {
+        proxyMBean.nextStep();
+    }
+
+    public void nextStep(long id) {
+        proxyMBean.nextStep(id);
+    }
+
+    public void nextStep(Collection<Long> ids) {
+        proxyMBean.nextStep(ids);
+    }
+
+    public DebugInfo getDebugInfo() {
+        try {
+            return (DebugInfo) getProActiveConnection().getAttribute(getObjectName(), "DebugInfo");
+        } catch (AttributeNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstanceNotFoundException e) {
+            e.printStackTrace();
+        } catch (MBeanException e) {
+            e.printStackTrace();
+        } catch (ReflectionException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void slowMotion(long slowMotionDelay) {
+        setChanged();
+        proxyMBean.slowMotion(slowMotionDelay);
+    }
+
+    public void initBreakpointTypes() {
+        proxyMBean.initBreakpointTypes();
+    }
+
+    public void enableBreakpointTypes(BreakpointType[] types) {
+        proxyMBean.enableBreakpointTypes(types);
+    }
+
+    public void disableBreakpointTypes(BreakpointType[] types) {
+        proxyMBean.disableBreakpointTypes(types);
     }
 
     //

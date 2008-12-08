@@ -68,6 +68,7 @@ public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObje
     // 7 s
     public static int DEFAULT_AUTO_RESET_TIME = 7;
     private static int DEFAULT_MAX_DEPTH = 3;
+    private static int DEFAUT_STEPBYSTEPDELAY = 0;
 
     // -------------------------------------------
     // --- Variables -----------------------------
@@ -91,6 +92,7 @@ public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObje
      */
     private final ConcurrentHashMap<String, ActiveObject> activeObjects;
     private int maxDepth = DEFAULT_MAX_DEPTH;
+    private int stepByStepDelay = DEFAUT_STEPBYSTEPDELAY;
 
     /**
      * Thread
@@ -419,6 +421,20 @@ public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObje
             n += data.getMonitoredChildrenSize();
         }
         return n;
+    }
+
+    public List<ActiveObject> getAOChildren() {
+        if (activeObjects == null)
+            return null;
+        return new ArrayList<ActiveObject>(this.activeObjects.values());
+    }
+
+    public int getStepByStepDelay() {
+        return stepByStepDelay;
+    }
+
+    public void setStepByStepDelay(int stepByStepDelay) {
+        this.stepByStepDelay = stepByStepDelay;
     }
 
 }

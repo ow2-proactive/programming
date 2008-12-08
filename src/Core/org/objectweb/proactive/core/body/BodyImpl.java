@@ -68,6 +68,7 @@ import org.objectweb.proactive.core.body.request.RequestQueue;
 import org.objectweb.proactive.core.body.request.RequestReceiver;
 import org.objectweb.proactive.core.body.request.RequestReceiverImpl;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
+import org.objectweb.proactive.core.debug.stepbystep.BreakpointType;
 import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapper;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
@@ -522,6 +523,14 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 return;
             }
 
+            if (!isProActiveInternalObject) {
+                if (((RequestReceiverImpl) requestReceiver).immediateExecution(request)) {
+                    debugger.breakpoint(BreakpointType.NewImmediateService, request);
+                } else {
+                    debugger.breakpoint(BreakpointType.NewService, request);
+                }
+            }
+
             // JMX Notification
             if (!isProActiveInternalObject && (mbean != null)) {
                 RequestNotificationData data = new RequestNotificationData(request.getSourceBodyID(), request
@@ -537,6 +546,18 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             // it is served normally.
             if (!isTerminateAORequest(request)) {
                 reply = request.serve(BodyImpl.this);
+            }
+
+            if (!isProActiveInternalObject) {
+                try {
+                    if (isInImmediateService())
+                        debugger.breakpoint(BreakpointType.EndImmediateService, request);
+                    else
+                        debugger.breakpoint(BreakpointType.EndService, request);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
 
             if (reply == null) {

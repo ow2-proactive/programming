@@ -479,6 +479,13 @@ public enum PAProperties {
     PA_DGC_TTB("proactive.dgc.ttb", PAPropertiesType.INTEGER),
 
     /* ------------------------------------
+     *  DISTRIBUTED DEBUGGER
+     */
+
+    /** Enable the distributed debugger */
+    PA_DEBUG("proactive.debug", PAPropertiesType.BOOLEAN),
+
+    /* ------------------------------------
      *  FILE TRANSFER
      */
 

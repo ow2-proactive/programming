@@ -184,6 +184,30 @@ public enum MVCNotificationTag {
     /**
      * Notification message sent when a Target connection have changed
      */
-    TARGET_CONNECTIONS_CHANGED;
+    TARGET_CONNECTIONS_CHANGED,
+    /**
+     *
+     */
+    STEP_BY_STEP_BLOCKED,
+    /**
+     *
+     */
+    STEP_BY_STEP_RESUMED,
+    /**
+     *
+     */
+    STEP_BY_STEP_MOTION_ENABLE,
+    /**
+     *
+     */
+    STEP_BY_STEP_MOTION_DISABLE,
+    /**
+     *
+     */
+    STEP_BY_STEP_IS_ENABLE,
+    /**
+     *
+     */
+    STEP_BY_STEP_IS_DISABLE;
 
 }
