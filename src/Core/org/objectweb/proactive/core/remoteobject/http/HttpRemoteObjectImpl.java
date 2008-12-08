@@ -56,11 +56,7 @@ public class HttpRemoteObjectImpl implements HTTPRemoteObject {
 
     public Reply receiveMessage(Request message) throws IOException, RenegotiateSessionException,
             ProActiveException {
-        ArrayList<Object> paramsList = new ArrayList<Object>();
-        paramsList.add(message);
-
         HTTPRemoteObjectRequest req = new HTTPRemoteObjectRequest(message, this.remoteObjectURL.toString());
-
         req.send();
 
         SynchronousReplyImpl rep = (SynchronousReplyImpl) req.getReturnedObject();
