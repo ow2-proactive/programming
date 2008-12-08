@@ -64,13 +64,12 @@ public class GroupCCS extends AbstractGroup {
         command.append("/tasks:" + cpus);
         command.append(" ");
 
-        String classpath = ((CommandBuilderProActive) commandBuilder).getClasspathwithoutArg(hostInfo);
+        String classpath = ((CommandBuilderProActive) commandBuilder).getClasspath(hostInfo);
         command.append(" ");
-        command.append("/classpath:" + classpath);
+        command.append("/classpath:\"" + classpath + "\"");
         command.append(" ");
 
-        String cbCommand = ((CommandBuilderProActive) commandBuilder).buildCommandWithoutClassPath(hostInfo,
-                gcma);
+        String cbCommand = ((CommandBuilderProActive) commandBuilder).buildCommand(hostInfo, gcma, false);
         //cbCommand = Helpers.escapeWindowsCommand(cbCommand);
         cbCommand += " -c 1 ";
 
