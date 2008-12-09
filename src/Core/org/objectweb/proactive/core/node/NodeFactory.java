@@ -194,31 +194,32 @@ public class NodeFactory {
     }
 
     /**
-     * Creates a new node on the local machine. This call can only be used
-     * to create a node on the local JVM on the local machine.
+     * Creates a new node on the current ProActive runtime.
      * The node URL can be in the form
      * <ul>
-     * <li>///nodeName</li>
+     * <li>nodeName</li>
      * <li>//localhost/nodeName</li>
      * <li>//<i>&lt;hostname></i>/nodeName</li>
+     * <li>protocol://hostname[:port]/nodeName</li>
      * </ul>
      * where <i>&lt;hostname></i> is the name of the localhost.
-     * @param nodeURL the URL of the node to create
+     * @param url the URL of the node to create
      * @return the newly created node on the local JVM
      * @exception NodeException if the node cannot be created
      */
+
     public static Node createNode(String nodeURL) throws NodeException, AlreadyBoundException {
         return createNode(nodeURL, false, null, null, null);
     }
 
     /**
-     * Creates a new node on the local machine. This call can only be used
-     * to create a node on the local JVM on the local machine.
+     * Creates a new node on the current ProActive runtime.
      * The node URL can be in the form
      * <ul>
-     * <li>///nodeName</li>
+     * <li>nodeName</li>
      * <li>//localhost/nodeName</li>
      * <li>//<i>&lt;hostname></i>/nodeName</li>
+     * <li>protocol://hostname[:port]/nodeName</li>
      * </ul>
      * where <i>&lt;hostname></i> is the name of the localhost.
      * @param url the URL of the node to create
@@ -252,7 +253,7 @@ public class NodeFactory {
         try {
             proActiveRuntime = RuntimeFactory.getProtocolSpecificRuntime(protocol);
             nodeURL = proActiveRuntime.createLocalNode(url, replacePreviousBinding, psm, vnname, jobId);
-        } catch (ProActiveException e) {
+        } catch (Exception e) {
             throw new NodeException("Cannot create a Node based on " + url, e);
         }
 
