@@ -39,7 +39,7 @@
 			how the active object is created and most of the parameters
 			are common between creation methods. All the available
 			creation methods with parameters are presented in the
-			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_published/org/objectweb/proactive/PAActiveObject.html">
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_published/org/objectweb/proactive/api/PAActiveObject.html">
 				PAActiveObject Javadoc
 			</link>
 			.

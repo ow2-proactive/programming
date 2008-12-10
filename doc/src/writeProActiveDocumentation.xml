@@ -292,7 +292,7 @@ public class Dummy {
  thanks to profiling) </para>
   
    <para>Use ULINK tags to point to 
-    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/">web references 
+    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/">web references 
      (ProActive for instance)</link>. Use freely, it sticks out nicely in pdf too!</para>
    
    <para>Use CITATION followed by an XREF for citations. For example, see 

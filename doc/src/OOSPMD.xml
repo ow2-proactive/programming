@@ -228,7 +228,7 @@
     See the javadoc of the topology package for more information:</para>
    
     <!-- This url can only work in the html generated files: in pdf there's no ".." -->
-   <screen><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/core/group/topology/package-summary.html" os="html">org.objectweb.proactive.core.group.topology</link><phrase os="pdf">org.objectweb.proactive.core.group.topology</phrase></screen>
+   <screen><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/group/topology/package-summary.html" os="html">org.objectweb.proactive.core.group.topology</link><phrase os="pdf">org.objectweb.proactive.core.group.topology</phrase></screen>
    
     <para>Like for the Total barrier, the string parameter represents a unique
     identity name for the barrier. The second parameter is the group of

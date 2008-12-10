@@ -391,7 +391,7 @@ Default target: compile.all
         </question>
 
         <answer>
-          <para>ProActive uses <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.objectweb.org/asm/">ASM</link> for the on the fly
+          <para>ProActive uses <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://asm.objectweb.org/">ASM</link> for the on the fly
           generation of stub classes. The library <literal>asm.jar</literal>,
           provided in the directory <literal>lib</literal> of <emphasis role="bold">ProActive</emphasis> is needed in order for any active
           object to function properly. If the library is not in the

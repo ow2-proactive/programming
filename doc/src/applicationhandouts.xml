@@ -253,7 +253,7 @@
     active objects is running and without interruptions in the application.</para>
 
    
-    <para>The penguin migration example shows how a set of <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/apps/penguin.html">mobile
+    <para>The penguin migration example shows how a set of <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/index.php?page=penguin">mobile
     agents</link>can move around  from machine to machine   while 
     still communicating with their base and
     with each other. It also features the ability to move a swing window

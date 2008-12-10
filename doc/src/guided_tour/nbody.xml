@@ -15,11 +15,11 @@
                 ProActive. Please take note that this page tries to take
                 you through the progression, step by step. You may find
                 some
-                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/apps/nbody.html">
+                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/nbody.html">
                     more information
                 </link>
                 , mainly on the design, on the web page of the
-                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/apps/">
+                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/">
                     applications/examples
                 </link>
                 of ProActive. This is a snapshot of the ProActive nbody
@@ -609,7 +609,7 @@ public void setValue(Planet inf, int id) {
                 are stored as an array, which is called
                 <literal>neighbours</literal>
                 . You may find another view of this example on this
-                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/apps/nbody-simple.html">
+                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/nbody-simple.html">
                     web page
                 </link>
                 .
@@ -719,7 +719,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             </para>
             <para>
                 You may find another view of this example on this
-                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/apps/nbody-groupcom.html">
+                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/nbody-groupcom.html">
                     web page
                 </link>
                 .
@@ -794,7 +794,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             </para>
             <para>
                 You may find another view of this example on this
-                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/apps/nbody-groupdistrib.html">
+                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/nbody-groupdistrib.html">
                     web page
                 </link>
                 .
@@ -846,7 +846,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             </para>
             <para>
                 You may find another view of this example on this
-                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/apps/nbody-groupoospmd.html">
+                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/nbody-groupoospmd.html">
                     web page
                 </link>
                 .
@@ -961,7 +961,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             </para>
             <para>
                 You may find another view of this example on this
-                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/apps/nbody-simple.html">
+                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/nbody-simple.html">
                     web page
                 </link>
                 .
@@ -979,7 +979,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 associated to a different algorithm, which cumbersomely
                 shows how to get Active Objects deployed along a tree
                 structure to communicate. Remember that there is
-                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/apps/nbody.html">
+                <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/apps/nbody.html">
                     another explanation
                 </link>
                 of all this on the web.
