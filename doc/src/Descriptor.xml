@@ -1615,7 +1615,7 @@
           <literal>org.objectweb.proactive.core.process.nordugrid.NGProcess</literal>
           to use such protocol.</para>
 
-          <para>To use ARC you will need to download the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://ftp.nordugrid.org/download/index.php">ARC
+          <para>To use ARC you will need to download the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://ftp.nordugrid.org/download/index.html">ARC
           Client</link></para>
 			<programlisting><textobject><textdata fileref="examples_legacy_descriptors/NorduGrid_Example.xml"/></textobject></programlisting>
 
@@ -2049,6 +2049,6 @@ pad.killall(false);
     <para>In order to get familiar on how to create processes
     programmatically, see the Process package</para>
 
-    <screen><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/core/process/package-summary.html">org.objectweb.proactive.core.process</link></screen>
+    <screen><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/process/package-summary.html">org.objectweb.proactive.core.process</link></screen>
   </section>
 </chapter>

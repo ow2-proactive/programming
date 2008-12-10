@@ -351,7 +351,7 @@ public void infiniteMethod(){
       
 
       <para>The second consequence concerns the definition of the
-      <literal>runActivity()</literal> method (see <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/release-doc/api/org/objectweb/proactive/RunActive.html"><literal>runActive</literal></link>).
+      <literal>runActivity()</literal> method (see <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/RunActive.html"><literal>runActive</literal></link>).
       Let us consider the following example:</para>
 
       

@@ -423,7 +423,7 @@
               (see the 
               
               <!-- This url can only work in the html generated files: in pdf there's no ".." -->
-              <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/core/classloader/package-summary.html" os="html">
+              <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/classloader/package-summary.html" os="html">
               classloader package javadoc</link>
               <phrase os="pdf">org.objectweb.proactive.core.classloader javadoc</phrase>). 
               This is an alternative to RMI dynamic class

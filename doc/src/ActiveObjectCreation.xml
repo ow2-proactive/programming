@@ -39,7 +39,7 @@
 			how the active object is created and most of the parameters
 			are common between creation methods. All the available
 			creation methods with parameters are presented in the
-			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/release-doc/api/org/objectweb/proactive/PAActiveObject.html">
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_published/org/objectweb/proactive/PAActiveObject.html">
 				PAActiveObject Javadoc
 			</link>
 			.
@@ -785,7 +785,7 @@
 				<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/proactivemetaobjectfactory.snip"/></textobject></programlisting>
 							
 				More explanations can be found in the<!-- This url can only work in the html generated files: in pdf there's no ".." -->
-				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/core/body/ProActiveMetaObjectFactory.html" os="html">
+				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/body/ProActiveMetaObjectFactory.html" os="html">
 					javadoc of that class
 				</link>
 				<phrase os="pdf">

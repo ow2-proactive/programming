@@ -249,7 +249,7 @@
     object. This WSDL file is the 'identity card' of the service. It contains
     the web service public interfaces and its location. Generally, WSDL files
     are used to generate a proxy to the service. For example, for a given
-    service, say 'compute', you can get the WSDL document at <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://localhost:8080/servlet/wsdl?id=compute">http://localhost:8080/servlet/wsdl?id=compute</uri>.</para>
+    service, say 'compute', you can get the WSDL document at <code>http://localhost:8080/servlet/wsdl?id=compute></code>.</para>
 
     <para>Now that this client knows what and where to call the service, it
     will send a SOAP message to the web server, the web server looks into the
@@ -324,8 +324,8 @@
 
         <listitem>
           <para>In the address box enter the WSDL service address, for
-          example: <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://localhost:8080/proactive/servlet/wsdl?id=helloWorld">http://localhost:8080/proactive/servlet/wsdl?id=helloWorld</uri>
-          .When clicking the 'add reference' button, this will get the
+          example: <code> http://localhost:8080/proactive/servlet/wsdl?id=helloWorld</code>.
+	   When clicking the 'add reference' button, this will get the
           service's WSDL and creates the specific proxy to the service.</para>
         </listitem>
 
@@ -369,7 +369,7 @@ string s = hw.helloWorld ();
                 });</programlisting>
 
       <para>Once the dispatcher is deployed as a web service, we have a WSDL
-      url: <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://localhost:8080/proactive/servlet/id=C3DDispactcher">http://localhost:8080/proactive/servlet/id=C3DDispactcher</uri>. It
+      url: <code>http://localhost:8080/proactive/servlet/id=C3DDispatcher</code>. It
       will be usefull to construct the dispatcher client.</para>
     </section>
 
@@ -432,12 +432,5 @@ string s = hw.helloWorld ();
         </figure></para>
     </section>
 
-    <section><info><title>Download the C# example</title></info>
-      
-
-      <para>You can find <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/proactive/C3DCSharp.zip">here</link>
-      the whole C# Visual Studio .Net project. N.B: In order to run this
-      project, you must install the Microsoft IIS server.</para>
-    </section>
   </section>
 </chapter>

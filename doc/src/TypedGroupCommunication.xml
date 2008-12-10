@@ -260,7 +260,7 @@ PAGroup.waitAll(vg);
    	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/group_unique_serialization.snip"/></textobject></programlisting>
  <para>To learn more, see the 
  <!-- This url can only work in the html generated files: in pdf there's no ".." -->
- <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/core/group/package-summary.html" os="html">JavaDoc</link> 
+ <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/group/package-summary.html" os="html">JavaDoc</link> 
  <phrase os="pdf">javadoc of org.objectweb.proactive.core.group</phrase>
       and the paper <citation><xref linkend="BBC02" endterm="BBC02.abbrev"/></citation>.
      </para>

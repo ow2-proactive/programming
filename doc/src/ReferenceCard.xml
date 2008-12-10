@@ -449,7 +449,7 @@
     to choose the exported methods of the object.</para>
 
     <para>The WSDL file matching the service will be accesible at
-    http://localhost:8080/servlet/wsdl?id=a for a service which name is 'a'
+    <code> http://localhost:8080/servlet/wsdl?id=a </code> for a service which name is 'a'
     and which id deployed on a web server which location is
     http://localhost:8080.</para>
 

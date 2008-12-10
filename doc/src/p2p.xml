@@ -556,11 +556,11 @@
             </imageobject>
           </mediaobject>
         </figure></para>
-
+    <!-- //TODO deprecated  since the deployment has changed     
       <para>For more information about ProActive XML Deployment Descriptor see 
-       <!-- This url can only work in the html generated files: in pdf there's no ".." -->
        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/Descriptor.html" os="html">the descriptor java doc</link>
        <phrase os="pdf"><literal>org.objectweb.proactive.Descriptor</literal> javadoc</phrase>.</para>
+    -->
     </section>
 
     <section xml:id="mozTocId294040"><info><title> The P2P Infrastructure API Usage Example</title></info>
@@ -648,7 +648,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
     some nodes (JVMs). The next section describes how to use it.</para>
 
     <para>Further research information is available 
-    at <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/Alexandre.Di_Costanzo/AdC/Publications.html">http://www-sop.inria.fr/oasis/Alexandre.Di_Costanzo/AdC/Publications.html</uri>.</para>
+    at <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://web.mac.com/adicosta/Alexs_Web_Site/Publications.html">http://web.mac.com/adicosta/Alexs_Web_Site/Publications.html</uri>.</para>
   </section>
 
   <section xml:id="p2p_html_infrastructure_model"><info><title>The P2P Infrastructure Model</title></info>
@@ -1359,7 +1359,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 			.
 		</para>
 		    <para>Further research information is available 
-    at <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/Alexandre.Di_Costanzo/">http://www-sop.inria.fr/oasis/Alexandre.Di_Costanzo/</uri>.</para>
+    at <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://web.mac.com/adicosta/Alexs_Web_Site/Publications.html">http://web.mac.com/adicosta/Alexs_Web_Site/Publications.html</uri>.</para>
 		
 		
   </section>
