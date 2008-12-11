@@ -239,7 +239,7 @@
 
 				<para>
 					The
-					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.eclipse.org/gef">
+					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.eclipse.org/gef/">
 						Graphical Editing Framework (GEF)
 					</link>
 					allows developers to take an existing
@@ -475,6 +475,7 @@
 						http://eclipse-wiki.info/GEFDescription
 					</link>
 				</para>
+                                <!-- The links are dead for the tutorial  
 				<para>
 					A tutorial : 'Building a GEF-based Eclipse
 					editor' :
@@ -495,6 +496,7 @@
 					</link>
 					.
 				</para>
+                                   -->
 				<para>
 					Somes GEF examples :
 					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://eclipse-wiki.info/GEFExamples">
@@ -1925,7 +1927,7 @@ public class ExamplePerspective implements IPerspectiveFactory {
 				<itemizedlist>
 					<listitem>
 						<para>
-							<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://devresource.hp.com/drc/technical_articles/ePlugIn/index.jsp">
+							<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://devresource.hp.com/drc.html">
 								Creating Eclipse plug-ins
 							</link>
 						</para>

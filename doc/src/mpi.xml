@@ -394,7 +394,7 @@ logger.info(<emphasis role="bold">jacobiSpmd</emphasis>);
 
         <listitem>
           <para><emphasis role="bold">Resource allocation:</emphasis> define
-          processes for resource reservation. See <xref linkend="DESCRIPTOR_Infrastructure_and_processes"/> for more
+          processes for resource reservation. See <xref xml:linkend="DESCRIPTOR_Infrastructure_and_processes"/> for more
           details on processes.</para>
 
           <para><itemizedlist>
@@ -1121,7 +1121,7 @@ public class MyClass{
 
       <para>The wrapping with control allows programmer to pass some messages
       from his own classes to the MPI computation. Of course these classes
-      have to be previously deployed using the API seen at <xref linkend="MPI_control_oneactive_javaapi"/>. This feature could be useful
+      have to be previously deployed using the API seen at <xref xml:linkend="MPI_control_oneactive_javaapi"/>. This feature could be useful
       for example if the programmer want to control the MPI code by sending
       some "start" or "stop" messages during computation.</para>
 

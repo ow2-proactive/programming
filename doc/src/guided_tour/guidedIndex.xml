@@ -119,7 +119,7 @@
     the <emphasis role="bold">Finish</emphasis> button.</para>
 
     <para>We have developed an Eclipse application that will help
-    developers to easily monitor ProActive applications. Have a look at the
-    documentation page, <xref linkend="IC2D_EclipsePlugin"/>.</para>
+    developers to easily monitor ProActive applications. To learn how to monitor ProActive applications read the
+    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://proactive.inria.fr/release-doc/ic2d/manual/single_html/IC2D.html"> ProActive Optimizing</link> documentation.</para>
   </section>
 </chapter>

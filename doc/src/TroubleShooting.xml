@@ -39,7 +39,7 @@
       <listitem>
         <para><emphasis role="bold">Java complains about denial of
         access.</emphasis> If you get the following exceptions, you probably
-        didn't change the file java.policy as described in <xref linkend="Create_Java_Policy"/>.</para>
+        didn't change the file java.policy as described in <xref xml:linkend="Create_Java_Policy"/>.</para>
        
       <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/java_policy_error.txt"/></textobject></programlisting>
       
