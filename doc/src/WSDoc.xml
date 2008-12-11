@@ -430,6 +430,17 @@ string s = hw.helloWorld ();
             ProActive user uses.</para></caption>
           </mediaobject>
         </figure></para>
+
+
+
+    <section><info><title>Download the C# example</title></info>
+
+
+      <para>You can find <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://proactive.inria.fr/userfiles/file/apps/C3DCSharp.zip">here</link>
+      the whole C# Visual Studio .Net project. N.B: In order to run this
+      project, you must install the Microsoft IIS server.</para>
+    </section>
+
     </section>
 
   </section>
