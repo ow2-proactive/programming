@@ -1348,19 +1348,4 @@ p2pNodeLookup.killAllNodes();</programlisting>
     </itemizedlist>
   </section>
   
-   <section xml:id="p2p_research"><info><title>Research Work</title></info>
-    
-
-    		<para>
-			The seminal paper
-			<citation>
-				<xref linkend="p2p_article" endterm="p2p.abbrev"/>
-			</citation>
-			.
-		</para>
-		    <para>Further research information is available 
-    at <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://web.mac.com/adicosta/Alexs_Web_Site/Publications.html">http://web.mac.com/adicosta/Alexs_Web_Site/Publications.html</uri>.</para>
-		
-		
-  </section>
 </chapter>
