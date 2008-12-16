@@ -8,4 +8,6 @@
   <content class="org.objectweb.proactive.examples.components.userguide.starter.ClientImpl"/>
 
   <controller desc="primitive"/>
+
+  <virtual-node name="VN" cardinality="single"/>
 </definition>
