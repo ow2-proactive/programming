@@ -35,6 +35,7 @@ import java.rmi.RemoteException;
 
 import javax.xml.namespace.QName;
 import javax.xml.rpc.Call;
+import javax.xml.rpc.ParameterMode;
 import javax.xml.rpc.Service;
 import javax.xml.rpc.ServiceException;
 import javax.xml.rpc.ServiceFactory;
@@ -43,9 +44,11 @@ import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
 /**
- * @author vlegrand
- * An example to call the hello world web service
+ * An example to call the hello world web service.
+ *
+ * @author The ProActive Team
  */
+//@snippet-start wsclientcomponent
 public class WSClientComponent {
     public static void main(String[] args) {
         String address;
@@ -61,9 +64,6 @@ public class WSClientComponent {
         address += WSConstants.SERV_RPC_ROUTER;
         System.err.println("address " + address);
 
-        //        String namespaceURI = "helloWorld";
-        //        String serviceName = "helloWorld";
-        //        String portName = "helloWorld";
         String namespaceURI = "server_hello-world";
         String serviceName = "server_hello-world";
         String portName = "helloWorld";
@@ -80,10 +80,15 @@ public class WSClientComponent {
 
             call.setOperationName(new QName(namespaceURI, portName));
 
-            //            Object[] inParams = new Object[]{"WS_param"};
-            Object[] inParams = new Object[] {};
-            String name = ((String) call.invoke(inParams));
-            System.out.println(name);
+            call.addParameter("name", new QName("string"), String.class, ParameterMode.IN);
+
+            call.setReturnType(new QName("string"));
+
+            Object[] inParams = new Object[1];
+            inParams[0] = "World";
+
+            String result = ((String) call.invoke(inParams));
+            System.out.println(result);
         } catch (ServiceException e) {
             e.printStackTrace();
         } catch (RemoteException e) {
@@ -91,3 +96,4 @@ public class WSClientComponent {
         }
     }
 }
+//@snippet-end wsclientcomponent

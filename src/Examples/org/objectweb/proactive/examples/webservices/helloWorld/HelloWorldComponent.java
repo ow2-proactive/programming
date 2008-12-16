@@ -48,18 +48,16 @@ import org.objectweb.proactive.extensions.webservices.WebServices;
 
 /**
  * A simple example to expose an active object as a web service.
- * A web server must be installed first to run this example
- * @author vlegrand
+ *
+ * @author The ProActive Team
  */
+//@snippet-start helloworldcomponent
 public class HelloWorldComponent implements HelloWorldItf {
     public HelloWorldComponent() {
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.examples.webservices.helloWorld.HelloWorldItf#helloWorld()
-     */
-    public String helloWorld() {
-        return "Hello world !";
+    public String helloWorld(String name) {
+        return "Hello "+ name +" !";
     }
 
     public static void main(String[] args) {
@@ -86,14 +84,13 @@ public class HelloWorldComponent implements HelloWorldItf {
             // create server component
             comp = cf.newFcInstance(sType, new ControllerDescription("server", Constants.PRIMITIVE),
                     new ContentDescription(HelloWorldComponent.class.getName()));
-            //start the component ...
+            //start the component
             Fractal.getLifeCycleController(comp).startFc();
         } catch (InstantiationException e1) {
             e1.printStackTrace();
         } catch (NoSuchInterfaceException e) {
             e.printStackTrace();
         } catch (IllegalLifeCycleException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -102,3 +99,4 @@ public class HelloWorldComponent implements HelloWorldItf {
         WebServices.exposeComponentAsWebService(comp, url, "server");
     }
 }
+//@snippet-end helloworldcomponent

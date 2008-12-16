@@ -43,8 +43,9 @@ import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
 /**
+ * An example to call the hello world web service.
+ *
  * @author The ProActive Team
- * An example to call the hello world web service
  */
 public class WSClient {
     public static void main(String[] args) {

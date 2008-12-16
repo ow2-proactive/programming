@@ -31,6 +31,9 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
+//@snippet-start helloworlditfcomponent
 public interface HelloWorldItf {
-    public String helloWorld();
+
+    public String helloWorld(String name);
 }
+//@snippet-end helloworlditfcomponent
