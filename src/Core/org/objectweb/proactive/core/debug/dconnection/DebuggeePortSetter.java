@@ -34,12 +34,19 @@ package org.objectweb.proactive.core.debug.dconnection;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class DebuggeePortSetter {
 
-    public static void main(String[] argv) throws Exception {
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.DEBUGGER);
+
+    public static void main(String[] argv) {
         System.out.println(Arrays.toString(argv));
         String dir = System.getProperty("java.io.tmpdir");
         String name = argv[0];
@@ -49,10 +56,18 @@ public class DebuggeePortSetter {
         if (file.isFile()) {
             file.delete();
         }
-        file.createNewFile();
-        FileWriter writer = new FileWriter(file);
-        writer.write(port);
-        writer.close();
+        try {
+            file.createNewFile();
+            FileWriter writer = new FileWriter(file);
+            writer.write(port);
+            writer.close();
+            logger.info("Debugger JVM started");
+        } catch (IOException e) {
+            logger.fatal(
+                    "Could not create the file where to store the debuggee port, exception message follows ",
+                    e);
+        }
+
     }
 
 }
