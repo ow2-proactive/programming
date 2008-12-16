@@ -57,7 +57,7 @@ public class HelloWorldComponent implements HelloWorldItf {
     }
 
     public String helloWorld(String name) {
-        return "Hello "+ name +" !";
+        return "Hello " + name + " !";
     }
 
     public static void main(String[] args) {
