@@ -52,11 +52,22 @@ public class DebugSocketConnection {
                 t.labelUp(nbOfTry); // update the popup
                 nodeInfo = target.getDebugInfo();
                 System.out.println("nodeInfo: " + nodeInfo);
+
                 if (nodeInfo != null && nodeInfo.getDebuggerNode() != null)
                     break;
-                if (nbOfTry > 50)
-                    throw new TunnelingTimeOutException();
+
+                if (nbOfTry > 50) {
+                    throw new TunnelingTimeOutException("Reached the maximum connection attempt number (" +
+                        nbOfTry + ")");
+                }
+
                 nbOfTry++;
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
 
             int port = nodeInfo.getDebuggeePort();
