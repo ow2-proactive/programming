@@ -241,7 +241,6 @@
 		<info>
 			<title>Graphical tools</title>
 		</info>
-		<section>
 			<para>
 				We are developing the VCE (Vercors Component
 				Environnement), that includes graphical editors for the
@@ -263,7 +262,6 @@
 				for GCM/Proactive, in particular for expressing request
 				queue selection, and multicast/gathercast policies.
 			</para>
-		</section>
 	</section>
 
 </chapter>

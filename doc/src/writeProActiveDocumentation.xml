@@ -475,7 +475,7 @@ public class Dummy {
   </para>
  </section>
  
- <section><info><title xml:id="customizingTheDTD">DocBook subset: the dtd</title></info>
+ <section xml:id="customizingTheDTD"><info><title>DocBook subset: the dtd</title></info>
   
   
   <para>The dtd is the file detailling which are the allowed tags in our

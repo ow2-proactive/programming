@@ -1314,7 +1314,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
       
 
 	<para>IC2D hides all P2P internal object by default, in order to monitor the
-		infrastructure itself we invite you to read the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://proactive.inria.fr/release-doc/ic2d/manual/single_html/IC2D.html"> ProActive Optimizing</link> documentationto to set
+		infrastructure itself we invite you to read the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://proactive.inria.fr/release-doc/ic2d/single_html/IC2DManual.html"> ProActive Optimizing</link> documentationto to set
 	the right option.</para>
 	
 	

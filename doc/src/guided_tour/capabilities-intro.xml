@@ -639,7 +639,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
           </listitem>
         </itemizedlist>
 
-	<para>You can start IC2D (see link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://proactive.inria.fr/release-doc/ic2d/manual/single_html/IC2D.html"> ProActive Optimizing</link> documentation) in order to
+	<para>You can start IC2D (see link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://proactive.inria.fr/release-doc/ic2d/single_html/IC2DManual.html"> ProActive Optimizing</link> documentation) in order to
         visualize the JVMs and the Active Objects. To stop the Jacobi
         computation and all the associated AOs, and JVMs, just Ctrl+C
         in the console you used to launch the Jacobi script.</para>
