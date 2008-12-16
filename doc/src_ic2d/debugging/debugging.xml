@@ -1,6 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
+	xml:id="debuggingGeneralSection">
+	<info>
+		<title>Using IC2D debugging features</title>
+	</info>
+	<para> IC2D comes with several plug-ins to help developers in the process of
+	debugging their applications built above ProActive.</para>
 
-<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="StepByStep">
+
+	<section xml:id="debugging">
+	<info>
+		<title>Debugging a ProActive Application using IC2D</title>
+	</info>
+	<para> The communication between a debugger (like jdb or eclipse) and a
+		Java virtual machine, use a socket connection. The debugger must know the URL of the
+		jvm and the port number enable for this socket connection, but no port
+		is enable by default on the jvm therefore this jvm must be launched
+		with the correct arguments. IC2D allow to monitor many jvm on
+		different host, the IC2D debugger connection tool is intended for give
+		the informations of a jvm to branch a debugger.</para>
+		<para>
+		First of all, JVM (ProActive Runtimes) must be started with the debug command line argument,
+		otherwise it is not possible to establish a remote connection to these JVMs. The additional argument would be of the form:
+		 <programlisting>-DdebugID=padebug_someDeploymentId -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0,launch='java -cp path/to/ProActive.jar org.objectweb.proactive.core.debug.dconnection.DebuggeePortSetter padebug_someDdeploymentId'</programlisting>
+		 In order to facilitate the use of the debugging features, the GCMA descriptor has been extended to easily start runtimes
+		 in debug mode.
+		 One has to add the tag &lt;debug/&gt; as child of the application/proactive tag. An example is shown hereafter:
+		  <programlisting><textobject><textdata fileref="debugging/GCMA.xml"/></textobject></programlisting>
+		</para>
+	<section xml:id="Connection">
+		<info>
+			<title>The connection</title>
+		</info>
+		<para> The IC2D debugger connection is a little different than a
+			simple debugger connection. When the user want to connect a debugger
+			on a remote jvm, the debugger is in fact connect on localhost on the
+			IC2D jvm. This is an active object (created when the user send the
+			connection request) that transmit, with a proactive connection, the
+			debugger informations and requests to the jvm.</para>
+		<figure xml:id="connectionfig">
+			<info>
+				<title>connection</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debugging/addDebugger/images/debuggerConnection.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+	<section xml:id="UseDebugger">
+		<info>
+			<title>How to use the IC2D debugger connection tools</title>
+		</info>
+		<para> When the user make a right click on a monitored jmv, he can
+			select an option (connect a debugger) that show him the port number
+			to connect his debugger on localhost.</para>
+		<figure xml:id="menu">
+			<info>
+				<title>menu</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debugging/addDebugger/images/context.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<figure xml:id="popup">
+			<info>
+				<title>popup</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debugging/addDebugger/images/popup.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<para> Next the user has just to connect his debugger. For example:
+			The eclipse debugger</para>
+		<figure xml:id="eclipseConnection">
+			<info>
+				<title>eclipse connection</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debugging/addDebugger/images/eclipseConnection.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<figure xml:id="eclipseDebugger">
+			<info>
+				<title>eclipse debugger</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debugging/addDebugger/images/eclipse.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+		<figure xml:id="communication">
+			<info>
+				<title>communication</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						fileref="debugging/addDebugger/images/SocketServClient.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+</section>
+
+	<section xml:id="StepByStep">
 
 	<info><title>Step by step mode</title></info>
 
@@ -8,7 +125,7 @@
     <figure xml:id="StepByStepFigure"><info><title>step by step preview</title></info>
        <mediaobject>
          <imageobject>
-             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debug/stepByStep/images/all.png" format="PNG"/>
+             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/all.png" format="PNG"/>
          </imageobject>
        </mediaobject>
     </figure>
@@ -114,7 +231,7 @@
 				<figure xml:id="PauseFigure"><info><title>pause</title></info>
 		       <mediaobject>
 		         <imageobject>
-		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debug/stepByStep/images/pause.png" format="PNG"/>
+		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/pause.png" format="PNG"/>
 		         </imageobject>
 		       </mediaobject>
 		    </figure>
@@ -132,7 +249,7 @@
 				<figure xml:id="FiltersFigure"><info><title>filters</title></info>
 		       <mediaobject>
 		         <imageobject>
-		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debug/stepByStep/images/filters.png" format="PNG"/>
+		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/filters.png" format="PNG"/>
 		         </imageobject>
 		       </mediaobject>
 		    </figure>
@@ -149,7 +266,7 @@
 				<figure xml:id="SlowMotionFigure"><info><title>slow motion</title></info>
 		       <mediaobject>
 		         <imageobject>
-		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debug/stepByStep/images/slowmotion.png" format="PNG"/>
+		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/slowmotion.png" format="PNG"/>
 		         </imageobject>
 		       </mediaobject>
 		    </figure>
@@ -169,7 +286,7 @@
 			  <figure xml:id="InformationFigure"><info><title>information</title></info>
 		       <mediaobject>
 		         <imageobject>
-		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debug/stepByStep/images/information.png" format="PNG"/>
+		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/information.png" format="PNG"/>
 		         </imageobject>
 		       </mediaobject>
 		    </figure>
@@ -179,5 +296,12 @@
 		</section>
 
 	</section>
+
+</section>
+
+
+
+
+
 
 </chapter>

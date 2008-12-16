@@ -11,8 +11,6 @@
 	  <!ENTITY JMX SYSTEM "Jmx.xml">
 	  <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
 	  <!ENTITY IC2D SYSTEM "IC2D.xml">
-	  
-	  
 	  <!ENTITY FAQ SYSTEM "FAQ.xml">
 	  <!ENTITY biblio SYSTEM "biblio.xml">
 	  <!ENTITY referenceCard SYSTEM "ReferenceCard.xml">
@@ -23,7 +21,9 @@
 	  <!ENTITY glossary SYSTEM "glossary.xml">
 	  <!ENTITY reference SYSTEM "definitions.xml">
 	  <!ENTITY scilab SYSTEM "scilab/ScilabDoc.xml">
-	  
+	  <!ENTITY debugging SYSTEM "debugging/debugging.xml">
+	  <!ENTITY adddebugger SYSTEM "debugging/addDebugger/addDebugger.xml">
+	  <!ENTITY stepbystep SYSTEM "debugging/stepByStep/stepByStep.xml">
 ]>
 
 <book xmlns="http://docbook.org/ns/docbook" version="5.0">
@@ -38,6 +38,7 @@
     &IC2D_EclipsePlugin;
     &TimIt;
     &scilab;
+    &debugging;
    </part>
 
    <part xml:id="ExtendingIC2D"><info><title>Extending IC2D</title></info>
