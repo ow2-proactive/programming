@@ -14,6 +14,7 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.node.StartNode;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
+import org.objectweb.proactive.core.process.AbstractExternalProcess.StandardOutputMessageLogger;
 
 
 public class DebuggerConnection implements Serializable {
@@ -73,7 +74,7 @@ public class DebuggerConnection implements Serializable {
         Node node = getNode();
         try {
             if (node == null && !created) {
-                JVMProcessImpl vm = new JVMProcessImpl();
+                JVMProcessImpl vm = new JVMProcessImpl(new StandardOutputMessageLogger());
                 vm.setClassname(StartNode.class.getName());
                 vm.setParameters(nodeName);
                 vm.startProcess();
@@ -81,6 +82,7 @@ public class DebuggerConnection implements Serializable {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e2) {
+                    e2.printStackTrace();
                 }
                 node = getNode();
             }
