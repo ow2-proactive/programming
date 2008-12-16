@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="userguide">
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
+	xml:id="userguide">
 	<info>
 		<title>User guide</title>
 	</info>
@@ -17,57 +19,81 @@
 			<primary>ADL</primary>
 			<secondary>definition</secondary>
 		</indexterm>
-		<para/>
+		<para />
 		<para>
 			The Architecture Description Languages (ADL) are a way to
 			describe software and/or system architectures. ADLs
-			facilitate application description without concern for the
-			underlying implementation code and foster code reuse as an
-			effect of decoupling the implementation from the
-			architecture. Architectures created by using ADLs are
-			composed of predefined entities with various connectors that
+			facilitate
+			application description without concern for the
+			underlying
+			implementation code and foster code reuse as an
+			effect of decoupling
+			the implementation from the
+			architecture. Architectures created by
+			using ADLs are
+			composed of predefined entities with various connectors
+			that
 			communicate through defined connections. To define an
-			architecture through an ADL we can use a textual syntax
-			and/or a graphical syntax, possibly associated with a design
+			architecture through an ADL, we can use a textual syntax
+			and/or a
+			graphical syntax, possibly associated with a design
 			tool.
 		</para>
 		<para>
-			In the case of ProActive we have developed the Grid
-			Component Model which is an extension of the Fractal ADL.
-			For detailed information on Fractal read
-			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://fractal.objectweb.org/tutorials/adl/index.html">
-				Fractal ADL tutorial
+			This GCM implementation reuses and extends the Fractal
+			ADL Project.
+			For detailed information on Fractal ADL read
+			<link xmlns:xlink="http://www.w3.org/1999/xlink"
+				xlink:href="http://fractal.objectweb.org/tutorials/adl/index.html">
+				the Fractal ADL tutorial
 			</link>
 			.
-
-
-			In our GCM implementation this mechanism is used to
-			configure and deploy component systems through normalized
-			XML files. Thanks to a specific XML DTD, it specifies a
-			definition for each component of the application. For
+			This mechanism is used to configure and
+			deploy component systems
+			through normalized
+			XML files. Thanks to a
+			specific XML DTD, it
+			specifies a
+			definition for each component of the
+			application. For
 			instance, it usually describes component interfaces,
-			component bindings, component attributes, the subcomponents
-			in the case of a composite component, the virtual node where
-			the component will be deployed, and so on. As it is an
-			extension of the standard Fractal ADL, GCM allows reusing
-			and integrating ProActive-specific features such as
-			distributed deployment using deployment descriptors, active
-			objects, virtual nodes, etc. For example, in the case of
-			virtual nodes the components ADL has to be associated with a
-			deployment descriptor (this is done at parsing time: both
-			files are given to the parser).
+			component
+			bindings, component attributes, the subcomponents
+			in the
+			case of a
+			composite component, the virtual node where
+			the component
+			will be
+			deployed, and so on. As it is an
+			extension of the standard
+			Fractal ADL,
+			GCM allows reusing
+			and integrating ProActive-specific
+			features such as
+			distributed deployment using deployment descriptors,
+			active
+			objects,
+			virtual nodes, etc. For example, in the case of
+			virtual nodes the
+			components ADL has to be associated with a
+			deployment descriptor (this
+			is done at parsing time: both
+			files are
+			given to the parser).
 
 		</para>
 		<para>
 			Note that because GCM is based on the Fractal ADL, it
-			requires the following libraries which are included in the
+			requires the
+			following libraries which are included in the
 			<literal>/lib</literal>
 			directory of the ProActive distribution :
 			<literal>fractal-adl.jar</literal>
 			,
 			<literal>dtdparser.jar</literal>
 			,
-			<literal>ow_deployment_scheduling.jar</literal>
+			<literal>ow_deployment_scheduling.jar
+			</literal>
 			.
 		</para>
 		<section>
@@ -78,8 +104,9 @@
 			<para>
 				Components are defined in
 				<emphasis role="bold">definition</emphasis>
-				files, which are .fractal files. Here is a simple
-				example of an ADL file extract from the example
+				files with the .fractal extension. Here is a simple
+				example of an ADL
+				file extract from the example
 				Helloworld retrievable at
 				Examples/org.objectweb.proactive.examples.components.helloworld.
 			</para>
@@ -387,9 +414,365 @@
 
 	<section>
 		<info>
-			<title>Deployment</title>
+			<title>Implementation specific API</title>
 		</info>
-		<para/>
+		<section>
+			<info>
+				<title>fractal.provider</title>
+			</info>
+
+			<para>
+				The API is the same for any Fractal implementation,
+				though some classes are implementation-specific:
+			</para>
+
+			<para>
+				The fractal provider class, that corresponds to the
+				<literal>fractal.provider</literal>
+				parameters of the JVM, is
+				<literal>
+					org.objectweb.proactive.core.component.Fractive
+				</literal>
+				. The
+				<literal>Fractive</literal>
+				class acts as:
+			</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>a bootstrap component</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						a GenericFactory for instantiating new
+						components
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						a utility class providing static methods to
+						create collective interfaces
+					</para>
+				</listitem>
+			</itemizedlist>
+		</section>
+
+		<section>
+			<info>
+				<title>Requirements</title>
+			</info>
+
+			<para>
+				As this implementation is based on ProActive, several
+				conditions are required (more in
+				<xref linkend="ActiveObjectCreation"/>
+				):
+			</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						the base class for the implementation of a
+						primitive component has to provide a no-argument
+						and preferably an empty constructor.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						asynchronous method calls with transparent
+						futures is a core feature of ProActive (
+						<xref linkend="FutureObjectCreation"/>
+						), and it allows concurrent processing. Indeed,
+						suppose a caller invokes a method on a callee.
+						This method returns a result on a component.
+						With synchronous method calls, the flow of
+						execution of the caller is blocked until the
+						result of the method called is received. In the
+						case of intensive computations, this can be
+						relatively long. With asynchronous method calls,
+						the caller gets a future object and will
+						continue its tasks until it really uses the
+						result of the method call. The process is then
+						blocked (it is called wait-by-necessity) until
+						the result has effectively been calculated.
+					</para>
+					<para>
+						Thus, for asynchronous invocations, return types
+						of the methods provided by the interfaces of the
+						components have to be reifiable (Non-final and
+						serializable class) and methods must not throw
+						exceptions.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</section>
+
+		<section>
+			<info>
+				<title>Content and controller descriptions</title>
+			</info>
+
+			<para>
+				When a component is instantiated with the
+				<literal>
+					public Component newFcInstance(Type type, Object
+					controllerDesc, Object contentDesc) throws
+					InstantiationException
+				</literal>
+				method of the
+				<literal>
+					org.objectweb.fractal.api.factory.Factory
+				</literal>
+				class, in addition to the type of the component have to
+				be specified the controller description and the content
+				description of the component.
+			</para>
+			<para>
+				The controller description (
+				<literal>
+					org.objectweb.proactive.core.component.ControllerDescription
+				</literal>
+				) is useful to describe the controllers of components.
+				It allows to define:
+				<itemizedlist>
+					<listitem>
+						<para>the name of a component.</para>
+					</listitem>
+					<listitem>
+						<para>
+							the hierarchical type of a component.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							the custom controllers for a component. The
+							configuration of the controllers is
+							described in a properties file whose
+							location can be given as a parameter. The
+							controllers configuration file is simple: it
+							associates the signature of a controller
+							interface with the implementation that has
+							to be used. During the construction of the
+							component, the membrane is automatically
+							constructed with these controllers. The
+							controllers are linked together, and
+							requests targetting a control interface
+							visit the different controllers until they
+							find the suitable controller, and then the
+							request is executed on this controller.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+
+			<para>
+				The role of the content description (
+				<literal>
+					org.objectweb.proactive.core.component.ContentDescription
+				</literal>
+				) is to define some informations about a component:
+				<itemizedlist>
+					<listitem>
+						<para>
+							the classname of the component (the only one
+							information mandatory).
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							the constructor parameters of the component
+							(optional).
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							the activity as defined in the ProActive
+							model (optional). See
+							<xref linkend="ActiveObjectCreation"/>
+							for more informations about activity in
+							ProActive.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							the meta-object factory for the component
+							(optional).
+						</para>
+					</listitem>
+				</itemizedlist>
+				It is also possible to force that there is only one
+				instance of this component when instantiating the
+				component on a given multiple virtual node by using the
+				<literal>forceSingleInstance</literal>
+				method.
+			</para>
+		</section>
+
+		<section>
+			<info>
+				<title>Collective interfaces</title>
+			</info>
+
+			<para>
+				Collective interactions are an extension to the Fractal
+				model, described in section
+				<xref linkend="collective-interfaces"/>
+				, that relies on collective interfaces.
+			</para>
+
+			<para>
+				This feature provides collective interactions (1-to-n
+				and n-to-1 interactions between components), namely
+				gathercast and multicast interfaces
+			</para>
+		</section>
+
+		<section>
+			<info>
+				<title>Priority controller</title>
+			</info>
+
+			<para>
+				In order to define Non Functional prioritized requests
+				(useful for instance for life cycle management,
+				reconfiguration, ...), a partial order between each kind
+				of request is available to specify when an incoming
+				request can pass requests already in the queue.
+			</para>
+
+			<para>
+				Here are the different priorities availables for the
+				requests:
+				<itemizedlist>
+					<listitem>
+						<para>
+							F: Functional request. Always goes at the
+							end of the requests queue.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							NF1: Standard Non Functional request. Also
+							always goes at the end of the requests
+							queue.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							NF2: Non Functional prioritized request.
+							Pass the Functional requests into the
+							requests queue but respect the order of the
+							other Non Functional requests.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							NF3: Non Functional most prioritized
+							request. Pass all the other requests into
+							the requests queue.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+
+			<para>
+				Thus, for prioritize non functional requests, a new
+				controller,
+				<literal>
+					org.objectweb.proactive.core.component.controller.PriorityController
+				</literal>
+				, has to be used:
+				<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/prioritycontroller.snip"/></textobject></programlisting>
+			</para>
+		</section>
+
+		<section>
+			<info>
+				<title>Monitor controller</title>
+			</info>
+
+			<para>
+				By using the monitor controller, <literal>org.objectweb.proactive.core.component.controller.MonitorController</literal>,
+				users can retrieve various statistics on components as the average length of the queue of a given method or the last
+				execution time of another method. Thus, with these metrics, users can be informed on the QoS and then decide to do
+				some changes in their application to improve the performance.
+			</para>
+			<para>
+				After having started the monitoring (Method <literal>startMonitoring</literal>), for each methods exposed by the server
+				interfaces of a component, this controller will be able to provide an instance of
+				<literal>org.objectweb.proactive.core.component.controller.MethodStatistics</literal>, which itself provides some
+				statistics related to a given method.
+			</para>
+			<para>
+				The set of statistics that can be retrieved and the corresponding methods to call are described through the
+				MethodStatistics interface:
+				<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/methodstatistics.snip"/></textobject></programlisting>
+				In regard to the MethodStatistics instances, they can be recovered by the following MonitorController's methods:
+				<itemizedlist>
+					<listitem>
+						<para>
+							<programlisting xml:lang="java">public Map&lt;String, MethodStatistics&gt; getAllStatistics();</programlisting>
+							Which returns every MethodStatistics (i.e. statistics of each methods of each server interfaces of the monitored component)
+							contained into a Map. The key to obtain the MethodStatistics corresponding to a method can be generated thanks to the method
+							<literal>org.objectweb.proactive.core.component.controller.MonitorControllerHelper.generateKey</literal> which takes as
+							parameters the name of the interface, the name of the method and an array of parameter types of the method.
+						</para>
+					</listitem>
+
+					<listitem>
+						<para>
+							<programlisting xml:lang="java">public MethodStatistics getStatistics(String itfName, String methodName)</programlisting>
+							Which returns the MethodStatistics object for the method methodName which belongs to the interface itfName.
+						</para>
+					</listitem>
+
+					<listitem>
+						<para>
+							<programlisting xml:lang="java">public MethodStatistics getStatistics(String itfName, String methodName, Class&lt;?&gt;[] parametersTypes)</programlisting>
+							Which returns the MethodStatistics object for the method methodName which takes as parameters the given parameter types and belongs to the interface itfName.
+						</para>
+					</listitem>
+				</itemizedlist> 
+				<para>
+					These methods to retrieve MethodStatistics are in "immediate services", i.e when calling one of these methods, the
+					corresponding request will not be enqueued in the component queue as any other request but it will be executed
+					immediately and thus avoiding to spend to much time to obtain the statistics.
+				</para>
+			</para>
+		</section>
+
+		<section>
+			<info>
+				<title>Stream ports</title>
+			</info>
+
+			<para>
+				Stream ports allow to ensure to have components which
+				only have one way communication methods (client side to
+				server side).
+			</para>
+			<para>
+				Thus, by using the
+				<literal>
+					org.objectweb.proactive.core.component.StreamInterface
+				</literal>
+				interface as a tag on the java interface definition of a
+				component interface, the GCM implementation will check
+				during the instantiation of a Fractal Interface Type
+				created with
+				<literal>createFcItfType(...)</literal>
+				method, if all the methods of the given interface, and
+				its parents, return void. If not, an exception is
+				thrown: "
+				<literal>
+					org.objectweb.fractal.api.factory.InstantiationException
+				</literal>
+				" accordingly to the Fractal specifications.
+			</para>
+		</section>
 	</section>
 
 	<section xml:id="collective-interfaces">
@@ -683,17 +1066,29 @@
 
 						<listitem>
 							<para>
-								UNICAST, which sends only one of the
-								list parameter to one of the connected
-								server interfaces. Which argument and
-								which server interface is determined by
-								a custom controller that extends
-								<literal>
-									org.objectweb.proactive.core.component.controller.MulticastController
-								</literal>
+								UNICAST, which sends only one parameter of the
+								list parameters to one of the connected
+								server interfaces.
 								.
 								<programlisting xml:lang="java">
 									ParamDispatchMode.UNICAST
+								</programlisting>
+								By default, the behavior is not specified: there
+								is no way to predict which parameter will be sent to
+								which server interface.
+								Therefore, it is strongly recommended to combine the
+								use of the UNICAST parameter distribution mode with
+								the dispatch annotation,
+								<literal>
+									org.objectweb.proactive.core.group.Dispatch
+								</literal>, which
+								allows to specify a custom dispatch mode (This custom
+								dispatch mode has to implement the
+								<literal>
+									org.objectweb.proactive.core.group.DispatchBehavior
+								</literal> interface):
+								<programlisting xml:lang="java">
+									@DispatchMode(mode = DispatchMode.CUSTOM, customMode=CustomUnicastDispatch.class)
 								</programlisting>
 							</para>
 						</listitem>
@@ -701,7 +1096,7 @@
 
 					<para>
 						It is also possible to define a custom
-						distribution by specifying the distribution
+						partition by specifying the partition
 						algorithm in a class which implements the
 						<literal>
 							org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatch
@@ -773,7 +1168,7 @@
 								@ClassDispatchMetadata(mode=@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST))
 								interface MyMulticastItf {
 
-									public void foo(List&amp;lt;T&amp;gt; parameters);
+									public void foo(List&lt;T&gt; parameters);
 								}
 							</programlisting>
 						</para>
@@ -806,7 +1201,31 @@
 						<para>
 							<programlisting xml:lang="java">
 								@MethodDispatchMetadata(mode=@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST))
-								public void foo(List&amp;lt;T&amp;gt; parameters);
+								public void foo(List&lt;T&gt; parameters);
+							</programlisting>
+						</para>
+
+						<para></para>
+
+						<para>
+							Moreover, an another feature, inherited from the group framework of ProActive, is available:
+							the dynamic dispatch.
+						</para>
+
+						<para>
+							The <literal>org.objectweb.proactive.core.group.DispatchMode.DYNAMIC</literal> mode is
+							applicable when there are more parameter partitions, resulting from the use of a parameters
+							distribution mode, than binded server interfaces. Dynamic dispatch uses a knowledge-based policy,
+							i.e. it collects information about request execution by server interfaces, and maintains a
+							ranking among server interfaces	so that partitions are dispatched to the "best" server interface.
+							A buffer can be configured, in which case buffered partitions are statically allocated to server
+							interfaces, according to the static	dispatch policy. 
+						</para>
+						<para>
+							Dynamic dispatch must be used like this:
+							<programlisting xml:lang="java">
+								@Dispatch(mode=DispatchMode.DYNAMIC, bufferSize=myBufferSize)
+								public void foo(List&lt;T&gt; parameters);
 							</programlisting>
 						</para>
 					</section>
@@ -830,7 +1249,7 @@
 						<para>
 							<programlisting xml:lang="java">
 								public void foo(@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST)
-														List&amp;lt;T&amp;gt; parameters);
+														List&lt;T&gt; parameters);
 							</programlisting>
 						</para>
 					</section>
@@ -1180,7 +1599,6 @@
 						<title>Redistribution of results</title>
 					</info>
 
-
 					<para>
 						The result of the invocation transformed by the
 						gathercast interface is a list of values. Each
@@ -1204,7 +1622,6 @@
 				<info>
 					<title>Binding compatibility</title>
 				</info>
-
 
 				<para>
 					Gathercast interfaces manipulate lists of parameters
@@ -1273,7 +1690,6 @@
 				<info>
 					<title>Process synchronization</title>
 				</info>
-
 
 				<para>
 					An invocation from a client interface to a
@@ -1351,312 +1767,123 @@
 		</section>
 	</section>
 
-	<section>
+	<section xml:id="component_deployment">
 		<info>
-			<title>Implementation specific API</title>
+			<title>Deployment</title>
 		</info>
-		<section>
-			<info>
-				<title>fractal.provider</title>
-			</info>
-
-			<para>
-				The API is the same for any Fractal implementation,
-				though some classes are implementation-specific:
-			</para>
-
-			<para>
-				The fractal provider class, that corresponds to the
-				<literal>fractal.provider</literal>
-				parameters of the JVM, is
-				<literal>
-					org.objectweb.proactive.core.component.Fractive
-				</literal>
-				. The
-				<literal>Fractive</literal>
-				class acts as:
-			</para>
-
-			<itemizedlist>
-				<listitem>
-					<para>a bootstrap component</para>
-				</listitem>
-
-				<listitem>
-					<para>
-						a GenericFactory for instantiating new
-						components
-					</para>
-				</listitem>
-
-				<listitem>
-					<para>
-						a utility class providing static methods to
-						create collective interfaces
-					</para>
-				</listitem>
-			</itemizedlist>
-		</section>
 
 		<section>
 			<info>
-				<title>Requirements</title>
+				<title>Overview</title>
 			</info>
 
 			<para>
-				As this implementation is based on ProActive, several
-				conditions are required (more in
-				<xref linkend="ActiveObjectCreation"/>
-				):
+				To create a distributed component system, a deployment framework is
+				available: the GCM Deployment.
 			</para>
 
-			<itemizedlist>
-				<listitem>
-					<para>
-						the base class for the implementation of a
-						primitive component has to provide a no-argument
-						and preferably an empty constructor.
-					</para>
-				</listitem>
-
-				<listitem>
-					<para>
-						asynchronous method calls with transparent
-						futures is a core feature of ProActive (
-						<xref linkend="FutureObjectCreation"/>
-						), and it allows concurrent processing. Indeed,
-						suppose a caller invokes a method on a callee.
-						This method returns a result on a component.
-						With synchronous method calls, the flow of
-						execution of the caller is blocked until the
-						result of the method called is received. In the
-						case of intensive computations, this can be
-						relatively long. With asynchronous method calls,
-						the caller gets a future object and will
-						continue its tasks until it really uses the
-						result of the method call. The process is then
-						blocked (it is called wait-by-necessity) until
-						the result has effectively been calculated.
-					</para>
-					<para>
-						Thus, for asynchronous invocations, return types
-						of the methods provided by the interfaces of the
-						components have to be reifiable (Non-final and
-						serializable class) and methods must not throw
-						exceptions.
-					</para>
-				</listitem>
-			</itemizedlist>
-		</section>
-
-		<section>
-			<info>
-				<title>Content and controller descriptions</title>
-			</info>
-
 			<para>
-				When a component is instantiated with the
-				<literal>
-					public Component newFcInstance(Type type, Object
-					controllerDesc, Object contentDesc) throws
-					InstantiationException
-				</literal>
-				method of the
-				<literal>
-					org.objectweb.fractal.api.factory.Factory
-				</literal>
-				class, in addition to the type of the component have to
-				be specified the controller description and the content
-				description of the component.
+				Distribution is achieved in a transparent manner over the Java RMI
+				protocol thanks to the use of a stub/proxy pattern. Components are
+				manipulated indifferently of their location (local or on a remote JVM).
+				A complete description of the GCM Deployment can be found at <xref linkend="GCMDeployment"/>.
 			</para>
+
 			<para>
-				The controller description (
-				<literal>
-					org.objectweb.proactive.core.component.ControllerDescription
-				</literal>
-				) is useful to describe the controllers of components.
-				It allows to define:
+				In brief, this framework:
 				<itemizedlist>
 					<listitem>
-						<para>the name of a component.</para>
+						connects to remote hosts using supported protocols, such as rsh,
+						ssh, lsf, oar, etc...
 					</listitem>
 					<listitem>
-						<para>
-							the hierarchical type of a component.
-						</para>
+						creates JVMs on these hosts
 					</listitem>
 					<listitem>
-						<para>
-							the custom controllers for a component. The
-							configuration of the controllers is
-							described in a properties file whose
-							location can be given as a parameter. The
-							controllers configuration file is simple: it
-							associates the signature of a controller
-							interface with the implementation that has
-							to be used. During the construction of the
-							component, the membrane is automatically
-							constructed with these controllers. The
-							controllers are linked together, and
-							requests targetting a control interface
-							visit the different controllers until they
-							find the suitable controller, and then the
-							request is executed on this controller.
-						</para>
+						instantiates components on these newly created JVMs
 					</listitem>
-				</itemizedlist>
+				</itemizedlist>				
 			</para>
+		</section>
+
+		<section>
+			<info>
+				<title>Initiate the deployment</title>
+			</info>
 
 			<para>
-				The role of the content description (
-				<literal>
-					org.objectweb.proactive.core.component.ContentDescription
-				</literal>
-				) is to define some informations about a component:
+				The first step to distribute components is to initiate the deployment by
+				loading the Application Descriptor:
+				<programlisting xml:lang="java">GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(filePath);</programlisting>
+				Then, the deployment must be started (i.e. creation of the remote JVMs):
+				<programlisting xml:lang="java">gcma.startDeployment();</programlisting>
+				The next step, distribute components, may be done through the ADL or the API.
+			</para>
+		</section>
+
+		<section>
+			<info>
+				<title>Distribute components with ADL</title>
+			</info>
+
+			<para>
+				Distribute components through the ADL is quite simple:
 				<itemizedlist>
 					<listitem>
-						<para>
-							the classname of the component (the only one
-							information mandatory).
-						</para>
+						Put the GCMApplication into a <emphasis role="bold">java.util.Map</emphasis>
+						with as key "deployment-descriptor":
+						<programlisting xml:lang="java">Map&lt;String, Object&gt; context = new HashMap&lt;String, Object&gt;();
+context.put("deployment-descriptor", gcma);</programlisting>
 					</listitem>
 					<listitem>
-						<para>
-							the constructor parameters of the component
-							(optional).
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							the activity as defined in the ProActive
-							model (optional). See
-							<xref linkend="ActiveObjectCreation"/>
-							for more informations about activity in
-							ProActive.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							the meta-object factory for the component
-							(optional).
-						</para>
+						Call the usual method to instantiate component through ADL (method
+						<emphasis role="bold">org.objectweb.fractal.adl.Factory.newComponent</emphasis>)
+						with the Map containing the Application Descriptor as parameter:
+						<programlisting xml:lang="java">Component component = (Component)
+						factory.newComponent("my.adl.folder.ComponentDefinition", context);</programlisting>
 					</listitem>
 				</itemizedlist>
-				It is also possible to force that there is only one
-				instance of this component when instantiating the
-				component on a given multiple virtual node by using the
-				<literal>forceSingleInstance</literal>
-				method.
+				Thus, the component will be instantiated in a node of the virtual node
+				specified in the ADL component definition (if a virtual node of the
+				same name has also been defined in the Application Descriptor).
+			</para>
+			<para>
+				If no virtual node has been specified in the ADL component definition,
+				the component is created in the local JVM.
 			</para>
 		</section>
 
 		<section>
 			<info>
-				<title>Collective interfaces</title>
+				<title>Distribute components with API</title>
 			</info>
 
 			<para>
-				Collective interactions are an extension to the Fractal
-				model, described in section
-				<xref linkend="collective-interfaces"/>
-				, that relies on collective interfaces.
-			</para>
-
-			<para>
-				This feature provides collective interactions (1-to-n
-				and n-to-1 interactions between components), namely
-				gathercast and multicast interfaces
+				To distribute components through the API, the first thing to do is to
+				get a node from a virtual node defined by the Application Descriptor:
+				<programlisting xml:lang="java">Map&lt;String, ? extends GCMVirtualNode&gt; vns = gcma.getVirtualNodes();
+Node node = vns.get("VN1").getANode();</programlisting>
+				Then, the component must be instanced thanks to one of the methods
+				provided by
+				<emphasis role="bold">org.objectweb.proactive.core.component.factory.ProActiveGenericFactory</emphasis>,
+				taking as parameter the node obtained previously:
+				<programlisting xml:lang="java">Component component = genericFact.newFcInstance(componentType, controllerDescription, contentDescription, node);</programlisting>
 			</para>
 		</section>
 
 		<section>
 			<info>
-				<title>Priority controller</title>
+				<title>ProActive Deployment</title>
 			</info>
 
 			<para>
-				In order to define Non Functional prioritized requests
-				(useful for instance for life cycle management,
-				reconfiguration, ...), a partial order between each kind
-				of request is available to specify when an incoming
-				request can pass requests already in the queue.
-			</para>
-
-			<para>
-				Here are the different priorities availables for the
-				requests:
-				<itemizedlist>
-					<listitem>
-						<para>
-							F: Functional request. Always goes at the
-							end of the requests queue.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							NF1: Standard Non Functional request. Also
-							always goes at the end of the requests
-							queue.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							NF2: Non Functional prioritized request.
-							Pass the Functional requests into the
-							requests queue but respect the order of the
-							other Non Functional requests.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							NF3: Non Functional most prioritized
-							request. Pass all the other requests into
-							the requests queue.
-						</para>
-					</listitem>
-				</itemizedlist>
-			</para>
-
-			<para>
-				Thus, for prioritize non functional requests, a new
-				controller,
-				<literal>
-					org.objectweb.proactive.core.component.controller.PriorityController
-				</literal>
-				, has to be used:
-				<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/prioritycontroller.snip"/></textobject></programlisting>
+				The distribution of components may also be made by using the ProActive
+				deployment framework. This deployment framework also uses the concept
+				of virtual nodes but just needs a single configuration file. More
+				informations are available at <xref linkend="XML_Descriptors"/>.
 			</para>
 		</section>
-
-		<section>
-			<info>
-				<title>Stream ports</title>
-			</info>
-
-			<para>
-				Stream ports allow to ensure to have components which
-				only have one way communication methods (client side to
-				server side).
-			</para>
-			<para>
-				Thus, by using the
-				<literal>
-					org.objectweb.proactive.core.component.StreamInterface
-				</literal>
-				interface as a tag on the java interface definition of a
-				component interface, the GCM implementation will check
-				during the instantiation of a Fractal Interface Type
-				created with
-				<literal>createFcItfType(...)</literal>
-				method, if all the methods of the given interface, and
-				its parents, return void. If not, an exception is
-				thrown: "
-				<literal>
-					org.objectweb.fractal.api.factory.InstantiationException
-				</literal>
-				" accordingly to the Fractal specifications.
-			</para>
-		</section>
+		
 	</section>
 
 	<section>
@@ -2016,6 +2243,107 @@
 			</section>
 		</section>
 
+		<section xml:id="Exporting_components_as_Web_Services">
+			<info>
+				<title>
+					Exporting components as Web Services
+				</title>
+			</info>
+
+			<para>
+				As with any active objects, each component can be exposed as a web service.
+			</para>
+
+			<para>
+				For a complete description of Web Services in ProActive, please refer to <xref linkend="WSDoc"/>.
+			</para>
+
+			<section>
+				<info><title>
+					Using ProActive Web Services API
+				</title></info>
+
+				<para>
+					The main difference with active objects is that, when exposing a component as web service, all the methods of each server interfaces are
+					automatically exposed as a web service (with active objects you can expose just one method at once).
+					Thus, the way to expose a component as web services is quite simple and can be done in a single call method by using
+					<emphasis role="bold">org.objectweb.proactive.extensions.webservices.WebServices</emphasis> API.
+					After having defined the component and having started it as usually, the following method must be called:
+					<programlisting xml:lang="java">WebService.exposeComponentAsWebService(Component component, String url, String componentName);</programlisting>
+					where:
+					<itemizedlist>
+	    	  			<listitem>
+    	    				<para>
+        						<emphasis role="bold">component</emphasis> is the instance of the component whose interfaces will be exposed as web services.
+       						</para>
+   						</listitem>
+	    	  			<listitem>
+							<para>
+   		     					<emphasis role="bold">url</emphasis> is the url of the web server; typically http://localhost:8080
+       						</para>
+   						</listitem>
+	    	  			<listitem>
+    		    			<para>
+        						<emphasis role="bold">componentName</emphasis> is the name of the component. Each service available in this way will get a name
+        						composed by the component name followed by the interface name: <emphasis>componentName_interfaceName</emphasis>.
+       						</para>
+   						</listitem>
+       				</itemizedlist>
+				</para>
+
+				<para>
+					Likewise, to undeploy a component, just call the method:
+					<programlisting xml:lang="java"> WebServices.unExposeAsWebService ( String componentName , String url,  Component component);</programlisting>
+					where:
+					<itemizedlist>
+	      				<listitem>
+    	    				<para>
+        						<emphasis role="bold">componentName</emphasis> is the name of the component.
+       						</para>
+    		    			<para>
+        						<emphasis role="bold">url</emphasis> is the url of the web server; typically http://localhost:8080
+       						</para>
+    	    				<para>
+        						<emphasis role="bold">component</emphasis> is the instance of the component.
+       						</para>
+   						</listitem>
+       				</itemizedlist>
+				</para>
+
+				<para>
+					Once the interfaces component are deployed, you can access it via any web service enabled client.
+				</para>
+
+			</section>
+
+			<section>
+				<info><title>
+					A simple example: Hello World with component
+				</title></info>
+
+				<para>
+					Here is a very basic example: just a classic HelloWorld programming with component.
+				</para>
+
+				<para>
+					First, below is the only one server interface of the component:
+					<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/helloworlditfcomponent.snip"/></textobject></programlisting>
+				</para>
+
+				<para>
+					The implementation class of the component which also contains the main method to create the component, start it and deploy it:
+					<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/helloworldcomponent.snip"/></textobject></programlisting>
+					The component <literal>comp</literal> has been deployed as a web service on the web server located at <literal>"http://localhost:8080"</literal>.
+					The accessible service method is <literal>server_hello-world_helloWorld</literal>.
+				</para>
+
+				<para>
+					At last, here is a java program calling the deployed web service:
+					<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/wsclientcomponent.snip"/></textobject></programlisting>
+				</para>
+			</section>
+		</section>
+
 		<section xml:id="Lifecycle_encapsulation_of_functional_activity_in_component_lifecycle">
 			<info>
 				<title>
@@ -2023,7 +2351,6 @@
 					component lifecycle
 				</title>
 			</info>
-
 
 			<indexterm>
 				<primary>Lifecycle</primary>
@@ -2093,10 +2420,10 @@
 			</para>
 		</section>
 		
-				<section>
-				<info>
-					<title>Structuring the membrane with non-functional components</title>
-				</info>
+		<section>
+			<info>
+				<title>Structuring the membrane with non-functional components</title>
+			</info>
 				
 				  <para> Components running in dynamically changing execution environments need
 						to adapt to these environments. In Fractal and GCM (Grid Component
@@ -2496,51 +2823,20 @@
 										component, calls performed on this copy will not be performed on the “real” NF
 										component inside the membrane. Methods introduced in Figure <xref linkend="codeAPI2"/> solve this problem.
 										 
-						 	</para>	 
-						 
-						 </section>
-						
-				  </section>
-				 
-				 
-				 
-				 
+					</para>
+				 </section>
 			</section>
-	</section>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		</section>
 
 		<section>
 			<info>
 				<title>Short cuts</title>
 			</info>
 
-
 			<section>
 				<info>
 					<title>Principles</title>
 				</info>
-
 
 				<para>
 					Communications between components in a hierarchical
@@ -2630,5 +2926,6 @@
 				</para>
 			</section>
 		</section>
+	</section>
 	
 </chapter>

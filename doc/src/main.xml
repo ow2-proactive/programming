@@ -27,7 +27,6 @@
                 <!ENTITY faultTolerance SYSTEM "faultTolerance.xml">
                 <!ENTITY technicalService SYSTEM "technicalService.xml">
                 <!ENTITY intro SYSTEM "components/intro.xml">
-                <!ENTITY starter SYSTEM "components/starter.xml">
                 <!ENTITY userguide SYSTEM "components/userguide.xml">
                 <!ENTITY architecture SYSTEM "components/architecture.xml">
                 <!ENTITY examples SYSTEM "components/examples.xml">
@@ -139,7 +138,6 @@
  <part xml:id="ProActiveComponents"><info><title>Programming With Components</title></info>
   
   &intro;
-  &starter;
   &userguide;
   &architecture;
   &examples;

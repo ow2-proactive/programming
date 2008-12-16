@@ -52,6 +52,7 @@ public interface MethodStatistics {
      */
     public static int maxNbRequests = 1000;
 
+    //@snippet-start methodstatistics
     /**
      * Get the current length of the requests incoming queue related to the monitored method.
      * 
@@ -165,17 +166,18 @@ public interface MethodStatistics {
      */
     public double getAveragePermanenceTimeInQueue(long pastXMilliseconds);
 
+    /**
+      * Get the list of all the method calls (server interfaces) invoked by a given invocation.
+      * 
+      * @return The list of the used interfaces.
+      * TODO which kind of information do you need (Interface reference, name, ...?)
+      */
+    public List<String> getInvokedMethodList();
+    //@snippet-end methodstatistics
+
     /*
      * The fourth information "the list of all the method calls (server interfaces) invoked by a
      * given invocation" will be provided later with the DSO as described in Pisa. But, you can
      * already dependencies
      */
-
-    /**
-     * Get the list of all the method calls (server interfaces) invoked by a given invocation.
-     * 
-     * @return The list of the used interfaces.
-     * TODO which kind of information do you need (Interface reference, name, ...?)
-     */
-    public List<String> getInvokedMethodList();
 }

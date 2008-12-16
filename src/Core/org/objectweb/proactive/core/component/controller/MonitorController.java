@@ -50,7 +50,6 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
  * getStatistics(String itfName, String methodName, Class<?>[] parametersTypes), getAllStatistics(). 
  * 
  * @author The ProActive Team
- * @see org.objectweb.proactive.core.component.controller.MonitorControllerImpl
  *
  */
 @PublicAPI

@@ -2,183 +2,14 @@
 	<section><info><title>Introduction</title></info> 
 		
 		<para>
-			This chapter introduces the ProActive/GCM implementation
-			 and presents a short user guide which explains how to use it. The chapter will not explain how to 
-			  program with components but instead focus on the particularities of the GCM implementation for ProActive. 
+			This chapter presents a short user guide which explains how to use the ProActive/GCM implementation.
+			The chapter will not explain how to program with components but instead focus on the particularities
+			of the GCM implementation for ProActive. 
 		</para>
 	</section>
-	<section><info><title>	 Key features of the ProActive/GCM Implementation </title></info>
-		 
-			 <itemizedlist>
-			 <listitem>	 <para>Creation/usage of primitive and composite components</para></listitem>
-			 <listitem><para> Client, server and non-functional interfaces </para>
-					<para>In addition to single/collection cardinalities,
-				 the ProActive/GCM implementation also provides multicast and gathercast cardinalities.</para>
-				 </listitem> 
-			<listitem><para>ADL support </para></listitem> 
-			<listitem><para>Deployment descriptor files describing components deployment</para>
-						<para>
-							Several	components in an assembly can be distributed on 
-							different nodes on several computers using transparent remote communication.
-							Such an arhitecture is presented in the figure below. 
-						</para>
-						
-				
-
-
-      	<figure><info><title> Component with inner component distributed </title></info> 
-		  <mediaobject>
-          <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/gcm_nodes.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-		</listitem>
-		</itemizedlist>
 		
-		<section><info><title> Primitive and composite components </title></info>
-		
-		<para>
-			The GCM component  model is hierarchical, so components
-			 can be either primitives or composites. A composite
-			 can contain one or many inner components (primitive or
-			 composite). Non functional and functional interfaces can be defined. 
-			</para>
-			<para>
-			ProActive/GCM provides the following defaults
-			 non functional interfaces thanks to the following controllers:
-			  binding-controller, name-controller, lifecycle-controller,
-			   super-controller, content-controller as specified by
-			 the GCM specification. In addition, there are other
-			 specific controllers in our implementation, namely
-			migration-controller, multicast-controller, gathercast-controller
-			and component-parameters-controller. In the current implementation,
-			the non functional part of a component can also be customized and extended.
-			</para>
-			<para>
-			Furthermore, ProActive/GCM allows developers to
-			 define what a component needs and provides with its client and server interfaces. 
-			 <!--  TODO These
-			  interfaces are defined by Java interfaces like non functional. what ?-->
-			  </para> 
-			   </section>
-			  <section><info><title> Collective Interfaces </title></info>
-			  	
-			  	<para>
-			  	By using collective interfaces, component systems designers
-			  	are able to specify parallelism, synchronization and
-			  	data distribution. Collective communications refer
-			  	to multipoint interactions between software entities.
-			  	Collective interfaces have two types of cardinalities, multicast and gathercast.
-			  	</para>
-			  	<para>
-			  	A collective interface gives the possibility to
-			  	manage a group of interfaces as a single entity.
-			  	This entity is itself an interface and viewed likewise.
-			  	The role and usage of multicast and gathercast interfaces are complementary.
-			  	</para>
-			  	</section>
-			  	<section><info><title> Multicast Interfaces </title></info>
-			  		
-			  		<para>Multicast interfaces are used for parallel
-			  		 invocations, parameters dispatching and results gathering. 
-			  		 A multicast interface is an abstraction for 
-			  		 1-to-n communications. When a single invocation is
-			  		 transformed into a set of invocations, these invocations 
-			  		 are forwarded to a set of connected server interfaces. Both
-			  		 the propagation of the invocation and the distribution of 
-			  		 the invocation parameters are customizable (through Java
-			  		 annotations in the Java interfaces definitions). 
-			  		 The result of an invocation, if it isn’t a void return 
-			  		 type, on a multicast interface will be a list of results wherever applicable.
-			  		 </para>
-			  		 <para>
-					If some parameters in a given method of a
-					 multicast interface are lists of values, these values can
-					 be distributed in various ways through method invocations to
-					 the server interfaces connected to the multicast interface
-					 (see Figure 2). The default behaviour –namely broadcast – is
-					 to send the same parameters to each of the connected server
-					  interfaces (see Figure 2.a). In case some parameters are list
-					  of values, copies of the lists are sent to each receiver. 
-					  However, similar to what SPMD programming model offers, 
-					  it may be adequate to strip some of the parameters so that 
-					  the bounded components will work on different data. In
-					  MPI, for instance, this can be explicitly specified by 
-					  stripping a data buffer and using the scatter primitive. In
-					  this case, you will use scatter or one-to-one dispatch mode (see Figure 2.b).
-					  </para>
-					  		
-      	<figure><info><title> Component parameters </title></info> 
-		  <mediaobject>
-          <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/gcm_parameters.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-
-
-			<para>GCM also specify result aggregation,
-			 but in the current state of the ProActive/GCM implementation
-			 the only available behaviour is the aggregation of results as list.
-			 </para>
-			 </section>
-			 <section><info><title>Gathercast interfaces</title></info>
-			 	
-			<para>
-				Gathercast interfaces are used for synchronization, parameter gathering and result dispatching.
-				A gathercast interface is an abstraction for n-to-1 communications. 
-				It handles data aggregation for invocation parameters, as well 
-				as process coordination. It gathers incoming data, and can also
-				 coordinate incoming invocations before continuing the invocation 
-				 flow, by defining synchronization barriers. Invocation parameters are simply
-				 gathered into lists of parameters as showed in the Figure 3.</para>
-      	<figure><info><title> Invocation parameter with a gathercast interface </title></info> 
-		  <mediaobject>
-          <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/gcm_gathercast_invocation.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-		<para> The following table summarizes the possible distribution
-		 policies based on parameters and return type. </para>
-
-      	<figure><info><title> Distribution policies </title></info> 
-		  <mediaobject>
-          <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/distribution_policies.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-	
-	</section>
-			 
-	<section><info><title>ADL file</title></info>
-		
-		<para> The Architecture Description Language (ADL) is used to 
-		define component type, configure and deploy component systems. You
-		 can define component and interface types, describe component
-		  membrane, and declare on which Virtual Node and you
-		   want deploy each component. The architecture of the system
-		    is described in one or many XML file.</para>
-		    <para>
-			Components are defined in files ending with the <literal>.fractal</literal> extension.
-			 The syntax of the document is validated against a DTD retrieved from
-			  the classpath  <literal>classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd </literal>.
-			   This DTD extends the Fractal ADL DTD and the implementation reuses
-			    and extends the FractalADL project
-			     [2].  You can find tutorial and document on
-			      ADL in this project1. The GCM specification [1]
-			       adds some keywords in the ADL definition which are supported by ProActive/GCM.
-			        The following section illustrates how you can use these files
-			         to describe a component assembly, and how you can use it with the Fractal/GCM API.
-			         </para>
-			         </section>
-			         </section>
-		
-		<section><info><title>	Creating and using components in a programatic way</title></info>
-					<para> Along this short user guide, we will show how
- 			 to use concretely the features described previously: how to
+	<section><info><title>	Creating and using components in a programatic way</title></info>
+					<para> Along this short user guide, we will show: how to
  			  create primitive and composite components, how to assemble
  			   them using Fractal/GCM API and Fractal API files, how
  		  	to interoperate with components, and then how to describe
@@ -390,8 +221,7 @@ Launch and deploy component assembly example with ADL
 				      
 				      <para> Client and server also support multicast and gathercast
 				       interface cardinality. The GCM [1] explains which constraints
-				        the server and client interfaces must respect
-				         and we discuss previously in the section 2.2 on their principles.
+				        the server and client interfaces must respect.
 				         </para>
 				         <para> For multicast interfaces you can specify the parameter dispatching
 				          mode thanks to Java annotations available in

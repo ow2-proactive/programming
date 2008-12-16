@@ -1,18 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="WSDoc"><info><title>Exporting Active Objects and components as Web Services</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="WSDoc"><info><title>Exporting Active Objects as Web Services</title></info>
   
 
   <section xml:id="WS_Overwiew"><info><title>Overview</title></info>
     
 
-    <para>This feature allows the call and monitoring of active objects and
-    GCM components from any client written in any foreign
-    language.</para>
+    <para>This feature allows the call and monitoring of active objects
+    from any client written in any foreign language.</para>
 
     <para>Indeed, applications written in C#, for example, cannot communicate
     with ProActive applications. We choose the web services technology that
     enable interoperability because they are based on XML and HTTP. Thus, any
-    active object or component can be accessible from any enabled web service
-    language.</para>
+    active object can be accessible from any enabled web service language.</para>
   </section>
 
   <section><info><title>Principles</title></info>
@@ -127,8 +125,7 @@
 
 	
 
-  <section><info><title>Steps to expose an active object or a component as a web
-    services</title></info>
+  <section><info><title>Steps to expose an active object as a web services</title></info>
     
 
     <para>The steps for exporting and using an active object as a web service
@@ -136,8 +133,7 @@
 
     <itemizedlist>
       <listitem>
-        <para>Write your active object or your component in a classic way; for
-        example:</para>
+        <para>Write your active object in a classic way; for example:</para>
 
         <programlisting xml:lang="java"> A a = (A)PAActiveObject.newActive("A", new Object [] {}); </programlisting>
       </listitem>
@@ -146,67 +142,32 @@
         <para>Once the element is created and activated, deploy it onto a web
         server by using <emphasis role="bold">org.objectweb.proactive.extensions.webservices.WebServices</emphasis> API:</para>
 
+        <programlisting xml:lang="java"> <emphasis role="bold">WebServices.exposeAsWebService(Object o, String url, String urn, String [] methods); </emphasis></programlisting>
+
+        <para>where:</para>
+
         <itemizedlist>
-          <listitem>
-            <para>For an active object:</para>
-
-            <programlisting xml:lang="java"> <emphasis role="bold">WebServices.exposeAsWebService(Object o, String url, String urn, String [] methods); </emphasis></programlisting>
-
-            <para>where:</para>
-
-            <itemizedlist>
-              <listitem>
+    	    <listitem>
                 <para><emphasis role="bold">o</emphasis> is the active
                 object</para>
-              </listitem>
+            </listitem>
 
-              <listitem>
+            <listitem>
                 <para><emphasis role="bold">url</emphasis> is the url of the
                 web server; typically http://localhost:8080.</para>
-              </listitem>
+            </listitem>
 
-              <listitem>
+            <listitem>
                 <para><emphasis role="bold">urn</emphasis> is the service name
                 which identify the active object on the server.</para>
-              </listitem>
+            </listitem>
 
-              <listitem>
+            <listitem>
                 <para><emphasis role="bold">methods</emphasis> a String array
                 containing the methods name you want to make accessible. If
                 this parameter is null, all the public methods will be
                 exposed.</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-
-          <listitem>
-            <para>For a component:</para>
-
-            <programlisting xml:lang="java"><emphasis role="bold">WebServices.exposeComponentAsWebService(Component component, String url, String componentName);  </emphasis></programlisting>
-
-            <para>where:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para><emphasis role="bold">component</emphasis> is the
-                component whose interfaces will be exposed as web
-                services</para>
-              </listitem>
-
-              <listitem>
-                <para><emphasis role="bold">url</emphasis> is the url of the
-                web server; typically http://localhost:8080.</para>
-              </listitem>
-
-              <listitem>
-                <para><emphasis role="bold">componentName</emphasis> is the
-                name of the component. Each service available in this way will
-                get a name composed by the component name followed by the
-                interface name:
-                <emphasis>componentName_interfaceName</emphasis></para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
+            </listitem>
         </itemizedlist>
       </listitem>
     </itemizedlist>
@@ -232,18 +193,12 @@
         the service is deployed</para>
       </listitem>
     </itemizedlist>
-
-    <para>To undeploy a component you have to specify the component name and
-    the component( needed to know the interfaces to undeploy):</para>
-
-    <programlisting xml:lang="java"><emphasis role="bold">WebServices.unExposeAsWebService ( String componentName , String url,  Component component);</emphasis></programlisting>
   </section>
 
   <section><info><title>Accessing the services</title></info>
     
 
-    <para>Once the active object or the interfaces component are deployed, you
-    can access it via any web service enabled client (such as C#).</para>
+    <para>Once the active object is deployed, you can access it via any web service enabled client (such as C#).</para>
 
     <para>First of all, the client will get the WSDL file matching this active
     object. This WSDL file is the 'identity card' of the service. It contains
