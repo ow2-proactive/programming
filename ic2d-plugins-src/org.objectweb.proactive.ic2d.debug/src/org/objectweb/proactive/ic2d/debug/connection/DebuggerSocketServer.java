@@ -56,6 +56,7 @@ public class DebuggerSocketServer extends AbstractDebuggerSocket {
                         client.connect();
                     }
                 } catch (SocketException e) {
+                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
