@@ -23,9 +23,8 @@ public class ClearAoInformationViewAction extends Action implements IWorkbenchWi
 
     public ClearAoInformationViewAction(AOInformationView view) {
         super.setId(DEBUGCLEAR);
-        super.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(
-                org.objectweb.proactive.ic2d.debug.Activator.getDefault().getBundle(), new Path(
-                    "icons/clear.png"), null)));
+        super.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(Activator.getDefault()
+                .getBundle(), new Path("icons/clear.png"), null)));
         super.setText("Clean the view");
         super.setToolTipText("Clean the view");
         this.view = view;

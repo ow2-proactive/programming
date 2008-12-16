@@ -20,9 +20,8 @@ public class DebugStepByStepNextStepAction extends AbstractStepByStepAction impl
     //
     public DebugStepByStepNextStepAction() {
         this.setId(NEXTSTEP);
-        this.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(
-                org.objectweb.proactive.ic2d.debug.Activator.getDefault().getBundle(), new Path(
-                    "icons/next_step.gif"), null)));
+        this.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(Activator.getDefault()
+                .getBundle(), new Path("icons/next_step.gif"), null)));
         this.setText("Next Step");
         this.setToolTipText("Next Step");
         this.setEnabled(true);

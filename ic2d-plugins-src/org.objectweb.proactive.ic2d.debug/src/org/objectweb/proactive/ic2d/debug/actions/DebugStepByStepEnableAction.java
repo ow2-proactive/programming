@@ -39,20 +39,17 @@ public class DebugStepByStepEnableAction extends AbstractStepByStepAction {
         if (target instanceof ActiveObject) {
             if (((ActiveObject) target).getDebugInfo().isStepByStepMode()) {
                 super.setText("Disable Step by Step in " + object.getName());
-                super.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(
-                        org.objectweb.proactive.ic2d.debug.Activator.getDefault().getBundle(), new Path(
-                            "icons/resume.gif"), null)));
+                super.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(Activator
+                        .getDefault().getBundle(), new Path("icons/resume.gif"), null)));
             } else {
                 super.setText("Enable Step by Step in " + object.getName());
-                super.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(
-                        org.objectweb.proactive.ic2d.debug.Activator.getDefault().getBundle(), new Path(
-                            "icons/pause.gif"), null)));
+                super.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(Activator
+                        .getDefault().getBundle(), new Path("icons/pause.gif"), null)));
             }
         } else {
             super.setText("Enable Step by Step in " + object.getName());
-            super.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(
-                    org.objectweb.proactive.ic2d.debug.Activator.getDefault().getBundle(), new Path(
-                        "icons/pause.gif"), null)));
+            super.setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(Activator.getDefault()
+                    .getBundle(), new Path("icons/pause.gif"), null)));
         }
         super.setEnabled(true);
     }
