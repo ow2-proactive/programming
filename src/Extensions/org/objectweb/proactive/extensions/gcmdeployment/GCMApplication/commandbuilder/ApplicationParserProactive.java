@@ -227,6 +227,7 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
         if (debugNode != null) {
             String attr = GCMParserHelper.getAttributeValue(debugNode, "command");
             commandBuilderProActive.setDebugCommand(attr);
+            commandBuilderProActive.enableDebug(true);
         }
 
     }

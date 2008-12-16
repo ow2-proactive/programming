@@ -85,7 +85,7 @@ public class DebuggerImpl implements Debugger {
     public DebuggerImpl() {
         initBreakpointTypes();
         disableBreakpointTypes(new BreakpointType[] { BreakpointType.SendRequest });
-        setStepByStep(PAProperties.PA_DEBUG.isSet() && PAProperties.PA_DEBUG.isTrue());
+        setStepByStep(PAProperties.PA_DEBUG.isTrue());
     }
 
     //

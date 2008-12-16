@@ -100,6 +100,9 @@ public class CommandBuilderProActive implements CommandBuilder {
     /** JVM debug mode configuration */
     private String debugCommandLine;
 
+    /** indicates if the debug tag has been found in the GCMA */
+    private boolean isDebugEnabled = false;
+
     public CommandBuilderProActive() {
         GCMD_LOGGER.trace(this.getClass().getSimpleName() + " created");
         vns = new HashMap<String, GCMVirtualNodeInternal>();
@@ -383,8 +386,9 @@ public class CommandBuilderProActive implements CommandBuilder {
             command.append(" ");
         }
 
-        command.append(" " + getDebugCommand(hostInfo, gcma.getDeploymentId()) + " ");
-
+        if (isDebugEnabled) {
+            command.append(" " + getDebugCommand(hostInfo, gcma.getDeploymentId()) + " ");
+        }
         // Class to be started and its arguments
         command.append(StartRuntime.class.getName());
         command.append(" ");
@@ -511,5 +515,9 @@ public class CommandBuilderProActive implements CommandBuilder {
                 deploymentId + "'";
         }
         return debugCommandLine;
+    }
+
+    public void enableDebug(boolean b) {
+        isDebugEnabled = b;
     }
 }

@@ -66,6 +66,7 @@ import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.Shortcut;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.debug.dconnection.DebuggerConnection;
 import org.objectweb.proactive.core.debug.stepbystep.BreakpointType;
 import org.objectweb.proactive.core.debug.stepbystep.Debugger;
@@ -190,8 +191,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
     // the StepByStep mode
     protected Debugger debugger;
-    // to connect some debugger
-    protected DebuggerConnection debuggerConnection;
+    protected boolean isDebuggingOn;
 
     private String reifiedObjectClassName;
 
@@ -230,9 +230,10 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
         ProActiveSecurity.loadProvider();
 
-        this.debugger = factory.newDebuggerFactory().newDebugger();
-        this.debugger.setTarget(this);
-        this.debuggerConnection = new DebuggerConnection();
+        if (isDebuggingOn = PAProperties.PA_DEBUG.isTrue()) {
+            this.debugger = factory.newDebuggerFactory().newDebugger();
+            this.debugger.setTarget(this);
+        }
 
         // SECURITY
         if (reifiedObject instanceof Secure) {
@@ -962,7 +963,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             }
 
             // add StepByStep breakpoint
-            if (!isProActiveInternalObject) {
+            if (isDebuggingOn && !isProActiveInternalObject) {
                 debugger.breakpoint(BreakpointType.SendRequest, null);
             }
 
@@ -1220,15 +1221,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         return body;
     }
 
-    public Debugger getDebugger() {
+    Debugger getDebugger() {
         return debugger;
     }
 
-    public void setDebugger(Debugger debugger) {
-        this.debugger = debugger;
-    }
-
-    public DebuggerConnection getDebuggerConnection() {
-        return debuggerConnection;
-    }
 }
