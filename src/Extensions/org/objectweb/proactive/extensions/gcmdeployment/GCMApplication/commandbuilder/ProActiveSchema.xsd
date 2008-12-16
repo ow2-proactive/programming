@@ -35,6 +35,12 @@
 								</xsd:element>
 								<xsd:element name="log4jProperties" type="pathElementType" minOccurs="0" maxOccurs="1" />
 								<xsd:element name="userProperties" type="pathElementType" minOccurs="0" maxOccurs="1" />
+								<xsd:element name="debug" minOccurs="0" maxOccurs="1">
+								  <xsd:complexType>
+									<xsd:attribute name="command" use="optional">
+									</xsd:attribute>
+									</xsd:complexType>
+								</xsd:element>
 							</xsd:sequence>
 						</xsd:complexType>
 					</xsd:element>

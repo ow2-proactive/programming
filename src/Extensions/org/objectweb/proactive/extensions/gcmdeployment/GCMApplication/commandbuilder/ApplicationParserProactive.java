@@ -64,6 +64,7 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
     private static final String XPATH_RUNTIME_POLICY = "app:runtimePolicy";
     private static final String XPATH_LOG4J_PROPERTIES = "app:log4jProperties";
     private static final String XPATH_USER_PROPERTIES = "app:userProperties";
+    private static final String XPATH_DEBUG_PROPERTIES = "app:debug";
     protected static final String NODE_NAME = "proactive";
     protected TechnicalServicesProperties appTechnicalServicesProperties;
     protected ProActiveSecurityManager proactiveApplicationSecurityManager;
@@ -220,6 +221,14 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
             String jvmarg = GCMParserHelper.getAttributeValue(jvmargNodes.item(i), "value");
             commandBuilderProActive.addJVMArg(jvmarg);
         }
+
+        // Optional: debug mode
+        Node debugNode = (Node) xpath.evaluate(XPATH_DEBUG_PROPERTIES, configNode, XPathConstants.NODE);
+        if (debugNode != null) {
+            String attr = GCMParserHelper.getAttributeValue(debugNode, "command");
+            commandBuilderProActive.setDebugCommand(attr);
+        }
+
     }
 
     public TechnicalServicesProperties getTechnicalServicesProperties() {

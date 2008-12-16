@@ -97,6 +97,9 @@ public class CommandBuilderProActive implements CommandBuilder {
     /** runtime security policy file */
     private PathElement runtimePolicy;
 
+    /** JVM debug mode configuration */
+    private String debugCommandLine;
+
     public CommandBuilderProActive() {
         GCMD_LOGGER.trace(this.getClass().getSimpleName() + " created");
         vns = new HashMap<String, GCMVirtualNodeInternal>();
@@ -380,6 +383,8 @@ public class CommandBuilderProActive implements CommandBuilder {
             command.append(" ");
         }
 
+        command.append(" " + getDebugCommand(hostInfo, gcma.getDeploymentId()) + " ");
+
         // Class to be started and its arguments
         command.append(StartRuntime.class.getName());
         command.append(" ");
@@ -490,5 +495,21 @@ public class CommandBuilderProActive implements CommandBuilder {
 
     public void setOverwriteClasspath(boolean overwriteClasspath) {
         this.overwriteClasspath = overwriteClasspath;
+    }
+
+    public void setDebugCommand(String debugCommand) {
+        debugCommandLine = debugCommand;
+    }
+
+    protected String getDebugCommand(HostInfo hostInfo, long deploymentId) {
+        if (debugCommandLine == null) {
+            debugCommandLine = "-DdebugID=padebug_" +
+                deploymentId +
+                " -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0,launch='java -cp " +
+                this.getPath(hostInfo) +
+                "/dist/lib/ProActive.jar org.objectweb.proactive.core.debug.dconnection.DebuggeePortSetter padebug_" +
+                deploymentId + "'";
+        }
+        return debugCommandLine;
     }
 }
