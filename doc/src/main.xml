@@ -36,13 +36,9 @@
                 <!ENTITY Security SYSTEM "Security.xml">
                 <!ENTITY WSDoc SYSTEM "WSDoc.xml">
                 <!ENTITY OSGi SYSTEM "OSGi.xml">
-                <!ENTITY JMX SYSTEM "Jmx.xml">
-                <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
                 <!ENTITY MonteCarlo SYSTEM "monteCarlo.xml">
                 <!ENTITY mpi SYSTEM "mpi.xml">
-                <!ENTITY IC2D SYSTEM "IC2D.xml">
                 <!ENTITY plugin SYSTEM "development/plugin.xml">
-                <!ENTITY scilab SYSTEM "scilab/ScilabDoc.xml">
                 <!ENTITY guidedindex SYSTEM "guided_tour/guidedIndex.xml">
                 <!-- <!ENTITY capabilities-intro SYSTEM "guided_tour/capabilities-intro.xml"> -->
                 <!ENTITY capabilities-intro SYSTEM "applicationhandouts.xml">
@@ -67,9 +63,6 @@
                 <!ENTITY referenceCard SYSTEM "ReferenceCard.xml">
                 <!ENTITY srcCodeAppendix SYSTEM "srcCodeAppendix.xml">
                 <!ENTITY loadbalancing SYSTEM "LoadBalancing.xml">
-                <!ENTITY TimIt SYSTEM "timit/TimIt.xml">
-                <!ENTITY IC2D_EclipsePlugin SYSTEM "ic2d/IC2D_EclipsePlugin.xml">
-                <!ENTITY extendingIC2D SYSTEM "ic2d/extendingIC2D.xml">
                 <!ENTITY glossary SYSTEM "glossary.xml">
                 <!ENTITY reference SYSTEM "definitions.xml">
                 <!ENTITY HighLevelAPITutorial SYSTEM "high_level_api_tutorial.xml">
@@ -151,8 +144,6 @@
   &Security;
   &WSDoc;
   &OSGi;
-  &JMX;
-  &JMXMBean;
   
  </part>
  
