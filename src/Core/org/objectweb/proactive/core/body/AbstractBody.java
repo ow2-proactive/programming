@@ -1221,7 +1221,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         return body;
     }
 
-    Debugger getDebugger() {
+    public Debugger getDebugger() {
         return debugger;
     }
 
