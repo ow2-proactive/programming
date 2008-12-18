@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="doc.ProActive">
+    <property name="doc.name"               value="ProActive" />
+    <property name="docs.src.dir"           value="../doc/src" />  
+    <import file="toolchain/doc.xml"/>
+</project>    

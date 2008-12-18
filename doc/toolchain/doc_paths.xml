@@ -11,7 +11,7 @@
 	<property name="docs.tmp.dir"  			value="${docs.dir}/tmp" />
 	<property name="docs.toolchain.dir"		value="${docs.dir}/toolchain" />
 	<property name="docs.xsl.dir"			value="${docs.toolchain.dir}/xsl" />
-	<property name="docs.built.dir"			value="${docs.dir}/built" />
+	<property name="docs.built.dir"			value="${docs.dir}/built/${doc.name}" />
 	
 	<property name="docs.api.complete.dir"	value="${docs.built.dir}/api_complete" />
 	<property name="docs.api.published.dir"	value="${docs.built.dir}/api_published" />

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="doc.IC2D">
+    <property name="doc.name"               value="IC2D" />
+    <property name="docs.src.dir"           value="../doc/src_ic2d" />  
+    <import file="toolchain/doc.xml"/>
+</project>    
