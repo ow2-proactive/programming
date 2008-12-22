@@ -41,7 +41,6 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.xml.VariableContractType;
 
 import performanceTests.HudsonReport;
-import performanceTests.Performance;
 import functionalTests.GCMFunctionalTestDefaultNodes;
 
 
@@ -52,9 +51,9 @@ public class TestHTTP extends GCMFunctionalTestDefaultNodes {
 
     public TestHTTP() {
         super(1, 1);
-        super.vContract.setVariableFromProgram(super.VAR_JVMARG, PAProperties.PA_COMMUNICATION_PROTOCOL
-                .getCmdLine() +
-            "http", VariableContractType.DescriptorDefaultVariable);
+        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVMARG,
+                PAProperties.PA_COMMUNICATION_PROTOCOL.getCmdLine() + "http",
+                VariableContractType.DescriptorDefaultVariable);
     }
 
     @Test
@@ -65,6 +64,7 @@ public class TestHTTP extends GCMFunctionalTestDefaultNodes {
         client.startTest();
     }
 
+    @SuppressWarnings("serial")
     static public class Server implements Serializable {
         boolean firstRequest = true;
         long count = 0;
@@ -94,6 +94,7 @@ public class TestHTTP extends GCMFunctionalTestDefaultNodes {
         }
     }
 
+    @SuppressWarnings("serial")
     static public class Client implements Serializable {
         private Server server;
 
@@ -114,7 +115,8 @@ public class TestHTTP extends GCMFunctionalTestDefaultNodes {
 
             long startTime = System.currentTimeMillis();
             while (true) {
-                if (System.currentTimeMillis() - startTime > Performance.DURATION)
+                if (System.currentTimeMillis() - startTime > PAProperties.PA_TEST_PERF_DURATION
+                        .getValueAsInt())
                     break;
 
                 for (int i = 0; i < 50; i++) {

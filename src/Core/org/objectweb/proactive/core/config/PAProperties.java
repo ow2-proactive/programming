@@ -522,6 +522,9 @@ public enum PAProperties {
      */
     PA_TEST("proactive.test", PAPropertiesType.BOOLEAN),
 
+    /** Duration of each performance test in ms */
+    PA_TEST_PERF_DURATION("proactive.test.perf.duration", PAPropertiesType.INTEGER),
+
     /**
      * Functional test timeout in ms
      *

@@ -79,6 +79,8 @@
         <prop key="proactive.filetransfer.blocks_number" value="8" />
         <prop key="proactive.filetransfer.blocks_size_kb" value="512" />
         <prop key="proactive.filetransfer.buffer_size_kb" value="256" />
+
+        <prop key="proactive.test.perf.duration" value="30000" />
     </properties>
     <javaProperties>
         <prop key="java.protocol.handler.pkgs" value="org.objectweb.proactive.core.ssh" />
