@@ -31,6 +31,7 @@
  */
 package org.objectweb.proactive.examples.jmx.remote.management.exceptions;
 
+@SuppressWarnings("serial")
 public class TransactionNotActiveException extends Exception {
 
     /**

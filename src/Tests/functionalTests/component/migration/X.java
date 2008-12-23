@@ -36,6 +36,7 @@ import java.io.Serializable;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
+@SuppressWarnings("serial")
 public class X implements E, Serializable {
 
     /**

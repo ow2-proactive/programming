@@ -322,6 +322,7 @@ public abstract class AbstractEventProducer implements java.io.Serializable {
      * @since   ProActive 0.9
      *
      */
+    @SuppressWarnings("serial")
     private class WeakReferenceListenerList<E> extends PlainListenerList<E> {
         public WeakReferenceListenerList() {
         }

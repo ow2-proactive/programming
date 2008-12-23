@@ -37,6 +37,7 @@ import org.objectweb.proactive.examples.c3d.geom.Vec;
 /**
  * Represents a punctual 3D viewpoint
  */
+@SuppressWarnings("serial")
 public class View implements java.io.Serializable {
     public Vec from;
     public Vec at;

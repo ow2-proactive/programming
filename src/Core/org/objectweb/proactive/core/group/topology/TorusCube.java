@@ -41,6 +41,7 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
  *
  * @author The ProActive Team
  */
+@SuppressWarnings("serial")
 public class TorusCube<E> extends Torus<E> { // implements Topology3D {
 
     /** depth of the three-dimensional topology group */

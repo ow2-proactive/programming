@@ -57,6 +57,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  * floating point performance, i.e., the performance without significant interprocessor
  * communication.
  */
+@SuppressWarnings("serial")
 public class WorkerEP extends Timed {
 
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;

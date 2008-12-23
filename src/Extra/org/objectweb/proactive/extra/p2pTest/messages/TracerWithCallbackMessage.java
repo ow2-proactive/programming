@@ -37,6 +37,7 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
 import org.objectweb.proactive.extra.p2pTest.p2p.Tracer;
 
 
+@SuppressWarnings("serial")
 public class TracerWithCallbackMessage extends BreadthFirstMessage {
     Tracer tracer = null;
 

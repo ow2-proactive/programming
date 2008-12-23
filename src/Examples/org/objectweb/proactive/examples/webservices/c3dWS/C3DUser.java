@@ -525,6 +525,7 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
         PAActiveObject.terminateActiveObject(true);
     }
 
+    @SuppressWarnings("serial")
     public class UserFrame extends Frame implements ActionListener, ItemListener {
 
         /**

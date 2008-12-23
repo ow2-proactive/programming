@@ -44,6 +44,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.commobserv.Co
  *
  * @author The ProActive Team
  */
+@SuppressWarnings("serial")
 public class Worker extends Timed implements java.io.Serializable {
 
     /**

@@ -122,6 +122,7 @@ public class TestDeploymentDescriptorParser {
     //
     // Examples of custom group & bridge parsers
     //
+    @SuppressWarnings("serial")
     protected static class UserGroup extends AbstractGroup {
         @Override
         public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
@@ -129,6 +130,7 @@ public class TestDeploymentDescriptorParser {
         }
     }
 
+    @SuppressWarnings("serial")
     protected static class UserBridge extends AbstractBridge {
         @Override
         public String internalBuildCommand(CommandBuilder commandBuilder) {

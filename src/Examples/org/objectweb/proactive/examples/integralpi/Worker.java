@@ -50,6 +50,7 @@ import org.objectweb.proactive.core.util.wrapper.DoubleWrapper;
  * @author The ProActive Team
  *
  */
+@SuppressWarnings("serial")
 public class Worker implements Serializable {
 
     /** The number that identifies the worker in a group */

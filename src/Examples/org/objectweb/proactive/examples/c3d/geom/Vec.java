@@ -34,6 +34,7 @@ package org.objectweb.proactive.examples.c3d.geom;
 /**
  * This class reflects the 3d vectors used in 3d computations
  */
+@SuppressWarnings("serial")
 public class Vec implements java.io.Serializable {
 
     /** The x coordinate */

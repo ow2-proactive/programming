@@ -34,6 +34,7 @@ package org.objectweb.proactive.examples.jmx.remote.management.jmx.notifications
 import java.util.Date;
 
 
+@SuppressWarnings("serial")
 public class TransactionCommitedNotification extends TransactionNotification {
     public TransactionCommitedNotification(String type, Object source, long sequenceNumber, String message,
             long id, Date date) {

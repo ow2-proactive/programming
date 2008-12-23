@@ -59,6 +59,7 @@ import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 /**
  * Activate a set of ProActive descriptor
  */
+@SuppressWarnings("serial")
 public class VNActivator implements Serializable, RunActive, NodeCreationEventListener, InitActive {
     final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

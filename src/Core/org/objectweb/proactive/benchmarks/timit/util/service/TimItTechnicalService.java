@@ -42,6 +42,7 @@ import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
  * A Technical Service for timing purpose.
  * @author The ProActive Team
  */
+@SuppressWarnings("serial")
 public class TimItTechnicalService implements TechnicalService, java.io.Serializable {
     private String timitActivation;
     private String reduceResults;

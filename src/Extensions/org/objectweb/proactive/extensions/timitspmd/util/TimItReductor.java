@@ -48,6 +48,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventDataBag;
  * @author The ProActive Team
  *
  */
+@SuppressWarnings("serial")
 public class TimItReductor implements ProActiveInternalObject, Serializable {
 
     /**

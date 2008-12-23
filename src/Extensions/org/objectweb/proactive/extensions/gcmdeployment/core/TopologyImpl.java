@@ -49,6 +49,7 @@ import org.objectweb.proactive.gcmdeployment.Topology;
 import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
 
 
+@SuppressWarnings("serial")
 public class TopologyImpl implements Topology, Serializable {
     protected long id;
     protected String applicationDescriptorPath;

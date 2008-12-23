@@ -53,6 +53,7 @@ import org.xml.sax.SAXException;
  *
  * @author The ProActive Team
  */
+@SuppressWarnings("serial")
 public class VariableContractImpl implements VariableContract, Serializable {
     static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT);
     public static VariableContractImpl xmlproperties = null;

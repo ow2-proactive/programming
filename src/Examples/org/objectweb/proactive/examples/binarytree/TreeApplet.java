@@ -59,6 +59,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 0.9
  *
  */
+@SuppressWarnings("serial")
 public class TreeApplet extends org.objectweb.proactive.examples.StandardFrame {
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private javax.swing.JPanel rootPanel;

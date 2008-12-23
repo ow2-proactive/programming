@@ -38,6 +38,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 
+@SuppressWarnings("serial")
 public class TreeEngineRenderer extends DefaultTreeCellRenderer {
 
     /**

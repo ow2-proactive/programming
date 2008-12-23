@@ -40,6 +40,7 @@ import org.objectweb.proactive.ext.locationserver.LocationServer;
 import org.objectweb.proactive.ext.locationserver.TimedRequestWithLocationServer;
 
 
+@SuppressWarnings("serial")
 public class TimedRequestWithMixedLocation extends TimedRequestWithLocationServer {
     private static final int MAX_TRIES = 30;
     private static int counter = 0;

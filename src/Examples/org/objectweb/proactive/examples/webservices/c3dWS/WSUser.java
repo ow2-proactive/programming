@@ -41,6 +41,7 @@ import org.objectweb.proactive.examples.webservices.c3dWS.ws.Service1Locator;
 import org.objectweb.proactive.examples.webservices.c3dWS.ws.Service1Soap;
 
 
+@SuppressWarnings("serial")
 public class WSUser implements User, Serializable {
     private String name;
     private String urlCallback;

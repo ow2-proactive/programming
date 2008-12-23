@@ -48,6 +48,7 @@ import org.apache.soap.server.DeploymentDescriptor;
  * This servlet return a WSDL document when called with the urn of the service
  * @author The ProActive Team
  */
+@SuppressWarnings("serial")
 public class WsdlServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {

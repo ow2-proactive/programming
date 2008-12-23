@@ -44,6 +44,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventDataBag;
  *
  * @author The ProActive Team
  */
+@SuppressWarnings("serial")
 public class TimItManager implements Serializable {
 
     /**

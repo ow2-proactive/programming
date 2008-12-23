@@ -40,6 +40,7 @@ import java.util.Random;
  *
  * Created on Feb 7, 2005
  */
+@SuppressWarnings("serial")
 public class UniversalUniqueID implements Serializable {
     private static Random _RandomForSpace = new Random();
     private static Random _RandomForTime = new Random();

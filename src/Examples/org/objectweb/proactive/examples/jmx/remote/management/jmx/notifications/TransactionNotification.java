@@ -36,6 +36,7 @@ import java.util.Date;
 import javax.management.Notification;
 
 
+@SuppressWarnings("serial")
 public class TransactionNotification extends Notification {
 
     /**

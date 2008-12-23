@@ -34,6 +34,7 @@ package org.objectweb.proactive.extensions.scilab.gui;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
+@SuppressWarnings("serial")
 public class TreeEngineNode extends DefaultMutableTreeNode {
 
     /**

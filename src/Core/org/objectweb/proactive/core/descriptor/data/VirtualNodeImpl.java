@@ -100,6 +100,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @see ProActiveDescriptorInternal
  * @see VirtualMachine
  */
+@SuppressWarnings("serial")
 public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements VirtualNodeInternal,
         Serializable, ServiceUser {
 

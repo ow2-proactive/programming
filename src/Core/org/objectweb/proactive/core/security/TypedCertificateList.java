@@ -35,6 +35,7 @@ import java.security.cert.Certificate;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("serial")
 public class TypedCertificateList extends ArrayList<TypedCertificate> {
 
     /**

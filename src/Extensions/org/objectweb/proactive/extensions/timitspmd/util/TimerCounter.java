@@ -40,6 +40,7 @@ import java.io.Serializable;
  * @author The ProActive Team
  *
  */
+@SuppressWarnings("serial")
 public class TimerCounter implements Serializable {
 
     /**

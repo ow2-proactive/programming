@@ -51,6 +51,7 @@ import org.objectweb.proactive.extra.p2pTest.messages.TracerWithCallbackMessage;
  *            -trace the number of acquaintance for all the p2p nodes
  *            -perform a request to get a ProActive node
  */
+@SuppressWarnings("serial")
 public class Tracer implements java.io.Serializable {
     public static final boolean DEBUG = true;
     private static final String USAGE = Tracer.class.getName() +

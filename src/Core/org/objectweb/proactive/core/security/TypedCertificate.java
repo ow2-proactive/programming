@@ -42,6 +42,7 @@ import java.security.cert.X509Certificate;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 
 
+@SuppressWarnings("serial")
 public class TypedCertificate implements Serializable {
 
     /**
