@@ -58,6 +58,7 @@ import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
 
 
+@SuppressWarnings("serial")
 public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> implements UniversalBody {
 
     /**
