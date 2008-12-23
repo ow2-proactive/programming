@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="perspectives">
-	<info>
-		<title>
+<info>
+<title>
 			Component perspectives: a support for advanced research
 		</title>
 	</info>
@@ -21,10 +21,7 @@
 		and as such it is a basis for experimenting new research paths.
 	</para>
 
-	<section>
-		<info>
-			<title>Dynamic reconfiguration</title>
-		</info>
+	<section><info><title xml:id="Dynamicreconfiguration_56">Dynamic reconfiguration</title></info>
 		<para>
 			One of the challenges of Grid computing is to handle changes
 			in the execution environments, which are not predictable in
@@ -92,8 +89,8 @@
 	</section>
 
 	<section>
-		<info>
-			<title>Model-checking</title>
+<info>
+<title xml:id="Modelchecking_56">Model-checking</title>
 		</info>
 
 
@@ -215,8 +212,8 @@
 	</section>
 
 	<section>
-		<info>
-			<title>Pattern-based deployment</title>
+<info>
+<title xml:id="Patternbaseddeployment_56">Pattern-based deployment</title>
 		</info>
 
 
@@ -238,8 +235,8 @@
 	</section>
 
 	<section>
-		<info>
-			<title>Graphical tools</title>
+<info>
+<title xml:id="Graphicaltools_56">Graphical tools</title>
 		</info>
 			<para>
 				We are developing the VCE (Vercors Component

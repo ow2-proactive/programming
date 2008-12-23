@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="DescriptorProcess"><info><title>Adding a Deployment Protocol</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="DescriptorProcess"><info><title xml:id="AddingaDeploymentProtocol_31">Adding a Deployment Protocol</title></info>
     
 
-    <section xml:id="DescriptorProcess_html_objectives"><info><title>Objectives</title></info>
+    <section xml:id="DescriptorProcess_html_objectives"><info><title xml:id="Objectives_31">Objectives</title></info>
         
 
         <para>
@@ -15,7 +15,7 @@
         </para>
     </section>
 
-    <section xml:id="DescriptorProcess_html_overview"><info><title>Overview</title></info>
+    <section xml:id="DescriptorProcess_html_overview"><info><title xml:id="Overview_31">Overview</title></info>
         
 
         <para>
@@ -59,7 +59,7 @@
         </para>
     </section>
 
-    <section xml:id="DescriptorProcess_html_javaProcess"><info><title>Java Process Class</title></info>
+    <section xml:id="DescriptorProcess_html_javaProcess"><info><title xml:id="JavaProcessClass_31">Java Process Class</title></info>
         
 
         <para>
@@ -70,7 +70,7 @@
             package.
         </para>
 
-        <section><info><title>Process Package Arquitecture</title></info>
+        <section xml:id="ProcessPackageArquitecture_31"><info><title>Process Package Arquitecture</title></info>
             
 
             <para>
@@ -81,7 +81,7 @@
                 .
             </para>
 
-            <figure><info><title>core.process structure</title></info>
+            <figure><info><title xml:id="coreprocessstructure_31">core.process structure</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -131,7 +131,7 @@
             </para>
         </section>
 
-        <section><info><title>The New Process Class</title></info>
+        <section xml:id="TheNewProcessClass_31"><info><title>The New Process Class</title></info>
             
 
             <para>
@@ -212,7 +212,7 @@
             </itemizedlist>
         </section>
 
-        <section><info><title>The StartRuntime.sh script</title></info>
+        <section xml:id="TheStartRuntimeshscript_31"><info><title>The StartRuntime.sh script</title></info>
             
 
             <para>
@@ -230,10 +230,10 @@
         </section>
     </section>
 
-    <section xml:id="DescriptorProcess_html_xmlProcess"><info><title>XML Descriptor Process</title></info>
+    <section xml:id="DescriptorProcess_html_xmlProcess"><info><title xml:id="XMLDescriptorProcess_31">XML Descriptor Process</title></info>
         
 
-        <section><info><title>Schema Modifications</title></info>
+        <section xml:id="SchemaModifications_31"><info><title>Schema Modifications</title></info>
             
 
             <para>
@@ -324,10 +324,10 @@
             </itemizedlist>
         </section>
 
-        <section><info><title>XML Parsing Handler</title></info>
+        <section xml:id="XMLParsingHandler_31"><info><title>XML Parsing Handler</title></info>
             
 
-            <section><info><title>ProActiveDescriptorConstants.java:</title></info>
+            <section xml:id="ProActiveDescriptorConstantsjava_31"><info><title>ProActiveDescriptorConstants.java:</title></info>
                 
 
                 <para>
@@ -341,7 +341,7 @@
                 </para>
             </section>
 
-            <section><info><title>ProcessDefinitinonHandler.java:</title></info>
+            <section xml:id="ProcessDefinitinonHandlerjava_31"><info><title>ProcessDefinitinonHandler.java:</title></info>
                 
 
                 <para>

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="faultTolerance"><info><title>Fault-Tolerance</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="faultTolerance"><info><title xml:id="FaultTolerance_6">Fault-Tolerance</title></info>
  
 
  <indexterm><primary>Fault-Tolerance</primary></indexterm>
   
- <section><info><title>Overview</title></info>
+ <section xml:id="Overview_6"><info><title>Overview</title></info>
     
 
     <para>ProActive can provide fault-tolerance capabilities through two
@@ -22,7 +22,7 @@
     protocol. As a consequence, a fault-tolerant active object must be
     serializable.</para>
 
-    <section><info><title>Communication Induced Checkpointing (CIC)</title></info>
+    <section xml:id="CommunicationInducedCheckpointingCIC_6"><info><title>Communication Induced Checkpointing (CIC)</title></info>
       
 
       <para>Each active object in a CIC fault-tolerant application have to
@@ -45,7 +45,7 @@
       more active object.</para>
     </section>
 
-    <section><info><title>Pessimistic message logging (PML)</title></info>
+    <section xml:id="PessimisticmessageloggingPML_6"><info><title>Pessimistic message logging (PML)</title></info>
       
 
       <para>Each active object in a PML fault-tolerant application have to
@@ -64,11 +64,10 @@
     </section>
   </section>
 
-  <section><info><title>Making a ProActive
-    application fault-tolerant</title></info>
+  <section><info><title >Making a ProActive application fault-tolerant</title></info>
     
 
-    <section><info><title>Resource Server</title></info>
+    <section xml:id="ResourceServer_6"><info><title>Resource Server</title></info>
       
 
       <para>To be able to recover a failed active object, the fault-tolerance
@@ -100,7 +99,7 @@
       when no more such nodes are available, the p2p network is used.</para>
     </section>
 
-    <section><info><title>Fault-Tolerance servers</title></info>
+    <section xml:id="FaultToleranceservers_6"><info><title>Fault-Tolerance servers</title></info>
       
 
       <para>Fault-tolerance mechanism needs servers for the checkpoints
@@ -169,7 +168,7 @@ this.server.startProcess();</screen></para>
       automatically and transparently disabled for all the application.</para>
     </section>
 
-    <section xml:id="faultTolerance_html_configuration"><info><title>Configure fault-tolerance for a ProActive application</title></info>
+    <section xml:id="faultTolerance_html_configuration"><info><title xml:id="ConfigurefaulttoleranceforaProActiveapplication_6">Configure fault-tolerance for a ProActive application</title></info>
       
 
       <para>Fault-tolerance capabilities of a ProActive application are set in
@@ -223,7 +222,7 @@ this.server.startProcess();</screen></para>
       used.</para>
     </section>
 
-    <section><info><title>A deployment descriptor example</title></info>
+    <section xml:id="Adeploymentdescriptorexample_6"><info><title>A deployment descriptor example</title></info>
       
 
       <para>Here is an example of GCMA descriptor that deploys 2 virtual
@@ -282,10 +281,10 @@ this.server.startProcess();</screen></para>
     </section>
   </section>
 
-  <section><info><title>Programming rules</title></info>
+  <section xml:id="Programmingrules_6"><info><title>Programming rules</title></info>
     
 
-    <section><info><title>Serializable</title></info>
+    <section xml:id="Serializable_6"><info><title>Serializable</title></info>
       
 
       <para>Persistence of active objects is obtained through standard Java
@@ -297,7 +296,7 @@ this.server.startProcess();</screen></para>
       automatically and transparently disabled for this active object.</para>
     </section>
 
-    <section><info><title>Standard Java main method</title></info>
+    <section xml:id="StandardJavamainmethod_6"><info><title>Standard Java main method</title></info>
       
 
       <para>Standard Java thread, typically main method, cannot be turned
@@ -327,7 +326,7 @@ s.getName()', args);
       consistent.</para>
     </section>
 
-    <section><info><title>Checkpointing occurrence</title></info>
+    <section xml:id="Checkpointingoccurrence_6"><info><title>Checkpointing occurrence</title></info>
       
 
       <para>To keep fault-tolerance fully transparent (see <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/personnel/Christian.Delbe/publis/rr5246.pdf">the
@@ -386,7 +385,7 @@ rvice(body);
       <literal>runActivity()</literal> method.</para>
     </section>
 
-    <section><info><title>Activity Determinism</title></info>
+    <section xml:id="ActivityDeterminism_6"><info><title>Activity Determinism</title></info>
       
 
       <para>All the activities of a fault-tolerant application must be deterministic 
@@ -395,7 +394,7 @@ rvice(body);
        methods such as <literal>Math.random()</literal>.</para>
     </section>
 
-    <section><info><title>Limitations and known bugs</title></info>
+    <section xml:id="Limitationsandknownbugs_6"><info><title>Limitations and known bugs</title></info>
       
 
       <para>Fault-tolerance in ProActive is still not compliant with the
@@ -426,10 +425,10 @@ rvice(body);
     </section>
   </section>
 
-  <section xml:id="faultTolerance_html_nbody"><info><title>  A complete example</title></info>
+  <section xml:id="faultTolerance_html_nbody"><info><title xml:id="Acompleteexample_6">A complete example</title></info>
     
 
-    <section><info><title>Description</title></info>
+    <section xml:id="Description_6"><info><title>Description</title></info>
       
 
       <para>You can find in
@@ -447,7 +446,7 @@ rvice(body);
       triggered for example by killing the JVM process on one of the
       hosts.</para>
 
-      <para><figure><info><title>The nbody application, with Fault-Tolerance enabled</title></info>
+      <para><figure><info><title xml:id="ThenbodyapplicationwithFaultToleranceenabled_6">The nbody application, with Fault-Tolerance enabled</title></info>
           
 
           <mediaobject>
@@ -466,7 +465,7 @@ rvice(body);
       had just before the failure.</para>
     </section>
 
-    <section><info><title>Running NBody example</title></info>
+    <section xml:id="RunningNBodyexample_6"><info><title>Running NBody example</title></info>
       
 
       <para>Before starting the fault-tolerant body example, you have to edit

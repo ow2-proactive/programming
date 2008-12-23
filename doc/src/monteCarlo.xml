@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="monte_carlo">
 
-    <info>
-        <title>Monte-Carlo API</title>
+<info>
+<title xml:id="MonteCarloAPI_34">Monte-Carlo API</title>
     </info>
     <section xml:id="mc_overview">
-        <info>
-            <title>Overview</title>
+<info>
+<title xml:id="Overview_34">Overview</title>
         </info>
 
         <para>
@@ -57,16 +57,16 @@
         </itemizedlist>
     </section>
     <section xml:id="mc_api">
-        <info>
-            <title>API</title>
+<info>
+<title xml:id="API_34">API</title>
         </info>
         <para>
             The Monte-Carlo APi is located in the following package:
         </para>
         <screen>org.objectweb.proactive.extra.montecarlo.example</screen>
         <section xml:id="mc_api_main_class">
-            <info>
-                <title>Main Class</title>
+<info>
+<title xml:id="MainClass_34">Main Class</title>
             </info>
             <para>
                 The entry point of the Monte-Carlo API is the PAMonteCarlo class. Its main constructor allows you to
@@ -90,13 +90,13 @@
             <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_terminate.snip"/></textobject></programlisting>
         </section>
         <section xml:id="mc_api_tasks">
-            <info>
-                <title>Tasks</title>
+<info>
+<title xml:id="Tasks_34">Tasks</title>
             </info>
             <para>This section describes the different types of tasks and their use</para>
             <section xml:id="mc_api_engine_task">
-                <info>
-                    <title>Engine Task</title>
+<info>
+<title xml:id="EngineTask_34">Engine Task</title>
                 </info>
                 <para>
                     An Engine Task is a general-purpose task, it is used when any computation which doesn't include
@@ -110,8 +110,8 @@
                 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_enginetask.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_simulation_set">
-                <info>
-                    <title>Simuation Set</title>
+<info>
+<title xml:id="SimuationSet_34">Simuation Set</title>
                 </info>
                 <para>
                     A Simulation Set is a specific task for running Monte-Carlo simulations. It is given a random number
@@ -124,8 +124,8 @@
                 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_simulationset.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_simulation_set_post_process">
-                <info>
-                    <title>Simuation Set Post Process</title>
+<info>
+<title xml:id="SimuationSetPostProcess_34">Simuation Set Post Process</title>
                 </info>
                 <para>
                     A simulation set task will return as output a huge number of values (e.g. arrays of size 10000 or
@@ -144,12 +144,12 @@
             </section>
         </section>
         <section xml:id="mc_example">
-            <info>
-                <title>Examples</title>
+<info>
+<title xml:id="Examples_34">Examples</title>
             </info>
             <section xml:id="mc_api_basic_processes">
-                <info>
-                    <title>Basic Simulations Processes</title>
+<info>
+<title xml:id="BasicSimulationsProcesses_34">Basic Simulations Processes</title>
                 </info>
                 <para>
                     Some basic Simulation Sets are provided as an example. These basic processes are widely used in the
@@ -159,8 +159,8 @@
                 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/montecarlo_geometricbrownianmotion.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_basic_applications">
-                <info>
-                    <title>Basic Example Applications</title>
+<info>
+<title xml:id="BasicExampleApplications_34">Basic Example Applications</title>
                 </info>
                 <para>
                     Two basic example applications are provided. The first one computes PI using the Monte-Carlo method

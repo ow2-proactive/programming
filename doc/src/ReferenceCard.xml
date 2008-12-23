@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ReferenceCard"><info><title>Reference Card</title></info>
+<?xml version="1.0" encoding="utf-8"?><appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ReferenceCard"><info><title xml:id="ReferenceCard_76">Reference Card</title></info>
   
 
   <para><emphasis role="bold">ProActive</emphasis> is a Java library for
@@ -54,7 +54,7 @@
   applications distributed over Local Area Network (LAN), Clusters, Intranet
   or Internet GRIDs.</para>
 
-  <section><info><title>Main concepts and definitions</title></info>
+  <section xml:id="Mainconceptsanddefinitions_76"><info><title>Main concepts and definitions</title></info>
     
 
     <para><itemizedlist>
@@ -208,14 +208,14 @@
     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/asynchronous_method_calls_and_implicit_futures.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>Explicit Synchronization</title></info>
+  <section xml:id="ExplicitSynchronization_76"><info><title>Explicit Synchronization</title></info>
     
 
     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/explicit_synchronization.txt"/></textobject></programlisting>
 
   </section>
 
-  <section><info><title>Programming Active Objects' Activity And Services</title></info>
+  <section xml:id="ProgrammingActiveObjectsActivityAndServices_76"><info><title>Programming Active Objects' Activity And Services</title></info>
     
 
     <para>When an AO must implement an activity that is not FIFO, the
@@ -246,7 +246,7 @@
 	<!--
 		//TODO: check reactive 
 	 -->
-  <section><info><title>Reactive Active Object</title></info>
+  <section xml:id="ReactiveActiveObject_76"><info><title>Reactive Active Object</title></info>
     
 
     <para>Even when an AO is busy doing its own work, it can remain reactive
@@ -282,7 +282,7 @@
     to start, suspend, restart, and stop AOs.</para>
   </section>
 
-  <section><info><title>Service methods</title></info>
+  <section xml:id="Servicemethods_76"><info><title>Service methods</title></info>
     
 	<para>The following method are in the <literal>Service</literal> class.
 	They can be used to control how requests are served.</para>
@@ -312,19 +312,19 @@
 
   </section>
 
-  <section><info><title>Active Object Creation:</title></info>
+  <section xml:id="ActiveObjectCreation_76"><info><title>Active Object Creation:</title></info>
     
 
      <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/ao_creation.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>Groups:</title></info>
+  <section xml:id="Groups_76"><info><title>Groups:</title></info>
     
 
     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/groups.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>Explicit Group Synchronizations</title></info>
+  <section xml:id="ExplicitGroupSynchronizations_76"><info><title>Explicit Group Synchronizations</title></info>
     
 
     <para>Methods both in Interface Group, and static in class
@@ -333,13 +333,13 @@
   <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/explicit_group_synchronization.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>OO SPMD</title></info>
+  <section xml:id="OOSPMD_76"><info><title>OO SPMD</title></info>
     
 
   <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/oospmd.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>Migration</title></info>
+  <section xml:id="Migration_76"><info><title>Migration</title></info>
     
 
     <para>Methods both in the interface <literal>MigrationController</literal>, and in class
@@ -357,7 +357,7 @@
 		 <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/migration_strategy.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>Components</title></info>
+  <section xml:id="Components_76"><info><title>Components</title></info>
     
 
     <para>Components are formed from AOs. A component can be linked and
@@ -382,7 +382,7 @@
  		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/fractive_component.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>Security:</title></info>
+  <section xml:id="Security_76"><info><title>Security:</title></info>
     
 
     <para>ProActive has an X.509 Public Key Infrastructure (PKI) allowing communication
@@ -401,7 +401,7 @@
     AO creation are not authorized.</para>
   </section>
 
-  <section><info><title>Deployment</title></info>
+  <section xml:id="Deployment_76"><info><title>Deployment</title></info>
     
 
     <para>Virtual Nodes (VN) allow one to specify the location where to create
@@ -431,7 +431,7 @@
 
   </section>
 
-  <section><info><title>Exceptions</title></info>
+  <section xml:id="Exceptions_76"><info><title>Exceptions</title></info>
     
 
     <para><emphasis role="bold">Functional exceptions with
@@ -440,7 +440,7 @@
 		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/trywithcatch.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>Export Active Objects as Web services</title></info>
+  <section xml:id="ExportActiveObjectsasWebservices_76"><info><title>Export Active Objects as Web services</title></info>
     
 
     <para>ProActive allows active objects exportation as web services. The
@@ -456,7 +456,7 @@
 		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/export_to_web_service.txt"/></textobject></programlisting>
   </section>
 
-  <section><info><title>Deploying a fault-tolerant application</title></info>
+  <section xml:id="Deployingafaulttolerantapplication_76"><info><title>Deploying a fault-tolerant application</title></info>
     
 
     <para>ProActive can provide fault-tolerance capabilities through two
@@ -510,7 +510,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Peer-to-Peer Infrastructure</title></info>
+  <section xml:id="PeertoPeerInfrastructure_76"><info><title>Peer-to-Peer Infrastructure</title></info>
     
 
     <para>This aims to help you to create a P2P infrastructure over your
@@ -577,7 +577,7 @@
 
   </section>
 
-  <section><info><title>Branch and Bound API</title></info>
+  <section xml:id="BranchandBoundAPI_76"><info><title>Branch and Bound API</title></info>
     
 
     <para>Firstly, create your own task:</para>
@@ -654,7 +654,7 @@
     </orderedlist>
   </section>
 
-  <section><info><title>File Transfer Deployment</title></info>
+  <section xml:id="FileTransferDeployment_76"><info><title>File Transfer Deployment</title></info>
     
 
     <para>File Transfer Deployment is a tool for transfering files at

@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="technicalService"><info><title>Technical Service</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="technicalService"><info><title xml:id="TechnicalService_23">Technical Service</title></info>
 	
 
 	<indexterm>
 		<primary>Technical Service</primary>
 	</indexterm>
 
-	<section><info><title>Context</title></info>
+	<section xml:id="Context_23"><info><title>Context</title></info>
 		
 
 		<para>
@@ -21,7 +21,7 @@
 		</para>
 
 	</section>
-	<section><info><title>Overview</title></info>
+	<section xml:id="Overview_23"><info><title>Overview</title></info>
 		
 
 		<para>
@@ -96,10 +96,10 @@ public interface TechnicalService {
 		</note>
 	</section>
 
-	<section><info><title>Progamming Guide</title></info>
+	<section xml:id="ProgammingGuide_23"><info><title>Progamming Guide</title></info>
 		
 	
-	<section><info><title>A full XML Descriptor File</title></info>
+	<section xml:id="AfullXMLDescriptorFile_23"><info><title>A full XML Descriptor File</title></info>
 		
 		<programlisting xml:lang="xml">&lt;ProActiveDescriptor&gt;
 	&lt;componentDefinition&gt;
@@ -139,7 +139,7 @@ public interface TechnicalService {
 	&lt;/technicalServiceDefinitions&gt;
 &lt;/ProActiveDescriptor&gt;</programlisting>
 	</section>
-	<section><info><title>Nodes Properties</title></info>
+	<section xml:id="NodesProperties_23"><info><title>Nodes Properties</title></info>
 		
 
 		<para>
@@ -156,7 +156,7 @@ public interface TechnicalService {
 localNode.setProperty(myKeyAsString, itsValueAsString);</programlisting>
 	</section>
 	</section>
-	<section><info><title>Further Information</title></info>
+	<section xml:id="FurtherInformation_23"><info><title>Further Information</title></info>
 		
 		<para>
 			The seminal paper

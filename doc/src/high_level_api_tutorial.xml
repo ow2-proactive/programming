@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="high_level_api_tutorial"><info><title> High-Level API Tutorials</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="high_level_api_tutorial"><info><title xml:id="HighLevelAPITutorials_41">High-Level API Tutorials</title></info>
 	
-  	<section xml:id="MWDP"><info><title>Master-Worker DistributedPrimes Application</title></info>
+  	<section xml:id="MWDP"><info><title xml:id="MasterWorkerDistributedPrimesApplication_41">Master-Worker DistributedPrimes Application</title></info>
 		
 	<para>
 		In the previous Distributed Primes example, we have used 
@@ -36,7 +36,7 @@
 	      	the results back to the master.</para>
       	</listitem>
       </itemizedlist>
-      	<figure><info><title> Architecture of Distributed Primes  Using Master-Worker API </title></info> 
+      	<figure><info><title xml:id="ArchitectureofDistributedPrimesUsingMasterWorkerAPI_41">Architecture of Distributed Primes  Using Master-Worker API </title></info> 
 		  <mediaobject>
           <imageobject>
 
@@ -44,7 +44,7 @@
           </imageobject>
         </mediaobject>
       </figure>
-     <section><info><title>Application components</title></info>
+     <section xml:id="Applicationcomponents_41"><info><title>Application components</title></info>
      	  
       	<para>
       		The general simple algorithm for using the Master-Worker API is the following:
@@ -117,7 +117,7 @@
      	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_example.snip"/></textobject></programlisting>
 	
 	</section>
-	<section><info><title>Running master-worker Distributed Primes</title></info>
+	<section xml:id="RunningmasterworkerDistributedPrimes_41"><info><title>Running master-worker Distributed Primes</title></info>
 	
 		
 	    <para> To compile and run the application you need the 

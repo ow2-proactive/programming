@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="comp_configuration"><info><title>Configuration</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="comp_configuration"><info><title xml:id="Configuration_49">Configuration</title></info>
   
 
-  <section xml:id="configuration_html_Controllers_and_interceptors_n"><info><title>Controllers and interceptors</title></info>
+  <section xml:id="configuration_html_Controllers_and_interceptors_n"><info><title xml:id="Controllersandinterceptors_49">Controllers and interceptors</title></info>
     
 
     <para>This section explains how to customize the membranes of component
     through the configuration, composition and creation of controllers and
     interceptors.</para>
 
-    <section><info><title>Configuration of controllers</title></info>
+    <section xml:id="Configurationofcontrollers_49"><info><title>Configuration of controllers</title></info>
       
 
       <para>It is possible to customize controllers, by specifying a control
@@ -45,7 +45,7 @@
    myContentDescription);</programlisting>
     </section>
 
-    <section><info><title>Writing a custom controller</title></info>
+    <section xml:id="Writingacustomcontroller_49"><info><title>Writing a custom controller</title></info>
       
 
       <para>The controller interface is a standard interface which defines
@@ -99,7 +99,7 @@
       </orderedlist>
     </section>
 
-    <section><info><title>Configuration of interceptors</title></info>
+    <section xml:id="Configurationofinterceptors_49"><info><title>Configuration of interceptors</title></info>
       
 
       <para>Controllers can also act as interceptors: they can intercept
@@ -193,7 +193,7 @@ OutputInterceptor2
 </screen>
     </section>
 
-    <section><info><title>Writing a custom interceptor</title></info>
+    <section xml:id="Writingacustominterceptor_49"><info><title>Writing a custom interceptor</title></info>
       
 
       <para>An interceptor being a controller, it must follow the rules
@@ -309,10 +309,10 @@ l invocation");
     lifecycle of the component is set to STOPPED.</para>
   </section>
 
-  <section><info><title>Short cuts</title></info>
+  <section xml:id="Shortcuts_49"><info><title>Short cuts</title></info>
     
 
-    <section><info><title>Principles</title></info>
+    <section xml:id="Principles_49"><info><title>Principles</title></info>
       
 
       <para>Communications between components in a hierarchical model may
@@ -342,7 +342,7 @@ l invocation");
       results in 2 local communications for the sole functional
       interface.</para>
 
-      <figure><info><title>Using shortcuts for minimizing remote communications.</title></info>
+      <figure><info><title xml:id="Usingshortcutsforminimizingremotecommunications_49">Using shortcuts for minimizing remote communications.</title></info>
         
 
         <mediaobject>
@@ -353,7 +353,7 @@ l invocation");
       </figure>
     </section>
 
-    <section><info><title>Configuration</title></info>
+    <section xml:id="Configuration_49"><info><title>Configuration</title></info>
       
 
       <para>Shortcuts are available when composite components are synchronous

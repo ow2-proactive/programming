@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="WSDoc"><info><title>Exporting Active Objects as Web Services</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="WSDoc"><info><title xml:id="ExportingActiveObjectsasWebServices_29">Exporting Active Objects as Web Services</title></info>
   
 
-  <section xml:id="WS_Overwiew"><info><title>Overview</title></info>
+  <section xml:id="WS_Overwiew"><info><title xml:id="Overview_290">Overview</title></info>
     
 
     <para>This feature allows the call and monitoring of active objects
@@ -13,7 +13,7 @@
     active object can be accessible from any enabled web service language.</para>
   </section>
 
-  <section><info><title>Principles</title></info>
+  <section xml:id="Principles_29"><info><title>Principles</title></info>
     
 
     <para>A <emphasis role="bold">web service</emphasis> is a software entity,
@@ -76,7 +76,7 @@
       </figure></para>
   </section>
 
-  <section><info><title>Pre-requisite: Installing the Web Server and the SOAP
+  <section><info><title >Pre-requisite: Installing the Web Server and the SOAP
     engine</title></info>
     
 
@@ -125,7 +125,7 @@
 
 	
 
-  <section><info><title>Steps to expose an active object as a web services</title></info>
+  <section xml:id="Stepstoexposeanactiveobjectasa_29"><info><title>Steps to expose an active object as a web services</title></info>
     
 
     <para>The steps for exporting and using an active object as a web service
@@ -173,7 +173,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Undeploy the services</title></info>
+  <section xml:id="Undeploytheservices_29"><info><title>Undeploy the services</title></info>
     
 
     <para>To undeploy an active object as a service, use the ProActive static
@@ -195,7 +195,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Accessing the services</title></info>
+  <section xml:id="Accessingtheservices_29"><info><title>Accessing the services</title></info>
     
 
     <para>Once the active object is deployed, you can access it via any web service enabled client (such as C#).</para>
@@ -212,7 +212,7 @@
     SOAP message to the client.</para>
   </section>
 
-  <section><info><title>Limitations</title></info>
+  <section xml:id="Limitations_29"><info><title>Limitations</title></info>
     
 
     <para>Apache Soap supports all defined types in the SOAP 1.1
@@ -226,10 +226,10 @@
     <literal>$APACHE_SOAP_HOME/WEB_INF/classes</literal>.</para>
   </section>
 
-  <section><info><title>A simple example: Hello World</title></info>
+  <section xml:id="AsimpleexampleHelloWorld_29"><info><title>A simple example: Hello World</title></info>
     
 
-    <section><info><title>Hello World web service code</title></info>
+    <section xml:id="HelloWorldwebservicecode_29"><info><title>Hello World web service code</title></info>
       
 
       <para>Let's start with a simple example, an Hello world active object
@@ -264,7 +264,7 @@
       new client application in Visual Studio .NET.</para>
     </section>
 
-    <section><info><title>Access with Visual Studio</title></info>
+    <section xml:id="AccesswithVisualStudio_29"><info><title>Access with Visual Studio</title></info>
       
 
       <para/>
@@ -297,10 +297,10 @@ string s = hw.helloWorld ();
     </section>
   </section>
 
-  <section><info><title>C# interoperability: an example with C3D</title></info>
+  <section xml:id="CinteroperabilityanexamplewithC3D_29"><info><title>C# interoperability: an example with C3D</title></info>
     
 
-    <section><info><title>Overview</title></info>
+    <section xml:id="Overview_29"><info><title>Overview</title></info>
       
 
       <para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/apps/c3d.html">C3D</link>
@@ -328,14 +328,14 @@ string s = hw.helloWorld ();
       will be usefull to construct the dispatcher client.</para>
     </section>
 
-    <section><info><title>Access with a C# client</title></info>
+    <section xml:id="AccesswithaCclient_29"><info><title>Access with a C# client</title></info>
       
 
       <para>First of all, we have to generate the service proxy following the
       steps described for the hello world access.</para>
 
       <para>All the SOAP calls will be managed by the generated proxy
-      <literal>localhost.C3DDispatcher</literal>. <figure><info><title>The dispatcher handling all calls</title></info>
+      <literal>localhost.C3DDispatcher</literal>. <figure><info><title xml:id="Thedispatcherhandlingallcalls_29">The dispatcher handling all calls</title></info>
           
 
           <mediaobject>
@@ -346,7 +346,7 @@ string s = hw.helloWorld ();
         </figure></para>
     </section>
 
-    <section><info><title>Dispatcher methods calls and callbacks</title></info>
+    <section xml:id="Dispatchermethodscallsandcallbacks_29"><info><title>Dispatcher methods calls and callbacks</title></info>
       
 
       <para>C# client registers to the C3D dispatcher and then can send
@@ -373,7 +373,7 @@ string s = hw.helloWorld ();
               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="webservices/scc3djava.png" format="PNG"/>
             </imageobject>
           </mediaobject>
-        </figure> <figure><info><title>C# application communicating via SOAP</title></info>
+        </figure> <figure><info><title xml:id="CapplicationcommunicatingviaSOAP_29">C# application communicating via SOAP</title></info>
           
 
           <mediaobject>
@@ -388,7 +388,7 @@ string s = hw.helloWorld ();
 
 
 
-    <section><info><title>Download the C# example</title></info>
+    <section xml:id="DownloadtheCexample_29"><info><title>Download the C# example</title></info>
 
 
       <para>You can find <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://proactive.inria.fr/userfiles/file/apps/C3DCSharp.zip">here</link>

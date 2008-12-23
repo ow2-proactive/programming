@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="annex">
-	<info>
-		<title>Annex</title>
+<info>
+<title xml:id="Annex_54">Annex</title>
 	</info>
 
 	<section xml:id="gcmBasicsExampleFile">
-		<info>
-			<title>The GCM Basics example files</title>
+<info>
+<title xml:id="TheGCMBasicsexamplefiles_54">The GCM Basics example files</title>
 		</info>
 
 		<para>

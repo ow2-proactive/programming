@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="perspectives"><info><title>Component perspectives: a support for advanced research</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="perspectives"><info><title xml:id="Componentperspectivesasupportforadvancedresearch_50">Component perspectives: a support for advanced research</title></info>
   
 
   <para>The ProActive/Fractal framework is a functional and flexible
@@ -11,7 +11,7 @@
   <para>It is now a mature framework for developing Grid applications, and as
   such it is a basis for experimenting new research paths.</para>
 
-  <section><info><title>Dynamic reconfiguration</title></info>
+  <section xml:id="Dynamicreconfiguration_50"><info><title>Dynamic reconfiguration</title></info>
     
 
     <para>One of the challenges of Grid computing is to handle changes in the
@@ -35,7 +35,7 @@
     asset for large scale distributed computing. We are also</para>
   </section>
 
-  <section><info><title>Model-checking</title></info>
+  <section xml:id="Modelchecking_50"><info><title>Model-checking</title></info>
     
 
     <para>Encapsulation properties, components with configurable activities,
@@ -62,7 +62,7 @@
     investigates such kinds of scenarii.</para>
   </section>
 
-  <section><info><title>Pattern-based deployment</title></info>
+  <section xml:id="Patternbaseddeployment_50"><info><title>Pattern-based deployment</title></info>
     
 
     <para>Distributed computational applications are designed by defining a
@@ -77,7 +77,7 @@
     of identical components.</para>
   </section>
 
-  <section xml:id="perspectives_html_GUI"><info><title>Graphical user interface</title></info>
+  <section xml:id="perspectives_html_GUI"><info><title xml:id="Graphicaluserinterface_50">Graphical user interface</title></info>
     
 
     <para>Another area of investigation is the tools for configuring,
@@ -107,7 +107,7 @@
     capabilities of IC2D: we would get a structural view of the application in
     the Fractal GUI, and a topological view in the standard IC2D.</para>
 
-    <section><info><title>Howto use it</title></info>
+    <section xml:id="Howtouseit_50"><info><title>Howto use it</title></info>
       
       <para>If you want to try out the extended Fractal GUI for ProActive (for
       versions of ProActive &lt; 3.2):</para>
@@ -165,7 +165,7 @@
     </section>
   </section>
 
-  <section><info><title>Other</title></info>
+  <section xml:id="Other_50"><info><title>Other</title></info>
     
 
     <para>Other areas of research that we are opening around this work
@@ -193,7 +193,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Limitations</title></info>
+  <section xml:id="Limitations_50"><info><title>Limitations</title></info>
     
 
     <para>Some features of the Fractal model are not implemented:</para>

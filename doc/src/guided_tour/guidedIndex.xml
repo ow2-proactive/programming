@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="guidedIndex"><info><title>Introduction To The Guided Tour and Tutorial</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="guidedIndex"><info><title xml:id="IntroductionToTheGuidedTourandTutorial_9">Introduction To The Guided Tour and Tutorial</title></info>
   
 
-  <section xml:id="guidedOverview"><info><title>Overview</title></info>
+  <section xml:id="guidedOverview"><info><title xml:id="Overview_9">Overview</title></info>
     
 
     <para>This tour is a practical introduction to ProActive, giving an
@@ -31,7 +31,7 @@
 		and the ProActive Scheduler.  </para>
   </section>
 
-  <section xml:id="guidedInstallation"><info><title>Installation and setup</title></info>
+  <section xml:id="guidedInstallation"><info><title xml:id="Installationandsetup_9">Installation and setup</title></info>
     
 
     <para>To get started follow the instructions for downloading and installing ProActive, in
@@ -54,7 +54,7 @@
         <literal> -Dlog4j.configuration=file:/filelocation/proactive-log4j</literal></para>
 
   </section>
-  <section><info><title>ProActive and IDEs (Eclipse, ...)</title></info>
+  <section xml:id="ProActiveandIDEsEclipse_9"><info><title>ProActive and IDEs (Eclipse, ...)</title></info>
     
 
     <para>We recommend you use the Eclipse IDE to develop your ProActive

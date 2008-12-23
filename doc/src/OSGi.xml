@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="OSGi"><info><title>ProActive on top of OSGi</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="OSGi"><info><title xml:id="ProActiveontopofOSGi_73">ProActive on top of OSGi</title></info>
   
 
-  <section xml:id="OSGi_html_overview"><info><title>Overview of OSGi -- Open Services Gateway initiative</title></info>
+  <section xml:id="OSGi_html_overview"><info><title xml:id="OverviewofOSGiOpenServicesGatewayinitiative_73">Overview of OSGi -- Open Services Gateway initiative</title></info>
     
 
     <para><emphasis role="bold">OSGi</emphasis> is a corporation that works on
@@ -16,7 +16,7 @@
     framework</emphasis> that allows to a diversity of services to be executed
     in a service gateway, by this way, many applications can <emphasis role="bold">share a single JVM</emphasis> .</para>
 
-    <figure><info><title>The OSGi framework entities</title></info>
+    <figure><info><title xml:id="TheOSGiframeworkentities_73">The OSGi framework entities</title></info>
       
 
       <mediaobject>
@@ -79,7 +79,7 @@
     <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.osgi.org">OSGi</link> website .</para>
   </section>
 
-  <section xml:id="OSGi_html_proactiveBundle"><info><title>ProActive bundle and service</title></info>
+  <section xml:id="OSGi_html_proactiveBundle"><info><title xml:id="ProActivebundleandservice_73">ProActive bundle and service</title></info>
     
 
     <para>In order to use ProActive on top of OSGi, we have developped the
@@ -93,7 +93,7 @@
     the ProActive Service will be able to create active object on this
     runtime.</para>
 
-    <figure><info><title>The Proactive Bundle uses the standard Http Service</title></info>
+    <figure><info><title xml:id="TheProactiveBundleusesthestandardHttpService_73">The Proactive Bundle uses the standard Http Service</title></info>
       
 
       <mediaobject>
@@ -111,7 +111,7 @@
     service.</para>
   </section>
 
-  <section xml:id="OSGi_html_helloWorld"><info><title> Yet another Hello World</title></info>
+  <section xml:id="OSGi_html_helloWorld"><info><title xml:id="YetanotherHelloWorld_73">Yet another Hello World</title></info>
     
 
     <para>The example below is <emphasis role="bold">a simple hello world that

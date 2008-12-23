@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Security"><info><title>Security Framework</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Security"><info><title xml:id="SecurityFramework_63">Security Framework</title></info>
   
 
   <para>In order to use the Proactive Security features, you have to
@@ -6,7 +6,7 @@
   Unlimited Strength Jurisdiction Policy Files</emphasis> available at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.java.sun.com">Sun's website</link>. Extract the file and
   copy jar files to your &lt;jre_home&gt;/lib/security.</para>
 
-  <section><info><title>Overview</title></info>
+  <section xml:id="Overview_63"><info><title>Overview</title></info>
     
 
     <para>Usually, applications and security are developed for a specific use.
@@ -26,10 +26,10 @@
     descriptor.</para>
   </section>
 
-  <section><info><title>Security Architecture</title></info>
+  <section xml:id="SecurityArchitecture_63"><info><title>Security Architecture</title></info>
     
 
-    <section><info><title>Base model</title></info>
+    <section xml:id="Basemodel_63"><info><title>Base model</title></info>
       
 
       <para>A distributed or concurrent application built using
@@ -42,7 +42,7 @@
       (see following figure); the absence of sharing is important with respect
       to security.</para>
 
-      <para><figure><info><title>Setting up virtual distributed sandboxs at runtime</title></info>
+      <para><figure><info><title xml:id="Settingupvirtualdistributedsandboxsatruntime_63">Setting up virtual distributed sandboxs at runtime</title></info>
           
 
           <mediaobject>
@@ -63,7 +63,7 @@
       certificate will be checked. If a valid path is found then the object
       certificate is validated.</para>
 
-      <para><figure><info><title>Certificate chain</title></info>
+      <para><figure><info><title xml:id="Certificatechain_63">Certificate chain</title></info>
           
 
           <mediaobject>
@@ -74,7 +74,7 @@
         </figure></para>
     </section>
 
-    <section><info><title>Security is expressed at different levels</title></info>
+    <section xml:id="Securityisexpressedatdifferentlevels_63"><info><title>Security is expressed at different levels</title></info>
       
 
       <para>Security is expressed at different levels, according to who wants
@@ -103,7 +103,7 @@
       entites interacting within the system, ensuring that all policies are
       adhered to.</para>
 
-      <para><figure><info><title>Hierarchical security</title></info>
+      <para><figure><info><title xml:id="Hierarchicalsecurity_63">Hierarchical security</title></info>
           
 
           <mediaobject>
@@ -115,10 +115,10 @@
     </section>
   </section>
 
-  <section><info><title>Detailed Security Architecture</title></info>
+  <section xml:id="DetailedSecurityArchitecture_63"><info><title>Detailed Security Architecture</title></info>
     
 
-    <section><info><title>Nodes and Virtual Nodes</title></info>
+    <section xml:id="NodesandVirtualNodes_63"><info><title>Nodes and Virtual Nodes</title></info>
       
 
       <para>The security architecture relies on two related abstractions for
@@ -139,7 +139,7 @@
       Nodes and Nodes is done when the application starts.</para>
     </section>
 
-    <section xml:id="Security_html_SECTION00033000000000000000"><info><title>Hierarchical Security Entities</title></info>
+    <section xml:id="Security_html_SECTION00033000000000000000"><info><title xml:id="HierarchicalSecurityEntities_63">Hierarchical Security Entities</title></info>
       
 
       <para>Grid programming is about deploying processes (activities) on
@@ -245,7 +245,7 @@
       offer, in a secure manner, hosting environments for mobile
       agents.</para>
 
-      <para><figure><info><title>Syntax and attributes for policy rules</title></info>
+      <para><figure><info><title xml:id="Syntaxandattributesforpolicyrules_63">Syntax and attributes for policy rules</title></info>
           
 
           <mediaobject>
@@ -256,7 +256,7 @@
         </figure></para>
     </section>
 
-    <section xml:id="Security_html_SECTION00034000000000000000"><info><title>Resource provider security features</title></info>
+    <section xml:id="Security_html_SECTION00034000000000000000"><info><title xml:id="Resourceprovidersecurityfeatures_63">Resource provider security features</title></info>
       
 
       <para>Prior to an application starting on a grid, a user needs to
@@ -270,7 +270,7 @@
       distributed.</para>
     </section>
 
-    <section xml:id="Security_html_SECTION00037000000000000000"><info><title>Interactions, Security Attributes</title></info>
+    <section xml:id="Security_html_SECTION00037000000000000000"><info><title xml:id="InteractionsSecurityAttributes_63">Interactions, Security Attributes</title></info>
       
 
       <para>Security policies are able to control all the
@@ -344,7 +344,7 @@
       discuss how this is done.</para>
     </section>
 
-    <section xml:id="Security_html_SECTION00038000000000000000"><info><title>Combining Policies</title></info>
+    <section xml:id="Security_html_SECTION00038000000000000000"><info><title xml:id="CombiningPolicies_63">Combining Policies</title></info>
       
 
       <para>As the proposed infrastructure takes into account different actors
@@ -366,7 +366,7 @@
       there must be clear principles to combine the various sets of
       rules.</para>
 
-      <para><figure xml:id="HierarchicalSecurityLevels"><info><title>Hierarchical Security Levels</title></info>
+      <para><figure xml:id="HierarchicalSecurityLevels"><info><title xml:id="HierarchicalSecurityLevels_63">Hierarchical Security Levels</title></info>
           
 
           <mediaobject>
@@ -408,7 +408,7 @@
       error is reported.</para>
     </section>
 
-    <section><info><title>Dynamic Policy Negotiation</title></info>
+    <section xml:id="DynamicPolicyNegotiation_63"><info><title>Dynamic Policy Negotiation</title></info>
       
 
       <para>During execution, entities interact in a pairwise fashion. Each
@@ -429,7 +429,7 @@
       case that the agreed security policy includes confidentiality, the two
       entities negotiate a session key.</para>
 
-      <informaltable frame="none" xml:id="Result_of_security_negotiations"><info><title>Result of security negotiations</title></info>
+      <informaltable frame="none" xml:id="Result_of_security_negotiations"><info><title xml:id="Resultofsecuritynegotiations_63">Result of security negotiations</title></info>
         
 
         <tgroup cols="1">
@@ -448,7 +448,7 @@
       </informaltable>
     </section>
 
-    <section><info><title>Migration and Negotiation</title></info>
+    <section xml:id="MigrationandNegotiation_63"><info><title>Migration and Negotiation</title></info>
       
 
       <indexterm>
@@ -505,7 +505,7 @@
 
 
 
-  <section><info><title>How to create policy files and certificates</title></info>
+  <section xml:id="Howtocreatepolicyfilesandcertificates_63"><info><title>How to create policy files and certificates</title></info>
     
 
     <para>A GUI has been created to facilitate certificate generation. It is a
@@ -514,7 +514,7 @@
     <para>The first screenshot presents a root certificate. Notice that the
     certificate chain table is empty.</para>
 
-    <para><figure><info><title>The ProActive Certificate Generator (for oasis)</title></info>
+    <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforoasis_63">The ProActive Certificate Generator (for oasis)</title></info>
         
 
         <mediaobject>
@@ -532,7 +532,7 @@
     Distinguished Name of the Entity ID 1 is the same as the subject DN of the
     certificate</para>
 
-    <para><figure><info><title>The ProActive Certificate Generator (for proactive)</title></info>
+    <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_1">The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -544,7 +544,7 @@
 
 
 
-     <para><figure><info><title>The ProActive Certificate Generator (for proactive)</title></info>
+     <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_2">The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -554,7 +554,7 @@
         </mediaobject>
       </figure></para>
 
- <para><figure><info><title>The ProActive Certificate Generator (for proactive)</title></info>
+ <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_3">The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -564,7 +564,7 @@
         </mediaobject>
       </figure></para>
 
- <para><figure><info><title>The ProActive Certificate Generator (for proactive)</title></info>
+ <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_4">The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -575,7 +575,7 @@
       </figure></para>
 
 
- <para><figure><info><title>The ProActive Certificate Generator (for proactive)</title></info>
+ <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_5">The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -593,7 +593,7 @@
     format is natively supported by the ProActive Security mechanism.</para>
   </section>
 
- <section><info><title>Activating security mechanism</title></info>
+ <section xml:id="Activatingsecuritymechanism_63"><info><title>Activating security mechanism</title></info>
     
 
     <para>Within the deployment descriptor, the tag &lt;security&gt; is used
@@ -633,7 +633,7 @@
 
 
 
- <section><info><title>The XML Security Descriptor in details</title></info>
+ <section xml:id="TheXMLSecurityDescriptorindetails_63"><info><title>The XML Security Descriptor in details</title></info>
     
  
     <para>Inside the policy file, you can express policy between entities
@@ -653,7 +653,7 @@
       </listitem>
     </itemizedlist>
 
-    <section><info><title>Construction of an XML policy:</title></info>
+    <section xml:id="ConstructionofanXMLpolicy_63"><info><title>Construction of an XML policy:</title></info>
       
 
       <para>A policy file must begin with:</para>

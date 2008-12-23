@@ -478,11 +478,11 @@ Process finished Thread=ERR -> /home/cdalmass/pub/l
   <!-- Guided tour section template 
 	 
 	<sect1 id="MyGreatApp">
-		<title> My Great Project Title</title>
+<title xml:id="MyGreatProjectTitle_13">My Great Project Title</title>
 	<para>
 		Overview
 	</para>
-	<figure> <title> Architecture title</title>
+	<figure><title xml:id="Architecturetitle_13">Architecture title</title>
 		  <mediaobject>
           <imageobject>
             <imagedata scalefit="1" width="100%" contentdepth="100%"  
@@ -498,7 +498,7 @@ Process finished Thread=ERR -> /home/cdalmass/pub/l
 	 <programlisting lang="java"><textobject><textdata fileref="guided_tour/examples/SimpleHelloWorld/src/active/HelloWorld.java" /></textobject></programlisting>
 	<para>some more info and code</para>	
 	<sect2>
-		<title>Running My Great Application</title>
+<title xml:id="RunningMyGreatApplication_13">Running My Great Application</title>
 		<para>
 			Information on running
 		</para>	
@@ -507,7 +507,7 @@ Process finished Thread=ERR -> /home/cdalmass/pub/l
 		</para>
 	</sect2>
 	<sect2>
-		<title>Monitoring Of My Great Application</title>
+<title xml:id="MonitoringOfMyGreatApplication_13">Monitoring Of My Great Application</title>
 		<para>
 			Info on monitoring
 		</para>

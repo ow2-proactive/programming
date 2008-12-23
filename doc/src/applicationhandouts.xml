@@ -2,7 +2,7 @@
    Applications</title></info>
   
 
-  <section xml:id="C3D_example"><info><title>C3D: A distributed 3D renderer</title></info>
+  <section xml:id="C3D_example"><info><title xml:id="C3DAdistributed3Drenderer_61">C3D: A distributed 3D renderer</title></info>
     
 	
     <para>Distribution is often used for CPU-intensive applications, where
@@ -28,7 +28,7 @@
      a dozen rendering engines running in parallel that communicate using Java RMI
      and controlled by a central dispatcher.</para>
    
-    <figure><info><title>The active objects in the c3d application</title></info>
+    <figure><info><title xml:id="Theactiveobjectsinthec3dapplication_61">The active objects in the c3d application</title></info>
       
 
       <mediaobject>
@@ -37,7 +37,7 @@
         </imageobject>
       </mediaobject>
     </figure>
-	<section><info><title>How to use C3D</title></info>
+	<section xml:id="HowtouseC3D_61"><info><title>How to use C3D</title></info>
 		
 	<para>
 	The C3D application uses three scripts that can be found under <literal>examples/c3d</literal>:
@@ -95,7 +95,7 @@
 
   </section>
 
-  <section><info><title>Readers/Writers Application</title></info>
+  <section xml:id="ReadersWritersApplication_61"><info><title>Readers/Writers Application</title></info>
     
 
     <para>ProActive provides an advanced synchronization mechanism that allows
@@ -113,7 +113,7 @@
       with ProActive</link> uses 3 active objects: Reader, Writer, and the
       controller class (ReaderWriter).</para>
 	
-      <section><info><title>How to use the Readers/Writers</title></info>
+      <section xml:id="HowtousetheReadersWriters_61"><info><title>How to use the Readers/Writers</title></info>
         
 
         <para>To start the application use <literal>examples/readers</literal>.</para>
@@ -142,7 +142,7 @@
         
      </section>
 	</section>
-	<section><info><title>The dining philosophers</title></info>
+	<section xml:id="Thediningphilosophers_61"><info><title>The dining philosophers</title></info>
       
 
       <para>The 'dining philosophers' problem is a classic exercise in
@@ -158,7 +158,7 @@
       philosophers are active objects, as well as the table (controller) and
       the dinner frame (user interface).</para>
 
-      <section><info><title>How to use the philosophers application</title></info>
+      <section xml:id="Howtousethephilosophersapplication_61"><info><title>How to use the philosophers application</title></info>
         
 
       <para>To start the application use <literal>examples/philosophers/philosophers.sh</literal>
@@ -170,7 +170,7 @@
         of the application: DinnerLayout, Table, and Philosopher</para>
 
         <para>
-        	<figure><info><title>The Dining Philosophers Example</title></info>
+        	<figure><info><title xml:id="TheDiningPhilosophersExample_61">The Dining Philosophers Example</title></info>
             
             <mediaobject>
               <imageobject>
@@ -239,7 +239,7 @@
     
   </section>
 
-  <section><info><title>Migration of active objects</title></info>
+  <section xml:id="Migrationofactiveobjects_61"><info><title>Migration of active objects</title></info>
     
 
     <indexterm>
@@ -259,7 +259,7 @@
     with each other. It also features the ability to move a swing window
     between screens while moving an agent from one JVM to the other.</para>
 
-    <section><info><title>How to use the penguin application</title></info>
+    <section xml:id="Howtousethepenguinapplication_61"><info><title>How to use the penguin application</title></info>
       
       
       <para>Use the <literal>examples/penguin/penguin.sh</literal>
@@ -290,7 +290,7 @@
           and that the penguin window disappears and reappears on the screen
           associated with the new JVM.</para>
   </section>
-    <section><info><title>How to use the Penguin Controller</title></info>
+    <section xml:id="HowtousethePenguinController_61"><info><title>How to use the Penguin Controller</title></info>
       
 
       <para>After selecting them, use the buttons to:</para>
@@ -317,7 +317,7 @@
     </section>
   </section>
 
-	<section><info><title>Chat example</title></info>
+	<section xml:id="Chatexample_61"><info><title>Chat example</title></info>
 	
 	
 	<para>
@@ -326,7 +326,7 @@
 		The clients  in the application can communicate to each other in a decentralized
 		manner and 	can migrate from computer to computer.</para>
 		
-		<section><info><title>How to run the Chat application</title></info>
+		<section xml:id="HowtoruntheChatapplication_61"><info><title>How to run the Chat application</title></info>
 			
 		<para>
 			To start a chat client run <literal>chat.sh</literal>
@@ -372,7 +372,7 @@
 	
 		</section>
 		
-		<section><info><title>Chat migration</title></info>
+		<section xml:id="Chatmigration_61"><info><title>Chat migration</title></info>
 			
 			<para>
 			The chat application can be migrated to another computer.
@@ -396,7 +396,7 @@
   <!-- //TODO  this example doesn't work in the 3.9 release 
   
       <sect1>
-        <title>PI (3.14)</title>
+<title xml:id="PI314_61">PI (3.14)</title>
 
 		    <para>
 		    	The PI application calculates the number
@@ -407,7 +407,7 @@
 		    	  the same time.  
 		    </para>
 		    <sect2>
-		    	<title>Running PI(3.14)</title>
+<title xml:id="RunningPI314_61">Running PI(3.14)</title>
 			<para>
 				To start the PI application use the scripts <literal> xxxx </literal>
 				in <literal>pathxxx</literal> with the parameters XXXXX.
@@ -418,10 +418,10 @@
    -->
   <!-- 
   <sect1 id="OOSPMDJacobiexample">
-    <title>OO SPMD on a Jacobi example</title>
+<title xml:id="OOSPMDonaJacobiexample_61">OO SPMD on a Jacobi example</title>
 
     <sect2>
-      <title>How to run the Jacobi code</title>
+<title xml:id="HowtoruntheJacobicode_61">How to run the Jacobi code</title>
 
 
 
@@ -444,7 +444,7 @@ or
  -->
   <!-- Pi MPI -> Pi ProActive -->
 
-  <section><info><title>Integral Pi</title></info>
+  <section xml:id="IntegralPi_61"><info><title>Integral Pi</title></info>
     
 
       <para>The MPI PI program approximates <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://en.wikipedia.org/wiki/Pi">pi</link> by computing :</para>
@@ -467,7 +467,7 @@ or
         other process. After the results are recieved the process sums the values.</para>
 
 
-    <section><info><title>Introduction</title></info>
+    <section xml:id="Introduction_61"><info><title>Introduction</title></info>
       
 
       <para>In this chapter we are going to see a simple example of an MPI
@@ -509,10 +509,10 @@ or
       </itemizedlist>
     </section>
 
-    <section><info><title>Initialization</title></info>
+    <section xml:id="Initialization_61"><info><title>Initialization</title></info>
       
 
-      <section><info><title>MPI Initialization primitives</title></info>
+      <section xml:id="MPIInitializationprimitives_61"><info><title>MPI Initialization primitives</title></info>
         
 
         <para>Some basic primitives are used, notice that MPI provides a rank
@@ -528,7 +528,7 @@ or
   solicit (&amp;N, &amp;nprocs, mynum);</programlisting>
       </section>
 
-      <section><info><title>ProActive Initialization primitives</title></info>
+      <section xml:id="ProActiveInitializationprimitives_61"><info><title>ProActive Initialization primitives</title></info>
         
 
         <para>First we need to create the group of workers (MPI processes
@@ -561,10 +561,10 @@ or
       </section>
     </section>
 
-    <section><info><title>Communication primitives</title></info>
+    <section xml:id="Communicationprimitives_61"><info><title>Communication primitives</title></info>
       
 
-      <section><info><title>Communication pattern</title></info>
+      <section xml:id="Communicationpattern_61"><info><title>Communication pattern</title></info>
         
 
         <para>The communication pattern is very simple, it's done in 2 steps.
@@ -572,7 +572,7 @@ or
         other process and sums the received values.</para>
       </section>
 
-      <section><info><title>MPI Approach</title></info>
+      <section xml:id="MPIApproach_61"><info><title>MPI Approach</title></info>
         
 
         <para>The MPI implementation involves 3 communication primitives
@@ -615,7 +615,7 @@ or
   }  </programlisting>
       </section>
 
-      <section><info><title>ProActive Approach</title></info>
+      <section xml:id="ProActiveApproach_61"><info><title>ProActive Approach</title></info>
         
 
         <para>The ProActive implementation is quite similar to MPI one. The
@@ -644,7 +644,7 @@ or
       </section>
     </section>
 
-    <section><info><title>Running the PI example</title></info>
+    <section xml:id="RunningthePIexample_61"><info><title>Running the PI example</title></info>
       
 
         <para>In examples/integralPi run integralpi.sh or .bat,
@@ -715,7 +715,7 @@ Enter the number of iterations (0 to exit) :  </screen>
   
 	<!-- NBODY -->
 	
-	<section xml:id="nbody"><info><title>The nbody example</title></info>
+	<section xml:id="nbody"><info><title xml:id="Thenbodyexample_61">The nbody example</title></info>
     
 
             <para>
@@ -824,7 +824,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 </informaltable>
             </para>
         
-        <section><info><title>How to run the n-body example</title></info>
+        <section xml:id="Howtorunthenbodyexample_61"><info><title>How to run the n-body example</title></info>
             
             <para>
                 With the script located in the folder
@@ -928,7 +928,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 </listitem>
             </itemizedlist>
         </section>
-        <section><info><title>Barnes-Hut</title></info>
+        <section xml:id="BarnesHut_61"><info><title>Barnes-Hut</title></info>
             
             <para>
                 This way to construct the nbody simulation is based on a
@@ -1059,7 +1059,7 @@ Enter the number of iterations (0 to exit) :  </screen>
 	
 	<!-- COMPONENTS -->
 	
-    <section xml:id="C3D_component_example"><info><title>C3D - Active Objects to Components</title></info>
+    <section xml:id="C3D_component_example"><info><title xml:id="C3DActiveObjectstoComponents_61">C3D - Active Objects to Components</title></info>
     
         <para>
             The standard C3D example has been
@@ -1075,7 +1075,7 @@ Enter the number of iterations (0 to exit) :  </screen>
             <literal>examples/components/c3d</literal>
             directory of the proactive source.
         </para>
-		<section><info><title>Refactoring C3D  with components</title></info>
+		<section xml:id="RefactoringC3Dwithcomponents_61"><info><title>Refactoring C3D  with components</title></info>
         
                 <para>
            
@@ -1112,7 +1112,7 @@ Enter the number of iterations (0 to exit) :  </screen>
         </para>
     </section>
 
-        <section><info><title>Creating the interfaces</title></info>
+        <section xml:id="Creatingtheinterfaces_61"><info><title>Creating the interfaces</title></info>
             
             <para>
                 What we need to do is to extract the interfaces of the
@@ -1164,7 +1164,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 design by separating behaviours.
             </para>
         </section>
-        <section><info><title>Creating the Component Wrappers</title></info>
+        <section xml:id="CreatingtheComponentWrappers_61"><info><title>Creating the Component Wrappers</title></info>
             
             <para>
                 You now have to create a class that englobes the
@@ -1251,7 +1251,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>            
+            <example><info><title xml:id="HowtorenameVirtualNodesinADLfiles_61">How to rename Virtual Nodes in ADL files</title></info>            
             
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
@@ -1291,7 +1291,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 </para>
             </note>
         </section>
-        <section><info><title>Component lookup and registration</title></info>
+        <section xml:id="Componentlookupandregistration_61"><info><title>Component lookup and registration</title></info>
             
             <para>
                 When running the User Component alone, you are prompted
@@ -1334,7 +1334,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 method, which lists all the interfaces available.
             </para>
         </section>
-        <section><info><title>How to run components C3D </title></info>
+        <section xml:id="HowtoruncomponentsC3D_61"><info><title>How to run components C3D </title></info>
         
         <para>
             There is only one access point for this example in the
@@ -1363,7 +1363,7 @@ org.objectweb.proactive.examples.components.c3d.adl.compositeOfDispRend</screen>
 ../../../descriptors/components/C3D_all.xml \
 org.objectweb.proactive.examples.components.c3d.adl.UserImpl</screen>
         </section>
-		<section><info><title>Conclusion</title></info>
+		<section xml:id="Conclusion_61"><info><title>Conclusion</title></info>
 			
 				<para>These are a few of the examples present in the ProActive
 				distribution. To see a full list of the examples go to 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Principles">
 
-<info><title>ProActive Overview</title></info>
+<info><title xml:id="ProActiveOverview_20">ProActive Overview</title></info>
   
   <para>Grid computing is now a key aspect, from scientific to business
   applications, from large scale simulations to everyday life enterprise IT.
@@ -30,34 +30,34 @@
 	</para>
 	<!--
 	<sect1>
-		<title>ProActive Parallel Suite</title>
+<title xml:id="ProActiveParallelSuite_20">ProActive Parallel Suite</title>
 		<sect2>
-			<title>Introduction</title>
+<title xml:id="Introduction_20">Introduction</title>
 			<para>//TODO</para>
 		</sect2>
 		<sect2>
-			<title>IC2D Eclipse IDE</title>
+<title xml:id="IC2DEclipseIDE_20">IC2D Eclipse IDE</title>
 			<para>//TODO</para>
 		</sect2>
 		<sect2>
-			<title>Programming and Composing</title>
+<title xml:id="ProgrammingandComposing_20">Programming and Composing</title>
 			<para>//TODO</para>
 		</sect2>
 		<sect2>
-			<title>Activating Technical Services</title>
+<title xml:id="ActivatingTechnicalServices_20">Activating Technical Services</title>
 			<para>//TODO</para>		
 		</sect2>
 		<sect2>
-			<title>Deployment And Virtualization</title>
+<title xml:id="DeploymentAndVirtualization_20">Deployment And Virtualization</title>
 			<para>//TODO</para>
 		</sect2>
 		
 	</sect1>
 	
 		-->
-   <section><info><title>ProActive Programming Frameworks</title></info>
+   <section xml:id="ProActiveProgrammingFrameworks_20"><info><title>ProActive Programming Frameworks</title></info>
   	
-		<section><info><title>Introduction</title></info>
+		<section xml:id="Introduction_20"><info><title>Introduction</title></info>
 			
 			<!--//TODO -->
 			<para/>
@@ -75,7 +75,7 @@
   	</para>
   
   
-     <para><figure><info><title>ProActive Features</title></info>
+     <para><figure><info><title xml:id="ProActiveFeatures_20">ProActive Features</title></info>
         
 
         <mediaobject>
@@ -108,7 +108,7 @@
   </itemizedlist>
 		</section>
 
-  	<section><info><title>Active Objects Model</title></info>
+  	<section xml:id="ActiveObjectsModel_20"><info><title>Active Objects Model</title></info>
   		
   		<para>ProActive is based on the concept of an active object, which is an entity
   		with its own configurable activity.
@@ -130,7 +130,7 @@
 		  (ASP), confluence, and determinism have been
 		  proven for this programming model: <xref endterm="TDO-book.abbrev" linkend="TDO-book"/> and <xref endterm="CHSPOPL04.abbrev" linkend="CHSPOPL04"/>.</para>
 	 </section>
-	<section><info><title>Implementation Language</title></info> 
+	<section xml:id="ImplementationLanguage_20"><info><title>Implementation Language</title></info> 
 		<para>
 			Grids gather large amount of heterogeneous resources, different processor architectures 
 			and operating systems. In this context, using a language which relies on 
@@ -143,7 +143,7 @@
 		</para>
 	</section>
 	
-	<section><info><title> Communication through typed asychronous messages</title></info> 
+	<section xml:id="Communicationthroughtypedasychronousmessages_20"><info><title>Communication through typed asychronous messages</title></info> 
 		<para>
 			In ProActive, the distribution is transparent: invoking methods on remote objects
 			does not require the developer to design remote objects with an explicit remoting mechanism.
@@ -217,7 +217,7 @@
 		</para>
 	</section>
 	
-	<section><info><title>Programming With Components: GCM</title></info>
+	<section xml:id="ProgrammingWithComponentsGCM_20"><info><title>Programming With Components: GCM</title></info>
 	 
 	 <!-- 
 	  //******************* TODO ********************
@@ -226,13 +226,13 @@
 	</section>
 	
 	
-	<section><info><title>Library features</title></info> 
+	<section xml:id="Libraryfeatures_20"><info><title>Library features</title></info> 
 		<para>
 			ProActive uses the  <xref linkend="MOP"/> to provide flexibility and configurability: it
 			allows the addition of meta-objects for managing new required features. Moreover, the library also
 			proposes a deployment framework, which allows the deployment of active objects on various 
 			infrastructures. The MOP architecture is represented in the next figure.
-		 <figure><info><title>MOP architecture</title></info>
+		 <figure><info><title xml:id="MOParchitecture_20">MOP architecture</title></info>
         
 
         <mediaobject>

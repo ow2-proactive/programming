@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="FileTransfer"><info><title>ProActive File Transfer</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="FileTransfer"><info><title xml:id="ProActiveFileTransfer_67">ProActive File Transfer</title></info>
   
 
-  <section xml:id="FileTransfer_html_intro"><info><title>Introduction and Concepts</title></info>
+  <section xml:id="FileTransfer_html_intro"><info><title xml:id="IntroductionandConcepts_67">Introduction and Concepts</title></info>
     
 
     <para>Currently ProActive provide support for the following type of
@@ -50,10 +50,10 @@
     </itemizedlist>
   </section>
 
-  <section xml:id="dbdoclet.id.FileTransfer_html_objectives"><info><title>File Transfer API</title></info>
+  <section xml:id="dbdoclet.id.FileTransfer_html_objectives"><info><title xml:id="FileTransferAPI_67">File Transfer API</title></info>
     
 
-    <section><info><title>API Definition</title></info>
+    <section xml:id="APIDefinition_67"><info><title>API Definition</title></info>
       
 
       <programlisting xml:lang="java">package org.objectweb.proactive.api.ProFileTransfer;
@@ -113,7 +113,7 @@ static <emphasis role="bold">      RemoteFile mkdirs</emphasis>(<emphasis role="
       from the remote node, into the local <emphasis role="bold">Node</emphasis>, and the <emphasis role="bold">push</emphasis> methods can be used to send the <emphasis role="bold">RemoteFile</emphasis> to another <emphasis role="bold">Node</emphasis>.</para>
     </section>
 
-    <section><info><title>How to use the API Example</title></info>
+    <section xml:id="HowtousetheAPIExample_67"><info><title>How to use the API Example</title></info>
       
 
       <para>In the following example, a <emphasis role="bold">Node</emphasis>
@@ -133,7 +133,7 @@ Node testnode = testVNode.getNode();
 
 <emphasis role="bold">remoteFileB.waitFor</emphasis>(); //blocking method</programlisting>
 
-      <section><info><title>How to obtain a Node from an Active Object reference</title></info>
+      <section xml:id="HowtoobtainaNodefromanActive_67"><info><title>How to obtain a Node from an Active Object reference</title></info>
         
 
         <para>The Node where an Active Object resides can be obtained in the
@@ -146,7 +146,7 @@ Node testnode = testVNode.getNode();
     </section>
   </section>
 
-  <section><info><title>Descriptor File Transfer</title></info>
+  <section xml:id="DescriptorFileTransfer_67"><info><title>Descriptor File Transfer</title></info>
     
 
     <para>File Transfers can also be specified using ProActive Descriptors.
@@ -168,7 +168,7 @@ Node testnode = testVNode.getNode();
       </listitem>
     </itemizedlist>
 
-    <section><info><title>XML Descriptor File Transfer Tags</title></info>
+    <section xml:id="XMLDescriptorFileTransferTags_67"><info><title>XML Descriptor File Transfer Tags</title></info>
       
 
       <para>The File Transfer related tags, are placed inside the descriptor
@@ -296,7 +296,7 @@ and implicitly inferred from the process information. --&gt;
           </itemizedlist></para>
       </section>
 
-      <section><info><title>Triggering File Transfer Deploy</title></info>
+      <section xml:id="TriggeringFileTransferDeploy_67"><info><title>Triggering File Transfer Deploy</title></info>
         
 
         <para>The trigger (start) of the File Transfer will take place when
@@ -326,7 +326,7 @@ and implicitly inferred from the process information. --&gt;
         possible.</para>
       </section>
 
-      <section><info><title>Triggering File Transfer Retrieve</title></info>
+      <section xml:id="TriggeringFileTransferRetrieve_67"><info><title>Triggering File Transfer Retrieve</title></info>
         
 
         <para>Since distributed application's termination is difficult to
@@ -365,14 +365,14 @@ File f[]=<emphasis role="bold">fw.getFiles()</emphasis> //wait-for-files to arri
     </section>
   </section>
 
-  <section xml:id="dbdoclet.id.FileTransfer_html_design" xreflabel="FileTransfer Design"><info><title>Advanced: FileTransfer Design</title></info>
+  <section xml:id="dbdoclet.id.FileTransfer_html_design" xreflabel="FileTransfer Design"><info><title xml:id="AdvancedFileTransferDesign_67">Advanced: FileTransfer Design</title></info>
     
 
     <para>This section provides internal details and information on how the
     File Transfer is implemented. Reading the following section to use the
     File Transfer mechanisms provided by ProActive is not necessary.</para>
 
-    <section><info><title>Abstract Definition (High level)</title></info>
+    <section xml:id="AbstractDefinitionHighlevel_67"><info><title>Abstract Definition (High level)</title></info>
       
 
       <para>This definitions can be referenced from a VirtualNode. They
@@ -397,7 +397,7 @@ File f[]=<emphasis role="bold">fw.getFiles()</emphasis> //wait-for-files to arri
       definition name.</para>
     </section>
 
-    <section><info><title>Concrete Definition (Low level)</title></info>
+    <section xml:id="ConcreteDefinitionLowlevel_67"><info><title>Concrete Definition (Low level)</title></info>
       
 
       <para>These definitions contain more architecture specific information,
@@ -425,10 +425,10 @@ File f[]=<emphasis role="bold">fw.getFiles()</emphasis> //wait-for-files to arri
       overridden if specified.</para>
     </section>
 
-    <section><info><title>How Deployment File Transfer Works</title></info>
+    <section xml:id="HowDeploymentFileTransferWorks_67"><info><title>How Deployment File Transfer Works</title></info>
       
 
-      <figure><info><title>File Transfer Design</title></info>
+      <figure><info><title xml:id="FileTransferDesign_67">File Transfer Design</title></info>
         
 
         <mediaobject>
@@ -448,7 +448,7 @@ File f[]=<emphasis role="bold">fw.getFiles()</emphasis> //wait-for-files to arri
       deployment will take place.</para>
     </section>
 
-    <section><info><title>How File Transfer API Works</title></info>
+    <section xml:id="HowFileTransferAPIWorks_67"><info><title>How File Transfer API Works</title></info>
       
 
       <para>The File Transfer API is built on top of ProActive's active object
@@ -459,7 +459,7 @@ File f[]=<emphasis role="bold">fw.getFiles()</emphasis> //wait-for-files to arri
       invocations between these two AO.</para>
     </section>
 
-    <section><info><title>How Retrieve File Transfer Works</title></info>
+    <section xml:id="HowRetrieveFileTransferWorks_67"><info><title>How Retrieve File Transfer Works</title></info>
       
 
       <para>For a given virtualnode, a File Transfer pull will take place with

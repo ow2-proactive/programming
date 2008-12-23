@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Migration"><info><title>Mobile Agents And Migration</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Migration"><info><title xml:id="MobileAgentsAndMigration_77">Mobile Agents And Migration</title></info>
   
 
   <!--  File: /home/irosenbe/PA_new_doc/docbook-tuto/Migration.html  -->
 
-  <section><info><title>Migration Overview</title></info>
+  <section xml:id="MigrationOverview_77"><info><title>Migration Overview</title></info>
     
 
     <indexterm significance="preferred">
@@ -81,7 +81,7 @@
 
   </section>
 
-  <section><info><title>Using Migration</title></info>
+  <section xml:id="UsingMigration_77"><info><title>Using Migration</title></info>
     
 
     <para>Any active object has the ability to migrate. If it references some
@@ -101,7 +101,7 @@
     its <literal>moveTo(String)</literal> method.</para>
   </section>
 
-  <section><info><title>Complete example</title></info>
+  <section xml:id="Completeexample_77"><info><title>Complete example</title></info>
     
 	<!-- TODO code hasn't been run, check it really works -->
     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/migration/migration_example.txt"/></textobject></programlisting>
@@ -129,7 +129,7 @@
     </para>
   </section>
 
-  <section><info><title>Dealing with non-serializable attributes</title></info>
+  <section xml:id="Dealingwithnonserializableattributes_77"><info><title>Dealing with non-serializable attributes</title></info>
     
 
 	<para>Implementing a MigrationStrategy (specifying what to do on departure
@@ -152,7 +152,7 @@
 
     </para>
     
-    <section><info><title> Using The <literal>MigrationStrategyManager</literal> Interface</title></info>
+    <section xml:id="UsingTheliteralMigrationStrategyManagerliteralInterface_77"><info><title>Using The <literal>MigrationStrategyManager</literal> Interface</title></info>
     	
     	<para>We can  use the methods <literal>onArrival(String) </literal>
     	and <literal>onDeparture(String) </literal> to specify which methods will
@@ -185,12 +185,12 @@
     </section>
   </section>
 
-  <section><info><title>Mixed Location Migration</title></info>
+  <section xml:id="MixedLocationMigration_77"><info><title>Mixed Location Migration</title></info>
     
 
     <para/>
 
-    <section><info><title>Forwarders And Agents</title></info>
+    <section xml:id="ForwardersAndAgents_77"><info><title>Forwarders And Agents</title></info>
       
 
       <para>There are two way to communicate with an active object which has
@@ -257,7 +257,7 @@
       both performance and reliability.</para>
 
       </section>
-      <section><info><title>Forwarder And Agent Parameters</title></info>
+      <section xml:id="ForwarderAndAgentParameters_77"><info><title>Forwarder And Agent Parameters</title></info>
       	
       	<para>Forwarders and agents have several parameters which control their behaviour:</para>
       	<itemizedlist>
@@ -324,7 +324,7 @@
 
 
 
-      <section><info><title>Configuration File</title></info>
+      <section xml:id="ConfigurationFile_77"><info><title>Configuration File</title></info>
       	
             <para>As a default, ProActive uses a "Forwarder based" strategy .
              It means that the forwarders have a unlimited lifetime and the agent never updates the location server.</para>
@@ -337,7 +337,7 @@
     </section>
         
       
-      <section><info><title>Location Server</title></info>
+      <section xml:id="LocationServer_77"><info><title>Location Server</title></info>
       	<!-- TODO where is the script for launching the migration server? -->
         
 

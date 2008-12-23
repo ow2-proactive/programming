@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="writingProActiveDocumentation"><info><title>How to write ProActive documentation</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="writingProActiveDocumentation"><info><title xml:id="HowtowriteProActivedocumentation_42">How to write ProActive documentation</title></info>
  
   
  
-  <section xml:id="ReasonForDocumentationChapter"><info><title>Aim of this chapter</title></info>
+  <section xml:id="ReasonForDocumentationChapter"><info><title xml:id="Aimofthischapter_42">Aim of this chapter</title></info>
    
    
    <para>This chapter is meant to help you as a reference for 
@@ -20,7 +20,7 @@
 </section>
 
 
-<section xml:id="DocBookQuickStart"><info><title>Getting a quick start into writing ProActive doc</title></info>
+<section xml:id="DocBookQuickStart"><info><title xml:id="GettingaquickstartintowritingProActivedoc_42">Getting a quick start into writing ProActive doc</title></info>
  
  
  <para> First off, all the documentation is written in 
@@ -94,14 +94,14 @@
  </orderedlist>
 </section>
 
-<section xml:id="DocBookExamples"><info><title>Example use of tags</title></info>
+<section xml:id="DocBookExamples"><info><title xml:id="Exampleuseoftags_42">Example use of tags</title></info>
  
  
  <para>These are the basic rules to follow to use docbook tags. This document 
   is made up of the files in the <literal>docBookTutorial</literal> directory, and
   you may find it with the other manual files in the 'doc-src' directory.</para>
  
- <section><info><title>Summary of the useful tags</title></info>
+ <section xml:id="Summaryoftheusefultags_42"><info><title>Summary of the useful tags</title></info>
   
   
   <para>The main tags/structures you should be using are: </para>
@@ -152,12 +152,12 @@
      paste!</emphasis></para></note>
  </section>
  
- <section xml:id="Figures"><info><title>Figures</title></info>
+ <section xml:id="Figures"><info><title xml:id="Figures_42">Figures</title></info>
   
   
   <para>This is the figure example. Please use the TITLE tag</para>
   
-  <figure><info><title>A Drawing using the FIGURE tag</title></info>
+  <figure><info><title xml:id="ADrawingusingtheFIGUREtag_42">A Drawing using the FIGURE tag</title></info>
    
    
    <mediaobject>
@@ -169,7 +169,7 @@
   </figure>
  </section>
  
- <section xml:id="Bullets"><info><title>Bullets</title></info>
+ <section xml:id="Bullets"><info><title xml:id="Bullets_42">Bullets</title></info>
   
   
   <para>Use ITEMIZEDLIST followed by as many 'LISTITEM's as you want!
@@ -190,7 +190,7 @@
    </itemizedlist></para>
  </section>
  
- <section xml:id="Code"><info><title>Code</title></info>
+ <section xml:id="Code"><info><title xml:id="Code_42">Code</title></info>
   
   
   <para>Code sources should be written between PROGRAMLISTING tags (possiblibly lang="java" or "xml" ). 
@@ -210,10 +210,10 @@
   <para>Within normal text, for instance in a paragraph, you can also just use 
    the LITERAL tag to highlight the  <literal>main</literal> methods.</para>
   
-  <example><info><title>JAVA program listing with file inclusion</title></info><para/></example>
+  <example><info><title xml:id="JAVAprogramlistingwithfileinclusion_42">JAVA program listing with file inclusion</title></info><para/></example>
    <programlisting xml:lang="java"><textobject><textdata fileref="examples/hello/TinyHello.java"/></textobject></programlisting>
   
-  <example><info><title>XML program listing with file inclusion</title></info>
+  <example><info><title xml:id="XMLprogramlistingwithfileinclusion_42">XML program listing with file inclusion</title></info>
      <para/>
      </example>
    
@@ -278,7 +278,7 @@ public class Dummy {
    
   </section>
   
-  <section xml:id="Links"><info><title>Links</title></info>
+  <section xml:id="Links"><info><title xml:id="Links_42">Links</title></info>
    
    
    <para>Use XREF tags to point to the Figures id (<xref linkend="Figures"/>) 
@@ -304,12 +304,12 @@ public class Dummy {
    
   </section>
   
-  <section xml:id="Tables"><info><title>Tables</title></info>
+  <section xml:id="Tables"><info><title xml:id="Tables_42">Tables</title></info>
    
    
    <para>The tag to use is TABLE.</para>
    
-   <informaltable><info><title>This is an example table</title></info>
+   <informaltable><info><title xml:id="Thisisanexampletable_42">This is an example table</title></info>
     
     
     <tgroup cols="2">
@@ -342,7 +342,7 @@ public class Dummy {
  
  
   
- <section xml:id="DocBookLimitations"><info><title>DocBok limitations imposed</title></info>
+ <section xml:id="DocBookLimitations"><info><title xml:id="DocBoklimitationsimposed_42">DocBok limitations imposed</title></info>
   
   
   <para>Here is described what is allowed in our docbook style. We restrict
@@ -366,7 +366,7 @@ public class Dummy {
    </itemizedlist>  
    </para>
 </section>
-<section xml:id="DocBookCustomization"><info><title>Stylesheet Customization</title></info>
+<section xml:id="DocBookCustomization"><info><title xml:id="StylesheetCustomization_42">Stylesheet Customization</title></info>
  
  
  <para>Ok, now you're nearly a docbook guru? You want to get right down to
@@ -374,7 +374,7 @@ public class Dummy {
   notes on how you should go about customizing the output. That means,
   changing how the pdf and html are written.</para>
 
-  <section xml:id="xsl.directory"><info><title>File hierarchy</title></info>
+  <section xml:id="xsl.directory"><info><title xml:id="Filehierarchy_42">File hierarchy</title></info>
   
   
   <para>The files for configuration are the following:</para>
@@ -412,7 +412,7 @@ public class Dummy {
   
  </section>
  
- <section><info><title>What you can change</title></info>
+ <section xml:id="Whatyoucanchange_42"><info><title>What you can change</title></info>
   
   
   <para>Basically, in the customization layers, you have full control (just
@@ -421,7 +421,7 @@ public class Dummy {
    As customization can get cryptic, make a special effort!</para>
  </section>
  
- <section><info><title>The Bible</title></info>
+ <section xml:id="TheBible_42"><info><title>The Bible</title></info>
   
   
   <para>The book you want to have with you is the following: "DocBook XSL:
@@ -435,7 +435,7 @@ public class Dummy {
  </section>
  
  
- <section xml:id="xsl.profiling"><info><title>Profiling</title></info>
+ <section xml:id="xsl.profiling"><info><title xml:id="Profiling_42">Profiling</title></info>
   
   <para>If you want to write some stuff that should go in pdf but not html, or vice-versa, 
    you want to do some "profiling". This is very easy to do, as it was needed and tuned 
@@ -447,7 +447,7 @@ public class Dummy {
    and using the "role" attribute is discouraged. </para>
  </section>
  
- <section xml:id="xsl.debugging"><info><title>The XSL debugging nightmare</title></info>
+ <section xml:id="xsl.debugging"><info><title xml:id="TheXSLdebuggingnightmare_42">The XSL debugging nightmare</title></info>
   
   
   <para>If you are editing the xsl stylesheets, and are having a hard time figuring
@@ -475,7 +475,7 @@ public class Dummy {
   </para>
  </section>
  
- <section xml:id="customizingTheDTD"><info><title>DocBook subset: the dtd</title></info>
+ <section xml:id="customizingTheDTD"><info><title xml:id="DocBooksubsetthedtd_42">DocBook subset: the dtd</title></info>
   
   
   <para>The dtd is the file detailling which are the allowed tags in our
@@ -493,7 +493,7 @@ public class Dummy {
    the previous version one will always be used. </para>
  </section>
  
- <section><info><title>Todo list, provided by Denis</title></info>
+ <section xml:id="TodolistprovidedbyDenis_42"><info><title>Todo list, provided by Denis</title></info>
   
   
   <orderedlist>
@@ -516,15 +516,15 @@ public class Dummy {
  
  </section>
  
-<section xml:id="DocAntTargets"><info><title>Ant targets for building the documentation</title></info>
-	<section xml:id="JavadocTargets"><info><title>Javadoc ant targets</title></info>
+<section xml:id="DocAntTargets"><info><title xml:id="Anttargetsforbuildingthedocumentation_42">Ant targets for building the documentation</title></info>
+	<section xml:id="JavadocTargets"><info><title xml:id="Javadocanttargets_42">Javadoc ant targets</title></info>
 	<para>
 	</para>
 	</section>
-	<section xml:id="ManualTargets"><info><title>Manual generation ant targets</title></info>
+	<section xml:id="ManualTargets"><info><title xml:id="Manualgenerationanttargets_42">Manual generation ant targets</title></info>
 	<para>
 	</para>
-	<figure><info><title>Main ant targets used in manual generation</title></info>
+	<figure><info><title xml:id="Mainanttargetsusedinmanualgeneration_42">Main ant targets used in manual generation</title></info>
 	<mediaobject>
     <imageobject>
      <imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="images/documentation_process.png" format="PNG"/>

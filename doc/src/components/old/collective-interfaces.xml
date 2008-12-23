@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="collective-interfaces"><info><title>Collective interfaces</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="collective-interfaces"><info><title xml:id="Collectiveinterfaces_44">Collective interfaces</title></info>
 	
 
 	<para>
@@ -15,7 +15,7 @@
 		collective communications at the level of the interfaces.
 	</para>
 
-	<section><info><title>Motivations</title></info>
+	<section xml:id="Motivations_44"><info><title>Motivations</title></info>
 		
 
 		<para>
@@ -91,10 +91,10 @@
 		</para>
 	</section>
 
-	<section><info><title>Multicast interfaces</title></info>
+	<section xml:id="Multicastinterfaces_44"><info><title>Multicast interfaces</title></info>
 		
 
-		<section><info><title>Definition</title></info>
+		<section xml:id="Definition_44"><info><title>Definition</title></info>
 			
 
 			<para>
@@ -145,7 +145,7 @@
 			</para>
 		</section>
 
-		<section><info><title>Data distribution</title></info>
+		<section xml:id="Datadistribution_44"><info><title>Data distribution</title></info>
 			
 
 			<para>
@@ -199,7 +199,7 @@
 				parameters is automatic.
 			</para>
 
-			<section><info><title>Invocation parameters distribution modes</title></info>
+			<section xml:id="Invocationparametersdistributionmodes_44"><info><title>Invocation parameters distribution modes</title></info>
 				
 
 				<para>
@@ -259,7 +259,7 @@
 				</para>
 			</section>
 
-			<section><info><title>Results</title></info>
+			<section xml:id="Results_44"><info><title>Results</title></info>
 				
 
 				<para>
@@ -286,7 +286,7 @@
 			</section>
 		</section>
 
-		<section><info><title>Configuration through annotations</title></info>
+		<section xml:id="Configurationthroughannotations_44"><info><title>Configuration through annotations</title></info>
 			
 
 			<para>
@@ -309,7 +309,7 @@
 				the distribution mode.
 			</para>
 
-			<section><info><title>Interface annotations</title></info>
+			<section xml:id="Interfaceannotations_44"><info><title>Interface annotations</title></info>
 				
 
 				<para>
@@ -342,7 +342,7 @@
 				</para>
 			</section>
 
-			<section><info><title>Method annotations</title></info>
+			<section xml:id="Methodannotations_44"><info><title>Method annotations</title></info>
 				
 
 				<para>
@@ -372,7 +372,7 @@
 				</para>
 			</section>
 
-			<section><info><title>Parameter annotations</title></info>
+			<section xml:id="Parameterannotations_44"><info><title>Parameter annotations</title></info>
 				
 
 				<para>
@@ -394,7 +394,7 @@
 				</para>
 			</section>
 
-			<section><info><title>Automatic type conversion</title></info>
+			<section xml:id="Automatictypeconversion_44"><info><title>Automatic type conversion</title></info>
 				
 
 				<para>
@@ -424,7 +424,7 @@
 			</section>
 		</section>
 
-		<section><info><title>Binding compatibility</title></info>
+		<section xml:id="Bindingcompatibility_44"><info><title>Binding compatibility</title></info>
 			
 
 			<para>
@@ -551,10 +551,10 @@
 		</section>
 	</section>
 
-	<section><info><title>Gathercast interfaces</title></info>
+	<section xml:id="Gathercastinterfaces_44"><info><title>Gathercast interfaces</title></info>
 		
 
-		<section><info><title>Definition</title></info>
+		<section xml:id="Definition_44"><info><title>Definition</title></info>
 			
 
 			<para>
@@ -599,7 +599,7 @@
 			</figure>
 		</section>
 
-		<section><info><title>Data distribution</title></info>
+		<section xml:id="Datadistribution_44"><info><title>Data distribution</title></info>
 			
 
 			<para>
@@ -609,7 +609,7 @@
 				each client interface.
 			</para>
 
-			<section><info><title>Gathering of invocation parameters</title></info>
+			<section xml:id="Gatheringofinvocationparameters_44"><info><title>Gathering of invocation parameters</title></info>
 				
 
 				<para>
@@ -636,7 +636,7 @@
 				</para>
 			</section>
 
-			<section><info><title>Redistribution of results</title></info>
+			<section xml:id="Redistributionofresults_44"><info><title>Redistribution of results</title></info>
 				
 
 				<para>
@@ -658,7 +658,7 @@
 			</section>
 		</section>
 
-		<section><info><title>Process synchronization</title></info>
+		<section xml:id="Processsynchronization_44"><info><title>Process synchronization</title></info>
 			
 
 			<para>
@@ -731,7 +731,7 @@
 
 		</section>
 
-		<section><info><title>Binding compatibility</title></info>
+		<section xml:id="Bindingcompatibility_44"><info><title>Binding compatibility</title></info>
 			
 
 			<para>

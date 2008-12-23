@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="XML_Descriptors"><info><title>XML Deployment Descriptors</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="XML_Descriptors"><info><title xml:id="XMLDeploymentDescriptors_1">XML Deployment Descriptors</title></info>
   
 
   <indexterm>
@@ -7,7 +7,7 @@
     <secondary>definition</secondary>
   </indexterm>
 
-  <section xml:id="Descriptor_html_objectives"><info><title>Objectives</title></info>
+  <section xml:id="Descriptor_html_objectives"><info><title xml:id="Objectives_1">Objectives</title></info>
     
 
     <para>Parameters tied to the deployment of an application should be
@@ -102,7 +102,7 @@
     source code</para>
   </section>
 
-  <section xml:id="Descriptor_Principles"><info><title>Principles</title></info>
+  <section xml:id="Descriptor_Principles"><info><title xml:id="Principles_1">Principles</title></info>
     
 
     <itemizedlist>
@@ -294,10 +294,10 @@
     get nodes associated to VirtualNodes.</para>
   </section>
 
-  <section xml:id="Descriptor_html_vn"><info><title>Different types of VirtualNodes</title></info>
+  <section xml:id="Descriptor_html_vn"><info><title xml:id="DifferenttypesofVirtualNodes_1">Different types of VirtualNodes</title></info>
     
 
-    <section><info><title>VirtualNodes Definition</title></info>
+    <section xml:id="VirtualNodesDefinition_1"><info><title>VirtualNodes Definition</title></info>
       
 
       <para><itemizedlist>
@@ -471,7 +471,7 @@
         </itemizedlist></para>
     </section>
 
-    <section><info><title>VirtualNodes Acquisition</title></info>
+    <section xml:id="VirtualNodesAcquisition_1"><info><title>VirtualNodes Acquisition</title></info>
       
 
       <indexterm>
@@ -552,10 +552,10 @@
     </section>
   </section>
 
-  <section xml:id="Descriptor_html_jvms"><info><title>Different types of JVMs</title></info>
+  <section xml:id="Descriptor_html_jvms"><info><title xml:id="DifferenttypesofJVMs_1">Different types of JVMs</title></info>
     
 
-    <section><info><title>Creation</title></info>
+    <section xml:id="Creation_1"><info><title>Creation</title></info>
       
 
       <para><itemizedlist>
@@ -598,7 +598,7 @@
         </itemizedlist></para>
     </section>
 
-    <section><info><title>Acquisition</title></info>
+    <section xml:id="Acquisition_1"><info><title>Acquisition</title></info>
       
 
       <indexterm>
@@ -628,7 +628,7 @@
     </section>
   </section>
 
-  <section xml:id="Descriptor_html_validation"><info><title>Validation against XML Schema</title></info>
+  <section xml:id="Descriptor_html_validation"><info><title xml:id="ValidationagainstXMLSchema_1">Validation against XML Schema</title></info>
     
 
     <para>To avoid mistake when building XML descriptors, ProActive provides
@@ -651,7 +651,7 @@
     as XMLSPY5.0(windows) can also be used to validate XML descriptors.</para>
   </section>
 
-  <section><info><title>Complete description and examples</title></info>
+  <section xml:id="Completedescriptionandexamples_1"><info><title>Complete description and examples</title></info>
     
 
     <para>Following XML files examples are used for the C3D application. The
@@ -659,7 +659,7 @@
     read every time a C3DUser is added. Both files contain many features
     described earlier in this document.</para>
 
-    <example><info><title>C3D_Dispatcher_Render.xml</title></info>
+    <example><info><title xml:id="C3D_Dispatcher_Renderxml_1">C3D_Dispatcher_Render.xml</title></info>
     
       
 
@@ -739,7 +739,7 @@
     activated. <emphasis role="bold">Renderer</emphasis> is mapped to a set of
     JVMs called <emphasis role="bold">Jvm1</emphasis>, ..., <emphasis role="bold">Jvm4</emphasis>.</para>
 
-    <example><info><title>C3D_User.xml</title></info>
+    <example><info><title xml:id="C3D_Userxml_1">C3D_User.xml</title></info>
     
       
 
@@ -799,7 +799,7 @@
     the creation tag is <emphasis role="bold">localJVM</emphasis>, there must
     be a process defined in the <emphasis role="bold">infrastructure</emphasis> with the id <emphasis role="bold">localJVM</emphasis></para>
 
-    <section><info><title>Local JVMs</title></info>
+    <section xml:id="LocalJVMs_1"><info><title>Local JVMs</title></info>
       
 
       <indexterm>
@@ -910,7 +910,7 @@
 </screen>
     </section>
 
-    <section><info><title>Remote JVMs</title></info>
+    <section xml:id="RemoteJVMs_1"><info><title>Remote JVMs</title></info>
       
 
       <para>With XML Deployment Descriptor, <emphasis role="bold">ProActive</emphasis> provides the ability to create remote
@@ -1848,7 +1848,7 @@
       If you are not familiar with ssh, see <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.openssh.org">openSSH</link></para>
     </section>
 
-    <section><info><title>DependentListProcessDecorator</title></info>
+    <section xml:id="DependentListProcessDecorator_1"><info><title>DependentListProcessDecorator</title></info>
       
 
       <para>This process is used when a process is dependent on an another
@@ -1872,7 +1872,7 @@
     </section>
   </section>
 
-  <section xml:id="Descriptor_html_services"><info><title>Infrastructure and services</title></info>
+  <section xml:id="Descriptor_html_services"><info><title xml:id="Infrastructureandservices_1">Infrastructure and services</title></info>
     
 
     <para>As mentionned previously, instead of creating jvms, ProActive gives
@@ -1952,7 +1952,7 @@
     <para/>
   </section>
 
-  <section><info><title>How to terminate a ProActive application</title></info>
+  <section xml:id="HowtoterminateaProActiveapplication_1"><info><title>How to terminate a ProActive application</title></info>
     
 
     <indexterm>
@@ -1960,7 +1960,7 @@
 
       <secondary>Nodes</secondary>
     </indexterm>
-	<section><info><title>Destroying active objects</title></info>
+	<section xml:id="Destroyingactiveobjects_1"><info><title>Destroying active objects</title></info>
 		
 		<para>In the master slave paradigm, the master should wait for all of
 		its slaves to be known. Then all active objects can be destroyed by
@@ -2003,7 +2003,7 @@
 		termination (letting the DGC call it) trigger the calling of the potentially
 		overloaded endActivity() method in the terminated active object.</para>
 	</section>
-	<section><info><title>Killing JVMs</title></info>
+	<section xml:id="KillingJVMs_1"><info><title>Killing JVMs</title></info>
 		
 		<para>Once active objects are destroyed, JVMs must be killed in order
 		to complete the cleanup. Alternatively, one can focus on killing the
@@ -2036,7 +2036,7 @@ pad.killall(false);
     </section>
   </section>
 
-  <section><info><title>Processes</title></info>
+  <section xml:id="Processes_1"><info><title>Processes</title></info>
     
 
     <para>There is the possiblity to use only the infrastructure part in order

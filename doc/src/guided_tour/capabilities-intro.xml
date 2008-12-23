@@ -46,7 +46,7 @@
      a dozen rendering engines running in parallel that communicate using Java RMI
      and controlled by a central dispatcher.</para>
    
-    <figure><info><title>The active objects in the c3d application</title></info>
+    <figure><info><title xml:id="Theactiveobjectsinthec3dapplication_11">The active objects in the c3d application</title></info>
       
 
       <mediaobject>
@@ -79,7 +79,7 @@
 	</para>
 
 
-    <section><info><title>Start C3D</title></info>
+    <section xml:id="StartC3D_11"><info><title>Start C3D</title></info>
       
 
       <para>Using the script <literal>c3d_no_user</literal>, a "Dispatcher"
@@ -87,7 +87,7 @@
       objects, which are the active objects used for parallel
       rendering.</para>
 
-      <para><figure><info><title>The dispatcher GUI is launched</title></info>
+      <para><figure><info><title xml:id="ThedispatcherGUIislaunched_11">The dispatcher GUI is launched</title></info>
           
 
           <mediaobject>
@@ -103,14 +103,14 @@
       the renderers used in the current computation.</para>
     </section>
 
-    <section><info><title>Start a user from the local machine</title></info>
+    <section xml:id="Startauserfromthelocalmachine_11"><info><title>Start a user from the local machine</title></info>
       
 
       <para>To add a new user start <literal>Proactive/examples/c3d/c3d_add_user.sh</literal> or
       <literal>Proactive\examples\c3d\c3d_add_user.bat</literal> depending on your
       operating system.</para>
       
-            <para><figure><info><title>Add User dialog</title></info>
+            <para><figure><info><title xml:id="AddUserdialog_11">Add User dialog</title></info>
           
 
           <mediaobject>
@@ -156,7 +156,7 @@
       </note>
     </section>
 
-    <section><info><title>Start a user from another machine</title></info>
+    <section xml:id="Startauserfromanothermachine_11"><info><title>Start a user from another machine</title></info>
       
 
       <para>Using the <literal>c3d_add_user</literal> script, and
@@ -171,7 +171,7 @@
       starting some actions (or a timeout must occur before the action is initiated).</para>
     </section>
 
-      <section><info><title>Look at the source code for the main classes</title></info>
+      <section xml:id="Lookatthesourcecodeforthemain_11"><info><title>Look at the source code for the main classes</title></info>
       
 
       <para>The main classes of this application are:</para>
@@ -200,7 +200,7 @@
     </section>
   </section>
 
-  <section><info><title>Synchronization with ProActive</title></info>
+  <section xml:id="SynchronizationwithProActive_11"><info><title>Synchronization with ProActive</title></info>
     
 
     <para>ProActive provides an advanced synchronization mechanism that allows
@@ -219,7 +219,7 @@
       </listitem>
     </itemizedlist>
 
-    <section><info><title>The readers-writers</title></info>
+    <section xml:id="Thereaderswriters_11"><info><title>The readers-writers</title></info>
       
 
       <para>The readers and the writers want to access the same data. In order
@@ -232,7 +232,7 @@
       with ProActive</link> uses 3 active objects: Reader, Writer, and the
       controller class (ReaderWriter).</para>
 
-      <section><info><title>Start the application</title></info>
+      <section xml:id="Starttheapplication_11"><info><title>Start the application</title></info>
         
 
         <para>To start the application use <literal>Proactive/examples/readers/readers.sh</literal>
@@ -273,7 +273,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
 
      </section>
 
-    <section><info><title>The dining philosophers</title></info>
+    <section xml:id="Thediningphilosophers_11"><info><title>The dining philosophers</title></info>
       
 
       <para>The 'dining philosophers' problem is a classic exercise in
@@ -284,7 +284,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       philosophers are active objects, as well as the table (controller) and
       the dinner frame (user interface).</para>
 
-      <section><info><title>Start the philosophers application</title></info>
+      <section xml:id="Startthephilosophersapplication_11"><info><title>Start the philosophers application</title></info>
         
 
       <para>To start the application use <literal>Proactive/examples/philosophers/philosophers.sh</literal>
@@ -296,7 +296,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         of the application: DinnerLayout, Table, and Philosopher</para>
 
         <para>
-        	<figure><info><title>The Dining Philosophers Example</title></info>
+        	<figure><info><title xml:id="TheDiningPhilosophersExample_11">The Dining Philosophers Example</title></info>
             
             <mediaobject>
               <imageobject>
@@ -365,7 +365,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </section>
   </section>
 
-  <section><info><title>Migration of active objects</title></info>
+  <section xml:id="Migrationofactiveobjects_11"><info><title>Migration of active objects</title></info>
     
 
     <indexterm>
@@ -384,13 +384,13 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
     with each other. It also features the capability to move a swing window
     between screens while moving an agent from one JVM to the other.</para>
 
-    <section><info><title>Start the penguin application</title></info>
+    <section xml:id="Startthepenguinapplication_11"><info><title>Start the penguin application</title></info>
       
 
       <para>Using the <literal>migration/penguin</literal> script.</para>
     </section>
 
-    <section><info><title>Start IC2D to see what is going on</title></info>
+    <section xml:id="StartIC2Dtoseewhatisgoingon_11"><info><title>Start IC2D to see what is going on</title></info>
       
 
       <para>Using the <literal>ic2d</literal> script</para>
@@ -398,7 +398,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       <para>Acquire the machines you have started nodes on</para>
     </section>
 
-    <section><info><title>Add an agent</title></info>
+    <section xml:id="Addanagent_11"><info><title>Add an agent</title></info>
       
 
       <itemizedlist>
@@ -431,7 +431,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </itemizedlist>
     </section>
 
-    <section><info><title>Add several agents</title></info>
+    <section xml:id="Addseveralagents_11"><info><title>Add several agents</title></info>
       
 
       <para>After selecting them, use the buttons to:</para>
@@ -452,7 +452,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </itemizedlist>
     </section>
 
-    <section><info><title>Move the control window to another user</title></info>
+    <section xml:id="Movethecontrolwindowtoanotheruser_11"><info><title>Move the control window to another user</title></info>
       
 
       <itemizedlist>
@@ -467,7 +467,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
   <!-- add from the other chapters -->
   
   
-      <section><info><title>PI (3.14)</title></info>
+      <section xml:id="PI314_11"><info><title>PI (3.14)</title></info>
         
 		    <para>
 		        In this document we show how to create a distributed application
@@ -489,7 +489,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
             .
         </para>
 
-        <section><info><title>MyPi.java</title></info>
+        <section xml:id="MyPijava_11"><info><title>MyPi.java</title></info>
             
 
             <para>
@@ -502,7 +502,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
             <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/mypi.txt"/></textobject></programlisting>
         </section>
 
-        <section><info><title>Add the Deployment Descriptor</title></info>
+        <section xml:id="AddtheDeploymentDescriptor_11"><info><title>Add the Deployment Descriptor</title></info>
             
 
             <para>
@@ -513,31 +513,31 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
 
         </section>
 
-        <section><info><title>Instantiate The Remote Objects</title></info>
+        <section xml:id="InstantiateTheRemoteObjects_11"><info><title>Instantiate The Remote Objects</title></info>
             
 
             <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/mypi.txt"/></textobject></programlisting>
         </section>
 
-        <section><info><title>Divide, Compute and Conquer</title></info>
+        <section xml:id="DivideComputeandConquer_11"><info><title>Divide, Compute and Conquer</title></info>
             
 
             <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/divide_work.txt"/></textobject></programlisting>
         </section>
 
-        <section><info><title>Cleanup</title></info>
+        <section xml:id="Cleanup_11"><info><title>Cleanup</title></info>
             
 
             <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/clean_up.txt"/></textobject></programlisting>
         </section>
 
-        <section><info><title>Executing the application</title></info>
+        <section xml:id="Executingtheapplication_11"><info><title>Executing the application</title></info>
             
             <programlisting><textobject><textdata fileref="guided_tour/code_snippets/execute_pi.txt"/></textobject></programlisting>
         </section>
     </section>
 
-    <section><info><title>Putting it all together</title></info>
+    <section xml:id="Puttingitalltogether_11"><info><title>Putting it all together</title></info>
         
 
             <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/allpi.txt"/></textobject></programlisting>
@@ -550,15 +550,15 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
   
   <!-- TODO what the hell does this program compute anyway? -->
   
-  <section xml:id="OOSPMDJacobiexample"><info><title>OO SPMD on a Jacobi example</title></info>
+  <section xml:id="OOSPMDJacobiexample"><info><title xml:id="OOSPMDonaJacobiexample_11">OO SPMD on a Jacobi example</title></info>
     
 	<para>If you want to learn more about the OO SPMD programming model before
 	  reading this example, you should take a look at <xref linkend="OOSPMD"/>.</para> 
 
-    <section><info><title>Execution and first glance at the Jacobi code</title></info>
+    <section xml:id="ExecutionandfirstglanceattheJacobicode_11"><info><title>Execution and first glance at the Jacobi code</title></info>
       
 
-      <section><info><title>Source files:
+      <section><info><title >Source files:
         ProActive/src/Examples/org/objectweb/proactive/examples/jacobi</title></info>
         
 
@@ -583,7 +583,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         SubMatrix.java later on.</para>
       </section>
 
-      <section><info><title>Execution</title></info>
+      <section xml:id="Execution_11"><info><title>Execution</title></info>
         
 
         <para>Each ProActive example comes with an easy to launch script for
@@ -646,10 +646,10 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </section>
     </section>
 
-    <section><info><title>Modification and compilation</title></info>
+    <section xml:id="Modificationandcompilation_11"><info><title>Modification and compilation</title></info>
       
 
-      <section><info><title>Source modification</title></info>
+      <section xml:id="Sourcemodification_11"><info><title>Source modification</title></info>
         
 
         <para>Do a simple source modification, for instance changing the
@@ -661,7 +661,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         constants.</para>
       </section>
 
-      <section><info><title>Compilation</title></info>
+      <section xml:id="Compilation_11"><info><title>Compilation</title></info>
         
 
         <para>ProActive distribution comes with scripts to easily recompile
@@ -682,10 +682,10 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </section>
     </section>
 
-    <section><info><title>Detailed understanding of the OO SPMD Jacobi</title></info>
+    <section xml:id="DetailedunderstandingoftheOOSPMDJacobi_11"><info><title>Detailed understanding of the OO SPMD Jacobi</title></info>
       
 
-      <section><info><title>Structure of the code</title></info>
+      <section xml:id="Structureofthecode_11"><info><title>Structure of the code</title></info>
         
 
         <para>Within the class SubMatrix.java the following methods correspond
@@ -783,7 +783,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>We will detail them in the next section.</para>
       </section>
 
-      <section><info><title>OO SPMD behavior</title></info>
+      <section xml:id="OOSPMDbehavior_11"><info><title>OO SPMD behavior</title></info>
         
 
         <para>Let us describe the OO SPMD techniques which are used and the
@@ -832,7 +832,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         ProActive will simplify this process.</para>
       </section>
 
-      <section><info><title>Adding a method barrier for a step by step execution</title></info>
+      <section xml:id="Addingamethodbarrierforastepby_11"><info><title>Adding a method barrier for a step by step execution</title></info>
         
 
         <para>Let's say we would like to control step by step the execution of
@@ -867,7 +867,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>You can try and test other modifications to the Jacobi
         code.</para>
 
-        <figure><info><title>Running the Jacobi application, and viewing with IC2D</title></info>
+        <figure><info><title xml:id="RunningtheJacobiapplicationandviewingwithIC2D_11">Running the Jacobi application, and viewing with IC2D</title></info>
           
 
           <indexterm>
@@ -884,7 +884,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         </figure>
       </section>
 
-      <section><info><title>Understanding various different kind of barriers</title></info>
+      <section xml:id="Understandingvariousdifferentkindofbarriers_11"><info><title>Understanding various different kind of barriers</title></info>
         
 
         <para>The group of neighbors built above is important wrt
@@ -908,7 +908,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>Then recompile and execute again. Using IC2D observe that much
         more communications are necessary.</para>
 
-        <figure><info><title>With all communications</title></info>
+        <figure><info><title xml:id="Withallcommunications_11">With all communications</title></info>
           
 
           <mediaobject>
@@ -918,7 +918,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
           </mediaobject>
         </figure>
 
-        <figure><info><title>With a barrier, there are many less communications</title></info>
+        <figure><info><title xml:id="Withabarriertherearemanylesscommunications_11">With a barrier, there are many less communications</title></info>
           
 
           <mediaobject>
@@ -933,10 +933,10 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </section>
     </section>
 
-    <section><info><title>Virtual Nodes and Deployment descriptors</title></info>
+    <section xml:id="VirtualNodesandDeploymentdescriptors_11"><info><title>Virtual Nodes and Deployment descriptors</title></info>
       
 
-      <section><info><title>Virtual Nodes</title></info>
+      <section xml:id="VirtualNodes_11"><info><title>Virtual Nodes</title></info>
         
 
         <para>Now, we will return to the source code of Jacobi.java to
@@ -944,7 +944,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         used.</para>
       </section>
 
-      <section><info><title>XML Descriptors</title></info>
+      <section xml:id="XMLDescriptors_11"><info><title>XML Descriptors</title></info>
         
 
         <para>The XML descriptor being used is:</para>
@@ -974,7 +974,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>A detailed presentation of XML descriptors is available in <xref linkend="Descriptor_html_objectives"/>.</para>
       </section>
 
-      <section><info><title>Changing the descriptor</title></info>
+      <section xml:id="Changingthedescriptor_11"><info><title>Changing the descriptor</title></info>
         
 
         <para>Edit the file Matrix.xml in order to change the number of JVMs
@@ -997,10 +997,10 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </section>
     </section>
 
-    <section><info><title>Execution on several machines and Clusters</title></info>
+    <section xml:id="ExecutiononseveralmachinesandClusters_11"><info><title>Execution on several machines and Clusters</title></info>
       
 
-      <section><info><title>Execution on several machines in the room</title></info>
+      <section xml:id="Executiononseveralmachinesintheroom_11"><info><title>Execution on several machines in the room</title></info>
         
 
         <para>
@@ -1046,7 +1046,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         once connected to those machines with rsh.</para>
 	  </section>
 	  
-      <section><info><title>Execution on Clusters</title></info>
+      <section xml:id="ExecutiononClusters_11"><info><title>Execution on Clusters</title></info>
         
 
         <para>If you have access to your own cluster, configure the XML
@@ -1064,10 +1064,10 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
 
   <!-- Pi MPI -> Pi ProActive -->
 
-  <section><info><title>An MPI to ProActive example through an Integral Pi application</title></info>
+  <section xml:id="AnMPItoProActiveexamplethroughanIntegral_11"><info><title>An MPI to ProActive example through an Integral Pi application</title></info>
     
 
-    <section><info><title>Introduction</title></info>
+    <section xml:id="Introduction_11"><info><title>Introduction</title></info>
       
 
       <para>In this chapter we are going to see a simple example of an MPI
@@ -1109,10 +1109,10 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </itemizedlist>
     </section>
 
-    <section><info><title>Initialization</title></info>
+    <section xml:id="Initialization_11"><info><title>Initialization</title></info>
       
 
-      <section><info><title>MPI Initialization primitives</title></info>
+      <section xml:id="MPIInitializationprimitives_11"><info><title>MPI Initialization primitives</title></info>
         
 
         <para>Some basic primitives are used, notice that MPI provides a rank
@@ -1122,7 +1122,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <programlisting><textobject><textdata fileref="guided_tour/code_snippets/mpi_primitives.txt"/></textobject></programlisting>
       </section>
 
-      <section><info><title>ProActive Initialization primitives</title></info>
+      <section xml:id="ProActiveInitializationprimitives_11"><info><title>ProActive Initialization primitives</title></info>
         
 
         <para>First we need to create the group of workers (MPI processes
@@ -1144,10 +1144,10 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </section>
     </section>
 
-    <section><info><title>Communication primitives</title></info>
+    <section xml:id="Communicationprimitives_11"><info><title>Communication primitives</title></info>
       
 
-      <section><info><title>Communication pattern</title></info>
+      <section xml:id="Communicationpattern_11"><info><title>Communication pattern</title></info>
         
 
         <para>The communication pattern is very simple, it's done in 2 steps.
@@ -1155,7 +1155,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         other process and sums the received values.</para>
       </section>
 
-      <section><info><title>MPI Approach</title></info>
+      <section xml:id="MPIApproach_11"><info><title>MPI Approach</title></info>
         
 
         <para>The MPI implementation involves 3 communication primitives
@@ -1184,7 +1184,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <programlisting><textobject><textdata fileref="guided_tour/code_snippets/mpi_code.txt"/></textobject></programlisting>
       </section>
 
-      <section><info><title>ProActive Approach</title></info>
+      <section xml:id="ProActiveApproach_11"><info><title>ProActive Approach</title></info>
         
 
         <para>The ProActive implementation is quite similar to MPI one. The
@@ -1203,7 +1203,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
       </section>
     </section>
 
-    <section><info><title>Running the ProActive example</title></info>
+    <section xml:id="RunningtheProActiveexample_11"><info><title>Running the ProActive example</title></info>
       
 
         <para>In ProActive/examples/integralPi or windows run integralpi.sh or .bat,
@@ -1218,9 +1218,9 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
   
 	<!-- NBODY -->
 	
-	<section xml:id="nbody"><info><title>The nbody example</title></info>
+	<section xml:id="nbody"><info><title xml:id="Thenbodyexample_11">The nbody example</title></info>
     
-        <section><info><title>Rationale and overview</title></info>
+        <section xml:id="Rationaleandoverview_11"><info><title>Rationale and overview</title></info>
             
             <para>
                 This section of the guided tour goes through the
@@ -1389,7 +1389,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 </informaltable>
             </para>
         </section>
-        <section><info><title>Usage</title></info>
+        <section xml:id="Usage_11"><info><title>Usage</title></info>
             
             <para>
                 With the script located in the folder
@@ -1493,7 +1493,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 </listitem>
             </itemizedlist>
         </section>
-        <section><info><title>
+        <section><info><title >
                 Source files:
                 ProActive/src/org/objectweb/proactive/examples/nbody
             </title></info>
@@ -1505,7 +1505,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 You'll find the following tree:
             </para>
             <para>
-                <figure><info><title>The nbody directory structure</title></info>
+                <figure><info><title xml:id="Thenbodydirectorystructure_11">The nbody directory structure</title></info>
                     
                     <mediaobject>
                         <imageobject>
@@ -1525,7 +1525,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 problem.
             </para>
         </section>
-        <section><info><title>Common files</title></info>
+        <section xml:id="Commonfiles_11"><info><title>Common files</title></info>
             
             <para>
                 The files contained in 'common' are those that are
@@ -1650,7 +1650,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 of the simplest implementation of the n-body problem.
             </para>
         </section>
-        <section><info><title>Simple Active Objects</title></info>
+        <section xml:id="SimpleActiveObjects_11"><info><title>Simple Active Objects</title></info>
             
             <para>
                 This is the implementation of the simplest example of
@@ -1791,7 +1791,7 @@ public void setValue(Planet inf, int id) {
                 .
             </para>
         </section>
-        <section><info><title>Groups of Active objects</title></info>
+        <section xml:id="GroupsofActiveobjects_11"><info><title>Groups of Active objects</title></info>
             
             <para>
                 This is a simple improvement, which results in faster
@@ -1901,7 +1901,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section><info><title>Group Distribution</title></info>
+        <section xml:id="GroupDistribution_11"><info><title>Group Distribution</title></info>
             <!-- TODO title might be wrong -->
             
             <para>
@@ -1976,7 +1976,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section><info><title>Object Oriented SPMD Groups</title></info>
+        <section xml:id="ObjectOrientedSPMDGroups_11"><info><title>Object Oriented SPMD Groups</title></info>
             
             <para>
                 This is another way to improve the groupcom example. It
@@ -2028,7 +2028,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section><info><title>Barnes-Hut</title></info>
+        <section xml:id="BarnesHut_11"><info><title>Barnes-Hut</title></info>
             
             <para>
                 This way to construct the nbody simulation is based on a
@@ -2143,7 +2143,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section><info><title>Conclusion</title></info>
+        <section xml:id="Conclusion_11"><info><title>Conclusion</title></info>
             
             <para>
                 In this guided tour, we tried to show different
@@ -2165,7 +2165,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
 	
 	<!-- COMPONENTS -->
 	
-    <section xml:id="C3D_component_example"><info><title>C3D - from Active Objects to Components</title></info>
+    <section xml:id="C3D_component_example"><info><title xml:id="C3DfromActiveObjectstoComponents_11">C3D - from Active Objects to Components</title></info>
     
         <para>
             This is an example of an application that is refactored to
@@ -2189,7 +2189,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             directory of the proactive source.
         </para>
     </section>
-    <section><info><title>Using working C3D code with components</title></info>
+    <section xml:id="UsingworkingC3Dcodewithcomponents_11"><info><title>Using working C3D code with components</title></info>
         
         <para>
             <figure><info><title>
@@ -2218,7 +2218,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             be implemented.
         </para>
     </section>
-    <section><info><title>How the application is written</title></info>
+    <section xml:id="Howtheapplicationiswritten_11"><info><title>How the application is written</title></info>
         
         <para>
             First of all, have a look at the doc on C3D to remember how
@@ -2229,7 +2229,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             only objects worth wrapping in components were those three.
             The rest is too small to be worth the hassle.
         </para>
-        <section><info><title>Creating the interfaces</title></info>
+        <section xml:id="Creatingtheinterfaces_11"><info><title>Creating the interfaces</title></info>
             
             <para>
                 What we need to do is to extract the interfaces of the
@@ -2281,7 +2281,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 design by separating behaviours.
             </para>
         </section>
-        <section><info><title>Creating the Component Wrappers</title></info>
+        <section xml:id="CreatingtheComponentWrappers_11"><info><title>Creating the Component Wrappers</title></info>
             
             <para>
                 You now have to create a class that englobes the
@@ -2368,7 +2368,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>           
+            <example><info><title xml:id="HowtorenameVirtualNodesinADLfiles_11">How to rename Virtual Nodes in ADL files</title></info>           
             
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
@@ -2408,7 +2408,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 </para>
             </note>
         </section>
-        <section><info><title>Component lookup and registration</title></info>
+        <section xml:id="Componentlookupandregistration_11"><info><title>Component lookup and registration</title></info>
             
             <para>
                 When running the User Component alone, you are prompted
@@ -2417,7 +2417,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 lookup mechanism. This is very simple to use. Here's the
                 code to do that:
             </para>
-            <example><info><title>Component Lookup and Registration</title></info>           
+            <example><info><title xml:id="ComponentLookupandRegistration_11">Component Lookup and Registration</title></info>           
             
                 
                 <para>The component Registration</para>
@@ -2454,7 +2454,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             </para>
         </section>
     </section>
-    <section><info><title>How to run this example</title></info>
+    <section xml:id="Howtorunthisexample_11"><info><title>How to run this example</title></info>
         
         <para>
             There is only one access point for this example in the
@@ -2490,7 +2490,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             org.objectweb.proactive.examples.components.c3d.adl.UserImpl
         </screen>
     </section>
-    <section><info><title>Source Code</title></info>
+    <section xml:id="SourceCode_11"><info><title>Source Code</title></info>
         
         <para>
             You may find the code of this application in the following
@@ -2515,7 +2515,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             </listitem>
         </itemizedlist>
     </section>
-		<section><info><title>Conclusion</title></info>
+		<section xml:id="Conclusion_11"><info><title>Conclusion</title></info>
 		
 	  <para>This tour was intended to guide you through an overview of ProActive.</para>
     

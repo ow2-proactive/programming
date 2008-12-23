@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="Installation"><info><title>ProActive Installation</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="Installation"><info><title xml:id="ProActiveInstallation_75">ProActive Installation</title></info>
 
   <para>ProActive is available for <link xlink:href="http://proactive.inria.fr/download_proactive_latest.htm"> download </link>under 
   the <link xlink:href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html"> GPL 2</link>
@@ -6,10 +6,10 @@
   on your computer. Please note that ProActive will NOT run with any 
   version prior to 1.5 since some features introduced in JDK 1.5 are essential.</para>
 
-  <section><info><title>ProActive Installation Overview</title></info>
+  <section xml:id="ProActiveInstallationOverview_75"><info><title>ProActive Installation Overview</title></info>
     
 
-    <section><info><title>Testing ProActive With The Examples</title></info>
+    <section xml:id="TestingProActiveWithTheExamples_75"><info><title>Testing ProActive With The Examples</title></info>
       
 
       <itemizedlist>
@@ -28,7 +28,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Developing With ProActive</title></info>
+    <section xml:id="DevelopingWithProActive_75"><info><title>Developing With ProActive</title></info>
       
 
       <itemizedlist>
@@ -68,10 +68,10 @@
     
   </section>
 
-  <section><info><title>ProActive Detailed Installation Steps</title></info>
+  <section xml:id="ProActiveDetailedInstallationSteps_75"><info><title>ProActive Detailed Installation Steps</title></info>
     
 
-    <section><info><title>Download And Expand The Archive</title></info>
+    <section xml:id="DownloadAndExpandTheArchive_75"><info><title>Download And Expand The Archive</title></info>
     	
     	<para>You can download the archive file (a standard zip file) containing 
     	ProActive from the <link xlink:href="http://proactive.inria.fr/download_proactive_latest.htm">
@@ -85,7 +85,7 @@
     	 command-line utility under most Linux/Unix systems. 
     	 Unzipping the archive creates a ProActive directory and all the files contained in 
     	 the archive go into this directory and its subdirectories.</para><para>Here is a quick 
-    	 overview of the directory structure of the archive:</para><informaltable frame="all"><info><title>ProActive.zip contents</title></info>
+    	 overview of the directory structure of the archive:</para><informaltable frame="all"><info><title xml:id="ProActivezipcontents_75">ProActive.zip contents</title></info>
       
 
       <tgroup cols="2">
@@ -171,7 +171,7 @@
     
 
 
-    <section><info><title>Set the <literal>CLASSPATH</literal> for using ProActive to write applications</title></info><indexterm significance="preferred">
+    <section xml:id="SettheliteralCLASSPATHliteralforusingProActive_75"><info><title>Set the <literal>CLASSPATH</literal> for using ProActive to write applications</title></info><indexterm significance="preferred">
       <primary>CLASSPATH</primary>
 
       <secondary>to run ProActive</secondary>
@@ -279,7 +279,7 @@
     	<literal> ProaActive/dist/lib</literal>.  
     </para>
     </section>
-    <section><info><title xml:id="Create_Java_Policy">Create a <literal>java.policy</literal> File To Set
+    <section xml:id="Create_Java_Policy"><info><title>Create a <literal>java.policy</literal> File To Set
     Permissions</title></info><para>See <link xlink:href="http://java.sun.com/j2se/1.5/docs/guide/security/permissions.html">Permissions
     in the JavaTM 2 SDK</link> to learn more about Java permissions. The
     option <literal>-Djava.security.policy=pathToFile</literal> will specify which security policy file to
@@ -295,7 +295,7 @@
  	<literal>proactive.java.policy</literal>
  	will be used by default.
 	</para></note></section>
-    <section>    <info><title>A simple proactive-log4j file</title></info>
+    <section xml:id="Asimpleproactivelog4jfile_75"><info><title>A simple proactive-log4j file</title></info>
 <indexterm>
       <primary>Log4j</primary>
 
@@ -319,11 +319,11 @@
       examples an existing log4j file named <literal>proactive-log4j</literal>
       will be used by default.</para>
     </note></section>
-    <section><info><title>Run A Few Examples For Testing</title></info><para>You can try to run the test applications provided with ProActive.
+    <section xml:id="RunAFewExamplesForTesting_75"><info><title>Run A Few Examples For Testing</title></info><para>You can try to run the test applications provided with ProActive.
      Each example comes with a script to launch the application. Depending on your
       operating system, the script you need to launch is located either in<literal> ProActive/scripts/unix </literal> or
     <literal>ProActive/scripts/windows</literal>. The source code of all the examples can be found in the directory <literal>ProActive/src/Examples/org/objectweb/proactive/examples/</literal>.</para>
-    	<section><info><title>Reader/Writer</title></info><para>This example is the ProActive version of the Readers/Writers
+    	<section xml:id="ReaderWriter_75"><info><title>Reader/Writer</title></info><para>This example is the ProActive version of the Readers/Writers
       canonical problem. To illustrate the ease-of-use of the ProActive model,
       different synchronization policies can be applied without even stopping the application. This example is based on a easy to use Swing
       GUI.</para><itemizedlist>
@@ -336,7 +336,7 @@
           <para>source : <literal>examples/readers</literal></para>
         </listitem>
       </itemizedlist></section>
-    	<section><info><title>The Dining Philosophers</title></info>
+    	<section xml:id="TheDiningPhilosophers_75"><info><title>The Dining Philosophers</title></info>
     	<para>This example is one possible implementation of the well-known Dining
     	 Philosophers synchronization problem. This
       example is based on a easy to use Swing GUI.</para>
@@ -350,7 +350,7 @@
         </listitem>
       </itemizedlist></section>
       
-    	<section><info><title>The N-Body Simulation</title></info><para>This example can be used later on as a deployment example for
+    	<section xml:id="TheNBodySimulation_75"><info><title>The N-Body Simulation</title></info><para>This example can be used later on as a deployment example for
     	 several machines, and also for the fault-tolerance features. <itemizedlist>
           <listitem>
             <para>script : <literal>nbody.sh</literal> or

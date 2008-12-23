@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="FAQ"><info><title>Frequently Asked Questions</title></info>
+<?xml version="1.0" encoding="utf-8"?><appendix xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="FAQ"><info><title xml:id="FrequentlyAskedQuestions_3">Frequently Asked Questions</title></info>
   
 
   <para><emphasis role="bold">Note:</emphasis> This FAQ is under construction.
@@ -6,7 +6,7 @@
   <email>proactive@ow2.org</email> and we'll update the FAQ.</para>
 
  <qandaset>
-   <qandadiv><title>Frequently Asked Questions</title>
+   <qandadiv><title xml:id="FrequentlyAskedQuestions_300">Frequently Asked Questions</title>
   <qandaentry>
         <question>
           <para>How do I build ProActive from the distribution?</para>

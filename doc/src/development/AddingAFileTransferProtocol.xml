@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="AddingAFileTransferProtocol"><info><title>How to add a new FileTransfer CopyProtocol</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="AddingAFileTransferProtocol"><info><title xml:id="HowtoaddanewFileTransferCopyProtocol_33">How to add a new FileTransfer CopyProtocol</title></info>
 <!--  File: /home/irosenbe/PA_new_doc/docbook-tuto/development/FileTransfer.html  -->
   
     <para> FileTransfer protocols can be of two types: <emphasis role="bold">external</emphasis> or <emphasis role="bold">internal</emphasis>. Examples of
@@ -8,7 +8,7 @@
  tools provided by the process are used. This implies that internal FileTransfer protocols can not
  be used with other process (ex: unicore file transfer can not be used when deploying with ssh),
  but the other way around is valid (ex: scp can be used when deploying with unicore).</para>
-    <section><info><title>Adding external FileTransfer
+    <section><info><title >Adding external FileTransfer
  CopyProtocol</title></info>
       
       <itemizedlist>
@@ -27,7 +27,7 @@
  All names already in the array ALLOWED_COPY_PROTOCOLS are forbidden. This includes the name <emphasis role="bold">'processDefault'</emphasis>, which is also forbidden. In some cases <emphasis role="bold">'processDefault'</emphasis> will correspond to an external FileTransfer protocol (ex: ssh
  with scp), and in some cases to an internal protocol (ex: unicore with unicore)</para>
     </section>
-    <section><info><title>Adding internal FileTransfer
+    <section><info><title >Adding internal FileTransfer
  CopyProtocol</title></info>
       
       <itemizedlist>

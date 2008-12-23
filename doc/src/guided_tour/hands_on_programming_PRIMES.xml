@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="hands_on_programming_PRIMES"><info><title>Primality test tutorial</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="hands_on_programming_PRIMES"><info><title xml:id="Primalitytesttutorial_16">Primality test tutorial</title></info>
 	
 	<para>
 		This chapter presents a step by step tutorial whose the purpose is to develop a distributed application to test if a number is prime using a self-made master/worker.
@@ -33,7 +33,7 @@
 	<!-- Sequential version -->
 	<!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
 
-	<section><info><title>A Sequential Version of the Primality Test</title></info>
+	<section xml:id="ASequentialVersionofthePrimalityTest_16"><info><title>A Sequential Version of the Primality Test</title></info>
 		
 		<para>
 			In the next section we will look at a simple sequential
@@ -43,7 +43,7 @@
 
 		<!-- ARCHITECTURE -->
 
-		<section><info><title>Architecture of the Sequential Version</title></info>
+		<section xml:id="ArchitectureoftheSequentialVersion_16"><info><title>Architecture of the Sequential Version</title></info>
 			
 			<para>
 				The provided application uses a straightforward algorithm : Given a
@@ -52,16 +52,16 @@
 				m by the current integer ( the running divisor ). 
 				The loop ends when either : 
 		 	<itemizedlist>
-		 		<listitem>  the running divisor evenly divides the candidate number. The candidate number is not a prime number.
-				 </listitem> 
-			<listitem> the running divisor is greater than the square root of the
+		 		<listitem> <para> the running divisor evenly divides the candidate number. The candidate number is not a prime number.
+				 </para></listitem> 
+			<listitem> <para>the running divisor is greater than the square root of the
          candidate number. The candidate number is a prime.
-				 </listitem> 
+				 </para></listitem> 
 			</itemizedlist>
 		
 			</para>
 			<para>
-				<figure><info><title>Architecture of the Sequential Version</title></info>
+				<figure><info><title xml:id="ArchitectureoftheSequentialVersion_16">Architecture of the Sequential Version</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -75,7 +75,7 @@
 
 		<!-- IMPLEMENTATION -->
 
-		<section><info><title>Implementation of the Sequential Version</title></info>
+		<section xml:id="ImplementationoftheSequentialVersion_16"><info><title>Implementation of the Sequential Version</title></info>
 			
 			<para>
 				The
@@ -94,7 +94,7 @@
 
 		<!-- RUNNING -->
 
-		<section><info><title>Running the Sequential Version</title></info>
+		<section xml:id="RunningtheSequentialVersion_16"><info><title>Running the Sequential Version</title></info>
 			
 
 			<para>
@@ -117,7 +117,7 @@
 	<!-- Distributed version -->
 	<!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
 
-	<section><info><title>A Distributed Version of the Primality Test</title></info>
+	<section xml:id="ADistributedVersionofthePrimalityTest_16"><info><title>A Distributed Version of the Primality Test</title></info>
 		
 		<para>
 			In the next section we will distribute the computation using
@@ -126,9 +126,9 @@
 		
 		<!-- CLASSES USED -->
 
-		<section><info><title>Classes Used</title></info>
+		<section xml:id="ClassesUsed_16"><info><title>Classes Used</title></info>
 			
-			<itemizedlist><info><title>ProActive</title></info>
+			<itemizedlist><info><title xml:id="ProActive_16">ProActive</title></info>
 				
 				<listitem>
 					<para>
@@ -180,7 +180,7 @@
 					</para>
 				</listitem>
 			</itemizedlist>
-			<itemizedlist><info><title>Other</title></info>
+			<itemizedlist><info><title xml:id="Other_16">Other</title></info>
 				
 				<listitem>
 					<para>
@@ -201,7 +201,7 @@
 
 		<!-- ARCHITECTURE -->
 
-		<section><info><title>Architecture of the Distributed Version</title></info>
+		<section xml:id="ArchitectureoftheDistributedVersion_16"><info><title>Architecture of the Distributed Version</title></info>
 			
 			<para>
 				The test range from 2 to sqrt(candidate) is divided into
@@ -211,7 +211,7 @@
 				waits for any answers and checks the result.
 			</para>
 			<para>
-				<figure><info><title>Distribution of the Test Range (Example with 2 Workers)</title></info>
+				<figure><info><title xml:id="DistributionoftheTestRangeExamplewith2_16">Distribution of the Test Range (Example with 2 Workers)</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -279,7 +279,7 @@
 			</para>
 			
 			<para>
-				<figure><info><title>Killing a JVM from IC2D</title></info>
+				<figure><info><title xml:id="KillingaJVMfromIC2D_16">Killing a JVM from IC2D</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -304,7 +304,7 @@
 		
 		<!-- SOLUTION -->
 
-		<section><info><title>Solution/Full Code</title></info>
+		<section xml:id="SolutionFullCode_16"><info><title>Solution/Full Code</title></info>
 			
 
 			<para>
@@ -328,7 +328,7 @@
 
 		<!-- RUNNING -->
 
-		<section><info><title>Running the Distributed Version</title></info>
+		<section xml:id="RunningtheDistributedVersion_16"><info><title>Running the Distributed Version</title></info>
 			
 
 			<para>
@@ -350,7 +350,7 @@
 	<!-- Distributed MW version -->
 	<!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
 
-	<section><info><title>
+	<section><info><title >
 			A Distributed Version of the Primality Test Using the
 			Master-Worker API
 		</title></info>
@@ -362,9 +362,9 @@
 		
 		<!-- CLASSES USED -->		
 
-		<section><info><title>Classes Used</title></info>
+		<section xml:id="ClassesUsed_16"><info><title>Classes Used</title></info>
 			
-			<itemizedlist><info><title>ProActive</title></info>
+			<itemizedlist><info><title xml:id="ProActive_16">ProActive</title></info>
 				
 				<listitem>
 					<para>
@@ -407,7 +407,7 @@
 					</para>
 				</listitem>	
 			</itemizedlist>
-			<itemizedlist><info><title>Other</title></info>
+			<itemizedlist><info><title xml:id="Other_16">Other</title></info>
 				
 				<listitem>
 					<para>
@@ -420,14 +420,14 @@
 
 		<!-- ARCHITECTURE -->
 
-		<section><info><title>Architecture of the Master-Worker Version</title></info>
+		<section xml:id="ArchitectureoftheMasterWorkerVersion_16"><info><title>Architecture of the Master-Worker Version</title></info>
 			
 			<para>
 				The application uses the same trivial distribution pattern as in the
 				precedent version.
 			</para>
 			<para>
-				<figure><info><title>Architecture of the Master-Worker Version</title></info>
+				<figure><info><title xml:id="ArchitectureoftheMasterWorkerVersion_16">Architecture of the Master-Worker Version</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -485,7 +485,7 @@
 		
 		<!-- SOLUTION -->
 
-		<section><info><title>Solution/Full Code</title></info>
+		<section xml:id="SolutionFullCode_16"><info><title>Solution/Full Code</title></info>
 			
 			
 			<para>
@@ -503,7 +503,7 @@
 		
 		<!-- RUNNING -->
 
-		<section><info><title>Running the Master-Worker Version</title></info>
+		<section xml:id="RunningtheMasterWorkerVersion_16"><info><title>Running the Master-Worker Version</title></info>
 			
 
 			<para>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="componentArchitecture">
-	<info>
-		<title>Architecture and design</title>
+<info>
+<title xml:id="Architectureanddesign_57">Architecture and design</title>
 	</info>
 
 	<para>
@@ -21,9 +21,7 @@
 		with dedicated meta-objects in charge of the component aspects.
 	</para>
 
-	<section>
-		<info>
-			<title>Meta-object protocol</title>
+	<section><info><title xml:id="Metaobjectprotocol_57">Meta-object protocol</title>
 		</info>
 
 
@@ -59,8 +57,8 @@
 
 		<para>
 			<figure>
-				<info>
-					<title>ProActive's Meta-Objects Protocol.</title>
+<info>
+<title xml:id="ProActivesMetaObjectsProtocol_57">ProActive's Meta-Objects Protocol.</title>
 				</info>
 
 
@@ -114,8 +112,8 @@
 
 		<para>
 			<figure>
-				<info>
-					<title>
+<info>
+<title>
 						The ProActive MOP with component meta-objects
 						and component representative
 					</title>
@@ -132,8 +130,8 @@
 	</section>
 
 	<section>
-		<info>
-			<title>Components vs active objects</title>
+<info>
+<title xml:id="Componentsvsactiveobjects_57">Components vs active objects</title>
 		</info>
 
 
@@ -164,8 +162,8 @@
 	</section>
 
 	<section>
-		<info>
-			<title>Method invocations on components interfaces</title>
+<info>
+<title xml:id="Methodinvocationsoncomponentsinterfaces_57">Method invocations on components interfaces</title>
 		</info>
 
 

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="SSHTunneling"><info><title>Using SSH tunneling for RMI or HTTP communications</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="SSHTunneling"><info><title xml:id="UsingSSHtunnelingforRMIorHTTPcommunications_40">Using SSH tunneling for RMI or HTTP communications</title></info>
   
 
   <!--  File: /home/irosenbe/PA_new_doc/docbook-tuto/SSHTunneling.html  -->
 
-  <section><info><title>Overview</title></info>
+  <section xml:id="Overview_40"><info><title>Overview</title></info>
     
 
     <para>ProActive allows users to <emphasis role="bold">tunnel</emphasis>
@@ -52,7 +52,7 @@
     </itemizedlist>
   </section>
 
-  <section><info><title>Configuration of the
+  <section><info><title >Configuration of the
     network</title></info>
     
 
@@ -90,7 +90,7 @@ A    | &lt;----                    ----&gt;  |    B
     firewall.</para>
   </section>
 
-  <section><info><title>ProActive runtime
+  <section><info><title >ProActive runtime
     communication patterns</title></info>
     
 
@@ -106,7 +106,7 @@ A    | &lt;----                    ----&gt;  |    B
     of the ProActive runtimes.</para>
   </section>
 
-  <section><info><title>ProActive application
+  <section><info><title >ProActive application
     communication patterns.</title></info>
     
 
@@ -117,7 +117,7 @@ A    | &lt;----                    ----&gt;  |    B
     patterms.</para>
   </section>
 
-  <section><info><title>ProActive communication
+  <section><info><title >ProActive communication
     protocols</title></info>
     
 
@@ -186,7 +186,7 @@ A    | &lt;----                    ----&gt;  |    B
     command line.</para>
   </section>
 
-  <section><info><title>The rmissh communication
+  <section><info><title >The rmissh communication
     protocol.</title></info>
     
 

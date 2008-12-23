@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="componentExamples"><info><title>Component examples</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="componentExamples"><info><title xml:id="Componentexamples_47">Component examples</title></info>
   
 
   <para>Three examples are presented: code snippets for visualizing the transition
@@ -6,7 +6,7 @@
   tutorial, and C3D component version. The programming model is Fractal, and
   one should refer to the Fractal documentation for other detailed examples.</para>
 
- <section xml:id="examples_html_From_objects_to_active_objects_to_distributed_components"><info><title> From objects to active objects to distributed components</title></info>
+ <section xml:id="examples_html_From_objects_to_active_objects_to_distributed_components"><info><title xml:id="Fromobjectstoactiveobjectstodistributedcomponents_47">From objects to active objects to distributed components</title></info>
     
 
     <para>In Java, objects are created by instantiation of classes. With
@@ -50,7 +50,7 @@
     definition of a component requires 3 sub-definitions: the type, the
     description of the content, and the description of the controller.</para>
 
-    <section><info><title>Type</title></info>
+    <section xml:id="Type_47"><info><title>Type</title></info>
       
 
       <para>The type of the component (i.e. the functional interfaces provided
@@ -80,7 +80,7 @@ ComponentType aType = tf.createFcType(new InterfaceType[] {
 }); </programlisting>
     </section>
 
-    <section><info><title>Description of the content</title></info>
+    <section xml:id="Descriptionofthecontent_47"><info><title>Description of the content</title></info>
       
 
       <para>The second step in the definition of a component is the definition
@@ -94,7 +94,7 @@ ComponentType aType = tf.createFcType(new InterfaceType[] {
 ); </programlisting>
     </section>
 
-    <section><info><title>Description of the controller</title></info>
+    <section xml:id="Descriptionofthecontroller_47"><info><title>Description of the controller</title></info>
       
 
       <para>Properties relative to the controller can be specified in the
@@ -117,7 +117,7 @@ ComponentType aType = tf.createFcType(new InterfaceType[] {
 ); </programlisting>
     </section>
 
-    <section><info><title>From attributes to client interfaces</title></info>
+    <section xml:id="Fromattributestoclientinterfaces_47"><info><title>From attributes to client interfaces</title></info>
       
 
       <para>There are 2 kinds of interfaces for a component: those that offer
@@ -185,14 +185,14 @@ public class AImpl implements A, BindingController {
     </section>
   </section>
 
-  <section xml:id="helloworldExample"><info><title>The HelloWorld example</title></info>
+  <section xml:id="helloworldExample"><info><title xml:id="TheHelloWorldexample_47">The HelloWorld example</title></info>
     
 
     <para>The mandatory helloworld example (from the Fractal tutorial) shows
     the different ways of creating a component system (programmatically and
     using the ADL), and it can easily be implemented using ProActive.</para>
 
-    <section><info><title>Set-up</title></info>
+    <section xml:id="Setup_47"><info><title>Set-up</title></info>
       
 
       <para>You can find the code for this example in the package
@@ -244,7 +244,7 @@ public class AImpl implements A, BindingController {
       </itemizedlist>
     </section>
 
-    <section><info><title>Architecture</title></info>
+    <section xml:id="Architecture_47"><info><title>Architecture</title></info>
       
 
       <para>The helloworld example is a simple client-server application,
@@ -271,7 +271,7 @@ public class AImpl implements A, BindingController {
         </figure></para>
     </section>
 
-    <section><info><title>Distributed deployment</title></info>
+    <section xml:id="Distributeddeployment_47"><info><title>Distributed deployment</title></info>
       
 
       <para>This section is specific to the ProActive implementation, as it
@@ -327,7 +327,7 @@ public class AImpl implements A, BindingController {
       imply compromises between dynamicity and performance issues.</para>
     </section>
 
-    <section><info><title>Execution</title></info>
+    <section xml:id="Execution_47"><info><title>Execution</title></info>
       
 
       <para>You can either compile and run the code yourself, or follow the
@@ -518,7 +518,7 @@ ssfully
 17 Server: print done.</screen>
     </section>
 
-    <section xml:id="HelloWorldADLFiles"><info><title>The HelloWorld ADL files</title></info>
+    <section xml:id="HelloWorldADLFiles"><info><title xml:id="TheHelloWorldADLfiles_47">The HelloWorld ADL files</title></info>
       
 
       <indexterm><primary>ADL</primary><secondary>example</secondary></indexterm>
@@ -551,7 +551,7 @@ ssfully
         </section>
   </section>
 
-  <section><info><title>The Comanche example</title></info>
+  <section xml:id="TheComancheexample_47"><info><title>The Comanche example</title></info>
    
 
     <para><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://fractal.objectweb.org/tutorial/index.html">The
@@ -576,7 +576,7 @@ ssfully
     needed resource classes into active objects.</para>
   </section>
 
-  <section><info><title>The C3D component example</title></info>
+  <section xml:id="TheC3Dcomponentexample_47"><info><title>The C3D component example</title></info>
    
   
    <para> There is a complete example of migrative Active Object code to Component code.

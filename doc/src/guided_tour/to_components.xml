@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:id="C3D_component_example" xsi:noNamespaceSchemaLocation="http://www.docbook.org/xsd/4.2/docbook.xsd"><info><title>C3D - from Active Objects to Components</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0" xml:id="C3D_component_example" xsi:noNamespaceSchemaLocation="http://www.docbook.org/xsd/4.2/docbook.xsd"><info><title xml:id="C3DfromActiveObjectstoComponents_8">C3D - from Active Objects to Components</title></info>
     
-    <section><info><title>Overview</title></info>
+    <section xml:id="Overview_8"><info><title>Overview</title></info>
         
         <para>
             This is an example of an application that is refactored to
@@ -24,7 +24,7 @@
             directory of the proactive source.
         </para>
     </section>
-    <section><info><title>Using working C3D code with components</title></info>
+    <section xml:id="UsingworkingC3Dcodewithcomponents_8"><info><title>Using working C3D code with components</title></info>
         
         <para>
             <figure><info><title>
@@ -53,7 +53,7 @@
             be implemented.
         </para>
     </section>
-    <section><info><title>How the application is written</title></info>
+    <section xml:id="Howtheapplicationiswritten_8"><info><title>How the application is written</title></info>
         
         <para>
             First of all, have a look at the doc on C3D to remember how
@@ -64,7 +64,7 @@
             only objects worth wrapping in components were those three.
             The rest is too small to be worth the hassle.
         </para>
-        <section><info><title>Creating the interfaces</title></info>
+        <section xml:id="Creatingtheinterfaces_8"><info><title>Creating the interfaces</title></info>
             
             <para>
                 What we need to do is to extract the interfaces of the
@@ -116,7 +116,7 @@
                 design by separating behaviours.
             </para>
         </section>
-        <section><info><title>Creating the Component Wrappers</title></info>
+        <section xml:id="CreatingtheComponentWrappers_8"><info><title>Creating the Component Wrappers</title></info>
             
             <para>
                 You now have to create a class that englobes the
@@ -203,7 +203,7 @@
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title>How to rename Virtual Nodes in ADL files</title></info>            
+            <example><info><title xml:id="HowtorenameVirtualNodesinADLfiles_8">How to rename Virtual Nodes in ADL files</title></info>            
             
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
@@ -243,7 +243,7 @@
                 </para>
             </note>
         </section>
-        <section><info><title>Component lookup and registration</title></info>
+        <section xml:id="Componentlookupandregistration_8"><info><title>Component lookup and registration</title></info>
             
             <para>
                 When running the User Component alone, you are prompted
@@ -252,7 +252,7 @@
                 lookup mechanism. This is very simple to use. Here's the
                 code to do that:
             </para>
-            <example><info><title>Component Lookup and Register</title></info>
+            <example><info><title xml:id="ComponentLookupandRegister_8">Component Lookup and Register</title></info>
             
                 
                 <para>The component Registration</para>
@@ -289,7 +289,7 @@
             </para>
         </section>
     </section>
-    <section><info><title>How to run this example</title></info>
+    <section xml:id="Howtorunthisexample_8"><info><title>How to run this example</title></info>
         
         <para>
             There is only one access point for this example in the
@@ -325,7 +325,7 @@
             org.objectweb.proactive.examples.components.c3d.adl.UserImpl
         </screen>
     </section>
-    <section><info><title>Source Code</title></info>
+    <section xml:id="SourceCode_8"><info><title>Source Code</title></info>
         
         <para>
             You may find the code of this application in the following

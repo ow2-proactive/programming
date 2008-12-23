@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="OOSPMD"><info><title>OOSPMD</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="OOSPMD"><info><title xml:id="OOSPMD_39">OOSPMD</title></info>
   
 
-  <section><info><title>OOSPMD: Introduction</title></info>
+  <section xml:id="OOSPMDIntroduction_39"><info><title>OOSPMD: Introduction</title></info>
     
 
     <indexterm><primary>OOSPMD</primary><secondary>definition</secondary></indexterm>
@@ -38,7 +38,7 @@
 			
   </section>
 
-  <section><info><title>SPMD Group Creation</title></info>
+  <section xml:id="SPMDGroupCreation_39"><info><title>SPMD Group Creation</title></info>
     <para>The main class for the SPMD groups is <literal>org.objectweb.proactive.api.PASPMD</literal>.
     This class contains methods for
      creating and controlling ProActive SPMD groups.  </para>
@@ -80,7 +80,7 @@
 	
   </section>
 
-  <section><info><title>Synchronizing activities with barriers</title></info>
+  <section xml:id="Synchronizingactivitieswithbarriers_39"><info><title>Synchronizing activities with barriers</title></info>
     
 
     <indexterm><primary>Barriers</primary><secondary>definition</secondary></indexterm>
@@ -126,7 +126,7 @@
     synchronization, as they were sent <emphasis>after
     </emphasis> the barrier instruction.</para>
         
-    <figure xml:id="oospmd_barriers_behavior"><info><title>Behaviour example of a total barrier</title></info>
+    <figure xml:id="oospmd_barriers_behavior"><info><title xml:id="Behaviourexampleofatotalbarrier_39">Behaviour example of a total barrier</title></info>
       
 
       <mediaobject>
@@ -154,7 +154,7 @@
     </itemizedlist>
     
 
-  <section><info><title>Total Barrier</title></info>
+  <section xml:id="TotalBarrier_39"><info><title>Total Barrier</title></info>
     
 
     <para>Total barrier directly involves the SPMD group. A call to 
@@ -200,7 +200,7 @@
     members of the group may indefinitely wait.</para>
   </section>
 
-  <section><info><title>Neighbour
+  <section><info><title >Neighbour
     barrier</title></info>
     
 
@@ -246,7 +246,7 @@
     exchanged messages.</para>
   </section>
 
-  <section><info><title>Method Barrier</title></info>
+  <section xml:id="MethodBarrier_39"><info><title>Method Barrier</title></info>
     
 
     <para>The Method barrier does no more involve extra messages to
@@ -278,10 +278,10 @@
   </section>
   </section>
   
-  <section><info><title>MPI to ProActive Summary</title></info>
+  <section xml:id="MPItoProActiveSummary_39"><info><title>MPI to ProActive Summary</title></info>
         
 
-        <informaltable xml:id="mpi_to_proactive_summary"><info><title>MPI to ProActive</title></info>
+        <informaltable xml:id="mpi_to_proactive_summary"><info><title xml:id="MPItoProActive_39">MPI to ProActive</title></info>
           
 
           <tgroup cols="2">

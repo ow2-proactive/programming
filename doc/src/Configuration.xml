@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Configuration"><info><title>ProActive Basic Configuration</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Configuration"><info><title xml:id="ProActiveBasicConfiguration_69">ProActive Basic Configuration</title></info>
   
 
-  <section><info><title>Overview</title></info>
+  <section xml:id="Overview_69"><info><title>Overview</title></info>
     
 
     <para>In order to get easier and more flexible configuration in ProActive,
@@ -14,7 +14,7 @@
   </section>
   
 
-  <section><info><title>How does it work?</title></info>
+  <section xml:id="Howdoesitwork_69"><info><title>How does it work?</title></info>
     
 
     <para>Using this file is very straightforward, since all lines must follow
@@ -54,7 +54,7 @@
     file?</title></info>
     
 
-	<section><info><title>ProActive Default Configuration file</title></info> 
+	<section xml:id="ProActiveDefaultConfigurationfile_69"><info><title>ProActive Default Configuration file</title></info> 
     <para>There is a default file with default ProActive options located under
     ProActive/src/org/objectweb/proactive/core/config/ProActiveConfiguration.xml.
     This file is automatically copied with the same package structure under
@@ -64,7 +64,7 @@
     org/objectweb/proactive/core/config/ProActiveConfiguration.xml (See below
     for default options).</para>
 	</section>
-	<section><info><title>User-defined ProActive Configuration file</title></info> 
+	<section xml:id="UserdefinedProActiveConfigurationfile_69"><info><title>User-defined ProActive Configuration file</title></info> 
 	<para>
 		It is possible for an user to override the default ProActive configuration file
 		by setting properties in a file located at the following path :
@@ -73,7 +73,7 @@
 	     for windows users : $HOME\.proactive\ProActiveConfiguration.xml  </screen>
 	</para>
     </section>
-    <section><info><title>Alternate User Configuration file</title></info> 
+    <section xml:id="AlternateUserConfigurationfile_69"><info><title>Alternate User Configuration file</title></info> 
 
     <para>People can specify their own configuration file by running their
     application with proactive.configuration option, i.e</para>
@@ -101,10 +101,10 @@
 </section>
   </section>
 
-  <section><info><title>ProActive properties</title></info>
+  <section xml:id="ProActiveproperties_69"><info><title>ProActive properties</title></info>
     
 
-    <section><info><title>Required</title></info>
+    <section xml:id="Required_69"><info><title>Required</title></info>
      
 
         <para><itemizedlist>
@@ -141,7 +141,7 @@
         programmatically with the default value.</para>
         
       </section>
-      <section><info><title>Fault-tolerance properties</title></info>
+      <section xml:id="Faulttoleranceproperties_69"><info><title>Fault-tolerance properties</title></info>
         
 
         <para>Note that those properties should not be altered if the
@@ -192,7 +192,7 @@
         </itemizedlist>
        </section>
        
-       <section xml:id="Configuration_html_p2p_properties"><info><title> Peer-to-Peer properties </title></info>
+       <section xml:id="Configuration_html_p2p_properties"><info><title xml:id="PeertoPeerproperties_69">Peer-to-Peer properties </title></info>
         
 
         <para><itemizedlist>
@@ -279,7 +279,7 @@
           </itemizedlist></para>
       </section>
 
-      <section><info><title>rmi ssh properties</title></info>
+      <section xml:id="rmisshproperties_69"><info><title>rmi ssh properties</title></info>
         
     <para>The following properties are specific to the rmissh protocol 
      (see <xref linkend="SSHTunneling"/>).</para>
@@ -360,7 +360,7 @@
       </itemizedlist></para>
     </section>
     
-    <section><info><title>Other properties</title></info>
+    <section xml:id="Otherproperties_69"><info><title>Other properties</title></info>
 
     
 
@@ -439,12 +439,12 @@
         </section>
   </section>
 
-  <section><info><title>Configuration file example</title></info>
+  <section xml:id="Configurationfileexample_69"><info><title>Configuration file example</title></info>
     
 
     <para>A configuration file could have following structure:</para>
 
-    <example><info><title>A configuration file example</title></info>
+    <example><info><title xml:id="Aconfigurationfileexample_69">A configuration file example</title></info>
     
      
     <screen>&lt;ProActiveUserProperties&gt;

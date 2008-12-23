@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="developingConventions"><info><title>Developing Conventions</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="developingConventions"><info><title xml:id="DevelopingConventions_37">Developing Conventions</title></info>
   
 
-  <section xml:id="codeLogging"><info><title>Code logging conventions</title></info>
+  <section xml:id="codeLogging"><info><title xml:id="Codeloggingconventions_37">Code logging conventions</title></info>
     
 
     <para>The ProActive code is currently using log4j as logging service. The
@@ -12,7 +12,7 @@
     messages that's why <emphasis>everybody must apply these
     rules</emphasis>.</para>
 
-    <section><info><title>Declaring loggers name</title></info>
+    <section xml:id="Declaringloggersname_37"><info><title>Declaring loggers name</title></info>
       
 
       <para>The interface
@@ -39,7 +39,7 @@ public static final String P2P_ACQUAINTANCES = P2P + ".acquaintances";
 public static final String P2P_FIRST_CONTACT = P2P + ".first_contact";</programlisting></example>
     </section>
 
-    <section><info><title>Using declared loggers in your classes</title></info>
+    <section xml:id="Usingdeclaredloggersinyourclasses_37"><info><title>Using declared loggers in your classes</title></info>
       
 
       <para>Firstly, import good classes:</para>
@@ -61,7 +61,7 @@ import org.objectweb.proactive.core.util.log.Loggers;</programlisting>
       Use this class to add some specific treatments to log messages.</para>
     </section>
 
-    <section><info><title>Managing loggers</title></info>
+    <section xml:id="Managingloggers_37"><info><title>Managing loggers</title></info>
       
 
       <para>Using hierarchic loggers is realy helpful to choose which logging
@@ -76,7 +76,7 @@ log4j.logger.proactive.p2p = INFO
 log4j.logger.proactive.p2p..first_contact = FATAL </screen>
     </section>
 
-    <section><info><title>Logging output</title></info>
+    <section xml:id="Loggingoutput_37"><info><title>Logging output</title></info>
       
 
       <para>Enabling the name of the category using for instance [%c]
@@ -106,7 +106,7 @@ log4j.logger.proactive.p2p..first_contact = FATAL </screen>
       </itemizedlist>
     </section>
 
-    <section><info><title>More information about log4j</title></info>
+    <section xml:id="Moreinformationaboutlog4j_37"><info><title>More information about log4j</title></info>
       
 
       <itemizedlist>
@@ -123,7 +123,7 @@ log4j.logger.proactive.p2p..first_contact = FATAL </screen>
     </section>
   </section>
 
-  <section xml:id="regressionTests"><info><title>Regression Tests Writing</title></info>
+  <section xml:id="regressionTests"><info><title xml:id="RegressionTestsWriting_37">Regression Tests Writing</title></info>
     
 
     <para>Add your test in nonregressiontest package and <emphasis>run all
@@ -133,7 +133,7 @@ log4j.logger.proactive.p2p..first_contact = FATAL </screen>
     <para/>
   </section>
 
-  <section xml:id="svnCommit"><info><title>Committing modifications in the SVN</title></info>
+  <section xml:id="svnCommit"><info><title xml:id="CommittingmodificationsintheSVN_37">Committing modifications in the SVN</title></info>
     
 
     <para>You need to do several things:</para>

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="MOP"><info><title>MOP: Metaobject Protocol</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="MOP"><info><title xml:id="MOPMetaobjectProtocol_28">MOP: Metaobject Protocol</title></info>
   
 
   <!--  File: /home/irosenbe/PA_new_doc/docbook-tuto/MOP.html  -->
 
-  <section><info><title>Implementation: a Meta-Object
+  <section><info><title >Implementation: a Meta-Object
     Protocol</title></info>
     
 
@@ -22,7 +22,7 @@
     non-public method or constructor calls.</para>
   </section>
 
-  <section><info><title>Principles</title></info>
+  <section xml:id="Principles_28"><info><title>Principles</title></info>
     
 
     <para>If the programmer wants to implement a new metabehavior using our
@@ -59,7 +59,7 @@
     example, is implemented through this feature.</para>
   </section>
 
-  <section><info><title>Example of a different
+  <section><info><title >Example of a different
     metabehavior: EchoProxy</title></info>
     
 
@@ -82,7 +82,7 @@ interface Echo extends Reflect {
 }</programlisting></para>
     
 
-    <section><info><title>Instantiating with the metabehavior</title></info>
+    <section xml:id="Instantiatingwiththemetabehavior_28"><info><title>Instantiating with the metabehavior</title></info>
       
 
       <para>Instantiating an object of any class with this metabehavior can be
@@ -134,7 +134,7 @@ interface Echo extends Reflect {
     </section>
   </section>
 
-  <section><info><title>The Reflect interface</title></info>
+  <section xml:id="TheReflectinterface_28"><info><title>The Reflect interface</title></info>
     
 
     <para>All the interfaces used for declaring
@@ -142,7 +142,7 @@ interface Echo extends Reflect {
     <literal>Reflect</literal>. This leads to a hierarchy of metabehaviors
     such as shown in the figure below.</para>
 
-    <para><figure><info><title>Metabehavior hierarchy</title></info>
+    <para><figure><info><title xml:id="Metabehaviorhierarchy_28">Metabehavior hierarchy</title></info>
         
 
         <mediaobject>
@@ -163,7 +163,7 @@ interface Echo extends Reflect {
     build new metabehaviors out of existing ones.</para>
   </section>
 
-  <section><info><title>Limitations</title></info>
+  <section xml:id="Limitations_28"><info><title>Limitations</title></info>
     
 
     <para>Due to its commitment to be a 100% Java library, the MOP has a few

@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="exceptions"><info><title>Exception Handling</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="exceptions"><info><title xml:id="ExceptionHandling_70">Exception Handling</title></info>
   
 
   <indexterm><primary>Exceptions</primary></indexterm>
 
-  <section><info><title>Exceptions and Asynchrony</title></info>
+  <section xml:id="ExceptionsandAsynchrony_70"><info><title>Exceptions and Asynchrony</title></info>
     
 
     <para>In the asynchronous environment provided by ProActive, exceptions
@@ -80,7 +80,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>TryWithCatch Annotator</title></info>
+    <section xml:id="TryWithCatchAnnotator_70"><info><title>TryWithCatch Annotator</title></info>
       
 
       <para>These needed annotations can be seen as cumbersome, so we provide
@@ -96,7 +96,7 @@
       
     </section>
 	<!-- TODO add an example maybe, currently there's no example whatsoever in the code -->
-    <section><info><title><literal>throwArrivedException()</literal> and <literal>waitForPotentialException()</literal></title></info>
+    <section xml:id="literalthrowArrivedExceptionliteralandliteralwaitForPotentialExceptionliteral_70"><info><title><literal>throwArrivedException()</literal> and <literal>waitForPotentialException()</literal></title></info>
       
 
       <para>We have seen the 3 methods mandatory to perform asynchronous calls

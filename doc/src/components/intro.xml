@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="intro">
-	<info>
-		<title>Introduction</title>
+<info>
+<title xml:id="Introduction_52">Introduction</title>
 	</info>
 	<indexterm>
 		<primary>Component</primary>
@@ -8,7 +8,7 @@
 
 	<section>
 
-		<info><title>Overview</title></info>
+<info><title xml:id="Overview_52">Overview</title></info>
 
 		<para>
 			Computing Grids and Peer-to-Peer networks are inherently
@@ -45,7 +45,7 @@
 
 	<section>
 
-		<info><title>Programming with components: the Fractal component model</title></info>
+<info><title xml:id="ProgrammingwithcomponentstheFractalcomponentmodel_52">Programming with components: the Fractal component model</title></info>
 
 		<para>
 			Fractal defines a general conceptual model, along with a programming
@@ -72,7 +72,7 @@
 		<para>
 			Here is a basic example of a system of Fractal components:
 			<figure>
-				<info><title>A system of Fractal components</title></info>
+<info><title xml:id="AsystemofFractalcomponents_52">A system of Fractal components</title></info>
 				<mediaobject>
 					<imageobject>
 						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/fractal.png" format="PNG"/>
@@ -104,7 +104,7 @@
 
 	<section>
 
-		<info><title>Presentation of ProActive/GCM</title></info>
+<info><title xml:id="PresentationofProActiveGCM_52">Presentation of ProActive/GCM</title></info>
 
 		<para>
 			The Grid Component Model (GCM) defines a component model suitable
@@ -123,7 +123,7 @@
 			Thus, the previous standard system of Fractal components becomes
 			when distributed with ProActive/GCM:
 			<figure>
-				<info><title>A system of distributed ProActive/GCM components (blue, yellow and white represent distinct locations)</title></info>
+<info><title xml:id="AsystemofdistributedProActiveGCMcomponentsblue_52">A system of distributed ProActive/GCM components (blue, yellow and white represent distinct locations)</title></info>
 				<mediaobject>
 					<imageobject>
 						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/fractal-proactive-distributed.png" format="PNG"/>
@@ -137,6 +137,7 @@
 			introduces the new features using a Fractal compliant terminology.
 			The main features that have been developed to implements the
 			GCM are:
+                  </para>  
 			<itemizedlist>
 			 <listitem>
 			 	<para>
@@ -155,7 +156,7 @@
 		  		</para>
 			 </listitem>
 			 </itemizedlist>
-		</para>
+		
 
 		<para>
 			ProActive/GCM is conformant up to level 3.2.
@@ -168,26 +169,26 @@
 		<para>
 			To sum it up, ProActive/GCM mainly provides:
 			<itemizedlist>
-			 <listitem>
+			 <listitem><para>
 			 	Creation/usage of primitive and composite components
-			 </listitem>
+			</para> </listitem>
 
-			 <listitem>
+			 <listitem><para>
 			 	Client, server and non-functional interfaces (single and collection cardinalities)
+			 </para></listitem>
+
+			 <listitem><para>
+			 	ADL support</para>
 			 </listitem>
 
-			 <listitem>
-			 	ADL support
-			 </listitem>
-
-			 <listitem>
-			 	A deployment framework
+			 <listitem> <para>
+			 	A deployment framework </para>
 			 </listitem>
 			 </itemizedlist>
 		</para>
 	</section>			  
 
-	<section> <info><title>GCM Basics</title></info>
+	<section xml:id="GCMBasics_52"><info><title>GCM Basics</title></info>
 	<para>
 		For starters, here is a very basic example demonstrating the
 		separation between the code and the deployment of an application

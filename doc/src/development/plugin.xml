@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="plugin"><info><title>ProActive Eclipse plugin</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="plugin"><info><title xml:id="ProActiveEclipseplugin_30">ProActive Eclipse plugin</title></info>
   
-    <section><info><title>Overview</title></info>
+    <section xml:id="Overview_30"><info><title>Overview</title></info>
       
       <para>The main objective of this plugin is to facilitate the use of ProActive in
  the Eclipse environment. The plugin has three main purposes:</para>
@@ -19,11 +19,11 @@
         </listitem>
 </itemizedlist>
     </section>
-    <section><info><title>The Guided Tour</title></info>
+    <section xml:id="TheGuidedTour_30"><info><title>The Guided Tour</title></info>
       
       <para>The aim of the guided tour is to provide a step by step explanation to the
  ProActive beginners.</para>
-      <figure><info><title>The plugin's interface</title></info>
+      <figure><info><title xml:id="Thepluginsinterface_30">The plugin's interface</title></info>
        
         <mediaobject>
           <imageobject>
@@ -44,7 +44,7 @@
         </listitem>
 </itemizedlist>
     </section>
-    <section><info><title>Wizards</title></info>
+    <section xml:id="Wizards_30"><info><title>Wizards</title></info>
       
       <para>These wizards will guide developpers to make complex operations with
  ProActive, such as installation, integration , configuration or execution. We have created 4
@@ -63,7 +63,7 @@
           <para> a configuration and execution wizard</para>
         </listitem>
 </orderedlist>
-      <figure><info><title>One wizard popup</title></info>
+      <figure><info><title xml:id="Onewizardpopup_30">One wizard popup</title></info>
        
         <mediaobject>
           <imageobject>
@@ -72,11 +72,11 @@
         </mediaobject>
       </figure>
     </section>
-    <section><info><title>The ProActive Editor</title></info>
+    <section xml:id="TheProActiveEditor_30"><info><title>The ProActive Editor</title></info>
       
       <para>This editor checks coding rules. It informs the developper of error
  concerning ProActive in his classes and can resolve some of these errors.</para>
-      <figure><info><title>The editor error highlighting</title></info>
+      <figure><info><title xml:id="Theeditorerrorhighlighting_30">The editor error highlighting</title></info>
        
         <mediaobject>
           <imageobject>

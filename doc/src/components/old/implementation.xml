@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="implementation"><info><title>An implementation of the Grid Component Model</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="implementation"><info><title xml:id="AnimplementationoftheGridComponentModel_46">An implementation of the Grid Component Model</title></info>
   
 
   <para>
@@ -47,12 +47,12 @@
   environments. The programming techniques and the architecture of the
   implementation is described in a following section.</para>
 
-  <section><info><title>Specific features</title></info>
+  <section xml:id="Specificfeatures_46"><info><title>Specific features</title></info>
     
 
     <para>Consider a standard system of Fractal components: </para>
 
-    <para><figure><info><title>A system of Fractal components</title></info>
+    <para><figure><info><title xml:id="AsystemofFractalcomponents_46">A system of Fractal components</title></info>
         
 
         <mediaobject>
@@ -64,7 +64,7 @@
       </figure></para>
 
     <para>ProActive/Fractal features distributed components:</para>
-    <para><figure><info><title>A system of distributed ProActive/Fractal components (blue, yellow and white represent distinct locations)</title></info>
+    <para><figure><info><title xml:id="AsystemofdistributedProActiveFractalcomponentsblue_46">A system of distributed ProActive/Fractal components (blue, yellow and white represent distinct locations)</title></info>
         
 
         <mediaobject>
@@ -76,7 +76,7 @@
       </figure></para>
 
     <para>Each component is implemented as one (at least) active object:</para>
-    <para><figure><info><title>Match between components and active objects</title></info>
+    <para><figure><info><title xml:id="Matchbetweencomponentsandactiveobjects_46">Match between components and active objects</title></info>
         
 
         <mediaobject>
@@ -90,7 +90,7 @@
     <para>The combination of the Fractal model with the ProActive library
     leverages the Fractal component model and provides an implementation for Grid computing.</para>
 
-    <section><info><title>Distribution</title></info>
+    <section xml:id="Distribution_46"><info><title>Distribution</title></info>
       
 
       <para>Distribution is achieved in a transparent manner over the Java RMI
@@ -99,7 +99,7 @@
       JVM).</para>
     </section>
 
-    <section><info><title>Deployment framework</title></info>
+    <section xml:id="Deploymentframework_46"><info><title>Deployment framework</title></info>
       
 
       <para>ProActive provides a deployment framework for creating a
@@ -122,7 +122,7 @@
       </orderedlist>
     </section>
 
-    <section><info><title>Activities</title></info>
+    <section xml:id="Activities_46"><info><title>Activities</title></info>
       
 
       <para>A fundamental concept of the ProActive library is this of Active
@@ -131,7 +131,7 @@
       to customize their <emphasis role="bold">behavior</emphasis>.</para>
     </section>
 
-    <section><info><title>Asynchronous method calls with futures</title></info>
+    <section xml:id="Asynchronousmethodcallswithfutures_46"><info><title>Asynchronous method calls with futures</title></info>
       
 
       <para>Asynchronous method calls with transparent futures is a core
@@ -147,7 +147,7 @@
       effectively been calculated.</para>
     </section>
 
-    <section><info><title>Collective interactions</title></info>
+    <section xml:id="Collectiveinteractions_46"><info><title>Collective interactions</title></info>
       
 
       <para>We address collective interactions (1-to-n and n-to-1 interactions
@@ -155,7 +155,7 @@
       namely gathercast and multicast interfaces.</para>
     </section>
 
-    <section><info><title>Conformance</title></info>
+    <section xml:id="Conformance_46"><info><title>Conformance</title></info>
       
 
       <para>The Fractal specification defines conformance levels for
@@ -169,10 +169,10 @@
     </section>
   </section>
 
-  <section><info><title>Implementation specific API</title></info>
+  <section xml:id="ImplementationspecificAPI_46"><info><title>Implementation specific API</title></info>
     
 
-    <section><info><title>fractal.provider</title></info>
+    <section xml:id="fractalprovider_46"><info><title>fractal.provider</title></info>
       
 
       <para>The API is the same for any Fractal implementation, though some
@@ -200,7 +200,7 @@
       </itemizedlist>
     </section>
 
-    <section><info><title>Content and controller descriptions</title></info>
+    <section xml:id="Contentandcontrollerdescriptions_46"><info><title>Content and controller descriptions</title></info>
       
 
       <para>The controller description and the content description of the
@@ -214,7 +214,7 @@
       <literal>org.proactive.core.component.ContentDescription</literal>.</para>
     </section>
 
-    <section><info><title>Collective interactions</title></info>
+    <section xml:id="Collectiveinteractions_46"><info><title>Collective interactions</title></info>
       
 
       <indexterm>
@@ -231,7 +231,7 @@
       mechanism.</para>
     </section>
 
-    <section><info><title>Requirements</title></info>
+    <section xml:id="Requirements_46"><info><title>Requirements</title></info>
       
 
       <para>As this implementation is based on ProActive, several conditions
@@ -252,7 +252,7 @@
     </section>
   </section>
 
-  <section xml:id="componentArchitecture"><info><title>Architecture and design</title></info>
+  <section xml:id="componentArchitecture"><info><title xml:id="Architectureanddesign_46">Architecture and design</title></info>
     
 
     <para>The implementation of the Fractal model is achieved by reusing the
@@ -267,7 +267,7 @@
     object</emphasis> with dedicated meta-objects in charge of the component
     aspects.</para>
 
-    <section><info><title>Meta-object protocol</title></info>
+    <section xml:id="Metaobjectprotocol_46"><info><title>Meta-object protocol</title></info>
       
 
       <para>ProActive is based on a meta-object protocol (MOP), that allows
@@ -290,7 +290,7 @@
       meta-objects, possibly resulting in induced actions, and then the call
       is forwarded to the base object 'a'.</para>
 
-      <para><figure><info><title>ProActive's Meta-Objects Protocol.</title></info>
+      <para><figure><info><title xml:id="ProActivesMetaObjectsProtocol_46">ProActive's Meta-Objects Protocol.</title></info>
           
 
           <mediaobject>
@@ -337,7 +337,7 @@
         </figure></para>
     </section>
 
-    <section><info><title>Components vs active objects</title></info>
+    <section xml:id="Componentsvsactiveobjects_46"><info><title>Components vs active objects</title></info>
       
 
       <para>In our implementation, because we make use of the MOP's
@@ -358,7 +358,7 @@
       identify them with the IC2D visual monitoring tool.</para>
     </section>
 
-    <section><info><title>Method invocations on components interfaces</title></info>
+    <section xml:id="Methodinvocationsoncomponentsinterfaces_46"><info><title>Method invocations on components interfaces</title></info>
       
 
       <para>Invoking a method on an active object means invoking a method on

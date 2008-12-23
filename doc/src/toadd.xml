@@ -1,5 +1,5 @@
   <sect1 id="TinyHelloWorld">
-    <title>Hello world ! (tiny example)</title>
+<title xml:id="Helloworldtinyexample_4">Hello world ! (tiny example)</title>
 
     <para>The example implements the smallest possible program in ProActive.
     It is the easiest program you could write using the Active Object concept
@@ -16,7 +16,7 @@
     linkend="SimpleCMA" />). </para>
 
     <sect2>
-      <title>The TinyHello Class</title>
+<title xml:id="TheTinyHelloClass_4">The TinyHello Class</title>
 
       <para>This class can be used as an Active Object, serving requests. Its
       creation involves the following steps: <itemizedlist>
@@ -36,7 +36,7 @@
         </itemizedlist></para>
 
       <example>
-        <title>A possible implementation for the TinyHello class</title>      </example>
+<title xml:id="ApossibleimplementationfortheTinyHelloclass_4">A possible implementation for the TinyHello class</title>      </example>
         
 
         <programlisting lang="java"><textobject>
@@ -45,7 +45,7 @@
     </sect2>
 
     <sect2>
-      <title>Implement the Required Functionality</title>
+<title xml:id="ImplementtheRequiredFunctionality_4">Implement the Required Functionality</title>
 
       <para>Implementing any remotely-accessible functionality is simply done
       through normal Java methods in a normal Java class, in exactly the same
@@ -54,7 +54,7 @@
     </sect2>
 
     <sect2>
-      <title>Creating the Hello Active Object</title>
+<title xml:id="CreatingtheHelloActiveObject_4">Creating the Hello Active Object</title>
 
       <para>Now that we know how to write the class that implements the
       required server-side functionalities, let us see how to create the
@@ -72,7 +72,7 @@
     </sect2>
 
     <sect2>
-      <title>Invoking a Method On a Remote Object And Printing Out the
+<title>Invoking a Method On a Remote Object And Printing Out the
       Message</title>
 
       <para>Invoking a method on a remote object is exactly like invoking a
@@ -90,7 +90,7 @@
     </sect2>
 
     <sect2>
-      <title>Launching</title>
+<title xml:id="Launching_4">Launching</title>
 
       <para>To launch the example, type:<screen>linux&gt; java -cp $CLASSPATH -Djava.security.policy=dist/proactive.java.policy 
             -Dlog4j.configuration=file:dist/proactive-log4j 
@@ -103,7 +103,7 @@ linux&gt; tinyHello.sh</screen> <screen>windows&gt; cd scripts/windows
 windows&gt; tinyHello.bat</screen></para>
 
       <sect3>
-        <title>The output</title>
+<title xml:id="Theoutput_4">The output</title>
 
         <screen>[apple unix]tinyhello.sh
 --- Hello World tiny example ---------------------------------
@@ -123,7 +123,7 @@ On apple/138.96.218.62, a message was received: Hello World!
   
 ***************IN APPENDIX**************************
   <sect1>
-    <title>ProActive and IDEs (Eclipse, ...)</title>
+<title xml:id="ProActiveandIDEsEclipse_4">ProActive and IDEs (Eclipse, ...)</title>
 
     <para>We recommend you use the Eclipse IDE to develop your ProActive
     applications. You can get this tool on the <ulink
@@ -238,7 +238,7 @@ On apple/138.96.218.62, a message was received: Hello World!
   ============IC2D from C3D and Components part ======================= 
   
   <sect2>
-      <title>Start IC2D to visualize the topology</title>
+<title xml:id="StartIC2Dtovisualizethetopology_4">Start IC2D to visualize the topology</title>
 
       <para>You will need at first to start IC2D using either
       ProActive/scripts/unix/ic2d.sh or ProActive/scripts/windows/ic2d.bat
@@ -265,7 +265,7 @@ On apple/138.96.218.62, a message was received: Hello World!
       </itemizedlist>
 
       <para><figure>
-          <title>The C3D application when a new user joins in, seen with
+<title>The C3D application when a new user joins in, seen with
           IC2D</title>
 
           <mediaobject>
@@ -299,7 +299,7 @@ On apple/138.96.218.62, a message was received: Hello World!
     </sect2>
 
     <sect2>
-      <title>Drag-and-drop migration</title>
+<title xml:id="Draganddropmigration_4">Drag-and-drop migration</title>
 
       <indexterm>
         <primary>Migration</primary>
@@ -328,7 +328,7 @@ On apple/138.96.218.62, a message was received: Hello World!
     </sect2>
 
     <sect2>
-      <title>Start a new JVM in a computation</title>
+<title xml:id="StartanewJVMinacomputation_4">Start a new JVM in a computation</title>
 
       <para>Manually you can start a new JVM - a 'Node' in the ProActive
       terminology - that will be used in a running system.</para>
@@ -381,7 +381,7 @@ windows&gt; startNode.bat rmi://mymachine/NodeZ </screen>
     </sect2>
 
     <sect2>
-      <title>Wrapping Active Objects in Components</title>
+<title xml:id="WrappingActiveObjectsinComponents_4">Wrapping Active Objects in Components</title>
 
       <para>You can also write components with the Fractive API, which is an
       implementation of Fractal in ProActive. You should check the section on
@@ -413,7 +413,7 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
       </itemizedlist>
 
       <figure>
-        <title>IC2D component explorer with the C3D example</title>
+<title xml:id="IC2DcomponentexplorerwiththeC3Dexample_4">IC2D component explorer with the C3D example</title>
 
         <mediaobject>
           <imageobject>
@@ -432,7 +432,7 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
   
   
        <sect3>
-        <title>Introduce a bug in the Writer Priority policy</title>
+<title xml:id="IntroduceabugintheWriterPrioritypolicy_4">Introduce a bug in the Writer Priority policy</title>
 
         <para>For instance, let several writers go through at the same
         time.</para>
@@ -468,7 +468,7 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
   
   ============== Philosophers visualizations IC2D ======================
       <sect3>
-        <title>Start the IC2D application</title>
+<title xml:id="StarttheIC2Dapplication_4">Start the IC2D application</title>
 
         <indexterm>
           <primary>IC2D</primary>
@@ -527,7 +527,7 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
         </itemizedlist>
 
         <figure>
-          <title>Monitoring new RMI host with IC2D</title>
+<title xml:id="MonitoringnewRMIhostwithIC2D_4">Monitoring new RMI host with IC2D</title>
 
           <mediaobject>
             <imageobject>
@@ -580,7 +580,7 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
   
   
   <sect1>
-    <title>migration of graphical interfaces</title>
+<title xml:id="migrationofgraphicalinterfaces_4">migration of graphical interfaces</title>
 
     <para>Graphical interfaces are not serializable, yet it is possible to
     migrate them with ProActive.</para>
@@ -593,7 +593,7 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
     more sophisticated frames.</para>
 
     <sect2>
-      <title>Design of the migratable application</title>
+<title xml:id="Designofthemigratableapplication_4">Design of the migratable application</title>
 
       <para>We will write a new active object class, that extends
       MigratableHello. The sayHello method will create a window containing the
@@ -611,10 +611,10 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
     </sect2>
 
     <sect2>
-      <title>Programming</title>
+<title xml:id="Programming_4">Programming</title>
 
       <sect3>
-        <title>HelloFrameController</title>
+<title xml:id="HelloFrameController_4">HelloFrameController</title>
 
         <para>The code of the HelloFrameController is in <xref
         linkend="tutorialCodeSrc.HelloFrameController.java" />.</para>
@@ -661,7 +661,7 @@ public void initActivity(Body body) {
       </sect3>
 
       <sect3>
-        <title>HelloFrame</title>
+<title xml:id="HelloFrame_4">HelloFrame</title>
 
         <para>This is an example of a graphical class that could be associated
         with the active object (see code in <xref
@@ -670,7 +670,7 @@ public void initActivity(Body body) {
     </sect2>
 
     <sect2>
-      <title>Execution</title>
+<title xml:id="Execution_4">Execution</title>
 
       <itemizedlist>
         <listitem>

@@ -74,14 +74,14 @@
  &bookinfo;
  &contributors;
  
- <part xml:id="ProActiveIntroduction"><info><title>Introduction</title></info>
+ <part xml:id="ProActiveIntroduction"><info><title xml:id="Introduction_2">Introduction</title></info>
   
   &Principles;
   &Installation;
   &TroubleShooting;  
  </part>
  
- <part xml:id="ProActiveGuidedTour"><info><title>Guided Tour and Tutorial</title></info>
+ <part xml:id="ProActiveGuidedTour"><info><title xml:id="GuidedTourandTutorial_2">Guided Tour and Tutorial</title></info>
   
   &guidedindex;
   &capabilities-intro;
@@ -98,7 +98,7 @@
    &conclusion;  -->
  </part>
  
- <part xml:id="ProActiveProgramming"><info><title>Programming With Active Objects</title></info>
+ <part xml:id="ProActiveProgramming"><info><title xml:id="ProgrammingWithActiveObjects_2">Programming With Active Objects</title></info>
   
   &ProActiveBasis; 
   &AOCreation; 
@@ -107,7 +107,7 @@
   &exceptions;
  </part>
  
- <part xml:id="HighLevelAPI"><info><title>Programming With High Level APIs</title></info>
+ <part xml:id="HighLevelAPI"><info><title xml:id="ProgrammingWithHighLevelAPIs_2">Programming With High Level APIs</title></info>
   
   &MasterWorker;
   &Calcium;
@@ -115,7 +115,7 @@
   &mpi;
  </part>
  
- <part xml:id="ProActiveDeployment"><info><title>Deployment And Virtualization</title></info>
+ <part xml:id="ProActiveDeployment"><info><title xml:id="DeploymentAndVirtualization_2">Deployment And Virtualization</title></info>
   
   &PAConfiguration;
   &GCMDeployment;
@@ -126,7 +126,7 @@
   &technicalService;
  </part>
  
- <part xml:id="ProActiveComponents"><info><title>Programming With Components</title></info>
+ <part xml:id="ProActiveComponents"><info><title xml:id="ProgrammingWithComponents_2">Programming With Components</title></info>
   
   &intro;
   &userguide;
@@ -135,7 +135,7 @@
   &perspectives;
   &annex;
  </part>
- <part xml:id="ProActiveAdvancedFeatures"><info><title>Services and Advanced Features</title></info>
+ <part xml:id="ProActiveAdvancedFeatures"><info><title xml:id="ServicesandAdvancedFeatures_2">Services and Advanced Features</title></info>
   
   &loadbalancing;
   &faultTolerance;
@@ -145,7 +145,7 @@
   
  </part>
  
- <part xml:id="ExtendingProActive"><info><title>Extending ProActive</title></info>
+ <part xml:id="ExtendingProActive"><info><title xml:id="ExtendingProActive_2">Extending ProActive</title></info>
   
   &writeDoc;
   &developingConventions;
@@ -155,13 +155,13 @@
   &MOP;
  </part>
  
- <part xml:id="Unsupported"><info><title>ProActive Extra Packages / Extensions Under Development  </title></info>
+ <part xml:id="Unsupported"><info><title xml:id="ProActiveExtraPackagesExtensionsUnderDevelopment_2">ProActive Extra Packages / Extensions Under Development  </title></info>
   &bnb;
   &p2p;
   &MonteCarlo;
  </part>
  
- <part xml:id="backMattersPart"><info><title>Back matters</title></info>
+ <part xml:id="backMattersPart"><info><title xml:id="Backmatters_2">Back matters</title></info>
   
   &FAQ;   
   &referenceCard;

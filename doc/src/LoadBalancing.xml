@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="LoadBalancing"><info><title>Load Balancing</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="LoadBalancing"><info><title xml:id="LoadBalancing_24">Load Balancing</title></info>
   
 
-  <section><info><title>Overview</title></info>
+  <section xml:id="Overview_24"><info><title>Overview</title></info>
     
 
     <indexterm significance="preferred">
@@ -19,27 +19,27 @@
     an other : PAMobileAgent.migrateTo(object,node,false). (see <xref linkend="Migration"/> for more details).</para>
   </section>
 
-  <section><info><title>Metrics</title></info>
+  <section xml:id="Metrics_24"><info><title>Metrics</title></info>
     
 
     <para>The load balancing need metrics to evaluate each node and so to take
     a decision. You can define your own Metrics (CPU Load, number of active
     objects, communication between active objects ...).</para>
 
-    <section><info><title>MetricFactory and Metric classes</title></info>
+    <section xml:id="MetricFactoryandMetricclasses_24"><info><title>MetricFactory and Metric classes</title></info>
       
 
       <para>You must implement two classes : MetricFactory and Metric (package
       org.objectweb.proactive.loadbalancing.metrics).</para>
 
-      <section><info><title>MetricFactory</title></info>
+      <section xml:id="MetricFactory_24"><info><title>MetricFactory</title></info>
         
 
         <para>You have to implements the method <emphasis>public Metric
         getNewMetric( ) </emphasis>which returns a new Metric.</para>
       </section>
 
-      <section><info><title>Metric</title></info>
+      <section xml:id="Metric_24"><info><title>Metric</title></info>
         
 
         <para>There are two concepts : the <emphasis>rank</emphasis> and the
@@ -74,13 +74,13 @@
     </section>
   </section>
 
-  <section><info><title>Using Load Balancing</title></info>
+  <section xml:id="UsingLoadBalancing_24"><info><title>Using Load Balancing</title></info>
     
 
     <para>There is two ways for using load balancing : manually in the
     application code or as a technical service.(see <xref linkend="technicalService"/> for more details).</para>
 
-    <section><info><title>In the application code</title></info>
+    <section xml:id="Intheapplicationcode_24"><info><title>In the application code</title></info>
       
 
       <para>In order to ease the use of the load balancing, we provide static
@@ -98,7 +98,7 @@
   LoadBalancing.addNode(node);</programlisting></para>
     </section>
 
-    <section><info><title>Technical Service</title></info>
+    <section xml:id="TechnicalService_24"><info><title>Technical Service</title></info>
       
 
       <para>In your deployment descriptor, you have to define the load
@@ -109,7 +109,7 @@
     </section>
   </section>
 
-  <section><info><title>Non Migratable Objects</title></info>
+  <section xml:id="NonMigratableObjects_24"><info><title>Non Migratable Objects</title></info>
     
 
     <para>Sometimes, active objects can't migrate : non-serializable

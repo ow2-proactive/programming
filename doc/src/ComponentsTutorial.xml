@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsTutorial"><info><title>GCM Components Tutorial</title></info>
-	<section><info><title>Introduction</title></info> 
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsTutorial"><info><title xml:id="GCMComponentsTutorial_27">GCM Components Tutorial</title></info>
+	<section xml:id="Introduction_27"><info><title>Introduction</title></info> 
 		
 		<para>
 			This chapter presents a short user guide which explains how to use the ProActive/GCM implementation.
@@ -8,7 +8,7 @@
 		</para>
 	</section>
 		
-	<section><info><title>	Creating and using components in a programatic way</title></info>
+	<section xml:id="Creatingandusingcomponentsinaprogramaticway_27"><info><title>Creating and using components in a programatic way</title></info>
 					<para> Along this short user guide, we will show: how to
  			  create primitive and composite components, how to assemble
  			   them using Fractal/GCM API and Fractal API files, how
@@ -19,7 +19,7 @@
  				<para> The first step of this user guide explains how
  				 to create a single primitive component. Next, we will use an
  				  assembly of two primitive components in a composite one.</para>
- 				  <section><info><title>
+ 				  <section><info><title >
  					The first component </title></info>
  				  	
 				
@@ -82,7 +82,7 @@
 				  </para>
 					 <programlisting><textobject><textdata fileref="guided_tour/code_snippets/components/simple_run_output.txt"/></textobject></programlisting>
 							</section>
-			<section><info><title>Define an assembly</title></info>
+			<section xml:id="Defineanassembly_27"><info><title>Define an assembly</title></info>
 				
 					<para> Now that we succeeded to create and use
 					 a primitive component, we will learn how to use
@@ -94,7 +94,7 @@
 					       a composite. The <xref linkend="component_assembly"/> shows this assembly. 
 					       </para>
 			
-	      	<figure xml:id="component_assembly"><info><title>Component assembly </title></info> 
+	      	<figure xml:id="component_assembly"><info><title xml:id="Componentassembly_27">Component assembly </title></info> 
 			  <mediaobject>
 	          <imageobject>
 	            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/component_assembly.png" format="PNG"/>
@@ -123,7 +123,7 @@
 			      </para>
 			      </section>
 			      </section>
-			<section><info><title>Create and use components using ADL</title></info>
+			<section xml:id="CreateandusecomponentsusingADL_27"><info><title>Create and use components using ADL</title></info>
 			
 				<para> We want create the same component directly using
 				 ADL capabilities. The source code of the method launchWithADL shows
@@ -165,7 +165,7 @@
 				 launchWithADL method in the main and then you can see the same output as in the previous section.
 				 </para>
 				 </section>
-				 <section><info><title>Creating, using and deploying components using ADL </title></info>
+				 <section xml:id="CreatingusinganddeployingcomponentsusingADL_27"><info><title>Creating, using and deploying components using ADL </title></info>
 				 
 				 	<para>To deploy components on a specific virtual node, we need
 				 	 to use ADL files. Just before we saw that the tag
@@ -217,7 +217,7 @@ Launch component assembly example with ADL
 Launch and deploy component assembly example with ADL
 				      -->
 				      </section>
-				      <section><info><title>Component interface Cardinality</title></info>
+				      <section xml:id="ComponentinterfaceCardinality_27"><info><title>Component interface Cardinality</title></info>
 				      
 				      <para> Client and server also support multicast and gathercast
 				       interface cardinality. The GCM [1] explains which constraints
@@ -228,7 +228,7 @@ Launch and deploy component assembly example with ADL
 				           the org.objectweb.proactive.core.component.type.annotations.multicast package.
 				           </para>
 				           </section>
-				   <section><info><title>Additional examples</title></info>
+				   <section xml:id="Additionalexamples_27"><info><title>Additional examples</title></info>
 				   
 				   <para> Two component applications are included in ProActive the HelloWorld and C3D example.
 				   </para>

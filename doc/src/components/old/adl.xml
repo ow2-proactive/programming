@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="adl"><info><title>Architecture Description Language</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="adl"><info><title xml:id="ArchitectureDescriptionLanguage_48">Architecture Description Language</title></info>
     
     <indexterm significance="preferred">
         <primary>ADL</primary>
@@ -37,7 +37,7 @@
         of the ProActive distribution): fractal-adl.jar, dtdparser.jar,
         ow_deployment_scheduling.jar
     </para>
-    <section><info><title>Overview</title></info>
+    <section xml:id="Overview_48"><info><title>Overview</title></info>
         
         <para>
             Components are defined in
@@ -173,7 +173,7 @@
             </listitem>
         </itemizedlist>
     </section>
-    <section><info><title>Example</title></info>
+    <section xml:id="Example_48"><info><title>Example</title></info>
         
         <para>
             The easiest way to understand the ADL is to see an example (
@@ -183,7 +183,7 @@
         </para>
         <para/>
     </section>
-    <section><info><title>Exportation and composition of virtual nodes</title></info>
+    <section xml:id="Exportationandcompositionofvirtualnodes_48"><info><title>Exportation and composition of virtual nodes</title></info>
         
         <para>
             Components are deployed on the virtual node that is
@@ -267,7 +267,7 @@ virtual-node name='client-node' cardinality='single'/</screen>
             machine. This can be useful for debugging purposes.
         </para>
     </section>
-    <section xml:id="adl_html_usage"><info><title>Usage</title></info>
+    <section xml:id="adl_html_usage"><info><title xml:id="Usage_48">Usage</title></info>
         
         <para>
             ADL definitions correspond to component factories. ADL

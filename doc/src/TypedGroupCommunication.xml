@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="TypedGroupCommunication"><info><title>Typed Group Communication</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="TypedGroupCommunication"><info><title xml:id="TypedGroupCommunication_66">Typed Group Communication</title></info>
   
 
-  <section xml:id="TypedGroupCommunication_html_overview"><info><title>Overview</title></info>
+  <section xml:id="TypedGroupCommunication_html_overview"><info><title xml:id="Overview_66">Overview</title></info>
     
 
     <para>Group communication is a crucial feature for high-performance and
@@ -34,7 +34,7 @@
 	 	The following diagrams contain
 	 	all the methods in the <literal>PAGroup</literal> class and <literal>Group</literal> interface.   
 	</para>     
-     	<figure><info><title>PAGroup class  and Group interface</title></info>
+     	<figure><info><title xml:id="PAGroupclassandGroupinterface_66">PAGroup class  and Group interface</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -44,7 +44,7 @@
 	</figure>
 
 <!-- 
-     	<figure><info><title>Group creation methods and parameters</title></info>
+     	<figure><info><title xml:id="Groupcreationmethodsandparameters_66">Group creation methods and parameters</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -63,7 +63,7 @@
 
   </section>
 
-  <section xml:id="TypedGroupCommunication_html_Creation"><info><title>Instantiation Typed Group Creation</title></info>
+  <section xml:id="TypedGroupCommunication_html_Creation"><info><title xml:id="InstantiationTypedGroupCreation_66">Instantiation Typed Group Creation</title></info>
     
 
    
@@ -99,7 +99,7 @@
     be invoked on the group.</para>
   </section>
 
-  <section xml:id="TypedGroupCommunication_html_repr"><info><title>Group representation and manipulation</title></info>
+  <section xml:id="TypedGroupCommunication_html_repr"><info><title xml:id="Grouprepresentationandmanipulation_66">Group representation and manipulation</title></info>
     
 
     <para>The <emphasis role="bold">typed group representation</emphasis> we
@@ -154,7 +154,7 @@ A ag1new = (A) gA.getGroupByType();</programlisting></para>
     
   </section>
 
-  <section xml:id="TypedGroupCommunication_html_result"><info><title>Group as result of group communications</title></info>
+  <section xml:id="TypedGroupCommunication_html_result"><info><title xml:id="Groupasresultofgroupcommunications_66">Group as result of group communications</title></info>
     
 
     <para>The particularity of our group communication mechanism is that the
@@ -205,7 +205,7 @@ PAGroup.waitAll(vg);
     
   </section>
 
-  <section xml:id="TypedGroupCommunication_html_comms"><info><title>Broadcast vs Dispatching</title></info>
+  <section xml:id="TypedGroupCommunication_html_comms"><info><title xml:id="BroadcastvsDispatching_66">Broadcast vs Dispatching</title></info>
     
 
     <para>Regarding the parameters of a method call towards a group of
@@ -238,7 +238,7 @@ PAGroup.waitAll(vg);
      
   </section>
   
-  <section><info><title>Access By Name</title></info>
+  <section xml:id="AccessByName_66"><info><title>Access By Name</title></info>
   <para> Group members can be accessed by name if on addition we specify the name.
   To use the named members we create the group and add members with  the <literal>addNamedElement(String key,E value)</literal> method 
   from the <literal>org.objectweb.proactive.core.group.Group</literal> interface. 
@@ -248,7 +248,7 @@ PAGroup.waitAll(vg);
   	<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/typed_group_name_access_example.snip"/></textobject></programlisting>
   </section>
   
-  <section><info><title>Unique serialization</title></info>
+  <section xml:id="Uniqueserialization_66"><info><title>Unique serialization</title></info>
   	<para>Unique serialization is an optimization option that allows performing the serialization
   	of the arguments before streaming them. If unique serialization is activated the arguments will 
   	be transformed into a byte array once, and afterward streamed. The one time serialization is

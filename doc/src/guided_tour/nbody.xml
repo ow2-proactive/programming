@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="nbody"><info><title>The nbody example</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="nbody"><info><title xml:id="Thenbodyexample_14">The nbody example</title></info>
     
-    <section><info><title>
+    <section><info><title >
             Using facilities provided by ProActive on a complete example
         </title></info>
         
-        <section><info><title>Rationale and overview</title></info>
+        <section xml:id="Rationaleandoverview_14"><info><title>Rationale and overview</title></info>
             
             <para>
                 This section of the guided tour goes through the
@@ -173,7 +173,7 @@
                 </informaltable>
             </para>
         </section>
-        <section><info><title>Usage</title></info>
+        <section xml:id="Usage_14"><info><title>Usage</title></info>
             
             <para>
                 With script located in the folder
@@ -280,7 +280,7 @@
                 </listitem>
             </itemizedlist>
         </section>
-        <section><info><title>
+        <section><info><title >
                 Source files:
                 ProActive/src/org/objectweb/proactive/examples/nbody
             </title></info>
@@ -292,7 +292,7 @@
                 You'll find the following tree:
             </para>
             <para>
-                <figure><info><title>The nbody directory structure</title></info>
+                <figure><info><title xml:id="Thenbodydirectorystructure_14">The nbody directory structure</title></info>
                     
                     <mediaobject>
                         <imageobject>
@@ -312,7 +312,7 @@
                 problem.
             </para>
         </section>
-        <section><info><title>Common files</title></info>
+        <section xml:id="Commonfiles_14"><info><title>Common files</title></info>
             
             <para>
                 The files contained in 'common' are those that are
@@ -457,7 +457,7 @@ maestro = (Maestro) PAActiveObject.newActive( Maestro.class.getName(), construct
                 of the simplest implementation of the n-body problem.
             </para>
         </section>
-        <section><info><title>Simple Active Objects</title></info>
+        <section xml:id="SimpleActiveObjects_14"><info><title>Simple Active Objects</title></info>
             
             <para>
                 This is the implementation of the simplest example of
@@ -615,7 +615,7 @@ public void setValue(Planet inf, int id) {
                 .
             </para>
         </section>
-        <section><info><title>Groups of Active objects</title></info>
+        <section xml:id="GroupsofActiveobjects_14"><info><title>Groups of Active objects</title></info>
             
             <para>
                 This is a simple improvement, which results in faster
@@ -725,7 +725,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section><info><title>Group Distribution</title></info>
+        <section xml:id="GroupDistribution_14"><info><title>Group Distribution</title></info>
             <!-- TODO title might be wrong -->
             
             <para>
@@ -800,7 +800,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section><info><title>Object Oriented SPMD Groups</title></info>
+        <section xml:id="ObjectOrientedSPMDGroups_14"><info><title>Object Oriented SPMD Groups</title></info>
             
             <para>
                 This is another way to improve the groupcom example. It
@@ -852,7 +852,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section><info><title>Barnes-Hut</title></info>
+        <section xml:id="BarnesHut_14"><info><title>Barnes-Hut</title></info>
             
             <para>
                 This way to construct the nbody simulation is based on a
@@ -967,7 +967,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section><info><title>Conclusion</title></info>
+        <section xml:id="Conclusion_14"><info><title>Conclusion</title></info>
             
             <para>
                 In this guided tour, we tried to show different

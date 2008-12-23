@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ProActiveBasis"><info><title>Active Object Definition</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ProActiveBasis"><info><title xml:id="ActiveObjectDefinition_60">Active Object Definition</title></info>
   
 
   <!--  File: /home/irosenbe/PA_new_doc/docbook-tuto/ProActiveBasis.html  -->
 
   
-  	<section><info><title>Overview</title></info>
+  	<section xml:id="Overview_60"><info><title>Overview</title></info>
   		
   		<!-- //TODO  expand -->
   		<para>In this part we will present the process of creating an active object
@@ -13,7 +13,7 @@
   		In the last chapters we will examine group communication, mobile agents  and
   		exception handling for active objects. </para>
   	</section>
-    <section xml:id="ProActiveBasis_html_def"><info><title>Active Object Structure</title></info>
+    <section xml:id="ProActiveBasis_html_def"><info><title xml:id="ActiveObjectStructure_60">Active Object Structure</title></info>
     
 
     <para>Active objects are the basic units of activity and distribution used
@@ -23,7 +23,7 @@
     objects thus making the use of the threads transparent.  </para>
     
     
-        <para><figure><info><title>Three different computational models</title></info>
+        <para><figure><info><title xml:id="Threedifferentcomputationalmodels_60">Three different computational models</title></info>
         
 
         <mediaobject>
@@ -80,7 +80,7 @@
       </listitem>
     </itemizedlist>
 
-    <figure><info><title>Proactive Active Object structure</title></info>
+    <figure><info><title xml:id="ProactiveActiveObjectstructure_60">Proactive Active Object structure</title></info>
         
 
         <mediaobject>

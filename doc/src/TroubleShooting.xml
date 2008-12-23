@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="TroubleShooting"><info><title>ProActive Troubleshooting</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="TroubleShooting"><info><title xml:id="ProActiveTroubleshooting_38">ProActive Troubleshooting</title></info>
   
 
   <para>In this section we present common problems encountered while trying to
@@ -6,7 +6,7 @@
   ProActive mailing list <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://forge.objectweb.org/mail/?group_id=7">proactive@ow2.org
   </link>. Make sure that you include a
     precise description of your problem along with a full copy of the error
-    message.</para><section><info><title>Common problems</title></info>
+    message.</para><section xml:id="Commonproblems_38"><info><title>Common problems</title></info>
     
 
     <para>If you encounter any problem with installing ProActive and running
@@ -39,7 +39,7 @@
       <listitem>
         <para><emphasis role="bold">Java complains about denial of
         access.</emphasis> If you get the following exceptions, you probably
-        didn't change the file java.policy as described in <xref xml:linkend="Create_Java_Policy"/>.</para>
+        didn't change the file java.policy as described in <xref linkend="Create_Java_Policy"/>.</para>
        
       <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/java_policy_error.txt"/></textobject></programlisting>
       
@@ -83,7 +83,7 @@
     
   </section>
 
-  <section xml:id="TroubleShooting_html_loggers"><info><title>Enabling the loggers</title></info>
+  <section xml:id="TroubleShooting_html_loggers"><info><title xml:id="Enablingtheloggers_38">Enabling the loggers</title></info>
     
 
     <para>To enable the debugging logger the following log file can be
@@ -100,7 +100,7 @@
   </section>
 
   
-  <section xml:id="dbdoclet.id.TroubleShooting_dns"><info><title>Domaine name resolution problems</title></info>
+  <section xml:id="dbdoclet.id.TroubleShooting_dns"><info><title xml:id="Domainenameresolutionproblems_38">Domaine name resolution problems</title></info>
     
 	    <para>To function properly, ProActive requires machines to have a
     correctly configured hostname and domain name. If the name of a machine
@@ -114,7 +114,7 @@
     deployed on computers that have names that do not resolve properly.</para>
   </section>
 
-  <section xml:id="dbdoclet.id.TroubleShooting_rmi_tunneling"><info><title>RMI Tunneling</title></info>
+  <section xml:id="dbdoclet.id.TroubleShooting_rmi_tunneling"><info><title xml:id="RMITunneling_38">RMI Tunneling</title></info>
     
 
     <para>ProActive provides RMI tunneling through ssh for crossing firewalls

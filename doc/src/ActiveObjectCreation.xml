@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ActiveObjectCreation"><info><title>Active Objects: Creation And Advanced Concepts</title></info>
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ActiveObjectCreation"><info><title xml:id="ActiveObjectsCreationAndAdvancedConcepts_71">Active Objects: Creation And Advanced Concepts</title></info>
 	
 
-	<section><info><title>Overview</title></info>
+	<section xml:id="Overview_71"><info><title>Overview</title></info>
 		
 		<para>
 			Active objects are created on a per-object basis: an
@@ -45,7 +45,7 @@
 			.
 		</para>
 
-		<figure><info><title>PAActiveObject class</title></info>
+		<figure><info><title xml:id="PAActiveObjectclass_71">PAActiveObject class</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -55,7 +55,7 @@
 			</mediaobject>
 		</figure>
 <!-- 
-		<figure><info><title>Active Object creation methods and parameters</title></info>
+		<figure><info><title xml:id="ActiveObjectcreationmethodsandparameters_71">Active Object creation methods and parameters</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -73,7 +73,7 @@
 
 	</section>
 
-	<section xml:id="ActiveObjectCreation_html_restrictions"><info><title>Restrictions on creating active objects</title></info>
+	<section xml:id="ActiveObjectCreation_html_restrictions"><info><title xml:id="Restrictionsoncreatingactiveobjects_71">Restrictions on creating active objects</title></info>
 		
 		<para>
 			Not all classes can be used to instantiate active objects.
@@ -116,7 +116,7 @@
 
 	</section>
 
-	<section><info><title>Instantiation Based Creation</title></info>
+	<section xml:id="InstantiationBasedCreation_71"><info><title>Instantiation Based Creation</title></info>
 		
 
 		<para>
@@ -211,7 +211,7 @@
 
 	</section>
 	
-	<section><info><title>Object Based Creation using <literal>PAActiveObject.turnActive(...)</literal></title></info>
+	<section xml:id="ObjectBasedCreationusingliteralPAActiveObjectturnActiveliteral_71"><info><title>Object Based Creation using <literal>PAActiveObject.turnActive(...)</literal></title></info>
 		
 
 		<para>
@@ -275,7 +275,7 @@
 	</section>
 
 
-	<section><info><title>Active Object Creation Arguments</title></info>
+	<section xml:id="ActiveObjectCreationArguments_71"><info><title>Active Object Creation Arguments</title></info>
 		
 
 		<section><info><title>
@@ -309,7 +309,7 @@
 			</para>
 		</section>
 
-		<section><info><title>Using Constructor Arguments</title></info>
+		<section xml:id="UsingConstructorArguments_71"><info><title>Using Constructor Arguments</title></info>
 			
 			<para>
 
@@ -383,11 +383,11 @@
 
 	<!--
 		<sect2>
-			<title>Using Parameterized Classes</title>
+<title xml:id="UsingParameterizedClasses_71">Using Parameterized Classes</title>
 			//TODO explain generics
 		</sect2>
 		-->
-		<section><info><title>Using A Node</title></info>
+		<section xml:id="UsingANode_71"><info><title>Using A Node</title></info>
 			
 			<para>
 				It is possible to pass an argument to the call to
@@ -447,7 +447,7 @@
 
 
 		</section>
-		<section xml:id="ActiveObjectCreationWithCustomActivity"><info><title>Using A Custom Activity</title></info>
+		<section xml:id="ActiveObjectCreationWithCustomActivity"><info><title xml:id="UsingACustomActivity_71">Using A Custom Activity</title></info>
 			
 
 
@@ -568,7 +568,7 @@
 			//TODO add explanation
 			
 		 -->
-		<figure><info><title>Activity algorithm</title></info>
+		<figure><info><title xml:id="Activityalgorithm_71">Activity algorithm</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -672,7 +672,7 @@
 
 		</section>
 
-		<section xml:id="ActiveObjectCreation_html_factory"><info><title>Using the factory pattern with Active Objects</title></info>
+		<section xml:id="ActiveObjectCreation_html_factory"><info><title xml:id="UsingthefactorypatternwithActiveObjects_71">Using the factory pattern with Active Objects</title></info>
 			
 			<para>
 				<emphasis role="bold">
@@ -812,7 +812,7 @@
 		</section>
 	<!--//TODO - why doesn't newActive have the same parameter ?
 		<sect2>
-			<title>
+<title>
 				Using
 				<literal>nameOfTargetType</literal>
 				with
@@ -857,7 +857,7 @@
 		
 
 		<para>
-			<figure><info><title>The components of an active object and of a referencing object</title></info>
+			<figure><info><title xml:id="Thecomponentsofanactiveobjectandof_710">The components of an active object and of a referencing object</title></info>
 				
 
 				<mediaobject>
@@ -892,7 +892,7 @@
 		
 		</para>
 		
-		<section><info><title>Role of the stub</title></info>
+		<section xml:id="Roleofthestub_71"><info><title>Role of the stub</title></info>
 			
 			
 			<indexterm>
@@ -1051,7 +1051,7 @@
 			</itemizedlist>
 		</section>
 
-		<section><info><title>Role of the proxy</title></info>
+		<section xml:id="Roleoftheproxy_71"><info><title>Role of the proxy</title></info>
 			
 
 			<para>
@@ -1069,7 +1069,7 @@
 			</para>
 		</section>
 
-		<section><info><title>Role of the body</title></info>
+		<section xml:id="Roleofthebody_71"><info><title>Role of the body</title></info>
 			
 
 			<para>
@@ -1086,7 +1086,7 @@
 			</para>
 		</section>
 
-		<section><info><title>Role of the instance of class Worker</title></info>
+		<section xml:id="RoleoftheinstanceofclassWorker_71"><info><title>Role of the instance of class Worker</title></info>
 			
 
 			<para>
@@ -1113,10 +1113,10 @@
 	</section>
 	
 
-	<section xml:id="FutureObjectCreation"><info><title>Asynchronous calls and futures</title></info>
+	<section xml:id="FutureObjectCreation"><info><title xml:id="Asynchronouscallsandfutures_71">Asynchronous calls and futures</title></info>
 		
 
-		<section><info><title>Creation of a Future Object</title></info>
+		<section xml:id="CreationofaFutureObject_71"><info><title>Creation of a Future Object</title></info>
 			
 
 			<para>
@@ -1321,7 +1321,7 @@
 			</para>
 
 			<para>
-				<figure><info><title>A future object</title></info>
+				<figure><info><title xml:id="Afutureobject_71">A future object</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -1347,7 +1347,7 @@
 				which provide control over the way futures are returned. 
 			</para>
 			</section>
-			<section><info><title>Methods affected by futures </title></info>
+			<section xml:id="Methodsaffectedbyfutures_71"><info><title>Methods affected by futures </title></info>
 				
 				<para>
 					Any call to a future object is reified in order to
@@ -1419,10 +1419,10 @@
 				
 		</section>
 
-		<section><info><title>Asynchronous calls in details</title></info>
+		<section xml:id="Asynchronouscallsindetails_71"><info><title>Asynchronous calls in details</title></info>
 			
 
-			<section><info><title>The setup</title></info>
+			<section xml:id="Thesetup_71"><info><title>The setup</title></info>
 				
 
 				<para>
@@ -1498,7 +1498,7 @@
 				</para>
 			</section>
 
-			<section><info><title>Visualizing the graph of active and passive objects</title></info>
+			<section xml:id="Visualizingthegraphofactiveandpassiveobjects_71"><info><title>Visualizing the graph of active and passive objects</title></info>
 				
 
 				<para>
@@ -1533,7 +1533,7 @@
 						</para>
 
 		<para>
-			<figure><info><title>The components of an active object and of a referencing object</title></info>
+			<figure><info><title xml:id="Thecomponentsofanactiveobjectandof_71">The components of an active object and of a referencing object</title></info>
 				
 
 				<mediaobject>
@@ -1610,7 +1610,7 @@
 				</itemizedlist>
 			</section>
 
-			<section><info><title>Sequence Diagram</title></info>
+			<section xml:id="SequenceDiagram_71"><info><title>Sequence Diagram</title></info>
 				
 
 				<para>
@@ -1709,7 +1709,7 @@
 				</para>
 
 				<para>
-					<figure><info><title>Call flow when a future is set before being used</title></info>
+					<figure><info><title xml:id="Callflowwhenafutureissetbefore_71">Call flow when a future is set before being used</title></info>
 						
 
 						<mediaobject>
@@ -1729,7 +1729,7 @@
 				</para>
 
 				<para>
-					<figure><info><title>Call flow when the future is not set before being used (wait-by-necessity)</title></info>
+					<figure><info><title xml:id="Callflowwhenthefutureisnotset_71">Call flow when the future is not set before being used (wait-by-necessity)</title></info>
 						
 
 						<mediaobject>
@@ -1742,7 +1742,7 @@
 			</section>
 		</section>
 
-		<section xml:id="FutureObjectCreation_commonerror"><info><title>Good ProActive programming practices</title></info>
+		<section xml:id="FutureObjectCreation_commonerror"><info><title xml:id="GoodProActiveprogrammingpractices_71">Good ProActive programming practices</title></info>
 			
 
 			<para>
@@ -1861,7 +1861,7 @@
 				</listitem>
 			</itemizedlist>
 		</section>
-		<section><info><title>Lightweight failure detection</title></info>
+		<section xml:id="Lightweightfailuredetection_71"><info><title>Lightweight failure detection</title></info>
 			
 
 			<para>
@@ -1895,7 +1895,7 @@
 		</section>
 	</section>
 	
-	<section xml:id="AC"><info><title>Automatic Continuation in ProActive</title></info>
+	<section xml:id="AC"><info><title xml:id="AutomaticContinuationinProActive_71">Automatic Continuation in ProActive</title></info>
 		
 
 		<indexterm significance="preferred">
@@ -1921,7 +1921,7 @@
 				will updated the value in the corresponding objects. 
 			</para>
 	
-		<section><info><title>Sending Futures</title></info>
+		<section xml:id="SendingFutures_71"><info><title>Sending Futures</title></info>
 			
 
 					<para>
@@ -1965,7 +1965,7 @@
 						located in the	<literal>FuturePool</literal>.
 					</para>
 			</section>		
-			<section><info><title>Receiving Futures</title></info>
+			<section xml:id="ReceivingFutures_71"><info><title>Receiving Futures</title></info>
 					
 			
 							<para>
@@ -1986,7 +1986,7 @@
 
 
 
-		<section><info><title>Illustration of an Automatic Continuation</title></info>
+		<section xml:id="IllustrationofanAutomaticContinuation_71"><info><title>Illustration of an Automatic Continuation</title></info>
 			
 
 			<indexterm>
@@ -2150,7 +2150,7 @@
 	</section>
 	
 	
-	<section xml:id="EXCHANGE"><info><title>Data Exchange between Active Objects</title></info>
+	<section xml:id="EXCHANGE"><info><title xml:id="DataExchangebetweenActiveObjects_71">Data Exchange between Active Objects</title></info>
 		
 
 		<indexterm significance="preferred">
@@ -2225,7 +2225,7 @@
 			<!-- //TODO add immediateService maybe and expand or remove this section, it is present in other parts of the manual		
 	
 	<sect1 id="ActiveObjectCreation_html_events">
-		<title>Event based programming</title>
+<title xml:id="Eventbasedprogramming_71">Event based programming</title>
 
   	<para>
 			ProActive supports an event based programming model. That

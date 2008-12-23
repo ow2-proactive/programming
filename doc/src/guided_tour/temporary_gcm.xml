@@ -1,15 +1,15 @@
 	 </sect1>
-			<title> GCM Components Tutorial </title>
+<title xml:id="GCMComponentsTutorial_17">GCM Components Tutorial </title>
 
 	<sect2> 
-		<title>Introduction</title>
+<title xml:id="Introduction_17">Introduction</title>
 		<para>
 			This document introduces the ProActive/GCM implementation
 			 and presents a short user guide which explains how to use it.
 		</para>
 	</sect2>
 	<sect2>
-		<title>	 Key features of ProActive GCM Implementation </title> 
+<title xml:id="KeyfeaturesofProActiveGCMImplementation_17">Key features of ProActive GCM Implementation </title> 
 			 <itemizedlist>
 			 <listitem>	 <para>Creation/usage of primitive and composite components</para></listitem>
 			 <listitem><para> Client, server and non-functional interfaces </para>
