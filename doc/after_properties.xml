@@ -13,7 +13,7 @@
             version="true" 
             source="${source}" 
             use="true" 
-            windowtitle="ProActive complete API" 
+            windowtitle="${javadoc.title} Complete API" 
             breakiterator="yes" 
             additionalparam="-docfilessubdirs -excludedocfilessubdir CVS:test_documentation"> 
             
@@ -29,8 +29,8 @@
             
             <link href="http://fractal.objectweb.org/current/doc/javadoc/fractal/" />
             <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
-            <doctitle><![CDATA[ProActive ${version}]]></doctitle>
-            <bottom><![CDATA[<i>Copyright 1997-2008 INRIA All Rights Reserved.</i>]]></bottom>
+            <doctitle>${javadoc.title}</doctitle>
+            <bottom>${javadoc.copyright}</bottom>
             
             <group title="ProActive packages for end user" packages="org.objectweb.proactive" />
             <group title="ProActive Core" packages="org.objectweb.proactive.core*" />
