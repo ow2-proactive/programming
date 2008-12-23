@@ -249,9 +249,9 @@ if [ -f $PROACTIVE/lib/timit/batik-xml.jar ]
 then
 	CLASSPATH=$CLASSPATH:$PROACTIVE/lib/timit/batik-xml.jar
 fi
-if [ -f $PROACTIVE/lib/timit/commons-cli-1.0.jar ]
+if [ -f $PROACTIVE/lib/timit/commons-cli-1.1.jar ]
 then
-	CLASSPATH=$CLASSPATH:$PROACTIVE/lib/timit/commons-cli-1.0.jar
+	CLASSPATH=$CLASSPATH:$PROACTIVE/lib/timit/commons-cli-1.1.jar
 fi
 if [ -f $PROACTIVE/lib/timit/jcommon-1.0.6.jar ]
 then

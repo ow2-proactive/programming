@@ -27,7 +27,7 @@
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
 	<classpathentry kind="lib" path="lib/colobus-0.1.jar"/>
 	<classpathentry kind="lib" path="lib/colt.jar"/>
-	<classpathentry kind="lib" path="lib/commons-cli-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-cli-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-discovery.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>

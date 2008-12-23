@@ -19,7 +19,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/cog-ogce.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/colobus-0.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/colt.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons-cli-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-cli-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-discovery.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging-1.0.4.jar"/>
