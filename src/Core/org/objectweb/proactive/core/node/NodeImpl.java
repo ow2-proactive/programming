@@ -37,7 +37,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
-import org.objectweb.proactive.Body;
 import org.objectweb.proactive.Job;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.Constants;
@@ -69,6 +68,7 @@ import org.objectweb.proactive.core.runtime.VMInformation;
  * @since   ProActive 0.9
  *
  */
+@SuppressWarnings("serial")
 public class NodeImpl implements Node, Serializable {
 
     protected NodeInformation nodeInformation;
@@ -346,26 +346,22 @@ public class NodeImpl implements Node, Serializable {
      */
     public void killAllActiveObjects() throws NodeException, IOException {
         List<UniversalBody> bodyArray;
-        boolean local = NodeFactory.isNodeLocal(this);
         try {
             bodyArray = this.proActiveRuntime.getActiveObjects(this.nodeInformation.getName());
         } catch (ProActiveException e) {
             throw new NodeException("Cannot get Active Objects registered on this node: " +
                 this.nodeInformation.getURL(), e);
         }
-        for (int i = 0; i < bodyArray.size(); i++) {
-            UniversalBody body = bodyArray.get(i);
-            if (local) {
-                ((Body) body).terminate();
-            } else {
-                try {
-                    // reify for remote terminate
-                    PAActiveObject.terminateActiveObject(MOP.createStubObject(Object.class.getName(), body),
-                            true);
-                } catch (MOPException e) {
-                    throw new IOException("Cannot contact Active Objects on this node: " +
-                        this.nodeInformation.getURL() + " caused by " + e.getMessage());
-                }
+
+        for (UniversalBody body : bodyArray) {
+            try {
+                // reify for remote terminate
+                PAActiveObject
+                        .terminateActiveObject(MOP.createStubObject(Object.class.getName(), body), true);
+            } catch (MOPException e) {
+                // Bad error handling but terminateActiveObject eat remote exceptions
+                throw new IOException("Cannot contact Active Objects on this node: " +
+                    this.nodeInformation.getURL() + " caused by " + e.getMessage());
             }
         }
     }
