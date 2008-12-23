@@ -10,8 +10,7 @@
     <section xml:id="ExecutionandfirstglanceattheJacobicode_10"><info><title>Execution and first glance at the Jacobi code</title></info>
       
 
-      <section><info><title >Source files:
-        ProActive/src/Examples/org/objectweb/proactive/examples/jacobi</title></info>
+      <section xml:id="source_files_jacob_5"><info><title >Source files: ProActive/src/Examples/org/objectweb/proactive/examples/jacobi</title></info>
         
 
         <para>The Jacobi example is made of two Java classes:</para>
@@ -337,7 +336,7 @@ private static void printMessageAndWait() {
         <para>You can try and test other modifications to the Jacobi
         code.</para>
 
-        <figure><info><title xml:id="RunningtheJacobiapplicationandviewingwithIC2D_10">Running the Jacobi application, and viewing with IC2D</title></info>
+        <figure xml:id="RunningtheJacobiapplicationandviewingwithIC2D_10"><info><title>Running the Jacobi application, and viewing with IC2D</title></info>
           
 
           <indexterm>
@@ -378,7 +377,7 @@ private static void printMessageAndWait() {
         <para>Then recompile and execute again. Using IC2D observe that much
         more communications are necessary.</para>
 
-        <figure><info><title xml:id="Withallcommunications_10">With all communications</title></info>
+        <figure xml:id="Withallcommunications_10"><info><title>With all communications</title></info>
           
 
           <mediaobject>
@@ -388,7 +387,7 @@ private static void printMessageAndWait() {
           </mediaobject>
         </figure>
 
-        <figure><info><title xml:id="Withabarriertherearemanylesscommunications_10">With a barrier, there are many less communications</title></info>
+        <figure xml:id="Withabarriertherearemanylesscommunications_10"><info><title>With a barrier, there are many less communications</title></info>
           
 
           <mediaobject>
@@ -451,8 +450,7 @@ private static void printMessageAndWait() {
         being used. For instance, if your machine is powerful enough, start 9
         JVMs, in order to have a single SubMatrix per JVM.</para>
 
-        <figure><info><title>IC2D viewing the Jacobi application with 9 JVMS on the same
-          machine</title></info>
+        <figure xml:id="jacobi_ic2d_9JVMS"><info><title>IC2D viewing the Jacobi application with 9 JVMS on the same machine</title></info>
           
 
           <mediaobject>

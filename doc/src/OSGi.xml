@@ -16,7 +16,7 @@
     framework</emphasis> that allows to a diversity of services to be executed
     in a service gateway, by this way, many applications can <emphasis role="bold">share a single JVM</emphasis> .</para>
 
-    <figure><info><title xml:id="TheOSGiframeworkentities_73">The OSGi framework entities</title></info>
+    <figure xml:id="TheOSGiframeworkentities_73"><info><title>The OSGi framework entities</title></info>
       
 
       <mediaobject>
@@ -93,7 +93,7 @@
     the ProActive Service will be able to create active object on this
     runtime.</para>
 
-    <figure><info><title xml:id="TheProactiveBundleusesthestandardHttpService_73">The Proactive Bundle uses the standard Http Service</title></info>
+    <figure xml:id="TheProactiveBundleusesthestandardHttpService_73"><info><title>The Proactive Bundle uses the standard Http Service</title></info>
       
 
       <mediaobject>

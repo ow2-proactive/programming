@@ -46,7 +46,7 @@
      a dozen rendering engines running in parallel that communicate using Java RMI
      and controlled by a central dispatcher.</para>
    
-    <figure><info><title xml:id="Theactiveobjectsinthec3dapplication_11">The active objects in the c3d application</title></info>
+    <figure xml:id="Theactiveobjectsinthec3dapplication_11"><info><title>The active objects in the c3d application</title></info>
       
 
       <mediaobject>
@@ -87,7 +87,7 @@
       objects, which are the active objects used for parallel
       rendering.</para>
 
-      <para><figure><info><title xml:id="ThedispatcherGUIislaunched_11">The dispatcher GUI is launched</title></info>
+      <para><figure xml:id="ThedispatcherGUIislaunched_11"><info><title>The dispatcher GUI is launched</title></info>
           
 
           <mediaobject>
@@ -110,7 +110,7 @@
       <literal>Proactive\examples\c3d\c3d_add_user.bat</literal> depending on your
       operating system.</para>
       
-            <para><figure><info><title xml:id="AddUserdialog_11">Add User dialog</title></info>
+            <para><figure xml:id="AddUserdialog_11"><info><title>Add User dialog</title></info>
           
 
           <mediaobject>
@@ -244,8 +244,7 @@
         creates 3 Writers, 3 Readers, a ReaderWrite (the controller of the
         application), and a ReaderDisplay, all of which are active objects.</para>
 
-        <para><figure><info><title>A GUI is started that illustrates the activities of the
-            Reader and Writer objects.</title></info>
+        <para><figure xml:id="gui_for_reader_writer"><info><title>A GUI is started that illustrates the activities of the Reader and Writer objects.</title></info>
             
 
             <mediaobject>
@@ -296,7 +295,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         of the application: DinnerLayout, Table, and Philosopher</para>
 
         <para>
-        	<figure><info><title xml:id="TheDiningPhilosophersExample_11">The Dining Philosophers Example</title></info>
+        	<figure xml:id="TheDiningPhilosophersExample_11"><info><title>The Dining Philosophers Example</title></info>
             
             <mediaobject>
               <imageobject>
@@ -558,8 +557,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
     <section xml:id="ExecutionandfirstglanceattheJacobicode_11"><info><title>Execution and first glance at the Jacobi code</title></info>
       
 
-      <section><info><title >Source files:
-        ProActive/src/Examples/org/objectweb/proactive/examples/jacobi</title></info>
+	    <section xml:id="Sourcefilesfprjacobi"><info><title >Source files: ProActive/src/Examples/org/objectweb/proactive/examples/jacobi</title></info>
         
 
         <para>The Jacobi example is made of two Java classes:</para>
@@ -867,7 +865,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>You can try and test other modifications to the Jacobi
         code.</para>
 
-        <figure><info><title xml:id="RunningtheJacobiapplicationandviewingwithIC2D_11">Running the Jacobi application, and viewing with IC2D</title></info>
+        <figure xml:id="RunningtheJacobiapplicationandviewingwithIC2D_11"><info><title>Running the Jacobi application, and viewing with IC2D</title></info>
           
 
           <indexterm>
@@ -908,7 +906,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>Then recompile and execute again. Using IC2D observe that much
         more communications are necessary.</para>
 
-        <figure><info><title xml:id="Withallcommunications_11">With all communications</title></info>
+        <figure xml:id="Withallcommunications_11"><info><title>With all communications</title></info>
           
 
           <mediaobject>
@@ -918,7 +916,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
           </mediaobject>
         </figure>
 
-        <figure><info><title xml:id="Withabarriertherearemanylesscommunications_11">With a barrier, there are many less communications</title></info>
+        <figure xml:id="Withabarriertherearemanylesscommunications_11"><info><title>With a barrier, there are many less communications</title></info>
           
 
           <mediaobject>
@@ -981,8 +979,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         being used. For instance, if your machine is powerful enough, start 9
         JVMs, in order to have a single SubMatrix per JVM.</para>
 
-        <figure><info><title>IC2D viewing the Jacobi application with 9 JVMS on the same
-          machine</title></info>
+        <figure xml:id="ic2d_on_the_same_machine_jacobi"><info><title>IC2D viewing the Jacobi application with 9 JVMS on the same machine</title></info>
           
 
           <mediaobject>
@@ -1242,9 +1239,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 example running on 3 hosts with 8 bodies:
             </para>
             <para>
-                <figure><info><title>
-                        NBody screenshot, with 3 hosts and 8 bodies
-                    </title></info>
+                <figure xml:id="nbody_screenshot_3_8"><info><title>NBody screenshot, with 3 hosts and 8 bodies</title></info>
                     
                     <mediaobject>
                         <imageobject>
@@ -1254,10 +1249,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 </figure>
             </para>
             <para>
-                <figure><info><title>
-                        NBody screenshot, with the application GUI and
-                        Java3D installed
-                    </title></info>
+                <figure xml:id="nbody_with_java3d"><info><title>NBody screenshot, with the application GUI and Java3D installed</title></info>
                     
                     <mediaobject>
                         <imageobject>
@@ -1493,10 +1485,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 </listitem>
             </itemizedlist>
         </section>
-        <section><info><title >
-                Source files:
-                ProActive/src/org/objectweb/proactive/examples/nbody
-            </title></info>
+        <section xml:id="source_files_nbody"><info><title >Source files: ProActive/src/org/objectweb/proactive/examples/nbody</title></info>
             
             <para>
                 This guided tour is based on the files you may find in
@@ -1505,7 +1494,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 You'll find the following tree:
             </para>
             <para>
-                <figure><info><title xml:id="Thenbodydirectorystructure_11">The nbody directory structure</title></info>
+                <figure xml:id="Thenbodydirectorystructure_11"><info><title>The nbody directory structure</title></info>
                     
                     <mediaobject>
                         <imageobject>
@@ -1585,10 +1574,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                         "add" following the physics rules.
                     </para>
                     <para>
-                        <figure><info><title>
-                                The equation of the force between two
-                                bodies
-                            </title></info>
+                        <figure xml:id="nbody_equation"><info><title>The equation of the force between two  bodies</title></info>
                             
                             <mediaobject>
                                 <imageobject>
@@ -2192,9 +2178,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
     <section xml:id="UsingworkingC3Dcodewithcomponents_11"><info><title>Using working C3D code with components</title></info>
         
         <para>
-            <figure><info><title>
-                    Informal description of the C3D Components hierarchy
-                </title></info>
+            <figure xml:id="Informal_description_of_c3d_components"><info><title>Informal description of the C3D Components hierarchy</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -2368,7 +2352,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title xml:id="HowtorenameVirtualNodesinADLfiles_11">How to rename Virtual Nodes in ADL files</title></info>           
+            <example xml:id="HowtorenameVirtualNodesinADLfiles_11"><info><title>How to rename Virtual Nodes in ADL files</title></info>           
             
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
@@ -2417,7 +2401,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 lookup mechanism. This is very simple to use. Here's the
                 code to do that:
             </para>
-            <example><info><title xml:id="ComponentLookupandRegistration_11">Component Lookup and Registration</title></info>           
+            <example xml:id="ComponentLookupandRegistration_11"><info><title>Component Lookup and Registration</title></info>           
             
                 
                 <para>The component Registration</para>

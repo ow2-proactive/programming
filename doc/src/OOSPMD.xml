@@ -43,7 +43,7 @@
     This class contains methods for
      creating and controlling ProActive SPMD groups.  </para>
 
-	<figure><mediaobject><imageobject><imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/PASPMD_api.png" format="PNG"/></imageobject></mediaobject></figure>
+	<figure xml:id="paspmd_figure"><info><title>PASPMD Class</title></info><mediaobject><imageobject><imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/PASPMD_api.png" format="PNG"/></imageobject></mediaobject></figure>
     
 
     <indexterm><primary>OOSPMD</primary><secondary>groups</secondary></indexterm>
@@ -200,8 +200,7 @@
     members of the group may indefinitely wait.</para>
   </section>
 
-  <section><info><title >Neighbour
-    barrier</title></info>
+  <section xml:id="Neighbour_barrier"><info><title>Neighbour barrier</title></info>
     
 
     <para>The Neighbour barrier is a kind of lightweight barrier, involving

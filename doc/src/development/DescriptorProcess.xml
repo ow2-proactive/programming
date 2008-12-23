@@ -81,7 +81,7 @@
                 .
             </para>
 
-            <figure><info><title xml:id="coreprocessstructure_31">core.process structure</title></info>
+            <figure xml:id="coreprocessstructure_31"><info><title>core.process structure</title></info>
                 
                 <mediaobject>
                     <imageobject>

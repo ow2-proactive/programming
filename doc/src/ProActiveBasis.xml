@@ -23,7 +23,7 @@
     objects thus making the use of the threads transparent.  </para>
     
     
-        <para><figure><info><title xml:id="Threedifferentcomputationalmodels_60">Three different computational models</title></info>
+        <para><figure xml:id="Threedifferentcomputationalmodels_60"><info><title>Three different computational models</title></info>
         
 
         <mediaobject>
@@ -80,7 +80,7 @@
       </listitem>
     </itemizedlist>
 
-    <figure><info><title xml:id="ProactiveActiveObjectstructure_60">Proactive Active Object structure</title></info>
+    <figure xml:id="ProactiveActiveObjectstructure_60"><info><title>Proactive Active Object structure</title></info>
         
 
         <mediaobject>

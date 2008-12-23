@@ -61,7 +61,7 @@
 		
 			</para>
 			<para>
-				<figure><info><title xml:id="ArchitectureoftheSequentialVersion_16">Architecture of the Sequential Version</title></info>
+				<figure xml:id="ArchitectureoftheSequentialVersion_16"><info><title>Architecture of the Sequential Version</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -211,7 +211,7 @@
 				waits for any answers and checks the result.
 			</para>
 			<para>
-				<figure><info><title xml:id="DistributionoftheTestRangeExamplewith2_16">Distribution of the Test Range (Example with 2 Workers)</title></info>
+				<figure xml:id="DistributionoftheTestRangeExamplewith2_16"><info><title>Distribution of the Test Range (Example with 2 Workers)</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -279,7 +279,7 @@
 			</para>
 			
 			<para>
-				<figure><info><title xml:id="KillingaJVMfromIC2D_16">Killing a JVM from IC2D</title></info>
+				<figure xml:id="KillingaJVMfromIC2D_16"><info><title>Killing a JVM from IC2D</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -350,10 +350,7 @@
 	<!-- Distributed MW version -->
 	<!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
 
-	<section><info><title >
-			A Distributed Version of the Primality Test Using the
-			Master-Worker API
-		</title></info>
+	<section xml:id="ADistributedVersionofthePrimalityTestUsingtheMasterWorkerAPI_5"><info><title >	A Distributed Version of the Primality Test Using the Master-Worker API</title></info>
 		
 		<para>
 			In the next section we will distribute the computation using
@@ -427,7 +424,7 @@
 				precedent version.
 			</para>
 			<para>
-				<figure><info><title xml:id="ArchitectureoftheMasterWorkerVersion_16">Architecture of the Master-Worker Version</title></info>
+				<figure xml:id="ArchitectureoftheMasterWorkerVersion_16"><info><title>Architecture of the Master-Worker Version</title></info>
 					
 					<mediaobject>
 						<imageobject>

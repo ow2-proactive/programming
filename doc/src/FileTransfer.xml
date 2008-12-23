@@ -264,8 +264,7 @@ and implicitly inferred from the process information. --&gt;
       <emphasis>hostname</emphasis> or <emphasis>username</emphasis> are
       required.</para>
 
-      <section><info><title>Currently supported protocols for file transfer
-        deployment</title></info>
+<section xml:id="Currentlysupportedprotocolsforfiletransferdeployment"><info><title>Currently supported protocols for file transfer deployment</title></info>
         
 
         <para><itemizedlist>
@@ -428,7 +427,7 @@ File f[]=<emphasis role="bold">fw.getFiles()</emphasis> //wait-for-files to arri
     <section xml:id="HowDeploymentFileTransferWorks_67"><info><title>How Deployment File Transfer Works</title></info>
       
 
-      <figure><info><title xml:id="FileTransferDesign_67">File Transfer Design</title></info>
+      <figure xml:id="FileTransferDesign_67"><info><title>File Transfer Design</title></info>
         
 
         <mediaobject>

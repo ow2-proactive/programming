@@ -75,7 +75,7 @@
   	</para>
   
   
-     <para><figure><info><title xml:id="ProActiveFeatures_20">ProActive Features</title></info>
+     <para><figure xml:id="ProActiveFeatures_20"><info><title>ProActive Features</title></info>
         
 
         <mediaobject>
@@ -232,7 +232,7 @@
 			allows the addition of meta-objects for managing new required features. Moreover, the library also
 			proposes a deployment framework, which allows the deployment of active objects on various 
 			infrastructures. The MOP architecture is represented in the next figure.
-		 <figure><info><title xml:id="MOParchitecture_20">MOP architecture</title></info>
+		 <figure xml:id="MOParchitecture_20"><info><title>MOP architecture</title></info>
         
 
         <mediaobject>

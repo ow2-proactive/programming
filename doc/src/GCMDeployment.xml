@@ -20,9 +20,7 @@
 
 
 
-	<section xml:id="gcmd_appli">
-<info>
-<title xml:id="ProActiveDeploymentAPI_64">ProActive Deployment API</title>
+	<section xml:id="gcmd_appli"><info><title xml:id="ProActiveDeploymentAPI_64">ProActive Deployment API</title>
 		</info>
 
 		<para>There are several ways the grid resources can be used by a deployed application.
@@ -34,9 +32,7 @@
 		<code>PAGCMDeployment.loadApplicationDescriptor()</code>, and call <code>GCMApplication.startDeployment()</code>. The
 		application must quit through <code>GCMApplication.kill()</code>.</para>
 		
-		<section>
-<info>
-<title xml:id="ResourcesfixedbytheapplicationSPMD_64">Resources fixed by the application (SPMD)</title>
+		<section xml:id="ResourcesfixedbytheapplicationSPMD_64"><info><title>Resources fixed by the application (SPMD)</title>
 			</info>
 
 			<para>In this case the application knows the amount of resources it requires. The acquisition of these resources
@@ -58,9 +54,7 @@
 			
 		</section>
 
-		<section>
-<info>
-<title xml:id="Resourcesfixedbytheapplicationdeployer_64">Resources fixed by the application deployer</title>
+		<section xml:id="Resourcesfixedbytheapplicationdeployer_64"><info><title>Resources fixed by the application deployer</title>
 			</info>
 
 			<para>In this case the application has no specific requirement on the resources it uses : the more the better.
@@ -72,9 +66,7 @@
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="OndemandScalability_64">On demand Scalability</title>
+		<section xml:id="OndemandScalability_64"><info><title>On demand Scalability</title>
 			</info>
 
 			<para>In the case the application is able to expand on new resources as they become available.
@@ -89,15 +81,11 @@
 
 	</section>
 
-	<section>
-<info>
-<title xml:id="GCMDeploymentDescriptors_64">GCM Deployment Descriptors</title>
+	<section xml:id="GCMDeploymentDescriptors_64"><info><title>GCM Deployment Descriptors</title>
 		</info>
 
 
-		<section>
-<info>
-<title xml:id="HostInformation_64">Host Information</title>
+		<section xml:id="HostInformation_64"><info><title>Host Information</title>
 			</info>
 
 			<para>
@@ -129,9 +117,7 @@
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Bridges_64">Bridges</title>
+		<section xml:id="Bridges_64"><info><title>Bridges</title>
 			</info>
 
 			<para>
@@ -153,9 +139,7 @@
 				A bridge is defined as a base structure meant to be derived. The base structure only defines an id (string).
 			</para>
 
-			<section>
-<info>
-<title xml:id="RSH_101">RSH</title>
+			<section xml:id="RSH_101"><info><title>RSH</title>
 				</info>
 
 				<para>
@@ -178,9 +162,7 @@
 			</section>
 
 
-			<section>
-<info>
-<title xml:id="SSH_640">SSH</title>
+			<section xml:id="SSH_640"><info><title>SSH</title>
 				</info>
 
 				<para>
@@ -213,9 +195,7 @@
 			</section>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Groups_64">Groups</title>
+		<section xml:id="Groups_64"><info><title>Groups</title>
 			</info>
 
 			<para>
@@ -247,9 +227,7 @@
 				</listitem>
 			</itemizedlist>
 
-			<section>
-<info>
-<title xml:id="CCS_64">CCS</title>
+			<section xml:id="CCS_64"><info><title>CCS</title>
 				</info>
 
 				<para>
@@ -278,9 +256,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="LSF_64">LSF</title>
+			<section xml:id="LSF_64"><info><title>LSF</title>
 				</info>
 
 				<para>
@@ -325,9 +301,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="OAR_64">OAR</title>
+			<section xml:id="OAR_64"><info><title>OAR</title>
 				</info>
 
 				<para>
@@ -385,9 +359,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="PBS_64">PBS</title>
+			<section xml:id="PBS_64"><info><title>PBS</title>
 				</info>
 
 				<para>
@@ -464,9 +436,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Prun_64">Prun</title>
+			<section xml:id="Prun_64"><info><title>Prun</title>
 				</info>
 
 				<para>
@@ -499,9 +469,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="HostList_64">Host List</title>
+			<section xml:id="HostList_64"><info><title>Host List</title>
 				</info>
 
 				<para>
@@ -562,9 +530,7 @@
 
 			</section><!-- host list def -->
 
-			<section>
-<info>
-<title xml:id="RSH_64">RSH</title>
+			<section xml:id="RSH_64"><info><title>RSH</title>
 				</info>
 
 				<para>
@@ -577,9 +543,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="SSH_64">SSH</title>
+			<section xml:id="SSH_64"><info><title>SSH</title>
 				</info>
 
 				<para>
@@ -602,14 +566,10 @@
 
 	</section>
 
-	<section>
-<info>
-<title xml:id="GCMApplicationdescriptor_64">GCM Application descriptor</title>
+	<section xml:id="GCMApplicationdescriptor_64"><info><title>GCM Application descriptor</title>
 		</info>
 
-		<section>
-<info>
-<title xml:id="Executable_64">Executable</title>
+		<section xml:id="Executable_64"><info><title>Executable</title>
 			</info>
 
 			<para>
@@ -668,9 +628,7 @@
 		</section>
 
 
-		<section>
-<info>
-<title xml:id="ProActive_64">ProActive</title>
+		<section xml:id="ProActive_64"><info><title>ProActive</title>
 			</info>
 
 			<para>This element describes a ProActive-based applicatin. It can have the following children :</para>
@@ -801,17 +759,13 @@
 
 	</section>
 
-	<section>
-<info>
-<title xml:id="FAQ_64">FAQ</title>
+	<section xml:id="FAQ_64"><info><title>FAQ</title>
 		</info>
 
 		<para/>
 	</section>
 
-	<section>
-<info>
-<title xml:id="Tutorial_64">Tutorial</title>
+	<section xml:id="Tutorial_64"><info><title>Tutorial</title>
 		</info>
 
 		<para>
@@ -826,9 +780,7 @@
 			Deployment Descriptor Tutorial
 			
 		-->
-		<section>
-<info>
-<title xml:id="FortheGridAdministratorcreatingadeploymentdescriptor_64">For the Grid Administrator : creating a deployment descriptor</title>
+		<section xml:id="FortheGridAdministratorcreatingadeploymentdescriptor_64"><info><title>For the Grid Administrator : creating a deployment descriptor</title>
 			</info>
 
 			<para>
@@ -970,9 +922,7 @@
 
 			<para>The next paragraphs go more in depth on the content and usage of each element.</para>
 
-			<section>
-<info>
-<title xml:id="Environmentelement_64">Environment element</title>
+			<section xml:id="Environmentelement_64"><info><title>Environment element</title>
 				</info>
 				<para>
 					To allow for a bit of flexibility, it is possible to define variables in a descriptor. The variables can be used in any XML value
@@ -995,9 +945,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Resourceselement_64">Resources element</title>
+			<section xml:id="Resourceselement_64"><info><title>Resources element</title>
 				</info>
 				<para>
 					The &lt;resource&gt; element describes the hierarchical structure of the available grid resources. This can be seen as the
@@ -1079,9 +1027,7 @@
 
 			</section>
 
-			<section>
-<info>
-<title xml:id="Acquisitionelement_64">Acquisition element</title>
+			<section xml:id="Acquisitionelement_64"><info><title>Acquisition element</title>
 				</info>
 				<para>
 					An alternative to the &lt;infrastructure&gt; element, the &lt;acquisition&gt; element describes how resources which are already
@@ -1105,9 +1051,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Infrastructureelement_64">Infrastructure element</title>
+			<section xml:id="Infrastructureelement_64"><info><title>Infrastructure element</title>
 				</info>
 				<para>
 					The &lt;infrastructure&gt; is where you will list the grid resources on which the deployment can take place, in no particular
@@ -1128,9 +1072,7 @@
 			Application Descriptor Tutorial
 			
 		-->
-		<section>
-<info>
-<title xml:id="FortheGridApplicationDevelopercreatinganapplication_64">For the Grid Application Developer : creating an application descriptor</title>
+		<section xml:id="FortheGridApplicationDevelopercreatinganapplication_64"><info><title>For the Grid Application Developer : creating an application descriptor</title>
 			</info>
 
 			<para>
@@ -1175,9 +1117,7 @@
 				corresponding &lt;nodeProvider&gt; element listed in the &lt;resources&gt; element.
 			</para>
 
-			<section>
-<info>
-<title xml:id="ExampleofExecutableelement_64">Example of Executable element</title>
+			<section xml:id="ExampleofExecutableelement_64"><info><title>Example of Executable element</title>
 				</info>
 
 				<para>
@@ -1211,9 +1151,7 @@
 
 			</section>
 
-			<section>
-<info>
-<title xml:id="ExampleofProActiveelement_64">Example of ProActive element</title>
+			<section xml:id="ExampleofProActiveelement_64"><info><title>Example of ProActive element</title>
 				</info>
 
 				<para>
@@ -1264,9 +1202,7 @@
 
 		</section><!-- end of Application Descriptor Tutorial -->
 
-		<section>
-<info>
-<title xml:id="FortheGridApplicationDeveloperdeployingyourapplication_64">For the Grid Application Developer : deploying your application on the grid</title>
+		<section xml:id="FortheGridApplicationDeveloperdeployingyourapplication_64"><info><title>For the Grid Application Developer : deploying your application on the grid</title>
 			</info>
 
 			<para>

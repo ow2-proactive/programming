@@ -64,7 +64,7 @@
     </section>
   </section>
 
-  <section><info><title >Making a ProActive application fault-tolerant</title></info>
+  <section xml:id="MakingaProActiveapplicationfaulttolerant"><info><title >Making a ProActive application fault-tolerant</title></info>
     
 
     <section xml:id="ResourceServer_6"><info><title>Resource Server</title></info>
@@ -446,7 +446,7 @@ rvice(body);
       triggered for example by killing the JVM process on one of the
       hosts.</para>
 
-      <para><figure><info><title xml:id="ThenbodyapplicationwithFaultToleranceenabled_6">The nbody application, with Fault-Tolerance enabled</title></info>
+      <para><figure xml:id="ThenbodyapplicationwithFaultToleranceenabled_6"><info><title>The nbody application, with Fault-Tolerance enabled</title></info>
           
 
           <mediaobject>

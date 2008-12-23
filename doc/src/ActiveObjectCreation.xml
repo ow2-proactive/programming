@@ -45,7 +45,7 @@
 			.
 		</para>
 
-		<figure><info><title xml:id="PAActiveObjectclass_71">PAActiveObject class</title></info>
+		<figure xml:id="PAActiveObjectclass_71"><info><title>PAActiveObject class</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -55,7 +55,7 @@
 			</mediaobject>
 		</figure>
 <!-- 
-		<figure><info><title xml:id="ActiveObjectcreationmethodsandparameters_71">Active Object creation methods and parameters</title></info>
+		<figure xml:id="ActiveObjectcreationmethodsandparameters_71"><info><title>Active Object creation methods and parameters</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -154,10 +154,7 @@
 			no-args constructor in order to be properly created.
 		</para>
 
-		<section><info><title>
-				Using
-				<literal>PAActiveObject.newActive(...)</literal>
-			</title></info>
+		<section xml:id="using_PAActiveObjectnewActive"><info><title>Using <code>PAActiveObject.newActive(...)</code></title></info>
 			
 
 			<para>
@@ -278,12 +275,7 @@
 	<section xml:id="ActiveObjectCreationArguments_71"><info><title>Active Object Creation Arguments</title></info>
 		
 
-		<section><info><title>
-				Using
-				<literal>classname</literal>
-				and
-				<literal>target</literal>
-			</title></info>
+		<section xml:id="using_classname_and_target"><info><title>Using <code>classname</code> and <code>target</code></title></info>
 			
 			<para>
 				<literal>PAActiveObject.newActive(...)</literal>
@@ -547,9 +539,7 @@
 				active object.
 			</para>
 
-			<section><info><title>
-					Algorithms deciding which activity to invoke
-				</title></info>
+			<section xml:id="Algorithmsdecidingwhichactivitytoinvoke"><info><title>Algorithms deciding which activity to invoke</title></info>
 				
 
 				<para>
@@ -568,7 +558,7 @@
 			//TODO add explanation
 			
 		 -->
-		<figure><info><title xml:id="Activityalgorithm_71">Activity algorithm</title></info>
+		<figure xml:id="Activityalgorithm_71"><info><title>Activity algorithm</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -584,9 +574,7 @@
 
 			</section>
 
-			<section><info><title>
-					Implementing the interfaces directly in the class
-				</title></info>
+			<section xml:id="Implementingtheinterfacesdirectlyintheclass"><info><title>Implementing the interfaces directly in the class</title></info>
 				
 
 				<para>
@@ -607,10 +595,7 @@
 
 				<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/CustomInitAndRun.txt"/></textobject></programlisting>
 
-					<example><info><title>
-							Start, stop, suspend, restart a simulation
-							algorithm in runActivity method
-						</title></info>					
+					<example xml:id="runActivity_start_stop_suspend"><info><title>Start, stop, suspend, restart a simulation algorithm in runActivity method</title></info>					
 						
 						
 						<para>
@@ -629,10 +614,7 @@
 
 			</section>
 
-			<section><info><title>
-					Passing an object implementing the interfaces at
-					creation time
-				</title></info>
+			<section xml:id="Passinganobjectimplementingtheinterfacesatcreationtime"><info><title>Passing an object implementing the interfaces at creation time</title></info>
 				
 
 				<para>
@@ -713,11 +695,7 @@
 
 
 
-		<section><info><title>
-				Using
-				<literal>MetaObjectFactory</literal>
-				to customize the meta objects
-			</title></info>
+		<section xml:id="using_metaobjects_to_customize"><info><title>Using <literal>MetaObjectFactory</literal> to customize the meta objects	</title></info>
 			
 
 			<para>
@@ -857,7 +835,7 @@
 		
 
 		<para>
-			<figure><info><title xml:id="Thecomponentsofanactiveobjectandof_710">The components of an active object and of a referencing object</title></info>
+			<figure xml:id="Thecomponentsofanactiveobjectandof_710"><info><title>The components of an active object and of a referencing object</title></info>
 				
 
 				<mediaobject>
@@ -1321,7 +1299,7 @@
 			</para>
 
 			<para>
-				<figure><info><title xml:id="Afutureobject_71">A future object</title></info>
+				<figure xml:id="Afutureobject_71"><info><title>A future object</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -1452,9 +1430,7 @@
 					<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/flowExampleCode.txt"/></textobject></programlisting>
 			</section>
 
-			<section><info><title>
-					What would have happened in a sequential world
-				</title></info>
+			<section xml:id="what_whould_have_happened_in_sequential_world"><info><title>What would have happened in a sequential world</title></info>
 				
 
 				<para>
@@ -1484,9 +1460,7 @@
 				</para>
 
 				<para>
-					<figure><info><title>
-							Single-threaded version	of the program
-						</title></info>
+					<figure xml:id="single_threaded_version"><info><title>Single-threaded version	of the program</title></info>
 						
 
 						<mediaobject>
@@ -1533,7 +1507,7 @@
 						</para>
 
 		<para>
-			<figure><info><title xml:id="Thecomponentsofanactiveobjectandof_71">The components of an active object and of a referencing object</title></info>
+			<figure xml:id="Thecomponentsofanactiveobjectandof_71"><info><title>The components of an active object and of a referencing object</title></info>
 				
 
 				<mediaobject>
@@ -1562,10 +1536,7 @@
 						</para>
 
 						<para>
-							<figure><info><title>
-									The components of a future object
-									before the result is set
-								</title></info>
+							<figure xml:id="components_of_future_before_the_result"><info><title>The components of a future object before the result is set</title></info>
 								
 
 								<mediaobject>
@@ -1594,9 +1565,7 @@
 						</para>
 
 						<para>
-							<figure><info><title>
-									All components of a future object
-								</title></info>
+							<figure xml:id="components_of_a_future_object"><info><title>All components of a future object</title></info>
 								
 
 								<mediaobject>
@@ -1709,7 +1678,7 @@
 				</para>
 
 				<para>
-					<figure><info><title xml:id="Callflowwhenafutureissetbefore_71">Call flow when a future is set before being used</title></info>
+					<figure xml:id="Callflowwhenafutureissetbefore_71"><info><title>Call flow when a future is set before being used</title></info>
 						
 
 						<mediaobject>
@@ -1729,7 +1698,7 @@
 				</para>
 
 				<para>
-					<figure><info><title xml:id="Callflowwhenthefutureisnotset_71">Call flow when the future is not set before being used (wait-by-necessity)</title></info>
+					<figure xml:id="Callflowwhenthefutureisnotset_71"><info><title>Call flow when the future is not set before being used (wait-by-necessity)</title></info>
 						
 
 						<mediaobject>

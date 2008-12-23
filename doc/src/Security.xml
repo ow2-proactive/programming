@@ -42,7 +42,7 @@
       (see following figure); the absence of sharing is important with respect
       to security.</para>
 
-      <para><figure><info><title xml:id="Settingupvirtualdistributedsandboxsatruntime_63">Setting up virtual distributed sandboxs at runtime</title></info>
+      <para><figure xml:id="Settingupvirtualdistributedsandboxsatruntime_63"><info><title>Setting up virtual distributed sandboxs at runtime</title></info>
           
 
           <mediaobject>
@@ -63,7 +63,7 @@
       certificate will be checked. If a valid path is found then the object
       certificate is validated.</para>
 
-      <para><figure><info><title xml:id="Certificatechain_63">Certificate chain</title></info>
+      <para><figure xml:id="Certificatechain_63"><info><title>Certificate chain</title></info>
           
 
           <mediaobject>
@@ -103,7 +103,7 @@
       entites interacting within the system, ensuring that all policies are
       adhered to.</para>
 
-      <para><figure><info><title xml:id="Hierarchicalsecurity_63">Hierarchical security</title></info>
+      <para><figure xml:id="Hierarchicalsecurity_63"><info><title>Hierarchical security</title></info>
           
 
           <mediaobject>
@@ -245,7 +245,7 @@
       offer, in a secure manner, hosting environments for mobile
       agents.</para>
 
-      <para><figure><info><title xml:id="Syntaxandattributesforpolicyrules_63">Syntax and attributes for policy rules</title></info>
+      <para><figure xml:id="Syntaxandattributesforpolicyrules_63"><info><title>Syntax and attributes for policy rules</title></info>
           
 
           <mediaobject>
@@ -514,7 +514,7 @@
     <para>The first screenshot presents a root certificate. Notice that the
     certificate chain table is empty.</para>
 
-    <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforoasis_63">The ProActive Certificate Generator (for oasis)</title></info>
+    <para><figure xml:id="TheProActiveCertificateGeneratorforoasis_63"><info><title>The ProActive Certificate Generator (for oasis)</title></info>
         
 
         <mediaobject>
@@ -532,7 +532,7 @@
     Distinguished Name of the Entity ID 1 is the same as the subject DN of the
     certificate</para>
 
-    <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_1">The ProActive Certificate Generator (for proactive)</title></info>
+    <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_1"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -544,7 +544,7 @@
 
 
 
-     <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_2">The ProActive Certificate Generator (for proactive)</title></info>
+     <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_2"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -554,7 +554,7 @@
         </mediaobject>
       </figure></para>
 
- <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_3">The ProActive Certificate Generator (for proactive)</title></info>
+ <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_3"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -564,7 +564,7 @@
         </mediaobject>
       </figure></para>
 
- <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_4">The ProActive Certificate Generator (for proactive)</title></info>
+ <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_4"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>
@@ -575,7 +575,7 @@
       </figure></para>
 
 
- <para><figure><info><title xml:id="TheProActiveCertificateGeneratorforproactive_5">The ProActive Certificate Generator (for proactive)</title></info>
+ <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_5"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
         
 
         <mediaobject>

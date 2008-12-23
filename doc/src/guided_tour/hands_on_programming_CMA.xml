@@ -50,7 +50,7 @@
 		running ProActive applications read <xref linkend="Installation"/>. 
 	</para>	
 	
-	<section xml:id="SimpleCMA"><info><title xml:id="SimpleComputationAndMonitoringAgent_18">Simple Computation And Monitoring Agent</title></info>
+	<section xml:id="SimpleCMA"><info><title>Simple Computation And Monitoring Agent</title></info>
 		
 	<para>
 		Welcome to your first ProActive program! This is one of the simplest applications that can be
@@ -137,7 +137,7 @@
 		</section>
   	<section xml:id="CMAArchitectureandSkeletonCode_4"><info><title>CMA Architecture and Skeleton Code </title></info>
 		
-	<figure><info><title> Client-Server architecture - the <literal>Main</literal> class acts as 
+	<figure xml:id="client_server_architecture_main"><info><title> Client-Server architecture - the <literal>Main</literal> class acts as 
 	a client and uses the <literal>CMAgent</literal> class as a server</title></info> 
 		  <mediaobject>
           <imageobject>
@@ -233,7 +233,7 @@
 	</section>
 	</section>
 
-  <section xml:id="Active_Object_LifeCycle"><info><title xml:id="ActiveObjectsLifecycleUsingInitActiveandEndActive_18">Active Objects Lifecycle: Using InitActive and EndActive</title></info>
+  <section xml:id="Active_Object_LifeCycle"><info><title>Active Objects Lifecycle: Using InitActive and EndActive</title></info>
     
 
     <para>Active objects, as their name indicates, have an activity of their
@@ -296,7 +296,7 @@
       the interfaces <literal>InitActive</literal> and <literal>EndActive</literal>.
       It acts as a server for the <literal>Main</literal> class.</para>
 
-      <para><figure><info><title xml:id="CMAArchitectureandSkeletonCodeUsingintialization_18">CMA Architecture and Skeleton Code Using intialization</title></info>
+      <para><figure xml:id="CMAArchitectureandSkeletonCodeUsingintialization_18"><info><title>CMA Architecture and Skeleton Code Using intialization</title></info>
       		 
           <mediaobject>
             <imageobject>
@@ -635,7 +635,7 @@
   			active objects. The communication details are handled by ProActive according to the descriptor.
   		</para>
   			
-  				<figure><info><title xml:id="Deploymentprocess_1">Deployment process </title></info> 
+  				<figure xml:id="Deploymentprocess_1"><info><title>Deployment process </title></info> 
 		  <mediaobject>
           <imageobject>
             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/deployment_process.png" format="PNG"/>
@@ -1323,7 +1323,7 @@
 				waits for any answers and checks the result.
 			</para>
 			<para>
-				<figure><info><title xml:id="DistributionoftheTestRangeExamplewith2_18">Distribution of the Test Range (Example with 2 Workers)</title></info>
+				<figure xml:id="DistributionoftheTestRangeExamplewith2_18"><info><title>Distribution of the Test Range (Example with 2 Workers)</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -1339,7 +1339,7 @@
 				various factors like workers load, network latency, etc ... 
 			</para>					
 			<para>
-				<figure><info><title xml:id="ArchitectureoftheDistributedVersion_2">Architecture of the Distributed Version </title></info>
+				<figure xml:id="ArchitectureoftheDistributedVersion_2"><info><title>Architecture of the Distributed Version </title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -1401,7 +1401,7 @@
 			</para>
 			
 			<para>
-				<figure><info><title xml:id="KillingaJVMfromIC2D_18">Killing a JVM from IC2D</title></info>
+				<figure xml:id="KillingaJVMfromIC2D_18"><info><title>Killing a JVM from IC2D</title></info>
 					
 					<mediaobject>
 						<imageobject>
@@ -1472,10 +1472,7 @@
 	<!-- Distributed MW version -->
 	<!-- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -->
 
-	<section><info><title >
-			A Distributed Version of the Primality Test Using the
-			Master-Worker API
-		</title></info>
+	<section xml:id="ADistributedVersionofthePrimalityTestUsingtheMasterWorkerAPI"><info><title>A Distributed Version of the Primality Test Using the Master-Worker API</title></info>
 		
 		<para>
 			In the next section we will distribute the computation using
@@ -1536,7 +1533,7 @@
 				precedent version.
 			</para>
 			<para>
-				<figure><info><title xml:id="ArchitectureoftheMasterWorkerVersion_2">Architecture of the Master-Worker Version</title></info>
+				<figure xml:id="ArchitectureoftheMasterWorkerVersion_2"><info><title>Architecture of the Master-Worker Version</title></info>
 					
 					<mediaobject>
 						<imageobject>

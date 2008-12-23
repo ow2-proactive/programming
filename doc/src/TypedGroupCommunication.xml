@@ -34,7 +34,7 @@
 	 	The following diagrams contain
 	 	all the methods in the <literal>PAGroup</literal> class and <literal>Group</literal> interface.   
 	</para>     
-     	<figure><info><title xml:id="PAGroupclassandGroupinterface_66">PAGroup class  and Group interface</title></info>
+     	<figure xml:id="PAGroupclassandGroupinterface_66"><info><title>PAGroup class  and Group interface</title></info>
 			
 			<mediaobject>
 				<imageobject>
@@ -44,7 +44,7 @@
 	</figure>
 
 <!-- 
-     	<figure><info><title xml:id="Groupcreationmethodsandparameters_66">Group creation methods and parameters</title></info>
+     	<figure xml:id="Groupcreationmethodsandparameters_66"><info><title>Group creation methods and parameters</title></info>
 			
 			<mediaobject>
 				<imageobject>

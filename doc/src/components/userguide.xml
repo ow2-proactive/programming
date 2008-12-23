@@ -10,9 +10,7 @@
 		of the GCM Implementation.
 	</para>
 
-	<section>
-<info>
-<title xml:id="ArchitectureDescriptionLanguage_53">Architecture Description Language</title>
+	<section xml:id="ArchitectureDescriptionLanguage_53"><info><title>Architecture Description Language</title>
 		</info>
 
 		<indexterm significance="preferred">
@@ -96,9 +94,7 @@
 			</literal>
 			.
 		</para>
-		<section>
-<info>
-<title xml:id="Overview_500">Overview</title>
+		<section xml:id="Overview_500"><info><title>Overview</title>
 			</info>
 
 			<para>
@@ -284,12 +280,7 @@
 				</listitem>
 			</itemizedlist>
 		</section>
-		<section>
-<info>
-<title>
-					Exportation and composition of virtual nodes
-				</title>
-			</info>
+		<section xml:id="Exportationandcompositionofvirtualnodes"><info><title>Exportation and composition of virtual nodes</title></info>
 
 			<para>
 				Components are deployed on the virtual node that is
@@ -369,10 +360,7 @@
 				debugging purposes.
 			</para>
 		</section>
-		<section xml:id="adl_usage_userguide">
-<info>
-<title xml:id="Usage_53">Usage</title>
-			</info>
+		<section xml:id="adl_usage_userguide"><info><title xml:id="Usage_53">Usage</title>			</info>
 
 			<para>
 				ADL definitions correspond to component factories. ADL
@@ -412,14 +400,8 @@
 		</section>
 	</section>
 
-	<section>
-<info>
-<title xml:id="ImplementationspecificAPI_53">Implementation specific API</title>
-		</info>
-		<section>
-<info>
-<title xml:id="fractalprovider_53">fractal.provider</title>
-			</info>
+	<section xml:id="ImplementationspecificAPI_53"><info><title>Implementation specific API</title></info>
+	<section xml:id="fractalprovider_53"><info><title>fractal.provider</title></info>
 
 			<para>
 				The API is the same for any Fractal implementation,
@@ -459,9 +441,7 @@
 			</itemizedlist>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Requirements_53">Requirements</title>
+		<section xml:id="Requirements_53"><info><title>Requirements</title>
 			</info>
 
 			<para>
@@ -510,9 +490,7 @@
 			</itemizedlist>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Contentandcontrollerdescriptions_53">Content and controller descriptions</title>
+		<section xml:id="Contentandcontrollerdescriptions_53"><info><title>Content and controller descriptions</title>
 			</info>
 
 			<para>
@@ -611,9 +589,7 @@
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Collectiveinterfaces_1">Collective interfaces</title>
+		<section xml:id="Collectiveinterfaces_1"><info><title>Collective interfaces</title>
 			</info>
 
 			<para>
@@ -630,9 +606,7 @@
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Prioritycontroller_53">Priority controller</title>
+		<section xml:id="Prioritycontroller_53"><info><title>Priority controller</title>
 			</info>
 
 			<para>
@@ -689,9 +663,7 @@
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Monitorcontroller_53">Monitor controller</title>
+		<section xml:id="Monitorcontroller_53"><info><title>Monitor controller</title>
 			</info>
 
 			<para>
@@ -745,9 +717,7 @@
 		
 		</section>
 
-		<section>
-<info>
-<title xml:id="Streamports_53">Stream ports</title>
+		<section xml:id="Streamports_53"><info><title>Stream ports</title>
 			</info>
 
 			<para>
@@ -776,9 +746,7 @@
 		</section>
 	</section>
 
-	<section xml:id="collective-interfaces">
-<info>
-<title xml:id="Collectiveinterfaces_2">Collective interfaces</title>
+	<section xml:id="collective-interfaces"><info><title>Collective interfaces</title>
 		</info>
 
 		<para>
@@ -795,9 +763,7 @@
 			collective communications at the level of the interfaces.
 		</para>
 
-		<section>
-<info>
-<title xml:id="Motivations_53">Motivations</title>
+		<section xml:id="Motivations_53"><info><title>Motivations</title>
 			</info>
 
 
@@ -876,15 +842,11 @@
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Multicastinterfaces_1">Multicast interfaces</title>
+		<section xml:id="Multicastinterfaces_1"><info><title>Multicast interfaces</title>
 			</info>
 
 
-			<section>
-<info>
-<title xml:id="Definition_1">Definition</title>
+			<section xml:id="Definition_1"><info><title>Definition</title>
 				</info>
 
 
@@ -922,12 +884,7 @@
 				</para>
 
 				<para>
-					<figure>
-<info>
-<title>
-								Multicast interfaces for primitive and
-								composite component
-							</title>
+					<figure xml:id="multicast_interfaces_for_composite_and_primitive_components"><info><title>Multicast interfaces for primitive and composite components</title>
 						</info>
 
 
@@ -940,9 +897,7 @@
 				</para>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Datadistribution_100">Data distribution</title>
+			<section xml:id="Datadistribution_100"><info><title>Data distribution</title>
 				</info>
 
 
@@ -980,12 +935,7 @@
 				</para>
 
 				<para>
-					<figure>
-<info>
-<title>
-								Broadcast and scatter of invocation
-								parameters
-							</title>
+					<figure xml:id="broadcast_and_scatter_of_invocation_parameters"><info><title>Broadcast and scatter of invocation parameters</title>
 						</info>
 
 
@@ -1002,12 +952,7 @@
 					of parameters is automatic.
 				</para>
 
-				<section>
-<info>
-<title>
-							Invocation parameters distribution modes
-						</title>
-					</info>
+				<section xml:id="Invocationparametersdistributionmodes"><info><title>Invocation parameters distribution modes</title></info>
 
 
 					<para>
@@ -1111,9 +1056,7 @@
 					</para>
 				</section>
 
-				<section>
-<info>
-<title xml:id="Configurationthroughannotations_53">Configuration through annotations</title>
+				<section xml:id="Configurationthroughannotations_53"><info><title>Configuration through annotations</title>
 					</info>
 
 
@@ -1139,9 +1082,7 @@
 						distribution mode.
 					</para>
 
-					<section>
-<info>
-<title xml:id="Interfaceannotations_53">Interface annotations</title>
+					<section xml:id="Interfaceannotations_53"><info><title>Interface annotations</title>
 						</info>
 
 
@@ -1175,9 +1116,7 @@
 						</para>
 					</section>
 
-					<section>
-<info>
-<title xml:id="Methodannotations_53">Method annotations</title>
+					<section xml:id="Methodannotations_53"><info><title>Method annotations</title>
 						</info>
 
 
@@ -1231,9 +1170,7 @@
 						</para>
 					</section>
 
-					<section>
-<info>
-<title xml:id="Parameterannotations_53">Parameter annotations</title>
+					<section xml:id="Parameterannotations_53"><info><title>Parameter annotations</title>
 						</info>
 
 
@@ -1256,9 +1193,7 @@
 					</section>
 				</section>
 
-				<section>
-<info>
-<title xml:id="Results_53">Results</title>
+				<section xml:id="Results_53"><info><title>Results</title>
 					</info>
 
 					<para>
@@ -1351,9 +1286,7 @@
 				</section>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Bindingcompatibility_3">Binding compatibility</title>
+			<section xml:id="Bindingcompatibility_3"><info><title>Binding compatibility</title>
 				</info>
 
 
@@ -1396,13 +1329,7 @@
 				</para>
 
 				<para>
-					<figure>
-<info>
-<title>
-								Comparison of signatures of methods
-								between client multicast interfaces and
-								server interfaces.
-							</title>
+					<figure xml:id="comparison_of_signatures_between_client_multicast_and_server"><info><title>Comparison of signatures of methods between client multicast interfaces and server interfaces</title>
 						</info>
 
 
@@ -1488,15 +1415,11 @@
 			</section>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Gathercastinterfaces_53">Gathercast interfaces</title>
+		<section xml:id="Gathercastinterfaces_53"><info><title>Gathercast interfaces</title>
 			</info>
 
 
-			<section>
-<info>
-<title xml:id="Definition_2">Definition</title>
+			<section xml:id="Definition_2"><info><title>Definition</title>
 				</info>
 
 
@@ -1529,12 +1452,7 @@
 					bidirectional links.
 				</para>
 
-				<figure>
-<info>
-<title>
-							Gathercast interfaces for primitive and
-							composite components
-						</title>
+				<figure xml:id="gathercast_for_primitive_and_composite_bleah"><info><title>Gathercast interfaces for primitive and composite components</title>
 					</info>
 
 
@@ -1546,9 +1464,7 @@
 				</figure>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Datadistribution_101">Data distribution</title>
+			<section xml:id="Datadistribution_101"><info><title>Data distribution</title>
 				</info>
 
 
@@ -1559,11 +1475,7 @@
 					results to each client interface.
 				</para>
 
-				<section>
-<info>
-<title>
-							Gathering of invocation parameters
-						</title>
+				<section xml:id="Gatheringofinvocationparameters"><info><title>Gathering of invocation parameters</title>
 					</info>
 
 
@@ -1577,12 +1489,7 @@
 					</para>
 
 					<para>
-						<figure>
-<info>
-<title>
-									Aggregation of parameters with a
-									gathercast interface
-								</title>
+						<figure xml:id="aggregation_of_parameters_with_gathercast_interfaces_1"><info><title>Aggregation of parameters with a gathercast interface</title>
 							</info>
 
 
@@ -1595,9 +1502,7 @@
 					</para>
 				</section>
 
-				<section>
-<info>
-<title xml:id="Redistributionofresults_53">Redistribution of results</title>
+				<section xml:id="Redistributionofresults_53"><info><title>Redistribution of results</title>
 					</info>
 
 					<para>
@@ -1619,9 +1524,7 @@
 				</section>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Bindingcompatibility_12">Binding compatibility</title>
+			<section xml:id="Bindingcompatibility_12"><info><title>Binding compatibility</title>
 				</info>
 
 				<para>
@@ -1670,12 +1573,7 @@
 					are incompatible
 				</para>
 
-				<figure>
-<info>
-<title>
-							Comparison of signature of methods for
-							bindings to a gathercast interface
-						</title>
+				<figure xml:id="comparison_of_signature_methods_for_bindings_to_gathercast_interface"><info><title>Comparison of signature of methods for bindings to a gathercast interface</title>
 					</info>
 
 
@@ -1687,9 +1585,7 @@
 				</figure>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Processsynchronization_53">Process synchronization</title>
+			<section xml:id="Processsynchronization_53"><info><title>Process synchronization</title>
 				</info>
 
 				<para>
@@ -1768,14 +1664,10 @@
 		</section>
 	</section>
 
-	<section xml:id="component_deployment">
-<info>
-<title xml:id="Deployment_53">Deployment</title>
+	<section xml:id="component_deployment"><info><title>Deployment</title>
 		</info>
 
-		<section>
-<info>
-<title xml:id="Overview_1">Overview</title>
+		<section xml:id="Overview_1"><info><title>Overview</title>
 			</info>
 
 			<para>
@@ -1807,9 +1699,7 @@
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Initiatethedeployment_53">Initiate the deployment</title>
+		<section xml:id="Initiatethedeployment_53"><info><title>Initiate the deployment</title>
 			</info>
 
 			<para>
@@ -1822,9 +1712,7 @@
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="DistributecomponentswithADL_53">Distribute components with ADL</title>
+		<section xml:id="DistributecomponentswithADL_53"><info><title>Distribute components with ADL</title>
 			</info>
 
 			<para>
@@ -1856,9 +1744,7 @@ context.put("deployment-descriptor", gcma);</programlisting>
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="DistributecomponentswithAPI_53">Distribute components with API</title>
+		<section xml:id="DistributecomponentswithAPI_53"><info><title>Distribute components with API</title>
 			</info>
 
 			<para>
@@ -1874,9 +1760,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			</para>
 		</section>
 
-		<section>
-<info>
-<title xml:id="ProActiveDeployment_53">ProActive Deployment</title>
+		<section xml:id="ProActiveDeployment_53"><info><title>ProActive Deployment</title>
 			</info>
 
 			<para>
@@ -1889,14 +1773,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 		
 	</section>
 
-	<section>
-<info>
-<title xml:id="Advanced_53">Advanced</title>
+	<section xml:id="Advanced_53"><info><title>Advanced</title>
 		</info>
 
-		<section xml:id="configuration_html_Controllers_and_interceptors_n">
-<info>
-<title xml:id="Controllersandinterceptors_53">Controllers and interceptors</title>
+		<section xml:id="configuration_html_Controllers_and_interceptors_n"><info><title>Controllers and interceptors</title>
 			</info>
 
 
@@ -1906,9 +1786,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				creation of controllers and interceptors.
 			</para>
 
-			<section>
-<info>
-<title xml:id="Configurationofcontrollers_53">Configuration of controllers</title>
+			<section xml:id="Configurationofcontrollers_53"><info><title>Configuration of controllers</title>
 				</info>
 
 
@@ -1966,9 +1844,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				</programlisting>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Writingacustomcontroller_53">Writing a custom controller</title>
+			<section xml:id="Writingacustomcontroller_53"><info><title>Writing a custom controller</title>
 				</info>
 
 
@@ -2045,9 +1921,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				</orderedlist>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Configurationofinterceptors_53">Configuration of interceptors</title>
+			<section xml:id="Configurationofinterceptors_53"><info><title>Configuration of interceptors</title>
 				</info>
 
 
@@ -2166,9 +2040,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				</screen>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Writingacustominterceptor_53">Writing a custom interceptor</title>
+			<section xml:id="Writingacustominterceptor_53"><info><title>Writing a custom interceptor</title>
 				</info>
 
 
@@ -2246,11 +2118,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			</section>
 		</section>
 
-		<section xml:id="Exporting_components_as_Web_Services">
-<info>
-<title>
-					Exporting components as Web Services
-				</title>
+		<section xml:id="Exporting_components_as_Web_Services"><info><title>Exporting components as Web Services</title>
 			</info>
 
 			<para>
@@ -2261,10 +2129,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				For a complete description of Web Services in ProActive, please refer to <xref linkend="WSDoc"/>.
 			</para>
 
-			<section>
-<info><title>
-					Using ProActive Web Services API
-				</title></info>
+			<section xml:id="UsingProActiveWebServicesAPI"><info><title>Using ProActive Web Services API</title></info>
 
 				<para>
 					The main difference with active objects is that, when exposing a component as web service, all the methods of each server interfaces are
@@ -2319,10 +2184,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 			</section>
 
-			<section>
-<info><title>
-					A simple example: Hello World with component
-				</title></info>
+			<section xml:id="AsimpleexampleHelloWorldwithcomponent"><info><title>A simple example: Hello World with component</title></info>
 
 				<para>
 					Here is a very basic example: just a classic HelloWorld programming with component.
@@ -2347,12 +2209,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			</section>
 		</section>
 
-		<section xml:id="Lifecycle_encapsulation_of_functional_activity_in_component_lifecycle">
-<info>
-<title>
-					Lifecycle: encapsulation of functional activity in
-					component lifecycle
-				</title>
+		<section xml:id="Lifecycle_encapsulation_of_functional_activity_in_component_lifecycle"><info><title>Lifecycle: encapsulation of functional activity in component lifecycle</title>
 			</info>
 
 			<indexterm>
@@ -2423,9 +2280,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			</para>
 		</section>
 		
-		<section>
-<info>
-<title xml:id="Structuringthemembranewithnonfunctionalcomponents_53">Structuring the membrane with non-functional components</title>
+		<section xml:id="Structuringthemembranewithnonfunctionalcomponents_53"><info><title>Structuring the membrane with non-functional components</title>
 			</info>
 				
 				  <para> Components running in dynamically changing execution environments need
@@ -2488,9 +2343,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</itemizedlist>
 				 </para>
 				 
-				 <section>
-<info>
-<title xml:id="Motivatingexample_53">Motivating example</title>
+				 <section xml:id="Motivatingexample_53"><info><title>Motivating example</title>
 					</info>
 					
 					 <para>			
@@ -2539,9 +2392,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				 
 				 </section>
 				 
-				  <section>
-<info>
-<title xml:id="AstructureforComponentizedMembranes_53">A structure for Componentized Membranes</title>
+				  <section xml:id="AstructureforComponentizedMembranes_53"><info><title>A structure for Componentized Membranes</title>
 						</info>
 						<para>
 							
@@ -2590,9 +2441,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							no interception of the communications on these bindings is allowed.
 						</para>
 						
-						<section>
-<info>
-<title xml:id="Performanceissues_53">Performance issues</title>
+						<section xml:id="Performanceissues_53"><info><title>Performance issues</title>
 							</info>
 								<para>
 							        While componentizing the membrane clearly improves
@@ -2614,14 +2463,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				  
 				  </section>
 				 
-				  <section>
-<info>
-<title xml:id="AnAPIforReconfiguringNonfunctionalAspects_53">An API for (Re)configuring Non-functional Aspects </title>
+				  <section xml:id="AnAPIforReconfiguringNonfunctionalAspects_53"><info><title>An API for (Re)configuring Non-functional Aspects </title>
 						</info>
 						
-						 <section>
-<info>
-<title xml:id="NonfunctionalTypeandNonfunctionalComponents_53">Non-functional Type and Non-functional Components</title>
+						 <section xml:id="NonfunctionalTypeandNonfunctionalComponents_53"><info><title>Non-functional Type and Non-functional Components</title>
 							</info>
 								<para>
 							      	To typecheck bindings between membranes, we have to extend the GCM model with a
@@ -2660,9 +2505,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 								</para>	
 								
 						 </section>
-						 <section>
-<info>
-<title xml:id="APIforthemanagementofthemembrane_53">API for the management of the membrane </title>
+						 <section xml:id="APIforthemanagementofthemembrane_53"><info><title>API for the management of the membrane </title>
 							</info>
 							<para>	
 								
@@ -2751,11 +2594,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							</para>	
 							
 						 </section>
-						 <section>
-<info>
-<title>
-									 Higher level API
-								  </title>
+						 <section xml:id="Higher_level_API"><info><title>High level API</title>
 								</info>
 								
 							<figure xml:id="codeAPI2">
@@ -2831,14 +2670,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			</section>
 		</section>
 
-		<section>
-<info>
-<title xml:id="Shortcuts_53">Short cuts</title>
+		<section xml:id="Shortcuts_53"><info><title>Short cuts</title>
 			</info>
 
-			<section>
-<info>
-<title xml:id="Principles_53">Principles</title>
+			<section xml:id="Principles_53"><info><title>Principles</title>
 				</info>
 
 				<para>
@@ -2884,12 +2719,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					for the sole functional interface.
 				</para>
 
-				<figure>
-<info>
-<title>
-							Using shortcuts for minimizing remote
-							communications.
-						</title>
+				<figure xml:id="shortcuts_for_minimizing_remote_communication"><info><title>Using shortcuts for minimizing remote communications</title>
 					</info>
 
 
@@ -2901,9 +2731,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				</figure>
 			</section>
 
-			<section>
-<info>
-<title xml:id="Configuration_53">Configuration</title>
+			<section xml:id="Configuration_53"><info><title>Configuration</title>
 				</info>
 
 

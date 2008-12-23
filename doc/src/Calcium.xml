@@ -3,15 +3,9 @@
 <title xml:id="TheCalciumSkeletonFramework_62">The Calcium Skeleton Framework</title>
   </info>
 
-  <section>
-<info>
-<title xml:id="Introduction_62">Introduction</title>
-    </info>
+  <section xml:id="Introduction_62"><info><title>Introduction</title></info>
 
-    <section>
-<info>
-<title xml:id="AboutCalcium_62">About Calcium</title>
-      </info>
+	  <section xml:id="AboutCalcium_62"><info><title >About Calcium</title></info>
 
       <para>Calcium is part of the ProActive Grid Middleware for programming
       structured parallel and distributed applications. The framework provides
@@ -27,10 +21,7 @@
       <programlisting xml:lang="java">package org.objectweb.proactive.extensions.calcium;</programlisting>
     </section>
 
-    <section>
-<info>
-<title xml:id="TheBigPicture_62">The Big Picture</title>
-      </info>
+    <section xml:id="TheBigPicture_62"><info><title >The Big Picture</title></info>
 
       <para>The following steps must be performed for programming with the
       framework.</para>
@@ -67,9 +58,7 @@
       tasks are interpreted by the remote skeleton interpreters as shown in
       the following Figure:</para>
 
-      <figure>
-<info>
-<title xml:id="TaskFlowinCalcium_62">Task Flow in Calcium</title>
+<figure xml:id="TaskFlowinCalcium_62"><info><title>Task Flow in Calcium</title>
         </info>
 
         <mediaobject>
@@ -87,18 +76,11 @@
     </section>
   </section>
 
-  <section>
-<info>
-<title xml:id="QuickExample_62">Quick Example</title>
-    </info>
-
+  <section xml:id="QuickExample_62"><info><title >Quick Example</title></info>
     <para>In this example we implement a skeleton program that finds prime
     numbers between an interval using a brute force (naive) approach.</para>
 
-    <section>
-<info>
-<title xml:id="Definetheskeletonstructure_62">Define the skeleton structure</title>
-      </info>
+<section xml:id="Definetheskeletonstructure_62"><info><title >Define the skeleton structure</title></info>
 
       <para>The approach consists of dividing the original search space into
       several smaller search spaces, and computing each sub search space in
@@ -114,10 +96,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
 );</programlisting>
     </section>
 
-    <section>
-<info>
-<title xml:id="ImplementingtheMuscleFunctions_62">Implementing the Muscle Functions</title>
-      </info>
+    <section xml:id="ImplementingtheMuscleFunctions_62"><info><title>Implementing the Muscle Functions</title></info>
 
       <para>We will call the problem an <emphasis role="bold">Interval</emphasis> and we will represent it using the
       following class.</para>
@@ -150,9 +129,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
     }
 }</programlisting>
 
-      <section>
-<info>
-<title xml:id="Divide_62">Divide</title>
+      <section xml:id="Divide_62"><info><title>Divide</title>
         </info>
 
         <para>The divition of an <emphasis role="bold">Interval</emphasis>
@@ -173,9 +150,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
 }</programlisting>
       </section>
 
-      <section>
-<info>
-<title xml:id="Condition_62">Condition</title>
+      <section xml:id="Condition_62"><info><title>Condition</title>
         </info>
 
         <para>The class <emphasis role="bold"> IntervalDivideCondition
@@ -190,9 +165,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
 }</programlisting>
       </section>
 
-      <section>
-<info>
-<title xml:id="Skeleton_62">Skeleton</title>
+      <section xml:id="Skeleton_62"><info><title>Skeleton</title>
         </info>
 
         <para>The <emphasis role="bold">SearchInterval</emphasis> class
@@ -218,9 +191,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
 }</programlisting>
       </section>
 
-      <section>
-<info>
-<title xml:id="Conquer_62">Conquer</title>
+      <section xml:id="Conquer_62"><info><title>Conquer</title>
         </info>
 
         <para>The <emphasis role="bold">JoinPrimes</emphasis> class
@@ -243,9 +214,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
       </section>
     </section>
 
-    <section>
-<info>
-<title xml:id="CreateanewCalciumInstance_62">Create a new Calcium Instance</title>
+    <section xml:id="CreateanewCalciumInstance_62"><info><title>Create a new Calcium Instance</title>
       </info>
 
       <para>The instantiation of the framework is performed in the following
@@ -260,11 +229,7 @@ Calcium calcium = new Calcium(enviroment);
 Stream&lt;Interval, Primes&gt; stream = calcium.newStream(root);</programlisting>
     </section>
 
-    <section>
-<info>
-<title>Provide an input of problems to be solved by the
-        framework</title>
-      </info>
+    <section xml:id="Provideaninputofproblemstobesolvedbytheframework"><info><title>Provide an input of problems to be solved by the framework</title></info>
 
       <para/>
 
@@ -277,9 +242,7 @@ futures.add(stream.input(new Interval(1,640,64)));
 calcium.boot(); //begin the evaluation</programlisting>
     </section>
 
-    <section>
-<info>
-<title xml:id="Collecttheresults_62">Collect the results</title>
+    <section xml:id="Collecttheresults_62"><info><title>Collect the results</title>
       </info>
 
       <programlisting xml:lang="java">for(CalFuture&lt;Primes&gt; future:futures){
@@ -290,9 +253,7 @@ calcium.boot(); //begin the evaluation</programlisting>
 calcium.shutdown(); //release the resources</programlisting>
     </section>
 
-    <section>
-<info>
-<title xml:id="Viewtheperformancestatistics_62">View the performance statistics</title>
+    <section xml:id="Viewtheperformancestatistics_62"><info><title>View the performance statistics</title>
       </info>
 
       <para/>
@@ -302,9 +263,7 @@ System.out.println(stats);</programlisting>
     </section>
   </section>
 
-  <section>
-<info>
-<title xml:id="SupportedPatterns_62">Supported Patterns</title>
+  <section xml:id="SupportedPatterns_62"><info><title>Supported Patterns</title>
     </info>
 
     <para>Skeletons can be composed in the following way:</para>
@@ -393,9 +352,7 @@ interface Divide&lt;P,X&gt;   extends Muscle&lt;P,X[]&gt;     { public List&lt;X
 interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer(Y[] param); }</programlisting>
   </section>
 
-  <section>
-<info>
-<title xml:id="ExecutionEnvironments_62">Execution Environments</title>
+  <section xml:id="ExecutionEnvironments_62"><info><title>Execution Environments</title>
     </info>
 
     <para>Calcium can be used with different execution evironments. This
@@ -404,9 +361,7 @@ interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer
     <emphasis role="bold">MultiThreadedEnvironment</emphasis> (stable),
     <emphasis role="bold">ProActiveEnvironment</emphasis> (stable), <emphasis role="bold"> ProActiveSchedulerEnvironment </emphasis> (beta).</para>
 
-    <section>
-<info>
-<title xml:id="MultiThreadedEnvironment_62">MultiThreadedEnvironment</title>
+    <section xml:id="MultiThreadedEnvironment_62"><info><title>MultiThreadedEnvironment</title>
       </info>
 
       <para>The <emphasis role="bold">MultithreadEnvironment</emphasis> is the
@@ -418,9 +373,7 @@ interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer
       <programlisting xml:lang="java">Environment environment = new EnvironmentFactory.newMultiThreadedEnvironment(2); //Number of threads to use.</programlisting>
     </section>
 
-    <section>
-<info>
-<title xml:id="ProActiveEnvironment_62">ProActiveEnvironment</title>
+    <section xml:id="ProActiveEnvironment_62"><info><title>ProActiveEnvironment</title>
       </info>
 
       <para>The ProActiveEnvironment is the current stable way of executing a
@@ -477,9 +430,7 @@ Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor)
 Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeployment(descriptor);</programlisting></para>
     </section>
 
-    <section>
-<info>
-<title xml:id="ProActiveSchedulerEnvironmentunstable_62">ProActiveSchedulerEnvironment (unstable)</title>
+    <section xml:id="ProActiveSchedulerEnvironmentunstable_62"><info><title>ProActiveSchedulerEnvironment (unstable)</title>
       </info>
 
       <para>The ProActiveSchedulerEnvironment is suitable for executing long
@@ -501,9 +452,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
     </section>
   </section>
 
-  <section>
-<info>
-<title xml:id="FileAccessandTransferSupportbeta_62">File Access and Transfer Support (beta)</title>
+  <section xml:id="FileAccessandTransferSupportbeta_62"><info><title>File Access and Transfer Support (beta)</title>
     </info>
 
     <para>Calcium provides a transparent support for file data access, based
@@ -516,9 +465,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
     of non-functional code inside muscle functions, such as code for moving
     downloading, uploading or moving data.</para>
 
-    <section>
-<info>
-<title xml:id="WorkSpace_62">WorkSpace</title>
+    <section xml:id="WorkSpace_62"><info><title>WorkSpace</title>
       </info>
 
       <para>The <emphasis role="bold">workspace</emphasis> is an abstraction
@@ -583,9 +530,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       different muscle functions are made on copies of the <emphasis role="bold">File</emphasis> 's data.</para>
     </section>
 
-    <section>
-<info>
-<title xml:id="AnnotatedMuscleFunctions_62">Annotated Muscle Functions</title>
+    <section xml:id="AnnotatedMuscleFunctions_62"><info><title>Annotated Muscle Functions</title>
       </info>
 
       <para>Muscle functions can be annotated to improve the file transfer
@@ -606,9 +551,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       optimization, and are not required for the <emphasis role="bold">File</emphasis> support to work.</para>
     </section>
 
-    <section>
-<info>
-<title xml:id="MuscleFunctionExample_62">Muscle Function Example</title>
+    <section xml:id="MuscleFunctionExample_62"><info><title>Muscle Function Example</title>
       </info>
 
       <para>The following example is taken from the BLAST skeleton program.
@@ -642,9 +585,7 @@ public class ConquerResults implements Conquer&lt;File, File&gt; {
 }</programlisting>
     </section>
 
-    <section>
-<info>
-<title xml:id="InputandOutputFilesfromtheframework_62">Input and Output Files from the framework</title>
+    <section xml:id="InputandOutputFilesfromtheframework_62"><info><title>Input and Output Files from the framework</title>
       </info>
 
       <para>The input and output is transparent as long as the <emphasis role="bold">File</emphasis> type class is used to reference Files. All
@@ -666,16 +607,12 @@ File result = future.get(); //The data referenced by result is downloaded into t
     </section>
   </section>
 
-  <section>
-<info>
-<title xml:id="PerformanceStatisticsbeta_62">Performance Statistics (beta)</title>
+  <section xml:id="PerformanceStatisticsbeta_62"><info><title>Performance Statistics (beta)</title>
     </info>
 
     <para>There are two types of performance statistics.</para>
 
-    <section>
-<info>
-<title xml:id="GlobalStatistics_62">Global Statistics</title>
+    <section xml:id="GlobalStatistics_62"><info><title>Global Statistics</title>
       </info>
 
       <para>These statistics refer to the global state of the framework by
@@ -710,9 +647,7 @@ monitor.start();
 monitor.stop();</programlisting>
     </section>
 
-    <section>
-<info>
-<title xml:id="LocalResultStatistics_62">Local Result Statistics</title>
+    <section xml:id="LocalResultStatistics_62"><info><title>Local Result Statistics</title>
       </info>
 
       <para>This statistics are specific for each result obtained from the

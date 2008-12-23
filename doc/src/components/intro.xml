@@ -6,9 +6,7 @@
 		<primary>Component</primary>
 	</indexterm>
 
-	<section>
-
-<info><title xml:id="Overview_52">Overview</title></info>
+	<section xml:id="Overview_52"><info><title>Overview</title></info>
 
 		<para>
 			Computing Grids and Peer-to-Peer networks are inherently
@@ -43,9 +41,7 @@
 		</para>
 	</section>
 
-	<section>
-
-<info><title xml:id="ProgrammingwithcomponentstheFractalcomponentmodel_52">Programming with components: the Fractal component model</title></info>
+	<section xml:id="ProgrammingwithcomponentstheFractalcomponentmodel_52"><info><title>Programming with components: the Fractal component model</title></info>
 
 		<para>
 			Fractal defines a general conceptual model, along with a programming
@@ -71,8 +67,7 @@
 
 		<para>
 			Here is a basic example of a system of Fractal components:
-			<figure>
-<info><title xml:id="AsystemofFractalcomponents_52">A system of Fractal components</title></info>
+			<figure xml:id="AsystemofFractalcomponents_52"><info><title>A system of Fractal components</title></info>
 				<mediaobject>
 					<imageobject>
 						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/fractal.png" format="PNG"/>
@@ -102,9 +97,7 @@
 
 	</section>
 
-	<section>
-
-<info><title xml:id="PresentationofProActiveGCM_52">Presentation of ProActive/GCM</title></info>
+	<section xml:id="PresentationofProActiveGCM_52"><info><title>Presentation of ProActive/GCM</title></info>
 
 		<para>
 			The Grid Component Model (GCM) defines a component model suitable
@@ -122,8 +115,7 @@
 		<para>
 			Thus, the previous standard system of Fractal components becomes
 			when distributed with ProActive/GCM:
-			<figure>
-<info><title xml:id="AsystemofdistributedProActiveGCMcomponentsblue_52">A system of distributed ProActive/GCM components (blue, yellow and white represent distinct locations)</title></info>
+			<figure xml:id="AsystemofdistributedProActiveGCMcomponentsblue_52"><info><title>A system of distributed ProActive/GCM components (blue, yellow and white represent distinct locations)</title></info>
 				<mediaobject>
 					<imageobject>
 						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/fractal-proactive-distributed.png" format="PNG"/>

@@ -2,9 +2,7 @@
 <info>
 <title xml:id="MasterWorkerAPI_36">Master-Worker API</title>
     </info>
-    <section xml:id="ms_overview">
-<info>
-<title xml:id="Overview_36">Overview</title>
+    <section xml:id="ms_overview"><info><title>Overview</title>
         </info>
 
         <para>Master-Worker computations are the most common case of distributed computations. They are suited well for
@@ -65,9 +63,7 @@
         </orderedlist>
 
         
-        <figure>            
-<info>
-<title xml:id="MasterWorkerAPImainclass_36">Master-Worker API main class</title>
+	<figure xml:id="MasterWorkerAPImainclass_36"><info><title>Master-Worker API main class</title>
             </info>
 
             <mediaobject>
@@ -78,9 +74,7 @@
         </figure>
     </section>
 
-        <section>
-<info>
-<title xml:id="LoggerSettings_36">Logger Settings</title>            
+        <section xml:id="LoggerSettings_36"><info><title>Logger Settings</title>            
             </info>
 
             <para>Before using the Master-Worker, launch the examples, or write your own code, it is very useful to
@@ -94,9 +88,7 @@
 
 
 
-        <section>
-<info>
-<title xml:id="MasterCreationAndDeployment_36">Master Creation And Deployment</title>
+        <section xml:id="MasterCreationAndDeployment_36"><info><title>Master Creation And Deployment</title>
             </info>
             <para>When creating the master the user application has the possibility to create either a local master (on
                 the machine the user application is running on) or a remote master. Regardless of the way it is created
@@ -126,11 +118,7 @@
                 .
             </para>
 
-            <figure>
-<info>
-<title>
-                        Deployment of the Master-Worker framework
-                    </title>
+            <figure xml:id="deployment_of_mw_framework"><info><title>Deployment of the Master-Worker framework</title>
                 </info>
 
 
@@ -148,9 +136,7 @@
                 communication and load balancing automatically. In the following figures we will show only the case of
                 several single core machines as the same principles apply regardless of machine type.
             </para>
-        <section>
-<info>
-<title xml:id="LocalMastercreation_36">Local Master creation</title>
+        <section xml:id="LocalMastercreation_36"><info><title>Local Master creation</title>
                 </info>
 
                 <para>In order to create a local master we use a constructor without parameters</para>
@@ -163,9 +149,7 @@
                     objects as a results.
                 </para>
             </section>
-            <section>
-<info>
-<title xml:id="RemoteMastercreation_36">Remote Master creation</title>
+            <section xml:id="RemoteMastercreation_36"><info><title>Remote Master creation</title>
                 </info>
 
                 <para>In order to create a remote master the following constructors can be used:</para>
@@ -183,9 +167,7 @@
                 </para>
             </section>
             </section>
-            <section>
-<info>
-<title xml:id="AddingResources_36">Adding Resources</title>
+            <section xml:id="AddingResources_36"><info><title>Adding Resources</title>
                 </info>
 
                 <para>Now that the master has been created, resources (Workers) must be added to it. The following
@@ -202,9 +184,7 @@
 
         </section>
 
-        <section>
-<info>
-<title xml:id="Tasksdefinitionandsubmission_360">Tasks definition and submission</title>
+        <section xml:id="Tasksdefinitionandsubmission_360"><info><title>Tasks definition and submission</title>
             </info>
 
             <para>Tasks are submitted through classes that implement the
@@ -228,9 +208,7 @@
             </para>
 
             <para>
-                <figure>
-<info>
-<title xml:id="Tasksdefinitionandsubmission_36">Tasks definition and submission</title>
+		    <figure  xml:id="Tasksdefinitionandsubmission_36"><info><title>Tasks definition and submission</title>
                     </info>
 
 
@@ -271,9 +249,7 @@
 
        </section>
  
-        <section xml:id="ms_principle_gathering">
-<info>
-<title xml:id="Resultsretrievalandreceptionorder_36">Results retrieval and reception order</title>
+        <section xml:id="ms_principle_gathering"><info><title>Results retrieval and reception order</title>
             </info>
 
             <para>Results are collected by the master when the calculations are complete.</para>
@@ -284,9 +260,7 @@
             </para>
 
             <para>
-                <figure>
-<info>
-<title xml:id="Resultsgathering_36">Results gathering</title>
+		    <figure xml:id="Resultsgathering_36"><info><title>Results gathering</title>
                     </info>
 
                     <mediaobject>
@@ -360,9 +334,7 @@
         </section>
 
 
-        <section>
-<info>
-<title xml:id="Terminatingthemaster_36">Terminating the master</title>
+        <section xml:id="Terminatingthemaster_36"><info><title>Terminating the master</title>
             </info>
 
 
@@ -376,9 +348,7 @@
     
         
 
-            <section>
-<info>
-<title xml:id="Workerpingperiod_36">Worker ping period</title>
+            <section xml:id="Workerpingperiod_36"><info><title>Worker ping period</title>
                 </info>
 
                 <para>At regular intervals, the Master sends a "ping" message to every Worker to check if they are
@@ -391,9 +361,7 @@
                     reassign the tasks the Worker has been assigned.
                 </para>
             </section>
-            <section>
-<info>
-<title xml:id="Workertaskflooding_36">Worker task flooding</title>
+            <section xml:id="Workertaskflooding_36"><info><title>Worker task flooding</title>
                 </info>
 
                 <para>The Master-Worker API's internal scheduling mechanism is quite simple as it is based on a pulling
@@ -413,9 +381,7 @@
             
             
             
-        <section xml:id="ms_Workermemory">
-<info>
-<title xml:id="WorkerMemory_36">Worker Memory</title>
+        <section xml:id="ms_Workermemory"><info><title>Worker Memory</title>
             </info>
 
 
@@ -435,9 +401,7 @@
                     memory, and if a worker modifies its memory, the memory of other workers will not be affected.
                 </para>
 
-                <section>
-<info>
-<title xml:id="StructureandAPI_36">Structure and API</title>
+                <section xml:id="StructureandAPI_36"><info><title>Structure and API</title>
                     </info>
 
                     <para>The Worker memory structure is very simple: it consists of
@@ -457,9 +421,7 @@
                     </para>
                     <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_worker_memory.snip"/></textobject></programlisting>
                 </section>
-                <section>
-<info>
-<title xml:id="Storingdata_36">Storing data</title>
+                <section xml:id="Storingdata_36"><info><title>Storing data</title>
                     </info>
 
                     <para>A user can store data in the Workers' memory either when :</para>
@@ -484,9 +446,7 @@
                         store the given data.
                     </para>
                 </section>
-                <section>
-<info>
-<title xml:id="Retrievingandusingthedata_36">Retrieving and using the data</title>
+                <section xml:id="Retrievingandusingthedata_36"><info><title>Retrieving and using the data</title>
                     </info>
 
                     <para>Loading and using any object stored in a Worker's memory is simply done through the
@@ -501,9 +461,7 @@
                 </section>
             </section>
         
-    <section xml:id="ms_example">
-<info>
-<title xml:id="MonteCarloPIExample_36">Monte-Carlo PI Example</title>
+    <section xml:id="ms_example"><info><title xml:id="MonteCarloPIExample_36">Monte-Carlo PI Example</title>
         </info>
 
 

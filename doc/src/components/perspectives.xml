@@ -21,7 +21,7 @@
 		and as such it is a basis for experimenting new research paths.
 	</para>
 
-	<section><info><title xml:id="Dynamicreconfiguration_56">Dynamic reconfiguration</title></info>
+	<section xml:id="Dynamicreconfiguration_56"><info><title>Dynamic reconfiguration</title></info>
 		<para>
 			One of the challenges of Grid computing is to handle changes
 			in the execution environments, which are not predictable in
@@ -88,9 +88,7 @@
 		</para>
 	</section>
 
-	<section>
-<info>
-<title xml:id="Modelchecking_56">Model-checking</title>
+	<section xml:id="Modelchecking_56"><info><title>Model-checking</title>
 		</info>
 
 
@@ -211,9 +209,7 @@
 
 	</section>
 
-	<section>
-<info>
-<title xml:id="Patternbaseddeployment_56">Pattern-based deployment</title>
+	<section xml:id="Patternbaseddeployment_56"><info><title>Pattern-based deployment</title>
 		</info>
 
 
@@ -234,9 +230,7 @@
 		</para>
 	</section>
 
-	<section>
-<info>
-<title xml:id="Graphicaltools_56">Graphical tools</title>
+	<section xml:id="Graphicaltools_56"><info><title>Graphical tools</title>
 		</info>
 			<para>
 				We are developing the VCE (Vercors Component

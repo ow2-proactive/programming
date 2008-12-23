@@ -73,7 +73,7 @@
         
         <para>The next figure show the architecture of the API:</para>
         <para>
-            <figure><info><title xml:id="TheAPIarchitecture_5">The API architecture.</title></info>
+            <figure xml:id="TheAPIarchitecture_5"><info><title>The API architecture.</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -123,7 +123,7 @@
             better solution with all:
         </para>
         <para>
-            <figure><info><title xml:id="Broadcastinganewsolution_5">Broadcasting a new solution.</title></info>
+            <figure xml:id="Broadcastinganewsolution_5"><info><title>Broadcasting a new solution.</title></info>
                 
                 <mediaobject>
                     <imageobject>

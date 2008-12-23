@@ -659,7 +659,7 @@
     read every time a C3DUser is added. Both files contain many features
     described earlier in this document.</para>
 
-    <example><info><title xml:id="C3D_Dispatcher_Renderxml_1">C3D_Dispatcher_Render.xml</title></info>
+    <example xml:id="C3D_Dispatcher_Renderxml_1"><info><title>C3D_Dispatcher_Render.xml</title></info>
     
       
 
@@ -739,7 +739,7 @@
     activated. <emphasis role="bold">Renderer</emphasis> is mapped to a set of
     JVMs called <emphasis role="bold">Jvm1</emphasis>, ..., <emphasis role="bold">Jvm4</emphasis>.</para>
 
-    <example><info><title xml:id="C3D_Userxml_1">C3D_User.xml</title></info>
+    <example xml:id="C3D_Userxml_1"><info><title>C3D_User.xml</title></info>
     
       
 

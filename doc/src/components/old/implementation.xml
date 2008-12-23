@@ -52,7 +52,7 @@
 
     <para>Consider a standard system of Fractal components: </para>
 
-    <para><figure><info><title xml:id="AsystemofFractalcomponents_46">A system of Fractal components</title></info>
+    <para><figure xml:id="AsystemofFractalcomponents_46"><info><title>A system of Fractal components</title></info>
         
 
         <mediaobject>
@@ -64,7 +64,7 @@
       </figure></para>
 
     <para>ProActive/Fractal features distributed components:</para>
-    <para><figure><info><title xml:id="AsystemofdistributedProActiveFractalcomponentsblue_46">A system of distributed ProActive/Fractal components (blue, yellow and white represent distinct locations)</title></info>
+    <para><figure xml:id="AsystemofdistributedProActiveFractalcomponentsblue_46"><info><title>A system of distributed ProActive/Fractal components (blue, yellow and white represent distinct locations)</title></info>
         
 
         <mediaobject>
@@ -76,7 +76,7 @@
       </figure></para>
 
     <para>Each component is implemented as one (at least) active object:</para>
-    <para><figure><info><title xml:id="Matchbetweencomponentsandactiveobjects_46">Match between components and active objects</title></info>
+    <para><figure xml:id="Matchbetweencomponentsandactiveobjects_46"><info><title>Match between components and active objects</title></info>
         
 
         <mediaobject>
@@ -290,7 +290,7 @@
       meta-objects, possibly resulting in induced actions, and then the call
       is forwarded to the base object 'a'.</para>
 
-      <para><figure><info><title xml:id="ProActivesMetaObjectsProtocol_46">ProActive's Meta-Objects Protocol.</title></info>
+      <para><figure xml:id="ProActivesMetaObjectsProtocol_46"><info><title>ProActive's Meta-Objects Protocol.</title></info>
           
 
           <mediaobject>
@@ -325,7 +325,7 @@
       object corresponding to the component involved. All standard operations
       of the Fractal API are now accessible.</para>
 
-      <para><figure><info><title>The ProActive MOP with component meta-objects and component
+	<para><figure xml:id="proactive_mop_with_component_meta_object"><info><title>The ProActive MOP with component meta-objects and component
           representative</title></info>
           
 

@@ -259,8 +259,7 @@ public class AImpl implements A, BindingController {
       intercepted. The exercise is still of interest, as it involves composite
       components.</para>
 
-      <para><figure><info><title>Client and Server wrapped in composite components (C and
-          S)</title></info>
+      <para><figure xml:id="client_and_server_wrapped_in_composites"><info><title>Client and Server wrapped in composite components (C and S)</title></info>
           
 
           <mediaobject>
@@ -296,8 +295,7 @@ public class AImpl implements A, BindingController {
 
       <para>Therefore, we have the two following configurations:</para>
 
-      <para><figure><info><title>Without wrappers, the primitive components are
-          distributed.</title></info>
+      <para><figure xml:id="without_wrappers_the_primite_components_are_distributed_1"><info><title>Without wrappers, the primitive components are distributed</title></info>
           
 
           <mediaobject>
@@ -307,8 +305,7 @@ public class AImpl implements A, BindingController {
           </mediaobject>
         </figure></para>
 
-      <para><figure><info><title>With wrappers, where again, only the primitive components
-          are distributed.</title></info>
+      <para><figure xml:id="only_the_primitive_are_distributed"><info><title>With wrappers only the primitive components are distributed</title></info>
           
 
           <mediaobject>

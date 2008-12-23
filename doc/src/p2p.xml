@@ -217,8 +217,7 @@
 
         <screen> last.peer.host$startP2PService.sh -acq rmi -port 6666 -s rmi://third.peer.host:2410 </screen>
 
-        <para><figure><info><title>Usage example P2P network (after firsts
-            connections)</title></info>
+        <para><figure xml:id="usage_example_of_p2p"><info><title>Usage example P2P network (after the first  connections)</title></info>
             
 
             <mediaobject>
@@ -546,8 +545,7 @@
       descriptor (xml_path attribute). Six nodes are shared on different
       hosts:</para>
 
-      <para><figure><info><title>A P2P Service which is sharing nodes deployed by a
-          descriptor</title></info>
+      <para><figure xml:id="a_p2p_service_which_is_sharing_nodes"><info><title>A P2P Service sharing nodes deployed by a descriptor</title></info>
           
 
           <mediaobject>
@@ -632,7 +630,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
     of hosts where some JVMs are running and several of them are running the
     P2P Service.</para>
 
-    <para><figure><info><title xml:id="Anetworkofhostswithsomerunningthe_68">A network of hosts with some running the P2P Service</title></info>
+    <para><figure xml:id="Anetworkofhostswithsomerunningthe_68"><info><title>A network of hosts with some running the P2P Service</title></info>
         
 
         <mediaobject>
@@ -775,7 +773,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
         is shown by the next Figure. The new peer has 2 servers to contact in
         order to join the existing P2P infrastructure.</para>
 
-        <para><figure><info><title xml:id="NewpeertryingtojoinaP2Pnetwork_68">New peer trying to join a P2P network</title></info>
+        <para><figure xml:id="NewpeertryingtojoinaP2Pnetwork_68"><info><title>New peer trying to join a P2P network</title></info>
             
 
             <mediaobject>
@@ -934,7 +932,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
         <para>The next figure shows a peer which is sending a heart beat to
         all of its acquaintances.</para>
 
-        <para><figure><info><title xml:id="HeartbeatsenteveryTTU_68">Heart beat sent every TTU</title></info>
+        <para><figure xml:id="HeartbeatsenteveryTTU_68"><info><title>Heart beat sent every TTU</title></info>
             
 
             <mediaobject>
@@ -1087,7 +1085,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
         <para>The next Figure shows briefly the execution of the inspired BFS
         algorithm:</para>
 
-        <para><figure><info><title xml:id="Askingnodestoacquaintancesandgettinganode_68">Asking nodes to acquaintances and getting a node</title></info>
+        <para><figure xml:id="Askingnodestoacquaintancesandgettinganode_68"><info><title>Asking nodes to acquaintances and getting a node</title></info>
             
 
             <mediaobject>
@@ -1162,7 +1160,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
       <para>The Figure below shows the connection between all active
       objects:</para>
 
-      <para><figure><info><title xml:id="NodesandActiveObjectswhichmakeupa_68">Nodes and Active Objects which make up a P2P Service.</title></info>
+      <para><figure xml:id="NodesandActiveObjectswhichmakeupa_68"><info><title>Nodes and Active Objects which make up a P2P Service.</title></info>
           
 
           <mediaobject>
@@ -1227,7 +1225,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
 
       <para>In short, this can be seen in the next Figure:</para>
 
-      <para><figure><info><title xml:id="DynamicSharedProActiveTypedGroup_68">Dynamic Shared ProActive Typed Group.</title></info>
+      <para><figure xml:id="DynamicSharedProActiveTypedGroup_68"><info><title>Dynamic Shared ProActive Typed Group.</title></info>
           
 
           <mediaobject>
@@ -1323,7 +1321,7 @@ p2pNodeLookup.killAllNodes();</programlisting>
       some active Domain objects from the nBody application which is deployed
       on this small P2P infrastructure.</para>
 
-      <para><figure><info><title xml:id="nBodyapplicationdeployedonP2PInfrastructure_68">nBody application deployed on P2P Infrastructure.</title></info>
+      <para><figure xml:id="nBodyapplicationdeployedonP2PInfrastructure_68"><info><title>nBody application deployed on P2P Infrastructure.</title></info>
           
 
           <mediaobject>

@@ -201,8 +201,7 @@
       </itemizedlist></para>
   </section>
 
-  <section><info><title>Main Principles: Asynchronous Method Calls And Implicit
-    futures</title></info>
+  <section xml:id="MainPrinciplesAsynchronousMethodCallsAndImplicit"><info><title>Main Principles: Asynchronous Method Calls And Implicit futures</title></info>
     
 
     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/asynchronous_method_calls_and_implicit_futures.txt"/></textobject></programlisting>

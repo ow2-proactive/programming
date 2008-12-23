@@ -80,7 +80,7 @@
       <para>One of the main principle is to specify and wrap the MPI code in
       an XML descriptor.</para>
 
-      <para><figure><info><title xml:id="Filetransferandaskingforresources_2">File transfer and asking for resources</title></info>
+      <para><figure xml:id="Filetransferandaskingforresources_2"><info><title>File transfer and asking for resources</title></info>
           
 
           <mediaobject>
@@ -279,7 +279,7 @@ public int <emphasis role="bold">getReturnValue</emphasis>();</programlisting>
             control of the application in case of multiple MPISpmd
             objects.</para>
 
-            <para><figure><info><title xml:id="Statetransitiondiagram_5">State transition diagram</title></info>
+            <para><figure xml:id="Statetransitiondiagram_5"><info><title>State transition diagram</title></info>
                 
 
                 <mediaobject>
@@ -1100,7 +1100,7 @@ public class MyClass{
             <para><emphasis role="bold">Snapshot of this
             example</emphasis></para>
 
-            <para><figure><info><title xml:id="MPItoProActivecommunication_17">MPI to ProActive communication</title></info>
+            <para><figure xml:id="MPItoProActivecommunication_17"><info><title>MPI to ProActive communication</title></info>
                 
 
                 <mediaobject>
@@ -1411,7 +1411,7 @@ public class MyClass{
             <para><emphasis role="bold">Snapshot of this
             example</emphasis></para>
 
-            <para><figure><info><title xml:id="ProActivetoMPIcommunication_22">ProActive to MPI communication</title></info>
+            <para><figure xml:id="ProActivetoMPIcommunication_22"><info><title>ProActive to MPI communication</title></info>
                 
 
                 <mediaobject>
@@ -1438,7 +1438,7 @@ public class MyClass{
       respectively either the MPI API or the ProActiveMPI API defined
       below.</para>
 
-      <para><figure><info><title xml:id="Filetransferandaskingforresources_24">File transfer and asking for resources</title></info>
+      <para><figure xml:id="Filetransferandaskingforresources_24"><info><title>File transfer and asking for resources</title></info>
           
 
           <mediaobject>
@@ -1684,7 +1684,7 @@ public class MyClass{
       nodes) is proportional to the number of cells in one dimension,
       N.</para>
 
-      <figure><info><title xml:id="JacobiRelaxationDomainDecomposition_28">Jacobi Relaxation - Domain Decomposition</title></info>
+      <figure xml:id="JacobiRelaxationDomainDecomposition_28"><info><title>Jacobi Relaxation - Domain Decomposition</title></info>
         
 
         <mediaobject>
@@ -1924,7 +1924,7 @@ created VirtualNode name=Cluster_Nina
         processes trough the communication between two proxies which belongs
         to two Nodes residing on different clusters.</para>
 
-        <figure><info><title xml:id="IC2DSnapshot_50">IC2D Snapshot</title></info>
+        <figure xml:id="IC2DSnapshot_50"><info><title>IC2D Snapshot</title></info>
           
 
           <mediaobject>
@@ -1948,7 +1948,7 @@ created VirtualNode name=Cluster_Nina
       <section xml:id="StructuralDesign_53"><info><title>Structural Design</title></info>
         
 
-        <para><figure><info><title xml:id="ProxyPattern_54">Proxy Pattern</title></info>
+        <para><figure xml:id="ProxyPattern_54"><info><title>Proxy Pattern</title></info>
             
 
             <mediaobject>
@@ -1972,7 +1972,7 @@ created VirtualNode name=Cluster_Nina
       <section xml:id="Infrastructureofprocesses_55"><info><title>Infrastructure of processes</title></info>
         
 
-        <para><figure><info><title xml:id="ProcessPackageArchitecture_56">Process Package Architecture</title></info>
+        <para><figure xml:id="ProcessPackageArchitecture_56"><info><title>Process Package Architecture</title></info>
             
 
             <mediaobject>

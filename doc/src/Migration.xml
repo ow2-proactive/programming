@@ -167,8 +167,7 @@
     	the creation and assignment once.</para> 
     	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/migration/migration_strategy_example.txt"/></textobject></programlisting>
     </section>
-    <section><info><title> Using <literal>readObject(...)</literal> and 
-    			<literal>writeObject(...)</literal></title></info>
+    <section xml:id="using_readObject_and_writeObject"><info><title> Using <literal>readObject(...)</literal> and	<literal>writeObject(...)</literal></title></info>
     	
 		    <para>Another way of dealing with unserializable attributes is 
 		    using the methods from the Serializable interface: </para>

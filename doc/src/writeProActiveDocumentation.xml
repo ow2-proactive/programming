@@ -157,7 +157,7 @@
   
   <para>This is the figure example. Please use the TITLE tag</para>
   
-  <figure><info><title xml:id="ADrawingusingtheFIGUREtag_42">A Drawing using the FIGURE tag</title></info>
+  <figure xml:id="ADrawingusingtheFIGUREtag_42"><info><title>A Drawing using the FIGURE tag</title></info>
    
    
    <mediaobject>
@@ -210,10 +210,10 @@
   <para>Within normal text, for instance in a paragraph, you can also just use 
    the LITERAL tag to highlight the  <literal>main</literal> methods.</para>
   
-  <example><info><title xml:id="JAVAprogramlistingwithfileinclusion_42">JAVA program listing with file inclusion</title></info><para/></example>
+  <example xml:id="JAVAprogramlistingwithfileinclusion_42"><info><title>JAVA program listing with file inclusion</title></info><para/></example>
    <programlisting xml:lang="java"><textobject><textdata fileref="examples/hello/TinyHello.java"/></textobject></programlisting>
   
-  <example><info><title xml:id="XMLprogramlistingwithfileinclusion_42">XML program listing with file inclusion</title></info>
+  <example xml:id="XMLprogramlistingwithfileinclusion_42"><info><title>XML program listing with file inclusion</title></info>
      <para/>
      </example>
    
@@ -524,7 +524,7 @@ public class Dummy {
 	<section xml:id="ManualTargets"><info><title xml:id="Manualgenerationanttargets_42">Manual generation ant targets</title></info>
 	<para>
 	</para>
-	<figure><info><title xml:id="Mainanttargetsusedinmanualgeneration_42">Main ant targets used in manual generation</title></info>
+	<figure xml:id="Mainanttargetsusedinmanualgeneration_42"><info><title>Main ant targets used in manual generation</title></info>
 	<mediaobject>
     <imageobject>
      <imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="images/documentation_process.png" format="PNG"/>

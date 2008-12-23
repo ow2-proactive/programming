@@ -19,8 +19,7 @@
  				<para> The first step of this user guide explains how
  				 to create a single primitive component. Next, we will use an
  				  assembly of two primitive components in a composite one.</para>
- 				  <section><info><title >
- 					The first component </title></info>
+ 				  <section xml:id="the_first_component"><info><title>The first component </title></info>
  				  	
 				
 					<para>We want to create a primitive component, 

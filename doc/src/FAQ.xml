@@ -8,7 +8,7 @@
  <qandaset>
    <qandadiv><title xml:id="FrequentlyAskedQuestions_300">Frequently Asked Questions</title>
   <qandaentry>
-        <question>
+        <question xml:id="HowDoIBuildProActiveFromTheDistribution">
           <para>How do I build ProActive from the distribution?</para>
         </question>
 
@@ -35,76 +35,87 @@
 
           <para>If you want only to compile only parts of ProActive, 
            you should try <literal>build</literal>, with no arguments. 
-           As of version v3.2, the result is: </para>
+           As of version v4.0, the result is: </para>
           
           <screen>/home/bob/ProActive/compile/$ build
 Buildfile: build.xml
 
 Main targets:
-ProActive Documentation.docs               Construct the javadoc and the manual
-ProActive Documentation.javadoc.complete   Make complete Javadoc
-ProActive Documentation.javadoc.published  Make published Javadoc
-ProActive Documentation.manual             Build all the different manual version: html, pdf...
-ProActive Documentation.manualHtml         Make only the html files in the manual
-ProActive Documentation.manualPdf          Make only the pdf files in the manual
-ProActive Documentation.manualSingleHtml   Make only the big html file in the manual
-all                                        build the class files and the documentation
-clean                                      Remove all generated files
-compile                                    Deprecated, see compile.all
-compile.all                                Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)
-compile.benchmarks                         Compile the benchmarks
-compile.core                               Compile ProActive core classes
-compile.examples                           Compile all examples classes
-compile.extensions                         Compile ProActive Extensions classes
-compile.extra                              Compile ProActive Extensions classes
-compile.stubGenerator                      Compile Stub Generator Classes
-compile.tests                              Compile functional and unit tests classes
-compile.trywithcatch                       Compile ProActive Try With Catch classes
-compile.util                               Compile ProActive Utils classes
-copyright_format                           Update Copyright and Version in every text files and format them
-core                                       Deprecated, see compile.core
-deploy                                     Populate dist/ with all needed file
-deploy.all                                 Populate dist/ (with ProActive_examples.jar)
-deploy.examples                            Add examples.jar to the dist/ directory
-docs                                       Construct the javadoc and the manual
-examples                                   Deprecated, see compile.examples
-extensions                                 Deprecated, see compile.extensions
-extra                                      Deprecated, see compile.extra
-format                                     hibernate's eclipse-based formatter
-ibis                                       Everything related to ProActive IBIS
-ic2d.libClean                              Clean all needed libraries to IC2D
-ic2d.libCopy                               Copy all needed libraries to IC2D
-ic2dLib                                    Deprecated, see ic2d.libCopy
-ic2dLibClean                               Deprecated, see ic2d.libClean
-javadoc.complete                           Make complete Javadoc
-javadoc.published                          Make published Javadoc
-jdepend                                    JDepend report
-junit                                      Run all non regression tests on the current host only
-junit.clover                               Same as junit but with code coverage enabled
-junit.distributed                          Run all non regression tests
-junit.emma                                 Same as junit but with code coverage enabled
-manual                                     Build all the different manual version: html, pdf...
-manualHtml                                 Make only the html files in the manual
-manualPdf                                  Make only the pdf files in the manual
-manualSingleHtml                           Make only the big html file in the manual
-microTimer                                 Deprecated, see compile.microTimer
-proActiveJar                               Deprecated, see deploy
-release                                    Source and Binary Releases
-release.all                                Source and Binary Releases
-release.bin                                Binary Release: dist + docs
-release.src                                Source Release: sources + docs
-runPerformanceTest                         Run performance test on the current host.
-stubGenerator                              Deprecated, see compile.stubGenerator
-update_copyright_and_version               Update Copyright and Version in every text files
-uploadSchemas                              upload schemas on web site
-Default target: compile.all
- </screen>          
+clean                               Remove all generated files
+compile                             Deprecated, see compile.all
+compile.all                         Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)
+compile.benchmarks                  Compile the benchmarks                                                       
+compile.core                        Compile ProActive core classes                                               
+compile.doc.utils                   Compile Documentation Utils                                                  
+compile.examples                    Compile all examples classes                                                 
+compile.extensions                  Compile ProActive Extensions classes                                         
+compile.extra                       Compile ProActive Extensions classes                                         
+compile.stubGenerator               Compile Stub Generator Classes                                               
+compile.tests                       Compile functional and unit tests classes                                    
+compile.trywithcatch                Compile ProActive Try With Catch classes                                     
+compile.util                        Compile ProActive Utils classes                                              
+copyright_format                    Update Copyright and Version in every text files and format them             
+core                                Deprecated, see compile.core                                                 
+deploy                              Populate dist/ (with ProActive_examples.jar)                                 
+deploy.all                          Populate dist/ with all ProActive Programming dependencies and JARs          
+deploy.core                         Populate dist/ with all the files needed                                     
+deploy.examples                     Add ProActive_examples.jar to the dist/ directory                            
+deploy.tests                        Add ProActive_tests.jar to the dist/ directory                               
+deploy.utils                        Add ProActive_utils.jar to the dist/ directory                               
+doc.ProActive.compile.doc.utils     Compile Documentation Utils                                                  
+doc.ProActive.doc.zips              Construct the javadoc and manual zip archives                                
+doc.ProActive.docs                  Construct the javadoc, the manual, and the zip archives                      
+doc.ProActive.javadoc.complete      Make complete Javadoc                                                        
+doc.ProActive.javadoc.completeZip   Create a zip from the complete javadoc                                       
+doc.ProActive.javadoc.published     Make published Javadoc                                                       
+doc.ProActive.javadoc.publishedZip  Create a zip from the published javadoc                                      
+doc.ProActive.manual                Build all the different manual version: html, pdf...                         
+doc.ProActive.manualHtml            Make only the html files in the manual                                       
+doc.ProActive.manualHtmlZip         Create a zip of the html filed in the manual
+doc.ProActive.manualPdf             Make only the pdf files in the manual
+doc.ProActive.manualSingleHtml      Make only the big html file in the manual
+doc.ProActive.manualSingleHtmlZip   Create a zip of the big html file in the manual
+doc.selectIC2D                      Switch to building the IC2D documentation (run build again after running the target)
+doc.selectPA                        Switch to building the ProActive documentation (run build again after running the target)
+doc.zips                            Construct the javadoc and manual zip archives
+docs                                Construct the javadoc, the manual, and the zip archives
+examples                            Deprecated, see compile.examples
+extensions                          Deprecated, see compile.extensions
+extra                               Deprecated, see compile.extra
+format                              hibernate's eclipse-based formatter
+ibis                                Everything related to ProActive IBIS
+ic2d.libClean                       Clean all needed libraries to IC2D
+ic2d.libCopy                        Copy all needed libraries to IC2D
+ic2dLib                             Deprecated, see ic2d.libCopy
+ic2dLibClean                        Deprecated, see ic2d.libClean
+javadoc.complete                    Make complete Javadoc
+javadoc.completeZip                 Create a zip from the complete javadoc
+javadoc.published                   Make published Javadoc
+javadoc.publishedZip                Create a zip from the published javadoc
+jdepend                             JDepend report
+junit                               Run all non regression tests on the current host only
+junit.clover                        Same as junit but with code coverage enabled
+junit.distributed                   Run all non regression tests
+junit.emma                          Same as junit but with code coverage enabled
+manual                              Build all the different manual version: html, pdf...
+manualHtml                          Make only the html files in the manual
+manualHtmlZip                       Create a zip of the html filed in the manual
+manualPdf                           Make only the pdf files in the manual
+manualSingleHtml                    Make only the big html file in the manual
+manualSingleHtmlZip                 Create a zip of the big html file in the manual
+microTimer                          Deprecated, see compile.microTimer
+proActiveJar                        Deprecated, see deploy
+runPerformanceTest                  Run performance test on the current host.
+stubGenerator                       Deprecated, see compile.stubGenerator
+update_copyright_and_version        Update Copyright and Version in every text files
+uploadSchemas                       upload schemas on web site
+Default target: compile.all</screen>          
 
           </answer>
       </qandaentry>
 
       <qandaentry>
-       <question>
+	      <question xml:id="WhydonttheexamplesandcompilationworkunderWindows"> 
         <para>Why don't the examples and compilation work under Windows?</para>
        </question>
        
@@ -126,7 +137,7 @@ Default target: compile.all
       </qandaentry>
       
       <qandaentry>
-        <question>
+        <question xml:id="permission_denied_when_launching_scripts_in_linux">
           <para>Why do I get a Permission denied when trying to launch
           examples scripts under Linux?</para>
         </question>
@@ -145,7 +156,7 @@ Default target: compile.all
        
        
        <qandaentry>
-        <question>
+        <question xml:id="how_does_the_node_creation_happen">
          <para>How does the node creation happen?</para>
         </question>
         
@@ -206,7 +217,7 @@ Default target: compile.all
        
        
        <qandaentry>
-        <question>
+        <question xml:id="how_does_the_rmi_creation_happen">
          <para>How does the RMI Registry creation happen?</para>
         </question>
         
@@ -227,7 +238,7 @@ Default target: compile.all
        
        
        <qandaentry>
-        <question>
+        <question xml:id="what_is_the_class_server">
          <para>What is the class server, why do we need it?</para>
         </question>
         
@@ -250,7 +261,7 @@ Default target: compile.all
        </qandaentry>
        
        <qandaentry xml:id="reifiableDefinition">
-        <question>
+        <question xml:id="what_is_a_reifiable_object">
          <para>What is a reifiable object?</para>
         </question>
         
@@ -275,7 +286,7 @@ Default target: compile.all
        </qandaentry>
        
        <qandaentry>
-        <question>
+        <question xml:id="what_is_the_body">
          <para>What is the body of an active object? What are its local and
           remote representations?</para>
         </question>
@@ -316,7 +327,7 @@ Default target: compile.all
        </qandaentry>
        
        <qandaentry>
-        <question>
+        <question xml:id="what_is_the_stub">
          <para>What is a ProActive stub?</para>
         </question>
         
@@ -354,7 +365,7 @@ Default target: compile.all
        </qandaentry>
        
       <qandaentry>
-       <question>
+       <question xml:id="are_calls_always_asynchronous">
         <para>Are the call to an Active Object always asynchronous?</para>
        </question>
        
@@ -386,7 +397,7 @@ Default target: compile.all
 
 
       <qandaentry>
-        <question>
+        <question xml:id="no_class_def_found_exception">
           <para>Why do I get an exception java.lang.NoClassDefFoundError about asm?</para>
         </question>
 
@@ -427,7 +438,7 @@ Default target: compile.all
 
       
       <qandaentry>
-       <question>
+       <question xml:id="bcel_no_class_def_found_exception">
         <para>Why do I get an exception java.lang.NoClassDefFoundError about bcel?</para>
        </question>
        
@@ -464,7 +475,7 @@ Default target: compile.all
       </qandaentry>
                
       <qandaentry>
-       <question>
+       <question xml:id="java_access_control_exception">
         <para>Why do I get an exception java.security.AccessControlException
          access denied?</para>
        </question>
@@ -536,7 +547,7 @@ Default target: compile.all
       </qandaentry>
  
       <qandaentry>
-       <question>
+       <question xml:id="jini_exception">
         <para>Why do I get an exception when using Jini?</para>
        </question>
        
@@ -559,7 +570,7 @@ Default target: compile.all
       </qandaentry>
       
       <qandaentry>
-       <question>
+	      <question xml:id="connection_refused_by_127">
         <para>Why do I get a java.rmi.ConnectException: Connection refused to host: 127.0.0.1 ?</para>
        </question>
        
@@ -576,7 +587,7 @@ Default target: compile.all
       
 
         <qandaentry>
-         <question>
+		<question xml:id="object_properties_not_updated">
           <para>Why aren't my object's properties updated?</para>
          </question>
          
@@ -615,7 +626,7 @@ Default target: compile.all
         
 
         <qandaentry>
- <question>
+		<question xml:id="references_to_an_active_object">
   <para>How can I pass a reference on an active object or the
    difference between this and PAActiveObject.getStubOnThis()?</para>
  </question>
@@ -659,7 +670,7 @@ Default target: compile.all
 
 
 <qandaentry>
- <question>
+	<question xml:id="ao_how_to_create">
   <para>How can I create an active object?</para>
  </question>
  
@@ -715,7 +726,7 @@ Default target: compile.all
 
 
     <qandaentry>
- <question>
+	    <question xml:id="instantion_based_and_object_based_creation">
   <para>What are the differences between instantiation based and
    object based active objects creation?</para>
  </question>
@@ -762,7 +773,7 @@ Default target: compile.all
 </qandaentry>
 
 <qandaentry>
- <question>
+	<question xml:id="why_nooargs">
   <para>Why do I have to write a no-args constructor?</para>
  </question>
  
@@ -778,7 +789,7 @@ Default target: compile.all
 </qandaentry>
 
       <qandaentry>
-       <question>
+	      <question xml:id="how_to_control_ao_activity">
         <para xml:id="activity">How do I control the activity of an active
          object?</para>
        </question>
@@ -890,7 +901,7 @@ Default target: compile.all
       </qandaentry>
       
       <qandaentry>
-       <question>
+       <question xml:id="what_happened_to_live">
         <para>What happened to the former live() method and Active
          interface?</para>
        </question>
@@ -935,7 +946,7 @@ Default target: compile.all
       </qandaentry>
       
       <qandaentry>
-       <question>
+	      <question xml:id="why_avoid_returning_null">
         <para>Why should I avoid to return null in methods body?</para>
        </question>
        
@@ -982,7 +993,7 @@ Default target: compile.all
       </qandaentry>
       
       <qandaentry>
-       <question>
+	      <question xml:id="jini_with_proactive">
         <para>How can I use Jini in ProActive?</para>
        </question>
        
@@ -995,7 +1006,7 @@ Default target: compile.all
       </qandaentry>
       
       <qandaentry>
-        <question>
+	      <question xml:id="component_out_of_ao">
          <para>How do I make a Component version out of an Active Object
           version?</para>
         </question>
@@ -1035,7 +1046,7 @@ Default target: compile.all
   
       
        <qandaentry>
-        <question>
+	       <question xml:id="jini_with_PA_1">
          <para>How can I use Jini in ProActive?</para>
         </question>
         
@@ -1048,7 +1059,7 @@ Default target: compile.all
        </qandaentry>
        
        <qandaentry>
-        <question>
+	       <question xml:id="why_not_asynch">
          <para>Why is my call not asynchronous?</para>
         </question>
         
@@ -1080,7 +1091,7 @@ Default target: compile.all
        
  
        <qandaentry>
-       <question>
+	       <question xml:id="difference_between_params_in_dd_and_pa_config">
         <para>What is the difference between passing parameters in
          Deployment Descriptor and setting properties in ProActive
          Configuration file?</para>
@@ -1097,7 +1108,7 @@ Default target: compile.all
       </qandaentry>
       
       <qandaentry>
-       <question>
+	      <question xml:id="declaration_error_message">
         <para>Why do I get the following message when parsing my xml
          deployment file: ERROR: file:~/ProActive/descriptor.xml Line:2
          Message:cvc-elt.1: Cannot find the declaration of element

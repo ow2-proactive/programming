@@ -342,7 +342,7 @@ l invocation");
       results in 2 local communications for the sole functional
       interface.</para>
 
-      <figure><info><title xml:id="Usingshortcutsforminimizingremotecommunications_49">Using shortcuts for minimizing remote communications.</title></info>
+      <figure xml:id="Usingshortcutsforminimizingremotecommunications_49"><info><title>Using shortcuts for minimizing remote communications.</title></info>
         
 
         <mediaobject>

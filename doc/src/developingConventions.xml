@@ -21,8 +21,7 @@
       loggers' name must start with <emphasis>proactive</emphasis>. It is the
       root logger. Therefore all loggers are hierarchic.</para>
 
-      <example><info><title>declaring P2P loggers in the interface
-        org.objectweb.proactive.core.util.Loggers</title></info>      
+      <example xml:id="declaring_P2P_loggers"><info><title>declaring P2P loggers in the interface <code>org.objectweb.proactive.core.util.Loggers</code></title></info>      
         
         
 

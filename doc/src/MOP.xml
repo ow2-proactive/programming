@@ -3,8 +3,7 @@
 
   <!--  File: /home/irosenbe/PA_new_doc/docbook-tuto/MOP.html  -->
 
-  <section><info><title >Implementation: a Meta-Object
-    Protocol</title></info>
+  <section xml:id="ImplementationaMetaObjectProtocol"><info><title>Implementation: a Meta-Object Protocol</title></info>
     
 
     <para>ProActive is built on top of a metaobject protocol (MOP) that
@@ -59,8 +58,7 @@
     example, is implemented through this feature.</para>
   </section>
 
-  <section><info><title >Example of a different
-    metabehavior: EchoProxy</title></info>
+  <section xml:id="ExampleofadifferentmetabehaviorEchoProxy"><info><title >Example of a different metabehavior: EchoProxy</title></info>
     
 
     <para>Here's the implementation of a very simple yet useful metabehavior:
@@ -142,7 +140,7 @@ interface Echo extends Reflect {
     <literal>Reflect</literal>. This leads to a hierarchy of metabehaviors
     such as shown in the figure below.</para>
 
-    <para><figure><info><title xml:id="Metabehaviorhierarchy_28">Metabehavior hierarchy</title></info>
+    <para><figure xml:id="Metabehaviorhierarchy_28"><info><title>Metabehavior hierarchy</title></info>
         
 
         <mediaobject>

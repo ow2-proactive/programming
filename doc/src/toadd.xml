@@ -264,9 +264,7 @@ On apple/138.96.218.62, a message was received: Hello World!
         </listitem>
       </itemizedlist>
 
-      <para><figure>
-<title>The C3D application when a new user joins in, seen with
-          IC2D</title>
+      <para><figure xml:id="c3d_with_user_join"><title>The C3D application when a new user joins in, seen with IC2D</title>
 
           <mediaobject>
             <imageobject>
@@ -412,8 +410,7 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
         </listitem>
       </itemizedlist>
 
-      <figure>
-<title xml:id="IC2DcomponentexplorerwiththeC3Dexample_4">IC2D component explorer with the C3D example</title>
+      <figure xml:id="IC2DcomponentexplorerwiththeC3Dexample_4"><title>IC2D component explorer with the C3D example</title>
 
         <mediaobject>
           <imageobject>
@@ -526,8 +523,7 @@ scripts/windows/components$ c3d.bat ..\..\..\descriptors\components\C3D_all.xml<
           </listitem>
         </itemizedlist>
 
-        <figure>
-<title xml:id="MonitoringnewRMIhostwithIC2D_4">Monitoring new RMI host with IC2D</title>
+	<figure xml:id="MonitoringnewRMIhostwithIC2D_4"><title>Monitoring new RMI host with IC2D</title>
 
           <mediaobject>
             <imageobject>

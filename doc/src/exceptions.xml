@@ -20,7 +20,7 @@
     try</literal> block. That is why ProActive method
     calls with potential exceptions are handled synchronously by default.</para>
 
-    <section><info><title>Barriers around <literal>try</literal>
+<section xml:id="Barriersaroundtryblocks"><info><title>Barriers around <literal>try</literal>
       blocks</title></info>
       
 

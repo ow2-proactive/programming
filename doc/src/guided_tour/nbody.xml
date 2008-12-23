@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="nbody"><info><title xml:id="Thenbodyexample_14">The nbody example</title></info>
     
-    <section><info><title >
-            Using facilities provided by ProActive on a complete example
-        </title></info>
+	<section xml:id="UsingfacilitiesprovidedbyProActiveonacompleteexample"><info><title>Using facilities provided by ProActive on a complete example </title></info>
         
         <section xml:id="Rationaleandoverview_14"><info><title>Rationale and overview</title></info>
             
@@ -26,9 +24,7 @@
                 example running on 3 hosts with 8 bodies:
             </para>
             <para>
-                <figure><info><title>
-                        NBody screenshot, with 3 hosts and 8 bodies
-                    </title></info>
+                <figure xml:id="nbody_3_8"><info><title>NBody screenshot, with 3 hosts and 8 bodies</title></info>
                     
                     <mediaobject>
                         <imageobject>
@@ -38,10 +34,7 @@
                 </figure>
             </para>
             <para>
-                <figure><info><title>
-                        NBody screenshot, with the application GUI and
-                        Java3D installed
-                    </title></info>
+                <figure xml:id="nboyd_java3d_1"><info><title>NBody screenshot, with the application GUI and Java3D installed</title></info>
                     
                     <mediaobject>
                         <imageobject>
@@ -280,10 +273,7 @@
                 </listitem>
             </itemizedlist>
         </section>
-        <section><info><title >
-                Source files:
-                ProActive/src/org/objectweb/proactive/examples/nbody
-            </title></info>
+        <section xml:id="source_files_nbody_1"><info><title>Source files: ProActive/src/org/objectweb/proactive/examples/nbody</title></info>
             
             <para>
                 This guided tour is based on the files you may find in
@@ -292,7 +282,7 @@
                 You'll find the following tree:
             </para>
             <para>
-                <figure><info><title xml:id="Thenbodydirectorystructure_14">The nbody directory structure</title></info>
+                <figure xml:id="Thenbodydirectorystructure_14"><info><title>The nbody directory structure</title></info>
                     
                     <mediaobject>
                         <imageobject>
@@ -378,10 +368,7 @@
                         "add" following the physics rules.
                     </para>
                     <para>
-                        <figure><info><title>
-                                The equation of the force between two
-                                bodies
-                            </title></info>
+                        <figure xml:id="equation_between_two_bodies"><info><title>The equation of the force between two bodies</title></info>
                             
                             <mediaobject>
                                 <imageobject>

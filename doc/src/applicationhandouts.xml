@@ -28,7 +28,7 @@
      a dozen rendering engines running in parallel that communicate using Java RMI
      and controlled by a central dispatcher.</para>
    
-    <figure><info><title xml:id="Theactiveobjectsinthec3dapplication_61">The active objects in the c3d application</title></info>
+    <figure xml:id="Theactiveobjectsinthec3dapplication_61"><info><title>The active objects in the c3d application</title></info>
       
 
       <mediaobject>
@@ -128,8 +128,7 @@
 	</para>
 
 
-        <para><figure><info><title>A GUI is started that illustrates the activities of the
-            Reader and Writer objects.</title></info>
+        <para><figure xml:id="a_gui_for_readers_writers"><info><title>A GUI is started that illustrates the activities of the Reader and Writer objects.</title></info>
             
 
             <mediaobject>
@@ -170,7 +169,7 @@
         of the application: DinnerLayout, Table, and Philosopher</para>
 
         <para>
-        	<figure><info><title xml:id="TheDiningPhilosophersExample_61">The Dining Philosophers Example</title></info>
+        	<figure xml:id="TheDiningPhilosophersExample_61"><info><title>The Dining Philosophers Example</title></info>
             
             <mediaobject>
               <imageobject>
@@ -1091,9 +1090,7 @@ Enter the number of iterations (0 to exit) :  </screen>
             be implemented.
         </para>
         
-            <figure><info><title>
-                    Informal description of the C3D Components hierarchy
-                </title></info>
+            <figure xml:id="informal_description_of_c3d_hierarchy"><info><title>Informal description of the C3D Components hierarchy</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -1251,7 +1248,7 @@ Enter the number of iterations (0 to exit) :  </screen>
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title xml:id="HowtorenameVirtualNodesinADLfiles_61">How to rename Virtual Nodes in ADL files</title></info>            
+            <example xml:id="HowtorenameVirtualNodesinADLfiles_61"><info><title>How to rename Virtual Nodes in ADL files</title></info>            
             
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;

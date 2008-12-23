@@ -27,9 +27,7 @@
     <section xml:id="UsingworkingC3Dcodewithcomponents_8"><info><title>Using working C3D code with components</title></info>
         
         <para>
-            <figure><info><title>
-                    Informal description of the C3D Components hierarchy
-                </title></info>
+            <figure xml:id="informal_description_of_c3d_2"><info><title>Informal description of the C3D Components hierarchy</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -203,7 +201,7 @@
                 <literal>UserImpl.fractal</literal>
                 )
             </para>
-            <example><info><title xml:id="HowtorenameVirtualNodesinADLfiles_8">How to rename Virtual Nodes in ADL files</title></info>            
+            <example xml:id="HowtorenameVirtualNodesinADLfiles_8"><info><title>How to rename Virtual Nodes in ADL files</title></info>            
             
                 
                 <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
@@ -252,7 +250,7 @@
                 lookup mechanism. This is very simple to use. Here's the
                 code to do that:
             </para>
-            <example><info><title xml:id="ComponentLookupandRegister_8">Component Lookup and Register</title></info>
+            <example xml:id="ComponentLookupandRegister_8"><info><title>Component Lookup and Register</title></info>
             
                 
                 <para>The component Registration</para>

@@ -130,10 +130,7 @@
 			</para>
 
 			<para>
-				<figure><info><title>
-						Multicast interfaces for primitive and composite
-						component
-					</title></info>
+				<figure xml:id="multicast_interfaces_for_primitive_and_composite"><info><title>Multicast interfaces for primitive and composite	component</title></info>
 					
 
 					<mediaobject>
@@ -181,9 +178,7 @@
 			</para>
 
 			<para>
-				<figure><info><title>
-						Broadcast and scatter of invocation parameters
-					</title></info>
+				<figure xml:id="broadcast_and_scatter_of_invocation"><info><title>Broadcast and scatter of invocation parameters</title></info>
 					
 
 					<mediaobject>
@@ -464,11 +459,7 @@
 			</para>
 
 			<para>
-				<figure><info><title>
-						Comparison of signatures of methods between
-						client multicast interfaces and server
-						interfaces.
-					</title></info>
+				<figure xml:id="comparison_of_signatures"><info><title>Comparison of signatures of methods between client multicast interfaces and server interfaces</title></info>
 					
 
 					<mediaobject>
@@ -585,10 +576,7 @@
 				bidirectional links.
 			</para>
 
-			<figure><info><title>
-					Gathercast interfaces for primitive and composite
-					components
-				</title></info>
+			<figure xml:id="gathercast_interfaces_for_primitive_and_composite"><info><title>Gathercast interfaces for primitive and composite components</title></info>
 				
 
 				<mediaobject>
@@ -621,10 +609,7 @@
 				</para>
 
 				<para>
-					<figure><info><title>
-							Aggregation of parameters with a gathercast
-							interface
-						</title></info>
+					<figure xml:id="aggregation_paramaters_with_a_gathercast_interface"><info><title>Aggregation of parameters with a gathercast interface</title></info>
 						
 
 						<mediaobject>
@@ -778,10 +763,7 @@
 				IllegalBindingException if signatures are incompatible
 			</para>
 
-			<figure><info><title>
-					Comparison of signature of methods for bindings to a
-					gathercast interface
-				</title></info>
+			<figure xml:id="comparison_of_signatures_of_methods_for_gathercast-bindings"><info><title>Comparison of signature of methods for bindings to a gathercast interface</title></info>
 				
 
 				<mediaobject>

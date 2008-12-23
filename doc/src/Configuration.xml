@@ -50,8 +50,7 @@
     <para>&lt;prop <emphasis role="bold">key</emphasis>='propn' <emphasis role="bold">value</emphasis>='valuen'/&gt;</para>
   </section>
 
-  <section><info><title>Where to access this
-    file?</title></info>
+  <section xml:id="Wheretoaccessthisfile"><info><title>Where to access this file?</title></info>
     
 
 	<section xml:id="ProActiveDefaultConfigurationfile_69"><info><title>ProActive Default Configuration file</title></info> 
@@ -444,7 +443,7 @@
 
     <para>A configuration file could have following structure:</para>
 
-    <example><info><title xml:id="Aconfigurationfileexample_69">A configuration file example</title></info>
+    <example xml:id="Aconfigurationfileexample_69"><info><title>A configuration file example</title></info>
     
      
     <screen>&lt;ProActiveUserProperties&gt;

@@ -64,8 +64,7 @@
       </listitem>
     </itemizedlist>
 
-    <para><figure><info><title>This figure shows the steps when an active object is called via
-        SOAP.</title></info>
+    <para><figure xml:id="SOAP_call_steps"><info><title>Steps taken when an active object is called via SOAP</title></info>
         
 
         <mediaobject>
@@ -76,8 +75,7 @@
       </figure></para>
   </section>
 
-  <section><info><title >Pre-requisite: Installing the Web Server and the SOAP
-    engine</title></info>
+  <section xml:id="PrerequisiteInstallingtheWebServerandtheSOAP"><info><title>Pre-requisite: Installing the Web Server and the SOAP engine</title></info>
     
 
     <para>First of all, you need to install the Jakarta Tomcat web server here
@@ -335,7 +333,7 @@ string s = hw.helloWorld ();
       steps described for the hello world access.</para>
 
       <para>All the SOAP calls will be managed by the generated proxy
-      <literal>localhost.C3DDispatcher</literal>. <figure><info><title xml:id="Thedispatcherhandlingallcalls_29">The dispatcher handling all calls</title></info>
+      <literal>localhost.C3DDispatcher</literal>. <figure xml:id="Thedispatcherhandlingallcalls_29"><info><title>The dispatcher handling all calls</title></info>
           
 
           <mediaobject>
@@ -364,7 +362,7 @@ string s = hw.helloWorld ();
       service receives a callback request, the C# client is updated thanks to
       propagated events.</para>
 
-      <para>Here are screenshots of the user application: <figure><info><title>The first screenshot is a classic ProActive
+      <para>Here are screenshots of the user application: <figure xml:id="classic_pa_application"><info><title>The first screenshot is a classic ProActive
           application</title></info>
           
 
@@ -373,7 +371,7 @@ string s = hw.helloWorld ();
               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="webservices/scc3djava.png" format="PNG"/>
             </imageobject>
           </mediaobject>
-        </figure> <figure><info><title xml:id="CapplicationcommunicatingviaSOAP_29">C# application communicating via SOAP</title></info>
+        </figure> <figure xml:id="CapplicationcommunicatingviaSOAP_29"><info><title>C# application communicating via SOAP</title></info>
           
 
           <mediaobject>
