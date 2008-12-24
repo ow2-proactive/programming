@@ -27,5 +27,5 @@ do
 	mkdir $TMPDIR/$branch
 	cp *.Test* $TMPDIR/$branch
 done
-python $(basename $0)/perf_graph.py $TMPDIR  performanceTests.bandwidth  performanceTests.throughput
+python $(dirname $0)/perf_graph.py $TMPDIR  performanceTests.bandwidth  performanceTests.throughput
 git co $ORIG_BRANCH

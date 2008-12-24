@@ -29,4 +29,4 @@ do
 	mkdir $TMPDIR/$commit
 	cp *.Test* $TMPDIR/$commit
 done
-python $(basename $0)/perf_graph.py $TMPDIR  performanceTests.bandwidth  performanceTests.throughput
+python $(dirname $0)/perf_graph.py $TMPDIR  performanceTests.bandwidth  performanceTests.throughput
