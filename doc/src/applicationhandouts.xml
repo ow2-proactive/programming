@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="capabilities-intro"><info><title xml:id="Introduction_Proactive_Features">ProActive Example
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="capabilities-intro"><info><title>ProActive Example
    Applications</title></info>
   
 
-  <section xml:id="C3D_example"><info><title xml:id="C3DAdistributed3Drenderer_61">C3D: A distributed 3D renderer</title></info>
+  <section xml:id="C3D_example"><info><title>C3D: A distributed 3D renderer</title></info>
     
 	
     <para>Distribution is often used for CPU-intensive applications, where

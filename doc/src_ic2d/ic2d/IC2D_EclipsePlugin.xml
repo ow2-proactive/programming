@@ -361,9 +361,8 @@
                     The
                     <xref linkend="monitoring"/>
                     shows an example where 3 hosts are monitored. The
-                    applications running are philosophers and C3D (
-                    <xref linkend="C3D_example"/>
-                    ).
+                    applications running are philosophers and C3D 
+		    (see the ProActive Programming manual for the applications).
                 </para>
             </section>
         </section><!-- The Monitoring plugin -->
