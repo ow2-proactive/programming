@@ -160,7 +160,7 @@ public class GCMVirtualNodeRemoteObjectAdapter extends Adapter<GCMVirtualNode> i
         vn.waitReady();
     }
 
-    public void waitReady(int timeout) throws ProActiveTimeoutException {
+    public void waitReady(long timeout) throws ProActiveTimeoutException {
         vn.waitReady(timeout);
     }
 
