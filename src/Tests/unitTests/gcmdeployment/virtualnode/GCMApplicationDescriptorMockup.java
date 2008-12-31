@@ -36,6 +36,7 @@ import java.util.Map;
 import java.net.URL;
 import java.util.Set;
 
+import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -136,6 +137,10 @@ public class GCMApplicationDescriptorMockup implements GCMApplicationInternal {
     }
 
     public void addDeployedRuntime(ProActiveRuntime part) {
+        // Do nothing
+    }
+
+    public void waitReady(long timeout) throws ProActiveTimeoutException {
         // Do nothing
     }
 }
