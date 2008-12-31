@@ -38,6 +38,7 @@ import java.util.Set;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.xml.VariableContract;
@@ -114,6 +115,15 @@ public interface GCMApplication {
      * @See {@link GCMVirtualNode}
      */
     public void waitReady();
+
+    /**
+     * Wait each GCMVirtualNode become ready or timeout
+     *
+     * @param timeout The timeout in ms
+     *  
+     * @See {@link GCMVirtualNode}
+     */
+    public void waitReady(long timeout) throws ProActiveTimeoutException;
 
     /**
      * Returns the GCMVirtualNode associated to this identifier

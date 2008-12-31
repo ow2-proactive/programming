@@ -176,7 +176,7 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
 
     }
 
-    public void waitReady(int timeout) throws ProActiveTimeoutException {
+    public void waitReady(long timeout) throws ProActiveTimeoutException {
         TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
         while (!time.isTimeoutElapsed()) {
             synchronized (isReadyMonitor) {

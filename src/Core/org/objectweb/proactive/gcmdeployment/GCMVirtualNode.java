@@ -118,7 +118,7 @@ public interface GCMVirtualNode {
      *             If the timeout is reached
      */
     // @snippet-start GCMVirtualNode_waitReady_timeout
-    public void waitReady(int timeout) throws ProActiveTimeoutException;
+    public void waitReady(long timeout) throws ProActiveTimeoutException;
 
     // @snippet-end GCMVirtualNode_waitReady_timeout
 

@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
@@ -149,6 +150,10 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
             ProActiveSecurityManager proactiveApplicationSecurityManager) {
         target.setProActiveApplicationSecurityManager(proactiveApplicationSecurityManager);
 
+    }
+
+    public void waitReady(long timeout) throws ProActiveTimeoutException {
+        target.waitReady(timeout);
     }
 
 }

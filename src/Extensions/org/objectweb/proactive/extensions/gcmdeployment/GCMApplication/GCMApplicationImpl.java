@@ -48,6 +48,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -58,6 +59,7 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.core.util.TimeoutAccounter;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentDescriptor;
@@ -453,6 +455,27 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
     private void popDeploymentPath() {
         currentDeploymentPath.remove(currentDeploymentPath.size() - 1);
+    }
+
+    public void waitReady(long timeout) throws ProActiveTimeoutException {
+        TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
+        for (GCMVirtualNode vn : virtualNodes.values()) {
+            try {
+                vn.waitReady(time.getRemainingTimeout());
+            } catch (ProActiveTimeoutException e) {
+                if (time.isTimeoutElapsed()) { // should always be true
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Timeout reached while waiting for all virtual nodes to be ready.");
+                    for (GCMVirtualNode v : virtualNodes.values()) {
+                        sb.append(" ");
+                        sb.append(v.getName());
+                        sb.append(": ");
+                        sb.append(v.isReady());
+                        throw new ProActiveTimeoutException(sb.toString());
+                    }
+                }
+            }
+        }
     }
 
     public void waitReady() {
