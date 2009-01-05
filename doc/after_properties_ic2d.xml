@@ -50,7 +50,8 @@
         </javadoc>			
     </target>
 	<target name="javadoc.published"  description="Make published Javadoc">
-		<echo>#### Currently there is no Published API in IC2D ####</echo>
+		<mkdir dir="${docs.api.published.dir}" />
+                <echo>#### Currently there is no Published API in IC2D ####</echo>
 		<echo>#### To see the API use javadoc.complete instead ####</echo>
 		
 	</target>
