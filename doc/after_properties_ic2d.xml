@@ -27,6 +27,7 @@
             additionalparam="-docfilessubdirs -excludedocfilessubdir CVS:test_documentation"> 
             <classpath>
                 <pathelement path="${ic2d.lib.dir}"/>
+		<pathelement path="../dev/lib/*.jar" />
             </classpath>
             
     		<packageset dir="${ic2d.src.dir}/src"/>

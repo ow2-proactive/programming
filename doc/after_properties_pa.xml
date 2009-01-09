@@ -52,11 +52,12 @@
         </javadoc>			
     </target>
     
-    <target name="javadoc.published" depends="compile.util, deploy, compile.doc.utils" description="Make published Javadoc">
+    <target name="javadoc.published" depends="compile.util, deploy" description="Make published Javadoc">
         <mkdir dir="${docs.tmp.dir}" />
         <javadoc source="${source}"	classpathref="compile.libs">
-            <doclet name="doc.PublishedAPIDoclet" path="${docs.java.classes.dir}">
-                <param name="-file" value="${docs.published.coreclasses}" />
+            <doclet name="doc.PublishedAPIDoclet" > 
+                <path refid="docs.utils.classpath"/>
+		<param name="-file" value="${docs.published.coreclasses}" />
             </doclet>
             <packageset dir="${src.proactive.dir}"/>
         </javadoc>
@@ -66,7 +67,8 @@
                 <path refid="compile.libs"/>
                 <pathelement path="${cl.proactive.dir}"/>
             </classpath>
-            <doclet name="doc.PublishedAPIDoclet" path="${docs.java.classes.dir}">
+            <doclet name="doc.PublishedAPIDoclet">
+                <path refid="docs.utils.classpath"/>
                 <param name="-file" value="${docs.published.extensionsclasses}" />
             </doclet>
             <packageset dir="${src.extensions.dir}"/>
@@ -78,7 +80,8 @@
                 <pathelement path="${cl.proactive.dir}"/>
                 <pathelement path="${cl.extensions.dir}"/>
             </classpath>
-            <doclet name="doc.PublishedAPIDoclet" path="${docs.java.classes.dir}">
+            <doclet name="doc.PublishedAPIDoclet">
+                <path refid="docs.utils.classpath"/>
                 <param name="-file" value="${docs.published.extraclasses}" />
             </doclet>
             <packageset dir="${src.extra.dir}"/>
