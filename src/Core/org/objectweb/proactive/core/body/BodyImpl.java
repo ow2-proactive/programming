@@ -523,7 +523,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 return;
             }
 
-            if (isDebuggingOn && !isProActiveInternalObject) {
+            if (!isProActiveInternalObject) {
                 if (((RequestReceiverImpl) requestReceiver).immediateExecution(request)) {
                     debugger.breakpoint(BreakpointType.NewImmediateService, request);
                 } else {
@@ -548,7 +548,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 reply = request.serve(BodyImpl.this);
             }
 
-            if (isDebuggingOn && !isProActiveInternalObject) {
+            if (!isProActiveInternalObject) {
                 try {
                     if (isInImmediateService())
                         debugger.breakpoint(BreakpointType.EndImmediateService, request);

@@ -119,7 +119,7 @@ public class StepByStepFilterDialog extends Dialog {
 
         /* Tree */
         this.tree = new Tree(shell, SWT.NO_BACKGROUND | SWT.CHECK);
-        BreakpointType[] bptype = BreakpointType.getAllTypes();
+        BreakpointType[] bptype = BreakpointType.values();
         checkedType = new HashMap<String, Boolean>();
         for (int i = 0; i < bptype.length; i++) {
             TreeItem ti = new TreeItem(tree, SWT.NONE);
@@ -217,7 +217,7 @@ public class StepByStepFilterDialog extends Dialog {
          * @return the table with the filter
          */
         private BreakpointType[] createBreakpointTypeTable() {
-            BreakpointType[] bptype = BreakpointType.getAllTypes();
+            BreakpointType[] bptype = BreakpointType.values();
             List<String> items = new ArrayList<String>();
             for (String item : checkedType.keySet()) {
                 if (checkedType.get(item).booleanValue()) {

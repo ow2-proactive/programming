@@ -191,7 +191,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
     // the StepByStep mode
     protected Debugger debugger;
-    protected boolean isDebuggingOn;
 
     private String reifiedObjectClassName;
 
@@ -230,10 +229,8 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
         ProActiveSecurity.loadProvider();
 
-        if (isDebuggingOn = PAProperties.PA_DEBUG.isTrue()) {
-            this.debugger = factory.newDebuggerFactory().newDebugger();
-            this.debugger.setTarget(this);
-        }
+        this.debugger = factory.newDebuggerFactory().newDebugger();
+        this.debugger.setTarget(this);
 
         // SECURITY
         if (reifiedObject instanceof Secure) {
@@ -963,7 +960,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
             }
 
             // add StepByStep breakpoint
-            if (isDebuggingOn && !isProActiveInternalObject) {
+            if (!isProActiveInternalObject) {
                 debugger.breakpoint(BreakpointType.SendRequest, null);
             }
 

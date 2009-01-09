@@ -37,9 +37,20 @@ import java.io.Serializable;
 
 public enum BreakpointType implements Serializable {
 
-    NewService("New Service", false), NewImmediateService("New Immediate Service", true), EndService(
-            "End Service", false), EndImmediateService("End Immediate Service", true), SendRequest(
-            "Send Request");
+    /** set a breakpoint at the beginning of a new service */
+    NewService("New Service", false),
+
+    /** set a breakpoint before execution a method which is an immediate service */
+    NewImmediateService("New Immediate Service", true),
+
+    /** set a breakpoint at the end of a service */
+    EndService("End Service", false),
+
+    /** set a breakpoint at the end of an immediate service */
+    EndImmediateService("End Immediate Service", true),
+
+    /** set a breakpoint before sending the request to the target active object */
+    SendRequest("Send Request");
 
     private String name;
     private boolean immediate;
@@ -59,11 +70,5 @@ public enum BreakpointType implements Serializable {
 
     public String toString() {
         return name;
-    }
-
-    /** Return all breakpoint types */
-    public static BreakpointType[] getAllTypes() {
-        return new BreakpointType[] { SendRequest, NewService, EndService, NewImmediateService,
-                EndImmediateService };
     }
 }

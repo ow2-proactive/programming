@@ -141,7 +141,7 @@ public class DebuggerImpl implements Debugger {
      */
     public void initBreakpointTypes() {
         disableAllBreakpointTypes();
-        enableBreakpointTypes(BreakpointType.getAllTypes());
+        enableBreakpointTypes(BreakpointType.values());
     }
 
     /**
