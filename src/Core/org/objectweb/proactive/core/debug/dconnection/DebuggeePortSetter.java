@@ -47,7 +47,6 @@ public class DebuggeePortSetter {
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.DEBUGGER);
 
     public static void main(String[] argv) {
-        System.out.println(Arrays.toString(argv));
         String dir = System.getProperty("java.io.tmpdir");
         String name = argv[0];
         String port = argv[2];
