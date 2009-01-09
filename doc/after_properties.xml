@@ -5,61 +5,57 @@
 <property name="docs.published.extraclasses" 		value="${docs.tmp.dir}/publishedExtraClasses" />
 
 
-	<!-- ############################################################### -->
-	<!-- ############################ IC2D Doc ######################### -->
-	<!-- ############################################################### -->
-	
-    <property name="docs.fractal.link"			value="http://fractal.objectweb.org/current/doc/javadoc/fractal/"/>
-    <property name="docs.java.api.link" 		value="http://java.sun.com/j2se/1.5.0/docs/api/"/>
-    <property name="ic2d.src.dir"           value="${base.dir}/ic2d-plugins-src/org.objectweb.proactive.ic2d" />
-    <property name="ic2d.lib.dir"                   value="${base.dir}/ic2d-plugins-src/org.objectweb.proactive.ic2d.lib/lib/" />
-
-    <target name="javadoc.complete" depends="compile.util" description="Make complete Javadoc">
+    <target name="javadoc.complete" depends="compile.util, deploy" description="Make complete Javadoc">
         <mkdir dir="${docs.tmp.dir}" />
-    	<javadoc  
+        <javadoc  
             destdir="${docs.api.complete.dir}" 
             author="true" 
             version="true" 
             source="${source}" 
             use="true" 
-            windowtitle="${javadoc.title} complete API" 
+            windowtitle="${javadoc.title} Complete API" 
             breakiterator="yes" 
             additionalparam="-docfilessubdirs -excludedocfilessubdir CVS:test_documentation"> 
+            
             <classpath>
-                <pathelement path="${ic2d.lib.dir}"/>
+                <path refid="compile.libs"/>
+                <pathelement path="${cl.proactive.dir}"/>
+                <pathelement path="${cl.extensions.dir}"/>
             </classpath>
             
-    		<packageset dir="${ic2d.src.dir}/src"/>
-    		<packageset dir="${ic2d.src.dir}.base/src"/>
-    		<packageset dir="${ic2d.src.dir}.chartit/src"/>
-    		<packageset dir="${ic2d.src.dir}.console/src"/>
-    		<packageset dir="${ic2d.src.dir}.dgc/src"/>
-    		<packageset dir="${ic2d.src.dir}.JMXmonitoring/src"/>
-    		<packageset dir="${ic2d.src.dir}.jobmonitoring/src"/>
-    		<packageset dir="${ic2d.src.dir}.launcher/src"/>
-    		<packageset dir="${ic2d.src.dir}.p2p/src"/>
-    		<packageset dir="${ic2d.src.dir}.security/src"/>
-    		<packageset dir="${ic2d.src.dir}.timit/src"/>
-    		
-            <link href="${docs.fractal.link}" />
-            <link href="${docs.java.api.link}"/>
-			
-        	<doctitle>${javadoc.title} ${version}</doctitle>
+            <packageset dir="${src.proactive.dir}" />
+            <packageset dir="${src.extensions.dir}" />
+            <packageset dir="${src.extra.dir}" />
+            
+            <link href="http://fractal.objectweb.org/current/doc/javadoc/fractal/" />
+            <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+            <doctitle>${javadoc.title}</doctitle>
             <bottom>${javadoc.copyright}</bottom>
-           
+            
+            <group title="ProActive packages for end user" packages="org.objectweb.proactive" />
+            <group title="ProActive Core" packages="org.objectweb.proactive.core*" />
+            <group title="ProActive Core : Body" packages="org.objectweb.proactive.core.body*" />
+            <group title="ProActive Core : Components (implementation of the Fractal model)" packages="org.objectweb.proactive.core.component*" />
+            <group title="ProActive P2P : P2P infrastructure" packages="org.objectweb.proactive.extra.p2p*" />
+            <group title="ProActive Extensions : Security" packages="org.objectweb.proactive.ext.security*" />
+            <group title="ProActive Extensions" packages="org.objectweb.proactive.ext*" />
+            <group title="ProActive Branch and Bound API" packages="org.objectweb.proactive.extra.branchnbound*" />
+            <group title="ProActive Calcium API" packages="org.objectweb.proactive.calcium*" />
+            <group title="ProActive Load Balancing API" packages="org.objectweb.proactive.loadbalancing*" />
+            <group title="ProActive MPI API" packages="org.objectweb.proactive.mpi*" />
+            <group title="ProActive OSGI API" packages="org.objectweb.proactive.osgi*" />
+            <group title="ProActive JMX API" packages="org.objectweb.proactive.jmx*" />
+            <group title="ProActive Scheduler API" packages="org.objectweb.proactive.scheduler*" />
+            <group title="ProActive Benchmarks API" packages="org.objectweb.proactive.benchmarks*" />
+            
+            
         </javadoc>			
     </target>
-	<target name="javadoc.published"  description="Make published Javadoc">
-		<echo>#### Currently there is no Published API in IC2D ####</echo>
-		<echo>#### To see the API use javadoc.complete instead ####</echo>
-		
-	</target>
-    <!--  THERE IS NO PUBLISHED API IN IC2D
-    	  HOWEVER, KEEPING THIS FOR FUTURE USE
-    <target name="javadoc.published" depends="compile.util, deploy" description="Make published Javadoc">
+    
+    <target name="javadoc.published" depends="compile.util, deploy, compile.doc.utils" description="Make published Javadoc">
         <mkdir dir="${docs.tmp.dir}" />
         <javadoc source="${source}"	classpathref="compile.libs">
-            <doclet name="doc.PublishedAPIDoclet" path="${cl.utils.dir}">
+            <doclet name="doc.PublishedAPIDoclet" path="${docs.java.classes.dir}">
                 <param name="-file" value="${docs.published.coreclasses}" />
             </doclet>
             <packageset dir="${src.proactive.dir}"/>
@@ -70,7 +66,7 @@
                 <path refid="compile.libs"/>
                 <pathelement path="${cl.proactive.dir}"/>
             </classpath>
-            <doclet name="doc.PublishedAPIDoclet" path="${cl.utils.dir}">
+            <doclet name="doc.PublishedAPIDoclet" path="${docs.java.classes.dir}">
                 <param name="-file" value="${docs.published.extensionsclasses}" />
             </doclet>
             <packageset dir="${src.extensions.dir}"/>
@@ -82,7 +78,7 @@
                 <pathelement path="${cl.proactive.dir}"/>
                 <pathelement path="${cl.extensions.dir}"/>
             </classpath>
-            <doclet name="doc.PublishedAPIDoclet" path="${cl.utils.dir}">
+            <doclet name="doc.PublishedAPIDoclet" path="${docs.java.classes.dir}">
                 <param name="-file" value="${docs.published.extraclasses}" />
             </doclet>
             <packageset dir="${src.extra.dir}"/>
@@ -94,7 +90,7 @@
             version="true" 
             source="${source}" 
             use="true" 
-            windowtitle="${docs.javadoc.window.title}" 
+            windowtitle="ProActive API" 
             breakiterator="yes" 
             additionalparam="-docfilessubdirs -excludedocfilessubdir CVS:test_documentation"> 
             
@@ -103,21 +99,43 @@
                 <pathelement path="${cl.proactive.dir}"/>
                 <pathelement path="${cl.extensions.dir}"/>
                 <pathelement path="${cl.extra.dir}"/>
-
-                <pathelement path="${cl.extra.dir}"/>
             </classpath>
             
-       
+            
             <fileset dir="${src.proactive.dir}" includesfile="${docs.published.coreclasses}"/>
             <fileset dir="${src.extensions.dir}" includesfile="${docs.published.extensionsclasses}"/>
             <fileset dir="${src.extra.dir}" includesfile="${docs.published.extraclasses}"/>
             
-            <link href="${docs.fractal.link}" />
-            <link href="${docs.java.api.link}"/>
-            <doctitle>${javadoc.title}</doctitle>
-            <bottom>${javadoc.copyright}</bottom>				
+            <link href="http://fractal.objectweb.org/current/doc/javadoc/fractal/" />
+            <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+            <doctitle><![CDATA[ProActive ${version}<br>]]></doctitle>
+            <bottom><![CDATA[<i>Copyright 1997-2008 INRIA All Rights Reserved.</i>]]></bottom>
+            
+            <group title="ProActive entry point">
+                <package name="org.objectweb.proactive.api" />
+            </group>
+            
+            <group title="ProActive Core">
+                <package name="org.objectweb.proactive.core*" />
+                <package name="org.objectweb.proactive.core.filetransfer*" />
+                <package name="org.objectweb.proactive.ext*" />
+                <package name="org.objectweb.proactive.gcmdeployment*" />
+                <package name="org.objectweb.proactive.mpi*" />  
+                <package name="org.objectweb.proactive.benchmarks*" />
+                <package name="org.objectweb.proactive" />
+                <package name="org.objectweb.proactive.annotation" /> 
+                
+            </group>
+            
+            <group title="ProActive Extensions">
+                <package name="org.objectweb.proactive.extensions.*" />
+            </group>
+            
+            <group title="ProActive Extra">
+                <package name="org.objectweb.proactive.extra.*" /> 
+            </group>
             
         </javadoc>			
     </target>
--->    
+    
 </project>

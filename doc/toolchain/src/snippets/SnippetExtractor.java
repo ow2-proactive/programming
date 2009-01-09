@@ -123,19 +123,29 @@ public abstract class SnippetExtractor {
      * and if so tries to extract the snippets.
      */
     public void run() {
+
         try {
             this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.target)));
-            // check if the file is valid and then parse
-            if (this.fileIsValid()) {
-                SnippetExtractor.logger.debug("File is valid, trying to extract: " + this.target);
-                this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.target)));
-                this.extractSnippets();
-            }
+            try {
+	        // check if the file is valid and then parse
+            	if (this.fileIsValid()) {
+                	SnippetExtractor.logger.debug("File is valid, trying to extract: " + this.target);
+			this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.target)));
+	            	try {	
+			   this.extractSnippets();
+                	} finally {
+			   this.reader.close();
+			}
+            	}
+            } finally {
+   	       this.reader.close();
+	    }
+
         } catch (final IOException ioExcep) {
             ioExcep.printStackTrace();
             SnippetExtractor.logger.error("Extraction error for file: " + this.target + " " +
                 ioExcep.getMessage());
-        }
+	}
     }
 
     /**
@@ -358,7 +368,6 @@ public abstract class SnippetExtractor {
             } //end start annotation if
             line = this.reader.readLine();
         } //end while
-        this.reader.close();
     }
 
     /**
@@ -392,14 +401,14 @@ public abstract class SnippetExtractor {
      * @param blanksToRemove the number of whitespace to remove from each line
      */
     private void formatFile(final String file, final int blanksToRemove) {
+      try {
         final File parsedFile = new File(this.targetDirectory, file);
-        try {
-            final BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(
+        final BufferedReader fileReader = new BufferedReader(new InputStreamReader(new FileInputStream(
                 parsedFile)));
+        final File outFile = new File(this.targetDirectory, file + SnippetExtractor.FILE_EXTENSION);
+        final BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
+        try {
             String line = null;
-            final File outFile = new File(this.targetDirectory, file + SnippetExtractor.FILE_EXTENSION);
-
-            final BufferedWriter writer = new BufferedWriter(new FileWriter(outFile));
             String whiteSpaceToAdd;
             SnippetExtractor.logger.debug("Input file :" + parsedFile + " output file " + outFile +
                 " to remove " + blanksToRemove);
@@ -416,16 +425,19 @@ public abstract class SnippetExtractor {
                 writer.write(whiteSpaceToAdd.concat(line.trim()));
                 writer.newLine();
             }
-            writer.close();
-            fileReader.close();
+	 } finally {
+	     fileReader.close();
+             writer.close();
+	 }
+
             // remove temporary file
             if (!parsedFile.delete())
                 throw new IOException("Temporary files could not be deleted");
         } catch (final IOException ioExcep) {
             SnippetExtractor.logger.error("File I/O exception");
             SnippetExtractor.logger.error(ioExcep.getMessage());
-        }
-    }
+	}    
+     }
 
     /**
      * This method is to be implemented by the subclasses responsible for
