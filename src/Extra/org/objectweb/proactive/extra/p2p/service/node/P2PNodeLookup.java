@@ -52,6 +52,7 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extra.p2p.service.P2PService;
 import org.objectweb.proactive.extra.p2p.service.messages.Message;
 import org.objectweb.proactive.extra.p2p.service.messages.RequestNodesMessage;
@@ -66,6 +67,7 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
  * Created on Jan 18, 2005
  */
 @PublicAPI
+@ActiveObject
 public class P2PNodeLookup implements InitActive, RunActive, EndActive, P2PConstants, Serializable,
         P2PLookupInt {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.P2P_NODES);

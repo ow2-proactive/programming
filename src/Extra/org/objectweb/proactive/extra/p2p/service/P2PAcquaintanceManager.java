@@ -61,6 +61,7 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper;
 import org.objectweb.proactive.core.util.wrapper.IntMutableWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extra.p2p.service.exception.PeerDoesntExist;
 import org.objectweb.proactive.extra.p2p.service.messages.AcquaintanceReply;
 import org.objectweb.proactive.extra.p2p.service.messages.AcquaintanceRequest;
@@ -78,6 +79,7 @@ import org.objectweb.proactive.extra.p2p.service.util.P2PConstants;
  * @author ProActive team
  * 
  */
+@ActiveObject
 public class P2PAcquaintanceManager implements InitActive, RunActive, Serializable, P2PConstants,
         ProActiveInternalObject {
 
@@ -94,7 +96,7 @@ public class P2PAcquaintanceManager implements InitActive, RunActive, Serializab
     /**
      * Max number of acquaintance that the P2PAcquaintanceManager has to know 
      */
-    static public int NOA = Integer.parseInt(PAProperties.PA_P2P_NOA.getValue());
+    static protected int NOA = Integer.parseInt(PAProperties.PA_P2P_NOA.getValue());
 
     /**
      * generator of random values
@@ -377,6 +379,7 @@ public class P2PAcquaintanceManager implements InitActive, RunActive, Serializab
      * @param peer
      *            the peer to add
      * @return add succesfull
+     * 		empty vector if failure
      */
     public Vector<String> add(String peerUrl, P2PService peer) {
         boolean result = false;
@@ -386,7 +389,7 @@ public class P2PAcquaintanceManager implements InitActive, RunActive, Serializab
                     result = this.acquaintancesWrapper.add(peer);
                     logger.info("Acquaintance " + peerUrl + " " + result + " added");
                 }
-                return null;
+                return new Vector<String>();
             }
         } catch (Exception e) {
             this.acquaintancesWrapper.remove(peer);
@@ -411,7 +414,9 @@ public class P2PAcquaintanceManager implements InitActive, RunActive, Serializab
         // we remove it from the awaited answers
         // if we don't do so, it might be refused because of the NOA limit
         this.removeFromAwaited(url);
-        this.add(url, peer);
+        if (this.add(url, peer).isEmpty()) {
+            logger.error("Cannot add " + url + " to the list of acquiantances of peer " + peer.getAddress());
+        }
         if (logger.isDebugEnabled()) {
             logger.debug("P2PAcquaintanceManager.acqAccepted() adding " + "--" + url + "--");
         }

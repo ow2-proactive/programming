@@ -34,10 +34,12 @@ package org.objectweb.proactive.examples.futurelist;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class BlockedObject implements org.objectweb.proactive.RunActive, java.io.Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     public BlockedObject() {
     }

@@ -31,9 +31,13 @@
  */
 package org.objectweb.proactive.examples.cruisecontrol;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
+
 /**
  * The class representing the current road
  */
+@ActiveObject
 public class CarModel implements org.objectweb.proactive.RunActive {
 
     /** constants representing the ACTIVE state of the car */
@@ -52,16 +56,16 @@ public class CarModel implements org.objectweb.proactive.RunActive {
     final static int m = 1000;
 
     /** the state of the car depending of the user interaction */
-    public int state = INACTIVE;
+    private int state = INACTIVE;
 
     /** the current acceleration needed for the speed */
-    double acc = 0;
+    private double acc = 0;
 
     /** the  current speed of the car */
-    double speed = 0;
+    private double speed = 0;
 
     /** the current distance */
-    double distance = 0;
+    private double distance = 0;
 
     /** constants for the */
     private static double coeff = 0.31;
@@ -70,7 +74,7 @@ public class CarModel implements org.objectweb.proactive.RunActive {
     private double alpha = 0;
 
     /** Reference onto the dispatcher */
-    Interface father;
+    private Interface father;
 
     /** No arg-constructor */
     public CarModel() {

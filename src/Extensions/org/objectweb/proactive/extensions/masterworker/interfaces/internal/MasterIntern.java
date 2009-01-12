@@ -43,9 +43,9 @@ import java.util.List;
 public interface MasterIntern {
 
     /**
-    * Internal version of the solve method
-    * @param tasks tasks to compute
-    */
+     * Internal version of the solve method
+     * @param tasks tasks to compute
+     */
     //@snippet-start masterworker_solve
     public void solveIntern(final String originatorName,
             final List<? extends Task<? extends Serializable>> tasks) throws IsClearingError;
@@ -72,14 +72,14 @@ public interface MasterIntern {
     Serializable waitOneResult(final String originatorName) throws TaskException, IsClearingError;
 
     /**
-    * Wait for at least one result is available <br>
-    * If there are more results availables at the time the request is executed, then every currently available results are returned
-    * Note that in SubmittedOrder mode, the method will block until the next result in submission order is available and will return
-    * as many successive results as possible<br>
-    * @param originatorName name of the worker initiating the call
-    * @return a collection of objects containing the results
-    * @throws TaskException if the task threw an Exception
-    */
+     * Wait for at least one result is available <br>
+     * If there are more results availables at the time the request is executed, then every currently available results are returned
+     * Note that in SubmittedOrder mode, the method will block until the next result in submission order is available and will return
+     * as many successive results as possible<br>
+     * @param originatorName name of the worker initiating the call
+     * @return a collection of objects containing the results
+     * @throws TaskException if the task threw an Exception
+     */
     List<Serializable> waitSomeResults(final String originatorName) throws TaskException;
 
     /**

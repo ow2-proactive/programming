@@ -46,6 +46,7 @@ import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.WebServices;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
@@ -58,6 +59,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  * @author The ProActive Team
  *
  */
+@ActiveObject
 public class PiBBP implements Serializable {
     private final static int SIMPLE = 1;
     private final static int PARALLEL = 2;
@@ -125,7 +127,7 @@ public class PiBBP implements Serializable {
      * Computes the value of PI with a group of "pi computers", deployed on a local node
      * @return the value of PI
      */
-    public String runParallel() {
+    private String runParallel() {
         try {
             // create a group of computers on the current host
             piComputer = (PiComputer) PAGroup.newGroup(PiComputer.class.getName(), new Object[][] {

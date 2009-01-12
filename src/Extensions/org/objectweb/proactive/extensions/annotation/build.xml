@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Annotation system for ProActive library" basedir="../../../../../../../compile/" default="-compile">
+
+	<import file="${basedir}/build.xml" />
+
+	<if name="ant.java.version" value="1.5">
+		<echo message="Using ant 1.5"></echo>
+		<!-- Exclude CTree related stuff from compilation -->
+		<property name="annotations_src_exclude" value="${extensions.path}/annotation/**/*CTree*.java"/>
+	</if>
+
+	<target name="compile" depends="core,extensions,-compile"/>
+
+	<target name="-compile">
+		<!--compile_extensions module="annotation" /-->
+			<if name="proactive.jar">
+				<else>
+					<!-- Try to automagically find the classes/ -->
+					<property name="proactive.jar" location="${cl.proactive.dir}"/>
+				</else>
+			</if>
+
+			<echo>Compiling annotation checkers...</echo>
+
+			<echo>  [i] src:  ${src.extensions.dir}/${extensions.path}/annotation</echo>
+			<echo>  [i] dest: ${cl.extensions.dir}</echo>
+			<echo>  [i] cp:   ${proactive.jar}</echo>
+
+			<javac
+			 srcdir="${src.extensions.dir}"
+			 destdir="${cl.extensions.dir}"
+			 deprecation="on"
+			 source="${source}"
+			 debug="${debug}"
+			 failonerror="true">
+				<classpath>
+					<path refid="compile.libs"/>
+					<pathelement location="${proactive.jar}"/>
+				</classpath>
+				<include name="${extensions.path}/annotation/**/*.java" />
+				<exclude name="${annotations_src_exclude}"/>
+			</javac>
+
+<!--
+			<copy todir="${cl.extensions.dir}" includeEmptyDirs="no">
+				<fileset dir=" ${src.extensions.dir}">
+					<exclude name="**/*.java" />
+				</fileset>
+			</copy>
+	-->
+
+	</target>
+</project>

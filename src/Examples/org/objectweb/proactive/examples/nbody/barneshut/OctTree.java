@@ -37,8 +37,10 @@ import java.util.List;
 
 import org.objectweb.proactive.examples.nbody.common.Cube;
 import org.objectweb.proactive.examples.nbody.common.Point3D;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class OctTree implements Serializable {
 
     /** max body in a cube while universe's division */

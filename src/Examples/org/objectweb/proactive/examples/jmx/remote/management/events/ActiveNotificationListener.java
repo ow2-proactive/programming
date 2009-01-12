@@ -42,8 +42,10 @@ import javax.management.ObjectName;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.jmx.ProActiveConnection;
 import org.objectweb.proactive.examples.jmx.remote.management.client.entities.ManageableEntity;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class ActiveNotificationListener implements Serializable, NotificationListener {
 
     /**

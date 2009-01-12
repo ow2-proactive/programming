@@ -34,11 +34,13 @@ package org.objectweb.proactive.examples.nbody.common;
 import java.io.Serializable;
 
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /** This very limited class is needed as an Active Object class, containing the GUI.
  * The swing GUI is attached as a field of the Active Object, so it can be recreated
  * from scratch. */
+@ActiveObject
 public class Displayer implements Serializable {
     private transient NBodyFrame nbf;
     private boolean displayft;

@@ -39,8 +39,10 @@ import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.util.wrapper.LongWrapper;
 import org.objectweb.proactive.examples.userguide.cmagent.simple.CMAgent;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class CMAgentInitialized extends CMAgent implements InitActive, RunActive, EndActive {
     private long lastRequestDuration;
     private long startTime;

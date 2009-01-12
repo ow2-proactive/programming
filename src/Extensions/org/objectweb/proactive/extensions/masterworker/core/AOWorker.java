@@ -48,6 +48,7 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskIntern;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worker;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerMaster;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -62,6 +63,7 @@ import java.util.Queue;
  *
  * @author The ProActive Team
  */
+@ActiveObject
 public class AOWorker implements InitActive, Serializable, Worker {
 
     /** log4j logger of the worker */

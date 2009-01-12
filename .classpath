@@ -3,9 +3,9 @@
 	<classpathentry kind="src" output="classes/Core" path="src/Core"/>
 	<classpathentry kind="src" output="classes/Benchmarks" path="src/Benchmarks"/>
 	<classpathentry excluding="org/objectweb/proactive/examples/nbody/common/NBody3DFrame.java" kind="src" output="classes/Examples" path="src/Examples"/>
-	<classpathentry kind="src" output="classes/Extensions" path="src/Extensions"/>
+	<classpathentry excluding="org/objectweb/proactive/extensions/annotation/*/*/**" kind="src" output="classes/Extensions" path="src/Extensions"/>
 	<classpathentry kind="src" output="classes/Extra" path="src/Extra"/>
-	<classpathentry kind="src" output="classes/Tests" path="src/Tests"/>
+	<classpathentry excluding="functionalTests/annotations/**/*|functionalTests/annotations/callbacks/inputs/|functionalTests/annotations/migrationsignal/inputs/|functionalTests/annotations/migrationstrategy/inputs/|functionalTests/annotations/remoteobject/inputs/" kind="src" output="classes/Tests" path="src/Tests"/>
 	<classpathentry excluding="doc/PublishedAPIDoclet.java" kind="src" output="classes/Utils" path="src/Utils"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/activation.jar"/>
@@ -90,5 +90,6 @@
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

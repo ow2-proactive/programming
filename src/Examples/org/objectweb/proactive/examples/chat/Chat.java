@@ -51,6 +51,8 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 
 
 /**
@@ -58,8 +60,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  * @author The ProActive Team
  */
+@ActiveObject
 public class Chat implements java.io.Serializable, RunActive {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** The name of the user */
     private String name = "";
@@ -273,6 +276,7 @@ public class Chat implements java.io.Serializable, RunActive {
      * Migrates the object to the specified loaction
      * @param nodeURL - the name of the node to migrate
      */
+    @MigrationSignal
     public void migrateTo(String nodeURL) {
         this.writePrivateMessage(new Message(" *** I move to " + nodeURL));
         try {

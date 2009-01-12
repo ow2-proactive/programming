@@ -40,6 +40,7 @@ import org.objectweb.proactive.core.group.DispatchMode;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
@@ -53,13 +54,14 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  * @author The ProActive Team
  * 
  */
+@ActiveObject
 public class PiBBP implements Serializable {
     protected int nbDecimals;
     private String deploymentDescriptorLocation_;
     private GCMApplication deploymentDescriptor_;
     private boolean ws_ = false;
     protected PiComputer piComputer;
-    int nbIntervals;
+    private int nbIntervals;
 
     /**
      * Empty constructor

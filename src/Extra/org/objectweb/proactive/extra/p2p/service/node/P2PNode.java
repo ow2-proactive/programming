@@ -34,6 +34,7 @@ package org.objectweb.proactive.extra.p2p.service.node;
 import java.io.Serializable;
 
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
@@ -43,9 +44,13 @@ import org.objectweb.proactive.core.node.Node;
  *
  * Created on Jan 13, 2005
  */
+@ActiveObject
 public class P2PNode implements Serializable {
     private Node node = null;
     private P2PNodeManager nodeManager = null;
+
+    public P2PNode() {
+    }
 
     /**
      * Construct a new <code>P2PNode</code> with specified <code>node</code> or

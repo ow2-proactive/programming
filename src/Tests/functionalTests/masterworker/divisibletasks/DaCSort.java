@@ -45,7 +45,7 @@ import java.util.Collections;
  * A merge-sort like task
  * splits the list into 2 sublists and merge results from subtasks
  *
-  @author The ProActive Team
+ @author The ProActive Team
  */
 public class DaCSort implements DivisibleTask<ArrayList<Integer>> {
 

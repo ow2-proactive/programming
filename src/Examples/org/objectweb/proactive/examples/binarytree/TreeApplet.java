@@ -44,6 +44,7 @@ import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
@@ -59,9 +60,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 0.9
  *
  */
+@ActiveObject
 @SuppressWarnings("serial")
 public class TreeApplet extends org.objectweb.proactive.examples.StandardFrame {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private javax.swing.JPanel rootPanel;
     private javax.swing.Box pCmd;
     private javax.swing.JPanel searchResult;

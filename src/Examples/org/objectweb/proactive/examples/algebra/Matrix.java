@@ -34,13 +34,15 @@ package org.objectweb.proactive.examples.algebra;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class Matrix implements java.io.Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
-    int m; // height
-    int n; // width
-    double[][] elements; // values
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private int m; // height
+    private int n; // width
+    private double[][] elements; // values
 
     public Matrix() {
         super();
@@ -92,7 +94,7 @@ public class Matrix implements java.io.Serializable {
         return m;
     }
 
-    public Matrix identity() {
+    private Matrix identity() {
         Matrix result;
         if (this.m != this.n) {
             return null;
@@ -266,7 +268,7 @@ public class Matrix implements java.io.Serializable {
         return;
     }
 
-    public Matrix rightProduct(Matrix m) {
+    private Matrix rightProduct(Matrix m) {
         // Let's verify dimensions (product is this*m)
         int i;
 
@@ -342,7 +344,7 @@ public class Matrix implements java.io.Serializable {
         return;
     }
 
-    public Matrix getInverse() {
+    private Matrix getInverse() {
         Matrix source;
         Matrix result;
         int i;

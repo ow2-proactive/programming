@@ -43,6 +43,8 @@ import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 
 
 /**
@@ -53,8 +55,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  * @version ProActive 1.0 (March 2002)
  */
+@ActiveObject
 public class SimpleObjectMigration implements Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private static final int SLEEP_TIME = 9000;
     private String name; // The name of the instance
     private String hi = " say hello from "; // The 'hello' sentence
@@ -64,7 +67,7 @@ public class SimpleObjectMigration implements Serializable {
      *
      */
     public SimpleObjectMigration() {
-        logger.info("SimpleObjectMigration> Empty constructor");
+        // logger.info("SimpleObjectMigration> Empty constructor");
     }
 
     /**
@@ -103,11 +106,12 @@ public class SimpleObjectMigration implements Serializable {
      *
      * @param t The url of the destination node
      */
+    @MigrationSignal
     public void moveTo(String t) {
         try {
             logger.info("SimpleObjectMigration> moveTo(" + t + ") " + "% start migration");
             PAMobileAgent.migrateTo(t);
-            logger.info("SimpleObjectMigration> moveTo(" + t + ") " + "% stop migration");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -234,6 +238,7 @@ public class SimpleObjectMigration implements Serializable {
 
         // We migrate the Active Object
         activeHello.moveTo(urlDestinationNode);
+        logger.info("SimpleObjectMigration> moveTo(" + urlDestinationNode + ") " + "% stop migration");
 
         logger.info("");
 

@@ -46,6 +46,7 @@ import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.migration.MigrationStrategyManagerImpl;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -62,6 +63,11 @@ import org.objectweb.proactive.examples.c3d.prim.Primitive;
 import org.objectweb.proactive.examples.c3d.prim.Sphere;
 import org.objectweb.proactive.examples.c3d.prim.Surface;
 import org.objectweb.proactive.examples.c3d.prim.View;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+
 import timer.AverageMicroTimer;
 
 
@@ -70,6 +76,7 @@ import timer.AverageMicroTimer;
  * It handles the logic of asking renderers to draw partial images. It then forwards them to the users.
  * It also allows users to hold conversations, in a chat-like way.
  */
+@ActiveObject
 public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispatcher, DispatcherLogic {
     private static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private static int IMAGE_HEIGHT = 500;
@@ -842,8 +849,21 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
 
         try {
 
-            Deployer deployer = (Deployer) PAActiveObject.newActive(Deployer.class.getName(),
-                    new Object[] { new File(argv[0]) });
+            File applicationDescriptor = new File(argv[0]);
+            ProActiveConfiguration.load();
+            GCMApplication gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
+            gcmad.startDeployment();
+
+            GCMVirtualNode renderer = gcmad.getVirtualNode("Renderer");
+            GCMVirtualNode dispatcher = gcmad.getVirtualNode("Dispatcher");
+
+            if (renderer == null)
+                throw new ProActiveException("Render virtual node is not defined");
+            if (dispatcher == null)
+                throw new ProActiveException("Dispatcher virtual node is not defined");
+
+            Deployer deployer = (Deployer) PAActiveObject.newActive(Deployer.class.getName(), new Object[] {
+                    gcmad, renderer, dispatcher });
 
             Node[] rendererNodes = deployer.getRendererNodes();
             Object[] param = new Object[] { rendererNodes, deployer };

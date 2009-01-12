@@ -46,6 +46,7 @@ import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
@@ -53,6 +54,7 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
  * This class activates a new JVM which wraps the Scilab Engine and forwards the Scilab tasks
  *
  */
+@ActiveObject
 public class MSEngine implements Serializable {
 
     /**

@@ -33,10 +33,13 @@
 package org.objectweb.proactive.examples.userguide.simplehello;
 
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 
+@ActiveObject
 public class HelloWorld {
     // empty constructor is required by Proactive
     public HelloWorld() {

@@ -40,14 +40,16 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class Matrix implements java.io.Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private int width;
     private int height;
     private double[][] tab;
-    boolean migration = true;
+    private boolean migration = true;
 
     // -----------------------------//
     //        CONSTRUCTORS          //
@@ -223,7 +225,7 @@ public class Matrix implements java.io.Serializable {
     //-----------------------------------//
     //             METHODS               //
     //-----------------------------------//
-    static int k = 0;
+    private static int k = 0;
 
     public void initializeWithRandomValues() {
         //int k= 0;
@@ -360,7 +362,7 @@ public class Matrix implements java.io.Serializable {
         return res;
     }
 
-    public Matrix distributedMultiply(Matrix m, Node[] nodeList) {
+    private Matrix distributedMultiply(Matrix m, Node[] nodeList) {
         if (getWidth() != m.getHeight()) {
             logger.error("Error : no compatible Matrix");
             return null;
@@ -425,7 +427,7 @@ public class Matrix implements java.io.Serializable {
         return result;
     }
 
-    public Matrix distributedMultiplyWithOutGroup(Matrix m, Node[] nodeList) {
+    private Matrix distributedMultiplyWithOutGroup(Matrix m, Node[] nodeList) {
         if (getWidth() != m.getHeight()) {
             logger.error("Error : no compatible Matrix");
             return null;

@@ -36,11 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.objectweb.proactive.examples.nbody.common.Deployer;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * Synchronization of the computation of the Domain
  */
+@ActiveObject
 public class Maestro implements Serializable {
 
     /** Counts the number of Domain that have respond */

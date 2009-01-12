@@ -52,6 +52,7 @@ import org.objectweb.proactive.examples.c3d.gui.WaitFrame;
 import org.objectweb.proactive.examples.c3d.prim.Sphere;
 import org.objectweb.proactive.examples.c3d.prim.Surface;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
@@ -60,6 +61,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  * The user logic of the C3D application. This class does not do gui related work, which is cast
  * back to UserGUI. It only handles the logic parts, ie specifies the behavior.
  */
+@ActiveObject
 public class C3DUser implements InitActive, java.io.Serializable, User, UserLogic {
 
     /** useful for showing information, if no GUI is available, or for error messages */

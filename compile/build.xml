@@ -53,6 +53,12 @@
 	<!-- ************
 		Classpath		
 	-->
+	
+	<path id="check.annotations.classpath">
+		<path refid="project.classpath" />
+		<!-- Annotation processing -->
+		<pathelement path="${deploy.lib.dir}/ProActive_annotations.jar"/>
+	</path>
 
 	<tstamp>
 <!-- 	<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" /> -->
@@ -69,15 +75,12 @@
 	</if>
 
 
-	<path id="examples.classpath">
-		<path refid="project.classpath" />
-	</path>
-
 	<!-- Default testsuite can be overriden by using the -Dtest property -->
 	<if name="test">
 		<fileset dir="${cl.test.dir}" id="testsuite">
 			<include name="${test}" />
 			<exclude name="**/*$*.class" />
+			<exclude name="${annotations_tests_exec_exclude}"/>
 		</fileset>
 		<else>
 			<fileset dir="${cl.test.dir}" id="testsuite">
@@ -98,6 +101,7 @@
 				<exclude name="functionalTests/component/collectiveitf/multicast/Tester.class" />
 				<exclude name="functionalTests/component/collectiveitf/multicast/TesterImpl.class" />
 				<exclude name="functionalTests/component/collectiveitf/multicast/classbased/TesterImpl.class" />
+				<exclude name="${annotations_tests_exec_exclude}"/>
 			</fileset>
 		</else>
 	</if>
@@ -250,12 +254,20 @@
 		</subant>
 	</target>
 
-
 	<target name="compile.tests" depends="compile.core, compile.extensions, compile.extra, compile.util" description="Compile functional and unit tests classes">
+		<if name="ant.java.version" value="1.5">
+			<!-- Exclude CTree related stuff from compilation -->
+			<property name="annotations_tests_exec_exclude" value="functionalTests/annotations/*CTree*.class,functionalTests/annotations/**/*CTree*"/>
+			<echo message="Using java 1.5, excluding from tests execution:${annotations_tests_exec_exclude}"/>
+		</if>
+
 		<javac srcdir="${src.test.dir}" destdir="${cl.test.dir}" includes="unitTests/**" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
 		</javac>
-		<javac srcdir="${src.test.dir}" destdir="${cl.test.dir}" includes="functionalTests/**" deprecation="on" source="${source}" debug="${debug}">
+		<javac srcdir="${src.test.dir}" destdir="${cl.test.dir}" 
+			includes="functionalTests/**"
+			excludes="functionalTests/annotations/*/inputs/**,${annotations_tests_exec_exclude}"
+			deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
 		</javac>
 		<javac srcdir="${src.test.dir}" destdir="${cl.test.dir}" includes="performanceTests/**" deprecation="on" source="${source}" debug="${debug}">
@@ -290,9 +302,10 @@
 	
 
 	<target name="compile.examples" depends="compile.core, compile.extensions, compile.extra" description="Compile all examples classes">
+		
 		<!-- XXX, MicroTimer should be in core or not used by examples-->
 		<javac srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="**/*.java" excludes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
-			<classpath refid="examples.classpath" />
+			<classpath refid="project.classpath"/>
 		</javac>
 
 		<copy todir="${cl.examples.dir}/${proactive.path}/examples" includeEmptyDirs="no">
@@ -305,7 +318,7 @@
 		<if name="java3d_present">
 			<echo message="Info: Java3D installed." />
 			<javac srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" deprecation="on" source="${source}" debug="${debug}">
-				<classpath refid="examples.classpath" />
+				<classpath refid="project.classpath" />
 			</javac>
 			<else>
 				<echo level="warning" message="Info: Java 3D dependencies were not resolved." />
@@ -342,7 +355,9 @@
 	</target>
 
 
-
+	<!-- ************
+		ProActive ant taskdefs		
+	-->
 
 
 	<!-- ************
@@ -365,6 +380,9 @@
 			<fileset dir="${cl.extra.dir}" includes="**" />
 			<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
 			<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
+			<!-- annotations info -->
+            <fileset dir="${compile.dir}" includes="META-INF/services/com.sun.mirror.apt.AnnotationProcessorFactory" />
+			<fileset dir="${compile.dir}" includes="META-INF/services/javax.annotation.processing.Processor"/>
 			<indexjars>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
@@ -423,6 +441,39 @@
 			<fileset dir="${cl.utils.dir}" />
 		</jar>
 	</target>
+	
+	<target name="deploy.annotations" depends="compile.extensions, -deploy.mkdir" description="Create a jar file which contains all the annotations">
+		<jar destfile="${deploy.lib.dir}/ProActive_annotations.jar" index="true">
+			<fileset dir="${cl.extensions.dir}">
+				<include name="org/objectweb/proactive/extensions/annotation/**"/>
+			</fileset>
+			<!-- annotations info -->
+		    <fileset dir="${compile.dir}" includes="META-INF/services/com.sun.mirror.apt.AnnotationProcessorFactory" />
+			<fileset dir="${compile.dir}" includes="META-INF/services/javax.annotation.processing.Processor"/>
+		</jar>
+	</target>
+	
+	<target name="deploy.annotations.java5" depends="compile.extensions, -deploy.mkdir" description="Create a jar file which contains only the JDK 1.5 annotations">
+		<jar destfile="${deploy.lib.dir}/ProActive_annotations_APT.jar" index="true">
+			<fileset dir="${cl.extensions.dir}">
+				<include name="org/objectweb/proactive/extensions/annotation/**"/>
+				<exclude name="org/objectweb/proactive/extensions/annotation/**/*CTree*"/>
+			</fileset>
+		    <fileset dir="${compile.dir}" includes="META-INF/services/com.sun.mirror.apt.AnnotationProcessorFactory" />
+		</jar>
+	</target>
+	
+	<target name="deploy.annotations.java6" depends="compile.extensions, -deploy.mkdir" description="Create a jar file which contains only the JDK 1.6 annotations">
+		<jar destfile="${deploy.lib.dir}/ProActive_annotations_CTree.jar" index="true">
+			<fileset dir="${cl.extensions.dir}">
+				<include name="org/objectweb/proactive/extensions/annotation/**"/>
+				<exclude name="org/objectweb/proactive/extensions/annotation/**/*APT*"/>
+				<exclude name="org/objectweb/proactive/extensions/annotation/**/ProActiveAnnotationProcessorFactory*"/>
+				<exclude name="org/objectweb/proactive/extensions/annotation/**/Bogus*"/>
+			</fileset>
+		    <fileset dir="${compile.dir}" includes="META-INF/services/javax.annotation.processing.Processor" />
+		</jar>
+	</target>
 
 	<target name="-deploy.mkdir">
 		<!-- Make deploy directories -->
@@ -431,26 +482,129 @@
 		<mkdir dir="${deploy.scripts.dir}" />
 	</target>
 
+	<target name="deploy.annotations.all" depends="deploy.annotations.java5, deploy.annotations.java6, deploy.annotations" />
 
-	<target name="deploy.all" depends="deploy.core, deploy.examples, deploy.tests, deploy.utils" description="Populate dist/ with all ProActive Programming dependencies and JARs" />
+	<target name="deploy.all" depends="deploy.core, deploy.examples, deploy.tests, deploy.utils, deploy.annotations.all" description="Populate dist/ with all ProActive Programming dependencies and JARs" />
 
 	<target name="deploy" depends="deploy.all" description="Populate dist/ (with ProActive_examples.jar)" />
 
+	
+	<!-- ************
+		Annotation processing		
+	-->
 
+	<target name="declare" depends="compile.util" >
+		<taskdef name="cavaj"
+			classname="ant.JavacForceCompileTask"
+			classpath="${cl.utils.dir}" 
+			/>
+		<taskdef name="tpa"
+			classname="ant.AptForceCompileTask"
+			classpath="${cl.utils.dir}" 
+			/>
+	</target>
+	
+	<target name="check.annotations.core" depends="deploy,declare" description="Annotation processing for Core">
+		<if name="ant.java.version" value="1.5">
+			<!-- invoke apt -->
+			<tpa srcdir="${src.proactive.dir}" destdir="${cl.proactive.dir}" includes="**/*.java" compile="false" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+				<compilerarg line="-nocompile"/>
+			</tpa>
+		<else>
+			<!-- invoke javac -->
+			<cavaj srcdir="${src.proactive.dir}" destdir="${cl.proactive.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+			</cavaj>
+		</else>
+		</if>
+	</target>
 
-
+	<target name="check.annotations.extensions" depends="deploy,declare" description="Annotation processing for Extensions">
+		<if name="ant.java.version" value="1.5">
+			<!-- invoke apt -->
+			<tpa srcdir="${src.extensions.dir}" destdir="${cl.extensions.dir}" includes="**/*.java" compile="false" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+				<compilerarg line="-nocompile"/>
+			</tpa>
+		<else>
+			<!-- invoke javac -->
+			<cavaj srcdir="${src.extensions.dir}" destdir="${cl.extensions.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+			</cavaj>
+		</else>
+		</if>
+	</target>
+	
+	<target name="check.annotations.extra" depends="deploy,declare" description="Annotation processing for Extra">
+		<if name="ant.java.version" value="1.5">
+			<!-- invoke apt -->
+			<tpa srcdir="${src.extra.dir}" destdir="${cl.extra.dir}" includes="**/*.java" compile="false" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+				<compilerarg line="-nocompile"/>
+			</tpa>
+		<else>
+			<!-- invoke javac -->
+			<cavaj srcdir="${src.extra.dir}" destdir="${cl.extra.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+			</cavaj>
+		</else>
+		</if>
+	</target>
+	
+	
+	<target name="check.annotations.examples" depends="deploy,declare" description="Annotation processing for Examples">
+		<if name="ant.java.version" value="1.5">
+			<!-- invoke apt -->
+			<tpa srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="**/*.java" excludes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" compile="false" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+				<compilerarg line="-nocompile"/>
+			</tpa>
+		<else>
+			<!-- invoke javac -->
+			<cavaj srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="**/*.java" excludes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+			</cavaj>
+		</else>
+		</if>
+	</target>
+	
+	<target name="check.annotations.benchmarks" depends="deploy,declare" description="Annotation processing for Benchmarks">
+		<if name="ant.java.version" value="1.5">
+			<!-- invoke apt -->
+			<tpa srcdir="${src.benchmarks.dir}" destdir="${cl.benchmarks.dir}" includes="**/*.java" compile="false" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+				<compilerarg line="-nocompile"/>
+			</tpa>
+		<else>
+			<!-- invoke javac -->
+			<cavaj srcdir="${src.benchmarks.dir}" destdir="${cl.benchmarks.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
+				<classpath refid="check.annotations.classpath"/>
+			</cavaj>
+		</else>
+		</if>
+	</target>
+	
+	<target name="check.annotations" depends="check.annotations.all" description="Perform annotation processing on ProActive code"/>
+		
+	<target name="check.annotations.all" depends="check.annotations.core, check.annotations.extensions, check.annotations.extra, check.annotations.examples, check.annotations.benchmarks" 
+		description="Do annotation processing for the following ProActive modules : Core + Extensions + Extra + Examples + Benchmarks" />
+	
 
 	<!-- ************
 		Testing		
 	-->
 
+	
+
+	
 	<macrodef name="junitMacro">
 		<attribute name="nodeDescriptor" />
 		<attribute name="testsuite"/>
 		<element name="jvmargs" optional="yes" />
 		<element name="additionalClasspath" optional="yes" />
 		<sequential>
-
+			
 			<delete dir="${junit.dir}" />
 			<mkdir dir="${junit.dir}" />
 			<junit printsummary="yes" forkmode="perTest" showoutput="${junit.showoutput}">
@@ -486,7 +640,7 @@
 
 
 				<batchtest fork="yes" todir="${junit.dir}">
-					<fileset refid="@{testsuite}" />
+					<fileset refid="@{testsuite}"/>
 				</batchtest>
 			</junit>
 		</sequential>

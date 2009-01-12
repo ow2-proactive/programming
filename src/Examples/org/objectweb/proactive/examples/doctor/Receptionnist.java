@@ -34,14 +34,16 @@ package org.objectweb.proactive.examples.doctor;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class Receptionnist implements org.objectweb.proactive.RunActive {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     public final static int NO_ONE = -1;
-    int pat_id;
-    int doc_id;
-    Office off;
+    private int pat_id;
+    private int doc_id;
+    private Office off;
 
     public Receptionnist() {
     }

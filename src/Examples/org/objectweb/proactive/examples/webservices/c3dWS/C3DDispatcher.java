@@ -77,6 +77,7 @@ import org.objectweb.proactive.examples.webservices.c3dWS.prim.Primitive;
 import org.objectweb.proactive.examples.webservices.c3dWS.prim.Sphere;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.WebServices;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
@@ -84,8 +85,9 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 /**
  * This class decouples the set of user frames from the set of rendering
  */
+@ActiveObject
 public class C3DDispatcher implements org.objectweb.proactive.RunActive, Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /**
      * The array of random colors
@@ -222,7 +224,7 @@ public class C3DDispatcher implements org.objectweb.proactive.RunActive, Seriali
      */
     private ProActiveDescriptor proActiveDescriptor;
     private String[] rendererNodes;
-    long previousTime = -1;
+    private long previousTime = -1;
     private String url;
     private String urn;
 

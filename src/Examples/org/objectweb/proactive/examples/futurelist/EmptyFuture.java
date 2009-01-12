@@ -35,7 +35,7 @@ import java.io.Serializable;
 
 
 public class EmptyFuture implements Serializable {
-    public String name;
+    private String name;
 
     public EmptyFuture() {
         name = "toto";

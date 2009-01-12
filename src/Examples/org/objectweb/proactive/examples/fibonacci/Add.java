@@ -41,12 +41,14 @@ import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * @author The ProActive Team
  *
  */
+@ActiveObject
 public class Add implements Serializable, InitActive, RunActive {
     private Cons1 cons1;
     private BigInteger fibN_1;

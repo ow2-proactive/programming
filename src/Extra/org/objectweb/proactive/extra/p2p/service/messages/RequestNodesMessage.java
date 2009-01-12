@@ -124,7 +124,7 @@ public class RequestNodesMessage extends BreadthFirstMessage {
 
                     long endTime = System.currentTimeMillis() + P2PService.ACQ_TO;
                     while ((System.currentTimeMillis() < endTime) && PAFuture.isAwaited(nodeAck)) {
-                        target.service.blockingServeOldest(2000);
+                        target.getService().blockingServeOldest(2000);
                     }
 
                     // Testing future is here or timeout is expired??

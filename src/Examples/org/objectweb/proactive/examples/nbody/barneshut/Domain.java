@@ -38,8 +38,10 @@ import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.examples.nbody.common.Displayer;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class Domain implements Serializable {
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

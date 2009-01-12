@@ -57,8 +57,8 @@ public class ExplorationMessage extends BreadthFirstMessage implements Serializa
                 if (result == null) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("ExplorationMessage me = " +
-                            P2PService.getHostNameAndPortFromUrl(PAActiveObject
-                                    .getActiveObjectNodeUrl(target.stubOnThis)) +
+                            P2PService.getHostNameAndPortFromUrl(PAActiveObject.getActiveObjectNodeUrl(target
+                                    .getStubOnThis())) +
                             " adding " +
                             P2PService.getHostNameAndPortFromUrl(PAActiveObject
                                     .getActiveObjectNodeUrl(this.sender)));

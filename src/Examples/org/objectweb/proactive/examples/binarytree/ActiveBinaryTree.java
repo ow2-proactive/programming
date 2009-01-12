@@ -31,6 +31,10 @@
  */
 package org.objectweb.proactive.examples.binarytree;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
+
+@ActiveObject
 public class ActiveBinaryTree extends BinaryTree {
 
     /*

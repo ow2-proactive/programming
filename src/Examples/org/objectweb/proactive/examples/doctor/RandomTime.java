@@ -33,12 +33,14 @@ package org.objectweb.proactive.examples.doctor;
 
 import java.util.Random;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
+
+@ActiveObject
 public class RandomTime {
-    Random rand;
+    private Random rand = new Random();
 
     public RandomTime() {
-        rand = new Random();
     }
 
     public long gaussianTime(long mean, long sigma) {

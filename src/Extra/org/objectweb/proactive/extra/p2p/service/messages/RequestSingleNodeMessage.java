@@ -75,7 +75,7 @@ public class RequestSingleNodeMessage extends RandomWalkMessage {
 
             long endTime = System.currentTimeMillis() + P2PService.ACQ_TO;
             while ((System.currentTimeMillis() < endTime) && PAFuture.isAwaited(nodeAck)) {
-                target.service.blockingServeOldest(2000);
+                target.getService().blockingServeOldest(2000);
             }
             if (PAFuture.isAwaited(nodeAck)) {
                 // Do not forward the message, Prevent  deadlock

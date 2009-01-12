@@ -31,6 +31,10 @@
  */
 package org.objectweb.proactive.examples.readers;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
+
+@ActiveObject
 public class Reader implements org.objectweb.proactive.RunActive {
     private ReaderDisplay display;
     private ReaderWriter rw;

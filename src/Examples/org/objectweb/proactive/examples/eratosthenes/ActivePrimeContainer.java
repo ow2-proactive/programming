@@ -35,6 +35,7 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
@@ -46,6 +47,7 @@ import org.objectweb.proactive.api.PAActiveObject;
  * it demands creation of a new container.
  * The container is migratable.
  */
+@ActiveObject
 public class ActivePrimeContainer implements PrimeNumber, java.io.Serializable, Slowable, RunActive {
     private PrimeNumber first;
     private int size;

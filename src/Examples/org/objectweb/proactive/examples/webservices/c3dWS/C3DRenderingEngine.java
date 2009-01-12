@@ -39,6 +39,8 @@ import org.objectweb.proactive.examples.webservices.c3dWS.prim.Isect;
 import org.objectweb.proactive.examples.webservices.c3dWS.prim.Light;
 import org.objectweb.proactive.examples.webservices.c3dWS.prim.Primitive;
 import org.objectweb.proactive.examples.webservices.c3dWS.prim.Surface;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 
 
 /**
@@ -47,6 +49,7 @@ import org.objectweb.proactive.examples.webservices.c3dWS.prim.Surface;
  * @author The ProActive Team
  * @author The ProActive Team
  */
+@ActiveObject
 public class C3DRenderingEngine implements java.io.Serializable {
 
     /**
@@ -118,6 +121,7 @@ public class C3DRenderingEngine implements java.io.Serializable {
     /**
      * Feature the migration property
      */
+    @MigrationSignal
     public void migrateTo(String nodeTarget) {
         try {
             org.objectweb.proactive.api.PAMobileAgent.migrateTo(nodeTarget);
@@ -179,7 +183,7 @@ public class C3DRenderingEngine implements java.io.Serializable {
     /**
      * Return the Vector's transmission direction
      */
-    Vec TransDir(Surface m1, Surface m2, Vec I, Vec N) {
+    private Vec TransDir(Surface m1, Surface m2, Vec I, Vec N) {
         double n1;
         double n2;
         double eta;

@@ -65,8 +65,8 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     public void solve(List<Task<Serializable>> tasks) {
         if (tasks.size() == 0) {
             throw new IllegalArgumentException("empty list");
@@ -76,8 +76,8 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public List<Serializable> waitAllResults() throws TaskException {
         if (!initCalled) {
@@ -102,8 +102,8 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public Serializable waitOneResult() throws TaskException {
         if (!initCalled) {
@@ -149,8 +149,8 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public List<Serializable> waitKResults(int k) throws TaskException {
         if (!initCalled) {
@@ -177,8 +177,8 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public boolean isEmpty() {
         if (!initCalled) {
@@ -188,8 +188,8 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     public int countAvailableResults() {
         if (!initCalled) {

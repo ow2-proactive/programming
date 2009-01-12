@@ -39,12 +39,14 @@ import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.examples.c3d.geom.Vec;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * An election, as a poll under democracy. A certain number of people can vote,
  * and then results are drawn.
  */
+@ActiveObject
 public class Election implements RunActive, Serializable {
     private static final int WAITMSECS = 4000; // Duration of one election round in milliseconds
     private C3DDispatcher c3ddispatcher; // to give back results

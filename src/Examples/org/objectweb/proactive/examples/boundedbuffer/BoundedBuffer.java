@@ -31,9 +31,13 @@
  */
 package org.objectweb.proactive.examples.boundedbuffer;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
+
 /**
  * Active BoundedBuffer
  */
+@ActiveObject
 public class BoundedBuffer implements org.objectweb.proactive.RunActive {
     private String[] buffer; // The buffer containing the datas
     private int size; // The buffer's capacity

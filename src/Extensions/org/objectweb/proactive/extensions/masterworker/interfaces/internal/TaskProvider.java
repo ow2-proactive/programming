@@ -72,11 +72,11 @@ public interface TaskProvider<R extends Serializable> {
     BooleanWrapper sendResult(ResultIntern<R> result, String workerName);
 
     /**
-    * Returns the results of several tasks at once to the provider
-    * @param results the results of the completed tasks
-    * @param workerName the name of the worker sending the result
-    * @return an aknowledgement (for synchronization)
-    */
+     * Returns the results of several tasks at once to the provider
+     * @param results the results of the completed tasks
+     * @param workerName the name of the worker sending the result
+     * @return an aknowledgement (for synchronization)
+     */
     BooleanWrapper sendResults(List<ResultIntern<R>> results, String workerName);
 
     /**

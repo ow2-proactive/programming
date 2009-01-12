@@ -32,11 +32,13 @@
 package org.objectweb.proactive.examples.philosophers;
 
 import org.objectweb.proactive.ObjectForSynchronousCall;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * This class implements the behaviors of the table and the storage of the forks
  */
+@ActiveObject
 public class Table implements org.objectweb.proactive.RunActive {
 
     /**

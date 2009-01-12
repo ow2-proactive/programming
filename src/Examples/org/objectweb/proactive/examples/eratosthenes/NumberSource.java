@@ -37,6 +37,7 @@ import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /** This class sends increasing numbers to the first PrimeNumber for testing.
@@ -45,19 +46,21 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * slowDown() makes the source sleep a little.
  * @author The ProActive Team
  */
+@ActiveObject
 public class NumberSource implements java.io.Serializable, RunActive, Slowable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private ActivePrimeContainer first;
-    private boolean pause;
+    private boolean pause = true;
     private boolean sleep;
-    private long currentNumber;
+    private long currentNumber = 5;
 
     /**
      * Constructor for NumberSource.
      */
     public NumberSource() {
-        pause = true;
-        currentNumber = 5;
+        // @ActiveObject
+        //        pause = true;
+        //        currentNumber = 5;
     }
 
     public void setFirst(ActivePrimeContainer first) {

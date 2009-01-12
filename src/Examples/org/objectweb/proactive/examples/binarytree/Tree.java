@@ -32,8 +32,10 @@
 package org.objectweb.proactive.examples.binarytree;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class Tree {
     private String key;
     private String value;

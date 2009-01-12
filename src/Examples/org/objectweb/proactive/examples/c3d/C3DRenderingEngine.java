@@ -38,12 +38,14 @@ import org.objectweb.proactive.examples.c3d.prim.Isect;
 import org.objectweb.proactive.examples.c3d.prim.Light;
 import org.objectweb.proactive.examples.c3d.prim.Surface;
 import org.objectweb.proactive.examples.c3d.prim.View;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * Rendering Engine used by C3D.
  * When fed a scene and an Interval, returns a 2D picture of the 3D scene.
  */
+@ActiveObject
 public class C3DRenderingEngine implements java.io.Serializable, RenderingEngine {
     private static final double INFINITE = 1e6;
 

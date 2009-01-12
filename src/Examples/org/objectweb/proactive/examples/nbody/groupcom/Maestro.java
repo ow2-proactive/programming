@@ -35,11 +35,13 @@ import java.io.Serializable;
 
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.examples.nbody.common.Deployer;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * Synchronization of the computation of the Domains
  */
+@ActiveObject
 public class Maestro implements Serializable {
     private Domain domainGroup;
     private int nbFinished = 0;

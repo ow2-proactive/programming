@@ -41,7 +41,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * which may have been created by another application.
  */
 public class HelloClient {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** Looks for a Hello Active Object bepending on args, and calls a method on it */
     public static void main(String[] args) {

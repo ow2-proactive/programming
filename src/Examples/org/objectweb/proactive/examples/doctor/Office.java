@@ -31,13 +31,17 @@
  */
 package org.objectweb.proactive.examples.doctor;
 
+import java.util.Vector;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class Office {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     //Number of patients being created at startup 
     public static final int NB_PAT = 15;
@@ -61,13 +65,13 @@ public class Office {
     public static final int DOC_UNDEF = -1;
     public static final int PAT_WELL = -2;
     public static final int PAT_SICK = -1;
-    java.util.Vector patients;
-    java.util.Vector doctors;
-    Office me;
-    Receptionnist recept;
-    DisplayPanel display;
-    RandomTime rand;
-    OfficeWindow win;
+    private Vector patients;
+    private Vector doctors;
+    private Office me;
+    private Receptionnist recept;
+    private DisplayPanel display;
+    private RandomTime rand;
+    private OfficeWindow win;
 
     public Office() {
     }

@@ -36,12 +36,14 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class AOInterpreter {
-    AOStageIn stageIn;
-    AOStageOut stageOut;
-    AOStageCompute stageCompute;
+    protected AOStageIn stageIn;
+    protected AOStageOut stageOut;
+    protected AOStageCompute stageCompute;
 
     /**
      * Empty constructor for ProActive  MOP

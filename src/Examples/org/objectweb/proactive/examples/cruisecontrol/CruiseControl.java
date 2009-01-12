@@ -31,9 +31,13 @@
  */
 package org.objectweb.proactive.examples.cruisecontrol;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
+
 /** The active object for the controller,
  * checks the speed of the car when it is on
  */
+@ActiveObject
 public class CruiseControl implements org.objectweb.proactive.RunActive {
 
     /** */
@@ -43,18 +47,18 @@ public class CruiseControl implements org.objectweb.proactive.RunActive {
     final static int INACTIVE = 0;
 
     /** State of the controller */
-    int state = INACTIVE;
+    private int state = INACTIVE;
 
     /** The desired speed of the controller */
-    double desiredSpeed = 0;
+    private double desiredSpeed = 0;
 
     /** The current acceleration to applies to the car
      * when the controller is on
      */
-    double acc = 0;
+    private double acc = 0;
 
     /** Reference onto the dispatcher of the Applet */
-    Interface father;
+    private Interface father;
 
     /** No-arg constructor for tha ProActive */
     public CruiseControl() {

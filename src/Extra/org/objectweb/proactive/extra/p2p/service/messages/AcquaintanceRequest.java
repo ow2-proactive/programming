@@ -49,23 +49,26 @@ public class AcquaintanceRequest extends Message implements Serializable {
      */
     @Override
     public void execute(P2PService target) {
-        if (!target.stubOnThis.equals(this.sender)) {
+        if (!target.getStubOnThis().equals(this.sender)) {
             Vector<String> result = target.getAcquaintanceManager().add(this.sender);
+            if (result.isEmpty())
+                logger.error("Could not add P2PService " + this.sender.getAddress() +
+                    " to the list of acquiantances of the P2PService " + target.getAddress());
             result = (Vector<String>) PAFuture.getFutureValue(result);
 
             if (result == null) {
                 //we have accepted the acquaintance request
                 logger.info("Register request from " + PAActiveObject.getActiveObjectNodeUrl(this.sender) +
                     " accepted");
-                this.sender.message(new AcquaintanceReply(1, target.generateUuid(), target.stubOnThis,
-                    PAActiveObject.getActiveObjectNodeUrl(target.stubOnThis)));
+                this.sender.message(new AcquaintanceReply(1, target.generateUuid(), target.getStubOnThis(),
+                    PAActiveObject.getActiveObjectNodeUrl(target.getStubOnThis())));
                 //service.registerAnswer(ProActive.getActiveObjectNodeUrl(target.stubOnThis),target.stubOnThis);
             } else {
                 logger.info("Register request from " + PAActiveObject.getActiveObjectNodeUrl(this.sender) +
                     " rejected");
                 //service.registerAnswer(ProActive.getActiveObjectNodeUrl(target.stubOnThis), result);
-                this.sender.message(new AcquaintanceReply(1, target.generateUuid(), target.stubOnThis,
-                    PAActiveObject.getActiveObjectNodeUrl(target.stubOnThis), result));
+                this.sender.message(new AcquaintanceReply(1, target.generateUuid(), target.getStubOnThis(),
+                    PAActiveObject.getActiveObjectNodeUrl(target.getStubOnThis()), result));
             }
         }
     }

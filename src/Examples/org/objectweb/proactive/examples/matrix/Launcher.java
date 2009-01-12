@@ -37,11 +37,13 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class Launcher implements java.io.Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
-    List<Node> nodesList;
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private List<Node> nodesList;
 
     public Launcher() {
     }

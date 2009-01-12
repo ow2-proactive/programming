@@ -31,6 +31,10 @@
  */
 package org.objectweb.proactive.examples.binarytree;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
+
+@ActiveObject
 public class TreeDisplay {
     private TreeApplet applet;
     private Tree tree;
@@ -90,7 +94,7 @@ public class TreeDisplay {
 
     public ObjectWrapper search(String key) {
         if (tree == null) {
-            return null;
+            return new ObjectWrapper("null");
         }
         return tree.search(key);
     }

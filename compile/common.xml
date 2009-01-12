@@ -102,6 +102,7 @@
 		<path refid="deploy.classpath"/>
 		<pathelement location="${base.dir}/compile/lib/junit-4.3.jar"/>
 		<pathelement location="${cl.test.dir}/" />
+		<pathelement location="${java.home}/../lib/tools.jar" />
 	</path>
 
 	<path id="project.classpath">

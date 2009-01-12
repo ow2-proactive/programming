@@ -35,14 +35,16 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.ext.util.FutureList;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class FutureReceiver implements java.io.Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
-    int etape = 0; // this is to count the jumps we have made so far
-    BlockedObject blocked;
-    java.util.Vector<EmptyFuture> waitingFutures = new java.util.Vector<EmptyFuture>();
-    FutureList futureList;
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private int etape = 0; // this is to count the jumps we have made so far
+    private BlockedObject blocked;
+    private java.util.Vector<EmptyFuture> waitingFutures = new java.util.Vector<EmptyFuture>();
+    private FutureList futureList;
 
     public FutureReceiver() {
     }

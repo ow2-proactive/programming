@@ -39,6 +39,7 @@ import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskIntern;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskRepository;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -61,6 +62,7 @@ import java.util.zip.Inflater;
  * @author The ProActive Team
  *
  */
+@ActiveObject
 public class AOTaskRepository implements TaskRepository, Serializable {
 
     /**

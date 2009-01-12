@@ -44,11 +44,13 @@ import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class AOInterpreterPool implements RunActive, InitActive {
 
-    static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_ENVIRONMENT);
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_ENVIRONMENT);
 
     private Vector<AOStageIn> pool;
     private boolean shutdown;

@@ -53,6 +53,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import org.objectweb.proactive.extensions.annotation.MigrationSignal;
+
 
 /**
  * @author The ProActive Team
@@ -208,6 +210,7 @@ public class ChatGUI extends JFrame {
             //			putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_3, ActionEvent.CTRL_MASK));
         }
 
+        @MigrationSignal
         public void actionPerformed(ActionEvent e) {
             if (location.getText().length() != 0) {
                 oa.migrateTo(location.getText());

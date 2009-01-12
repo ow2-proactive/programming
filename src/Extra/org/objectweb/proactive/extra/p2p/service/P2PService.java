@@ -57,6 +57,7 @@ import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extra.p2p.service.exception.P2POldMessageException;
 import org.objectweb.proactive.extra.p2p.service.exception.PeerDoesntExist;
 import org.objectweb.proactive.extra.p2p.service.messages.DumpAcquaintancesMessage;
@@ -76,6 +77,7 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
  *
  */
 @PublicAPI
+@ActiveObject
 public class P2PService implements InitActive, P2PConstants, Serializable {
 
     /** Logger. */
@@ -101,7 +103,7 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
     private static final int EXPL_MSG = Integer.parseInt(PAProperties.PA_P2P_EXPLORING_MSG.getValue()) - 1;
 
     /**
-    * Node acquisition request timeout 
+     * Node acquisition request timeout 
      */
     static public final long ACQ_TO = Long.parseLong(PAProperties.PA_P2P_NODES_ACQUISITION_T0.getValue());
 
@@ -128,23 +130,39 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
     /**
      * Stub of Local P2PService (stub of itself) 
      */
-    public P2PService stubOnThis = null;
+    private P2PService stubOnThis = null;
+
+    public P2PService getStubOnThis() {
+        return stubOnThis;
+    }
+
+    public void setStubOnThis(P2PService stubOnThis) {
+        this.stubOnThis = stubOnThis;
+    }
 
     /**
      * Service of AO
      */
-    public Service service = null;
+    private Service service = null;
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
 
     /**
      * Starting list of super peers.
      */
 
-    private Vector<String> superPeers;
+    private Vector<String> superPeers = new Vector<String>();
 
     /**
      * Filter of request received on active object.
      */
-    public RequestFilter filter = new RequestFilter() {
+    private RequestFilter filter = new RequestFilter() {
 
         /**
          * @see org.objectweb.proactive.core.body.request.RequestFilter#acceptRequest(org.objectweb.proactive.core.body.request.Request)
@@ -157,6 +175,14 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
             return true;
         }
     };
+
+    public RequestFilter getRequestFilter() {
+        return filter;
+    }
+
+    public void setRequestFilter(RequestFilter filter) {
+        this.filter = filter;
+    }
 
     /**
      * Build from an URL, a URL made of host name and host port
@@ -177,7 +203,6 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
      * @see org.objectweb.proactive.api.PAActiveObject
      */
     public P2PService() {
-        this.superPeers = new Vector<String>();
     }
 
     /**
@@ -414,9 +439,9 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
     }
 
     /**
-    * Return  a stub of the P2PNodeManager active object
-    * @return stub of local P2PNodeManager active object 
-    */
+     * Return  a stub of the P2PNodeManager active object
+     * @return stub of local P2PNodeManager active object 
+     */
     public P2PNodeManager getNodeManager() {
         return this.nodeManager;
     }

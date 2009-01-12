@@ -33,6 +33,8 @@ package org.objectweb.proactive.extra.p2p.service.node;
 
 import java.io.Serializable;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
 
 /**
  *
@@ -40,6 +42,7 @@ import java.io.Serializable;
  *
  * Created on May 19, 2005
  */
+@ActiveObject
 public class P2PNodeAck implements Serializable {
     private boolean bool = false;
 

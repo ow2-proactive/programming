@@ -34,8 +34,10 @@ package org.objectweb.proactive.examples.userguide.distributedprimes;
 import java.io.Serializable;
 import java.util.Vector;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class PrimeWorker implements Serializable {
     private Vector<Long> primes = new Vector<Long>();
 

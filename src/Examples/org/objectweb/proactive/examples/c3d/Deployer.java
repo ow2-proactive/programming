@@ -40,46 +40,36 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
+@ActiveObject
 public class Deployer {
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
-    GCMApplication gcmad;
-    GCMVirtualNode renderer;
-    GCMVirtualNode dispatcher;
+    private GCMApplication gcmad;
+    private GCMVirtualNode renderer;
+    private GCMVirtualNode dispatcher;
 
     public Deployer() {
         // No args constructor
     }
 
-    public Deployer(File applicationDescriptor) {
-        try {
-            ProActiveConfiguration.load();
-            gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
-            gcmad.startDeployment();
-            renderer = gcmad.getVirtualNode("Renderer");
-            dispatcher = gcmad.getVirtualNode("Dispatcher");
-        } catch (ProActiveException e) {
-            logger.error("Cannot load GCM Application Descriptor: " + applicationDescriptor, e);
-        }
+    public Deployer(GCMApplication gcmad, GCMVirtualNode renderer, GCMVirtualNode dispatcher) {
+        this.gcmad = gcmad;
+        this.renderer = renderer;
+        this.dispatcher = dispatcher;
     }
 
     public Node[] getRendererNodes() {
-        if (renderer == null)
-            return null;
-
         logger.info("Waiting Renderer virtual node to be ready");
         renderer.waitReady();
         return renderer.getCurrentNodes().toArray(new Node[0]);
     }
 
     public Node getDispatcherNode() {
-        if (dispatcher == null)
-            return null;
-
         logger.info("Waiting Dispatcher virtual node to be ready");
         dispatcher.waitReady();
         return dispatcher.getANode();

@@ -38,12 +38,14 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * @author The ProActive Team
  *
  */
+@ActiveObject
 public class Cons1 implements Serializable, InitActive, RunActive {
     private Add add;
     private Cons2 cons2;

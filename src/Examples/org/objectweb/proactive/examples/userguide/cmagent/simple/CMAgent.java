@@ -32,6 +32,10 @@
 //@snippet-start fullCMA
 package org.objectweb.proactive.examples.userguide.cmagent.simple;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
+
+@ActiveObject
 public class CMAgent {
     // empty constructor is required by Proactive
     public CMAgent() {

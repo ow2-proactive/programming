@@ -34,14 +34,16 @@ package org.objectweb.proactive.examples.eratosthenes;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * @author The ProActive Team
  * Serves to print newly found prime numbers to the console.
  */
+@ActiveObject
 public class ConsolePrimeOutputListener implements PrimeOutputListener, java.io.Serializable {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+    private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private long startTime;
     private int numberCounter;
 

@@ -34,6 +34,8 @@ package org.objectweb.proactive.examples.robustarith;
 import java.io.Serializable;
 import java.math.BigInteger;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
 
 /**
  * @author The ProActive Team
@@ -41,6 +43,7 @@ import java.math.BigInteger;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
+@ActiveObject
 public class SubSum implements Serializable {
     private String name;
 

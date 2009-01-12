@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.core.util.wrapper.IntMutableWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extra.branchnbound.core.Result;
 import org.objectweb.proactive.extra.branchnbound.core.Task;
 
@@ -56,6 +57,7 @@ import org.objectweb.proactive.extra.branchnbound.core.Task;
  *
  * Created on Nov 3, 2005
  */
+@ActiveObject
 public class BasicQueueImpl extends TaskQueue {
     private static final String BCK_SEPARTOR = "End pending tasks backup -- Starting not started tasks backup";
     private Vector<Task> queue = new Vector<Task>();

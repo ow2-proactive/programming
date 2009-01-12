@@ -43,6 +43,7 @@ import javax.management.NotificationListener;
 import javax.management.ObjectName;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
@@ -50,6 +51,7 @@ import org.objectweb.proactive.api.PAActiveObject;
  * <p>This object has to be an Active Objet in order to receive remotely JMX Notifications
  * @author The ProActive Team
  */
+@ActiveObject
 public class ConnectionListener implements NotificationListener, Serializable {
     private MBeanServerConnection connection;
 

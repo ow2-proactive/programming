@@ -38,9 +38,11 @@ import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.calcium.task.TaskPool;
 
 
+@ActiveObject
 public class AOTaskPool extends TaskPool implements RunActive, Serializable {
     public AOTaskPool() {
         super();

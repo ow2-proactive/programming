@@ -35,11 +35,13 @@ package org.objectweb.proactive.examples.userguide.primes.distributed;
 
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.examples.userguide.cmagent.simple.CMAgent;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * @author The ProActive Team
  */
+@ActiveObject
 public class CMAgentPrimeWorker extends CMAgent {
 
     /**

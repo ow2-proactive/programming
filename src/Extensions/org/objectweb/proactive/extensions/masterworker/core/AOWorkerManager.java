@@ -51,6 +51,8 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worke
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
 import org.objectweb.proactive.extensions.masterworker.core.AOWorker;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+import org.objectweb.proactive.extensions.annotation.NodeAttachmentCallback;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
@@ -79,6 +81,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author The ProActive Team
  */
+@ActiveObject
 public class AOWorkerManager implements WorkerManager, InitActive, Serializable {
 
     /**
@@ -133,13 +136,13 @@ public class AOWorkerManager implements WorkerManager, InitActive, Serializable 
     private Map<String, Worker> workers;
 
     /**
-    * descriptor used to deploy the master (if any)
-    */
+     * descriptor used to deploy the master (if any)
+     */
     private URL masterDescriptorURL;
 
     /**
-    * GCMapplication used to deploy the master (if any)
-    */
+     * GCMapplication used to deploy the master (if any)
+     */
     private GCMApplication applicationUsed;
 
     /**
@@ -302,6 +305,7 @@ public class AOWorkerManager implements WorkerManager, InitActive, Serializable 
      * @param node a node which just got registered
      * @param virtualNode name of the vn associated
      */
+    @NodeAttachmentCallback
     public void nodeCreated(Node node, String virtualNode) {
         if (debug) {
             logger.debug("nodeCreated " + node);

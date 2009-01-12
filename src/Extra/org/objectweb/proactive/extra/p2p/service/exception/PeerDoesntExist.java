@@ -40,8 +40,8 @@ package org.objectweb.proactive.extra.p2p.service.exception;
 public class PeerDoesntExist extends Exception {
 
     /**
-    *
-    */
+     *
+     */
     public PeerDoesntExist() {
         super();
     }

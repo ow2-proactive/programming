@@ -36,11 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.objectweb.proactive.examples.nbody.common.Deployer;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * Synchronization of the others Maestro
  */
+@ActiveObject
 public class BigMaestro implements Serializable {
 
     /** Counts the number of Maestro that have respond */

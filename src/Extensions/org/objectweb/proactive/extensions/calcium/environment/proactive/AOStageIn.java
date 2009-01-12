@@ -31,17 +31,19 @@
  */
 package org.objectweb.proactive.extensions.calcium.environment.proactive;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.calcium.environment.Interpreter;
 import org.objectweb.proactive.extensions.calcium.system.SkeletonSystemImpl;
 import org.objectweb.proactive.extensions.calcium.system.files.FileStaging;
 import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
+@ActiveObject
 public class AOStageIn {
-    FileServerClientImpl fserver;
-    AOStageCompute stageCompute;
-    AOTaskPool taskpool;
-    Interpreter interpreter;
+    protected FileServerClientImpl fserver;
+    protected AOStageCompute stageCompute;
+    protected AOTaskPool taskpool;
+    protected Interpreter interpreter;
 
     /**
      * Empty constructor for ProActive  MOP

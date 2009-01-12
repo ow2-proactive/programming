@@ -34,6 +34,7 @@ package org.objectweb.proactive.extensions.calcium.environment.proactive;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.calcium.environment.Interpreter;
 import org.objectweb.proactive.extensions.calcium.statistics.Timer;
 import org.objectweb.proactive.extensions.calcium.system.SkeletonSystemImpl;
@@ -42,8 +43,9 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
 import org.objectweb.proactive.extensions.calcium.task.TaskPool;
 
 
+@ActiveObject
 public class AOStageCompute {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_ENVIRONMENT);
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_ENVIRONMENT);
     private TaskPool taskpool;
     private AOStageOut stageOut;
     private Timer unusedCPUTimer;

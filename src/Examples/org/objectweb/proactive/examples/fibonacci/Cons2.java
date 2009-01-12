@@ -37,12 +37,14 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * @author The ProActive Team
  *
  */
+@ActiveObject
 public class Cons2 implements InitActive, RunActive {
     private Add add;
     private BigInteger fibN_1;

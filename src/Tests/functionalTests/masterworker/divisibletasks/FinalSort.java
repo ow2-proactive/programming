@@ -41,7 +41,7 @@ import java.util.Collections;
 /**
  * A task which sorts the given list using Collections sort method
  *
-  @author The ProActive Team 
+ @author The ProActive Team 
  */
 public class FinalSort implements Task<ArrayList<Integer>> {
 

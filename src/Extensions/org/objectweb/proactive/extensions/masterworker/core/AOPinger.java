@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worker;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerDeadListener;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerWatcher;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -58,6 +59,7 @@ import java.util.ArrayList;
  *
  * @author The ProActive Team
  */
+@ActiveObject
 public class AOPinger implements WorkerWatcher, RunActive, InitActive, Serializable {
 
     /**
@@ -81,14 +83,14 @@ public class AOPinger implements WorkerWatcher, RunActive, InitActive, Serializa
     private WorkerDeadListener listener;
 
     /** Worker group */
-    private Set<Worker> workerGroup;
+    private Set<Worker> workerGroup = null;
 
     /** for internal use */
     private transient Thread localThread;
 
     /** ProActive empty constructor */
+    @Deprecated
     public AOPinger() {
-        workerGroup = null;
     }
 
     /**

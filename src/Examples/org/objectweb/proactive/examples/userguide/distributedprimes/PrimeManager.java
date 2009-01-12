@@ -35,8 +35,10 @@ import java.io.Serializable;
 import java.util.Vector;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class PrimeManager implements Serializable {
     private Vector<PrimeWorker> workers = new Vector<PrimeWorker>();
 

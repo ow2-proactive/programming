@@ -38,11 +38,14 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
@@ -182,15 +185,20 @@ public class Start implements Serializable {
         Deployer deployer = null;
         if (display) {
             try {
-                deployer = (Deployer) PAActiveObject.newActive(Deployer.class.getName(),
-                        new Object[] { new File(xmlFileName) });
+                GCMApplication gcmad = PAGCMDeployment.loadApplicationDescriptor(new File(xmlFileName));
+                gcmad.startDeployment();
+                GCMVirtualNode workers = gcmad.getVirtualNode("Workers");
+
+                if (workers == null)
+                    throw new ProActiveException("Failed to acquire \"Workers\" virtual node");
+
+                deployer = (Deployer) PAActiveObject.newActive(Deployer.class.getName(), new Object[] {
+                        gcmad, workers });
 
                 displayer = (Displayer) PAActiveObject.newActive(Displayer.class.getName(),
                         new Object[] { new Integer(totalNbBodies), new Boolean(displayft), deployer,
                                 new BooleanWrapper(ddd) });
-            } catch (ActiveObjectCreationException e) {
-                abort(e);
-            } catch (NodeException e) {
+            } catch (ProActiveException e) {
                 abort(e);
             }
         }

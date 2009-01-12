@@ -45,10 +45,10 @@ import java.util.Map;
  */
 public class WorkerMemoryImpl implements WorkerMemory {
     /**
-    * The memory of the worker <br>
-    * the worker can keep some data between different tasks executions <br>
-    * e.g. connection to a database, file descriptor, etc ...
-    */
+     * The memory of the worker <br>
+     * the worker can keep some data between different tasks executions <br>
+     * e.g. connection to a database, file descriptor, etc ...
+     */
     private Map<String, Object> memory;
 
     public WorkerMemoryImpl(Map<String, Serializable> memory) {
@@ -63,8 +63,8 @@ public class WorkerMemoryImpl implements WorkerMemory {
     }
 
     /**
-         * {@inheritDoc}
-         */
+     * {@inheritDoc}
+     */
     public Object load(final String dataName) {
         return memory.get(dataName);
     }

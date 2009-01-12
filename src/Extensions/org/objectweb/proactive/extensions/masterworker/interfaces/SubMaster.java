@@ -47,10 +47,10 @@ import java.util.List;
 public interface SubMaster<T extends Task<R>, R extends Serializable> {
 
     /**
-    * Reception order mode. Results can be received in Completion Order (the default) or Submission Order
-    * @author The ProActive Team
-    *
-    */
+     * Reception order mode. Results can be received in Completion Order (the default) or Submission Order
+     * @author The ProActive Team
+     *
+     */
     public enum OrderingMode {
         /**
          * Results of tasks are received in the same order as tasks were submitted
@@ -63,8 +63,8 @@ public interface SubMaster<T extends Task<R>, R extends Serializable> {
     }
 
     /**
-    * Results of tasks are received in the same order as tasks were submitted
-    */
+     * Results of tasks are received in the same order as tasks were submitted
+     */
     public OrderingMode SUBMISSION_ORDER = OrderingMode.SubmitionOrder;
 
     /**
@@ -112,13 +112,13 @@ public interface SubMaster<T extends Task<R>, R extends Serializable> {
     R waitOneResult() throws TaskException;
 
     /**
-    * Wait for at least one result is available <br>
-    * If there are more results availables at the time the request is executed, then every currently available results are returned 
-    * Note that in SubmittedOrder mode, the method will block until the next result in submission order is available and will return
-    * as many successive results as possible<br>
-    * @return a collection of objects containing the results
-    * @throws TaskException if the task threw an Exception
-    */
+     * Wait for at least one result is available <br>
+     * If there are more results availables at the time the request is executed, then every currently available results are returned 
+     * Note that in SubmittedOrder mode, the method will block until the next result in submission order is available and will return
+     * as many successive results as possible<br>
+     * @return a collection of objects containing the results
+     * @throws TaskException if the task threw an Exception
+     */
     List<R> waitSomeResults() throws TaskException;
 
     /**

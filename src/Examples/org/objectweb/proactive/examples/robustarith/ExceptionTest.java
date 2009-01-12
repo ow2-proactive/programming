@@ -35,6 +35,7 @@ import java.io.Serializable;
 
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAException;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 class DangerousException extends Exception {
@@ -43,6 +44,7 @@ class DangerousException extends Exception {
     }
 }
 
+@ActiveObject
 public class ExceptionTest implements Serializable {
 
     /* Empty constructor for ProActive */

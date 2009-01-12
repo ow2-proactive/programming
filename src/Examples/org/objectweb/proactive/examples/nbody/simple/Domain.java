@@ -40,8 +40,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.examples.nbody.common.Displayer;
 import org.objectweb.proactive.examples.nbody.common.Force;
 import org.objectweb.proactive.examples.nbody.common.Planet;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
+@ActiveObject
 public class Domain implements Serializable {
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private int identification; // a unique number to differentiate this Domain from the others
@@ -49,7 +51,7 @@ public class Domain implements Serializable {
     private String hostName = "unknown"; // to display on which host we're running
     private Maestro maestro; // used for synchronization
     private Displayer display; // optional, to have a nice output 
-    Planet info; // the information of the body considered
+    private Planet info; // the information of the body considered
     private Planet[] values; // list of all the bodies within all the other domains
     private int nbvalues; // have we received all values awaited ?
     private int nbReceived = 0; // have we received all values awaited ?

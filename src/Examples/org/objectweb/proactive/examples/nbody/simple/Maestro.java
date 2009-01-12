@@ -34,11 +34,13 @@ package org.objectweb.proactive.examples.nbody.simple;
 import java.io.Serializable;
 
 import org.objectweb.proactive.examples.nbody.common.Deployer;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * Synchronization of the computation of the Domains
  */
+@ActiveObject
 public class Maestro implements Serializable {
     private int nbFinished = 0; // iteration related fields
     private int iter = 0; // iteration related fields

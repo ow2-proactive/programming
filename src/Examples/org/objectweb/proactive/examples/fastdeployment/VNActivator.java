@@ -54,11 +54,13 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 /**
  * Activate a set of ProActive descriptor
  */
+@ActiveObject
 @SuppressWarnings("serial")
 public class VNActivator implements Serializable, RunActive, NodeCreationEventListener, InitActive {
     final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
@@ -83,8 +85,8 @@ public class VNActivator implements Serializable, RunActive, NodeCreationEventLi
     private Executor AOCreators;
 
     /** The number of slave already created */
-    int slaveID = 0;
-    Object slaveIDLock;
+    private int slaveID = 0;
+    private Object slaveIDLock;
 
     public VNActivator() {
         // No-args empty descriptor

@@ -31,9 +31,13 @@
  */
 package org.objectweb.proactive.examples.boundedbuffer;
 
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
+
+
 /**
  * Simple Active consumer
  */
+@ActiveObject
 public abstract class ConsumerProducer implements org.objectweb.proactive.RunActive {
     protected String name;
     protected ConsumerProducerListener listener;
