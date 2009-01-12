@@ -575,6 +575,7 @@ public class DiffPrint {
         }
         String[] a = new String[s.size()];
         s.copyInto(a);
+        rdr.close();
         return a;
     }
 
