@@ -37,7 +37,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import org.objectweb.proactive.core.body.UniversalBody;
+import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.request.Request;
 
 
@@ -141,7 +141,7 @@ public interface Debugger extends Serializable {
      *
      * @param target the Body to attach the debugger to
      */
-    public void setTarget(UniversalBody target);
+    public void setTarget(AbstractBody target);
 
     /**
      * set enable or disable the debugger
