@@ -481,104 +481,74 @@
 		Annotation processing		
 	-->
 
-	<target name="declare" depends="compile.util" >
-		<taskdef name="cavaj"
+	<target name="-declare" depends="compile.util" >
+		<taskdef name="annotations_javac"
 			classname="ant.JavacForceCompileTask"
 			classpath="${cl.utils.dir}" 
 			/>
-		<taskdef name="tpa"
+		<taskdef name="annotations_apt"
 			classname="ant.AptForceCompileTask"
 			classpath="${cl.utils.dir}" 
 			/>
 	</target>
 	
-	<target name="check.annotations.core" depends="deploy,declare" description="Annotation processing for Core">
+	<macrodef name="check_annotations">
+		<attribute name="module"/>
+		<element name="extra.exclusion.pattern" optional="yes"/>
+		<element name="extra.inclusion.pattern" optional="yes"/>
+		<sequential>
 		<if name="ant.java.version" value="1.5">
 			<!-- invoke apt -->
-			<tpa srcdir="${src.proactive.dir}" destdir="${cl.proactive.dir}" includes="**/*.java" compile="false" encoding="UTF-8">
+			<annotations_apt srcdir="${src.@{module}.dir}" destdir="${cl.@{module}.dir}" compile="false" encoding="UTF-8">
+				<include name="**/*.java"/>
+				<extra.inclusion.pattern />
+				<extra.exclusion.pattern />
 				<classpath refid="check.annotations.classpath"/>
 				<compilerarg line="-nocompile"/>
-			</tpa>
+			</annotations_apt>
 		<else>
 			<!-- invoke javac -->
-			<cavaj srcdir="${src.proactive.dir}" destdir="${cl.proactive.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
+			<annotations_javac srcdir="${src.@{module}.dir}" destdir="${cl.@{module}.dir}" source="${source}" debug="${debug}" encoding="UTF-8">
+				<include name="**/*.java"/>
+				<extra.inclusion.pattern />
+				<extra.exclusion.pattern />
 				<classpath refid="check.annotations.classpath"/>
-			</cavaj>
+			</annotations_javac>
 		</else>
 		</if>
+		</sequential>
+	</macrodef>
+	
+	<target name="check.annotations.core" depends="deploy,-declare" description="Annotation processing for Core">
+		<check_annotations module="proactive" />
 	</target>
 
-	<target name="check.annotations.extensions" depends="deploy,declare" description="Annotation processing for Extensions">
-		<if name="ant.java.version" value="1.5">
-			<!-- invoke apt -->
-			<tpa srcdir="${src.extensions.dir}" destdir="${cl.extensions.dir}" includes="**/*.java" compile="false" encoding="UTF-8">
-				<classpath refid="check.annotations.classpath"/>
-				<compilerarg line="-nocompile"/>
-			</tpa>
-		<else>
-			<!-- invoke javac -->
-			<cavaj srcdir="${src.extensions.dir}" destdir="${cl.extensions.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
-				<classpath refid="check.annotations.classpath"/>
-			</cavaj>
-		</else>
-		</if>
+	<target name="check.annotations.extensions" depends="deploy,-declare" description="Annotation processing for Extensions">
+		<check_annotations module="extensions" />
 	</target>
 	
-	<target name="check.annotations.extra" depends="deploy,declare" description="Annotation processing for Extra">
-		<if name="ant.java.version" value="1.5">
-			<!-- invoke apt -->
-			<tpa srcdir="${src.extra.dir}" destdir="${cl.extra.dir}" includes="**/*.java" compile="false" encoding="UTF-8">
-				<classpath refid="check.annotations.classpath"/>
-				<compilerarg line="-nocompile"/>
-			</tpa>
-		<else>
-			<!-- invoke javac -->
-			<cavaj srcdir="${src.extra.dir}" destdir="${cl.extra.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
-				<classpath refid="check.annotations.classpath"/>
-			</cavaj>
-		</else>
-		</if>
+	<target name="check.annotations.extra" depends="deploy,-declare" description="Annotation processing for Extra">
+		<check_annotations module="extra" />
 	</target>
 	
-	
-	<target name="check.annotations.examples" depends="deploy,declare" description="Annotation processing for Examples">
-		<if name="ant.java.version" value="1.5">
-			<!-- invoke apt -->
-			<tpa srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="**/*.java" excludes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" compile="false" encoding="UTF-8">
-				<classpath refid="check.annotations.classpath"/>
-				<compilerarg line="-nocompile"/>
-			</tpa>
-		<else>
-			<!-- invoke javac -->
-			<cavaj srcdir="${src.examples.dir}" destdir="${cl.examples.dir}" includes="**/*.java" excludes="${proactive.path}/examples/nbody/common/NBody3DFrame.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
-				<classpath refid="check.annotations.classpath"/>
-			</cavaj>
-		</else>
-		</if>
+	<target name="check.annotations.examples" depends="deploy,-declare" description="Annotation processing for Examples">
+		<check_annotations module="examples">
+			<extra.exclusion.pattern>
+				<exclude name="${proactive.path}/examples/nbody/common/NBody3DFrame.java" />
+			</extra.exclusion.pattern>
+		</check_annotations>
 	</target>
 	
-	<target name="check.annotations.benchmarks" depends="deploy,declare" description="Annotation processing for Benchmarks">
-		<if name="ant.java.version" value="1.5">
-			<!-- invoke apt -->
-			<tpa srcdir="${src.benchmarks.dir}" destdir="${cl.benchmarks.dir}" includes="**/*.java" compile="false" encoding="UTF-8">
-				<classpath refid="check.annotations.classpath"/>
-				<compilerarg line="-nocompile"/>
-			</tpa>
-		<else>
-			<!-- invoke javac -->
-			<cavaj srcdir="${src.benchmarks.dir}" destdir="${cl.benchmarks.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}" encoding="UTF-8">
-				<classpath refid="check.annotations.classpath"/>
-			</cavaj>
-		</else>
-		</if>
+	<target name="check.annotations.benchmarks" depends="deploy,-declare" description="Annotation processing for Benchmarks">
+		<check_annotations module="benchmarks" />
 	</target>
 	
 	<target name="check.annotations" depends="check.annotations.all" description="Perform annotation processing on ProActive code"/>
 		
 	<target name="check.annotations.all" depends="check.annotations.core, check.annotations.extensions, check.annotations.extra, check.annotations.examples, check.annotations.benchmarks" 
 		description="Do annotation processing for the following ProActive modules : Core + Extensions + Extra + Examples + Benchmarks" />
-	
 
+	
 	<!-- ************
 		Testing		
 	-->
