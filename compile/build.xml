@@ -524,7 +524,11 @@
 	</target>
 
 	<target name="check.annotations.extensions" depends="deploy,-declare" description="Annotation processing for Extensions">
-		<check_annotations module="extensions" />
+		<check_annotations module="extensions">
+			<extra.exclusion.pattern>
+				<exclude name="org/objectweb/proactive/extensions/annotation/**/*.java" />
+			</extra.exclusion.pattern>
+		</check_annotations>
 	</target>
 	
 	<target name="check.annotations.extra" depends="deploy,-declare" description="Annotation processing for Extra">
