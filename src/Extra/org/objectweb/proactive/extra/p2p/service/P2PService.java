@@ -362,10 +362,10 @@ public class P2PService implements InitActive, P2PConstants, Serializable {
             }
         } catch (ActiveObjectCreationException e) {
             logger.fatal("Couldn't create an active lookup", e);
-            return null;
+            return P2PNodeLookup.INVALID_NODE_LOOKUP;
         } catch (NodeException e) {
             logger.fatal("Couldn't connect node to creat", e);
-            return null;
+            return P2PNodeLookup.INVALID_NODE_LOOKUP;
         } catch (IOException e) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Couldn't enable AC for a nodes lookup", e);

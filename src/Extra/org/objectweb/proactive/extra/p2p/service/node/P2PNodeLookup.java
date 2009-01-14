@@ -89,6 +89,20 @@ public class P2PNodeLookup implements InitActive, RunActive, EndActive, P2PConst
     private boolean killAllFlag = false;
     private String nodeFamilyRegexp = null;
 
+    // <hack> - changeme with something decent! 
+    public static final P2PNodeLookup INVALID_NODE_LOOKUP = new P2PNodeLookup();
+    private boolean isInvalid;
+
+    public P2PNodeLookup(boolean invalid) {
+        isInvalid = invalid;
+    }
+
+    public boolean isInvalid() {
+        return isInvalid;
+    }
+
+    // </hack>
+
     public P2PNodeLookup() {
         // the empty constructor
     }
