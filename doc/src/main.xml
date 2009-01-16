@@ -69,6 +69,8 @@
 				<!ENTITY AnnotationProcessing SYSTEM "Annotations.xml">
                 
                 <!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">
+	        <!ENTITY JMX SYSTEM "Jmx.xml">
+         	 <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
                 ]>
                 
 <book xmlns="http://docbook.org/ns/docbook" version="5.0">
@@ -144,6 +146,8 @@
   &WSDoc;
   &AnnotationProcessing;
   &OSGi;
+  &JMX;
+  &JMXMBean;
   
  </part>
  
@@ -157,6 +161,7 @@
   &MOP;
  </part>
  
+
  <part xml:id="Unsupported"><info><title xml:id="ProActiveExtraPackagesExtensionsUnderDevelopment_2">ProActive Extra Packages / Extensions Under Development  </title></info>
   &bnb;
   &p2p;

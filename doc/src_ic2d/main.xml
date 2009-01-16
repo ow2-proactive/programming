@@ -45,10 +45,6 @@
     &extendingIC2D;
    </part>
      
- <part xml:id="IC2DBackend"><info><title>ProActive JMX Connectors</title></info>
-  &JMX;
-  &JMXMBean;
- </part>
  
  <!-- TODO not written yet --> 
    <!--   &glossary;  
