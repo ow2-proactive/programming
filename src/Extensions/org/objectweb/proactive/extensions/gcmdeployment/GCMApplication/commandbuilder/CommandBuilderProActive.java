@@ -487,7 +487,11 @@ public class CommandBuilderProActive implements CommandBuilder {
             ret = proactive.getPath();
         } else {
             // Use the GCMA definition
-            ret = proActivePath.getFullPath(hostInfo, this);
+            if (proActivePath != null) {
+                ret = proActivePath.getFullPath(hostInfo, this);
+            } else {
+                ret = null;
+            }
         }
 
         return ret;
