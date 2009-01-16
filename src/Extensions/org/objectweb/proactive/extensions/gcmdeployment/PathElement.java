@@ -110,8 +110,7 @@ public class PathElement implements Cloneable, Serializable {
             case PROACTIVE:
                 Tool tool = hostInfo.getTool(Tools.PROACTIVE.id);
                 if (tool != null) {
-                    String ret = appendPath(hostInfo.getHomeDirectory(), tool.getPath(), hostInfo);
-                    return appendPath(ret, relPath, hostInfo);
+                    return appendPath(tool.getPath(), relPath, hostInfo);
                 } else {
                     String bp = commandBuilder.getPath(hostInfo);
                     if (bp != null) {
