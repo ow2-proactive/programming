@@ -13,11 +13,11 @@
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
-   sodipodi:docbase="/user/vjuresch/home/workspace/ProActive/doc-src/images"
+   sodipodi:docbase="/auto/sea/u/sea/0/user/ffonteno/proactive-git/programming/doc/src/images"
    sodipodi:docname="documentation_process.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0"
-   inkscape:export-filename="/user/vjuresch/home/workspace/ProActive/doc-src/images/documentation_process.png"
+   inkscape:export-filename="/user/ffonteno/home/proactive-git/programming/doc/src/images/documentation_process.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -48,12 +48,12 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.98994949"
      inkscape:cx="440.31671"
-     inkscape:cy="727.65581"
+     inkscape:cy="323.59479"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="1672"
-     inkscape:window-height="994"
-     inkscape:window-x="0"
+     inkscape:window-width="1680"
+     inkscape:window-height="1025"
+     inkscape:window-x="1280"
      inkscape:window-y="0"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -85,7 +85,7 @@
            height="100.71429"
            x="35.714287"
            y="668.07648" /></flowRegion><flowPara
-         id="flowPara2489">If we have a pdf transform than <flowSpan
+         id="flowPara2489">If we have a pdf transform then <flowSpan
    style="font-family:Aharoni CLM"
    id="flowSpan8790">docbookTransform</flowSpan> is called by <flowSpan
    style="font-family:Aharoni CLM"
@@ -138,7 +138,7 @@
        id="g2517"
        transform="matrix(0.8677129,0,0,0.9038832,11.869634,87.74784)">
       <flowRoot
-         transform="translate(12.042388,-131.15433)"
+         transform="translate(0.4008353,-130.03676)"
          id="flowRoot2358"
          xml:space="preserve"><flowRegion
            id="flowRegion2360"><rect
@@ -214,7 +214,7 @@
              height="50.714283"
              width="137.85713"
              id="rect3713" /></flowRegion><flowPara
-           id="flowPara3717">Snippets files placed int the specified snippets directory</flowPara></flowRoot>      <rect
+           id="flowPara3717">Snippets files placed in the specified snippets directory</flowPara></flowRoot>      <rect
          style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#02ff02;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect3719"
          width="161.42857"
@@ -263,9 +263,9 @@
              height="55.000023"
              width="165.71428"
              id="rect4716" /></flowRegion><flowPara
-           id="flowPara5730">The <flowSpan
+           id="flowPara5730">The main<flowSpan
    style="font-family:Aharoni CLM"
-   id="flowSpan8740">PA_index.xml</flowSpan>  file previously copied to a temporary folder</flowPara></flowRoot>      <rect
+   id="flowSpan8740">.xml</flowSpan>  file previously copied to a temporary folder</flowPara></flowRoot>      <rect
          style="opacity:0.25;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#0000ff;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          id="rect4722"
          width="161.42857"
@@ -327,7 +327,7 @@
              id="rect5740" /></flowRegion><flowPara
            id="flowPara5742"><flowSpan
    style="font-family:Aharoni CLM"
-   id="flowSpan8742">PA_index.xml</flowSpan>  file with the <flowSpan
+   id="flowSpan8742">main.xml</flowSpan>  file with the <flowSpan
    style="font-family:Aharoni CLM"
    id="flowSpan8744">&lt;programlisting&gt;</flowSpan> contents included and with tags for coloring the <flowSpan
    style="font-family:Aharoni CLM"

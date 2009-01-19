@@ -26,7 +26,7 @@
  <para> First off, all the documentation is written in 
   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://nwalsh.com/docbook/">docbook</link>. You 
   can find all the documentation source files in the 
-  <literal>ProActive/doc-src/</literal>
+  <literal>ProActive/doc/src/</literal>
   directory. </para>
  
  <para>Here are the instrtuctions to follow to start well &amp; fast writing
@@ -40,12 +40,12 @@
   
   <listitem>
    <para>If you want a new chapter of your own, copy one of the existing
-    files. (<literal>ProActive/doc-src/WSDoc.xml</literal> for example)</para>
+    files. (<literal>ProActive/doc/src/WSDoc.xml</literal> for example)</para>
   </listitem>
   
   <listitem>
    <para>Reference your file in the root element of the doc (it is
-    currently called PA_index.xml)</para>
+    currently called main.xml)</para>
   </listitem>
   
   <listitem>
@@ -152,22 +152,23 @@
      paste!</emphasis></para></note>
  </section>
  
- <section xml:id="Figures"><info><title xml:id="Figures_42">Figures</title></info>
-  
-  
-  <para>This is the figure example. Please use the TITLE tag</para>
-  
-  <figure xml:id="ADrawingusingtheFIGUREtag_42"><info><title>A Drawing using the FIGURE tag</title></info>
-   
-   
-   <mediaobject>
-    <imageobject>
-     <imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="images/e1.png" format="PNG"/>
-    </imageobject>
-   </mediaobject>
-   
-  </figure>
- </section>
+	<section xml:id="Figures"><info><title xml:id="Figures_42">Figures</title></info>
+
+		<para>This is the figure example. Please use the TITLE tag</para>
+
+		<figure xml:id="ADrawingusingtheFIGUREtag_42">
+			<info>
+				<title>A Drawing using the FIGURE tag</title>
+			</info>
+
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="images/e1.png" format="PNG"/>
+				</imageobject>
+			</mediaobject>
+
+		</figure>
+	</section>
  
  <section xml:id="Bullets"><info><title xml:id="Bullets_42">Bullets</title></info>
   
@@ -210,17 +211,22 @@
   <para>Within normal text, for instance in a paragraph, you can also just use 
    the LITERAL tag to highlight the  <literal>main</literal> methods.</para>
   
-  <example xml:id="JAVAprogramlistingwithfileinclusion_42"><info><title>JAVA program listing with file inclusion</title></info><para/></example>
-   <programlisting xml:lang="java"><textobject><textdata fileref="examples/hello/TinyHello.java"/></textobject></programlisting>
+	<example xml:id="JAVAprogramlistingwithfileinclusion_42">
+		<info>
+			<title>JAVA program listing with file inclusion</title>
+		</info>
+	</example>
+   <programlisting xml:lang="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/hello/TinyHello.java"/></textobject></programlisting>
   
-  <example xml:id="XMLprogramlistingwithfileinclusion_42"><info><title>XML program listing with file inclusion</title></info>
-     <para/>
-     </example>
+	<example xml:id="XMLprogramlistingwithfileinclusion_42">
+		<info>
+			<title>XML program listing with file inclusion</title>
+		</info>
+	</example>
    
-   <programlisting xml:lang="xml"><textobject><textdata fileref="examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
+   <programlisting xml:lang="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
   
-  
-  <para>A screen example, for instance some code inside a unix shell:</para>
+	<para>A screen example, for instance some code inside a unix shell:</para>
    
   <screen>linux &gt; start.sh &amp; </screen>
   
@@ -251,31 +257,29 @@ public class Dummy {
    
    <para>Here is an example of deployment descriptor that deploys 3 virtual nodes .</para>
    
-   <programlisting xml:lang="xml"> &lt;!-- Deploying 3 virtual Nodes  --&gt;
- &lt;ProActiveDescriptor&gt;                        
-  &lt;componentDefinition&gt;
-   &lt;virtualNodesDefinition&gt;
-    &lt;virtualNode name="NonFT-Workers" property="multiple"/&gt;
-    &lt;virtualNode name="FT-Workers" property="multiple" <emphasis role="bold">ftServiceId="appli"</emphasis>/&gt;
-    &lt;virtualNode name="Failed" property="multiple" <emphasis role="bold">ftServiceId="resource"</emphasis>/&gt;
-   &lt;/virtualNodesDefinition&gt;
-  &lt;/componentDefinition&gt;
-  
-  &lt;deployment&gt;
-     &lt;mapping&gt;
-      &lt;map virtualNode="NonFT-Workers"&gt;
-       &lt;jvmSet&gt;
-        &lt;vmName value="Jvm1"/&gt;
-       &lt;/jvmSet&gt;
-      &lt;/map&gt;
-      &lt;map virtualNode="FT-Workers"&gt;
-       &lt;jvmSet&gt;
-        &lt;vmName value="Jvm2"/&gt;
-       &lt;/jvmSet&gt;
-      &lt;/map&gt;
-    ....</programlisting>
-   
-   
+   <programlisting xml:lang="xml">&lt;!-- Deploying 3 virtual Nodes  --&gt;
+&lt;ProActiveDescriptor&gt;
+	&lt;componentDefinition&gt;
+		&lt;virtualNodesDefinition&gt;
+			&lt;virtualNode name="NonFT-Workers" property="multiple"/&gt;
+			&lt;virtualNode name="FT-Workers" property="multiple" <emphasis role="bold">ftServiceId="appli"</emphasis>/&gt;
+			&lt;virtualNode name="Failed" property="multiple" <emphasis role="bold">ftServiceId="resource"</emphasis>/&gt;
+		&lt;/virtualNodesDefinition&gt;
+	&lt;/componentDefinition&gt;
+
+	&lt;deployment&gt;
+		&lt;mapping&gt;
+			&lt;map virtualNode="NonFT-Workers"&gt;
+				&lt;jvmSet&gt;
+					&lt;vmName value="Jvm1"/&gt;
+				&lt;/jvmSet&gt;
+			&lt;/map&gt;
+			&lt;map virtualNode="FT-Workers"&gt;
+				&lt;jvmSet&gt;
+					&lt;vmName value="Jvm2"/&gt;
+				&lt;/jvmSet&gt;
+			&lt;/map&gt;
+			....</programlisting>
   </section>
   
   <section xml:id="Links"><info><title xml:id="Links_42">Links</title></info>
@@ -407,9 +411,9 @@ public class Dummy {
      <emphasis role="bold">ProActive.css</emphasis> Which is yet another
      extra layer on top of the html output.  </para>
    </listitem>
-   
   </itemizedlist>
   
+  <para>You can find these files in the <literal>ProActive/doc/toolchain/xsl/</literal> directory.</para>
  </section>
  
  <section xml:id="Whatyoucanchange_42"><info><title>What you can change</title></info>
@@ -486,7 +490,7 @@ public class Dummy {
   
   <para>When you run the manual generation through the ant tasks, the xml
    is checked for validity. The message you should see is 
-   <screen>XML is VALID and complies to dtd in ../docs/tmp/PA_index.xml</screen></para>
+   <screen>XML is VALID and complies to dtd in ../docs/tmp/main.xml</screen></para>
   
   <para>If you happen to modify the dtd, you should put also copy it on
    the web, on <literal>/proj/oasis/www/proactive/doc/dtd/$version/</literal> or else
