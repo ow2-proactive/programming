@@ -23,7 +23,7 @@
       
       <para>The aim of the guided tour is to provide a step by step explanation to the
  ProActive beginners.</para>
-      <figure><info><title>The plugin's interface</title></info>
+      <figure xml:id="Thepluginsinterface_17"><info><title>The plugin's interface</title></info>
        
         <mediaobject>
           <imageobject>
@@ -63,7 +63,7 @@
           <para> a configuration and execution wizard</para>
         </listitem>
 </orderedlist>
-      <figure><info><title>One wizard popup</title></info>
+      <figure xml:id="Onewizardpopup"><info><title>One wizard popup</title></info>
        
         <mediaobject>
           <imageobject>
@@ -76,7 +76,7 @@
       
       <para>This editor checks coding rules. It informs the developper of error
  concerning ProActive in his classes and can resolve some of these errors.</para>
-      <figure><info><title>The editor error highlighting</title></info>
+      <figure xml:id="Theeditorerrorhighlighting_17"><info><title>The editor error highlighting</title></info>
        
         <mediaobject>
           <imageobject>

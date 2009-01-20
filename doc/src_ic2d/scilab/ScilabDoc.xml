@@ -187,7 +187,7 @@
                 </listitem>
             </itemizedlist>
 
-            <figure>
+            <figure xml:id="Mainframe">
                 <info>
                     <title>Main frame</title>
                 </info>
@@ -216,7 +216,7 @@
                 the nodes.
             </para>
 
-            <figure>
+            <figure xml:id="Deploymentoftheapplication_17">
                 <info>
                     <title>Deployment of the application</title>
                 </info>
@@ -245,7 +245,7 @@
                 creates and sends the task.
             </para>
 
-            <figure>
+            <figure xml:id="Creationofatask">
                 <info>
                     <title>Creation of a task</title>
                 </info>
@@ -273,7 +273,7 @@
                 the result (with the possibility to save it in a file)
             </para>
 
-            <figure>
+            <figure xml:id="Displayaresult">
                 <info>
                     <title>Display a result</title>
                 </info>
@@ -343,7 +343,7 @@
                 A rigth-click on it show a popup menu to restart it.
             </para>
 
-            <figure>
+            <figure xml:id="StateofEngines">
                 <info>
                     <title>State of Engines</title>
                 </info>

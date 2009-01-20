@@ -465,7 +465,7 @@ Process finished Thread=ERR -> /home/cdalmass/pub/l
 			</processDefinition>
 		</processes>
 	</infrastructure>
-</ProActiveDescriptor
+</ProActiveDescriptor>
 	
   	<sect1>
   </sect1>
@@ -482,7 +482,7 @@ Process finished Thread=ERR -> /home/cdalmass/pub/l
 	<para>
 		Overview
 	</para>
-	<figure><title xml:id="Architecturetitle_13">Architecture title</title>
+	<figure xml:id="Architecturetitle"><title xml:id="Architecturetitle_13">Architecture title</title>
 		  <mediaobject>
           <imageobject>
             <imagedata scalefit="1" width="100%" contentdepth="100%"  
@@ -521,6 +521,5 @@ Process finished Thread=ERR -> /home/cdalmass/pub/l
     
     
     
-  
   
   

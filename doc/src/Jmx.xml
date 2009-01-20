@@ -16,7 +16,7 @@
 		</para>
 
 		<para>
-			<figure><info><title>
+			<figure xml:id="JMX3levelsarchitecture"><info><title>
 					This figure shows the JMX 3 levels architecture and
 					the integration of the ProActive JMX Connector.
 				</title></info>

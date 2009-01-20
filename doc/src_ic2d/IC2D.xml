@@ -81,7 +81,7 @@
     hosts, Java Virtual Machines, and active objects, including the topology
     and volume of communications.</emphasis></para>
 
-    <para><figure><info><title>IC2D visualizing the C3D application</title></info>
+    <para><figure xml:id="IC2DvisualizingtheC3Dapplication"><info><title>IC2D visualizing the C3D application</title></info>
         
 
         <mediaobject>
@@ -100,7 +100,7 @@
 
 		<indexterm><primary>Migration</primary><secondary>drag-and-drop</secondary></indexterm>
 
-		<para><figure><info><title>A 'drag-and-drop' migration allows to graphically move running
+		<para><figure xml:id="Adraganddropmigrationallowstographicallymoverunning"><info><title>A 'drag-and-drop' migration allows to graphically move running
         active objects</title></info>
         
 
@@ -111,7 +111,7 @@
         </mediaobject>
       </figure></para>
 
-    <figure><info><title>IC2D permits to visualize related events and AOs state</title></info>
+    <figure xml:id="IC2DpermitstovisualizerelatedeventsandAOsstate"><info><title>IC2D permits to visualize related events and AOs state</title></info>
       
 
       <mediaobject>
@@ -157,7 +157,7 @@
      <para> You can find a Fractal GUI (menu-&gt;Components-&gt;Start the Fractal GUI) to edit your ADL files 
       in IC2D. This can only be done before deployment. </para>
     
-     <para><figure><info><title>Starting the Fractal GUI through IC2D</title></info>
+     <para><figure xml:id="StartingtheFractalGUIthroughIC2D"><info><title>Starting the Fractal GUI through IC2D</title></info>
        
        
        <mediaobject>
@@ -309,7 +309,7 @@
       <para>You will find the launcher in the <emphasis role="bold">launcher
       menu</emphasis>, in the menu bar. Click then on <emphasis role="bold">launch a new application</emphasis>.</para>
 
-      <para><figure><info><title>The launcher menu</title></info>
+      <para><figure xml:id="Thelaunchermenu"><info><title>The launcher menu</title></info>
           
 
           <mediaobject>
@@ -325,7 +325,7 @@
       checkbox control the graphical monitoring and textual job monitoring
       your application.</para>
 
-      <para><figure><info><title>Loading a descriptor in the launcher</title></info>
+      <para><figure xml:id="Loadingadescriptorinthelauncher"><info><title>Loading a descriptor in the launcher</title></info>
           
 
           <mediaobject>
@@ -353,7 +353,7 @@
     application deployed with JINI and RMI protocol between Baltimore US and
     Nice France on a globus cluster and LSF cluster</para>
 
-    <figure><info><title>C3D, deployed with JINI and RMI, between Baltimore (USA) and Nice (France)</title></info>
+    <figure xml:id="C3DdeployedwithJINIandRMIbetweenBaltimoreUSAandNiceFrance"><info><title>C3D, deployed with JINI and RMI, between Baltimore (USA) and Nice (France)</title></info>
       
       <mediaobject>
         <imageobject>

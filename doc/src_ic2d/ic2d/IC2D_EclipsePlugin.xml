@@ -1241,7 +1241,7 @@
                     </emphasis>
                 </para>
                 <para>
-                    <figure><info><title>The "Open Perspective" window</title></info>
+                    <figure xml:id="TheOpenPerspectivewindow"><info><title>The "Open Perspective" window</title></info>
                         
                         <mediaobject>
                             <imageobject>
@@ -1272,7 +1272,7 @@
                     .
                 </para>
                 <para>
-                    <figure><info><title>The open with action</title></info>
+                    <figure xml:id="Theopenwithaction"><info><title>The open with action</title></info>
                         
                         <mediaobject>
                             <imageobject>
@@ -1355,7 +1355,7 @@
                     <para>a configuration and execution wizard</para>
                 </listitem>
             </orderedlist>
-            <figure><info><title>A wizard popup</title></info>
+            <figure xml:id="Awizardpopup"><info><title>A wizard popup</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -1371,7 +1371,7 @@
                 developper of error concerning ProActive in his classes
                 and can resolve some of these errors.
             </para>
-            <figure><info><title>The editor error highlighting</title></info>
+            <figure xml:id="Theeditorerrorhighlighting"><info><title>The editor error highlighting</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -1387,7 +1387,7 @@
             The aim of the guided tour is to provide a step by step
             explanation to the ProActive beginners.
         </para>
-        <figure><info><title>The plugin's interface</title></info>
+        <figure xml:id="Thepluginsinterface"><info><title>The plugin's interface</title></info>
             
             <mediaobject>
                 <imageobject>
