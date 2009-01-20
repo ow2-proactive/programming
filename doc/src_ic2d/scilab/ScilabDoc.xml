@@ -136,7 +136,7 @@
 
         </section>
 
-        <section>
+        <section xml:id="LaunchingMatlabScilabGridToolBox">
             <info>
                 <title>Launching Matlab/Scilab Grid ToolBox</title>
             </info>
@@ -201,7 +201,7 @@
             </figure>
         </section>
 
-        <section>
+        <section xml:id="Deploymentoftheapplication">
             <info>
                 <title>Deployment of the application</title>
             </info>
@@ -230,7 +230,7 @@
             </figure>
         </section>
 
-        <section>
+        <section xml:id="Tasklaunching">
             <info>
                 <title>Task launching</title>
             </info>
@@ -259,7 +259,7 @@
             </figure>
         </section>
 
-        <section>
+        <section xml:id="Displayofresults">
             <info>
                 <title>Display of results</title>
             </info>
@@ -287,7 +287,7 @@
             </figure>
         </section>
 
-        <section>
+        <section xml:id="Taskmonitoring">
             <info>
                 <title>Task monitoring</title>
             </info>
@@ -329,7 +329,7 @@
             </itemizedlist>
         </section>
 
-        <section>
+        <section xml:id="Enginemonitoring">
             <info>
                 <title>Engine monitoring</title>
             </info>

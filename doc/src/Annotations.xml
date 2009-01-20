@@ -3,8 +3,9 @@
 <chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Annotations">
 	<info><title>Making ProActive programming easier: the ProActive Java Annotations System</title></info>
 	
-	<section><info><title>Compile-time annotations</title></info>
+	<section xml:id="Compiletimeannotations"><info><title>Compile-time annotations</title></info>
 		<para>
+		
 		Compile-time annotations provide a way to check at compile-time the constraints imposed
 			on Java code by the ProActive library. Usually, these constraints are documented 
 			in the ProActive manual, and it is left to the responsibility of the programmer to
@@ -16,7 +17,7 @@
 			will receive will be more related to the logic of the application, and less 
 			to the misusage of the ProActive library...
 		</para>	
-		<section>
+		<section xml:id="Generalusage">
 			<info><title>General usage</title></info>
 		<para>
 		First of all, note that the annotation system is <emphasis role="bold">non-intrusive</emphasis>. 
@@ -164,7 +165,7 @@
 		</para>
 		</section>
 		
-		<section>
+		<section xml:id="ActiveObject">
 			<info><title>@ActiveObject</title></info>
 			<para>
 			The @ActiveObject annotation is applicable on a Java class definition, and it tests 
@@ -195,7 +196,7 @@
 		</para>
 		</section>
 		
-		<section>
+		<section xml:id="RemoteObject">
 			<info><title>@RemoteObject</title></info>
 		<para>
 			The @RemoteObject annotation is applicable on a Java class definition and it verifies limitations
@@ -204,7 +205,7 @@
 		</para>
 		</section>
 		
-		<section>
+		<section xml:id="MigrationSignal">
 			<info><title>@MigrationSignal</title></info>
 		<para>
 			@MigrationSignal is applied on a method definition, in order to mark the fact that the annotated method should be used
@@ -217,7 +218,7 @@
 		</para>
 		</section>
 		
-		<section>
+		<section xml:id="Migratable">
 			<info><title>@Migratable</title></info>
 		<para>
 			@Migratable is applied on an object, in order to specify that it will be used as a migratable object. This means that the object must be an active object
@@ -225,7 +226,7 @@
 		</para>
 		</section>
 		
-		<section>
+		<section xml:id="MigrationStrategy">
 			<info><title>Migration Strategy</title></info>
 		<para>
 			When implementing mobile agents using ProActive, one can specify methods that should be executed when arriving to, or departing from, a site. The signature of these methods must be:
@@ -246,7 +247,7 @@
 		</para>
 		</section>
 		
-		<section>
+		<section xml:id="NodeAttchedCallback">
 			<info><title>@NodeAttchedCallback</title></info>
 		<para>
 		    When a client subscribes to Node attachment notification, the method passed as parameter is invoked each time a Node is attached to the GCMVirtualNode. 
@@ -260,7 +261,7 @@
 		</para>
 		</section>
 		
-		<section>
+		<section xml:id="VirtualNodesReadyCallback">
 			<info><title>@VirtualNodesReadyCallback</title></info>
 		<para>
 			When a client subscribes to isReady notification, the method passed as parameter is invoked when the Virtual Node becomes Ready.

@@ -121,7 +121,7 @@
 
 	<info><title>Step by step mode</title></info>
 
-	<section>
+	<section xml:id="stepbysteppreview">
     <figure xml:id="StepByStepFigure"><info><title>step by step preview</title></info>
        <mediaobject>
          <imageobject>
@@ -131,7 +131,7 @@
     </figure>
 	</section>
 
-	<section><info><title>Breakpoints Overview</title></info>
+	<section xml:id="BreakpointsOverview"><info><title>Breakpoints Overview</title></info>
 
 	  <para>
 		The <emphasis role="bold">step by step</emphasis> mode allows to control the execution of an active object at service level.

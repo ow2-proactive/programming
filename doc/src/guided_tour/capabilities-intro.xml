@@ -19,7 +19,7 @@
     </listitem>
   </itemizedlist>
 
-  <section xml:id="C3D_example"><info><title>Parallel processing and collaborative application with
+  <section xml:id="C3D_example_17"><info><title>Parallel processing and collaborative application with
     ProActive: C3D a 3D renderer</title></info>
     
 
@@ -2129,7 +2129,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 .
             </para>
         </section>
-        <section xml:id="Conclusion_11"><info><title>Conclusion</title></info>
+        <section xml:id="Conclusion_17"><info><title>Conclusion</title></info>
             
             <para>
                 In this guided tour, we tried to show different

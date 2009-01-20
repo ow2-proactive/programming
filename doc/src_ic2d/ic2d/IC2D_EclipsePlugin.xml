@@ -62,9 +62,9 @@
                 </para>
             </listitem>
         </itemizedlist>
-        <section><info><title>The Monitoring plugin</title></info>
+        <section xml:id="TheMonitoringplugin"><info><title>The Monitoring plugin</title></info>
             
-            <section><info><title>The Monitoring perspective</title></info>
+            <section xml:id="TheMonitoringperspective"><info><title>The Monitoring perspective</title></info>
                 
                 <para>
                     The Monitoring plugin provides the
@@ -120,7 +120,7 @@
                     </mediaobject>
                 </figure>
             </section><!-- The Monitoring perspective -->
-            <section><info><title>Monitor a new host</title></info>
+            <section xml:id="Monitoranewhost"><info><title>Monitor a new host</title></info>
                 
                 <para>In order to monitor a new host:</para>
                 <orderedlist>
@@ -166,7 +166,7 @@
                     </mediaobject>
                 </figure>
             </section><!-- Monitor a new host -->
-            <section><info><title>The Monitoring buttons</title></info>
+            <section xml:id="TheMonitoringbuttons"><info><title>The Monitoring buttons</title></info>
                 
                 <para>
                     Here the buttons proposed in the monitoring view:
@@ -273,7 +273,7 @@
                     named 'Monitoring#number_of_this_view'
                 </para>
             </section><!-- Monitoring icons -->
-            <section><info><title>The Virtual Nodes list</title></info>
+            <section xml:id="TheVirtualNodeslist"><info><title>The Virtual Nodes list</title></info>
                 
                 <para>
                     At the top of the Monitoring View, one can find the
@@ -291,7 +291,7 @@
                     </mediaobject>
                 </figure>
             </section><!-- The Virtual Nodes list -->
-            <section><info><title>Management of the communications display</title></info>
+            <section xml:id="Managementofthecommunicationsdisplay"><info><title>Management of the communications display</title></info>
                 
                 <para>
                     At the bottom of the Monitoring view, one can find a
@@ -355,7 +355,7 @@
                     </listitem>
                 </orderedlist>
             </section><!-- The management of the communications display -->
-            <section><info><title>Example</title></info>
+            <section xml:id="Example"><info><title>Example</title></info>
                 
                 <para>
                     The
@@ -366,7 +366,7 @@
                 </para>
             </section>
         </section><!-- The Monitoring plugin -->
-        <section><info><title>The Job Monitoring plugin</title></info>
+        <section xml:id="TheJobMonitoringplugin"><info><title>The Job Monitoring plugin</title></info>
             
             <para>
                 To look at the
@@ -430,7 +430,7 @@
             </figure>
         </section><!-- The Job Monitoring plugin -->
         <!-- ******************************************************************************** -->
-        <section><info><title>The TimIt plugin</title></info><!-- The TimIt for IC2D plugin -->
+        <section xml:id="TheTimItplugin"><info><title>The TimIt plugin</title></info><!-- The TimIt for IC2D plugin -->
             
             <para>
                 The TimIt plugin for IC2D provides the ability to
@@ -494,7 +494,7 @@
                 For that, 3 views are available.
               </para>
                 <!-- TimIt Main View -->
-                <section><info><title>TimIt Main View</title></info>
+                <section xml:id="TimItMainView"><info><title>TimIt Main View</title></info>
                 	
                     <para>
                             The main view shown in
@@ -516,7 +516,7 @@
                         </figure>
                 </section>
                 <!-- TimIt Tree View -->
-                <section><info><title>TimIt Tree View</title></info>
+                <section xml:id="TimItTreeView"><info><title>TimIt Tree View</title></info>
        				
                         <para>
                             The tree view shown in
@@ -825,7 +825,7 @@
                         </figure>
                 </section>
                 <!-- TimIt Timeline View -->
-                <section><info><title> TimIt Timeline View</title></info>
+                <section xml:id="TimItTimelineView"><info><title> TimIt Timeline View</title></info>
 		              
                         <para>
                             The timeline view shown in
@@ -854,7 +854,7 @@
         <!-- ************************************************************************************ -->
         <!-- The ChartIt plugin -->
         <!-- ************************************************************************************ -->
-        <section>
+        <section xml:id="TheChartItplugin">
         	<info>
         		<title>The ChartIt plugin</title>
         	</info>
@@ -1056,7 +1056,7 @@
     <!-- ************************************************************************************ -->
     <!-- <section xml:id="Launcher"><info><title>Launcher</title></info>
         
-        <section><info><title>Principles</title></info>
+        <section xml:id="Principles_17"><info><title>Principles</title></info>
             
             <para>
                 The launcher allows users to launch applications
@@ -1071,7 +1071,7 @@
                 rest of the application.
             </para>
         </section>
-        <section><info><title>MainDefinition tag</title></info>
+        <section xml:id="MainDefinitiontag"><info><title>MainDefinition tag</title></info>
             
             <para>
                 A new tag has been introduced, just before the component
@@ -1178,7 +1178,7 @@
     &lt;/infrastructure&gt;
 &lt;/ProActiveDescriptor&gt;</programlisting>
         </section>
-        <section><info><title>API</title></info>
+        <section xml:id="API"><info><title>API</title></info>
             
             <para>
                 The Launcher class is located in the package
@@ -1218,7 +1218,7 @@
                 </literal>
             </para>
         </section>
-        <section><info><title>The Launcher Plug-in</title></info>
+        <section xml:id="TheLauncherPlugin"><info><title>The Launcher Plug-in</title></info>
             
             <para>
                 In order to launch a
@@ -1228,7 +1228,7 @@
                 .
             </para>
             <para>To use this editor, you have two possibilities:</para>
-            <section><info><title>First possibility</title></info>
+            <section xml:id="Firstpossibility"><info><title>First possibility</title></info>
                 
                 <para>
                     Open the
@@ -1262,7 +1262,7 @@
                     list.
                 </para>
             </section>
-            <section><info><title>Second possibility</title></info>
+            <section xml:id="Secondpossibility"><info><title>Second possibility</title></info>
                 
                 <para>
                     In the Navigator view, or another similar, a right
@@ -1282,7 +1282,7 @@
                     </figure>
                 </para>
             </section>
-            <section><info><title>The Launcher perspective</title></info>
+            <section xml:id="TheLauncherperspective"><info><title>The Launcher perspective</title></info>
                 
                 <para>
                     The
@@ -1331,7 +1331,7 @@
     <!-- **************************DO NOT EXIST !!!******************************************************* 
     <section xml:id="ProgrammingTools"><info><title>Programming Tools</title></info>
         
-        <section><info><title>ProActive Wizards</title></info>
+        <section xml:id="ProActiveWizards"><info><title>ProActive Wizards</title></info>
             
             <para>
                 These wizards will guide developpers to make complex
@@ -1364,7 +1364,7 @@
                 </mediaobject>
             </figure>
         </section>
-        <section><info><title>The ProActive Editor</title></info>
+        <section xml:id="TheProActiveEditor"><info><title>The ProActive Editor</title></info>
             
             <para>
                 This editor checks coding rules. It informs the
@@ -1381,7 +1381,7 @@
             </figure>
         </section>
     </section>
-    <section><info><title>The Guided Tour as Plugin</title></info>
+    <section xml:id="TheGuidedTourasPlugin"><info><title>The Guided Tour as Plugin</title></info>
         
         <para>
             The aim of the guided tour is to provide a step by step

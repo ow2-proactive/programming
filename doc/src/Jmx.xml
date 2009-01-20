@@ -114,7 +114,7 @@
 			</para>
 	</section>
 
-	<section><info><title>How to use the connector ?</title></info>
+	<section xml:id="Howtousetheconnector"><info><title>How to use the connector ?</title></info>
 		
 		<para>
 			The ProActive connector allows you yo connect to an MBean in
@@ -208,7 +208,7 @@
 			</para>
 		</note>
 	</section>
-	<section><info><title>Example : a simple textual JMX Console</title></info>
+	<section xml:id="ExampleasimpletextualJMXConsole"><info><title>Example : a simple textual JMX Console</title></info>
 		
 
 		<para>

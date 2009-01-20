@@ -8,7 +8,7 @@
  tools provided by the process are used. This implies that internal FileTransfer protocols can not
  be used with other process (ex: unicore file transfer can not be used when deploying with ssh),
  but the other way around is valid (ex: scp can be used when deploying with unicore).</para>
-    <section><info><title>Adding external FileTransfer
+    <section xml:id="AddingexternalFileTransfer"><info><title>Adding external FileTransfer
  CopyProtocol</title></info>
       
       <itemizedlist>
@@ -27,7 +27,7 @@
  All names already in the array ALLOWED_COPY_PROTOCOLS are forbidden. This includes the name <emphasis role="bold">'processDefault'</emphasis>, which is also forbidden. In some cases <emphasis role="bold">'processDefault'</emphasis> will correspond to an external FileTransfer protocol (ex: ssh
  with scp), and in some cases to an internal protocol (ex: unicore with unicore)</para>
     </section>
-    <section><info><title>Adding internal FileTransfer
+    <section xml:id="AddinginternalFileTransfer"><info><title>Adding internal FileTransfer
  CopyProtocol</title></info>
       
       <itemizedlist>

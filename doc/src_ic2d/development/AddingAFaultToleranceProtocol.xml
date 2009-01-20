@@ -11,7 +11,7 @@
     </para>
     <section xml:id="FaultTolerance_html_objectives"><info><title>Overview</title></info>
         
-        <section><info><title>Active Object side</title></info>
+        <section xml:id="ActiveObjectside"><info><title>Active Object side</title></info>
             
             <para>
                 Fault-tolerance mechanism in ProActive is mainly based
@@ -153,7 +153,7 @@ iveRequest(org.objectweb.proactive.core.body.request.Request)
                 , to add needed informations, depending on the protocol.
             </para>
         </section>
-        <section><info><title>Server side</title></info>
+        <section xml:id="Serverside"><info><title>Server side</title></info>
             
             <para>
                 ProActive include a global server that provide fault

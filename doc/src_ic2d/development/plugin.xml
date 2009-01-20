@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="plugin"><info><title>ProActive Eclipse plugin</title></info>
   
-    <section><info><title>Overview</title></info>
+    <section xml:id="Overview_18"><info><title>Overview</title></info>
       
       <para>The main objective of this plugin is to facilitate the use of ProActive in
  the Eclipse environment. The plugin has three main purposes:</para>
@@ -19,7 +19,7 @@
         </listitem>
 </itemizedlist>
     </section>
-    <section><info><title>The Guided Tour</title></info>
+    <section xml:id="TheGuidedTour"><info><title>The Guided Tour</title></info>
       
       <para>The aim of the guided tour is to provide a step by step explanation to the
  ProActive beginners.</para>
@@ -44,7 +44,7 @@
         </listitem>
 </itemizedlist>
     </section>
-    <section><info><title>Wizards</title></info>
+    <section xml:id="Wizards"><info><title>Wizards</title></info>
       
       <para>These wizards will guide developpers to make complex operations with
  ProActive, such as installation, integration , configuration or execution. We have created 4
@@ -72,7 +72,7 @@
         </mediaobject>
       </figure>
     </section>
-    <section><info><title>The ProActive Editor</title></info>
+    <section xml:id="TheProActiveEditor_17"><info><title>The ProActive Editor</title></info>
       
       <para>This editor checks coding rules. It informs the developper of error
  concerning ProActive in his classes and can resolve some of these errors.</para>

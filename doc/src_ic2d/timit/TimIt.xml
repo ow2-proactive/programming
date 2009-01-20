@@ -3,7 +3,7 @@
     <indexterm>
         <primary>TimIt</primary>
     </indexterm>
-    <section><info><title>Overview</title></info>        
+    <section xml:id="Overview"><info><title>Overview</title></info>
         <para>
             TimIt offer a complete solution to benchmark an application.
             It is an API which provide some advanced timing and event
@@ -81,15 +81,15 @@
 &lt;/timit&gt;</programlisting>
         </para>
     </section>
-    <section><info><title>Quick start</title></info>
+    <section xml:id="Quickstart"><info><title>Quick start</title></info>
         
-        <section><info><title>Define your TimIt configuration file</title></info>
+        <section xml:id="DefineyourTimItconfigurationfile"><info><title>Define your TimIt configuration file</title></info>
             
             <para>
                 Configuring TimIt is done through an XML configuration
                 file which is axed around four major tags :
             </para>
-            <section><info><title>Global variables definition</title></info>
+            <section xml:id="Globalvariablesdefinition"><info><title>Global variables definition</title></info>
                 
                 <para>
                     This part set variables which can be used both
@@ -202,7 +202,7 @@
   &lt;descriptorVariable name="NBNODES" value="${NP} /&gt;
 &lt;/benchmark&gt;</programlisting>
             </section>
-            <section><info><title>Serie</title></info>
+            <section xml:id="Serie"><info><title>Serie</title></info>
                 
                 <para>
                     A Serie represent a suite of benchmarks. For
@@ -249,7 +249,7 @@
                     </listitem>
                 </itemizedlist>
             </section>
-            <section><info><title>Chart definition</title></info>
+            <section xml:id="Chartdefinition"><info><title>Chart definition</title></info>
                 
                 <para>
                     Here you specify parameters for the charts. Those
@@ -405,7 +405,7 @@
                     </listitem>
                 </itemizedlist>
             </section>
-            <section><info><title>Benchmark suite definition</title></info>
+            <section xml:id="Benchmarksuitedefinition"><info><title>Benchmark suite definition</title></info>
                 
                 <para>
                     Define the suite of tests with different parameters.
@@ -560,7 +560,7 @@
                 </para>
             </section>
         </section>
-        <section><info><title>
+        <section xml:id="Addtimecounter"><info><title>
                 Add time counters and event observers in your source
                 files
             </title></info>
@@ -654,7 +654,7 @@
             </para>
         </section>
     </section>
-    <section><info><title>Usage</title></info>
+    <section xml:id="Usage"><info><title>Usage</title></info>
         
         <para>
             TimIt provide different kind of services. By combinig them,
@@ -662,7 +662,7 @@
             application. TimIt package contains few examples for using
             these services in your application.
         </para>
-        <section><info><title>Timer counters</title></info>
+        <section xml:id="Timercounters"><info><title>Timer counters</title></info>
             
             <para>
                 It will help you to time some piece of code in your
@@ -731,7 +731,7 @@
 T_TOTAL.stop();</programlisting>
             </para>
         </section>
-        <section><info><title>Event observers</title></info>
+        <section xml:id="Eventobservers_17"><info><title>Event observers</title></info>
             
             <para>
                 It will help you to keep an eye on different events that
@@ -830,7 +830,7 @@ TimIt.notifyObservers( new CommEvent(E_COMM, destID, 1) );</programlisting>
             </itemizedlist>
         </section>
     </section>
-    <section><info><title>TimIt extension</title></info>
+    <section xml:id="TimItextension"><info><title>TimIt extension</title></info>
         
         <para>
             TimIt package can be found in
@@ -841,7 +841,7 @@ TimIt.notifyObservers( new CommEvent(E_COMM, destID, 1) );</programlisting>
             feature to this application. To do so, TimIt is organized in
             5 major points which can be extended :
         </para>
-        <section><info><title>Configuration file</title></info>
+        <section xml:id="Configurationfile"><info><title>Configuration file</title></info>
             
             <para>
                 The subpackage
@@ -903,7 +903,7 @@ if (name.equals("myOption")) {
             <programlisting xml:lang="java">String result = bench.get("myOption");
 // ... and do whatever you want with it...</programlisting>
         </section>
-        <section><info><title>Timer counters</title></info>
+        <section xml:id="Timercounters_17"><info><title>Timer counters</title></info>
             
             <para>
                 The subpackage
@@ -927,7 +927,7 @@ if (name.equals("myOption")) {
                 </listitem>
             </itemizedlist>
         </section>
-        <section><info><title>Event observers</title></info>
+        <section xml:id="Eventobservers"><info><title>Event observers</title></info>
             
             <para>
                 The subpackage
@@ -1081,7 +1081,7 @@ if (name.equals("myOption")) {
                 </listitem>
             </orderedlist>
         </section>
-        <section><info><title>Chart generation</title></info>
+        <section xml:id="Chartgeneration"><info><title>Chart generation</title></info>
             
             <para>
                 The subpackage

@@ -2,7 +2,7 @@
   	 
 	 	
 	 	
-	 	<section><info><title>User Installation</title></info>
+		<section xml:id="UserInstallation"><info><title>User Installation</title></info>
 	    	<para>You can download the archive file (a standard zip file) containing 
 	    	IC2D from the <link xlink:href="http://proactive.inria.fr/download_ic2d_latest.htm">
 	    	 download section </link> of the ProActive home page. You will be asked to accept 
@@ -20,7 +20,7 @@
 	    	 	For information on using IC2D read <xref linkend="IC2D_EclipsePlugin"/> 
 	    	 </para>
 	 	</section>
-		<section><info><title> Developer Installation</title></info>	
+		<section xml:id="DeveloperInstallation"><info><title> Developer Installation</title></info>
 			<para>
 				If you want to develop IC2D or plugins for IC2D the installation steps are
 				the following: 

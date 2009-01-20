@@ -73,7 +73,7 @@
  <!-- This url can only work in the html generated files: in pdf there's no ".." -->
  <screen><uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api/org/objectweb/proactive/ic2d/package-summary.html" os="html">../api/org/objectweb/proactive/ic2d/package-summary.html</uri><phrase os="pdf">org.objectweb.proactive.ic2d javadoc</phrase></screen>
 
-  <section><info><title>Graphical Visualisation
+  <section xml:id="GraphicalVisualisation"><info><title>Graphical Visualisation
     within IC2D</title></info>
     
 
@@ -92,7 +92,7 @@
       </figure></para>
   </section>
 
-  <section><info><title>Control within IC2D</title></info>
+  <section xml:id="ControlwithinIC2D"><info><title>Control within IC2D</title></info>
     
 
     <para><emphasis role="bold">IC2D permits to interactively and dynamically
@@ -122,7 +122,7 @@
     </figure>
   </section>
 
-  <section><info><title>Job monitoring and
+  <section xml:id="Jobmonitoringand"><info><title>Job monitoring and
     control</title></info>
     
 
@@ -151,7 +151,7 @@
    </section>
 
      
-    <section><info><title>Fractal GUI</title></info>
+    <section xml:id="FractalGUI"><info><title>Fractal GUI</title></info>
      
 		 <indexterm><primary>IC2D</primary><secondary>Fractal GUI</secondary></indexterm>
      <para> You can find a Fractal GUI (menu-&gt;Components-&gt;Start the Fractal GUI) to edit your ADL files 
@@ -173,10 +173,10 @@
       which contains an example use of this GUI. </para>
 </section>
 
-   <section><info><title>Launcher</title></info>
+   <section xml:id="Launcher_17"><info><title>Launcher</title></info>
     
 
-    <section><info><title>Principles</title></info>
+    <section xml:id="Principles"><info><title>Principles</title></info>
       
 
       <para>The launcher allows users to launch applications directly from an
@@ -189,7 +189,7 @@
       application.</para>
     </section>
 
-    <section><info><title>MainDefinition tag</title></info>
+    <section xml:id="MainDefinitiontag_17"><info><title>MainDefinition tag</title></info>
       
 
       <para>A new tag has been introduced, just before the component
@@ -280,7 +280,7 @@
   &lt;/ProActiveDescriptor&gt;</screen>
     </section>
 
-    <section><info><title>API</title></info>
+    <section xml:id="API_17"><info><title>API</title></info>
       
 
       <para>The Launcher class is located in the package <emphasis role="bold">org.objectweb.proactive.core.descriptor</emphasis>. To use
@@ -303,7 +303,7 @@
       ;</literal></para>
     </section>
 
-    <section><info><title>Launcher in IC2D</title></info>
+    <section xml:id="LauncherinIC2D"><info><title>Launcher in IC2D</title></info>
       
 
       <para>You will find the launcher in the <emphasis role="bold">launcher
@@ -343,7 +343,7 @@
     </section>
   </section>
 
-  <section><info><title>Grid and cluster
+  <section xml:id="Gridandcluster"><info><title>Grid and cluster
     computing</title></info>
     
 

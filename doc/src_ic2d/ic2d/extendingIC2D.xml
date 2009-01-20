@@ -1013,7 +1013,7 @@
 
 	<!-- ************************************************************************************************** -->
 
-	<section><info><title>Extending IC2D</title></info>
+	<section xml:id="ExtendingIC2D"><info><title>Extending IC2D</title></info>
 		
 
 		<section xml:id="checkout"><info><title>How to checkout IC2D</title></info>
@@ -1996,10 +1996,10 @@ public class ExamplePerspective implements IPerspectiveFactory {
 
 	</section>
 
-	<section><info><title>How to create the IC2D stand-alone application from the sources</title></info>
+	<section xml:id="HowtocreatetheIC2Dstandaloneapplicationfromthesources"><info><title>How to create the IC2D stand-alone application from the sources</title></info>
 		
 
-		<section xml:id="Required"><info><title>Required</title></info>
+		<section xml:id="Required_17"><info><title>Required</title></info>
 			
 			<note><info><title>Required</title></info>
 			
