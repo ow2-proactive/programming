@@ -65,7 +65,7 @@ public class BodyRequest extends MessageImpl implements Request, java.io.Seriali
             }
         }
         methodCall = MethodCall.getMethodCall(targetBody.getClass().getMethod(methodName, paramClasses),
-                params, (Map<TypeVariable, Class<?>>) null);
+                params, (Map<TypeVariable<?>, Class<?>>) null);
     }
 
     public BodyRequest(Body targetBody, String methodName, Class<?>[] paramClasses, Object[] params,

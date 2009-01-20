@@ -61,7 +61,6 @@ import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
 import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
 import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
 import org.objectweb.proactive.core.component.type.annotations.multicast.Reduce;
-import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceMode;
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.util.ClassDataCache;
@@ -317,7 +316,7 @@ public class RepresentativeInterfaceClassGenerator extends AbstractInterfaceClas
             ProActiveInterfaceType itfType) throws NotFoundException, CannotCompileException,
             ClassNotFoundException, SecurityException, NoSuchMethodException {
 
-        Class itfClass = Class.forName(itfType.getFcItfSignature());
+        Class<?> itfClass = Class.forName(itfType.getFcItfSignature());
 
         for (int i = 0; i < reifiedMethods.length; i++) {
             CtClass[] paramTypes = reifiedMethods[i].getParameterTypes();
@@ -343,13 +342,12 @@ public class RepresentativeInterfaceClassGenerator extends AbstractInterfaceClas
 
                     // look for reduction closure
                     CtClass[] parametersCtTypes = reifiedMethods[i].getParameterTypes();
-                    Class[] parametersTypes = new Class[parametersCtTypes.length];
+                    Class<?>[] parametersTypes = new Class[parametersCtTypes.length];
                     for (int j = 0; j < parametersCtTypes.length; j++) {
                         parametersTypes[j] = Class.forName(parametersCtTypes[j].getName());
                     }
                     Method itfMethod = itfClass.getMethod(reifiedMethods[i].getName(), parametersTypes);
                     Reduce reduceAnnotation = itfMethod.getAnnotation(Reduce.class);
-                    ReduceMode reductionMode = null;
 
                     if (reduceAnnotation == null) {
                         preWrap += PAGroup.class.getName() + ".getGroup(";

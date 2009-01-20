@@ -248,9 +248,9 @@ public class BasicResultWriter {
      */
     private boolean addTimerToItsParentElement(BasicTimer timerToAdd, Element rootElement) {
         // If the current element is the parent of the timerToAdd then add it
-        Iterator<Element> it = rootElement.getDescendants();
+        Iterator<?> it = rootElement.getDescendants();
         while (it.hasNext()) {
-            Element ee = it.next();
+            Element ee = (Element) it.next();
             if (timerToAdd.getParent().getName().equals(ee.getAttributeValue("name")) &&
                 (timerToAdd.getParent().getParent().getId() == Integer.valueOf(ee
                         .getAttributeValue("parentId")))) {
@@ -400,7 +400,7 @@ public class BasicResultWriter {
         // Iterate through the root to fill the map
         java.util.Map<String, Element> resultElementsMap = new java.util.HashMap<String, Element>();
 
-        Iterator<Element> itResultElements = result.getRootElement().getDescendants();
+        Iterator<?> itResultElements = result.getRootElement().getDescendants();
         String currentParentName = "";
         while (itResultElements.hasNext()) {
             Object o = itResultElements.next();

@@ -137,7 +137,7 @@ public class ProActiveProvider extends WSConstants implements Provider {
 
                 targetObject = ((ProActiveComponentRepresentative) component).getFcInterface(actualName);
                 logger.info("target Object class  = " + targetObject.getClass());
-                Class c = targetObject.getClass();
+                Class<?> c = targetObject.getClass();
                 Method[] meths = c.getMethods();
                 for (int i = 0; i < meths.length; i++) {
                     logger.info("--> " + meths[i]);

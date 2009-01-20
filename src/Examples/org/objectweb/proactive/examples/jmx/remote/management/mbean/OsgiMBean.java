@@ -47,7 +47,7 @@ public interface OsgiMBean {
      *
      * @return
      */
-    public List getBundles();
+    public List<?> getBundles();
 
     /**
      *

@@ -78,7 +78,7 @@ public class NonFunctionalServices {
      */
     public static void terminateAO(Proxy proxy) throws Throwable {
         proxy.reify(MethodCall.getMethodCall(terminateAOMethod, paramTypes,
-                (Map<TypeVariable, Class<?>>) null));
+                (Map<TypeVariable<?>, Class<?>>) null));
     }
 
     /**
@@ -89,7 +89,7 @@ public class NonFunctionalServices {
      */
     public static void terminateAOImmediately(Proxy proxy) throws Throwable {
         proxy.reify(MethodCall.getMethodCall(terminateAOImmediatelyMethod, paramTypes,
-                (Map<TypeVariable, Class<?>>) null));
+                (Map<TypeVariable<?>, Class<?>>) null));
     }
 
     /**

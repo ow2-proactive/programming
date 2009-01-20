@@ -34,7 +34,7 @@ package org.objectweb.proactive.core.body;
 /**
  * This class is the default implementation of the Body interface.
  * An implementation of the Body interface, which lets the reified object
- * explicitely manage the queue of pending requests through its live() routine.
+ * explicitly manage the queue of pending requests through its live() routine.
  *
  * @author The ProActive Team
  * @version 1.0,  2001/10/23

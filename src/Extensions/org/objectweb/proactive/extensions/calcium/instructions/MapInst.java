@@ -59,7 +59,6 @@ public class MapInst<P, R> implements Instruction<P, P> {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     public PrefetchFilesMatching getPrefetchFilesAnnotation() {
         return divideInst.getPrefetchFilesAnnotation();
     }

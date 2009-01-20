@@ -125,7 +125,7 @@ public class RegistryHelper {
 
             // doing a lookup should produce ConnectException if registry doesn't exist
             // and no exception or NotBoundException if the registry does exist.
-            java.rmi.Remote r = registry.lookup("blah!");
+            registry.lookup("blah!");
             logger.info("Detected an existing RMI Registry on port " + port);
             return registry;
         } catch (java.rmi.NotBoundException e) {

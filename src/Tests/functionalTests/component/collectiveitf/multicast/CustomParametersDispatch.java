@@ -54,14 +54,14 @@ public class CustomParametersDispatch implements ParamDispatch {
      */
     public List<Object> partition(Object inputParameter, int nbOutputReceivers)
             throws ParameterDispatchException {
-        if (!(inputParameter instanceof List) || !(((List) inputParameter).size() >= 1) ||
-            !(((List) inputParameter).get(0) instanceof WrappedInteger)) {
+        if (!(inputParameter instanceof List) || !(((List<?>) inputParameter).size() >= 1) ||
+            !(((List<?>) inputParameter).get(0) instanceof WrappedInteger)) {
             throw new ParameterDispatchException("needs a List of (at least 1) WrappedInteger elements");
         }
 
         List<Object> result = new ArrayList<Object>();
         for (int i = 0; i < nbOutputReceivers; i++) {
-            result.add((WrappedInteger) ((List) inputParameter).get(0));
+            result.add((WrappedInteger) ((List<?>) inputParameter).get(0));
         }
         return result;
     }

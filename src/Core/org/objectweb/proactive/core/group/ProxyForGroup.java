@@ -110,14 +110,14 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
     protected int waited = 0;
 
     /**
-     * Flag to deternime the semantic of communication (broadcast or dispatching)
+     * Flag to determine the semantic of communication (broadcast or dispatching)
      */
     protected boolean dispatching = false;
 
     protected DispatchMode dispatchMode = DispatchMode.UNSPECIFIED;
 
     /**
-     * Flag to deternime the semantic of communication (unique serialization of parameters or not)
+     * Flag to determine the semantic of communication (unique serialization of parameters or not)
      */
     protected boolean uniqueSerialization = false;
 

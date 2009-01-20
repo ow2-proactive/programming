@@ -125,8 +125,8 @@ public interface Request extends Message, Securizable {
 
     /**
      * Notifies the request that it has been received by the destination.
-     * When this request gets fowarded, this method must not be called as a
-     * fowarder is not the genuine destination of the request.
+     * When this request gets forwarded, this method must not be called as a
+     * forwarder is not the genuine destination of the request.
      * @param bodyReceiver the body destination that received the request
      * @exception java.io.IOException if the request failed to perform a possible
      * operation upon that notification
@@ -134,7 +134,7 @@ public interface Request extends Message, Securizable {
     public void notifyReception(UniversalBody bodyReceiver) throws java.io.IOException;
 
     /**
-     * Returns true if the request is a non fuctional request.
+     * Returns true if the request is a non functional request.
      * Non Functional requests are requests which do not modify application's computation.
      * @return isFunctionalRequest
      */

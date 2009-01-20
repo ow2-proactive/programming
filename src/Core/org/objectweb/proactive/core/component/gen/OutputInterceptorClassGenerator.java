@@ -68,7 +68,7 @@ import org.objectweb.proactive.core.util.ClassDataCache;
  *
  */
 public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGenerator {
-    List outputInterceptors;
+    List<?> outputInterceptors;
     private static OutputInterceptorClassGenerator instance;
 
     public static OutputInterceptorClassGenerator instance() {
@@ -79,7 +79,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
         }
     }
 
-    public ProActiveInterface generateInterface(ProActiveInterface representative, List outputInterceptors)
+    public ProActiveInterface generateInterface(ProActiveInterface representative, List<?> outputInterceptors)
             throws InterfaceGenerationFailedException {
         this.outputInterceptors = outputInterceptors;
         ProActiveInterface generated = generateInterface(representative.getFcItfName(), representative

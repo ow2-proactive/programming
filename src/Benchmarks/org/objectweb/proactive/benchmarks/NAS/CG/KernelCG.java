@@ -40,7 +40,6 @@ import org.objectweb.proactive.benchmarks.NAS.Kernel;
 import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
 import org.objectweb.proactive.benchmarks.NAS.util.NpbMath;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.group.ProxyForGroup;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
@@ -90,7 +89,7 @@ public class KernelCG extends Kernel {
         // String buff to have a print order
         String printBuffer = "";
         // Some int values
-        int i, k, tempValue = 0;
+        int i;
         // The nodes to use
         List<Node> nodes = null;
         // Temp node array

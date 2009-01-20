@@ -233,15 +233,15 @@ public class XMLHelper {
      * @param vars
      *            the variables to set
      */
-    public static void replaceVariables(List serieList, HashMap<String, String> vars) {
+    public static void replaceVariables(List<Element> serieList, HashMap<String, String> vars) {
         // Replace variables
         Pattern p = Pattern.compile("[^\\x24\\x7B\\x7D]*\\x24\\x7B" + // *${
             "([^\\x7D]*)" + // A,B,C
             "\\x7D[^\\x7D\\x24\\x7B]*"); // }*
-        @SuppressWarnings("unchecked")
-        Iterator it = serieList.iterator();
+
+        Iterator<Element> it = serieList.iterator();
         while (it.hasNext()) {
-            Element serie = (Element) it.next();
+            Element serie = it.next();
             // Look for variables in Series attributes
             replaceVariablesAttributes(serie, p, vars);
 
@@ -295,6 +295,7 @@ public class XMLHelper {
      * @param values
      *            names to accept
      */
+    @SuppressWarnings("unchecked")
     public static void tagFiltering(Element eTag, String[] values) {
         Arrays.sort(values);
         List<Element> children = eTag.getChildren();
@@ -316,6 +317,7 @@ public class XMLHelper {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static boolean filter(Element eTag, String[] values) {
         if (values.length == 0) {
             return true;
@@ -325,7 +327,7 @@ public class XMLHelper {
             eTag.detach();
             return false;
         } else {
-            List children = eTag.getChildren();
+            List<Element> children = eTag.getChildren();
             for (int i = 0; i < children.size(); i++) {
                 Element child = (Element) children.get(i);
                 Element parent = child.getParentElement();

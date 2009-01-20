@@ -80,7 +80,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
 
     // note that we do not want to serialize this member but rather handle
-    // the serialization by ourselve
+    // the serialization by ourselves
     protected transient UniversalBody universalBody;
     protected transient boolean isLocal;
     private transient GCTag tag;
@@ -404,7 +404,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         // Determines the constructor of the body object: it is the constructor that
         // has only one argument, this argument being of type ConstructorCall
         try {
-            Constructor cstr = bodyClass.getConstructor(argsClass);
+            Constructor<?> cstr = bodyClass.getConstructor(argsClass);
 
             // A word of explanation: here we have two nested ConstructorCall objects:
             // 'bodyConstructorCall' is the reification of the construction of the body,

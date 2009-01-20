@@ -69,7 +69,7 @@ public class Test extends ComponentTest {
         Fractal.getLifeCycleController(root).startFc();
 
         DummyControllerItf ref = (DummyControllerItf) root.getFcInterface("dummy-membrane");
-        String name = ref.dummyMethodWithResult();
+        ref.dummyMethodWithResult();
         ref.dummyVoidMethod("Message");
         Assert.assertTrue(root instanceof ProActiveNFComponentRepresentative);
     }

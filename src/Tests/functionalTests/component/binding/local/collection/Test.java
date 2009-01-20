@@ -168,7 +168,6 @@ public class Test extends ComponentTest {
         Fractal.getLifeCycleController(pB5).startFc();
         Fractal.getLifeCycleController(pB6).startFc();
         ((I1Multicast) pE.getFcInterface("i1")).processInputMessage(new Message(""));
-        Message expected = new Message("composite-" + PrimitiveComponentB.MESSAGE);
         Message m1 = ((I2) c1.getFcInterface("i2-server-01")).processOutputMessage(new Message("composite-"));
         Message m2 = ((I2) c1.getFcInterface("i2-server-02")).processOutputMessage(new Message("composite-"));
         Assert.assertEquals(new Message("composite-" + PrimitiveComponentB.MESSAGE).toString(), PAFuture

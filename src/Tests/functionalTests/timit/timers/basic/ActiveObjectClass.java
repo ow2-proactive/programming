@@ -350,7 +350,7 @@ public class ActiveObjectClass implements java.io.Serializable {
     public void terminate() {
         this.localReference = null;
         this.remoteReference = null;
-        Body b = PAActiveObject.getBodyOnThis();
+        //Body b = PAActiveObject.getBodyOnThis();
         //b.getFuturePool().disableAC();
         PAActiveObject.terminateActiveObject(true);
     }

@@ -103,8 +103,8 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
     private void checkCompatibility(ProActiveInterfaceType client, ProActiveInterfaceType server)
             throws IllegalBindingException {
         try {
-            Class cl = Class.forName(client.getFcItfSignature());
-            Class sr = Class.forName(server.getFcItfSignature());
+            Class<?> cl = Class.forName(client.getFcItfSignature());
+            Class<?> sr = Class.forName(server.getFcItfSignature());
             if (!cl.isAssignableFrom(sr)) {
                 throw new IllegalBindingException("Signatures of interfaces don't correspond (" +
                     client.getFcItfSignature() + " and " + server.getFcItfSignature() + ")");

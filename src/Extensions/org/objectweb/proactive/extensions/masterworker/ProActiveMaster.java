@@ -85,7 +85,7 @@ import java.util.List;
 @PublicAPI
 public class ProActiveMaster<T extends Task<R>, R extends Serializable> implements Master<T, R>, Serializable {
 
-    protected ProActiveMaster activeThis = null;
+    protected ProActiveMaster<T, R> activeThis = null;
 
     protected AOMaster aomaster = null;
 
@@ -320,6 +320,7 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     public List<R> waitSomeResults() throws TaskException {
         if (aomaster.isEmpty(null)) {
             throw new IllegalStateException("Master is empty, call to this method will wait forever");

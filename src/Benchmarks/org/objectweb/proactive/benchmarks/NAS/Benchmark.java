@@ -33,7 +33,6 @@ package org.objectweb.proactive.benchmarks.NAS;
 
 import java.io.File;
 
-import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.benchmarks.NAS.CG.KernelCG;
 import org.objectweb.proactive.benchmarks.NAS.EP.KernelEP;
 import org.objectweb.proactive.benchmarks.NAS.FT.KernelFT;

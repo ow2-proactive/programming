@@ -59,7 +59,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public abstract class MOP {
 
     /**
-     * The name of the interface that caracterizes all stub classes
+     * The name of the interface that characterizes all stub classes
      */
     protected static String STUB_OBJECT_INTERFACE_NAME = "org.objectweb.proactive.core.mop.StubObject";
     protected static Class<?> STUB_OBJECT_INTERFACE;
@@ -261,13 +261,13 @@ public abstract class MOP {
             // MOP.forName(nameOfClass);//   addClassToCache(nameOfStubClass, targetClass);
         }
 
-        // Instanciates the stub object
+        // Instantiates the stub object
         StubObject stub = createStubObject(stubClass.getName(), targetClass, genericParameters);
 
         // build the constructor call for the target object to create
         ConstructorCall reifiedCall = buildTargetObjectConstructorCall(targetClass, constructorParameters);
 
-        // Instanciates the proxy object
+        // Instantiates the proxy object
         Proxy proxy = createProxyObject(nameOfProxy, proxyParameters, reifiedCall);
 
         // Connects the proxy to the stub
@@ -277,7 +277,7 @@ public abstract class MOP {
 
     /**
      * Creates an instance of an object
-     * @param nameOfClass The class to instanciate
+     * @param nameOfClass The class to instantiate
      * @param constructorParameters Array of the constructor's parameters [wrapper]
      * @param proxyParameters The array holding the proxy parameter
      */
@@ -550,7 +550,7 @@ public abstract class MOP {
             // Verifies that the stub has a noargs constructor and caches it
             try {
                 if (targetClass.isMemberClass() && !Modifier.isStatic(targetClass.getModifiers())) {
-                    Class enclosing = targetClass.getEnclosingClass();
+                    Class<?> enclosing = targetClass.getEnclosingClass();
                     stubConstructor = stubClass.getConstructor(enclosing);
                 } else {
                     stubConstructor = stubClass.getConstructor(EMPTY_CLASS_ARRAY);
@@ -566,7 +566,7 @@ public abstract class MOP {
 
     /**
      * Finds the Constructor of the proxy for a specified class
-     * @param proxyClass The represenation of the proxy
+     * @param proxyClass The representation of the proxy
      * @return the Constructor
      * @throws InvalidProxyClassException If the class is not a valid Proxy
      */
@@ -599,7 +599,7 @@ public abstract class MOP {
             if (stubConstructor.getParameterTypes().length != 0) {
                 // member class constructor
                 // add the implicit param : an instance of the enclosing class
-                Class realClass = Class.forName(Utils.convertStubClassNameToClassName(stubConstructor
+                Class<?> realClass = Class.forName(Utils.convertStubClassNameToClassName(stubConstructor
                         .getDeclaringClass().getName()));
                 try {
                     o = stubConstructor.newInstance(realClass.getEnclosingClass().newInstance());

@@ -128,10 +128,11 @@ public class TaskWrapperImpl implements TaskIntern<Serializable> {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public Serializable run(final WorkerMemory memory, final SubMaster master) throws Exception {
-        return ((DivisibleTask) this.realTask).run(memory, master);
+    * {@inheritDoc}
+    */
+    public Serializable run(final WorkerMemory memory,
+            final SubMaster<Task<Serializable>, Serializable> master) throws Exception {
+        return ((DivisibleTask<Serializable>) this.realTask).run(memory, master);
     }
 
     /**

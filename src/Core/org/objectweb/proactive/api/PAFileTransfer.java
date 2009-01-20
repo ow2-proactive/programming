@@ -177,7 +177,7 @@ public class PAFileTransfer {
 
         Node localNode = getLocalNode();
 
-        ArrayList<RemoteFile> rfile = new ArrayList<RemoteFile>(srcFile.length);
+        // ArrayList<RemoteFile> rfile = new ArrayList<RemoteFile>(srcFile.length);
 
         // local side verifications
         for (int i = 0; i < srcFile.length; i++) {

@@ -46,11 +46,11 @@ import java.io.Serializable;
 public interface DivisibleTask<R extends Serializable> extends Task<R> {
 
     /**
-     * A task to be executed<br/>
-     * @param memory access to the worker memory
-     * @param master access to the master, to submit new task 
-     * @return the result
-     * @throws Exception any exception thrown by the task
-     */
-    R run(WorkerMemory memory, SubMaster master) throws Exception;
+    * A task to be executed<br/>
+    * @param memory access to the worker memory
+    * @param master access to the master, to submit new task 
+    * @return the result
+    * @throws Exception any exception thrown by the task
+    */
+    R run(WorkerMemory memory, SubMaster<Task<R>, R> master) throws Exception;
 }

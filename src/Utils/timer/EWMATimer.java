@@ -75,7 +75,6 @@ public class EWMATimer extends AverageMicroTimer {
     public static void main(String[] args) {
         int max = 100;
         Random r = new Random();
-        long rValue;
         double[] ewmaMemory = new double[max];
         double[] ewmaMemory2 = new double[max];
         double[] tMemory = new double[max];

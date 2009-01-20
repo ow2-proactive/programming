@@ -481,7 +481,6 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        ProActiveMetaObjectFactory clone = null;
 
         try {
             return MakeDeepCopy.WithObjectStream.makeDeepCopy(this);

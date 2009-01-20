@@ -228,7 +228,7 @@ public class ByteToObjectConverter {
             this.cl = cl;
         }
 
-        protected Class resolveClass(java.io.ObjectStreamClass v) throws java.io.IOException,
+        protected Class<?> resolveClass(java.io.ObjectStreamClass v) throws java.io.IOException,
                 ClassNotFoundException {
             if (cl == null) {
                 return super.resolveClass(v);

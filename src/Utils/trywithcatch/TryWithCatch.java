@@ -61,7 +61,8 @@ public class TryWithCatch {
         }
     }
 
-    private static List getParseData(String filename) {
+    @SuppressWarnings("unchecked")
+    private static List<Anything> getParseData(String filename) {
         FileInputStream fis = null;
         Symbol s;
 
@@ -79,7 +80,7 @@ public class TryWithCatch {
             return null;
         }
 
-        List parsed = (List) s.value;
+        List<Anything> parsed = (List<Anything>) s.value;
 
         /*
         java.util.Iterator i = parsed.iterator();
@@ -93,7 +94,7 @@ public class TryWithCatch {
     }
 
     private static void catcher(String filename) {
-        List parsed = getParseData(filename);
+        List<Anything> parsed = getParseData(filename);
         if (parsed == null) {
             return;
         }

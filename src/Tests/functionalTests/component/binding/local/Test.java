@@ -144,8 +144,8 @@ public class Test extends ComponentTest {
     }
 
     private void testGet() {
-        Binding retreived1 = (Binding) bindings1.get("i2");
-        Object retreived2 = bindings2.get("i2");
+        //Binding retreived1 = (Binding) bindings1.get("i2");
+        //Object retreived2 = bindings2.get("i2");
         Object retreived3 = bindings3.get("i202");
         Binding dummy = (Binding) bindings1.get("dummy");
         Assert.assertEquals(dummy, null);
@@ -176,7 +176,7 @@ public class Test extends ComponentTest {
         Assert.assertTrue(Arrays.equals(bindings1.getExternalClientBindings(), new String[] { "i2" }));
         Assert.assertTrue(Arrays.equals(bindings2.getExternalClientBindings(), new String[] { "i2" }));
         // cannot do equality between tables, as the ordering from getExternalsBindings is not predictable
-        List l = Arrays.asList(bindings3.getExternalClientBindings());
+        List<?> l = Arrays.asList(bindings3.getExternalClientBindings());
         String[] t = new String[] { "i202", "i201" };
         Assert.assertTrue((l.size() == t.length) && (l.containsAll(Arrays.asList(t))));
     }

@@ -295,7 +295,8 @@ public class PASPMD {
     public static Object newSPMDGroupInParallel(String className, Object[][] params, Node[] nodeList)
             throws ClassNotFoundException, ClassNotReifiableException {
         Object result = PAGroup.newGroup(className);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) PAGroup.getGroup(result);
+        ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) PAGroup
+                .getGroup(result);
 
         proxy.createMemberWithMultithread(className, null, params, nodeList);
 
@@ -382,7 +383,7 @@ public class PASPMD {
             // set the number of awaited message barriers
             body.getProActiveSPMDGroupManager().setAwaitedBarrierCalls(barrierName, PAGroup.size(group));
             // send the barrier messages
-            ProxyForGroup proxy = (ProxyForGroup) PAGroup.getGroup(group);
+            ProxyForGroup<Object> proxy = (ProxyForGroup<Object>) PAGroup.getGroup(group);
             proxy.reify(new MethodCallBarrier(barrierName));
         } catch (InvocationTargetException e) {
             System.err.println("Unable to invoke a method call to control groups");

@@ -41,7 +41,7 @@ import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 
 /**
  * <P>
- * An object implementing this interface is an implementation of the non fonctionnal part of an
+ * An object implementing this interface is an implementation of the non functional part of an
  * ActiveObject. This representation is local to the ActiveObject. By contrast there is a remote
  * representation of Body that can be accessed by distant object.
  * </P>
@@ -94,7 +94,7 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
     public boolean isActive();
 
     /**
-     * To avoid some causal ordering corruptions, the body can be temporarly set as <i>sterile</i>.
+     * To avoid some causal ordering corruptions, the body can be temporarily set as <i>sterile</i>.
      * Then, it will not be able to send any request, except to himself and to its parent. Such
      * restriction should be necessary when sending multiple requests in parallel.
      * 
@@ -184,14 +184,14 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
     public void updateNodeURL(String newNodeURL);
 
     /**
-     * For setting an immediate service for this body. An immediate service is a method that will bw
-     * excecuted by the calling thread.
+     * For setting an immediate service for this body. An immediate service is a method that will be
+     * executed by the calling thread.
      */
     public void setImmediateService(String methodName);
 
     /**
-     * Removes an immediate service for this body An immediate service is a method that will bw
-     * excecuted by the calling thread.
+     * Removes an immediate service for this body An immediate service is a method that will be
+     * executed by the calling thread.
      * 
      * @param methodName
      *            the name of the method
@@ -201,8 +201,8 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
     public void removeImmediateService(String methodName);
 
     /**
-     * Adds an immediate service for this body An immediate service is a method that will bw
-     * excecuted by the calling thread.
+     * Adds an immediate service for this body An immediate service is a method that will be
+     * executed by the calling thread.
      * 
      * @param methodName
      *            the name of the method
@@ -212,8 +212,8 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
     public void setImmediateService(String methodName, Class<?>[] parametersTypes);
 
     /**
-     * Removes an immediate service for this body An immediate service is a method that will bw
-     * excecuted by the calling thread.
+     * Removes an immediate service for this body An immediate service is a method that will be
+     * executed by the calling thread.
      * 
      * @param methodName
      *            the name of the method
@@ -242,8 +242,8 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
 
     /**
      * Terminate the body. After this call the body is no more alive and no more active. The body is
-     * unuseable after this call. If some automatic continuations are registred in the futurepool of
-     * this body, the ACThread will be killed when the last registred AC is sent.
+     * unusable after this call. If some automatic continuations are registered in the futurepool of
+     * this body, the ACThread will be killed when the last registered AC is sent.
      */
     public void terminate();
 

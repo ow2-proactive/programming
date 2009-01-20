@@ -69,7 +69,7 @@ public class Result implements Serializable {
 
     /**
      *
-     * Construct a new result with an excpetion.
+     * Construct a new result with an exception.
      * @param e the exception.
      */
     public Result(Exception e) {

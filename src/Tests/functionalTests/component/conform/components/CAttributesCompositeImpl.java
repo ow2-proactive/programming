@@ -121,6 +121,14 @@ public class CAttributesCompositeImpl implements CAttributes {
     }
 
     public void setWriteOnlyX11(boolean x11) {
+        this.setX11(x11);
+    }
+
+    public void setX11(boolean x11) {
         this.x11 = x11;
+    }
+
+    public boolean getX11() {
+        return x11;
     }
 }

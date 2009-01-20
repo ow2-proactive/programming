@@ -178,7 +178,7 @@ public class BasicComparativeChartBuilder {
         }
 
         // Get values from XML tree (Element)
-        List<Element> children = root.getChildren();
+        List<?> children = root.getChildren();
 
         if (children.size() == 0) {
             throw new RuntimeException("Nothing to collect from " + file.getAbsolutePath() +
@@ -187,8 +187,8 @@ public class BasicComparativeChartBuilder {
 
         // Collect all available classNames
         String val = null;
-        for (Element e : children) {
-            val = e.getAttributeValue(CLASSNAME_ATTRIBUTE_NAME);
+        for (Object e : children) {
+            val = ((Element) e).getAttributeValue(CLASSNAME_ATTRIBUTE_NAME);
             // If already known className
             if (this.classNamesList.contains(val)) {
                 throw new RuntimeException("Found a className repetition " + val + " in the file " +
@@ -205,15 +205,15 @@ public class BasicComparativeChartBuilder {
         Element root = d.getRootElement();
 
         // Get values from XML tree (Element)
-        List<Element> aos = root.getChildren();
+        List<?> aos = root.getChildren();
 
         // Search for the element with the specified className attribute value
         Element ao = null;
-        for (Element e : aos) {
+        for (Object e : aos) {
             String val = "";
-            if ((val = e.getAttributeValue(CLASSNAME_ATTRIBUTE_NAME)).equals(className) ||
+            if ((val = ((Element) e).getAttributeValue(CLASSNAME_ATTRIBUTE_NAME)).equals(className) ||
                 (val.indexOf(className) >= 0)) {
-                ao = e;
+                ao = (Element) e;
                 break;
             }
         }
@@ -231,7 +231,7 @@ public class BasicComparativeChartBuilder {
 
         // Get timers
         Element timers = ao.getChild("timers");
-        Iterator<Element> it = timers.getDescendants();
+        Iterator<?> it = timers.getDescendants();
 
         while (it.hasNext()) {
             Object o = it.next();

@@ -75,17 +75,17 @@ public class DispatchMonitor {
 
     BlockingQueue<Integer> availableSlots = new LinkedBlockingQueue<Integer>();
 
-    ProxyForGroup groupProxy;
+    ProxyForGroup<?> groupProxy;
     Map<Integer, Worker> dispatched = new ConcurrentHashMap<Integer, Worker>();
     Map<Worker, Worker> replicated = new ConcurrentHashMap<Worker, Worker>();
 
     LinkedList<Worker> rankedWorkers = new LinkedList<Worker>();
 
-    public DispatchMonitor(ProxyForGroup groupProxy, int instance) {
+    public DispatchMonitor(ProxyForGroup<?> groupProxy, int instance) {
         this.instance = instance;
         this.groupProxy = groupProxy;
         int index = 0;
-        for (Iterator iterator = groupProxy.iterator(); iterator.hasNext();) {
+        for (Iterator<?> iterator = groupProxy.iterator(); iterator.hasNext();) {
             Object member = (Object) iterator.next();
             Worker worker = new Worker(index, groupProxy.bufferSize);
             rankedWorkers.add(worker);
@@ -265,7 +265,7 @@ public class DispatchMonitor {
 
         boolean refIsBodyProxy = (originatingProxy instanceof BodyProxy);
         //		boolean refIsBodyAdapterImpl = (originatingProxy instanceof BodyAdapterImpl);
-        boolean refIsBodyAdapterImpl = false;
+        //		boolean refIsBodyAdapterImpl = false;
         for (int i = 0; i < groupProxy.getMemberList().size(); i++) {
             BodyProxy groupMemberProxy = (BodyProxy) ((StubObject) groupProxy.getMemberList().get(i))
                     .getProxy();

@@ -66,7 +66,7 @@ public class StartFTServer {
             int fdPeriod = 0;
             String name = "";
             String proto = FTManagerFactory.PROTO_CIC;
-            String p2pServer = null;
+            //String p2pServer = null;
 
             if (args.length == 0) {
                 //                System.out

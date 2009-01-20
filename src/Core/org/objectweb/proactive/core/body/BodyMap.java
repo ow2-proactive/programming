@@ -117,7 +117,7 @@ public class BodyMap /* extends AbstractEventProducer */implements Cloneable, ja
     }
 
     public synchronized void removeBody(UniqueID id) {
-        UniversalBody b = idToBodyMap.remove(id);
+        /*UniversalBody b = */idToBodyMap.remove(id);
         notifyAll();
 
         // ProActiveEvent

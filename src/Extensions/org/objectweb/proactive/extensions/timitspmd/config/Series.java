@@ -52,7 +52,7 @@ public class Series extends Tag {
 
         // Construct ConfigChart array (if needed)
         if (eSerie.getChild("charts") != null) {
-            List chartList = eSerie.getChild("charts").getChildren();
+            List<?> chartList = eSerie.getChild("charts").getChildren();
             this.charts = new ConfigChart[chartList.size()];
             for (int i = 0; i < this.charts.length; i++) {
                 this.charts[i] = new ConfigChart((Element) chartList.get(i));
@@ -60,7 +60,7 @@ public class Series extends Tag {
         }
 
         // Construct Benchmark array
-        List benchList = eSerie.getChild("benchmarks").getChildren();
+        List<?> benchList = eSerie.getChild("benchmarks").getChildren();
         this.benchmarks = Benchmark.toArray(benchList);
     }
 
@@ -97,7 +97,7 @@ public class Series extends Tag {
             "\n";
     }
 
-    public static Series[] oldtoArray(List serieList) {
+    public static Series[] oldtoArray(List<?> serieList) {
         int quantity = serieList.size();
         Series[] result = new Series[quantity];
 
@@ -109,7 +109,7 @@ public class Series extends Tag {
         return result;
     }
 
-    public static Series[] toArray(List serieList) {
+    public static Series[] toArray(List<?> serieList) {
         ArrayList<String> seqList;
         int quantity = serieList.size();
         ArrayList<Series> result = new ArrayList<Series>();

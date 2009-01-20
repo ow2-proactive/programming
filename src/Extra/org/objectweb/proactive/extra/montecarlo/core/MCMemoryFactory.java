@@ -48,14 +48,14 @@ import java.util.Map;
  */
 public class MCMemoryFactory implements MemoryFactory {
 
-    private Class prngClass;
+    private Class<?> prngClass;
 
     private RandomStreamFactory prngfactory = null;
 
     /**
      * Creates memory for newly created workers, the memory will contain the provided class as a Random Stream or a MRG32k3a Random Stream if the agrument is null
      */
-    public MCMemoryFactory(Class randomStreamClass) {
+    public MCMemoryFactory(Class<?> randomStreamClass) {
         if (randomStreamClass == null) {
             prngClass = MRG32k3a.class;
         } else {
@@ -67,8 +67,8 @@ public class MCMemoryFactory implements MemoryFactory {
         if (prngfactory == null) {
             prngfactory = new BasicRandomStreamFactory(prngClass);
         }
-        HashMap map = new HashMap(1);
-        map.put("rng", prngfactory.newInstance());
+        HashMap<String, Serializable> map = new HashMap<String, Serializable>(1);
+        map.put("rng", (Serializable) prngfactory.newInstance());
         return map;
     }
 }

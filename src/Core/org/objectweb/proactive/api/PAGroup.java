@@ -83,11 +83,11 @@ public class PAGroup {
         return findProxyForGroup(o);
     }
 
-    public static ProxyForGroup getGroupProxy(Object group) {
-        ProxyForGroup pfg;
+    public static ProxyForGroup<Object> getGroupProxy(Object group) {
+        ProxyForGroup<Object> pfg;
 
         try {
-            pfg = (ProxyForGroup) PAGroup.getGroup(group);
+            pfg = (ProxyForGroup<Object>) PAGroup.getGroup(group);
         } catch (ClassCastException cce) {
             pfg = null;
         }
@@ -106,7 +106,7 @@ public class PAGroup {
      * @return the name class of the typed group
      */
     public static String getType(Object o) {
-        ProxyForGroup tmp = findProxyForGroup(o);
+        ProxyForGroup<?> tmp = findProxyForGroup(o);
         if (tmp != null) {
             return tmp.getTypeName();
         } else {
@@ -120,7 +120,7 @@ public class PAGroup {
      * @return the <code>ProxyForGroup</code> of the typed group <code>ogroup</code>.
      * <code>null</code> if <code>ogroup</code> does not represent a Group.
      */
-    public static ProxyForGroup findProxyForGroup(Object ogroup) {
+    public static <E> ProxyForGroup<E> findProxyForGroup(Object ogroup) {
         if (!(MOP.isReifiedObject(ogroup))) {
             return null;
         } else {
@@ -128,7 +128,7 @@ public class PAGroup {
 
             // obj is an object representing a Group (and not a future)
             if (tmp instanceof org.objectweb.proactive.core.group.ProxyForGroup) {
-                return (org.objectweb.proactive.core.group.ProxyForGroup) tmp;
+                return (org.objectweb.proactive.core.group.ProxyForGroup<E>) tmp;
             }
 
             // obj is a future ... but may be a future-Group
@@ -140,14 +140,14 @@ public class PAGroup {
                 // future of standard object (or group proxy in case of multicast interfaces)
                 else {
                     if (((FutureProxy) tmp).getResult() instanceof ProxyForGroup) {
-                        return (ProxyForGroup) ((FutureProxy) tmp).getResult();
+                        return (ProxyForGroup<E>) ((FutureProxy) tmp).getResult();
                     }
                     return null;
                 }
 
             // future-Group
             if (tmp instanceof org.objectweb.proactive.core.group.ProxyForGroup) {
-                return (org.objectweb.proactive.core.group.ProxyForGroup) tmp;
+                return (org.objectweb.proactive.core.group.ProxyForGroup<E>) tmp;
             }
             // future of an active object
             else {
@@ -164,11 +164,11 @@ public class PAGroup {
      * @return the member of the typed group at the rank <code>n</code>
      */
     public static Object get(Object o, int n) {
-        org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+        ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
         if (theProxy == null) {
             return null;
         } else {
-            return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).get(n);
+            return theProxy.get(n);
         }
     }
 
@@ -180,7 +180,7 @@ public class PAGroup {
      * @throws IllegalArgumentException if the parameter doesn't represent a group
      */
     public static int size(Object o) {
-        ProxyForGroup theProxy = PAGroup.findProxyForGroup(o);
+        ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
         if (theProxy == null) {
             throw new java.lang.IllegalArgumentException("Parameter doesn't represent a group");
         } else {
@@ -219,8 +219,7 @@ public class PAGroup {
             result = MOP.newInstance(className, genericParameters, null,
                     PAGroup.DEFAULT_PROXYFORGROUP_CLASS_NAME, null);
 
-            ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) ((StubObject) result)
-                    .getProxy();
+            ProxyForGroup<?> proxy = (ProxyForGroup<?>) ((StubObject) result).getProxy();
             proxy.setClassName(className);
             proxy.setStub((StubObject) result);
         } catch (ClassNotReifiableException e) {
@@ -622,7 +621,7 @@ public class PAGroup {
             throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
             NodeException {
         Object result = newGroup(className, (Class<?>[]) null);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) getGroup(result);
+        ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) getGroup(result);
 
         proxy.createMemberWithMultithread(className, null, params, nodeList);
 
@@ -693,7 +692,7 @@ public class PAGroup {
             throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
             NodeException {
         Object result = newGroup(className, (Class<?>[]) null);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) getGroup(result);
+        ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) getGroup(result);
 
         proxy.createMemberWithMultithread(className, null, params, nodeList);
 
@@ -740,7 +739,7 @@ public class PAGroup {
             Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
             ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, genericParameters);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) getGroup(result);
+        ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) getGroup(result);
 
         proxy.createMemberWithMultithread(className, genericParameters, params, nodeList);
 
@@ -806,7 +805,7 @@ public class PAGroup {
             Object[][] params, Node[] nodeList) throws ClassNotFoundException, ClassNotReifiableException,
             ActiveObjectCreationException, NodeException {
         Object result = newGroup(className, genericParameters);
-        ProxyForGroup proxy = (org.objectweb.proactive.core.group.ProxyForGroup) getGroup(result);
+        ProxyForGroup<Object> proxy = (org.objectweb.proactive.core.group.ProxyForGroup<Object>) getGroup(result);
 
         proxy.createMemberWithMultithread(className, genericParameters, params, nodeList);
 
@@ -1057,9 +1056,9 @@ public class PAGroup {
      * @param ogroup the typed group who will change his semantic of communication.
      */
     public static void setScatterGroup(Object ogroup) {
-        Proxy proxytmp = PAGroup.findProxyForGroup(ogroup);
+        ProxyForGroup<?> proxytmp = PAGroup.findProxyForGroup(ogroup);
         if (proxytmp != null) {
-            ((ProxyForGroup) proxytmp).setDispatchingOn();
+            proxytmp.setDispatchingOn();
         }
     }
 
@@ -1068,9 +1067,9 @@ public class PAGroup {
      * @param ogroup the typed group who will change his semantic of communication.
      */
     public static void unsetScatterGroup(Object ogroup) {
-        Proxy proxytmp = PAGroup.findProxyForGroup(ogroup);
+        ProxyForGroup<?> proxytmp = PAGroup.findProxyForGroup(ogroup);
         if (proxytmp != null) {
-            ((ProxyForGroup) proxytmp).setDispatchingOff();
+            proxytmp.setDispatchingOff();
         }
     }
 
@@ -1080,9 +1079,9 @@ public class PAGroup {
      * @return <code>true</code> if the "scatter option" is enabled for the typed group <code>ogroup</code>.
      */
     public static boolean isScatterGroupOn(Object ogroup) {
-        Proxy proxytmp = PAGroup.findProxyForGroup(ogroup);
+        ProxyForGroup<?> proxytmp = PAGroup.findProxyForGroup(ogroup);
         if (proxytmp != null) {
-            return ((ProxyForGroup) proxytmp).isDispatchingOn();
+            return proxytmp.isDispatchingOn();
         } else {
             return false;
         }
@@ -1093,9 +1092,9 @@ public class PAGroup {
      * @param ogroup the typed group who will change his semantic of communication.
      */
     public static void setUniqueSerialization(Object ogroup) {
-        Proxy proxytmp = PAGroup.findProxyForGroup(ogroup);
+        ProxyForGroup<?> proxytmp = PAGroup.findProxyForGroup(ogroup);
         if (proxytmp != null) {
-            ((ProxyForGroup) proxytmp).setUniqueSerializationOn();
+            proxytmp.setUniqueSerializationOn();
         }
     }
 
@@ -1104,9 +1103,9 @@ public class PAGroup {
      * @param ogroup the typed group who will change his semantic of communication.
      */
     public static void unsetUniqueSerialization(Object ogroup) {
-        Proxy proxytmp = PAGroup.findProxyForGroup(ogroup);
+        ProxyForGroup<?> proxytmp = PAGroup.findProxyForGroup(ogroup);
         if (proxytmp != null) {
-            ((ProxyForGroup) proxytmp).setUniqueSerializationOff();
+            proxytmp.setUniqueSerializationOff();
         }
     }
 
@@ -1120,9 +1119,9 @@ public class PAGroup {
     }
 
     public static void setDispatchMode(Object group, DispatchMode balancingMode, int bufferSize) {
-        Proxy proxytmp = PAGroup.findProxyForGroup(group);
+        ProxyForGroup<?> proxytmp = PAGroup.findProxyForGroup(group);
         if (proxytmp != null) {
-            ((ProxyForGroup) proxytmp).setBalancingMode(balancingMode, bufferSize);
+            proxytmp.setBalancingMode(balancingMode, bufferSize);
         }
     }
 
@@ -1134,7 +1133,7 @@ public class PAGroup {
      * @param autoPurge the new behavior
      */
     public static void setAutomaticPurge(Object ogroup, boolean autoPurge) {
-        ProxyForGroup proxytmp = PAGroup.findProxyForGroup(ogroup);
+        ProxyForGroup<?> proxytmp = PAGroup.findProxyForGroup(ogroup);
         if (proxytmp == null) {
             throw new IllegalArgumentException("argument " + ogroup.getClass().getName() + " is not a group");
         }
@@ -1147,11 +1146,11 @@ public class PAGroup {
      */
     public static void waitAll(Object o) {
         if (MOP.isReifiedObject(o)) {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).waitAll();
+                theProxy.waitAll();
             }
 
             // Else the "standard waitFor" method has been used in the findProxyForGroup method
@@ -1165,11 +1164,11 @@ public class PAGroup {
      */
     public static Object waitAndGetOne(Object o) {
         if (MOP.isReifiedObject(o)) {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).waitAndGetOne();
+                return theProxy.waitAndGetOne();
             }
             // Else the "standard waitFor" method has been used in the findProxyForGroup method so the future is arrived, just return it
             else {
@@ -1189,12 +1188,11 @@ public class PAGroup {
      */
     public static Object waitAndGetOneThenRemoveIt(Object o) {
         if (MOP.isReifiedObject(o)) {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy)
-                        .waitAndGetOneThenRemoveIt();
+                return theProxy.waitAndGetOneThenRemoveIt();
             }
             // Else the "standard waitFor" method has been used in the findProxyForGroup method so the future is arrived, just return it
             else {
@@ -1215,11 +1213,11 @@ public class PAGroup {
      */
     public static Object waitAndGetTheNth(Object o, int n) {
         if (MOP.isReifiedObject(o)) {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).waitAndGetTheNth(n);
+                return theProxy.waitAndGetTheNth(n);
             }
             // Else the "standard waitFor" method has been used in the findProxyForGroup method so the future is arrived, just return it
             else {
@@ -1239,11 +1237,11 @@ public class PAGroup {
      */
     public static void waitN(Object o, int n) {
         if (MOP.isReifiedObject(o)) {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).waitN(n);
+                theProxy.waitN(n);
             }
 
             // Else the "standard waitFor" method has been used in the findProxyForGroup method
@@ -1256,11 +1254,11 @@ public class PAGroup {
      */
     public static void waitOne(Object o) {
         if (MOP.isReifiedObject(o)) {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).waitOne();
+                theProxy.waitOne();
             }
 
             // Else the "standard waitFor" method has been used in the findProxyForGroup method
@@ -1274,11 +1272,11 @@ public class PAGroup {
      */
     public static int waitOneAndGetIndex(Object o) {
         if (MOP.isReifiedObject(o)) {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).waitOneAndGetIndex();
+                return theProxy.waitOneAndGetIndex();
             }
             // Else return 0
             else {
@@ -1297,11 +1295,11 @@ public class PAGroup {
      */
     public static void waitTheNth(Object o, int n) {
         if (MOP.isReifiedObject(o)) {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).waitTheNth(n);
+                theProxy.waitTheNth(n);
             }
 
             // Else the "standard waitFor" method has been used in the findProxyForGroup method
@@ -1319,11 +1317,11 @@ public class PAGroup {
         if (!(MOP.isReifiedObject(o))) {
             return true;
         } else {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).allArrived();
+                return theProxy.allArrived();
             }
             // Else the "standard waitFor" method has been used in the findProxyForGroup method so the future is arrived
             else {
@@ -1343,11 +1341,11 @@ public class PAGroup {
         if (!(MOP.isReifiedObject(o))) {
             return false;
         } else {
-            org.objectweb.proactive.core.mop.Proxy theProxy = PAGroup.findProxyForGroup(o);
+            ProxyForGroup<?> theProxy = PAGroup.findProxyForGroup(o);
 
             // If the object represents a group, we use the proxyForGroup's method
             if (theProxy != null) {
-                return ((org.objectweb.proactive.core.group.ProxyForGroup) theProxy).allAwaited();
+                return theProxy.allAwaited();
             }
             // Else the "standard waitFor" method has been used in the findProxyForGroup method so the future is arrived
             else {

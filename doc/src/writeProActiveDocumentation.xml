@@ -152,23 +152,22 @@
      paste!</emphasis></para></note>
  </section>
  
-	<section xml:id="Figures"><info><title xml:id="Figures_42">Figures</title></info>
-
-		<para>This is the figure example. Please use the TITLE tag</para>
-
-		<figure xml:id="ADrawingusingtheFIGUREtag_42">
-			<info>
-				<title>A Drawing using the FIGURE tag</title>
-			</info>
-
-			<mediaobject>
-				<imageobject>
-					<imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="images/e1.png" format="PNG"/>
-				</imageobject>
-			</mediaobject>
-
-		</figure>
-	</section>
+ <section xml:id="Figures"><info><title xml:id="Figures_42">Figures</title></info>
+  
+  
+  <para>This is the figure example. Please use the TITLE tag</para>
+  
+  <figure xml:id="ADrawingusingtheFIGUREtag_42"><info><title>A Drawing using the FIGURE tag</title></info>
+   
+   
+   <mediaobject>
+    <imageobject>
+     <imagedata scalefit="1" width="100%" contentdepth="100%" align="center" fileref="images/e1.png" format="PNG"/>
+    </imageobject>
+   </mediaobject>
+   
+  </figure>
+ </section>
  
  <section xml:id="Bullets"><info><title xml:id="Bullets_42">Bullets</title></info>
   

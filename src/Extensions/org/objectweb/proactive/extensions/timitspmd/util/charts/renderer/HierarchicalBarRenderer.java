@@ -74,8 +74,7 @@ public class HierarchicalBarRenderer extends BarRenderer {
     /** A list of the width of each series bar. */
     protected ObjectList seriesBarWidthList;
     protected Element[] datasetTree;
-    @SuppressWarnings("unchecked")
-    protected Comparable[] series;
+    protected Comparable<String>[] series;
 
     /**
      * Default constructor.
@@ -476,7 +475,7 @@ public class HierarchicalBarRenderer extends BarRenderer {
         }
     }
 
-    private Paint getItemPaintFromName(String name, Comparable[] series, int column) {
+    private Paint getItemPaintFromName(String name, Comparable<String>[] series, int column) {
         for (int i = 0; i < series.length; i++) {
             if (series[i].equals(name)) {
                 return this.getItemPaint(i, column);

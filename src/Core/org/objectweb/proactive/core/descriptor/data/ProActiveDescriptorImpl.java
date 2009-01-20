@@ -98,10 +98,9 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
     private java.util.HashMap<String, VirtualMachine> virtualMachineMapping;
 
     /** map process id and process */
-    @SuppressWarnings("unchecked")
     // don't know how to describe that that map can contain either process or service
     // using the generics
-    private java.util.HashMap processMapping;
+    private java.util.HashMap<String, Object> processMapping;
 
     /** map process id and process updater for later update of the process */
     private java.util.HashMap<String, ProcessUpdater> pendingProcessMapping;

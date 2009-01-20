@@ -46,7 +46,7 @@ public class SumReduction implements ReduceBehavior {
         if (values.isEmpty()) {
             throw new ReductionException("no values to perform reduction on");
         }
-        for (Iterator iterator = values.iterator(); iterator.hasNext();) {
+        for (Iterator<?> iterator = values.iterator(); iterator.hasNext();) {
             Object value = iterator.next();
             if (!(value instanceof IntWrapper)) {
                 throw new ReductionException("wrong type: expected " + IntWrapper.class.getName() +

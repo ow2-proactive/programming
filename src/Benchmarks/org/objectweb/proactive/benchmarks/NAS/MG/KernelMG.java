@@ -39,7 +39,6 @@ import org.objectweb.proactive.benchmarks.NAS.Kernel;
 import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
 import org.objectweb.proactive.benchmarks.NAS.util.Communicator;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
@@ -77,8 +76,6 @@ public class KernelMG extends Kernel {
 
     public void runKernel() throws ProActiveException {
 
-        // The Array of virtual nodes
-        VirtualNode[] vnodeArray;
         // The Array of nodes
         Node[] nodes;
         // The array of parameters for each worker

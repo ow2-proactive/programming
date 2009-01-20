@@ -89,7 +89,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
     protected MethodCallResult target;
 
     /**
-     * True if this proxy has to be copied for migration or local copie.
+     * True if this proxy has to be copied for migration or local copy.
      * If true, the serialization of this future does not register an automatic continuation.
      */
     protected transient boolean copyMode;
@@ -106,7 +106,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
 
     /**
      * To monitor this future, this body will be pinged.
-     * transient to explicitely document that the serialisation of
+     * transient to explicitly document that the serialization of
      * this attribute is custom: in case of automatic continuation,
      * it references the previous element in the chain
      */
@@ -147,7 +147,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
 
     /**
      * This constructor is provided for compatibility with other proxies.
-     * More precisely, this permits proxy instanciation via the Meta.newMeta
+     * More precisely, this permits proxy instantiation via the Meta.newMeta
      * method.
      */
     public FutureProxy(ConstructorCall c, Object[] p) throws ConstructionOfReifiedObjectFailedException {

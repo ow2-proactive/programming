@@ -122,7 +122,7 @@ public class ConstructorCallImpl implements ConstructorCall, Serializable {
         try {
             // if the reified class is an member class, add the implicit parameter
             if (getReifiedClass().isMemberClass() && !Modifier.isStatic(getReifiedClass().getModifiers())) {
-                Class enclosingClass = getReifiedClass().getEnclosingClass();
+                Class<?> enclosingClass = getReifiedClass().getEnclosingClass();
                 Object[] tmp = effectiveArguments;
                 effectiveArguments = new Object[tmp.length + 1];
                 effectiveArguments[0] = enclosingClass.newInstance();

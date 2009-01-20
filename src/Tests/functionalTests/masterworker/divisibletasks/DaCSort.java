@@ -33,6 +33,7 @@ package functionalTests.masterworker.divisibletasks;
 
 import org.objectweb.proactive.extensions.masterworker.interfaces.DivisibleTask;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
+import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 
 import java.util.ArrayList;
@@ -57,17 +58,18 @@ public class DaCSort implements DivisibleTask<ArrayList<Integer>> {
         this.input = input;
     }
 
-    public ArrayList<Integer> run(WorkerMemory memory, SubMaster master) throws Exception {
-        ArrayList l1 = new ArrayList(input.subList(0, input.size() / 2));
-        ArrayList l2 = new ArrayList(input.subList(input.size() / 2 + 1, input.size()));
+    public ArrayList<Integer> run(WorkerMemory memory,
+            SubMaster<Task<ArrayList<Integer>>, ArrayList<Integer>> master) throws Exception {
+        ArrayList<Integer> l1 = new ArrayList<Integer>(input.subList(0, input.size() / 2));
+        ArrayList<Integer> l2 = new ArrayList<Integer>(input.subList(input.size() / 2 + 1, input.size()));
 
         if (l1.size() < MIN_LIST_TO_SPLIT) {
-            ArrayList<FinalSort> tasks = new ArrayList<FinalSort>();
+            ArrayList<Task<ArrayList<Integer>>> tasks = new ArrayList<Task<ArrayList<Integer>>>();
             tasks.add(new FinalSort(l1));
             tasks.add(new FinalSort(l2));
             master.solve(tasks);
         } else {
-            ArrayList<DaCSort> tasks = new ArrayList<DaCSort>();
+            ArrayList<Task<ArrayList<Integer>>> tasks = new ArrayList<Task<ArrayList<Integer>>>();
             tasks.add(new DaCSort(l1));
             tasks.add(new DaCSort(l2));
             master.solve(tasks);

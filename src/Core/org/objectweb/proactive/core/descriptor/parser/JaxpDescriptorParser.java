@@ -2014,7 +2014,7 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
         }
 
         // This method isn't necessary for XPath processing either.
-        public Iterator getPrefixes(String uri) {
+        public Iterator<?> getPrefixes(String uri) {
             throw new UnsupportedOperationException();
         }
     }

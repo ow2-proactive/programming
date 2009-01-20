@@ -33,7 +33,6 @@ package org.objectweb.proactive.benchmarks.NAS.IS;
 
 import java.util.List;
 
-import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.api.PASPMD;
@@ -45,7 +44,6 @@ import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.group.ProxyForGroup;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.extensions.timitspmd.util.BenchmarkStatistics;
 import org.objectweb.proactive.extensions.timitspmd.util.EventStatistics;
@@ -77,8 +75,6 @@ public class KernelIS extends Kernel {
 
     public void runKernel() throws ProActiveException {
 
-        // The Array of virtual nodes
-        VirtualNode[] vnodeArray;
         List<Node> nodes;
         AllBucketSize allBucketSize = null;
 

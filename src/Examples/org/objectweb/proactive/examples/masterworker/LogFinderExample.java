@@ -55,7 +55,7 @@ import java.util.TreeSet;
  * This test class is an example on how to use the Master/Worker API to log a set of log files contained inside a directory
  * A first task will list the content of the directory, filter log files names, and sort the files by decreasing size.
  * Finally the grep tasks will copy the content of each file locally to each worker then execute the grep command on it.
- * This is not intended to be a real-life log analyser as file copying is very expensive, but by this we simulate the idea of a replicated file system, which is mandatory for efficient log file analysis.
+ * This is not intended to be a real-life log analyzer as file copying is very expensive, but by this we simulate the idea of a replicated file system, which is mandatory for efficient log file analysis.
  * @author The ProActive Team
  *
  */
@@ -98,7 +98,7 @@ public class LogFinderExample extends AbstractExample {
 
         });
 
-        // Adding ressources
+        // Adding resources
         if (vn_name == null) {
             master.addResources(descriptor_url);
         } else {

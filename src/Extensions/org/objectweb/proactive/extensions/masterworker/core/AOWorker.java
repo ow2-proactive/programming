@@ -147,7 +147,6 @@ public class AOWorker implements InitActive, Serializable, Worker {
     }
 
     /** gets the initial task to solve */
-    @SuppressWarnings("unchecked")
     protected void getTasks() {
         if (debug) {
             logger.debug(name + " asks a new task...");
@@ -166,7 +165,6 @@ public class AOWorker implements InitActive, Serializable, Worker {
     }
 
     /** gets the initial task to solve */
-    @SuppressWarnings("unchecked")
     protected void getTasksWithResult(ResultInternImpl result) {
         if (debug) {
             logger.debug(name + " sends the result of task " + result.getId() + " and asks a new task...");
@@ -204,7 +202,6 @@ public class AOWorker implements InitActive, Serializable, Worker {
     }
 
     /** gets the initial task to solve */
-    @SuppressWarnings("unchecked")
     public void getTaskAndSchedule() {
         // We get some tasks
         getTasks();

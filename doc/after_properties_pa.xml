@@ -67,8 +67,7 @@
                 <path refid="compile.libs"/>
                 <pathelement path="${cl.proactive.dir}"/>
             </classpath>
-            <doclet name="doc.PublishedAPIDoclet">
-                <path refid="docs.utils.classpath"/>
+            <doclet name="doc.PublishedAPIDoclet" path="${docs.java.classes.dir}">
                 <param name="-file" value="${docs.published.extensionsclasses}" />
             </doclet>
             <packageset dir="${src.extensions.dir}"/>
