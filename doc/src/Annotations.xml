@@ -4,7 +4,7 @@
 	<info><title>Making ProActive programming easier: the ProActive Java Annotations System</title></info>
 	
 	<section><info><title>Compile-time annotations</title></info>
-		
+		<para>
 		Compile-time annotations provide a way to check at compile-time the constraints imposed
 			on Java code by the ProActive library. Usually, these constraints are documented 
 			in the ProActive manual, and it is left to the responsibility of the programmer to
@@ -15,6 +15,7 @@
 			sessions made out of stack traces eyeballing. Ideally, the runtime errors that the programmer
 			will receive will be more related to the logic of the application, and less 
 			to the misusage of the ProActive library...
+		</para>	
 		<section>
 			<info><title>General usage</title></info>
 		<para>
@@ -124,9 +125,10 @@
 			</itemizedlist>
 			<itemizedlist>
 			  <listitem>
-				<para>
+				    <para>
 					<emphasis role="bold">NetBeans</emphasis>
 					cannot be configured to use APT proactive annotation processor without manual editing of project's build.xml file.
+					</para>
 					<para>
 					In order to setup annotation processing using javac (applicable for JDK 6) goto
 					</para>
@@ -139,13 +141,13 @@
 					<para>
 					Then build the project.
 					</para>
-				</para>
-			  </listitem>
+				 </listitem>
 			</itemizedlist>
 			<itemizedlist>
 			  <listitem>
 				<para>
 					<emphasis role="bold">IntelliJ IDEA</emphasis>
+				</para>
 					<para>
 					To setup javac's annotation processor first make sure that javac compiler is chosen in
 					Project Settings -> Compiler.
@@ -156,7 +158,7 @@
 					<para>
 					  <screen>-processor org.objectweb.proactive.extensions.annotation.common.ProActiveProcessorCTree</screen>
 					</para>
-				</para>
+				
 			  </listitem>
 			</itemizedlist>
 		</para>

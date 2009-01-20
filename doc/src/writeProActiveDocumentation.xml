@@ -215,16 +215,18 @@
 		<info>
 			<title>JAVA program listing with file inclusion</title>
 		</info>
-	</example>
    <programlisting xml:lang="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/hello/TinyHello.java"/></textobject></programlisting>
+
+	</example>
   
 	<example xml:id="XMLprogramlistingwithfileinclusion_42">
 		<info>
 			<title>XML program listing with file inclusion</title>
 		</info>
+   <programlisting xml:lang="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
+
 	</example>
    
-   <programlisting xml:lang="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
   
 	<para>A screen example, for instance some code inside a unix shell:</para>
    
