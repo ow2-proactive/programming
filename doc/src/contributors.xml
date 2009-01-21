@@ -3,127 +3,59 @@
 <dedication xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="contributors"><info><title xml:id="ContributorsandContactInformation_19">Contributors and Contact Information</title></info>
   
 
-  <para>
+
     <informaltable frame="none">
-      <tgroup cols="2">
+      <tgroup cols="1">
+        <thead>
+         <row>
+            <entry align="center">Team Leader</entry>
+         </row>
+        </thead>
         <tbody>
           <row>
             <entry align="center">
             	<para>
-                <emphasis role="bold">Team Leader:</emphasis>
                 <address>
-
                   <personname>
                     <!--<honorific>Prof.</honorific>-->
-
                     <firstname>Denis</firstname>
-
                     <surname>Caromel</surname>
-                    
                   </personname>
-					
-                  <street>INRIA 2004, Route des Lucioles</street>
-
-                  <pob> BP 93</pob>
-
-                  <postcode>06902</postcode>
-
-                  <city>Sophia Antipolis Cedex</city>
-
+                  <street>INRIA 2004, Route des Lucioles</street>,<pob>BP 93</pob>
+                  <postcode>06902</postcode><city>Sophia Antipolis Cedex</city>
                   <country>France</country>
-
                   <phone>+33 492 387 631</phone>
-
                   <fax>+33 492 387 971</fax>
-
                   <email>Denis.Caromel@inria.fr</email>
                 </address>
                 </para>
             </entry>
-            <entry align="center" valign="top">
-              <emphasis role="bold">ActiveEon Team</emphasis>
-              <itemizedlist mark="none" role="sorted">
-
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Arnaud</firstname>
-
-                      <surname>Contes</surname>
-					                      
-                    
-                    </personname></person>
-						
-                    (Core, Security, Debugging)
-                  </para>
-                </listitem>
-
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Christian</firstname>
-
-                      <surname>Delbé</surname>
-                    </personname></person>
-                    (FT, Scheduling)
-                  </para>
-                </listitem>
-
-			  <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Emil</firstname>
-
-                      <surname>Salageanu</surname>
-                    </personname></person>
-                    (IC2D, Agent)
-                  </para>
-                </listitem>  
-
-			  <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Vladimir</firstname>
-
-                      <surname>Bodnartchouk</surname>
-                    </personname></person>
-                    (IC2D, TimIt)
-                  </para>
-                </listitem>
-
-
-
-	          </itemizedlist>
-	          </entry>
-          </row>
+           </row>
         </tbody>
       </tgroup>
     </informaltable>
+
+
+
 
     <!--   Oasis team and past contributors on two columns <==> in a two column table   -->
 	
 	
 	<informaltable colsep="0" frame="none">
       <tgroup cols="2">
-        <tbody>
+        <thead>
           <row>
             <entry align="center" valign="top">
-                <emphasis>OASIS Team</emphasis>
+                OASIS Team
    			</entry> 
+            <entry align="center" valign="top">
+				ActiveEon Team
+			</entry>
 
-            <entry align="center" valign="top">
-				<emphasis>Past And External Important Contributors</emphasis>
-   			</entry> 
    			</row>
-   		</tbody>
-        </tgroup>
-        
-    </informaltable>
-    
-    <informaltable colsep="0" frame="none">
-      <tgroup cols="4">
-        <tbody>
-          <row>
+		</thead>
+		<tbody>
+         <row>
             <entry align="center" valign="top">
               <itemizedlist mark="none" role="sorted">
 
@@ -139,39 +71,7 @@
                 </listitem>
 
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Abhishek-Rajeev</firstname>
 
-                      <surname>Gupta</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
-
-
-              
-
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Antonio</firstname>
-
-                      <surname>Cansado</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
-              
-
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Baptiste</firstname>
-
-                      <surname>De Stefano</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
 
                 <listitem>
                   <para>
@@ -194,30 +94,10 @@
                   </para>
                 </listitem>
 
-			  <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Cédric</firstname>
-
-                      <surname>Dalmasso</surname>
-                    </personname></person>
-                    (Component)
-                  </para>
-                </listitem>
 
 
 
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Clement</firstname>
-
-                      <surname>Mathieu</surname>
-                    </personname></person>
-                    (Core, GCM Deployment)
-                  </para>
-                </listitem>
 
 
                 <listitem>
@@ -293,22 +173,14 @@
                 <listitem>
                   <para>
                     <person><personname>
-                      <firstname>Florin</firstname>
+                      <firstname>Florin-Alexandru</firstname>
 
                       <surname>Bratu</surname>
                     </personname></person>
                   </para>
                 </listitem>
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Franca</firstname>
 
-                      <surname>Perrina</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
 
 
                 <listitem>
@@ -334,15 +206,7 @@
                 </listitem>
 
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Guillaume</firstname>
 
-                      <surname>Laurent</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
 
                 <listitem>
                   <para>
@@ -364,49 +228,6 @@
                   </para>
                 </listitem>
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Jean-Luc</firstname>
-
-                      <surname>Scheefer</surname>
-                    </personname></person>
-                    (Scheduling)
-                  </para>
-                </listitem>
-
-
-
-
-				</itemizedlist>
-
- 			</entry>
- 			<entry align="center" valign="top">
-              <itemizedlist mark="none" role="sorted">
-              
-
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Jean-Michael</firstname>
-
-                      <surname>Guillamume</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
-
-
-
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Johann</firstname>
-
-                      <surname>Fradj</surname>
-                    </personname></person>
-                    (Scheduling)
-                  </para>
-                </listitem>
 
 
 
@@ -420,26 +241,7 @@
                   </para>
                 </listitem>
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Julian</firstname>
 
-                      <surname>Krzeminski</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
-
-
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Kamran</firstname>
-
-                      <surname>Qadir</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
                 <listitem>
                   <para>
                     <person><personname>
@@ -481,27 +283,10 @@
                 </listitem>
 
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Mario</firstname>
 
-                      <surname>Leyton</surname>
-                    </personname></person>
-                    (Skeleton)
-                  </para>
-                </listitem>
-              
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Maxime</firstname>
 
-                      <surname>Menant</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
+
                 <listitem>
                   <para>
                     <person><personname>
@@ -512,15 +297,7 @@
                   </para>
                 </listitem>
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Olivier</firstname>
 
-                      <surname>Helin</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
 
 			  <listitem>
                   <para>
@@ -543,15 +320,7 @@
                   </para>
                 </listitem>
 
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Tomasz</firstname>
 
-                      <surname>Dobek</surname>
-                    </personname></person>
-                  </para>
-                </listitem>
 
                 <listitem>
                   <para>
@@ -573,17 +342,7 @@
                   </para>
                 </listitem>
 
-              
-                <listitem>
-                  <para>
-                    <person><personname>
-                      <firstname>Vincent</firstname>
 
-                      <surname>Cave</surname>
-                    </personname></person>
-                    (Legacy Wrapping)
-                  </para>
-                </listitem>
 
                 <listitem>
                   <para>
@@ -605,36 +364,221 @@
                     </personname></person>
                   </para>
                 </listitem>
+			  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Franca</firstname>
+
+                      <surname>Perrina</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+
+		  </itemizedlist>
+		</entry>
+
+
+             <entry align="center" valign="top">
+              <itemizedlist mark="none" role="sorted">
 
                 <listitem>
                   <para>
-                    <person><personname>
-                      <firstname>Yulai</firstname>
+                    <person>
+                     <personname>
+                      <firstname>Arnaud</firstname>
+                      <surname>Contes</surname>
+                      </personname>
+                    </person>
 
-                      <surname>Yuan</surname>
-                    </personname></person>
+                    (Core, Security, Debugging)
                   </para>
                 </listitem>
 
                 <listitem>
                   <para>
                     <person><personname>
-                      <firstname>Zhihui</firstname>
+                      <firstname>Christian</firstname>
 
-                      <surname>Dai</surname>
+                      <surname>Delbé</surname>
+                      </personname>
+                    </person>
+                    (FT, Scheduling)
+                  </para>
+                </listitem>
+
+			  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Emil</firstname>
+
+                      <surname>Salageanu</surname>
+                    </personname></person>
+                    (IC2D, Agent)
+                  </para>
+                </listitem>
+
+			  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Vladimir</firstname>
+
+                      <surname>Bodnartchouk</surname>
+                    </personname></person>
+                    (IC2D, TimIt)
+                  </para>
+                </listitem>
+
+             <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Cédric</firstname>
+
+                      <surname>Dalmasso</surname>
+                    </personname></person>
+                    (Component)
+                  </para>
+                </listitem>
+                        <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Clement</firstname>
+
+                      <surname>Mathieu</surname></personname>
+                    </person>
+                    (Core, GCM Deployment)
+                  </para>
+                </listitem>
+                 <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Jean-Luc</firstname>
+
+                      <surname>Scheefer</surname>
+                    </personname></person>
+                    (Scheduling)
+                  </para>
+                </listitem>
+                  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Olivier</firstname>
+
+                      <surname>Helin</surname></personname>
+                    </person>
+                  </para>
+			  </listitem>
+
+
+               <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Maxime</firstname>
+                      <surname>Menant</surname>
+                     </personname> </person>
+                  </para>
+                </listitem>
+
+                <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Jean-Michael</firstname>
+
+                      <surname>Guillamume</surname>
                     </personname></person>
                   </para>
                 </listitem>
-        	  
-        	  </itemizedlist>
-        	</entry>
-		
 
 
 
+	          </itemizedlist>
+	          </entry>
+   </row>
+   </tbody>
+   </tgroup>
+   </informaltable>
+<informaltable colsep="0" frame="none">
+      <tgroup cols="1">
+        <thead>
+          <row>
+            <entry align="center" valign="top">
+				Former OASIS Members And External Important Contributors
+			</entry>
 
+			</row>
+		</thead>
+        <tbody>
+          <row>
             <entry align="center" valign="top">
               <itemizedlist mark="none" role="sorted">
+                <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Arnaud</firstname>
+
+                      <surname>Contes</surname>
+
+
+                    </personname></person>
+
+                    (Core, Security, Debugging)
+                  </para>
+                </listitem>
+
+                <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Christian</firstname>
+
+                      <surname>Delbé</surname>
+                    </personname></person>
+                    (Core, FT, Scheduling)
+                  </para>
+                </listitem>
+
+  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Cédric</firstname>
+
+                      <surname>Dalmasso</surname>
+                    </personname></person>
+                    (Component)
+                  </para>
+                </listitem>
+
+              <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Clement</firstname>
+
+                      <surname>Mathieu</surname>
+                    </personname></person>
+                    (Core, GCM Deployment)
+                  </para>
+                </listitem>
+
+
+			  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Emil</firstname>
+
+                      <surname>Salageanu</surname>
+                    </personname></person>
+                    (IC2D, Agent)
+                  </para>
+                </listitem>
+
+			  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Vladimir</firstname>
+
+                      <surname>Bodnartchouk</surname>
+                    </personname></person>
+                    (IC2D, TimIt)
+                  </para>
+                </listitem>
           
 
                     <listitem>
@@ -682,13 +626,16 @@
                 </listitem>
                 
 
+                <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Vincent</firstname>
 
-			
-              </itemizedlist>
-            </entry>
- 			<entry align="center" valign="top">
-              <itemizedlist mark="none" role="sorted">
-
+                      <surname>Cave</surname>
+                    </personname></person>
+                    (Legacy Wrapping)
+                  </para>
+                </listitem>
 
                 <listitem>
                 	<para>
@@ -745,14 +692,161 @@
                 </listitem>
 
 
+              <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Mario</firstname>
+
+                      <surname>Leyton</surname>
+                    </personname></person>
+                    (Skeleton)
+                  </para>
+                </listitem>
+
+		         <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Tomasz</firstname>
+
+                      <surname>Dobek</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+
+                  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Olivier</firstname>
+
+                      <surname>Helin</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+                 <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Julian</firstname>
+
+                      <surname>Krzeminski</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+
+
+                <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Kamran</firstname>
+
+                      <surname>Qadir</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+
+                    <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Baptiste</firstname>
+
+                      <surname>De Stefano</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+                   <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Abhishek-Rajeev</firstname>
+
+                      <surname>Gupta</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+                  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Guillaume</firstname>
+
+                      <surname>Laurent</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
                 
+                      <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Johann</firstname>
+
+                      <surname>Fradj</surname>
+                    </personname></person>
+                    (Scheduling)
+                  </para>
+                </listitem>
+
+
+                  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Yulai</firstname>
+
+                      <surname>Yuan</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+
+                <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Zhihui</firstname>
+
+                      <surname>Dai</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+		   <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Jean-Luc</firstname>
+
+                      <surname>Scheefer</surname>
+                    </personname></person>
+                    (Scheduling)
+                  </para>
+                </listitem>
+
+                <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Jean-Michael</firstname>
+
+                      <surname>Guillamume</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+                  <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Maxime</firstname>
+
+                      <surname>Menant</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <person><personname>
+                      <firstname>Antonio</firstname>
+
+                      <surname>Cansado</surname>
+                    </personname></person>
+                  </para>
+                </listitem>
               </itemizedlist>
             </entry>
           </row>
         </tbody>
       </tgroup>
     </informaltable>
-  </para>
+
 
   <para>
     <emphasis role="bold">Public questions, comments, or discussions can pe
