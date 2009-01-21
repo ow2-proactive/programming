@@ -6,7 +6,7 @@
   <email>proactive@ow2.org</email> and we'll update the FAQ.</para>
 
  <qandaset>
-   <qandadiv><title xml:id="FrequentlyAskedQuestions_300">Frequently Asked Questions</title>
+   <qandadiv xml:id="FrequentlyAskedQuestions_main"><title>Frequently Asked Questions</title>
   <qandaentry>
         <question xml:id="HowDoIBuildProActiveFromTheDistribution">
           <para>How do I build ProActive from the distribution?</para>
