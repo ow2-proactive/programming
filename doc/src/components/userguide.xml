@@ -2722,10 +2722,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				<figure xml:id="shortcuts_for_minimizing_remote_communication"><info><title>Using shortcuts for minimizing remote communications</title>
 					</info>
 
-
 					<mediaobject>
 						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="components/pics/shortcuts.png" format="PNG"/>
+							<imagedata scalefit="1" width="700%" contentdepth="700%" fileref="components/pics/shortcuts.png" format="PNG"/>
 						</imageobject>
 					</mediaobject>
 				</figure>
