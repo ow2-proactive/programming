@@ -33,6 +33,7 @@ package org.objectweb.proactive.extensions.masterworker.interfaces;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.xml.VariableContract;
 import org.objectweb.proactive.core.node.Node;
 
 import java.io.Serializable;
@@ -78,12 +79,32 @@ public interface Master<T extends Task<R>, R extends Serializable> extends SubMa
     void addResources(URL descriptorURL) throws ProActiveException;
 
     /**
+    * Adds the given descriptor to the master<br>
+    * Every virtual nodes inside the given descriptor will be activated<br/>
+    * @param descriptorURL URL of a deployment descriptor
+    * @param contract a variable contract for this descriptor
+    * @throws ProActiveException if a problem occurs while adding resources
+    */
+    void addResources(URL descriptorURL, VariableContract contract) throws ProActiveException;
+
+    /**
      * Adds the given descriptor to the master<br>
      * Only the specified virtual node inside the given descriptor will be activated <br/>
      * @param descriptorURL URL of a deployment descriptor
+     * @param contract a variable contract for this descriptor  
      * @param virtualNodeName name of the virtual node to activate
      * @throws ProActiveException if a problem occurs while adding resources
      */
+    void addResources(URL descriptorURL, VariableContract contract, String virtualNodeName)
+            throws ProActiveException;
+
+    /**
+    * Adds the given descriptor to the master<br>
+    * Only the specified virtual node inside the given descriptor will be activated <br/>
+    * @param descriptorURL URL of a deployment descriptor
+    * @param virtualNodeName name of the virtual node to activate
+    * @throws ProActiveException if a problem occurs while adding resources
+    */
     void addResources(URL descriptorURL, String virtualNodeName) throws ProActiveException;
 
     //@snippet-end masterworker_addresources

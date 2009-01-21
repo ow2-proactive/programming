@@ -41,6 +41,7 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.xml.VariableContract;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
 import org.objectweb.proactive.core.group.Group;
@@ -236,8 +237,20 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     }
 
     /** {@inheritDoc} */
+    public void addResources(final URL descriptorURL, final VariableContract contract)
+            throws ProActiveException {
+        (smanager).addResources(descriptorURL, contract);
+    }
+
+    /** {@inheritDoc} */
     public void addResources(final URL descriptorURL, final String virtualNodeName) throws ProActiveException {
         (smanager).addResources(descriptorURL, virtualNodeName);
+    }
+
+    /** {@inheritDoc} */
+    public void addResources(final URL descriptorURL, final VariableContract contract,
+            final String virtualNodeName) throws ProActiveException {
+        (smanager).addResources(descriptorURL, contract, virtualNodeName);
     }
 
     /** {@inheritDoc} */

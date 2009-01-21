@@ -36,6 +36,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.xml.VariableContract;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
@@ -198,6 +199,15 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
      */
     public void addResources(URL descriptorURL) throws ProActiveException {
         aomaster.addResources(descriptorURL);
+    }
+
+    public void addResources(URL descriptorURL, VariableContract contract) throws ProActiveException {
+        aomaster.addResources(descriptorURL, contract);
+    }
+
+    public void addResources(URL descriptorURL, VariableContract contract, String virtualNodeName)
+            throws ProActiveException {
+        aomaster.addResources(descriptorURL, contract, virtualNodeName);
     }
 
     /**

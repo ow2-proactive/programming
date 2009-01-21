@@ -39,6 +39,8 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
+import org.objectweb.proactive.core.xml.VariableContract;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.body.exceptions.SendRequestCommunicationException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -189,11 +191,50 @@ public class AOWorkerManager implements WorkerManager, InitActive, Serializable 
      * {@inheritDoc}
      */
     public void addResources(final URL descriptorURL) throws ProActiveException {
+        addResources(descriptorURL, (VariableContract) null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addResources(final URL descriptorURL, final String virtualNodeName) throws ProActiveException {
+        addResources(descriptorURL, null, virtualNodeName);
+    }
+
+    public void addResources(URL descriptorURL, VariableContract contract, String virtualNodeName)
+            throws ProActiveException {
+        if (!isTerminated) {
+            if (!descriptorURL.equals(masterDescriptorURL)) {
+                // If the descriptor given is not the one already used to deploy the master, we start a deployment
+                GCMApplication pad = null;
+                if (contract == null) {
+                    pad = PAGCMDeployment.loadApplicationDescriptor(descriptorURL);
+                } else {
+                    pad = PAGCMDeployment.loadApplicationDescriptor(descriptorURL,
+                            (VariableContractImpl) contract);
+                }
+                padlist.add(pad);
+                addResourcesInternal(pad.getVirtualNode(virtualNodeName));
+                pad.startDeployment();
+            } else {
+                // Otherwise, we reuse the previously started deployment
+                addResourcesInternal(applicationUsed.getVirtualNode(virtualNodeName));
+            }
+        }
+    }
+
+    public void addResources(URL descriptorURL, VariableContract contract) throws ProActiveException {
         if (!isTerminated) {
 
             if (!descriptorURL.equals(masterDescriptorURL)) {
                 // If the descriptor given is not the one already used to deploy the master, we start a deployment
-                GCMApplication pad = PAGCMDeployment.loadApplicationDescriptor(descriptorURL);
+                GCMApplication pad = null;
+                if (contract == null) {
+                    pad = PAGCMDeployment.loadApplicationDescriptor(descriptorURL);
+                } else {
+                    pad = PAGCMDeployment.loadApplicationDescriptor(descriptorURL,
+                            (VariableContractImpl) contract);
+                }
                 padlist.add(pad);
                 for (Entry<String, GCMVirtualNode> ent : pad.getVirtualNodes().entrySet()) {
                     addResourcesInternal(ent.getValue());
@@ -209,25 +250,6 @@ public class AOWorkerManager implements WorkerManager, InitActive, Serializable 
                 }
             }
 
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void addResources(final URL descriptorURL, final String virtualNodeName) throws ProActiveException {
-        if (!isTerminated) {
-            if (!descriptorURL.equals(masterDescriptorURL)) {
-                // If the descriptor given is not the one already used to deploy the master, we start a deployment
-
-                GCMApplication pad = PAGCMDeployment.loadApplicationDescriptor(descriptorURL);
-                padlist.add(pad);
-                addResourcesInternal(pad.getVirtualNode(virtualNodeName));
-                pad.startDeployment();
-            } else {
-                // Otherwise, we reuse the previously started deployment
-                addResourcesInternal(applicationUsed.getVirtualNode(virtualNodeName));
-            }
         }
     }
 
