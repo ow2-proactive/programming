@@ -109,6 +109,7 @@ public class Executor {
             this.stream = stream;
             this.cmd = cmd;
             setDaemon(true);
+            setName("GCM Deployment" + type.toString() + " Monitor for " + cmd.subSequence(0, 100));
         }
 
         @Override
