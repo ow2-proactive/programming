@@ -32,6 +32,7 @@
 package org.objectweb.proactive.core.body.migration;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
@@ -190,6 +191,14 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
 
         if (!isActive()) {
             throw new MigrationException("Attempt to migrate a non active body");
+        }
+
+        // PROACTIVE-277
+        Class reifiedClass = this.localBodyStrategy.getReifiedObject().getClass();
+        if (reifiedClass.isMemberClass() && !Modifier.isStatic(reifiedClass.getModifiers())) {
+            // this active object has been turned active from an instance of a non static member class
+            // cannot be migrated dur to reference to the enclosing instance
+            throw new MigrationException("Attempt to migrate a instance of a non static member class");
         }
 
         try {

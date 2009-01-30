@@ -33,6 +33,7 @@ package org.objectweb.proactive.api;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
@@ -287,6 +288,7 @@ public class PAActiveObject {
     public static Object newActive(String classname, Class<?>[] genericParameters,
             Object[] constructorParameters, Node node, Active activity, MetaObjectFactory factory)
             throws ActiveObjectCreationException, NodeException {
+
         if (factory == null) {
             factory = ProActiveMetaObjectFactory.newInstance();
             if (factory.getProActiveSecurityManager() == null) {
@@ -337,11 +339,18 @@ public class PAActiveObject {
         }
 
         try {
-            // create stub object
-            Object stub = MOP.createStubObject(classname, genericParameters, constructorParameters, node,
-                    activity, clonedFactory);
-
-            return stub;
+            // PROACTIVE-277
+            Class activatedClass = Class.forName(classname);
+            if (activatedClass.isMemberClass() && !Modifier.isStatic(activatedClass.getModifiers())) {
+                // the activated class is an internal member class (not static, i.e. not nested top level).
+                throw new ActiveObjectCreationException(
+                    "Cannot create an active object from a non static member class.");
+            } else {
+                // create stub object
+                Object stub = MOP.createStubObject(classname, genericParameters, constructorParameters, node,
+                        activity, clonedFactory);
+                return stub;
+            }
         } catch (MOPException e) {
             Throwable t = e;
 
@@ -350,6 +359,9 @@ public class PAActiveObject {
             }
 
             throw new ActiveObjectCreationException(t);
+        } catch (ClassNotFoundException e) {
+            // class cannot be loaded
+            throw new ActiveObjectCreationException(e);
         }
     }
 

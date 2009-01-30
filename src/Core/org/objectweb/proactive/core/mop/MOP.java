@@ -602,7 +602,8 @@ public abstract class MOP {
                 Class<?> realClass = Class.forName(Utils.convertStubClassNameToClassName(stubConstructor
                         .getDeclaringClass().getName()));
                 try {
-                    o = stubConstructor.newInstance(realClass.getEnclosingClass().newInstance());
+                    // a stub on a member class has a null reference to enclosing instance
+                    o = stubConstructor.newInstance((Object) null);
                 } catch (InstantiationException e) {
                     throw new ConstructionOfStubObjectFailedException("Enclosing class " +
                         realClass.getEnclosingClass().getName() + " does not have no-args constructor.");

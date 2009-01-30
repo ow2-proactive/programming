@@ -34,6 +34,7 @@ package org.objectweb.proactive.core.body;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -187,8 +188,10 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             if ("true".equals(node.getProperty(FaultToleranceTechnicalService.FT_ENABLED))) {
                 // if the object is a ProActive internal object, FT is disabled
                 if (!super.isProActiveInternalObject) {
-                    // if the object is not serilizable, FT is disabled
-                    if (this.localBodyStrategy.getReifiedObject() instanceof Serializable) {
+                    // if the object is not serializable or instance of non static enclosing class (PROACTIVE-277), FT is disabled
+                    Class reifiedClass = this.localBodyStrategy.getReifiedObject().getClass();
+                    if ((this.localBodyStrategy.getReifiedObject() instanceof Serializable) ||
+                        (reifiedClass.isMemberClass() && !Modifier.isStatic(reifiedClass.getModifiers()))) {
                         try {
                             // create the fault tolerance manager
                             int protocolSelector = FTManager.getProtoSelector(node
@@ -206,9 +209,10 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                         }
                     } else {
                         // target body is not serilizable
-                        bodyLogger.error("**WARNING** Activated object is not serializable (" +
-                            this.localBodyStrategy.getReifiedObject().getClass() +
-                            "). Fault-tolerance is disabled for this active object");
+                        bodyLogger
+                                .error("**WARNING** Activated object is not serializable or instance of non static member class (" +
+                                    this.localBodyStrategy.getReifiedObject().getClass() +
+                                    "). Fault-tolerance is disabled for this active object");
                         this.ftmanager = null;
                     }
                 }

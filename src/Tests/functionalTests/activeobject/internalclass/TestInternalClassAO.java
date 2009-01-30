@@ -33,6 +33,8 @@ package functionalTests.activeobject.internalclass;
 
 import java.io.Serializable;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -47,36 +49,60 @@ import functionalTests.FunctionalTest;
  * 
  * Member or nested top-level classes must be public to be activated.
  * As local classes (i.e. member classes defined in a code block) cannot be public, they cannot be activated.
- * Enclosing classes for both member or nested top-level classes must also have an empty constructor as for activated classes.
  * 
  */
 public class TestInternalClassAO extends FunctionalTest {
 
-    @Test
-    public void test() throws ActiveObjectCreationException, NodeException {
+    private int enclosingPrivate = 0;
 
-        // new active
-        MemberClass ao = (MemberClass) PAActiveObject.newActive(MemberClass.class.getName(), new Object[] {});
+    private static final int AWAITED_VALUE = 3;
+
+    @Test
+    public void test() throws NodeException, ActiveObjectCreationException {
+
+        ////// new active //////
+        boolean newActiveException = false;
+        MemberClass ao = null;
+        try {
+            ao = (MemberClass) PAActiveObject.newActive(MemberClass.class.getName(), new Object[] {});
+        } catch (ActiveObjectCreationException e) {
+            newActiveException = true;
+        }
+        // cannot create an active object from a member class
+        Assert.assertTrue(newActiveException);
+
+        // ok
         NestedTopLevelClass sao = (NestedTopLevelClass) PAActiveObject.newActive(NestedTopLevelClass.class
                 .getName(), new Object[] {});
 
-        // turn active
+        /////// turn active ///////
         MemberClass ao2 = new MemberClass();
-        NestedTopLevelClass sao2 = new NestedTopLevelClass();
+        // access to the enclosing instance 
+        ao2.incrementEnclosingPrivateValue();
         ao2 = (MemberClass) PAActiveObject.turnActive(ao2);
+        // access to the enclosing instance through activated object
+        ao2.incrementEnclosingPrivateValue();
+        // access to the enclosing instance through activated object with an intermediate AO
+        RemoteAgent ra = (RemoteAgent) PAActiveObject.newActive(RemoteAgent.class.getName(), new Object[] {});
+        ra.doCallOnMemberClassInstance(ao2);
+        Assert.assertEquals(AWAITED_VALUE, this.enclosingPrivate);
+
+        // ok
+        NestedTopLevelClass sao2 = new NestedTopLevelClass();
         sao2 = (NestedTopLevelClass) PAActiveObject.turnActive(sao2);
+
     }
 
+    // Requirement for non static member class : MUST BE SERIALIZABLE
+    // Note that empty constructor is not mandatory
     public class MemberClass implements Serializable {
-        public MemberClass() {
-            // Empty
+        public int incrementEnclosingPrivateValue() {
+            return TestInternalClassAO.this.enclosingPrivate++;
         }
     }
 
-    public static class NestedTopLevelClass implements Serializable {
-        public NestedTopLevelClass() {
-            // Empty
-        }
+    // No requirement on Nested Top Level class.
+    public static class NestedTopLevelClass {
     }
 
 }
