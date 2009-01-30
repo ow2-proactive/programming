@@ -38,13 +38,10 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.exceptions.InactiveBodyException;
 import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -55,8 +52,6 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
     public static Logger logger = ProActiveLogger.getLogger(Loggers.REQUESTS);
 
     private static List<Class<?>[]> ANY_PARAMETERS = null;
-
-    private static final boolean IS_UNIQUE_THREAD = true;
 
     static {
         ANY_PARAMETERS = new ArrayList<Class<?>[]>(1);
@@ -73,8 +68,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
     //private java.util.Vector immediateServices;
     // refactored : keys are method names, and values are arrays of parameters types
     // map of immediate services (method names +lists of method parameters)
-    private Map<String, List<Class<?>[]>> immediateServices;
-    private Map<UniqueID,ThreadForCaller> threadsForCallers;
+    private java.util.Map<String, List<Class<?>[]>> immediateServices;
     private AtomicInteger inImmediateService;
 
     public RequestReceiverImpl() {
@@ -84,34 +78,19 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
         immediateServices.put("_terminateAOImmediately", ANY_PARAMETERS);
         immediateServices.put("_ImmediateMethodCallDummy", ANY_PARAMETERS);
         this.inImmediateService = new AtomicInteger(0);
-        this.threadsForCallers = new Hashtable<UniqueID, ThreadForCaller>();
     }
 
     public int receiveRequest(Request request, Body bodyReceiver) {
         try {
-		// System.out.println(">>> Received Request : " + request.getMethodName());
             if (immediateExecution(request)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("immediately serving " + request.getMethodName());
                 }
                 this.inImmediateService.incrementAndGet();
-                // System.out.println(">>> Checked IS : " + request.getMethodName());
-                // Threads for callers
                 try {
-			if (IS_UNIQUE_THREAD) {
-				UniqueID caller = request.getSourceBodyID();
-				ThreadForCaller tfc = this.threadsForCallers.get(caller);
-				if (tfc==null){
-					tfc = new ThreadForCaller(caller);
-					tfc.start();
-					this.threadsForCallers.put(caller, tfc);
-				}
-				tfc.doCall(request, bodyReceiver); // TODO MKris : What about exceptions ??
-			} else {
-				bodyReceiver.serve(request);
-			}
+                    bodyReceiver.serve(request);
                 } finally {
-			this.inImmediateService.decrementAndGet();
+                    this.inImmediateService.decrementAndGet();
                 }
                 if (logger.isDebugEnabled()) {
                     logger.debug("end of service for " + request.getMethodName());
@@ -135,9 +114,6 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
             return 0;
         }
     }
-
-
-
 
     public boolean immediateExecution(Request request) {
         if ((request == null) || (request.getMethodCall() == null) ||
@@ -219,59 +195,5 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
     public boolean isInImmediateService() throws IOException {
         return this.inImmediateService.intValue() > 0;
     }
-
-
-    /**
-     * Thread for calling immediate service. This thread must be associated to a given caller.
-     * @author cdelbe
-     */
-    private static class ThreadForCaller extends Thread {
-
-	private UniqueID associatedCaller;
-	private boolean isAlive;
-	private Semaphore callerLock;
-	private Semaphore localLock;
-
-
-	private Request currentRequest;
-	private Body currentReceiver;
-
-
-	public ThreadForCaller(UniqueID caller) {
-		this.associatedCaller = caller;
-		this.setName("Immediate Service Thread for caller " + this.associatedCaller);
-		this.isAlive = true;
-		this.callerLock = new Semaphore(0);
-		this.localLock = new Semaphore(0);
-	}
-
-	public synchronized void doCall(Request request, Body receiver) {
-		System.out.println(">>> Doing a call " + request.getMethodName() + " for caller " + this.associatedCaller);
-		this.currentRequest = request;
-		this.currentReceiver = receiver;
-		this.localLock.release();
-		// wait for the completion of the call
-		this.callerLock.acquireUninterruptibly();
-	}
-
-	public void run(){
-		while (this.isAlive){
-			this.localLock.acquireUninterruptibly();
-			//synchronized(this){
-			this.currentReceiver.serve(this.currentRequest);
-			this.currentRequest = null;
-			this.currentReceiver = null;
-			this.callerLock.release();
-			//}
-		}
-	}
-
-	private synchronized void kill(){
-		this.isAlive=false;
-		this.callerLock.release(); // TODO MKris : enough?
-	}
-
-    }
-
 
 }
