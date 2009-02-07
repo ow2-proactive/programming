@@ -274,30 +274,19 @@ public class LocalBodyStore {
      * @param listener the listener of body events to add
      */
 
-    //    public void addBodyEventListener(BodyEventListener listener) {
-    //        this.bodyEventProducer.addBodyEventListener(listener);
-    //    }
     /**
      * Removes a listener of body events.
      * @param listener the listener of body events to remove
      */
 
-    //    public void removeBodyEventListener(BodyEventListener listener) {
-    //        this.bodyEventProducer.removeBodyEventListener(listener);
-    //    }
     //
     // -- FRIENDLY METHODS -----------------------------------------------
     //
     void registerBody(AbstractBody body) {
         if (this.localBodyMap.getBody(body.getID()) != null) {
-            Thread.dumpStack();
-            logger.warn("Body already registered in the body map");
+            logger.debug("Body already registered in the body map");
         }
         localBodyMap.putBody(body.bodyID, body);
-
-        // ProActiveEvent
-        //        bodyEventProducer.fireBodyCreated(body);
-        //        // END ProActiveEvent
 
         // JMX Notification
         if (!body.isProActiveInternalObject) {
@@ -313,9 +302,6 @@ public class LocalBodyStore {
 
     void unregisterBody(AbstractBody body) {
         localBodyMap.removeBody(body.bodyID);
-        // ProActiveEvent
-        //        bodyEventProducer.fireBodyRemoved(body);
-        // END ProActiveEvent
 
         // JMX Notification
         if (!body.isProActiveInternalObject) {
@@ -334,13 +320,10 @@ public class LocalBodyStore {
 
     void registerHalfBody(AbstractBody body) {
         this.localHalfBodyMap.putBody(body.bodyID, body);
-
-        //bodyEventProducer.fireBodyCreated(body);
     }
 
     void unregisterHalfBody(AbstractBody body) {
         this.localHalfBodyMap.removeBody(body.bodyID);
-        //bodyEventProducer.fireBodyRemoved(body);
     }
 
     public void registerForwarder(AbstractBody body) {
