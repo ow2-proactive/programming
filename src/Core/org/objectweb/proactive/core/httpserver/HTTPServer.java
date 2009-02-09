@@ -37,6 +37,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
 import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
+import org.mortbay.thread.QueuedThreadPool;
 import org.mortbay.xml.XmlConfiguration;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -104,6 +105,9 @@ public class HTTPServer {
         }
         connector.setPort(port);
         this.server.addConnector(connector);
+
+        UnboundedThreadPool utp = new UnboundedThreadPool();
+        this.server.setThreadPool(utp);
 
         /* Lets users customize Jetty if needed */
         if (PAProperties.PA_HTTP_JETTY_XML.isSet()) {
