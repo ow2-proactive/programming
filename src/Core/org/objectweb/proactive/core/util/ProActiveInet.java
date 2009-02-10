@@ -34,7 +34,6 @@ package org.objectweb.proactive.core.util;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
-import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -191,23 +190,39 @@ public class ProActiveInet {
         try {
             Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
             while (nis.hasMoreElements()) {
-                StringBuilder sb = new StringBuilder();
-
                 NetworkInterface ni = nis.nextElement();
+                ret.add(networkInterfaceToString(ni));
 
-                sb.append(ni.getName() + "\t");
-                sb.append(macAddrToString(ni.getHardwareAddress()) + "\t");
-                for (InterfaceAddress ia : ni.getInterfaceAddresses()) {
-                    sb.append(ia.getAddress().toString() + " ");
+                Enumeration<NetworkInterface> subnis = ni.getSubInterfaces();
+                while (subnis.hasMoreElements()) {
+                    NetworkInterface subni = subnis.nextElement();
+                    ret.add(networkInterfaceToString(subni));
                 }
-
-                ret.add(sb.toString());
             }
         } catch (SocketException e) {
             logger.error("Failed to list all available netAdress", e);
         }
 
         return ret;
+    }
+
+    private String networkInterfaceToString(NetworkInterface ni) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(ni.getName() + "\t");
+        try {
+            sb.append(macAddrToString(ni.getHardwareAddress()) + "\t");
+        } catch (SocketException e) {
+            sb.append("Unknown MAC \t");
+        }
+
+        Enumeration<InetAddress> ias = ni.getInetAddresses();
+        while (ias.hasMoreElements()) {
+            InetAddress ia = ias.nextElement();
+            sb.append(ia.getHostAddress() + " ");
+        }
+
+        return sb.toString();
     }
 
     private String macAddrToString(byte[] macAddr) {
