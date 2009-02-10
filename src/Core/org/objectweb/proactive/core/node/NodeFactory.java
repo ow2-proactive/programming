@@ -312,7 +312,8 @@ public class NodeFactory {
         try {
             url = URIBuilder.checkURI(nodeURL).toString();
             proActiveRuntime = RuntimeFactory.getRuntime(url);
-            proActiveRuntime.killNode(url);
+            String nodeName = URIBuilder.getNameFromURI(nodeURL);
+            proActiveRuntime.killNode(nodeName);
         } catch (ProActiveException e) {
             throw new NodeException("Cannot get the node based on " + nodeURL, e);
         } catch (URISyntaxException e) {
