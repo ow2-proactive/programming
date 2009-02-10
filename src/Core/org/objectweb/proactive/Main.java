@@ -50,6 +50,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        ProActiveInet pInet = ProActiveInet.getInstance();
+
         System.out.println("\t\t--------------------");
         System.out.println("\t\tProActive " + PAVersion.getProActiveVersion());
         System.out.println("\t\t--------------------");
@@ -57,9 +59,18 @@ public class Main {
         System.out.println();
 
         String localAddress = null;
-        localAddress = URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress());
+        localAddress = URIBuilder.getHostNameorIP(pInet.getInetAddress());
         System.out.println("Local IP Address: " + localAddress);
+
         System.out.println("Config dir: " + Constants.USER_CONFIG_DIR);
+        System.out.println();
+
+        System.out.println("Network setup:");
+        for (String s : pInet.getAlInetAddresses()) {
+            System.out.println("\t" + s);
+        }
+        System.out.println();
+
         System.out.println("Available properties:");
         for (PAProperties p : PAProperties.values()) {
             String type = p.isBoolean() ? "Boolean" : "String";

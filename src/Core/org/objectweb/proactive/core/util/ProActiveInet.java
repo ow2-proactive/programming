@@ -34,6 +34,7 @@ package org.objectweb.proactive.core.util;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -49,8 +50,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 /**
  * Provide the local InetAddress to be used by ProActive
- *
- * Implementation should respect Java network Stack property java.net.preferIPv6addresses
+ * 
+ * Implementation should respect Java network Stack property
+ * java.net.preferIPv6addresses
  */
 public class ProActiveInet {
     static private ProActiveInet instance;
@@ -80,7 +82,7 @@ public class ProActiveInet {
 
     /**
      * Returns the inet address used by the local ProActive Runtime
-     *
+     * 
      * @return
      */
     public InetAddress getInetAddress() {
@@ -89,10 +91,10 @@ public class ProActiveInet {
 
     /**
      * Returns the host name of the local ProActive inet address
-     *
-     * If {@link PAProperties.PA_USE_IP_ADDRESS} is set then the IP address is returned
-     * instead of an FQDN
-     *
+     * 
+     * If {@link PAProperties.PA_USE_IP_ADDRESS} is set then the IP address is
+     * returned instead of an FQDN
+     * 
      * @return
      * @see PAProperties
      */
@@ -182,4 +184,62 @@ public class ProActiveInet {
 
         return interfaces;
     }
+
+    public List<String> getAlInetAddresses() {
+        List<String> ret = new ArrayList<String>();
+
+        try {
+            Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
+            while (nis.hasMoreElements()) {
+                StringBuilder sb = new StringBuilder();
+
+                NetworkInterface ni = nis.nextElement();
+
+                sb.append(ni.getName() + "\t");
+                sb.append(macAddrToString(ni.getHardwareAddress()) + "\t");
+                for (InterfaceAddress ia : ni.getInterfaceAddresses()) {
+                    sb.append(ia.getAddress().toString() + " ");
+                }
+
+                ret.add(sb.toString());
+            }
+        } catch (SocketException e) {
+            logger.error("Failed to list all available netAdress", e);
+        }
+
+        return ret;
+    }
+
+    private String macAddrToString(byte[] macAddr) {
+        StringBuffer sb = new StringBuffer(17);
+        for (int i = 44; i >= 0; i -= 4) {
+            int nibble = ((int) (byte2Long(macAddr) >>> i)) & 0xf;
+            char nibbleChar = (char) (nibble > 9 ? nibble + ('A' - 10) : nibble + '0');
+            sb.append(nibbleChar);
+            if ((i & 0x7) == 0 && i != 0) {
+                sb.append(':');
+            }
+        }
+        return sb.toString();
+    }
+
+    private long byte2Long(byte addr[]) {
+        long address = 0;
+        if (addr != null) {
+            if (addr.length == 6) {
+                address = unsignedByteToLong(addr[5]);
+                address |= (unsignedByteToLong(addr[4]) << 8);
+                address |= (unsignedByteToLong(addr[3]) << 16);
+                address |= (unsignedByteToLong(addr[2]) << 24);
+                address |= (unsignedByteToLong(addr[1]) << 32);
+                address |= (unsignedByteToLong(addr[0]) << 40);
+            }
+        }
+        return address;
+    }
+
+    private long unsignedByteToLong(byte b) {
+        return (long) b & 0xFF;
+    }
+
 }
