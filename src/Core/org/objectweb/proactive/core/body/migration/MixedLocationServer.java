@@ -195,6 +195,8 @@ public class MixedLocationServer implements org.objectweb.proactive.RunActive, L
         return tmp;
     }
 
+    @SuppressWarnings("deprecation")
+    // PROACTIVE-601
     protected void register() {
         try {
             logger.info("Attempt at binding : " + url);

@@ -46,12 +46,14 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.rmi.RegistryHelper;
+import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -240,4 +242,22 @@ public class RmiRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
         }
 
     }
+
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject remoteObject, String name)
+            throws ProActiveException {
+        URI uri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), name, this.getProtocolId());
+
+        // register the object on the register
+        InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
+        RemoteRemoteObject rmo = register(irro, uri, true);
+        irro.setRemoteRemoteObject(rmo);
+
+        return irro;
+    }
+
+    public URI getBaseURI() {
+        return URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "",
+                Constants.RMI_PROTOCOL_IDENTIFIER);
+    }
+
 }

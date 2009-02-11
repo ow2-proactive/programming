@@ -91,7 +91,8 @@ public class Test extends ComponentTest {
         Map<String, Object> context = new HashMap<String, Object>();
 
         oldDeploymentDescriptor = PADeployment.getProactiveDescriptor(Test.class.getResource(
-                "/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath());
+                "/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
+                (VariableContractImpl) super.vContract.clone());
 
         context.put("deployment-descriptor", oldDeploymentDescriptor);
         Component root = (Component) f.newComponent(
@@ -137,7 +138,6 @@ public class Test extends ComponentTest {
         URL descriptorPath = Test.class
                 .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
 
-        VariableContractImpl vContract = new VariableContractImpl();
         vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
                 .name(), VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, new Integer(4)
@@ -145,7 +145,8 @@ public class Test extends ComponentTest {
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, new Integer(1)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
 
-        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
+        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath,
+                (VariableContractImpl) super.vContract.clone());
 
         newDeploymentDescriptor.startDeployment();
 

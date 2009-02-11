@@ -78,7 +78,7 @@ public class ServerImpl implements ServerTestItf, Identifiable {
      * @see functionalTests.component.collectiveitf.multicast.ServerTestItf#testOneToOne(java.lang.MyObject)
      */
     public WrappedInteger testOneToOne_Param(WrappedInteger a) {
-        Assert.assertEquals(a.getIntValue(), id);
+        Assert.assertEquals(a.getIntValue().intValue(), id);
         return new WrappedInteger(id);
     }
 

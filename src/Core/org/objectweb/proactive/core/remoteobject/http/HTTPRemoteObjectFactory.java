@@ -40,6 +40,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
@@ -48,11 +49,14 @@ import org.objectweb.proactive.core.remoteobject.http.message.HttpRegistryListRe
 import org.objectweb.proactive.core.remoteobject.http.message.HttpRemoteObjectLookupMessage;
 import org.objectweb.proactive.core.remoteobject.http.util.HTTPRegistry;
 import org.objectweb.proactive.core.remoteobject.http.util.exceptions.HTTPRemoteException;
+import org.objectweb.proactive.core.util.ProActiveInet;
+import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory implements RemoteObjectFactory {
+
     protected String protocolIdentifier = Constants.XMLHTTP_PROTOCOL_IDENTIFIER;
 
     static {
@@ -212,6 +216,23 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
 
     public void unexport(RemoteRemoteObject rro) throws ProActiveException {
         // see PROACTIVE-419
+    }
+
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject remoteObject, String name)
+            throws ProActiveException {
+        URI uri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), name, this.getProtocolId());
+
+        // register the object on the register
+        InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
+        RemoteRemoteObject rmo = register(irro, uri, true);
+        irro.setRemoteRemoteObject(rmo);
+
+        return irro;
+    }
+
+    public URI getBaseURI() {
+        return URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "",
+                Constants.XMLHTTP_PROTOCOL_IDENTIFIER);
     }
 
 }

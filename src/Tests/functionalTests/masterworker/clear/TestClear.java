@@ -97,7 +97,7 @@ public class TestClear extends FunctionalTest {
         }
 
         master = new ProActiveMaster<A, Integer>();
-        master.addResources(descriptor);
+        master.addResources(descriptor, super.vContract);
         master.setResultReceptionOrder(Master.SUBMISSION_ORDER);
     }
 

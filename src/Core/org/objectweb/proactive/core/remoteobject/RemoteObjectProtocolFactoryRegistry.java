@@ -33,15 +33,22 @@ package org.objectweb.proactive.core.remoteobject;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 
+import javax.imageio.spi.ServiceRegistry;
+
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.remoteobject.http.HTTPRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.ibis.IbisRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmissh.RmiSshRemoteObjectFactory;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class RemoteObjectProtocolFactoryRegistry {
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
     protected static Hashtable<String, Class<? extends RemoteObjectFactory>> remoteObjectFactories;
 
     static {
@@ -51,6 +58,20 @@ public class RemoteObjectProtocolFactoryRegistry {
         remoteObjectFactories.put(Constants.XMLHTTP_PROTOCOL_IDENTIFIER, HTTPRemoteObjectFactory.class);
         remoteObjectFactories.put(Constants.RMISSH_PROTOCOL_IDENTIFIER, RmiSshRemoteObjectFactory.class);
         remoteObjectFactories.put(Constants.IBIS_PROTOCOL_IDENTIFIER, IbisRemoteObjectFactory.class);
+
+        Iterator<RemoteObjectFactorySPI> iter = ServiceRegistry.lookupProviders(RemoteObjectFactorySPI.class);
+        while (iter.hasNext()) {
+            RemoteObjectFactorySPI remoteObjectFactorySPI = iter.next();
+
+            String protoId = remoteObjectFactorySPI.getProtocolId();
+            Class<? extends RemoteObjectFactory> cl = remoteObjectFactorySPI.getFactoryClass();
+
+            if (!remoteObjectFactories.contains(protoId)) {
+                logger.info("Loading <" + protoId + ", " + cl + ">");
+                remoteObjectFactories.put(protoId, cl);
+            }
+        }
+
     }
 
     public static void put(String protocol, Class<? extends RemoteObjectFactory> factory) {

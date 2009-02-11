@@ -43,7 +43,6 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
-import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
@@ -63,7 +62,7 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
 
         RemoteAO rao = (RemoteAO) PAActiveObject.newActive(RemoteAO.class.getName(), new Object[] {}, node);
         String url = rao.createRemoteObject();
-        RemoteObject remoteObject = RemoteObjectHelper.lookup(new URI(url));
+        RemoteObject<RO> remoteObject = (RemoteObject<RO>) RemoteObjectHelper.lookup(new URI(url));
         RO ro = (RO) RemoteObjectHelper.generatedObjectStub(remoteObject);
 
         rao.setVirtualNode(vn1);
@@ -114,6 +113,7 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
 
     }
 
+    @SuppressWarnings("serial")
     static public class RemoteAO implements Serializable {
         GCMVirtualNode vn;
 
@@ -126,17 +126,11 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
         }
 
         public String createRemoteObject() {
-            try {
-                RO ro = new RO();
-                RemoteObjectExposer<RO> roe = new RemoteObjectExposer<RO>(RO.class.getName(), ro);
-                URI uri = RemoteObjectHelper.generateUrl("remoteObject");
-                roe.createRemoteObject(uri);
-                return roe.getURL();
-            } catch (UnknownProtocolException e) {
-                e.printStackTrace();
-            }
+            RO ro = new RO();
+            RemoteObjectExposer<RO> roe = new RemoteObjectExposer<RO>(RO.class.getName(), ro);
+            roe.createRemoteObject("remoteObject");
+            return roe.getURL();
 
-            return null;
         }
     }
 }

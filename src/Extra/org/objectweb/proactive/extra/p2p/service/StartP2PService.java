@@ -45,6 +45,7 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
+import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.util.ProActiveInet;
@@ -444,7 +445,7 @@ public class StartP2PService implements P2PConstants {
      * @param peerList
      * @return Vector of valid peers URLs
      */
-    public static Vector<String> checkingPeersUrl(Vector peerList) {
+    public static Vector<String> checkingPeersUrl(Vector<String> peerList) {
         int nbUrls = peerList.size();
         Vector<String> newPeerList = new Vector<String>(nbUrls);
 
@@ -516,10 +517,10 @@ public class StartP2PService implements P2PConstants {
          } */
 
         // Node Creation
-        String url = null;
+        Node node = null;
 
         try {
-            url = paRuntime.createLocalNode(P2PConstants.P2P_NODE_NAME, false, null, paRuntime
+            node = paRuntime.createLocalNode(P2PConstants.P2P_NODE_NAME, false, null, paRuntime
                     .getVMInformation().getName(), Job.DEFAULT_JOBID);
         } catch (AlreadyBoundException e) {
             logger.warn("This name " + P2PConstants.P2P_NODE_NAME + " is already bound in the registry", e);
@@ -529,7 +530,7 @@ public class StartP2PService implements P2PConstants {
         params[0] = this.peers;
 
         // P2PService Active Object Creation
-        this.p2pService = (P2PService) PAActiveObject.newActive(P2PService.class.getName(), params, url);
+        this.p2pService = (P2PService) PAActiveObject.newActive(P2PService.class.getName(), params, node);
 
         try {
             PAActiveObject.enableAC(this.p2pService);

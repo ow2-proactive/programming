@@ -33,6 +33,7 @@ package org.objectweb.proactive.core.node;
 
 import java.net.URISyntaxException;
 import java.rmi.AlreadyBoundException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Job;
@@ -45,7 +46,6 @@ import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -80,22 +80,20 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 @PublicAPI
 public class NodeFactory {
-    protected static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT);
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.NODE);
 
     public static final String DEFAULT_VIRTUAL_NODE_NAME = "DefaultVN";
 
-    private static final String DEFAULT_NODE_NAME;
+    private static final String DEFAULT_NODE_NAME = "Node";
+    private static final AtomicInteger nodeCounter = new AtomicInteger();
     private static Node defaultNode = null;
 
-    private static final String HALFBODIES_NODE_URL;
     private static final String HALFBODIES_NODE_NAME = "__PA__HalfbodiesNode";
+    private static final AtomicInteger halfbodyCounter = new AtomicInteger();
     private static Node halfBodiesNode = null;
 
     static {
         ProActiveConfiguration.load();
-        DEFAULT_NODE_NAME = URIBuilder.buildURI("localhost", "Node").toString();
-        // mmm, this name is supposed to be unique :(
-        HALFBODIES_NODE_URL = URIBuilder.buildURI("localhost", HALFBODIES_NODE_NAME).toString();
     }
 
     //test with class loader
@@ -111,24 +109,19 @@ public class NodeFactory {
      * @throws NodeException
      */
     public static synchronized Node getDefaultNode() throws NodeException {
-        String nodeURL = null;
         ProActiveRuntime defaultRuntime = null;
         String jobID = PAActiveObject.getJobId();
         ProActiveSecurityManager securityManager = null;
         if (defaultNode == null) {
             try {
                 defaultRuntime = RuntimeFactory.getDefaultRuntime();
-                nodeURL = defaultRuntime.createLocalNode(DEFAULT_NODE_NAME +
-                    Integer.toString(ProActiveRandom.nextPosInt()), false, securityManager,
-                        DEFAULT_VIRTUAL_NODE_NAME, jobID);
+                defaultNode = defaultRuntime.createLocalNode(DEFAULT_NODE_NAME +
+                    nodeCounter.incrementAndGet(), false, securityManager, DEFAULT_VIRTUAL_NODE_NAME, jobID);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the default Node", e);
             } catch (AlreadyBoundException e) { //if this exception is risen, we generate another random name for the node
                 getDefaultNode();
             }
-
-            defaultNode = new NodeImpl(defaultRuntime, nodeURL, PAProperties.PA_COMMUNICATION_PROTOCOL
-                    .getValue(), jobID);
         }
         return defaultNode;
     }
@@ -139,23 +132,20 @@ public class NodeFactory {
      * @throws NodeException
      */
     public static synchronized Node getHalfBodiesNode() throws NodeException {
-        String nodeURL = null;
         ProActiveRuntime defaultRuntime = null;
         ProActiveSecurityManager securityManager = null;
         if (halfBodiesNode == null) {
             try {
                 defaultRuntime = RuntimeFactory.getDefaultRuntime();
-                nodeURL = defaultRuntime.createLocalNode(HALFBODIES_NODE_URL +
-                    Integer.toString(ProActiveRandom.nextPosInt()), false, securityManager,
-                        DEFAULT_VIRTUAL_NODE_NAME, Job.DEFAULT_JOBID);
+                halfBodiesNode = defaultRuntime.createLocalNode(HALFBODIES_NODE_NAME +
+                    halfbodyCounter.incrementAndGet(), false, securityManager, DEFAULT_VIRTUAL_NODE_NAME,
+                        Job.DEFAULT_JOBID);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the halfbodies hosting Node", e);
             } catch (AlreadyBoundException e) {
                 // try another name
                 getHalfBodiesNode();
             }
-            halfBodiesNode = new NodeImpl(defaultRuntime, nodeURL, PAProperties.PA_COMMUNICATION_PROTOCOL
-                    .getValue(), Job.DEFAULT_JOBID);
         }
         return halfBodiesNode;
     }
@@ -181,8 +171,18 @@ public class NodeFactory {
     /*
      * check if the node name does not conflict with halfbodiesnode name.
      */
-    private static boolean checkNodeName(String nodeUrl) {
-        return !nodeUrl.contains(HALFBODIES_NODE_NAME);
+    private static void checkNodeName(String nodeName) throws NodeException {
+        if (nodeName == null) {
+            throw new NodeException("Node name cannot be null");
+        }
+
+        if (!nodeName.matches("[a-zA-Z0-9_-]+")) {
+            throw new NodeException(nodeName + " is not a valid Node name");
+        }
+
+        if (nodeName.startsWith(HALFBODIES_NODE_NAME)) {
+            throw new NodeException(nodeName + " is a reserved Node name");
+        }
     }
 
     /**
@@ -193,56 +193,33 @@ public class NodeFactory {
         return node.getVMInformation().getVMID().equals(UniqueID.getCurrentVMID());
     }
 
-    /**
-     * Creates a new node on the current ProActive runtime.
-     * The node URL can be in the form
-     * <ul>
-     * <li>nodeName</li>
-     * <li>//localhost/nodeName</li>
-     * <li>//<i>&lt;hostname></i>/nodeName</li>
-     * <li>protocol://hostname[:port]/nodeName</li>
-     * </ul>
-     * where <i>&lt;hostname></i> is the name of the localhost.
-     * @param url the URL of the node to create
-     * @return the newly created node on the local JVM
-     * @exception NodeException if the node cannot be created
-     */
-
-    public static Node createNode(String nodeURL) throws NodeException, AlreadyBoundException {
-        return createNode(nodeURL, false, null, null, null);
-    }
-
-    /**
-     * Creates a new node on the current ProActive runtime.
-     * The node URL can be in the form
-     * <ul>
-     * <li>nodeName</li>
-     * <li>//localhost/nodeName</li>
-     * <li>//<i>&lt;hostname></i>/nodeName</li>
-     * <li>protocol://hostname[:port]/nodeName</li>
-     * </ul>
-     * where <i>&lt;hostname></i> is the name of the localhost.
-     * @param url the URL of the node to create
+    /** Creates a new node on the local ProActive runtime.
+     * 
+     * @param nodeName 
+     * 			name of the node to create. It musts comply to the following regular expression: "[a-zA-Z0-9_-]+"
      * @param replacePreviousBinding
-     * @return the newly created node on the local JVM
-     * @exception NodeException if the node cannot be created
+     * 			Should an already existing node with the same name be replaced or not			
+     * @param psm
+     * 			A {@link ProActiveSecurityManager} or null
+     * @param vnname
+     * 			A Virtual Node name or null
+     * @param jobId
+     * 			A jobID or null
+     * @return  the newly created node on the local JVM
+     * @exception NodeException 
+     * 			if the node cannot be created or if the nodeName is invalid
      */
-    public static Node createNode(String url, boolean replacePreviousBinding, ProActiveSecurityManager psm,
-            String vnname, String jobId) throws NodeException, AlreadyBoundException {
+    public static Node createLocalNode(String nodeName, boolean replacePreviousBinding,
+            ProActiveSecurityManager psm, String vnname, String jobId) throws NodeException,
+            AlreadyBoundException {
         ProActiveRuntime proActiveRuntime;
-        String nodeURL;
 
-        if (!checkNodeName(url)) {
-            throw new NodeException(url + " is not a valid url for a node. A node URL cannot contain " +
-                HALFBODIES_NODE_NAME);
-        }
+        // Throws an Exception is the name is invalid
+        checkNodeName(nodeName);
 
         if (logger.isDebugEnabled()) {
-            logger.debug("NodeFactory: createNode(" + url + ")");
+            logger.debug("NodeFactory: createNode(" + nodeName + ")");
         }
-
-        //first look for the protocol
-        String protocol = URIBuilder.getProtocol(url);
 
         if (vnname == null) {
             vnname = DEFAULT_VIRTUAL_NODE_NAME;
@@ -251,15 +228,59 @@ public class NodeFactory {
         //NodeFactory factory = getFactory(protocol);
         //then create a node
         try {
-            proActiveRuntime = RuntimeFactory.getProtocolSpecificRuntime(protocol);
-            nodeURL = proActiveRuntime.createLocalNode(url, replacePreviousBinding, psm, vnname, jobId);
+            proActiveRuntime = RuntimeFactory.getDefaultRuntime();
+            return proActiveRuntime.createLocalNode(nodeName, replacePreviousBinding, psm, vnname, jobId);
         } catch (Exception e) {
-            throw new NodeException("Cannot create a Node based on " + url, e);
+            throw new NodeException("Failed to create a local node. name=" + nodeName, e);
         }
+    }
 
-        Node node = new NodeImpl(proActiveRuntime, nodeURL, protocol, jobId);
+    /** Creates a new node on the local ProActive runtime
+     * 
+     * The node URL can be in the form:
+     * <ul>
+     *  <li>nodeName</li>
+     *  <li>//localhost/nodeName</li>
+     *  <li>//<hostname>/nodeName</li>
+     *  <li>protocol://hostname[:port]/nodeName</li>
+     * </ul>
+     * 
+     * @param nodeURL the URL of the node to create
+     * @return the newly created node on the local JVM
+     * @exception NodeException if the node cannot be created
+     * 
+     * @deprecated replaced by {@link #createLocalNode(String, boolean, ProActiveSecurityManager, String, String)}
+     */
+    @Deprecated
+    public static Node createNode(String nodeURL) throws NodeException, AlreadyBoundException {
+        String nodeName = URIBuilder.getNameFromURI(nodeURL);
+        return createLocalNode(nodeName, false, null, null, null);
+    }
 
-        return node;
+    /** Creates a new node on the local ProActive runtime
+     * 
+     * The node URL can be in the form:
+     * <ul>
+     *  <li>nodeName</li>
+     *  <li>//localhost/nodeName</li>
+     *  <li>//<hostname>/nodeName</li>
+     *  <li>protocol://hostname[:port]/nodeName</li>
+     * </ul>
+     * 
+     * @param nodeName the name of the node to create
+     * @param replacePreviousBinding
+     * @return the newly created node on the local JVM
+     * @exception NodeException if the node cannot be created
+     * 
+     * @deprecated replaced by {@link #createLocalNode(String, boolean, ProActiveSecurityManager, String, String)}
+     */
+    @Deprecated
+    public static Node createNode(String nodeURL, boolean replacePreviousBinding,
+            ProActiveSecurityManager psm, String vnname, String jobId) throws NodeException,
+            AlreadyBoundException {
+        String nodeName = URIBuilder.getHostNameFromUrl(nodeURL);
+
+        return createLocalNode(nodeName, replacePreviousBinding, psm, vnname, jobId);
     }
 
     /**
@@ -286,12 +307,11 @@ public class NodeFactory {
 
         //String noProtocolUrl = UrlBuilder.removeProtocol(nodeURL, protocol);
         try {
-            url = URIBuilder.checkURI(nodeURL).toString();
+            //            url = URIBuilder.checkURI(nodeURL).toString();
+            url = nodeURL; // #@#@ This modification can break proactive
             proActiveRuntime = RuntimeFactory.getRuntime(url);
             jobID = proActiveRuntime.getJobID(url);
         } catch (ProActiveException e) {
-            throw new NodeException("Cannot get the node based on " + nodeURL, e);
-        } catch (URISyntaxException e) {
             throw new NodeException("Cannot get the node based on " + nodeURL, e);
         }
 

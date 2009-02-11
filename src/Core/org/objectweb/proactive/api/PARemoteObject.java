@@ -33,7 +33,9 @@
 package org.objectweb.proactive.api;
 
 import java.net.URI;
+import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
@@ -42,6 +44,8 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -51,6 +55,13 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
  */
 @PublicAPI
 public class PARemoteObject {
+    public final static Logger logger = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
+
+    /* Used to attribute an unique name to RO created by turnRemote */
+    private final static String TURN_REMOTE_PREFIX = "__@@__TURN_REMOTE_";
+
+    /* Used to attribute an unique name to RO created by turnRemote */
+    private final static AtomicLong counter = new AtomicLong();
 
     public static <T> RemoteObjectExposer<T> newRemoteObject(String className, T target) {
         return new RemoteObjectExposer<T>(className, target);
@@ -101,6 +112,24 @@ public class PARemoteObject {
     public static Object lookup(URI url) throws ProActiveException {
         return RemoteObjectHelper.getFactoryFromURL(url).lookup(RemoteObjectHelper.expandURI(url))
                 .getObjectProxy();
+    }
+
+    /**
+     * Turn a POJO into a remote object.
+     *
+     * @param object the object to be exported as a remote object
+     * @return A remote object that can be called from any JVM
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T turnRemote(T object) {
+        RemoteObjectExposer<T> roe = newRemoteObject(object.getClass().getName(), object);
+        RemoteRemoteObject rro = roe.createRemoteObject(TURN_REMOTE_PREFIX + counter.incrementAndGet());
+        try {
+            return (T) new RemoteObjectAdapter(rro).getObjectProxy();
+        } catch (ProActiveException e) {
+            logger.warn("Turn Remote failed due to", e);
+            return null;
+        }
     }
 
 }

@@ -37,6 +37,7 @@ import functionalTests.masterworker.basicordered.TestBasicOrdered;
 import static junit.framework.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Master;
 
@@ -65,9 +66,10 @@ public class TestRemoteMaster extends FunctionalTest {
             tasks.add(t);
         }
 
-        master = new ProActiveMaster<A, Integer>(descriptor, "Master");
+        master = new ProActiveMaster<A, Integer>(descriptor, (VariableContractImpl) super.vContract.clone(),
+            "Master");
         // We use the same descriptor as resource, the Master VN should be ignored
-        master.addResources(descriptor);
+        master.addResources(descriptor, (VariableContractImpl) super.vContract.clone());
         master.setResultReceptionOrder(Master.SUBMISSION_ORDER);
 
         master.solve(tasks);

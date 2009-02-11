@@ -73,6 +73,7 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
  * runtime.
  *  - cache the vmInformation field
  */
+@SuppressWarnings("serial")
 public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntime> implements
         ProActiveRuntime {
 
@@ -117,7 +118,7 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
         return target.createBody(nodeName, bodyConstructorCall, isNodeLocal);
     }
 
-    public String createLocalNode(String nodeName, boolean replacePreviousBinding,
+    public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
             ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId) throws NodeException,
             AlreadyBoundException {
         return target.createLocalNode(nodeName, replacePreviousBinding, nodeSecurityManager, vnName, jobId);
@@ -212,7 +213,7 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
         target.killNode(nodeName);
     }
 
-    public void killRT(boolean softly) throws Exception {
+    public void killRT(boolean softly) {
         target.killRT(softly);
     }
 

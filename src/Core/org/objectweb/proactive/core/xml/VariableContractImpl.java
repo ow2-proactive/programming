@@ -54,7 +54,8 @@ import org.xml.sax.SAXException;
  * @author The ProActive Team
  */
 @SuppressWarnings("serial")
-public class VariableContractImpl implements VariableContract, Serializable {
+public class VariableContractImpl implements VariableContract, Serializable, Cloneable {
+
     static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT);
     public static VariableContractImpl xmlproperties = null;
     public static final Lock lock = new Lock();
@@ -62,7 +63,7 @@ public class VariableContractImpl implements VariableContract, Serializable {
     private static final Pattern variablePattern = Pattern.compile("(\\$\\{(.*?)\\})");
     private static final Pattern legalPattern = Pattern.compile("^\\$\\{[\\w\\.]+\\}$");
 
-    private class PropertiesDatas implements Serializable {
+    private class PropertiesDatas implements Serializable, Cloneable {
         public String value;
         public VariableContractType type;
         public String setFrom; //Descriptor, Program
@@ -74,6 +75,22 @@ public class VariableContractImpl implements VariableContract, Serializable {
             sb.append(value).append(" type=").append(type).append(" setFrom=").append(setFrom);
             return sb.toString();
         }
+
+        @Override
+        protected Object clone() throws CloneNotSupportedException {
+            PropertiesDatas propertiesDatas = null;
+            try {
+                propertiesDatas = (PropertiesDatas) super.clone();
+                propertiesDatas.value = this.value;
+                propertiesDatas.type = this.type;
+                propertiesDatas.setFrom = this.setFrom;
+            } catch (CloneNotSupportedException cnse) {
+                ProActiveLogger.logImpossibleException(logger, cnse);
+            }
+
+            return propertiesDatas;
+        }
+
     }
 
     private HashMap<String, PropertiesDatas> variablesMap;
@@ -447,6 +464,23 @@ public class VariableContractImpl implements VariableContract, Serializable {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        VariableContractImpl vContract = null;
+        try {
+            vContract = (VariableContractImpl) super.clone();
+            vContract.closed = this.closed;
+            for (String key : variablesMap.keySet()) {
+                PropertiesDatas data = variablesMap.get(key);
+
+                vContract.variablesMap.put(key, (PropertiesDatas) data.clone());
+            }
+        } catch (CloneNotSupportedException cnse) {
+            ProActiveLogger.logImpossibleException(logger, cnse);
+        }
+        return vContract;
     }
 
     public Map<String, String> toMap() {

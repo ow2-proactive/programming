@@ -77,6 +77,7 @@ import org.objectweb.proactive.extra.p2p.service.util.UniversalUniqueID;
  *
  */
 @PublicAPI
+@SuppressWarnings("serial")
 @ActiveObject
 public class P2PService implements InitActive, P2PConstants, Serializable {
 

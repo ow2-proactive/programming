@@ -110,7 +110,19 @@ public abstract class AbstractRemoteObjectFactory {
             e.printStackTrace();
         }
 
-        throw new UnknownProtocolException("there is no RemoteObjectFactory defined for the protocol : " +
+        throw new UnknownProtocolException("There is no RemoteObjectFactory defined for the protocol : " +
             protocol);
+    }
+
+    /** Return the default RemoteObjectFactory
+     * 
+     * The default ROF is controlled by the @link{PAProperties.PA_COMMUNICATION_PROTOCOL} property.
+     * 
+     * @return return the remote object factory associated to the default protocol
+     * @throws UnknownProtocolException if the default communication protocol is not known
+     */
+    public static RemoteObjectFactory getDefaultRemoteObjectFactory() throws UnknownProtocolException {
+        String protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
+        return getRemoteObjectFactory(protocol);
     }
 }

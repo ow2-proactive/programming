@@ -7,6 +7,7 @@
 	<environment>
 		<javaPropertyVariable name="proactive.home"/>
 		<javaPropertyVariable name="java.home"/>
+		<programVariable name="JVM_PARAMETERS"/>
 	</environment>
 	
 	<application>	
@@ -14,6 +15,7 @@
 			<configuration>
 				<java base="root" relpath="${java.home}/bin/java"/>
 				<jvmarg value="-Dproactive.test=true"/>
+				<jvmarg value="${JVM_PARAMETERS}"/>
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="classes/Tests"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>

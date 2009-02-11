@@ -19,7 +19,7 @@ public class TestNodeKill extends FunctionalTest {
     @Test
     public void test() throws NodeException, AlreadyBoundException, ActiveObjectCreationException,
             IOException {
-        Node node = NodeFactory.createNode("my_node");
+        Node node = NodeFactory.createLocalNode("my_node", false, null, null, null);
         PAActiveObject.newActive(Object.class.getName(), new Object[] {}, node);
         node.killAllActiveObjects();
         System.out.println("TestKillLocalNode.main() Node killed ");

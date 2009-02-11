@@ -37,6 +37,7 @@ import static junit.framework.Assert.assertTrue;
 
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 
 import functionalTests.FunctionalTest;
@@ -55,14 +56,16 @@ public class TestLookupActive extends FunctionalTest {
         a.register();
 
         // check lookup works
-        String url = URIBuilder.buildURIFromProperties("localhost", "A").toString();
+        String url = URIBuilder.buildURIFromProperties(ProActiveInet.getInstance().getHostname(), "A")
+                .toString();
         a = (A) PAActiveObject.lookupActive(A.class.getName(), url);
 
         assertTrue(a != null);
         assertEquals(a.getName(), "toto");
 
         // check listActive contains the previous lookup
-        String host = URIBuilder.buildURIFromProperties("localhost", "").toString();
+        String host = URIBuilder.buildURIFromProperties(ProActiveInet.getInstance().getHostname(), "")
+                .toString();
         String[] registered = PAActiveObject.listActive(host);
         assertNotNull(registered);
 

@@ -87,6 +87,8 @@ public class TestSubscribeAttachmentFromAO extends FunctionalTest {
                 vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_OS, OperatingSystem
                         .getOperatingSystem().name(), VariableContractType.DescriptorDefaultVariable);
 
+                vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, FunctionalTest
+                        .getJvmParameters(), VariableContractType.ProgramVariable);
                 GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(appDesc, vContract);
 
                 GCMVirtualNode vn = gcma.getVirtualNode("nodes");

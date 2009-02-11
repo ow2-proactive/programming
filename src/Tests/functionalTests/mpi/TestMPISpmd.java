@@ -38,6 +38,8 @@ import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
+import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.mpi.MPI;
 import org.objectweb.proactive.mpi.MPIConstants;
 import org.objectweb.proactive.mpi.MPISpmd;
@@ -69,7 +71,11 @@ public class TestMPISpmd extends FunctionalTest {
             logger.debug("Loading descriptor from: " + XML_FILE);
         }
 
-        pad = PADeployment.getProactiveDescriptor(XML_FILE);
+        VariableContractImpl vContract = new VariableContractImpl();
+        vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS,
+                FunctionalTest.getJvmParameters(), VariableContractType.ProgramVariable);
+
+        pad = PADeployment.getProactiveDescriptor(XML_FILE, vContract);
 
         VirtualNode testNode = pad.getVirtualNode("CPI");
         this.mpi_spmd = MPI.newMPISpmd(testNode);

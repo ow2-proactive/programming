@@ -54,7 +54,10 @@ import org.objectweb.proactive.core.config.ProActiveConfiguration;
  */
 public class ProActiveLogger extends Logger {
 
-    static {
+    private static boolean loaded = false;
+
+    // Callers must be synchronized to avoid race conditions
+    private static void load() {
 
         if (System.getProperty("log4j.configuration") == null) {
             // if logger is not defined create default logger with level info that logs
@@ -106,9 +109,40 @@ public class ProActiveLogger extends Logger {
 
         }
 
+        myFactory = new ProActiveLoggerFactory();
+        loaded = true;
     }
 
-    private static ProActiveLoggerFactory myFactory = new ProActiveLoggerFactory();
+    private static ProActiveLoggerFactory myFactory;
+
+    /** Log an exception that "cannot occur"
+     *
+     * Impossible exceptions should never be eaten or "printStackTraced" but logged
+     * using this method. Because nothing is impossible... 
+     * 
+     * @param t The nasty exception
+     */
+    static public void logImpossibleException(Logger logger, Throwable t) {
+        logger.error("The following impossible exception occured", t);
+    }
+
+    /** Log an exception we don't want to handle
+    *
+    * @param t The nasty exception
+    */
+    static public void logEatedException(Logger logger, String message, Throwable t) {
+        /* Usually we don't want to see theses exceptions. DEBUG is the right level to use */
+        logger.debug(message, t);
+    }
+
+    /** Log an exception we don't want to handle
+    *
+    * 
+    * @param t The nasty exception
+    */
+    static public void logEatedException(Logger logger, Throwable t) {
+        logEatedException(logger, "The following exception occured but we don't care ", t);
+    }
 
     /**
        Just calls the parent constructor.
@@ -121,7 +155,15 @@ public class ProActiveLogger extends Logger {
        This method overrides {@link Logger#getLogger} by supplying
        its own factory type as a parameter.
      */
-    public static Logger getLogger(String name) {
+    synchronized public static Logger getLogger(String name) {
+        if (!loaded) {
+            load();
+        }
+
+        // FIXME: Don't know how to avoid this cast
+        //
+        // AFAIK we should be able to directly use the factory to create the Logger but using
+        // myFactory.makeNewLoggerInstance(name) does not work since the LogManager is not used...
         return Logger.getLogger(name, myFactory);
     }
 

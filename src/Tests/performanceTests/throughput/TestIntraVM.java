@@ -45,6 +45,10 @@ import functionalTests.FunctionalTest;
 
 public class TestIntraVM extends FunctionalTest {
 
+    static {
+        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmi");
+    }
+
     @Test
     public void test() throws ActiveObjectCreationException, NodeException {
         Server server = (Server) PAActiveObject.newActive(Server.class.getName(), new Object[] {});

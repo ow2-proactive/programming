@@ -150,10 +150,22 @@ public interface Loggers {
     static final public String JMX_MBEAN = JMX + ".mbean";
     static final public String JMX_NOTIFICATION = JMX + ".notification";
 
+    // Forwarding
+    static final public String FORWARDING = CORE + ".forwarding";
+    static final public String FORWARDING_MESSAGE = FORWARDING + ".message";
+    static final public String FORWARDING_ROUTER = FORWARDING + ".router";
+    static final public String FORWARDING_CLIENT = FORWARDING + ".client";
+    static final public String FORWARDING_CLIENT_TUNNEL = FORWARDING_CLIENT + ".tunnel";
+    static final public String FORWARDING_REMOTE_OBJECT = FORWARDING + ".remoteobject";
+
     // Exceptions
     public static final String EXCEPTIONS = CORE + ".exceptions";
     public static final String EXCEPTIONS_ONE_WAY = EXCEPTIONS + ".one_way";
     public static final String EXCEPTIONS_SEND_REPLY = EXCEPTIONS + ".send_reply";
 
     public static final String WEB_SERVICES = CORE + "webservices";
+
+    public static final String UTILS = CORE + ".utils";
+    public static final String SLEEPER = UTILS + ".sleeper";
+    public static final String WAITER = UTILS + ".waiter";
 }

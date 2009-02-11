@@ -54,7 +54,7 @@
 			<processDefinition id="linuxJVM1">
 				<jvmProcess class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<jvmParameters>
-						<parameter value="-Dproactive.test=true"/>	
+						<parameter value="${JVM_PARAMETERS}"/>
 					<!-- 	<parameter value="-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n"/> -->
 					</jvmParameters>
 				</jvmProcess>
@@ -62,7 +62,7 @@
 			<processDefinition id="linuxJVM2">
 				<jvmProcess class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<jvmParameters>
-						<parameter value="-Dproactive.test=true"/>
+						<parameter value="${JVM_PARAMETERS}"/>
 					<!-- 		<parameter value="-Xdebug -Xrunjdwp:transport=dt_socket,address=8001,server=y,suspend=n"/> -->
 					</jvmParameters>
 				</jvmProcess>
@@ -71,7 +71,7 @@
 				<jvmProcess class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<jvmParameters>
 						<parameter value="-Dproactive.future.ac=true"/>
-						<parameter value="-Dproactive.test=true"/>
+						<parameter value="${JVM_PARAMETERS}"/>
 					<!-- 	<parameter value="-Xdebug -Xrunjdwp:transport=dt_socket,address=8002,server=y,suspend=n"/> -->
 					</jvmParameters>
 				</jvmProcess>

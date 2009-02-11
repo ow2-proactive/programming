@@ -39,8 +39,10 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.FakeNode;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl;
 
+import functionalTests.FunctionalTest;
 
-public class TestGetNewNodes {
+
+public class TestGetNewNodes extends FunctionalTest {
     final int COUNT_1 = 50;
     final int COUNT_2 = 100;
 

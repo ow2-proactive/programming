@@ -129,6 +129,8 @@ public class ProActiveConnectorServer extends JMXConnectorServer {
      */
 
     //exposes the active object
+    @SuppressWarnings("deprecation")
+    // PROACTIVE-601
     public synchronized void start() throws IOException {
         if (this.state == STARTED) {
             return;

@@ -34,6 +34,8 @@ package functionalTests.remoteobject.registry;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectProtocolFactoryRegistry;
+
+import functionalTests.FunctionalTest;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
@@ -45,7 +47,7 @@ import static junit.framework.Assert.assertTrue;
  * @author The ProActive Team
  *
  */
-public class RemoteObjectProtocolRegistryTest {
+public class RemoteObjectProtocolRegistryTest extends FunctionalTest {
     @org.junit.Test
     public void addRemoveAProtocol() throws Exception {
         RemoteObjectProtocolFactoryRegistry.put("dummy", DummyProtocol.class);

@@ -34,6 +34,7 @@ package org.objectweb.proactive.core.remoteobject;
 import java.lang.reflect.Constructor;
 import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
@@ -43,9 +44,12 @@ import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.remoteobject.http.HTTPTransportServlet;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class RemoteObjectHelper {
+    static final private Logger logger = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
     /**
      * returns the default port set for the given protocol or -1 if none
@@ -87,13 +91,14 @@ public class RemoteObjectHelper {
      * @return the URI for the given name
      */
     public static URI generateUrl(String name) {
-        String protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
         try {
-            return URIBuilder.buildURI(null, name, protocol, getDefaultPortForProtocol(protocol), true);
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getDefaultRemoteObjectFactory();
+            URI baseURI = rof.getBaseURI();
+            return URIBuilder.buildURI(baseURI, name);
         } catch (UnknownProtocolException e) {
-            e.printStackTrace();
+            ProActiveLogger.logImpossibleException(logger, e);
+            return null;
         }
-        return null;
     }
 
     /**

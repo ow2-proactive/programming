@@ -27,7 +27,7 @@
 			<processDefinition id="linuxJVM">
 				<jvmProcess class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<jvmParameters>
-						<parameter value="-Dproactive.test=true"/>
+						<parameter value="${JVM_PARAMETERS}"/>
 					</jvmParameters>
 				</jvmProcess>
 			</processDefinition>

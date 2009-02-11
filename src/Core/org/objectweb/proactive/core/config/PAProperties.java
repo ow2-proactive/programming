@@ -249,6 +249,17 @@ public enum PAProperties {
     PA_NET_SECONDARYNAMES("proactive.net.secondaryNames", PAPropertiesType.STRING), SCHEMA_VALIDATION(
             "schema.validation", PAPropertiesType.BOOLEAN, true),
 
+    /** The address of the router to use. Must be set if message routing is enabled 
+     * 
+     * Can be FQDN or an IP address
+     */
+    PA_NET_ROUTER_ADDRESS("proactive.net.router.address", PAPropertiesType.STRING),
+
+    /** The port of the router to use. Must be set if message routing is enabled
+     * 
+     */
+    PA_NET_ROUTER_PORT("proactive.net.router.port", PAPropertiesType.INTEGER),
+
     /* ------------------------------------
      *  RMI
      */

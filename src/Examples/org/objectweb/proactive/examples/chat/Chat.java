@@ -227,7 +227,7 @@ public class Chat implements java.io.Serializable, RunActive {
      */
     public void register() {
         try {
-            PAActiveObject.register(PAActiveObject.getStubOnThis(), "//localhost/" + this.name);
+            PAActiveObject.registerByName(PAActiveObject.getStubOnThis(), this.name);
         } catch (IOException e) {
             e.printStackTrace();
         }

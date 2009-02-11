@@ -64,6 +64,7 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
  *
  *
  */
+@SuppressWarnings("serial")
 public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
     protected Object target;
     protected String className;
@@ -213,7 +214,7 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
      * @see org.objectweb.proactive.core.remoteobject.RemoteObject#getObjectProxy()
      */
     @SuppressWarnings("unchecked")
-    public T getObjectProxy() throws ProActiveException {
+    public T getObjectProxy() {
         try {
             T reifiedObjectStub = (T) MOP.createStubObject(this.className, target.getClass(), new Class[] {});
             if (adapterClass != null) {

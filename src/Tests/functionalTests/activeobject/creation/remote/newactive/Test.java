@@ -36,8 +36,8 @@ import static junit.framework.Assert.assertTrue;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
 import functionalTests.GCMDeploymentReady;
+import functionalTests.GCMFunctionalTestDefaultNodes;
 import functionalTests.activeobject.creation.A;
 
 

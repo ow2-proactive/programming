@@ -37,8 +37,10 @@ import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 
+import functionalTests.FunctionalTest;
 
-public class TestDescriptorVariable {
+
+public class TestDescriptorVariable extends FunctionalTest {
 
     @Test
     public void simpleTest() throws ProActiveException {

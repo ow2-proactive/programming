@@ -64,7 +64,7 @@ public class AbstractFTTezt extends FunctionalTest {
         this.server = new JVMProcessImpl(
             new org.objectweb.proactive.core.process.AbstractExternalProcess.StandardOutputMessageLogger());
         this.server.setClassname("org.objectweb.proactive.core.body.ft.servers.StartFTServer");
-        this.server.setJvmOptions(FunctionalTest.JVM_PARAMETERS);
+        this.server.setJvmOptions(super.getJvmParameters());
         this.server.setParameters("-proto " + protocol);
         this.server.startProcess();
         try {
@@ -91,10 +91,9 @@ public class AbstractFTTezt extends FunctionalTest {
         GCMVirtualNode vnode;
 
         //	create nodes
-        VariableContractImpl vContract = new VariableContractImpl();
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
+        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
                 VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
+        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
                 VariableContractType.DescriptorDefaultVariable);
 
         gcma = PAGCMDeployment.loadApplicationDescriptor(gcmApplicationFile, vContract);

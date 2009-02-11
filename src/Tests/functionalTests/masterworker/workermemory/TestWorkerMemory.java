@@ -75,7 +75,7 @@ public class TestWorkerMemory extends FunctionalTest {
         HashMap<String, Serializable> memory = new HashMap<String, Serializable>();
         memory.put("message", "Hello0");
         master = new ProActiveMaster<MemoryTask, String>(new ConstantMemoryFactory(memory));
-        master.addResources(descriptor);
+        master.addResources(descriptor, super.vContract);
         master.setResultReceptionOrder(Master.SUBMISSION_ORDER);
     }
 

@@ -35,6 +35,7 @@ import functionalTests.FunctionalTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
@@ -52,7 +53,8 @@ public class TestGCMDescriptorURL extends FunctionalTest {
     //    GCMApplication gcma3;
 
     @Test
-    public void test() throws ProActiveException, FileNotFoundException, MalformedURLException {
+    public void test() throws ProActiveException, FileNotFoundException, MalformedURLException,
+            CloneNotSupportedException {
         /**** Testing classical File url ****/
         URL descriptor1 = getClass().getResource("application/TestVirtualNodeRelative.xml");
         System.out.println("Using descriptor at URL :");
@@ -69,8 +71,10 @@ public class TestGCMDescriptorURL extends FunctionalTest {
         //        URL jarfileurl2 = new URL("http://proactive.inria.fr/userfiles/file/apps/descriptors.jar");
         //        URL descriptor3 = new URL("jar:"+jarfileurl2.toExternalForm()+"!/application/TestVirtualNodeRelative.xml");
         //        System.out.println(descriptor3);
-        gcma = PAGCMDeployment.loadApplicationDescriptor(descriptor1);
-        gcma2 = PAGCMDeployment.loadApplicationDescriptor(descriptor2);
+        gcma = PAGCMDeployment.loadApplicationDescriptor(descriptor1, (VariableContractImpl) super.vContract
+                .clone());
+        gcma2 = PAGCMDeployment.loadApplicationDescriptor(descriptor2, (VariableContractImpl) super.vContract
+                .clone());
         //        gcma3 = PAGCMDeployment.loadApplicationDescriptor(descriptor3);
         Assert.assertFalse(gcma.isStarted());
         Assert.assertEquals(1, gcma.getVirtualNodes().size());
@@ -83,7 +87,8 @@ public class TestGCMDescriptorURL extends FunctionalTest {
         System.out.println(descriptor3);
 
         try {
-            gcma3 = PAGCMDeployment.loadApplicationDescriptor(descriptor3);
+            gcma3 = PAGCMDeployment.loadApplicationDescriptor(descriptor3,
+                    (VariableContractImpl) super.vContract.clone());
         } catch (ProActiveException ex) {
             // on linux a proactive exception here is normal as the windows path points to nowhere but not an IOException saying there is an internal error
             // but on windows
@@ -96,12 +101,14 @@ public class TestGCMDescriptorURL extends FunctionalTest {
         URL descriptor4 = getClass().getResource("application/TestVirtualNodeAbsolute.xml");
         System.out.println("Using descriptor at URL :");
         System.out.println(descriptor4);
-        gcma4 = PAGCMDeployment.loadApplicationDescriptor(descriptor4);
+        gcma4 = PAGCMDeployment.loadApplicationDescriptor(descriptor4, (VariableContractImpl) super.vContract
+                .clone());
         /**** Testing absolute deployment File ref 2 ****/
         URL descriptor5 = getClass().getResource("application/TestVirtualNodeAbsolute2.xml");
         System.out.println("Using descriptor at URL :");
         System.out.println(descriptor5);
-        gcma4 = PAGCMDeployment.loadApplicationDescriptor(descriptor5);
+        gcma4 = PAGCMDeployment.loadApplicationDescriptor(descriptor5, (VariableContractImpl) super.vContract
+                .clone());
 
     }
 }

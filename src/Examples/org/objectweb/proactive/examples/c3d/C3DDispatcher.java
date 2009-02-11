@@ -410,8 +410,7 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
         myStrategyManager.onDeparture("leaveHost");
 
         try {
-            PAActiveObject.register(PAActiveObject.getStubOnThis(), "//" +
-                ProActiveInet.getInstance().getInetAddress().getHostName() + "/" + "Dispatcher");
+            PAActiveObject.registerByName(PAActiveObject.getStubOnThis(), "Dispatcher");
         } catch (IOException ioe) {
             logger.error("Coudn't register the Dispatcher! " + ioe.getMessage());
         }

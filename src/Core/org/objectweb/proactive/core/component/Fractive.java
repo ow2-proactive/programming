@@ -754,6 +754,8 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
      * @throws IOException
      *             if the component cannot be registered
      */
+    @SuppressWarnings("deprecation")
+    // PROACTIVE-601
     public static void register(Component ref, String url) throws IOException {
         if (!(ref instanceof ProActiveComponentRepresentative)) {
             throw new IllegalArgumentException("This method can only register ProActive components");

@@ -78,6 +78,7 @@
 							value="-Dproactive.timit.activation=${TIMIT_ACTIVATE}" />
 						<parameter value="${VMARGS}" />
 						<parameter value="-Dproactive.test=true"/>
+						<parameter value="-Dproactive.net.router.address=localhost -Dproactive.net.router.port=0"/>
 					</jvmParameters>
 				</jvmProcess>
 			</processDefinition>

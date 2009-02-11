@@ -61,7 +61,7 @@ public class TestProActiveCounter {
 
         Collections.sort(results);
         for (int i = 0; i < results.size(); i++) {
-            Assert.assertEquals("i=" + i, results.get(i), i);
+            Assert.assertEquals(results.get(i).longValue(), i);
         }
     }
 

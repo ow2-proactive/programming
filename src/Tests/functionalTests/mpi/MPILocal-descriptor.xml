@@ -30,6 +30,7 @@
 						<parameter value="-Dproactive.useIPaddress=true" />
 						<parameter value="-Dproactive.rmi.port=6099" />
 						<parameter value="-Dproactive.test=true"/>
+						<parameter value="${JVM_PARAMETERS}"/>
 					</jvmParameters>
 				</jvmProcess>
 			</processDefinition>

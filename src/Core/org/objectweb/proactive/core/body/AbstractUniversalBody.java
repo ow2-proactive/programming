@@ -34,6 +34,8 @@ package org.objectweb.proactive.core.body;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,6 +65,7 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
  * @since   ProActive 0.9.3
  *
  */
+@SuppressWarnings("serial")
 public abstract class AbstractUniversalBody implements UniversalBody, Serializable {
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
@@ -115,19 +118,13 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
         this.roe = new RemoteObjectExposer<UniversalBody>(UniversalBody.class.getName(), this,
             UniversalBodyRemoteObjectAdapter.class);
 
-        URI uri = RemoteObjectHelper.generateUrl(this.bodyID.toString());
-
         try {
-            RemoteRemoteObject rro = register(uri);
+            RemoteRemoteObject rro = this.roe.createRemoteObject(this.bodyID.toString());
             this.remoteBody = (UniversalBody) new RemoteObjectAdapter(rro).getObjectProxy();
         } catch (Exception e) {
             e.printStackTrace();
             throw new ActiveObjectCreationException(e);
         }
-    }
-
-    protected RemoteRemoteObject register(URI uri) throws UnknownProtocolException {
-        return this.roe.createRemoteObject(uri);
     }
 
     //
@@ -178,10 +175,8 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
         this.roe = new RemoteObjectExposer<UniversalBody>(UniversalBody.class.getName(), this,
             UniversalBodyRemoteObjectAdapter.class);
 
-        URI uri = RemoteObjectHelper.generateUrl(this.bodyID.toString());
-
         try {
-            RemoteRemoteObject rro = this.roe.createRemoteObject(uri);
+            RemoteRemoteObject rro = this.roe.createRemoteObject(this.bodyID.toString());
             this.remoteBody = (UniversalBody) new RemoteObjectAdapter(rro).getObjectProxy();
         } catch (ProActiveException e) {
             // TODO Auto-generated catch block
@@ -202,8 +197,14 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     /*
      * @see org.objectweb.proactive.core.body.UniversalBody#register(java.lang.String)
      */
+    @Deprecated
     public void register(String url) throws IOException, UnknownProtocolException {
         this.roe.createRemoteObject(RemoteObjectHelper.expandURI(URI.create(url)));
+    }
+
+    public String registerByName(String name) throws IOException {
+        this.roe.createRemoteObject(name);
+        return this.roe.getURL();
     }
 
     public RemoteObjectExposer<UniversalBody> getRemoteObjectExposer() {

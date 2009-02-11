@@ -44,7 +44,7 @@ import functionalTests.FunctionalTest;
 public class TestErrorHandling extends FunctionalTest {
 
     @Test(expected = NodeException.class)
-    public void test() throws NodeException, AlreadyBoundException {
-        NodeFactory.createNode("//wrong");
+    public void testHalfBody() throws NodeException, AlreadyBoundException {
+        NodeFactory.createLocalNode("__PA__HalfbodiesNode", false, null, null, null);
     }
 }

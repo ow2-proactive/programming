@@ -45,6 +45,10 @@ import functionalTests.GCMFunctionalTestDefaultNodes;
 
 public class TestForgetOnSend extends GCMFunctionalTestDefaultNodes {
 
+    static {
+        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmi");
+    }
+
     public TestForgetOnSend() {
         super(1, 1);
     }

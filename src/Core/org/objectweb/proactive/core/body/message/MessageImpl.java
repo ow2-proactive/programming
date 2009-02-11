@@ -47,6 +47,7 @@ import org.objectweb.proactive.core.body.ft.protocols.FTManager;
  * @since   ProActive 0.9
  *
  */
+@SuppressWarnings("serial")
 public class MessageImpl implements Message, java.io.Serializable {
 
     /** The name of the method called */
@@ -103,7 +104,7 @@ public class MessageImpl implements Message, java.io.Serializable {
         StringBuffer sb = new StringBuffer();
         sb.append("method=").append(methodName).append(", ");
         sb.append("sender=").append(sourceID).append(", ");
-        sb.append("sequenceNumber=").append(sequenceNumber).append("\n");
+        sb.append("sequenceNumber=").append(sequenceNumber);
         return sb.toString();
     }
 

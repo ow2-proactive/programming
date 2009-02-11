@@ -60,6 +60,7 @@ import org.apache.log4j.MDC;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
@@ -96,9 +97,9 @@ import org.objectweb.proactive.core.mop.Utils;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
+import org.objectweb.proactive.core.node.NodeImpl;
 import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.rmi.FileProcess;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -263,11 +264,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         this.roe = new RemoteObjectExposer<ProActiveRuntime>(
             "org.objectweb.proactive.core.runtime.ProActiveRuntime", this,
             ProActiveRuntimeRemoteObjectAdapter.class);
-
-        String url = URIBuilder.buildURIFromProperties(URIBuilder.getHostNameFromUrl(getInternalURL()),
-                URIBuilder.getNameFromURI(getInternalURL())).toString();
-
-        this.roe.createRemoteObject(URI.create(url));
+        this.roe.createRemoteObject(vmInformation.getName());
 
         // logging info
         MDC.remove("runtime");
@@ -442,11 +439,9 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#createLocalNode(String, boolean,
      *      ProActiveSecurityManager, String, String)
      */
-    public String createLocalNode(String nodeURL, boolean replacePreviousBinding,
+    public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
             ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId) throws NodeException,
             AlreadyBoundException {
-        // check if nodeName is an URI or not
-        String nodeName = URIBuilder.getNameFromURI(nodeURL);
 
         if (!replacePreviousBinding && (this.nodeMap.get(nodeName) != null)) {
             throw new AlreadyBoundException("Node " + nodeName +
@@ -458,31 +453,24 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             nodeSecurityManager.setParent(this);
         }
 
-        LocalNode newNode = new LocalNode(nodeName, jobId, nodeSecurityManager, vnName);
-
-        URI realnodeURL = URI.create(nodeURL);
-        if (!realnodeURL.isAbsolute()) {
-            try {
-                realnodeURL = RemoteObjectHelper.generateUrl(PAProperties.PA_COMMUNICATION_PROTOCOL
-                        .getValue(), nodeName);
-            } catch (UnknownProtocolException e) {
-                throw new NodeException(e);
-            }
-        }
-        try {
-            newNode.activateProtocol(realnodeURL);
-        } catch (UnknownProtocolException e) {
-            throw new NodeException(e);
-        }
+        LocalNode localNode = new LocalNode(nodeName, jobId, nodeSecurityManager, vnName);
 
         if (replacePreviousBinding && (this.nodeMap.get(nodeName) != null)) {
-            newNode.setActiveObjects(this.nodeMap.get(nodeName).getActiveObjectsId());
+            localNode.setActiveObjects(this.nodeMap.get(nodeName).getActiveObjectsId());
             this.nodeMap.remove(nodeName);
         }
 
-        this.nodeMap.put(nodeName, newNode);
+        this.nodeMap.put(nodeName, localNode);
 
-        return realnodeURL.toString();
+        Node node = null;
+        try {
+            node = new NodeImpl((ProActiveRuntime) PARemoteObject.lookup(URI.create(localNode.getURL())),
+                localNode.getURL(), URIBuilder.getProtocol(localNode.getURL()), jobId);
+        } catch (ProActiveException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return node;
     }
 
     public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId,
@@ -492,14 +480,10 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             logger.warn("Runtime capacity exceeded. A bug inside GCM Deployment occured");
         }
 
-        String protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
-        String hostname = vmInformation.getHostName();
         String nodeName = this.vmInformation.getName() + "_" + Constants.GCM_NODE_NAME + gcmNodes;
-        String url = URIBuilder.buildURI(hostname, nodeName, protocol).toString();
         Node node = null;
         try {
-            createLocalNode(url, false, nodeSecurityManager, vnName, jobId);
-            node = NodeFactory.getNode(url);
+            node = createLocalNode(nodeName, false, nodeSecurityManager, vnName, jobId);
             for (TechnicalService ts : tsList) {
                 ts.apply(node);
             }
@@ -509,9 +493,9 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         } catch (AlreadyBoundException e) {
             // CapacityNode- is a reserved name space.
             // Should not happen, log it and delete the old node
-            logger.warn(url + "is already registered... replacing it !");
+            logger.warn(nodeName + "is already registered... replacing it !");
             try {
-                createLocalNode(url, true, null, vnName, null);
+                createLocalNode(nodeName, true, null, vnName, null);
             } catch (NodeException e1) {
                 logger.warn("Failed to create a capacity node", e1);
             } catch (AlreadyBoundException e1) {
@@ -703,6 +687,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#killRT(boolean)
      */
     public void killRT(boolean softly) {
+
         // JMX Notification
         if (getMBean() != null) {
             getMBean().sendNotification(NotificationType.runtimeDestroyed);
@@ -711,7 +696,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         // END JMX Notification
         killAllNodes();
 
-        logger.info("terminating Runtime " + getInternalURL());
+        logger.info("terminating Runtime " + vmInformation.getName());
 
         // JMX unregistration
         if (getMBean() != null) {
@@ -731,14 +716,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         }
         // END JMX unregistration
         System.exit(0);
-    }
 
-    /**
-     * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#getURL()
-     */
-    protected String getInternalURL() {
-        return URIBuilder.buildURI(URIBuilder.getHostNameorIP(this.vmInformation.getInetAddress()),
-                this.vmInformation.getName()).toString();
     }
 
     /**
@@ -791,10 +769,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
     public void registerVirtualNode(String virtualNodeName, boolean replacePreviousBinding)
             throws UnknownProtocolException {
-        String url;
-        url = URIBuilder.buildURIFromProperties(URIBuilder.getHostNameFromUrl(getInternalURL()),
-                virtualNodeName).toString();
-        this.roe.createRemoteObject(URI.create(url));
+        this.roe.createRemoteObject(virtualNodeName);
     }
 
     public void unregisterVirtualNode(String virtualNodeName) {
@@ -1608,7 +1583,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     }
 
     public void register(GCMRuntimeRegistrationNotificationData notification) {
-        createRegistrationForwarder();
+        //        createRegistrationForwarder();
         getMBean().sendNotification(NotificationType.GCMRuntimeRegistered, notification);
     }
 

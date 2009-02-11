@@ -32,7 +32,6 @@
 package org.objectweb.proactive.core.runtime;
 
 import java.lang.management.ManagementFactory;
-import java.net.URI;
 import java.security.AccessControlException;
 import java.security.PublicKey;
 import java.util.ArrayList;
@@ -60,7 +59,6 @@ import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
-import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityContext;
@@ -81,6 +79,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * This class is a runtime representation of a node
  * and should not be used outside a runtime
  */
+@SuppressWarnings("serial")
 public class LocalNode implements SecurityEntity {
     private static Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);
     private String name;
@@ -117,6 +116,7 @@ public class LocalNode implements SecurityEntity {
         this.runtimeRoe = new RemoteObjectExposer<ProActiveRuntime>(
             "org.objectweb.proactive.core.runtime.ProActiveRuntime", ProActiveRuntimeImpl
                     .getProActiveRuntime(), ProActiveRuntimeRemoteObjectAdapter.class);
+        this.runtimeRoe.createRemoteObject(name);
 
         // JMX registration
         //        if (PAProperties.PA_JMX_MBEAN.isTrue()) {
@@ -139,10 +139,6 @@ public class LocalNode implements SecurityEntity {
         //        }
 
         // END JMX registration
-    }
-
-    public void activateProtocol(URI nodeURL) throws UnknownProtocolException {
-        this.runtimeRoe.createRemoteObject(nodeURL);
     }
 
     /**
@@ -443,5 +439,9 @@ public class LocalNode implements SecurityEntity {
             throw new SecurityNotAvailableException();
         }
         this.securityManager.terminateSession(sessionID);
+    }
+
+    public String getURL() {
+        return this.runtimeRoe.getURL();
     }
 }

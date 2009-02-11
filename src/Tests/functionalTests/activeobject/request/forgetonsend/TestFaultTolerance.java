@@ -69,7 +69,6 @@ public class TestFaultTolerance extends AbstractFTTezt {
         GCMApplication gcma;
         GCMVirtualNode vnode;
 
-        VariableContractImpl vContract = new VariableContractImpl();
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
                 VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",

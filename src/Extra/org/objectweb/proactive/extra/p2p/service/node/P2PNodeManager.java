@@ -332,8 +332,8 @@ public class P2PNodeManager implements Serializable, InitActive, EndActive, P2PC
                     P2PConstants.VN_NAME);
         }
 
-        Node newNode = NodeFactory.createNode(P2PConstants.SHARED_NODE_NAME + "_" + this.nodeCounter++, true,
-                newNodeSecurityManager, P2PConstants.VN_NAME, null);
+        Node newNode = NodeFactory.createLocalNode(P2PConstants.SHARED_NODE_NAME + "_" + this.nodeCounter++,
+                true, newNodeSecurityManager, P2PConstants.VN_NAME, null);
         this.availableNodes.add(newNode);
         logger.info("New shared node created @" + newNode.getNodeInformation().getURL());
         return newNode;

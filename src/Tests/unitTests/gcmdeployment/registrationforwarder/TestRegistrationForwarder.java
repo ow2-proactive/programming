@@ -31,6 +31,8 @@
  */
 package unitTests.gcmdeployment.registrationforwarder;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.jmx.notification.GCMRuntimeRegistrationNotificationData;
@@ -38,11 +40,10 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.runtime.RegistrationForwarder;
 
-import junit.framework.Assert;
-import static unitTests.UnitTests.logger;
+import functionalTests.FunctionalTest;
 
 
-public class TestRegistrationForwarder {
+public class TestRegistrationForwarder extends FunctionalTest {
     final static long timeout = 500;
     ProActiveRuntime part;
 

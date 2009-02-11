@@ -101,6 +101,8 @@ public class SimpleLocationServer implements org.objectweb.proactive.RunActive, 
         return tmp;
     }
 
+    @SuppressWarnings("deprecation")
+    // PROACTIVE-601
     protected void register() {
         try {
             logger.info("Attempt at binding : " + this.url);

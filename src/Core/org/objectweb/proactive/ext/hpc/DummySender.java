@@ -32,6 +32,7 @@
 package org.objectweb.proactive.ext.hpc;
 
 import java.io.IOException;
+import java.net.URI;
 import java.security.AccessControlException;
 import java.security.PublicKey;
 
@@ -56,6 +57,7 @@ import org.objectweb.proactive.core.security.securityentity.Entities;
 import org.objectweb.proactive.core.security.securityentity.Entity;
 
 
+@SuppressWarnings("serial")
 public class DummySender implements UniversalBody {
 
     //
@@ -126,6 +128,7 @@ public class DummySender implements UniversalBody {
         return 0;
     }
 
+    @Deprecated
     public void register(String url) throws IOException, UnknownProtocolException {
         // TODO Auto-generated method stub
 
@@ -208,5 +211,10 @@ public class DummySender implements UniversalBody {
     public void terminateSession(long sessionID) throws SecurityNotAvailableException, IOException {
         // TODO Auto-generated method stub
 
+    }
+
+    public String registerByName(String name) throws IOException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

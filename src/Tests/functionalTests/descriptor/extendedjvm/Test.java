@@ -99,7 +99,8 @@ public class Test extends FunctionalTest {
         }
         searchAndReplace(oldFilePath, newFilePath, "proactive.home", proactiveDir);
         descriptor = PADeployment.getProactiveDescriptor(getClass().getResource(
-                "/functionalTests/descriptor/extendedjvm/" + fileName + "-tmp.xml").getPath());
+                "/functionalTests/descriptor/extendedjvm/" + fileName + "-tmp.xml").getPath(),
+                super.vContract);
         descriptor.activateMappings();
     }
 

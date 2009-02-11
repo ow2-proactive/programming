@@ -95,6 +95,7 @@ public class ProActiveServicesImpl implements ProActiveService {
     /**
      * @see org.objectweb.proactive.osgi.ProActiveService#register(java.lang.Object, java.lang.String)
      */
+    @SuppressWarnings("deprecation")
     public void register(Object obj, String url) throws IOException {
         PAActiveObject.register(obj, url);
     }
@@ -142,7 +143,7 @@ public class ProActiveServicesImpl implements ProActiveService {
         //    	System.out.println("url du class server = ");
         try {
             Thread.currentThread().setContextClassLoader(ProActiveServicesImpl.class.getClassLoader());
-            this.node = NodeFactory.createNode(OSGI_NODE_NAME);
+            this.node = NodeFactory.createLocalNode(OSGI_NODE_NAME, false, null, null, null);
         } catch (NodeException e) {
             e.printStackTrace();
         } catch (AlreadyBoundException e) {
@@ -197,8 +198,6 @@ public class ProActiveServicesImpl implements ProActiveService {
         } catch (NodeException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ProActiveException e) {
             e.printStackTrace();
         }
 

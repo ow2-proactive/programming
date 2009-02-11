@@ -33,6 +33,8 @@ package org.objectweb.proactive.core.body;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Job;
@@ -177,6 +179,9 @@ public interface UniversalBody extends Job, Serializable, SecurityEntity {
      * @throws UnknownProtocolException thrown if the protocol is not supported by
      * the current active object
      */
+    @Deprecated
     public void register(String url) throws IOException, UnknownProtocolException;
+
+    public String registerByName(String name) throws IOException;
 }
 //@snippet-end universalbody

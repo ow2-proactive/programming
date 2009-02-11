@@ -155,12 +155,8 @@ public class DebuggerConnection implements Serializable {
                     // then n tests might be needed to find if there are n nodes...
                     node.getNumberOfActiveObjects();
                     if (node.getNumberOfActiveObjects() <= 0) {
-                        try {
-                            created = false;
-                            node.getProActiveRuntime().killRT(true);
-                        } catch (EOFException e) {
-                        } catch (UnmarshalException e) {
-                        }
+                        created = false;
+                        node.getProActiveRuntime().killRT(true);
                     }
                 }
             } catch (NodeException e) {

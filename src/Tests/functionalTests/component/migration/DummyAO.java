@@ -51,6 +51,7 @@ import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
+import functionalTests.FunctionalTest;
 import functionalTests.GCMFunctionalTest;
 import functionalTests.GCMFunctionalTestDefaultNodes;
 import functionalTests.component.descriptor.fractaladl.Test;
@@ -66,8 +67,14 @@ public class DummyAO implements Serializable {
     public boolean goOldDeployment() throws Exception {
         Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
         Map<String, ProActiveDescriptor> context = new HashMap<String, ProActiveDescriptor>();
+
+        VariableContractImpl vContract = new VariableContractImpl();
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVM_PARAMETERS, FunctionalTest
+                .getJvmParameters(), VariableContractType.ProgramVariable);
+
         ProActiveDescriptor deploymentDescriptor = PADeployment.getProactiveDescriptor(Test.class
-                .getResource("/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath());
+                .getResource("/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
+                vContract);
         context.put("deployment-descriptor", deploymentDescriptor);
 
         Component x = (Component) f.newComponent("functionalTests.component.migration.x", context);
@@ -134,6 +141,8 @@ public class DummyAO implements Serializable {
                 .toString(), VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, new Integer(1)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVM_PARAMETERS, FunctionalTest
+                .getJvmParameters(), VariableContractType.ProgramVariable);
 
         newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
 

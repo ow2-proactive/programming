@@ -42,14 +42,16 @@ import java.util.Set;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
-import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
-import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.xml.VariableContract;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
@@ -65,8 +67,14 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
     protected void construct() {
         deploymentId = target.getDeploymentId();
         virtualNodeNames = target.getVirtualNodeNames();
-        baseUri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "",
-                PAProperties.PA_COMMUNICATION_PROTOCOL.getValue());
+
+        try {
+            RemoteObjectFactory rof;
+            rof = AbstractRemoteObjectFactory.getDefaultRemoteObjectFactory();
+            baseUri = rof.getBaseURI();
+        } catch (UnknownProtocolException e) {
+            ProActiveLogger.logImpossibleException(GCMA_LOGGER, e);
+        }
     }
 
     public VariableContract getVariableContract() {
@@ -78,7 +86,10 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
         long deploymentId = target.getDeploymentId();
         String name = deploymentId + "/VirtualNode/" + vnName;
 
-        URI uri = URIBuilder.buildURI(baseUri.getHost(), name, baseUri.getScheme(), baseUri.getPort());
+        // Hack. Dunno how to uri.clone()	
+        // DO NOT use the three args version of buildURI. It silently replaces the hostname.
+        URI uri = URIBuilder.buildURI(baseUri.getHost(), name, baseUri.getScheme(), baseUri.getPort(), false);
+
         try {
             RemoteObject ro = RemoteObjectHelper.lookup(uri);
             vn = (GCMVirtualNode) RemoteObjectHelper.generatedObjectStub(ro);

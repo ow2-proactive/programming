@@ -43,8 +43,10 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.FakeNode;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl;
 
+import functionalTests.FunctionalTest;
 
-public class TestGetANodeWithTimeout {
+
+public class TestGetANodeWithTimeout extends FunctionalTest {
     static final int TIMEOUT = 1000;
     static final int CLIENTS = 10;
     GCMVirtualNodeImpl vn;

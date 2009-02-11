@@ -61,7 +61,7 @@ public class StartNodeCommand implements Command {
         String nodeName = st.nextToken();
 
         try {
-            NodeFactory.createNode(nodeName, false, null, null, null);
+            NodeFactory.createLocalNode(nodeName, false, null, null, null);
         } catch (NodeException e) {
             e.printStackTrace();
         } catch (AlreadyBoundException e) {

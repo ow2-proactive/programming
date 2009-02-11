@@ -60,7 +60,8 @@ public class TestOverriding extends FunctionalTest {
                 VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
                 VariableContractType.DescriptorDefaultVariable);
-
+        vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, FunctionalTest.getJvmParameters()
+                .toString(), VariableContractType.ProgramVariable);
         URL desc = this.getClass().getResource("TestOverridingApplication.xml");
         app = PAGCMDeployment.loadApplicationDescriptor(desc, vContract);
         app.startDeployment();

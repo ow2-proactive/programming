@@ -34,7 +34,6 @@ package functionalTests.activeobject.lookupactive;
 import java.io.IOException;
 
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.util.URIBuilder;
 
 
 public class A {
@@ -53,8 +52,7 @@ public class A {
 
     public int register() {
         try {
-            PAActiveObject.register(PAActiveObject.getStubOnThis(), URIBuilder.buildURIFromProperties(
-                    "localhost", "A").toString());
+            PAActiveObject.registerByName(PAActiveObject.getStubOnThis(), "A");
         } catch (IOException e) {
             e.printStackTrace();
         }

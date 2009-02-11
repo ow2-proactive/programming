@@ -36,6 +36,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Master;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
@@ -65,12 +66,14 @@ public class TestDivisibleTasksWithFT extends FunctionalTest {
     @Before
     public void initTest() throws Exception {
 
-        this.pad = PAGCMDeployment.loadApplicationDescriptor(descriptor);
+        this.pad = PAGCMDeployment.loadApplicationDescriptor(descriptor,
+                (VariableContractImpl) super.vContract.clone());
         this.pad.startDeployment();
         this.vn1 = this.pad.getVirtualNode("VN1");
         this.vn1.waitReady();
         System.out.println("VN1 is ready");
-        this.pad2 = PAGCMDeployment.loadApplicationDescriptor(descriptor2);
+        this.pad2 = PAGCMDeployment.loadApplicationDescriptor(descriptor2,
+                (VariableContractImpl) super.vContract.clone());
         this.pad2.startDeployment();
         this.vn2 = this.pad2.getVirtualNode("VN2");
         this.vn2.waitReady();

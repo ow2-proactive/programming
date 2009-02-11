@@ -47,11 +47,68 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
+import org.objectweb.proactive.core.xml.VariableContractType;
+import org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory;
+import org.objectweb.proactive.extra.messagerouting.router.Router;
+import org.objectweb.proactive.extra.messagerouting.router.RouterConfig;
 
 
 public class FunctionalTest {
     static final protected Logger logger = Logger.getLogger("testsuite");
-    static final public String JVM_PARAMETERS = "-Dproactive.test=true";
+
+    static final public String VAR_JVM_PARAMETERS = "JVM_PARAMETERS";
+    static private Router router;
+
+    @BeforeClass
+    static public void configureMessageRouting() {
+        try {
+            // Configure the Message routing
+            if (MessageRoutingRemoteObjectFactory.PROTOCOL_ID.equals(PAProperties.PA_COMMUNICATION_PROTOCOL
+                    .getValue())) {
+                RouterConfig config = new RouterConfig();
+
+                if (PAProperties.PA_NET_ROUTER_PORT.getValueAsInt() == 0) {
+                    router = Router.createAndStart(config);
+                    PAProperties.PA_NET_ROUTER_PORT.setValue(router.getPort());
+                } else {
+                    config.setPort(PAProperties.PA_NET_ROUTER_PORT.getValueAsInt());
+                    router = Router.createAndStart(config);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @AfterClass
+    static public void terminateMessageRouting() {
+        if (router != null) {
+            router.stop();
+        }
+    }
+
+    static public String getJvmParameters() {
+        StringBuilder jvmParameters = new StringBuilder(" ");
+        jvmParameters.append("-Dproactive.test=true ");
+
+        jvmParameters.append(PAProperties.PA_COMMUNICATION_PROTOCOL.getCmdLine());
+        jvmParameters.append(PAProperties.PA_COMMUNICATION_PROTOCOL.getValue());
+        jvmParameters.append(" ");
+
+        if (MessageRoutingRemoteObjectFactory.PROTOCOL_ID.equals(PAProperties.PA_COMMUNICATION_PROTOCOL
+                .getValue())) {
+            jvmParameters.append(PAProperties.PA_NET_ROUTER_ADDRESS.getCmdLine());
+            jvmParameters.append(PAProperties.PA_NET_ROUTER_ADDRESS.getValue());
+            jvmParameters.append(" ");
+
+            jvmParameters.append(PAProperties.PA_NET_ROUTER_PORT.getCmdLine());
+            jvmParameters.append(PAProperties.PA_NET_ROUTER_PORT.getValue());
+            jvmParameters.append(" ");
+        }
+
+        return jvmParameters.toString();
+    }
 
     /** The amount of time given to a test to success or fail */
     static final private long TIMEOUT = 300000;
@@ -65,8 +122,22 @@ public class FunctionalTest {
         }
     };
 
+    /** The default variable contract to pass to PA(GCM)Deployment.load 
+     * 
+     * This variable contract MUST ALWAYS be used. Otherwise tests will fail 
+     * when some protocol are enabled (message routing for example) 
+     */
+    public VariableContractImpl vContract;
+
+    public FunctionalTest() {
+        vContract = new VariableContractImpl();
+        vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, getJvmParameters(),
+                VariableContractType.ProgramVariable);
+    }
+
     @BeforeClass
     public static void beforeClass() {
+        logger.info(FunctionalTest.class.getName() + " @BeforeClass: beforeClass");
         // Set PA_TEST to automatically flag child processes
         // When PA_TEST is set GCM Deployment framework will add it to 
         // started JVM. 
@@ -140,10 +211,14 @@ public class FunctionalTest {
 
     @AfterClass
     public static void afterClass() {
-        logger.trace("afterClass");
+        logger.info(FunctionalTest.class.getName() + " @AfterClass: afterClass");
 
         logger.trace("Removing the shutdownHook");
         Runtime.getRuntime().removeShutdownHook(shutdownHook);
+
+        if (router != null) {
+            //     	       router.stop();
+        }
 
         logger.trace("Killing remaining ProActive Runtime");
         killProActive();

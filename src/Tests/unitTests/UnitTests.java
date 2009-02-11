@@ -32,13 +32,8 @@
 package unitTests;
 
 import org.apache.log4j.Logger;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfoImpl;
 
 
-@RunWith(Suite.class)
 /**
  * All in-place Unit tests must be declared here otherwise they will not be run.
  * 
@@ -48,8 +43,6 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.H
  * <li>Add this class to the following <b>SuiteClasses</b> annotation</li>
  * </ul>
  */
-@SuiteClasses( { org.objectweb.proactive.core.util.CircularArrayList.UnitTestCircularArrayList.class,
-        HostInfoImpl.UnitTestHostInfoImpl.class })
 public class UnitTests {
     static final public Logger logger = Logger.getLogger("testsuite");
 }

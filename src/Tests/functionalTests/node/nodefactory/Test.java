@@ -31,48 +31,26 @@
  */
 package functionalTests.node.nodefactory;
 
-import org.junit.After;
-import org.junit.Before;
-import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.PAProperties;
+import static junit.framework.Assert.assertTrue;
+
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
-import org.objectweb.proactive.core.util.URIBuilder;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertTrue;
 
 
 /**
  * Test the creation of rmi, ibis node whith the factory
  */
 public class Test extends FunctionalTest {
-    Node rmiNode;
-    private String rmiURL;
+    final private static String NODE_NAME = "RMINode";
 
     @org.junit.Test
     public void action() throws Exception {
-        NodeFactory.createNode(rmiURL);
-        //        NodeFactory.createNode("ibis://localhost/IBISNode");
-        rmiNode = NodeFactory.getNode(rmiURL);
-        //ibisNode = NodeFactory.getNode("ibis://localhost/IBISNode");
-        assertTrue((rmiNode != null) && NodeFactory.isNodeLocal(rmiNode));
+        Node node = NodeFactory.createLocalNode(NODE_NAME, false, null, null, null);
+        String nodeURL = node.getNodeInformation().getURL();
+        Node returnedNode = NodeFactory.getNode(nodeURL);
+        assertTrue((returnedNode != null) && NodeFactory.isNodeLocal(returnedNode));
     }
 
-    @Before
-    public void initTest() throws Exception {
-        String port = PAProperties.PA_RMI_PORT.getValue();
-        if (port != null) {
-            rmiURL = URIBuilder.buildURI("localhost", "RMINode" + System.currentTimeMillis(),
-                    Constants.RMI_PROTOCOL_IDENTIFIER, new Integer(port).intValue()).toString();
-        } else {
-            rmiURL = URIBuilder.buildURI("localhost", "RMINode" + System.currentTimeMillis(),
-                    Constants.RMI_PROTOCOL_IDENTIFIER).toString();
-        }
-    }
-
-    @After
-    public void endTest() throws Exception {
-        NodeFactory.killNode(rmiURL);
-    }
 }

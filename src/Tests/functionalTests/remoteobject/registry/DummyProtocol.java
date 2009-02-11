@@ -72,4 +72,13 @@ public class DummyProtocol implements RemoteObjectFactory {
     public void unexport(RemoteRemoteObject rro) throws ProActiveException {
     }
 
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name)
+            throws ProActiveException {
+        return null;
+    }
+
+    public URI getBaseURI() {
+        return null;
+    }
+
 }

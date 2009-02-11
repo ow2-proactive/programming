@@ -34,7 +34,6 @@ package org.objectweb.proactive.core.util.log;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.apache.log4j.spi.LoggerFactory;
 import org.objectweb.proactive.core.UniqueID;
@@ -49,7 +48,7 @@ public class ProActiveLoggerFactory implements LoggerFactory {
      * Creates a new ProActiveLogger with Diagnostic Context information (hostname and runtime).
      * @see org.apache.log4j.spi.LoggerFactory#makeNewLoggerInstance(java.lang.String)
      */
-    public Logger makeNewLoggerInstance(String name) {
+    public ProActiveLogger makeNewLoggerInstance(String name) {
         if (MDC.get("hostname") == null) {
             MDC.put("hostname", getHostName());
         }

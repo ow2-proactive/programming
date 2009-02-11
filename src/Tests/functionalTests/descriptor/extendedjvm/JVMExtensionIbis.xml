@@ -54,7 +54,7 @@
 						<parameter value="-Dibis.name_server.host=localhost"/>
 						<parameter value="-Dibis.name_server.pool=rutget"/>
 						<parameter value="-Dibis.name_server.key=12"/>
-						<parameter value="-Dproactive.test=true"/>
+						<parameter value="${JVM_PARAMETERS}"/>
 					</jvmParameters>
 				</jvmProcess>
 			</processDefinition>
@@ -77,7 +77,7 @@
 						<parameter value="-Dibis.name_server.host=localhost"/>
 						<parameter value="-Dibis.name_server.pool=rutget"/>
 						<parameter value="-Dibis.name_server.key=12"/>
-						<parameter value="-Dproactive.test=true"/>
+						<parameter value="${JVM_PARAMETERS}"/>
 					</jvmParameters>
 				</jvmProcess>
 			</processDefinition>
@@ -91,7 +91,7 @@
 						<parameter value="-Dibis.name_server.host=localhost"/>
 						<parameter value="-Dibis.name_server.pool=rutget"/>
 						<parameter value="-Dibis.name_server.key=12"/>
-						<parameter value="-Dproactive.test=true"/>
+						<parameter value="${JVM_PARAMETERS}"/>
 					</jvmParameters>
 				</jvmProcess>
 			</processDefinition>

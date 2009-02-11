@@ -41,7 +41,7 @@ public class TestExecutableOnePerCapacity extends AbstractTExecutable {
         super(Instances.onePerCapacity);
     }
 
-    @Test(timeout = 10000)
+    @Test(timeout = 20000)
     public void Test() {
         while (4 != tmpDir.listFiles().length) {
             try {

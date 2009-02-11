@@ -42,8 +42,10 @@ import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 
+import functionalTests.FunctionalTest;
 
-public class TestVariableContract {
+
+public class TestVariableContract extends FunctionalTest {
     static final String VAR_NAME = "VARIABLE";
     static final String VAR_VALUE = "value";
     static final String VAR_DEFAULTVALUE = "plop";

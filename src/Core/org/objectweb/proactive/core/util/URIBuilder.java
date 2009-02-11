@@ -75,6 +75,10 @@ public class URIBuilder {
         }
     }
 
+    public static URI buildURI(URI baseURI, String name) {
+        return URI.create(baseURI.toString() + name);
+    }
+
     /**
      * Returns an url compliant with RFC 2396 [protocol:][//host][[/]path]
      * loopback address is replaced by a non-loopback address localhost -> [DNS/IP] Address
@@ -115,7 +119,7 @@ public class URIBuilder {
      * @returnan url under the form [protocol:][//host[:port]][[/]name]
      */
     public static URI buildURI(String host, String name, String protocol, int port) {
-        return buildURI(host, name, protocol, port, true);
+        return buildURI(host, name, protocol, port, false);
     }
 
     /**
@@ -194,7 +198,7 @@ public class URIBuilder {
 
     /**
      * build a virtual node url from a given url
-     * @param url
+     * @param uri
      * @return
      * @throws java.net.UnknownHostException if no network interface was found
      */
@@ -231,7 +235,7 @@ public class URIBuilder {
 
     /**
      * Returns the name included in the url
-     * @param url
+     * @param uri
      * @return the name included in the url
      */
     public static String getNameFromURI(URI u) {
@@ -362,7 +366,7 @@ public class URIBuilder {
 
     /**
      * change the port of a given url
-     * @param url the url to change the port
+     * @param uri the url to change the port
      * @param port the new port number
      * @return the url with the new port
      */

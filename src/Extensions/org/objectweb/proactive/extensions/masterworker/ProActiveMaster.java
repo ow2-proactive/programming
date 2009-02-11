@@ -37,6 +37,7 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.xml.VariableContract;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
@@ -84,6 +85,7 @@ import java.util.List;
  * @see org.objectweb.proactive.extensions.masterworker.interfaces.Master
  */
 @PublicAPI
+@SuppressWarnings("serial")
 public class ProActiveMaster<T extends Task<R>, R extends Serializable> implements Master<T, R>, Serializable {
 
     protected ProActiveMaster<T, R> activeThis = null;
@@ -162,12 +164,39 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
      * The master will be created on top of a single resource deployed by this virtual node
      *
      * @param descriptorURL url of the ProActive descriptor
+     * @param vContract {@link VariableContract} to use when parsing the descriptor
+     * @param masterVNName  name of the virtual node to deploy inside the ProActive descriptor
+     */
+    public ProActiveMaster(URL descriptorURL, VariableContractImpl vContract, String masterVNName) {
+        this(descriptorURL, vContract, masterVNName, new ConstantMemoryFactory());
+    }
+
+    /**
+     * Creates an empty remote master with the URL of a descriptor and the name of a virtual node
+     * The master will be created on top of a single resource deployed by this virtual node
+     *
+     * @param descriptorURL url of the ProActive descriptor
+     * @param vContract {@link VariableContract} to use when parsing the descriptor
      * @param masterVNName  name of the virtual node to deploy inside the ProActive descriptor
      * @param memoryFactory factory which will create memory for each new workers
      */
     public ProActiveMaster(URL descriptorURL, String masterVNName, MemoryFactory memoryFactory) {
+        this(descriptorURL, null, masterVNName, memoryFactory);
+    }
+
+    /**
+     * Creates an empty remote master with the URL of a descriptor and the name of a virtual node
+     * The master will be created on top of a single resource deployed by this virtual node
+     *
+     * @param descriptorURL url of the ProActive descriptor
+     * @param vContract {@link VariableContract} to use when parsing the descriptor
+     * @param masterVNName  name of the virtual node to deploy inside the ProActive descriptor
+     * @param memoryFactory factory which will create memory for each new workers
+     */
+    public ProActiveMaster(URL descriptorURL, VariableContractImpl vContract, String masterVNName,
+            MemoryFactory memoryFactory) {
         try {
-            GCMApplication pad = PAGCMDeployment.loadApplicationDescriptor(descriptorURL);
+            GCMApplication pad = PAGCMDeployment.loadApplicationDescriptor(descriptorURL, vContract);
 
             GCMVirtualNode masterVN = pad.getVirtualNode(masterVNName);
             pad.startDeployment();

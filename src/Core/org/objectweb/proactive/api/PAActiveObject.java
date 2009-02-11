@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.net.URI;
+import java.net.URL;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -901,6 +902,7 @@ public class PAActiveObject {
      * @exception java.io.IOException
      *                if the remote body cannot be registered
      */
+    @Deprecated
     public static void register(Object obj, String url) throws java.io.IOException {
         UniversalBody body = AbstractBody.getRemoteBody(obj);
 
@@ -914,6 +916,18 @@ public class PAActiveObject {
             e.printStackTrace();
             throw new IOException(e.getMessage());
         }
+    }
+
+    public static String registerByName(Object obj, String name) throws IOException {
+        UniversalBody body = AbstractBody.getRemoteBody(obj);
+
+        String url = body.registerByName(name);
+        body.setRegistered(true);
+        if (PAActiveObject.logger.isInfoEnabled()) {
+            PAActiveObject.logger.info("Success at binding url " + url);
+        }
+
+        return url;
     }
 
     /**

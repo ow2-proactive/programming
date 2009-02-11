@@ -392,6 +392,7 @@
 					<include name="*.jar" />
 				</fileset>
 			</indexjars>
+			<fileset dir="${compile.dir}" includes="META-INF/**" />
 		</jar>
 
 		<copy todir="${deploy.lib.dir}">
@@ -567,6 +568,7 @@
 	<macrodef name="junitMacro">
 		<attribute name="nodeDescriptor" />
 		<attribute name="testsuite"/>
+		<attribute name="communication.protocol" default="rmi"/>
 		<element name="jvmargs" optional="yes" />
 		<element name="additionalClasspath" optional="yes" />
 		<sequential>
@@ -587,6 +589,7 @@
 					<path refid="test.classpath" />
 				</classpath>
 
+				<jvmarg value="-Dproactive.communication.protocol=@{communication.protocol}" />
 				<jvmarg value="-Djava.security.policy=${base.dir}/compile/proactive.java.policy" />
 				<jvmarg value="-Dlog4j.configuration=file:${base.dir}/compile/proactive-log4j" />
 				<jvmarg value="-DfunctionalTests.descriptor.defaultnodes.file=@{nodeDescriptor}" />
@@ -612,15 +615,40 @@
 		</sequential>
 	</macrodef>
 
-
-	<target name="junit.distributed" depends="compile.tests, deploy.all" description="Run all non regression tests">
-		<junitMacro nodeDescriptor="/functionalTests/descriptor/defaultnodes/Nodes.xml" testsuite="testsuite"/>
-	</target>
-
 	<target name="junit" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
 
+	<target name="junit.http" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
+		<junitMacro communication.protocol="http" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
+	</target>
+
+	<target name="junit.rmi" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
+		<junitMacro communication.protocol="rmi" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
+	</target>
+
+	<target name="junit.ibis" depends="deploy.all">
+		<junitMacro communication.protocol="ibis" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocalIbis.xml" testsuite="testsuite">
+			<jvmargs>
+				<jvmarg value="-Dproactive.rmi=ibis" />
+				<jvmarg value="-Dibis.serialization=sun" />
+				<jvmarg value="-Dibis.name_server.host=localhost" />
+				<jvmarg value="-Dibis.name_server.pool=rutget" />
+				<jvmarg value="-Dibis.pool.host_number=1" />
+				<jvmarg value="-Dibis.name_server.key=12" />
+				<jvmarg value="-Dibis.property.file=/home1/fabrice/workIbis/Ibis/properties" />
+			</jvmargs>
+		</junitMacro>
+	</target>
+
+	<target name="junit.pamr" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
+		<junitMacro communication.protocol="pamr" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite">
+			<jvmargs>
+				<jvmarg value="-Dproactive.net.router.address=localhost" />
+				<jvmarg value="-Dproactive.net.router.port=0" />
+			</jvmargs>
+		</junitMacro>
+	</target>
 
 	<target name="with.clover">
 		<taskdef resource="cloverlib.xml" classpath="${base.dir}/compile/lib/clover.jar" />
@@ -722,20 +750,6 @@
 			</runTestsMacro>
 	</target>
 	-->
-
-	<target name="junit.ibis" depends="deploy.all">
-		<junitMacro nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocalIbis.xml" testsuite="testsuite">
-			<jvmargs>
-				<jvmarg value="-Dproactive.rmi=ibis" />
-				<jvmarg value="-Dibis.serialization=sun" />
-				<jvmarg value="-Dibis.name_server.host=localhost" />
-				<jvmarg value="-Dibis.name_server.pool=rutget" />
-				<jvmarg value="-Dibis.pool.host_number=1" />
-				<jvmarg value="-Dibis.name_server.key=12" />
-				<jvmarg value="-Dibis.property.file=/home1/fabrice/workIbis/Ibis/properties" />
-			</jvmargs>
-		</junitMacro>
-	</target>
 
 	<target name="junit.performance" depends="deploy.all">
 		<junitMacro nodeDescriptor="/functionalTests/descriptor/defaultnodes/Nodes.xml" testsuite="performancesuite"/>
