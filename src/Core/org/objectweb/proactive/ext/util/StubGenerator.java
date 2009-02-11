@@ -38,6 +38,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import javassist.ClassClassPath;
 import javassist.ClassPool;
@@ -153,7 +154,7 @@ public class StubGenerator {
 
         // ClassPool.releaseUnmodifiedClassFile = true;
         for (File file : files) {
-            String str = file.toString().replaceFirst(srcDir.toString().replace("\\", "\\\\"), "");
+            String str = file.toString().replaceFirst(Matcher.quoteReplacement(srcDir.toString()), "");
             try {
                 if (!verbose) {
                     System.setErr(mute);

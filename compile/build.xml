@@ -167,21 +167,19 @@
 		<echo message="Java primitive type wrapper stubs generating..." />
 		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
 			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -pkg org.objectweb.proactive.core.util.wrapper" />
+			<arg value="-srcDir ${cl.proactive.dir}"/>
+            <arg value="-pkg org.objectweb.proactive.core.util.wrapper"/>
+		</java>
+		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
+			<classpath refid="project.classpath" />
+			<arg value="-srcDir ${cl.proactive.dir}"/>
+            <arg value="-class org/objectweb/proactive/core/runtime/ProActiveRuntime" />
 		</java>
 
 		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
 			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -pkg org.objectweb.proactive.core.util.wrapper" />
-		</java>
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -class org/objectweb/proactive/core/runtime/ProActiveRuntime" />
-		</java>
-
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -class org/objectweb/proactive/core/body/UniversalBody" />
+			<arg value="-srcDir ${cl.proactive.dir}"/>
+            <arg value="-class org/objectweb/proactive/core/body/UniversalBody" />
 		</java>
 
 	    <antcall target="ibis"/>
@@ -613,7 +611,7 @@
 		<junitMacro nodeDescriptor="/functionalTests/descriptor/defaultnodes/Nodes.xml" testsuite="testsuite"/>
 	</target>
 
-	<target name="junit" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
+	<target name="junit"  description="Run all non regression tests on the current host only">
 		<junitMacro nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
 
@@ -914,7 +912,8 @@
 
 		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
 			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -pkg org.objectweb.proactive" />
+			<arg value="-srcDir ${cl.proactive.dir}"/>
+            <arg value="-pkg org.objectweb.proactive" />
 		</java>
 	</target>
 
