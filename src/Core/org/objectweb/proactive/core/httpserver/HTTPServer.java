@@ -31,6 +31,8 @@
  */
 package org.objectweb.proactive.core.httpserver;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
@@ -112,10 +114,10 @@ public class HTTPServer {
         if (PAProperties.PA_HTTP_JETTY_XML.isSet()) {
             final String fileLoc = PAProperties.PA_HTTP_JETTY_XML.getValue();
             try {
-                final XmlConfiguration configuration = new XmlConfiguration(fileLoc);
+                final XmlConfiguration configuration = new XmlConfiguration(new File(fileLoc).toURI().toURL());
                 configuration.configure(server);
             } catch (Exception e) {
-                logger.error("Failed to load jetty configuration file", e);
+                logger.error("Failed to load jetty configuration file: " + fileLoc, e);
             }
         }
 
