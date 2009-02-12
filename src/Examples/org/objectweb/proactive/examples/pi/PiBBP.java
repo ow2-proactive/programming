@@ -383,7 +383,7 @@ public class PiBBP implements Serializable {
      * Initializes the computation with the arguments found in the args array
      * @param args The initialization arguments
      */
-    private void parseProgramArguments(String[] args) {
+    private void parseProgramArguments(String[] args) throws IllegalArgumentException {
         if (args.length == 0) {
             ws_ = true;
             deploymentDescriptorLocation_ = "LAN.xml";
@@ -399,8 +399,7 @@ public class PiBBP implements Serializable {
                     deploymentDescriptorLocation_ = "LAN.xml";
                     break;
                 case 3:
-                    deploymentDescriptorLocation_ = "sophia-infra-p2p.xml";
-                    break;
+                    throw new IllegalArgumentException("P2P is no longer supported");
                 case 4:
                     deploymentDescriptorLocation_ = "sophia-cluster.xml";
                     break;

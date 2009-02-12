@@ -61,7 +61,7 @@ import org.objectweb.proactive.extra.branchnbound.core.queue.TaskQueue;
  */
 @PublicAPI
 public class ProActiveBranchNBound {
-    private static Logger logger = ProActiveLogger.getLogger(Loggers.P2P_SKELETONS);
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
 
     static {
         // Loading the ProActive's configuration

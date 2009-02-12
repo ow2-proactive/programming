@@ -14,12 +14,6 @@
 
 	<acquisition>
 		<lookup hostList="schubby" type="RMI" />
-		<p2p nodesAsked="3">
-			<localClient />
-			<peerSet>
-				<peer>http://localhost</peer>
-			</peerSet>
-		</p2p>
 	</acquisition>
 
 	<infrastructure>

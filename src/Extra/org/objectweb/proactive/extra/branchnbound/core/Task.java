@@ -50,7 +50,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 @PublicAPI
 public abstract class Task implements Serializable, Comparable<Task> {
-    protected static Logger logger = ProActiveLogger.getLogger(Loggers.P2P_SKELETONS_MANAGER);
+    protected static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
     protected Result initLowerBound;
     protected Result initUpperBound;
     protected Worker worker = null;

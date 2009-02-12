@@ -70,18 +70,6 @@
 		<xsd:attribute name="port" type="xsd:positiveInteger"></xsd:attribute>
 	</xsd:complexType>
 
-	<xsd:complexType name="p2pType">
-		<xsd:sequence>
-			<xsd:element name="localClient" type="localClientType"/>
-			<xsd:element name="peerSet" type="peerSetType"/>
-		</xsd:sequence>
-		<xsd:attribute name="nodesAsked">
-			<xsd:simpleType>
-				<xsd:union memberTypes="xsd:positiveInteger MAX" />
-			</xsd:simpleType>
-		</xsd:attribute>
-	</xsd:complexType>
-
 	<xsd:complexType name="lookupType">
 		<xsd:attribute name="type" type="lookupProtocolType"></xsd:attribute>
 		<xsd:attribute name="hostList" type="xsd:string"></xsd:attribute>
@@ -92,7 +80,6 @@
 	<xsd:complexType name="acquisitionType">
 		<xsd:sequence>
 			<xsd:element name="lookup" type="lookupType" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:element name="p2p" type="p2pType" minOccurs="0" maxOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 

@@ -32,7 +32,6 @@
                 <!ENTITY examples SYSTEM "components/examples.xml">
                 <!ENTITY perspectives SYSTEM "components/perspectives.xml">
                 <!ENTITY annex SYSTEM "components/annex.xml">
-                <!ENTITY p2p SYSTEM "p2p.xml">
                 <!ENTITY Security SYSTEM "Security.xml">
                 <!ENTITY WSDoc SYSTEM "WSDoc.xml">
                 <!ENTITY OSGi SYSTEM "OSGi.xml">

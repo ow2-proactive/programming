@@ -54,7 +54,6 @@ public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObje
     // -------------------------------------------
     // --- Constants -----------------------------
     // -------------------------------------------
-    public static boolean HIDE_P2PNODE_MONITORING = true;
     public static boolean DEFAULT_ENABLE_AUTO_RESET = false;
     public final static String ADD_VN_MESSAGE = "Add a virtual node";
     public final static String REMOVE_VN_MESSAGE = "Remove a virtual node";
@@ -98,7 +97,6 @@ public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObje
      * Thread
      */
     private final MonitorThread monitorThread;
-    private boolean hideP2P = HIDE_P2PNODE_MONITORING;
 
     // -------------------------------------------
     // --- Constructor ---------------------------
@@ -380,26 +378,6 @@ public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObje
 
     public List<VirtualNodeObject> getVNChildren() {
         return new ArrayList<VirtualNodeObject>(this.vnChildren.values());
-    }
-
-    /**
-     * Use to hide or nor the p2p objects.
-     * 
-     * @param hide
-     *            true for hide the p2p object, false otherwise
-     */
-    public void hideP2P(boolean hide) {
-        this.hideP2P = hide;
-        this.monitorThread.forceRefresh();
-    }
-
-    /**
-     * Return true if the p2p objects ars hidden, false otherwise
-     * 
-     * @return true if the p2p objects ars hidden, false otherwise
-     */
-    public boolean isP2PHidden() {
-        return this.hideP2P;
     }
 
     public void notifyChanged() {

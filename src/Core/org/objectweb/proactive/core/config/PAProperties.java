@@ -429,46 +429,6 @@ public enum PAProperties {
     PA_MASTERWORKER_COMPRESSTASKS("proactive.masterworker.compresstasks", PAPropertiesType.BOOLEAN),
 
     /* ------------------------------------
-     *  PEER TO PEER
-     */
-
-    /** Acquisition method. */
-    PA_P2P_ACQUISITION("proactive.p2p.acq", PAPropertiesType.STRING),
-
-    /** Port number. */
-    PA_P2P_PORT("proactive.p2p.port", PAPropertiesType.INTEGER),
-
-    /** NOA is in number of peers. */
-    PA_P2P_NOA("proactive.p2p.noa", PAPropertiesType.INTEGER),
-
-    /** TTU is in minutes. */
-    PA_P2P_TTU("proactive.p2p.ttu", PAPropertiesType.INTEGER),
-
-    /** TTL is in hops. */
-    PA_P2P_TTL("proactive.p2p.ttl", PAPropertiesType.INTEGER),
-
-    /** List capacity of message sequence number. */
-    PA_P2P_MSG_MEMORY("proactive.p2p.msg_capacity", PAPropertiesType.INTEGER),
-
-    /** Percentage of agree response. */
-    PA_P2P_EXPLORING_MSG("proactive.p2p.expl_msg", PAPropertiesType.INTEGER),
-
-    /** Timeout for node acquisition. */
-    PA_P2P_NODES_ACQUISITION_T0("proactive.p2p.nodes_acq_to", PAPropertiesType.INTEGER),
-
-    /** Lookup frequency for nodes. */
-    PA_P2P_LOOKUP_FREQ("proactive.p2p.lookup_freq", PAPropertiesType.INTEGER),
-
-    /** If true deploying one shared nodes by CPU, else only one node is shared. */
-    PA_P2P_MULTI_PROC_NODES("proactive.p2p.multi_proc_nodes", PAPropertiesType.BOOLEAN),
-
-    /** Path of the xml deployment descriptor, for deploying shared nodes. */
-    PA_P2P_XML_PATH("proactive.p2p.xml_path", PAPropertiesType.STRING),
-
-    /** Boolean value for disable node sharing. */
-    PA_P2P_NO_SHARING("proactive.p2p.nosharing", PAPropertiesType.BOOLEAN),
-
-    /* ------------------------------------
      *  DISTRIBUTED GARBAGE COLLECTOR
      */
 

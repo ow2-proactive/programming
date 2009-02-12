@@ -32,7 +32,6 @@
 package unitTests.gcmdeployment.descriptorParser;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,17 +40,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.xpath.XPath;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentAcquisition;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentParserImpl;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.P2PEntry;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.AbstractBridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.AbstractBridgeParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroup;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.AbstractGroupParser;
-import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
@@ -63,11 +62,6 @@ import org.xml.sax.SAXException;
  * 
  */
 public class TestDeploymentDescriptorParser {
-
-    private static final int LOCAL_PORT_NUM = 12345;
-    private static final String LOCAL_PROTOCOL = "RMI";
-    private static final int LOCAL_NODES_TO_ASK = 12;
-    private static final String[] LOCAL_HOSTS = new String[] { "rmi://foo.bar:123", "rmi://foo2.bar:456" };
 
     @Test
     public void test() throws Exception {
@@ -90,33 +84,6 @@ public class TestDeploymentDescriptorParser {
 
         parser.parseInfrastructure();
         parser.parseResources();
-    }
-
-    @Test
-    public void acquisitionTest() throws Exception {
-        File descriptor = new File(this.getClass().getResource("testfiles/deployment/acquisition.xml")
-                .getFile());
-        System.out.println("Parsing " + descriptor.getAbsolutePath());
-        GCMDeploymentParserImpl parser = new GCMDeploymentParserImpl(Helpers.fileToURL(descriptor), null);
-
-        parser.parseAcquisition();
-
-        GCMDeploymentAcquisition acquisitionParsed = parser.getAcquisitions();
-
-        assertEquals(acquisitionParsed.getLookupEntries().size(), 0);
-        assertEquals(acquisitionParsed.getP2PEntries().size(), 1);
-        P2PEntry entry = acquisitionParsed.getP2PEntries().get(0);
-        assertEquals(entry.getHostsList().size(), 2);
-        assertEquals(entry.getLocalClient().getPort(), LOCAL_PORT_NUM);
-        assertEquals(entry.getLocalClient().getProtocol(), LOCAL_PROTOCOL);
-        List<String> hostList = entry.getHostsList();
-        int i = 0;
-        for (String host : hostList) {
-            assertTrue(host.equals(LOCAL_HOSTS[i]));
-            i++;
-        }
-        assertEquals(entry.getNodesToAsk(), LOCAL_NODES_TO_ASK);
-
     }
 
     //

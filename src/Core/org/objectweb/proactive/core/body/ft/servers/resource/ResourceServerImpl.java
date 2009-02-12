@@ -34,6 +34,7 @@ package org.objectweb.proactive.core.body.ft.servers.resource;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.body.ft.servers.FTServer;
 import org.objectweb.proactive.core.node.Node;
@@ -48,8 +49,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class ResourceServerImpl implements ResourceServer {
 
-    /** Connexion port for recovery nodes p2p network */
-    // public static final String P2P_PORT = "2603";
     //logger
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.FAULT_TOLERANCE);
 
@@ -59,9 +58,6 @@ public class ResourceServerImpl implements ResourceServer {
     // list of free ProActiveRuntime
     private List<Node> freeNodes;
 
-    // OR use p2p infracstructure
-    // private P2PService serviceP2P;
-
     // number of returned free nodes
     private int nodeCounter;
 
@@ -70,22 +66,6 @@ public class ResourceServerImpl implements ResourceServer {
         this.freeNodes = new ArrayList<Node>();
         this.nodeCounter = 0;
     }
-
-    //    public ResourceServerImpl(FTServer server, String p2pServerURL) {
-    //        this(server);
-    //        try {
-    //            Vector<String> v = new Vector<String>(1);
-    //            v.add(p2pServerURL);
-    //            StartP2PService startServiceP2P = new StartP2PService(v);
-    //            PAProperties.PA_P2P_PORT.setValue(P2P_PORT);
-    //            startServiceP2P.start();
-    //            this.serviceP2P = startServiceP2P.getP2PService();
-    //            logger.info("[RESOURCE] Running on p2p network");
-    //        } catch (ProActiveException e) {
-    //            logger.error("**ERROR** Unable to reach p2p network");
-    //            e.printStackTrace();
-    //        }
-    //    }
 
     /**
      * @see org.objectweb.proactive.core.body.ft.servers.resource.ResourceServer#addFreeNode(org.objectweb.proactive.core.node.Node)
@@ -102,14 +82,8 @@ public class ResourceServerImpl implements ResourceServer {
         this.nodeCounter++;
         Node n = null;
         if (this.freeNodes.isEmpty()) {
-            //            // use p2p service if any
-            //            if (this.serviceP2P != null) {
-            //                P2PNodeLookup p2pNodeLookup = this.serviceP2P.getNodes(1, "FT", "1"); // SET JOB-ID
-            //                n = (Node) ((p2pNodeLookup.getNodes(30000)).firstElement());
-            //            } else {
             logger.error("[RESSOURCE] **ERROR** There is no resource nodes !");
             return null;
-            //            }
         } else {
             n = (this.freeNodes.get(nodeCounter % (this.freeNodes.size())));
         }

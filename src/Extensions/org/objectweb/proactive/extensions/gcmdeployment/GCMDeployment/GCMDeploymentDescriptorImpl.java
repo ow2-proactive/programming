@@ -33,16 +33,12 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 
 import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import org.objectweb.proactive.core.process.JVMProcessImpl;
-import org.objectweb.proactive.core.process.AbstractExternalProcess.StandardOutputMessageLogger;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.P2PEntry;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Group;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
@@ -68,9 +64,6 @@ public class GCMDeploymentDescriptorImpl implements GCMDeploymentDescriptor {
         startGroups(commandBuilder, gcma);
         startBridges(commandBuilder, gcma);
 
-        for (P2PEntry p2pAcq : acquisitions.getP2PEntries()) {
-            startP2PAcquisition(p2pAcq);
-        }
     }
 
     private void startLocal(CommandBuilder commandBuilder, GCMApplicationInternal gcma) {
@@ -109,24 +102,6 @@ public class GCMDeploymentDescriptorImpl implements GCMDeploymentDescriptor {
                 GCMD_LOGGER.debug("bridge id=" + bridge.getId() + " command= " + command);
                 Executor.getExecutor().submit(command);
             }
-        }
-    }
-
-    private void startP2PAcquisition(P2PEntry entry) {
-        try {
-            JVMProcessImpl process = new JVMProcessImpl(new StandardOutputMessageLogger());
-            process.setClassname("org.objectweb.proactive.extra.p2p.service.StartP2PService");
-
-            process.setParameters("-port " + entry.getLocalClient().getPort() + " -acq " +
-                entry.getLocalClient().getProtocol());
-
-            process.startProcess();
-            Thread.sleep(7000);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
     }
 

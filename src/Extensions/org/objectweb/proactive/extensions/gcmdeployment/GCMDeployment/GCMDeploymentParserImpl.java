@@ -57,7 +57,6 @@ import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.P2PEntry;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.AbstractBridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.BridgeOARSHParser;
@@ -87,9 +86,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.H
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfoImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tool;
 import org.objectweb.proactive.extensions.gcmdeployment.environment.Environment;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -117,7 +114,6 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
     private static final String PA_GROUP = "group";
     private static final String PA_BRIDGE = "bridge";
     private static final String PA_LOOKUP = "lookup";
-    private static final String PA_P2P = "p2p";
     private static final String PA_NODE_ASKED = "nodesAsked";
     private static final String PA_LOCAL_CLIENT = "localClient";
     private static final String PA_PEER_SET = "peerSet";
@@ -324,59 +320,8 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
      * @throws IOException
      */
     private void parseAcquisitionNode(Node acquisitionNode) throws XPathExpressionException, IOException {
-        if (acquisitionNode.getNodeName().equals(PA_P2P)) {
-            parseP2PNode(acquisitionNode);
-        } else if (acquisitionNode.getNodeName().equals(PA_LOOKUP)) {
+        if (acquisitionNode.getNodeName().equals(PA_LOOKUP)) {
             // parseLookupNode();
-        }
-    }
-
-    private void parseP2PNode(Node acquisitionNode) {
-        P2PEntry newEntry = new P2PEntry();
-
-        Node attr = acquisitionNode.getAttributes().getNamedItem(PA_NODE_ASKED);
-
-        if (attr != null && attr.getNodeType() == Node.ATTRIBUTE_NODE) {
-            Attr attr2 = (Attr) attr;
-            newEntry.setNodesToAsk(Integer.parseInt(attr2.getValue()));
-        }
-
-        NodeList childNodes = acquisitionNode.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node chNode = childNodes.item(i);
-            if (chNode.getNodeType() == Node.ELEMENT_NODE) {
-                if (chNode.getNodeName().equals(PA_LOCAL_CLIENT)) {
-                    parseLocalClientNode(chNode, newEntry);
-                } else if (chNode.getNodeName().equals(PA_PEER_SET)) {
-                    parsePeerSetNode(chNode, newEntry);
-                }
-            }
-        }
-
-        this.acquisitions.getP2PEntries().add(newEntry);
-    }
-
-    private void parseLocalClientNode(Node localClientNode, P2PEntry p2pEntry) {
-        NamedNodeMap attrs = localClientNode.getAttributes();
-        for (int i = 0; i < attrs.getLength(); i++) {
-            Attr attr = (Attr) attrs.item(i);
-            if (attr.getName().equals(PA_PROTOCOL)) {
-                p2pEntry.getLocalClient().setProtocol(attr.getValue());
-            } else if (attr.getName().equals(PA_PORT)) {
-                p2pEntry.getLocalClient().setPort(Integer.parseInt(attr.getValue()));
-            }
-        }
-    }
-
-    private void parsePeerSetNode(Node peerSetNode, P2PEntry p2pEntry) {
-        NodeList childNodes = peerSetNode.getChildNodes();
-        for (int i = 0; i < childNodes.getLength(); i++) {
-            Node chNode = childNodes.item(i);
-            if (chNode.getNodeType() == Node.ELEMENT_NODE) {
-                if (chNode.getNodeName().equals(PA_PEER)) {
-                    p2pEntry.getHostsList().add(chNode.getTextContent());
-                }
-            }
         }
     }
 

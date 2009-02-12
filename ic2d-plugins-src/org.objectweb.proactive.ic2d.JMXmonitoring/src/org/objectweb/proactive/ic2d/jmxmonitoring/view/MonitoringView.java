@@ -74,7 +74,6 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.action.KillVMAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.MonitoringContextMenuProvider;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.NewHostAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.NewViewAction;
-import org.objectweb.proactive.ic2d.jmxmonitoring.action.P2PAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.RefreshAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.RefreshHostAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.RefreshJVMAction;
@@ -355,10 +354,6 @@ public class MonitoringView extends ViewPart {
         EnableDisableMonitoringAction toolBarEnableDisableMonitoring = new EnableDisableMonitoringAction(
             world);
         toolBarManager.add(toolBarEnableDisableMonitoring);
-
-        // Adds enable/disable monitoring action to the view's toolbar
-        P2PAction toolBarP2P = new P2PAction(world);
-        toolBarManager.add(toolBarP2P);
 
         toolBarManager.add(new Separator());
 

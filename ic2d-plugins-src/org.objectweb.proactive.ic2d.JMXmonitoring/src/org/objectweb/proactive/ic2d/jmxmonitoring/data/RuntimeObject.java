@@ -49,7 +49,6 @@ import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extra.p2p.service.util.P2PConstants;
 import org.objectweb.proactive.ic2d.console.Console;
 import org.objectweb.proactive.ic2d.jmxmonitoring.Activator;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.listener.RuntimeObjectListener;
@@ -225,12 +224,9 @@ public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeO
         final Map<String, ProActiveNodeObject> childrenToRemove = this.getMonitoredChildrenAsMap();
 
         for (final ObjectName name : nodeNames) {
-            // Search if the node is a P2P node
+            // Check if the node should be displayed
             final String nodeName = name.getKeyProperty(FactoryName.NODE_NAME_PROPERTY);
-            if (nodeName.startsWith(P2PConstants.P2P_NODE_NAME) && getWorldObject().isP2PHidden() ||
-                NodeFactory.isHalfBodiesNode(nodeName)) {
-                // We have to skeep this node because it is a P2PNode or a
-                // halfBodiesNode
+            if (NodeFactory.isHalfBodiesNode(nodeName)) {
                 continue;
             }
 

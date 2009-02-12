@@ -21,12 +21,6 @@
 			<include name="components/*.jar" />
 		</fileset>
 	</path>
-	<path id="p2p.classpath">
-		<pathelement location="${proactive.dir}/classes"/>
-		<fileset dir="/net/proj/oasis/home/pkg/proactivep2p/java/lib">
-			<include name="*.jar" />
-		</fileset>
-	</path>
 	<!-- default target that displays usage -->
 	<target name="usage">
 		<echo message="" />
@@ -81,12 +75,6 @@
 		</javac>
 	</target>
 
-	<target name="compileP2P" depends="init, configurationCopy">
-		<javac srcdir="${src.dir}" destdir="${classes.dir}/Examples" deprecation="on" source="${source}" debug="${debug}">
-			<classpath refid="p2p.classpath" />
-			<include name="**/*.java" />
-		</javac>
-	</target>
 
 
 	<!--
@@ -151,16 +139,12 @@
 		<echo message="0 : no deployment" />
 		<echo message="1 : localhost deployment" />
 		<echo message="2 : LAN deployment" />
-		<echo message="3 : P2P Infra-Inria nodes acquisition" />
 		<echo message="4 : INRIA cluster deployment" />
 		<echo message="5 : On-the-fly deployment"/>
 		<echo message="6 : Custom deployment descriptor" />
 		<echo message="default : localhost deployment" />
 		<input message="? " addproperty="deployment" defaultvalue="1" />
 		
-		<condition property="isP2P">
-			<equals arg1="${deployment}" arg2="3" />
-		</condition>
 		<condition property="isOnTheFly">
 			<equals arg1="${deployment}" arg2="5" />
 		</condition>
@@ -175,7 +159,6 @@
 			</and>
 		</condition>
 		
-		<antcall target="p2p" />
 		<antcall target="normal" />
 		<antcall target="onthefly" />
 	</target>
@@ -194,20 +177,6 @@
 		</java>
 	</target>
 
-	<target name="p2p" if="isP2P">
-		<antcall target="clean"/>
-		<antcall target="compileP2P" />
-		<java classname="org.objectweb.proactive.examples.pi.PiBBP" fork="true">
-			<classpath refid="p2p.classpath" />
-			<jvmarg value="-Djava.security.policy=${proactive.dir}/dist/proactive.java.policy" />
-			<jvmarg value="-Dlog4j.configuration=file:${proactive.dir}/dist/proactive-log4j" />
-			<jvmarg value="-Dproactive.configuration=file:${base}/config/proactive-config-p2p.xml" />
-			<jvmarg value="-Dproactive.home=${proactive.dir}" />
-			<arg value="${nb-decimals}" />
-			<arg value="${run-mode}" />
-			<arg value="${deployment}" />
-		</java>
-	</target>
 
 	<target name="onthefly" if="isOnTheFly">
 		<antcall target="clean"/>

@@ -44,18 +44,6 @@ log4j.logger.org.mortbay = WARN
 #log4j.logger.proactive.components.adl = DEBUG
 #log4j.logger.proactive.components.gui = DEBUG
 
-#log4j.logger.proactive.p2p = DEBUG
-#log4j.logger.proactive.p2p.startservice = DEBUG
-#log4j.logger.proactive.p2p.vn = DEBUG
-#log4j.logger.proactive.p2p.vn.service = DEBUG
-#log4j.logger.proactive.p2p.nodes = DEBUG
-#log4j.logger.proactive.p2p.acquaintances = DEBUG
-#log4j.logger.proactive.p2p.first_contact = DEBUG
-#log4j.logger.proactive.p2p.skeletons = DEBUG
-#log4j.logger.proactive.p2p.skeletons.worker = DEBUG
-#log4j.logger.proactive.p2p.skeletons.manager = DEBUG
-#log4j.logger.proactive.p2p.daemon = DEBUG
-
 #log4j.logger.proactive.security = DEBUG
 #log4j.logger.proactive.security.node = DEBUG
 #log4j.logger.proactive.security.session = DEBUG

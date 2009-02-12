@@ -60,7 +60,7 @@ import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsExcept
 public abstract class TaskQueue implements Serializable {
 
     /** The logger. */
-    public final static Logger logger = ProActiveLogger.getLogger(Loggers.P2P_SKELETONS_MANAGER);
+    public final static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
 
     /** Keeping a copy of the best current solution. */
     private Result bestCurrentResult;

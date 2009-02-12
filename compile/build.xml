@@ -127,7 +127,6 @@
 	<target name="extensions" depends="compile.extensions" description="Deprecated, see compile.extensions" />
 	<target name="extra" depends="compile.extra" description="Deprecated, see compile.extra" />
 	<target name="microTimer" depends="compile.microTimer" description="Deprecated, see compile.microTimer" />
-	<target name="p2p_daemon" depends="compile.p2p_daemon" />
 	<target name="stubGenerator" depends="compile.stubGenerator" description="Deprecated, see compile.stubGenerator" />
 	<target name="tests" depends="compile.tests" />
 	<target name="proActiveJar" depends="deploy" description="Deprecated, see deploy" />
@@ -285,19 +284,6 @@
 	</target>
 
 
-	<target name="compile.p2p_daemon">
-		<exec dir="${daemon.dir}/src/common" executable="cc" os="Linux, Darwin, SunOS">
-			<arg line="-Wall -g -o proactivep2p -x c proactivep2p.cpp proactivep2p.h" />
-		</exec>
-		<exec dir="${daemon.dir}/src/common" executable="cc" os="Linux, Darwin, SunOS">
-			<arg line="-Wall -g -o p2pctl -x c p2pctl.c proactivep2p.h" />
-		</exec>
-		<mkdir dir="${daemon.dir}/build" />
-		<move file="${daemon.dir}/src/common/proactivep2p" todir="${daemon.dir}/build" />
-		<move file="${daemon.dir}/src/common/p2pctl" todir="${daemon.dir}/build" />
-	</target>
-
-	
 	<target name="compile.benchmarks" depends="compile.core, compile.extra" description="Compile the benchmarks">
 		<javac srcdir="${src.benchmarks.dir}" destdir="${cl.benchmarks.dir}" includes="**/*.java" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
