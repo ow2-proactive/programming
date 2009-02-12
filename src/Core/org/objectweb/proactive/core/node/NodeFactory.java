@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.URIBuilder;
@@ -109,14 +110,14 @@ public class NodeFactory {
      * @throws NodeException
      */
     public static synchronized Node getDefaultNode() throws NodeException {
-        ProActiveRuntime defaultRuntime = null;
+        ProActiveRuntime runtime = null;
         String jobID = PAActiveObject.getJobId();
         ProActiveSecurityManager securityManager = null;
         if (defaultNode == null) {
             try {
-                defaultRuntime = RuntimeFactory.getDefaultRuntime();
-                defaultNode = defaultRuntime.createLocalNode(DEFAULT_NODE_NAME +
-                    nodeCounter.incrementAndGet(), false, securityManager, DEFAULT_VIRTUAL_NODE_NAME, jobID);
+                runtime = ProActiveRuntimeImpl.getProActiveRuntime();
+                defaultNode = runtime.createLocalNode(DEFAULT_NODE_NAME + nodeCounter.incrementAndGet(),
+                        false, securityManager, DEFAULT_VIRTUAL_NODE_NAME, jobID);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the default Node", e);
             } catch (AlreadyBoundException e) { //if this exception is risen, we generate another random name for the node
