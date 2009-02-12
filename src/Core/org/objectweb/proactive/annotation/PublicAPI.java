@@ -37,6 +37,6 @@ import java.lang.annotation.RetentionPolicy;
 
 
 @Documented
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface PublicAPI {
 }
