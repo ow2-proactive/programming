@@ -90,13 +90,15 @@ public class FunctionalTest {
 
     static public String getJvmParameters() {
         StringBuilder jvmParameters = new StringBuilder(" ");
-        jvmParameters.append("-Dproactive.test=true ");
+
+        jvmParameters.append(PAProperties.PA_TEST.getCmdLine());
+        jvmParameters.append("true ");
 
         // Jetty: avoid to use SecureRandom for session tracking
         jvmParameters.append(PAProperties.PA_HTTP_JETTY_XML.getCmdLine());
         jvmParameters.append(PAProperties.PA_HTTP_JETTY_XML.getValue());
 
-        jvmParameters.append("-Dproactive.test=true ");
+        jvmParameters.append(" -Dproactive.test=true ");
 
         jvmParameters.append(PAProperties.PA_COMMUNICATION_PROTOCOL.getCmdLine());
         jvmParameters.append(PAProperties.PA_COMMUNICATION_PROTOCOL.getValue());
