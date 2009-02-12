@@ -31,10 +31,12 @@
  */
 package org.objectweb.proactive.extra.messagerouting.remoteobject;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
@@ -77,7 +79,7 @@ public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializa
         this.agent = agent;
     }
 
-    public Reply receiveMessage(Request message) throws MessageRoutingException {
+    public Reply receiveMessage(Request message) throws ProActiveException {
 
         MessageRoutingRemoteObjectRequest req = new MessageRoutingRemoteObjectRequest(message,
             this.remoteObjectURL, getAgent());

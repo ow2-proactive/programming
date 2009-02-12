@@ -40,7 +40,6 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.client.Agent;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
-import org.objectweb.proactive.extra.messagerouting.remoteobject.util.exceptions.MessageRoutingRemoteException;
 
 
 /** Any kind of routed message.
@@ -86,7 +85,7 @@ public abstract class MessageRoutingMessage implements Serializable {
 
     /** Send the message to its recipient using the local agent
      * 
-     * @throws MessageRoutingRemoteException if something bad happened when sending this message
+     * @throws MessageRoutingException if something bad happened when sending this message
      */
     public final void send() throws MessageRoutingException {
         try {

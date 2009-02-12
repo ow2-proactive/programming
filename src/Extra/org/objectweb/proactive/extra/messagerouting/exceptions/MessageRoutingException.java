@@ -1,6 +1,6 @@
 package org.objectweb.proactive.extra.messagerouting.exceptions;
 
-import java.io.IOException;
+import org.objectweb.proactive.core.ProActiveException;
 
 
 /** Signals that an error of some sort has occurred.
@@ -10,7 +10,7 @@ import java.io.IOException;
  * @since ProActive 4.1.0
  */
 @SuppressWarnings("serial")
-public class MessageRoutingException extends IOException {
+public class MessageRoutingException extends ProActiveException {
 
     public MessageRoutingException() {
         super();
