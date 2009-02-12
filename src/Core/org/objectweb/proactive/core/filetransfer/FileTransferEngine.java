@@ -126,9 +126,8 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
         return singletonFTE;
     }
 
-    public synchronized static FileTransferEngine getFileTransferEngine(Node node) {
+    public static FileTransferEngine getFileTransferEngine(Node node) {
         ProActiveRuntime runtime = node.getProActiveRuntime();
-
         FileTransferEngine fte = runtime.getFileTransferEngine();
 
         return fte;
