@@ -76,7 +76,7 @@ public class GathercastControllerImpl extends AbstractCollectiveInterfaceControl
     /*
      * @see org.objectweb.proactive.core.component.controller.AbstractCollectiveInterfaceController#init()
      */
-    @Override
+    //TODO is it an initController method ???
     public void init() {
         if (gatherRequestsHandler == null) {
             gatherRequestsHandler = new GatherRequestsQueues(owner);

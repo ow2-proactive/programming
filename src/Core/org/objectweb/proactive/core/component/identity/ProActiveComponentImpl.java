@@ -67,6 +67,7 @@ import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Fractive;
 import org.objectweb.proactive.core.component.ProActiveInterface;
+import org.objectweb.proactive.core.component.ProActiveInterfaceImpl;
 import org.objectweb.proactive.core.component.config.ComponentConfigurationHandler;
 import org.objectweb.proactive.core.component.controller.AbstractProActiveController;
 import org.objectweb.proactive.core.component.controller.MembraneController;
@@ -142,6 +143,14 @@ public class ProActiveComponentImpl implements ProActiveComponent, Serializable 
             }
         } else { /*No NFTYpe, means that it has to be generated from the config file*/
             addControllers(component_is_primitive);
+        }
+
+        for (Interface itf : controlItfs.values()) {
+            // TODO Check with component controller
+            ProActiveController itfImpl = (ProActiveController) ((ProActiveInterfaceImpl) itf).getFcItfImpl();
+            if (itfImpl != null) { // due to non-functional interface implemented using component
+                itfImpl.initController();
+            }
         }
 
         // 3. external functional interfaces

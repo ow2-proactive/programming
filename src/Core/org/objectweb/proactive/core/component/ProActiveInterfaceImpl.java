@@ -119,13 +119,13 @@ public abstract class ProActiveInterfaceImpl implements ProActiveInterface, Seri
         this.type = type;
     }
 
-    /*
+    /**
      *
      * @see org.objectweb.proactive.core.component.ProActiveInterface#getFcItfImpl()
      */
     public abstract Object getFcItfImpl();
 
-    /*
+    /**
      *
      * @see org.objectweb.proactive.core.component.ProActiveInterface#setFcItfImpl(java.lang.Object)
      */

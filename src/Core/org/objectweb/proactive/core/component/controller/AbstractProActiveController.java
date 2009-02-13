@@ -65,19 +65,21 @@ public abstract class AbstractProActiveController implements ProActiveController
 
     /**
      * Constructor for AbstractProActiveController.
-     * @param owner the component that wants this controller
-     * is in the {@link Constants} class.
+     * 
+     * @param owner the component that wants this controller is in the {@link Constants} class.
      */
     public AbstractProActiveController(Component owner) {
         this.owner = (ProActiveComponent) owner;
         setControllerItfType();
     }
 
-    /*
-     * @see org.objectweb.proactive.core.component.controller.ProActiveController#init()
+    /**
+     * Default void implementation of the the initController method. A controller requiring 
+     * initialization *after* all controllers are instantiated have to override this method.
+     * 
+     * @see org.objectweb.proactive.core.component.controller.ProActiveController#initController()
      */
-    public void init() {
-        // controllers requiring initialization *after* all controllers are instantiated should override this method
+    public void initController() {
     }
 
     /*

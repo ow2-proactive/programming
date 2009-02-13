@@ -89,7 +89,7 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
         super(owner);
     }
 
-    @Override
+    //TODO is it an initController method ???
     public void init() {
         // this method is called once the component is fully instantiated with all its interfaces created
         InterfaceType[] itfTypes = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
