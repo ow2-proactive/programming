@@ -73,23 +73,18 @@ public class GathercastControllerImpl extends AbstractCollectiveInterfaceControl
         super(owner);
     }
 
-    /*
-     * @see org.objectweb.proactive.core.component.controller.AbstractCollectiveInterfaceController#init()
-     */
-    //TODO is it an initController method ???
-    public void init() {
-        if (gatherRequestsHandler == null) {
-            gatherRequestsHandler = new GatherRequestsQueues(owner);
-            List<Object> interfaces = Arrays.asList(owner.getFcInterfaces());
-            Iterator<Object> it = interfaces.iterator();
+    @Override
+    public void initController() {
+        gatherRequestsHandler = new GatherRequestsQueues(owner);
+        List<Object> interfaces = Arrays.asList(owner.getFcInterfaces());
+        Iterator<Object> it = interfaces.iterator();
 
-            while (it.hasNext()) {
-                Interface itf = (Interface) it.next();
+        while (it.hasNext()) {
+            Interface itf = (Interface) it.next();
 
-                // gather mechanism currently only offered for functional interfaces
-                if (!Utils.isControllerInterfaceName(itf.getFcItfName())) {
-                    addManagedInterface((ProActiveInterface) itf);
-                }
+            // gather mechanism currently only offered for functional interfaces
+            if (!Utils.isControllerInterfaceName(itf.getFcItfName())) {
+                addManagedInterface((ProActiveInterface) itf);
             }
         }
     }
@@ -151,9 +146,6 @@ public class GathercastControllerImpl extends AbstractCollectiveInterfaceControl
      * @see org.objectweb.proactive.core.component.controller.GatherController#handleRequestOnGatherItf(org.objectweb.proactive.core.component.request.ComponentRequest)
      */
     public Object handleRequestOnGatherItf(ComponentRequest r) throws ServeException {
-        if (gatherRequestsHandler == null) {
-            init();
-        }
         return gatherRequestsHandler.addRequest(r);
     }
 

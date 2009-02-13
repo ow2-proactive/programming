@@ -145,6 +145,9 @@ public class ProActiveComponentImpl implements ProActiveComponent, Serializable 
             addControllers(component_is_primitive);
         }
 
+        // 3. external functional interfaces
+        addFunctionalInterfaces(component_is_primitive);
+
         for (Interface itf : controlItfs.values()) {
             // TODO Check with component controller
             ProActiveController itfImpl = (ProActiveController) ((ProActiveInterfaceImpl) itf).getFcItfImpl();
@@ -152,9 +155,6 @@ public class ProActiveComponentImpl implements ProActiveComponent, Serializable 
                 itfImpl.initController();
             }
         }
-
-        // 3. external functional interfaces
-        addFunctionalInterfaces(component_is_primitive);
 
         // put all in a table
         // interfaceReferences = interface_references_list.toArray(new Interface[interface_references_list.size()]);

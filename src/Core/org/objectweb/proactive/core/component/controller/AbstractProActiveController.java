@@ -75,7 +75,7 @@ public abstract class AbstractProActiveController implements ProActiveController
 
     /**
      * Default void implementation of the the initController method. A controller requiring 
-     * initialization *after* all controllers are instantiated have to override this method.
+     * initialization *after* all interfaces are instantiated have to override this method.
      * 
      * @see org.objectweb.proactive.core.component.controller.ProActiveController#initController()
      */

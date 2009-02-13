@@ -47,15 +47,16 @@ import org.objectweb.proactive.core.node.Node;
 public interface ProActiveController extends Interface {
 
     /**
-     * This method is called after creation of all controllers and interfaces. Controllers 
-     * requiring initialization *after* all controllers are instantiated can override this 
-     * method.
+     * This method is called after creation of all functional and non-functional(controller) 
+     * interfaces. Controllers requiring initialization *after* all interfaces are instantiated
+     * can override this method.
      */
     public void initController();
 
     /**
      * If a controller holds references to active objects which are dependent on it, it needs to
      * trigger the migration of these active objects. This is done by overriding this method.
+     * 
      * @param node
      * @throws MigrationException
      */
