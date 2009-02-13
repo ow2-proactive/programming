@@ -72,15 +72,7 @@ public class ProcessForOneWayCall extends AbstractProcessForGroup {
         LocalBodyStore.getInstance().pushContext(new Context(body, null));
         Object object = null;
 
-        // try-catch block added by AdC for P2P
-        try {
-            object = this.memberList.get(this.groupIndex);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            // TODO cdelbe acontes : WTF ?
-            // delete contexts for this thread
-            LocalBodyStore.getInstance().clearAllContexts();
-            return;
-        }
+        object = this.memberList.get(this.groupIndex);
 
         /* only do the communication (reify) if the object is not an error nor an exception */
         if (!(object instanceof Throwable)) {
