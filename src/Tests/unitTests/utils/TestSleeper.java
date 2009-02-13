@@ -24,6 +24,7 @@ public class TestSleeper extends UnitTests {
         sleeper.sleep();
         long after = System.currentTimeMillis();
 
+        logger.info("Spleeped " + (after - before) + " expected " + SLEEP_TIME);
         Assert.assertTrue(after - before >= SLEEP_TIME);
     }
 
