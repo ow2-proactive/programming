@@ -36,7 +36,6 @@
             <group title="ProActive Core" packages="org.objectweb.proactive.core*" />
             <group title="ProActive Core : Body" packages="org.objectweb.proactive.core.body*" />
             <group title="ProActive Core : Components (implementation of the Fractal model)" packages="org.objectweb.proactive.core.component*" />
-            <group title="ProActive P2P : P2P infrastructure" packages="org.objectweb.proactive.extra.p2p*" />
             <group title="ProActive Extensions : Security" packages="org.objectweb.proactive.ext.security*" />
             <group title="ProActive Extensions" packages="org.objectweb.proactive.ext*" />
             <group title="ProActive Branch and Bound API" packages="org.objectweb.proactive.extra.branchnbound*" />

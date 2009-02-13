@@ -115,15 +115,6 @@ public interface TechnicalService {
 				&lt;jvmProcess class="JVMNodeProcess" /&gt;
 			&lt;/processDefinition&gt;
 		&lt;/processes&gt;
-		&lt;aquisition&gt;
-			&lt;aquisitionDefinition id="p2pservice"&gt;
-				&lt;P2PService nodesAsked="100000"&gt;
-					&lt;peerSet&gt;
-						&lt;peer&gt;rmi://registry1:3000&lt;/peer&gt;
-					&lt;/peerSet&gt;
-				&lt;/P2PService&gt;
-			&lt;/acquisitionDefinition&gt;
-		&lt;/services&gt;
 	&lt;/infrastructure&gt;
 	&lt;technicalServiceDefinitions&gt;
 		&lt;service id="ft-master" class="services.FaultTolerance"&gt;

@@ -808,7 +808,6 @@
 
 &lt;acquisition&gt;
 		&lt;lookup …/&gt;
-		&lt;p2p …/&gt;
 	…
 &lt;/acquisition&gt;
 
@@ -1031,7 +1030,7 @@
 				</info>
 				<para>
 					An alternative to the &lt;infrastructure&gt; element, the &lt;acquisition&gt; element describes how resources which are already
-					running can be acquired. It contains two types of elements: &lt;lookup&gt; and &lt;p2p&gt;, in this order. Each element can either
+					running can be acquired. It contains one type of elements: &lt;lookup&gt;, in this order. Each element can either
 					have a single occurrence or be omitted. The &lt;lookup&gt; element has the following three attributes:
 					<orderedlist>
 						<listitem>
@@ -1044,10 +1043,6 @@
 							<para>port: a positive integer.</para>
 						</listitem>
 					</orderedlist>
-				</para>
-				<para>
-					The &lt;p2p&gt; element has a single attribute named "nodesAsked", indicating the number of requested nodes. You can set the value
-					to 'MAX' so that the maximum number of available nodes will be allocated to the task.
 				</para>
 			</section>
 

@@ -2061,7 +2061,7 @@ public class ExamplePerspective implements IPerspectiveFactory {
 					</listitem>
 					<listitem>
 						<para>
-						 And select all (except P2P)
+						 And select all 
 						 </para>
 					</listitem>
 				</orderedlist>

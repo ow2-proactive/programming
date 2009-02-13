@@ -761,8 +761,8 @@
 				type="ServiceDefinitionType" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
-	<!-- ServiceDefinition has two childs: RMIRegistryLookup, P2PLookup but only one
-		can be present in the parent element. This element contains also an attribute: id
+	<!-- ServiceDefinition has one child: RMIRegistryLookup. 
+	     This element contains also an attribute: id
 		which must appear once and only once and represents the id of the service in
 		order for
 		jvms(serviceReference element in deployment/jvms/jvm/creation/processReference)

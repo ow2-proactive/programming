@@ -211,7 +211,7 @@
             </listitem>
 
             <listitem>
-              <para>fault tolerance, P2P, security</para>
+              <para>fault tolerance, security</para>
             </listitem>
           </itemizedlist></para>
       </listitem>
@@ -610,7 +610,7 @@
       <para>Descriptors give the ability to acquire JVMs instead of creating
       them. To do so, it must be specified in the <emphasis role="bold">acquisition</emphasis> tag which service to use in oder to
       acquire the JVMs. Services will be described below, in the
-      infrastructure part. At this point 2 services are provided: <emphasis role="bold">RMIRegistryLookup</emphasis> and <emphasis role="bold">P2PService</emphasis> service.</para>
+      infrastructure part. At this point one service is provided: the <emphasis role="bold">RMIRegistryLookup</emphasis> service.</para>
 
       <screen> ...........................                          
  &lt;jvm name='<emphasis role="bold">jvm1</emphasis>'&gt;
@@ -1877,11 +1877,10 @@
 
     <para>As mentionned previously, instead of creating jvms, ProActive gives
     the possibility to acquire existing jvms. To do so, as shown in the
-    example below, a service must be referenced in the <emphasis role="bold">acquisition</emphasis> tag. At this point two services are
+    example below, a service must be referenced in the <emphasis role="bold">acquisition</emphasis> tag. At this point one service is
     implemented: <emphasis role="bold">RMIRegistryLookup</emphasis>: this
     service performs a lookup in an RMIRegistry at the <emphasis role="bold">url specified in the service definition</emphasis> to find a
-    ProActiveRuntime(a jvm) with the given name. <emphasis role="bold">P2PService</emphasis> service allows when using ProActive's
-    P2P infrastructure to get as many jvms as desired.</para>
+    ProActiveRuntime(a jvm) with the given name.</para>
 
     <programlisting xml:lang="xml"> &lt;?xml version='1.0' encoding='UTF-8'?&gt;                      
  &lt;ProActiveDescriptor
@@ -1898,7 +1897,6 @@
     &lt;map virtualNode='<emphasis role="bold">VnTest</emphasis>'&gt;
      &lt;jvmSet&gt;
       &lt;vmName value='<emphasis role="bold">Jvm1</emphasis>'/&gt;
-      &lt;vmName value='<emphasis role="bold">Jvm2</emphasis>'/&gt;
      &lt;/jvmSet&gt;
     &lt;/map&gt;
    &lt;/mapping&gt;
@@ -1908,11 +1906,6 @@
       &lt;<emphasis role="bold">serviceReference</emphasis> refid='<emphasis role="bold">lookupRMI</emphasis>'/&gt;
      &lt;/<emphasis role="bold">acquisition</emphasis>&gt;
     &lt;/jvm&gt;
-    &lt;jvm name='<emphasis role="bold">Jvm2</emphasis>'&gt;
-     &lt;<emphasis role="bold">acquisition</emphasis>&gt;
-      &lt;<emphasis role="bold">serviceReference</emphasis> refid='<emphasis role="bold">lookupP2P</emphasis>'/&gt;
-     &lt;/<emphasis role="bold">acquisition</emphasis>&gt;
-    &lt;/jvm&gt;
    &lt;/jvms&gt;
   &lt;/deployment&gt;
   &lt;infrastructure&gt;
@@ -1920,32 +1913,15 @@
     &lt;serviceDefinition id='<emphasis role="bold">lookupRMI</emphasis>'&gt;
      &lt;<emphasis role="bold">RMIRegistryLookup</emphasis> url='//localhost:2020/PA_JVM1'/&gt;
     &lt;/serviceDefinition&gt;
-    &lt;serviceDefinition id='<emphasis role="bold">lookupP2P</emphasis>'&gt;
-     &lt;<emphasis role="bold">P2PService</emphasis> nodesAsked='2'acq='rmi' port='2410' NOA='10' TTU='60000' TTL='10'&gt;
-      &lt;peerSet&gt;
-       &lt;peer&gt;rmi://localhost:3000&lt;/peer&gt;
-      &lt;/peerSet&gt;
-     &lt;/P2PService&gt;
-    &lt;/serviceDefinition&gt;
    &lt;/services&gt;
   &lt;/infrastructure&gt;
  &lt;/ProActiveDescriptor&gt;</programlisting>
 
     <para>The <emphasis role="bold">RMIRegistryLookup</emphasis> service needs
-    only an <emphasis role="bold">url</emphasis> to perform the lookup. Many
-    options exist for the <emphasis role="bold">P2PService</emphasis> service:
-    <emphasis role="bold">nodesAsked</emphasis> represents the number of JVMs
-    to acquire, the <emphasis role="bold">peer</emphasis> element represents
-    an entry point in the P2P system, many peers can be specified. Elements
-    <emphasis role="bold">acq</emphasis> and <emphasis role="bold">port</emphasis> represent the communication protocol and the
-    listening port for the P2P Service, if a P2P Service is already running
-    with this configuration the descriptor will use this one else a new one is
-    started. <xref linkend="p2p"/> provides more information.</para>
+    only an <emphasis role="bold">url</emphasis> to perform the lookup. </para>
 
-    <para>The example above shows a VirtualNode <emphasis role="bold">VnTest</emphasis>, that is mapped with two jvms, <emphasis role="bold">Jvm1 and Jvm2</emphasis>. <emphasis role="bold">Jvm1</emphasis> represents one jvm that will be acquired using
-    an RMI Lookup, <emphasis role="bold">Jvm2</emphasis> represents two jvms
-    that will be found in the P2P infrastructure, so at the end 3 acquired
-    jvms are expected.</para>
+    <para>The example above shows a VirtualNode <emphasis role="bold">VnTest</emphasis>, that is mapped with one jvms, <emphasis role="bold">Jvm1</emphasis>. <emphasis role="bold">Jvm1</emphasis> represents one jvm that will be acquired using
+    an RMI Lookup.</para>
 
     <para>Fault Tolerance can also be defined at the service level. See <xref linkend="faultTolerance"/> for more information.</para>
 

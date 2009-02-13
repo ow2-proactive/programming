@@ -38,7 +38,6 @@
     		<packageset dir="${ic2d.src.dir}.JMXmonitoring/src"/>
     		<packageset dir="${ic2d.src.dir}.jobmonitoring/src"/>
     		<packageset dir="${ic2d.src.dir}.launcher/src"/>
-    		<packageset dir="${ic2d.src.dir}.p2p/src"/>
     		<packageset dir="${ic2d.src.dir}.security/src"/>
     		<packageset dir="${ic2d.src.dir}.timit/src"/>
     		

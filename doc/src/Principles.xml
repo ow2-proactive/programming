@@ -278,10 +278,7 @@
 			Java RMI as the default protocol, SSH, HTTP, tunneled RMI. It is also possible to export active objects as Web 
 			Services, which can then be accessed using the standard SOAP protocol. A file transfer mechanism is also 
 			implemented; it allows the transfer of files between active objects, for instance to send large data input files 
-			or to retrieve results files. ProActive also provides a peer-to-peer (P2P) infrastructure that allows for starting computations
-			on P2P networks by using a dynamic overlay network of JVMs. Under this framework, peers can dynamically join the network
-			and participate in the computations.
-		</para>
+			or to retrieve results files.</para>
 		</section>
 </section>
 

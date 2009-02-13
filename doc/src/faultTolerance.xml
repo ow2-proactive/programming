@@ -77,26 +77,11 @@
 
       <para>A resource server is implemented in ProActive in
       <literal>ft.servers.resource.ResourceServer</literal>. This server can
-      store free nodes by two differents way:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>at deployment time: the user can specify in the deployment
+      store free nodes at deployment time. The user can specify in the deployment
           descriptor a resource virtual node. Each node mapped on this virtual
           node will automaticaly register itself as free node at the specified
           resource server.</para>
-        </listitem>
 
-        <listitem>
-          <para>at execution time: the resource server can use an 
-           underlying p2p network (see <xref linkend="p2p"/>) to reclaim free nodes
-          when a hosting node is needed.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Note that those two mechanisms can be combined. In that case, the
-      resource server first provides node registered at deployment time, and
-      when no more such nodes are available, the p2p network is used.</para>
     </section>
 
     <section xml:id="FaultToleranceservers_6"><info><title>Fault-Tolerance servers</title></info>
@@ -143,12 +128,6 @@
           message from another active object.</para>
         </listitem>
 
-        <listitem>
-         <para>the URL of a p2p service (see <xref linkend="p2p"/>) that can
-          be used by the resource server: <literal>-p2p &lt;serviceURL&gt;</literal>. 
-          There is no default value for this
-          option.</para>
-        </listitem>
       </itemizedlist>
 
       <para>The server can also be directly launched in the java source code,

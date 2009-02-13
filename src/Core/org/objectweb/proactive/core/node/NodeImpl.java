@@ -324,7 +324,7 @@ public class NodeImpl implements Node, Serializable {
         }
 
         /**
-         * Change the Job ID of this node. Used for P2P.
+         * Change the Job ID of this node. 
          * @see org.objectweb.proactive.Job
          * @param jobId The new JobID
          */

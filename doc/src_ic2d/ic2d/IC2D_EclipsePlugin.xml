@@ -234,15 +234,6 @@
                 <para>
                     When the eye is opened the monitoring is activated.
                 </para>
-                <figure xml:id="p2pbutton"><info><title>Show P2P objects</title></info>
-                    
-                    <mediaobject>
-                        <imageobject>
-                            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="ic2d/images/features/P2PButton.png" format="PNG"/>
-                        </imageobject>
-                    </mediaobject>
-                </figure>
-                <para>Allows to see or not the P2P objects.</para>
                 <figure xml:id="zoominbutton"><info><title>Zoom In</title></info>
                     
                     <mediaobject>

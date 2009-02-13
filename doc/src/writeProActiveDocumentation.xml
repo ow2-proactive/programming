@@ -248,7 +248,7 @@ public class Dummy {
   String convert(String fileToConvert) throws IOException {
     if (a &gt; b &amp;&amp; c &lt; d ) {
       // can use "this" for 'NodeCreationEvent'
-      VirtualNode vn = pad.getVirtualNode("p2pvn");
+      VirtualNode vn = pad.getVirtualNode("vn");
       vn.start();
       }
     return "Hello World";      

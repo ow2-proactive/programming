@@ -57,16 +57,6 @@
   <section xml:id="miscFileSrc"><info><title xml:id="Otherfilescitedinthemanual_7">Other files cited in the manual</title></info>
     
 
-    <example xml:id="miscFileSrc.p2p_files.proactivep2p.xsd"><info><title xml:id="P2Pconfigurationproactivep2pxsd_7">P2P configuration: proactivep2p.xsd</title></info>
-         <para/>  </example> 
-     
-     <programlisting xml:lang="xml"><textobject><textdata fileref="p2p_files/proactivep2p.xsd"/></textobject></programlisting>
-    
-    <example xml:id="miscFileSrc.p2p_files.sample_p2p.xml"><info><title xml:id="P2Pconfigurationsample_p2pxml_7">P2P configuration: sample_p2p.xml</title></info>
-         <para/>  </example> 
-     
-     <programlisting xml:lang="xml"><textobject><textdata fileref="p2p_files/sample_p2p.xml"/></textobject></programlisting>
-    
     <example xml:id="miscFileSrc.webservices.web.xml"><info><title xml:id="SOAPconfigurationwebserviceswebxml_7">SOAP configuration: webservices/web.xml</title></info>
          <para/>  </example> 
      

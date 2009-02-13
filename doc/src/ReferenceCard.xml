@@ -502,78 +502,7 @@
         detection scanning. Default value is 10 sec.</para>
       </listitem>
 
-      <listitem>
-        <para>the URL of a p2p service that can be used by the resource
-        server: <literal>-p2p [serviceURL]</literal>. No default value.</para>
-      </listitem>
     </itemizedlist>
-  </section>
-
-  <section xml:id="PeertoPeerInfrastructure_76"><info><title>Peer-to-Peer Infrastructure</title></info>
-    
-
-    <para>This aims to help you to create a P2P infrastructure over your
-    desktop workstations network. It is self-organized and configurable. The
-    infrastructure maintains a dynamic JVMs network for deploying
-    computational applications.</para>
-
-    <para><emphasis role="bold">Deploying the
-    Infrastructure:</emphasis></para>
-
-    <para>Firstly, you have to start P2P Services on each shared
-    machine:</para>
-
-    <para><screen>$ cd ProActive/bin</screen></para>
-
-    <para><screen>$ ./startP2PService [-acq acquisitionMethod] [-port portNumber] [-s Peer ...]</screen></para>
-
-    <para>With that parameters (all are optionals):</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>-acq is the ProActive Runtime communication protocol used by the
-        peer. Examples: rmi, http, ibis,... By default it is rmi.</para>
-      </listitem>
-
-      <listitem>
-        <para>-port is the port number where the P2P Service listens. By
-        default it is 2410.</para>
-      </listitem>
-
-      <listitem>
-        <para>-s specify addresses of peers which are used to join the P2P
-        infrastructure. Example: rmi://applepie.proactive.org:8080</para>
-      </listitem>
-    </itemizedlist>
-
-    <para><emphasis role="bold">A simple example:</emphasis> <screen>first.peer.host$ ./startP2PService.sh</screen>
-    <screen>second.peer.host$ ./startP2PService.sh -s //first.peer.host</screen>
-    <screen>third.peer.host$ ./startP2PService.sh -s //second.peer.host</screen></para>
-
-    <para><emphasis role="bold">Acquiring Nodes:</emphasis></para>
-
-    <para>Now you have a P2P Infrastructure running, you might want to deploy
-    your ProActive application on it. That is simple, just modify the XML
-    deployment descriptor:</para>
-	<!-- //TODO check if the descriptor is correct -->
-	<programlisting xml:lang="XML"><textobject><textdata fileref="code_snippets/reference/p2p_descriptor.txt"/></textobject></programlisting>
-
-    <para>In the <emphasis role="bold">nodesAsked</emphasis> argument, a
-    special value <emphasis role="bold">MAX</emphasis> is allowed. When it is
-    used, the P2P infrastructure returns the maximum number of nodes available,
-    and continues to return new nodes to the
-    application while the application is running. To use all the benefits of the feature, we need to add a nodes
-    creation event listener to the application.</para>
-	<!-- This is not correct check -->
-    <para><emphasis role="bold">Usage Example:</emphasis></para>
-
-	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/p2p_example.txt"/></textobject></programlisting>
-
-  <para>'this' has to implement the NodeCreationEventListener
-    interface:</para>
-
- 	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/p2p_example1.txt"/></textobject></programlisting>
-
   </section>
 
   <section xml:id="BranchandBoundAPI_76"><info><title>Branch and Bound API</title></info>
