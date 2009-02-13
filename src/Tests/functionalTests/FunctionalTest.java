@@ -68,7 +68,8 @@ public class FunctionalTest {
                     .getValue())) {
                 RouterConfig config = new RouterConfig();
 
-                if (PAProperties.PA_NET_ROUTER_PORT.getValueAsInt() == 0) {
+                if (!PAProperties.PA_NET_ROUTER_PORT.isSet() ||
+                    PAProperties.PA_NET_ROUTER_PORT.getValueAsInt() == 0) {
                     router = Router.createAndStart(config);
                     PAProperties.PA_NET_ROUTER_PORT.setValue(router.getPort());
                 } else {
