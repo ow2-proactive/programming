@@ -201,7 +201,8 @@ public enum PAProperties {
      * ProActive Runtime Hostname (or IP Address)
      *
      * This option can be used to set manually the Runtime IP Address. Can be
-     * useful when the Java networking stack return a bad IP address (example: multihomed machines)
+     * useful when the Java networking stack return a bad IP address (example: multihomed machines).
+     * 
      */
     PA_HOSTNAME("proactive.hostname", PAPropertiesType.STRING),
 
@@ -214,6 +215,11 @@ public enum PAProperties {
      *
      */
     PA_NET_USE_IP_ADDRESS("proactive.useIPaddress", PAPropertiesType.BOOLEAN),
+
+    /** Enable or disable IPv6 
+     * 
+     */
+    PA_NET_DISABLE_IPv6("proactive.net.disableIPv6", PAPropertiesType.BOOLEAN),
 
     /**
      * Toggle loopback IP address usage
@@ -239,6 +245,12 @@ public enum PAProperties {
      * Select the network interface
      */
     PA_NET_INTERFACE("proactive.net.interface", PAPropertiesType.STRING),
+
+    /** Select the netmask to use (xxx.xxx.xxx.xxx/xx)
+     * 
+     * Does not work with IPv6 addresses
+     */
+    PA_NET_NETMASK("proactive.net.netmask", PAPropertiesType.STRING),
 
     /**
      * RMI/SSH black voodoo

@@ -7,7 +7,7 @@ public class ListInterfaces {
 
     public static void main(String[] args) {
 
-        for (String s : ProActiveInet.getInstance().getAlInetAddresses()) {
+        for (String s : ProActiveInet.getInstance().listAllInetAddress()) {
             System.out.println(s);
         }
 

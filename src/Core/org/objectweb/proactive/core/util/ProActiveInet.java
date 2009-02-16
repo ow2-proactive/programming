@@ -31,13 +31,13 @@
  */
 package org.objectweb.proactive.core.util;
 
-import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.ArrayList;
+import java.net.UnknownHostException;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -47,32 +47,24 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
-/**
- * Provide the local InetAddress to be used by ProActive
- * 
- * Implementation should respect Java network Stack property
- * java.net.preferIPv6addresses
+/** Provide the local InetAddress to be used by ProActive
+ *  
+ * Expected behavior of this class is described in the ProActive manual, chapter "ProActive basic configuration"  
  */
 public class ProActiveInet {
-    static private ProActiveInet instance;
-    static private Object singletonMutex = new Object();
-    static private Logger logger = ProActiveLogger.getLogger(Loggers.CORE);
-    private InetAddress electedAddress;
+    static private Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION_NETWORK);
+
+    final static private ProActiveInet instance = new ProActiveInet();
+
+    final private InetAddress electedAddress;
 
     static public ProActiveInet getInstance() {
-        if (null == instance) {
-            synchronized (singletonMutex) {
-                if (null == instance) {
-                    instance = new ProActiveInet();
-                }
-            }
-        }
-
         return instance;
     }
 
     private ProActiveInet() {
         electedAddress = electAnAddress();
+
         if (electedAddress == null) {
             logger.error("No local Inet Address found. Exiting");
             PALifeCycle.exitFailure();
@@ -86,6 +78,37 @@ public class ProActiveInet {
      */
     public InetAddress getInetAddress() {
         return electedAddress;
+    }
+
+    public List<String> listAllInetAddress() {
+        LinkedList<String> ret = new LinkedList<String>();
+
+        Enumeration<NetworkInterface> nis;
+        try {
+            nis = NetworkInterface.getNetworkInterfaces();
+            while (nis.hasMoreElements()) {
+                NetworkInterface ni = nis.nextElement();
+
+                StringBuilder sb = new StringBuilder();
+                sb.append(ni.getName());
+                sb.append("\t");
+                sb.append("MAC n/a");
+                sb.append("\t");
+
+                Enumeration<InetAddress> ias = ni.getInetAddresses();
+                while (ias.hasMoreElements()) {
+                    InetAddress ia = ias.nextElement();
+
+                    sb.append(ia.getHostAddress());
+                    sb.append(" ");
+                }
+                ret.add(sb.toString());
+            }
+        } catch (SocketException e) {
+            logger.info("Failed to find a suitable InetAddress", e);
+        }
+
+        return ret;
     }
 
     /**
@@ -102,159 +125,287 @@ public class ProActiveInet {
     }
 
     private InetAddress electAnAddress() {
-        InetAddress address;
+        InetAddress ia = null;
 
-        try {
-            List<NetworkInterface> nis;
-            nis = getNetworkInterfaces();
-            if (PAProperties.PREFER_IPV6_ADDRESSES.isTrue()) {
-                address = findAddress(nis, Inet6Address.class);
-                if (address == null) {
-                    address = findAddress(nis, Inet4Address.class);
+        if (defaultBehavior()) {
+            logger.debug("Using default algorithm to elected an IP address");
+            ia = getDefaultInterface();
+        } else {
+            // Follow the user defined rules
+            if (PAProperties.PA_HOSTNAME.isSet()) {
+                logger.debug(PAProperties.PA_HOSTNAME.getKey() +
+                    " defined. Using getByName() to elected an IP address");
+                // return the result of getByName
+                try {
+                    ia = InetAddress.getByName(PAProperties.PA_HOSTNAME.getValue());
+                } catch (UnknownHostException e) {
+                    logger.info(PAProperties.PA_HOSTNAME.getKey() +
+                        " is set, but no IP address is bound to this hostname");
                 }
             } else {
-                address = findAddress(nis, Inet4Address.class);
-                if (address == null) {
-                    address = findAddress(nis, Inet6Address.class);
+                logger
+                        .debug("At least one proactive.net.* property defined. Using the matching algorithm to elect an IP address");
+                // Use the filter algorithm
+                if (ia == null) {
+                    List<InetAddress> l;
+                    l = getAllInetAddresses();
+                    l = filterByNetmask(l);
+                    l = filterLoopback(l);
+                    l = filterPrivate(l);
+
+                    for (InetAddress addr : l) {
+
+                        if (PAProperties.PA_NET_DISABLE_IPv6.isTrue() && addr instanceof Inet6Address) {
+                            continue;
+                        }
+
+                        ia = addr;
+                        break;
+                    }
                 }
             }
-        } catch (SocketException e) {
-            address = null;
+
         }
 
-        return address;
+        return ia;
     }
 
-    private InetAddress findAddress(List<NetworkInterface> nis, Class<?> cl) {
-        for (NetworkInterface ni : nis) {
-            Enumeration<InetAddress> ias = ni.getInetAddresses();
-            while (ias.hasMoreElements()) {
-                InetAddress ia = ias.nextElement();
-                if (ia.getClass().equals(cl)) {
-                    if (PAProperties.PA_NET_NOLOOPBACK.isTrue()) {
-                        if (ia.isLoopbackAddress()) {
-                            continue;
-                        }
-                    }
+    /**
+     * Elects the default {@link InetAddress}.
+     * 
+     * A first match algorithm is used:
+     * <ol>
+     * <li>Public IP address</li>
+     * <li>Private IP address</li>
+     * <li>loopback address</li>
+     * </ol>
+     * 
+     * IPv6 address can enabled/disabled with the
+     * {@link PAProperties#PA_NET_DISABLE_IPv6} property.
+     */
+    private InetAddress getDefaultInterface() {
+        List<InetAddress> ias = getAllInetAddresses();
 
-                    if (PAProperties.PA_NET_NOPRIVATE.isTrue()) {
-                        if (ia.isSiteLocalAddress()) {
-                            continue;
-                        }
-                    }
+        // Search for a public IPv4 address
+        for (InetAddress ia : ias) {
+            if (ia.isLoopbackAddress())
+                continue;
+            if (ia.isSiteLocalAddress())
+                continue;
+            if (PAProperties.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
+                continue;
 
-                    return ia;
-                }
-            }
+            return ia;
         }
+
+        // Search for a private IPv4 address
+        for (InetAddress ia : ias) {
+            if (ia.isLoopbackAddress())
+                continue;
+            if (PAProperties.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
+                continue;
+
+            return ia;
+        }
+
+        // Search for a loopback address
+        for (InetAddress ia : ias) {
+            if (PAProperties.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
+                continue;
+
+            return ia;
+        }
+
         return null;
     }
 
-    private List<NetworkInterface> getNetworkInterfaces() throws SocketException {
-        List<NetworkInterface> interfaces = new ArrayList<NetworkInterface>();
+    /**
+     * Returns true if a property that can affect interface binding is set.
+     * False otherwise
+     */
+    private boolean defaultBehavior() {
+        if (PAProperties.PA_HOSTNAME.isSet())
+            return false;
 
-        if (PAProperties.PA_NET_INTERFACE.isSet()) {
-            Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
-            while (nis.hasMoreElements()) {
-                NetworkInterface ni = nis.nextElement();
-                if (ni.getName().equals(PAProperties.PA_NET_INTERFACE.getValue())) {
-                    interfaces.add(ni);
-                }
-            }
-        } else {
-            Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
-            while (nis.hasMoreElements()) {
-                interfaces.add(nis.nextElement());
-            }
-        }
+        if (PAProperties.PA_NET_NOLOOPBACK.isSet())
+            return false;
 
-        if (logger.isDebugEnabled()) {
-            StringBuilder sb = new StringBuilder();
-            for (NetworkInterface ni : interfaces) {
-                sb.append(ni.getName());
-                sb.append(" ");
-            }
-            logger.debug("Suitable Network Interfaces are: " + sb);
-        }
+        if (PAProperties.PA_NET_NOPRIVATE.isSet())
+            return false;
 
-        if (interfaces.isEmpty()) {
-            logger.warn("No suitable network interface found");
-        }
+        if (PAProperties.PA_NET_NETMASK.isSet())
+            return false;
 
-        return interfaces;
+        if (PAProperties.PA_NET_INTERFACE.isSet())
+            return false;
+
+        return true;
     }
 
-    public List<String> getAlInetAddresses() {
-        List<String> ret = new ArrayList<String>();
+    private List<InetAddress> getAllInetAddresses() {
+        LinkedList<InetAddress> ret = new LinkedList<InetAddress>();
 
+        String intf = PAProperties.PA_NET_INTERFACE.getValue();
+
+        Enumeration<NetworkInterface> nis;
         try {
-            Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
+            nis = NetworkInterface.getNetworkInterfaces();
             while (nis.hasMoreElements()) {
                 NetworkInterface ni = nis.nextElement();
-                ret.add(networkInterfaceToString(ni));
 
-                Enumeration<NetworkInterface> subnis = ni.getSubInterfaces();
-                while (subnis.hasMoreElements()) {
-                    NetworkInterface subni = subnis.nextElement();
-                    ret.add(networkInterfaceToString(subni));
+                if (intf != null && !ni.getName().equals(intf)) {
+                    // Skip this interface
+                    continue;
+                }
+
+                Enumeration<InetAddress> ias = ni.getInetAddresses();
+                while (ias.hasMoreElements()) {
+                    InetAddress ia = ias.nextElement();
+
+                    ret.add(ia);
                 }
             }
         } catch (SocketException e) {
-            logger.error("Failed to list all available netAdress", e);
+            logger.info("Failed to find a suitable InetAddress", e);
         }
 
         return ret;
     }
 
-    private String networkInterfaceToString(NetworkInterface ni) {
-        StringBuilder sb = new StringBuilder();
+    private List<InetAddress> filterPrivate(List<InetAddress> l) {
+        if (!PAProperties.PA_NET_NOPRIVATE.isSet() || !PAProperties.PA_NET_NOPRIVATE.isTrue()) {
+            // All InetAddress match
+            return new LinkedList<InetAddress>(l);
+        }
 
-        sb.append(ni.getName() + "\t");
+        List<InetAddress> ret = new LinkedList<InetAddress>();
+        for (InetAddress ia : l) {
+            if (!ia.isSiteLocalAddress()) {
+                ret.add(ia);
+            } else {
+                logger.debug("Discarded " + ia + " because of the no private criteria");
+            }
+        }
+
+        return ret;
+    }
+
+    private List<InetAddress> filterLoopback(List<InetAddress> l) {
+        if (!PAProperties.PA_NET_NOLOOPBACK.isSet() || !PAProperties.PA_NET_NOLOOPBACK.isTrue()) {
+            // All InetAddress match
+            return new LinkedList<InetAddress>(l);
+        }
+
+        List<InetAddress> ret = new LinkedList<InetAddress>();
+        for (InetAddress ia : l) {
+            if (!ia.isLoopbackAddress()) {
+                ret.add(ia);
+            } else {
+                logger.debug("Discarded " + ia + " because of the no loopback criteria");
+            }
+        }
+
+        return ret;
+    }
+
+    private List<InetAddress> filterByNetmask(List<InetAddress> l) {
+        if (!PAProperties.PA_NET_NETMASK.isSet()) {
+            // All InetAddress match
+            return new LinkedList<InetAddress>(l);
+        }
+
+        IPMatcher matcher;
         try {
-            sb.append(macAddrToString(ni.getHardwareAddress()) + "\t");
-        } catch (SocketException e) {
-            sb.append("Unknown MAC \t");
+            matcher = new IPMatcher(PAProperties.PA_NET_NETMASK.getValue());
+        } catch (Throwable e) {
+            logger.fatal("Invalid format for property " + PAProperties.PA_NET_NETMASK.getKey() +
+                ". Must be xxx.xxx.xxx.xxx/xx");
+            return new LinkedList<InetAddress>();
         }
 
-        Enumeration<InetAddress> ias = ni.getInetAddresses();
-        while (ias.hasMoreElements()) {
-            InetAddress ia = ias.nextElement();
-            sb.append(ia.getHostAddress() + " ");
-        }
-
-        return sb.toString();
-    }
-
-    private String macAddrToString(byte[] macAddr) {
-        StringBuffer sb = new StringBuffer(17);
-        for (int i = 44; i >= 0; i -= 4) {
-            int nibble = ((int) (byte2Long(macAddr) >>> i)) & 0xf;
-            char nibbleChar = (char) (nibble > 9 ? nibble + ('A' - 10) : nibble + '0');
-            sb.append(nibbleChar);
-            if ((i & 0x7) == 0 && i != 0) {
-                sb.append(':');
+        List<InetAddress> ret = new LinkedList<InetAddress>();
+        for (InetAddress ia : l) {
+            if (!(ia instanceof Inet6Address)) {
+                if (matcher.match(ia)) {
+                    ret.add(ia);
+                } else {
+                    logger.debug("Discarded " + ia +
+                        " because of netmask criteria is not compatible with IPv6");
+                }
+            } else {
+                logger.debug("Discarded " + ia + " because of the  netmask criteria");
             }
         }
-        return sb.toString();
+        return ret;
     }
 
-    private long byte2Long(byte addr[]) {
-        long address = 0;
-        if (addr != null) {
-            if (addr.length == 6) {
-                address = unsignedByteToLong(addr[5]);
-                address |= (unsignedByteToLong(addr[4]) << 8);
-                address |= (unsignedByteToLong(addr[3]) << 16);
-                address |= (unsignedByteToLong(addr[2]) << 24);
-                address |= (unsignedByteToLong(addr[1]) << 32);
-                address |= (unsignedByteToLong(addr[0]) << 40);
+    static private class IPMatcher {
+
+        final private int networkPortion;
+        final private int mask;
+
+        public IPMatcher(String str) throws Throwable {
+            String[] array = str.split("/");
+            if (array.length != 2)
+                throw new IllegalArgumentException("Invalid string, xxx.xxx.xxx.xxx/xx expected");
+
+            int ip = stringToInt(array[0]);
+            int significantBits = Integer.parseInt(array[1]);
+
+            this.mask = computeMask(ip, significantBits);
+            this.networkPortion = ip & this.mask;
+
+        }
+
+        private int computeMask(int ip, int mask) {
+            int shift = Integer.SIZE - mask;
+            return (~0 >> shift) << shift;
+        }
+
+        public boolean match(String ip) throws Exception {
+            return match(stringToInt(ip));
+        }
+
+        public boolean match(InetAddress ia) {
+            try {
+                return match(stringToInt(ia.getHostAddress()));
+            } catch (Exception e) {
+                ProActiveLogger.logImpossibleException(logger, e);
+                return false;
             }
         }
-        return address;
-    }
 
-    private long unsignedByteToLong(byte b) {
-        return (long) b & 0xFF;
-    }
+        public boolean match(int ip) throws Exception {
+            return (ip & mask) == networkPortion;
+        }
 
+        private static String getBits(int value) {
+            int displayMask = 1 << 31;
+            StringBuffer buf = new StringBuffer(35);
+
+            for (int c = 1; c <= 32; c++) {
+                buf.append((value & displayMask) == 0 ? '0' : '1');
+                value <<= 1;
+
+                if (c % 8 == 0)
+                    buf.append(' ');
+            }
+
+            return buf.toString();
+        }
+
+        private int stringToInt(String ip) throws Exception {
+            String[] parts = ip.split("\\.");
+            int tmp = 0;
+            for (int i = 0; i < parts.length; i++) {
+                int parsedInt = Integer.parseInt(parts[i]);
+                if (parsedInt > 255 || parsedInt < 0) {
+                    throw new Exception("An octet must be a number between 0 and 255.");
+                }
+                tmp |= parsedInt << ((3 - i) * 8);
+            }
+
+            return tmp;
+        }
+    }
 }

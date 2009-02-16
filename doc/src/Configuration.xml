@@ -382,4 +382,157 @@
        
      </para></note>
   </section>
+  
+  
+  <section>
+  	<info>
+  		<title>Network configuration</title>
+  	</info>
+  
+  
+  	<para>
+		A ProActive runtime is only able to bind to one and only one InetAddress.
+   		Usually, this limitation is not seen by the user and no special configuration
+   		is required. ProActive tries to use the most suitable network address available. 
+   		But sometimes, ProActive fails to elect the right IP address or the user wants to
+   		use a given IP address. In such case, you can specify the IP address to use by using 
+   		theses properties: <emphasis>proactive.hostname</emphasis>, 
+   		<emphasis>proactive.net.interface</emphasis>,  <emphasis>proactive.net.netmask</emphasis>, 
+   		<emphasis>proactive.net.nolocal</emphasis>, <emphasis>proactive.net.noprivate</emphasis>.
+   	</para>
+  
+  	<para>
+  		IPv6 can be enabled by setting the <emphasis>proactive.net.disableIPv6</emphasis>
+  		property to false. By default ProActive will not use IPv6 addresses.
+  	</para>
+  	 	
+   	<para>
+   		If none of the <emphasis>proactive.hostname</emphasis>, 
+   		<emphasis>proactive.net.interface</emphasis>,  <emphasis>proactive.net.netmask</emphasis>, 
+   		<emphasis>proactive.net.nolocal</emphasis>, <emphasis>proactive.net.noprivate</emphasis>   		
+   		 properties is defined, then the following algorithm is used to elect an IP address:
+   		<itemizedlist>
+   			<listitem>
+   				<para>
+					If a public IP address is available use it. If several ones are 
+					available, one is chosen randomly.					
+   				</para>
+   			</listitem>
+   			<listitem>
+   				<para>
+   					If a private IP address is available use it. If several ones are
+   					available, one is chosen randomly.
+   				</para>
+   			</listitem>
+   			<listitem>
+   				<para>
+   					If a loopback IP address is available use it. If several ones are
+   					available, one is chosen randomly.
+   				</para>
+   			</listitem>
+   			<listitem>
+   				<para>
+					If no IP address is available at all. Then the runtime exits with an 
+					error message.
+   				</para>
+   			</listitem>
+   		</itemizedlist>	
+	</para> 
+   	
+   	<para>
+   		If <emphasis>proactive.hostname</emphasis> is set, then the value returned by
+   		<emphasis>InetAddress.getByName(proactive.hostname)</emphasis> is elected. If no
+   		IP address is found, then the runtime exits with an error message.
+   	</para>
+   	
+   	<para>
+	   	If <emphasis>proactive.hostname</emphasis> is not set, and at least one of the
+	    <emphasis>proactive.net.interface</emphasis>,  <emphasis>proactive.net.netmask</emphasis>, 
+   		<emphasis>proactive.net.nolocal</emphasis>, <emphasis>proactive.net.noprivate</emphasis> 
+   		is set, then one of the addresses matching all the requirements is elected. Requirements are:
+   		
+   		<itemizedlist>
+   			<listitem>
+   				<para>
+   					If <emphasis>proactive.net.interface</emphasis> is set, then the IP address
+   					must be bound to the given network interface.
+   				</para>
+   			</listitem>
+   			<listitem>
+   				<para>
+   					If <emphasis>proactive.net.netmask</emphasis> is set, then the IP address
+   					must match the given netmask.
+   				</para>
+   			</listitem>
+   			<listitem>
+   				<para>
+   					If <emphasis>proactive.net.nolocal</emphasis> is set, then the IP address
+   					must not be a loopback address.
+   				</para>
+   			</listitem>
+   			<listitem>
+   				<para>
+   					If <emphasis>proactive.net.noprivate</emphasis> is set, then the IP address
+   					must not be a private address.
+   				</para>
+   			</listitem>
+   		</itemizedlist>
+  	</para>
+
+	<para>
+		If no address matches theses criteria, the runtime exits with an error message.
+  	</para>
+  	
+  	<para>
+  		The easiest way to check if ProActive elect the address you want is to run the following command:
+  		<screen>
+java -jar dist/lib/ProActive.jar
+  		</screen>
+  		
+  		It shows the elected IP address, and shows all the network interfaces and IP addresses available. It also 
+  		displays all the configuration properties and their value.
+  		
+  		<screen>
+  		--------------------
+		ProActive 4.1.0-beta
+		--------------------
+
+
+Local IP Address: 192.168.1.22
+Config dir: /user/cmathieu/home/.proactive
+
+Network setup:
+	eth0	MAC n/a	fe80:0:0:0:222:19ff:fe1d:ad34%2 192.168.1.22 
+	lo	MAC n/a	0:0:0:0:0:0:0:1%1 127.0.0.1 
+
+Available properties:
+	String	java.security.policy [null]
+	Boolean	java.net.preferIPv6Addresses [null]
+  		</screen>
+  	</para>
+  	
+  	<para>
+  		Some examples follows:
+  		
+  		<screen>
+$ # Use the default algorithm, since no public IP address is available, 192.168.1.22 is elected.
+$ java -jar dist/lib/ProActive.jar 		
+  		
+$ # Use the IP address returned by name resolution system for "britany.activeeon.com"
+$ java -Dproactive.hostname=britany.activeeon.com -jar dist/lib/ProActive.jar 
+
+$ # Use only a public IP address bound to eth1
+$ java -Dproactive.net.interface=eth1 -Dproactive.net.nolocal=true -Dproactive.net.noprivate=true -jar dist/lib/ProActive.jar 
+
+$ # Use an IP address matching 192.168.2.0/24
+$ java -Dproactive.net.netmask="192.168.2.0/24" -Dproactive.net.noprivate=true -jar dist/lib/ProActive.jar 
+  		</screen>
+  	</para>
+
+	<para>
+		The log4j logger <emphasis>proactive.configuration.network</emphasis> can be used to diagnosis why
+		an IP address is elected or rejected.
+	</para>
+  </section>
+
 </chapter>

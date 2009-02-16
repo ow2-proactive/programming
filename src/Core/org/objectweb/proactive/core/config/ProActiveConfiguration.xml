@@ -11,9 +11,7 @@
         <prop key="proactive.mixedlocation.maxMigrationNb" value="-1" />
         <prop key="proactive.mixedlocation.maxTimeOnSite" value="-1" />
     
-        <prop key="proactive.net.nolocal"   value="false" />
-        <prop key="proactive.net.noprivate" value="false" />
-    	<prop key="proactive.useIPaddress" value="true" />
+    	<prop key="proactive.net.disableIPv6" value="true" />
 	    
         <prop key="proactive.future.ac" value="true" />
         <prop key="proactive.stack_trace" value="false" /> <!-- complete stack traces in requests -->

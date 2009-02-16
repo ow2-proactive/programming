@@ -59,14 +59,14 @@ public class Main {
         System.out.println();
 
         String localAddress = null;
-        localAddress = URIBuilder.getHostNameorIP(pInet.getInetAddress());
+        localAddress = pInet.getInetAddress().getHostAddress();
         System.out.println("Local IP Address: " + localAddress);
 
         System.out.println("Config dir: " + Constants.USER_CONFIG_DIR);
         System.out.println();
 
         System.out.println("Network setup:");
-        for (String s : pInet.getAlInetAddresses()) {
+        for (String s : pInet.listAllInetAddress()) {
             System.out.println("\t" + s);
         }
         System.out.println();
