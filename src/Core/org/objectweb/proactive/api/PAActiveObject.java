@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.net.URI;
-import java.net.URL;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -1233,7 +1232,7 @@ public class PAActiveObject {
      *         body found
      * @exception java.io.IOException
      *                if the remote body cannot be found under the given url or if the object found
-     *                is not of type RmiRemoteBody
+     *                is not of type UniversalBody
      * @exception ActiveObjectCreationException
      *                if the stub-proxy couple cannot be created
      */
@@ -1249,6 +1248,9 @@ public class PAActiveObject {
 
             if (o instanceof UniversalBody) {
                 return MOP.createStubObject(classname, (UniversalBody) o);
+            } else {
+                throw new IOException("The remote object located at " + url +
+                    " is not an Active Object. class=" + o.getClass().getName());
             }
         } catch (ProActiveException e) {
             throw new IOException(e.getMessage());
@@ -1261,8 +1263,6 @@ public class PAActiveObject {
 
             throw new ActiveObjectCreationException("Exception occured when trying to create stub-proxy", t);
         }
-
-        return null;
     }
 
     /**

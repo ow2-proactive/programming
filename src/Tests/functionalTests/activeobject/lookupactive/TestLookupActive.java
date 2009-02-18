@@ -35,6 +35,8 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.util.ProActiveInet;
@@ -76,5 +78,12 @@ public class TestLookupActive extends FunctionalTest {
         }
 
         throw new Exception("Could not find registered object in list of objects");
+    }
+
+    @Test(expected = IOException.class)
+    public void lookupNode() throws Exception {
+        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" });
+        String nodeURL = PAActiveObject.getActiveObjectNodeUrl(a);
+        PAActiveObject.lookupActive(A.class.getName(), nodeURL);
     }
 }
