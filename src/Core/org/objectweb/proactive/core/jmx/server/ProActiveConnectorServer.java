@@ -129,8 +129,6 @@ public class ProActiveConnectorServer extends JMXConnectorServer {
      */
 
     //exposes the active object
-    @SuppressWarnings("deprecation")
-    // PROACTIVE-601
     public synchronized void start() throws IOException {
         if (this.state == STARTED) {
             return;
@@ -162,7 +160,7 @@ public class ProActiveConnectorServer extends JMXConnectorServer {
         String path = this.address.getURLPath();
         int index = path.indexOf(ProActiveJMXConstants.SERVER_REGISTERED_NAME);
         String url = path.substring(index);
-        PAActiveObject.register(this.paServer, url);
+        PAActiveObject.registerByName(this.paServer, url);
         state = STARTED;
     }
 
