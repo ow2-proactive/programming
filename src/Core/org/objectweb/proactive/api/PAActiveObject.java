@@ -1123,11 +1123,11 @@ public class PAActiveObject {
     }
 
     /**
-     * Return the URL of the remote <code>activeObject</code>.
+     * Return the URL of the node of the remote <code>activeObject</code>.
      * 
      * @param activeObject
      *            the remote active object.
-     * @return the URL of <code>activeObject</code>.
+     * @return the URL of the node of the <code>activeObject</code>.
      */
     public static String getActiveObjectNodeUrl(Object activeObject) {
         UniversalBody body = AbstractBody.getRemoteBody(activeObject);
