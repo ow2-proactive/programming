@@ -33,12 +33,17 @@ package functionalTests.activeobject.loopmixedlocation;
 
 import static junit.framework.Assert.assertTrue;
 
+import java.io.IOException;
+
+import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.proxy.BodyProxy;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.ext.util.SimpleLocationServer;
 import org.objectweb.proactive.extensions.mixedlocation.MixedLocationMetaObjectFactory;
 
@@ -58,16 +63,23 @@ public class TestLoopMixedLocation extends GCMFunctionalTestDefaultNodes {
     SimpleLocationServer server;
     UniqueID idA;
 
-    public TestLoopMixedLocation() {
+    public TestLoopMixedLocation() throws ActiveObjectCreationException, NodeException, IOException {
         super(1, 1);
+
+        this.server = (SimpleLocationServer) PAActiveObject.newActive(SimpleLocationServer.class.getName(),
+                new Object[] {});
+        String serverUrl = PAActiveObject.registerByName(this.server, "LocationServer");
+
+        PAProperties.PA_LOCATION_SERVER_RMI.setValue(serverUrl);
+
+        String additionalJVMargs = PAProperties.PA_LOCATION_SERVER_RMI.getCmdLine() + serverUrl;
+        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVMARG, additionalJVMargs,
+                VariableContractType.DescriptorDefaultVariable);
     }
 
     @org.junit.Test
     public void action() throws Exception {
-        String serverUrl = PAProperties.PA_LOCATION_SERVER_RMI.getValue();
-        server = (SimpleLocationServer) PAActiveObject.newActive(SimpleLocationServer.class.getName(),
-                new Object[] { serverUrl });
-        Thread.sleep(3000);
+
         a = (A) PAActiveObject.newActive(A.class.getName(), null, new Object[] { "toto" }, null, null,
                 MixedLocationMetaObjectFactory.newInstance());
         migratableA = (MigratableA) PAActiveObject.newActive(MigratableA.class.getName(), null,
