@@ -37,13 +37,9 @@ import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Service;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.config.ProActiveConfiguration;
-import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -58,17 +54,10 @@ public class MixedLocationServer implements org.objectweb.proactive.RunActive, L
      * Delay minimum to send the same version to the same caller
      */
     public static final int DELAY_SAME_REPLY = 1000;
-    private LocationMap table;
-    private Hashtable<String, LocationRequestInfo> requestTable;
-    private String url;
+    final private LocationMap table = new LocationMap();
+    final private Hashtable<String, LocationRequestInfo> requestTable = new Hashtable<String, LocationRequestInfo>();
 
     public MixedLocationServer() {
-    }
-
-    public MixedLocationServer(String url) {
-        this.url = normalizeURL(url);
-        this.table = new LocationMap();
-        this.requestTable = new Hashtable<String, LocationRequestInfo>();
     }
 
     /**
@@ -103,7 +92,6 @@ public class MixedLocationServer implements org.objectweb.proactive.RunActive, L
      * the last request
      */
     public void runActivity(org.objectweb.proactive.Body body) {
-        this.register();
         Service service = new Service(body);
 
         while (body.isActive()) {
@@ -193,42 +181,6 @@ public class MixedLocationServer implements org.objectweb.proactive.RunActive, L
             e.printStackTrace();
         }
         return tmp;
-    }
-
-    @SuppressWarnings("deprecation")
-    // PROACTIVE-601
-    protected void register() {
-        try {
-            logger.info("Attempt at binding : " + url);
-            PAActiveObject.register(PAActiveObject.getStubOnThis(), url);
-            logger.info("Location Server bound in registry : " + url);
-        } catch (Exception e) {
-            logger.fatal("Cannot bind in registry - aborting " + url);
-            e.printStackTrace();
-            return;
-        }
-    }
-
-    public static void main(String[] args) {
-        ProActiveConfiguration.load();
-        String name = PAProperties.PA_LOCATION_SERVER_RMI.getValue();
-
-        Object[] arg = new Object[1];
-        arg[0] = name;
-
-        MixedLocationServer server = null;
-
-        try {
-            if (args.length == 1) {
-                server = (MixedLocationServer) PAActiveObject.newActive(MixedLocationServer.class.getName(),
-                        arg, NodeFactory.getNode(args[0]));
-            } else {
-                server = (MixedLocationServer) PAActiveObject.newActive(MixedLocationServer.class.getName(),
-                        arg);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     //
