@@ -25,7 +25,10 @@ public class TestSleeper extends UnitTests {
         long after = System.currentTimeMillis();
 
         logger.info("Spleeped " + (after - before) + " expected " + SLEEP_TIME);
-        Assert.assertTrue(after - before >= SLEEP_TIME);
+        // -1 is here because System.nanoTime() is more accurate
+        // than System.currentTimeMillis(). Rouding errors can leads to
+        // after - before == SLEEP_TIME - 1
+        Assert.assertTrue(after - before >= SLEEP_TIME - 1);
     }
 
     private class T implements Runnable {
