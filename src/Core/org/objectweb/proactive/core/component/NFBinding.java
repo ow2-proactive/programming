@@ -61,7 +61,7 @@ public class NFBinding extends Binding {
     }
 
     public String getServerComponentName() {
-        return clientComponent;
+        return serverComponent;
     }
 
     public String getServerInterfaceName() {
