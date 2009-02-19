@@ -94,7 +94,7 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
     }
 
     @Override
-    public void init() {
+    public void initController() {
         // this method is called once the component is fully instantiated with all its interfaces created
         InterfaceType[] itfTypes = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
         for (int i = 0; i < itfTypes.length; i++) {
@@ -435,7 +435,6 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
     }
 
     protected void bindFc(String clientItfName, ProActiveInterface serverItf) {
-        init();
         if (logger.isDebugEnabled()) {
             try {
                 if (!PAGroup.isGroup(serverItf.getFcItfOwner())) {

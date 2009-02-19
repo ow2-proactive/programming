@@ -69,13 +69,15 @@ public interface ProActiveInterface extends Interface, StubObject {
 
     /**
      * Sets the type.
+     * 
      * @param type The type to set
      */
     public abstract void setFcType(Type type);
 
     /**
-     * getter
-     * @return the delegatee
+     * Return the object implementing this interface.
+     * 
+     * @return The implementing object
      */
     public abstract Object getFcItfImpl();
 
