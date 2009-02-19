@@ -60,17 +60,19 @@ public class ProActiveLogger extends Logger {
             // if logger is not defined create default logger with level info that logs
             // on the console
 
-            File f = new File(System.getProperty("user.home") + File.separator + Constants.USER_CONFIG_DIR +
-                File.separator + ProActiveConfiguration.PROACTIVE_LOG_PROPERTIES_FILE);
+            File f = new File(Constants.USER_CONFIG_DIR + File.separator +
+                ProActiveConfiguration.PROACTIVE_LOG_PROPERTIES_FILE);
 
             if (f.exists()) {
-
                 try {
                     InputStream in = new FileInputStream(f);
                     // testing the availability of the file
                     Properties p = new Properties();
                     p.load(in);
                     PropertyConfigurator.configure(p);
+                    // PROACTIVE-524 this one *MUST* be set through System.setProperty
+                    // and not by PAProperties.LOG4J.setValue(...) as it introduces
+                    // a race condition on the logger initialization. 
                     System.setProperty("log4j.configuration", f.toURI().toString());
 
                 } catch (Exception e) {
@@ -90,7 +92,6 @@ public class ProActiveLogger extends Logger {
                 }
 
             } else {
-
                 InputStream in = PAProperties.class.getResourceAsStream("proactive-log4j");
                 // testing the availability of the file
                 Properties p = new Properties();
