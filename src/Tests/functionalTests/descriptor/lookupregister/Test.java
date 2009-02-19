@@ -38,6 +38,7 @@ import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
+import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 
 import functionalTests.FunctionalTest;
@@ -70,8 +71,11 @@ public class Test extends FunctionalTest {
         proActiveDescriptorAgent.activateMappings();
         VirtualNode vnAgent = proActiveDescriptorAgent.getVirtualNode("Agent");
         PAActiveObject.newActive(A.class.getName(), new Object[] { "local" }, vnAgent.getNode());
-        VirtualNode vnLookup = PADeployment.lookupVirtualNode(URIBuilder.buildURIFromProperties("localhost",
-                "Agent").toString());
+
+        String url = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "Agent").toString();
+
+        System.out.println(url);
+        VirtualNode vnLookup = PADeployment.lookupVirtualNode(url);
         a = (A) vnLookup.getUniqueAO();
 
         assertTrue((a.getName().equals("local")));
