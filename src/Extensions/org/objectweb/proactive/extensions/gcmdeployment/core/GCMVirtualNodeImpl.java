@@ -491,32 +491,31 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
                         }
                     }
                 }
-
-                if (isReady() && !readyNotifSent) {
-                    synchronized (isReadyMonitor) {
-                        isReadyMonitor.notifyAll();
-                    }
-
-                    synchronized (isReadySubscribers) {
-                        for (Subscriber subscriber : isReadySubscribers) {
-                            Class<?> cl = subscriber.getClient().getClass();
-                            try {
-                                Method m = cl.getMethod(subscriber.getMethod(), String.class);
-                                m.invoke(subscriber.getClient(), this.getName());
-                                isReadySubscribers.remove(subscriber);
-                            } catch (Exception e) {
-                                GCM_NODEMAPPER_LOGGER.warn(e);
-                            }
-                        }
-                    }
-                    readyNotifSent = true;
-                }
             } catch (NodeException e) {
                 GCMA_LOGGER.warn("GCM Deployment failed to create a node on " + fakeNode.getRuntimeURL() +
                     ". Please check your network configuration", e);
             }
         }
 
+        if (isReady() && !readyNotifSent) {
+            synchronized (isReadyMonitor) {
+                isReadyMonitor.notifyAll();
+            }
+
+            synchronized (isReadySubscribers) {
+                for (Subscriber subscriber : isReadySubscribers) {
+                    Class<?> cl = subscriber.getClient().getClass();
+                    try {
+                        Method m = cl.getMethod(subscriber.getMethod(), String.class);
+                        m.invoke(subscriber.getClient(), this.getName());
+                        isReadySubscribers.remove(subscriber);
+                    } catch (Exception e) {
+                        GCM_NODEMAPPER_LOGGER.warn(e);
+                    }
+                }
+            }
+            readyNotifSent = true;
+        }
     }
 
     /*
