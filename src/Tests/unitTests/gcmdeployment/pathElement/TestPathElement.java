@@ -106,8 +106,7 @@ public class TestPathElement {
 
         PathElement pe = new PathElement(path, PathBase.PROACTIVE);
 
-        String expected = PathElement.appendPath(homeDir, toolDir, hostInfo);
-        expected = PathElement.appendPath(expected, path, hostInfo);
+        String expected = PathElement.appendPath(toolDir, path, hostInfo);
         Assert.assertEquals(expected, pe.getFullPath(hostInfo, cb));
     }
 

@@ -248,8 +248,9 @@ public class CommandBuilderProActive implements CommandBuilder {
         if (!overwriteClasspath) {
             // ProActive.jar contains a JAR index
             // see: http://java.sun.com/j2se/1.3/docs/guide/jar/jar.html#JAR%20Index
+
             char fs = hostInfo.getOS().fileSeparator();
-            sb.append(getPath(hostInfo));
+            sb.append(this.getPath(hostInfo));
             sb.append(fs);
             sb.append("dist");
             sb.append(fs);
@@ -446,11 +447,23 @@ public class CommandBuilderProActive implements CommandBuilder {
     }
 
     public String getPath(HostInfo hostInfo) {
-        if (proActivePath != null) {
-            return proActivePath.getFullPath(hostInfo, this);
+        String ret = null;
+
+        Tool proactive = null;
+        proactive = hostInfo.getTool(Tools.PROACTIVE.id);
+        if (proactive != null) {
+            // GCMD overridden the ProActive location. Use the GCMD declaration
+            ret = proactive.getPath();
+        } else {
+            // Use the GCMA definition
+            if (proActivePath != null) {
+                ret = proActivePath.getFullPath(hostInfo, this);
+            } else {
+                ret = null;
+            }
         }
 
-        return null;
+        return ret;
     }
 
     private static String getAbsolutePath(String path) {
