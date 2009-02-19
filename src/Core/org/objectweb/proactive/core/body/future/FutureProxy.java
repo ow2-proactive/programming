@@ -207,7 +207,9 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      */
     public synchronized void receiveReply(MethodCallResult obj) {
         if (isAvailable()) {
-            throw new IllegalStateException("FutureProxy receives a reply and this target field is not null");
+            throw new IllegalStateException(
+                "FutureProxy receives a reply and the current target field is not null. Current target is " +
+                    this.target + " while reply's target is " + obj);
         }
         if (dispatchMonitor != null) {
             dispatchMonitor.updatedResult(originatingProxy);
