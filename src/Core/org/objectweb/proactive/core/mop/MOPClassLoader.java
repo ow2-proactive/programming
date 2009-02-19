@@ -231,7 +231,7 @@ public class MOPClassLoader extends URLClassLoader {
                         return (Class<?>) m.invoke(this.getParent(), effectiveArguments);
                     }
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.debug(ex);
                     throw new ClassNotFoundException(ex.getMessage());
                 }
             } else {
