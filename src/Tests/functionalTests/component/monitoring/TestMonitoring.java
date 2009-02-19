@@ -76,8 +76,8 @@ public class TestMonitoring extends ComponentTest {
     private void checkMethodStatistics(String itfName, String methodName, int nbCalls, int nbMethods,
             long sleepTimeCallMethod) throws Exception {
         MethodStatistics methodStats = monitor.getStatistics(itfName, methodName);
-        assertTrue(checkTime(ServerImpl.EXECUTION_TIME, methodStats.getAverageServiceTime()));
-        assertTrue(checkTime(nbMethods * sleepTimeCallMethod, methodStats.getAverageInterArrivalTime()));
+        checkTime(ServerImpl.EXECUTION_TIME, methodStats.getAverageServiceTime());
+        checkTime(nbMethods * sleepTimeCallMethod, methodStats.getAverageInterArrivalTime());
     }
 
     public void start() throws Exception {
