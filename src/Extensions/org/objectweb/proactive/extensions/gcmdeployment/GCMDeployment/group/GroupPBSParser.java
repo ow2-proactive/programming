@@ -50,7 +50,7 @@ public class GroupPBSParser extends AbstractGroupSchedulerParser {
     private static final String NODE_NAME_STDOUT = "stdout";
     private static final Object NODE_NAME_STDERR = "stderr";
 
-    private static final String ATTR_QUEUE_NAME = "queueName";
+    private static final String ATTR_QUEUE_NAME = "queue";
     private static final String ATTR_INTERACTIVE = "interactive";
     private static final String ATTR_JOBNAME = "jobName";
 
