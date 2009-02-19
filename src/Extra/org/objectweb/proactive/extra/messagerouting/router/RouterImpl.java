@@ -223,7 +223,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
             // Miam Miam Miam
             ProActiveLogger.logEatedException(logger, e);
         }
-        attachment.getClient().discardAttachment();
+        Client client = attachment.getClient();
+        if (client != null) {
+            client.discardAttachment();
+        }
         logger.debug("Client " + sc.socket() + " disconnected");
 
         // Broadcast the disconnection to every client
