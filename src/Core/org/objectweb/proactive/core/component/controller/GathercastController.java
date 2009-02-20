@@ -71,12 +71,4 @@ public interface GathercastController extends CollectiveInterfaceController {
      * @return the list of interfaces connected to this gathercast interface
      */
     public List<ItfID> getConnectedClientItfs(String serverItfName);
-
-    /**
-     * Delegates a request to be processed by the gathercast controller
-     * @param r a request on a gathercast interface
-     * @return the result of the gathercast invocation
-     * @throws ServeException if the request handling failed
-     */
-    public Object handleRequestOnGatherItf(ComponentRequest r) throws ServeException;
 }
