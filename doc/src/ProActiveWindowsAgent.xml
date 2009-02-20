@@ -42,7 +42,8 @@
 				<para>Loads the user's configuration.</para>
 			</listitem>
 			<listitem>
-				<para>Creates schedules according to the working plan specified in the configuration.</para>
+				<para>Creates schedules according to the working plan
+					specified in the configuration.</para>
 			</listitem>
 			<listitem>
 				<para>Spawns a jvm process that will run a specified java
@@ -50,20 +51,28 @@
 					connections are available:</para>
 				<itemizedlist>
 					<listitem>
-						<para><emphasis role="bold">RMI Registration</emphasis> - The specified java class will create a
-							ProActive local node as a computational resource and register it in a local
-							RMI registry.</para>
+						<para>
+							<emphasis role="bold">RMI Registration</emphasis>
+							- The specified java class will create a ProActive local node as
+							a computational resource and register it in a local RMI registry.
+						</para>
 					</listitem>
 					<listitem>
-						<para><emphasis role="bold">Resource Manager Registration</emphasis> - The specified java
-							class will create a ProActive local node as a computational resource and
-							register it in the specified Resource Manager, thus being able to
-							execute java or native tasks received from the Scheduler.</para>
+						<para>
+							<emphasis role="bold">Resource Manager Registration
+							</emphasis>
+							- The specified java class will create a ProActive local node as
+							a computational resource and register it in the specified
+							Resource Manager, thus being able to execute java or native tasks
+							received from the Scheduler.
+						</para>
 						<para> It's is important to note that a jvm process running tasks
 							can potentially spawn child processes.</para>
 					</listitem>
 					<listitem>
-						<para><emphasis role="bold">Custom</emphasis> - The user can specify its own java class.
+						<para>
+							<emphasis role="bold">Custom</emphasis>
+							- The user can specify its own java class.
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -73,22 +82,84 @@
 					the following limitations:</para>
 				<itemizedlist>
 					<listitem>
-						<para><emphasis role="bold">RAM limitation</emphasis> - The user can specify a maximum amount of
-							memory allowed for a jvm process and its children. If the limit
-							is reached all processes are automatically killed.</para>
+						<para>
+							<emphasis role="bold">RAM limitation</emphasis>
+							- The user can specify a maximum amount of memory allowed for a
+							jvm process and its children. If the limit is reached all
+							processes are automatically killed.
+						</para>
 					</listitem>
 					<listitem>
-						<para><emphasis role="bold">CPU limitation</emphasis> - The user can specify a maximum CPU usage
-							allowed for a jvm process and its children. If the limit is exceeded by the sum of CPU usages of
-							all processes they are automatically throttled to reach the given limit.</para>
+						<para>
+							<emphasis role="bold">CPU limitation</emphasis>
+							- The user can specify a maximum CPU usage allowed for a jvm
+							process and its children. If the limit is exceeded by the sum of
+							CPU usages of all processes they are automatically throttled to
+							reach the given limit.
+						</para>
 					</listitem>
 				</itemizedlist>
 			</listitem>
 			<listitem>
-				<para>Restarts the spawned jvm process in case of failures according to a timeout policy.</para>
+				<para>Restarts the spawned jvm process in case of failures
+					with a timeout policy.</para>
 			</listitem>
 		</itemizedlist>
 	</section>
+	<section xml:id="PWA_Example">
+		<info>
+			<title>Example</title>
+		</info>
+		<para>This simple example illustrates how to create an active
+			object on a ProActive node created with the ProActive Windows Agent,
+			we suppose that the agent is already:</para>
+		<itemizedlist>
+			<listitem>
+				<para>Installed (see next chapter for installation) on a
+					host with ip address 192.168.1.62</para>
+			</listitem>
+			<listitem>
+				<para>
+					Configured with the
+					<emphasis role="bold">RMI registration</emphasis>
+					as selected connection type and "toto" as node name.
+				</para>
+			</listitem>
+		</itemizedlist>
+		<para>Once the agent is started, the following java code gets a
+			reference on a remote node and creates an active object on the remote
+			node identified by the url "rmi://192.168.1.62:1099/toto"</para>
+		<para>
+			<programlisting xml:lang="java">public class Test {
+
+	public static void main(String [] args){
+		try{
+			final Node n = NodeFactory.getNode("rmi://192.168.1.62:1099/toto");
+			
+			System.out.println("Nb of active objects on the remote node: " + n.getNumberOfActiveObjects() + " local runtime hashcode " + Runtime.getRuntime().hashCode());
+			
+			final Test stubOnTest = (Test)PAActiveObject.newActive(Test.class.getName(),null,n);		
+			
+			final String receivedMessage = stubOnTest.getMessage();
+			
+			System.out.println("Nb of active objects on the remote node: " + n.getNumberOfActiveObjects() + " received message: " + receivedMessage);			
+		}catch(Throwable t){
+			t.printStackTrace();
+		}				
+	}	
+	
+	public Test(){}
+	
+	public String getMessage(){return "A message from " + Runtime.getRuntime().hashCode();}		
+}</programlisting>
+		</para>
+		<para>The output is:</para>
+		<screen> --> This ClassFileServer is listening on port 2027 
+Detected an existing RMI Registry on port 1099 
+Nb of active objects on the remote node: 0 local runtime hashcode 6588476
+Generating class : pa.stub.org.ow2.proactive.resourcemanager.utils._StubTest 
+Nb of active objects on the remote node: 1 received message: A message from 26670261</screen>
+	</section>	
 	<section xml:id="PWA_Installation">
 		<info>
 			<title>Installation</title>
@@ -206,29 +277,30 @@
 				<para>The ProActive (or Scheduler) location.</para>
 			</listitem>
 			<listitem>
-				<para>The jvm location (usually something like C:\Program Files\Java\jdk1.6.0_12).</para>
+				<para>The jvm location (usually something like C:\Program
+					Files\Java\jdk1.6.0_12).</para>
 			</listitem>
 			<listitem>
 				<para>The jvm parameters.</para>
 			</listitem>
 			<listitem>
-				<para>The user can enable the memory management (disabled
-					by default) in order to limit the amount of RAM used by the
-					jvm process.</para>
+				<para>The user can enable the memory management (disabled by
+					default) in order to limit the amount of RAM used by the jvm
+					process.</para>
 				<para>By default the limit is set to 96 mbytes, thus each time the
-					jvm process asks more memory it will be killed as well as its
-					child processes.</para>
+					jvm process asks more memory it will be killed as well as its child
+					processes.</para>
 				<para>The user can extend this limit by giving more memory for
-					java tasks (executed by the jvm process) or for native
-					tasks (child processes spawned by the jvm process).</para>
+					java tasks (executed by the jvm process) or for native tasks (child
+					processes spawned by the jvm process).</para>
 			</listitem>
 			<listitem>
-				<para>It is possible to list all available network interfaces by clicking on
-				    the "Refresh" button and add the selected network interface name as
-				    a value of the "proactive.net.interface" property by clicking on "Use" button.
-				    See the ProActive documentation for further information.
-				</para>
-			</listitem>			
+				<para>It is possible to list all available network interfaces by
+					clicking on the "Refresh" button and add the selected network
+					interface name as a value of the "proactive.net.interface" property
+					by clicking on "Use" button. See the ProActive documentation for
+					further information.</para>
+			</listitem>
 		</itemizedlist>
 		<para>
 			<figure xml:id="PWA_config_editor_connection_FIGURE">
@@ -250,25 +322,26 @@
 			<listitem>
 				<para>
 					<emphasis role="bold">RMI Registration</emphasis>
-					- creates a local ProActive node and registers (advertises) it in
-					a local RMI registry. The node name is optional.
+					- creates a local ProActive node and registers (advertises) it in a
+					local RMI registry. The node name is optional.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
 					<emphasis role="bold">Resource Manager Registration
 					</emphasis>
-					- creates a local ProActive node and registers it in the specified Resource
-					Manager. The url must be like 'protocol://host:port/'. The node name is optional.
-					Since the Resource Manager requires an authentication a username and a password are required.					
+					- creates a local ProActive node and registers it in the specified
+					Resource Manager. The url must be like 'protocol://host:port/'. The
+					node name is optional. Since the Resource Manager requires an
+					authentication a username and a password are required.
 				</para>
 			</listitem>
 			<listitem>
 				<para>
 					<emphasis role="bold">Custom</emphasis>
 					- the user specifies its own java starter class and the arguments
-					to be given to the main method. The java starter class must be in the classpath when the
-					jvm process is started.
+					to be given to the main method. The java starter class must be in
+					the classpath when the jvm process is started.
 				</para>
 			</listitem>
 		</itemizedlist>
@@ -292,9 +365,10 @@
 			duration. The agent will end the connection as well as the ProActive
 			Runtime process and its child processes when the plan duration has
 			expired.</para>
-		<para> Moreover it is possible to specify the jvm process Priority and it's CPU usage limit.
-			The behavior of the CPU usage limit works as follows: if the jvm process spawns other processes they will also be part of the limit so that 
-			if the sum of CPU % of all processes exceeds the user limit they will be throttled to reach the given limit.
+		<para> Moreover it is possible to specify the jvm process Priority and
+			it's CPU usage limit. The behavior of the CPU usage limit works as
+			follows: if the jvm process spawns other processes they will also be
+			part of the limit so that if the sum of CPU% of all processes exceeds the user limit they will be throttled to reach the given limit.
 			Note that if the Priority is set to RealTime the CPU % throttling will be disabled.
 		</para>
 
