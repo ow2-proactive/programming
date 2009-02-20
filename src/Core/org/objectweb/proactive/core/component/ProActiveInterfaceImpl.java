@@ -36,6 +36,7 @@ import java.io.Serializable;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.Type;
+import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentativeImpl;
 
 
@@ -134,24 +135,19 @@ public abstract class ProActiveInterfaceImpl implements ProActiveInterface, Seri
 
     @Override
     public boolean equals(Object anObject) {
-        //it's the "component" itf, compare directly them
-        if (anObject instanceof ProActiveComponentRepresentativeImpl) {
-            return super.equals(anObject);
+        if (Interface.class.isAssignableFrom(anObject.getClass())) {
 
+            Interface itf = (Interface) anObject;
+            boolean nameEquality = itf.getFcItfName().equals(name);
+
+            // Are the two itf belong to the same component?
+            UniqueID objectID = ((ProActiveComponentRepresentativeImpl) itf.getFcItfOwner()).getID();
+            UniqueID thisID = ((ProActiveComponentRepresentativeImpl) owner).getID();
+            boolean ownerEquality = objectID.equals(thisID);
+
+            return nameEquality && ownerEquality;
         }
-
-        if (!(anObject instanceof Interface)) {
-            return false;
-        }
-        Interface itf = (Interface) anObject;
-        boolean nameEquality = itf.getFcItfName().equals(name);
-
-        // Are the two itf belong to the same component?
-        ProActiveComponentRepresentativeImpl pr1 = (ProActiveComponentRepresentativeImpl) itf.getFcItfOwner();
-        ProActiveComponentRepresentativeImpl pr2 = (ProActiveComponentRepresentativeImpl) owner;
-        boolean ownerEquality = pr1.getID().equals(pr2.getID());
-
-        return nameEquality & ownerEquality;
+        return false;
     }
 
     @Override
