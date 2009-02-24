@@ -26,7 +26,6 @@
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>
 					<pathElement base="proactive" relpath="dist/lib/ibis-1.4.jar"/>
 				</proactiveClasspath>	
-				<log4jProperties base="proactive" relpath="compile/proactive-log4j"/>	
 		      <!--   <proactiveSecurity>
 		          <applicationPolicy base="proactive" relpath="descriptors/security/applicationPolicy1.xml"/>
 		          <runtimePolicy base="proactive" relpath="descriptors/security/applicationPolicy1.xml"/>

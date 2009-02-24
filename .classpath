@@ -56,7 +56,7 @@
 	<classpathentry kind="lib" path="lib/julia-mixins.jar"/>
 	<classpathentry kind="lib" path="lib/julia-runtime.jar"/>
 	<classpathentry kind="lib" path="lib/jung-1.7.4.jar"/>
-	<classpathentry kind="lib" path="lib/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/log4j.jar" sourcepath="/home/cmathieu/Download/apache-log4j-1.2.15"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
 	<classpathentry kind="lib" path="lib/moduleloader.jar"/>
 	<classpathentry kind="lib" path="lib/njs_client.jar"/>

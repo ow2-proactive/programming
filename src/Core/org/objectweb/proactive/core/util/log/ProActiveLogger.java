@@ -58,55 +58,54 @@ public class ProActiveLogger extends Logger {
 
     // Callers must be synchronized to avoid race conditions
     private static void load() {
+        String configurationFile = System.getProperty("log4j.configuration");
+        String collectorURL = System.getProperty("proactive.log4j.collector");
+        boolean success = false;
+        // If log4j.configuration is set, log4j will use this file automatically
 
-        if (System.getProperty("log4j.configuration") == null) {
-            // if logger is not defined create default logger with level info that logs
-            // on the console
+        if (configurationFile == null) {
+            // We have to load load the log4j configuration by ourself
+            Properties p = new Properties();
 
-            File f = new File(Constants.USER_CONFIG_DIR + File.separator +
-                ProActiveConfiguration.PROACTIVE_LOG_PROPERTIES_FILE);
-
-            if (f.exists()) {
-                try {
-                    InputStream in = new FileInputStream(f);
-                    // testing the availability of the file
-                    Properties p = new Properties();
-                    p.load(in);
-                    PropertyConfigurator.configure(p);
-                    // PROACTIVE-524 this one *MUST* be set through System.setProperty
-                    // and not by PAProperties.LOG4J.setValue(...) as it introduces
-                    // a race condition on the logger initialization. 
-                    System.setProperty("log4j.configuration", f.toURI().toString());
-
-                } catch (Exception e) {
-                    System.err.println("the user's log4j configuration file (" + f.getAbsolutePath() +
-                        ") exits but is not accessible, fallbacking on the default configuration");
-                    InputStream in = PAProperties.class.getResourceAsStream("proactive-log4j");
-                    // testing the availability of the file
-                    Properties p = new Properties();
-
-                    try {
-                        p.load(in);
-                        PropertyConfigurator.configure(p);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-
-                }
-
-            } else {
-                InputStream in = PAProperties.class.getResourceAsStream("proactive-log4j");
-                // testing the availability of the file
-                Properties p = new Properties();
-
+            if (collectorURL != null) {
+                // Load the ProActive log collector config file
+                InputStream in = PAProperties.class.getResourceAsStream("proactive-collector-log4j");
                 try {
                     p.load(in);
-                    PropertyConfigurator.configure(p);
+                    success = true;
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    System.err.println("Failed to read the proactive-collector-log4j file: " +
+                        e1.getMessage());
+                }
+            } else {
+                // Load the proactive-log4j in the user configuration directory if available
+                File f = new File(Constants.USER_CONFIG_DIR + File.separator +
+                    ProActiveConfiguration.PROACTIVE_LOG_PROPERTIES_FILE);
+
+                if (f.exists()) {
+                    try {
+                        InputStream in = new FileInputStream(f);
+                        p.load(in);
+
+                        success = true;
+                    } catch (Exception e) {
+                        System.err.println("the user's log4j configuration file (" + f.getAbsolutePath() +
+                            ") exits but is not accessible, fallbacking on the default configuration");
+                    }
                 }
             }
 
+            if (!success) {
+                // Load the default proactive-log4j file embedded in the ProActive.jar
+                InputStream in = PAProperties.class.getResourceAsStream("proactive-log4j");
+                try {
+                    p.load(in);
+                } catch (IOException e1) {
+                    System.err.println("Failed to read the default configuration file:" + e1.getMessage());
+                }
+            }
+
+            PropertyConfigurator.configure(p);
         }
 
         myFactory = new ProActiveLoggerFactory();
@@ -160,10 +159,6 @@ public class ProActiveLogger extends Logger {
             load();
         }
 
-        // FIXME: Don't know how to avoid this cast
-        //
-        // AFAIK we should be able to directly use the factory to create the Logger but using
-        // myFactory.makeNewLoggerInstance(name) does not work since the LogManager is not used...
         return Logger.getLogger(name, myFactory);
     }
 

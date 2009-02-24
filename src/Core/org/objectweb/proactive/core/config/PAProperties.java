@@ -135,6 +135,18 @@ public enum PAProperties {
      */
     LOG4J_DEFAULT_INIT_OVERRIDE("log4j.defaultInitOverride", PAPropertiesType.BOOLEAN),
 
+    PA_LOG4J_COLLECTOR("proactive.log4j.collector", PAPropertiesType.STRING),
+
+    PA_LOG4J_APPENDER_PROVIDER("proactive.log4j.appender.provider", PAPropertiesType.STRING),
+
+    LOGGING_EVENT_SENDER_PROVIDER_PERIOD(
+            "org.objectweb.proactive.core.util.log.remote.LoggingEventSenderProvider.period",
+            PAPropertiesType.INTEGER),
+
+    LOGGING_EVENT_SENDER_PROVIDER_THRESHOLD(
+            "org.objectweb.proactive.core.util.log.remote.LoggingEventSenderProvider.threshold",
+            PAPropertiesType.INTEGER),
+
     /**
      * Activates ProActive classloader
      */
