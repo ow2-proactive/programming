@@ -754,13 +754,30 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
      * @throws IOException
      *             if the component cannot be registered
      */
-    @SuppressWarnings("deprecation")
-    // PROACTIVE-601
+    @Deprecated
     public static void register(Component ref, String url) throws IOException {
         if (!(ref instanceof ProActiveComponentRepresentative)) {
             throw new IllegalArgumentException("This method can only register ProActive components");
         }
         PAActiveObject.register(ref, url);
+    }
+
+    /**
+     * Registers a reference on a component with a name
+     *
+     * @param ref
+     *            a reference on a component (it should be an instance of
+     *            ProActiveComponentRepresentative)
+     * @param name
+     *            the name of the component
+     * @throws IOException
+     *             if the component cannot be registered
+     */
+    public static void registerByName(Component ref, String name) throws IOException {
+        if (!(ref instanceof ProActiveComponentRepresentative)) {
+            throw new IllegalArgumentException("This method can only register ProActive components");
+        }
+        PAActiveObject.registerByName(ref, name);
     }
 
     /**

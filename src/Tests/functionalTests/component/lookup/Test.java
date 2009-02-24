@@ -69,8 +69,8 @@ public class Test extends ComponentTest {
                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE) });
         componentA = componentFactory.newFcInstance(typeA, new ControllerDescription("component-a",
             Constants.PRIMITIVE), new ContentDescription(A.class.getName()));
+        Fractive.registerByName(componentA, "componentA");
         String url = URIBuilder.buildURIFromProperties("localhost", "componentA").toString();
-        Fractive.register(componentA, url);
         Component retreived = Fractive.lookup(url);
         Assert.assertEquals(componentA, retreived);
     }
