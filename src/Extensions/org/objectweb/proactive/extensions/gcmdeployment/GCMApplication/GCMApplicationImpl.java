@@ -59,7 +59,6 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.TimeoutAccounter;
-import org.objectweb.proactive.core.util.log.remote.ProActiveLogCollectorDeployer;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentDescriptor;
@@ -121,8 +120,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     private ProActiveSecurityManager proactiveApplicationSecurityManager;
 
     private VariableContractImpl vContract;
-
-    final private ProActiveLogCollectorDeployer logCollector;
 
     static public GCMApplication getLocal(long deploymentId) {
         return localDeployments.get(deploymentId);
@@ -201,8 +198,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
             for (GCMVirtualNode vn : this.virtualNodes.values()) {
                 this.ROvirtualNodes.put(vn.getName(), vnAsRemoteObject(vn));
             }
-
-            this.logCollector = new ProActiveLogCollectorDeployer(this.deploymentId + "/logCollector");
 
         } catch (Exception e) {
             throw new ProActiveException("Failed to create GCMApplication: " + e.getMessage() +
@@ -527,10 +522,6 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
                     ". Please check your network configuration", e);
             }
         }
-    }
-
-    public String getLogCollectorUrl() {
-        return this.logCollector.getCollectorURL();
     }
 
 }

@@ -357,11 +357,6 @@ public class CommandBuilderProActive implements CommandBuilder {
             command.append(log4jProperties.getFullPath(hostInfo, this));
             command.append("\"");
             command.append(" ");
-        } else {
-            //        	command.append("-Dlog4j.debug ");
-            command.append(PAProperties.PA_LOG4J_COLLECTOR.getCmdLine());
-            command.append(gcma.getLogCollectorUrl());
-            command.append(" ");
         }
 
         // Java Security Policy
