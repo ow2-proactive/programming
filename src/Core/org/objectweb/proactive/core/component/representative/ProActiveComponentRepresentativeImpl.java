@@ -594,10 +594,6 @@ public class ProActiveComponentRepresentativeImpl implements ProActiveComponentR
         return this.componentParameters;
     }
 
-    public void setComponentParameters(ComponentParameters componentParameters) {
-        this.componentParameters = componentParameters;
-    }
-
     public void setImmediateServices() {
         throw new UnsupportedOperationException("only on the identity component");
     }

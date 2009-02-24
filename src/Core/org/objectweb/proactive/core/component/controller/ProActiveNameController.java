@@ -96,7 +96,6 @@ public class ProActiveNameController extends AbstractProActiveController impleme
     }
 
     public ControllerState getState() {
-
         return new ControllerState(name);
     }
 }

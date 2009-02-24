@@ -126,11 +126,6 @@ public class ProActiveComponentRepresentativeFactory {
                         new Class[] {}), new Object[] {}, null, Constants.COMPONENT, null,
                         ComponentRequest.STRICT_FIFO_PRIORITY));
 
-        //remove immediate service for getComponentParameters
-        //        proxy.reify(MethodCall.getComponentMethodCall(ComponentParametersController.class.getDeclaredMethod(
-        //                "removeImmediateServices", new Class[] {}), new Object[] {}, null,
-        //                Constants.COMPONENT_PARAMETERS_CONTROLLER, null, ComponentRequest.STRICT_FIFO_PRIORITY));
-
         return ProActiveComponentRepresentativeFactory.instance().createComponentRepresentative(
                 componentParameters, proxy);
     }
@@ -152,10 +147,6 @@ public class ProActiveComponentRepresentativeFactory {
                         new Class[] {}), new Object[] {}, null, Constants.COMPONENT, null,
                         ComponentRequest.STRICT_FIFO_PRIORITY));
 
-        //remove immediate service for getComponentParameters
-        //        proxy.reify(MethodCall.getComponentMethodCall(ComponentParametersControllerImpl.class
-        //                .getDeclaredMethod("removeImmediateServices", new Class[] {}), new Object[] {}, null,
-        //                Constants.COMPONENT_PARAMETERS_CONTROLLER, null, ComponentRequest.STRICT_FIFO_PRIORITY));
         return ProActiveComponentRepresentativeFactory.instance().createNFComponentRepresentative(
                 componentParameters.getComponentType(), componentParameters.getHierarchicalType(), proxy,
                 componentParameters.getControllerDescription().getControllersConfigFileLocation());

@@ -175,7 +175,7 @@ public class ProActiveLifeCycleControllerImpl extends AbstractProActiveControlle
             //getRequestQueue().start();
             fcState = LifeCycleController.STARTED;
             if (logger.isDebugEnabled()) {
-                logger.debug("started " + owner.getComponentParameters().getName());
+                logger.debug("started " + Fractal.getNameController(owner).getFcName());
             }
         } catch (NoSuchInterfaceException nsie) {
             logger.error("interface not found : " + nsie.getMessage());
@@ -216,7 +216,7 @@ public class ProActiveLifeCycleControllerImpl extends AbstractProActiveControlle
             //getRequestQueue().stop();
             fcState = LifeCycleController.STOPPED;
             if (logger.isDebugEnabled()) {
-                logger.debug("stopped" + owner.getComponentParameters().getName());
+                logger.debug("stopped" + Fractal.getNameController(owner).getFcName());
             }
         } catch (NoSuchInterfaceException nsie) {
             logger.error("interface not found : " + nsie.getMessage());

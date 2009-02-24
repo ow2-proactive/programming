@@ -65,21 +65,12 @@ public interface ProActiveComponent extends Component, Interface, Serializable {
     public ProActiveComponent getRepresentativeOnThis();
 
     /**
-     * comparison between components
-     * @param object another component to compare to
-     * @return true if both components are equals
-     */
-    public boolean equals(Object object);
-
-    /**
      * getter for a unique identifier
      * @return a unique identifier of the component (of the active object) accross virtual machines
      */
     public UniqueID getID();
 
     public ComponentParameters getComponentParameters();
-
-    public void setComponentParameters(ComponentParameters componentParameters);
 
     public void setImmediateServices();
 }

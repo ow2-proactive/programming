@@ -56,27 +56,6 @@ public class ComponentParameters implements Serializable {
     private ComponentType componentNFType;
     private ControllerDescription controllerDesc;
 
-    /** Constructor for ComponentParameters.
-     * @param name the name of the component
-     * @param hierarchicalType the hierarchical type, either PRIMITIVE or COMPOSITE or PARALLEL
-     * @param componentType
-     */
-    public ComponentParameters(String name, String hierarchicalType, ComponentType componentType) {
-        this(componentType, new ControllerDescription(name, hierarchicalType));
-    }
-
-    /**
-     * Constructor for ComponentParameters.
-     * @param name String
-     * @param hierarchicalType String
-     * @param componentType ComponentType
-     * @param controllerConfigFileLocation String
-     */
-    public ComponentParameters(String name, String hierarchicalType, ComponentType componentType,
-            String controllerConfigFileLocation) {
-        this(componentType, new ControllerDescription(name, hierarchicalType, controllerConfigFileLocation));
-    }
-
     /**
      * Constructor
      * @param componentType the type of the component

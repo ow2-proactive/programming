@@ -50,7 +50,7 @@ import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
  * a controller interface with the implementation that has to be used. <br>
  * During the construction of the component, the membrane is automatically
  * constructed with these controllers. The controllers are linked together, and
- * requests targetting a control interface visit the different controllers until
+ * requests targeting a control interface visit the different controllers until
  * they find the suitable controller, and then the request is executed on this
  * controller.
  *
@@ -108,18 +108,6 @@ public class ControllerDescription implements Serializable {
      * @param name String
      * @param hierarchicalType String
      * @param controllersConfigFileLocation String
-     * @param interceptorsConfigFileLocation String
-     */
-    public ControllerDescription(String name, String hierarchicalType, String controllersConfigFileLocation,
-            String interceptorsConfigFileLocation) {
-        this(name, hierarchicalType, controllersConfigFileLocation, false);
-    }
-
-    /**
-     * Constructor for ControllerDescription.
-     * @param name String
-     * @param hierarchicalType String
-     * @param controllersConfigFileLocation String
      * @param synchronous boolean
      */
     public ControllerDescription(String name, String hierarchicalType, String controllersConfigFileLocation,
@@ -157,7 +145,7 @@ public class ControllerDescription implements Serializable {
         if (!Constants.PRIMITIVE.equals(hierarchicalType)) {
             this.synchronous = synchronous;
         }
-        if (!withConfigFile) { //Wthout specifying a specific configuration described in a file
+        if (!withConfigFile) { //Without specifying a specific configuration described in a file
             this.controllersConfigFileLocation = null;
         } else {
             this.controllersConfigFileLocation = DEFAULT_COMPONENT_CONFIG_FILE_LOCATION;

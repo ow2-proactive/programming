@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.LifeCycleController;
+import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
@@ -108,10 +109,13 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
 
         ProActiveComponentImpl actualComponent = ((ComponentBody) targetBody).getProActiveComponentImpl();
         if (logger.isDebugEnabled()) {
-            logger.debug("invocation on method [" + methodCall.getName() + "] of interface [" +
-                methodCall.getComponentMetadata().getComponentInterfaceName() + "] on component : [" +
-                actualComponent.getComponentParameters().getName() + "]");
-
+            try {
+                logger.debug("invocation on method [" + methodCall.getName() + "] of interface [" +
+                    methodCall.getComponentMetadata().getComponentInterfaceName() + "] on component : [" +
+                    Fractal.getNameController(actualComponent).getFcName() + "]");
+            } catch (NoSuchInterfaceException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
