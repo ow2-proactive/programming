@@ -159,8 +159,8 @@
 
     <!-- the javadoc need trunk/doc/  because the paths are not from a subant task-->
     <target name="doc.ProActive.javadoc.published" depends="compile.util, deploy" description="Generate the ProActive Programming published javadoc">
-        <mkdir dir="${javadoc.tmp.dir}" />
-        <javadoc source="${source}"	classpathref="compile.libs">
+        <mkdir dir="../doc/tmp" />
+	<javadoc source="${source}"	classpathref="compile.libs">
             <doclet name="doc.PublishedAPIDoclet" > 
                 <path refid="docs.utils.classpath.javadoc"/>
 		<param name="-file" value="doc/tmp/publishedCoreClasses" />
