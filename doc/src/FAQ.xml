@@ -308,7 +308,7 @@ Default target: compile.all</screen>
          
          <para>The body has two representations. One is local and given by
           the interface <literal>Body</literal> </para>
-          <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/body.snip"/></textobject></programlisting>
+          <programlisting language="java"><textobject><textdata fileref="automatic_snippets/body.snip"/></textobject></programlisting>
           <para> This is the
           local view of the body an object can have when being in the same JVM
           as the body. For instance, the implementation of the activity of an
@@ -321,7 +321,7 @@ Default target: compile.all</screen>
           and therefore the methods that can be invoked. That view is the one
           used by the proxy of a remote reference to the active object to send
           request to the body of the active object.</para>
-         <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/universalbody.snip"/></textobject></programlisting>
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/universalbody.snip"/></textobject></programlisting>
           
         </answer>
        </qandaentry>

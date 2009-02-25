@@ -204,13 +204,13 @@
   <section xml:id="MainPrinciplesAsynchronousMethodCallsAndImplicit"><info><title>Main Principles: Asynchronous Method Calls And Implicit futures</title></info>
     
 
-    <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/asynchronous_method_calls_and_implicit_futures.txt"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/asynchronous_method_calls_and_implicit_futures.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="ExplicitSynchronization_76"><info><title>Explicit Synchronization</title></info>
     
 
-    <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/explicit_synchronization.txt"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/explicit_synchronization.txt"/></textobject></programlisting>
 
   </section>
 
@@ -221,10 +221,10 @@
     RunActive interface has to be implemented: it specifies the AO behavior in
     the method named <literal>runActivity()</literal>:</para>
 
-    <programlisting xml:lang="java"><textobject><textdata fileref="../src/Core/org/objectweb/proactive/RunActive.java"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="../../src/Core/org/objectweb/proactive/RunActive.java"/></textobject></programlisting>
 	<para>Example:</para>
 
-   <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/RunActive_example.txt"/></textobject></programlisting>
+   <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/RunActive_example.txt"/></textobject></programlisting>
 
     
     <para> Two other interfaces can also be specified:</para>
@@ -233,13 +233,13 @@
 	    the active object. It is called once before the <literal>runActivity(Body body)</literal> method.
 	    It is not called again if the active object restarts after migration.</para>
 
-    <programlisting xml:lang="java"><textobject><textdata fileref="../src/Core/org/objectweb/proactive/InitActive.java"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="../../src/Core/org/objectweb/proactive/InitActive.java"/></textobject></programlisting>
 
 	<para>The method <literal> endActivity(Body body) </literal> finalizes the activity of
     	the active object. It is called once after the execution of the <literal>runActivity(Body body)</literal> method.
     </para>
     
-    <programlisting xml:lang="java"><textobject><textdata fileref="../src/Core/org/objectweb/proactive/EndActive.java"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="../../src/Core/org/objectweb/proactive/EndActive.java"/></textobject></programlisting>
 
   </section>
 	<!--
@@ -252,7 +252,7 @@
     to external events (method calls). One just has to program non-blocking
     services to take into account external inputs.</para>
 
-    <para><programlisting xml:lang="java"><emphasis role="bold">public class </emphasis>BusyButReactive <emphasis role="bold">implements</emphasis> RunActive { <emphasis role="bold">
+    <para><programlisting language="java"><emphasis role="bold">public class </emphasis>BusyButReactive <emphasis role="bold">implements</emphasis> RunActive { <emphasis role="bold">
 
     public void </emphasis> runActivity(Body body) { 
        Service service = new Service(body); 
@@ -288,39 +288,39 @@
     <para><emphasis role="bold">Non-blocking services:</emphasis> returns
     immediately if no matching request is pending</para>
 
-		  <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/non-blocking_services.txt"/></textobject></programlisting>
+		  <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/non-blocking_services.txt"/></textobject></programlisting>
 				
     <para><emphasis role="bold">Blocking services:</emphasis> waits until a
     matching request can be served</para>
 
-		  <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/blocking_services.txt"/></textobject></programlisting>
+		  <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/blocking_services.txt"/></textobject></programlisting>
 
     <para><emphasis role="bold">Blocking timed services:</emphasis> wait a
     matching request at most a time given in ms</para>
 
-		     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/blocking_timed_services.txt"/></textobject></programlisting>
+		     <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/blocking_timed_services.txt"/></textobject></programlisting>
 
 
     <para><emphasis role="bold">Waiting primitives:</emphasis></para>
 
-  	     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/waiting_primitives.txt"/></textobject></programlisting>
+         <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/waiting_primitives.txt"/></textobject></programlisting>
 
     <para><emphasis role="bold">Others:</emphasis></para>
 
-     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/other_services.txt"/></textobject></programlisting>
+     <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/other_services.txt"/></textobject></programlisting>
 
   </section>
 
   <section xml:id="ActiveObjectCreation_76"><info><title>Active Object Creation:</title></info>
     
 
-     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/ao_creation.txt"/></textobject></programlisting>
+     <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/ao_creation.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="Groups_76"><info><title>Groups:</title></info>
     
 
-    <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/groups.txt"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/groups.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="ExplicitGroupSynchronizations_76"><info><title>Explicit Group Synchronizations</title></info>
@@ -329,13 +329,13 @@
     <para>Methods both in Interface Group, and static in class
     PAGroup</para>
 
-  <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/explicit_group_synchronization.txt"/></textobject></programlisting>
+  <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/explicit_group_synchronization.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="OOSPMD_76"><info><title>OO SPMD</title></info>
     
 
-  <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/oospmd.txt"/></textobject></programlisting>
+  <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/oospmd.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="Migration_76"><info><title>Migration</title></info>
@@ -344,16 +344,16 @@
     <para>Methods both in the interface <literal>MigrationController</literal>, and in class
     <literal>PAMobileAgent</literal></para>
 
- <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/migration_methods.txt"/></textobject></programlisting>
+ <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/migration_methods.txt"/></textobject></programlisting>
     
         <para>To initiate the migration of an object from outside, define a public
     method, that upon service will call the static migrateTo primitive:</para>
 
-	 <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/migration_example.txt"/></textobject></programlisting>
+	 <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/migration_example.txt"/></textobject></programlisting>
     
 		<para>To define a migration strategy we implement the methods in in the interface <literal>MigrationStrategyManager</literal>:
 		</para>
-		 <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/migration_strategy.txt"/></textobject></programlisting>
+		 <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/migration_strategy.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="Components_76"><info><title>Components</title></info>
@@ -375,10 +375,10 @@
 
     <para>In the class <literal>PAComponent</literal>:</para>
 
- 		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/new_component.txt"/></textobject></programlisting>
-			
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/new_component.txt"/></textobject></programlisting>
+
     <para><literal>Fractive:</literal></para>
- 		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/fractive_component.txt"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/fractive_component.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="Security_76"><info><title>Security:</title></info>
@@ -392,7 +392,7 @@
 
     <para><emphasis role="bold">Example of specification:</emphasis></para>
 
-		<programlisting xml:lang="XML"><textobject><textdata fileref="code_snippets/reference/xml_security_file.txt"/></textobject></programlisting>
+		<programlisting language="xml"><textobject><textdata fileref="code_snippets/reference/xml_security_file.txt"/></textobject></programlisting>
 
     <para>This rule specifies that communications (requests) are authorized 
     from Virtual Node 'VN1' to the VN 'VN2', provided that authentication and
@@ -415,10 +415,10 @@
 
     <para>Example of a deployment descriptor that provides the localhost as resource with a capacity of <code>hostCapacity</code> jvms, each jvm hosting <code> vmCapacity</code>  nodes.</para>
 
-    <programlisting xml:lang="XML"><textobject><textdata fileref="../examples/GCMD_Local.xml"/></textobject></programlisting>
+    <programlisting language="xml"><textobject><textdata fileref="../../examples/GCMD_Local.xml"/></textobject></programlisting>
     
     <para>An example of application deployment: </para>
- 		<programlisting xml:lang="XML"><textobject><textdata fileref="../examples/agent/GCMA.xml"/></textobject></programlisting>
+      <programlisting language="xml"><textobject><textdata fileref="../../examples/agent/GCMA.xml"/></textobject></programlisting>
 
 
 
@@ -426,7 +426,7 @@
 	<para>Deployment is done in several steps: load the XML descriptor file, activate the virtual nodes, and
 	manipulate nodes and objects.
 	</para>
-		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/deployment_api.txt"/></textobject></programlisting>
+		<programlisting language="java"><textobject><textdata fileref="code_snippets/reference/deployment_api.txt"/></textobject></programlisting>
 
   </section>
 
@@ -436,7 +436,7 @@
     <para><emphasis role="bold">Functional exceptions with
     asynchrony</emphasis></para>
 
-		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/trywithcatch.txt"/></textobject></programlisting>
+		<programlisting language="java"><textobject><textdata fileref="code_snippets/reference/trywithcatch.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="ExportActiveObjectsasWebservices_76"><info><title>Export Active Objects as Web services</title></info>
@@ -452,7 +452,7 @@
     and which id deployed on a web server which location is
     http://localhost:8080.</para>
 
-		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/export_to_web_service.txt"/></textobject></programlisting>
+		<programlisting language="java"><textobject><textdata fileref="code_snippets/reference/export_to_web_service.txt"/></textobject></programlisting>
   </section>
 
   <section xml:id="Deployingafaulttolerantapplication_76"><info><title>Deploying a fault-tolerant application</title></info>
@@ -471,7 +471,7 @@
     <para><emphasis role="bold">A Fault-tolerant deployment
     descriptor</emphasis></para>
 
-		<programlisting xml:lang="XML"><textobject><textdata fileref="code_snippets/reference/fault_descriptor.txt"/></textobject></programlisting>
+		<programlisting language="xml"><textobject><textdata fileref="code_snippets/reference/fault_descriptor.txt"/></textobject></programlisting>
 
     <para><emphasis role="bold">Starting the fault-tolerance
     server</emphasis></para>
@@ -510,7 +510,7 @@
 
     <para>Firstly, create your own task:</para>
 
-	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/bnb.txt"/></textobject></programlisting>
+	<programlisting language="java"><textobject><textdata fileref="code_snippets/reference/bnb.txt"/></textobject></programlisting>
 
 
     <para>How to interact with the framework from inside a task:</para>
@@ -519,14 +519,14 @@
       <listitem>
         <para>Some class variables:</para>
 
-	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/bnb_variables.txt"/></textobject></programlisting>
+	<programlisting language="java"><textobject><textdata fileref="code_snippets/reference/bnb_variables.txt"/></textobject></programlisting>
 
       </listitem>
 
       <listitem>
         <para>Interact with the framework (inside a Task):</para>
 
-	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/bnb_interact.txt"/></textobject></programlisting>
+	<programlisting language="java"><textobject><textdata fileref="code_snippets/reference/bnb_interact.txt"/></textobject></programlisting>
       </listitem>
     </itemizedlist>
 
@@ -548,7 +548,7 @@
 
     <para>Finally, start the compution:</para>
 
-	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/bnb_start.txt"/></textobject></programlisting>
+	<programlisting language="java"><textobject><textdata fileref="code_snippets/reference/bnb_start.txt"/></textobject></programlisting>
 
     <para>Keep in mind that only 'initLower/UpperBound' and 'split' methods
     are called on the root task. The 'execute' method is called on the root
@@ -572,7 +572,7 @@
         <para><literal>for i in splitted do in
         parallel</literal></para>
 
-  		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/reference/split.txt"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/reference/split.txt"/></textobject></programlisting>
 	</listitem>
 
       <listitem>
@@ -589,6 +589,6 @@
     deployment time. This files are specified using the ProActive XML
     Deployment Descriptor in the following way:</para>
 
-    <programlisting xml:lang="XML"><textobject><textdata fileref="code_snippets/reference/file_transfer.txt"/></textobject></programlisting>
+    <programlisting language="xml"><textobject><textdata fileref="code_snippets/reference/file_transfer.txt"/></textobject></programlisting>
   </section>
 </appendix>

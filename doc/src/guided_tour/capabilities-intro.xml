@@ -260,7 +260,7 @@
     
         <para>The routines dealing with synchronization policy are:</para>
 
-        <programlisting xml:lang="java">public void evenPolicy(org.objectweb.proactive.Service service)
+        <programlisting language="java">public void evenPolicy(org.objectweb.proactive.Service service)
 public void readerPolicy(org.objectweb.proactive.Service service)
 public void writerPolicy(org.objectweb.proactive.Service service)</programlisting> 
 		<para>
@@ -498,7 +498,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 following content:
             </para>
 
-            <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/mypi.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/mypi.txt"/></textobject></programlisting>
         </section>
 
         <section xml:id="AddtheDeploymentDescriptor_11"><info><title>Add the Deployment Descriptor</title></info>
@@ -508,26 +508,26 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 Inside the main we add the code for acquiring the
                 resources.
             </para>
-            <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/pi_acquire_resources.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/pi_acquire_resources.txt"/></textobject></programlisting>
 
         </section>
 
         <section xml:id="InstantiateTheRemoteObjects_11"><info><title>Instantiate The Remote Objects</title></info>
             
 
-            <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/mypi.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/mypi.txt"/></textobject></programlisting>
         </section>
 
         <section xml:id="DivideComputeandConquer_11"><info><title>Divide, Compute and Conquer</title></info>
             
 
-            <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/divide_work.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/divide_work.txt"/></textobject></programlisting>
         </section>
 
         <section xml:id="Cleanup_11"><info><title>Cleanup</title></info>
             
 
-            <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/clean_up.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/clean_up.txt"/></textobject></programlisting>
         </section>
 
         <section xml:id="Executingtheapplication_11"><info><title>Executing the application</title></info>
@@ -539,7 +539,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
     <section xml:id="Puttingitalltogether_11"><info><title>Putting it all together</title></info>
         
 
-            <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/allpi.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/allpi.txt"/></textobject></programlisting>
     </section>
   
   
@@ -840,7 +840,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>In class SubMatrix.java, add a method
         <literal>barrier()</literal> of the form:</para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/ospmd_barrier.txt"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/ospmd_barrier.txt"/></textobject></programlisting>
 
         <para>Do not forget to define the <literal>keepOnGoing()</literal>
         method that indeed can return void, and just be empty. Find the
@@ -853,7 +853,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <literal>keepOnGoing()</literal> on the SPMD group "matrix". Here are
         samples of the code:</para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/spmd_keep_going.txt"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/spmd_keep_going.txt"/></textobject></programlisting>
 
         <para>Recompile, and execute the code. Each iteration needs to be
         activated by hitting the return key in the shell window where Jacobi
@@ -1026,7 +1026,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>Use IC2D to visualize the machines ("titi", "toto", "tata" and
         "tutu" in this example) and the JVMs being launched on them.</para>
 
-        <programlisting xml:lang="xml"><textobject><textdata fileref="guided_tour/code_snippets/example_descriptor.txt"/></textobject></programlisting>
+        <programlisting language="xml"><textobject><textdata fileref="guided_tour/code_snippets/example_descriptor.txt"/></textobject></programlisting>
 
         <para>Pay attention of what happened to your previous XML deployment
         file. First of all to use the current jvm the following line was added
@@ -1130,14 +1130,14 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         parameters and the nodes specified in the deployment
         descriptor.</para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/spmd_group.txt"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/spmd_group.txt"/></textobject></programlisting>
 
         <para>As with MPI, the ProActive's SPMD layer provides some initialization
         primitives. In Worker.java you can identify this initialization. Note
         that one-to-one communications will be done thanks to an array view on
         the created group.</para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/spmd_worker.txt"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/spmd_worker.txt"/></textobject></programlisting>
       </section>
     </section>
 
@@ -1194,7 +1194,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
         <para>The leader blocks his request queue until another worker will do
         a distant call on the leader's <emphasis role="bold">updateX</emphasis> method which is :</para>
 
-        <programlisting xml:lang="java">  public void updateX(double value){
+        <programlisting language="java">  public void updateX(double value){
      this.x = value;
   } </programlisting>
       </section>
@@ -1661,7 +1661,7 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 during the simulation. They are created in the
                 Start.java file:
             </para>
-            <programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/nbodies_creation.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/nbodies_creation.txt"/></textobject></programlisting>
             <para>
                 See how the call to
                 <literal>PAActiveObject.newActive</literal>
@@ -1694,17 +1694,17 @@ public void writerPolicy(org.objectweb.proactive.Service service)</programlistin
                 synchronize themselves by all pinging the maestro, with
                 the notifyFinished call:
             </para>
-            <programlisting xml:lang="java">// init workers, from the Start class
+            <programlisting language="java">// init workers, from the Start class
 for (int i=0 ; i &amp;lt; totalNbBodies ; i ++)
     domainArray[i].init(domainArray, displayer, maestro);
     // init method, defined within each worker
 </programlisting>
-            <programlisting xml:lang="java">public void init(Domain [] domainArray, Displayer dp, Maestro master) {
+            <programlisting language="java">public void init(Domain [] domainArray, Displayer dp, Maestro master) {
     this.neighbours = domainArray;
     .....
     maestro.notifyFinished();  // say we're ready to start
 }</programlisting>
-            <programlisting xml:lang="java">public void notifyFinished() {
+            <programlisting language="java">public void notifyFinished() {
     this.nbFinished ++;
     if (this.nbFinished == this.domainArray.length) {
         this.iter ++; 
@@ -1743,7 +1743,7 @@ for (int i=0 ; i &amp;lt; totalNbBodies ; i ++)
                 Instead of explicitly asking for information, this
                 information is automatically issued:
             </para>
-            <programlisting xml:lang="java">public void sendValueToNeighbours() {
+            <programlisting language="java">public void sendValueToNeighbours() {
     for (int i = 0 ; i &lt; this.neighbours.length ; i ++)
         if (i != this.identification) // don't notify self!
              this.neighbours[i].setValue(this.info, this.identification);
@@ -1790,7 +1790,7 @@ public void setValue(Planet inf, int id) {
                 <literal>Active Objects</literal>
                 ) :
             </para>
-            <programlisting xml:lang="java">// in the Start class
+            <programlisting language="java">// in the Start class
 Object [][] params = ...
 Domain  domainGroup = null;
 try {
@@ -1837,7 +1837,7 @@ catch ....</programlisting>
                 Then this group is passed as a parameter to all the
                 members of the Group in just one call:
             </para>
-            <programlisting xml:lang="java">// Still in the Start class
+            <programlisting language="java">// Still in the Start class
 domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             <para>
                 This method sets the local field as a copy of the passed
@@ -1847,7 +1847,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 <literal>Domain</literal>
                 from the Group, to avoid having calls on self:
             </para>
-            <programlisting xml:lang="java">public void init(Domain domainGroup, Displayer dp, Maestro master) {
+            <programlisting language="java">public void init(Domain domainGroup, Displayer dp, Maestro master) {
     this.neighbours = domainGroup;
     Group g = PAGroup.getGroup(neighbours);
     g.remove(PAActiveObject.getStubOnThis()); // no need to send information to self
@@ -1856,7 +1856,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 Remember that in the previous example, the neighbours
                 where stored in an array, and each was accessed in turn:
             </para>
-            <programlisting xml:lang="java">for (int i = 0 ; i &amp;lt; this.neighbours.length ; i ++) {
+            <programlisting language="java">for (int i = 0 ; i &amp;lt; this.neighbours.length ; i ++) {
     if (i != this.identification) // don't notify self!
     this.neighbours[i].setValue(this.info, this.identification);
 }</programlisting>
@@ -1907,7 +1907,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 iteration, because it is still waiting for more results,
                 in the current iteration.
             </para>
-            <programlisting xml:lang="java">public void setValue(Planet inf, int receivedIter) {
+            <programlisting language="java">public void setValue(Planet inf, int receivedIter) {
     if (this.iter == receivedIter) {
         this.currentForce.add(info, inf);
         this.nbReceived ++ ;
@@ -1939,7 +1939,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 <literal>Domain</literal>
                 changes iteration.
             </para>
-            <programlisting xml:lang="java">public void sendValueToNeighbours()  {
+            <programlisting language="java">public void sendValueToNeighbours()  {
     reset();                  
     this.iter++;
     if (this.iter &amp;lt; this.maxIter) {                           
@@ -1972,7 +1972,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 OOspmd Groups, there is a special instruction, which
                 takes the same parameters as a newGroup instruction:
             </para>
-            <programlisting xml:lang="java">Object [][] params =  ...
+            <programlisting language="java">Object [][] params =  ...
  Domain domainGroup = null;
  try {
     domainGroup = (Domain) ProSPMD.newSPMDGroup( Domain.class.getName(), params, nodes);
@@ -1986,7 +1986,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 others to have reached it, before reading its request
                 queue again.
             </para>
-            <programlisting xml:lang="java">public void sendValueToNeighbours() {
+            <programlisting language="java">public void sendValueToNeighbours() {
     this.neighbours.setValue(this.info, this.identification);       
     ProSPMD.barrier('barrier' + this.iter);
     this.iter++;
@@ -2335,7 +2335,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 <literal>userAndComposite.fractal</literal>
                 )
             </para>
-            <programlisting xml:lang="xml">  &lt;component ... /&gt;
+            <programlisting language="xml">  &lt;component ... /&gt;
        
     &lt;!-- mapping the node names in the descriptor file to others referenced in the component's adl files. --&gt;
     &lt;exportedVirtualNodes&gt;
@@ -2355,7 +2355,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             <example xml:id="HowtorenameVirtualNodesinADLfiles_11"><info><title>How to rename Virtual Nodes in ADL files</title></info>           
             
                 
-                <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
+                <programlisting language="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
        
     &lt;!-- Recalling a renamed Virtual Node --&gt;
     &lt;exportedVirtualNodes&gt;
@@ -2406,12 +2406,12 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 
                 <para>The component Registration</para>
                 <para>
-                    <programlisting xml:lang="java">Fractive.register(Fractive.getComponentRepresentativeOnThis(),
+                    <programlisting language="java">Fractive.register(Fractive.getComponentRepresentativeOnThis(),
       UrlBuilder.buildUrlFromProperties("localhost", "Dispatcher"));</programlisting>
                 </para>
                 <para>The Component lookup</para>
                 <para>
-                    <programlisting xml:lang="java">ProActiveComponentRepresentative a = Fractive.lookup(
+                    <programlisting language="java">ProActiveComponentRepresentative a = Fractive.lookup(
       UrlBuilder.buildUrl(this.hostName, "Dispatcher", protocol, this.portNumber));
       this.c3dDispatcher = (Dispatcher) a.getFcInterface("user2dispatcher");</programlisting>
                 </para>

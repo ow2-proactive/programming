@@ -89,7 +89,7 @@
 				For this example a prime number is given as candidate by
 				default.
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_sequential_main.snip"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="../automatic_snippets/primes_sequential_main.snip"/></textobject></programlisting>
 		</section>
 
 		<!-- RUNNING -->
@@ -253,11 +253,11 @@
 
 			<!-- SKELETON CODE -->
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_manager_skeleton.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_manager_skeleton.txt"/></textobject></programlisting>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_worker_skeleton.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_worker_skeleton.txt"/></textobject></programlisting>
 			
-			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_main_skeleton.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributed_main_skeleton.txt"/></textobject></programlisting>
 
 			<!-- FT-TEST -->
 			
@@ -315,19 +315,19 @@
 				The <literal>Main</literal>
 				class that deploys the manager and the workers.
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_main.snip"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="../automatic_snippets/primes_distributed_main.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>CMAgentPrimeManager</literal>
 				class that distributes the intervals to workers.
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_manager.snip"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="../automatic_snippets/primes_distributed_manager.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>CMAgentPrimeWorker</literal>
 				class that tests if a candidate is prime.
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributed_worker.snip"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="../automatic_snippets/primes_distributed_worker.snip"/></textobject></programlisting>
 		</section>
 
 		<!-- RUNNING -->
@@ -453,9 +453,9 @@
 			
 			<!-- SKELETON CODE -->
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_task_skeleton.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_task_skeleton.txt"/></textobject></programlisting>
 			
-			<programlisting xml:lang="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_skeleton.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_skeleton.txt"/></textobject></programlisting>
 			
 			<!-- FT-TEST -->
 			
@@ -493,13 +493,13 @@
 				The <literal>FindPrimeTask</literal>
 				class that performs the computation.
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_task.snip"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="../automatic_snippets/primes_distributedmw_task.snip"/></textobject></programlisting>
 
 			<para>
 				The <literal>PrimeExampleMW</literal>
 				class that deploys the master and the workers.
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="./automatic_snippets/primes_distributedmw_example.snip"/></textobject></programlisting>								
+			<programlisting language="java"><textobject><textdata fileref="../automatic_snippets/primes_distributedmw_example.snip"/></textobject></programlisting>								
 		</section>		
 		
 		<!-- RUNNING -->

@@ -18,22 +18,10 @@
    
 	<property file="${user.home}/.proactive/build.properties" />
 	<import file="common.xml" />
-	<import file="../doc/manual.xml" optional="true"/> 
-
-        <target name="doc.selectPA" description="Switch to building the ProActive documentation (run build again after running the target)"> 
-           <copy  file="../doc/pa.xml" tofile="../doc/manual.xml" overwrite="true"/>
-           <copy  file="../doc/after_properties_pa.xml" tofile="../doc/after_properties.xml" overwrite="true"/>
-           <echo message="Run build again with no arguments to see the available documentation targets" level="info"/>
-        </target>
-        <target name="doc.selectIC2D" description="Switch to building the IC2D documentation (run build again after running the target)"> 
-           <copy  file="../doc/ic2d.xml" tofile="../doc/manual.xml" overwrite="true"/>
-           <copy  file="../doc/after_properties_ic2d.xml" tofile="../doc/after_properties.xml" overwrite="true"/>
-           <echo message="Run build again with no arguments to see the available documentation targets" level="info"/>
-        </target>
-
-            
-
-
+	
+	<import file="../doc/ic2d.xml"  optional="true" />
+	<import file="../doc/pa.xml"  optional="true" />
+	
 	<!-- ************
 		Taskdefs		
 	-->

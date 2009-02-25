@@ -133,14 +133,14 @@
       <listitem>
         <para>Write your active object in a classic way; for example:</para>
 
-        <programlisting xml:lang="java"> A a = (A)PAActiveObject.newActive("A", new Object [] {}); </programlisting>
+        <programlisting language="java"> A a = (A)PAActiveObject.newActive("A", new Object [] {}); </programlisting>
       </listitem>
 
       <listitem>
         <para>Once the element is created and activated, deploy it onto a web
         server by using <emphasis role="bold">org.objectweb.proactive.extensions.webservices.WebServices</emphasis> API:</para>
 
-        <programlisting xml:lang="java"> <emphasis role="bold">WebServices.exposeAsWebService(Object o, String url, String urn, String [] methods); </emphasis></programlisting>
+        <programlisting language="java"> <emphasis role="bold">WebServices.exposeAsWebService(Object o, String url, String urn, String [] methods); </emphasis></programlisting>
 
         <para>where:</para>
 
@@ -177,7 +177,7 @@
     <para>To undeploy an active object as a service, use the ProActive static
     method:</para>
 
-    <programlisting xml:lang="java"><emphasis role="bold">WebServices.unExposeAsWebService ( String urn, String url );  </emphasis></programlisting>
+    <programlisting language="java"><emphasis role="bold">WebServices.unExposeAsWebService ( String urn, String url );  </emphasis></programlisting>
 
     <para>where:</para>
 
@@ -233,7 +233,7 @@
       <para>Let's start with a simple example, an Hello world active object
       exposed as a web service:</para>
 
-      <programlisting xml:lang="java">public class HelloWorld implements Serializable {
+      <programlisting language="java">public class HelloWorld implements Serializable {
    public HelloWorld () {}
    public String helloWorld (String name) {
       return "Hello world !";
@@ -286,7 +286,7 @@
           <para>Once the web reference is added, you can use the helloWorld
           service as an object and perform calls on it:</para>
 
-          <programlisting xml:lang="java">...
+          <programlisting language="java">...
 localhost.helloWorld hw = new localhost.helloWorld();
 string s = hw.helloWorld ();
 ...</programlisting>
@@ -313,7 +313,7 @@ string s = hw.helloWorld ();
       in order to a C# client for example controls it. Only one instruction
       has been added in the main method:</para>
 
-      <programlisting xml:lang="java">WebServices.exposeAsWebService (dispatcher, "C3DDispatcher",
+      <programlisting language="java">WebServices.exposeAsWebService (dispatcher, "C3DDispatcher",
                     "http://localhost:8080",  new String [] {
                     "rotateRight", "getPicture", "rotateLeft", "rotateUp",
                     "rotateDown", "getPixels", "getPixelMax", "waitForImage",

@@ -440,7 +440,7 @@
                     In your deployement descriptor you have to declare
                     the technical service :
                  </para>
-                    <programlisting xml:lang="xml">
+                    <programlisting language="xml">
                         
 						 &lt;technicalServices&gt;
 						     &lt;technicalServiceDefinition id="profile" class="org.objectweb.proactive.benchmarks.timit.util.service.TimItTechnicalService"&gt;
@@ -454,7 +454,7 @@
                     Then use the defined id in the virtualNode
                     definition :
                  </para>
-                    <programlisting xml:lang="xml">
+                    <programlisting language="xml">
                         
 						&lt;virtualNodesDefinition&gt;
 							&lt;virtualNode name="Workers" technicalServiceId="profile"/&gt;
@@ -521,7 +521,7 @@
                                 Suppose that your active object class is
                                 :
                                 </para>
-                                <programlisting xml:lang="java">
+                                <programlisting language="java">
 	package org.objectweb.user.example;
 
 	public class ActiveObjectClass{
@@ -1069,7 +1069,7 @@
                 definition tag. This tag is named "mainDefinition" and
                 its syntax is:
             </para>
-            <programlisting xml:lang="xml">
+            <programlisting language="xml">
 				&amp;lt;mainDefinition id="mainID"
 				class="theClassToLaunchContainingAMainMethod"&amp;gt;
 				&amp;lt;arg value="param1"&amp;gt; &amp;lt;arg value="param2"&amp;gt;
@@ -1105,7 +1105,7 @@
                 with the same name in the virtualNodeDefinitions tag (in
                 componentDefinition).
             </para>
-            <programlisting xml:lang="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+            <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;ProActiveDescriptor
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://www-sop.inria.fr/oasis/proactive/schema/DescriptorSchema.xsd"&gt;

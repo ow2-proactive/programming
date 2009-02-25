@@ -130,7 +130,7 @@
 			reference on a remote node and creates an active object on the remote
 			node identified by the url "rmi://192.168.1.62:1099/toto"</para>
 		<para>
-			<programlisting xml:lang="java">public class Test {
+			<programlisting language="java">public class Test {
 
 	public static void main(String [] args){
 		try{

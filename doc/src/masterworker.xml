@@ -140,7 +140,7 @@
                 </info>
 
                 <para>In order to create a local master we use a constructor without parameters</para>
-                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/master_creation.snip"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/master_creation.snip"/></textobject></programlisting>
                 <para>Using this constructor, a master will be created in the current JVM, the master will share CPU
                     usage and memory with the user JVM. This master will compute tasks of type
                     <literal>A</literal>
@@ -154,9 +154,9 @@
 
                 <para>In order to create a remote master the following constructors can be used:</para>
                 
-                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_constructor.snip"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_constructor.snip"/></textobject></programlisting>
 
-                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_constructor_remote.snip"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_constructor_remote.snip"/></textobject></programlisting>
 
                 <para>Using either of these constructors, a master will be created in the specified remote
                     resource(JVM), the master will share CPU usage and memory with existing running applications on the
@@ -173,7 +173,7 @@
                 <para>Now that the master has been created, resources (Workers) must be added to it. The following
                     methods can be used for creating workers:
                 </para>
-                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_addresources.snip"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_addresources.snip"/></textobject></programlisting>
                 <para>The first two methods will tell the master to create workers on already deployed ProActive
                     resources. The last two methods will ask the master to deploy resources using a ProActive descriptor
                     and to create workers on top of these resources. For a complete explanation of ProActive's
@@ -224,7 +224,7 @@
                 <literal>org.objectweb.proactive.extensions.masterworker.interfaces.Task</literal>
             </para>
 
-            <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_task.snip"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_task.snip"/></textobject></programlisting>
 
             <para>Users need to implement the
                 <literal>Task</literal>
@@ -236,7 +236,7 @@
             </para>
 		
 			<para>The tasks are submitted to the master which in turn sends them to the workers. The following method submits the tasks: </para>
-            <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_solve.snip"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_solve.snip"/></textobject></programlisting>
             <warning><para>
                 The master keeps a track of task objects that have
                 been submitted to it and which are currently computing.
@@ -299,7 +299,7 @@
                 <emphasis>Submission</emphasis>
                 order using the following method :
             </para>
-            <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_order.snip"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_order.snip"/></textobject></programlisting>
             <para>The default mode of the Master-Worker API is
                 <emphasis>Completion</emphasis>
                 order. The mode can be switched dynamically, which means that subsequent calls to wait methods (see
@@ -329,7 +329,7 @@
                 </itemizedlist>
             </para>
 
-            <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_collection.snip"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_collection.snip"/></textobject></programlisting>
 
         </section>
 
@@ -338,7 +338,7 @@
             </info>
 
 
-            <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_terminate.snip"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_terminate.snip"/></textobject></programlisting>
 
             <para>One single method is used to terminate the master. A boolean parameter tells the master to free
                 resources or not (i.e. terminate remote JVMs).
@@ -356,7 +356,7 @@
                     messages. The default value of this parameter is 10000 (which corresponds to 10 seconds).
                 </para>
                 <para>In order to change this default value, the method described underneath can be called :</para>
-                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_ping.snip"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_ping.snip"/></textobject></programlisting>
                 <para>If the Master does not receive an answer for the ping it will remove the Worker from its list and
                     reassign the tasks the Worker has been assigned.
                 </para>
@@ -376,7 +376,7 @@
                     small value (1-5).
                 </para>
                 <para>Use the following method to change the flooding parameter :</para>
-                <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_flood.snip"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_flood.snip"/></textobject></programlisting>
             </section>
             
             
@@ -419,7 +419,7 @@
                         method. The user can use this interface to save, load or erase objects in the local worker's
                         memory. Below is the detailed WorkerMemory interface:
                     </para>
-                    <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_worker_memory.snip"/></textobject></programlisting>
+                    <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_worker_memory.snip"/></textobject></programlisting>
                 </section>
                 <section xml:id="Storingdata_36"><info><title>Storing data</title>
                     </info>
@@ -477,23 +477,23 @@
             value of PI with an arbitrary precision. The more points generated the better the accuracy for PI.
         </para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi.snip"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi.snip"/></textobject></programlisting>
 
         <para>In the main method the master is created and resources are added using a deployment descriptor .</para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_master_creation.snip"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_master_creation.snip"/></textobject></programlisting>
 
         <para>After the master is created the tasks are created and submitted to the master.</para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_tasks_submit.snip"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_tasks_submit.snip"/></textobject></programlisting>
 
         <para>After the task submission the results are gathered and displayed.</para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_results.snip"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_results.snip"/></textobject></programlisting>
 
 
         <para>Finally, the master is terminated (all resources are freed) and the program exits.</para>
 
-        <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_terminate.snip"/></textobject></programlisting>
+        <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_terminate.snip"/></textobject></programlisting>
     </section>
 </chapter>

@@ -69,7 +69,7 @@
 			For the examples  in this chapter we will be using the following
 			class that can be instantiated as an active	object:
 		</para>	
-		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/ActiveWorker.txt"/></textobject></programlisting>
+		<programlisting language="java"><textobject><textdata fileref="code_snippets/ActiveWorker.txt"/></textobject></programlisting>
 
 	</section>
 
@@ -172,7 +172,7 @@
 				active thread is started.
 			</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>
 		</section>
 
 
@@ -200,7 +200,7 @@
 				returns, the active objects have been created and their
 				threads have been started.
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActiveInParallel.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActiveInParallel.txt"/></textobject></programlisting>
 
 
 		</section>
@@ -246,7 +246,7 @@
 			The simplest code for object based creation looks like this:
 		</para>
 
-		<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/simpleTurnActive.txt"/></textobject></programlisting>
+		<programlisting language="java"><textobject><textdata fileref="code_snippets/simpleTurnActive.txt"/></textobject></programlisting>
 
 		<para>
 			The second parameter of
@@ -341,7 +341,7 @@
 				.
 			</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/ConstructorAmbiguities.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/ConstructorAmbiguities.txt"/></textobject></programlisting>
 			<para>
 				If we use
 				<literal>
@@ -410,13 +410,13 @@
 				contained in the virtual node.
 
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.Node.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.Node.txt"/></textobject></programlisting>
 
 			<para>
 				To deploy using the node's URL we just have the use the
 				URL instead of the Node as argument:
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.URL.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.URL.txt"/></textobject></programlisting>
 			<para>
 				The usage is similar for
 				<literal>PAActiveObject.turnActive(...)</literal>
@@ -435,7 +435,7 @@
 				<literal>VirtualNode</literal>
 				.
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/newActiveInParallel.onVirtualNode.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/newActiveInParallel.onVirtualNode.txt"/></textobject></programlisting>
 
 
 		</section>
@@ -593,7 +593,7 @@
 					initialization and activity.
 				</para>
 
-				<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/CustomInitAndRun.txt"/></textobject></programlisting>
+				<programlisting language="java"><textobject><textdata fileref="code_snippets/CustomInitAndRun.txt"/></textobject></programlisting>
 
 					<example xml:id="runActivity_start_stop_suspend"><info><title>Start, stop, suspend, restart a simulation algorithm in runActivity method</title></info>					
 						
@@ -608,7 +608,7 @@
 
 			
 						<para>
-							<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/SimulationWithActivity.txt"/></textobject></programlisting>
+							<programlisting language="java"><textobject><textdata fileref="code_snippets/SimulationWithActivity.txt"/></textobject></programlisting>
 						</para>
 			</example>
 
@@ -640,7 +640,7 @@
 					be passed to the active object. We do so by
 					implementing one or more interfaces.
 				</para>
-				<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/activityImplementation.txt"/></textobject></programlisting>
+				<programlisting language="java"><textobject><textdata fileref="code_snippets/activityImplementation.txt"/></textobject></programlisting>
 				<para>
 					The implemented interface can be used with
 					<literal>PAActiveObject.newActive(..)</literal>
@@ -648,7 +648,7 @@
 					<literal>PAActiveObject.turnActive(...)</literal>
 					.
 				</para>
-				<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/usingActivity.txt"/></textobject></programlisting>
+				<programlisting language="java"><textobject><textdata fileref="code_snippets/usingActivity.txt"/></textobject></programlisting>
 
 			</section>
 
@@ -674,12 +674,12 @@
 				returns it. The code is:
 			</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/factoryAO.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/factoryAO.txt"/></textobject></programlisting>
 			<para>
 				The static method in the factory class is then used to
 				create active objects:
 			</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/factoryCall.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/factoryCall.txt"/></textobject></programlisting>
 
 			<para>
 				It is up to the programmer to decide whether this method
@@ -744,7 +744,7 @@
 			</para>
 
 			<para>
-				<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/metaObjectFactory.txt"/></textobject></programlisting>
+				<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactory.txt"/></textobject></programlisting>
 			</para>
 
 			<para>
@@ -760,7 +760,7 @@
 				<literal>ProActiveMetaObjectFactory</literal>
 				 provides to simplify the creation of factories as
 				singleton. 
-				<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/proactivemetaobjectfactory.snip"/></textobject></programlisting>
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/proactivemetaobjectfactory.snip"/></textobject></programlisting>
 							
 				More explanations can be found in the<!-- This url can only work in the html generated files: in pdf there's no ".." -->
 				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/body/ProActiveMetaObjectFactory.html" os="html">
@@ -778,7 +778,7 @@
 				example as before we have:
 			</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.newActive.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.newActive.txt"/></textobject></programlisting>
 
 			<para>
 				In the case of a
@@ -786,7 +786,7 @@
 				we would have:
 			</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.turnActive.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.turnActive.txt"/></textobject></programlisting>
 		</section>
 	<!--//TODO - why doesn't newActive have the same parameter ?
 		<sect2>
@@ -823,7 +823,7 @@
 			using a piece of code like this:
 		</para>
 
-	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>
+	<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>
 
 		<para>
 			If the creation of the active instance of B is successful,
@@ -1427,7 +1427,7 @@
 					The code for the following example is: 
 				</para>
 				
-					<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/flowExampleCode.txt"/></textobject></programlisting>
+					<programlisting language="java"><textobject><textdata fileref="code_snippets/flowExampleCode.txt"/></textobject></programlisting>
 			</section>
 
 			<section xml:id="what_whould_have_happened_in_sequential_world"><info><title>What would have happened in a sequential world</title></info>
@@ -1762,7 +1762,7 @@
 						of your object has a method
 					</para>
 
-					<programlisting xml:lang="java">
+					<programlisting language="java">
 <emphasis role="bold">int</emphasis> giveSolution(parameter)</programlisting>
 
 					<para>
@@ -1770,7 +1770,7 @@
 						synchronous. To have asynchronous calls use
 					</para>
 
-					<programlisting xml:lang="java"><emphasis role="bold">IntWrapper</emphasis> giveSolution(parameter)</programlisting>
+					<programlisting language="java"><emphasis role="bold">IntWrapper</emphasis> giveSolution(parameter)</programlisting>
 
 				<para>
 						All wrappers are in the package:
@@ -1799,7 +1799,7 @@
 						to return <literal>null</literal> in Active Object methods:
 						on the caller side the test
 						
-						<programlisting xml:lang="java">if(result_from_method == null)</programlisting>
+						<programlisting language="java">if(result_from_method == null)</programlisting>
 						
 						has no sense. <literal>Result_from_method</literal> is a
 						couple Stub - FutureProxy as explained above, so
@@ -1807,10 +1807,10 @@
 						result_from_method cannot be <literal>null</literal>:
 					</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/avoidNull.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/avoidNull.txt"/></textobject></programlisting>
 
 					<para>On the caller side:</para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/callerSideAvoidNull.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/callerSideAvoidNull.txt"/></textobject></programlisting>
 
 
 					<para>
@@ -1853,7 +1853,7 @@
 				an exception.
 			</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/futureException.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/futureException.txt"/></textobject></programlisting>
 
 			<para>
 				The ping is started when the future is being awaited, but
@@ -1972,16 +1972,16 @@
 			</para>
 
 			<para>
-				<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/futurePassing.txt"/></textobject></programlisting>
+				<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePassing.txt"/></textobject></programlisting>
 			</para>
 
 			<para>where</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/futurePasserClassWorker.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePasserClassWorker.txt"/></textobject></programlisting>
 
 			<para>and</para>
 
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/futurePasserClassB.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePasserClassB.txt"/></textobject></programlisting>
 			
 			
 			<para>
@@ -2176,7 +2176,7 @@
 		</para>
 		
 		<para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/exchangeOperator.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/exchangeOperator.txt"/></textobject></programlisting>
 		</para>
 		
 		<para>
@@ -2187,7 +2187,7 @@
 		</para>
 		
 		<para>
-			<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/exchangeableDouble.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="code_snippets/exchangeableDouble.txt"/></textobject></programlisting>
 		</para>
 	</section>
 	

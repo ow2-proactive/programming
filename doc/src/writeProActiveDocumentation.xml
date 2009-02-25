@@ -214,7 +214,7 @@
 		<info>
 			<title>JAVA program listing with file inclusion</title>
 		</info>
-   <programlisting xml:lang="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/hello/TinyHello.java"/></textobject></programlisting>
+   <programlisting language="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/hello/TinyHello.java"/></textobject></programlisting>
 
 	</example>
   
@@ -222,7 +222,7 @@
 		<info>
 			<title>XML program listing with file inclusion</title>
 		</info>
-   <programlisting xml:lang="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
+   <programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/c3d/adl/UserImpl.fractal"/></textobject></programlisting>
 
 	</example>
    
@@ -234,7 +234,7 @@
   <para> Here is some java code directly included in the docbook (you can 
   use CDATA to escape  &amp; and &lt;):  </para>
   
-  <programlisting xml:lang="java">package util;
+  <programlisting language="java">package util;
                                                    
 import java.io.IOException;
                                                    
@@ -258,7 +258,7 @@ public class Dummy {
    
    <para>Here is an example of deployment descriptor that deploys 3 virtual nodes .</para>
    
-   <programlisting xml:lang="xml">&lt;!-- Deploying 3 virtual Nodes  --&gt;
+   <programlisting language="xml">&lt;!-- Deploying 3 virtual Nodes  --&gt;
 &lt;ProActiveDescriptor&gt;
 	&lt;componentDefinition&gt;
 		&lt;virtualNodesDefinition&gt;
@@ -458,7 +458,7 @@ public class Dummy {
   <para>If you are editing the xsl stylesheets, and are having a hard time figuring
    out what's happening, don't panic! Use many messages 
    to find out what the values of the variables are at a given time:
-   <screen>&lt;xsl:message&gt;
+   <screen language="xml">&lt;xsl:message&gt;
      &lt;xsl:text&gt; OK, in question.toc, id is &lt;/xsl:text&gt; &lt;xsl:copy-of select="$id" /&gt; 
     &lt;/xsl:message&gt;
     

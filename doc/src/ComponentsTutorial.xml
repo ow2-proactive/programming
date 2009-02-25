@@ -27,9 +27,9 @@
 					called computer-itf which provides the two following
 					 methods: compute and doNothing. To do that, we need to write the two following classes.
 					 	</para>
-					 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/simple_composite_interface.snip"/></textobject></programlisting>
+					 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/simple_composite_interface.snip"/></textobject></programlisting>
 
-					 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/primitive_computer.snip"/></textobject></programlisting>
+					 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/primitive_computer.snip"/></textobject></programlisting>
 					 
 				<para>Now, we will discuss on the different ways to use this component.
 					First, we must create the component with
@@ -58,7 +58,7 @@
 					 <programlisting><textobject><textdata fileref="guided_tour/code_snippets/components/simple_component_run.txt"/></textobject></programlisting>
 
 
-					 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/full-main.snip"/></textobject></programlisting>
+					 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/full-main.snip"/></textobject></programlisting>
 					<para> If we want to create and call components in
 					 a standard Java application, we need to use the GCM API [1].
 					 The method launchFirstPrimitive shows all the steps
@@ -69,7 +69,7 @@
 					 interface and use it as a standard Java object to access our component.
 					 </para>
 
-					 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/launch_first_primitive.snip"/></textobject></programlisting>
+					 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/launch_first_primitive.snip"/></textobject></programlisting>
 				
 				
 				
@@ -108,14 +108,14 @@
 			 don’t need to retrieve the compute-itf interface since the assembling
 			 it’s done in the launchWithoutADL method or in the following part using ADL.
 			  </para>
-			 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/primitive_master.snip"/></textobject></programlisting>
+			 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/primitive_master.snip"/></textobject></programlisting>
 			   <para> In the launchWithoutADL method, we extend component type definition
 			    and component creation parts. And we add one more part, 
 			    the component assembling. In this part, at first 
 			    we put the two primitives, PrimitiveComputer and PrimitiveMaster 
 			    in the composite component. Next, we make the binding between each component interfaces.
 			    </para>
-			 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/launch_without_ADL.snip"/></textobject></programlisting>
+			 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/launch_without_ADL.snip"/></textobject></programlisting>
 			    <para> This way isn’t the simplest one to create and use
 			     component. There is a lot of code to write, that
 			      could introduce mistakes or errors in an assembly. We will show an easier one next.
@@ -133,7 +133,7 @@
 				      and assemble parts any more. Moreover, we need to create only one
 				       component, the other ones are automatically created.
 				       </para>
-			 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/launch_with_ADL.snip"/></textobject></programlisting>
+			 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/launch_with_ADL.snip"/></textobject></programlisting>
 				<para> ADL allows describing a component assembly through a text
 				 file. In our case, we have defined fives files. These
 				 files need to be in the classpath of
@@ -146,19 +146,19 @@
 				 implementation class with the content tag and a virtual node
 				  with the virtual-node tag. These tags are explained in the following section.
 				  </para>
-			 <programlisting xml:lang="xml"><textobject><textdata fileref="../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveComputerType.fractal"/></textobject></programlisting>
+			 <programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveComputerType.fractal"/></textobject></programlisting>
 					<para> 		It is quite the same for the
 					PrimitiveMaster component; just the name
 					 and definition class change, and there is one more interface, a client one.
 					 </para>
-			<programlisting xml:lang="xml"><textobject><textdata fileref="../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveMasterType.fractal"/></textobject></programlisting>
+			<programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveMasterType.fractal"/></textobject></programlisting>
 
 				<para>And finally, there is the composite one. It
 				 defines one interface, and include the two primitive
 				  described previously. The binding tag is new; it describes
 				   the binding between the interface from composite and inner components.
 				   </para>
-			<programlisting xml:lang="xml"><textobject><textdata fileref="../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveMaster.fractal"/></textobject></programlisting>
+			<programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveMaster.fractal"/></textobject></programlisting>
 
 				<para>Now, we can run the example; uncomment the line calling the
 				 launchWithADL method in the main and then you can see the same output as in the previous section.
@@ -195,7 +195,7 @@
 							 are asynchronous, in order to not kill JVM before the end of the component execution.
 							 </para>
 
-			 <programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/launch_and_deploy_with_ADL.snip"/></textobject></programlisting>
+			 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/launch_and_deploy_with_ADL.snip"/></textobject></programlisting>
 
 				 <para> Now we can run this example; uncomment the
 				  line calling the launchPrimitiveADLAndDeployment method, launch it and see
@@ -244,7 +244,7 @@ Launch and deploy component assembly example with ADL
 				        3D renderer, is in the org.objectweb.proactive.examples.components.c3d package.
 				        </para>
 				        
-				        <programlisting xml:lang="xml"><textobject><textdata fileref="../src/Examples/org/objectweb/proactive/examples/components/userguide/deploymentDescriptor.xml"/></textobject></programlisting>
+				        <programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/deploymentDescriptor.xml"/></textobject></programlisting>
 				        
 	        </section>				        
 </chapter>

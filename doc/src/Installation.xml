@@ -220,7 +220,7 @@
     and set the the <literal>CLASSPATH</literal>.
     </para>
    <para>
-     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/class_path_linux.txt"/></textobject></programlisting>
+     <programlisting language="java"><textobject><textdata fileref="code_snippets/class_path_linux.txt"/></textobject></programlisting>
    	</para>
     <para>Under Windows:</para>
 	<para> Open a Windows command terminal by executing either <literal>cmd</literal> or
@@ -231,7 +231,7 @@
     </para>
 	
    <para>
-     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/class_path_windows.txt"/></textobject></programlisting>
+     <programlisting language="java"><textobject><textdata fileref="code_snippets/class_path_windows.txt"/></textobject></programlisting>
    	</para>
      
     
@@ -288,7 +288,7 @@
     
     <para>
     
-    <programlisting xml:lang="java"><textobject><textdata fileref="../../compile/proactive.java.policy"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="../../compile/proactive.java.policy"/></textobject></programlisting>
 	</para><note><para>
  	If you use the scripts provided with the distribution to run the
  	examples an existing policy file named

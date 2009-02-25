@@ -92,7 +92,7 @@
     last one in the method, i.e the method must return immediately after. Here
     is an example of a method in an active object:</para>
 
-    <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/migration/migration_method.txt"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_method.txt"/></textobject></programlisting>
 
 
     <para>We don't provide any test to check if the call to migrateTo is the
@@ -104,7 +104,7 @@
   <section xml:id="Completeexample_77"><info><title>Complete example</title></info>
     
 	<!-- TODO code hasn't been run, check it really works -->
-    <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/migration/migration_example.txt"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_example.txt"/></textobject></programlisting>
 
     <para>The class SimpleAgent implements <literal>Serializable</literal> so
     the objects created will be able to migrate. We need to provide an empty
@@ -121,7 +121,7 @@
     location. For our application we pass the location of the node as runtime
     parameter to the application. </para>
     
-     <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/migration/migration_example_main.txt"/></textobject></programlisting>
+     <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_example_main.txt"/></textobject></programlisting>
     
     
     <para>To see another example of migration look at the migration example in 
@@ -165,18 +165,18 @@
     	be migrated and assign the methods to be run. For this we use the 
     	<literal> initActivity(Body)</literal> method because we only need to run
     	the creation and assignment once.</para> 
-    	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/migration/migration_strategy_example.txt"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_strategy_example.txt"/></textobject></programlisting>
     </section>
     <section xml:id="using_readObject_and_writeObject"><info><title> Using <literal>readObject(...)</literal> and	<literal>writeObject(...)</literal></title></info>
     	
 		    <para>Another way of dealing with unserializable attributes is 
 		    using the methods from the Serializable interface: </para>
-		    <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/migration/serializable_methods.txt"/></textobject></programlisting>
+		    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/serializable_methods.txt"/></textobject></programlisting>
 		    <para>
 		    We override these methods to provide a way to save and restore the 
 		    non-serializable components of the active object:
 		    </para>
-    	<programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/migration/migration_read_writeObject.txt"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_read_writeObject.txt"/></textobject></programlisting>
 
     <para>To learn how to use the methods see the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/javase/6/docs/api/java/io/Serializable.html">Serializable</link> interface in the standard
     JavaDoc.</para>
@@ -332,7 +332,7 @@
              edit the file  <literal>
              ProActive/src/Core/org/objectweb/proactive/core/config/ProActiveConfiguration.xml</literal> and change the four values listed above.
              </para>
-        		<programlisting xml:lang="XML"><textobject><textdata fileref="../src/Core/org/objectweb/proactive/core/config/ProActiveConfiguration.xml"/></textobject></programlisting>	
+            <programlisting language="xml"><textobject><textdata fileref="../../src/Core/org/objectweb/proactive/core/config/ProActiveConfiguration.xml"/></textobject></programlisting>
     </section>
         
       

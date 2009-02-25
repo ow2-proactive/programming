@@ -293,7 +293,7 @@
         <para>In class SubMatrix.java, add a method
         <literal>barrier()</literal> of the form:</para>
 
-        <programlisting xml:lang="java">String[] st= new String[1];
+        <programlisting language="java">String[] st= new String[1];
 st[0]="keepOnGoing";
 PASPMD.barrier(st);</programlisting>
 
@@ -308,7 +308,7 @@ PASPMD.barrier(st);</programlisting>
         <literal>keepOnGoing()</literal> on the SPMD group "matrix". Here are
         samples of the code:</para>
 
-        <programlisting xml:lang="java">while (true) {
+        <programlisting language="java">while (true) {
   printMessageAndWait();
   matrix.keepOnGoing();
 }
@@ -497,7 +497,7 @@ private static void printMessageAndWait() {
         <para>Use IC2D to visualize the machines ("titi", "toto", "tata" and
         "tutu" in this example) and the JVMs being launched on them.</para>
 
-        <programlisting xml:lang="xml">...
+        <programlisting language="xml">...
         
 &lt;jvmSet&gt;
    &lt;<emphasis role="bold">currentJvm</emphasis> /&gt;
@@ -637,7 +637,7 @@ private static void printMessageAndWait() {
         parameters and the nodes specified in the deployment
         descriptor.</para>
 
-        <programlisting xml:lang="java">  // Group creation           
+        <programlisting language="java">  // Group creation           
   Worker workers = (Worker) PASPMD.newSPMDGroup(
          Worker.class.getName(), params, provideNodes(args[0]));
 
@@ -650,7 +650,7 @@ private static void printMessageAndWait() {
         that one-to-one communications will be done thanks to an array view on
         the created group.</para>
 
-        <programlisting xml:lang="java">  // Worker initialization
+        <programlisting language="java">  // Worker initialization
   rank = PASPMD.getMyRank();
   groupSize = PASPMD.getMySPMDGroupSize();
 
@@ -721,7 +721,7 @@ private static void printMessageAndWait() {
         non-blocking ) by default, therefore we need to specify explicitly to
         block until a specific request.</para>
 
-        <programlisting xml:lang="java">  // The leader collects partial results.
+        <programlisting language="java">  // The leader collects partial results.
   // Others just send their computed data to the rank 0.
   
   if ( rank==0 ) { // Check if i'm the leader worker 

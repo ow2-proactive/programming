@@ -50,7 +50,7 @@
                 following content:
             </para>
 
-            <programlisting xml:lang="java">package org.objectweb.proactive.examples.pi;
+            <programlisting language="java">package org.objectweb.proactive.examples.pi;
 
 import org.objectweb.proactive.ProActive;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
@@ -103,7 +103,7 @@ public static void main(String args[]) throws Exception{
         <section xml:id="InstantiateTheRemoteObjects_15"><info><title>Instantiate The Remote Objects</title></info>
             
 
-            <programlisting xml:lang="java">PiComputer piComputer = (PiComputer) PAGroup.newGroupInParallel(
+            <programlisting language="java">PiComputer piComputer = (PiComputer) PAGroup.newGroupInParallel(
                           PiComputer.class.getName(),
                           new Object[] { numberOfDecimals }, 
                           nodes);
@@ -114,7 +114,7 @@ public static void main(String args[]) throws Exception{
         <section xml:id="DivideComputeandConquer_15"><info><title>Divide, Compute and Conquer</title></info>
             
 
-            <programlisting xml:lang="java">Interval intervals = PiUtil.dividePI(numberOfWorkers, numberOfDecimals.intValue());
+            <programlisting language="java">Interval intervals = PiUtil.dividePI(numberOfWorkers, numberOfDecimals.intValue());
   PAGroup.setScatterGroup(intervals);
 
   Result results = piComputer.compute(intervals);
@@ -126,7 +126,7 @@ public static void main(String args[]) throws Exception{
         <section xml:id="Cleanup_15"><info><title>Clean up</title></info>
             
 
-            <programlisting xml:lang="java">  descriptor.killall(true);
+            <programlisting language="java">  descriptor.killall(true);
   System.exit(0);</programlisting>
         </section>
 
@@ -143,7 +143,7 @@ public static void main(String args[]) throws Exception{
     <section xml:id="Puttingitalltogether_15"><info><title>Putting it all together</title></info>
         
 
-        <programlisting xml:lang="java">package org.objectweb.proactive.examples.pi;
+        <programlisting language="java">package org.objectweb.proactive.examples.pi;
 
 import org.objectweb.proactive.ProActive;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;

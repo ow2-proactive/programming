@@ -586,14 +586,14 @@
                 </info>
 
 
-                <programlisting xml:lang="java"><textobject><textdata fileref="../src/Extensions/org/objectweb/proactive/extensions/scilab/test/SciTest2.java"/></textobject></programlisting>
+                <programlisting language="java"><textobject><textdata fileref="../src/Extensions/org/objectweb/proactive/extensions/scilab/test/SciTest2.java"/></textobject></programlisting>
             </example>
             <example xml:id="sciex2">
                 <info>
                     <title>Descriptor deployment</title>
                 </info>
 
-                <programlisting xml:lang="xml"><textobject><textdata fileref="../examples/scilab/GCMA.xml"/></textobject></programlisting>
+                <programlisting language="xml"><textobject><textdata fileref="../examples/scilab/GCMA.xml"/></textobject></programlisting>
             </example>
         </section>
     </section>

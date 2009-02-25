@@ -56,7 +56,7 @@
     <section xml:id="APIDefinition_67"><info><title>API Definition</title></info>
       
 
-      <programlisting xml:lang="java">package org.objectweb.proactive.api.ProFileTransfer;
+      <programlisting language="java">package org.objectweb.proactive.api.ProFileTransfer;
 
 static <emphasis role="bold">      RemoteFile</emphasis> <emphasis role="bold">pull</emphasis>(<emphasis role="bold">Node</emphasis> srcNode, <emphasis role="bold">File</emphasis> srcFile, <emphasis role="bold">File</emphasis> dstFile) throws IOException;
 static List&lt;<emphasis role="bold">RemoteFile</emphasis>&gt; <emphasis role="bold">pull</emphasis>(<emphasis role="bold">Node</emphasis> srcNode, <emphasis role="bold">File[]</emphasis> srcFile, <emphasis role="bold">File[]</emphasis> dstFile) throws IOException;
@@ -121,7 +121,7 @@ static <emphasis role="bold">      RemoteFile mkdirs</emphasis>(<emphasis role="
       <emphasis role="bold">Node</emphasis>, and the computation is blocked
       waiting for the file transfer operation to finish.</para>
 
-      <programlisting xml:lang="java">ProActiveDescriptor pad = PADeployment.getProactiveDescriptor(XML_LOCATION);
+      <programlisting language="java">ProActiveDescriptor pad = PADeployment.getProactiveDescriptor(XML_LOCATION);
 
 VirtualNode testVNode = pad.getVirtualNode("test");
 testVNode.activate();
@@ -334,7 +334,7 @@ and implicitly inferred from the process information. --&gt;
         trigger the retrieval of all files associated with a
         VirtualNode.</para>
 
-        <para><programlisting xml:lang="java">import org.objectweb.proactive.core.descriptor.data;
+        <para><programlisting language="java">import org.objectweb.proactive.core.descriptor.data;
 
 public FileWrapper <emphasis role="bold">VirtualNode.fileTransferRetrieve</emphasis>();</programlisting></para>
 
@@ -343,7 +343,7 @@ public FileWrapper <emphasis role="bold">VirtualNode.fileTransferRetrieve</empha
         virtual node using the <emphasis role="bold">pftp</emphasis>. The
         following shows an example:</para>
 
-        <programlisting xml:lang="java">import org.objectweb.proactive.core.descriptor.data;
+        <programlisting language="java">import org.objectweb.proactive.core.descriptor.data;
 
 pad = PADeployment.getProactiveDescriptor(XML_LOCATION);
 

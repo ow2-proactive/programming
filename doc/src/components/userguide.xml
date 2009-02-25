@@ -107,7 +107,7 @@
 				Examples/org.objectweb.proactive.examples.components.helloworld.
 			</para>
 
-			<programlisting xml:lang="xml" linenumbering="numbered">  &lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+			<programlisting language="xml" linenumbering="numbered">  &lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
   &lt;!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd"&gt;
 
   &lt;definition name="org.objectweb.proactive.examples.components.helloworld.HelloWorld"&gt;
@@ -365,7 +365,7 @@
 			<para>
 				ADL definitions correspond to component factories. ADL
 				definition can be used directly:
-				<programlisting xml:lang="java">
+				<programlisting language="java">
 					Factory factory = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
 					Map context = new HashMap();
 					Component c = (Component) factory.newComponent("myADLDefinition",context);
@@ -659,7 +659,7 @@
 					org.objectweb.proactive.core.component.controller.PriorityController
 				</literal>
 				, has to be used:
-				<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/prioritycontroller.snip"/></textobject></programlisting>
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/prioritycontroller.snip"/></textobject></programlisting>
 			</para>
 		</section>
 
@@ -681,13 +681,13 @@
 			<para>
 				The set of statistics that can be retrieved and the corresponding methods to call are described through the
 				MethodStatistics interface:
-				<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/methodstatistics.snip"/></textobject></programlisting>
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/methodstatistics.snip"/></textobject></programlisting>
 				In regard to the MethodStatistics instances, they can be recovered by the following MonitorController's methods:
 	                 </para>	
           		<itemizedlist>
 					<listitem>
 						<para>
-							<programlisting xml:lang="java">public Map&lt;String, MethodStatistics&gt; getAllStatistics();</programlisting>
+							<programlisting language="java">public Map&lt;String, MethodStatistics&gt; getAllStatistics();</programlisting>
 							Which returns every MethodStatistics (i.e. statistics of each methods of each server interfaces of the monitored component)
 							contained into a Map. The key to obtain the MethodStatistics corresponding to a method can be generated thanks to the method
 							<literal>org.objectweb.proactive.core.component.controller.MonitorControllerHelper.generateKey</literal> which takes as
@@ -697,14 +697,14 @@
 
 					<listitem>
 						<para>
-							<programlisting xml:lang="java">public MethodStatistics getStatistics(String itfName, String methodName)</programlisting>
+							<programlisting language="java">public MethodStatistics getStatistics(String itfName, String methodName)</programlisting>
 							Which returns the MethodStatistics object for the method methodName which belongs to the interface itfName.
 						</para>
 					</listitem>
 
 					<listitem>
 						<para>
-							<programlisting xml:lang="java">public MethodStatistics getStatistics(String itfName, String methodName, Class&lt;?&gt;[] parametersTypes)</programlisting>
+							<programlisting language="java">public MethodStatistics getStatistics(String itfName, String methodName, Class&lt;?&gt;[] parametersTypes)</programlisting>
 							Which returns the MethodStatistics object for the method methodName which takes as parameters the given parameter types and belongs to the interface itfName.
 						</para>
 					</listitem>
@@ -967,7 +967,7 @@
 								BROADCAST, which copies a list of
 								parameters and sends a copy to each
 								connected server interface.
-								<programlisting xml:lang="java">
+								<programlisting language="java">
 									ParamDispatchMode.BROADCAST
 								</programlisting>
 							</para>
@@ -981,7 +981,7 @@
 								the number of elements in the annotated
 								list is equal to the number of connected
 								server interfaces.
-								<programlisting xml:lang="java">
+								<programlisting language="java">
 									ParamDispatchMode.ONE_TO_ONE
 								</programlisting>
 							</para>
@@ -993,7 +993,7 @@
 								element of the list parameter in a
 								round-robin fashion to the connected
 								server interfaces.
-								<programlisting xml:lang="java">
+								<programlisting language="java">
 									ParamDispatchMode.ROUND_ROBIN
 								</programlisting>
 							</para>
@@ -1004,7 +1004,7 @@
 								RANDOM, which distributes each element
 								of the list parameter in a random manner
 								to the connected server interfaces.
-								<programlisting xml:lang="java">
+								<programlisting language="java">
 									ParamDispatchMode.RANDOM
 								</programlisting>
 							</para>
@@ -1016,7 +1016,7 @@
 								list parameters to one of the connected
 								server interfaces.
 								.
-								<programlisting xml:lang="java">
+								<programlisting language="java">
 									ParamDispatchMode.UNICAST
 								</programlisting>
 								By default, the behavior is not specified: there
@@ -1033,7 +1033,7 @@
 								<literal>
 									org.objectweb.proactive.core.group.DispatchBehavior
 								</literal> interface):
-								<programlisting xml:lang="java">
+								<programlisting language="java">
 									@DispatchMode(mode = DispatchMode.CUSTOM, customMode=CustomUnicastDispatch.class)
 								</programlisting>
 							</para>
@@ -1048,7 +1048,7 @@
 							org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatch
 						</literal>
 						interface.
-						<programlisting xml:lang="java">
+						<programlisting language="java">
 							@ParamDispatchMetadata(mode
 							=ParamDispatchMode.CUSTOM, customMode =
 							CustomParametersDispatch.class))
@@ -1106,7 +1106,7 @@
 						<para>and is used as follows:</para>
 
 						<para>
-							<programlisting xml:lang="java">
+							<programlisting language="java">
 								@ClassDispatchMetadata(mode=@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST))
 								interface MyMulticastItf {
 
@@ -1139,7 +1139,7 @@
 						<para>and is used as follows:</para>
 
 						<para>
-							<programlisting xml:lang="java">
+							<programlisting language="java">
 								@MethodDispatchMetadata(mode=@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST))
 								public void foo(List&lt;T&gt; parameters);
 							</programlisting>
@@ -1163,7 +1163,7 @@
 						</para>
 						<para>
 							Dynamic dispatch must be used like this:
-							<programlisting xml:lang="java">
+							<programlisting language="java">
 								@Dispatch(mode=DispatchMode.DYNAMIC, bufferSize=myBufferSize)
 								public void foo(List&lt;T&gt; parameters);
 							</programlisting>
@@ -1185,7 +1185,7 @@
 						<para>and is used as follows:</para>
 
 						<para>
-							<programlisting xml:lang="java">
+							<programlisting language="java">
 								public void foo(@ParamDispatchMetadata(mode=ParamDispatchMode.BROADCAST)
 														List&lt;T&gt; parameters);
 							</programlisting>
@@ -1231,7 +1231,7 @@
 						method of the interface returns either nothing,
 						or a list. Valid return types for methods of
 						multicast interfaces are illustrated as follows:
-						<programlisting xml:lang="java">
+						<programlisting language="java">
 							public List&lt;Something&gt; foo();
 
 							public void bar();
@@ -1258,7 +1258,7 @@
 						annotation at the level of the methods which the
 						results need to be reduced:
 
-						<programlisting xml:lang="java">
+						<programlisting language="java">
 							@Reduce(reductionMode =
 							ReduceMode.SELECT_UNIQUE_VALUE)
 						</programlisting>
@@ -1278,7 +1278,7 @@
 						the implementation class of the reduction to
 						use:
 
-						<programlisting xml:lang="java">
+						<programlisting language="java">
 							@Reduce(reductionMode = ReduceMode.CUSTOM,
 							customReductionMode = MyReduction.class)
 						</programlisting>
@@ -1615,7 +1615,7 @@
 					an annotation on the method subject to the timeout,
 					the value of the timeout is specified in
 					milliseconds:
-					<programlisting xml:lang="java">@org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro(timeout=20)</programlisting>
+					<programlisting language="java">@org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro(timeout=20)</programlisting>
 				</para>
 
 				<para>
@@ -1645,7 +1645,7 @@
 					Thus, this specific feature can be used by the same
 					annotation as for the timeout but with a different
 					attribute:
-					<programlisting xml:lang="java">@org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro(waitForAll=false)</programlisting>
+					<programlisting language="java">@org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro(waitForAll=false)</programlisting>
 					Therefore, the waitForAll attribute accepts boolean
 					values and has for default value "true" (same
 					behavior as if the annotation is not specified).
@@ -1705,9 +1705,9 @@
 			<para>
 				The first step to distribute components is to initiate the deployment by
 				loading the Application Descriptor:
-				<programlisting xml:lang="java">GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(filePath);</programlisting>
+				<programlisting language="java">GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(filePath);</programlisting>
 				Then, the deployment must be started (i.e. creation of the remote JVMs):
-				<programlisting xml:lang="java">gcma.startDeployment();</programlisting>
+				<programlisting language="java">gcma.startDeployment();</programlisting>
 				The next step, distribute components, may be done through the ADL or the API.
 			</para>
 		</section>
@@ -1722,14 +1722,14 @@
 					<listitem><para>
 						Put the GCMApplication into a <emphasis role="bold">java.util.Map</emphasis>
 						with as key "deployment-descriptor":</para>
-						<programlisting xml:lang="java">Map&lt;String, Object&gt; context = new HashMap&lt;String, Object&gt;();
+						<programlisting language="java">Map&lt;String, Object&gt; context = new HashMap&lt;String, Object&gt;();
 context.put("deployment-descriptor", gcma);</programlisting>
 					</listitem>
 					<listitem><para>
 						Call the usual method to instantiate component through ADL (method
 						<emphasis role="bold">org.objectweb.fractal.adl.Factory.newComponent</emphasis>)
 						with the Map containing the Application Descriptor as parameter:</para>
-						<programlisting xml:lang="java">Component component = (Component)
+						<programlisting language="java">Component component = (Component)
 						factory.newComponent("my.adl.folder.ComponentDefinition", context);</programlisting>
 					</listitem>
 				</itemizedlist>
@@ -1750,13 +1750,13 @@ context.put("deployment-descriptor", gcma);</programlisting>
 			<para>
 				To distribute components through the API, the first thing to do is to
 				get a node from a virtual node defined by the Application Descriptor:
-				<programlisting xml:lang="java">Map&lt;String, ? extends GCMVirtualNode&gt; vns = gcma.getVirtualNodes();
+				<programlisting language="java">Map&lt;String, ? extends GCMVirtualNode&gt; vns = gcma.getVirtualNodes();
 Node node = vns.get("VN1").getANode();</programlisting>
 				Then, the component must be instanced thanks to one of the methods
 				provided by
 				<emphasis role="bold">org.objectweb.proactive.core.component.factory.ProActiveGenericFactory</emphasis>,
 				taking as parameter the node obtained previously:
-				<programlisting xml:lang="java">Component component = genericFact.newFcInstance(componentType, controllerDescription, contentDescription, node);</programlisting>
+				<programlisting language="java">Component component = genericFact.newFcInstance(componentType, controllerDescription, contentDescription, node);</programlisting>
 			</para>
 		</section>
 
@@ -1802,7 +1802,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					structure:
 				</para>
 
-				<programlisting xml:lang="xml">
+				<programlisting language="xml">
 					&lt;componentConfiguration&gt;
 						&lt;controllers&gt;
 							&lt;controller&gt;
@@ -1837,7 +1837,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					the newFcInstance method from the Fractal API:
 				</para>
 
-				<programlisting xml:lang="java">
+				<programlisting language="java">
 					componentInstance = componentFactory.newFcInstance(myComponentType,
 												new ControllerDescription("name",myHierarchicalType,thePathToMyControllerConfigFile),
 												myContentDescription);
@@ -1880,7 +1880,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</listitem>
 				</orderedlist>
 
-				<programlisting xml:lang="java">
+				<programlisting language="java">
 					public ControllerImplementation(Component owner) {
 						super(owner);
 					}
@@ -1897,7 +1897,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</listitem>
 				</orderedlist>
 
-				<programlisting xml:lang="java">
+				<programlisting language="java">
 					protected void setControllerItfType() {
 						try {
 							setItfType(ProActiveTypeFactory.instance().createFcItfType(
@@ -1954,7 +1954,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					output interceptor would be defined as follows:
 				</para>
 
-				<programlisting xml:lang="xml">
+				<programlisting language="xml">
 					&lt;componentConfiguration&gt;
 						&lt;controllers&gt;
 							...
@@ -2062,7 +2062,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					Here is a simple example of an input interceptor:
 				</para>
 
-				<programlisting xml:lang="java">
+				<programlisting language="java">
 					public class MyInputInterceptor extends AbstractProActiveController
 															implements InputInterceptor, MyController {
 						public MyInputInterceptor(Component owner) {
@@ -2101,7 +2101,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>The configuration file would state:</para>
 
-				<programlisting xml:lang="xml">
+				<programlisting language="xml">
 					&lt;componentConfiguration&gt;
 						&lt;controllers&gt;
 							...
@@ -2137,7 +2137,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					Thus, the way to expose a component as web services is quite simple and can be done in a single call method by using
 					<emphasis role="bold">org.objectweb.proactive.extensions.webservices.WebServices</emphasis> API.
 					After having defined the component and having started it as usually, the following method must be called:
-					<programlisting xml:lang="java">WebService.exposeComponentAsWebService(Component component, String url, String componentName);</programlisting>
+					<programlisting language="java">WebService.exposeComponentAsWebService(Component component, String url, String componentName);</programlisting>
 					where:
 					<itemizedlist>
 	    	  			<listitem>
@@ -2161,7 +2161,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					Likewise, to undeploy a component, just call the method:
-					<programlisting xml:lang="java"> WebServices.unExposeAsWebService ( String componentName , String url,  Component component);</programlisting>
+					<programlisting language="java"> WebServices.unExposeAsWebService ( String componentName , String url,  Component component);</programlisting>
 					where:
 					<itemizedlist>
 	      				<listitem>
@@ -2192,19 +2192,19 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					First, below is the only one server interface of the component:
-					<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/helloworlditfcomponent.snip"/></textobject></programlisting>
+					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/helloworlditfcomponent.snip"/></textobject></programlisting>
 				</para>
 
 				<para>
 					The implementation class of the component which also contains the main method to create the component, start it and deploy it:
-					<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/helloworldcomponent.snip"/></textobject></programlisting>
+					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/helloworldcomponent.snip"/></textobject></programlisting>
 					The component <literal>comp</literal> has been deployed as a web service on the web server located at <literal>"http://localhost:8080"</literal>.
 					The accessible service method is <literal>server_hello-world_helloWorld</literal>.
 				</para>
 
 				<para>
 					At last, here is a java program calling the deployed web service:
-					<programlisting xml:lang="java"><textobject><textdata fileref="automatic_snippets/wsclientcomponent.snip"/></textobject></programlisting>
+					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/wsclientcomponent.snip"/></textobject></programlisting>
 				</para>
 			</section>
 		</section>
@@ -2474,7 +2474,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 									the union of the types of NF interfaces the membrane exposes. To specify the
 									NF type of a component, we propose to overload the Fractal newFcInstance
 									method (the one to create functional components) as follows:
-									<programlisting xml:lang="java">
+									<programlisting language="java">
 										public Component newFcInstance(Type fType,Type nfType, any contentDesc, any controllerDesc);
 									</programlisting>
 									In this method, nfType represents the NF type of the component; it can be
@@ -2497,7 +2497,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 									   To create NF components, we extend the common Fractal factories (generic
 									factory and ADL factory). For generic factory, we add a method named
 									newNFcInstance that creates this new kind of components:
-									<programlisting xml:lang="java">
+									<programlisting language="java">
 										public Component newNFcInstance(Type fType,Type nfType, any contentDesc, any controllerDesc);
 									</programlisting>
 									Parameters of this method are identical to its functional equivalent and NF
@@ -2515,7 +2515,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 										The primitives for managing the membrane.
 									</title>
 								</info>	
-									<programlisting xml:lang="java">
+									<programlisting language="java">
 										public void addNFSubComponent(Component component) throws IllegalContentException;
 										public void removeNFSubComponent(Component component) throws IllegalContentException, IllegalLifeCycleException, NoSuchComponentException;
 										public Component[] getNFcSubComponents();
@@ -2603,7 +2603,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 										Higher level API
 									</title>
 								</info>	
-									<programlisting xml:lang="java">
+									<programlisting language="java">
 										public void bindNFc(String clientItf, String serverItf) throws NoSuchInterfaceException, IllegalLifeCycleException,IllegalBindingException, NoSuchComponentException;
 										public void bindNFc(String clientItf, Object serverItf) throws NoSuchInterfaceException, IllegalLifeCycleException,IllegalBindingException, NoSuchComponentException;
 										public void unbindNFc(String clientItf) throws NoSuchInterfaceException, IllegalLifeCycleException, llegalBindingException, NoSuchComponentException;
@@ -2627,7 +2627,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 									interface “i2” of the component “nfComp2”. Suppose mc is a reference to the
 									MembraneController of the host component.
 									
-									<programlisting xml:lang="java">
+									<programlisting language="java">
 										Component nfComp1=mc.getNFcSubComponent("nfComp1");
 										Component nfComp2=mc.getNFcSubComponent("nfComp2");
 										Fractal.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));
@@ -2636,7 +2636,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							 <para>	
 									Using the API of Figure <xref linkend="codeAPI2"/>, this binding can be realized by the following code, that binds the
 									component “nfComp1” correctly.
-									<programlisting xml:lang="java">
+									<programlisting language="java">
 										mc.bindNFc("nfComp1.i1","nfComp2.i2");
 									</programlisting>
 									
@@ -2743,7 +2743,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					that is passed to the component factory:
 				</para>
 
-				<programlisting xml:lang="java">
+				<programlisting language="java">
 					ControllerDescription controllerDescription = new ControllerDescription("name", Constants.COMPOSITE,
 																									Constants.SYNCHRONOUS);
 				</programlisting>

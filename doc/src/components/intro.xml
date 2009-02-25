@@ -205,12 +205,12 @@
 		deployment descriptor file, the line:
 	</para>
 	<para>
-		<programlisting xml:lang="xml">&lt;host id="localhost" os="unix" hostCapacity="1"
+		<programlisting language="xml">&lt;host id="localhost" os="unix" hostCapacity="1"
 vmCapacity="2"&gt;</programlisting>
 	</para>
 	<para>is changed to:</para>
 	<para>
-		<programlisting xml:lang="xml">&lt;host id="localhost" os="unix" hostCapacity="2"
+		<programlisting language="xml">&lt;host id="localhost" os="unix" hostCapacity="2"
 vmCapacity="1"&gt;</programlisting>
 	</para>
 

@@ -184,7 +184,7 @@
                 <literal>userAndComposite.fractal</literal>
                 )
             </para>
-            <programlisting xml:lang="xml">  &lt;component ... /&gt;
+            <programlisting language="xml">  &lt;component ... /&gt;
        
     &lt;!-- mapping the node names in the descriptor file to others referenced in the component's adl files. --&gt;
     &lt;exportedVirtualNodes&gt;
@@ -204,7 +204,7 @@
             <example xml:id="HowtorenameVirtualNodesinADLfiles_8"><info><title>How to rename Virtual Nodes in ADL files</title></info>            
             
                 
-                <programlisting xml:lang="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
+                <programlisting language="xml">&lt;content class="org.objectweb.proactive.examples.components.c3d.UserImpl"/&gt;
        
     &lt;!-- Recalling a renamed Virtual Node --&gt;
     &lt;exportedVirtualNodes&gt;
@@ -255,12 +255,12 @@
                 
                 <para>The component Registration</para>
                 <para>
-                    <programlisting xml:lang="java">Fractive.register(Fractive.getComponentRepresentativeOnThis(),
+                    <programlisting language="java">Fractive.register(Fractive.getComponentRepresentativeOnThis(),
       UrlBuilder.buildUrlFromProperties("localhost", "Dispatcher"));</programlisting>
                 </para>
                 <para>The Component lookup</para>
                 <para>
-                    <programlisting xml:lang="java">ProActiveComponentRepresentative a = Fractive.lookup(
+                    <programlisting language="java">ProActiveComponentRepresentative a = Fractive.lookup(
       UrlBuilder.buildUrl(this.hostName, "Dispatcher", protocol, this.portNumber));
       this.c3dDispatcher = (Dispatcher) a.getFcInterface("user2dispatcher");</programlisting>
                 </para>

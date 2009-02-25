@@ -223,7 +223,7 @@
                     the user for keeping a code clear. See next their
                     descriptions:
                 </para>
-                <programlisting xml:lang="java">protected Result initLowerBound; // to store the lower bound
+                <programlisting language="java">protected Result initLowerBound; // to store the lower bound
 protected Result initUpperBound; // to store the upper bound
 protected Object bestKnownSolution; // setted automaticaly by the API with the best current solution
 protected Worker worker; // to interact with the API (see after)</programlisting>
@@ -245,20 +245,20 @@ protected Worker worker; // to interact with the API (see after)</programlisting
                             Broadcasting a new better solution to all
                             the other class:
                         </para>
-                        <programlisting xml:lang="java">this.worker.setBestCurrentResult(newBetterSolution);</programlisting>
+                        <programlisting language="java">this.worker.setBestCurrentResult(newBetterSolution);</programlisting>
                     </listitem>
                     <listitem>
                         <para>
                             Sending a set of sub-tasks for computing:
                         </para>
-                        <programlisting xml:lang="java">this.worker.sendSubTasksToTheManager(subTaskList);</programlisting>
+                        <programlisting language="java">this.worker.sendSubTasksToTheManager(subTaskList);</programlisting>
                     </listitem>
                     <listitem>
                         <para>
                             For a smarter split, checking that the task
                             queue needs more tasks:
                         </para>
-                        <programlisting xml:lang="java">BooleanWrapper workersAvailable = this.worker.isHungry();</programlisting>
+                        <programlisting language="java">BooleanWrapper workersAvailable = this.worker.isHungry();</programlisting>
                     </listitem>
                 </itemizedlist>
             </section>
@@ -301,7 +301,7 @@ protected Worker worker; // to interact with the API (see after)</programlisting
                 Finally, it is the main entry point for starting, and
                 controlling your computation.
             </para>
-            <programlisting xml:lang="java">Task task = new YourTask(someArguments);
+            <programlisting language="java">Task task = new YourTask(someArguments);
 Manager manager =  ProActiveBranchNBound.newBnB(task,
                         nodes,
                         LargerQueueImpl.class.getName());
@@ -347,7 +347,7 @@ Result futureResult = manager.start(); // this call is asynchronous</programlist
             <emphasis role="bold">Flowshop Task</emphasis>
             :
         </para>
-        <programlisting xml:lang="java">import org.objectweb.proactive.ProActive;
+        <programlisting language="java">import org.objectweb.proactive.ProActive;
 import org.objectweb.proactive.extra.branchnbound.core.Result;
 import org.objectweb.proactive.extra.branchnbound.core.Task;
 import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsExcepti\
@@ -370,7 +370,7 @@ public class FlowShopTask extends Task {
             <emphasis role="bold">bound</emphasis>
             methods:
         </para>
-        <programlisting xml:lang="java">
+        <programlisting language="java">
             // Compute the lower bound public void initLowerBound() {
             this.lowerBound = this.computeLowerBound(this.fs); } //
             Compute the upper bound public void initUpperBound() {
@@ -381,7 +381,7 @@ public class FlowShopTask extends Task {
             <emphasis role="bold">split</emphasis>
             method:
         </para>
-        <programlisting xml:lang="java">public Vector split() {
+        <programlisting language="java">public Vector split() {
   // Divide the set of permutations in 10 sub-tasks
   int nbTasks = 10;
   Vector tasks = new Vector(nbTasks);
@@ -396,7 +396,7 @@ public class FlowShopTask extends Task {
             <emphasis role="bold">execute</emphasis>
             method:
         </para>
-        <programlisting xml:lang="java">public Result execute() {
+        <programlisting language="java">public Result execute() {
        
   if (! this.iHaveToSplit()) {
   // Test all permutation

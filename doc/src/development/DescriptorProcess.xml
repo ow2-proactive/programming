@@ -258,7 +258,7 @@
                         tag in:
                     </para>
 
-                    <programlisting xml:lang="xml">&lt;xs:complexType name="ProcessDefinitionType"&gt;
+                    <programlisting language="xml">&lt;xs:complexType name="ProcessDefinitionType"&gt;
     &lt;xs:choice&gt;
         &lt;xs:element name="jvmProcess" type="JvmProcessType"/&gt;
         &lt;xs:element name="rshProcess" type="RshProcessType"/&gt;
@@ -292,7 +292,7 @@
                         OARGRID tag:
                     </para>
 
-                    <programlisting xml:lang="xml">&lt;!--oarGridProcess--&gt;
+                    <programlisting language="xml">&lt;!--oarGridProcess--&gt;
 &lt;xs:complexType name="oarGridProcessType"&gt;
     &lt;xs:sequence&gt;
         &lt;xs:element ref="processReference"/&gt;
@@ -374,7 +374,7 @@
                             of the process tag.
                         </para>
 
-                        <programlisting xml:lang="xml">protected class OARGRIDProcessHandler extends ProcessHandler {
+                        <programlisting language="xml">protected class OARGRIDProcessHandler extends ProcessHandler {
   public OARGRIDProcessHandler(ProActiveDescriptor proActiveDescriptor) {
     super(proActiveDescriptor);
     this.addHandler(OARGRID_OPTIONS_TAG, new OARGRIDOptionHandler());

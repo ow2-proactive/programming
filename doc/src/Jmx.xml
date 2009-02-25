@@ -89,7 +89,7 @@
 			is synchronous, because the JMX remote API provides
 			non-reifiable methods. For example, the method invoke that
 			allow to invoke a Mbean's method throws exceptions :
-			<programlisting xml:lang="java">
+			<programlisting language="java">
 				public Object invoke(ObjectName name, String
 				operationName, Object[] params, String[] signature)
 				throws InstanceNotFoundException, MBeanException,
@@ -102,7 +102,7 @@
 				acces thanks to additionnal reifiable methods. The
 				additional invoke method looks like :
 			</para>
-			<programlisting xml:lang="java">
+			<programlisting language="java">
 				public GenericTypeWrapper invokeAsynchronous(ObjectName
 				name, String operationName, Object[] params, String[]
 				signature) (method names connector ( non reifiable
@@ -128,7 +128,7 @@
 			connector on the application you wish to manage. This is
 			simply done by adding one line of code in the application to
 			be managed :
-			<programlisting xml:lang="java">
+			<programlisting language="java">
 				org.objectweb.proactive.jmx.server.ServerConnector
 				connector = new
 				org.objectweb.proactive.jmx.server.ServerConnector ();
@@ -136,7 +136,7 @@
 			Once the connector server part launched, any ProActive JMX
 			connector client can connect to it and manage the
 			application thanks to the ClientConnector class.
-			<programlisting xml:lang="java">
+			<programlisting language="java">
 				org.objectweb.proactive.jmx.client.ClientConnector
 				clientConnector = new
 				org.objectweb.proactive.jmx.client.ClientConnector
@@ -188,7 +188,7 @@
 			</emphasis>
 			and added as a NotificationListener :
 
-			<programlisting xml:lang="java">
+			<programlisting language="java">
 				/*creates an active listener MyNotificationListener */
 				MyNotificationListener listener =
 				(MyNotificationListener)PAActiveObject.newActive(MyNotificationListener.class.getName(),

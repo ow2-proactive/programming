@@ -10,7 +10,7 @@
     cannot be handled the same as in a sequential environment. Let's see the
     problem with exceptions and asynchrony in a piece of code:</para>
 
-    <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/exceptions/basic_exception.txt"/></textobject></programlisting>
+    <programlisting language="java"><textobject><textdata fileref="code_snippets/exceptions/basic_exception.txt"/></textobject></programlisting>
 
     <para>As the method call in line 2 is asynchronous, the program continues execution 
     without waiting for its completion. So, it is
@@ -50,7 +50,7 @@
       <para>Let's reuse the previous example to see how to use these
       barriers</para>
 
-      <programlisting xml:lang="java"><textobject><textdata fileref="code_snippets/exceptions/trywithcatch_exception.txt"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/exceptions/trywithcatch_exception.txt"/></textobject></programlisting>
 
       <para>With this code, the call in line 3 will be asynchronous, and the
       exception will be handled in the correct <literal>

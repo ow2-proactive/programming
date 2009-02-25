@@ -290,7 +290,7 @@ this.server.startProcess();</screen></para>
       initialization and launching procedure to an active object.</para>
 
       
-        <para><programlisting xml:lang="java">...
+        <para><programlisting language="java">...
 public static void main(String[] args){
    Initializer init = (Initializer)(PAActiveObject.newActive('Initializer.getClas\
 s.getName()', args);
@@ -319,7 +319,7 @@ s.getName()', args);
       as</para>
 
       
-        <para><programlisting xml:lang="java">...
+        <para><programlisting language="java">...
 public void infiniteMethod(){
    while (true){
      this.doStuff();
@@ -333,7 +333,7 @@ public void infiniteMethod(){
       Let us consider the following example:</para>
 
       
-        <para><programlisting xml:lang="java">...
+        <para><programlisting language="java">...
 public void runActivity(Body body) {
    org.objectweb.proactive.Service service = new org.objectweb.proactive.Se\
 rvice(body);

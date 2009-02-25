@@ -30,7 +30,7 @@
                 delivery of the message to the active object. Main
                 methods for the FTManager of the PML protocol are then:
             </para>
-            <programlisting xml:lang="java">/**
+            <programlisting language="java">/**
      * Message must be synchronously logged before being delivered.
      * The LatestRcvdIndex table is updated
      * @see org.objectweb.proactive.core.body.ft.protocols.FTManager#onDeli\
@@ -94,7 +94,7 @@ iveRequest(org.objectweb.proactive.core.body.request.Request)
                 <literal>beforeRestartAfterRecovery()</literal>
                 thus looks like:
             </para>
-            <programlisting xml:lang="java">/**
+            <programlisting language="java">/**
      * Message logs are contained in the checkpoint info structure.
      */
     public int beforeRestartAfterRecovery(CheckpointInfo ci, int inc) {

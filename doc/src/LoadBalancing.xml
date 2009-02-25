@@ -89,7 +89,7 @@
       MetricFactory as described in the previous paragraph. You can specify a
       list of nodes at the initialization or later.</para>
 
-      <para><programlisting xml:lang="java">  Node[] nodes;
+      <para><programlisting language="java">  Node[] nodes;
   Node node;
   //...  initialisation of nodes
   LoadBalancing.activateOn(nodes, new MyMetricFactory()); // or  LoadBalancing.activate(new MyMetricFactory()); 
@@ -102,10 +102,10 @@
       
 
       <para>In your deployment descriptor, you have to define the load
-      balancing technical service as following : <programlisting xml:lang="xml">&lt;technical-service id="LoadBalancingService" class="org.objectweb.proactive.loadbalancing.LoadBalancingTS"&gt;
+      balancing technical service as following : <programlisting language="xml">&lt;technical-service id="LoadBalancingService" class="org.objectweb.proactive.loadbalancing.LoadBalancingTS"&gt;
   &lt;arg name="MetricFactory" value="myPackage.myMetricFactory" /&gt;
 &lt;/technical-service&gt;</programlisting>This service has to be applied on a
-      Virtual Node : <programlisting xml:lang="xml">&lt;virtualNode name="Workers" property="multiple" technicalServiceId="LoadBalancingService"/&gt;</programlisting></para>
+      Virtual Node : <programlisting language="xml">&lt;virtualNode name="Workers" property="multiple" technicalServiceId="LoadBalancingService"/&gt;</programlisting></para>
     </section>
   </section>
 

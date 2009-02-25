@@ -18,7 +18,7 @@
       <para>The Calcium implementation can be found in the following package
       of the ProActive Middleware distribution:</para>
 
-      <programlisting xml:lang="java">package org.objectweb.proactive.extensions.calcium;</programlisting>
+      <programlisting language="java">package org.objectweb.proactive.extensions.calcium;</programlisting>
     </section>
 
     <section xml:id="TheBigPicture_62"><info><title >The Big Picture</title></info>
@@ -87,7 +87,7 @@
       parallel. Therefore, the most suitable pattern corresponds to Divide and
       Conquer.</para>
 
-      <programlisting xml:lang="java">//DaC(&lt;Divide&gt;,&lt;Condition&gt;,&lt;Skeleton&gt;,&lt;Conquer&gt;)
+      <programlisting language="java">//DaC(&lt;Divide&gt;,&lt;Condition&gt;,&lt;Skeleton&gt;,&lt;Conquer&gt;)
 Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
     new IntervalDivide(),
     new IntervalDivideCondition(),
@@ -101,7 +101,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
       <para>We will call the problem an <emphasis role="bold">Interval</emphasis> and we will represent it using the
       following class.</para>
 
-      <programlisting xml:lang="java">class Interval implements Serializable {
+      <programlisting language="java">class Interval implements Serializable {
     public int min,max;
     public int solvableSize;
 
@@ -120,7 +120,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
 
       <para>The primes that are found will be stored in a <emphasis role="bold">Primes</emphasis> class.</para>
 
-      <programlisting xml:lang="java">public class Primes implements Serializable {
+      <programlisting language="java">public class Primes implements Serializable {
 
     public Vector&lt;Integer&gt; list;
 
@@ -135,7 +135,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
         <para>The divition of an <emphasis role="bold">Interval</emphasis>
         into smaller intervals is handled by an <emphasis role="bold">IntervalDivide</emphasis> class:</para>
 
-        <programlisting xml:lang="java">public class IntervalDivide implements Divide&lt;Interval, Interval&gt;{
+        <programlisting language="java">public class IntervalDivide implements Divide&lt;Interval, Interval&gt;{
     
     public Interval[] divide(Interval param, SkeletonSystem system) {
         
@@ -156,7 +156,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
         <para>The class <emphasis role="bold"> IntervalDivideCondition
         </emphasis> is used to determine if an <emphasis role="bold">Interval</emphasis> must be subdivided or not.</para>
 
-        <programlisting xml:lang="java">public class IntervalDivideCondition implements Condition&lt;Interval&gt;{
+        <programlisting language="java">public class IntervalDivideCondition implements Condition&lt;Interval&gt;{
     
     public boolean condition(Interval params, SkeletonSystem system) {
         
@@ -173,7 +173,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
         <emphasis role="bold">Interval</emphasis> object and return a
         <emphasis role="bold">Primes</emphasis> object</para>
 
-        <programlisting xml:lang="java">public class SearchInterval implements Execute&lt;Interval, Primes&gt; {
+        <programlisting language="java">public class SearchInterval implements Execute&lt;Interval, Primes&gt; {
 
     public Primes execute(Interval param, SkeletonSystem system) {
 
@@ -198,7 +198,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
         consolidates the result of the sub intervals into a single
         result.</para>
 
-        <programlisting xml:lang="java">public class JoinPrimes implements Conquer&lt;Primes, Primes&gt; {
+        <programlisting language="java">public class JoinPrimes implements Conquer&lt;Primes, Primes&gt; {
 
     public Primes conquer(Primes[] p, SkeletonSystem system) {
         Primes conquered = new Primes();
@@ -220,7 +220,7 @@ Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
       <para>The instantiation of the framework is performed in the following
       way</para>
 
-      <programlisting xml:lang="java">Skeleton&lt;Interval,Primes&gt; root = ...; //Step 1
+      <programlisting language="java">Skeleton&lt;Interval,Primes&gt; root = ...; //Step 1
 
 EnvironmentFactory enviroment = new MultiThreadedEnvironment(2);
 
@@ -233,7 +233,7 @@ Stream&lt;Interval, Primes&gt; stream = calcium.newStream(root);</programlisting
 
       <para/>
 
-      <programlisting xml:lang="java">Vector&lt;CalFuture&lt;Primes&gt;&gt; futures = new Vector&lt;Future&lt;Primes&gt;&gt;();
+      <programlisting language="java">Vector&lt;CalFuture&lt;Primes&gt;&gt; futures = new Vector&lt;Future&lt;Primes&gt;&gt;();
 
 futures.add(stream.input(new Interval(1,6400,300)));
 futures.add(stream.input(new Interval(1,100,20)));
@@ -245,7 +245,7 @@ calcium.boot(); //begin the evaluation</programlisting>
     <section xml:id="Collecttheresults_62"><info><title>Collect the results</title>
       </info>
 
-      <programlisting xml:lang="java">for(CalFuture&lt;Primes&gt; future:futures){
+      <programlisting language="java">for(CalFuture&lt;Primes&gt; future:futures){
     Primes res=future.get();
     System.out.print(res.list);
 }
@@ -258,7 +258,7 @@ calcium.shutdown(); //release the resources</programlisting>
 
       <para/>
 
-      <programlisting xml:lang="java">Stats stats = future.get(0).getStats(res);
+      <programlisting language="java">Stats stats = future.get(0).getStats(res);
 System.out.println(stats);</programlisting>
     </section>
   </section>
@@ -333,7 +333,7 @@ System.out.println(stats);</programlisting>
 
     <para>The Skeleton's API is the following:</para>
 
-    <programlisting xml:lang="java">class Farm&lt;P,R&gt; implements Skeleton&lt;P,R&gt;   { public Farm(Skeleton&lt;P,R&gt; child); }
+    <programlisting language="java">class Farm&lt;P,R&gt; implements Skeleton&lt;P,R&gt;   { public Farm(Skeleton&lt;P,R&gt; child); }
 class Pipe&lt;P,R&gt; implements Skeleton&lt;P,R&gt;   { &lt;X&gt; Pipe(Skeleton&lt;P,X&gt; s1, Skeleton&lt;X,R&gt; s2); }
 class If&lt;P,R&gt; implements Skeleton&lt;P,R&gt;   { public If(Condition&lt;P&gt; cond, Skeleton&lt;P,R&gt; ifsub, Skeleton&lt;P,R&gt; elsesub); }
 class While&lt;P&gt; implements Skeleton,P&gt;   { public While(Condition&lt;P&gt; cond, Skeleton&lt;P,P&gt; child); }
@@ -346,7 +346,7 @@ class Seq&lt;P,R&gt; implements Skeleton&lt;P,R&gt;   { public Seq(Execute&lt;P,
     <para>Where the muscle functions are user provided, and must implement the
     following interfaces:</para>
 
-    <programlisting xml:lang="java">interface Execute&lt;P,R&gt;  extends Muscle&lt;P,R&gt;       { public R exec(P param); }
+    <programlisting language="java">interface Execute&lt;P,R&gt;  extends Muscle&lt;P,R&gt;       { public R exec(P param); }
 interface Condition&lt;P&gt;  extends Muscle&lt;P,Boolean&gt; { public boolean evalCondition(P param); }
 interface Divide&lt;P,X&gt;   extends Muscle&lt;P,X[]&gt;     { public List&lt;X&gt; divide(P param); }
 interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer(Y[] param); }</programlisting>
@@ -370,7 +370,7 @@ interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer
       easier environment to debug applications, before submitting them to a
       distributed environment.</para>
 
-      <programlisting xml:lang="java">Environment environment = new EnvironmentFactory.newMultiThreadedEnvironment(2); //Number of threads to use.</programlisting>
+      <programlisting language="java">Environment environment = new EnvironmentFactory.newMultiThreadedEnvironment(2); //Number of threads to use.</programlisting>
     </section>
 
     <section xml:id="ProActiveEnvironment_62"><info><title>ProActiveEnvironment</title>
@@ -384,14 +384,14 @@ interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer
       to acquire computation nodes, and active object to communicate and
       distribute the program to the computation nodes.</para>
 
-      <programlisting xml:lang="java">String descriptorPath = "/home/user/descriptor.xml";
+      <programlisting language="java">String descriptorPath = "/home/user/descriptor.xml";
 Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor);</programlisting>
 
       <para>To instantiate the environment, a descriptor deployment's path
       must be specified. The ProActiveEnvironment requires that the descriptor
       file provides the following contractual variables:</para>
 
-      <programlisting xml:lang="java">&lt;variables&gt;
+      <programlisting language="java">&lt;variables&gt;
   &lt;descriptorVariable name="SKELETON_FRAMEWORK_VN" value="framework" /&gt;
   &lt;descriptorVariable name="INTERPRETERS_VN" value="interpreters" /&gt;
   &lt;programDefaultVariable name="MAX_CINTERPRETERS" value="3"/&gt;
@@ -426,7 +426,7 @@ Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor)
       <para>The new GCM Deployment mechanism is also supported through the
       following factory mechanism:</para>
 
-      <para><programlisting xml:lang="java">String descriptorPath = "/home/user/GCMApplication.xml";
+      <para><programlisting language="java">String descriptorPath = "/home/user/GCMApplication.xml";
 Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeployment(descriptor);</programlisting></para>
     </section>
 
@@ -439,7 +439,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       tasks requiring file access and transfer are not supported using this
       environment, but will be supported in future releases.</para>
 
-      <programlisting xml:lang="java">Environment environment = ProActiveSchedulerEnvironment.factory("schedulerURL","user", "password");</programlisting>
+      <programlisting language="java">Environment environment = ProActiveSchedulerEnvironment.factory("schedulerURL","user", "password");</programlisting>
 
       <para>To use the scheduler, a URL with its location, a username and a
       password must be provided.</para>
@@ -448,7 +448,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       and as such represents an unstable version of the framework, thus it is
       located in the following package of the ProActive distribution:</para>
 
-      <programlisting xml:lang="java">package org.objectweb.proactive.extra.calcium.environment.proactivescheduler;</programlisting>
+      <programlisting language="java">package org.objectweb.proactive.extra.calcium.environment.proactivescheduler;</programlisting>
     </section>
   </section>
 
@@ -459,7 +459,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
     on the Proxy Pattern. The <emphasis role="bold">BLAST</emphasis> example
     is implemented using this support in:</para>
 
-    <programlisting xml:lang="java">package org.objectweb.proactive.extensions.calcium.examples.blast;</programlisting>
+    <programlisting language="java">package org.objectweb.proactive.extensions.calcium.examples.blast;</programlisting>
 
     <para>The goal of the file transfer support is to minimize the intrusion
     of non-functional code inside muscle functions, such as code for moving
@@ -476,7 +476,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       muscle function access it. Where <emphasis role="bold">File</emphasis>
       corresponds to the standard java type <emphasis role="bold">java.io.File</emphasis> .</para>
 
-      <programlisting xml:lang="java">    /**
+      <programlisting language="java">    /**
      * This method is used to get a reference on a file inside the workspace.
      *
      * Note that this is only a reference, and can point to an unexistent File.
@@ -540,7 +540,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       supported annotation can fetch a file based on its name, and
       size:</para>
 
-      <programlisting xml:lang="java">public @interface PrefetchFilesMatching {
+      <programlisting language="java">public @interface PrefetchFilesMatching {
 
     String name() default "[unassigned]";
     long sizeSmallerThan() default Long.MIN_VALUE;
@@ -564,7 +564,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       the new <emphasis role="bold">File</emphasis> holding the merged results
       is returned.</para>
 
-      <programlisting xml:lang="java">@PrefetchFilesMatching(name = "merged.*")
+      <programlisting language="java">@PrefetchFilesMatching(name = "merged.*")
 public class ConquerResults implements Conquer&lt;File, File&gt; {
 
     public File conquer(File[] param, SkeletonSystem system) throws Exception {
@@ -593,7 +593,7 @@ public class ConquerResults implements Conquer&lt;File, File&gt; {
       the Calcium framework when submitting the parameter into the
       stream.</para>
 
-      <programlisting xml:lang="java">Stream&lt;File, File&gt; stream = ...;
+      <programlisting language="java">Stream&lt;File, File&gt; stream = ...;
 
 CalFuture&lt;File&gt; future = stream.input(new File("/home/user/input.data")); //input.data is copied and imported into the framework.
 
@@ -633,14 +633,14 @@ File result = future.get(); //The data referenced by result is downloaded into t
       <para>Statistics for a specific moment can be directly retrieved from
       the Calcium instance:</para>
 
-      <programlisting xml:lang="java">StatsGlobal statsGlobal = calcium.getStatsGlobal()</programlisting>
+      <programlisting language="java">StatsGlobal statsGlobal = calcium.getStatsGlobal()</programlisting>
 
       <para>An alternative is to create a monitor that can be performe
       functions based on the statistics. In the following example we activate
       a simple logger monitor that prints the statistics every 5
       seconds.</para>
 
-      <programlisting xml:lang="java">Monitor monitor= new SimpleLogMonitor(calcium, 5);
+      <programlisting language="java">Monitor monitor= new SimpleLogMonitor(calcium, 5);
 
 monitor.start();
 ...

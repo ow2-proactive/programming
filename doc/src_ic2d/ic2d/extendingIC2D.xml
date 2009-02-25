@@ -1431,7 +1431,7 @@ Eclipse-AutoStart: true
 				
 					
 					<para>
-					<programlisting xml:lang="java">
+					<programlisting language="java">
 package org.objectweb.proactive.ic2d.example;
 
 import org.eclipse.ui.plugin.*;
@@ -1806,7 +1806,7 @@ bin.includes = META-INF/,\ .
 				
 					
 					<para>
-					<programlisting xml:lang="xml">
+					<programlisting language="xml">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;?eclipse version="3.0"?&gt;
 &lt;plugin&gt;
@@ -1842,7 +1842,7 @@ bin.includes = META-INF/,\ .
 				
 					
 					<para>
-					<programlisting xml:lang="java">
+					<programlisting language="java">
 package org.objectweb.proactive.ic2d.example;
 
 import org.eclipse.ui.IPageLayout;

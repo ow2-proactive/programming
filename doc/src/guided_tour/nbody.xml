@@ -345,7 +345,7 @@
                         space, with velocity and mass - the diameter
                         expresses the size to use for the display:
                     </para>
-                    <programlisting xml:lang="java">public class Planet implements Serializable{
+                    <programlisting language="java">public class Planet implements Serializable{
     public double mass;
     public double x,y,vx,vy;
     // position and velocity
@@ -395,7 +395,7 @@
                         Displayer. Before choosing which example to run,
                         it creates the nodes required by the simulation:
                     </para>
-                    <programlisting xml:lang="java">try {
+                    <programlisting language="java">try {
 	descriptorPad = PADeployment.getProactiveDescriptor(xmlFileName);
 } catch (ProActiveException e) {
     abort(e);
@@ -429,7 +429,7 @@ try {
                         <literal>Start</literal>
                         (it will be detailed later):
                     </para>
-                    <programlisting xml:lang="java">Object [] constructorParams ;
+                    <programlisting language="java">Object [] constructorParams ;
 constructorParams = {domainArray, new Integer(maxIter), killsupport} ;
 maestro = (Maestro) PAActiveObject.newActive( Maestro.class.getName(), constructorParams , nodes[0] ) ;</programlisting>
                 </listitem>
@@ -469,7 +469,7 @@ maestro = (Maestro) PAActiveObject.newActive( Maestro.class.getName(), construct
                 during the simulation. They are created in the
                 Start.java file:
             </para>
-            <programlisting xml:lang="java">Rectangle universe = new Rectangle (-100,-100,100,100);
+            <programlisting language="java">Rectangle universe = new Rectangle (-100,-100,100,100);
 Domain [] domainArray = new Domain [totalNbBodies];
 for (int  i = 0 ; i &lt; totalNbBodies ; i++)  {
     Object [] constructorParams = new Object [] {
@@ -519,17 +519,17 @@ for (int  i = 0 ; i &lt; totalNbBodies ; i++)  {
                 synchronize themselves by all pinging the maestro, with
                 the notifyFinished call:
             </para>
-            <programlisting xml:lang="java">// init workers, from the Start class
+            <programlisting language="java">// init workers, from the Start class
 for (int i=0 ; i &amp;lt; totalNbBodies ; i ++)
     domainArray[i].init(domainArray, displayer, maestro);
     // init method, defined within each worker
 </programlisting>
-            <programlisting xml:lang="java">public void init(Domain [] domainArray, Displayer dp, Maestro master) {
+            <programlisting language="java">public void init(Domain [] domainArray, Displayer dp, Maestro master) {
     this.neighbours = domainArray;
     .....
     maestro.notifyFinished();  // say we're ready to start
 }</programlisting>
-            <programlisting xml:lang="java">public void notifyFinished() {
+            <programlisting language="java">public void notifyFinished() {
     this.nbFinished ++;
     if (this.nbFinished == this.domainArray.length) {
         this.iter ++; 
@@ -568,7 +568,7 @@ for (int i=0 ; i &amp;lt; totalNbBodies ; i ++)
                 Instead of explicitly asking for information, this
                 information is automatically issued:
             </para>
-            <programlisting xml:lang="java">public void sendValueToNeighbours() {
+            <programlisting language="java">public void sendValueToNeighbours() {
     for (int i = 0 ; i &lt; this.neighbours.length ; i ++)
         if (i != this.identification) // don't notify self!
              this.neighbours[i].setValue(this.info, this.identification);
@@ -615,7 +615,7 @@ public void setValue(Planet inf, int id) {
                 <literal>Active Objects</literal>
                 ) :
             </para>
-            <programlisting xml:lang="java">// in the Start class
+            <programlisting language="java">// in the Start class
 Object [][] params = ...
 Domain  domainGroup = null;
 try {
@@ -662,7 +662,7 @@ catch ....</programlisting>
                 Then this group is passed as a parameter to all the
                 members of the Group in just one call:
             </para>
-            <programlisting xml:lang="java">// Still in the Start class
+            <programlisting language="java">// Still in the Start class
 domainGroup.init(domainGroup, displayer, maestro);</programlisting>
             <para>
                 This method sets the local field as a copy of the passed
@@ -672,7 +672,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 <literal>Domain</literal>
                 from the Group, to avoid having calls on self:
             </para>
-            <programlisting xml:lang="java">public void init(Domain domainGroup, Displayer dp, Maestro master) {
+            <programlisting language="java">public void init(Domain domainGroup, Displayer dp, Maestro master) {
     this.neighbours = domainGroup;
     Group g = PAGroup.getGroup(neighbours);
     g.remove(PAActiveObject.getStubOnThis()); // no need to send information to self
@@ -681,7 +681,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 Remember that in the previous example, the neighbours
                 where stored in an array, and each was accessed in turn:
             </para>
-            <programlisting xml:lang="java">for (int i = 0 ; i &amp;lt; this.neighbours.length ; i ++) {
+            <programlisting language="java">for (int i = 0 ; i &amp;lt; this.neighbours.length ; i ++) {
     if (i != this.identification) // don't notify self!
     this.neighbours[i].setValue(this.info, this.identification);
 }</programlisting>
@@ -732,7 +732,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 iteration, because it is still waiting for more results,
                 in the current iteration.
             </para>
-            <programlisting xml:lang="java">public void setValue(Planet inf, int receivedIter) {
+            <programlisting language="java">public void setValue(Planet inf, int receivedIter) {
     if (this.iter == receivedIter) {
         this.currentForce.add(info, inf);
         this.nbReceived ++ ;
@@ -764,7 +764,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 <literal>Domain</literal>
                 changes iteration.
             </para>
-            <programlisting xml:lang="java">public void sendValueToNeighbours()  {
+            <programlisting language="java">public void sendValueToNeighbours()  {
     reset();                  
     this.iter++;
     if (this.iter &amp;lt; this.maxIter) {                           
@@ -797,7 +797,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 OOspmd Groups, there is a special instruction, which
                 takes the same parameters as a newGroup instruction:
             </para>
-            <programlisting xml:lang="java">Object [][] params =  ...
+            <programlisting language="java">Object [][] params =  ...
  Domain domainGroup = null;
  try {
     domainGroup = (Domain) ProSPMD.newSPMDGroup( Domain.class.getName(), params, nodes);
@@ -811,7 +811,7 @@ domainGroup.init(domainGroup, displayer, maestro);</programlisting>
                 others to have reached it, before reading its request
                 queue again.
             </para>
-            <programlisting xml:lang="java">public void sendValueToNeighbours() {
+            <programlisting language="java">public void sendValueToNeighbours() {
     this.neighbours.setValue(this.info, this.identification);       
     ProSPMD.barrier('barrier' + this.iter);
     this.iter++;
