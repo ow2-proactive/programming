@@ -4,7 +4,7 @@
 	<info>
 		<title>Using IC2D debugging features</title>
 	</info>
-	<para> IC2D comes with several plug-ins to help developers in the process of
+	<para>IC2D comes with several plug-ins to help developers in the process of
 	debugging their applications built above ProActive.</para>
 
 
@@ -115,13 +115,12 @@
 			</mediaobject>
 		</figure>
 	</section>
-</section>
+	</section>
 
 	<section xml:id="StepByStep">
 
 	<info><title>Step by step mode</title></info>
 
-	<section xml:id="stepbysteppreview">
     <figure xml:id="StepByStepFigure"><info><title>step by step preview</title></info>
        <mediaobject>
          <imageobject>
@@ -129,7 +128,6 @@
          </imageobject>
        </mediaobject>
     </figure>
-	</section>
 
 	<section xml:id="BreakpointsOverview"><info><title>Breakpoints Overview</title></info>
 
@@ -217,6 +215,8 @@
 			</itemizedlist>
 
 		</section>
+		
+	</section>
 
 		<section xml:id="Controls"><info><title>Step by step controls</title></info>
 
@@ -231,7 +231,7 @@
 				<figure xml:id="PauseFigure"><info><title>pause</title></info>
 		       <mediaobject>
 		         <imageobject>
-		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/pause.png" format="PNG"/>
+		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/suspendResume.png" format="PNG"/>
 		         </imageobject>
 		       </mediaobject>
 		    </figure>
@@ -245,18 +245,26 @@
 				The filter tools allow to enable or disable some specific breakpoints.
 				For example it is possible to enable New service and send request breakpoints, and disable the others.
 			  </para>
-
-				<figure xml:id="FiltersFigure"><info><title>filters</title></info>
+			  
+			  <figure xml:id="FiltersFigure"><info><title>filters</title></info>
 		       <mediaobject>
 		         <imageobject>
-		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/filters.png" format="PNG"/>
+		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/filter.png" format="PNG"/>
 		         </imageobject>
 		       </mediaobject>
-		    </figure>
+		      </figure>
+
+			  <figure xml:id="FiltersPopupFigure"><info><title>Popup filters</title></info>
+		       <mediaobject>
+		         <imageobject>
+		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/filterPopup.png" format="PNG"/>
+		         </imageobject>
+		       </mediaobject>
+		      </figure>
 
 			</section>
 
-		<section xml:id="SlowMotion"><info><title>Slow motion</title></info>
+		    <section xml:id="SlowMotion"><info><title>Slow motion</title></info>
 
 			  <para>
 				This tools enable a delay in the breakpoints.
@@ -266,7 +274,7 @@
 				<figure xml:id="SlowMotionFigure"><info><title>slow motion</title></info>
 		       <mediaobject>
 		         <imageobject>
-		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/slowmotion.png" format="PNG"/>
+		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/slowMotion.png" format="PNG"/>
 		         </imageobject>
 		       </mediaobject>
 		    </figure>
@@ -296,12 +304,5 @@
 		</section>
 
 	</section>
-
-</section>
-
-
-
-
-
 
 </chapter>
