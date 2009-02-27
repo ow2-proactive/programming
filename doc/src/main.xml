@@ -68,6 +68,7 @@
 				<!ENTITY AnnotationProcessing SYSTEM "Annotations.xml">
                 
                 <!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">
+                <!ENTITY MessageRouting SYSTEM "MessageRouting.xml">
 	        <!ENTITY JMX SYSTEM "Jmx.xml">
          	 <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
                 ]>
@@ -124,6 +125,7 @@
   &Descriptor;
   &VariableContract;
   &FileTransfer;
+  &MessageRouting;
   &SSHTunneling;
   &technicalService;
  </part>

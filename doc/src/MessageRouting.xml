@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
+	xml:id="pamr">
+	<info>
+		<title xml:id="pamr_chapter_title">ProActive Message Routing</title>
+	</info>
+
+
+	<section xml:id="pamr_overview">
+		<info>
+			<title>Overview of ProActive Message Routing</title>
+		</info>
+
+		<para>
+			ProActive Programming supports several communication protocols like RMI, HTTP, Ibis or RMI over SSH.
+			Each protocol has it own advantages and drawbacks. For example RMI is reasonably fast
+			but is not firewall friendly. HTTP is slower but only requires one open TCP port.
+		</para>
+
+		<para>
+			All the aforementioned protocols expect bidirectional TCP connections. The ProActive message routing 
+			protocol is designed to allow ProActive Programming deployment when only outgoing connections
+			are available. Such environments can be encountered due to:
+			
+			<itemizedlist>
+				<listitem>
+					<para>Network address translation devices </para>
+				</listitem>
+				<listitem>
+					<para>Firewalls allowing only outgoing connection (this is the default setup of many personal firewall)</para>
+				</listitem>
+				<listitem>
+					<para>Virtual Machines with a virtualized network stack</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+	
+		<para>
+			When the message routing protocol is activated, each ProActive runtime connect to a 
+			central message router. This connection is kept open, and used as a tunnel
+			to distribute incoming messages to their recipients. If the tunnel goes down, it is 
+			automatically reopened by the ProActive runtime.
+		</para>
+		
+		<para>
+			Few use cases of the ProActive message routing protocol follows.
+		</para>
+		
+		<para>
+			The first use case, is two laptops connected by connected by WIFI, each with a personal
+			firewall. As shown on this 
+			<link linkend="pamr_usecase_laptop">picture</link>, there is no way to establish a connection 
+			between the two laptops. To solve this issue, a message router can be deployed on an external 
+			machine. Most of the desktop machines and laptop have a personal firewall enabled. If it is 
+			possible it is better to open on TCP port on each machine and use the HTTP transport. If not
+			then message routing can be used. 
+			
+			<mediaobject xml:id="pamr_usecase_laptop">
+				<imageobject>
+					<imagedata format="PNG" align="center" fileref="message_routing/laptop_nok.png" scalefit="1" />
+				</imageobject>
+				<caption>
+					<para>
+						Laptops with personal firewalls denying incoming connection. 
+					</para>
+				</caption>
+			</mediaobject>
+		</para>
+
+		<para>
+			The second use case is similar to the first one. When a virtual machine is deployed with a virtual 
+			network stack, it is not possible to contact the virtual machines from the LAN. VMs are behind
+			a software NAT performed by the hypervisor.
+			
+			<mediaobject xml:id="pamr_usecase_virtualization">
+				<imageobject>
+					<imagedata format="PNG" align="center" fileref="message_routing/virtualization_nok.png"/>
+				</imageobject>
+				<caption>
+					<para>
+						Servers with few virtual machines deployed with a virtualized network stack. 
+					</para>
+				</caption>
+			</mediaobject>
+			
+			The solution is to place a message router on a physical machine on the LAN. All the virtual machines will
+			connect to this router. For production usage it is better to configure your VM to get real IP addresses
+			on the LAN. But with message routing you can develop and test your application on virtual machines 
+			without any configuration.
+		</para>		
+		
+		</section>
+	
+	<section xml:id="pamr_configuration">
+		<info>
+			<title>ProActive message routing configuration</title>
+		</info>
+	
+		<para>
+			The configuration of the ProActive message routing protocol is a two step process.
+			The first step is to configure and start the message router. Then the second step
+			is to configure every ProActive runtime to use the ProActive message routing protocol
+			and the started message router.
+		</para>
+	
+		<section xml:id="pamr_configuration_router"> 
+			<info>
+				<title>Message router configuration</title>
+			</info>
+			
+			<para>
+				The message router must be started on a machine which is TCP reachable by all the 
+				ProActive runtimes involved in the computation. The localization of the message
+				router is critical. The machine must be TCP reachable, have a good network connection
+				(bandwidth and latency) and be stable. If the message router crash, the whole application
+				must be restarted.
+			</para>
+
+			<para>
+				To start a message router, use the <emphasis>bin/startRouter.sh</emphasis> or 
+				<emphasis>bin/startRouter.bat</emphasis> script:
+				
+				<screen>
+[cmathieu@britany:programming-git]$ bin/startRouter.sh 
+34980@britany.activeeon.com - [INFO    forwarding.router] Message router listening on ServerSocket[addr=/192.168.1.22,localport=33647]
+				</screen>
+				
+				The IP address and TCP port on which the message router is bound is printed on the standard output.
+			</para>
+			
+			<para>
+				By default the message router binds to the <emphasis>wildcard</emphasis> address on the 
+				<emphasis>33647</emphasis> TCP port. This behavior can be configuration by using the 
+				following parameters:
+				
+				<itemizedlist>
+					<listitem>
+						<para>
+							<emphasis>--port</emphasis>: The TCP port to bind to.						
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis>--ip</emphasis>: The IP address to bind to. 
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis>--ipv4</emphasis>: The message router will only use IPv4 sockets
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis>--ipv6</emphasis>: Prefer IPv6 addresses over IPv4 addresses (and IPv4 addresses
+							mapped over IPv6), 
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis>--nbWorkers</emphasis>: The number of worker threads to use. The only serial 
+							operation in the message router is reading bits from the tunnels. All other operations
+							can be performed in parallel with the help of a thread pool. This parameter defines how 
+							many workers are in the thread pool. 
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</section>
+	
+	
+		<section xml:id="pamr_configuration_runtime">
+			<info>
+				<title>ProActive runtime configuration</title>
+			</info>
+	
+			<para>
+				Once the message router is running, ProActive runtime can be started. Three ProActive properties
+				must be set:
+				
+				<itemizedlist>
+					<listitem>
+						<para>
+							<emphasis>proactive.communication.protocol</emphasis> must be set to <emphasis>pamr</emphasis>						
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis>proactive.net.router.address</emphasis> must be set to the router IP address						
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis>proactive.net.router.port</emphasis> can be set to TCP port on which the 
+							message router is listening. If omitted, port <emphasis>33647</emphasis> is used 						
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+			
+			<para>
+				If the router cannot be contacted, an error message is printed with an exception like this one:
+				
+				<screen>
+<![CDATA[
+6743@britany.activeeon.com - [INFO oactive.remoteobject] Loading <pamr, class org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory>
+6743@britany.activeeon.com - [FATAL warding.remoteobject] Failed to initializeorg.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory
+org.objectweb.proactive.core.ProActiveRuntimeException: Failed to create the local agent
+	at org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory.logAndThrowException(MessageRoutingRemoteObjectFactory.java:119)
+	at org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory.<init>(MessageRoutingRemoteObjectFactory.java:101)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at java.lang.Class.newInstance0(Class.java:355)
+	at java.lang.Class.newInstance(Class.java:308)
+	at org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory.getRemoteObjectFactory(AbstractRemoteObjectFactory.java:100)
+	at org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory.getDefaultRemoteObjectFactory(AbstractRemoteObjectFactory.java:126)
+	at org.objectweb.proactive.core.remoteobject.RemoteObjectExposer.createRemoteObject(RemoteObjectExposer.java:153)
+	at org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl.<init>(ProActiveRuntimeImpl.java:267)
+	at org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl.<clinit>(ProActiveRuntimeImpl.java:158)
+	at org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeMapper.subscribeJMXRuntimeEvent(NodeMapper.java:102)
+	at org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeMapper.<init>(NodeMapper.java:97)
+	at org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationImpl.<init>(GCMApplicationImpl.java:176)
+	at org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.loadApplicationDescriptor(PAGCMDeployment.java:104)
+	at org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.loadApplicationDescriptor(PAGCMDeployment.java:86)
+	at org.objectweb.proactive.examples.hello.Hello.main(Hello.java:87)
+Caused by: org.objectweb.proactive.core.ProActiveException: Failed to create the tunnel to britany.activeeon.com/192.168.1.22:33647
+	at org.objectweb.proactive.extra.messagerouting.client.AgentImpl.<init>(AgentImpl.java:128)
+	at org.objectweb.proactive.extra.messagerouting.client.AgentImpl.<init>(AgentImpl.java:88)
+	at org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory.<init>(MessageRoutingRemoteObjectFactory.java:99)
+	... 17 more
+]]>		
+				</screen>
+				
+			The nested exception shows that the ProActive runtime failed to contact the message router.
+			</para>
+		</section>
+	</section>
+</chapter>
