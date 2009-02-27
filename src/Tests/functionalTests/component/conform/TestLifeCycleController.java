@@ -87,19 +87,13 @@ public class TestLifeCycleController extends Conformtest {
     // -------------------------------------------------------------------------
     @Test
     public void testStarted() throws Exception {
+        // assumes that a method call on a stopped interface hangs
         Fractal.getBindingController(c).bindFc("client", d.getFcInterface("server"));
         assertEquals("STOPPED", Fractal.getLifeCycleController(c).getFcState());
         Fractal.getLifeCycleController(c).startFc();
         assertEquals("STARTED", Fractal.getLifeCycleController(c).getFcState());
         final I i = (I) c.getFcInterface("server");
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                i.m(true);
-            }
-        });
-        t.start();
-        t.join(50);
-        assertTrue(!t.isAlive());
+        i.m(true);
     }
 
     // TODO test issue: this test assumes that a call on a stopped interface hangs

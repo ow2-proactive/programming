@@ -87,14 +87,6 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
         assertEquals("STOPPED", Fractal.getLifeCycleController(r).getFcState());
         assertEquals("STOPPED", Fractal.getLifeCycleController(c).getFcState());
         assertEquals("STOPPED", Fractal.getLifeCycleController(d).getFcState());
-
-        // TODO test issue: this test assumes a call on a stopped interface hangs
-        //      t = new Thread(new Runnable() {
-        //        public void run () { i.m(true); }
-        //      });
-        //      t.start();
-        //      t.join(50);    
-        //      assertTrue(t.isAlive());
     }
 
     @Override
