@@ -4,6 +4,8 @@
   	<property name="ic2d.file.set" value="../doc/toolchain" />
 	<property name="ic2d.src.dir" value="../doc/src_ic2d" />
 	<property name="ic2d.doc.name" value="IC2D" />
+	<property name="docs.tmp.dir"	value="${basedir}/../doc/tmp" />
+
 	<!-- ================================================================ -->
 	<!--            Create docs, which is the javadoc + manual            -->
 	<!--  =============================================================== -->
@@ -100,7 +102,7 @@
 
 
 	<target name="doc.IC2D.javadoc.complete" depends="compile.util, deploy"  description="Generate the ProActive Optimizing complete javadoc">
-<!-- 	  <mkdir dir="${docs.tmp.dir}" /> -->
+ 	  <mkdir dir="${docs.tmp.dir}" /> 
 	  <javadoc  
 	      destdir="../doc/built/IC2D/api_complete" 
 	      author="true" 

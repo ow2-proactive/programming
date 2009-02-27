@@ -4,6 +4,8 @@
 	<property name="pa.file.set" value="../doc/toolchain" />
 	<property name="pa.src.dir" value="../doc/src" />
 	<property name="pa.doc.name" value="ProActive" />
+	<property name="docs.tmp.dir"	value="${basedir}/../doc/tmp" />
+
 	<!-- ================================================================ -->
 	<!--            Create docs, which is the javadoc + manual            -->
 	<!--  =============================================================== -->
@@ -102,7 +104,7 @@
 	
 
 	<target name="doc.ProActive.javadoc.complete" depends="compile.util, deploy" description="Generate the ProActive Programming complete javadoc ">
-	  <mkdir dir="${javadoc.tmp.dir}" />
+	  <mkdir dir="${docs.tmp.dir}" />
 	  <javadoc  
 	      destdir="../doc/built/ProActive/api_complete" 
 	      author="true" 
@@ -156,14 +158,13 @@
 	      
       </path>
 
-
     <!-- the javadoc need trunk/doc/  because the paths are not from a subant task-->
     <target name="doc.ProActive.javadoc.published" depends="compile.util, deploy" description="Generate the ProActive Programming published javadoc">
-        <mkdir dir="../doc/tmp" />
+        <mkdir dir="${docs.tmp.dir}" />
 	<javadoc source="${source}"	classpathref="compile.libs">
             <doclet name="doc.PublishedAPIDoclet" > 
                 <path refid="docs.utils.classpath.javadoc"/>
-		<param name="-file" value="doc/tmp/publishedCoreClasses" />
+		<param name="-file" value="${docs.tmp.dir}/publishedCoreClasses" />
             </doclet>
             <packageset dir="${src.proactive.dir}"/>
         </javadoc>
@@ -175,7 +176,7 @@
             </classpath>
             <doclet name="doc.PublishedAPIDoclet">
                 <path refid="docs.utils.classpath.javadoc"/>
-                <param name="-file" value="doc/tmp/publishedExtensionClasses" />
+                <param name="-file" value="${docs.tmp.dir}/publishedExtensionClasses" />
             </doclet>
             <packageset dir="${src.extensions.dir}"/>
         </javadoc>
@@ -188,7 +189,7 @@
             </classpath>
             <doclet name="doc.PublishedAPIDoclet">
                 <path refid="docs.utils.classpath.javadoc"/>
-                <param name="-file" value="doc/tmp/publishedExtraClasses" />
+                <param name="-file" value="${docs.tmp.dir}/publishedExtraClasses" />
             </doclet>
             <packageset dir="${src.extra.dir}"/>
         </javadoc>
@@ -211,9 +212,9 @@
             </classpath>
             
             
-            <fileset dir="${src.proactive.dir}" includesfile="../doc/tmp/publishedCoreClasses"/>
-            <fileset dir="${src.extensions.dir}" includesfile="../doc/tmp/publishedExtensionClasses"/>
-            <fileset dir="${src.extra.dir}" includesfile="../doc/tmp/publishedExtraClasses"/>
+            <fileset dir="${src.proactive.dir}" includesfile="${docs.tmp.dir}/publishedCoreClasses"/>
+            <fileset dir="${src.extensions.dir}" includesfile="${docs.tmp.dir}/publishedExtensionClasses"/>
+            <fileset dir="${src.extra.dir}" includesfile="${docs.tmp.dir}/publishedExtraClasses"/>
             
             <link href="http://fractal.objectweb.org/current/doc/javadoc/fractal/" />
             <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
