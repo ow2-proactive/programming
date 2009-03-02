@@ -1153,7 +1153,8 @@
 			<informaltable><info><title>
 					Future creation, and asynchronous calls depending on
 					return type
-				</title></info>
+					</title>
+				</info>
 				
 
 				<tgroup cols="4">
@@ -1310,7 +1311,40 @@
 								<para>No</para>
 							</entry>
 						</row>
-			
+						<row>
+							<entry>
+								<para>Array</para>
+							</entry>
+
+							<entry align="center">
+								<para>No</para>
+							</entry>
+
+							<entry align="center">
+								<para>No</para>
+							</entry>
+
+							<entry align="center">
+								<para>No</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<para>Array</para>
+							</entry>
+
+							<entry align="center">
+								<para>yes</para>
+							</entry>
+
+							<entry align="center">
+								<para>No</para>
+							</entry>
+
+							<entry align="center">
+								<para>No</para>
+							</entry>
+						</row>
 					</tbody>
 				</tgroup>
 			</informaltable>

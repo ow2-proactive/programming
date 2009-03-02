@@ -224,6 +224,32 @@ public class TestAsync extends FunctionalTest {
             ESPYLON);
     }
 
+    // sync
+    @Test
+    public void testObjectArray() throws Exception {
+        long before = System.currentTimeMillis();
+        ao.m_object_array();
+        long after = System.currentTimeMillis();
+
+        logger.info("Waited " + (after - before) + "ms");
+        Assert.assertTrue(ao instanceof StubObject);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
+            ESPYLON);
+    }
+
+    // sync
+    @Test
+    public void testIntArray() throws Exception {
+        long before = System.currentTimeMillis();
+        ao.m_int_array();
+        long after = System.currentTimeMillis();
+
+        logger.info("Waited " + (after - before) + "ms");
+        Assert.assertTrue(ao instanceof StubObject);
+        Assert.assertTrue("Method call seems to be async but should be sync", after - before > TIMEOUT -
+            ESPYLON);
+    }
+
     public static class AO {
         int timeout = -1;
 
@@ -292,6 +318,16 @@ public class TestAsync extends FunctionalTest {
         public StaticNonFinalClass m_static_non_final_exception() throws Exception {
             sleep();
             return new StaticNonFinalClass();
+        }
+
+        public Object[] m_object_array() {
+            sleep();
+            return new Object[] { new String("1"), new String("2") };
+        }
+
+        public int[] m_int_array() {
+            sleep();
+            return new int[] { 1, 2 };
         }
 
         private void sleep() {
