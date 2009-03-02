@@ -105,7 +105,34 @@
 					reified
 				</para>
 			</listitem>
+			
 		</itemizedlist>
+
+		<para>
+			Member classes (i.e. non-static named internal classes) can be 
+			used to instantiate active objects only through 
+			<literal>PAActiveObject.turnActive(...)</literal> method 
+			(see <xref linkend="ObjectBasedCreationusingliteralPAActiveObjectturnActiveliteral_71"/>). 
+			In other words, an instance of a member class can only be 
+			activated after creation, and not directly 
+			created as an active object. Attempting to directly create an
+			active object from a member class with 
+			<literal>PAActiveObject.turnActive(...)</literal> method will
+			throw a NotActivatableException.
+			
+			This is mainly due to the fact that active objects created 
+			from the same member class must share a 
+			reference to the enclosing instance: as 
+			<literal>PAActiveObject.newActive(...)</literal>
+			performs a deep copy of the activated instance, the 
+			enclosing instance would be a different copy for each active objects.
+			
+			Because of this sharing, active objects created from a member 
+			class cannot be migrated (<xref linkend="Migration"/>) nor turned 
+			as fault-tolerant active object (<xref linkend="faultTolerance"/>). 
+			Attempting to migrate or checkpoint such an active object will 
+			throw a ProActiveException.
+		</para>
 
 		<para>
 			There are also restrictions at method level within a class.
