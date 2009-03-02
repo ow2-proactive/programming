@@ -866,12 +866,11 @@
   </para>
 
   <para>
-    <emphasis role="bold">Bugs can be posted on the ProActive Jira
-    bug-tracking system </emphasis>
+    <emphasis role="bold">Bugs can be posted on the ProActive bug-tracking system </emphasis>
   </para>
 
   <para>
-    <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://galpage-exp.inria.fr:8181/jira">https://galpage-exp.inria.fr:8181/jira</uri>
+    <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://bugs.activeeon.com/browse/PROACTIVE">http://bugs.activeeon.com/browse/PROACTIVE</uri>
   </para>
 
   <!-- List to be completed and kept up-to-date, sorted alphabeticly -->
