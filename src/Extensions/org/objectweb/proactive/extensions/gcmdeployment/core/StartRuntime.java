@@ -34,6 +34,7 @@ package org.objectweb.proactive.extensions.gcmdeployment.core;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
@@ -52,6 +53,7 @@ import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.core.util.log.remote.ProActiveAppender;
 
 
 /**
@@ -59,7 +61,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * 
  */
 public class StartRuntime {
-    static Logger logger = ProActiveLogger.getLogger(Loggers.RUNTIME);
+    Logger logger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     /** The URL of the parent ProActive Runtime */
     private String parentURL;
@@ -123,6 +125,7 @@ public class StartRuntime {
                 ret &= false;
             }
         }
+
         return ret;
     }
 
@@ -218,6 +221,8 @@ public class StartRuntime {
             logger.warn("Cannot get the local ProActive Runtime", e1);
             abort();
         }
+
+        ProActiveAppender.notifyIsReady();
 
         // Say hello to our parent if needed
         if (parentURL != null) {

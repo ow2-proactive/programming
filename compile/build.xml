@@ -286,8 +286,8 @@
 			<classpath refid="project.classpath"/>
 		</javac>
 
-		<copy todir="${cl.examples.dir}/${proactive.path}/examples" includeEmptyDirs="no">
-			<fileset dir="${src.examples.dir}/${proactive.path}/examples">
+		<copy todir="${cl.examples.dir}/" includeEmptyDirs="no">
+			<fileset dir="${src.examples.dir}/">
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
@@ -402,8 +402,8 @@
 
 	<target name="deploy.examples" depends="examples, deploy.core" description="Add ProActive_examples.jar to the dist/ directory">
 		<jar destfile="${deploy.lib.dir}/ProActive_examples.jar">
-			<fileset dir="${cl.examples.dir}" />
-			<fileset dir="${cl.benchmarks.dir}" />
+			<fileset dir="${cl.examples.dir}" includes="**" />
+			<fileset dir="${cl.benchmarks.dir}" includes="**" />
 		</jar>
 	</target>
 
@@ -883,6 +883,7 @@
 		<copy toDir="${cl.proactive.dir}">
 			<fileset dir="${src.proactive.dir}">
 				<include name="org/objectweb/proactive/core/config/proactive-log4j" />
+				<include name="org/objectweb/proactive/core/config/distributed-log4j" />
 				<include name="org/**/*.xml" />
 				<include name="org/**/*.fractal" />
 				<include name="org/**/*.properties" />

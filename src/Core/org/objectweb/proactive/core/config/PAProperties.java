@@ -136,6 +136,17 @@ public enum PAProperties {
     LOG4J_DEFAULT_INIT_OVERRIDE("log4j.defaultInitOverride", PAPropertiesType.BOOLEAN),
 
     /**
+     * URI of the remote log collector
+     * 
+     */
+    PA_LOG4J_COLLECTOR("proactive.log4j.collector", PAPropertiesType.STRING),
+
+    /**
+     * Qualified name of the flushing provider to use
+     */
+    PA_LOG4J_APPENDER_PROVIDER("proactive.log4j.appender.provider", PAPropertiesType.STRING),
+
+    /**
      * Activates ProActive classloader
      */
     PA_CLASSLOADER("proactive.classloader", PAPropertiesType.BOOLEAN),

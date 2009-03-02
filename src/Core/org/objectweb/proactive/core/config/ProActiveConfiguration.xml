@@ -54,6 +54,8 @@
         <prop key="proactive.filetransfer.buffer_size_kb" value="256" />
 
         <prop key="proactive.test.perf.duration" value="30000" />
+        
+        <prop key="proactive.log4j.appender.provider" value="org.objectweb.proactive.core.util.log.remote.ThrottlingProvider" />
     </properties>
     <javaProperties>
         <prop key="java.protocol.handler.pkgs" value="org.objectweb.proactive.core.ssh" />

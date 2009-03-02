@@ -1,0 +1,11 @@
+
+# The default logging level is INFO
+# The root logger logs in the test.log file
+
+log4j.rootLogger=INFO,REMOTE
+log4j.logger.org.mortbay = WARN
+
+
+log4j.appender.REMOTE=org.objectweb.proactive.core.util.log.remote.ProActiveAppender
+log4j.appender.REMOTE.layout=org.apache.log4j.PatternLayout
+log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20c{2}] %m%n

@@ -535,4 +535,311 @@ $ java -Dproactive.net.netmask="192.168.2.0/24" -Dproactive.net.noprivate=true -
 	</para>
   </section>
 
+  <section xml:id="configuration_log4j">
+  	<info>
+  		<title>Log4j configuration</title>
+  	</info>
+
+	<para>
+		ProActive Programming uses log4j as logging framework. This section present various log4j
+		setups for distributed applications. It also introduces the ProActive log4j appender. It aims 
+		to allow easy centralization of all the logging events created by a distributed application.
+		It relies on ProActive communications to send logging events from computational resources 
+		to a collector.
+	</para>
+
+	<para>
+		Log4j basics are not explained here. If you want to learn more about log4j, please refer to 
+		<link xlink:href="http://logging.apache.org/log4j/1.2/manual.html">the log4j introduction</link>.
+	</para>
+
+	
+	<section xml:id="configuration_log4j_overview">
+		<info>
+			<title>ProActive Appender</title>
+		</info>
+		
+		<para>
+			Until ProActive Programming 4.1.0, a default log4j configuration file was shipped with the
+			ProActive Programming jar file. This configuration file defined a ConsoleAppender to log
+			all the logging event on the standard output with a custom layout. With this configuration,
+			it was not easy to gather all the logging events. Even if the GCM Deployment monitors the
+			standard output of the forked processes, job scheduler like LSF or PBS redirect the standard 
+			output to a file. The user had to collect the log by itself.
+		</para>
+		
+		<para>
+			In addition it was not easy to write logging events into a file. 
+			log4j instances are not synchronized. Using the same <emphasis>FileAppender</emphasis> in 
+			two JVMs leads to corrupted log files since several processes write in the same file 
+			concurrently. 
+		</para>
+
+		<para>
+			ProActive Programming 4.1.0 introduced the ProActiveAppender. It allows the deployed 
+			ProActive runtimes to forward their logging events to their parent runtime through 
+			ProActive communications. It is now easy to centralize all the logging events created
+			by your application at a unique location. Contrary to other distributed appender
+			shipped with log4j, the ProActiveAppender is ready to use out-of-box and well integrated
+			in the GCM Deployment framework. You don't have to write your own event collector or to
+			setup an heavy weight infrastructure. In addition, the local log4j configuration of 
+			the log collector is used to store the local and remote logging events.
+		</para>
+			
+		<para>
+			The following schema describes how the ProActiveAppender works:
+			
+			<mediaobject xml:id="configuration_log4j_overview_img">
+				<imageobject>
+					<imagedata format="PNG" align="center" fileref="log4j/overview.png"  scalefit="1"  width="100%" contentdepth="100%"/>
+				</imageobject>
+				<caption>
+					<para>
+						Overview of the ProActiveAppender
+					</para>
+				</caption>
+			</mediaobject>
+			
+			<variablelist>
+				<title>Description of the different entities involved in distributed logging</title>
+			
+				<varlistentry>
+					<term>
+						local.log4j
+					</term>
+					<listitem>
+						<para>
+							A log4j configuration file. It defines the behavior of log4j on the
+							machine in charge of logging event centralization.
+						</para>
+					</listitem>
+				</varlistentry>
+				
+				<varlistentry>
+					<term>
+						remote.log4j
+					</term>
+					<listitem>
+						<para>
+							A log4j configuration file. It defines the behavior of log4j on the
+							remote machines. Must define and use a ProActiveAppender. 
+						</para>
+					</listitem>
+				</varlistentry>
+				
+				<varlistentry>
+					<term>
+						log collector
+					</term>
+					<listitem>
+						<para>
+							Receives all the remote logging events and forwards them to the local
+							log4j appenders. Defined by the <filename>local.log4j</filename> 
+							configuration file. Exported as a remote object.
+						</para>
+					</listitem>
+				</varlistentry>
+				
+				<varlistentry>
+					<term>
+						ProActiveAppender
+					</term>
+					<listitem>
+						<para>
+							A log4j appender. It forwards logging events to a remote log collector 
+							through ProActive communications according to a flushing policy.  
+						</para>
+					</listitem>
+				</varlistentry>
+				
+				<varlistentry>
+					<term>
+						Flushing Provider
+					</term>
+					<listitem>
+						<para>
+							Defines how and when the logging events are sent to the remote log collector.
+							Since different applications can have different requirements (example: should the 
+							logging events be buffered or dropped when the log collector is not available),
+							it is possible to write and use a custom provider.
+						</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+		
+		<para>
+			To explain how the ProActiveAppender works and to learn how to configure it, we will 
+			follow the path of a logging events.
+		</para>
+		
+		<para>
+			A logging event is created when user code or ProActive invokes the 
+			<code language="java">Logger.info()</code> or a similar methods (bullet 1).
+			Once the logging event is created, log4j forwards it to a set of log4j appenders
+			according to the current log4j configuration (bullet 2). To enable remote 
+			logging, a ProActiveAppender must be defined and used in the 
+			<filename>remote.log4j</filename> configuration file.
+		</para>
+		
+		<para>
+			 To forward all the logging events with a priority equals or higher 
+			 than <code>INFO</code>, the following log4j configuration file can be used: 
+		
+			<screen>
+log4j.rootLogger=INFO,REMOTE
+
+log4j.appender.REMOTE=org.objectweb.proactive.core.util.log.remote.ProActiveAppender
+log4j.appender.REMOTE.layout=org.apache.log4j.PatternLayout
+log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20c{2}] %m%n
+			</screen>
+		</para>
+		
+		<para>
+			Of course, it is possible to define several appenders (remote and local for example) or to 
+			use the remote appender of only a given set of loggers.
+		</para>
+		
+		<para>
+			When instantiated by log4j, the ProActiveAppender expects to find the URI of 
+			the log collector in the <code>proactive.log4j.collector</code> java property. It also
+			loads a flushing provider according to the <code>proactive.log4j.appender.provider</code> 
+			java property. If the property is not set, the first provider found is used.
+		</para>
+		
+		<para>
+			ProActiveAppender retries the remote log collector, setup the flushing
+			provider and forwards the logging events to the flushing provider (bullet 3). 
+			It also buffers all the logging events until the log collector is available. 
+			If it takes more than 30 seconds, logging events are printed on the standard output. 
+		</para>
+		
+		<para>
+			The flushing provider sends the logging events to the log collector via a ProActive
+			communication (bullet 4). It defines its owns buffering and flushing policy. By default the 
+			<code>org.objectweb.proactive.core.util.log.remote.ThrottlingProvider</code> is used. It 
+			defines a simple but flexible and robust flushing policy. Logging events are buffered until
+			one of the following condition is met:
+			
+			<itemizedlist>
+				<listitem>
+					<para>
+						The number of buffered messages reach a threshold
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						The buffer has not been flushed since a given period
+					</para>
+				</listitem>
+			</itemizedlist>
+			
+			The size of the buffer can be configured. When the buffer is full, callers are blocked until
+			the logging events have been flushed. This behavior can slow down the application, but ensures 
+			that no logging events is lost. On commodity hardware, this provider can send almost 
+			90000 logging events per seconds (two runtimes on the Intel Q9400).
+		</para>
+		
+		<para>
+			When the log collector receives a set of logging events it forwards each logging events to 
+			the local Logger which invoke the appenders defined by <filename>local.log4j</filename> 
+			(bullet 5). Appenders then write the logging events somewhere (file, standard output etc).
+		</para>
+	</section>
+	
+		
+	<section xml:id="configuration_log4j_gcm_integration">
+		<info>
+			<title>ProActive Appender and GCM Deployment</title>
+		</info>
+
+		<para>
+			This section presents how the GCM Deployment framework integrates the ProActiveAppender.
+		</para>
+		
+		<para>
+			When the GCM Deployment framework starts a ProActive runtime, if no <code>log4jProperties</code> 
+			tag is defined in the GCM Application descriptor file, then the <filename>distributed-log4j</filename>
+			is used as log4j configuration file. It sends all the logging events with a level equals 
+			or higher than <code>INFO</code> to a log collector located on the machine who loaded the 
+			GCM Application descriptor. The logging events are handled by the appenders defined in 
+			the <filename>local.log4j</filename> file. Logging events filtering is done client side,
+			not server side (ie. all the logging events received by the log collector are forwarded 
+			to the appenders). To enable the DEBUG level on deployed machines you 
+			must write a <filename>remote.log4j</filename> configuration file and set 
+			the <code>log4jProperties</code> tag in the GCM Application descriptor file. 
+		</para>
+		
+		<para>	
+			The following example of <filename>remote.log4j</filename> file enables the debug level for
+			the application and the ProActive master worker framework:
+			
+			<screen>
+log4j.rootLogger=INFO,REMOTE
+log4j.logger.org.mortbay = WARN
+
+log4j.logger.proactive.masterworker=DEBUG,REMOTE
+log4j.logger.myapplication=DEBUG,REMOTE
+
+log4j.appender.REMOTE=org.objectweb.proactive.core.util.log.remote.ProActiveAppender
+log4j.appender.REMOTE.layout=org.apache.log4j.PatternLayout
+log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20c{2}] %m%n			
+			</screen>
+		</para>
+	</section>
+	
+	<section xml:id="configuration_log4j_other_appender">
+		<info>
+			<title>Other appenders</title>
+		</info>
+		
+		<para>
+			The ProActiveAppender is well suited for development and most production needs. It is 
+			easy to setup and well integrated to the ProActive GCM Deployment.  But if your
+			application generates a lot of logging events, or if you don't want to rely on ProActive
+			to transport the logging events, you can use some other appenders provided with log4j. 
+			Useful appenders for distributed application are quickly described in this section.
+		</para>
+		
+		<para>
+			The <emphasis>JDBCAppender</emphasis> sends logging events into a relational database via JDBC. The version shipped 
+			with log4j 1.2 is known to be broken and have some severe limitations. Alternative implementations 
+			of this appender exist. 
+		</para>
+
+		<para>
+			<emphasis>SocketAppender</emphasis> sends logging events to a remote log server. It is very 
+			similar to the  ProActiveAppender but use plain TCP connections. Main differences are:
+			
+			<itemizedlist>
+				<listitem>
+					<para>
+						Remote logging uses TCP protocol
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						If the remote log server is down, logging events a dropped.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						SocketAppender does not flush buffered logging events on JVM exit. They are lost.
+					</para>
+				</listitem>
+			</itemizedlist>
+			
+			<emphasis>SocketHubAppender</emphasis> can sends logging events to several remote log server. 
+			Both only define the client side of distributed logging. You have to write your 
+			own <code>SocketNode</code> to handle the received logging events.
+		</para>
+
+		<para>
+			<emphasis>JMSAppender</emphasis> publishes logging events to a JMS topic.
+		</para>
+	</section>
+
+  </section>
+
+	
 </chapter>

@@ -31,9 +31,9 @@
  */
 package unitTests.gcmdeployment.virtualnode;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
-import java.net.URL;
 import java.util.Set;
 
 import org.objectweb.proactive.core.ProActiveTimeoutException;
@@ -142,5 +142,9 @@ public class GCMApplicationDescriptorMockup implements GCMApplicationInternal {
 
     public void waitReady(long timeout) throws ProActiveTimeoutException {
         // Do nothing
+    }
+
+    public String getLogCollectorUrl() {
+        throw new RuntimeException("Not implemented");
     }
 }
