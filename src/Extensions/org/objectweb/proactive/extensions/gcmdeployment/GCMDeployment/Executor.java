@@ -67,7 +67,7 @@ public class Executor {
         command = command.replaceAll("'", "\"");
         logger.debug("Command submited: " + command);
         try {
-            System.out.println("executing command=" + command);
+            logger.info("executing command=" + command);
 
             Process p = null;
             switch (OperatingSystem.getOperatingSystem()) {
