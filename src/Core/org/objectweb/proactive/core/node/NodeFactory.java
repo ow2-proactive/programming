@@ -33,7 +33,6 @@ package org.objectweb.proactive.core.node;
 
 import java.net.URISyntaxException;
 import java.rmi.AlreadyBoundException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Job;
@@ -47,6 +46,7 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
+import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -86,11 +86,9 @@ public class NodeFactory {
     public static final String DEFAULT_VIRTUAL_NODE_NAME = "DefaultVN";
 
     private static final String DEFAULT_NODE_NAME = "Node";
-    private static final AtomicInteger nodeCounter = new AtomicInteger();
     private static Node defaultNode = null;
 
     private static final String HALFBODIES_NODE_NAME = "__PA__HalfbodiesNode";
-    private static final AtomicInteger halfbodyCounter = new AtomicInteger();
     private static Node halfBodiesNode = null;
 
     static {
@@ -110,20 +108,25 @@ public class NodeFactory {
      * @throws NodeException
      */
     public static synchronized Node getDefaultNode() throws NodeException {
-        ProActiveRuntime runtime = null;
         String jobID = PAActiveObject.getJobId();
         ProActiveSecurityManager securityManager = null;
-        if (defaultNode == null) {
+
+        ProActiveRuntime runtime = ProActiveRuntimeImpl.getProActiveRuntime();
+
+        while (defaultNode == null) {
             try {
-                runtime = ProActiveRuntimeImpl.getProActiveRuntime();
-                defaultNode = runtime.createLocalNode(DEFAULT_NODE_NAME + nodeCounter.incrementAndGet(),
+                // hopefully no collision will occur
+                defaultNode = runtime.createLocalNode(DEFAULT_NODE_NAME + ProActiveRandom.nextPosInt(),
                         false, securityManager, DEFAULT_VIRTUAL_NODE_NAME, jobID);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the default Node", e);
-            } catch (AlreadyBoundException e) { //if this exception is risen, we generate another random name for the node
-                getDefaultNode();
+            } catch (AlreadyBoundException e) {
+                //if this exception is risen, we generate another random name for the node
+                ProActiveLogger.logEatedException(logger, e);
             }
+
         }
+
         return defaultNode;
     }
 
@@ -133,21 +136,21 @@ public class NodeFactory {
      * @throws NodeException
      */
     public static synchronized Node getHalfBodiesNode() throws NodeException {
-        ProActiveRuntime defaultRuntime = null;
+        ProActiveRuntime defaultRuntime = ProActiveRuntimeImpl.getProActiveRuntime();
         ProActiveSecurityManager securityManager = null;
-        if (halfBodiesNode == null) {
+        while (halfBodiesNode == null) {
             try {
-                defaultRuntime = RuntimeFactory.getDefaultRuntime();
                 halfBodiesNode = defaultRuntime.createLocalNode(HALFBODIES_NODE_NAME +
-                    halfbodyCounter.incrementAndGet(), false, securityManager, DEFAULT_VIRTUAL_NODE_NAME,
+                    ProActiveRandom.nextPosInt(), false, securityManager, DEFAULT_VIRTUAL_NODE_NAME,
                         Job.DEFAULT_JOBID);
             } catch (ProActiveException e) {
                 throw new NodeException("Cannot create the halfbodies hosting Node", e);
             } catch (AlreadyBoundException e) {
                 // try another name
-                getHalfBodiesNode();
+                ProActiveLogger.logEatedException(logger, e);
             }
         }
+
         return halfBodiesNode;
     }
 
