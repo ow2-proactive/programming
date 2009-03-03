@@ -76,7 +76,7 @@ fi
 cd compile || warn_and_exit "Cannot move in compile"
 ./build clean
 ./build -Dversion="${VERSION}" deploy.all
-./build -Dversion="${VERSION}" manualPdf
+./build -Dversion="${VERSION}" doc.ProActive.manualPdf
 
 cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
 echo " [i] Clean"
@@ -88,8 +88,7 @@ find . -type d -a -name ".svn" -exec rm -Rf {} \;
 rm -Rf .git
 
 # Remove useless parts of ProActive
-rm ./doc-src/ProActiveRefBook.doc
-rm ./doc-src/guided_tour/examples/SimpleHelloWorld/lib/ProActive.jar
+rm ./doc/src/ProActiveRefBook.doc
 rm -Rf lib/client.jar dist/lib/client.jar
 find . -type f -a -name "*.svg" -exec rm {} \; # svg are converted in png by hands
 
@@ -99,8 +98,9 @@ rm -Rf ./compile/lib/clover.*
 # Remove temporary files
 rm compile/junit*properties
 rm -Rf classes/
-rm -Rf docs/tmp/
-rm -Rf doc-src/*_snippets/
+rm -Rf doc/tmp/
+rm -Rf doc/src_ic2d
+rm -Rf doc/ic2d.xml
 
 sed -i "s/{version}/$VERSION/" README.txt
 
