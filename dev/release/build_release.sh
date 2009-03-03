@@ -103,6 +103,10 @@ rm -Rf classes/
 rm -Rf docs/tmp/
 rm -Rf doc-src/*_snippets/
 
+# Remove useless images in pdf documentation
+find docs/manual/pdf/ -mindepth 1 -type d -exec rm -Rf {} \;
+
+
 sed -i "s/{version}/$VERSION/" README.txt
 
 cd ${TMP}
