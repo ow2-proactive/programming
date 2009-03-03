@@ -34,7 +34,9 @@ package org.objectweb.proactive.core.component;
 import java.io.Serializable;
 
 import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.Type;
+import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentativeImpl;
 
 
@@ -137,16 +139,19 @@ public abstract class ProActiveInterfaceImpl implements ProActiveInterface, Seri
 
     @Override
     public boolean equals(Object anObject) {
-        if (anObject instanceof ProActiveComponentRepresentativeImpl) {
-            return super.equals(anObject);
+        if (Interface.class.isAssignableFrom(anObject.getClass())) {
 
+            Interface itf = (Interface) anObject;
+            boolean nameEquality = itf.getFcItfName().equals(name);
+
+            // Are the two itf belong to the same component?
+            UniqueID objectID = ((ProActiveComponentRepresentativeImpl) itf.getFcItfOwner()).getID();
+            UniqueID thisID = ((ProActiveComponentRepresentativeImpl) owner).getID();
+            boolean ownerEquality = objectID.equals(thisID);
+
+            return nameEquality && ownerEquality;
         }
-        ProActiveInterfaceImpl itf = (ProActiveInterfaceImpl) anObject;
-        boolean one = itf.getFcItfName().equals(name);
-        ProActiveComponentRepresentativeImpl pr1 = (ProActiveComponentRepresentativeImpl) itf.getFcItfOwner();
-        ProActiveComponentRepresentativeImpl pr2 = (ProActiveComponentRepresentativeImpl) owner;
-        boolean two = pr1.getID().equals(pr2.getID());
-        return one & two;
+        return false;
     }
 
     @Override
