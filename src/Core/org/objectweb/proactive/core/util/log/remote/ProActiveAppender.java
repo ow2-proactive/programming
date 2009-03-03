@@ -75,6 +75,16 @@ public final class ProActiveAppender extends AppenderSkeleton {
 
     @Override
     protected void append(LoggingEvent event) {
+        /* 
+         * Since provider can be multithreaded, thread local informations must be 
+         * saved retrieved before giving the logging event to the provider.
+         */
+        event.getThreadName();
+        event.getRenderedMessage();
+        event.getNDC();
+        event.getMDCCopy();
+        event.getThrowableStrRep();
+
         spi.append(event);
 
         if (!this.collectorKnow.get()) {
