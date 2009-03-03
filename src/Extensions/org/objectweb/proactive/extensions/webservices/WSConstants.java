@@ -50,9 +50,10 @@ import org.objectweb.proactive.extensions.webservices.soap.ProActiveProvider;
  */
 public class WSConstants {
 
-    public static final String SERV_WSDL = "/webservices/wsdl";
-    public static final String SERV_RPC_ROUTER = "/webservices/rpcrouter";
-    public static final String SERV_MESSAGE_ROUTER = "/webservices/messagerouter";
+    public static final String NAMESPACE = "/proactive/";
+    public static final String SERV_WSDL = NAMESPACE + "wsdl";
+    public static final String SERV_RPC_ROUTER = NAMESPACE + "rpcrouter";
+    public static final String SERV_MESSAGE_ROUTER = NAMESPACE + "messagerouter";
 
     public static final String PROACTIVE_PROVIDER = ProActiveProvider.class.getName();
     public static final String PROACTIVE_STUB = "Stub";
