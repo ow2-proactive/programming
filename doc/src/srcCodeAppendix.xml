@@ -64,7 +64,7 @@
     <example xml:id="miscFileSrc.mpi_files.MPIRemote-descriptor.xml"><info><title xml:id="MPIWrappingmpi_filesMPIRemotedescriptorxml_7">MPI Wrapping: mpi_files/MPIRemote-descriptor.xml</title></info>
          <para/>  </example> 
      
-     <programlisting language="xml"><textobject><textdata fileref="file:mpi_files/MPIRemote-descriptor.xml"/></textobject></programlisting>
+     <programlisting language="xml"><textobject><textdata fileref="mpi_files/MPIRemote-descriptor.xml"/></textobject></programlisting>
 
 </section>
 
