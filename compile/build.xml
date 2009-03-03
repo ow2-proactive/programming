@@ -155,21 +155,25 @@
 		<echo message="Java primitive type wrapper stubs generating..." />
 		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
 			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -pkg org.objectweb.proactive.core.util.wrapper" />
+			<arg value="-srcDir"/>
+            <arg value="${cl.proactive.dir}"/>
+            <arg value="-pkg"/>
+            <arg value="org.objectweb.proactive.core.util.wrapper"/>
+		</java>
+		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
+			<classpath refid="project.classpath" />
+            <arg value="-srcDir"/>
+			<arg value="${cl.proactive.dir}"/>
+            <arg value="-class"/>
+            <arg value="org/objectweb/proactive/core/runtime/ProActiveRuntime" />
 		</java>
 
 		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
 			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -pkg org.objectweb.proactive.core.util.wrapper" />
-		</java>
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -class org/objectweb/proactive/core/runtime/ProActiveRuntime" />
-		</java>
-
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -class org/objectweb/proactive/core/body/UniversalBody" />
+            <arg value="-srcDir"/>
+			<arg value="${cl.proactive.dir}"/>
+            <arg value="-class"/>
+            <arg value="org/objectweb/proactive/core/body/UniversalBody" />
 		</java>
 
 	    <antcall target="ibis"/>
@@ -786,7 +790,10 @@
 
 		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
 			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.proactive.dir} -pkg org.objectweb.proactive" />
+			<arg value="-srcDir"/>
+            <arg value="${cl.proactive.dir}"/>
+            <arg value="-pkg"/>
+            <arg value="org.objectweb.proactive" />
 		</java>
 	</target>
 
