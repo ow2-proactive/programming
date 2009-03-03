@@ -126,7 +126,6 @@
     		<packageset dir="${ic2d.plugins.src.dir}.JMXmonitoring/src"/>
     		<packageset dir="${ic2d.plugins.src.dir}.jobmonitoring/src"/>
     		<packageset dir="${ic2d.plugins.src.dir}.launcher/src"/>
-    		<packageset dir="${ic2d.plugins.src.dir}.p2p/src"/>
     		<packageset dir="${ic2d.plugins.src.dir}.security/src"/>
     		<packageset dir="${ic2d.plugins.src.dir}.timit/src"/>
     		
