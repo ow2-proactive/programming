@@ -37,6 +37,7 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
 
 
+@SuppressWarnings("serial")
 public class ExceptionInInitActivityAO implements Serializable, InitActive {
     public ExceptionInInitActivityAO() {
 
