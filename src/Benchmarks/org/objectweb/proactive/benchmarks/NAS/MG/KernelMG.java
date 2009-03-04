@@ -39,7 +39,6 @@ import org.objectweb.proactive.benchmarks.NAS.Kernel;
 import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
 import org.objectweb.proactive.benchmarks.NAS.util.Communicator;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;

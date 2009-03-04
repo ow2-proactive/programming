@@ -32,8 +32,6 @@
 package org.objectweb.proactive.ext.util;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.Body;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.BodyMap;
 import org.objectweb.proactive.core.body.UniversalBody;

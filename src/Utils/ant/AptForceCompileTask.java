@@ -35,7 +35,6 @@ import java.io.File;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.taskdefs.Apt;
-import org.apache.tools.ant.types.Path;
 
 
 /** This class extends the behaviour of the ant builtin apt task

@@ -31,7 +31,6 @@
  */
 package org.objectweb.proactive.extra.messagerouting.remoteobject;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 
@@ -47,7 +46,6 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.client.Agent;
-import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingRemoteObjectRequest;
 
 

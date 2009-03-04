@@ -31,8 +31,6 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication;
 
-import java.net.URL;
-
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;

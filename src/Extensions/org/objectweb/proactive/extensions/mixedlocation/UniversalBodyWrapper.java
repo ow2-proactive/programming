@@ -32,7 +32,6 @@
 package org.objectweb.proactive.extensions.mixedlocation;
 
 import java.io.IOException;
-import java.net.URI;
 import java.security.AccessControlException;
 import java.security.PublicKey;
 

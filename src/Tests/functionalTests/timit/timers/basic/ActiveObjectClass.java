@@ -31,7 +31,6 @@
  */
 package functionalTests.timit.timers.basic;
 
-import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.benchmarks.timit.util.CoreTimersContainer;
 import org.objectweb.proactive.benchmarks.timit.util.basic.BasicTimer;

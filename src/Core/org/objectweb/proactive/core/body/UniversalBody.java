@@ -33,9 +33,6 @@ package org.objectweb.proactive.core.body;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URI;
-import java.net.URL;
-
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Job;
 import org.objectweb.proactive.core.UniqueID;

@@ -35,7 +35,6 @@ import org.objectweb.proactive.api.PAVersion;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.ProActiveInet;
-import org.objectweb.proactive.core.util.URIBuilder;
 
 
 public class Main {

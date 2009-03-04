@@ -44,7 +44,6 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMFunctionalTest;
 
 
 /**

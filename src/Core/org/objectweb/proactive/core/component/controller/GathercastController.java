@@ -34,10 +34,8 @@ package org.objectweb.proactive.core.component.controller;
 import java.util.List;
 
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.body.request.ServeException;
 import org.objectweb.proactive.core.component.identity.ProActiveComponent;
 import org.objectweb.proactive.core.component.representative.ItfID;
-import org.objectweb.proactive.core.component.request.ComponentRequest;
 
 
 /**
