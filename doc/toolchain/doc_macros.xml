@@ -107,6 +107,8 @@
 				<arg value="TODAY=${TODAY}" />
 				<arg value="VERSION=${version}" />
 			</java>
+			<!-- remove temporary folder -->
+			<delete>${docs.tmp.dir}</delete>
 		</sequential>
 	</macrodef>
 
@@ -200,4 +202,15 @@
 					docbookOutputDir="${docs.html.multiple.dir}"/>
 		</sequential>
 	</macrodef>
+	<!-- ==================================================================== -->
+	<!--                               Clean                                  -->
+	<!-- ==================================================================== -->
+	<macrodef name="clean" description="Delete generated and temporary files">
+		<sequential>
+		      <delete dir="${docs.tmp.dir}" />
+		      <delete dir="${docs.dir}/built" />
+		</sequential>
+	</macrodef>
+	
+	
 </project>
