@@ -76,7 +76,7 @@
 				<include name="functionalTests/**/**/*Test*.class" />
 				
 				<exclude name="**/*$*.class" />
-				<!-- <exclude name="functionalTests/security/*/*.class" /> -->
+				<exclude name="functionalTests/security/*/*.class" /> <!-- TestUnlimitedCrypto declares its own testsuite -->
 				<exclude name="functionalTests/*.class" />
 				<exclude name="functionalTests/component/collectiveitf/multicast/**/*.fractal" />
 				<exclude name="functionalTests/component/collectiveitf/multicast/ClientTestItf.class" />
