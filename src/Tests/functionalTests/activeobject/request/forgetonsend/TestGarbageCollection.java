@@ -36,11 +36,10 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.config.PAProperties;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMDeploymentReady;
+
 import static junit.framework.Assert.assertTrue;
 
 
-@GCMDeploymentReady
 public class TestGarbageCollection extends FunctionalTest {
 
     /*

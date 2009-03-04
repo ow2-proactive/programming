@@ -34,18 +34,14 @@ package functionalTests.activeobject.creation.local.newactive;
 import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.util.ProActiveInet;
-import org.objectweb.proactive.core.util.URIBuilder;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMDeploymentReady;
 import functionalTests.activeobject.creation.A;
 
 
 /**
  * Test newActive method on the local default node
  */
-@GCMDeploymentReady
 public class Test extends FunctionalTest {
     A a;
     String name;

@@ -48,7 +48,7 @@ import org.objectweb.proactive.ext.util.SimpleLocationServer;
 import org.objectweb.proactive.extensions.mixedlocation.MixedLocationMetaObjectFactory;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
+
 import functionalTests.activeobject.locationserver.A;
 import functionalTests.activeobject.locationserver.MigratableA;
 
@@ -56,7 +56,7 @@ import functionalTests.activeobject.locationserver.MigratableA;
 /**
  * Test migration with location server and forwarder
  */
-@GCMDeploymentReady
+
 public class TestLoopMixedLocation extends GCMFunctionalTestDefaultNodes {
     A a;
     MigratableA migratableA;

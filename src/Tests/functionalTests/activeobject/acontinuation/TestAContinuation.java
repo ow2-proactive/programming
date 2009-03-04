@@ -38,14 +38,14 @@ import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.config.PAProperties;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMDeploymentReady;
+
 import static junit.framework.Assert.assertTrue;
 
 
 /**
  * Test automatic continuations by results and parameters
  */
-@GCMDeploymentReady
+
 public class TestAContinuation extends FunctionalTest {
     AOAContinuation a;
     AOAContinuation b;

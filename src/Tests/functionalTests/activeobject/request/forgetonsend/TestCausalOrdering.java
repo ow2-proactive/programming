@@ -41,13 +41,12 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
  * Test ForgetOnSend strategies. Must run on a single JVM
  */
-@GCMDeploymentReady
+
 public class TestCausalOrdering extends FunctionalTest {
 
     private boolean result;

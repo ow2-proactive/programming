@@ -37,13 +37,12 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
  * Test getActiveObjects method on a node
  */
-@GCMDeploymentReady
+
 public class TestGetActiveObject extends GCMFunctionalTestDefaultNodes {
 
     public TestGetActiveObject() {

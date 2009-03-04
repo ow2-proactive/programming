@@ -37,14 +37,14 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
+
 import functionalTests.activeobject.creation.A;
 
 
 /**
  * Test turnActive method on a remote node
  */
-@GCMDeploymentReady
+
 public class Test extends GCMFunctionalTestDefaultNodes {
     A a;
     String name;

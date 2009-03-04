@@ -42,10 +42,8 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
-@GCMDeploymentReady
 public class TestContext extends GCMFunctionalTestDefaultNodes {
 
     public TestContext() {

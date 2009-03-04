@@ -43,13 +43,12 @@ import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
  * Test register and lookup AOs
  */
-@GCMDeploymentReady
+
 public class TestLookupActive extends FunctionalTest {
 
     @Test

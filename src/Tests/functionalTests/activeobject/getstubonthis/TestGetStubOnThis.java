@@ -39,13 +39,12 @@ import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.NodeException;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
  * See PROACTIVE-273
  */
-@GCMDeploymentReady
+
 public class TestGetStubOnThis extends FunctionalTest {
     public TestGetStubOnThis() {
 

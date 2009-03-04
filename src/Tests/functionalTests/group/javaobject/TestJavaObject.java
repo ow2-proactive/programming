@@ -40,7 +40,7 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
+
 import functionalTests.group.A;
 
 
@@ -49,7 +49,7 @@ import functionalTests.group.A;
  *
  * @author The ProActive Team
  */
-@GCMDeploymentReady
+
 public class TestJavaObject extends GCMFunctionalTestDefaultNodes {
     private A typedGroup = null;
     private A resultTypedGroup = null;

@@ -37,13 +37,12 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
  * Test AO simple migration
  */
-@GCMDeploymentReady
+
 public class TestSimpleMigration extends GCMFunctionalTestDefaultNodes {
 
     public TestSimpleMigration() {

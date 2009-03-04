@@ -38,12 +38,10 @@ import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.GCMDeploymentReady;
 import functionalTests.GCMFunctionalTest;
 import functionalTests.gcmdeployment.LocalHelpers;
 
 
-@GCMDeploymentReady
 public class TestVirtualNode6 extends GCMFunctionalTest {
     public TestVirtualNode6() throws FileNotFoundException {
         super(LocalHelpers.getDescriptor(TestVirtualNode6.class));

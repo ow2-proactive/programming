@@ -42,13 +42,11 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.GCMDeploymentReady;
 import functionalTests.GCMFunctionalTest;
 import functionalTests.GCMFunctionalTestDefaultNodes;
 import functionalTests.gcmdeployment.LocalHelpers;
 
 
-@GCMDeploymentReady
 public final class TimersTestApplication extends GCMFunctionalTest {
     private ActiveObjectClass a1;
     private ActiveObjectClass a1bis;

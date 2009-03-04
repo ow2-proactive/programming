@@ -43,13 +43,12 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
  * Test ForgetOnSend strategies on SPMD groups
  */
-@GCMDeploymentReady
+
 public class TestGroup extends GCMFunctionalTestDefaultNodes {
 
     private boolean result;

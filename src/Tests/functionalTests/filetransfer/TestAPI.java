@@ -48,14 +48,13 @@ import org.objectweb.proactive.core.filetransfer.RemoteFile;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.calcium.system.SkeletonSystemImpl;
 
-import functionalTests.GCMDeploymentReady;
 import functionalTests.GCMFunctionalTestDefaultNodes;
 
 
 /**
  * Tests the two main methods of the File Transfer API
  */
-@GCMDeploymentReady
+
 public class TestAPI extends GCMFunctionalTestDefaultNodes {
 
     private static int FILE_SIZE = 16; //MB

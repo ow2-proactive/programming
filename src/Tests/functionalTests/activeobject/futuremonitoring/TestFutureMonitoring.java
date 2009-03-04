@@ -39,13 +39,12 @@ import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureE
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
  * Test monitoring the futures
  */
-@GCMDeploymentReady
+
 public class TestFutureMonitoring extends GCMFunctionalTestDefaultNodes {
 
     public TestFutureMonitoring() {

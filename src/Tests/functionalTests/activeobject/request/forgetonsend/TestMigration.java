@@ -38,14 +38,13 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
  * When migrating an Active Object, the migration should wait until the SendingQueue is empty to
  * avoid multiple and un-useful serializations. 
  */
-@GCMDeploymentReady
+
 public class TestMigration extends GCMFunctionalTestDefaultNodes {
 
     private C c1, c2, c3, c4;

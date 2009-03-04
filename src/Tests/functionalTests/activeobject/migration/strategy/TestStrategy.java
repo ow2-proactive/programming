@@ -37,7 +37,6 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeFactory;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
@@ -45,7 +44,7 @@ import functionalTests.GCMDeploymentReady;
  * @author The ProActive Team
  *
  */
-@GCMDeploymentReady
+
 public class TestStrategy extends GCMFunctionalTestDefaultNodes {
     A a;
 

@@ -40,10 +40,8 @@ import org.objectweb.proactive.api.PASPMD;
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
-@GCMDeploymentReady
 public class TestSimpleArray extends GCMFunctionalTestDefaultNodes {
     private A spmdgroup;
 

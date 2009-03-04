@@ -42,7 +42,6 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.GCMDeploymentReady;
 
 
 /**
@@ -50,7 +49,7 @@ import functionalTests.GCMDeploymentReady;
  *
  * @author The ProActive Team
  */
-@GCMDeploymentReady
+
 public class TestBarrier extends GCMFunctionalTestDefaultNodes {
     private A spmdgroup = null;
 

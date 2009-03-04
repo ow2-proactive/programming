@@ -35,10 +35,8 @@ import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMDeploymentReady;
 
 
-@GCMDeploymentReady
 public class TestFutureCallbacks extends FunctionalTest {
 
     @Test
