@@ -108,7 +108,7 @@
 				<arg value="VERSION=${version}" />
 			</java>
 			<!-- remove temporary folder -->
-			<delete dir="${docs.tmp.dir}/>
+			<delete dir="${docs.tmp.dir}"/>
 		</sequential>
 	</macrodef>
 
