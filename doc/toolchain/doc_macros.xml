@@ -107,8 +107,6 @@
 				<arg value="TODAY=${TODAY}" />
 				<arg value="VERSION=${version}" />
 			</java>
-			<!-- remove temporary folder -->
-			<delete dir="${docs.tmp.dir}"/>
 		</sequential>
 	</macrodef>
 
@@ -156,6 +154,8 @@
 			  docbookStyle="${docs.xsl.html.one}" 
 			  docbook.profile="html" 
 			  docbookOutputDir="${docs.html.single.dir}"/>
+			<!-- remove temporary folder -->
+			<delete dir="${docs.tmp.dir}"/>
 		</sequential>
 	</macrodef> 
 	
@@ -186,6 +186,8 @@
 				<fileset dir="${docs.pdf.dir}" defaultexcludes="false"
 					includes="**/*"  excludes="${docs.pdf.name}" />
 			</delete>
+			<!-- remove temporary folder -->
+			<delete dir="${docs.tmp.dir}"/>
 		</sequential>
 	</macrodef>
 
@@ -200,6 +202,8 @@
 					docbookStyle="${docs.xsl.html.chunked}" 
 					docbook.profile="html" 
 					docbookOutputDir="${docs.html.multiple.dir}"/>
+			<!-- remove temporary folder -->
+			<delete dir="${docs.tmp.dir}"/>
 		</sequential>
 	</macrodef>
 	<!-- ==================================================================== -->
