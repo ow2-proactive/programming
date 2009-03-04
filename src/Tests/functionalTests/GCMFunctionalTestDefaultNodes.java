@@ -33,7 +33,7 @@ package functionalTests;
 
 import java.net.URL;
 
-import org.objectweb.proactive.core.ProActiveException;
+import org.junit.Ignore;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
@@ -45,6 +45,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  * @author The ProActive Team
  * 
  */
+@Ignore
 public class GCMFunctionalTestDefaultNodes extends GCMFunctionalTest {
 
     static final private URL defaultApplicationDescriptor = FunctionalTest.class

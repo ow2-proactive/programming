@@ -32,6 +32,7 @@
 package unitTests;
 
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 
 
 /**
@@ -43,6 +44,7 @@ import org.apache.log4j.Logger;
  * <li>Add this class to the following <b>SuiteClasses</b> annotation</li>
  * </ul>
  */
+@Ignore
 public class UnitTests {
     static final public Logger logger = Logger.getLogger("testsuite");
 }

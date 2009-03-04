@@ -32,9 +32,11 @@
 package functionalTests;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.objectweb.proactive.core.config.PAProperties;
 
 
+@Ignore
 public class ComponentTestDefaultNodes extends GCMFunctionalTestDefaultNodes {
 
     public ComponentTestDefaultNodes(int hostCapacity, int vmCapacity) {

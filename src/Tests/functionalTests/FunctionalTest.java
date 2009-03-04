@@ -45,6 +45,7 @@ import java.util.TimerTask;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
@@ -54,6 +55,7 @@ import org.objectweb.proactive.extra.messagerouting.router.Router;
 import org.objectweb.proactive.extra.messagerouting.router.RouterConfig;
 
 
+@Ignore
 public class FunctionalTest {
     static final protected Logger logger = Logger.getLogger("testsuite");
 

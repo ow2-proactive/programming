@@ -32,15 +32,13 @@
 package functionalTests;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.objectweb.proactive.core.config.PAProperties;
 
 import functionalTests.FunctionalTest;
 
 
-/**
- * @author The ProActive Team
- * 
- */
+@Ignore
 public abstract class ComponentTest extends FunctionalTest {
 
     /**
