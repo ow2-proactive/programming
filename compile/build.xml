@@ -96,10 +96,7 @@
 
 	<fileset dir="${cl.test.dir}" id="performancesuite">
 		<include name="performanceTests/**/*Test*.class" />
-		
 		<exclude name="**/*$*.class" />
-		<exclude name="performanceTests/simple/**/*.class" />
-		<exclude name="performanceTest/throughtput/TestIbis.class" />
 	</fileset>
 
 
