@@ -19,8 +19,8 @@
 	<property file="${user.home}/.proactive/build.properties" />
 	<import file="common.xml" />
 	
-	<import file="../doc/ic2d.xml"  optional="true" />
-	<import file="../doc/pa.xml"  optional="true" />
+	<import file="../doc/ic2d/build.xml"  optional="true" />
+	<import file="../doc/pa/build.xml"  optional="true" />
 	
 	<!-- ************
 		Taskdefs		
