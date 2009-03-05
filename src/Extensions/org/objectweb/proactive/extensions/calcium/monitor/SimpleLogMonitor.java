@@ -40,7 +40,7 @@ import org.objectweb.proactive.extensions.calcium.statistics.StatsGlobal;
  * This class provides a simple monitor that periodically queries the Calcium
  * framework and prints the results.
  *
- *  * @author The ProActive Team
+ * @author The ProActive Team
  */
 @PublicAPI
 public class SimpleLogMonitor implements Monitor {
@@ -61,7 +61,7 @@ public class SimpleLogMonitor implements Monitor {
     }
 
     /**
-     * @see {@link Monitor#stop()}
+     * @see Monitor#stop()
      */
     public void stop() {
         thread.myStop();
@@ -70,7 +70,7 @@ public class SimpleLogMonitor implements Monitor {
     }
 
     /**
-     * @see {@link Monitor#start()}
+     * @see Monitor#start()
      */
     public void start() {
         if (thread != null) {

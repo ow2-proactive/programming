@@ -165,7 +165,7 @@ public class MSService implements Serializable {
      * Deploy engines over each node defined in the the file descriptor
      * @param nameVirtualNode
      * @param pathDescriptor
-     * @param number of engines to deploy
+     * @param nbEngine number of engines to deploy
      * @return the number of deployed engine
      */
     public synchronized int deployEngine(String nameVirtualNode, String pathDescriptor, int nbEngine) {

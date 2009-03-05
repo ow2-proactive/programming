@@ -315,17 +315,20 @@ public enum PAProperties {
      * 
      * You can use a SocketConnect, a BlockingChannelConnector or a SelectChannelConnector
      * You CANNOT use a SSL connector. 
-     * 
-     * {@link http://docs.codehaus.org/display/JETTY/Architecture}
+     * Click 
+     * <a  href="http://docs.codehaus.org/display/JETTY/Architecture">here</a> for more
+     * information on the Jetty architecture. 
      */
     PA_HTTP_JETTY_CONNECTOR("proactive.http.jetty.connector", PAPropertiesType.STRING),
 
     /**
      * Jetty configuration file
      * 
-     * Jetty can be configuration by providing a jetty.xml file.
-     * {@link http://docs.codehaus.org/display/JETTY/jetty.xml} 
-     * {@link http://docs.codehaus.org/display/JETTY/Syntax+Reference}
+     * Jetty can be configured by providing a 
+     * <a  href="http://docs.codehaus.org/display/JETTY/jetty.xml">jetty.xml</a>
+     * file. Click 
+     * <a  href="http://docs.codehaus.org/display/JETTY/Syntax+Reference">here </a>
+     * for the Jetty syntax reference.
      */
     PA_HTTP_JETTY_XML("proactive.http.jetty.xml", PAPropertiesType.STRING),
 

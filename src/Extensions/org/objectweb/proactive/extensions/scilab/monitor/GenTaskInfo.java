@@ -74,7 +74,7 @@ public class GenTaskInfo {
 
     /**
      * Get the priority of this task
-     * @return
+     * @return priority of this task
      */
     public int getPriority() {
         return priority;
@@ -114,7 +114,7 @@ public class GenTaskInfo {
 
     /**
      * Returns the id of this task, with regards to the MSService
-     * @return
+     * @return a String containing the id of this task
      */
     public String getIdTask() {
         return genTask.getId();
@@ -177,7 +177,7 @@ public class GenTaskInfo {
 
     /**
      * Retrieves the date at which this task started
-     * @return
+     * @return a long containing the date at which this task was started
      */
     public long getDateStart() {
         return dateStart;
@@ -185,7 +185,7 @@ public class GenTaskInfo {
 
     /**
      * Retrieves the path to the script associated with this task
-     * @return
+     * @return a String containg the path associated with this task
      */
     public String getPathScript() {
         return fileScript.getAbsolutePath();
@@ -193,7 +193,7 @@ public class GenTaskInfo {
 
     /**
      * Retrieves the file name of the script associated with this task
-     * @return
+     * @return a String containing the filename of the script for this task
      */
     public String getNameScript() {
         return fileScript.getName();
