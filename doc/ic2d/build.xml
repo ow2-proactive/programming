@@ -2,7 +2,7 @@
 <project>
   
   	<property name="ic2d.file.set" value="../doc/toolchain" />
-	<property name="ic2d.src.dir" value="../doc/src_ic2d" />
+	<property name="ic2d.src.dir" value="../doc/ic2d" />
 	<property name="ic2d.doc.name" value="IC2D" />
 	<property name="docs.tmp.dir"	value="${basedir}/../doc/tmp" />
 

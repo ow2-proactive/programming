@@ -2,7 +2,7 @@
 <project>
   
 	<property name="pa.file.set" value="../doc/toolchain" />
-	<property name="pa.src.dir" value="../doc/src" />
+	<property name="pa.src.dir" value="../doc/pa" />
 	<property name="pa.doc.name" value="ProActive" />
 	<property name="docs.tmp.dir"	value="${basedir}/../doc/tmp" />
 
