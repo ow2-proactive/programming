@@ -583,7 +583,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                      * An agent disconnected. To avoid blocked thread we have to
                      * unlock all thread that are waiting a response from this agent
                      */
-                    mailboxes.unlockDueToDisconnection(error.getRecipient());
+                    mailboxes.unlockDueToDisconnection(error.getSender());
                     break;
                 case ERR_NOT_CONNECTED_RCPT:
                     /*
