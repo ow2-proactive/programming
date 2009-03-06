@@ -41,7 +41,7 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
  * This interface is used to divide a parameter
  * into a list of parameters.
  *
- * It is used in {@link org.objectweb.proactive.extensions.calcium.skeletons.Skeletons} such as: {@link org.objectweb.proactive.extensions.calcium.skeletons.DaC }, {@link org.objectweb.proactive.extensions.calcium.skeletons.Map}, and {@link org.objectweb.proactive.extensions.calcium.skeletons.Fork}.
+ * It is used in {@link org.objectweb.proactive.extensions.calcium.skeletons.Skeleton} such as: {@link org.objectweb.proactive.extensions.calcium.skeletons.DaC }, {@link org.objectweb.proactive.extensions.calcium.skeletons.Map}, and {@link org.objectweb.proactive.extensions.calcium.skeletons.Fork}.
  *
  * @author The ProActive Team
  *

@@ -114,12 +114,13 @@ public class PAFileTransfer {
     }
 
     /**
-     * Pull a list of remote files on a Node to the local node.
+     * Pull a single remote file from a source Node to the local node.
      *
      * @param srcNode
      * @param srcFile
      * @param dstFile
-     * @return A list of {@link org.objectweb.proactive.core.filetransfer.RemoteFile  RemoteFile} instances representing the file transfer operation of each file.
+     * @return A {@link org.objectweb.proactive.core.filetransfer.RemoteFile  RemoteFile} instance representing the file transfer operation of the file.
+     * @see  #pull( Node, File[], File[])
      * @throws IOException If an initialization error was detected.
      */
     public static RemoteFile pull(Node srcNode, File srcFile, File dstFile) throws IOException {
@@ -127,8 +128,13 @@ public class PAFileTransfer {
     }
 
     /**
-     * Pull a single remote file to the local node and location.
-     * @see  #pull(File[], Node,  File[])
+     * Pull a list of remote files from a source Node to the local node.
+     *
+     * @param srcNode
+     * @param srcFile
+     * @param dstFile
+     * @throws IOException If an initialization error was detected.    
+     * @see  #pull( Node, File, File)
      */
     public static List<RemoteFile> pull(Node srcNode, File[] srcFile, File[] dstFile) throws IOException {
         return transfer(srcNode, srcFile, getLocalNode(), dstFile);

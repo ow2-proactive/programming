@@ -83,8 +83,8 @@ public class Pipe<P extends java.io.Serializable, R extends java.io.Serializable
      * Like the {@link Pipe#Pipe(Skeleton, Skeleton) basic} constructor, but accepts
      * three stages instead of two.
      *
-     * @param stage1 The first stage of computation.
-     * @param stage2 The second stage of computation.
+     * @param child1 The first stage of computation.
+     * @param child2 The second stage of computation.
      * @param child3 The third stage of computation.
      */
     public <X extends Serializable, Y extends Serializable> Pipe(Skeleton<P, X> child1,
@@ -102,8 +102,8 @@ public class Pipe<P extends java.io.Serializable, R extends java.io.Serializable
      *
      * Each {@link Execute} will be wrapped in a {@link Seq} {@link Skeleton}.
      *
-     * @param stage1 The first stage of computation.
-     * @param stage2 The second stage of computation.
+     * @param child1 The first stage of computation.
+     * @param child2 The second stage of computation.
      * @param child3 The third stage of computation.
      */
     public <X extends Serializable, Y extends Serializable> Pipe(Execute<P, X> child1, Execute<X, Y> child2,
@@ -121,10 +121,10 @@ public class Pipe<P extends java.io.Serializable, R extends java.io.Serializable
      *
      * For building <code>Pipe</code>s with more than four stages, a <code>Pipe</code> nesting other <code>Pipe</code>'s can be used.
      *
-     * @param stage1 The first stage of computation.
-     * @param stage2 The second stage of computation.
+     * @param child1 The first stage of computation.
+     * @param child2 The second stage of computation.
      * @param child3 The third stage of computation.
-     * @param child4 The third stage of computation.
+     * @param child4 The fourth stage of computation.
      */
     public <X extends Serializable, Y extends Serializable, Z extends Serializable> Pipe(
             Skeleton<P, X> child1, Skeleton<X, Y> child2, Skeleton<Y, Z> child3, Skeleton<Z, R> child4) {
@@ -142,10 +142,10 @@ public class Pipe<P extends java.io.Serializable, R extends java.io.Serializable
      *
      * Each {@link Execute} will be wrapped in a {@link Seq} {@link Skeleton}.
      *
-     * @param stage1 The first stage of computation.
-     * @param stage2 The second stage of computation.
+     * @param child1 The first stage of computation.
+     * @param child2 The second stage of computation.
      * @param child3 The third stage of computation.
-     * @param child4 The third stage of computation.
+     * @param child4 The fourth stage of computation.
      */
     public <X extends Serializable, Y extends Serializable, Z extends Serializable> Pipe(
             Execute<P, X> child1, Execute<X, Y> child2, Execute<Y, Z> child3, Execute<Z, R> child4) {

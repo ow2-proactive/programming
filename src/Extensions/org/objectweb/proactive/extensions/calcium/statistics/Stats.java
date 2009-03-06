@@ -118,9 +118,8 @@ public interface Stats extends Serializable {
     public int getTreeSize();
 
     /**
-     * @param The muscle of interest
-     * @return The excercise of the specified muscle, or null if no
-     * statistics are available for this muscle.
+     * @param muscle The muscle of interest
+     * @return The exercise of the specified muscle, or null if no statistics are available for this muscle.
      */
     public Exercise getExcercise(Muscle muscle);
 

@@ -98,25 +98,25 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
      * Then, it will not be able to send any request, except to himself and to its parent. Such
      * restriction should be necessary when sending multiple requests in parallel.
      * 
-     * @see org.objectweb.proactive.core.body.proxy.SendingQueue
-     * @param isSteril
+     * @param isSterile
      * @param parentUID
+     * @see org.objectweb.proactive.core.body.proxy.SendingQueueProxy
      */
     public void setSterility(boolean isSterile, UniqueID parentUID);
 
     /**
      * Get the sterility status of the body
      * 
-     * @see org.objectweb.proactive.core.body.proxy.SendingQueue
      * @return the sterility status
+     * @see org.objectweb.proactive.core.body.proxy.SendingQueueProxy
      */
     public boolean isSterile();
 
     /**
      * Get the parent UniqueID of the body
      * 
-     * @see org.objectweb.proactive.core.body.proxy.SendingQueue
      * @return the parent UniqueID
+     * @see org.objectweb.proactive.core.body.proxy.SendingQueueProxy
      */
     public UniqueID getParentUID();
 
@@ -195,8 +195,6 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
      * 
      * @param methodName
      *            the name of the method
-     * @param parametersTypes
-     *            the types of the parameters of the method
      */
     public void removeImmediateService(String methodName);
 
@@ -248,11 +246,11 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
     public void terminate();
 
     /**
-     * @see terminate(). If completeACs is true, this call has the same behavior than terminate().
-     *      Otherwise, the ACThread is killed even if some ACs remain in the futurepool.
      * @param completeACs
      *            if true, this call has the same behavior than terminate(). Otherwise, the ACThread
      *            is killed even if some ACs remain in the futurepool.
+     * @see #terminate(). If completeACs is true, this call has the same behavior as terminate().
+     *      Otherwise, the ACThread is killed even if some ACs remain in the futurepool.
      */
     public void terminate(boolean completeACs);
 

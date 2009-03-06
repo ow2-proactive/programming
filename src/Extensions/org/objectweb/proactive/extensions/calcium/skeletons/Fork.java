@@ -57,7 +57,7 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
  * Each sub-parameter will be inputed into a different nested {@link Skeleton}. (MIMD)
  *
  * The results of the nested {@link Skeleton}s will be consolidated into a single one using
- * the specified {@ Conquer} object.
+ * the specified {@link Conquer} object.
  *
  * @author The ProActive Team
  */

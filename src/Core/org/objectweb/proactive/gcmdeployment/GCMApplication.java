@@ -112,7 +112,7 @@ public interface GCMApplication {
      * This method should be used carefully since it can hang forever. Safer, with timeout, fine
      * grained methods are available at GCMVirtualNode level.
      *
-     * @See {@link GCMVirtualNode}
+     * @see GCMVirtualNode
      */
     public void waitReady();
 
@@ -121,7 +121,7 @@ public interface GCMApplication {
      *
      * @param timeout The timeout in ms
      *  
-     * @See {@link GCMVirtualNode}
+     * @see GCMVirtualNode
      */
     public void waitReady(long timeout) throws ProActiveTimeoutException;
 
@@ -182,11 +182,11 @@ public interface GCMApplication {
      * Descriptor. An {@link IllegalStateException} is thrown if at least one GCMVirtualNode is
      * defined</b>
      *
-     * See {@link GCMVirtualNode}.getTopology()
      *
      * @return the topology of this GCM Application
      *
      * @see GCMVirtualNode
+     * @see GCMVirtualNode#getCurrentTopology()
      * @see Topology
      */
     public Topology getTopology() throws ProActiveException;
@@ -198,13 +198,13 @@ public interface GCMApplication {
      * Descriptor. An {@link IllegalStateException} is thrown if at least one GCMVirtualNode is
      * defined</b>
      *
-     * See {@link GCMVirtualNode}.updateTopology()
      * 
      * @param topology
      *            topology to be updated
      *
-     * @See GCMVirtualNode
-     * @See Topology
+     * @see GCMVirtualNode
+     * @see GCMVirtualNode#updateTopology(Topology)
+     * @see Topology
      */
     public void updateTopology(Topology topology) throws ProActiveException;
 

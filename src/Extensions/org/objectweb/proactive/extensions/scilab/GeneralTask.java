@@ -89,7 +89,7 @@ public interface GeneralTask extends Serializable {
 
     /**
      * Retrieve the job initialization script
-     * @return
+     * @return a String containing the job initialization script
      */
     public String getJobInit();
 

@@ -176,7 +176,6 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
      * The master will be created on top of a single resource deployed by this virtual node
      *
      * @param descriptorURL url of the ProActive descriptor
-     * @param vContract {@link VariableContract} to use when parsing the descriptor
      * @param masterVNName  name of the virtual node to deploy inside the ProActive descriptor
      * @param memoryFactory factory which will create memory for each new workers
      */

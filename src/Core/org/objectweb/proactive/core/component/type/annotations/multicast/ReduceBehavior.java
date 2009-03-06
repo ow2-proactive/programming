@@ -47,10 +47,10 @@ import org.objectweb.proactive.core.component.exceptions.ReductionException;
 public interface ReduceBehavior {
 
     /**
-     * Reduces the list of values provided according to an algorithm in order to get the result wishes.
+     * Reduces the list of values provided according to an algorithm in order to get the desired results.
      *
-     * @param the list of values which represents the list of the results of a call on a multicat interface.
-     * @return the results reduced.
+     * @param values the list of values which represents the list of the results of a call on a multicast interface
+     * @return the results reduced
      * @throws ReductionException if reduction fails
      */
     public Object reduce(List<?> values) throws ReductionException;

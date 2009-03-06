@@ -47,7 +47,7 @@ import org.objectweb.proactive.core.runtime.VMInformation;
  * @version 1.0,  2001/10/23
  * @since   ProActive 0.9
  *
- * @See {@link VMInformation}
+ * @see VMInformation
  */
 @PublicAPI
 public interface NodeInformation extends Serializable, Job {

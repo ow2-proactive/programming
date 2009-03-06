@@ -179,8 +179,6 @@ public interface GCMVirtualNode {
      *            <code>void method(Node, String virtualNodeName)</code>
      * @param withHistory
      *            If true already attached Node will generate notification too.
-     * @return true is returned if a method named methodName with the right signature exists, false
-     *         otherwise
      */
     // @snippet-start GCMVirtualNode_subscribeNodeAttachment
     public void subscribeNodeAttachment(Object client, String methodName, boolean withHistory)
@@ -216,8 +214,6 @@ public interface GCMVirtualNode {
      * @param methodName
      *            the method name to be called. The method must have this signature:
      *            <code>method(GCMVirtualNode)</code>
-     * @return true is returned if a method named methodName with the right signature exists and the
-     *         Virtual Node is not Greedy, false otherwise
      */
     public void subscribeIsReady(Object client, String methodName) throws ProActiveException;
 

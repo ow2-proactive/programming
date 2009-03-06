@@ -60,14 +60,13 @@ public interface TimerProvidable {
     public void stopTimer(int timerId);
 
     /**
-     * Starts the Serve timer and the timer associated to the currently served Method.
-     * @param timerId The id of the timer defined in <code>TimerWarehouse</code> class
+    /* Starts the serve timer then starts the associated method timer identified by an instance of java.lang.Method class.
+    /* @param method The method that identifies the timer     
      */
     public void startServeTimer(Method method);
 
     /**
-     * Starts the Serve timer and the timer associated to the currently served Method.
-     * @param timerId The id of the timer defined in <code>TimerWarehouse</code> class
+     * Stops the Serve timer.
      */
     public void stopServeTimer();
 

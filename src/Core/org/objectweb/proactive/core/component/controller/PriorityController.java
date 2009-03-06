@@ -112,7 +112,7 @@ public interface PriorityController {
      *            Name of the method
      * @param parametersTypes
      *            The type of the method's parameters signature
-     * @return
+     * @return a RequestPriority for a method
      */
     public RequestPriority getPriority(String interfaceName, String methodName, Class<?>[] parametersTypes);
 }

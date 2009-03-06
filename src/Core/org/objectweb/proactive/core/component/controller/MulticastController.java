@@ -92,7 +92,7 @@ public interface MulticastController extends CollectiveInterfaceController {
      * Check if the given multicast interface is bound to one of the given server interfaces
      *
      * @param clientItfName name of the multicast interface
-     * @param serverItfsComponent array of server interfaces
+     * @param serverItfs array of server interfaces
      * @return true if the given multicast interface of the component is bound on a component
      */
     public Boolean isBoundTo(Interface clientItfName, Interface[] serverItfs);

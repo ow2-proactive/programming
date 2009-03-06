@@ -84,7 +84,6 @@ public class SciTask extends AbstractGeneralTask {
 
     /**
      * add an input data
-     * @param name name of the data
      * @param data ptolemy Token data
      */
     public void addDataIn(SciData data) {

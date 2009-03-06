@@ -179,7 +179,6 @@ public class PAActiveObject {
      *            the name of the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
-     * @param classname)
      * @param constructorParameters
      *            the parameters of the constructor.
      * @return a reference (possibly remote) on a Stub of the newly created active object
@@ -202,7 +201,6 @@ public class PAActiveObject {
      *            the name of the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
-     * @param classname)
      * @param constructorParameters
      *            the parameters of the constructor.
      * @param nodeURL
@@ -235,7 +233,6 @@ public class PAActiveObject {
      *            the name of the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
-     * @param classname)
      * @param constructorParameters
      *            the parameters of the constructor.
      * @param node
@@ -260,10 +257,9 @@ public class PAActiveObject {
      * calling the newActive and the active object itself.
      * 
      * @param classname
-     *            the name of the class to instanciate as active
+     *            the name of the class to instantiate as active
      * @param genericParameters
      *            parameterizing types (of class
-     * @param classname)
      * @param constructorParameters
      *            the parameters of the constructor of the object to instantiate as active. If some
      *            parameters are primitive types, the wrapper class types should be given here. null
@@ -615,7 +611,6 @@ public class PAActiveObject {
      *            The object to turn active
      * @param genericParameters
      *            parameterizing types (of class
-     * @param classname)
      * @param nameOfTargetType
      *            the fully qualified name of the type the stub class should inherit from. That type
      *            can be less specific than the type of the target object.
