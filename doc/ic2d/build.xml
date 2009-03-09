@@ -102,8 +102,7 @@
 
 
 	<target name="doc.IC2D.javadoc.complete" depends="compile.util, deploy"  description="Generate the ProActive Optimizing complete javadoc">
- 	  <mkdir dir="${docs.tmp.dir}" /> 
-	  <javadoc  
+ 	  <javadoc  
 	      destdir="../doc/built/IC2D/api_complete" 
 	      author="true" 
 	      version="true" 

@@ -104,7 +104,6 @@
 	
 
 	<target name="doc.ProActive.javadoc.complete" depends="compile.util, deploy" description="Generate the ProActive Programming complete javadoc ">
-	  <mkdir dir="${docs.tmp.dir}" />
 	  <javadoc  
 	      destdir="../doc/built/ProActive/api_complete" 
 	      author="true" 
@@ -245,6 +244,7 @@
                 <package name="org.objectweb.proactive.extra.*" /> 
             </group>
             
-        </javadoc>			
+        </javadoc>
+	<delete dir="${docs.tmp.dir}" />
     </target>
 </project>
