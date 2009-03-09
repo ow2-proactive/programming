@@ -42,8 +42,7 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
  * The monitor controller interface. This controller manages the statistics for each methods exposed by the
  * component server interfaces. It's an optional controller.
  * <br>
- * The statistics of a given method are stored in a {@link org.objectweb.proactive.core.component.controller.MethodStatistics}
- * object.
+ * The statistics of a given method are stored in a {@link MethodStatistics} object.
  * <br>
  * The implementation class org.objectweb.proactive.core.component.controller.MonitorControllerImpl provides in
  * immediate services the following methods: getStatistics(String itfName, String methodName),
@@ -100,12 +99,12 @@ public interface MonitorController {
 
     /**
      * Get the statistics for each methods exposed by the component server interfaces.
-     * Use the {@link  org.objectweb.proactive.core.component.controller.MonitorControllerHelper.generateKey}
+     * Use the {@link MonitorControllerHelper#generateKey(String, String, Class[])}
      * method to retrieve desired method statistics.
      * 
      * @return All the statistics in a map structured like this
      *      Map<itfName-MethodName-ClassNameParam1-ClassNameParam2-..., MethodStatistics>.
-     * @see org.objectweb.proactive.core.component.controller.MonitorControllerHelper.generateKey
+     * @see MonitorControllerHelper#generateKey(String, String, Class[])
      */
     public Map<String, MethodStatistics> getAllStatistics();
 }
