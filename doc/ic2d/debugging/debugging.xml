@@ -4,7 +4,7 @@
 	<info>
 		<title>Using IC2D debugging features</title>
 	</info>
-	<para>IC2D comes with several plug-ins to help developers in the process of
+	<para>IC2D comes with several plug-ins to help developers with the process of
 	debugging their applications built above ProActive.</para>
 
 
@@ -12,32 +12,31 @@
 	<info>
 		<title>Debugging a ProActive Application using IC2D</title>
 	</info>
-	<para> The communication between a debugger (like jdb or eclipse) and a
-		Java virtual machine, use a socket connection. The debugger must know the URL of the
-		jvm and the port number enable for this socket connection, but no port
-		is enable by default on the jvm therefore this jvm must be launched
-		with the correct arguments. IC2D allow to monitor many jvm on
-		different host, the IC2D debugger connection tool is intended for give
-		the informations of a jvm to branch a debugger.</para>
+	<para> The communication between a debugger (like JDB or Eclipse) and a
+		Java Virtual Machine (JVM) uses a socket connection. The debugger has therefore to know the URL of the
+		JVM and the port number available for this socket connection. However, no port number
+		is available by default on the JVM. Thus, in order to be able to launch the JVM
+		with the correct arguments, the IC2D debugger connection tool is intended to give
+		the informations needed to the debugger connection.</para>
 		<para>
-		First of all, JVM (ProActive Runtimes) must be started with the debug command line argument,
-		otherwise it is not possible to establish a remote connection to these JVMs. The additional argument would be of the form:
+		First of all, JVMs (ProActive Runtimes) have to be started with the debug command line argument,
+		otherwise it is not possible to establish a remote connection to these JVMs. The additional argument is of the following form:
 		 <programlisting>-DdebugID=padebug_someDeploymentId -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0,launch='java -cp path/to/ProActive.jar org.objectweb.proactive.core.debug.dconnection.DebuggeePortSetter padebug_someDdeploymentId'</programlisting>
 		 In order to facilitate the use of the debugging features, the GCMA descriptor has been extended to easily start runtimes
 		 in debug mode.
-		 One has to add the tag &lt;debug/&gt; as child of the application/proactive tag. An example is shown hereafter:
+		 One has to add the tag &lt;debug/&gt; as a child of the application/proactive tag. An example is shown hereafter:
 		  <programlisting><textobject><textdata fileref="debugging/GCMA.xml"/></textobject></programlisting>
 		</para>
 	<section xml:id="Connection">
 		<info>
 			<title>The connection</title>
 		</info>
-		<para> The IC2D debugger connection is a little different than a
-			simple debugger connection. When the user want to connect a debugger
-			on a remote jvm, the debugger is in fact connect on localhost on the
-			IC2D jvm. This is an active object (created when the user send the
-			connection request) that transmit, with a proactive connection, the
-			debugger informations and requests to the jvm.</para>
+		<para> The IC2D debugger connection differs slightly from a
+			simple debugger connection. When a user wants to connect a debugger
+			to a remote JVM, he actually has to connect it to the local IC2D JVM. 
+			Then, it is an active object (created when the user sends the
+			connection request) that is in charge of transmitting, through a proactive connection, 
+			the debugger informations and requests to the JVM.</para>
 		<figure xml:id="connectionfig">
 			<info>
 				<title>connection</title>
@@ -54,12 +53,12 @@
 		<info>
 			<title>How to use the IC2D debugger connection tools</title>
 		</info>
-		<para> When the user make a right click on a monitored jmv, he can
-			select an option (connect a debugger) that show him the port number
-			to connect his debugger on localhost.</para>
+		<para> When a user right clicks on a monitored JVM, he can
+			select an option (connect a debugger) that shows him the port number
+			of his local debugger.</para>
 		<figure xml:id="menu">
 			<info>
-				<title>menu</title>
+				<title>Menu</title>
 			</info>
 			<mediaobject>
 				<imageobject>
@@ -70,7 +69,7 @@
 		</figure>
 		<figure xml:id="popup">
 			<info>
-				<title>popup</title>
+				<title>Popup</title>
 			</info>
 			<mediaobject>
 				<imageobject>
@@ -80,10 +79,10 @@
 			</mediaobject>
 		</figure>
 		<para> Next the user has just to connect his debugger. For example:
-			The eclipse debugger</para>
+			The Eclipse debugger</para>
 		<figure xml:id="eclipseConnection">
 			<info>
-				<title>eclipse connection</title>
+				<title>Eclipse connection</title>
 			</info>
 			<mediaobject>
 				<imageobject>
@@ -94,7 +93,7 @@
 		</figure>
 		<figure xml:id="eclipseDebugger">
 			<info>
-				<title>eclipse debugger</title>
+				<title>Eclipse debugger</title>
 			</info>
 			<mediaobject>
 				<imageobject>
@@ -105,7 +104,7 @@
 		</figure>
 		<figure xml:id="communication">
 			<info>
-				<title>communication</title>
+				<title>Communication</title>
 			</info>
 			<mediaobject>
 				<imageobject>
@@ -121,7 +120,7 @@
 
 	<info><title>Step by step mode</title></info>
 
-    <figure xml:id="StepByStepFigure"><info><title>step by step preview</title></info>
+    <figure xml:id="StepByStepFigure"><info><title>Step by step preview</title></info>
        <mediaobject>
          <imageobject>
              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/all.png" format="PNG"/>
@@ -132,15 +131,15 @@
 	<section xml:id="BreakpointsOverview"><info><title>Breakpoints Overview</title></info>
 
 	  <para>
-		The <emphasis role="bold">step by step</emphasis> mode allows to control the execution of an active object at service level.
-		There are several types of breakpoints localized at different steps of the execution of a service.
-		This breakpoints are used to stop (when it is enabled) and restart (when it is disabled) the execution of the active object.
+		The <emphasis role="bold">step by step</emphasis> mode allows to control the execution of an active object at the service level.
+		There are several types of breakpoints located at different steps of the service execution.
+		These breakpoints are used to stop (when it is enabled) and restart (when it is disabled) an active object execution.
 	  </para>
 
-	  <section xml:id="StandardBreakpoints"><info><title>standard breakpoints</title></info>
+	  <section xml:id="StandardBreakpoints"><info><title>Standard breakpoints</title></info>
 
 		  <para>
-			The standard breakpoints are localized inside the service thread of an active object.
+			The standard breakpoints are located inside the service thread of an active object.
 			These breakpoints do not block the other threads (like immediate services, JMX, ...).
 			There are 3 points:
 		  </para>
@@ -149,8 +148,8 @@
 			    <listitem>
 			      <para>
 				<emphasis role="bold">New service: </emphasis>
-				This breakpoint is localized before the beginning of the service.
-				The service do not start while the breakpoint is enabled.
+				This breakpoint is located before the beginning of the service.
+				If the breakpoint is enabled, then the service will not start.
 			      </para>
 			      <para>
 				Enabled by default.
@@ -160,8 +159,8 @@
 			    <listitem>
 			      <para>
 				<emphasis role="bold">End service: </emphasis>
-				This breakpoint is localized after the ending of the service.
-				The service is finished yet and no other services can start while the breakpoint is enabled.
+				This breakpoint is located after the end of the service.
+				Once the service finished, no other service will start if the breakpoint is enabled.
 			      </para>
 				<para>
 				Enabled by default.
@@ -171,9 +170,8 @@
 			    <listitem>
 			      <para>
 				<emphasis role="bold">Send request: </emphasis>
-				This breakpoint is localized before sending a request to an active object.
-				Send request is available for half bodies.
-				The request is not added at request queue of the active object.
+				This breakpoint is located before sending a request to an active object.
+				The request is not added to the request queue of the active object.
 			      </para>
 				<para>
 				Disabled by default.
@@ -186,17 +184,17 @@
 		<section xml:id="ImmediateService"><info><title>Immediate service breakpoints</title></info>
 
 			<para>
-				The immediate service breakpoints are localized inside each immediate service threads.
-				The functionality of this breakpoints is the same as the standard breakpoints.
+				The immediate service breakpoints are located inside each immediate service thread.
+				The functionalities of these breakpoints is the same than those of standard breakpoints.
 				For one object, there may be several immediate services blocked at the same time.
-		There are 2 points for this specific service:
+				There are 2 points for this specific service:
 			</para>
 
 			<itemizedlist>
 		    <listitem>
 		      <para>
 			<emphasis role="bold">New immediate service: </emphasis>
-						This breakpoint is localized before the beginning of the immediate service.
+						This breakpoint is located before the beginning of the immediate service.
 		      </para>
 			<para>
 			Enabled by default.
@@ -206,7 +204,7 @@
 		    <listitem>
 		      <para>
 			<emphasis role="bold">End immediate service: </emphasis>
-			This breakpoint is localized after the ending of the immediate service.
+			This breakpoint is located after the end of the immediate service.
 		      </para>
 			<para>
 			Enabled by default.
@@ -223,12 +221,12 @@
 			<section xml:id="EnableDisableNextStep"><info><title>Enable / Disable / NextStep</title></info>
 
 				<para>
-					 The main functionality of the step by step mode is to stop and restart the active object (enable/disable button).
-					 This functionality is available for one object or each objects in a node, a jvm, a host, a world (all object visible on IC2D monitoring).
-					 When an active object is stopped it is possible to restart it until the next breakpoint enable (next step button).
+					 The main functionality of the step by step mode is to stop and restart an active object (enable/disable button).
+					 This functionality is available for one object or for each object in a node, a JVM, a host or a world (all object visible on IC2D monitoring).
+					 If an active object has been stopped, it is possible to restart it up to the next enabled breakpoint (next step button).
 				</para>
 
-				<figure xml:id="PauseFigure"><info><title>pause</title></info>
+				<figure xml:id="PauseFigure"><info><title>Pause</title></info>
 		       <mediaobject>
 		         <imageobject>
 		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/suspendResume.png" format="PNG"/>
@@ -242,8 +240,8 @@
 		  <section xml:id="Filters"><info><title>Filters</title></info>
 
 			  <para>
-				The filter tools allow to enable or disable some specific breakpoints.
-				For example it is possible to enable New service and send request breakpoints, and disable the others.
+				The filter tool allows to enable or disable some specific breakpoints.
+				For example, it is possible to enable a new service and send request breakpoints, and disable the others.
 			  </para>
 			  
 			  <figure xml:id="FiltersFigure"><info><title>filters</title></info>
@@ -267,8 +265,8 @@
 		    <section xml:id="SlowMotion"><info><title>Slow motion</title></info>
 
 			  <para>
-				This tools enable a delay in the breakpoints.
-				When the active object stop in a breakpoint, it performs a next step automatically after the delay.
+				This tool enables to introduce a delay after the breakpoints.
+				Using this tool, the active object will stop at each breakpoint and will automatically restart after the delay.
 			  </para>
 
 				<figure xml:id="SlowMotionFigure"><info><title>slow motion</title></info>
@@ -285,13 +283,13 @@
 
 			  <para>
 				  This view displays some informations of an active object when it is selected.
-				  This active object can be restarted with this view if it is blocked in a breakpoint.
+				  From this view, one can restart a previously blocked active object.
 			  </para>
 			  <para>
-					It possible to choose the blocked service to restart (immediate or not).
+				  This tool also enables to choose the blocked service to restart (immediate or not).
 			  </para>
 
-			  <figure xml:id="InformationFigure"><info><title>information</title></info>
+			  <figure xml:id="InformationFigure"><info><title>Information</title></info>
 		       <mediaobject>
 		         <imageobject>
 		             <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="debugging/stepByStep/images/information.png" format="PNG"/>
