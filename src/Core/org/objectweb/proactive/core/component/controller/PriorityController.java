@@ -82,7 +82,6 @@ public interface PriorityController {
      *            Name of the method on which set the priority
      * @param priority
      *            The priority
-     * @return true if success, else false
      */
     public void setPriority(String interfaceName, String methodName, RequestPriority priority);
 
@@ -98,7 +97,6 @@ public interface PriorityController {
      *            The type of the method's parameters signature
      * @param priority
      *            The priority
-     * @return true if success, else false
      */
     public void setPriority(String interfaceName, String methodName, Class<?>[] parametersTypes,
             RequestPriority priority);
@@ -112,7 +110,7 @@ public interface PriorityController {
      *            Name of the method
      * @param parametersTypes
      *            The type of the method's parameters signature
-     * @return a RequestPriority for a method
+     * @return The priority of the given method
      */
     public RequestPriority getPriority(String interfaceName, String methodName, Class<?>[] parametersTypes);
 }
