@@ -7,7 +7,7 @@ then
 	CLASSPATH=.
 fi
 
-. $PROACTIVE/scripts/unix/env.sh
+. $PROACTIVE/examples/env.sh
 
 JAVACMD=$JAVACMD" -Dfractal.provider=org.objectweb.proactive.core.component.Fractive"
 

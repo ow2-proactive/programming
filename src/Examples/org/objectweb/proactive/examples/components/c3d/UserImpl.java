@@ -76,8 +76,7 @@ public class UserImpl extends C3DUser implements BindingController, User {
 
         // Register the User in the Registry.
         try {
-            Fractive.register(Fractive.getComponentRepresentativeOnThis(), URIBuilder.buildURIFromProperties(
-                    "localhost", "User").toString());
+            Fractive.registerByName(Fractive.getComponentRepresentativeOnThis(), "User");
         } catch (IOException e) {
             logger.error("Registering 'User' for future lookup failed");
             e.printStackTrace();

@@ -44,7 +44,7 @@ public class Main {
         if ((args.length != 2) && (args.length != 1)) {
             System.out.println("Parameters : descriptor_file [fractal_ADL_file] " +
                 "\n        The first file describes your deployment of computing nodes." +
-                "\n                You may want to try ../../../descriptors/components/C3D_all.xml" +
+                "\n                You may want to try ../../descriptors/components/C3D_all.xml" +
                 "\n        The second file describes your components layout. " +
                 "\n                Default is " + DEFAULT_ADL);
 
