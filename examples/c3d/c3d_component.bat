@@ -15,7 +15,7 @@ goto doit
 
 :doit
 SETLOCAL ENABLEDELAYEDEXPANSION
-IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..\..
+IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
 call "..\init.bat"
 set JAVA_CMD=%JAVA_CMD% -Dfractal.provider=org.objectweb.proactive.core.component.Fractive
 %JAVA_CMD%  org.objectweb.proactive.examples.components.c3d.Main %*
