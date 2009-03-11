@@ -432,7 +432,7 @@ public enum PAProperties {
      *  TIMIT
      */
 
-    /** TODO vbodnart Describe this property */
+    /** this property indicates the list (comma separated) of the TimIt counters to activate */
     PA_TIMIT_ACTIVATION("proactive.timit.activation", PAPropertiesType.STRING),
 
     /* ------------------------------------
