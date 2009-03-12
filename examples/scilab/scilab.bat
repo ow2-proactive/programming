@@ -9,7 +9,7 @@ IF NOT DEFINED PROACTIVE set PROACTIVE=..\..
 
 call "%..\init.bat"
 call scilab_env.bat
-%JAVA_CMD% org.objectweb.proactive.extensions.scilab.gui.MSFrame
+%JAVA_CMD% org.objectweb.proactive.examples.scilab.gui.MSFrame
 
 ENDLOCAL
 
