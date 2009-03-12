@@ -45,6 +45,7 @@ import org.objectweb.proactive.core.xml.VariableContract;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
 import org.objectweb.proactive.core.group.Group;
+import org.objectweb.proactive.core.group.ExceptionListException;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -992,9 +993,22 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         // We clear the workers activity memory
         workersActivity.clear();
         // We tell all the worker to clear their pending tasks
-        workerGroupStub.clear();
+        try {
+            workerGroupStub.clear();
+        } catch (ExceptionListException exl) {
+            for (Exception ex : exl) {
+                ex.printStackTrace();
+            }
+        }
+
         // We clear every sleeping workers registered
-        sleepingGroup.clear();
+        try {
+            sleepingGroup.clear();
+        } catch (ExceptionListException exl) {
+            for (Exception ex : exl) {
+                ex.printStackTrace();
+            }
+        }
         // We clear the repository
         repository.clear();
         isClearing = true;
