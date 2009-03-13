@@ -72,7 +72,6 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
-import org.objectweb.proactive.extensions.annotation.Sterile;
 
 
 @SuppressWarnings("serial")
