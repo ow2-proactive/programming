@@ -34,6 +34,7 @@ package functionalTests.activeobject.request.forgetonsend;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.extensions.annotation.Sterile;
 
+
 public class B {
 
     private static String services;
