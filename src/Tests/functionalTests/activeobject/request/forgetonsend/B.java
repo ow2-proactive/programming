@@ -31,6 +31,9 @@
  */
 package functionalTests.activeobject.request.forgetonsend;
 
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.extensions.annotation.Sterile;
+
 public class B {
 
     private static String services;
@@ -70,9 +73,26 @@ public class B {
         services += "f";
     }
 
+    @Sterile
+    public void g() {
+        services += "g";
+    }
+
+    public void h(SlowlySerializableObject o) {
+        services += "h";
+    }
+
+    public void i(SlowlySerializableObject o) {
+        services += "i";
+    }
+
     public String takeFast() {
         String result = services;
         services = "";
         return result;
+    }
+
+    public void setAsImmediate(String methodName) {
+        PAActiveObject.setImmediateService(methodName);
     }
 }

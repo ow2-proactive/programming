@@ -31,11 +31,14 @@
  */
 package org.objectweb.proactive.core.body.proxy;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
+
+import javassist.scopedpool.ScopedClassPool;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Active;
@@ -69,6 +72,7 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
+import org.objectweb.proactive.extensions.annotation.Sterile;
 
 
 @SuppressWarnings("serial")
@@ -95,7 +99,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
     // -- CONSTRUCTORS -----------------------------------------------
     //
 
-    /**
+    /*
      * Empty, no args constructor
      */
     public UniversalBodyProxy() {
@@ -107,11 +111,11 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         // this.isLocal = LocalBodyStore.getInstance().getLocalBody(getBodyID()) != null;
     }
 
-    /**
+    /*
      * Instantiates an object of class BodyProxy, creates a body object (referenced either via the
      * instance variable <code>localBody</code> or <code>remoteBody</code>) and passes the
-     * ConstructorCall object <code>c</code> to the body, which will then handle the creation of
-     * the reified object (That's it !). parameter contains either : &lt;Node, Active,
+     * ConstructorCall object <code>c</code> to the body, which will then handle the creation of the
+     * reified object (That's it !). parameter contains either : &lt;Node, Active,
      * MetaObjectFactory> or &lt;UniversalBody>
      */
     public UniversalBodyProxy(ConstructorCall constructorCall, Object[] parameters) throws ProActiveException {
@@ -289,35 +293,46 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             if (sendingQueue != null) {
                 // Some FOS have been declared on the local body
 
+                // Delegating rendezvous is forbidden for loopback calls
+                boolean isLoopbackCall = sourceBody.getID().equals(this.getBodyID());
+
                 // Retrieve the SQP attached to this proxy (and creates it if needed)
-                SendingQueueProxy sqp = sendingQueue.getSendingQueueProxyFor(this);
+                SendingQueueProxy sqp = isLoopbackCall ? null : sendingQueue.getSendingQueueProxyFor(this);
 
-                if (sqp.isFosRequest(methodCall.getName())) {
+                if (!isLoopbackCall && sqp.isFosRequest(methodCall.getName())) {
                     /*
-                     * ** ForgetOnSend Strategy **
+                     * ForgetOnSend Strategy (delegated rendezvous)
                      */
-                    // A FOS request must be sterile
+                    // FOS requests must be sterile
                     methodCall.setSterility(true);
-
                     // if needed, waking up the threadPool that will retrieve and send our requests
                     sendingQueue.wakeUpThreadPool();
-
                     // enqueue the request for future sending
                     sqp.put(new RequestToSend(methodCall, future, (AbstractBody) sourceBody, this));
 
                 } else {
                     /*
-                     * ** Standard Strategy Mixed With FOS**
+                     * Standard Strategy Mixed With FOS (with rendezvous)
                      */
                     // Some FOS requests have already be sent from this body.
-                    // To avoid Causal Ordering disruptions, we must wait until all the
-                    // pending FOS requests to send from the local body are sent
-                    sendingQueue.waitForAllSendingQueueEmpty();
+                    // To avoid Causal Ordering disruptions, we must wait until
+                    // some or all the pending FOS requests to send from the
+                    // local body are sent, depending on the sterility status
+                    // of the request
+                    if (!isLoopbackCall && (methodCall.isSterile() || methodCall.isAnnotedSterile())) {
+                        // useful if annotedSterile but not set as sterile yet
+                        methodCall.setSterility(true);
+                        // only waits on the destination sending queue
+                        sqp.waitForEmpty();
+                    } else {
+                        // waits on all the sending queues
+                        sendingQueue.waitForAllSendingQueueEmpty();
+                    }
                     sendRequest(methodCall, future, sourceBody);
                 }
             } else {
                 /*
-                 * ** Standard Strategy **
+                 * Standard Strategy
                  */
                 // FOS requests have never be sent from this body.
                 sendRequest(methodCall, future, sourceBody);

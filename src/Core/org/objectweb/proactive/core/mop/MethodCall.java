@@ -31,6 +31,7 @@
  */
 package org.objectweb.proactive.core.mop;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -715,6 +716,17 @@ public class MethodCall implements java.io.Serializable, Cloneable {
      */
     public void setSterility(boolean isSterile) {
         this.isSterile = isSterile;
+    }
+
+    public boolean isAnnotedSterile() {
+        String classname = "org.objectweb.proactive.extensions.annotation.Sterile";
+        try {
+            Class sterile = Class.forName(classname);
+            return getReifiedMethod().isAnnotationPresent(sterile);
+
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
     //

@@ -31,12 +31,18 @@
  */
 package functionalTests.activeobject.request.forgetonsend;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
 
 import functionalTests.FunctionalTest;
+
+import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -45,12 +51,11 @@ import functionalTests.FunctionalTest;
 
 public class TestAnnotation extends FunctionalTest {
 
-    private boolean result;
     private B b1, b2;
-    private SlowlySerializableObject obj1, obj4;
 
     /**
-     * Check if @Sterile annotation is taken into account
+     * Check if @Sterile annotation is taken into account for distinction
+     * between local wait and global wait
      */
     @Test
     public void ptpAnnotation() {
@@ -63,16 +68,27 @@ public class TestAnnotation extends FunctionalTest {
             e.printStackTrace();
         }
 
-        PAActiveObject.setForgetOnSend(b1, "b");
+        PAActiveObject.setForgetOnSend(b1, "h");
+        PAActiveObject.setForgetOnSend(b2, "f");
+        PAActiveObject.setForgetOnSend(b2, "i");
 
-        result = true;
+        b1.setAsImmediate("takeFast");
+        b2.setAsImmediate("takeFast");
 
-        b1.h(new SlowlySerializableObject("test", 1000)); // fos + future
+        b1.a();
+        b2.a();
+
+        b1.h(new SlowlySerializableObject("test", 200)); // slow fos
+        b2.i(new SlowlySerializableObject("test", 400)); // slow fos
         b1.g(); // standard, sterile annotation (=> only waits on b1)
+        b1.e(); // standard, without annotation (=> global wait)
 
-        String res = b1.takeFast(); // standard
-        if (!res.equals("hg")) {
-            result = false;
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e1) {
+            e1.printStackTrace();
         }
+
+        assertTrue(b1.takeFast().equals("aahgie"));
     }
 }
