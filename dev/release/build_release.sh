@@ -98,9 +98,7 @@ rm -Rf ./compile/lib/clover.*
 # Remove temporary files
 rm compile/junit*properties
 rm -Rf classes/
-rm -Rf doc/tmp/
-rm -Rf doc/src_ic2d
-rm -Rf doc/ic2d.xml
+rm -Rf doc/ic2d
 
 sed -i "s/{version}/$VERSION/" README.txt
 
