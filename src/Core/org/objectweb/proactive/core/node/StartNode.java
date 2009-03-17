@@ -185,7 +185,7 @@ public class StartNode {
                 if (nodeURL == null) {
                     node = NodeFactory.getDefaultNode();
                 } else {
-                    node = NodeFactory.createLocalNode(nodeURL, !noRebind, null, null, null);
+                    node = NodeFactory.createNode(nodeURL, !noRebind, null, null, null);
                 }
 
                 logger.info("OK. Node " + node.getNodeInformation().getName() + " ( " +
