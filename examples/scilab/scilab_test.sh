@@ -1,14 +1,8 @@
 #!/bin/sh
 
-
-if [ -z "$PROACTIVE" ]
-then
 workingDir=`dirname $0`
-PROACTIVE=$workingDir/../../../.
-CLASSPATH=.
-fi
-. $PROACTIVE/scripts/unix/env.sh
-. $PROACTIVE/scripts/unix/scilab/scilab_env.sh
+. $workingDir/../env.sh
+. $workingDir/scilab_env.sh
 
 echo
 echo --- Scilab Test ---
