@@ -34,6 +34,7 @@ package org.objectweb.proactive.core.remoteobject.http.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -42,10 +43,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.remoteobject.http.HTTPTransportServlet;
 import org.objectweb.proactive.core.remoteobject.http.util.exceptions.HTTPRemoteException;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -55,6 +59,8 @@ import org.objectweb.proactive.core.util.URIBuilder;
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class HttpMessageSender {
+    final static private Logger logger = ProActiveLogger.getLogger(Loggers.HTTP_CLIENT);
+
     public static final String SERVICE_REQUEST_CONTENT_TYPE = "application/java";
     private String url;
 
@@ -117,15 +123,38 @@ public class HttpMessageSender {
 
             //Get data returned in the connection
             DataInputStream in = null;
-
             in = new DataInputStream(new BufferedInputStream(connection.getInputStream()));
 
-            int a = connection.getContentLength();
+            byte[] buf = new byte[0];
+            byte[] acc = new byte[1024];
+            int acc_i = 0;
+            boolean cont = true;
+            while (cont) {
+                try {
+                    if (acc_i == acc.length) {
+                        // acc is full flush it into buf
+                        byte[] old = buf;
+                        buf = new byte[old.length + acc.length];
+                        System.arraycopy(old, 0, buf, 0, old.length);
+                        System.arraycopy(acc, 0, buf, old.length, acc.length);
 
-            byte[] b = new byte[a];
+                        acc_i = 0;
+                    }
 
-            in.readFully(b);
-            Object returnedObject = HttpMarshaller.unmarshallObject(b);
+                    acc[acc_i] = in.readByte();
+                    acc_i++;
+                } catch (EOFException e) {
+                    cont = false;
+                }
+            }
+
+            // flush acc into buf
+            byte[] old = buf;
+            buf = new byte[old.length + acc_i];
+            System.arraycopy(old, 0, buf, 0, old.length);
+            System.arraycopy(acc, 0, buf, old.length, acc_i);
+
+            Object returnedObject = HttpMarshaller.unmarshallObject(buf);
             return returnedObject;
 
             //            if (returnedObject instanceof Exception)

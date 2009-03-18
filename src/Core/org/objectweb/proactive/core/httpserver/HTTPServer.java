@@ -51,7 +51,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * It is based on Jetty
  */
 public class HTTPServer {
-    final private static Logger logger = ProActiveLogger.getLogger(Loggers.HTTPSERVER);
+    final private static Logger logger = ProActiveLogger.getLogger(Loggers.HTTP_SERVER);
 
     private static HTTPServer httpServer;
 

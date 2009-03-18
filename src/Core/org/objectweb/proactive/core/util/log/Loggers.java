@@ -77,7 +77,8 @@ public interface Loggers {
     public static final String LOAD_BALANCING = CORE + ".loadbalancing";
     public static final String IC2D = CORE + ".ic2d";
     public static final String EXAMPLES = CORE + ".examples";
-    public static final String HTTPSERVER = CORE + ".httpserver";
+    public static final String HTTP_SERVER = CORE + ".http.server";
+    public static final String HTTP_CLIENT = CORE + ".http.client";
 
     public static final String BNB = CORE + "bnb";
 
