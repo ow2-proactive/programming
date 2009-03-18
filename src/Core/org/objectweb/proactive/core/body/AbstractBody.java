@@ -1195,28 +1195,6 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         this.securityManager.setProActiveSecurityManager(user, policyServer);
     }
 
-    /**
-     * @param obj
-     * @return
-     */
-    public static UniversalBody getRemoteBody(Object obj) {
-        // Check if obj is really a reified object
-        if (!(MOP.isReifiedObject(obj))) {
-            throw new ProActiveRuntimeException("The given object " + obj + " is not a reified object");
-        }
-
-        // Find the appropriate remoteBody
-        org.objectweb.proactive.core.mop.Proxy myProxy = ((StubObject) obj).getProxy();
-
-        if (myProxy == null) {
-            throw new ProActiveRuntimeException("Cannot find a Proxy on the stub object: " + obj);
-        }
-
-        BodyProxy myBodyProxy = (BodyProxy) myProxy;
-        UniversalBody body = myBodyProxy.getBody().getRemoteAdapter();
-        return body;
-    }
-
     public Debugger getDebugger() {
         return debugger;
     }

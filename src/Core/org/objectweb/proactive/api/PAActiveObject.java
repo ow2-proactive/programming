@@ -898,7 +898,7 @@ public class PAActiveObject {
      */
     @Deprecated
     public static void register(Object obj, String url) throws java.io.IOException {
-        UniversalBody body = AbstractBody.getRemoteBody(obj);
+        UniversalBody body = getRemoteBody(obj);
 
         try {
             body.register(url);
@@ -913,7 +913,7 @@ public class PAActiveObject {
     }
 
     public static String registerByName(Object obj, String name) throws IOException {
-        UniversalBody body = AbstractBody.getRemoteBody(obj);
+        UniversalBody body = getRemoteBody(obj);
 
         String url = body.registerByName(name);
         body.setRegistered(true);
@@ -1017,7 +1017,7 @@ public class PAActiveObject {
         UniversalBody targetedBody = null;
         try {
             // reified object is checked in getRemoteBody
-            targetedBody = AbstractBody.getRemoteBody(target);
+            targetedBody = getRemoteBody(target);
             targetedBody.receiveFTMessage(PAActiveObject.hb);
             return true;
         } catch (IOException e) {
@@ -1124,7 +1124,7 @@ public class PAActiveObject {
      * @return the URL of the node of the <code>activeObject</code>.
      */
     public static String getActiveObjectNodeUrl(Object activeObject) {
-        UniversalBody body = AbstractBody.getRemoteBody(activeObject);
+        UniversalBody body = getRemoteBody(activeObject);
         return body.getNodeURL();
     }
 
@@ -1264,7 +1264,7 @@ public class PAActiveObject {
      * Enable the automatic continuation mechanism for this active object.
      */
     public static void enableAC(Object obj) throws java.io.IOException {
-        UniversalBody body = AbstractBody.getRemoteBody(obj);
+        UniversalBody body = getRemoteBody(obj);
         body.enableAC();
     }
 
@@ -1272,7 +1272,7 @@ public class PAActiveObject {
      * Disable the automatic continuation mechanism for this active object.
      */
     public static void disableAC(Object obj) throws java.io.IOException {
-        UniversalBody body = AbstractBody.getRemoteBody(obj);
+        UniversalBody body = getRemoteBody(obj);
         body.disableAC();
     }
 
@@ -1369,5 +1369,23 @@ public class PAActiveObject {
         } catch (MOPException e) {
             throw new ProActiveRuntimeException("Cannot create Stub for this Body e=" + e);
         }
+    }
+
+    private static UniversalBody getRemoteBody(Object obj) {
+        // Check if obj is really a reified object
+        if (!(MOP.isReifiedObject(obj))) {
+            throw new ProActiveRuntimeException("The given object " + obj + " is not a reified object");
+        }
+
+        // Find the appropriate remoteBody
+        org.objectweb.proactive.core.mop.Proxy myProxy = ((StubObject) obj).getProxy();
+
+        if (myProxy == null) {
+            throw new ProActiveRuntimeException("Cannot find a Proxy on the stub object: " + obj);
+        }
+
+        BodyProxy myBodyProxy = (BodyProxy) myProxy;
+        UniversalBody body = myBodyProxy.getBody().getRemoteAdapter();
+        return body;
     }
 }
