@@ -75,7 +75,7 @@ JMXNotification.getInstance().subscribe(ObjectName objectName, NotificationListe
 		</section>
 		<section xml:id="exampleJMXNotificationListener"><info><title>example of notification listener</title></info>
 			
-<screen>
+<programlisting language="java">
 import javax.management.Notification;
 import javax.management.NotificationListener;
 import org.objectweb.proactive.core.UniqueID;
@@ -96,7 +96,7 @@ public class MyListener implements NotificationListener{
 			System.out.println("Active Object created with id:"+id);
 		}
 	}
-}</screen>
+}</programlisting>
 		</section>
 		<section xml:id="JMXProActiveNotificationSent"><info><title>The JMX notifications sent by the ProActive MBean</title></info>
 			
