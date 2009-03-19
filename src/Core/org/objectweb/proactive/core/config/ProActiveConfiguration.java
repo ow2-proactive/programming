@@ -240,11 +240,13 @@ public class ProActiveConfiguration {
     }
 
     private Properties getUserProperties() {
+        boolean defaultFile = false;
         Properties userProps = new Properties();
 
         /* Filename of the user configuration file */
         String fname = System.getProperty(PAProperties.PA_CONFIGURATION_FILE.getKey());
         if (fname == null) {
+            defaultFile = true;
             fname = PROACTIVE_USER_CONFIG_FILENAME;
         }
 
@@ -261,7 +263,7 @@ public class ProActiveConfiguration {
             logger.debug("User Config File is: " + u.toExternalForm());
             userProps = ProActiveConfigurationParser.parse(u.toString(), userProps);
         } catch (Exception e) {
-            if (!fname.equals(PROACTIVE_CONFIG_FILENAME)) {
+            if (!defaultFile) {
                 logger.warn("Configuration file " + u.toExternalForm() + " not found");
             }
         }
