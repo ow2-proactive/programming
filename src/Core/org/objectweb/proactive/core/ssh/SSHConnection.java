@@ -115,6 +115,11 @@ public class SSHConnection {
             }
         }
 
+        if (connection == null) {
+            throw new IOException("No SSH private key found. Failed to open a SSH connection to " + username +
+                "@" + hostname + ":" + port);
+        }
+
         if (connection.isAuthenticationComplete()) {
             connection.setTCPNoDelay(true);
             portForwarders = new ArrayList<LocalPortForwarder>();
