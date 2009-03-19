@@ -31,10 +31,10 @@ import org.apache.log4j.spi.LoggingEvent;
  * The queue size, the threshold and the period can be configured by setting the
  * following java properties:
  * <ul>
- * <li>org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.qsize
- * <li>org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.threshold
+ * <li>org.objectweb.proactive.core.util.log.remote.throttlingprovider.qsize
+ * <li>org.objectweb.proactive.core.util.log.remote.throttlingprovider.threshold
  * </li>
- * <li>org.objectweb.proactive.core.util.log.remote.ThrottlingProvider. period</li>
+ * <li>org.objectweb.proactive.core.util.log.remote.throttlingprovider. period</li>
  * </ul>
  * 
  */
@@ -49,21 +49,21 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
      * A logging event cannot be buffered more than this amount of time (in
      * milliseconds).
      */
-    final int period;
+    int period;
     final String periodProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.period";
 
     /**
      * Send the events to the collector as soon as THRESHOLD logging events are
      * available.
      */
-    final int threshold;
+    int threshold;
     final String thresholdProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.threshold";
 
     /**
      * The buffer size. If the buffer is full, clients are blocked until the
      * flushing thread is able to recover a steady state.
      */
-    final int qsize;
+    int qsize;
     final String qsizeProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.qsize";
 
     /** Logging Events to be send to the collector */
@@ -85,7 +85,23 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
 
     private FileAppender errorAppender;
 
+    public ThrottlingProvider(int period, int threshold, int qsize) {
+        this.period = period;
+        this.threshold = threshold;
+        this.qsize = qsize;
+
+        this.buffer = new ArrayBlockingQueue<LoggingEvent>(this.qsize);
+        this.terminate = new AtomicBoolean(false);
+        this.pendingEvents = new AtomicInteger();
+        this.mustNotify = new AtomicBoolean(false);
+    }
+
     public ThrottlingProvider() {
+        // Default value
+        this(DEFAULT_PERIOD, DEFAULT_THRESHOLD, DEFAULT_QSIZE);
+
+        // Use the values defined by properties if set 
+
         String prop;
         int value;
 
@@ -139,12 +155,6 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
             }
         }
         this.qsize = value;
-
-        this.buffer = new ArrayBlockingQueue<LoggingEvent>(this.qsize);
-        this.terminate = new AtomicBoolean(false);
-        this.pendingEvents = new AtomicInteger();
-        this.mustNotify = new AtomicBoolean(false);
-
     }
 
     @Override
