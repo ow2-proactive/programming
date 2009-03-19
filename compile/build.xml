@@ -593,6 +593,10 @@
 		<junitMacro communication.protocol="http" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
 
+	<target name="junit.rmissh" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
+		<junitMacro communication.protocol="rmissh" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
+	</target>
+
 	<target name="junit.rmi" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="rmi" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
