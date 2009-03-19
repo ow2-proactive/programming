@@ -67,7 +67,7 @@ public class RemoteObjectProtocolFactoryRegistry {
             Class<? extends RemoteObjectFactory> cl = remoteObjectFactorySPI.getFactoryClass();
 
             if (!remoteObjectFactories.contains(protoId)) {
-                logger.info("Loading <" + protoId + ", " + cl + ">");
+                logger.info("Remote Object Factory provider <" + protoId + ", " + cl + "> found");
                 remoteObjectFactories.put(protoId, cl);
             }
         }
