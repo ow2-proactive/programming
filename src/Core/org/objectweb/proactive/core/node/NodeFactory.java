@@ -284,8 +284,7 @@ public class NodeFactory {
     public static Node createNode(String nodeURL, boolean replacePreviousBinding,
             ProActiveSecurityManager psm, String vnname, String jobId) throws NodeException,
             AlreadyBoundException {
-        String nodeName = URIBuilder.getHostNameFromUrl(nodeURL);
-
+        String nodeName = URIBuilder.getNameFromURI(nodeURL);
         return createLocalNode(nodeName, replacePreviousBinding, psm, vnname, jobId);
     }
 
