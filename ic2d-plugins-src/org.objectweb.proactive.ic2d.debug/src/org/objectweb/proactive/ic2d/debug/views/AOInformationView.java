@@ -66,10 +66,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
 public class AOInformationView extends ViewPart {
 
     /* The view ID */
-    public static final String ID = "org.objectweb.proactive.ic2d.jmxmonitoring.view.AOStateProperties";
-
-    /* This view is a singleton */
-    private static AOInformationView singleton;
+    public static final String ID = "org.objectweb.proactive.ic2d.debug.views.AOInformationView";
 
     /* Tree for displaying information */
     private Tree tree;
@@ -77,33 +74,13 @@ public class AOInformationView extends ViewPart {
     /* Map containing the tree's items */
     private Map<UniqueID, TreeItem> treeItems = new HashMap<UniqueID, TreeItem>();
 
-    //
-    // -- CONSTRUCTOR ----------------------------------------------
-    //
-    /*
-     * The constructor
-     */
-
-    //
-    // -- PUBLIC METHODS ----------------------------------------------
-    //
-    /*
-     * Return the instance of this view singleton
-     *
-     * @return
-     */
-    //    public static synchronized AOInformationView getInstance() {
-    //        if (singleton == null)
-    //            singleton = new AOInformationView();
-    //        return singleton;
-    //    }
     /*
      * Create the view's part
      */
     @Override
     public void createPartControl(Composite parent) {
 
-        //        parent.setLayout(new FormLayout());
+        //                parent.setLayout(new FormLayout());
 
         // Toolbar Manager
         IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
@@ -120,12 +97,12 @@ public class AOInformationView extends ViewPart {
         toolBarManager.add(new Separator());
 
         // Set a legend label
-        Label legendLabel = new Label(parent, SWT.NONE);
-        legendLabel
-                .setText("Click on an Active Object to see its informations.\nTo go to the next breakpoint, clik on the breakpoint type.");
-        FormData legendLabelFormData = new FormData();
-        legendLabelFormData.left = new FormAttachment(0, 0);
-        legendLabel.setLayoutData(legendLabelFormData);
+        //        Label legendLabel = new Label(parent, SWT.NONE);
+        //        legendLabel
+        //                .setText("Click on an Active Object to see its informations.\nTo go to the next breakpoint, clik on the breakpoint type.");
+        //        FormData legendLabelFormData = new FormData();
+        //        legendLabelFormData.top = new FormAttachment(0, 0);
+        //        legendLabel.setLayoutData(legendLabelFormData);
 
         // Set the tree
         tree = new Tree(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
@@ -146,7 +123,7 @@ public class AOInformationView extends ViewPart {
         });
 
         FormData treeData = new FormData();
-        treeData.top = new FormAttachment(legendLabel, 2);
+        //        treeData.top = new FormAttachment(legendLabel, 2);
         treeData.bottom = new FormAttachment(100, 0);
         tree.setLayoutData(treeData);
 

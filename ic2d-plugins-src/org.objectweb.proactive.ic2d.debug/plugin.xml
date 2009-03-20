@@ -10,7 +10,7 @@
             category="org.objectweb.proactive.ic2d.debug.DebugCategory"
             class="org.objectweb.proactive.ic2d.debug.views.AOInformationView"
             icon="icons/aoinfo.png"
-            id="org.objectweb.proactive.ic2d.debug.views.AOStateProperties"
+            id="org.objectweb.proactive.ic2d.debug.views.AOInformationView"
             name="Active Object Information"/>
        <category
             id="org.objectweb.proactive.ic2d.debug.DebugCategory"

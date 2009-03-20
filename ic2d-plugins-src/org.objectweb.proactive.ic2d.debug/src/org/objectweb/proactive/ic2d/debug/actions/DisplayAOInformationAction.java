@@ -33,6 +33,9 @@
 package org.objectweb.proactive.ic2d.debug.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.IViewDescriptor;
 import org.objectweb.proactive.ic2d.debug.views.AOInformationView;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
@@ -53,9 +56,12 @@ public class DisplayAOInformationAction extends Action implements IActionExtPoin
 
     public void setActiveSelect(AbstractData<?, ?> ref) {
         if (ref instanceof ActiveObject) {
-            AOInformationView aoinfInformationView = AOInformationView.getInstance();
-            aoinfInformationView.selectItem((ActiveObject) ref);
+            AOInformationView aoinfInformationView;
+            aoinfInformationView = (AOInformationView) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+                    .getActivePage().findView(AOInformationView.ID);
+            if (aoinfInformationView != null) {
+                aoinfInformationView.selectItem((ActiveObject) ref);
+            }
         }
     }
-
 }
