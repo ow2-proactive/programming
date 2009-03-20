@@ -73,6 +73,7 @@ import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.ic2d.console.Console;
 import org.objectweb.proactive.ic2d.jmxmonitoring.Activator;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.WorldObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.util.IC2DThreadPool;
 
 
 public class MonitorNewHostDialog extends Dialog {
@@ -419,11 +420,11 @@ public class MonitorNewHostDialog extends Dialog {
 
                 recordUrl(url);
                 world.setDepth(Integer.parseInt(depthText.getText()));
-                //				new Thread() {
-                //					public void run() {
-                world.addHost(url);
-                //					}
-                //				}.start();
+                IC2DThreadPool.execute(new Runnable() {
+                    public void run() {
+                        world.addHost(url);
+                    }
+                });
             }
             shell.close();
         }
