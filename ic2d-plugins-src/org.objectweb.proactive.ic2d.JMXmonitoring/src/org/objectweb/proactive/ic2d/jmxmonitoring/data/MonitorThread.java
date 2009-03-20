@@ -104,10 +104,10 @@ public final class MonitorThread implements Observer {
         this.worldObj = world;
         this.objectsToRefreshSelectively = new ConcurrentHashMap<String, AbstractData<?, ?>>();
         this.refresh = false;
-        this.refresher = new Thread(new MonitorThreadRefresher(world), "Ic2d refresh thread");
+        this.refresher = new Thread(new MonitorThreadRefresher(world), "IC2D refresh thread");
         this.selectiveRefresh = true;
         this.selectiveRefresher = new Thread(new MonitorThreadSelectiveRefresher(),
-            "Ic2d selective refresh thread");
+            "IC2D selective refresh thread");
         selectiveRefresher.start();
     }
 
@@ -232,7 +232,7 @@ public final class MonitorThread implements Observer {
                 try {
                     Thread.sleep(ttr * 1000);
                 } catch (InterruptedException e) { /* Do nothing */
-                    System.out.println("Ic2d exploring thread has been interrupted.");
+                    System.out.println("IC2D exploring thread has been interrupted.");
                 }
             }
         }
@@ -253,7 +253,7 @@ public final class MonitorThread implements Observer {
                     Thread.sleep(timeForSelectiveRefresh * 1000);
                 }
             } catch (InterruptedException e) {
-                System.out.println("Ic2d selective exploring thread has been interupted.");
+                System.out.println("IC2D selective exploring thread has been interrupted.");
             }
         }
     }
