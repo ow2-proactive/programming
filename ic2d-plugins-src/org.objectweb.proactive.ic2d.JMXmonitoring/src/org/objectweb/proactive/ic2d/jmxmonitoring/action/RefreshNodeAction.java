@@ -43,8 +43,8 @@ public class RefreshNodeAction extends Action {
     public RefreshNodeAction() {
         this.setId(REFRESH_NODE);
         this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "refresh.gif"));
-        this.setText("Look for new Active Objects");
-        this.setToolTipText("Look for new Active Objects");
+        this.setText("Refresh");
+        this.setToolTipText("Refresh Node State");
     }
 
     public void setNode(ProActiveNodeObject node) {

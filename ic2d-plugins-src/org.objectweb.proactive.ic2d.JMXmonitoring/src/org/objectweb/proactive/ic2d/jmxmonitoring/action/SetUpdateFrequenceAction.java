@@ -38,15 +38,15 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.dialog.SetUpdateFrequenceDialo
 
 
 public class SetUpdateFrequenceAction extends Action {
-    public static final String SET_UPDATE_FREQUENCE = "Set update frequence";
+    public static final String SET_UPDATE_FREQUENCE = "Set refresh rate";
     private Display display;
     private ProActiveNodeObject node;
 
     public SetUpdateFrequenceAction(Display display) {
         this.setId(SET_UPDATE_FREQUENCE);
         this.display = display;
-        this.setText("Set Update Frequence...");
-        this.setToolTipText("Set Update Frequence");
+        this.setText("Set Refresh Rate");
+        this.setToolTipText("Set Refresh Rate");
     }
 
     public void setNode(ProActiveNodeObject node) {

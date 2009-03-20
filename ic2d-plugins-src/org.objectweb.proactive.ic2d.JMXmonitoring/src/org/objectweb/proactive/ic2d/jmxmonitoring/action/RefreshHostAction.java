@@ -37,13 +37,13 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.data.HostObject;
 
 
 public class RefreshHostAction extends Action {
-    public static final String REFRESH_HOST = "Refresh host";
+    public static final String REFRESH_HOST = "Refresh Host";
     private HostObject host;
 
     public RefreshHostAction() {
-        super("Look for new JVM", ImageDescriptor.createFromFile(RefreshHostAction.class, "refresh.gif"));
+        super("Refresh", ImageDescriptor.createFromFile(RefreshHostAction.class, "refresh.gif"));
         this.setId(REFRESH_HOST);
-        this.setToolTipText("Look for new JVM");
+        this.setToolTipText("Refresh");
     }
 
     public void setHost(HostObject host) {

@@ -47,8 +47,8 @@ public class SetTTRAction extends Action {
         this.display = display;
         this.monitorThread = monitorThread;
         this.setId(SET_TTR);
-        this.setText("Set Time To Refresh...");
-        setToolTipText("Set Time To Refresh");
+        this.setText("Set Refresh Rate");
+        setToolTipText("Set Refresh Rate");
         this.setImageDescriptor(ImageDescriptor.createFromFile(this.getClass(), "ttr.gif"));
     }
 

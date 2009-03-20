@@ -70,7 +70,7 @@ public class SetUpdateFrequenceDialog extends Dialog {
         shell.setLayout(layout);
 
         Label titleLabel = new Label(shell, SWT.NONE);
-        titleLabel.setText("Please enter the new value for the frequence of the update for");
+        titleLabel.setText("Please enter the new refresh rate");
         FormData titleLabelFormData = new FormData();
         titleLabelFormData.left = new FormAttachment(0, 0);
         titleLabel.setLayoutData(titleLabelFormData);
