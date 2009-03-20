@@ -123,13 +123,15 @@ public class VirtualNodesGroup implements Observer {
                 Display.getDefault().asyncExec(new Runnable() {
                     public void run() {
                         Button b = virtualNodes.get(vnRemoved);
-                        virtualNodes.remove(vnRemoved);
-                        buttons.remove(b);
-                        if (!b.isDisposed()) {
-                            b.dispose();
-                        }
-                        if (!group.isDisposed()) {
-                            group.pack();
+                        if (b != null) {
+                            virtualNodes.remove(vnRemoved);
+                            buttons.remove(b);
+                            if (!b.isDisposed()) {
+                                b.dispose();
+                            }
+                            if (!group.isDisposed()) {
+                                group.pack();
+                            }
                         }
                     }
                 });

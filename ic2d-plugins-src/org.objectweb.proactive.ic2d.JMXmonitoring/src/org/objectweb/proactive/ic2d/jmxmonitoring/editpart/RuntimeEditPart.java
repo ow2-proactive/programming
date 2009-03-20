@@ -62,6 +62,7 @@ public final class RuntimeEditPart extends AbstractMonitoringEditPart<RuntimeObj
     //which means that the observable (VMObject) will be blocked
     //on the notifyObservers method.
     public void update(Observable o, Object arg) {
+
         if (!(arg instanceof MVCNotification)) {
             return;
         }
@@ -70,25 +71,37 @@ public final class RuntimeEditPart extends AbstractMonitoringEditPart<RuntimeObj
         final MVCNotificationTag mvcNotification = notif.getMVCNotification();
         getViewer().getControl().getDisplay().asyncExec(new Runnable() {
             public void run() {
+                getCastedFigure().setDebuggable(getCastedModel().canBeDebugged());
+                getCastedFigure().setDebugTunnelActivated(getCastedModel().hasDebuggerConnected());
+                getCastedFigure().refresh();
                 switch (mvcNotification) {
                     case RUNTIME_OBJECT_RUNTIME_KILLED:
                         Console.getInstance(Activator.CONSOLE_NAME).log(getModel() + " killed!");
                         getCastedFigure().notResponding();
                         break;
-                    case STATE_CHANGED: {
+                    case STATE_CHANGED:
                         if (notif.getData() == State.NOT_MONITORED) {
                             refreshChildren();
                             return;
                         }
-                    }
+                        break;
+                    case RUNTIME_DEBUG_CONNECTION_ACTIVATED:
+                        getCastedFigure().setDebugTunnelActivated(true);
+
+                        break;
+                    case RUNTIME_DEBUG_CONNECTION_TERMINATED:
+                        getCastedFigure().setDebugTunnelActivated(false);
+                        break;
                     default:
                         // Refresh only if this editpart is active
                         // remember edit parts are active after activate() is called
                         // and until deactivate() is called.
                         if (isActive()) {
                             refresh();
+                            refreshChildren();
                         }
                 }
+                refreshChildren();
             }
         });
 
@@ -114,6 +127,8 @@ public final class RuntimeEditPart extends AbstractMonitoringEditPart<RuntimeObj
      */
     protected IFigure createFigure() {
         VMFigure figure = new VMFigure(getCastedModel().getName() /*FullName()*/);
+        figure.setDebuggable(getCastedModel().canBeDebugged());
+        figure.setDebugTunnelActivated(getCastedModel().hasDebuggerConnected());
         JVMListener listener = new JVMListener(getCastedModel(), getMonitoringView());
         figure.addMouseListener(listener);
         figure.addMouseMotionListener(listener);
@@ -139,4 +154,5 @@ public final class RuntimeEditPart extends AbstractMonitoringEditPart<RuntimeObj
         }
         return castedFigure;
     }
+
 }

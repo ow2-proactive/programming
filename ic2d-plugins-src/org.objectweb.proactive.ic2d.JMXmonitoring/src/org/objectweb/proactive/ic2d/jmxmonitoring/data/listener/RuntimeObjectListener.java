@@ -38,6 +38,7 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.jmx.notification.BodyNotificationData;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.RuntimeObject;
 
 
@@ -83,7 +84,10 @@ public class RuntimeObjectListener implements NotificationListener {
         if (type.equals(NotificationType.bodyCreated)) {
             // THE RETREIVAL OF NEW BODIES IS HANDLED BY AN AUTOMATIC REFRESH THREAD
             // so there is no point to handle it here see ProActiveNodeObject#explore() method
-
+            BodyNotificationData notificationData = (BodyNotificationData) notification.getUserData();
+            String nodeUrl = notificationData.getNodeUrl();
+            ProActiveNodeObject node = (ProActiveNodeObject) this.runtimeObject.getChild(nodeUrl);
+            node.explore();
             // // First get the notification data
             // final BodyNotificationData notificationData =
             // (BodyNotificationData) notification
@@ -133,6 +137,9 @@ public class RuntimeObjectListener implements NotificationListener {
             this.runtimeObject.getParent().explore();
         } else if (type.equals(NotificationType.nodeDestroyed)) {
             this.runtimeObject.getParent().explore();
+        } else if (type.equals(NotificationType.debuggerConnectionActivated) ||
+            type.equals(NotificationType.debuggerConnectionTerminated)) {
+            this.runtimeObject.notifyObservers();
         } else {
             System.out.println(runtimeObject + " => " + type);
         }

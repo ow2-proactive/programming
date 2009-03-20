@@ -31,31 +31,33 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.figure;
 
-import java.util.List;
-
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
-import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 
 public class VMFigure extends AbstractRectangleFigure {
     protected final static int DEFAULT_WIDTH = 19;
     private IFigure contentPane;
+    private Image flagDebugTunnelActive;
+    private Image flagDebugTunnelActivatable;
+    private boolean isDebugTunnelActivated = false;
+    private boolean isDebuggable = false;
     public static final Color STANDARD_COLOR;
     public static final Color GLOBUS_COLOR;
     public static final Color NOT_RESPONDING = ColorConstants.red;
     private static final Color DEFAULT_BORDER_COLOR;
+    private static Display device;
 
     static {
-        Display device = Display.getCurrent();
+        device = Display.getCurrent();
         STANDARD_COLOR = new Color(device, 240, 240, 240);
         GLOBUS_COLOR = new Color(device, 255, 208, 208);
         DEFAULT_BORDER_COLOR = new Color(device, 140, 200, 225);
@@ -66,6 +68,9 @@ public class VMFigure extends AbstractRectangleFigure {
     //
     public VMFigure(String text) {
         super(text);
+        flagDebugTunnelActive = new Image(device, this.getClass().getResourceAsStream("debugger.gif"));
+        flagDebugTunnelActivatable = new Image(device, this.getClass()
+                .getResourceAsStream("debugger_off.gif"));
     }
 
     /**
@@ -128,6 +133,29 @@ public class VMFigure extends AbstractRectangleFigure {
         return DEFAULT_BORDER_COLOR;
     }
 
+    /**
+     * @see AbstractFigure#paintIC2DFigure(Graphics)
+     */
+    @Override
+    public void paintIC2DFigure(Graphics graphics) {
+        super.paintIC2DFigure(graphics);
+        Rectangle bounds = this.getBounds().getCopy().resize(-1, -2);
+        // Draw Immediate Service Flag
+        if (isDebugTunnelActivated()) {
+            graphics.drawImage(flagDebugTunnelActive, bounds.x, bounds.y);
+        } else if (isDebuggable) {
+            graphics.drawImage(flagDebugTunnelActivatable, bounds.x, bounds.y);
+        }
+    }
+
+    public boolean isDebugTunnelActivated() {
+        return isDebugTunnelActivated;
+    }
+
+    public void setDebugTunnelActivated(boolean isDebugTunnelActivated) {
+        this.isDebugTunnelActivated = isDebugTunnelActivated;
+    }
+
     //
     // -- INNER CLASS --------------------------------------------
     //
@@ -141,6 +169,10 @@ public class VMFigure extends AbstractRectangleFigure {
 
             return super.calculatePreferredSize(container, wHint, hHint).expand(5, 0);
         }
+    }
+
+    public void setDebuggable(boolean isDebuggable) {
+        this.isDebuggable = isDebuggable;
     }
 
 }

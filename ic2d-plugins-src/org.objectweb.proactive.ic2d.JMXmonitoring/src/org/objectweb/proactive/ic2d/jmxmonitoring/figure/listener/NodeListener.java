@@ -165,7 +165,7 @@ public final class NodeListener implements MouseListener, MouseMotionListener {
     //---- MouseMotionListener 
     public void mouseEntered(MouseEvent me) {
         if (dnd.getSource() != null) {
-            dnd.refresh(figure);
+            //            dnd.refresh(figure);
             figure.setHighlight(ColorConstants.green);
         }
     }
@@ -174,7 +174,7 @@ public final class NodeListener implements MouseListener, MouseMotionListener {
         if (dnd.getSource() != null) {
             dnd.refresh(figure);
             figure.setHighlight(null);
-            figure.repaint();
+            //            figure.repaint();
         }
     }
 

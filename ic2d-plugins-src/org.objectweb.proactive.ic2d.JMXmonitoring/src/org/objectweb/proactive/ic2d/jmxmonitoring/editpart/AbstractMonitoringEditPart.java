@@ -119,6 +119,7 @@ public abstract class AbstractMonitoringEditPart<E extends AbstractData<?, ?>> e
     public void run() {
         try {
             refresh();
+            refreshChildren();
         } catch (Exception e) {
             System.out.println("Exception occured in AbstractMonitoringEditPart.run() : " + e +
                 " figure was : " + getFigure());
@@ -126,8 +127,8 @@ public abstract class AbstractMonitoringEditPart<E extends AbstractData<?, ?>> e
         }
     }
 
-    public void addFigureToUpdtate(IFigure figure) {
-    }
+    //    public void addFigureToUpdtate(IFigure figure) {
+    //    }
 
     /**
      * Convert the result of EditPart.getModel()
@@ -163,4 +164,5 @@ public abstract class AbstractMonitoringEditPart<E extends AbstractData<?, ?>> e
         }
         return super.getParent();
     }
+
 }

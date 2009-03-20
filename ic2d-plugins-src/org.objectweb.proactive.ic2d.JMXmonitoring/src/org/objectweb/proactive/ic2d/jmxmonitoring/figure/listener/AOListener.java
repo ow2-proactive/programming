@@ -150,7 +150,10 @@ public class AOListener implements MouseListener, MouseMotionListener {
     }
 
     public void mouseReleased(MouseEvent me) {
+
+        //        if (me.button != 1) {
         parentFigure.handleMouseReleased(me);
+        //        }
     }
 
     public void mouseEntered(MouseEvent me) {

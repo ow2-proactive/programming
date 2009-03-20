@@ -44,7 +44,6 @@ public class DynamicGridLayout extends GridLayout {
 
             for (int i = 0; i < numChildren; i++) {
                 child = (IFigure) children.get(i);
-                System.out.println("DynamicGridLayout.calculatePreferredSize()" + child);
                 prefSize = child.getPreferredSize(wHint, hHint);
 
                 temp.width += prefSize.width;

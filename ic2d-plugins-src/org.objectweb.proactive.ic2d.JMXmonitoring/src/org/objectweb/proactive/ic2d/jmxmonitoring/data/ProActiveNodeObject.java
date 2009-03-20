@@ -187,7 +187,9 @@ public final class ProActiveNodeObject extends AbstractData<RuntimeObject, Activ
             // specific notification for that case
             if (numberOfNewChildren == 1) {
                 // Fire add child notification
-                super.notifyObservers(new MVCNotification(MVCNotificationTag.ADD_CHILD, newChildren.get(0)));
+                super
+                        .notifyObservers(new MVCNotification(MVCNotificationTag.ADD_CHILD, newChildren
+                                .get(0)));
                 return;
             }
             // Fire add all children notification
