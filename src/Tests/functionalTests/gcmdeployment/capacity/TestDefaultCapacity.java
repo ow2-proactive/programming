@@ -35,7 +35,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.extensions.gcmdeployment.core.StartRuntime;
+import org.objectweb.proactive.core.runtime.StartPARuntime;
 
 import functionalTests.FunctionalTest;
 
@@ -45,7 +45,7 @@ public class TestDefaultCapacity extends FunctionalTest {
     public void testCapacityAutoDetection() throws InterruptedException {
 
         PAProperties.PA_RUNTIME_STAYALIVE.setValue(false);
-        StartRuntime.main(new String[] {});
+        StartPARuntime.main(new String[] {});
 
         ProActiveRuntimeImpl part = ProActiveRuntimeImpl.getProActiveRuntime();
 

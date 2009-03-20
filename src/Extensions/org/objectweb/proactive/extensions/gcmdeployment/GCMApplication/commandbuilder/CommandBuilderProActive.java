@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
+import org.objectweb.proactive.core.runtime.StartPARuntime;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
@@ -52,7 +53,6 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.T
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tools;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement.PathBase;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
-import org.objectweb.proactive.extensions.gcmdeployment.core.StartRuntime;
 
 
 public class CommandBuilderProActive implements CommandBuilder {
@@ -395,7 +395,7 @@ public class CommandBuilderProActive implements CommandBuilder {
             command.append(" " + getDebugCommand(hostInfo, gcma.getDeploymentId()) + " ");
         }
         // Class to be started and its arguments
-        command.append(StartRuntime.class.getName());
+        command.append(StartPARuntime.class.getName());
         command.append(" ");
 
         String parentURL;
@@ -406,21 +406,21 @@ public class CommandBuilderProActive implements CommandBuilder {
                     "Cannot determine the URL of this runtime. Childs will not be able to register", e);
             parentURL = "unkownParentURL";
         }
-        command.append("-" + StartRuntime.Params.parent.shortOpt() + " " + parentURL);
+        command.append("-" + StartPARuntime.Params.parent.shortOpt() + " " + parentURL);
         command.append(" ");
 
         if (hostInfo.getVmCapacity() != 0) {
-            command.append("-" + StartRuntime.Params.capacity.shortOpt() + " " + hostInfo.getVmCapacity());
+            command.append("-" + StartPARuntime.Params.capacity.shortOpt() + " " + hostInfo.getVmCapacity());
             command.append(" ");
         }
 
-        command.append("-" + StartRuntime.Params.topologyId.shortOpt() + " " + hostInfo.getToplogyId());
+        command.append("-" + StartPARuntime.Params.topologyId.shortOpt() + " " + hostInfo.getToplogyId());
         command.append(" ");
 
-        command.append("-" + StartRuntime.Params.deploymentId.shortOpt() + " " + gcma.getDeploymentId());
+        command.append("-" + StartPARuntime.Params.deploymentId.shortOpt() + " " + gcma.getDeploymentId());
         command.append(" ");
 
-        command.append("-" + StartRuntime.Params.codebase.shortOpt() + " " +
+        command.append("-" + StartPARuntime.Params.codebase.shortOpt() + " " +
             ClassServerServlet.get().getCodeBase());
         command.append(" ");
 

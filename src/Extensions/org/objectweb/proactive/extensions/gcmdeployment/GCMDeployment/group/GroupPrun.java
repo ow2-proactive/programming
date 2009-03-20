@@ -34,9 +34,9 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.objectweb.proactive.core.runtime.StartPARuntime;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
-import org.objectweb.proactive.extensions.gcmdeployment.core.StartRuntime;
 
 
 public class GroupPrun extends AbstractGroup {
@@ -90,7 +90,7 @@ public class GroupPrun extends AbstractGroup {
         String cbCommand = commandBuilder.buildCommand(hostInfo, gcma);
         if (hostInfo.getHostCapacity() == 0) {
             // if user put his own command in deployment file, he should also define hostCapacity
-            cbCommand += " -" + StartRuntime.Params.capacity.shortOpt() + " " + hostCapacity;
+            cbCommand += " -" + StartPARuntime.Params.capacity.shortOpt() + " " + hostCapacity;
         }
         //    	cbCommand = Helpers.escapeCommand(cbCommand);
         command.append(cbCommand);

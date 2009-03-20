@@ -29,7 +29,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.gcmdeployment.core;
+package org.objectweb.proactive.core.runtime;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,9 +46,6 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.jmx.notification.GCMRuntimeRegistrationNotificationData;
-import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -58,9 +55,9 @@ import org.objectweb.proactive.core.util.log.remote.ProActiveAppender;
 
 /**
  * This class is a utility class allowing to start a ProActiveRuntime with a JVM.
- * 
+ *
  */
-public class StartRuntime {
+public class StartPARuntime {
     Logger logger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     /** The URL of the parent ProActive Runtime */
@@ -82,7 +79,7 @@ public class StartRuntime {
         try {
             initLog4j();
             ProActiveConfiguration.load();
-            StartRuntime startRuntime = new StartRuntime(args);
+            StartPARuntime startRuntime = new StartPARuntime(args);
             startRuntime.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,7 +126,7 @@ public class StartRuntime {
         return ret;
     }
 
-    protected StartRuntime(String[] args) {
+    protected StartPARuntime(String[] args) {
         this.args = args;
         parseOptions();
     }
