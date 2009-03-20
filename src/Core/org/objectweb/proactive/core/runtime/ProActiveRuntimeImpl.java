@@ -137,7 +137,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 @SuppressWarnings("serial")
 public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl implements ProActiveRuntime,
-        LocalProActiveRuntime, ProActiveRuntimeImplMBean {
+        LocalProActiveRuntime {
 
     /**
      * 
