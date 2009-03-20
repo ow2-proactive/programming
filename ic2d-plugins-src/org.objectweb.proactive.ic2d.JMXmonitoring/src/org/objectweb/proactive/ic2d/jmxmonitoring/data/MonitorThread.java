@@ -62,7 +62,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 public final class MonitorThread implements Observer {
     private static org.apache.log4j.Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
     private final static int DEFAULT_TTR = 10;
-    private final static int DEFAULT_TIME_SELECTIVE_REFRESH = 10;
+    private final static int DEFAULT_TIME_SELECTIVE_REFRESH = 20;
 
     // /** Hosts will be recursively searched up to this depth */
     // private int depth;
@@ -243,7 +243,7 @@ public final class MonitorThread implements Observer {
                     }
                     objectsToRefreshSelectively.clear();
 
-                    Thread.sleep(timeForSelectiveRefresh * 2000);
+                    Thread.sleep(timeForSelectiveRefresh * 1000);
                 }
             } catch (InterruptedException e) {
                 System.out.println("Ic2d selective exploring thread has been interupted.");
