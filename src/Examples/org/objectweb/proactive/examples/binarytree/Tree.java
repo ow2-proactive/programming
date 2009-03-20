@@ -31,12 +31,16 @@
  */
 package org.objectweb.proactive.examples.binarytree;
 
+import java.io.Serializable;
+
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
+import org.objectweb.proactive.extensions.annotation.Migratable;
 
 
 @ActiveObject
-public class Tree {
+@Migratable
+public class Tree implements Serializable {
     private String key;
     private String value;
     private Tree left;
