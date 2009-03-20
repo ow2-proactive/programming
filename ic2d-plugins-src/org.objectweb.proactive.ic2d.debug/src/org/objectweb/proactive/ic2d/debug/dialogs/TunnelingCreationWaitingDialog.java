@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FontDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.objectweb.proactive.ic2d.debug.actions.DebugSocketConnection;
 
 
 /**
@@ -90,7 +91,7 @@ public class TunnelingCreationWaitingDialog extends Dialog {
     }
 
     public void labelUp(int cpt) {
-        titleLabel.setText("Establishing connection... try: " + cpt + "/50");
+        titleLabel.setText("Establishing connection... try: " + cpt + "/" + DebugSocketConnection.NB_TRIES);
         titleLabel.update();
     }
 
