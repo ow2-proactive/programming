@@ -32,6 +32,7 @@
 package org.objectweb.proactive.ic2d.jmxmonitoring.action;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 
 import javax.management.MBeanServerConnection;
 import javax.management.ObjectName;
@@ -50,8 +51,11 @@ import org.objectweb.proactive.ic2d.chartit.editor.ChartItDataEditor;
 import org.objectweb.proactive.ic2d.console.Console;
 import org.objectweb.proactive.ic2d.jmxmonitoring.Activator;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ActiveObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.HostObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.RuntimeObject;
+import org.objectweb.proactive.ic2d.jmxmonitoring.data.VirtualNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.WorldObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint;
 
@@ -95,7 +99,7 @@ public final class ChartItAction extends Action implements IActionExtPoint {
      * @see org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint#setAbstractDataObject(org.objectweb.proactive.ic2d.jmxmonitoring.data.AbstractData)
      */
     public void setAbstractDataObject(final AbstractData<?, ?> object) {
-        if (object.getClass() == WorldObject.class || object.getClass() == HostObject.class)
+        if (object.getClass() == HostObject.class)
             return;
         this.target = object;
         super.setText("Show " + object.getName() + " in ChartIt");
@@ -128,14 +132,25 @@ public final class ChartItAction extends Action implements IActionExtPoint {
             final IWorkbenchWindow currentWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
             if (!activateIfFound(currentWindow, abstractData.getName()) && createNewIfNotFound) {
                 // First build a ResourceDescriptor
-                final IResourceDescriptor resourceDescriptor = new AbstractDataDescriptor(abstractData);
-                // Open new editor based the descriptor
-                if (abstractData instanceof RuntimeObject) {
-                    ChartItDataEditor.openNewFromResourceDescriptor(resourceDescriptor,
-                            PARUNTIME_CHARTIT_CONFIG_FILENAME);
+                final IResourceDescriptor resourceDescriptor;
+                // If the data is world object create adequate descriptor
+                if (abstractData instanceof WorldObject) {
+                    resourceDescriptor = new WorldObjectResourceDescriptor((WorldObject) abstractData);
+                } else if (abstractData instanceof RuntimeObject) {
+                    // For runtime objects
+                    resourceDescriptor = new RuntimeObjectResourceDescriptor((RuntimeObject) abstractData);
+                } else if (abstractData instanceof ProActiveNodeObject) {
+                    // For node objects
+                    resourceDescriptor = new NodeObjectResourceDescriptor((ProActiveNodeObject) abstractData);
+                } else if (abstractData instanceof ActiveObject) {
+                    // For active objects
+                    resourceDescriptor = new ActiveObjectResourceDescriptor((ActiveObject) abstractData);
                 } else {
-                    ChartItDataEditor.openNewFromResourceDescriptor(resourceDescriptor);
+                    // For other objects that are not known 
+                    resourceDescriptor = new AbstractDataDescriptor(abstractData);
                 }
+                // Open new editor based on the resource descriptor
+                ChartItDataEditor.openNewFromResourceDescriptor(resourceDescriptor);
             }
         } catch (Exception e) {
             Console.getInstance(Activator.CONSOLE_NAME)
@@ -231,6 +246,390 @@ public final class ChartItAction extends Action implements IActionExtPoint {
 
         public IDataProvider[] getCustomDataProviders() {
             return this.customProviders;
+        }
+
+        public String getConfigFilename() {
+            return null;
+        }
+    }
+
+    final class RuntimeObjectResourceDescriptor implements IResourceDescriptor {
+        final RuntimeObject runtimeObject;
+
+        public RuntimeObjectResourceDescriptor(final RuntimeObject runtimeObject) {
+            this.runtimeObject = runtimeObject;
+        }
+
+        public IDataProvider[] getCustomDataProviders() {
+            return new IDataProvider[] { new NodesCountFromRuntimeObject(this.runtimeObject) };
+        }
+
+        public String getHostUrlServer() {
+            return this.runtimeObject.getHostUrlServer();
+        }
+
+        public MBeanServerConnection getMBeanServerConnection() {
+            return this.runtimeObject.getMBeanServerConnection();
+        }
+
+        public String getName() {
+            return this.runtimeObject.getName();
+        }
+
+        public ObjectName getObjectName() {
+            return this.runtimeObject.getObjectName();
+        }
+
+        public String getConfigFilename() {
+            return "predef_paruntime_chartit_conf.xml";
+        }
+    }
+
+    final class NodesCountFromRuntimeObject implements IDataProvider {
+        final RuntimeObject runtimeObject;
+
+        public NodesCountFromRuntimeObject(final RuntimeObject runtimeObject) {
+            this.runtimeObject = runtimeObject;
+        }
+
+        public String getDescription() {
+            return "The number of node objects (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "NodesCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.runtimeObject.getMonitoredChildrenSize();
+        }
+    }
+
+    final class ActiveObjectResourceDescriptor implements IResourceDescriptor {
+        final ActiveObject activeObject;
+
+        public ActiveObjectResourceDescriptor(ActiveObject activeObject) {
+            this.activeObject = activeObject;
+        }
+
+        public IDataProvider[] getCustomDataProviders() {
+            return new IDataProvider[] {
+                    new IncomingCommunicationChannelsCountFromActiveObject(this.activeObject),
+                    new OutgoingCommunicationChannelsCountFromActiveObject(this.activeObject),
+                    new RequestQueueLengthFromActiveObject(this.activeObject) };
+        }
+
+        public String getHostUrlServer() {
+            return this.activeObject.getHostUrlServer();
+        }
+
+        public MBeanServerConnection getMBeanServerConnection() {
+            return this.activeObject.getMBeanServerConnection();
+        }
+
+        public String getName() {
+            return this.activeObject.getName();
+        }
+
+        public ObjectName getObjectName() {
+            return this.activeObject.getObjectName();
+        }
+
+        public String getConfigFilename() {
+            return "predef_ao_chartit_conf.xml";
+        }
+    }
+
+    final class IncomingCommunicationChannelsCountFromActiveObject implements IDataProvider {
+        final ActiveObject activeObject;
+
+        public IncomingCommunicationChannelsCountFromActiveObject(final ActiveObject activeObject) {
+            this.activeObject = activeObject;
+        }
+
+        public String getDescription() {
+            return "The number of incoming communication channels (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "IncomingCommunicationChannelsCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.activeObject.getIncomingCommunications().size();
+        }
+    }
+
+    final class OutgoingCommunicationChannelsCountFromActiveObject implements IDataProvider {
+        final ActiveObject activeObject;
+
+        public OutgoingCommunicationChannelsCountFromActiveObject(final ActiveObject activeObject) {
+            this.activeObject = activeObject;
+        }
+
+        public String getDescription() {
+            return "The number of outgoing communication channels (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "OutgoingCommunicationChannelsCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.activeObject.getOutgoingCommunications().size();
+        }
+    }
+
+    final class RequestQueueLengthFromActiveObject implements IDataProvider {
+        final ActiveObject activeObject;
+
+        public RequestQueueLengthFromActiveObject(final ActiveObject activeObject) {
+            this.activeObject = activeObject;
+        }
+
+        public String getDescription() {
+            return "The length of the request queue (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "RequestQueueLength";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.activeObject.getRequestQueueLength();
+        }
+    }
+
+    final class NodeObjectResourceDescriptor implements IResourceDescriptor {
+        final ProActiveNodeObject nodeObject;
+
+        public NodeObjectResourceDescriptor(ProActiveNodeObject nodeObject) {
+            this.nodeObject = nodeObject;
+        }
+
+        public IDataProvider[] getCustomDataProviders() {
+            return new IDataProvider[] { new ActiveObjectsCountFromNodeObject(this.nodeObject) };
+        }
+
+        public String getHostUrlServer() {
+            return this.nodeObject.getHostUrlServer();
+        }
+
+        public MBeanServerConnection getMBeanServerConnection() {
+            return this.nodeObject.getMBeanServerConnection();
+        }
+
+        public String getName() {
+            return this.nodeObject.getName();
+        }
+
+        public ObjectName getObjectName() {
+            return this.nodeObject.getObjectName();
+        }
+
+        public String getConfigFilename() {
+            return "predef_panode_chartit_conf.xml";
+        }
+    }
+
+    final class ActiveObjectsCountFromNodeObject implements IDataProvider {
+        final ProActiveNodeObject nodeObject;
+
+        public ActiveObjectsCountFromNodeObject(final ProActiveNodeObject nodeObject) {
+            this.nodeObject = nodeObject;
+        }
+
+        public String getDescription() {
+            return "The number of registered active objects (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "ActiveObjectsCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.nodeObject.getMonitoredChildrenSize();
+        }
+    }
+
+    final class WorldObjectResourceDescriptor implements IResourceDescriptor {
+        final WorldObject worldObject;
+
+        public WorldObjectResourceDescriptor(WorldObject worldObject) {
+            this.worldObject = worldObject;
+        }
+
+        public IDataProvider[] getCustomDataProviders() {
+            return new IDataProvider[] { new HostsCountFromWorldObject(this.worldObject),
+                    new RuntimesCountFromWorldObject(this.worldObject),
+                    new VirtualNodesCountFromWorldObject(this.worldObject),
+                    new NodesCountFromWorldObject(this.worldObject),
+                    new ActiveObjectsCountFromWorldObject(this.worldObject) };
+        }
+
+        public String getHostUrlServer() {
+            return "localhost";
+        }
+
+        public MBeanServerConnection getMBeanServerConnection() {
+            return ManagementFactory.getPlatformMBeanServer();
+        }
+
+        public String getName() {
+            return worldObject.getName();
+        }
+
+        public ObjectName getObjectName() {
+            return null;
+        }
+
+        public String getConfigFilename() {
+            return "predef_world_chartit_conf.xml";
+        }
+    }
+
+    final class HostsCountFromWorldObject implements IDataProvider {
+        final WorldObject worldObject;
+
+        public HostsCountFromWorldObject(final WorldObject worldObject) {
+            this.worldObject = worldObject;
+        }
+
+        public String getDescription() {
+            return "The number of monitored hosts (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "HostsCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.worldObject.getNumberOfHosts();
+        }
+    }
+
+    final class RuntimesCountFromWorldObject implements IDataProvider {
+        final WorldObject worldObject;
+
+        public RuntimesCountFromWorldObject(final WorldObject worldObject) {
+            this.worldObject = worldObject;
+        }
+
+        public String getDescription() {
+            return "The number of monitored runtimes (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "RuntimesCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.worldObject.getNumberOfJVMs();
+        }
+
+    }
+
+    final class VirtualNodesCountFromWorldObject implements IDataProvider {
+        final WorldObject worldObject;
+
+        public VirtualNodesCountFromWorldObject(final WorldObject worldObject) {
+            this.worldObject = worldObject;
+        }
+
+        public String getDescription() {
+            return "The number of monitored virtual nodes (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "VirtualNodesCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.worldObject.getVNChildren().size();
+        }
+    }
+
+    final class NodesCountFromWorldObject implements IDataProvider {
+        final WorldObject worldObject;
+
+        public NodesCountFromWorldObject(final WorldObject worldObject) {
+            this.worldObject = worldObject;
+        }
+
+        public String getDescription() {
+            return "The number of monitored node objects (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "NodesCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            int n = 0;
+            for (final VirtualNodeObject vnObject : this.worldObject.getVNChildren()) {
+                n += vnObject.getMonitoredChildrenSize();
+            }
+            return n;
+        }
+    }
+
+    final class ActiveObjectsCountFromWorldObject implements IDataProvider {
+        final WorldObject worldObject;
+
+        public ActiveObjectsCountFromWorldObject(final WorldObject worldObject) {
+            this.worldObject = worldObject;
+        }
+
+        public String getDescription() {
+            return "The number of monitored active objects (based on monitoring collected data)";
+        }
+
+        public String getName() {
+            return "ActiveObjectsCount";
+        }
+
+        public String getType() {
+            return "int";
+        }
+
+        public Object provideValue() {
+            return this.worldObject.getNumberOfActiveObjects();
         }
     }
 }
