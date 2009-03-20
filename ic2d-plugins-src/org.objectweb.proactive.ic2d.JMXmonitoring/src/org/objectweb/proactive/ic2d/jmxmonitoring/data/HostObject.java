@@ -203,7 +203,7 @@ public final class HostObject extends AbstractData<WorldObject, RuntimeObject> {
 
         Map<String, RuntimeObject> childrenToRemoved = this.getMonitoredChildrenAsMap();
 
-        for (final RuntimeObject runtimeObject : runtimeObjects) {
+        for (RuntimeObject runtimeObject : runtimeObjects) {
             RuntimeObject child = (RuntimeObject) this.getChild(runtimeObject.getKey());
 
             // If this child is not yet monitored.
