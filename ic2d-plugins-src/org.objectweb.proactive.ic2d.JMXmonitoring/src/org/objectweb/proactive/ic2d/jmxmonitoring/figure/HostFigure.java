@@ -126,18 +126,6 @@ public class HostFigure extends AbstractRectangleFigure {
         repaint();
     }
 
-//    @Override
-//    protected void paintIC2DFigure(Graphics graphics) {
-//
-//        //        int nb_colums = new Double(Math.sqrt(contentPane.getChildren().size())).intValue();
-//        //        nb_colums = Math.max(nb_colums, 1);
-//        //        ((GridLayout) contentPane.getLayoutManager()).numColumns = nb_colums;
-//        contentPane.getLayoutManager().layout(contentPane);
-//        this.invalidateTree();
-//
-//        super.paintIC2DFigure(graphics);
-//    }
-
     //
     // -- INNER CLASS --------------------------------------------
     //
