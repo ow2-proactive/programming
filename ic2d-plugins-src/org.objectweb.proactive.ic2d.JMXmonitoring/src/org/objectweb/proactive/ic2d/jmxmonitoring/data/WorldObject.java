@@ -103,7 +103,7 @@ public final class WorldObject extends AbstractData<AbstractData<?, ?>, HostObje
     // -------------------------------------------
 
     /**
-     * Create a new WorldObject 0617896139 Herve
+     * Create a new WorldObject
      * 
      * @param connection
      *            A ProActiveConnection
