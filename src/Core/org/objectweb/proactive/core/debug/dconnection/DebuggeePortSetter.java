@@ -58,7 +58,7 @@ public class DebuggeePortSetter {
             FileWriter writer = new FileWriter(file);
             writer.write(port);
             writer.close();
-            logger.info("Debugger JVM started");
+            logger.debug("Debugger port :" + port + " written to file " + file.getAbsolutePath());
         } catch (IOException e) {
             logger.fatal(
                     "Could not create the file where to store the debuggee port, exception message follows ",

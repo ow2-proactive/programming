@@ -105,4 +105,8 @@ public class NotificationType {
 
     // --- Used in the message of the JMX notifications -------------
     public final static String migrationMessage = "Migration Finished";
+
+    public final static String debuggerConnectionActivated = "debuggerConnectionActivated";
+    public final static String debuggerConnectionTerminated = "debuggerConnectionTerminated";
+
 }
