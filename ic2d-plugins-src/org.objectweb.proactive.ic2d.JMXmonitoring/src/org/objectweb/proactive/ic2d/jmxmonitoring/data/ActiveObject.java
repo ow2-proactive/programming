@@ -709,8 +709,7 @@ public final class ActiveObject extends AbstractData<ProActiveNodeObject, Abstra
         this.requestQueueLength--;
         setChanged();
         notifyObservers(new MVCNotification(MVCNotificationTag.ACTIVE_OBJECT_REQUEST_QUEUE_LENGHT_CHANGED,
-            requestQueueLength));
-        ;
+            requestQueueLength));        
     }
 
     public void setRequestQueueLength(int requestQueueLength) {
@@ -718,9 +717,17 @@ public final class ActiveObject extends AbstractData<ProActiveNodeObject, Abstra
             this.requestQueueLength = requestQueueLength;
             setChanged();
             notifyObservers(new MVCNotification(
-                MVCNotificationTag.ACTIVE_OBJECT_REQUEST_QUEUE_LENGHT_CHANGED, requestQueueLength));
-            ;
+                MVCNotificationTag.ACTIVE_OBJECT_REQUEST_QUEUE_LENGHT_CHANGED, requestQueueLength));            
         }
+    }
+    
+    /**
+     * Returns the length of the monitored active object request queue.
+     * 
+     * @return The length of the request queue
+     */
+    public int getRequestQueueLength() {
+        return this.requestQueueLength;
     }
 
     public String getJobId() {
