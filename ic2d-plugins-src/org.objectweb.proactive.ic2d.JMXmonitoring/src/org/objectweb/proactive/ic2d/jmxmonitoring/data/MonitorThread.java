@@ -54,14 +54,21 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
  * specifically asked. This thread is used to explore new found objects in the
  * system. The time between two executions of the
  * MonitorThreadSelectiveRefresher (timeForSelectiveRefresh * 1000) should
- * allways be less that
+ * always be less that
  * 
  * @author The ProActive Team
  * 
  */
 public final class MonitorThread implements Observer {
     private static org.apache.log4j.Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
+    /**
+     * Default time to refresh in seconds
+     */
     private final static int DEFAULT_TTR = 10;
+
+    /**
+     * Default selective time to refresh in seconds
+     */
     private final static int DEFAULT_TIME_SELECTIVE_REFRESH = 20;
 
     // /** Hosts will be recursively searched up to this depth */
