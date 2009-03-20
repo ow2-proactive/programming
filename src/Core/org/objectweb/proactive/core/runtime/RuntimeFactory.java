@@ -72,7 +72,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 0.9
  *
  */
-public abstract class RuntimeFactory {
+public class RuntimeFactory {
     public static Logger runtimeLogger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     // test with class loader
@@ -197,22 +197,4 @@ public abstract class RuntimeFactory {
         //proActiveRuntimeURL = removeProtocol(proActiveRuntimeURL, protocol);
         return (ProActiveRuntime) RemoteObjectHelper.generatedObjectStub(ro);
     }
-
-    //
-    // -- PROTECTED METHODS -----------------------------------------------
-    //
-
-    /**
-     * Returns the reference of the only one instance of the ProActiveRuntime
-     * associated with the local JVM.
-     * If this runtime does not yet exist, it creates it with the associated protocol.
-     * @return ProActiveRuntime
-     * @throws ProActiveException if this ProActiveRuntime cannot be created
-     */
-    protected abstract ProActiveRuntime getProtocolSpecificRuntimeImpl() throws ProActiveException;
-
-    /**
-     * Returns the reference to the proActiveRuntime located at s
-     */
-    protected abstract ProActiveRuntime getRemoteRuntimeImpl(String s) throws ProActiveException;
 }
