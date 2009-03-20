@@ -31,9 +31,13 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.figure;
 
+import java.util.List;
+
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -110,11 +114,7 @@ public class VMFigure extends AbstractRectangleFigure {
         setLayoutManager(layout);
         add(label, BorderLayout.TOP);
 
-        contentPane = new Figure();
-        ToolbarLayout contentPaneLayout = new VMToolbarLayout();
-        contentPaneLayout.setSpacing(10);
-        contentPaneLayout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
-        contentPane.setLayoutManager(contentPaneLayout);
+        contentPane = new GridContentPane("VM");
         add(contentPane, BorderLayout.CENTER);
     }
 
@@ -143,13 +143,4 @@ public class VMFigure extends AbstractRectangleFigure {
         }
     }
 
-    private class VMToolbarLayout extends ToolbarLayout {
-        public VMToolbarLayout() {
-            super(false);
-        }
-
-        protected Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
-            return super.calculatePreferredSize(container, wHint, hHint).expand(0, 8);
-        }
-    }
 }

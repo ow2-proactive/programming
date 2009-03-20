@@ -53,7 +53,7 @@ public final class WorldEditPart extends AbstractMonitoringEditPart<WorldObject>
     /*
      * A repaint will be done each TIME_TO_REFRESH mls 
      */
-    private static int TIME_TO_REPAINT = 200;
+    private static int TIME_TO_REPAINT = 400;
 
     /*
      * refreshMode=FULL -> a refresh is asked for each event 
@@ -91,7 +91,7 @@ public final class WorldEditPart extends AbstractMonitoringEditPart<WorldObject>
 
                         control = getViewer().getControl();
                         if (control != null) {
-                            control.getDisplay().syncExec(WorldEditPart.this.drawRunnable);
+                            control.getDisplay().asyncExec(WorldEditPart.this.drawRunnable);
                         }
                     }
                 } catch (InterruptedException e) {

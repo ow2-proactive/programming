@@ -100,12 +100,6 @@ public class MonitoringContextMenuProvider extends ContextMenuProvider {
 
             // Zoom Out
             actions.add(registry.getAction(GEFActionConstants.ZOOM_OUT));
-
-            // Vertical Layout
-            actions.add(registry.getAction(VerticalLayoutAction.VERTICAL_LAYOUT));
-
-            // Horizontal Layout
-            actions.add(registry.getAction(HorizontalLayoutAction.HORIZONTAL_LAYOUT));
         }
 
         for (IAction a : this.actions) {

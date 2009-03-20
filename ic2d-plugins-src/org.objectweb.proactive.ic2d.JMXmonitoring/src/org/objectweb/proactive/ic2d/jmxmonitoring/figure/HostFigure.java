@@ -31,8 +31,12 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.figure;
 
+import java.util.List;
+
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
@@ -74,18 +78,6 @@ public class HostFigure extends AbstractRectangleFigure {
         return contentPane;
     }
 
-    public boolean isVerticalLayout() {
-        return contentPane.getLayoutManager() instanceof HostVerticalLayout;
-    }
-
-    public void setVerticalLayout() {
-        contentPane.setLayoutManager(new HostVerticalLayout());
-    }
-
-    public void setHorizontalLayout() {
-        contentPane.setLayoutManager(new HostHorizontalLayout());
-    }
-
     //
     // -- PROTECTED METHODS --------------------------------------------
     //
@@ -100,12 +92,13 @@ public class HostFigure extends AbstractRectangleFigure {
         BorderLayout layout = new HostBorderLayout();
         setLayoutManager(layout);
         add(label, BorderLayout.TOP);
+        //        contentPane = new Figure();
+        //        DynamicGridLayout contentPaneLayout = new DynamicGridLayout("Host",this);
+        //        contentPaneLayout.setSpacing(5);
+        //        contentPaneLayout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
+        //        contentPane.setLayoutManager(contentPaneLayout);
 
-        contentPane = new Figure();
-        ToolbarLayout contentPaneLayout = new HostHorizontalLayout();
-        contentPaneLayout.setSpacing(5);
-        contentPaneLayout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
-        contentPane.setLayoutManager(contentPaneLayout);
+        contentPane = new GridContentPane("Host");
 
         add(contentPane, BorderLayout.CENTER);
     }
@@ -133,10 +126,27 @@ public class HostFigure extends AbstractRectangleFigure {
         repaint();
     }
 
+//    @Override
+//    protected void paintIC2DFigure(Graphics graphics) {
+//
+//        //        int nb_colums = new Double(Math.sqrt(contentPane.getChildren().size())).intValue();
+//        //        nb_colums = Math.max(nb_colums, 1);
+//        //        ((GridLayout) contentPane.getLayoutManager()).numColumns = nb_colums;
+//        contentPane.getLayoutManager().layout(contentPane);
+//        this.invalidateTree();
+//
+//        super.paintIC2DFigure(graphics);
+//    }
+
     //
     // -- INNER CLASS --------------------------------------------
     //
     private class HostBorderLayout extends BorderLayout {
+
+        public HostBorderLayout() {
+
+        }
+
         protected Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
             if (legend) {
                 return super.calculatePreferredSize(container, wHint, hHint).expand( /*100*/
@@ -145,35 +155,7 @@ public class HostFigure extends AbstractRectangleFigure {
             }
             return super.calculatePreferredSize(container, wHint, hHint).expand(10, 0);
         }
+
     }
 
-    private class HostHorizontalLayout extends ToolbarLayout {
-        public HostHorizontalLayout() {
-            super(true);
-        }
-
-        protected Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
-            return super.calculatePreferredSize(container, wHint, hHint).expand(0, 13);
-        }
-
-        public void layout(IFigure figure) {
-            super.layout(figure);
-            figure.translate(5, 0);
-        }
-    }
-
-    private class HostVerticalLayout extends ToolbarLayout {
-        public HostVerticalLayout() {
-            super(false);
-        }
-
-        protected Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
-            return super.calculatePreferredSize(container, wHint, hHint).expand(0, 13);
-        }
-
-        public void layout(IFigure figure) {
-            super.layout(figure);
-            figure.translate(5, 5);
-        }
-    }
 }

@@ -83,32 +83,27 @@ public class AOInformationView extends ViewPart {
     /*
      * The constructor
      */
-    public AOInformationView() {
-        singleton = this;
-    }
 
     //
     // -- PUBLIC METHODS ----------------------------------------------
     //
-
     /*
      * Return the instance of this view singleton
      *
      * @return
      */
-    public static AOInformationView getInstance() {
-        if (singleton == null)
-            singleton = new AOInformationView();
-        return singleton;
-    }
-
+    //    public static synchronized AOInformationView getInstance() {
+    //        if (singleton == null)
+    //            singleton = new AOInformationView();
+    //        return singleton;
+    //    }
     /*
      * Create the view's part
      */
     @Override
     public void createPartControl(Composite parent) {
 
-        parent.setLayout(new FormLayout());
+        //        parent.setLayout(new FormLayout());
 
         // Toolbar Manager
         IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();

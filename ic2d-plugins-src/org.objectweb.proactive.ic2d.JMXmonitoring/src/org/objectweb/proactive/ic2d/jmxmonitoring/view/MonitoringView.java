@@ -69,7 +69,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.objectweb.proactive.ic2d.jmxmonitoring.Activator;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.ChartItAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.EnableDisableMonitoringAction;
-import org.objectweb.proactive.ic2d.jmxmonitoring.action.HorizontalLayoutAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.KillVMAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.MonitoringContextMenuProvider;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.NewHostAction;
@@ -83,7 +82,6 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.action.SetTTRAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.SetUpdateFrequenceAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.ShowConnectionsAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.StopMonitoringAction;
-import org.objectweb.proactive.ic2d.jmxmonitoring.action.VerticalLayoutAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.WorldObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.dnd.DragAndDrop;
 import org.objectweb.proactive.ic2d.jmxmonitoring.editpart.CommunicationEditPart;
@@ -522,9 +520,6 @@ public class MonitoringView extends ViewPart {
         registry.registerAction(new ShowConnectionsAction());
         registry.registerAction(new KillVMAction());
         registry.registerAction(new SetUpdateFrequenceAction(display));
-        registry.registerAction(new VerticalLayoutAction());
-        registry.registerAction(new HorizontalLayoutAction());
-
         // Added for ChartIt
         registry.registerAction(new ChartItAction());
 

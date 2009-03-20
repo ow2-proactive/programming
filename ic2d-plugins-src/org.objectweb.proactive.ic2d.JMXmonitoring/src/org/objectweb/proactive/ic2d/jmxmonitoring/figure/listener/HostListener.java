@@ -40,10 +40,8 @@ import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
-import org.objectweb.proactive.ic2d.jmxmonitoring.action.HorizontalLayoutAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.RefreshHostAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.action.StopMonitoringAction;
-import org.objectweb.proactive.ic2d.jmxmonitoring.action.VerticalLayoutAction;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.HostObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.dnd.DragAndDrop;
 import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint;
@@ -84,20 +82,6 @@ public class HostListener implements MouseListener, MouseMotionListener {
                     StopMonitoringAction stopMonitoringAction = (StopMonitoringAction) act;
                     stopMonitoringAction.setObject(host);
                     stopMonitoringAction.setEnabled(true);
-                } else if (actionClass == VerticalLayoutAction.class) {
-                    VerticalLayoutAction verticalLayoutAction = (VerticalLayoutAction) act;
-                    verticalLayoutAction.setHost(figure);
-                    if (figure.isVerticalLayout()) {
-                        verticalLayoutAction.setChecked(true);
-                    }
-                    verticalLayoutAction.setEnabled(true);
-                } else if (actionClass == HorizontalLayoutAction.class) {
-                    HorizontalLayoutAction horizontalLayoutAction = (HorizontalLayoutAction) act;
-                    horizontalLayoutAction.setHost(figure);
-                    if (figure.isVerticalLayout()) {
-                        horizontalLayoutAction.setChecked(false);
-                    }
-                    horizontalLayoutAction.setEnabled(true);
                 } else if (act instanceof IActionExtPoint) {
                     ((IActionExtPoint) act).setAbstractDataObject(this.host);
                 } else if (act instanceof ZoomOutAction || act instanceof ZoomInAction) {

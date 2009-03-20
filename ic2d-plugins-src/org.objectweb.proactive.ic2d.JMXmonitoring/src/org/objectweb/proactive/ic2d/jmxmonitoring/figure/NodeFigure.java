@@ -31,10 +31,13 @@
  */
 package org.objectweb.proactive.ic2d.jmxmonitoring.figure;
 
+import java.util.List;
+
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.Graphics;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
@@ -114,14 +117,8 @@ public class NodeFigure extends AbstractRectangleFigure {
         BorderLayout layout = new NodeBorderLayout();
         layout.setVerticalSpacing(5);
         setLayoutManager(layout);
-
         add(label, BorderLayout.TOP);
-
-        contentPane = new NodeContentPane();
-        ToolbarLayout contentPaneLayout = new NodeToolbarLayout();
-        contentPaneLayout.setSpacing(5);
-        contentPaneLayout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
-        contentPane.setLayoutManager(contentPaneLayout);
+        contentPane = new GridContentPane("Node");
         add(contentPane, BorderLayout.CENTER);
     }
 
@@ -147,16 +144,6 @@ public class NodeFigure extends AbstractRectangleFigure {
             }
 
             return super.calculatePreferredSize(container, wHint, hHint).expand(15, 0);
-        }
-    }
-
-    private class NodeToolbarLayout extends ToolbarLayout {
-        public NodeToolbarLayout() {
-            super(false);
-        }
-
-        protected Dimension calculatePreferredSize(IFigure container, int wHint, int hHint) {
-            return super.calculatePreferredSize(container, wHint, hHint).expand(0, 15);
         }
     }
 

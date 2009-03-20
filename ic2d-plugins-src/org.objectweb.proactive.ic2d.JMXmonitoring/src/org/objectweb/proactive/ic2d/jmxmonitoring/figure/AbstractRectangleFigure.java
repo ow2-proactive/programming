@@ -109,4 +109,5 @@ public abstract class AbstractRectangleFigure extends AbstractFigure {
         }
         return text;
     }
+
 }
