@@ -80,12 +80,9 @@ public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeO
             String serverName) {
         super(objectName);
         this.parent = parent;
-
         this.url = FactoryName.getCompleteUrl(runtimeUrl);
-
         this.hostUrlServer = hostUrl;
         this.serverName = serverName;
-
         this.listener = new RuntimeObjectListener(this);
     }
 
@@ -350,10 +347,53 @@ public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeO
     }
 
     public boolean hasDebuggerConnected() {
-        return proxyMBean.hasDebuggerConnected();
+        try {
+
+            final ProActiveConnection proActiveConnection = this.getProActiveConnection();
+            if (proActiveConnection == null) {
+                return false;
+            }
+
+            if (this.proxyMBean == null) {
+                this.proxyMBean = (ProActiveRuntimeWrapperMBean) MBeanServerInvocationHandler
+                        .newProxyInstance(proActiveConnection, super.objectName,
+                                ProActiveRuntimeWrapperMBean.class, false);
+            }
+
+            if (!PAActiveObject.pingActiveObject(proActiveConnection)) {
+                System.out.println("Connection to runtime closed: " + this.getName());
+                return false;
+            }
+
+            return proxyMBean.hasDebuggerConnected();
+        } catch (Throwable t) {
+            return false;
+        }
+
     }
 
     public boolean canBeDebugged() {
-        return proxyMBean.canBeDebugged();
+        try {
+
+            final ProActiveConnection proActiveConnection = this.getProActiveConnection();
+            if (proActiveConnection == null) {
+                return false;
+            }
+
+            if (this.proxyMBean == null) {
+                this.proxyMBean = (ProActiveRuntimeWrapperMBean) MBeanServerInvocationHandler
+                        .newProxyInstance(proActiveConnection, super.objectName,
+                                ProActiveRuntimeWrapperMBean.class, false);
+            }
+
+            if (!PAActiveObject.pingActiveObject(proActiveConnection)) {
+                System.out.println("Connection to runtime closed: " + this.getName());
+                return false;
+            }
+
+            return proxyMBean.canBeDebugged();
+        } catch (Throwable t) {
+            return false;
+        }
     }
 }
