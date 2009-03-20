@@ -38,6 +38,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.swt.widgets.Control;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.WorldObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.listener.WorldListener;
+import org.objectweb.proactive.ic2d.jmxmonitoring.util.IC2DThreadPool;
 import org.objectweb.proactive.ic2d.jmxmonitoring.view.MonitoringView;
 
 
@@ -81,8 +82,7 @@ public final class WorldEditPart extends AbstractMonitoringEditPart<WorldObject>
         super(model);
         this.monitoringView = monitoringView;
 
-        new Thread() {
-            @Override
+        IC2DThreadPool.execute(new Runnable() {
             public final void run() {
                 try {
                     Control control;
@@ -98,7 +98,7 @@ public final class WorldEditPart extends AbstractMonitoringEditPart<WorldObject>
                     e.printStackTrace();
                 }
             }
-        }.start();
+        });
     }
 
     //

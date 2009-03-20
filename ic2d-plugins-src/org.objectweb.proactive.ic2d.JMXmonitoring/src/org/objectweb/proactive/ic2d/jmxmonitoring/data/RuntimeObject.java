@@ -52,6 +52,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.ic2d.console.Console;
 import org.objectweb.proactive.ic2d.jmxmonitoring.Activator;
 import org.objectweb.proactive.ic2d.jmxmonitoring.data.listener.RuntimeObjectListener;
+import org.objectweb.proactive.ic2d.jmxmonitoring.util.IC2DThreadPool;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotification;
 import org.objectweb.proactive.ic2d.jmxmonitoring.util.MVCNotificationTag;
 
@@ -155,32 +156,29 @@ public final class RuntimeObject extends AbstractData<HostObject, ProActiveNodeO
      * Kill this runtime.
      */
     public void killRuntime() {
-        new Thread() {
-            @Override
+        IC2DThreadPool.execute(new Runnable() {
             public void run() {
                 Object[] params = {};
                 String[] signature = {};
                 invokeAsynchronous("killRuntime", params, signature);
                 runtimeKilled();
             }
-        }.start();
+        });
     }
 
     public void runtimeKilled() {
         setChanged();
         notifyObservers(new MVCNotification(MVCNotificationTag.RUNTIME_OBJECT_RUNTIME_KILLED));
-        ;
-        new Thread() {
-            @Override
+        IC2DThreadPool.execute(new Runnable() {
             public void run() {
                 try {
-                    sleep(3000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 RuntimeObject.this.destroy();
             }
-        }.start();
+        });
     }
 
     /**

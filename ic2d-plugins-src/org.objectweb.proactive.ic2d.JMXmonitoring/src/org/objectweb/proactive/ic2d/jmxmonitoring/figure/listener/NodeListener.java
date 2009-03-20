@@ -51,6 +51,7 @@ import org.objectweb.proactive.ic2d.jmxmonitoring.data.ProActiveNodeObject;
 import org.objectweb.proactive.ic2d.jmxmonitoring.dnd.DragAndDrop;
 import org.objectweb.proactive.ic2d.jmxmonitoring.extpoint.IActionExtPoint;
 import org.objectweb.proactive.ic2d.jmxmonitoring.figure.NodeFigure;
+import org.objectweb.proactive.ic2d.jmxmonitoring.util.IC2DThreadPool;
 import org.objectweb.proactive.ic2d.jmxmonitoring.view.MonitoringView;
 
 
@@ -145,11 +146,11 @@ public final class NodeListener implements MouseListener, MouseMotionListener {
                 }
 
                 /*------------ Migration ------------*/
-                new Thread(new Runnable() {
+                IC2DThreadPool.execute(new Runnable() {
                     public void run() {
                         source.migrateTo(node);
                     }
-                }).start();
+                });
                 /*----------------------------------*/
                 this.internalCancel();
             }
