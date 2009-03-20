@@ -154,23 +154,22 @@ public class MonitoringView extends ViewPart {
         world = new WorldObject();
         title = world.getName();
 
-        Thread t = new Thread() {
-            @Override
+        IC2DThreadPool.execute(new Runnable() {
             public final void run() {
-                try {
-                    while (true) {
+                while (true) {
+                    try {
                         Thread.sleep(TIME_TO_REFRESH_NUMBER_OF_MONITORED_OBJECTS);
-
                         Display.getDefault().asyncExec(updateNbOfMonitoredObjects);
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
-        };
-        t.setPriority(Thread.MIN_PRIORITY);
-        t.setDaemon(true);
-        t.start();
+        });
+        //        t.setPriority(Thread.MIN_PRIORITY);
+        //        t.setDaemon(true);
+        //        t.start();
     }
 
     //
@@ -315,7 +314,7 @@ public class MonitoringView extends ViewPart {
 
         Group numberOfObjectsResetGroup = new Group(groupD, SWT.NONE);
         numberOfObjectsResetGroup.setText("Monitored Objects");
-        GridLayout nbObjsLayout = new org.eclipse.swt.layout.GridLayout(2, false);
+        GridLayout nbObjsLayout = new org.eclipse.swt.layout.GridLayout(3, true);
         // RowLayout nbObjsLayout = new RowLayout();
         numberOfObjectsResetGroup.setLayout(nbObjsLayout);
         aosLLabel = new Label(numberOfObjectsResetGroup, SWT.NONE);
