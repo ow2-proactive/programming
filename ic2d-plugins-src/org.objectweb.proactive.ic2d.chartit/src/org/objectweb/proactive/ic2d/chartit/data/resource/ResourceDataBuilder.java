@@ -101,6 +101,10 @@ public final class ResourceDataBuilder {
                 return customDataProviders;
             }
 
+            public String getConfigFilename() {
+                return null;
+            }
+
         };
     }
 

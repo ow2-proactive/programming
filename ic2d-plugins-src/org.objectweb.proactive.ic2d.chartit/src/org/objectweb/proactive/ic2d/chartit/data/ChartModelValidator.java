@@ -53,7 +53,7 @@ import org.objectweb.proactive.ic2d.console.Console;
  * 
  * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>.
  */
-public class ChartModelValidator {
+public final class ChartModelValidator {
 
     /**
      * The types associated to this class of model
@@ -75,19 +75,26 @@ public class ChartModelValidator {
             "[Ljava.lang.Double;", "[J", "[Ljava.lang.Long;" };
 
     /**
-     * @param model
-     * @return
+     * Validates a chart model. In other words verifies the following rules:
+     * <p>
+     * - Data providers are String[] are Number[] of the same length
+     * <p> 
+     * - Only number based data providers
+     * 
+     * @param model The model to validate
+     * 
+     * @return True if the model is semantically valid
      */
     public static final boolean validate(final ChartModel model) {
-        List<IDataProvider> providers = model.getProviders();
+        final List<IDataProvider> providers = model.getProviders();
         // At least 1 provider is needed
         if (providers.size() < 1) {
             return false;
         }
         // Get the iterator
-        Iterator<IDataProvider> it = providers.iterator();
+        final Iterator<IDataProvider> it = providers.iterator();
         // Get first element
-        IDataProvider firstElement = it.next();
+        final IDataProvider firstElement = it.next();
         // If string array
         if (Utils.contains(STRING_ARRAY_TYPE, firstElement.getType())) {
             // size must not exceed 2 and the next element must be an array of
@@ -129,17 +136,27 @@ public class ChartModelValidator {
         } else {
             return false;
         }
-
     }
 
     private static final void initModel(final ChartModel model, final IDataProvider namesProvider,
             final IDataProvider valuesProvider) {
-        model.runtimeNames = (String[]) namesProvider.provideValue();
+        final String[] names = (String[]) namesProvider.provideValue();
+        final double[] values = new double[names.length];
 
         // Check and adapt names
-        checkAndAdaptNamesLength(model);
+        // If RRD4J chart type Datasource name must be less than 20 chars
+        if (model.isChronological()) {
+            for (int i = names.length; i-- > 0;) {
+                String name = names[i];
+                if (name.length() > 20) {
+                    names[i] = name.substring(0, 19);
+                }
+            }
+        }
 
-        model.runtimeValues = new double[model.runtimeNames.length];
+        model.setRuntimeNames(names);
+        model.setRuntimeValues(values);
+
         model.runtimeValuesUpdater = new IRuntimeValuesUpdater() {
             public final void updateValues(final double[] valuesToUpdate) {
                 final Object values = valuesProvider.provideValue();
@@ -152,7 +169,7 @@ public class ChartModelValidator {
                                 " because its values length differs from names length.");
                     return;
                 }
-                for (int i = 0; i < length; i++) {
+                for (int i = length; i-- > 0;) {
                     valuesToUpdate[i] = ((Number) java.lang.reflect.Array.get(values, i)).doubleValue();
                 }
             }
@@ -162,38 +179,38 @@ public class ChartModelValidator {
 
     private static final void initModel(final ChartModel model, final List<IDataProvider> providers) {
         final String[] names = new String[providers.size()];
-        int i = 0;
-        for (final IDataProvider provider : providers) {
-            names[i++] = provider.getName();
-        }
-        model.runtimeNames = names;
+        final double[] values = new double[providers.size()];
 
-        // Check and adapt names
-        checkAndAdaptNamesLength(model);
-
-        model.runtimeValues = new double[names.length];
-        model.runtimeValuesUpdater = new IRuntimeValuesUpdater() {
-            public final void updateValues(final double[] valuesToUpdate) {
-                int i = 0;
-                for (final IDataProvider provider : providers) {
-                    valuesToUpdate[i++] = ((Number) provider.provideValue()).doubleValue();
-                }
-
-            }
-        };
-
-        model.runtimeValuesUpdater.updateValues(model.runtimeValues);
-    }
-
-    private static final void checkAndAdaptNamesLength(final ChartModel model) {
         // If RRD4J chart type Datasource name must be less than 20 chars
         if (model.isChronological()) {
-            for (int i = 0; i < model.runtimeNames.length; i++) {
-                String name = model.runtimeNames[i];
+            int i = 0;
+            for (final IDataProvider provider : providers) {
+                String name = provider.getName();
                 if (name.length() > 20) {
-                    model.runtimeNames[i] = name.substring(0, 19);
+                    names[i] = name.substring(0, 19);
+                } else {
+                    names[i] = name;
                 }
+                i++;
+            }
+        } else {
+            int i = 0;
+            for (final IDataProvider provider : providers) {
+                names[i++] = provider.getName();
             }
         }
+
+        model.setRuntimeNames(names);
+        model.setRuntimeValues(values);
+
+        model.runtimeValuesUpdater = new IRuntimeValuesUpdater() {
+            public final void updateValues(final double[] valuesToUpdate) {
+                for (int i = providers.size(); i-- > 0;) {
+                    IDataProvider provider = providers.get(i);
+                    valuesToUpdate[i] = ((Number) provider.provideValue()).doubleValue();
+                }
+            }
+        };
+        model.runtimeValuesUpdater.updateValues(model.runtimeValues);
     }
 }

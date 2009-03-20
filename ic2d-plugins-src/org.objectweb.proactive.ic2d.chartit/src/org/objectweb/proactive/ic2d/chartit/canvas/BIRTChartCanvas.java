@@ -39,16 +39,47 @@ import org.eclipse.birt.chart.model.Chart;
 import org.eclipse.birt.chart.model.attribute.Bounds;
 import org.eclipse.birt.chart.model.attribute.impl.BoundsImpl;
 import org.eclipse.birt.chart.util.PluginSettings;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 
 /**
- * The canvas to show chart.
- * @author The ProActive Team
+ * The canvas that draws a chart using BIRT charting api.
+ * 
+ * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>.
  */
-public final class BIRTChartCanvas extends AbstractCachedCanvas {
+public final class BIRTChartCanvas extends Canvas implements PaintListener, ControlListener {
+
+    /**
+     * Default canvas width
+     */
+    public static final int DEFAULT_WIDTH = 400;
+
+    /**
+     * Default canvas height
+     */
+    public static final int DEFAULT_HEIGHT = 200;
+
+    /**
+     * The image which caches the chart image to improve drawing performance.
+     */
+    protected Image cachedImage;
+
+    /**
+     * To know if we need to recompute the chart
+     */
+    public boolean recomputeChart;
 
     /**
      * The device render for rendering chart.
@@ -61,9 +92,9 @@ public final class BIRTChartCanvas extends AbstractCachedCanvas {
     protected Chart chart;
 
     /**
-     * The chart state.
+     * The scale resolution used for chart rendering 
      */
-    protected GeneratedChartState state;
+    private final double scaleResolution;
 
     /**
      * Constructs one canvas containing chart.
@@ -75,51 +106,73 @@ public final class BIRTChartCanvas extends AbstractCachedCanvas {
      *            the style of control to construct
      */
     public BIRTChartCanvas(Composite parent, int style, final Chart chart) {
-        super(parent, style);
+        // SWT.NO_BACKGROUND is used to avoid flickering
+        super(parent, style | SWT.NO_BACKGROUND);
+
+        // Set default size 
+        this.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+        // Set the default Layout data
+        final GridData gd = new GridData();
+        gd.widthHint = DEFAULT_WIDTH;
+        gd.heightHint = DEFAULT_HEIGHT;
+        gd.horizontalAlignment = GridData.FILL;
+        gd.grabExcessHorizontalSpace = true;
+        this.setLayoutData(gd);
+
+        // Initialize the cached image
+        this.cachedImage = new Image(Display.getDefault(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+        // Add listeners
+        super.addPaintListener(this);
+        super.addControlListener(this);
+
         this.chart = chart;
-        // initialize the SWT rendering device
+        // initialize the SWT rendering device               
         try {
-            PluginSettings ps = PluginSettings.instance();
-            this.render = ps.getDevice("dv.SWT");
+            this.render = PluginSettings.instance().getDevice("dv.SWT");
         } catch (ChartException ex) {
             ex.printStackTrace();
         }
+        // Compute the scale resolution 
+        this.scaleResolution = 72d / this.render.getDisplayServer().getDpiResolution();
     }
 
     /**
-     * Builds the chart state. This method should be call when data is changed.
-     * May be slow : 20-60ms Intel(R) Core(TM)2 Duo CPU E4400 @ 2.00GHz JVM 1.5 64bits
+     * Called when the canvas is repaint
      */
-    @Override
-    protected void buildChart() {
-        final Point size = getSize();
-        Bounds bo = BoundsImpl.create(0, 0, size.x, size.y);
-        int resolution = render.getDisplayServer().getDpiResolution();
-        bo.scale(72d / resolution);
-        try {
-            this.state = Generator.instance().build(render.getDisplayServer(), chart, bo, null, null, null);
-        } catch (ChartException ex) {
-            ex.printStackTrace();
-        }
-    }
+    public final void paintControl(final PaintEvent e) {
+        final Composite co = (Composite) e.getSource();
+        final Rectangle rect = co.getClientArea();
 
-    /**
-     * Draws the chart onto the cached image in the area of the given
-     * <code>Rectangle</code>.
-     */
-    @Override
-    public void drawToCachedImage() {
-        GC gc = null;
-        try {
-            gc = new GC(super.cachedImage);
-            render.setProperty(IDeviceRenderer.GRAPHICS_CONTEXT, gc);
-            Generator.instance().render(render, state);
-        } catch (ChartException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (gc != null)
-                gc.dispose();
+        if (this.recomputeChart) {
+            // Dispose the precedent image
+            this.cachedImage.dispose();
+            // Then create another
+            this.cachedImage = new Image(co.getDisplay(), rect);
+
+            // Chart rendering be called when data is changed.
+            // May be slow : 20-60ms Intel(R) Core(TM)2 Duo CPU E4400 @ 2.00GHz JVM 1.5 64bits               
+            final Point size = super.getSize();
+            final Bounds bo = BoundsImpl.create(0, 0, size.x, size.y);
+            bo.scale(this.scaleResolution);
+            // The cached image must not be null
+            final GC gcImage = new GC(this.cachedImage);
+            this.render.setProperty(IDeviceRenderer.GRAPHICS_CONTEXT, gcImage);
+            final Generator gr = Generator.instance();
+            try {
+                final GeneratedChartState state = gr.build(this.render.getDisplayServer(), this.chart, bo,
+                        null, null, null);
+                gr.render(this.render, state);
+            } catch (ChartException ex) {
+                ex.printStackTrace();
+            } finally {
+                gcImage.dispose();
+            }
+
+            this.recomputeChart = false;
         }
+        e.gc.drawImage(this.cachedImage, 0, 0);
     }
 
     /**
@@ -137,8 +190,8 @@ public final class BIRTChartCanvas extends AbstractCachedCanvas {
         //        // Draw the changes to the cached image
         //        this.drawToCachedImage();
         //        // Draw the cached image to the screen    	
-        super.recomputeChart = true;
-        super.redraw();
+        this.recomputeChart = true;
+        this.redraw();
     }
 
     /**
@@ -147,7 +200,7 @@ public final class BIRTChartCanvas extends AbstractCachedCanvas {
      * @return the chart contained in this canvas.
      */
     public Chart getChart() {
-        return chart;
+        return this.chart;
     }
 
     /**
@@ -159,11 +212,38 @@ public final class BIRTChartCanvas extends AbstractCachedCanvas {
      *            the chart to set
      */
     public void setChart(final Chart chart) {
-        if (super.cachedImage != null)
-            super.cachedImage.dispose();
+        if (this.cachedImage != null)
+            this.cachedImage.dispose();
 
-        super.cachedImage = null;
+        this.cachedImage = null;
         this.chart = chart;
+    }
+
+    /**
+     * Called when the control is resized
+     */
+    public final void controlResized(final ControlEvent e) {
+        // Recompute chart
+        this.recomputeChart = true;
+        // Redraw
+        this.redraw();
+    }
+
+    /**
+     * Controls cannot be moved for the moment
+     */
+    public final void controlMoved(final ControlEvent e) {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.swt.widgets.Widget#dispose()
+     */
+    public void dispose() {
+        if (this.cachedImage != null)
+            this.cachedImage.dispose();
+        super.dispose();
     }
 
 }

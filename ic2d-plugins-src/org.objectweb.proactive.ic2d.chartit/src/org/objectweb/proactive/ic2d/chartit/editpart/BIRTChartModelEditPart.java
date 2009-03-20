@@ -51,14 +51,14 @@ public final class BIRTChartModelEditPart extends AbstractChartItEditPart<BIRTCh
 
     @Override
     public void fillSWTCompositeClient(final Composite client, final int style) {
-        super.canvas = BIRTChartBuilder.build(client, style, super.chartModel);
+        super.canvas = BIRTChartCanvasBuilder.build(client, style, super.chartModel);
 
         // Once the canvas has been created initialize this edit part
         super.init();
     }
 
     public void run() {
-        if (!super.canvas.isVisible())
+        if (super.canvas.isDisposed() || !super.canvas.isVisible())
             return;
         // Redraw the canvas
         this.canvas.refreshChartAndRedrawCanvas();

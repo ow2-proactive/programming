@@ -122,16 +122,12 @@ public final class AvailableDataProvidersSectionWrapper extends AbstractChartItS
         table.setLinesVisible(true);
 
         // Name Column
-        final TableColumn nameColumn = new TableColumn(table, SWT.NONE);
-        nameColumn.setText("Name");
-        nameColumn.pack();
-        //nameColumn.setWidth(200);
+        final TableColumn column1 = new TableColumn(table, SWT.NONE);
+        column1.setText("Name");
 
         // Type Column
-        final TableColumn typeColumn = new TableColumn(table, SWT.NONE);
-        typeColumn.setText("Type");
-        typeColumn.pack();
-        //typeColumn.setWidth(200);
+        final TableColumn column2 = new TableColumn(table, SWT.NONE);
+        column2.setText("Type");
 
         // Layout the table
         GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
@@ -143,8 +139,9 @@ public final class AvailableDataProvidersSectionWrapper extends AbstractChartItS
             public final void controlResized(final ControlEvent event) {
                 final int width = table.getClientArea().width;
                 if (width > 0) {
-                    nameColumn.setWidth(width / 2);
-                    nameColumn.pack();
+                    int halfWidth = width / 2;
+                    column1.setWidth(halfWidth);
+                    column2.setWidth(halfWidth);
                 }
             }
         });
@@ -279,14 +276,14 @@ public final class AvailableDataProvidersSectionWrapper extends AbstractChartItS
     }
 
     /**
-     * Retunrs all providers.
+     * Returns all providers.
      * 
      * @return An array that contains all data providers
      */
     public IDataProvider[] getAllProviders() {
         final TableItem[] allItems = this.tableViewer.getTable().getItems();
         final IDataProvider[] allProviders = new IDataProvider[allItems.length];
-        for (int i = allItems.length; --i >= 0;) {
+        for (int i = allItems.length; i-- > 0;) {
             allProviders[i] = (IDataProvider) allItems[i].getData();
         }
         return allProviders;
@@ -337,12 +334,11 @@ public final class AvailableDataProvidersSectionWrapper extends AbstractChartItS
          */
         @SuppressWarnings("unchecked")
         public String getColumnText(final Object obj, final int index) {
-            final IDataProvider dp = (IDataProvider) obj;
             switch (index) {
                 case 0:
-                    return dp.getName();
+                    return ((IDataProvider) obj).getName();
                 case 1:
-                    return dp.getType();
+                    return ((IDataProvider) obj).getType();
                 default:
                     return "Unknown";
             }

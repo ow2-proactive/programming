@@ -36,32 +36,67 @@ import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
 
 
-public final class RRD4JChartCanvas extends AbstractCachedCanvas {
+/**
+ * The canvas to show chart with RRD4J charting api.
+ * 
+ * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>.
+ */
+public final class RRD4JChartCanvas extends Canvas implements PaintListener, ControlListener {
 
+    /**
+     * Default canvas width
+     */
+    public static final int DEFAULT_WIDTH = 400;
+
+    /**
+     * Default canvas height
+     */
+    public static final int DEFAULT_HEIGHT = 200;
+
+    /**
+     * The palette data used for building an ImageData
+     */
     private static final PaletteData PALETTE_DATA = new PaletteData(0xFF0000, 0xFF00, 0xFF);
 
+    /** The default crop width */
     public static final int DEFAULT_WIDTH_CROP = 80;
+
+    /** The default crop height */
     public static final int DEFAULT_HEIGHT_CROP = 50;//30;
 
     /**
-     * 
+     * The image which caches the chart image to improve drawing performance.
      */
-    private final RrdGraphDef graphDef;
+    protected Image cachedImage;
 
     /**
-     * 
+     * To know if we need to recompute the chart
      */
-    private RrdGraph graph;
+    public boolean recomputeChart;
+
+    /**
+     * The graph definition built once
+     */
+    private final RrdGraphDef graphDef;
 
     /**
      * Cached awt image
@@ -80,7 +115,26 @@ public final class RRD4JChartCanvas extends AbstractCachedCanvas {
      *            the style of control to construct
      */
     public RRD4JChartCanvas(final Composite parent, int style, final RrdGraphDef graphDef) {
-        super(parent, style);
+        super(parent, style | SWT.NO_BACKGROUND);
+
+        // Set default size 
+        this.setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+        // Set the default Layout data
+        final GridData gd = new GridData();
+        gd.widthHint = DEFAULT_WIDTH;
+        gd.heightHint = DEFAULT_HEIGHT;
+        gd.horizontalAlignment = GridData.FILL;
+        gd.grabExcessHorizontalSpace = true;
+        this.setLayoutData(gd);
+
+        // Initialize the chached image
+        this.cachedImage = new Image(Display.getDefault(), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+        // Add listeners
+        super.addPaintListener(this);
+        super.addControlListener(this);
+
         this.graphDef = graphDef;
     }
 
@@ -99,46 +153,45 @@ public final class RRD4JChartCanvas extends AbstractCachedCanvas {
      * Draws the chart onto the cached image in the area of the given
      * <code>Image</code>.
      */
-    @Override
     public void drawToCachedImage() {
         GC gc = null;
         try {
-            final int boundsWidth = super.cachedImage.getBounds().width;
-            final int boundsHeigth = super.cachedImage.getBounds().height;
+            final int boundsWidth = this.cachedImage.getBounds().width;
+            final int boundsHeigth = this.cachedImage.getBounds().height;
 
             this.graphDef.setWidth(boundsWidth - DEFAULT_WIDTH_CROP);
             this.graphDef.setHeight(boundsHeigth - DEFAULT_HEIGHT_CROP);
 
             // Create the graph
-            this.graph = new RrdGraph(graphDef);
+            final RrdGraph graph = new RrdGraph(graphDef);
 
             // First Draw to an AWT Image then convert to SWT if bounds has changed
             if (this.cachedAwtImage == null || this.cachedAwtImage.getWidth() != boundsWidth) {
                 this.cachedAwtImage = new BufferedImage(boundsWidth, boundsHeigth, BufferedImage.TYPE_INT_RGB);
-                // We can force bitdepth to be 24 bit because BufferedImage getRGB allows us to always
+                // We can force bit depth to be 24 bit because BufferedImage getRGB allows us to always
                 // retrieve 24 bit data regardless of source color depth.
                 this.swtImageData = new ImageData(boundsWidth, boundsHeigth, 24, PALETTE_DATA);
             }
             // Render the graph
-            this.graph.render(cachedAwtImage.getGraphics());
+            graph.render(cachedAwtImage.getGraphics());
 
-            // Dispose the prcedent cachedImage
-            if (super.cachedImage != null) {
-                super.cachedImage.dispose();
+            // Dispose the precedent cachedImage
+            if (this.cachedImage != null) {
+                this.cachedImage.dispose();
             }
 
             // Convert from BufferedImage to Image                      
-            super.cachedImage = convert(cachedAwtImage, swtImageData);
+            this.cachedImage = convert(cachedAwtImage, swtImageData);
 
             // Draw the image in the gc
-            gc = new GC(super.cachedImage);
+            gc = new GC(this.cachedImage);
 
             // Manually erase gray contours
             gc.setForeground(ColorConstants.white);
             gc.setLineWidth(3);
             gc.drawRectangle(0, 0, boundsWidth - 1, boundsHeigth - 1);
 
-        } catch (Exception ex) {
+        } catch (Throwable ex) {
             ex.printStackTrace();
         } finally {
             if (gc != null)
@@ -146,8 +199,50 @@ public final class RRD4JChartCanvas extends AbstractCachedCanvas {
         }
     }
 
-    @Override
-    protected void buildChart() {
+    /**
+     * Called when the canvas is repaint
+     */
+    public final void paintControl(final PaintEvent e) {
+        final Composite co = (Composite) e.getSource();
+        final Rectangle rect = co.getClientArea();
+
+        if (this.recomputeChart) {
+            // Dispose the precedent image
+            this.cachedImage.dispose();
+            // Then create another
+            this.cachedImage = new Image(co.getDisplay(), rect);
+            this.drawToCachedImage();
+            this.recomputeChart = false;
+        }
+
+        e.gc.drawImage(this.cachedImage, 0, 0);
+    }
+
+    /**
+     * Called when the control is resized
+     */
+    public final void controlResized(final ControlEvent e) {
+        // Recompute chart
+        this.recomputeChart = true;
+        // Redraw
+        this.redraw();
+    }
+
+    /**
+     * Controls cannot be moved for the moment
+     */
+    public final void controlMoved(final ControlEvent e) {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.swt.widgets.Widget#dispose()
+     */
+    public void dispose() {
+        if (this.cachedImage != null)
+            this.cachedImage.dispose();
+        super.dispose();
     }
 
     /**
@@ -170,14 +265,14 @@ public final class RRD4JChartCanvas extends AbstractCachedCanvas {
         final WritableRaster alphaRaster = srcImage.getAlphaRaster();
         final byte[] alphaBytes = new byte[w];
         int[] buff, alpha;
-        for (int y = h; --y >= 0;) {
+        for (int y = h; y-- > 0;) {
             buff = srcImage.getRGB(0, y, w, 1, null, 0, scansize);
             swtImageData.setPixels(0, y, w, buff, 0);
 
             // check for alpha channel
             if (alphaRaster != null) {
                 alpha = alphaRaster.getPixels(0, y, w, 1, (int[]) null);
-                for (int i = w; --i >= 0;)
+                for (int i = w; i-- > 0;)
                     alphaBytes[i] = (byte) alpha[i];
                 swtImageData.setAlphas(0, y, w, alphaBytes, 0);
             }

@@ -35,7 +35,7 @@ package org.objectweb.proactive.ic2d.chartit.data.provider.predefined;
 import org.objectweb.proactive.ic2d.chartit.data.provider.IDataProvider;
 
 
-public class StringArrayDataProvider implements IDataProvider {
+public final class StringArrayDataProvider implements IDataProvider {
 
     public static final String NAME = "arrayOfString";
     public static final String DESCRIPTION = "Test purpose array of String.";

@@ -42,7 +42,6 @@ import java.beans.XMLEncoder;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import org.eclipse.jface.action.ToolBarManager;
@@ -67,9 +66,12 @@ import org.objectweb.proactive.ic2d.chartit.actions.LoadChartsConfigAction;
 import org.objectweb.proactive.ic2d.chartit.actions.SafeSaveDialog;
 import org.objectweb.proactive.ic2d.chartit.actions.SaveChartsConfigAction;
 import org.objectweb.proactive.ic2d.chartit.data.ChartModel;
+import org.objectweb.proactive.ic2d.chartit.data.ChartModelContainer;
 import org.objectweb.proactive.ic2d.chartit.data.ChartType;
 import org.objectweb.proactive.ic2d.chartit.data.provider.IDataProvider;
 import org.objectweb.proactive.ic2d.console.Console;
+
+import cern.colt.Arrays;
 
 
 /**
@@ -199,8 +201,6 @@ public final class ChartsSectionWrapper extends AbstractChartItSectionWrapper {
             if (models.size() == 0)
                 return;
 
-            // Once the data has been dumped to an xml file ask user for report
-            // output path
             final SafeSaveDialog safeSaveDialog = new SafeSaveDialog(Display.getDefault().getActiveShell());
             safeSaveDialog.setText("Save Configuration");
             final String path = safeSaveDialog.open();
@@ -218,9 +218,10 @@ public final class ChartsSectionWrapper extends AbstractChartItSectionWrapper {
             // Prepare a bean info to specify all serialized fields
             final BeanInfo info = Introspector.getBeanInfo(ChartModel.class);
             for (final PropertyDescriptor pd : info.getPropertyDescriptors()) {
+                final String name = pd.getName();
                 // if non transient property continue else set transient
-                if (pd.getName().equals("name") || pd.getName().equals("chartType") ||
-                    pd.getName().equals("refreshPeriod") || pd.getName().equals("runtimeNames")) {
+                if (name.equals("name") || name.equals("chartType") || name.equals("refreshPeriodInMs") ||
+                    name.equals("runtimeNames") || name.equals("labels")) {
                     continue;
                 } else {
                     pd.setValue("transient", Boolean.TRUE);
@@ -285,6 +286,9 @@ public final class ChartsSectionWrapper extends AbstractChartItSectionWrapper {
             // First get the total number of models to decode
             final int numberOfModels = (Integer) decoder.readObject();
 
+            final AvailableDataProvidersSectionWrapper availWrapper = super.overviewPage.availableDataProvidersSW;
+            final ChartModelContainer chartModelContainer = super.getResourceData().getModelsContainer();
+
             final String[] modelNames = new String[numberOfModels];
             for (int i = 0; i < numberOfModels; i++) {
                 // Decode a chart model
@@ -292,8 +296,7 @@ public final class ChartsSectionWrapper extends AbstractChartItSectionWrapper {
 
                 // Retrieve all its providers by names				
                 for (final String providerName : o.getRuntimeNames()) {
-                    final IDataProvider provider = super.overviewPage.availableDataProvidersSW
-                            .getProviderByName(providerName);
+                    final IDataProvider provider = availWrapper.getProviderByName(providerName);
                     if (provider != null) {
                         o.addProvider(provider);
                     } else {
@@ -303,8 +306,8 @@ public final class ChartsSectionWrapper extends AbstractChartItSectionWrapper {
                 }
 
                 // Add the model to the container
-                if (super.getResourceData().getModelsContainer().getModelByName(o.getName()) == null) {
-                    super.getResourceData().getModelsContainer().addModel(o);
+                if (chartModelContainer.getModelByName(o.getName()) == null) {
+                    chartModelContainer.addModel(o);
                 }
                 modelNames[i] = o.getName();
             }
@@ -316,7 +319,7 @@ public final class ChartsSectionWrapper extends AbstractChartItSectionWrapper {
             // Set the old classLoader back for this thread
             Thread.currentThread().setContextClassLoader(oldClassLoader);
 
-        } catch (FileNotFoundException e) {
+        } catch (Throwable e) {
             Console.getInstance(Activator.CONSOLE_NAME).log(
                     "Could not load the configuration : " + e.getMessage());
         }

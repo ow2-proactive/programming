@@ -34,9 +34,9 @@ package org.objectweb.proactive.ic2d.chartit.editpart;
 
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.objectweb.proactive.ic2d.chartit.canvas.AbstractCachedCanvas;
 import org.objectweb.proactive.ic2d.chartit.data.ChartModel;
 import org.objectweb.proactive.ic2d.chartit.data.IChartModelListener;
 
@@ -46,7 +46,7 @@ import org.objectweb.proactive.ic2d.chartit.data.IChartModelListener;
  * 
  * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>. 
  */
-public abstract class AbstractChartItEditPart<C extends AbstractCachedCanvas> implements IChartItEditPart {
+public abstract class AbstractChartItEditPart<C extends Canvas> implements IChartItEditPart {
 
     /**
      * The model of this edit part
@@ -88,35 +88,40 @@ public abstract class AbstractChartItEditPart<C extends AbstractCachedCanvas> im
     }
 
     /**
-     * Returns the model
-     * @return
+     * Returns the model associated to this edit part.
+     * 
+     * @return The chart model
      */
     public ChartModel getModel() {
         return this.chartModel;
     }
 
     /**
-     * Returns the canvas
-     * @return
+     * Returns the canvas associated to this edit part.
+     * 
+     * @return The canvas
      */
     public C getCanvas() {
         return this.canvas;
     }
 
     /**
-     * 
+     * Activates this edit part by adding it as a listener of the chart model
      */
     public void activate() {
         this.chartModel.setChartModelListener(this);
     }
 
     /**
-     * 
+     * Deactivates this edit part by removing it as a listener from the chart model
      */
     public void deactivate() {
         this.chartModel.unSetChartModelListener();
     }
 
+    /**
+     * Called when the chart model has changed
+     */
     public void modelChanged(int type, Object oldValue, Object newValue) {
         if (type == IChartModelListener.CHANGED) {
             Display.getDefault().asyncExec(this);

@@ -82,28 +82,32 @@ public class RRD4JChartModelEditPart extends AbstractChartItEditPart<RRD4JChartC
         newGraphDef.setShowSignature(false);
         newGraphDef.setColor(RrdGraphDef.COLOR_BACK, Color.white);
         final String[] runtimeNames = super.chartModel.getRuntimeNames();
+        final String[] runtimeLabels = super.chartModel.getLabels();
         // If only one data provider
         if (runtimeNames.length == 1) {
             final String dataSourceName = runtimeNames[0];
+            final String label = runtimeLabels[0];
             newGraphDef.datasource(dataSourceName, this.dataStore.getDataStoreName(), dataSourceName,
                     ConsolFun.AVERAGE);
             newGraphDef.area(dataSourceName, Color.LIGHT_GRAY, null);
-            newGraphDef.line(dataSourceName, Color.BLACK, dataSourceName, 2);
+            newGraphDef.line(dataSourceName, Color.BLACK, label, 2);
         } else {
-            // Set logarithmic to see all values
-            newGraphDef.setAltAutoscale(true); // setLogarithmic(true);
+            // Set autoscale
+            newGraphDef.setAltAutoscale(true);
             // A random generator is used to 
             final Random generator = new Random(Utils.SEED);
             // Stack all other data sources
             String dataSourceName;
+            String label;
             Color lineColor;
-            for (int i = runtimeNames.length; --i >= 0;) {
+            for (int i = runtimeNames.length; i-- > 0;) {
                 dataSourceName = runtimeNames[i];
+                label = runtimeLabels[i];
                 newGraphDef.datasource(dataSourceName, this.dataStore.getDataStoreName(), dataSourceName,
                         ConsolFun.AVERAGE);
                 lineColor = new Color(generator.nextInt(Utils.MAX_RGB_VALUE), generator
                         .nextInt(Utils.MAX_RGB_VALUE), generator.nextInt(Utils.MAX_RGB_VALUE));
-                newGraphDef.line(dataSourceName, lineColor, dataSourceName, 2);
+                newGraphDef.line(dataSourceName, lineColor, label, 2);
             }
         }
         return newGraphDef;
@@ -115,7 +119,7 @@ public class RRD4JChartModelEditPart extends AbstractChartItEditPart<RRD4JChartC
      * @see java.lang.Runnable#run()
      */
     public void run() {
-        if (!super.canvas.isVisible())
+        if (super.canvas.isDisposed() || !super.canvas.isVisible())
             return;
         // Update time span of the graph definition
         this.canvas.updateTimeSpan(this.dataStore.getLeftBoundTime(), this.dataStore.getRightBoundTime());

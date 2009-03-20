@@ -35,6 +35,7 @@ import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -52,23 +53,24 @@ import org.objectweb.proactive.ic2d.console.Console;
 /**
  * A multi-page form editor that uses Eclipse Forms support.
  * <p>
- * Two pages are available; the first is an overview page composed 
- * of multiple sections for charts configuration, the second is the charts
- * page. 
+ * Two pages are available; the first is an overview page composed of multiple
+ * sections for charts configuration, the second is the charts page.
  * 
  * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>.
  */
 public final class ChartItDataEditor extends FormEditor {
 
     /**
-     * 
+     * The id of this editor
      */
     public static final String ID = "org.objectweb.proactive.ic2d.chartit.editors.ChartItDataEditor";
 
     /*
      * (non-Javadoc)
      * 
-     * @see org.eclipse.ui.forms.editor.FormEditor#createToolkit(org.eclipse.swt.widgets.Display)
+     * @see
+     * org.eclipse.ui.forms.editor.FormEditor#createToolkit(org.eclipse.swt.
+     * widgets.Display)
      */
     protected FormToolkit createToolkit(final Display display) {
         // Create a toolkit that shares colors between editors.
@@ -106,7 +108,9 @@ public final class ChartItDataEditor extends FormEditor {
     /*
      * (non-Javadoc)
      * 
-     * @see org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor)
+     * @see
+     * org.eclipse.ui.ISaveablePart#doSave(org.eclipse.core.runtime.IProgressMonitor
+     * )
      */
     public void doSave(IProgressMonitor monitor) {
     }
@@ -129,10 +133,12 @@ public final class ChartItDataEditor extends FormEditor {
     }
 
     /**
-     * Opens a new ChartItEditor associated with a resourceDescriptor.
+     * Opens a new ChartItEditor from a resource descriptor.
      * 
-     * @param resourceDescriptor The descriptor of the resource
-     * @throws PartInitException Thrown if the part can not be activated
+     * @param resourceDescriptor
+     *            The descriptor of the resource
+     * @throws PartInitException
+     *             Thrown if the part can not be activated
      */
     public static ChartItDataEditor openNewFromResourceDescriptor(final IResourceDescriptor resourceDescriptor)
             throws PartInitException {
@@ -145,38 +151,30 @@ public final class ChartItDataEditor extends FormEditor {
                         true);
         // The name of the editor is the name of the resource descriptor
         editor.setPartName(resourceDescriptor.getName());
-        return editor;
-    }
 
-    /**
-     * Opens a new ChartItEditor associated with a resourceDescriptor,
-     * loads a configuration from a specified config file then activates the
-     * charts page.
-     * 
-     * @param resourceDescriptor The descriptor of the resource
-     * @param configFilename The name of the file containing the configuration
-     * @throws PartInitException Thrown if the part can not be activated
-     */
-    public static ChartItDataEditor openNewFromResourceDescriptor(
-            final IResourceDescriptor resourceDescriptor, final String configFilename)
-            throws PartInitException {
+        String configFilename = resourceDescriptor.getConfigFilename();
+        // If a configuration file was specified load it
+        if (configFilename != null) {
+            // Locate default config file in 'config' directory of chartit
+            // plugin
+            final URL configURL = FileLocator.find(Activator.getDefault().getBundle(), new Path("config/" +
+                configFilename), null);
 
-        // Locate default config file in 'config' directory of chartit plugin
-        final URL configURL = Activator.getDefault().getBundle().getEntry("config/" + configFilename);
-        final ChartItDataEditor editor = ChartItDataEditor.openNewFromResourceDescriptor(resourceDescriptor);
-        // Get the overview page
-        final OverviewPage overviewPage = (OverviewPage) editor.getActivePageInstance();
-        try {
-            overviewPage.getChartsSW().loadConfigFromXML(FileLocator.toFileURL(configURL).getPath());
-            if (overviewPage.canLeaveThePage()) {
-                editor.setActivePage(ChartsPage.CHARTS_PAGE_NAME);
+            // Get the overview page
+            final OverviewPage overviewPage = (OverviewPage) editor.getActivePageInstance();
+            try {
+                overviewPage.getChartsSW().loadConfigFromXML(FileLocator.toFileURL(configURL).getPath());
+                if (overviewPage.canLeaveThePage()) {
+                    editor.setActivePage(ChartsPage.CHARTS_PAGE_NAME);
+                }
+            } catch (Exception e) {
+                Console.getInstance(Activator.CONSOLE_NAME).log(
+                        "Cannot locate the config file : " + configFilename +
+                            " in the config directory of ChartIt plugin ! " + e);
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            Console.getInstance(Activator.CONSOLE_NAME).log(
-                    "Cannot locate the config file : " + configFilename +
-                        " in the config directory of ChartIt plugin !");
-        }
 
+        }
         return editor;
     }
 }

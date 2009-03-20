@@ -80,4 +80,12 @@ public interface IResourceDescriptor {
      * @return An array of custom data providers
      */
     public IDataProvider[] getCustomDataProviders();
+
+    /**
+     * Return the name of the configuration file that must be located in the config dir 
+     * of the ChartIt plugin.
+     * 
+     * @return The name of configuration file or null if there is no configuration file.
+     */
+    public String getConfigFilename();
 }

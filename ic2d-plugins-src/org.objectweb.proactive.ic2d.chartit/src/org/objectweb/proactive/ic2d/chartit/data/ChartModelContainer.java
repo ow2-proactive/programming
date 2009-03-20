@@ -52,7 +52,7 @@ import org.objectweb.proactive.ic2d.chartit.data.store.IDataStore;
  * 
  * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>.
  */
-public class ChartModelContainer {
+public final class ChartModelContainer {
     /**
      * Minimal period for refreshing models (seconds)
      */
@@ -134,14 +134,14 @@ public class ChartModelContainer {
         this.models.remove(model);
     }
 
-    public void removeByName(String name) {
-        ChartModel toRemove = this.getModelByName(name);
+    public void removeByName(final String name) {
+        final ChartModel toRemove = this.getModelByName(name);
         if (toRemove != null)
             this.models.remove(toRemove);
     }
 
     public ChartModel getModelByName(String name) {
-        for (ChartModel c : this.models) {
+        for (final ChartModel c : this.models) {
             if (name.equals(c.getName())) {
                 return c;
             }
@@ -150,22 +150,22 @@ public class ChartModelContainer {
     }
 
     public ChartModel createNewChartModel() {
-        ChartModel c = new ChartModel(ChartModel.DEFAULT_CHART_NAME + this.models.size());
+        final ChartModel c = new ChartModel(ChartModel.DEFAULT_CHART_NAME + this.models.size());
         this.models.add(c);
         return c;
     }
 
     /**
      * 
-     * @return
+     * @return True if running and false otherwise
      */
     public boolean isRunning() {
         return this.isRunning;
     }
 
     /**
-     * Starts collecting data
-     * @return
+     * Starts collecting data. For each chart model a timer task is created then 
+     * these tasks are submitted to a timer that will execute them periodically.
      */
     public void startCollector() {
         // Set this collector as running
@@ -210,8 +210,8 @@ public class ChartModelContainer {
             };
 
             // Then schedule it
-            this.scheduledModelsCollector.schedule(task, model.getRefreshPeriod(), //initial delay
-                    model.getRefreshPeriod());
+            this.scheduledModelsCollector.schedule(task, model.getRefreshPeriodInMs(), //initial delay
+                    model.getRefreshPeriodInMs());
 
             // Finally add it to the task list
             this.scheduledTasks.add(task);
@@ -235,17 +235,26 @@ public class ChartModelContainer {
         this.scheduledTasks.clear();
         //  Purge the timer so that it can be reused
         this.scheduledModelsCollector.purge();
+
+        // Close the data store
+        this.dataStore.close();
+
         this.isRunning = false;
     }
 
+    /**
+     * Returns the data store used by this container.
+     * 
+     * @return The data store
+     */
     public IDataStore getDataStore() {
         return dataStore;
     }
 
     /**
-     * Returns the list of models
+     * Returns the list of chart models.
      * 
-     * @return The list of 
+     * @return The list of chart models of this container
      */
     public List<ChartModel> getModels() {
         return this.models;

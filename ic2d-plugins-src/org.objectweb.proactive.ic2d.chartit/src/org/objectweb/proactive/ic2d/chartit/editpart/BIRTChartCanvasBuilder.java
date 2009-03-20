@@ -92,7 +92,7 @@ import org.objectweb.proactive.ic2d.chartit.util.Utils;
  * 
  * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>. 
  */
-public class BIRTChartBuilder {
+public final class BIRTChartCanvasBuilder {
 
     public static final String[] SINGLE_CATEGORY = new String[] { "Category" };
 
@@ -106,6 +106,15 @@ public class BIRTChartBuilder {
      */
     protected final static int FONT_SIZE = 8;
 
+    /**
+     * Creates an instance of BIRTChartCanvas according to the type of the provided chart model.
+     * 
+     * @param client The Composite client
+     * @param style The style of the composite 
+     * @param model The chart model
+     * 
+     * @return An instance of the BIRTChartCanvas
+     */
     public static final BIRTChartCanvas build(final Composite client, final int style, final ChartModel model) {
         Chart chart = null;
         switch (model.getChartType()) {
@@ -172,7 +181,7 @@ public class BIRTChartBuilder {
         cwoaPie.getTitle().setVisible(false);
 
         // Data Set
-        TextDataSet categoryValues = TextDataSetImpl.create(model.getRuntimeNames());
+        TextDataSet categoryValues = TextDataSetImpl.create(model.getLabels());
         NumberDataSet seriesOneValues = NumberDataSetImpl.create(model.getRuntimeValues());
 
         // Base Series
@@ -253,7 +262,7 @@ public class BIRTChartBuilder {
         yAxisPrimary.getLabel().getCaption().getFont().setName(FONT_NAME);
 
         // Data Set
-        final TextDataSet categoryValues = TextDataSetImpl.create(model.getRuntimeNames());
+        final TextDataSet categoryValues = TextDataSetImpl.create(model.getLabels());
         final NumberDataSet orthoValues = NumberDataSetImpl.create(model.getRuntimeValues());
 
         final SampleData sd = DataFactory.eINSTANCE.createSampleData();
@@ -328,7 +337,7 @@ public class BIRTChartBuilder {
         yAxisPrimary.getLabel().getCaption().getFont().setName(FONT_NAME);
 
         // Data Set
-        final TextDataSet categoryValues = TextDataSetImpl.create(model.getRuntimeNames());
+        final TextDataSet categoryValues = TextDataSetImpl.create(model.getLabels());
         final NumberDataSet orthoValues = NumberDataSetImpl.create(model.getRuntimeValues());
 
         // X-Series
@@ -390,7 +399,7 @@ public class BIRTChartBuilder {
         yAxisPrimary.getLabel().getCaption().getFont().setName(FONT_NAME);
 
         // Data Set
-        final TextDataSet categoryValues = TextDataSetImpl.create(model.getRuntimeNames());
+        final TextDataSet categoryValues = TextDataSetImpl.create(model.getLabels());
         final NumberDataSet orthoValues = NumberDataSetImpl.create(model.getRuntimeValues());
 
         // X-Series
@@ -405,7 +414,7 @@ public class BIRTChartBuilder {
         final LineSeries ls = (LineSeries) LineSeriesImpl.create();
         ls.setDataSet(orthoValues);
         ls.getLineAttributes().setColor(ColorDefinitionImpl.BLUE());
-        for (int i = 0; i < ls.getMarkers().size(); i++) {
+        for (int i = ls.getMarkers().size(); i-- > 0;) {
             ((Marker) ls.getMarkers().get(i)).setType(MarkerType.TRIANGLE_LITERAL);
         }
         ls.getLabel().setVisible(true);
@@ -475,7 +484,7 @@ public class BIRTChartBuilder {
         final SeriesDefinition sdOrth = SeriesDefinitionImpl.create();
         sdBase.getSeriesDefinitions().add(sdOrth);
 
-        final int length = chartModel.getRuntimeNames().length;
+        final int length = chartModel.getLabels().length;
 
         final Random generator = new Random(Utils.SEED);
         // Clear series palette
@@ -485,7 +494,7 @@ public class BIRTChartBuilder {
         OrthogonalSampleData sdOrthogonal;
         DialSeries seDial;
         NumberDataSetImpl t;
-        for (int i = 0; i < length; i++) {
+        for (int i = length; i-- > 0;) {
             r = generator.nextInt(Utils.MAX_RGB_VALUE);
             g = generator.nextInt(Utils.MAX_RGB_VALUE);
             b = generator.nextInt(Utils.MAX_RGB_VALUE);
@@ -507,7 +516,7 @@ public class BIRTChartBuilder {
             seDial.getDial().getMinorGrid().setTickStyle(TickStyle.BELOW_LITERAL);
             seDial.getDial().getLabel().getCaption().getFont().setSize(FONT_SIZE);
             // Set series identifier 
-            seDial.setSeriesIdentifier(chartModel.getRuntimeNames()[i]);
+            seDial.setSeriesIdentifier(chartModel.getLabels()[i]);
             sdOrth.getSeries().add(seDial);
         }
         return dChart;

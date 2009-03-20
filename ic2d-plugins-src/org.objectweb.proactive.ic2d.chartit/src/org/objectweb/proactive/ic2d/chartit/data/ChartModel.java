@@ -50,7 +50,7 @@ import org.objectweb.proactive.ic2d.chartit.data.provider.IDataProvider;
  * 
  * @author <a href="mailto:support@activeeon.com">ActiveEon Team</a>.
  */
-public class ChartModel {
+public final class ChartModel {
 
     /**
      * An empty array of string
@@ -85,7 +85,7 @@ public class ChartModel {
     /**
      * The period for refreshing cached value (in milliseconds)
      */
-    protected long refreshPeriod;
+    protected long refreshPeriodInMs;
 
     /**
      * The list of data providers used by this chart
@@ -114,6 +114,11 @@ public class ChartModel {
     protected String[] runtimeNames;
 
     /**
+     * The list of labels (can be defined by the user) to be used inside charts instead of runtime names.
+     */
+    protected List<String> labels;
+
+    /**
      * The runtime values
      */
     protected double[] runtimeValues;
@@ -126,12 +131,13 @@ public class ChartModel {
         this(name, ChartType.PIE, ChartModel.DEFAULT_REFRESH_PERIOD);
     }
 
-    public ChartModel(String name, ChartType chartType, long refreshperiod) {
+    public ChartModel(final String name, final ChartType chartType, final long refreshPeriodInMs) {
         this.name = name;
         this.chartType = chartType;
-        this.refreshPeriod = refreshperiod;
+        this.refreshPeriodInMs = refreshPeriodInMs;
 
         this.runtimeNames = ChartModel.EMPTY_RUNTIME_NAMES;
+        this.labels = new ArrayList<String>();
         this.runtimeValues = ChartModel.EMPTY_RUNTIME_VALUES;
 
         this.providers = new ArrayList<IDataProvider>();
@@ -159,6 +165,7 @@ public class ChartModel {
     public void removeProvider(final IDataProvider provider) {
         if (this.providers.contains(provider)) {
             this.providers.remove(provider);
+            this.labels.remove(provider.getName());
         }
     }
 
@@ -171,6 +178,7 @@ public class ChartModel {
             }
         }
         this.providers.remove(providerToRemove);
+        this.labels.remove(providerToRemove.getName());
     }
 
     public void removeProvidersByNames(final String[] names) {
@@ -180,11 +188,11 @@ public class ChartModel {
     }
 
     public List<IDataProvider> getProviders() {
-        return providers;
+        return this.providers;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -192,38 +200,61 @@ public class ChartModel {
     }
 
     public String[] getRuntimeNames() {
-        return runtimeNames;
+        return this.runtimeNames;
     }
 
-    public void setRuntimeNames(String[] runtimeNames) {
+    public void setRuntimeNames(final String[] runtimeNames) {
         this.runtimeNames = runtimeNames;
+    }
+
+    public void addLabel(final String label) {
+        this.labels.add(label);
+    }
+
+    public void setLabelAtIndex(final int index, final String label) {
+        this.labels.set(index, label);
+    }
+
+    public void setLabels(final String[] labels) {
+        this.labels = new ArrayList<String>(labels.length);
+        for (final String label : labels) {
+            this.labels.add(label);
+        }
+    }
+
+    public String[] getLabels() {
+        final String[] res = new String[this.labels.size()];
+        for (int i = res.length; i-- > 0;) {
+            res[i] = this.labels.get(i);
+        }
+        return res;
     }
 
     public double[] getRuntimeValues() {
         return runtimeValues;
     }
 
-    public void setRuntimeValues(double[] runtimeValues) {
+    public void setRuntimeValues(final double[] runtimeValues) {
         this.runtimeValues = runtimeValues;
     }
 
-    public long getRefreshPeriod() {
-        return refreshPeriod;
+    public long getRefreshPeriodInMs() {
+        return this.refreshPeriodInMs;
     }
 
-    public void setRefreshPeriod(long refreshPeriod) {
-        this.refreshPeriod = refreshPeriod;
+    public void setRefreshPeriodInMs(final long refreshPeriodInMs) {
+        this.refreshPeriodInMs = refreshPeriodInMs;
     }
 
     public ChartType getChartType() {
         return chartType;
     }
 
-    public void setChartType(ChartType chartType) {
+    public void setChartType(final ChartType chartType) {
         this.chartType = chartType;
     }
 
-    public void setChartModelListener(IChartModelListener chartModelListener) {
+    public void setChartModelListener(final IChartModelListener chartModelListener) {
         this.chartModelListener = chartModelListener;
     }
 
@@ -236,7 +267,7 @@ public class ChartModel {
     }
 
     public String toString() {
-        return "Name : " + this.name + " type : " + this.chartType + " rp : " + this.refreshPeriod +
+        return "Name : " + this.name + " type : " + this.chartType + " rp : " + this.refreshPeriodInMs +
             " providers : " + this.providers.size();
     }
 
@@ -244,7 +275,7 @@ public class ChartModel {
         this.runtimeNames = new String[this.providers.size()];
         int i = 0;
         for (final IDataProvider provider : this.providers) {
-            runtimeNames[i++] = provider.getName();
+            this.runtimeNames[i++] = provider.getName();
         }
     }
 }

@@ -35,7 +35,7 @@ package org.objectweb.proactive.ic2d.chartit.data.provider.predefined;
 import org.objectweb.proactive.ic2d.chartit.data.provider.IDataProvider;
 
 
-public class FloatArrayDataProvider implements IDataProvider {
+public final class FloatArrayDataProvider implements IDataProvider {
 
     public static final String NAME = "arrayOfFloat";
     public static final String DESCRIPTION = "Test purpose array of float.";
