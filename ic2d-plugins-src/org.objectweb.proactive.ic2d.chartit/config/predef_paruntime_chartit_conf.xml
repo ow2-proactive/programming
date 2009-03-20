@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?> 
-<java version="1.5.0_14" class="java.beans.XMLDecoder"> 
+<java version="1.6.0_12" class="java.beans.XMLDecoder"> 
  <int>6</int> 
  <object class="org.objectweb.proactive.ic2d.chartit.data.ChartModel"> 
   <void property="chartType"> 
    <object id="ChartType0" class="org.objectweb.proactive.ic2d.chartit.data.ChartType" method="valueOf"> 
-    <class>org.objectweb.proactive.ic2d.chartit.data.ChartType</class> 
     <string>TUBE</string> 
    </object> 
   </void> 
+  <void property="labels"> 
+   <array class="java.lang.String" length="2"> 
+    <void index="0"> 
+     <string>Internal AOs</string> 
+    </void> 
+    <void index="1"> 
+     <string>User AOs</string> 
+    </void> 
+   </array> 
+  </void> 
   <void property="name"> 
-   <string>Registered bodies</string> 
+   <string>Internal and User Active Objects</string> 
   </void> 
   <void property="runtimeNames"> 
    <array class="java.lang.String" length="2"> 
@@ -26,8 +35,18 @@
   <void property="chartType"> 
    <object idref="ChartType0"/> 
   </void> 
+  <void property="labels"> 
+   <array class="java.lang.String" length="2"> 
+    <void index="0"> 
+     <string>Active Object Thread</string> 
+    </void> 
+    <void index="1"> 
+     <string>Other Thread</string> 
+    </void> 
+   </array> 
+  </void> 
   <void property="name"> 
-   <string>Bodies and HalfBodies</string> 
+   <string>Active Object Thread and Other Thread</string> 
   </void> 
   <void property="runtimeNames"> 
    <array class="java.lang.String" length="2"> 
@@ -43,9 +62,37 @@
  <object class="org.objectweb.proactive.ic2d.chartit.data.ChartModel"> 
   <void property="chartType"> 
    <object id="ChartType1" class="org.objectweb.proactive.ic2d.chartit.data.ChartType" method="valueOf"> 
-    <class>org.objectweb.proactive.ic2d.chartit.data.ChartType</class> 
     <string>TIME_SERIES</string> 
    </object> 
+  </void> 
+  <void property="labels"> 
+   <array class="java.lang.String" length="1"> 
+    <void index="0"> 
+     <string>Threads</string> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="name"> 
+   <string>All Threads</string> 
+  </void> 
+  <void property="runtimeNames"> 
+   <array class="java.lang.String" length="1"> 
+    <void index="0"> 
+     <string>ThreadCount</string> 
+    </void> 
+   </array> 
+  </void> 
+ </object> 
+ <object class="org.objectweb.proactive.ic2d.chartit.data.ChartModel"> 
+  <void property="chartType"> 
+   <object idref="ChartType1"/> 
+  </void> 
+  <void property="labels"> 
+   <array class="java.lang.String" length="1"> 
+    <void index="0"> 
+     <string>Heap</string> 
+    </void> 
+   </array> 
   </void> 
   <void property="name"> 
    <string>Used Heap Memory</string> 
@@ -62,20 +109,12 @@
   <void property="chartType"> 
    <object idref="ChartType1"/> 
   </void> 
-  <void property="name"> 
-   <string>Threads</string> 
-  </void> 
-  <void property="runtimeNames"> 
+  <void property="labels"> 
    <array class="java.lang.String" length="1"> 
     <void index="0"> 
-     <string>ThreadCount</string> 
+     <string>Loaded Classes</string> 
     </void> 
    </array> 
-  </void> 
- </object> 
- <object class="org.objectweb.proactive.ic2d.chartit.data.ChartModel"> 
-  <void property="chartType"> 
-   <object idref="ChartType1"/> 
   </void> 
   <void property="name"> 
    <string>Loaded Classes</string> 
@@ -92,11 +131,15 @@
   <void property="chartType"> 
    <object idref="ChartType1"/> 
   </void> 
-  <void property="name"> 
-   <string>Objects waiting finalization</string> 
+  <void property="labels"> 
+   <array class="java.lang.String" length="1"> 
+    <void index="0"> 
+     <string>Waiting finalization</string> 
+    </void> 
+   </array> 
   </void> 
-  <void property="refreshPeriod"> 
-   <long>3000</long> 
+  <void property="name"> 
+   <string>Objects Waiting for Finalization</string> 
   </void> 
   <void property="runtimeNames"> 
    <array class="java.lang.String" length="1"> 
