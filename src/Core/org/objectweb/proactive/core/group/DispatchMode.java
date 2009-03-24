@@ -103,6 +103,7 @@ public enum DispatchMode implements DispatchBehavior, Serializable {
                 break;
             case DYNAMIC:
                 taskIndexes = UNSPECIFIED.getTaskIndexes(originalMethodCall, generatedMethodCalls, nbWorkers);
+                break;
             default:
                 taskIndexes = UNSPECIFIED.getTaskIndexes(originalMethodCall, generatedMethodCalls, nbWorkers);
 
