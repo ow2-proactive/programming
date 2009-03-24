@@ -34,6 +34,7 @@ package org.objectweb.proactive.examples.jmx.remote.management.command.osgi;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.util.Date;
 
@@ -55,7 +56,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 
-public abstract class OSGiCommand extends NotificationBroadcasterSupport implements IJmx, CommandMBean {
+public abstract class OSGiCommand extends NotificationBroadcasterSupport implements IJmx, CommandMBean,Serializable {
     public static final String INSTALL = "install ";
     public static final String UNINSTALL = "uninstall ";
     public static final String START = "start ";
