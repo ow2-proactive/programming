@@ -56,7 +56,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 
 
-public abstract class OSGiCommand extends NotificationBroadcasterSupport implements IJmx, CommandMBean,Serializable {
+public abstract class OSGiCommand extends NotificationBroadcasterSupport implements IJmx, CommandMBean,
+        Serializable {
     public static final String INSTALL = "install ";
     public static final String UNINSTALL = "uninstall ";
     public static final String START = "start ";
