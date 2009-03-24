@@ -311,7 +311,7 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
     public void terminateSession(long sessionID) {
         synchronized (this.sessions) {
             Session session = getSession(sessionID);
-            this.sessions.remove(new Long(sessionID));
+            this.sessions.remove(Long.valueOf(sessionID));
             this.sessionIDs.remove(session.getDistantCertificate());
         }
     }
@@ -334,11 +334,11 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
         long id;
         do {
             id = ProActiveRandom.nextLong() + System.currentTimeMillis();
-        } while ((id == 0) || this.sessions.contains(new Long(id)));
+        } while ((id == 0) || this.sessions.contains(Long.valueOf(id)));
 
         Session newSession = new Session(distantSessionID, communicationPolicy, distantCertificate);
-        this.sessions.put(new Long(id), newSession);
-        this.sessionIDs.put(distantCertificate, new Long(id));
+        this.sessions.put(Long.valueOf(id), newSession);
+        this.sessionIDs.put(distantCertificate, Long.valueOf(id));
 
         ProActiveLogger.getLogger(Loggers.SECURITY).debug("starting a new session : " + id);
         return id;
@@ -1063,7 +1063,7 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
         byte[][] result = new byte[5][];
 
         try {
-            Session session = this.sessions.get(new Long(sessionID));
+            Session session = this.sessions.get(Long.valueOf(sessionID));
 
             if (session == null) {
                 return result;
@@ -1362,7 +1362,7 @@ public class ProActiveSecurityManager implements Serializable /*, SecurityEntity
     }
 
     public Session getSession(long id) {
-        return this.sessions.get(new Long(id));
+        return this.sessions.get(Long.valueOf(id));
     }
 
     public TypedCertificateList getMyCertificateChain() {

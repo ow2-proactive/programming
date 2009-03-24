@@ -181,8 +181,8 @@ public class Utils {
         Object[] effectiveArguments = new Object[4];
         effectiveArguments[0] = className;
         effectiveArguments[1] = bytes;
-        effectiveArguments[2] = new Integer(0);
-        effectiveArguments[3] = new Integer(bytes.length);
+        effectiveArguments[2] = Integer.valueOf(0);
+        effectiveArguments[3] = Integer.valueOf(bytes.length);
 
         return (Class<?>) method.invoke(Thread.currentThread().getContextClassLoader(), effectiveArguments);
     }

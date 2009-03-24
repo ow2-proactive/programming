@@ -127,7 +127,7 @@ public class FTManagerCIC extends org.objectweb.proactive.core.body.ft.protocols
     private Vector<UniqueID> history;
 
     // cannot lock hisotry itself, because it is modified in synchronized blocks !
-    private final Character historyLock = new Character('l');
+    private final Character historyLock = Character.valueOf('l');
 
     // protocol for output commit
     private long deliveredRequestsCounter;
@@ -645,14 +645,14 @@ public class FTManagerCIC extends org.objectweb.proactive.core.body.ft.protocols
                     CheckpointInfoCIC ci = new CheckpointInfoCIC();
                     this.extendReplyLog(this.checkpointIndex + 1);
                     this.extendRequestLog(this.checkpointIndex + 1);
-                    ci.replyToResend = (this.replyToResend.get(new Integer(this.checkpointIndex + 1)));
-                    ci.requestToResend = (this.requestToResend.get(new Integer(this.checkpointIndex + 1)));
+                    ci.replyToResend = (this.replyToResend.get(Integer.valueOf(this.checkpointIndex + 1)));
+                    ci.requestToResend = (this.requestToResend.get(Integer.valueOf(this.checkpointIndex + 1)));
                     ci.pendingRequest = pendingRequest;
                     ci.checkpointIndex = this.checkpointIndex + 1;
 
                     // delete logs
-                    this.replyToResend.remove(new Integer(this.checkpointIndex + 1));
-                    this.requestToResend.remove(new Integer(this.checkpointIndex + 1));
+                    this.replyToResend.remove(Integer.valueOf(this.checkpointIndex + 1));
+                    this.requestToResend.remove(Integer.valueOf(this.checkpointIndex + 1));
 
                     // inc checkpoint index
                     this.checkpointIndex++;
@@ -869,7 +869,7 @@ public class FTManagerCIC extends org.objectweb.proactive.core.body.ft.protocols
         if (this.latestRequestLog < size) {
             //the log vector must grow
             for (int j = this.latestRequestLog + 1; j <= size; j++) {
-                this.requestToResend.put(new Integer(j), new Vector<RequestLog>());
+                this.requestToResend.put(Integer.valueOf(j), new Vector<RequestLog>());
             }
             this.latestRequestLog = size;
         }
@@ -882,7 +882,7 @@ public class FTManagerCIC extends org.objectweb.proactive.core.body.ft.protocols
         if (this.latestReplyLog < size) {
             //the log vector must grow
             for (int j = this.latestReplyLog + 1; j <= size; j++) {
-                this.replyToResend.put(new Integer(j), new Vector<ReplyLog>());
+                this.replyToResend.put(Integer.valueOf(j), new Vector<ReplyLog>());
             }
             this.latestReplyLog = size;
         }

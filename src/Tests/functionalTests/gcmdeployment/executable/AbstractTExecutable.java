@@ -47,7 +47,7 @@ import functionalTests.GCMFunctionalTestDefaultNodes;
 
 public class AbstractTExecutable extends GCMFunctionalTest {
 
-    String cookie = new Long(ProActiveRandom.nextLong()).toString();
+    String cookie = Long.valueOf(ProActiveRandom.nextLong()).toString();
     File tmpDir = new File(ProActiveConfiguration.getInstance().getProperty("java.io.tmpdir") +
         File.separator + this.getClass().getName() + cookie + File.separator);
 

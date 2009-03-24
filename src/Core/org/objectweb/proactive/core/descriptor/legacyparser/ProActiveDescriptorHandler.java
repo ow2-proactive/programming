@@ -293,7 +293,7 @@ public class ProActiveDescriptorHandler extends AbstractUnmarshallerDecorator im
             boolean waitForTimeout = false;
 
             if (checkNonEmpty(waitForTimeoutAsString)) {
-                waitForTimeout = new Boolean(waitForTimeoutAsString).booleanValue();
+                waitForTimeout = Boolean.valueOf(waitForTimeoutAsString).booleanValue();
             }
 
             if (checkNonEmpty(timeout)) {

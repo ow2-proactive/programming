@@ -471,10 +471,10 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
             for (int i = 0; i < serverItfs.length; i++) {
                 Interface curServerItf = serverItfs[i];
                 if (((Group<ProActiveInterface>) clientSideProxy.getDelegatee()).contains(curServerItf))
-                    return new Boolean(true);
+                    return Boolean.valueOf(true);
             }
         }
-        return new Boolean(false);
+        return Boolean.valueOf(false);
     }
 
     private boolean hasClientSideProxy(String itfName) {

@@ -671,7 +671,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 // first check if it is a process that is attached to the vm
                 if (vm.hasProcess()) {
                     ExternalProcess process = vm.getProcess();
-                    int nbNodesPerCreatedVM = new Integer(vm.getNbNodesOnCreatedVMs()).intValue();
+                    int nbNodesPerCreatedVM = Integer.valueOf(vm.getNbNodesOnCreatedVMs()).intValue();
 
                     if (process.getNodeNumber() == UniversalProcess.UNKNOWN_NODE_NUMBER) {
                         return UniversalProcess.UNKNOWN_NODE_NUMBER;
@@ -996,7 +996,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
             proActiveRuntimeRegistered = RuntimeFactory.getRuntime(notification.getRuntimeUrl());
             nodeHost = proActiveRuntimeRegistered.getVMInformation().getHostName();
 
-            int nodeNumber = (new Integer(_virtualMachine.getNbNodesOnCreatedVMs())).intValue();
+            int nodeNumber = (Integer.valueOf(_virtualMachine.getNbNodesOnCreatedVMs())).intValue();
 
             for (int i = 1; i <= nodeNumber; i++) {
                 ProActiveSecurityManager siblingPSM = null;
@@ -1307,7 +1307,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
         } else {
             //increment the node count by askedNodes
             increaseNumberOfNodes(process.getNodeNumber() *
-                new Integer(vm.getNbNodesOnCreatedVMs()).intValue());
+                Integer.valueOf(vm.getNbNodesOnCreatedVMs()).intValue());
 
             return process;
         }

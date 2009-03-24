@@ -123,7 +123,7 @@ public abstract class Kernel implements Serializable {
         SortedMap<Long, List<Node>> nodesBySize = new TreeMap<Long, List<Node>>();
         for (Long tid : nodesByTID.keySet()) {
             List<Node> tempNodes = nodesByTID.get(tid);
-            nodesBySize.put(new Long(tempNodes.size()), tempNodes);
+            nodesBySize.put(Long.valueOf(tempNodes.size()), tempNodes);
         }
 
         // Return count nodes by using the largest list first

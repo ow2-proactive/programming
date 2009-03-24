@@ -54,8 +54,8 @@ public class RandomLongGenerator {
 
         for (int i = 0; i < 4; i++) {
             ra2 = ra2 +
-                ((Math.abs(new Byte(seed[i]).longValue())) * new Double(Math.pow(10, (-3 + (3 * (i + 1)))))
-                        .longValue());
+                ((Math.abs(Byte.valueOf(seed[i]).longValue())) * Double.valueOf(
+                        Math.pow(10, (-3 + (3 * (i + 1))))).longValue());
         }
 
         return ra2;

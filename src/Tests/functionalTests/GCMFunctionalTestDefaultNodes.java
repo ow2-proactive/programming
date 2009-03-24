@@ -67,10 +67,10 @@ public class GCMFunctionalTestDefaultNodes extends GCMFunctionalTest {
         this.hostCapacity = hostCapacity;
         this.vmCapacity = vmCapacity;
 
-        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, new Integer(
-            hostCapacity).toString(), VariableContractType.DescriptorDefaultVariable);
-        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, new Integer(
-            vmCapacity).toString(), VariableContractType.DescriptorDefaultVariable);
+        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer
+                .valueOf(hostCapacity).toString(), VariableContractType.DescriptorDefaultVariable);
+        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(
+                vmCapacity).toString(), VariableContractType.DescriptorDefaultVariable);
 
     }
 

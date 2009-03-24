@@ -147,8 +147,8 @@ public class KernelCG extends Kernel {
             ////////////////////////////////////////////////////////////////////
 
             // Fill the constructor arguments
-            param = new Object[] { problemClass, new Integer(this.npcols), new Integer(this.nprows),
-                    new Integer(this.nzz) };
+            param = new Object[] { problemClass, Integer.valueOf(this.npcols), Integer.valueOf(this.nprows),
+                    Integer.valueOf(this.nzz) };
             params = new Object[this.problemClass.NUM_PROCS][];
             for (i = 0; i < problemClass.NUM_PROCS; i++) {
                 params[i] = param;

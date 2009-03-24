@@ -67,10 +67,10 @@ public class FindPrimeTask implements Task<Boolean> {
         }
         for (long divider = begin; divider < end; divider++) {
             if ((taskCandidate % divider) == 0) {
-                return new Boolean(false);
+                return Boolean.valueOf(false);
             }
         }
-        return new Boolean(true);
+        return Boolean.valueOf(true);
     }
 }
 //@snippet-end primes_distributedmw_task

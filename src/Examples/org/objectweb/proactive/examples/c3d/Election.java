@@ -92,13 +92,13 @@ public class Election implements RunActive, Serializable {
      * @return the numbers of voters up to now */
     public void vote(int i_user, String name, Vec wish) {
         // check no bad dude is voting twice
-        if (voters.contains(new Integer(i_user))) {
+        if (voters.contains(Integer.valueOf(i_user))) {
             this.c3ddispatcher.userLog(i_user, "You have already voted in this round");
             return;
         }
 
         // register this vote
-        this.voters.add(new Integer(i_user));
+        this.voters.add(Integer.valueOf(i_user));
         this.ballots.add(wish);
 
         //  We should be starting a new election, if startime=0 <==> ballots.size=0 <==> voters.size=0 

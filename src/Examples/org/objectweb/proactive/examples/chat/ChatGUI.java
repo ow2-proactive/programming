@@ -156,7 +156,7 @@ public class ChatGUI extends JFrame {
     private class QuitAction extends AbstractAction {
         public QuitAction() {
             putValue(Action.NAME, "Quit");
-            putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_Q));
+            putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_Q));
             putValue(ACTION_COMMAND_KEY, "quit");
             putValue(SHORT_DESCRIPTION, "Quit");
             putValue(LONG_DESCRIPTION, "Quit the application");
@@ -181,7 +181,7 @@ public class ChatGUI extends JFrame {
     private class SendAction extends AbstractAction {
         public SendAction() {
             putValue(Action.NAME, "Send");
-            putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_S));
+            putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_S));
             putValue(ACTION_COMMAND_KEY, "send");
             putValue(SHORT_DESCRIPTION, "Send");
             putValue(LONG_DESCRIPTION, "Send a message");
@@ -203,7 +203,7 @@ public class ChatGUI extends JFrame {
     private class MigrateAction extends AbstractAction {
         public MigrateAction() {
             putValue(Action.NAME, "Migrate !");
-            putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_M));
+            putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_M));
             putValue(ACTION_COMMAND_KEY, "migrate");
             putValue(SHORT_DESCRIPTION, "Migrate");
             putValue(LONG_DESCRIPTION, "Migrate to a specified node");

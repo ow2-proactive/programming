@@ -47,7 +47,7 @@ public class TestSpecifiedCapacity extends FunctionalTest {
     public void testSpecifiedCapacity() throws InterruptedException {
 
         PAProperties.PA_RUNTIME_STAYALIVE.setValue(false);
-        StartPARuntime.main(new String[] { "--capacity", new Long(askedCapacity).toString() });
+        StartPARuntime.main(new String[] { "--capacity", Long.valueOf(askedCapacity).toString() });
 
         ProActiveRuntimeImpl part = ProActiveRuntimeImpl.getProActiveRuntime();
 

@@ -114,7 +114,8 @@ public class Office {
 
     public void addDoctor(int id, long meanTime, long sigmaTime) {
         try {
-            Object[] params = { new Integer(id), new Long(meanTime), new Long(sigmaTime), me, rand };
+            Object[] params = { Integer.valueOf(id), Long.valueOf(meanTime), Long.valueOf(sigmaTime), me,
+                    rand };
 
             Doctor newDoc = (Doctor) org.objectweb.proactive.api.PAActiveObject.newActive(Doctor.class
                     .getName(), params);

@@ -623,7 +623,7 @@ public class ProActiveBindingControllerImpl extends AbstractProActiveController 
             }
         }
 
-        return new Boolean(false);
+        return Boolean.valueOf(false);
     }
 
     public Bindings getBindings() {
@@ -666,7 +666,7 @@ public class ProActiveBindingControllerImpl extends AbstractProActiveController 
                     if ((binding != null) &&
                         binding.getServerInterface().getFcItfOwner().equals(curServerItf.getFcItfOwner()) &&
                         binding.getServerInterface().getFcItfType().equals(curServerItf.getFcItfType())) {
-                        return new Boolean(true);
+                        return Boolean.valueOf(true);
                     }
                 }
             } else {
@@ -674,12 +674,12 @@ public class ProActiveBindingControllerImpl extends AbstractProActiveController 
                     MulticastController mc = (MulticastController) getFcItfOwner().getFcInterface(
                             Constants.MULTICAST_CONTROLLER);
                     if (mc.isBoundTo(curItf, serverItfsComponent))
-                        return new Boolean(true);
+                        return Boolean.valueOf(true);
                 } catch (NoSuchInterfaceException e) {
                     // TODO: handle exception
                 }
             }
         }
-        return new Boolean(false);
+        return Boolean.valueOf(false);
     }
 }

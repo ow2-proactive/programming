@@ -444,7 +444,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
 
                 // long sID = request.getSessionId();
                 if (sID != 0) {
-                    sessionID = new Long(sID);
+                    sessionID = Long.valueOf(sID);
                     if (this.openedSessions.contains(sessionID)) {
                         this.openedSessions.remove(sessionID);
                         this.internalBodySecurity.terminateSession(sID);

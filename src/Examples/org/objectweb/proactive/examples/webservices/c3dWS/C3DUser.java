@@ -292,7 +292,7 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
         VirtualNode user = proActiveDescriptor.getVirtualNode("User");
 
         Node node = user.getNode();
-        Object[] params = { new Boolean(false), new Boolean(false), "" };
+        Object[] params = { Boolean.valueOf(false), Boolean.valueOf(false), "" };
 
         try {
             C3DUser c3duser = (C3DUser) org.objectweb.proactive.api.PAActiveObject.newActive(

@@ -46,7 +46,7 @@ public class NodeMockup implements Node {
     NodeInformationMockUp nodeInformation;
 
     public NodeMockup(int i) {
-        nodeInformation = new NodeInformationMockUp(new Integer(i).toString());
+        nodeInformation = new NodeInformationMockUp(Integer.valueOf(i).toString());
     }
 
     public NodeMockup(String name) {

@@ -108,7 +108,7 @@ public class Util {
             NodeException {
 
         AOInterpreterPool interpool = (AOInterpreterPool) PAActiveObject.newActive(AOInterpreterPool.class
-                .getName(), new Object[] { new Boolean(true) }, frameworknode);
+                .getName(), new Object[] { Boolean.valueOf(true) }, frameworknode);
 
         return interpool;
     }

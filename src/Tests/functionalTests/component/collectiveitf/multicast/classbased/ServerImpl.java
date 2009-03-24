@@ -44,7 +44,7 @@ public class ServerImpl implements BroadcastServerItf, OneToOneServerItf, Identi
      * @see functionalTests.component.collectiveitf.multicast.Identifiable#getID()
      */
     public String getID() {
-        return new Integer(id).toString();
+        return Integer.valueOf(id).toString();
     }
 
     /*

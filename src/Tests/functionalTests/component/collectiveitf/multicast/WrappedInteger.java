@@ -46,7 +46,7 @@ public class WrappedInteger implements Serializable {
     }
 
     public WrappedInteger(Integer value) {
-        intValue = new Integer(value);
+        intValue = Integer.valueOf(value);
     }
 
     /**

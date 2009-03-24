@@ -72,7 +72,7 @@ public class FutureMap extends Object implements java.io.Serializable {
         if (indexedByID == null) {
             throw new ProActiveRuntimeException("There is no map for creatorID " + creatorID);
         }
-        FuturesAndACs listes = indexedByID.get(new Long(id));
+        FuturesAndACs listes = indexedByID.get(Long.valueOf(id));
 
         // add bodyDest to the list of dest for future (id, bodyID)
         if (listes != null) {
@@ -99,19 +99,19 @@ public class FutureMap extends Object implements java.io.Serializable {
 
             FuturesAndACs newf = new FuturesAndACs();
             newf.addFuture(futureObject);
-            newIndexedByID.put(new Long(id), newf);
+            newIndexedByID.put(Long.valueOf(id), newf);
             indexedByBodyID.put(creatorID, newIndexedByID);
         }
         // entry for creatorID exists, but there is no sub-entry for id
-        else if (indexedByID.get(new Long(id)) == null) {
+        else if (indexedByID.get(Long.valueOf(id)) == null) {
             //list of futures
             FuturesAndACs newf = new FuturesAndACs();
             newf.addFuture(futureObject);
-            indexedByID.put(new Long(id), newf);
+            indexedByID.put(Long.valueOf(id), newf);
         }
         // one copy of an existing future
         else {
-            ((indexedByID.get(new Long(id)))).addFuture(futureObject);
+            ((indexedByID.get(Long.valueOf(id)))).addFuture(futureObject);
         }
     }
 
@@ -125,7 +125,7 @@ public class FutureMap extends Object implements java.io.Serializable {
         ArrayList<Future> result = null;
 
         if (indexedByID != null) {
-            FuturesAndACs listes = indexedByID.get(new Long(id));
+            FuturesAndACs listes = indexedByID.get(Long.valueOf(id));
             if (listes != null) {
                 result = listes.getFutures();
             }
@@ -142,7 +142,7 @@ public class FutureMap extends Object implements java.io.Serializable {
         java.util.HashMap<Long, FuturesAndACs> indexedByID = (indexedByBodyID.get(bodyID));
         ArrayList<UniversalBody> result = null;
         if (indexedByID != null) {
-            FuturesAndACs listes = indexedByID.get(new Long(id));
+            FuturesAndACs listes = indexedByID.get(Long.valueOf(id));
             if (listes != null) {
                 result = listes.getDestinationsAC();
             }
@@ -179,7 +179,7 @@ public class FutureMap extends Object implements java.io.Serializable {
     public synchronized void removeFutures(long id, UniqueID creatorID) {
         java.util.HashMap<Long, FuturesAndACs> indexedByID = (indexedByBodyID.get(creatorID));
         if (indexedByID != null) {
-            indexedByID.remove(new Long(id));
+            indexedByID.remove(Long.valueOf(id));
         }
     }
 

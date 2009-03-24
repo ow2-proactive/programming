@@ -193,9 +193,9 @@ public class Start implements Serializable {
                 deployer = (Deployer) PAActiveObject.newActive(Deployer.class.getName(), new Object[] {
                         gcmad, workers });
 
-                displayer = (Displayer) PAActiveObject.newActive(Displayer.class.getName(),
-                        new Object[] { new Integer(totalNbBodies), new Boolean(displayft), deployer,
-                                new BooleanWrapper(ddd) });
+                displayer = (Displayer) PAActiveObject.newActive(Displayer.class.getName(), new Object[] {
+                        Integer.valueOf(totalNbBodies), Boolean.valueOf(displayft), deployer,
+                        new BooleanWrapper(ddd) });
             } catch (ProActiveException e) {
                 abort(e);
             }

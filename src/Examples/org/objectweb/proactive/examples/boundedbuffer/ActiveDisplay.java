@@ -57,7 +57,7 @@ public class ActiveDisplay implements ConsumerProducerListener {
         // Active Buffer creation
         try {
             buffer = (BoundedBuffer) org.objectweb.proactive.api.PAActiveObject.newActive(BoundedBuffer.class
-                    .getName(), new Object[] { new Integer(size), o });
+                    .getName(), new Object[] { Integer.valueOf(size), o });
         } catch (Exception e) {
         }
 

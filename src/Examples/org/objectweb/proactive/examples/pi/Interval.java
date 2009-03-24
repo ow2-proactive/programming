@@ -48,8 +48,8 @@ public class Interval implements Serializable {
     }
 
     public Interval(int beginning, int end) {
-        this.beginning = new Integer(beginning);
-        this.end = new Integer(end);
+        this.beginning = Integer.valueOf(beginning);
+        this.end = Integer.valueOf(end);
     }
 
     public Integer getEnd() {

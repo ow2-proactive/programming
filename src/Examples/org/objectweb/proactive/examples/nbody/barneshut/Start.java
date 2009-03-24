@@ -96,7 +96,7 @@ public class Start {
                 // all the tree's nodes
                 // useless boolean, just for pick up a different constructor
                 listOctTree.add(PAActiveObject.newActive(OctTree.class.getName(), new Object[] { lplanets,
-                        universe, new Boolean(true) }, nodes[(10 * i + 8) % nodes.length]));
+                        universe, Boolean.valueOf(true) }, nodes[(10 * i + 8) % nodes.length]));
             } catch (ActiveObjectCreationException e) {
                 deployer.abortOnError(e);
             } catch (NodeException e) {

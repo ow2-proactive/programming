@@ -195,7 +195,7 @@ public class C3DUser implements InitActive, java.io.Serializable, User, UserLogi
      */
     public void informNewUser(int nUser, String sName) {
         this.gui.addUser(sName);
-        this.h_users.put(sName, new Integer(nUser));
+        this.h_users.put(sName, Integer.valueOf(nUser));
     }
 
     /**

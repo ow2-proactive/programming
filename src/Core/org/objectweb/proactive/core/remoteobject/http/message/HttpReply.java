@@ -73,7 +73,7 @@ public class HttpReply extends HttpMessage implements Serializable {
         try {
             Body body = HttpUtils.getBody(idBody);
             if (this.reply != null) {
-                return new Integer(body.receiveReply(this.reply));
+                return Integer.valueOf(body.receiveReply(this.reply));
             }
         } catch (IOException e) {
             e.printStackTrace();

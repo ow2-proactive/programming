@@ -174,7 +174,7 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
                 }
             }
 
-            return new Boolean(false);
+            return Boolean.valueOf(false);
         }
 
         if (methodCall.getName().equals("hashCode") && (methodCall.getNumberOfParameter() == 0)) {

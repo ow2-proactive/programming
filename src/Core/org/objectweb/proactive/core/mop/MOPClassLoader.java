@@ -218,8 +218,8 @@ public class MOPClassLoader extends URLClassLoader {
                     Object[] effectiveArguments = new Object[5];
                     effectiveArguments[0] = name;
                     effectiveArguments[1] = data;
-                    effectiveArguments[2] = new Integer(0);
-                    effectiveArguments[3] = new Integer(data.length);
+                    effectiveArguments[2] = Integer.valueOf(0);
+                    effectiveArguments[3] = Integer.valueOf(data.length);
                     effectiveArguments[4] = this.getClass().getProtectionDomain();
 
                     //  we have been loaded through the bootclasspath

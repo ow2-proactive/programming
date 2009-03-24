@@ -36,6 +36,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
+import net.sf.saxon.value.IntegerValue;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
@@ -192,7 +194,7 @@ public class URIBuilder {
         if (port == -1) {
             return buildURI(host, name, protocol);
         } else {
-            return buildURI(host, name, protocol, new Integer(port).intValue());
+            return buildURI(host, name, protocol, Integer.valueOf(port).intValue());
         }
     }
 

@@ -85,11 +85,11 @@ public class TryCache {
 
     public void recordTrySuccess(String host, int port) {
         String key = getKey(host, port);
-        _hash.put(key, new Boolean(true));
+        _hash.put(key, Boolean.valueOf(true));
     }
 
     public void recordTryFailure(String host, int port) {
         String key = getKey(host, port);
-        _hash.put(key, new Boolean(false));
+        _hash.put(key, Boolean.valueOf(false));
     }
 }

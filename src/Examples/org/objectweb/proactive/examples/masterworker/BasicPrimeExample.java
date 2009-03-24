@@ -212,10 +212,10 @@ public class BasicPrimeExample extends AbstractExample {
         public Boolean run(WorkerMemory memory) {
             for (long divider = begin; divider < end; divider++) {
                 if ((candidate % divider) == 0) {
-                    return new Boolean(false);
+                    return Boolean.valueOf(false);
                 }
             }
-            return new Boolean(true);
+            return Boolean.valueOf(true);
         }
     }
 }
