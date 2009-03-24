@@ -489,6 +489,10 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         out.writeObject(writtenUpdater.getRemoteAdapter());
     }
 
+    /**
+     * the use of the synchronized keyword in readObject is meant to prevent race conditions on
+     * futures -- do not remove it.
+     */
     private synchronized void readObject(java.io.ObjectInputStream in) throws java.io.IOException,
             ClassNotFoundException {
         senderID = (UniqueID) in.readObject();
