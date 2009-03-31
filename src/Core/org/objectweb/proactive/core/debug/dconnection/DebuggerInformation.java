@@ -39,8 +39,6 @@ import org.objectweb.proactive.core.node.Node;
 
 public class DebuggerInformation implements Serializable {
 
-    private static final long serialVersionUID = -2470754430058574000L;
-
     private Node debuggerNode;
     private int debuggeePort;
 

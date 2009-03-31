@@ -42,7 +42,6 @@ import cern.colt.Arrays;
 
 
 public class Data implements Serializable {
-    private static final long serialVersionUID = 4068435103580170397L;
 
     /** data readed */
     private byte[] data;
