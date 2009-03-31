@@ -57,6 +57,10 @@ import java.util.Map;
 public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitActive {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      * log4j logger of the worker
      */
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER_WORKERS);

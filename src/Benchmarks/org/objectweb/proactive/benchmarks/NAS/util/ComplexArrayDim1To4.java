@@ -42,6 +42,10 @@ import java.io.Serializable;
  */
 public class ComplexArrayDim1To4 implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private Complex[] array;
     private int d1;
     private int d2;

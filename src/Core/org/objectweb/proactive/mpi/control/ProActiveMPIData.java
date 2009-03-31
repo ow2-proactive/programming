@@ -32,6 +32,10 @@
 package org.objectweb.proactive.mpi.control;
 
 public class ProActiveMPIData implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private int jobID = 0;
     private int msg_type = 0;
 

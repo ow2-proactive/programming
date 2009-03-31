@@ -32,6 +32,11 @@
 package org.objectweb.proactive.core.mop;
 
 public class ClassNotReifiableException extends StructuralException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public ClassNotReifiableException() {
     }
 

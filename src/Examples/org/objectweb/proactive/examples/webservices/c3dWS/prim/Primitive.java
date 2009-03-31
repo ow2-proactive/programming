@@ -36,6 +36,10 @@ import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
 
 
 public abstract class Primitive implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     public Surface surf = new Surface();
 
     public void setColor(double r, double g, double b) {

@@ -55,6 +55,11 @@ import org.objectweb.proactive.core.component.controller.PriorityController;
  */
 public class ComponentActivityPriority extends ComponentActivity implements RunActive, InitActive, EndActive,
         Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     //    private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ACTIVITY);
     //    private transient InitActive componentInitActive; // used only once
     //    private RunActive componentRunActive;
@@ -156,6 +161,11 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
     }
 
     private class ComponentPriotirizedRequestRunActive implements RunActive, Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
         public void runActivity(Body body) {
             Service componentService = new Service(body);
             ComponentBody componentBody = (ComponentBody) body;

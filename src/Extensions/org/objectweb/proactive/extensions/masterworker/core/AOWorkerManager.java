@@ -87,6 +87,10 @@ import java.util.concurrent.TimeUnit;
 public class AOWorkerManager implements WorkerManager, InitActive, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      * log4j logger for the worker manager
      */
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER_WORKERMANAGER);

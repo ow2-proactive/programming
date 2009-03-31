@@ -42,6 +42,10 @@ import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
  */
 public class FTProblemClass extends NASProblemClass {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     public int np1;
     public int np2;
     public int np;

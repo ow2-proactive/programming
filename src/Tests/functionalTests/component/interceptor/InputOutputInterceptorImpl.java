@@ -54,6 +54,11 @@ public class InputOutputInterceptorImpl extends AbstractProActiveController impl
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * @param owner
      */
     public InputOutputInterceptorImpl(Component owner) {

@@ -46,6 +46,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class DoubleMutableWrapper extends DoubleWrapper {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * The no arguments constructor for ProActive.
      */
     public DoubleMutableWrapper() {

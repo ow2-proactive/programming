@@ -37,6 +37,10 @@ import java.util.Vector;
 
 
 public class MethodStatisticsCompositeImpl extends MethodStatisticsAbstract implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private List<MonitorController> subcomponentMonitors;
 
     public MethodStatisticsCompositeImpl(String itfName, String methodName, Class<?>[] parametersTypes,

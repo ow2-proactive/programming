@@ -62,6 +62,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class HalfBody extends AbstractBody {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
@@ -213,6 +218,10 @@ public class HalfBody extends AbstractBody {
          *
          */
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         /** A pool future that contains the pending future objects */
         protected FuturePool futures;
         protected RequestFactory internalRequestFactory;

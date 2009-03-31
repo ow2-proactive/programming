@@ -39,6 +39,10 @@ import org.objectweb.proactive.examples.c3d.geom.Vec;
  * 3D representation of a Sphere, in space.
  */
 public class Sphere extends Primitive implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private Vec c;
     private double r;
     private double r2;

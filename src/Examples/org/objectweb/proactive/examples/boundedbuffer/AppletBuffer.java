@@ -49,6 +49,10 @@ import org.objectweb.proactive.core.config.ProActiveConfiguration;
 public class AppletBuffer extends org.objectweb.proactive.examples.StandardFrame {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      * The graphic panes
      */
     public CellPanel[] cells;
@@ -179,6 +183,10 @@ public class AppletBuffer extends org.objectweb.proactive.examples.StandardFrame
     // -- INNER CLASSES -----------------------------------------------
     //
     protected class CellPanel extends javax.swing.JPanel {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private javax.swing.JLabel caption;
         private boolean in;
         private boolean out;

@@ -38,6 +38,10 @@ import javax.swing.SwingConstants;
  * and holds the buttons for the interaction between the driver and the car
  */
 public class CarPanel extends javax.swing.JPanel {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     // Fields
     static final int INACTIVE = 0;
     static final int ACTIVE = 1;

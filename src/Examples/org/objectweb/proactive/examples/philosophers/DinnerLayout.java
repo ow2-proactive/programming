@@ -373,6 +373,11 @@ public class DinnerLayout {
     private class PhilPanel extends javax.swing.JLabel {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
+        /**
          * The array holding the images
          */
         private javax.swing.Icon[] imgPhil;
@@ -408,6 +413,11 @@ public class DinnerLayout {
     }
 
     private class ForkPanel extends javax.swing.JLabel {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
 
         /**
          * The array holding the images (shared with the phils)

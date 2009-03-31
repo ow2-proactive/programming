@@ -44,6 +44,10 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventObserver
 public class DefaultEventObserver implements EventObserver {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      *
      */
     private DefaultEventData eventData;

@@ -41,6 +41,10 @@ import java.io.Serializable;
  *
  */
 public class Interval implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private Integer beginning;
     private Integer end;
 

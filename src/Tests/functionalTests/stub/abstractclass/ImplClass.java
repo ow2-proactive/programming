@@ -32,6 +32,11 @@
 package functionalTests.stub.abstractclass;
 
 public class ImplClass extends AbstractClass {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public ImplClass() {
     }
 

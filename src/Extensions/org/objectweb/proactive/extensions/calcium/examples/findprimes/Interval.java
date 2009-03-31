@@ -35,6 +35,10 @@ import java.io.Serializable;
 
 
 class Interval implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     public int min;
     public int max;
     public int solvableSize;

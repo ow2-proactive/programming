@@ -53,6 +53,10 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
  * @since   ProActive 0.9.3
  */
 public class SimpleExternalProcess extends AbstractExternalProcess {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private String targetCommand;
 
     //

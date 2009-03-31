@@ -47,6 +47,10 @@ import java.util.Random;
  *
  */
 public class CompositeAverageMicroTimer extends AverageMicroTimer implements Timer, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private HashMap<String, Timer> timerMap = new HashMap<String, Timer>();
     private Timer activeTimer = null;
 

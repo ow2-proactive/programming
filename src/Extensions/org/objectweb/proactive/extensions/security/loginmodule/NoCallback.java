@@ -45,6 +45,10 @@ import javax.security.auth.callback.Callback;
  *
  */
 public class NoCallback implements Callback, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private Map<String, Object> values;
 
     protected void set(Map<String, Object> values) {

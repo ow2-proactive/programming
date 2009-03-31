@@ -40,6 +40,10 @@ import org.osgi.framework.Bundle;
 
 
 public class StopCommand extends OSGiCommand implements StopCommandMBean {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private long idBundle;
 
     public StopCommand(Transaction t, long id) {

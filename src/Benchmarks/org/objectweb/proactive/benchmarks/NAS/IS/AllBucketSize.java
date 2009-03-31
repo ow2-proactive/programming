@@ -45,6 +45,10 @@ import org.objectweb.proactive.api.PAActiveObject;
  */
 public class AllBucketSize implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private WorkerIS typedGroup;
     private int groupSize;
     private int received;

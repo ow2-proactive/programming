@@ -60,6 +60,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * This servlet enables the HTTP Communication protocol.
  */
 public class HTTPTransportServlet extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     final static public String NS = "/httpTransport";
     final static public String MAPPING = NS;
 

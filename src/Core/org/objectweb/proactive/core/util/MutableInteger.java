@@ -39,6 +39,10 @@ import java.io.Serializable;
  * @author The ProActive Team
  */
 public class MutableInteger implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private int value;
 
     public MutableInteger() {

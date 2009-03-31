@@ -48,6 +48,11 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
  */
 public class HostComponentSetterImpl extends AbstractProActiveController implements HostComponentSetter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public HostComponentSetterImpl(Component owner) {
         super(owner);
 

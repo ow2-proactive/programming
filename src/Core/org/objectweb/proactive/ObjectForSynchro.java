@@ -53,6 +53,11 @@ package org.objectweb.proactive;
 public class ObjectForSynchro extends Object implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * No arg constructor for Serializable
      */
     public ObjectForSynchro() {

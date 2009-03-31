@@ -53,6 +53,11 @@ import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 public class C3DRenderingEngine implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * Alpha channel
      */
     private static final int alpha = 255 << 24;

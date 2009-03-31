@@ -48,6 +48,10 @@ import org.objectweb.proactive.extensions.calcium.system.WSpace;
 @StateFul(value = false)
 @PrefetchFilesMatching(name = "db.*|query.*|blastall")
 public class ExecuteBlast implements Execute<BlastParams, File> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_APPLICATION);
 
     public File execute(BlastParams param, SkeletonSystem system) throws IOException, InterruptedException,

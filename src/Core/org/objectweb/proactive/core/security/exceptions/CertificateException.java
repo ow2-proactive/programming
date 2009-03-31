@@ -47,6 +47,11 @@ public class CertificateException extends Exception implements Serializable {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      *
      */
     public CertificateException() {

@@ -32,6 +32,10 @@
 package org.objectweb.proactive.benchmarks.NAS.util.wrapper;
 
 public class IntWrapper implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private int rank;
     private int val;
 

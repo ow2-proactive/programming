@@ -69,6 +69,10 @@ import org.objectweb.proactive.extra.branchnbound.core.queue.TaskQueue;
 @PublicAPI
 @ActiveObject
 public class Manager implements Serializable, InitActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
     private static final boolean enableRealloc = false; // TODO turn it
     private static final boolean enableBackup = false; // TODO turn it

@@ -48,6 +48,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class IntMutableWrapper extends IntWrapper implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * The no arguments constructor for ProActive.
      */
     public IntMutableWrapper() {

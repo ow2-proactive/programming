@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.migration.MigrationStrategyManagerImpl;
 public class A implements Serializable, RunActive {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      *
      */
     int counter = 0;

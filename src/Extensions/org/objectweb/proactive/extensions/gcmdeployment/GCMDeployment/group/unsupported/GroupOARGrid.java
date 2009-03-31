@@ -39,6 +39,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Abst
 
 
 public class GroupOARGrid extends AbstractGroup {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private String queueName;
     private String accessProtocol;
     private String wallTime;

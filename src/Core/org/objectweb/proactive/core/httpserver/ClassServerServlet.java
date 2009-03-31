@@ -60,6 +60,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * returned. The MOP class loader is used so even Stub class can be served.
  */
 public class ClassServerServlet extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     final static public String NS = "/classServer";
     final static public String MAPPING = NS + "/*";
 

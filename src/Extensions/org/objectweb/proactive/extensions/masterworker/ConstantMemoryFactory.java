@@ -45,6 +45,10 @@ import java.util.HashMap;
  */
 public class ConstantMemoryFactory implements MemoryFactory {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private HashMap<String, Serializable> memory;
 
     public ConstantMemoryFactory() {

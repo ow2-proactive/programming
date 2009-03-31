@@ -39,6 +39,10 @@ import java.io.Serializable;
  */
 public class SlowlySerializableObject implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private long tts;
     private String name;
     private int vmSerializer;

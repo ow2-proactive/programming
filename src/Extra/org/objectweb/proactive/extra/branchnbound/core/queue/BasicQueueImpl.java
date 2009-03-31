@@ -59,6 +59,10 @@ import org.objectweb.proactive.extra.branchnbound.core.Task;
  */
 @ActiveObject
 public class BasicQueueImpl extends TaskQueue {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private static final String BCK_SEPARTOR = "End pending tasks backup -- Starting not started tasks backup";
     private Vector<Task> queue = new Vector<Task>();
     private int hungryLevel;

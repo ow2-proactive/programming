@@ -46,6 +46,10 @@ import java.io.Serializable;
  */
 public class SimulationSetTask implements Task<Serializable> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private SimulationSet exp;
 
     public SimulationSetTask(SimulationSet exp) {

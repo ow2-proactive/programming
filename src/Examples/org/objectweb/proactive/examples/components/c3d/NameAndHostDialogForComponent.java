@@ -46,6 +46,10 @@ import org.objectweb.proactive.examples.c3d.gui.NameAndHostDialog;
 
 /** Overide the AO NameAndHostDialog, to use proper conponent lookup. */
 public class NameAndHostDialogForComponent extends NameAndHostDialog {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private static final String COMPONENT_ALIAS = "Dispatcher";
 
     public NameAndHostDialogForComponent() {

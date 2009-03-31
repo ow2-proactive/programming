@@ -46,6 +46,11 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 public class SSHNodeProcess extends SSHJVMProcess {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * Creates a new instance of SSHNodeProcess.
      */
     public SSHNodeProcess() {

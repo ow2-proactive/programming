@@ -42,6 +42,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  * from scratch. */
 @ActiveObject
 public class Displayer implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private transient NBodyFrame nbf;
     private boolean displayft;
     private int nbBodies;

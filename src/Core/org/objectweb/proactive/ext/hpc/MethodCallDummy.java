@@ -38,6 +38,10 @@ import java.lang.reflect.Method;
 
 public class MethodCallDummy extends MethodCall {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private static MethodCallDummy immediate_mc_dummy = new MethodCallDummy(true);
     private static MethodCallDummy mc_dummy = new MethodCallDummy(false);
     private Method dummyMethod;

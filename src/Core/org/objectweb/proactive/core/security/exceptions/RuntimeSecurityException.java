@@ -41,6 +41,11 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class RuntimeSecurityException extends ProActiveRuntimeException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public RuntimeSecurityException() {
         super();
     }

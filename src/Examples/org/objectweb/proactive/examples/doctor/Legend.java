@@ -43,7 +43,16 @@ import java.awt.event.WindowEvent;
 
 
 public class Legend extends Dialog {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public class LegendPanel extends Panel {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         DisplayPanel display;
 
         public LegendPanel(DisplayPanel _display) {

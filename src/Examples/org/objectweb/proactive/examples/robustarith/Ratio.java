@@ -42,6 +42,10 @@ import java.math.BigInteger;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class Ratio implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private BigInteger num;
     private BigInteger denum;
 

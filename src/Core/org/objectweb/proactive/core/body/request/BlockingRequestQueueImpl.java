@@ -53,6 +53,10 @@ import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 
 public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.io.Serializable,
         BlockingRequestQueue {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //

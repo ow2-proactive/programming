@@ -42,6 +42,10 @@ import org.objectweb.fractal.api.control.BindingController;
  *
  */
 public class PiBBPWrapper extends PiBBP implements MasterComputation, BindingController {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     PiCompMultiCast clientMultiCast;
 
     public PiBBPWrapper() {

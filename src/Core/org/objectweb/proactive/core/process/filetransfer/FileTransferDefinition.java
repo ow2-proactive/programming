@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 2.3
  */
 public class FileTransferDefinition implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     final protected static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
     private ArrayList<FileDescription> all;
     private ArrayList<FileDescription> files;
@@ -180,6 +184,10 @@ public class FileTransferDefinition implements Serializable {
     }
 
     public class FileDescription implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         String srcName;
         String destName;
 
@@ -233,6 +241,10 @@ public class FileTransferDefinition implements Serializable {
     }
 
     public class DirectoryDescription extends FileDescription {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         String includes;
         String excludes;
 

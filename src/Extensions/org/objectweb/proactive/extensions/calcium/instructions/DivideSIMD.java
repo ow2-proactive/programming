@@ -55,6 +55,10 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
  * @param <X> The type of the objects resulting from the division.
  */
 public class DivideSIMD<P, X> implements Instruction<P, X> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_STRUCTURE);
     Divide<P, X> div;
     private Stack<Instruction> instruction; //Single instruction stack

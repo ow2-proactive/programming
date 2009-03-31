@@ -53,6 +53,10 @@ import org.objectweb.proactive.core.process.UniversalProcess;
  * @since   ProActive 3.0
  */
 public class OARGRIDSubProcess extends AbstractExternalProcessDecorator {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     public final static String DEFAULT_OARGRIDSUBPATH = "/usr/local/bin/oargridsub";
     private static final String DEFAULT_SCRIPT_LOCATION = System.getProperty("user.home") + File.separator +
         "ProActive" + File.separator + "scripts" + File.separator + "unix" + File.separator + "cluster" +
@@ -281,6 +285,10 @@ public class OARGRIDSubProcess extends AbstractExternalProcessDecorator {
     }
 
     public class OarSite implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private String clusterName;
         private String clusterFrontEndName;
         private int nodes;

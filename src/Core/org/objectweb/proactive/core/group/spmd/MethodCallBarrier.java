@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
  */
 public class MethodCallBarrier extends MethodCallControlForGroup {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /** The unique ID of the barrier */
     private String IDName;
 

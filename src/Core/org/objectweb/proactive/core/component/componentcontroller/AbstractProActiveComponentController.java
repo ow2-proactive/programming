@@ -48,6 +48,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public abstract class AbstractProActiveComponentController implements Serializable, HostComponentSetter {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private boolean isInternal = true;
     private InterfaceType interfaceType;
     protected static Logger controllerLogger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);

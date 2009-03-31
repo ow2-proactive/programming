@@ -36,6 +36,11 @@ import org.objectweb.proactive.core.mop.Proxy;
 
 
 public abstract class AbstractProxy implements Proxy, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //

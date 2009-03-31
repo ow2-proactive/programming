@@ -40,6 +40,11 @@ package org.objectweb.proactive.extensions.timitspmd.util.observing;
  */
 public class FakeEventObservable implements EventObservable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** Construct an FakeObservable with zero Observers. */
     public FakeEventObservable() {
     }

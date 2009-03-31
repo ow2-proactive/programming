@@ -41,6 +41,10 @@ import org.objectweb.proactive.extensions.annotation.Migratable;
 @ActiveObject
 @Migratable
 public class Tree implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private String key;
     private String value;
     private Tree left;

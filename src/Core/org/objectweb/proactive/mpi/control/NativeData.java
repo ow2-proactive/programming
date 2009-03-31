@@ -36,6 +36,10 @@ import java.io.Serializable;
 
 public class NativeData implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private byte[] data;
 
     public NativeData() {

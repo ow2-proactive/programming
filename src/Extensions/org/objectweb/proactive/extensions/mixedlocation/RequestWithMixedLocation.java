@@ -48,6 +48,10 @@ import org.objectweb.proactive.ext.locationserver.LocationServerFactory;
 
 
 public class RequestWithMixedLocation extends RequestImpl implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     private static final int MAX_TRIES = 15;
     private static int counter = 0;

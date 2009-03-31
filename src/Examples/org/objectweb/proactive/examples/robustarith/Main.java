@@ -51,6 +51,10 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 public class Main {
     public static void main(String[] args) {
         Formula f = new Formula() {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 41L;
             private final Ratio ONE_64 = new Ratio(BigInteger.ONE, new BigInteger("64"));
 
             private BigInteger i2b(int i) {

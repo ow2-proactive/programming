@@ -65,6 +65,11 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
  */
 public class KernelCG extends Kernel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public static boolean ROUND_ROBIN_MAPPING_MODE = true;
 
     private CGProblemClass problemClass;

@@ -38,6 +38,11 @@ package org.objectweb.proactive.examples.c3d.prim;
 public class Isect implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * Remember, the ray has two vecs that define it : P and D.
      * This t is the value so that P + tD = point of collision which Primitive
      */

@@ -32,6 +32,11 @@
 package org.objectweb.proactive.examples.jmx.remote.management.exceptions;
 
 public class JMXException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public JMXException(Throwable t) {
         super(t);
     }

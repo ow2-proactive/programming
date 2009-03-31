@@ -63,6 +63,10 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  * @since   ProActive 2.2
  */
 public class Start implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private GCMApplication descriptorPad;
 

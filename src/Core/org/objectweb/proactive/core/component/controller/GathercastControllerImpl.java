@@ -65,6 +65,10 @@ import org.objectweb.proactive.core.node.Node;
 public class GathercastControllerImpl extends AbstractCollectiveInterfaceController implements
         GathercastController, ControllerStateDuplication {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private Map<String, List<ItfID>> bindingsOnServerItfs = new HashMap<String, List<ItfID>>();
     private Map<String, ProActiveInterface> gatherItfs = new HashMap<String, ProActiveInterface>();
     private GatherRequestsQueues gatherRequestsHandler;
@@ -238,6 +242,10 @@ public class GathercastControllerImpl extends AbstractCollectiveInterfaceControl
     }
 
     class GatherCastItfState implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private HashMap<String, List<ItfID>> bindingsOnServerItfs;
         private HashMap<String, ProActiveInterface> gatherItfs;
         private GatherRequestsQueues gatherRequestsHandler;

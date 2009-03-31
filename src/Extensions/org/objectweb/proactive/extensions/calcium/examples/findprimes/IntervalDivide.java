@@ -37,6 +37,11 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
 
 public class IntervalDivide implements Divide<Interval, Interval> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public Interval[] divide(Interval param, SkeletonSystem system) {
 
         int middle = param.min + ((param.max - param.min) / 2);

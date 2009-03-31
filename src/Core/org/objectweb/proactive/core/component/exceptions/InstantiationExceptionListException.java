@@ -45,6 +45,10 @@ import org.objectweb.fractal.api.factory.InstantiationException;
  *
  */
 public class InstantiationExceptionListException extends InstantiationException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     List<InstantiationException> exceptions;
 
     public List<InstantiationException> getExceptionList() {

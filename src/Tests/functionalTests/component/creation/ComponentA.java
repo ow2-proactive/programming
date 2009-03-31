@@ -43,6 +43,10 @@ import org.objectweb.proactive.api.PAActiveObject;
 public class ComponentA implements Serializable, ComponentInfo {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      *
      */
     String name;

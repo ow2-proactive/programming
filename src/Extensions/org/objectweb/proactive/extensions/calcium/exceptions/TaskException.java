@@ -42,6 +42,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class TaskException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public TaskException(String msg) {
         super(msg);
     }

@@ -42,6 +42,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class NoSuchComponentException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public NoSuchComponentException() {
         super();
     }

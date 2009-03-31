@@ -45,6 +45,11 @@ import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
 public class MethodCallSetSPMDGroup extends MethodCallControlForGroup {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * Builds a method call to set the SPMD group
      * @param smpgGroup - the SPMD group to set
      */

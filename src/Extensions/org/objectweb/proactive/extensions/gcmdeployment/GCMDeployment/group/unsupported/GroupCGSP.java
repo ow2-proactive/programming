@@ -38,6 +38,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Abst
 
 
 public class GroupCGSP extends AbstractGroup {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private String hostName;
     private String queue;
     private String count;

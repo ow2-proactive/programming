@@ -63,6 +63,10 @@ import org.objectweb.proactive.examples.jmx.remote.management.mbean.BundleInfo;
 public class EntitiesEventManager implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      *
      */
     private static transient EntitiesEventManager instance;

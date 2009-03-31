@@ -42,6 +42,10 @@ import org.objectweb.proactive.core.node.Node;
  */
 public class NodeNotificationData implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /** The node */
     private Node node;
     private String vn;

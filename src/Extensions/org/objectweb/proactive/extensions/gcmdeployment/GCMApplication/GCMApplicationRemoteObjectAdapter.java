@@ -59,6 +59,10 @@ import org.objectweb.proactive.gcmdeployment.Topology;
 
 
 public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> implements GCMApplication {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     long deploymentId;
     Set<String> virtualNodeNames;
     URI baseUri;

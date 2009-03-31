@@ -43,6 +43,11 @@ public class GroupAlreadyExistsException extends GroupCreationException {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      *
      *
      */

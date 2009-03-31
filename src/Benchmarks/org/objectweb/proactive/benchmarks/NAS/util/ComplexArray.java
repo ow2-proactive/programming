@@ -33,6 +33,10 @@ package org.objectweb.proactive.benchmarks.NAS.util;
 
 public class ComplexArray implements java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private static final int REAL = 0;
     private static final int IMG = 1;
     private static int quantity = 0; // DEBUG

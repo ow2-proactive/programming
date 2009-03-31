@@ -871,6 +871,10 @@ public class Service {
      *
      */
     protected class RequestFilterOnMethodName implements RequestFilter, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private String methodName;
 
         public RequestFilterOnMethodName(String methodName) {
@@ -892,6 +896,11 @@ public class Service {
      *
      */
     protected class AcceptAllRequestFilter implements RequestFilter {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
 
         /**
          * Returns true if and only if the given request can be accepted.

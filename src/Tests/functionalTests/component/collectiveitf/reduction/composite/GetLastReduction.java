@@ -39,6 +39,11 @@ import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceB
 
 
 public class GetLastReduction implements ReduceBehavior, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public Object reduce(List<?> values) throws ReductionException {
         System.out.println("--------------");
         System.out.println("Getting last out of " + values.size() + " elements");

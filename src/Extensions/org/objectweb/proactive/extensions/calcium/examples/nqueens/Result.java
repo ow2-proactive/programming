@@ -35,6 +35,10 @@ import java.io.Serializable;
 
 
 public class Result implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     //solutions vector
     public long[] solutions;
     public int n;

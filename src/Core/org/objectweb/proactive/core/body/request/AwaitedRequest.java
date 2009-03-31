@@ -64,6 +64,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class AwaitedRequest implements Request, java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** Logger */
     public static Logger logger = ProActiveLogger.getLogger(Loggers.REQUESTS);
 

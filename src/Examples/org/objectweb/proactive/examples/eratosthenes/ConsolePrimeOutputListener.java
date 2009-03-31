@@ -43,6 +43,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class ConsolePrimeOutputListener implements PrimeOutputListener, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private long startTime;
     private int numberCounter;

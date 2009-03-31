@@ -86,6 +86,11 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 @ActiveObject
 public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /**
@@ -1235,6 +1240,10 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
      * The about box
      */
     class MyDialog extends Dialog implements ActionListener, MouseListener, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private Label d_title = new Label("ProActive PDC", Label.CENTER);
         private Label d_url = new Label("http://www.inria.fr/proactive/", Label.CENTER);
 
@@ -1316,6 +1325,10 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
  * and hides the drawing and scaling issues inherent to image displaying
  */
 class MyImageContainer extends Canvas implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private Image img;
     private Image scaled_img;
     private int minwidth;

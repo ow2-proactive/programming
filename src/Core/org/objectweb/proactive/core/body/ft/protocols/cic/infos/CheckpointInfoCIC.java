@@ -53,6 +53,11 @@ public class CheckpointInfoCIC implements org.objectweb.proactive.core.body.ft.c
      *
      */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** The index of the linked checkpoint */
     public int checkpointIndex;
 

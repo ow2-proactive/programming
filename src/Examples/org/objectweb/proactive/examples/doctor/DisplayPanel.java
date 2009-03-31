@@ -38,6 +38,10 @@ import java.awt.Graphics;
 
 
 public class DisplayPanel extends javax.swing.JPanel implements Runnable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     Dimension prefSize;
     int[] patState;
     int[] docState;

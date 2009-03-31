@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
  *
  */
 public class RmiRemoteObjectImpl extends UnicastRemoteObject implements RmiRemoteObject {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     protected InternalRemoteRemoteObject internalrrObject;
 
     public RmiRemoteObjectImpl() throws java.rmi.RemoteException {

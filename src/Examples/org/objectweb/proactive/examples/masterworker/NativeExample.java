@@ -117,6 +117,11 @@ public class NativeExample extends AbstractExample {
     public static class SimpleNativeTask extends NativeTask {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
+        /**
          *
          */
         public SimpleNativeTask(String command) {

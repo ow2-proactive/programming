@@ -58,6 +58,10 @@ import java.util.Vector;
  *
  */
 public class NonFunctionalRequestsProcessor implements RequestProcessor, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private AbstractList<Request> nfRequestsQueue;
     private RequestFilter immediateNFResquestFilter;
     private RequestFilter priorityNFRequestFilter;
@@ -180,6 +184,11 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
     protected class ImmediateNFRequestFilter implements RequestFilter, Serializable {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
+        /**
          *
          */
         public boolean acceptRequest(Request request) {
@@ -199,6 +208,11 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
     protected class PriorityNFRequestFilter implements RequestFilter, Serializable {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
+        /**
          *
          */
         public boolean acceptRequest(Request request) {
@@ -216,6 +230,11 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
      *
      */
     protected class NoPriorityNFRequestFilter implements RequestFilter, Serializable {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
 
         /**
          *

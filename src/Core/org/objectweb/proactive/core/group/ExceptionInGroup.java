@@ -42,6 +42,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class ExceptionInGroup extends RuntimeException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** The Object who throwns the Throwable */
     private Object object;
 

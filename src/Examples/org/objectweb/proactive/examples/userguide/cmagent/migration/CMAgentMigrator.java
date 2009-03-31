@@ -45,6 +45,11 @@ import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 @ActiveObject
 public class CMAgentMigrator extends CMAgentInitialized implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     @MigrationSignal
     public void migrateTo(Node whereTo) {
         try {

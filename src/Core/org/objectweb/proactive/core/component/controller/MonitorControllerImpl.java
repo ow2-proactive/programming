@@ -70,6 +70,11 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 public class MonitorControllerImpl extends AbstractProActiveController implements MonitorController,
         NotificationListener {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
 
     private transient JMXNotificationManager jmxNotificationManager;

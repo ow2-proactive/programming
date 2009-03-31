@@ -43,6 +43,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class IconRenderer extends DefaultTableCellRenderer {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      *
      */
     JLabel res = new JLabel();

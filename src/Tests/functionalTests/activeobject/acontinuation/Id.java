@@ -34,6 +34,10 @@ package functionalTests.activeobject.acontinuation;
 public class Id implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      *
      */
     String name;

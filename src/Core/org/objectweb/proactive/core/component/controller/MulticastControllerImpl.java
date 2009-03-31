@@ -77,6 +77,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class MulticastControllerImpl extends AbstractCollectiveInterfaceController implements
         MulticastController, Serializable, ControllerStateDuplication {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
     private static Logger multicastLogger = ProActiveLogger.getLogger(Loggers.COMPONENTS_MULTICAST);
     private Map<String, ProActiveInterface> multicastItfs = new HashMap<String, ProActiveInterface>();
@@ -514,6 +518,10 @@ public class MulticastControllerImpl extends AbstractCollectiveInterfaceControll
     }
 
     class MulticastItfState implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private HashMap clientSideProxies;
         private HashMap<String, ProActiveInterface> multicastItfs;
         private HashMap<String, Map<String, Map<SerializableMethod, SerializableMethod>>> matchingMethods;

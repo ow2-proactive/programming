@@ -87,6 +87,11 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  */
 @ActiveObject
 public class C3DDispatcher implements org.objectweb.proactive.RunActive, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /**
@@ -1487,6 +1492,10 @@ public class C3DDispatcher implements org.objectweb.proactive.RunActive, Seriali
     }
 
     class C3DDispatcherFrame extends Frame implements ActionListener {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private MenuItem mi_exit;
         private MenuItem mi_clear;
         private MenuItem mi_benchmark;

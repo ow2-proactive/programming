@@ -46,6 +46,10 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
  */
 public class RuntimeRegistrationEvent extends ProActiveEvent {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /** constant for the registration */
     public static final int RUNTIME_REGISTERED = 10;
     public static final int RUNTIME_ACQUIRED = 20;

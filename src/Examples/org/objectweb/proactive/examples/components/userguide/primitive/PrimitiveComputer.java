@@ -36,6 +36,11 @@ import java.io.Serializable;
 
 
 public class PrimitiveComputer implements ComputeItf, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public PrimitiveComputer() {
     }
 

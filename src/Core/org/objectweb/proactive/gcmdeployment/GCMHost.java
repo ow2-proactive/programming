@@ -46,6 +46,10 @@ import org.objectweb.proactive.core.runtime.VMInformation;
 
 @PublicAPI
 public class GCMHost implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     protected String hostname;
     protected Map<VMInformation, GCMRuntime> runtimes;
 

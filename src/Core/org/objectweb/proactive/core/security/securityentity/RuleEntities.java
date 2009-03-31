@@ -39,6 +39,11 @@ import org.objectweb.proactive.core.security.securityentity.RuleEntity.Match;
 public class RuleEntities extends ArrayList<RuleEntity> {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      *
      */
     public RuleEntities() {

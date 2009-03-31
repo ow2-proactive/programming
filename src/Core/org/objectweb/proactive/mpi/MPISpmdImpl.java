@@ -53,6 +53,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class MPISpmdImpl implements MPISpmd, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     private final static Logger MPI_IMPL_LOGGER = ProActiveLogger.getLogger(Loggers.MPI);
 
     /**  name of the MPISpmd object */

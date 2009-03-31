@@ -68,6 +68,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class RemoteObjectAdapter implements RemoteObject {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      * the location of the remote object this remote object adapter represents
      */
     protected RemoteRemoteObject remoteObject;

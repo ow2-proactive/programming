@@ -55,6 +55,11 @@ import org.objectweb.fractal.api.type.ComponentType;
  */
 public class ProActiveNFComponentRepresentativeImpl extends ProActiveComponentRepresentativeImpl implements
         ProActiveNFComponentRepresentative {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     public ProActiveNFComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {
         super(componentType, hierarchicalType, controllersConfigFileLocation);

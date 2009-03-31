@@ -124,6 +124,11 @@ public class Table implements org.objectweb.proactive.RunActive {
     // -- INNER CLASSES -----------------------------------------------
     //
     private class GetForkRequestFilter implements org.objectweb.proactive.core.body.request.RequestFilter {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
         public GetForkRequestFilter() {
         }
 

@@ -42,6 +42,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class ComponentMethodCallMetadata implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     static final transient Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
     private String componentInterfaceName = null;
     private boolean isComponentMethodCall;

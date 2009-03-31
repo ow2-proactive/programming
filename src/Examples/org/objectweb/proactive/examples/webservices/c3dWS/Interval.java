@@ -32,6 +32,10 @@
 package org.objectweb.proactive.examples.webservices.c3dWS;
 
 public class Interval implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     public int number;
     public int width;
     public int height;

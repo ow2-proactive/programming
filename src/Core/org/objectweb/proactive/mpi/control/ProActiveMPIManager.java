@@ -59,6 +59,10 @@ import org.objectweb.proactive.mpi.MPISpmdImpl.LateDeploymentHelper;
 
 
 public class ProActiveMPIManager implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.MPI_CONTROL_MANAGER);
     public final static String DEFAULT_LIBRARY_NAME = "libProActiveMPIComm.so";
 

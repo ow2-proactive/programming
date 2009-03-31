@@ -42,6 +42,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class BasicTimer implements java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** A static variable to switch to debug mode */
     public static final boolean DEBUG = false; //ProActiveLogger.getLogger(Loggers.BODY).isDebugEnabled();    
 

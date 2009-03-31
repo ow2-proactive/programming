@@ -36,6 +36,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 @PublicAPI
 public class MPIResult implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private int returnValue;
 
     public MPIResult() {

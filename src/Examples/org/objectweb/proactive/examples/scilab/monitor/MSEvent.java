@@ -42,6 +42,11 @@ import java.util.EventObject;
 public class MSEvent extends EventObject {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      *
      */
     public MSEvent(Object source) {

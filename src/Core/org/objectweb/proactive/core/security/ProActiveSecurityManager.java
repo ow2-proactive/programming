@@ -91,6 +91,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class ProActiveSecurityManager implements Serializable /*, SecurityEntity*/{
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      *
      */
     private static Logger logger = ProActiveLogger.getLogger(Loggers.SECURITY_MANAGER);

@@ -42,6 +42,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class Maestro implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private int nbFinished = 0; // iteration related fields
     private int iter = 0; // iteration related fields
     private int maxIter; // iteration related fields

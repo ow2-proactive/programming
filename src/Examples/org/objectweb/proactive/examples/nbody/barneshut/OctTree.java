@@ -43,6 +43,11 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class OctTree implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** max body in a cube while universe's division */
     public static final int MAX_BODIES_IN_DOMAIN = 1;
 

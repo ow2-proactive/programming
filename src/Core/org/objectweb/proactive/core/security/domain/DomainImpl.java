@@ -49,6 +49,10 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 
 
 public class DomainImpl implements SecurityDomain {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private PolicyServer policyServer;
     private String name;
 

@@ -49,6 +49,11 @@ import org.objectweb.proactive.core.node.NodeFactory;
 
 public class ProActiveMPICoupling implements Serializable, InitActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** global Manager*/
     private ProActiveMPIManager manager;
 

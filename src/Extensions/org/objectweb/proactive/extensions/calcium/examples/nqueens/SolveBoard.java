@@ -35,6 +35,10 @@ import org.objectweb.proactive.extensions.calcium.muscle.Execute;
 
 
 abstract public class SolveBoard implements Execute<Board, Result> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     protected int n1;
     protected int n2;
 
