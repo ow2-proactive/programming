@@ -89,6 +89,7 @@ rm -Rf .git
 
 # Remove useless parts of ProActive
 rm ./doc/pa/ProActiveRefBook.doc
+rm ./doc/pa/ProActiveRefBook.pdf
 rm -Rf lib/client.jar dist/lib/client.jar
 find . -type f -a -name "*.svg" -exec rm {} \; # svg are converted in png by hands
 
