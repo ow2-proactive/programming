@@ -42,7 +42,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 /**
  * Annotation for specifying the dispatch strategy of a given parameter. You
  * could use it directly in the method's parameter declaration or inside
- * {@link MethodDispatchMode} and {@link ClassDispatchMode} annotations.
+ * {@link MethodDispatchMetadata} and {@link ClassDispatchMetadata} annotations.
  * <br>
  * Examples:
  * <br>
