@@ -77,7 +77,7 @@ public enum DispatchMode implements DispatchBehavior, Serializable {
 
     /**
      * Custom static partitioning of tasks can be specified in an external class file that
-     * implements the {@link AllocationBehavior} interface.
+     * implements the {@link DispatchBehavior} interface.
      */
     CUSTOM;
 
