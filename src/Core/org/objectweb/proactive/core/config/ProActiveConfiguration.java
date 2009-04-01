@@ -172,7 +172,6 @@ public class ProActiveConfiguration {
 
         @Override
         protected void finalize() throws Throwable {
-            logger.warn("FINALIZE CALLED");
 
             for (String key : exportedKeys.keySet()) {
                 System.setProperty(key, exportedKeys.get(key));
@@ -250,7 +249,7 @@ public class ProActiveConfiguration {
             fname = PROACTIVE_USER_CONFIG_FILENAME;
         }
 
-        if (!fname.matches("^\\w+:.*$")) {
+        if (!fname.matches("^\\w{2,}+:.*$")) {
             // protocol prefix was not specified
             // using "file" protocol by default
             fname = FILE_PROTOCOL_PREFIX + fname;
