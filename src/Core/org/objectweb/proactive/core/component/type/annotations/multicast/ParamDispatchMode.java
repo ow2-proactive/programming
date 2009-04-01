@@ -190,6 +190,7 @@ public enum ParamDispatchMode implements ParamDispatch, Serializable {
                 break;
             case RANDOM:
                 result = ROUND_ROBIN.expectedPartitionsSize(inputParameter, nbOutputReceivers);
+                break;
             default:
                 result = BROADCAST.expectedPartitionsSize(inputParameter, nbOutputReceivers);
         }
