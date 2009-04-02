@@ -130,6 +130,14 @@ public class HTTPServer {
         logger.debug("Started the HTTP server on port " + connector.getLocalPort());
     }
 
+    /** Stop the HTTP server 
+     * 
+     * @throws Exception If the HTTP server fails to stop
+     */
+    public void stop() throws Exception {
+        this.server.stop();
+    }
+
     /**
      * Register a Servlet with a given mapping
      * 
