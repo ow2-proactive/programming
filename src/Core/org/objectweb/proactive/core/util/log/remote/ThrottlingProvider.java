@@ -39,11 +39,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Appender;
+import org.apache.log4j.Category;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Layout;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.spi.LoggingEvent;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 
 /**
@@ -294,7 +298,15 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
         if (this.errorAppender == null) {
             try {
                 Layout layout = new PatternLayout("%X{shortid@hostname} - [%p %20.20c{2}] %m%n");
-                this.errorAppender = new FileAppender(layout, "throttlingProvider.log");
+                ProActiveRuntimeImpl part = ProActiveRuntimeImpl.getProActiveRuntime();
+                String runtimeName = part.getVMInformation().getName();
+                this.errorAppender = new FileAppender(layout, "throttlingProvider-" + runtimeName + ".log");
+
+                // Add an explanatory message at the begining of the file
+                String msg = "This file has been created to prevent logging event loss when the distributed log4j framework is enabled. If a logging event is created while the provider is sending the buffered logging events to the log collector, it is dumped into this file. It prevents logging events loss and infinite loops. If you see this file, most likely, the log collector became unreachable or some low level ProActive loggers have been activated.";
+                Logger l = Logger.getLogger(this.getClass());
+                LoggingEvent le = new LoggingEvent(Category.class.getName(), l, Level.INFO, msg, null);
+                this.errorAppender.append(le);
             } catch (IOException e) {
                 System.err.println("Failed to create FileAppender");
                 e.printStackTrace();
