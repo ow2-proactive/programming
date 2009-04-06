@@ -350,12 +350,15 @@
 		</concat>
 
 		<jar manifest="${compile.dir}/Manifest.mf" destfile="${deploy.lib.dir}/ProActive.jar" index="true">
-			<fileset dir="${cl.proactive.dir}" includes="**" />
-			<fileset dir="${cl.extensions.dir}" includes="**" />
+			<fileset dir="${cl.proactive.dir}" includes="**"/>
+			<fileset dir="${cl.extensions.dir}">
+				<include name="**"/>
+				<exclude name="org/objectweb/proactive/extensions/annotation/**/*CTree*"/>
+			</fileset>
 			<fileset dir="${cl.extra.dir}" includes="**" />
 			<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
 			<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
-			<fileset dir="${compile.dir}" includes="META-INF/services/javax.annotation.processing.Processor"/>
+			
 			<indexjars>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
@@ -427,14 +430,23 @@
 	</target>
 	
 	<target name="deploy.annotations.java6" depends="compile.extensions, -deploy.mkdir" description="Create a jar file which contains only the JDK 1.6 annotations">
-		<jar destfile="${deploy.lib.dir}/ProActive_annotations_CTree.jar" index="true">
-			<fileset dir="${cl.extensions.dir}">
-				<include name="org/objectweb/proactive/extensions/annotation/**"/>
-			</fileset>
-			<!-- annotations info -->
-		    <fileset dir="${compile.dir}" includes="META-INF/services/com.sun.mirror.apt.AnnotationProcessorFactory" />
-			<fileset dir="${compile.dir}" includes="META-INF/services/javax.annotation.processing.Processor"/>
-		</jar>
+		<if name="ant.java.version" value="1.5">
+			<else>
+				<jar destfile="${deploy.lib.dir}/ProActive_annotations_CTree.jar" index="true">
+					<service type="com.sun.mirror.apt.AnnotationProcessorFactory">
+						<provider classname="org.objectweb.proactive.extensions.annotation.common.ProActiveAnnotationProcessorFactory"/>
+						<provider classname="org.objectweb.proactive.extensions.annotation.common.BogusAnnotationProcessorFactory"/>
+					</service>
+					<service type="javax.annotation.processing.Processor">
+						<provider classname="org.objectweb.proactive.extensions.annotation.common.ProActiveProcessorCTree"/>
+					</service>
+					
+					<fileset dir="${cl.extensions.dir}">
+						<include name="org/objectweb/proactive/extensions/annotation/**"/>
+					</fileset>
+					</jar>
+			</else>
+		</if>
 	</target>
 
 	<target name="-deploy.mkdir">
@@ -446,7 +458,7 @@
 
 	<target name="deploy.annotations.all" depends="deploy.annotations.java5, deploy.annotations.java6" />
 
-	<target name="deploy.all" depends="deploy.core, deploy.examples, deploy.tests, deploy.utils, deploy.annotations.all" description="Populate dist/ with all ProActive Programming dependencies and JARs" />
+	<target name="deploy.all" depends="deploy.core, deploy.examples, deploy.tests, deploy.utils, deploy.annotations.java6" description="Populate dist/ with all ProActive Programming dependencies and JARs" />
 
 	<target name="deploy" depends="deploy.all" description="Populate dist/ (with ProActive_examples.jar)" />
 
