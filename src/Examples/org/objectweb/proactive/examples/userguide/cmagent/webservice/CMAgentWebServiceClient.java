@@ -31,14 +31,12 @@
  */
 package org.objectweb.proactive.examples.userguide.cmagent.webservice;
 
-import java.rmi.RemoteException;
-
 import javax.xml.namespace.QName;
-import javax.xml.rpc.Call;
-import javax.xml.rpc.Service;
-import javax.xml.rpc.ServiceException;
-import javax.xml.rpc.ServiceFactory;
 
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.addressing.EndpointReference;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.rpc.client.RPCServiceClient;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
@@ -49,39 +47,44 @@ import org.objectweb.proactive.extensions.webservices.WSConstants;
 //@snippet-start webservice_cma_client_full
 public class CMAgentWebServiceClient {
     public static void main(String[] args) {
-        String address;
-        if (args.length == 0) {
-            address = "http://localhost:8080/";
-        } else {
-            address = args[0];
-        }
-        if (!address.startsWith("http://")) {
-            address = "http://" + address;
-        }
-
-        address += WSConstants.AXIS_SERVICES_PATH;
-        String namespaceURI = "cmAgentService";
-        String serviceName = "cmAgentService";
-        String portName = "getLastRequestServeTime";
-
-        ServiceFactory factory;
         try {
-            factory = ServiceFactory.newInstance();
+            String url = "";
+            if (args.length == 0) {
+                url = "http://localhost:8080/";
+            } else if (args.length == 1) {
+                url = args[0];
+            } else {
+                System.out.println("Wrong number of arguments:");
+                System.out.println("Usage: java HelloWorld [url]");
+                return;
+            }
 
-            Service service = factory.createService(new QName(serviceName));
+            if (!url.startsWith("http://")) {
+                url = "http://" + url;
+            }
 
-            Call call = service.createCall(new QName(portName));
+            RPCServiceClient serviceClient = new RPCServiceClient();
 
-            call.setTargetEndpointAddress(address);
+            Options options = serviceClient.getOptions();
 
-            call.setOperationName(new QName(namespaceURI, portName));
+            EndpointReference targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH +
+                "cmAgentService");
 
-            Object[] inParams = new Object[0];
-            String name = ((String) call.invoke(inParams));
+            options.setTo(targetEPR);
+            options.setAction("getLastRequestServeTime");
+
+            // Call sayText
+            QName op = new QName("getLastRequestServeTime");
+
+            Object[] opArgs = new Object[] {};
+            Class<?>[] returnTypes = new Class[] { String.class };
+            // Call sayText
+            Object[] response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
+
+            String name = (String) response[0];
+
             System.out.println(name);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
+        } catch (AxisFault e) {
             e.printStackTrace();
         }
     }

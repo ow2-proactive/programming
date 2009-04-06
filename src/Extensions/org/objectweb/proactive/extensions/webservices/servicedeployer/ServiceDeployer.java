@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
+
 import org.apache.axis2.engine.MessageReceiver;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.deployment.util.Utils;
+import org.apache.axis2.description.AxisOperation;
 import org.apache.axis2.description.Parameter;
 import org.apache.axis2.description.WSDL2Constants;
 import org.apache.axis2.util.Loader;
@@ -73,7 +76,7 @@ public class ServiceDeployer {
         if (methodsName.length == 0)
             return excludedOperations;
 
-        Method[] methodsTable = objectClass.getDeclaredMethods();
+        Method[] methodsTable = objectClass.getMethods();
 
         ArrayList<String> methodsNameArray = new ArrayList<String>();
         for (String name : methodsName) {
