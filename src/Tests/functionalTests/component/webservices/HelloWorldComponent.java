@@ -31,45 +31,38 @@
  */
 package functionalTests.component.webservices;
 
-import javax.xml.namespace.QName;
-
-import org.apache.axis2.addressing.EndpointReference;
-import org.apache.axis2.client.Options;
-import org.apache.axis2.rpc.client.RPCServiceClient;
-import org.objectweb.proactive.extensions.webservices.WSConstants;
+import java.util.LinkedList;
 
 
 /**
- * An example to call the hello world web service.
+ * A simple example to expose an active object as a web service.
  *
  * @author The ProActive Team
  */
-// @snippet-start wsclientcomponent
-public class WSClientComponent {
+public class HelloWorldComponent implements HelloWorldItf{
 
-    public static String callComposite(String url, int index) throws Exception {
+    LinkedList<String> textsToSay = new LinkedList<String>();
 
-        RPCServiceClient serviceClient = new RPCServiceClient();
+    public HelloWorldComponent() {
+    }
 
-        Options options = serviceClient.getOptions();
+    public void putHelloWorld() {
+	this.textsToSay.add("Hello world!");
+    }
 
-        EndpointReference targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH +
-            "composite_hello-world");
+    public void putTextToSay(String textToSay) {
+        this.textsToSay.add(textToSay);
+    }
 
-        options.setTo(targetEPR);
-        options.setAction("helloName");
+    public String sayText() {
+        if (this.textsToSay.isEmpty()) {
+            return "The list is empty";
+        } else {
+            return this.textsToSay.poll();
+        }
+    }
 
-        // Call sayText
-        QName op = new QName("helloName");
-
-        Object[] opArgs = new Object[] { index };
-        Class<?>[] returnTypes = new Class[] { String.class };
-
-        Object[] response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
-
-        String result = (String) response[0];
-
-        return result;
+    public Boolean contains(String textToCheck) {
+	return new Boolean(textsToSay.contains(textToCheck));
     }
 }
-// @snippet-end wsclientcomponent

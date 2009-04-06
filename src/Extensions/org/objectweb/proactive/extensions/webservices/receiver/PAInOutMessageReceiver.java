@@ -4,6 +4,10 @@ import java.lang.IllegalAccessException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import javax.naming.event.ObjectChangeListener;
+
+import javassist.expr.Cast;
+
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
@@ -24,7 +28,12 @@ import org.apache.axis2.rpc.receivers.RPCUtil;
 import org.apache.axis2.wsdl.WSDLConstants;
 import org.apache.log4j.Logger;
 
+import org.objectweb.proactive.Service;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.body.future.FutureProxy;
+import org.objectweb.proactive.core.body.proxy.BodyProxy;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
+import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -157,11 +166,21 @@ public class PAInOutMessageReceiver extends AbstractInOutMessageReceiver {
             }
             Parameter generateBare = axisService.getParameter(Java2WSDLConstants.DOC_LIT_BARE_PARAMETER);
             if (generateBare != null && "true".equals(generateBare.getValue())) {
-                RPCUtil.processResonseAsDocLitBare(resObject, axisService, envelope, fac, ns, bodyContent,
+		if (resObject instanceof StubObject) {
+			RPCUtil.processResonseAsDocLitBare(((FutureProxy) ((StubObject) resObject).getProxy()).getResult(), axisService, envelope, fac, ns, bodyContent,
                         outMessageContext);
+		} else {
+			RPCUtil.processResonseAsDocLitBare(resObject, axisService, envelope, fac, ns, bodyContent,
+                            outMessageContext);
+		}
             } else {
-                RPCUtil.processResponseAsDocLitWrapped(resObject, axisService, method, envelope, fac, ns,
+		if (resObject instanceof StubObject) {
+			RPCUtil.processResponseAsDocLitWrapped(((FutureProxy) ((StubObject) resObject).getProxy()).getResult(), axisService, method, envelope, fac, ns,
                         bodyContent, outMessageContext);
+		} else {
+			RPCUtil.processResponseAsDocLitWrapped(resObject, axisService, method, envelope, fac, ns,
+                            bodyContent, outMessageContext);
+		}
             }
             outMessageContext.setEnvelope(envelope);
 

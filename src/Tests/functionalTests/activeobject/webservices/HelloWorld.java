@@ -4,7 +4,7 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2009 INRIA/University of Nice-Sophia Antipolis
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
  * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.examples.webservices.helloWorld;
+package functionalTests.activeobject.webservices;
 
 import java.util.LinkedList;
 
@@ -53,15 +53,8 @@ public class HelloWorld {
     public HelloWorld() {
     }
 
-    public String helloWorld() {
-        return "Hello world !";
-    }
-
-    // This method is used to check
-    // that it is not inserted in the wsdl
-    // and not callable.
-    public String toString() {
-        return "HelloWorld";
+    public void putHelloWorld() {
+	this.textsToSay.add("Hello world!");
     }
 
     public void putTextToSay(String textToSay) {
@@ -74,6 +67,10 @@ public class HelloWorld {
         } else {
             return this.textsToSay.poll();
         }
+    }
+
+    public Boolean contains(String textToCheck) {
+	return new Boolean(textsToSay.contains(textToCheck));
     }
 
     public static void main(String[] args) {

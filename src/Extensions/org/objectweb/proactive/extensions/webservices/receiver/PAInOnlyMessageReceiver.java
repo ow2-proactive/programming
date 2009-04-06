@@ -57,8 +57,7 @@ public class PAInOnlyMessageReceiver extends AbstractInMessageReceiver {
             String className = (String) axisService.getParameter("ServiceClass").getValue();
 
             // Retrieve the isComponent parameter
-            boolean isComponent = Boolean.getBoolean((String) axisService.getParameter("isComponent")
-                    .getValue());
+            boolean isComponent = "true".equals((String) axisService.getParameter("isComponent").getValue());
 
             // Unmarshall the serialized object stored in a parameter of the service
             byte[] marshallObject = (byte[]) axisService.getParameter("MarshalledObject").getValue();
@@ -101,8 +100,12 @@ public class PAInOnlyMessageReceiver extends AbstractInMessageReceiver {
 
             if (method == null) {
                 String methodName = op.getName().getLocalPart();
-                Method[] methods = targetObject.getClass().getSuperclass().getMethods();
-
+                Method[] methods;
+                if (isComponent) {
+                    methods = targetObject.getClass().getMethods();
+                } else {
+                    methods = targetObject.getClass().getSuperclass().getMethods();
+                }
                 for (int i = 0; i < methods.length; i++) {
                     if (methods[i].getName().equals(methodName)) {
                         method = methods[i];

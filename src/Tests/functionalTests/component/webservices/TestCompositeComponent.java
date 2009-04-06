@@ -31,7 +31,14 @@
  */
 package functionalTests.component.webservices;
 
+import javax.xml.namespace.QName;
+
+import org.apache.axis2.addressing.EndpointReference;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.rpc.client.RPCServiceClient;
 import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.api.control.ContentController;
@@ -46,6 +53,7 @@ import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.webservices.WSConstants;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 
 import functionalTests.FunctionalTest;
@@ -60,18 +68,14 @@ public class TestCompositeComponent extends FunctionalTest {
 
     private static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
 
-    public static void main(String[] args) throws Exception {
-        TestCompositeComponent compositeComponent = new TestCompositeComponent();
-        compositeComponent.exposeComposite();
-    }
+    private String url;
 
-    @org.junit.Test
-    public void exposeComposite() throws Exception {
-
-        // Retrieves the port number of the local Jetty server
+    @Before
+    public void deployComposite() throws Exception {
+	// Retrieves the port number of the local Jetty server
         Class.forName("org.objectweb.proactive.extensions.webservices.WebServices");
         String port = PAProperties.PA_XMLHTTP_PORT.getValue();
-        String url = "http://localhost:" + port + "/";
+        url = "http://localhost:" + port + "/";
 
         Component boot = null;
         Component comp = null;
@@ -116,6 +120,37 @@ public class TestCompositeComponent extends FunctionalTest {
 
         logger.info("Deploy a composite as a webservice service on : " + url);
 
-        logger.info("Call to the helloName method returned: " + WSClientComponent.callComposite(url, -1));
+    }
+
+    @org.junit.Test
+    public void testComposite() throws Exception {
+
+        RPCServiceClient serviceClient = new RPCServiceClient();
+
+        Options options = serviceClient.getOptions();
+
+        EndpointReference targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH +
+            "composite_hello-world");
+
+        options.setTo(targetEPR);
+        options.setAction("helloName");
+
+        // Call sayText
+        QName op = new QName("helloName");
+
+        // Choose a random name
+        int index = -1;
+        Object[] opArgs = new Object[] { index };
+        Class<?>[] returnTypes = new Class[] { String.class };
+
+        Object[] response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
+
+        String result = (String) response[0];
+        logger.info("Call to the helloName method returned: " + result);
+    }
+
+    @After
+    public void undeployComposite() throws Exception {
+        WebServices.unExposeComponentAsWebService(this.url, "composite", new String[] {"hello-world"});
     }
 }
