@@ -8,13 +8,5 @@ workingDir=`dirname $0`
 
 $JAVACMD -Dproactive.http.port=8080 org.objectweb.proactive.examples.webservices.helloWorld.HelloWorld "$@"
 
-
-echo
-echo ------------------------------------------------------------
-else
-	echo "Webservices will be deployed in an external servlet container at $@ "
-fi
-
-
 echo
 echo ------------------------------------------------------------

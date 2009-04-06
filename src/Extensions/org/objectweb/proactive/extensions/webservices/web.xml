@@ -16,6 +16,6 @@
 
   <servlet-mapping>
     <servlet-name>AxisServlet</servlet-name>
-	 <url-pattern>/axis2/services/*</url-pattern>
+	 <url-pattern>/proactive/services/*</url-pattern>
   </servlet-mapping>
 </web-app>

@@ -89,6 +89,9 @@
 	<classpathentry kind="lib" path="lib/wsdl4j-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib/axiom.jar"/>
+	<classpathentry kind="lib" path="lib/axis2-adb-1.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/axis2-kernel-1.4.1.jar"/>
 	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
 	<classpathentry kind="output" path="classes"/>
