@@ -181,7 +181,6 @@ public class ServiceDeployer {
                 loader = superclass.getClassLoader();
                 implClass = ((InterfaceType) interface_.getFcItfType()).getFcItfSignature();
             }
-            System.out.println(implClass);
 
             // Retrieve methods we don't want
             ArrayList<String> excludedOperations = this.getExcludedOperations(superclass, methods);

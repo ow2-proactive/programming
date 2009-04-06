@@ -64,8 +64,6 @@ public class PAInOutMessageReceiver extends AbstractInOutMessageReceiver {
 
             String className = (String) axisService.getParameter("ServiceClass").getValue();
 
-            System.out.println("className = " + className);
-
             // Retrieve the isComponent parameter
             boolean isComponent = "true".equals((String) axisService.getParameter("isComponent").getValue());
 
@@ -120,7 +118,6 @@ public class PAInOutMessageReceiver extends AbstractInOutMessageReceiver {
                 for (int i = 0; i < methods.length; i++) {
                     if (methods[i].getName().equals(methodName)) {
                         method = methods[i];
-                        System.out.println("method found: name = " + method.getName());
                         op.addParameter("myMethod", method);
                         break;
                     }

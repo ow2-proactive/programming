@@ -31,7 +31,7 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
-import org.objectweb.fractal.api.control.BindingController;
+import org.objectweb.proactive.extensions.webservices.deployer.PADeployer;
 
 
 /**
@@ -39,40 +39,30 @@ import org.objectweb.fractal.api.control.BindingController;
  *
  * @author The ProActive Team
  */
-public class HelloNameComponent implements HelloNameItf, BindingController {
-    ChooseNameItf chooseName;
+public class UndeployComponent {
 
-    public HelloNameComponent() {
-    }
-
-    public String helloName(int index) {
-        String name = chooseName.chooseName(index);
-        return "Hello " + name + " !";
-    }
-
-    public String[] listFc() {
-        String[] result = new String[1];
-        result[0] = "choose-name";
-        return result;
-    }
-
-    public Object lookupFc(String s) {
-        if (s.equals("choose-name")) {
-            return chooseName;
+    public static void main(String[] args) {
+        String url = "";
+        String componentName = "";
+        String interfaceName = "";
+        if (args.length == 2) {
+            url = "http://localhost:8080/";
+            componentName = args[0];
+            interfaceName = args[1];
+        } else if (args.length == 3) {
+            url = args[0];
+            componentName = args[1];
+            interfaceName = args[2];
+        } else {
+            System.out.println("Wrong number of arguments:");
+            System.out.println("Usage: java UndeployComponent [url] serviceName interfaceName");
+            return;
         }
-        return null;
-    }
 
-    public void bindFc(String s, Object o) {
-        if (s.equals("choose-name")) {
-            chooseName = (ChooseNameItf) o;
+        if (!url.startsWith("http://")) {
+            url = "http://" + url;
         }
-    }
 
-    public void unbindFc(String s) {
-        if (s.equals("choose-name")) {
-            chooseName = null;
-        }
+        PADeployer.unDeployComponent(url, componentName, new String[] { interfaceName });
     }
-
 }

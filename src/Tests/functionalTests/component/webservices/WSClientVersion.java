@@ -29,10 +29,44 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.examples.webservices.helloWorld;
+package functionalTests.component.webservices;
 
-public interface HelloNameItf {
+import javax.xml.namespace.QName;
 
-    public String helloName(int index);
+import org.apache.axis2.addressing.EndpointReference;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.rpc.client.RPCServiceClient;
+import org.objectweb.proactive.extensions.webservices.WSConstants;
 
+
+/**
+ * An example to call the hello world web service.
+ *
+ * @author The ProActive Team
+ */
+public class WSClientVersion {
+
+    public static String getVersion(String url) throws Exception {
+
+        RPCServiceClient serviceClient = new RPCServiceClient();
+
+        Options options = serviceClient.getOptions();
+
+        EndpointReference targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH + "Version");
+
+        options.setTo(targetEPR);
+        options.setAction("getVersion");
+
+        // Call sayText
+        QName op = new QName("getVersion");
+
+        Object[] opArgs = new Object[] {};
+        Class<?>[] returnTypes = new Class[] { String.class };
+
+        Object[] response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
+
+        String result = (String) response[0];
+
+        return result;
+    }
 }

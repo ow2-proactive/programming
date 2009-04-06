@@ -29,27 +29,10 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.examples.webservices.helloWorld;
+package functionalTests.component.webservices;
 
-/**
- * A simple example to expose an active object as a web service.
- *
- * @author The ProActive Team
- */
-public class ChooseNameComponent implements ChooseNameItf {
+public interface HelloNameItf {
 
-    private String[] names = new String[] { "Abhijeet Gaikwad", "Bastien Sauvan", "Brian Amedro",
-            "Elaine Isnard", "Elton Mathias", "Eric Madelaine", "Etienne Vallette-De-Osia", "Fabien Viale",
-            "Fabrice Huet", "Florin-Alexandru Bratu", "Francoise Baude", "Germain Sigety",
-            "Guilherme Perretti Pezzi", "Imen Filiali", "Jonathan Martin", "Khan Muhammad", "Laurent Vanni",
-            "Ludovic Henrio", "Marcela Rivera", "Nicolas Dodelin", "Paul Naoumenko", "Regis Gascon",
-            "Vasile Jureschi", "Viet Dong Doan", "Virginie Contes", "Yu Feng", "Franca Perrina" };
-
-    public ChooseNameComponent() {
-    }
-
-    public String chooseName(int index) {
-        return names[index];
-    }
+    public String helloName(int index);
 
 }

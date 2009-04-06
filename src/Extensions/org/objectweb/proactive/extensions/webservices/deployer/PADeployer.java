@@ -96,7 +96,7 @@ public class PADeployer {
             interfaces = new Object[interfaceNames.length];
             for (int i = 0; i < interfaceNames.length; i++) {
                 try {
-                    logger.info("Deploying the interface" + interfaceNames[i] + " of " + componentName);
+                    logger.info("Deploying the interface " + interfaceNames[i] + " of " + componentName);
                     interfaces[i] = component.getFcInterface(interfaceNames[i]);
                 } catch (NoSuchInterfaceException e) {
                     logger.error("Impossible to retrieve the interface whose name is " + interfaceNames[i]);

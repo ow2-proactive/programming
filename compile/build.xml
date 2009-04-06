@@ -585,7 +585,7 @@
 		</sequential>
 	</macrodef>
 
-	<target name="junit" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
+	<target name="junit" depends="compile.tests, deploy.all, proActiveWar" description="Run all non regression tests on the current host only">
 		<junitMacro nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
 
@@ -1050,7 +1050,7 @@
 	<!-- ================================================================================ -->
 	<!--    Create the proactive Web Archive to be used with the web service framework    -->
 	<!-- ================================================================================ -->
-	<target name="proActiveWar" depends="deploy">
+	<target name="proActiveWar" depends="deploy.core">
 		<property name="webservices.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices/" />
 		<property name="axis2.dir" value="${webservices.dir}/axis2" />
 		<property name="temp" value="${axis2.dir}/temp" />
