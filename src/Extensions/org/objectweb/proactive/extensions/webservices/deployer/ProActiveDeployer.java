@@ -6,6 +6,7 @@ import org.apache.axis2.deployment.Deployer;
 import org.apache.axis2.deployment.repository.util.DeploymentFileData;
 import org.apache.axis2.deployment.DeploymentException;
 import org.apache.axis2.description.AxisService;
+import org.apache.axis2.description.AxisOperation;
 import org.apache.axis2.description.WSDL2Constants;
 import org.apache.axis2.engine.MessageReceiver;
 import org.apache.axis2.util.Loader;
@@ -14,6 +15,8 @@ import org.apache.axiom.om.*;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axiom.om.util.StAXUtils;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 import javax.xml.stream.XMLStreamException;
@@ -27,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.lang.reflect.Method;
@@ -41,7 +45,15 @@ public class ProActiveDeployer implements Deployer {
 		this.configContext = configContext;
 	}
 
-	private OMElement BuildXML(Object o, String registerName) {
+	/**
+	 * Builds the xml file.
+	 *
+	 * @param o
+	 * @param registerName
+	 * @param methods
+	 * @return an OMElement which represents the root of the xml tree.
+	 */
+	private OMElement BuildXML(Object o, String registerName, String methods[]) {
 		Class<?> superclass = o.getClass().getSuperclass();
 
 		OMFactory factory = OMAbstractFactory.getOMFactory();
@@ -76,24 +88,27 @@ public class ProActiveDeployer implements Deployer {
 		OMText opTypeInOutText = factory.createOMText(opTypeInOut, "InOut");
 		opTypeInOut.addChild(opTypeInOutText);
 
+		ArrayList<Method> methodsArray = this.getMethods(superclass, methods);
+
 		// operation list of tags
-		Method[] methodList = superclass.getDeclaredMethods();
-		OMElement operation[] = new OMElement[methodList.length];
-		OMAttribute operationName[] = new OMAttribute[methodList.length];
-		for(int i = 0 ; i < methodList.length ; i++ ) {
-			operation[i] = factory.createOMElement("operation", null);
-			operationName[i] = factory.createOMAttribute("name", null, methodList[i].getName());
-			operation[i].addAttribute(operationName[i]);
-			service.addChild(operation[i]);
-			if (methodList[i].getReturnType().getName().equals("void")) {
-				operation[i].addChild(opTypeInOnly.cloneOMElement());
+		Iterator<Method> itOp = methodsArray.iterator();
+		OMElement operation;
+		OMAttribute operationName;
+		while (itOp.hasNext()) {
+			Method m = itOp.next();
+			operation = factory.createOMElement("operation", null);
+			operationName = factory.createOMAttribute("name", null, m.getName());
+			operation.addAttribute(operationName);
+			service.addChild(operation);
+			if (m.getReturnType().getName().equals("void")) {
+				operation.addChild(opTypeInOnly.cloneOMElement());
 			} else {
-				operation[i].addChild(opTypeInOut.cloneOMElement());
+				operation.addChild(opTypeInOut.cloneOMElement());
 			}
 			OMElement actionMapping = factory.createOMElement("actionMapping", null);
-			OMText actionMappingText = factory.createOMText(actionMapping, "urn:" + methodList[i].getName());
+			OMText actionMappingText = factory.createOMText(actionMapping, "urn:" + m.getName());
 			actionMapping.addChild(actionMappingText);
-			operation[i].addChild(actionMapping);
+			operation.addChild(actionMapping);
 		}
 
 		// register name
@@ -116,7 +131,7 @@ public class ProActiveDeployer implements Deployer {
 	 * @throws IOException
 	 * 		Occurs if the list of registration names cannot be retrieved.
 	 */
-	private static String chooseRegisterName(Object o) throws IOException {
+	private String chooseRegisterName(Object o) throws IOException {
 		String url = "http://localhost:8080";
 		try {
 			String registerName = o.getClass().getSuperclass().getSimpleName() + Math.round(Math.random());
@@ -139,16 +154,47 @@ public class ProActiveDeployer implements Deployer {
 		}
 	}
 
+	/**
+	 * If methodsName is not null, then it returns an ArrayList of the methods of objectClass
+	 * whose name is contained in methodsName.
+	 * If methodsName is null, then it returns an ArrayList of all the methods of objectClass
+	 *
+	 * @param objectClass
+	 * @param methodsName
+	 * @return the ArrayList of methods to be deployed
+	 */
+	private ArrayList<Method> getMethods(Class<?> objectClass, String[] methodsName) {
+		ArrayList<Method> methodsArray = new ArrayList<Method>();
+		ArrayList<String> methodsNameArray = new ArrayList<String>();
+		for (String name : methodsName) {
+			methodsNameArray.add(name);
+		}
+		Method[] methodsTable = objectClass.getDeclaredMethods();
+		boolean isEmpty = methodsNameArray.isEmpty();
+		for (Method m : methodsTable) {
+			if ( isEmpty || methodsNameArray.contains(m.getName())) {
+				methodsArray.add(m);
+			}
+		}
+		return methodsArray;
+	}
 
+	/**
+	 * Creates the xml file used for the deployment
+	 *
+	 * @param o Object to deploy
+	 * @param methods Methods of o to deploy
+	 */
 	public void deploy(Object o, String[] methods) {
 		try {
+
 			String serviceName = o.getClass().getSuperclass().getSimpleName();
 			String registerName = chooseRegisterName(o);
 
 			PAActiveObject.registerByName(o, registerName);
 
 			// Constructs the OMElement which represents the custom services.xml file
-			OMElement serviceXml = BuildXML(o, registerName);
+			OMElement serviceXml = BuildXML(o, registerName, methods);
 
 			// Writes this element into a file with a .pa extension
 			FileWriter fstream =
@@ -172,6 +218,7 @@ public class ProActiveDeployer implements Deployer {
 	@SuppressWarnings("unchecked")
 	public void deploy(DeploymentFileData deploymentFileData) throws DeploymentException {
 		try {
+			// Create the xml parser
 			File file = deploymentFileData.getFile();
 			FileInputStream fis = new FileInputStream(file);
 			XMLInputFactory xif = XMLInputFactory.newInstance();
@@ -179,6 +226,10 @@ public class ProActiveDeployer implements Deployer {
 			StAXOMBuilder builder = new StAXOMBuilder(reader);
 			OMElement service = builder.getDocumentElement();
 
+			// Retrieve service name
+			String serviceName = service.getAttributeValue(new QName("name"));
+
+			// Retrieve class and register name
 			String implClass = "" ;
 			String registerName = "" ;
 			Iterator itParam = service.getChildrenWithName(new QName("", "parameter"));
@@ -191,6 +242,7 @@ public class ProActiveDeployer implements Deployer {
 				}
 			}
 
+			// Create the message receivers
 			HashMap<String, MessageReceiver> messageReceiverMap = new HashMap<String, MessageReceiver>();
 			Class inOnlyMessageReceiver = Loader
 					.loadClass("org.objectweb.proactive.extensions.webservices.receiver.ProActiveInOnlyMessageReceiver");
@@ -198,21 +250,48 @@ public class ProActiveDeployer implements Deployer {
 					.newInstance();
 			messageReceiverMap.put(WSDL2Constants.MEP_URI_IN_ONLY,
 					messageReceiver);
-			messageReceiverMap.put(WSDL2Constants.MEP_URI_ROBUST_IN_ONLY,
-					messageReceiver);
 			Class inoutMessageReceiver = Loader
 					.loadClass("org.objectweb.proactive.extensions.webservices.receiver.ProActiveInOutMessageReceiver");
 			MessageReceiver inOutmessageReceiver = (MessageReceiver) inoutMessageReceiver
 					.newInstance();
 			messageReceiverMap.put(WSDL2Constants.MEP_URI_IN_OUT,
 					inOutmessageReceiver);
+			messageReceiverMap.put(WSDL2Constants.MEP_URI_ROBUST_IN_ONLY,
+					inOutmessageReceiver);
 
+			// Construct the service with all the methods of the class
 			AxisService axisService = AxisService.createService(
 					implClass, configContext.getAxisConfiguration(), messageReceiverMap,
 				null, null, configContext.getAxisConfiguration().getSystemClassLoader());
+
+			// Create the list of methods we want to deploy
+			ArrayList<String> listOfOperation = new ArrayList<String>();
+			Iterator itOperation = service.getChildrenWithName(new QName("", "operation"));
+			while(itOperation.hasNext()) {
+				listOfOperation.add(((OMElement) itOperation.next()).getAttributeValue(new QName("name")));
+			}
+
+			// Removed axisOperations that we don't want to be deploy
+			// and axisOperations corresponding to disallowed methods
+			Iterator itOp = axisService.getOperations();
+			while (itOp.hasNext()) {
+				AxisOperation axisOperation = (AxisOperation) itOp.next();
+				String operationName = axisOperation.getName().getLocalPart();
+				if (! listOfOperation.contains(operationName)
+					|| WSConstants.disallowedMethods.contains(operationName))
+				{
+					axisService.removeOperation(axisOperation.getName());
+				}
+			}
+
+			// Add the register name to be able to lookup the active object
 			axisService.addParameter("RegisterName", registerName);
 
+			// Deploy the service
 			configContext.getAxisConfiguration().addService(axisService);
+
+	        ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info("Deployed the class " + implClass +
+				" as a web service to http://localhost:8080/axis2/services/" + serviceName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -229,10 +308,21 @@ public class ProActiveDeployer implements Deployer {
 	public void unDeploy(String fileName) {
 		// remove all the runtime data you have created for this file
 		try {
+			// Unregister the service
 			int slashIndex = fileName.lastIndexOf('/');
 			int pointIndex = fileName.lastIndexOf('.');
 			String serviceName = fileName.substring(slashIndex + 1, pointIndex);
+			ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info(serviceName);
 			this.configContext.getAxisConfiguration().removeService(serviceName);
+
+			// Erase the file
+			File file = new File(fileName);
+			if (file.exists())
+			{
+				ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info(fileName + " has been deleted");
+				file.delete();
+			}
+	        ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info("Undeployed the service " + serviceName);
 		} catch (AxisFault axisFault) {
 			axisFault.printStackTrace();
 		}

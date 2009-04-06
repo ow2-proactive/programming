@@ -55,21 +55,59 @@ public class WSClient {
 
 			EndpointReference targetEPR = new EndpointReference(
 					"http://localhost:8080/" + WSConstants.AXIS_SERVICES_PATH + "HelloWorld");
+
 			options.setTo(targetEPR);
-			options.setAction("helloWorld");
 
-			QName op = new QName("helloWorld");
 
-			Object[] opArgs = new Object[] {};
+			// Call putTextToSay
+			QName op = new QName("putTextToSay");
+
+			String textArg = "Bonjour";
+			Object[] opArgs = new Object[] {textArg};
+
+			serviceClient.invokeRobust(op, opArgs);
+
+			System.out.println("Client added " + textArg + " into the list of texts");
+
+
+			// Call putTextToSay
+			textArg = "Au revoir";
+			opArgs = new Object[] {textArg};
+
+			serviceClient.invokeRobust(op, opArgs);
+
+			System.out.println("Client added " + textArg + " into the list of texts");
+
+
+			// Call sayText
+			op = new QName("sayText");
+
+			opArgs = new Object[] {};
 			Class<?>[] returnTypes = new Class[] { String.class };
 
 			Object[] response = serviceClient.invokeBlocking(op,
 				opArgs, returnTypes);
 
-			Object result = response[0];
+			String result = (String) response[0];
 
-			System.out.println("Client returned " + (String) result);
+			System.out.println("Client returned " + result);
 
+			// Call sayText
+			response = serviceClient.invokeBlocking(op,
+					opArgs, returnTypes);
+
+			result = (String) response[0];
+
+			System.out.println("Client returned " + result);
+
+
+			// Call sayText
+			response = serviceClient.invokeBlocking(op,
+						opArgs, returnTypes);
+
+			result = (String) response[0];
+
+			System.out.println("Client returned " + result);
         } catch (AxisFault e) {
             e.printStackTrace();
         }

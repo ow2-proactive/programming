@@ -31,6 +31,8 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
+import java.util.LinkedList;
+
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
@@ -45,28 +47,38 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class HelloWorld {
-    public HelloWorld() {
+
+	LinkedList<String> textsToSay = new LinkedList<String>();
+
+	public HelloWorld() {
     }
 
     public String helloWorld() {
         return "Hello world !";
     }
 
+    public String toString() {
+        return "HelloWorld";
+    }
+
+	public void putTextToSay (String textToSay) {
+		this.textsToSay.add(textToSay);
+	}
+
+	public String sayText() {
+		if (this.textsToSay.isEmpty()) {
+			return "The list is empty";
+		} else {
+			return this.textsToSay.poll();
+		}
+	}
+
     public static void main(String[] args) {
-//        String url;
-//        if (args.length == 0) {
-//            url = "http://localhost:8080";
-//        } else {
-//            url = args[0];
-//        }
-//        if (!url.startsWith("http://")) {
-//            url = "http://" + url;
-//        }
-        System.out.println("Deploy an hello world service");
         try {
             HelloWorld hw = (HelloWorld) PAActiveObject.newActive(
                     "org.objectweb.proactive.examples.webservices.helloWorld.HelloWorld", new Object[] {});
-            WebServices.exposeAsWebService(hw, new String[] {});
+            WebServices.exposeAsWebService(hw, new String[] {"putTextToSay", "sayText"});
+            WebServices.unExposeAsWebService(hw);
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();
         } catch (NodeException e) {

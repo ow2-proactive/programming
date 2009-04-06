@@ -7,19 +7,24 @@ import org.apache.axis2.description.AxisService;
 import org.apache.axis2.description.AxisOperation;
 import org.apache.axis2.description.AxisMessage;
 import org.apache.axis2.wsdl.WSDLConstants;
+import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMFactory;
 import org.apache.axis2.rpc.receivers.RPCUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.api.PAActiveObject;
 
 public class ProActiveInOnlyMessageReceiver extends AbstractInMessageReceiver {
 	protected void invokeBusinessLogic(MessageContext inMessageContext) throws AxisFault {
 		try {
-			System.out.println("Got the message ==> " +
+			ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info("Got the message ==> " +
 				inMessageContext.getEnvelope().getBody().getFirstElement().toString());
 
 			AxisService axisService = inMessageContext.getServiceContext().getAxisService();
@@ -31,7 +36,10 @@ public class ProActiveInOnlyMessageReceiver extends AbstractInMessageReceiver {
 			Object activeObject = PAActiveObject.lookupActive(className, url);
 
 			AxisOperation op = inMessageContext.getOperationContext().getAxisOperation();
+
 			OMElement methodElement = inMessageContext.getEnvelope().getBody().getFirstElement();
+			OMFactory factory = OMAbstractFactory.getOMFactory();
+			methodElement.setNamespace(factory.createOMNamespace(axisService.getTargetNamespace(), null));
 
 			AxisMessage inAxisMessage = op.getMessage(WSDLConstants.MESSAGE_LABEL_IN_VALUE);
 
