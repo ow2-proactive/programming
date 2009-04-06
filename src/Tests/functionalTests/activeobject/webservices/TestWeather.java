@@ -47,84 +47,79 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 
+
 public class TestWeather {
 
-	private static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
 
-	String url;
+    String url;
 
-	@Before
-	public void deployWeatherService() throws Exception {
-		// Loading the WebServices class enables us to retrieve the jetty
-		// port number
-		Class.forName("org.objectweb.proactive.extensions.webservices.WebServices");
+    @Before
+    public void deployWeatherService() throws Exception {
+        // Loading the WebServices class enables us to retrieve the jetty
+        // port number
+        Class.forName("org.objectweb.proactive.extensions.webservices.WebServices");
         String port = PAProperties.PA_XMLHTTP_PORT.getValue();
-//        String port = "8081";
+        //        String port = "8081";
         this.url = "http://localhost:" + port + "/";
 
-        WeatherService weatherService= (WeatherService) PAActiveObject.newActive(
-		"functionalTests.activeobject.webservices.WeatherService", new Object[] {});
+        WeatherService weatherService = (WeatherService) PAActiveObject.newActive(
+                "functionalTests.activeobject.webservices.WeatherService", new Object[] {});
         WebServices.exposeAsWebService(weatherService, this.url, "WeatherService");
-	}
+    }
 
-	@org.junit.Test
-	public void TestWeatherService() throws Exception {
+    @org.junit.Test
+    public void TestWeatherService() throws Exception {
 
         RPCServiceClient serviceClient = new RPCServiceClient();
 
         Options options = serviceClient.getOptions();
 
-        EndpointReference targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH + "WeatherService");
+        EndpointReference targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH +
+            "WeatherService");
         options.setTo(targetEPR);
 
         // Setting the weather
         options.setAction("setWeather");
-        QName opSetWeather =
-            new QName("setWeather");
+        QName opSetWeather = new QName("setWeather");
 
         Weather w = new Weather();
 
-        w.setTemperature((float)39.3);
+        w.setTemperature((float) 39.3);
         w.setForecast("Cloudy with showers");
         w.setRain(true);
-        w.setHowMuchRain((float)4.5);
+        w.setHowMuchRain((float) 4.5);
 
         Object[] opSetWeatherArgs = new Object[] { w };
 
         serviceClient.invokeRobust(opSetWeather, opSetWeatherArgs);
 
-     // Getting the weather
+        // Getting the weather
         options.setAction("getWeather");
-        QName opGetWeather =
-            new QName("getWeather");
+        QName opGetWeather = new QName("getWeather");
 
-        Object[] opGetWeatherArgs = new Object[] { };
+        Object[] opGetWeatherArgs = new Object[] {};
         Class<?>[] returnTypes = new Class<?>[] { Weather.class };
 
-        Object[] response = serviceClient.invokeBlocking(opGetWeather,
-                opGetWeatherArgs, returnTypes);
+        Object[] response = serviceClient.invokeBlocking(opGetWeather, opGetWeatherArgs, returnTypes);
 
         Weather result = (Weather) response[0];
 
         if (result == null) {
-		logger.info("Weather didn't initialize!");
+            logger.info("Weather didn't initialize!");
             return;
         }
 
         // Displaying the result
-        logger.info("Temperature               : " +
-                           result.getTemperature());
-        logger.info("Forecast                  : " +
-                           result.getForecast());
-        logger.info("Rain                      : " +
-                           result.getRain());
-        logger.info("How much rain (in inches) : " +
-                           result.getHowMuchRain());
+        logger.info("Temperature               : " + result.getTemperature());
+        logger.info("Forecast                  : " + result.getForecast());
+        logger.info("Rain                      : " + result.getRain());
+        logger.info("How much rain (in inches) : " + result.getHowMuchRain());
 
-	}
+    }
 
-	@After
-	public void undeployWeatherService() throws Exception {
+    @After
+    public void undeployWeatherService() throws Exception {
         WebServices.unExposeAsWebService(this.url, "WeatherService");
-	}
+    }
 }

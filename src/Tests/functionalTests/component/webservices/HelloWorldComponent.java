@@ -39,7 +39,7 @@ import java.util.LinkedList;
  *
  * @author The ProActive Team
  */
-public class HelloWorldComponent implements HelloWorldItf{
+public class HelloWorldComponent implements HelloWorldItf {
 
     LinkedList<String> textsToSay = new LinkedList<String>();
 
@@ -47,7 +47,7 @@ public class HelloWorldComponent implements HelloWorldItf{
     }
 
     public void putHelloWorld() {
-	this.textsToSay.add("Hello world!");
+        this.textsToSay.add("Hello world!");
     }
 
     public void putTextToSay(String textToSay) {
@@ -63,6 +63,6 @@ public class HelloWorldComponent implements HelloWorldItf{
     }
 
     public Boolean contains(String textToCheck) {
-	return new Boolean(textsToSay.contains(textToCheck));
+        return new Boolean(textsToSay.contains(textToCheck));
     }
 }

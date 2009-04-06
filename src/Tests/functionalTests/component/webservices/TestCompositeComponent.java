@@ -72,7 +72,7 @@ public class TestCompositeComponent extends FunctionalTest {
 
     @Before
     public void deployComposite() throws Exception {
-	// Retrieves the port number of the local Jetty server
+        // Retrieves the port number of the local Jetty server
         Class.forName("org.objectweb.proactive.extensions.webservices.WebServices");
         String port = PAProperties.PA_XMLHTTP_PORT.getValue();
         url = "http://localhost:" + port + "/";
@@ -151,6 +151,6 @@ public class TestCompositeComponent extends FunctionalTest {
 
     @After
     public void undeployComposite() throws Exception {
-        WebServices.unExposeComponentAsWebService(this.url, "composite", new String[] {"hello-world"});
+        WebServices.unExposeComponentAsWebService(this.url, "composite", new String[] { "hello-world" });
     }
 }

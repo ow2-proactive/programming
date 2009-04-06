@@ -166,21 +166,22 @@ public class PAInOutMessageReceiver extends AbstractInOutMessageReceiver {
             }
             Parameter generateBare = axisService.getParameter(Java2WSDLConstants.DOC_LIT_BARE_PARAMETER);
             if (generateBare != null && "true".equals(generateBare.getValue())) {
-		if (resObject instanceof StubObject) {
-			RPCUtil.processResonseAsDocLitBare(((FutureProxy) ((StubObject) resObject).getProxy()).getResult(), axisService, envelope, fac, ns, bodyContent,
-                        outMessageContext);
-		} else {
-			RPCUtil.processResonseAsDocLitBare(resObject, axisService, envelope, fac, ns, bodyContent,
-                            outMessageContext);
-		}
-            } else {
-		if (resObject instanceof StubObject) {
-			RPCUtil.processResponseAsDocLitWrapped(((FutureProxy) ((StubObject) resObject).getProxy()).getResult(), axisService, method, envelope, fac, ns,
-                        bodyContent, outMessageContext);
-		} else {
-			RPCUtil.processResponseAsDocLitWrapped(resObject, axisService, method, envelope, fac, ns,
+                if (resObject instanceof StubObject) {
+                    RPCUtil.processResonseAsDocLitBare(((FutureProxy) ((StubObject) resObject).getProxy())
+                            .getResult(), axisService, envelope, fac, ns, bodyContent, outMessageContext);
+                } else {
+                    RPCUtil.processResonseAsDocLitBare(resObject, axisService, envelope, fac, ns,
                             bodyContent, outMessageContext);
-		}
+                }
+            } else {
+                if (resObject instanceof StubObject) {
+                    RPCUtil.processResponseAsDocLitWrapped(
+                            ((FutureProxy) ((StubObject) resObject).getProxy()).getResult(), axisService,
+                            method, envelope, fac, ns, bodyContent, outMessageContext);
+                } else {
+                    RPCUtil.processResponseAsDocLitWrapped(resObject, axisService, method, envelope, fac, ns,
+                            bodyContent, outMessageContext);
+                }
             }
             outMessageContext.setEnvelope(envelope);
 

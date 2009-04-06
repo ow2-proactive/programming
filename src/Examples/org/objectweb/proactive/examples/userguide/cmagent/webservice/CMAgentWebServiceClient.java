@@ -39,7 +39,7 @@ import javax.xml.rpc.Service;
 import javax.xml.rpc.ServiceException;
 import javax.xml.rpc.ServiceFactory;
 
-import org.objectweb.proactive.extensions.webservicesBk.WSConstants;
+import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
 /**
@@ -51,7 +51,7 @@ public class CMAgentWebServiceClient {
     public static void main(String[] args) {
         String address;
         if (args.length == 0) {
-            address = "http://localhost:8080";
+            address = "http://localhost:8080/";
         } else {
             address = args[0];
         }
@@ -59,7 +59,7 @@ public class CMAgentWebServiceClient {
             address = "http://" + address;
         }
 
-        address += WSConstants.SERV_RPC_ROUTER;
+        address += WSConstants.AXIS_SERVICES_PATH;
         String namespaceURI = "cmAgentService";
         String serviceName = "cmAgentService";
         String portName = "getLastRequestServeTime";

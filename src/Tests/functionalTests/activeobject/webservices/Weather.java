@@ -2,6 +2,7 @@ package functionalTests.activeobject.webservices;
 
 import java.io.Serializable;
 
+
 public class Weather implements Serializable {
     private float temperature;
     private String forecast;
@@ -11,36 +12,35 @@ public class Weather implements Serializable {
     public Weather() {
     }
 
-    public void setTemperature(float temp){
+    public void setTemperature(float temp) {
         temperature = temp;
     }
 
-    public float getTemperature(){
+    public float getTemperature() {
         return temperature;
     }
 
-    public void setForecast(String fore){
+    public void setForecast(String fore) {
         forecast = fore;
     }
 
-    public String getForecast(){
+    public String getForecast() {
         return forecast;
     }
 
-    public void setRain(boolean r){
+    public void setRain(boolean r) {
         rain = r;
     }
 
-    public boolean getRain(){
+    public boolean getRain() {
         return rain;
     }
 
-    public void setHowMuchRain(float howMuch){
+    public void setHowMuchRain(float howMuch) {
         howMuchRain = howMuch;
     }
 
-    public float getHowMuchRain(){
+    public float getHowMuchRain() {
         return howMuchRain;
     }
 }
-

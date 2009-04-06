@@ -54,7 +54,7 @@ public class HelloWorld {
     }
 
     public void putHelloWorld() {
-	this.textsToSay.add("Hello world!");
+        this.textsToSay.add("Hello world!");
     }
 
     public void putTextToSay(String textToSay) {
@@ -70,7 +70,7 @@ public class HelloWorld {
     }
 
     public Boolean contains(String textToCheck) {
-	return new Boolean(textsToSay.contains(textToCheck));
+        return new Boolean(textsToSay.contains(textToCheck));
     }
 
     public static void main(String[] args) {
