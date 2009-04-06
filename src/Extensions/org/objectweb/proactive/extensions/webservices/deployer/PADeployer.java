@@ -144,7 +144,7 @@ public class PADeployer {
         try {
             RPCServiceClient serviceClient = new RPCServiceClient();
             EndpointReference targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH +
-                "DeployerService");
+                "ServiceDeployer");
 
             Options options = serviceClient.getOptions();
             options.setTo(targetEPR);
@@ -156,7 +156,7 @@ public class PADeployer {
 
             serviceClient.invokeRobust(op, opArgs);
 
-            logger.info("Called the deployer to " + url + " to undeploy the " + serviceName + "service");
+            logger.info("Called the deployer to " + url + " to undeploy the " + serviceName + " service");
         } catch (AxisFault axisFault) {
             axisFault.printStackTrace();
         }
@@ -169,21 +169,25 @@ public class PADeployer {
      * @param component Component to undeploy
      * @param url Url of the host where interfaces are deployed
      * @param componentName Name of the component
-     * @param interfaceNames Interfaces we want to undeploy.
-      * 							  If null, then all the interfaces will be undeployed
      */
-    static public void unDeployComponent(Component component, String url, String componentName,
-            String[] interfaceNames) {
-        if (interfaceNames.length == 0) {
-            Object[] interfaces = component.getFcInterfaces();
-            for (Object o : interfaces) {
-                unDeploy(url, componentName + "_" + ((Interface) o).getFcItfName());
-            }
-        } else {
-            for (String s : interfaceNames) {
-                unDeploy(url, componentName + "_" + s);
-            }
+    static public void unDeployComponent(Component component, String url, String componentName) {
+        Object[] interfaces = component.getFcInterfaces();
+        for (Object o : interfaces) {
+            unDeploy(url, componentName + "_" + ((Interface) o).getFcItfName());
         }
     }
 
+    /**
+     * Call the method unDeploy of the ServiceDeployer service
+     * deployed on the host for each interface.
+     *
+     * @param url Url of the host where interfaces are deployed
+     * @param componentName Name of the component
+     * @param interfaceNames Interfaces we want to undeploy.
+     */
+    static public void unDeployComponent(String url, String componentName, String[] interfaceNames) {
+        for (String s : interfaceNames) {
+            unDeploy(url, componentName + "_" + s);
+        }
+    }
 }

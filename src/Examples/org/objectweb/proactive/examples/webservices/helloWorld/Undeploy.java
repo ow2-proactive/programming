@@ -4,7 +4,7 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2009 INRIA/University of Nice-Sophia Antipolis
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
  * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -31,11 +31,35 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
-//@snippet-start helloworlditfcomponent
-public interface HelloWorldItf {
+import org.objectweb.proactive.extensions.webservices.deployer.PADeployer;
 
-    public String helloWorld(String name);
 
-    public String sayHello();
+/**
+ * A simple example to expose an active object as a web service.
+ *
+ * @author The ProActive Team
+ */
+public class Undeploy {
+
+    public static void main(String[] args) {
+        String url = "";
+        String serviceName = "";
+        if (args.length == 1) {
+            url = "http://localhost:8080/";
+            serviceName = args[0];
+        } else if (args.length == 2) {
+            url = args[0];
+            serviceName = args[1];
+        } else {
+            System.out.println("Wrong number of arguments:");
+            System.out.println("Usage: java Undeploy [url] serviceName");
+            return;
+        }
+
+        if (!url.startsWith("http://")) {
+            url = "http://" + url;
+        }
+
+        PADeployer.unDeploy(url, serviceName);
+    }
 }
-//@snippet-end helloworlditfcomponent

@@ -1077,7 +1077,6 @@
 			</lib>
 			<lib dir="${deploy.dir}/lib">
 				<include name="ProActive.jar" />
-				<include name="ProActive_examples.jar" />
 			</lib>
 			<webinf dir="${temp}/WEB-INF" />
 			<fileset dir="${temp}">

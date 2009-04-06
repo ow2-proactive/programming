@@ -1,43 +1,29 @@
 package org.objectweb.proactive.extensions.webservices.servicedeployer;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.File;
-import javax.xml.namespace.QName;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
 
 import org.apache.axis2.engine.MessageReceiver;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.deployment.util.Utils;
-import org.apache.axis2.description.InOutAxisOperation;
 import org.apache.axis2.description.Parameter;
 import org.apache.axis2.description.WSDL2Constants;
-import org.apache.axis2.description.AxisOperation;
 import org.apache.axis2.util.Loader;
 import org.apache.axis2.description.AxisService;
 import org.apache.axis2.description.java2wsdl.DefaultSchemaGenerator;
 import org.apache.axis2.description.java2wsdl.DocLitBareSchemaGenerator;
 import org.apache.axis2.description.java2wsdl.Java2WSDLConstants;
 import org.apache.axis2.description.java2wsdl.SchemaGenerator;
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.util.StAXUtils;
-import org.apache.axiom.om.util.Base64;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.log4j.Logger;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
-import org.objectweb.proactive.core.component.identity.ProActiveComponent;
-import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
@@ -131,12 +117,6 @@ public class ServiceDeployer {
             service.setParent(axisConfiguration);
             service.setName(serviceName);
 
-            for (String s : methods) {
-                AxisOperation axisOperation = new InOutAxisOperation(new QName("helloWorld"));
-                axisOperation.setMessageReceiver(inOutmessageReceiver);
-                service.addOperation(axisOperation);
-            }
-
             Parameter generateBare = service.getParameter(Java2WSDLConstants.DOC_LIT_BARE_PARAMETER);
             if (generateBare != null && "true".equals(generateBare.getValue())) {
                 schemaGenerator = new DocLitBareSchemaGenerator(loader, implClass, null,
@@ -184,15 +164,16 @@ public class ServiceDeployer {
                 o = HttpMarshaller.unmarshallObject(marshalledObject);
                 superclass = o.getClass().getSuperclass();
                 loader = o.getClass().getClassLoader();
+                implClass = superclass.getName();
             } else {
                 // Unmarshalled object
                 component = HttpMarshaller.unmarshallObject(marshalledObject);
                 String interfaceName = serviceName.substring(serviceName.lastIndexOf('_') + 1);
-                superclass = Class.forName(((InterfaceType) ((Interface) ((Component) component)
-                        .getFcInterface(interfaceName)).getFcItfType()).getFcItfSignature());
+                Interface interface_ = (Interface) ((Component) component).getFcInterface(interfaceName);
+                superclass = interface_.getClass();
                 loader = superclass.getClassLoader();
+                implClass = ((InterfaceType) interface_.getFcItfType()).getFcItfSignature();
             }
-            implClass = superclass.getName();
             System.out.println(implClass);
 
             // Retrieve methods we don't want
@@ -211,6 +192,7 @@ public class ServiceDeployer {
 
             // Add the service to the axis configuration
             axisConfiguration.addService(axisService);
+            logger.info("The deployer service has deployed the service " + serviceName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -229,7 +211,7 @@ public class ServiceDeployer {
 
             // Remove the service from the axis configuration
             axisConfig.removeService(serviceName);
-
+            logger.info("The deployer service has undeployed the service " + serviceName);
         } catch (AxisFault e) {
             e.printStackTrace();
         }
