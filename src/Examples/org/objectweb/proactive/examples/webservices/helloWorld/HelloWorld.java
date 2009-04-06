@@ -48,9 +48,9 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class HelloWorld {
 
-	LinkedList<String> textsToSay = new LinkedList<String>();
+    LinkedList<String> textsToSay = new LinkedList<String>();
 
-	public HelloWorld() {
+    public HelloWorld() {
     }
 
     public String helloWorld() {
@@ -61,24 +61,39 @@ public class HelloWorld {
         return "HelloWorld";
     }
 
-	public void putTextToSay (String textToSay) {
-		this.textsToSay.add(textToSay);
-	}
+    public void putTextToSay(String textToSay) {
+        this.textsToSay.add(textToSay);
+    }
 
-	public String sayText() {
-		if (this.textsToSay.isEmpty()) {
-			return "The list is empty";
-		} else {
-			return this.textsToSay.poll();
-		}
-	}
+    public String sayText() {
+        if (this.textsToSay.isEmpty()) {
+            return "The list is empty";
+        } else {
+            return this.textsToSay.poll();
+        }
+    }
 
     public static void main(String[] args) {
         try {
+            String url = "";
+            if (args.length == 0) {
+                url = "http://localhost:8080/";
+            } else if (args.length == 1) {
+                url = args[0];
+            } else {
+                System.out.println("Wrong number of arguments:");
+                System.out.println("Usage: java HelloWorld [url]");
+                return;
+            }
+
+            if (!url.startsWith("http://")) {
+                url = "http://" + url;
+            }
+
             HelloWorld hw = (HelloWorld) PAActiveObject.newActive(
                     "org.objectweb.proactive.examples.webservices.helloWorld.HelloWorld", new Object[] {});
-            WebServices.exposeAsWebService(hw, new String[] {"putTextToSay", "sayText"});
-            WebServices.unExposeAsWebService(hw);
+            WebServices.exposeAsWebService(hw, url, "HelloWorld", new String[] { "putTextToSay", "sayText",
+                    "helloWorld" });
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();
         } catch (NodeException e) {

@@ -43,7 +43,7 @@ import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.extensions.webservicesBk.WebServices;
+import org.objectweb.proactive.extensions.webservices.WebServices;
 
 
 /**
@@ -63,7 +63,7 @@ public class HelloWorldComponent implements HelloWorldItf {
     public static void main(String[] args) {
         String url;
         if (args.length == 0) {
-            url = "http://localhost:8080";
+            url = "http://localhost:8080/";
         } else {
             url = args[0];
         }
@@ -96,7 +96,7 @@ public class HelloWorldComponent implements HelloWorldItf {
 
         System.out.println("Deploy an hello world service on : " + url);
 
-        WebServices.exposeComponentAsWebService(comp, url, "server");
+        WebServices.exposeComponentAsWebService(comp, url, "server", null);
     }
 }
 //@snippet-end helloworldcomponent

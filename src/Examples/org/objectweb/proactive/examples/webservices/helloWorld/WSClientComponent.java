@@ -31,16 +31,13 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
-import java.rmi.RemoteException;
-
 import javax.xml.namespace.QName;
-import javax.xml.rpc.Call;
-import javax.xml.rpc.ParameterMode;
-import javax.xml.rpc.Service;
-import javax.xml.rpc.ServiceException;
-import javax.xml.rpc.ServiceFactory;
 
-import org.objectweb.proactive.extensions.webservicesBk.WSConstants;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.addressing.EndpointReference;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.rpc.client.RPCServiceClient;
+import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
 /**
@@ -51,47 +48,48 @@ import org.objectweb.proactive.extensions.webservicesBk.WSConstants;
 //@snippet-start wsclientcomponent
 public class WSClientComponent {
     public static void main(String[] args) {
-        String address;
-        if (args.length == 0) {
-            address = "http://localhost:8080";
-        } else {
-            address = args[0];
-        }
-        if (!address.startsWith("http://")) {
-            address = "http://" + address;
-        }
-
-        address += WSConstants.SERV_RPC_ROUTER;
-        System.err.println("address " + address);
-
-        String namespaceURI = "server_hello-world";
-        String serviceName = "server_hello-world";
-        String portName = "helloWorld";
-
-        ServiceFactory factory;
         try {
-            factory = ServiceFactory.newInstance();
+            String url = "";
+            if (args.length == 0) {
+                url = "http://localhost:8080/";
+            } else if (args.length == 1) {
+                url = args[0];
+            } else {
+                System.out.println("Wrong number of arguments:");
+                System.out.println("Usage: java HelloWorld [url]");
+                return;
+            }
 
-            Service service = factory.createService(new QName(serviceName));
+            if (!url.startsWith("http://")) {
+                url = "http://" + url;
+            }
 
-            Call call = service.createCall(new QName(portName));
+            RPCServiceClient serviceClient = new RPCServiceClient();
 
-            call.setTargetEndpointAddress(address);
+            Options options = serviceClient.getOptions();
 
-            call.setOperationName(new QName(namespaceURI, portName));
+            EndpointReference targetEPR;
 
-            call.addParameter("name", new QName("string"), String.class, ParameterMode.IN);
+            if (args.length == 0) {
+                targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH + "server_hello-world");
+            } else {
+                targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH + "server_hello-world");
+            }
 
-            call.setReturnType(new QName("string"));
+            options.setTo(targetEPR);
 
-            Object[] inParams = new Object[1];
-            inParams[0] = "World";
+            // Call sayText
+            QName op = new QName("helloWorld");
 
-            String result = ((String) call.invoke(inParams));
-            System.out.println(result);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
+            Object[] opArgs = new Object[] { "ProActive Team" };
+            Class<?>[] returnTypes = new Class[] { String.class };
+
+            Object[] response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
+
+            String result = (String) response[0];
+
+            System.out.println("Client returned " + result);
+        } catch (AxisFault e) {
             e.printStackTrace();
         }
     }

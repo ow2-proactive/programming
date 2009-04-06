@@ -31,66 +31,63 @@
  */
 package org.objectweb.proactive.extensions.webservices;
 
-//import java.io.File;
-//import java.io.IOException;
-
 import org.mortbay.jetty.servlet.ServletHolder;
-//import org.objectweb.fractal.api.Component;
+
+import org.apache.axis2.transport.http.AxisServlet;
+
+import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.webservices.deployer.ProActiveDeployer;
-import org.objectweb.proactive.extensions.webservices.servlet.PAAxisServlet;
-import org.apache.axis2.context.ConfigurationContext;
+import org.objectweb.proactive.extensions.webservices.deployer.PADeployer;
+
 
 @PublicAPI
-public final class WebServices {
-
-	static ConfigurationContext configContext;
-	static ProActiveDeployer deployer = new ProActiveDeployer();
+public final class WebServices extends WSConstants {
 
     static {
+        // Retrieve or launch a Jetty server
+        // in case of a local exposition
         HTTPServer httpServer = HTTPServer.get();
 
-        PAAxisServlet axisServlet = new PAAxisServlet();
+        // Create an Axis servlet
+        ServletHolder axisServletHolder = new ServletHolder(new AxisServlet());
 
-		ServletHolder axisServletHolder = new ServletHolder(axisServlet);
-		axisServletHolder.setInitParameter("axis2.xml.path", WSConstants.AXIS_XML_PATH);
-		axisServletHolder.setInitParameter("axis2.repository.path", WSConstants.AXIS_REPOSITORY_PATH);
-		httpServer.registerServlet(axisServletHolder, WSConstants.AXIS_SERVLET);
+        // Define axis2 configuration file and repository where services and modules
+        // are stored. The repository path is mandatory since it contains the ServiceDeployer
+        // service which is used to expose our active objects as webservice.
+        axisServletHolder.setInitParameter("axis2.xml.path", WSConstants.AXIS_XML_PATH);
+        axisServletHolder.setInitParameter("axis2.repository.path", WSConstants.AXIS_REPOSITORY_DIR);
 
-		configContext = axisServlet.getConfigContext();
-        deployer.init(configContext);
+        // Register the Axis Servlet to Jetty
+        httpServer.registerServlet(axisServletHolder, WSConstants.AXIS_SERVLET);
 
-//		ProActiveLogger.getLogger(Loggers.WEB_SERVICES).warn(
-//				"Failed to create a temporary Service Store, " + System.getProperty("user.dir") +
-//				"/DeployedService.ds will be used", e);
-
-
-        ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info("Deployed axis servlet");
-
+        ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info(
+                "Deployed axis servlet on the local Jetty server");
     }
 
     /**
      * Expose an active object as a web service
-     * @param o The object to expose as a web service
+     *
+      * @param o The object to expose as a web service
      * @param url The url of the host where the object will be deployed  (typically http://localhost:8080)
      * @param urn The name of the object
      * @param methods The methods that will be exposed as web services functionalities
+      *					 If null, then all methods will be exposed
      */
-    public static void exposeAsWebService(Object o, String[] methods) {
-        deployer.deploy(o, methods);
+    public static void exposeAsWebService(Object o, String url, String urn, String[] methods) {
+        PADeployer.deploy(o, url, urn, methods, false);
     }
 
     /**
      * Delete the service on a web server
+      *
      * @param urn The name of the object
      * @param url The url of the web server
      */
-    public static void unExposeAsWebService(Object o) {
-        deployer.unDeploy(WSConstants.AXIS_REPOSITORY_PATH + "services/"
-			+ o.getClass().getSuperclass() + ".pa");
+    public static void unExposeAsWebService(String url, String urn) {
+        PADeployer.unDeploy(url, urn);
     }
 
     /**
@@ -100,21 +97,27 @@ public final class WebServices {
      * interface belongs to.
      * All the interfaces public methods will be exposed.
      *
-     * @param componentName The name of the component
-     * @param url  The web server url  where to deploy the service - typically "http://localhost:8080"
      * @param component The component owning the interfaces that will be deployed as web services.
+     * @param url  Web server url  where to deploy the service - typically "http://localhost:8080"
+     * @param componentName Name of the component
+     * @param interfacesName Names of the interfaces we want to deploy.
+      *							  If null, then all the interfaces will be deployed
      */
-//    public static void exposeComponentAsWebService(Component component, String url, String componentName) {
-//        ProActiveDeployer.deployComponent(componentName, url, component);
-//    }
+    public static void exposeComponentAsWebService(Component component, String url, String componentName,
+            String[] interfacesName) {
+        PADeployer.deployComponent(component, url, componentName, interfacesName);
+    }
 
     /**
      * Undeploy component interfaces on a web server
-     * @param componentName The name of the component
-     * @param url The url of the web server
+     *
      * @param component  The component owning the services interfaces
-     */
-//    public static void unExposeComponentAsWebService(String componentName, String url, Component component) {
-//        ProActiveDeployer.undeployComponent(componentName, url, component);
-//    }
+     * @param url The url of the web server
+     * @param componentName The name of the component
+     * @param interfaceNames Interfaces to be undeployed
+    */
+    public static void unExposeComponentAsWebService(Component component, String url, String componentName,
+            String[] interfaceNames) {
+        PADeployer.unDeployComponent(component, url, componentName, interfaceNames);
+    }
 }

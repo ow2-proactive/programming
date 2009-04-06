@@ -1,0 +1,24 @@
+<service name="ServiceDeployer" scope="application">
+	<description>
+		Service to handle remote deployment
+	</description>
+	<messageReceivers>
+		<messageReceiver
+			mep="http://www.w3.org/2004/08/wsdl/in-only"
+			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+		<messageReceiver
+			mep="http://www.w3.org/2004/08/wsdl/in-only"
+			class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+	</messageReceivers>
+	<parameter name="ServiceClass">
+			org.objectweb.proactive.extensions.webservices.servicedeployer.ServiceDeployer
+	</parameter>
+	<operation name="deploy">
+		<messageReceiver
+			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+	</operation>
+	<operation name="unDeploy">
+		<messageReceiver
+			class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+	</operation>
+</service>

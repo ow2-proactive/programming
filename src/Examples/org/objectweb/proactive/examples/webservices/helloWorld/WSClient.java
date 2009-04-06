@@ -48,66 +48,77 @@ public class WSClient {
     public static void main(String[] args) {
 
         try {
+            String url = "";
+            if (args.length == 0) {
+                url = "http://localhost:8080/";
+            } else if (args.length == 1) {
+                url = args[0];
+            } else {
+                System.out.println("Wrong number of arguments:");
+                System.out.println("Usage: java HelloWorld [url]");
+                return;
+            }
 
-			RPCServiceClient serviceClient = new RPCServiceClient();
+            if (!url.startsWith("http://")) {
+                url = "http://" + url;
+            }
 
-			Options options = serviceClient.getOptions();
+            RPCServiceClient serviceClient = new RPCServiceClient();
 
-			EndpointReference targetEPR = new EndpointReference(
-					"http://localhost:8080/" + WSConstants.AXIS_SERVICES_PATH + "HelloWorld");
+            Options options = serviceClient.getOptions();
 
-			options.setTo(targetEPR);
+            EndpointReference targetEPR;
 
+            if (args.length == 0) {
+                targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH + "HelloWorld");
+            } else {
+                targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH + "HelloWorld");
+            }
 
-			// Call putTextToSay
-			QName op = new QName("putTextToSay");
+            options.setTo(targetEPR);
 
-			String textArg = "Bonjour";
-			Object[] opArgs = new Object[] {textArg};
+            // Call putTextToSay
+            QName op = new QName("putTextToSay");
+            String textArg = "Bonjour";
+            Object[] opArgs = new Object[] { textArg };
 
-			serviceClient.invokeRobust(op, opArgs);
+            serviceClient.invokeRobust(op, opArgs);
 
-			System.out.println("Client added " + textArg + " into the list of texts");
+            System.out.println("Client added " + textArg + " into the list of texts");
 
+            // Call putTextToSay
+            textArg = "Au revoir";
+            opArgs = new Object[] { textArg };
 
-			// Call putTextToSay
-			textArg = "Au revoir";
-			opArgs = new Object[] {textArg};
+            serviceClient.invokeRobust(op, opArgs);
 
-			serviceClient.invokeRobust(op, opArgs);
+            System.out.println("Client added " + textArg + " into the list of texts");
 
-			System.out.println("Client added " + textArg + " into the list of texts");
+            // Call sayText
+            op = new QName("sayText");
 
+            opArgs = new Object[] {};
+            Class<?>[] returnTypes = new Class[] { String.class };
 
-			// Call sayText
-			op = new QName("sayText");
+            Object[] response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
 
-			opArgs = new Object[] {};
-			Class<?>[] returnTypes = new Class[] { String.class };
+            String result = (String) response[0];
 
-			Object[] response = serviceClient.invokeBlocking(op,
-				opArgs, returnTypes);
+            System.out.println("Client returned " + result);
 
-			String result = (String) response[0];
+            // Call sayText
+            response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
 
-			System.out.println("Client returned " + result);
+            result = (String) response[0];
 
-			// Call sayText
-			response = serviceClient.invokeBlocking(op,
-					opArgs, returnTypes);
+            System.out.println("Client returned " + result);
 
-			result = (String) response[0];
+            // Call sayText
+            response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
 
-			System.out.println("Client returned " + result);
+            result = (String) response[0];
 
-
-			// Call sayText
-			response = serviceClient.invokeBlocking(op,
-						opArgs, returnTypes);
-
-			result = (String) response[0];
-
-			System.out.println("Client returned " + result);
+            System.out.println("Client returned " + result);
         } catch (AxisFault e) {
             e.printStackTrace();
         }
