@@ -21,6 +21,12 @@ import org.objectweb.proactive.extensions.webservices.WSConstants;
 import org.apache.log4j.Logger;
 
 
+/**
+ * @author The ProActive Team
+ *
+ * This class is in charge of calling the ServiceDeployer service on hosts specified
+ * by urls and invokes its deploy and unDeploy methods with the needed arguments.
+ */
 public class PADeployer {
 
     private static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
@@ -59,7 +65,7 @@ public class PADeployer {
     }
 
     /**
-     * Check if a method can be exposed as WS
+     * Check if a method can be exposed as a web service
      *
      * @param method Name of the method
      * @return
@@ -75,7 +81,7 @@ public class PADeployer {
      * @param component Component to be deployed
      * @param url Url of the host
      * @param componentName Name of the component
-    * @param interfacesName Names of the interfaces we want to deploy.
+     * @param interfacesName Names of the interfaces we want to deploy.
      * 						 	 If null, then all the interfaces will be deployed
      */
     static public void deployComponent(Component component, String url, String componentName,
@@ -164,7 +170,7 @@ public class PADeployer {
 
     /**
      * Call the method unDeploy of the ServiceDeployer service
-     * deployed on the host for each interface.
+     * deployed on the host for every interface of component.
      *
      * @param component Component to undeploy
      * @param url Url of the host where interfaces are deployed
@@ -179,7 +185,8 @@ public class PADeployer {
 
     /**
      * Call the method unDeploy of the ServiceDeployer service
-     * deployed on the host for each interface.
+     * deployed on the host for interfaces of component specified in
+     * interfaceNames.
      *
      * @param url Url of the host where interfaces are deployed
      * @param componentName Name of the component

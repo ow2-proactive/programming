@@ -43,6 +43,12 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.deployer.PADeployer;
 
 
+/**
+ * @author The ProActive Team
+ *
+ * Deploy and undeploy Active Object and components. Methods of this class
+ * just call methods of the PADeployer class.
+ */
 @PublicAPI
 public final class WebServices extends WSConstants {
 
@@ -70,14 +76,25 @@ public final class WebServices extends WSConstants {
     /**
      * Expose an active object as a web service
      *
-      * @param o The object to expose as a web service
+     * @param o The object to expose as a web service
      * @param url The url of the host where the object will be deployed  (typically http://localhost:8080)
      * @param urn The name of the object
      * @param methods The methods that will be exposed as web services functionalities
-      *					 If null, then all methods will be exposed
+     *					 If null, then all methods will be exposed
      */
     public static void exposeAsWebService(Object o, String url, String urn, String[] methods) {
         PADeployer.deploy(o, url, urn, methods, false);
+    }
+
+    /**
+     * Expose an active object with all its methods as a web service
+     *
+     * @param o The object to expose as a web service
+     * @param url The url of the host where the object will be deployed  (typically http://localhost:8080)
+     * @param urn The name of the object
+     */
+    public static void exposeAsWebService(Object o, String url, String urn) {
+        PADeployer.deploy(o, url, urn, null, false);
     }
 
     /**
@@ -91,11 +108,11 @@ public final class WebServices extends WSConstants {
     }
 
     /**
-     * Expose a component as webservice. Each server and controller
+     * Expose a component as web service. Each server and controller
      * interface of the component will be accessible by  the urn
      * [componentName]_[interfaceName]in order to identify the component an
      * interface belongs to.
-     * All the interfaces public methods will be exposed.
+     * Only the interfaces public methods of the specified interfaces will be exposed.
      *
      * @param component The component owning the interfaces that will be deployed as web services.
      * @param url  Web server url  where to deploy the service - typically "http://localhost:8080"
@@ -106,6 +123,21 @@ public final class WebServices extends WSConstants {
     public static void exposeComponentAsWebService(Component component, String url, String componentName,
             String[] interfacesName) {
         PADeployer.deployComponent(component, url, componentName, interfacesName);
+    }
+
+    /**
+     * Expose a component as web service. Each server and controller
+     * interface of the component will be accessible by  the urn
+     * [componentName]_[interfaceName]in order to identify the component an
+     * interface belongs to.
+     * All the interfaces public methods of all interfaces will be exposed.
+     *
+     * @param component The component owning the interfaces that will be deployed as web services.
+     * @param url  Web server url  where to deploy the service - typically "http://localhost:8080"
+     * @param componentName Name of the component
+     */
+    public static void exposeComponentAsWebService(Component component, String url, String componentName) {
+        PADeployer.deployComponent(component, url, componentName, null);
     }
 
     /**

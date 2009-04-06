@@ -8,31 +8,32 @@ import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 
 import org.apache.axis2.AxisFault;
-
 import org.apache.axis2.context.MessageContext;
-
 import org.apache.axis2.description.AxisMessage;
 import org.apache.axis2.description.AxisOperation;
 import org.apache.axis2.description.AxisService;
-
 import org.apache.axis2.receivers.AbstractInMessageReceiver;
-
 import org.apache.axis2.rpc.receivers.RPCUtil;
-
 import org.apache.axis2.wsdl.WSDLConstants;
 
 import org.apache.log4j.Logger;
 
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
-
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
-
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
+/**
+ * @author The ProActive Team
+ *
+ * When ServiceDeployer create a service for an active object or a component,
+ * it specifies a custom message receiver which is in charge of unmarshalling
+ * the object representing the service and to invoke the asked method.
+ * This class implements this custom message receiver for in-only methods and
+ * is strongly based on the RPCInOnlyMessageReceiver class of axis2.
+ */
 public class PAInOnlyMessageReceiver extends AbstractInMessageReceiver {
 
     private static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);

@@ -31,6 +31,13 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
+/**
+ * @author The ProActive Team
+ *
+ * This class implements the service which will be deployed on the server at the
+ * same time that the proactive web application. This service is used to deploy and undeploy
+ * Active Object and components on the server side.
+ */
 public class ServiceDeployer {
 
     private static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);

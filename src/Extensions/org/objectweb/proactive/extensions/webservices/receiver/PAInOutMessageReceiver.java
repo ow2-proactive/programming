@@ -30,7 +30,15 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 
-
+/**
+ * @author The ProActive Team
+ *
+ * When ServiceDeployer create a service for an active object or a component,
+ * it specifies a custom message receiver which is in charge of unmarshalling
+ * the object representing the service and to invoke the asked method.
+ * This class implements this custom message receiver for in-out methods and
+ * is strongly based on the RPCMessageReceiver class of axis2.
+ */
 public class PAInOutMessageReceiver extends AbstractInOutMessageReceiver {
 
     private static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
