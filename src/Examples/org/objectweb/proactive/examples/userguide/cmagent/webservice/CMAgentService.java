@@ -44,7 +44,7 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 public class CMAgentService extends CMAgentInitialized {
 
     public static void main(String[] args) {
-        String url = "http://localhost:8080";
+        String url = "http://localhost:8080/";
         System.out.println("Started a monitoring agent on : " + url);
         try {
             CMAgentService hw = (CMAgentService) PAActiveObject.newActive(
