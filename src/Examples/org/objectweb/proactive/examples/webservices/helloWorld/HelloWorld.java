@@ -53,20 +53,20 @@ public class HelloWorld {
     }
 
     public static void main(String[] args) {
-        String url;
-        if (args.length == 0) {
-            url = "http://localhost:8080";
-        } else {
-            url = args[0];
-        }
-        if (!url.startsWith("http://")) {
-            url = "http://" + url;
-        }
-        System.out.println("Deploy an hello world service on : " + url);
+//        String url;
+//        if (args.length == 0) {
+//            url = "http://localhost:8080";
+//        } else {
+//            url = args[0];
+//        }
+//        if (!url.startsWith("http://")) {
+//            url = "http://" + url;
+//        }
+        System.out.println("Deploy an hello world service");
         try {
             HelloWorld hw = (HelloWorld) PAActiveObject.newActive(
                     "org.objectweb.proactive.examples.webservices.helloWorld.HelloWorld", new Object[] {});
-            WebServices.exposeAsWebService(hw, url, "helloWorld", new String[] { "helloWorld" });
+            WebServices.exposeAsWebService(hw, new String[] {});
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();
         } catch (NodeException e) {

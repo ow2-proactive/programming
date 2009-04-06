@@ -41,7 +41,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.soap.util.xml.QName;
-import org.objectweb.proactive.extensions.webservices.soap.ProActiveProvider;
 
 
 /**
@@ -50,17 +49,12 @@ import org.objectweb.proactive.extensions.webservices.soap.ProActiveProvider;
  */
 public class WSConstants {
 
-    public static final String NAMESPACE = "/proactive/";
-    public static final String SERV_WSDL = NAMESPACE + "wsdl";
-    public static final String SERV_RPC_ROUTER = NAMESPACE + "/servlet/rpcrouter";
-    public static final String SERV_MESSAGE_ROUTER = NAMESPACE + "messagerouter";
 
-    public static final String PROACTIVE_PROVIDER = ProActiveProvider.class.getName();
-    public static final String PROACTIVE_STUB = "Stub";
-    public static final String WSDL_FILE = "Wsdl";
-    public static final String DOCUMENTATION = "ProActive Active Object";
-    public static final String COMPONENT_INTERFACE = "Compoment Interface";
-    public static final String URL_PUBLICATION = "URL";
+	public static final String AXIS_XML_PATH = "axis2/conf/axis2.xml";
+	public static final String AXIS_REPOSITORY_PATH = "axis2/repository/";
+	public static final String AXIS_SERVICES_PATH = "proactive/services/";
+	public static final String AXIS_SERVLET = "/" + AXIS_SERVICES_PATH + "*";
+
     public static final Vector<String> disallowedMethods = new Vector<String>();
 
     static {

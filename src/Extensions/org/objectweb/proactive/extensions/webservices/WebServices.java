@@ -31,66 +31,56 @@
  */
 package org.objectweb.proactive.extensions.webservices;
 
-import java.io.File;
-import java.io.IOException;
+//import java.io.File;
+//import java.io.IOException;
 
-import org.apache.soap.server.DOMFaultListener;
-import org.apache.soap.server.http.MessageRouterServlet;
-import org.apache.soap.server.http.RPCRouterServlet;
 import org.mortbay.jetty.servlet.ServletHolder;
-import org.objectweb.fractal.api.Component;
+//import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.webservices.soap.ProActiveDeployer;
-import org.objectweb.proactive.extensions.webservices.soap.WsdlServlet;
-
+import org.objectweb.proactive.extensions.webservices.deployer.ProActiveDeployer;
+import org.objectweb.proactive.extensions.webservices.servlet.PAAxisServlet;
+import org.apache.axis2.context.ConfigurationContext;
 
 @PublicAPI
 public final class WebServices {
 
+	static ConfigurationContext configContext;
+	static ProActiveDeployer deployer = new ProActiveDeployer();
+
     static {
         HTTPServer httpServer = HTTPServer.get();
 
-        RPCRouterServlet rpcRouterServlet = new RPCRouterServlet();
-        ServletHolder rpcRouterServletHolder = new ServletHolder(rpcRouterServlet);
-        rpcRouterServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
-        try {
-            File deployedServices = null;
-            deployedServices = File.createTempFile("DeployedServices", "ds");
-            deployedServices.deleteOnExit();
-            rpcRouterServletHolder.setInitParameter("ServicesStore", deployedServices.toString());
-        } catch (IOException e) {
-            ProActiveLogger.getLogger(Loggers.WEB_SERVICES).warn(
-                    "Failed to create a temporary Service Store, " + System.getProperty("user.dir") +
-                        "/DeployedService.ds will be used", e);
-        }
-        httpServer.registerServlet(rpcRouterServletHolder, WSConstants.SERV_RPC_ROUTER);
+        PAAxisServlet axisServlet = new PAAxisServlet();
 
-        MessageRouterServlet messageRouterServlet = new MessageRouterServlet();
-        ServletHolder messaggeRouterServletHolder = new ServletHolder(messageRouterServlet);
-        messaggeRouterServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
-        httpServer.registerServlet(messaggeRouterServletHolder, WSConstants.SERV_MESSAGE_ROUTER);
+		ServletHolder axisServletHolder = new ServletHolder(axisServlet);
+		axisServletHolder.setInitParameter("axis2.xml.path", WSConstants.AXIS_XML_PATH);
+		axisServletHolder.setInitParameter("axis2.repository.path", WSConstants.AXIS_REPOSITORY_PATH);
+		httpServer.registerServlet(axisServletHolder, WSConstants.AXIS_SERVLET);
 
-        WsdlServlet wsdlServlet = new WsdlServlet();
-        ServletHolder wsdlServletHolder = new ServletHolder(wsdlServlet);
-        wsdlServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
-        httpServer.registerServlet(wsdlServletHolder, WSConstants.SERV_WSDL);
+		configContext = axisServlet.getConfigContext();
+        deployer.init(configContext);
 
-        ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info("Deployed SOAP Web Services servlets");
+//		ProActiveLogger.getLogger(Loggers.WEB_SERVICES).warn(
+//				"Failed to create a temporary Service Store, " + System.getProperty("user.dir") +
+//				"/DeployedService.ds will be used", e);
+
+
+        ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info("Deployed axis servlet");
 
     }
 
     /**
      * Expose an active object as a web service
      * @param o The object to expose as a web service
-     * @param url The url of the host where the object will be seployed  (typically http://localhost:8080)
+     * @param url The url of the host where the object will be deployed  (typically http://localhost:8080)
      * @param urn The name of the object
-     * @param methods The methods that will be exposed as web services functionnalities
+     * @param methods The methods that will be exposed as web services functionalities
      */
-    public static void exposeAsWebService(Object o, String url, String urn, String[] methods) {
-        ProActiveDeployer.deploy(urn, url, o, methods);
+    public static void exposeAsWebService(Object o, String[] methods) {
+        deployer.deploy(o, methods);
     }
 
     /**
@@ -98,8 +88,9 @@ public final class WebServices {
      * @param urn The name of the object
      * @param url The url of the web server
      */
-    public static void unExposeAsWebService(String urn, String url) {
-        ProActiveDeployer.undeploy(urn, url);
+    public static void unExposeAsWebService(Object o) {
+        deployer.unDeploy(WSConstants.AXIS_REPOSITORY_PATH + "services/"
+			+ o.getClass().getSuperclass() + ".pa");
     }
 
     /**
@@ -113,9 +104,9 @@ public final class WebServices {
      * @param url  The web server url  where to deploy the service - typically "http://localhost:8080"
      * @param component The component owning the interfaces that will be deployed as web services.
      */
-    public static void exposeComponentAsWebService(Component component, String url, String componentName) {
-        ProActiveDeployer.deployComponent(componentName, url, component);
-    }
+//    public static void exposeComponentAsWebService(Component component, String url, String componentName) {
+//        ProActiveDeployer.deployComponent(componentName, url, component);
+//    }
 
     /**
      * Undeploy component interfaces on a web server
@@ -123,7 +114,7 @@ public final class WebServices {
      * @param url The url of the web server
      * @param component  The component owning the services interfaces
      */
-    public static void unExposeComponentAsWebService(String componentName, String url, Component component) {
-        ProActiveDeployer.undeployComponent(componentName, url, component);
-    }
+//    public static void unExposeComponentAsWebService(String componentName, String url, Component component) {
+//        ProActiveDeployer.undeployComponent(componentName, url, component);
+//    }
 }

@@ -31,14 +31,11 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
-import java.rmi.RemoteException;
-
 import javax.xml.namespace.QName;
-import javax.xml.rpc.Call;
-import javax.xml.rpc.Service;
-import javax.xml.rpc.ServiceException;
-import javax.xml.rpc.ServiceFactory;
-
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.addressing.EndpointReference;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.rpc.client.RPCServiceClient;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
@@ -49,39 +46,31 @@ import org.objectweb.proactive.extensions.webservices.WSConstants;
  */
 public class WSClient {
     public static void main(String[] args) {
-        String address;
-        if (args.length == 0) {
-            address = "http://localhost:8080";
-        } else {
-            address = args[0];
-        }
-        if (!address.startsWith("http://")) {
-            address = "http://" + address;
-        }
 
-        address += WSConstants.SERV_RPC_ROUTER;
-        String namespaceURI = "helloWorld";
-        String serviceName = "helloWorld";
-        String portName = "helloWorld";
-
-        ServiceFactory factory;
         try {
-            factory = ServiceFactory.newInstance();
 
-            Service service = factory.createService(new QName(serviceName));
+			RPCServiceClient serviceClient = new RPCServiceClient();
 
-            Call call = service.createCall(new QName(portName));
+			Options options = serviceClient.getOptions();
 
-            call.setTargetEndpointAddress(address);
+			EndpointReference targetEPR = new EndpointReference(
+					"http://localhost:8080/" + WSConstants.AXIS_SERVICES_PATH + "HelloWorld");
+			options.setTo(targetEPR);
+			options.setAction("helloWorld");
 
-            call.setOperationName(new QName(namespaceURI, portName));
+			QName op = new QName("helloWorld");
 
-            Object[] inParams = new Object[0];
-            String name = ((String) call.invoke(inParams));
-            System.out.println(name);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
+			Object[] opArgs = new Object[] {};
+			Class<?>[] returnTypes = new Class[] { String.class };
+
+			Object[] response = serviceClient.invokeBlocking(op,
+				opArgs, returnTypes);
+
+			Object result = response[0];
+
+			System.out.println("Client returned " + (String) result);
+
+        } catch (AxisFault e) {
             e.printStackTrace();
         }
     }
