@@ -31,12 +31,21 @@
  */
 package org.objectweb.proactive.extensions.webservices;
 
+import java.io.File;
+
+import org.mortbay.jetty.Handler;
+import org.mortbay.jetty.deployer.ContextDeployer;
+import org.mortbay.jetty.deployer.WebAppDeployer;
+import org.mortbay.jetty.handler.DefaultHandler;
+import org.mortbay.jetty.handler.HandlerCollection;
 import org.mortbay.jetty.servlet.ServletHolder;
+import org.mortbay.jetty.webapp.WebAppContext;
 
 import org.apache.axis2.transport.http.AxisServlet;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;

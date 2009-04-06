@@ -13,7 +13,6 @@
 	<property name="servicedeployer.class.dir" value="${servicedeployer.build.dir}/classes" />
 	<property name="services.path" value="repository/services" />
 	<property name="repository.path" value="${axis2.dir}/${services.path}" />
-	<property name="helloWS.dir" value="${base.dir}/examples/helloWebServices"/>
 
 	<target name="-compile">
 		<compile_extension module="webservices" />
@@ -100,6 +99,5 @@
 			</fileset>
 		</jar>
 		<copy file="${servicedeployer.build.dir}/ServiceDeployer.aar" tofile="${repository.path}/ServiceDeployer.aar" overwrite="true" />
-		<copy file="${servicedeployer.build.dir}/ServiceDeployer.aar" tofile="${helloWS.dir}/axis2/${services.path}/ServiceDeployer.aar" overwrite="true" />
 	</target>
 </project>

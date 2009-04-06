@@ -49,6 +49,7 @@ public class PADeployer {
 
             Options options = serviceClient.getOptions();
             options.setTo(targetEPR);
+            options.setAction("deploy");
 
             QName op = new QName("http://servicedeployer.webservices.extensions.proactive.objectweb.org",
                 "deploy");
@@ -154,6 +155,7 @@ public class PADeployer {
 
             Options options = serviceClient.getOptions();
             options.setTo(targetEPR);
+            options.setAction("unDeploy");
 
             QName op = new QName("http://servicedeployer.webservices.extensions.proactive.objectweb.org",
                 "unDeploy");

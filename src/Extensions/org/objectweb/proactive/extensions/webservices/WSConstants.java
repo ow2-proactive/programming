@@ -33,6 +33,8 @@ package org.objectweb.proactive.extensions.webservices;
 
 import java.util.Vector;
 
+import org.objectweb.proactive.core.config.PAProperties;
+
 
 /**
  * @author The ProActive Team
@@ -41,8 +43,10 @@ import java.util.Vector;
 public class WSConstants {
 
     // Define axis2 paths
-    public static final String AXIS_XML_PATH = "axis2/conf/axis2.xml";
-    public static final String AXIS_REPOSITORY_DIR = "axis2/repository/";
+    public static final String WS_PATH = PAProperties.PA_HOME.getValue() +
+        "/src/Extensions/org/objectweb/proactive/extensions/webservices/";
+    public static final String AXIS_XML_PATH = WS_PATH + "axis2/conf/axis2.xml";
+    public static final String AXIS_REPOSITORY_DIR = WS_PATH + "axis2/repository/";
     public static final String AXIS_SERVICES_DIR = AXIS_REPOSITORY_DIR + "services/";
     public static final String AXIS_SERVICES_PATH = "proactive/services/";
     public static final String AXIS_SERVLET = "/" + AXIS_SERVICES_PATH + "*";
