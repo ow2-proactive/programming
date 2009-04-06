@@ -585,7 +585,7 @@
 		</sequential>
 	</macrodef>
 
-	<target name="junit" depends="compile.tests, deploy.all, proActiveWar" description="Run all non regression tests on the current host only">
+	<target name="junit" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
 
@@ -597,7 +597,7 @@
 		<junitMacro communication.protocol="rmissh" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
 
-	<target name="junit.rmi" depends="compile.tests, deploy.all, proActiveWar" description="Run all non regression tests on the current host only">
+	<target name="junit.rmi" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
 		<junitMacro communication.protocol="rmi" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
 
@@ -1050,40 +1050,12 @@
 	<!-- ================================================================================ -->
 	<!--    Create the proactive Web Archive to be used with the web service framework    -->
 	<!-- ================================================================================ -->
-	<target name="proActiveWar" depends="deploy.core">
-		<property name="webservices.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices/" />
-		<property name="axis2.dir" value="${webservices.dir}/axis2" />
-		<property name="temp" value="${axis2.dir}/temp" />
-
-		<subant target="generate.service" inheritall="true" failonerror="true">
-			<fileset dir="${webservices.dir}" includes="**/build.xml" />
-		</subant>
-
-		<subant target="prepare.repo" inheritall="true" failonerror="true">
-			<fileset dir="${webservices.dir}" includes="**/build.xml" />
-		</subant>
-
-		<war destfile="${deploy.dir}/proactive.war" webxml="${axis2.dir}/webapp/WEB-INF/web.xml">
-			<lib dir="${axis2.dir}/lib">
-				<include name="**" />
-				<exclude name="**servlet**" />
-				<exclude name="ant*.jar" />
-				<exclude name="axis2-adb-codegen*.jar"/>
-				<exclude name="axis2-codegen*.jar"/>
-				<exclude name="jibx-bind*.jar"/>
+	<target name="proActiveWar" depends="deploy">
+		<war destfile="${deploy.dir}/proactive.war" webxml="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices/soap/web.xml" basedir="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices/war-root">
+			<lib dir="${deploy.lib.dir}">
+				<include name="*.jar" />
 			</lib>
-			<lib dir="${lib.dir}">
-				<include name="**" />
-			</lib>
-			<lib dir="${deploy.dir}/lib">
-				<include name="ProActive.jar" />
-			</lib>
-			<webinf dir="${temp}/WEB-INF" />
-			<fileset dir="${temp}">
-				<include name="**/axis2-web/**" />
-			</fileset>
 		</war>
-		<delete dir="${temp}" />
 	</target>
 
 	<!-- MUST BE CALLED FROM AN INRIA MACHINE ON PRODUCTION NETWORK -->

@@ -52,7 +52,7 @@ import org.objectweb.proactive.extensions.webservices.WebServices;
  * @author The ProActive Team
  */
 //@snippet-start helloworldcomponent
-public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
+public class HelloWorldComponent implements HelloWorldItf {
     public HelloWorldComponent() {
     }
 
@@ -60,22 +60,10 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
         return "Hello " + name + " !";
     }
 
-    public String goodByeWorld(String name) {
-        return "Good Bye " + name + " !";
-    }
-
-    public String sayHello() {
-        return "Hello ProActive Team !";
-    }
-
-    public String sayGoodBye() {
-        return "Good bye ProActive Team !";
-    }
-
     public static void main(String[] args) {
         String url;
         if (args.length == 0) {
-            url = "http://localhost:8080/";
+            url = "http://localhost:8080";
         } else {
             url = args[0];
         }
@@ -91,12 +79,8 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
             GenericFactory cf = Fractal.getGenericFactory(boot);
 
             // type of server component
-            ComponentType sType = tf
-                    .createFcType(new InterfaceType[] {
-                            tf.createFcItfType("hello-world", HelloWorldItf.class.getName(), false, false,
-                                    false),
-                            tf.createFcItfType("goodbye-world", GoodByeWorldItf.class.getName(), false,
-                                    false, false) });
+            ComponentType sType = tf.createFcType(new InterfaceType[] { tf.createFcItfType("hello-world",
+                    HelloWorldItf.class.getName(), false, false, false) });
             // create server component
             comp = cf.newFcInstance(sType, new ControllerDescription("server", Constants.PRIMITIVE),
                     new ContentDescription(HelloWorldComponent.class.getName()));
@@ -112,8 +96,7 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
 
         System.out.println("Deploy an hello world service on : " + url);
 
-        WebServices.exposeComponentAsWebService(comp, url, "server", new String[] { "hello-world",
-                "goodbye-world" });
+        WebServices.exposeComponentAsWebService(comp, url, "server");
     }
 }
 //@snippet-end helloworldcomponent

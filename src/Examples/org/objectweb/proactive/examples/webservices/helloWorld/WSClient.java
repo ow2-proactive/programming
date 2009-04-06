@@ -31,11 +31,14 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
+import java.rmi.RemoteException;
+
 import javax.xml.namespace.QName;
-import org.apache.axis2.AxisFault;
-import org.apache.axis2.addressing.EndpointReference;
-import org.apache.axis2.client.Options;
-import org.apache.axis2.rpc.client.RPCServiceClient;
+import javax.xml.rpc.Call;
+import javax.xml.rpc.Service;
+import javax.xml.rpc.ServiceException;
+import javax.xml.rpc.ServiceFactory;
+
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 
 
@@ -46,75 +49,39 @@ import org.objectweb.proactive.extensions.webservices.WSConstants;
  */
 public class WSClient {
     public static void main(String[] args) {
+        String address;
+        if (args.length == 0) {
+            address = "http://localhost:8080";
+        } else {
+            address = args[0];
+        }
+        if (!address.startsWith("http://")) {
+            address = "http://" + address;
+        }
 
+        address += WSConstants.SERV_RPC_ROUTER;
+        String namespaceURI = "helloWorld";
+        String serviceName = "helloWorld";
+        String portName = "helloWorld";
+
+        ServiceFactory factory;
         try {
-            String url = "";
-            if (args.length == 0) {
-                url = "http://localhost:8080/";
-            } else if (args.length == 1) {
-                url = args[0];
-            } else {
-                System.out.println("Wrong number of arguments:");
-                System.out.println("Usage: java HelloWorld [url]");
-                return;
-            }
+            factory = ServiceFactory.newInstance();
 
-            if (!url.startsWith("http://")) {
-                url = "http://" + url;
-            }
+            Service service = factory.createService(new QName(serviceName));
 
-            RPCServiceClient serviceClient = new RPCServiceClient();
+            Call call = service.createCall(new QName(portName));
 
-            Options options = serviceClient.getOptions();
+            call.setTargetEndpointAddress(address);
 
-            EndpointReference targetEPR = new EndpointReference(url + WSConstants.AXIS_SERVICES_PATH +
-                "HelloWorld");
+            call.setOperationName(new QName(namespaceURI, portName));
 
-            options.setTo(targetEPR);
-
-            // Call putTextToSay
-            QName op = new QName("putTextToSay");
-            String textArg = "Bonjour";
-            Object[] opArgs = new Object[] { textArg };
-
-            serviceClient.invokeRobust(op, opArgs);
-
-            System.out.println("Client added " + textArg + " into the list of texts");
-
-            // Call putTextToSay
-            textArg = "Au revoir";
-            opArgs = new Object[] { textArg };
-
-            serviceClient.invokeRobust(op, opArgs);
-
-            System.out.println("Client added " + textArg + " into the list of texts");
-
-            // Call sayText
-            op = new QName("sayText");
-
-            opArgs = new Object[] {};
-            Class<?>[] returnTypes = new Class[] { String.class };
-
-            Object[] response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
-
-            String result = (String) response[0];
-
-            System.out.println("Client returned " + result);
-
-            // Call sayText
-            response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
-
-            result = (String) response[0];
-
-            System.out.println("Client returned " + result);
-
-            // Call sayText
-            response = serviceClient.invokeBlocking(op, opArgs, returnTypes);
-
-            result = (String) response[0];
-
-            System.out.println("Client returned " + result);
-        } catch (AxisFault e) {
+            Object[] inParams = new Object[0];
+            String name = ((String) call.invoke(inParams));
+            System.out.println(name);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }

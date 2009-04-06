@@ -31,8 +31,6 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
-import java.util.LinkedList;
-
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
@@ -47,9 +45,6 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class HelloWorld {
-
-    LinkedList<String> textsToSay = new LinkedList<String>();
-
     public HelloWorld() {
     }
 
@@ -57,46 +52,21 @@ public class HelloWorld {
         return "Hello world !";
     }
 
-    // This method is used to check
-    // that it is not inserted in the wsdl
-    // and not callable.
-    public String toString() {
-        return "HelloWorld";
-    }
-
-    public void putTextToSay(String textToSay) {
-        this.textsToSay.add(textToSay);
-    }
-
-    public String sayText() {
-        if (this.textsToSay.isEmpty()) {
-            return "The list is empty";
-        } else {
-            return this.textsToSay.poll();
-        }
-    }
-
     public static void main(String[] args) {
+        String url;
+        if (args.length == 0) {
+            url = "http://localhost:8080";
+        } else {
+            url = args[0];
+        }
+        if (!url.startsWith("http://")) {
+            url = "http://" + url;
+        }
+        System.out.println("Deploy an hello world service on : " + url);
         try {
-            String url = "";
-            if (args.length == 0) {
-                url = "http://localhost:8080/";
-            } else if (args.length == 1) {
-                url = args[0];
-            } else {
-                System.out.println("Wrong number of arguments:");
-                System.out.println("Usage: java HelloWorld [url]");
-                return;
-            }
-
-            if (!url.startsWith("http://")) {
-                url = "http://" + url;
-            }
-
             HelloWorld hw = (HelloWorld) PAActiveObject.newActive(
                     "org.objectweb.proactive.examples.webservices.helloWorld.HelloWorld", new Object[] {});
-            WebServices.exposeAsWebService(hw, url, "HelloWorld", new String[] { "putTextToSay", "sayText",
-                    "helloWorld" });
+            WebServices.exposeAsWebService(hw, url, "helloWorld", new String[] { "helloWorld" });
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();
         } catch (NodeException e) {

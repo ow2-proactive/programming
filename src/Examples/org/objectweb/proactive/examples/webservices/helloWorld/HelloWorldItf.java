@@ -35,7 +35,5 @@ package org.objectweb.proactive.examples.webservices.helloWorld;
 public interface HelloWorldItf {
 
     public String helloWorld(String name);
-
-    public String sayHello();
 }
 //@snippet-end helloworlditfcomponent
