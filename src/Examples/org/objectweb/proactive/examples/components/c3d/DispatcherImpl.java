@@ -42,6 +42,7 @@ import org.objectweb.fractal.api.control.LifeCycleController;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.Service;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.component.Fractive;
 import org.objectweb.proactive.core.component.body.ComponentBody;
 import org.objectweb.proactive.core.component.body.ComponentRunActive;
@@ -136,7 +137,7 @@ public class DispatcherImpl extends C3DDispatcher implements Dispatcher, Dispatc
 
                     try {
                         Fractive.registerByName(Fractive.getComponentRepresentativeOnThis(), "Dispatcher");
-                    } catch (IOException e) {
+                    } catch (ProActiveException e) {
                         System.err.println("HEY, couldn't register dispatcher");
                         e.printStackTrace();
                     }

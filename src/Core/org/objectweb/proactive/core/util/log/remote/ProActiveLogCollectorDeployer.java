@@ -52,7 +52,7 @@ final public class ProActiveLogCollectorDeployer {
 
     final RemoteObjectExposer<ProActiveLogCollector> roe;
 
-    public ProActiveLogCollectorDeployer(String name) {
+    public ProActiveLogCollectorDeployer(String name) throws ProActiveException {
         this.collector = new ProActiveLogCollector();
         this.roe = PARemoteObject.newRemoteObject(ProActiveLogCollector.class.getName(), this.collector);
         this.roe.createRemoteObject(name);

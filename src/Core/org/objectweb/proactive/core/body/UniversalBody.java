@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Job;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
 import org.objectweb.proactive.core.body.reply.Reply;
@@ -172,13 +173,11 @@ public interface UniversalBody extends Job, Serializable, SecurityEntity {
     /**
      * Allow to specify an url where to register the active object.
      * @param url the url where to bind the active object
-     * @throws IOException
-     * @throws UnknownProtocolException thrown if the protocol is not supported by
-     * the current active object
+     * @throws ProActiveException if the active object cannot be registered at the given URL
      */
     @Deprecated
-    public void register(String url) throws IOException, UnknownProtocolException;
+    public void register(String url) throws ProActiveException;
 
-    public String registerByName(String name) throws IOException;
+    public String registerByName(String name) throws IOException, ProActiveException;
 }
 //@snippet-end universalbody

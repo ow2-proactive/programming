@@ -72,15 +72,9 @@ public class PARemoteObject {
         return new RemoteObjectExposer<T>(className, target, targetRemoteObjectAdapter);
     }
 
-    public static <T> T bind(RemoteObjectExposer<T> roe, URI uri) throws UnknownProtocolException {
+    public static <T> T bind(RemoteObjectExposer<T> roe, URI uri) throws ProActiveException {
         RemoteRemoteObject irro = roe.createRemoteObject(uri);
-        try {
-            return (T) new RemoteObjectAdapter(irro).getObjectProxy();
-        } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
+        return (T) new RemoteObjectAdapter(irro).getObjectProxy();
     }
 
     /**
@@ -119,17 +113,12 @@ public class PARemoteObject {
      *
      * @param object the object to be exported as a remote object
      * @return A remote object that can be called from any JVM
+     * @exception ProActiveException if the remote object cannot be created
      */
     @SuppressWarnings("unchecked")
-    public static <T> T turnRemote(T object) {
+    public static <T> T turnRemote(T object) throws ProActiveException {
         RemoteObjectExposer<T> roe = newRemoteObject(object.getClass().getName(), object);
         RemoteRemoteObject rro = roe.createRemoteObject(TURN_REMOTE_PREFIX + counter.incrementAndGet());
-        try {
-            return (T) new RemoteObjectAdapter(rro).getObjectProxy();
-        } catch (ProActiveException e) {
-            logger.warn("Turn Remote failed due to", e);
-            return null;
-        }
+        return (T) new RemoteObjectAdapter(rro).getObjectProxy();
     }
-
 }
