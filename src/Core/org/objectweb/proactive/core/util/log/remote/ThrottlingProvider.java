@@ -33,7 +33,9 @@
 package org.objectweb.proactive.core.util.log.remote;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -119,6 +121,16 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
      */
     final private Object gatherAndSendMutex = new Object();
 
+    /** The log collector is unavailable since this date
+     * 
+     * Reset to null each time the collector becomes available again
+     */
+    private Date failureDate;
+    /** The first cause of log collector unavailability */
+    private Throwable failureCause;
+    /** Number of dropped messages since the collector is unavailable */
+    private long nbDroppedMsg;
+
     private FileAppender errorAppender;
 
     public ThrottlingProvider(int period, int threshold, int qsize) {
@@ -130,6 +142,10 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
         this.terminate = new AtomicBoolean(false);
         this.pendingEvents = new AtomicInteger();
         this.mustNotify = new AtomicBoolean(false);
+        this.failureDate = null;
+        this.failureCause = null;
+        this.nbDroppedMsg = 0;
+
     }
 
     public ThrottlingProvider() {
@@ -234,12 +250,43 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
 
                 /* Remove events from the buffer and send them */
                 ArrayList<LoggingEvent> events = new ArrayList<LoggingEvent>(nbEvent);
+
+                if (this.failureDate != null) {
+                    String msg = this.nbDroppedMsg + " logging events dropped by " +
+                        this.getClass().getName() + "since " +
+                        DateFormat.getDateInstance().format(this.failureDate) +
+                        ". A copy of theses logging events is available in " +
+                        this.getErrorAppender().getFile() + " on " +
+                        ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getHostName();
+                    Logger l = Logger.getLogger(this.getClass());
+                    LoggingEvent le = new LoggingEvent(Category.class.getName(), l, Level.INFO, msg,
+                        this.failureCause);
+                    events.add(le);
+                }
+
                 for (int i = 0; i < nbEvent; i++) {
                     events.add(buffer.poll());
                 }
 
-                if (events.size() != 0) {
-                    collector.sendEvent(events);
+                try {
+                    if (events.size() != 0) {
+                        collector.sendEvent(events);
+                        this.failureDate = null;
+                        this.failureCause = null;
+                        this.nbDroppedMsg = 0;
+                    }
+                } catch (Throwable t) {
+                    if (this.failureDate == null) {
+                        this.failureDate = new Date();
+                        this.failureCause = t;
+                    }
+
+                    this.nbDroppedMsg += nbEvent;
+
+                    Appender appender = this.getErrorAppender();
+                    for (LoggingEvent le : events) {
+                        appender.doAppend(le);
+                    }
                 }
             }
         }
@@ -294,7 +341,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
     }
 
     /** Lazily load the error appender */
-    synchronized private Appender getErrorAppender() {
+    synchronized private FileAppender getErrorAppender() {
         if (this.errorAppender == null) {
             try {
                 Layout layout = new PatternLayout("%X{shortid@hostname} - [%p %20.20c{2}] %m%n");
