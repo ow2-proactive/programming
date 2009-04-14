@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.security.AccessControlException;
 import java.security.PublicKey;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
@@ -268,11 +269,11 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
     }
 
     @Deprecated
-    public void register(String url) throws IOException, UnknownProtocolException {
+    public void register(String url) throws ProActiveException {
         this.wrappedBody.register(url);
     }
 
-    public String registerByName(String name) throws IOException {
+    public String registerByName(String name) throws IOException, ProActiveException {
         return this.wrappedBody.registerByName(name);
     }
 

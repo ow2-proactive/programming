@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.security.AccessControlException;
 import java.security.PublicKey;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
@@ -173,11 +174,11 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
     }
 
     @Deprecated
-    public void register(String url) throws IOException, UnknownProtocolException {
+    public void register(String url) throws ProActiveException {
         target.register(url);
     }
 
-    public String registerByName(String name) throws IOException {
+    public String registerByName(String name) throws IOException, ProActiveException {
         return target.registerByName(name);
     }
 
