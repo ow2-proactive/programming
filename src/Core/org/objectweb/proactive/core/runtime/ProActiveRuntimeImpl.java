@@ -197,7 +197,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
     /** The MBean representing this ProActive Runtime */
     private ProActiveRuntimeWrapperMBean mbean;
-    private RegistrationForwarder registrationForwarder;
 
     private long gcmNodes;
 
@@ -1597,14 +1596,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     }
 
     public void addDeployment(long deploymentId) {
-        createRegistrationForwarder();
-        registrationForwarder.doNotForward(deploymentId);
-    }
-
-    synchronized private void createRegistrationForwarder() {
-        if (registrationForwarder == null) {
-            this.registrationForwarder = new RegistrationForwarder();
-        }
     }
 
     public void setDeploymentId(long deploymentId) {
