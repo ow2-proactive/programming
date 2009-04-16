@@ -49,6 +49,7 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
  *
  *
  */
+@SuppressWarnings("serial")
 public class RmiRemoteObjectImpl extends UnicastRemoteObject implements RmiRemoteObject {
     protected InternalRemoteRemoteObject internalrrObject;
 
