@@ -34,13 +34,12 @@ package org.objectweb.proactive.core.util.log.remote;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.log4j.Appender;
 import org.apache.log4j.Category;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Layout;
@@ -72,9 +71,12 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
  * <li>org.objectweb.proactive.core.util.log.remote.throttlingprovider.qsize
  * <li>org.objectweb.proactive.core.util.log.remote.throttlingprovider.threshold
  * </li>
- * <li>org.objectweb.proactive.core.util.log.remote.throttlingprovider. period</li>
+ * <li>org.objectweb.proactive.core.util.log.remote.throttlingprovider.period</li>
  * </ul>
- * 
+ *
+ * When the log collector is not reachable, logging events are put into a local logfile
+ * by default. They can be dropped by setting the
+ * <code>org.objectweb.core.util.log.remote.throttlingprovider.nologfile</code> property to true.
  */
 public final class ThrottlingProvider extends LoggingEventSenderSPI {
     final static int DEFAULT_QSIZE = 10000;
@@ -87,22 +89,28 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
      * A logging event cannot be buffered more than this amount of time (in
      * milliseconds).
      */
-    int period;
+    private int period;
     final String periodProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.period";
 
     /**
      * Send the events to the collector as soon as THRESHOLD logging events are
      * available.
      */
-    int threshold;
+    private int threshold;
     final String thresholdProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.threshold";
 
     /**
      * The buffer size. If the buffer is full, clients are blocked until the
      * flushing thread is able to recover a steady state.
      */
-    int qsize;
+    private int qsize;
     final String qsizeProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.qsize";
+
+    /**
+     * If the logging events must be dropped or saved into a log file when the log collector is not available
+     */
+    private boolean noLogFile;
+    final String noLogFileProperty = "org.objectweb.proactive.core.util.log.remote.ThrottlingProvider.nologfile";
 
     /** Logging Events to be send to the collector */
     final private ArrayBlockingQueue<LoggingEvent> buffer;
@@ -133,10 +141,11 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
 
     private FileAppender errorAppender;
 
-    public ThrottlingProvider(int period, int threshold, int qsize) {
+    public ThrottlingProvider(int period, int threshold, int qsize, boolean noLogFile) {
         this.period = period;
         this.threshold = threshold;
         this.qsize = qsize;
+        this.noLogFile = noLogFile;
 
         this.buffer = new ArrayBlockingQueue<LoggingEvent>(this.qsize);
         this.terminate = new AtomicBoolean(false);
@@ -150,7 +159,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
 
     public ThrottlingProvider() {
         // Default value
-        this(DEFAULT_PERIOD, DEFAULT_THRESHOLD, DEFAULT_QSIZE);
+        this(DEFAULT_PERIOD, DEFAULT_THRESHOLD, DEFAULT_QSIZE, false);
 
         // Use the values defined by properties if set 
 
@@ -207,6 +216,13 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
             }
         }
         this.qsize = value;
+
+        boolean b = false;
+        prop = System.getProperty(noLogFileProperty);
+        if (prop != null) {
+            b = Boolean.parseBoolean(prop);
+        }
+        this.noLogFile = b;
     }
 
     @Override
@@ -249,15 +265,20 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
                 final int nbEvent = this.pendingEvents.getAndSet(0);
 
                 /* Remove events from the buffer and send them */
-                ArrayList<LoggingEvent> events = new ArrayList<LoggingEvent>(nbEvent);
+                LinkedList<LoggingEvent> events = new LinkedList<LoggingEvent>();
 
                 if (this.failureDate != null) {
-                    String msg = this.nbDroppedMsg + " logging events dropped by " +
-                        this.getClass().getName() + "since " +
-                        DateFormat.getDateInstance().format(this.failureDate) +
-                        ". A copy of theses logging events is available in " +
-                        this.getErrorAppender().getFile() + " on " +
-                        ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getHostName();
+                    String msg;
+                    if (this.noLogFile) {
+                        msg = this.nbDroppedMsg + " logging events dropped by " + this.getClass().getName() +
+                            "since " + DateFormat.getDateInstance().format(this.failureDate);
+                    } else {
+                        msg = this.nbDroppedMsg + " logging events dropped by " + this.getClass().getName() +
+                            "since " + DateFormat.getDateInstance().format(this.failureDate) +
+                            ". A copy of theses logging events is available in " +
+                            this.getErrorAppender().getFile() + " on " +
+                            ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getHostName();
+                    }
                     Logger l = Logger.getLogger(this.getClass());
                     LoggingEvent le = new LoggingEvent(Category.class.getName(), l, Level.INFO, msg,
                         this.failureCause);
@@ -279,13 +300,15 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
                     if (this.failureDate == null) {
                         this.failureDate = new Date();
                         this.failureCause = t;
+                    } else {
+                        // Remove the inserted logging event
+                        events.remove(0);
                     }
 
                     this.nbDroppedMsg += nbEvent;
 
-                    Appender appender = this.getErrorAppender();
                     for (LoggingEvent le : events) {
-                        appender.doAppend(le);
+                        this.logError(le);
                     }
                 }
             }
@@ -300,12 +323,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
              * collector To avoid infinite loop, we use a dedicated file
              * appender
              */
-            Appender errorAppender = this.getErrorAppender();
-            if (errorAppender != null) {
-                this.errorAppender.append(event);
-            } else {
-                System.err.println(event.getLoggerName() + " " + event.getLevel() + " " + event.getMessage());
-            }
+            this.logError(event);
         } else {
             /*
              * Add the event into the buffer. If the buffer is full, the calling
@@ -342,7 +360,7 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
 
     /** Lazily load the error appender */
     synchronized private FileAppender getErrorAppender() {
-        if (this.errorAppender == null) {
+        if (this.errorAppender == null && !this.noLogFile) {
             try {
                 Layout layout = new PatternLayout("%X{shortid@hostname} - [%p %20.20c{2}] %m%n");
                 ProActiveRuntimeImpl part = ProActiveRuntimeImpl.getProActiveRuntime();
@@ -367,5 +385,16 @@ public final class ThrottlingProvider extends LoggingEventSenderSPI {
     public void terminate() {
         this.terminate.set(true);
         this.gatherAndSend();
+    }
+
+    private void logError(LoggingEvent le) {
+        if (!this.noLogFile) {
+            FileAppender appender = getErrorAppender();
+            if (appender != null) {
+                appender.doAppend(le);
+            } else {
+                System.err.println(le.getLoggerName() + " " + le.getLevel() + " " + le.getMessage());
+            }
+        }
     }
 }
