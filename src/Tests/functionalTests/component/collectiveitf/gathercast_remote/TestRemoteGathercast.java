@@ -89,36 +89,36 @@ public class TestRemoteGathercast extends ComponentTest {
     }
 
     private void useRemoteGathercastItf(Object deploymentDesc) throws Exception {
-             Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
-            Map<String, Object> context = new HashMap<String, Object>();
+        Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
+        Map<String, Object> context = new HashMap<String, Object>();
 
-            context.put("deployment-descriptor", deploymentDesc);
-            Component gatherCmpServer, gatherCmpClient;
+        context.put("deployment-descriptor", deploymentDesc);
+        Component gatherCmpServer, gatherCmpClient;
 
-            // instantiate components
-            System.out.println("\nInstantiate components...");
-            gatherCmpClient = (Component) f.newComponent(
-                    "functionalTests.component.collectiveitf.gathercast_remote.GatherCmp", context);
-            gatherCmpServer = (Component) f.newComponent(
-                    "functionalTests.component.collectiveitf.gathercast_remote.GatherCmp", context);
+        // instantiate components
+        System.out.println("\nInstantiate components...");
+        gatherCmpClient = (Component) f.newComponent(
+                "functionalTests.component.collectiveitf.gathercast_remote.GatherCmp", context);
+        gatherCmpServer = (Component) f.newComponent(
+                "functionalTests.component.collectiveitf.gathercast_remote.GatherCmp", context);
 
-            // bind components
-            System.out.println("\nBind components...");
+        // bind components
+        System.out.println("\nBind components...");
 
-            // CgeneratedCCgeneratedfunctionalTestsCCPcomponentCCPcollectiveitfCCPgathercast_remoteCCPGatherItfCCOreceiverCCgathercastItfProxyCOreceiverCrepresentative
-            //     TestRemoteGathercast.class.getClassLoader().loadClass("CgeneratedCCgeneratedorgCCPobjectwebCCPproactiveCCPexamplesCCPcomponentsCCPjacobiCCPGathercastDataReceiverCCOreceiverCCgathercastItfProxyCOreceiverCrepresentative");
-            BindingController bc = Fractal.getBindingController(gatherCmpClient);
+        // CgeneratedCCgeneratedfunctionalTestsCCPcomponentCCPcollectiveitfCCPgathercast_remoteCCPGatherItfCCOreceiverCCgathercastItfProxyCOreceiverCrepresentative
+        //     TestRemoteGathercast.class.getClassLoader().loadClass("CgeneratedCCgeneratedorgCCPobjectwebCCPproactiveCCPexamplesCCPcomponentsCCPjacobiCCPGathercastDataReceiverCCOreceiverCCgathercastItfProxyCOreceiverCrepresentative");
+        BindingController bc = Fractal.getBindingController(gatherCmpClient);
 
-            // binding
-            bc.bindFc("sender", gatherCmpServer.getFcInterface("receiver"));
+        // binding
+        bc.bindFc("sender", gatherCmpServer.getFcInterface("receiver"));
 
-            // start and launch components
-            System.out.println("\nLaunch components...");
-            ((Runnable) gatherCmpClient.getFcInterface("main")).run();
+        // start and launch components
+        System.out.println("\nLaunch components...");
+        ((Runnable) gatherCmpClient.getFcInterface("main")).run();
 
-            System.out.println("\nStart components...");
-            Fractal.getLifeCycleController(gatherCmpClient).startFc();
-            Fractal.getLifeCycleController(gatherCmpServer).startFc();
+        System.out.println("\nStart components...");
+        Fractal.getLifeCycleController(gatherCmpClient).startFc();
+        Fractal.getLifeCycleController(gatherCmpServer).startFc();
     }
 
     @After
