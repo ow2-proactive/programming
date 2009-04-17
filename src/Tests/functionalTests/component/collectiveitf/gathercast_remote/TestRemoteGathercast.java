@@ -34,16 +34,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Ignore;
-import org.objectweb.fractal.adl.ADLException;
+import org.junit.After;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.BindingController;
-import org.objectweb.fractal.api.control.IllegalBindingException;
-import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.fractal.util.Fractal;
-import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.api.PADeployment;
+import org.objectweb.proactive.core.component.adl.Registry;
+import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
@@ -53,35 +51,48 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import functionalTests.ComponentTest;
 import functionalTests.GCMFunctionalTest;
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.component.descriptor.fractaladl.Test;
 
 
 public class TestRemoteGathercast extends ComponentTest {
 
-    @org.junit.Test
-    @Ignore
-    public void testRemoteGathercast() throws Exception {
-        try {
+    private GCMApplication newDeploymentDescriptor = null;
+    private ProActiveDescriptor oldDeploymentDescriptor = null;
 
-            Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
+    @org.junit.Test
+    public void testRemoteGathercastPADeployement() throws Exception {
+        oldDeploymentDescriptor = PADeployment.getProactiveDescriptor(TestRemoteGathercast.class.getResource(
+                "/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
+                (VariableContractImpl) super.vContract.clone());
+
+        useRemoteGathercastItf(oldDeploymentDescriptor);
+    }
+
+    @org.junit.Test
+    public void testRemoteGathercastGCMDeployement() throws Exception {
+
+        URL descriptorPath = TestRemoteGathercast.class
+                .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
+
+        vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
+                .name(), VariableContractType.DescriptorDefaultVariable);
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
+                .toString(), VariableContractType.DescriptorDefaultVariable);
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
+                .toString(), VariableContractType.DescriptorDefaultVariable);
+
+        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath,
+                (VariableContractImpl) super.vContract.clone());
+
+        newDeploymentDescriptor.startDeployment();
+
+        useRemoteGathercastItf(newDeploymentDescriptor);
+    }
+
+    private void useRemoteGathercastItf(Object deploymentDesc) throws Exception {
+             Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
             Map<String, Object> context = new HashMap<String, Object>();
 
-            URL descriptorPath = Test.class
-                    .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
-
-            vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
-                    .name(), VariableContractType.DescriptorDefaultVariable);
-            vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(
-                    4).toString(), VariableContractType.DescriptorDefaultVariable);
-            vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
-                    .toString(), VariableContractType.DescriptorDefaultVariable);
-
-            GCMApplication newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(
-                    descriptorPath, (VariableContractImpl) super.vContract.clone());
-
-            newDeploymentDescriptor.startDeployment();
-
-            context.put("deployment-descriptor", newDeploymentDescriptor);
+            context.put("deployment-descriptor", deploymentDesc);
             Component gatherCmpServer, gatherCmpClient;
 
             // instantiate components
@@ -108,24 +119,18 @@ public class TestRemoteGathercast extends ComponentTest {
             System.out.println("\nStart components...");
             Fractal.getLifeCycleController(gatherCmpClient).startFc();
             Fractal.getLifeCycleController(gatherCmpServer).startFc();
-        } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ADLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchInterfaceException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalBindingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IllegalLifeCycleException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    }
+
+    @After
+    public void endTest() throws Exception {
+        Registry.instance().clear();
+        if (newDeploymentDescriptor != null) {
+            newDeploymentDescriptor.kill();
         }
 
-        System.exit(0);
+        if (oldDeploymentDescriptor != null) {
+            oldDeploymentDescriptor.killall(false);
+        }
     }
 
 }
