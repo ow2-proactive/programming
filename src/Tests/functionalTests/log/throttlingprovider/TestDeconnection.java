@@ -30,7 +30,8 @@ public class TestDeconnection {
 
         ThrottlingProvider tp = new ThrottlingProvider(period, threshold, qsize);
         FailingCollector collector = new FailingCollector();
-        ProActiveAppender appender = new ProActiveAppender(tp, collector);
+        // Start the flushing thread
+        new ProActiveAppender(tp, collector);
 
         // append 1000 logging events
         sendXEvents(1000, tp);
@@ -55,7 +56,6 @@ public class TestDeconnection {
             Thread.sleep(period);
             Queue<LoggingEvent> les = collector.getReceivedLoggingEvents();
             nbEvents = les.size();
-            LoggingEvent le = les.poll();
         } while (nbEvents < 1);
 
         System.out.println(nbEvents);
