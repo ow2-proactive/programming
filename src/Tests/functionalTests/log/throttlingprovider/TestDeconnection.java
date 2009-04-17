@@ -28,7 +28,7 @@ public class TestDeconnection {
         int threshold = 10;
         int qsize = 100;
 
-        ThrottlingProvider tp = new ThrottlingProvider(period, threshold, qsize);
+        ThrottlingProvider tp = new ThrottlingProvider(period, threshold, qsize, true);
         FailingCollector collector = new FailingCollector();
         // Start the flushing thread
         new ProActiveAppender(tp, collector);
@@ -60,7 +60,6 @@ public class TestDeconnection {
 
         System.out.println(nbEvents);
         Assert.assertTrue(nbEvents == 1);
-        System.out.println("OK");
     }
 
     public void sendXEvents(int x, ThrottlingProvider tp) {
