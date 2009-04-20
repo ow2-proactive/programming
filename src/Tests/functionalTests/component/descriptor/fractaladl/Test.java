@@ -76,7 +76,6 @@ public class Test extends ComponentTest {
     public static String MESSAGE = "-->m";
     private List<Message> messages;
 
-    //ComponentsCache componentsCache;
     private GCMApplication newDeploymentDescriptor = null;
     private ProActiveDescriptor oldDeploymentDescriptor = null;
 
@@ -87,54 +86,15 @@ public class Test extends ComponentTest {
 
     @org.junit.Test
     public void testOldDeployment() throws Exception {
-        Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
-        Map<String, Object> context = new HashMap<String, Object>();
-
         oldDeploymentDescriptor = PADeployment.getProactiveDescriptor(Test.class.getResource(
                 "/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
                 (VariableContractImpl) super.vContract.clone());
 
-        context.put("deployment-descriptor", oldDeploymentDescriptor);
-        Component root = (Component) f.newComponent(
-                "functionalTests.component.descriptor.fractaladl.MessagePassingExample", context);
-        Fractal.getLifeCycleController(root).startFc();
-        Component[] subComponents = Fractal.getContentController(root).getFcSubComponents();
-        for (Component component : subComponents) {
-            if ("parallel".equals(Fractal.getNameController(component).getFcName())) {
-                // invoke method on composite
-                I1Multicast i1Multicast = (I1Multicast) component.getFcInterface("i1");
-                //I1 i1= (I1)p1.getFcInterface("i1");
-                messages = i1Multicast.processInputMessage(new Message(MESSAGE));
-
-                for (Message msg : messages) {
-                    System.out.println("Test.testOldDeployment()" + messages);
-                    msg.append(MESSAGE);
-                }
-                break;
-            }
-        }
-        StringBuffer resulting_msg = new StringBuffer();
-        int nb_messages = append(resulting_msg, messages);
-
-        //        System.out.println("*** received " + nb_messages + "  : " +
-        //            resulting_msg.toString());
-        //        System.out.println("***" + resulting_msg.toString());
-        // this --> primitiveC --> primitiveA --> primitiveB--> primitiveA --> primitiveC --> this  (message goes through parallel and composite components)
-        String single_message = Test.MESSAGE + PrimitiveComponentA.MESSAGE + PrimitiveComponentB.MESSAGE +
-            PrimitiveComponentA.MESSAGE + Test.MESSAGE;
-
-        // there should be 4 messages with the current configuration
-        Assert.assertEquals(2, nb_messages);
-
-        Assert.assertEquals(single_message + single_message, resulting_msg.toString());
-
+        useFractalADL(oldDeploymentDescriptor);
     }
 
     @org.junit.Test
     public void testGCMDeployment() throws Exception {
-        Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
-        Map<String, Object> context = new HashMap<String, Object>();
-
         URL descriptorPath = Test.class
                 .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
 
@@ -149,8 +109,14 @@ public class Test extends ComponentTest {
                 (VariableContractImpl) super.vContract.clone());
 
         newDeploymentDescriptor.startDeployment();
+        useFractalADL(newDeploymentDescriptor);
+    }
 
-        context.put("deployment-descriptor", newDeploymentDescriptor);
+    private void useFractalADL(Object deploymentDesc) throws Exception {
+        Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
+        Map<String, Object> context = new HashMap<String, Object>();
+
+        context.put("deployment-descriptor", deploymentDesc);
         Component root = (Component) f.newComponent(
                 "functionalTests.component.descriptor.fractaladl.MessagePassingExample", context);
         Fractal.getLifeCycleController(root).startFc();
