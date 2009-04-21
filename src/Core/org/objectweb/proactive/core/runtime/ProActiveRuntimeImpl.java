@@ -185,8 +185,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // map proActiveRuntime registered on this VM and their names
     private java.util.Hashtable<String, ProActiveRuntime> proActiveRuntimeMap;
 
-    // synchronized set of URL to runtimes in which we are registered
-    private java.util.Set<String> runtimeAcquaintancesURL;
     private ProActiveRuntime parentRuntime;
     protected RemoteObjectExposer<ProActiveRuntime> roe;
 
@@ -209,8 +207,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         try {
             this.vmInformation = new VMInformationImpl();
             this.proActiveRuntimeMap = new java.util.Hashtable<String, ProActiveRuntime>();
-            this.runtimeAcquaintancesURL = java.util.Collections
-                    .synchronizedSortedSet(new java.util.TreeSet<String>());
             this.virtualNodesMap = new java.util.Hashtable<String, VirtualNodeInternal>();
             this.descriptorMap = new java.util.Hashtable<String, ProActiveDescriptorInternal>();
             this.nodeMap = new java.util.Hashtable<String, LocalNode>();
@@ -336,7 +332,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     public void setParent(ProActiveRuntime parentPARuntime) {
         if (this.parentRuntime == null) {
             this.parentRuntime = parentPARuntime;
-            this.runtimeAcquaintancesURL.add(parentPARuntime.getURL());
         } else {
             runtimeLogger.error("Parent runtime already set!");
         }
@@ -653,38 +648,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      */
     public ProActiveRuntime getProActiveRuntime(String proActiveRuntimeName) {
         return this.proActiveRuntimeMap.get(proActiveRuntimeName);
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#addAcquaintance(String)
-     */
-    public void addAcquaintance(String proActiveRuntimeName) {
-        this.runtimeAcquaintancesURL.add(proActiveRuntimeName);
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#getAcquaintances()
-     */
-    public String[] getAcquaintances() {
-        String[] urls;
-
-        synchronized (this.runtimeAcquaintancesURL) {
-            urls = new String[this.runtimeAcquaintancesURL.size()];
-
-            java.util.Iterator<String> iter = this.runtimeAcquaintancesURL.iterator();
-
-            for (int i = 0; i < urls.length; i++)
-                urls[i] = iter.next();
-        }
-
-        return urls;
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#rmAcquaintance(java.lang.String)
-     */
-    public void rmAcquaintance(String proActiveRuntimeName) {
-        this.runtimeAcquaintancesURL.remove(proActiveRuntimeName);
     }
 
     /**

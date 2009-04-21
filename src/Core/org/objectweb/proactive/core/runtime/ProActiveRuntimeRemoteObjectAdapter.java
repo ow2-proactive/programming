@@ -109,9 +109,6 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
     }
 
     // =========   Implements ProActiveRuntime ==================
-    public void addAcquaintance(String proActiveRuntimeName) throws ProActiveException {
-        target.addAcquaintance(proActiveRuntimeName);
-    }
 
     public UniversalBody createBody(String nodeName, ConstructorCall bodyConstructorCall, boolean isNodeLocal)
             throws ProActiveException, ConstructorCallExecutionFailedException, InvocationTargetException {
@@ -126,10 +123,6 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
 
     public void createVM(UniversalProcess remoteProcess) throws IOException, ProActiveException {
         target.createVM(remoteProcess);
-    }
-
-    public String[] getAcquaintances() throws ProActiveException {
-        return target.getAcquaintances();
     }
 
     public List<UniversalBody> getActiveObjects(String nodeName) throws ProActiveException {
@@ -247,10 +240,6 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
     public void registerVirtualNode(String virtualNodeName, boolean replacePreviousBinding)
             throws ProActiveException, AlreadyBoundException {
         target.registerVirtualNode(virtualNodeName, replacePreviousBinding);
-    }
-
-    public void rmAcquaintance(String proActiveRuntimeName) throws ProActiveException {
-        target.rmAcquaintance(proActiveRuntimeName);
     }
 
     public Object setLocalNodeProperty(String nodeName, String key, String value) throws ProActiveException {

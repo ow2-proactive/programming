@@ -180,28 +180,6 @@ public interface ProActiveRuntime extends SecurityEntity {
     public ProActiveRuntime getProActiveRuntime(String proActiveRuntimeName) throws ProActiveException;
 
     /**
-     * <i><font size="-1" color="#FF0000">**For internal use only** </font></i>
-     * Tells this runtime that it's registered in another one
-     * @param proActiveRuntimeName the name of the remote ProActiveRuntime in which this runtime is registered
-     */
-    void addAcquaintance(String proActiveRuntimeName) throws ProActiveException;
-
-    /**
-     * Returns all the ProActiveRuntime URL in which this runtime is registered
-     * @return all the ProActiveRuntime URL in which this runtime is registered
-     * @exception ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
-     */
-    public String[] getAcquaintances() throws ProActiveException;
-
-    /**
-     * <i><font size="-1" color="#FF0000">**For internal use only** </font></i>.
-     * Tell to this runtime that is no more registered in <code>proActiveRuntimeName</code>.
-     * @param proActiveRuntimeName the name of the remote ProActiveRuntime.
-     * @exception ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
-     */
-    public void rmAcquaintance(String proActiveRuntimeName) throws ProActiveException;
-
-    /**
      * Kills this ProActiveRuntime and this VM
      * @param softly if false, this Runtime is killed abruptely
      * if true, if that runtime originates the creation of  a rmi registry, it waits until the registry is empty before
