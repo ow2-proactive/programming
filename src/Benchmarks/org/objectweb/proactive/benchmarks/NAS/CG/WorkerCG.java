@@ -55,7 +55,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  * computations in that it tests irregular long distance communication, employing unstructured
  * matrix vector multiplication.
  */
-@SuppressWarnings("serial")
+
 public class WorkerCG extends Timed {
 
     /** TimIt related variables * */

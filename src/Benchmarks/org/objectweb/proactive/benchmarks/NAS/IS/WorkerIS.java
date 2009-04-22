@@ -59,7 +59,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  * A large integer sort. This kernel performs a sorting operation that is important in "particle
  * method" codes. It tests both integer computation speed and communication performance.
  */
-@SuppressWarnings("serial")
+
 public class WorkerIS extends Timed {
 
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;

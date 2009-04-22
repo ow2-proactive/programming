@@ -37,7 +37,6 @@ import org.objectweb.proactive.core.ssh.rmissh.SshRMIClientSocketFactory;
 import org.objectweb.proactive.core.ssh.rmissh.SshRMIServerSocketFactory;
 
 
-@SuppressWarnings("serial")
 public class RmiSshRemoteObjectImpl extends RmiRemoteObjectImpl {
     public RmiSshRemoteObjectImpl(InternalRemoteRemoteObject target) throws java.rmi.RemoteException {
         super(target, new SshRMIServerSocketFactory(), new SshRMIClientSocketFactory());

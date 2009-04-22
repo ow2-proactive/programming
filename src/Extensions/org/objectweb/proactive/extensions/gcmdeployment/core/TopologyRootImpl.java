@@ -35,7 +35,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@SuppressWarnings("serial")
 public class TopologyRootImpl extends TopologyImpl {
     protected Map<Long, TopologyImpl> nodeMap;
 

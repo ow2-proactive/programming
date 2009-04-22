@@ -64,7 +64,7 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
  *
  *
  */
-@SuppressWarnings("serial")
+
 public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
     protected Object target;
     protected String className;

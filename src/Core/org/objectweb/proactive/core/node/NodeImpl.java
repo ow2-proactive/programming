@@ -68,7 +68,7 @@ import org.objectweb.proactive.core.runtime.VMInformation;
  * @since   ProActive 0.9
  *
  */
-@SuppressWarnings("serial")
+
 public class NodeImpl implements Node, Serializable {
 
     protected NodeInformation nodeInformation;

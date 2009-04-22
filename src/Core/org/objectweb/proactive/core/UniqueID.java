@@ -49,7 +49,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 0.9
  *
  */
-@SuppressWarnings("serial")
+
 @PublicAPI
 public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
     private java.rmi.server.UID id;

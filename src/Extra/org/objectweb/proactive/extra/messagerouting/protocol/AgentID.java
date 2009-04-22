@@ -42,7 +42,7 @@ import java.io.Serializable;
  * 
  * @since ProActive 4.1.0
  */
-@SuppressWarnings("serial")
+
 public class AgentID implements Serializable {
     final private long id;
 

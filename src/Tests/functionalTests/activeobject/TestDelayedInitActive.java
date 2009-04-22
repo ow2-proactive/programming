@@ -35,7 +35,6 @@ public class TestDelayedInitActive extends FunctionalTest {
             before >= SLEEP);
     }
 
-    @SuppressWarnings("serial")
     static public class AO implements Serializable, InitActive {
         public void initActivity(Body body) {
             // Enlarge the race condition window

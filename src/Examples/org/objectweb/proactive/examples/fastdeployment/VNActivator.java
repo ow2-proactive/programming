@@ -61,7 +61,6 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  * Activate a set of ProActive descriptor
  */
 @ActiveObject
-@SuppressWarnings("serial")
 public class VNActivator implements Serializable, RunActive, NodeCreationEventListener, InitActive {
     final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

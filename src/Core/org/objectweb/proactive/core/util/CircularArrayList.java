@@ -61,7 +61,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 0.9
  *
  */
-@SuppressWarnings("serial")
+
 public class CircularArrayList<E> extends java.util.AbstractList<E> implements java.util.List<E>,
         java.io.Serializable {
     static Logger logger = ProActiveLogger.getLogger(Loggers.UTIL);

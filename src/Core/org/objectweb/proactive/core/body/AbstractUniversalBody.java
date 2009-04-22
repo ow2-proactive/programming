@@ -63,7 +63,7 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
  * @since   ProActive 0.9.3
  *
  */
-@SuppressWarnings("serial")
+
 public abstract class AbstractUniversalBody implements UniversalBody, Serializable {
     //
     // -- PROTECTED MEMBERS -----------------------------------------------

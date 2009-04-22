@@ -41,7 +41,7 @@ import org.objectweb.proactive.core.ProActiveException;
  * 
  * @since ProActive 4.1.0
  */
-@SuppressWarnings("serial")
+
 public class MessageRoutingException extends ProActiveException {
 
     public MessageRoutingException() {

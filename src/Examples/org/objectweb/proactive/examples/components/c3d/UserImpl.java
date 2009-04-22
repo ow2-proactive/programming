@@ -44,7 +44,7 @@ import org.objectweb.proactive.examples.c3d.gui.NameAndHostDialog;
 
 
 /** The component container for a User. */
-@SuppressWarnings("serial")
+
 public class UserImpl extends C3DUser implements BindingController, User {
 
     /** Mandatory ProActive empty no-arg constructor */

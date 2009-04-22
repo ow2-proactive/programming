@@ -71,7 +71,6 @@ public class TestGetDefaultNode extends GCMFunctionalTestDefaultNodes {
         Assert.assertFalse(url0.equals(url1));
     }
 
-    @SuppressWarnings("serial")
     static public class AO implements Serializable {
 
         public AO() {

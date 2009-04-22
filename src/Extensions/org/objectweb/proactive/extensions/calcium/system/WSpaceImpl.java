@@ -44,7 +44,7 @@ import java.net.URL;
  *
  * @author The ProActive Team
  */
-@SuppressWarnings("serial")
+
 public class WSpaceImpl implements WSpace, java.io.Serializable {
     File wspace;
 

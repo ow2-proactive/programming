@@ -45,7 +45,7 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  *
  * @author The ProActive Team
  */
-@SuppressWarnings("serial")
+
 @PublicAPI
 public class VasisekModelInterestRates implements SimulationSet<double[]> {
 

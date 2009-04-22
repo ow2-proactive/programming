@@ -67,7 +67,6 @@ public class TestTurnRemote extends GCMFunctionalTestDefaultNodes {
 
     }
 
-    @SuppressWarnings("serial")
     public static class AO implements Serializable {
         public AO() {
         }
