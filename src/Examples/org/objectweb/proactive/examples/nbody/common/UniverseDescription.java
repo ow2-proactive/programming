@@ -52,7 +52,7 @@ import org.xml.sax.Attributes;
  * @author The ProActive Team
  *
  */
-@SuppressWarnings("serial")
+
 public class UniverseDescription implements Serializable {
     // Fields
     private Vector<PlanetDescription> planets;

@@ -36,7 +36,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 
 
-@SuppressWarnings("serial")
 public class Timer implements Serializable {
     long t;
     long accumulated;

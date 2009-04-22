@@ -41,7 +41,7 @@ import java.rmi.dgc.VMID;
  * </p>
  * @author The ProActive Team
  */
-@SuppressWarnings("serial")
+
 public class UniqueRuntimeID implements java.io.Serializable {
     private java.rmi.dgc.VMID vmID;
     private String vmName;

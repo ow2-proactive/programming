@@ -42,7 +42,6 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystemImpl;
 import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
-@SuppressWarnings("serial")
 public class WhileInst<P> implements Instruction<P, P> {
     Condition<P> cond;
     Stack<Instruction> childStack;

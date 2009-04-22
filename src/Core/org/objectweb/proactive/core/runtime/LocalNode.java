@@ -80,7 +80,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * This class is a runtime representation of a node
  * and should not be used outside a runtime
  */
-@SuppressWarnings("serial")
+
 public class LocalNode implements SecurityEntity {
     private static Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);
     private String name;

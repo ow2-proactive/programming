@@ -47,7 +47,6 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  * @author The ProActive Team
  */
 @ActiveObject
-@SuppressWarnings("serial")
 public class Worker extends Timed implements java.io.Serializable {
 
     /**

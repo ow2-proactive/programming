@@ -73,7 +73,7 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
  * runtime.
  *  - cache the vmInformation field
  */
-@SuppressWarnings("serial")
+
 public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntime> implements
         ProActiveRuntime {
 

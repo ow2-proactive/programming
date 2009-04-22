@@ -63,7 +63,6 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
         HudsonReport.reportToHudson(this.cl, throughput);
     }
 
-    @SuppressWarnings("serial")
     static public class Server implements Serializable {
         boolean firstRequest = true;
         long count = 0;
@@ -93,7 +92,6 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
         }
     }
 
-    @SuppressWarnings("serial")
     static public class Client implements Serializable {
         private Server server;
 

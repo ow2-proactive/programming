@@ -113,7 +113,6 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
 
     }
 
-    @SuppressWarnings("serial")
     static public class RemoteAO implements Serializable {
         GCMVirtualNode vn;
 

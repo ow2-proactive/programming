@@ -40,7 +40,7 @@ import org.objectweb.proactive.core.ProActiveException;
  * object framework.
  * @author The ProActive Team
  */
-@SuppressWarnings("serial")
+
 @PublicAPI
 public class UnknownProtocolException extends ProActiveException {
 

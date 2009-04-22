@@ -61,7 +61,7 @@ import org.objectweb.proactive.core.util.URIBuilder;
  * @version 1.0,  2003/04/01
  * @since   ProActive 1.0.2
  */
-@SuppressWarnings("serial")
+
 public class VirtualNodeLookup extends RuntimeDeploymentProperties implements VirtualNodeInternal {
     private VirtualNodeInternal virtualNode;
     private String name;

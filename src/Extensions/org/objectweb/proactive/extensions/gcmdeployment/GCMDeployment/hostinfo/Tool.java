@@ -34,7 +34,6 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo;
 import java.io.Serializable;
 
 
-@SuppressWarnings("serial")
 public class Tool implements Serializable {
     private String id;
     private String path;

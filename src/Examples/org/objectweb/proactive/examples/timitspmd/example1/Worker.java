@@ -61,7 +61,7 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  * @author The ProActive Team
  *
  */
-@SuppressWarnings("serial")
+
 public class Worker extends Timed {
 
     /**

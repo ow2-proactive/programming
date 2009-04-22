@@ -37,7 +37,7 @@ import java.io.Serializable;
 /**
  * A timer which retains the values measured in addition to calculating the average
  */
-@SuppressWarnings("serial")
+
 public class TimerWithMemory extends AverageMicroTimer implements Timer, Serializable {
     protected long[] memory;
     protected int position;

@@ -40,7 +40,6 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 
-@SuppressWarnings("serial")
 public class WelcomeDialog extends JDialog {
 
     /**
