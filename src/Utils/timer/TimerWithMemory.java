@@ -39,6 +39,10 @@ import java.io.Serializable;
  */
 
 public class TimerWithMemory extends AverageMicroTimer implements Timer, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     protected long[] memory;
     protected int position;
 

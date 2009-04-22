@@ -55,6 +55,11 @@ import org.objectweb.proactive.extra.messagerouting.remoteobject.message.Message
  */
 
 public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     final static private Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_REMOTE_OBJECT);
 
     /** The URL of the RemoteObject */

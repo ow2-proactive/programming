@@ -114,6 +114,10 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
     }
 
     static public class RemoteAO implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         GCMVirtualNode vn;
 
         public RemoteAO() {

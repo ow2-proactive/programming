@@ -52,6 +52,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 @PublicAPI
 public class UniqueID implements java.io.Serializable, Comparable<UniqueID> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private java.rmi.server.UID id;
     private java.rmi.dgc.VMID vmID;
 

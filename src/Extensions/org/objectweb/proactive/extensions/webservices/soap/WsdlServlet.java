@@ -50,6 +50,11 @@ import org.apache.soap.server.DeploymentDescriptor;
  */
 
 public class WsdlServlet extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         DefaultConfigManager cm = new DefaultConfigManager();

@@ -44,6 +44,10 @@ import java.io.Serializable;
  */
 
 public class AgentID implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     final private long id;
 
     public AgentID(long id) {

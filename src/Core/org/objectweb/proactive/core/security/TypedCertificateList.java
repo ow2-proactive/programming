@@ -38,6 +38,11 @@ import java.util.ArrayList;
 public class TypedCertificateList extends ArrayList<TypedCertificate> {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      *
      */
     public Certificate[] certsToArray() {

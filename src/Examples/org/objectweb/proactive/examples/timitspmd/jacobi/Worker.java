@@ -50,6 +50,11 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 public class Worker extends Timed implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
+    /**
      *
      */
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = true;

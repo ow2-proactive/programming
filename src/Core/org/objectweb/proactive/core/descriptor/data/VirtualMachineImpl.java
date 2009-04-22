@@ -50,6 +50,11 @@ public class VirtualMachineImpl implements VirtualMachine, java.io.Serializable 
     //  ----- PRIVATE MEMBERS -----------------------------------------------------------------------------------
     //
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** the name of this VirtualMachine */
     private String name;
 

@@ -48,6 +48,10 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventDataBag;
 public class TimItManager implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+    /**
      *
      */
     private static TimItManager instance = new TimItManager();

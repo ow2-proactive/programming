@@ -37,4 +37,9 @@ import java.io.Serializable;
 
 public class NonFinalClass implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
 }

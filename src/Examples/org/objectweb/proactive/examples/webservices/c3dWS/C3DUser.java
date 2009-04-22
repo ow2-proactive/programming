@@ -535,6 +535,11 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
     public class UserFrame extends Frame implements ActionListener, ItemListener {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
+        /**
          * Button UP
          */
         private Button b_up = new EqualButton("Up");
@@ -1219,6 +1224,11 @@ public class C3DUser implements org.objectweb.proactive.RunActive, java.io.Seria
          * AWT 1.1 event handling for window events
          */
         class MyWindowListener extends WindowAdapter implements java.io.Serializable {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 41L;
+
             @Override
             public void windowClosing(WindowEvent e) {
                 setVisible(false);

@@ -47,6 +47,11 @@ import org.objectweb.proactive.examples.c3d.gui.NameAndHostDialog;
 
 public class UserImpl extends C3DUser implements BindingController, User {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     /** Mandatory ProActive empty no-arg constructor */
     public UserImpl() {
     }
