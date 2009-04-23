@@ -87,9 +87,9 @@ public class GetTimerSnapshotAction extends Action implements IActionExtPoint {
 
             // Pass the reference of the AbstractDataObject to the ChartContainerObject			
             if ((part != null) && part.getClass().equals(TimItView.class)) {
-                if (this.container == null) {
-                    this.container = ((TimItView) part).getChartContainer();
-                }
+                //if (this.container == null) {
+                this.container = ((TimItView) part).getChartContainer();
+                //}
                 this.container.recognizeAndCreateChart(this.object);
             }
 
