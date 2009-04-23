@@ -57,8 +57,13 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  * tests both short and long distance data communication. It approximates a solution to the discrete
  * Poisson problem.
  */
-@SuppressWarnings("serial")
+
 public class WorkerMG extends Timed implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /*
      * TimIt related variables

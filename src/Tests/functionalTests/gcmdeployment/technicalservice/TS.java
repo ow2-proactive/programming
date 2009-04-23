@@ -38,8 +38,11 @@ import org.objectweb.proactive.core.descriptor.services.TechnicalService;
 import org.objectweb.proactive.core.node.Node;
 
 
-@SuppressWarnings("serial")
 public class TS implements TechnicalService {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private String arg1;
     private String arg2;
 

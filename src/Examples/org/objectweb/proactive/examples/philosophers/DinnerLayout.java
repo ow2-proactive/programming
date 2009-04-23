@@ -170,9 +170,13 @@ public class DinnerLayout {
      * UserFrame
      * This is the <b>real</b> AWT Frame
      */
-    @SuppressWarnings("serial")
+
     protected class UserFrame extends javax.swing.JPanel implements java.awt.event.ActionListener,
             java.awt.event.MouseListener {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         protected javax.swing.JButton bQuit;
         protected javax.swing.JButton bAuto;
 

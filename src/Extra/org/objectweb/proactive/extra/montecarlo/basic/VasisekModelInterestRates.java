@@ -45,10 +45,14 @@ import umontreal.iro.lecuyer.rng.RandomStream;
  *
  * @author The ProActive Team
  */
-@SuppressWarnings("serial")
+
 @PublicAPI
 public class VasisekModelInterestRates implements SimulationSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private double a, b, t;
     private int N;
 

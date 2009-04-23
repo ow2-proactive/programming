@@ -53,8 +53,13 @@ import org.objectweb.proactive.extra.messagerouting.remoteobject.message.Message
  * 
  * @since ProActive 4.1.0
  */
-@SuppressWarnings("serial")
+
 public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     final static private Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_REMOTE_OBJECT);
 
     /** The URL of the RemoteObject */

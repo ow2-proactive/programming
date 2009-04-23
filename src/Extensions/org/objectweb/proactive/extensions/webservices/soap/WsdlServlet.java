@@ -48,8 +48,13 @@ import org.apache.soap.server.DeploymentDescriptor;
  * This servlet return a WSDL document when called with the urn of the service
  * @author The ProActive Team
  */
-@SuppressWarnings("serial")
+
 public class WsdlServlet extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
         DefaultConfigManager cm = new DefaultConfigManager();

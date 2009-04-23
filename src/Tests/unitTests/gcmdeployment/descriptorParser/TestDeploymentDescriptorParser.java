@@ -86,16 +86,25 @@ public class TestDeploymentDescriptorParser {
     //
     // Examples of custom group & bridge parsers
     //
-    @SuppressWarnings("serial")
+
     protected static class UserGroup extends AbstractGroup {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
         @Override
         public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
             return new ArrayList<String>();
         }
     }
 
-    @SuppressWarnings("serial")
     protected static class UserBridge extends AbstractBridge {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
         @Override
         public String internalBuildCommand(CommandBuilder commandBuilder) {
             return "";

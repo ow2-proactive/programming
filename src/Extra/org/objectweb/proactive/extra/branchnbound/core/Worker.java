@@ -55,8 +55,12 @@ import org.objectweb.proactive.extra.branchnbound.core.queue.TaskQueue;
  *
  * Created on Apr 25, 2005
  */
-@SuppressWarnings("serial")
+
 public class Worker implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
     private Worker selfWorkerGroup = null;
     private Result bestCurrentResult = null;

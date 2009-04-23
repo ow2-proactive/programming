@@ -41,8 +41,11 @@ import org.objectweb.proactive.examples.webservices.c3dWS.ws.Service1Locator;
 import org.objectweb.proactive.examples.webservices.c3dWS.ws.Service1Soap;
 
 
-@SuppressWarnings("serial")
 public class WSUser implements User, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private String name;
     private String urlCallback;
     private Service1Locator locator;

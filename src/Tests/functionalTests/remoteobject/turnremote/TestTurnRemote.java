@@ -41,6 +41,7 @@ import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PARemoteObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
@@ -55,7 +56,7 @@ public class TestTurnRemote extends GCMFunctionalTestDefaultNodes {
     }
 
     @Test
-    public void test() throws ActiveObjectCreationException, NodeException {
+    public void test() throws ProActiveException {
         Node node = super.getANode();
         AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] {}, node);
         RObject ro = ao.deploy();
@@ -66,12 +67,16 @@ public class TestTurnRemote extends GCMFunctionalTestDefaultNodes {
 
     }
 
-    @SuppressWarnings("serial")
     public static class AO implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
         public AO() {
         }
 
-        public RObject deploy() {
+        public RObject deploy() throws ProActiveException {
             return PARemoteObject.turnRemote(new RObject());
         }
     }

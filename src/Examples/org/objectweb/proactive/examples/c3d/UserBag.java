@@ -40,8 +40,12 @@ import java.util.Iterator;
  * Storage for triples of (int -> User  -> String).
  * This is a Bag, because keys can be the same [even though they shouldn't be!].
  */
-@SuppressWarnings("serial")
+
 public class UserBag implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private ArrayList<Troika> list = new ArrayList<Troika>();
 
     /** Create an empty Bag. */
@@ -145,6 +149,10 @@ public class UserBag implements Serializable {
     //    }
     // A container for (int -> C3DUser -> String)
     private class Troika implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         int key;
         User user;
         String name;

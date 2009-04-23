@@ -44,9 +44,14 @@ import org.objectweb.proactive.extra.messagerouting.remoteobject.util.MessageRou
  *
  * @since ProActive 4.1.0
  */
-@SuppressWarnings("serial")
+
 public class MessageRoutingRegistryListRemoteObjectsMessage extends MessageRoutingMessage implements
         Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /**
      * Construct a list message

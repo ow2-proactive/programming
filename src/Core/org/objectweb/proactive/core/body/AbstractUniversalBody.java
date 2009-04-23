@@ -63,11 +63,16 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
  * @since   ProActive 0.9.3
  *
  */
-@SuppressWarnings("serial")
+
 public abstract class AbstractUniversalBody implements UniversalBody, Serializable {
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /** Unique ID of the body. */
     protected UniqueID bodyID;
@@ -196,11 +201,11 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
      * @see org.objectweb.proactive.core.body.UniversalBody#register(java.lang.String)
      */
     @Deprecated
-    public void register(String url) throws IOException, UnknownProtocolException {
+    public void register(String url) throws ProActiveException {
         this.roe.createRemoteObject(RemoteObjectHelper.expandURI(URI.create(url)));
     }
 
-    public String registerByName(String name) throws IOException {
+    public String registerByName(String name) throws ProActiveException {
         this.roe.createRemoteObject(name);
         return this.roe.getURL();
     }

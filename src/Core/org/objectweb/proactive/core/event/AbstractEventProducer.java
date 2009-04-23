@@ -331,8 +331,13 @@ public abstract class AbstractEventProducer implements java.io.Serializable {
      * @since   ProActive 0.9
      *
      */
-    @SuppressWarnings("serial")
+
     private class WeakReferenceListenerList<E> extends PlainListenerList<E> {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
         public WeakReferenceListenerList() {
         }
 

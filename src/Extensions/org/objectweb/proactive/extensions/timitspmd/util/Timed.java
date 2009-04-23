@@ -46,9 +46,13 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.RealEventObse
  *
  * @author The ProActive Team
  */
-@SuppressWarnings("serial")
+
 public class Timed implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /**
      *
      */

@@ -55,9 +55,13 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  * computations in that it tests irregular long distance communication, employing unstructured
  * matrix vector multiplication.
  */
-@SuppressWarnings("serial")
+
 public class WorkerCG extends Timed {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /** TimIt related variables * */
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
     private TimerCounter T_total = new TimerCounter("Total");

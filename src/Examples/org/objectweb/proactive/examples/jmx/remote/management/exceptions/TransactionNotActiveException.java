@@ -31,8 +31,12 @@
  */
 package org.objectweb.proactive.examples.jmx.remote.management.exceptions;
 
-@SuppressWarnings("serial")
 public class TransactionNotActiveException extends Exception {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /**
      *

@@ -63,8 +63,11 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
         HudsonReport.reportToHudson(this.cl, throughput);
     }
 
-    @SuppressWarnings("serial")
     static public class Server implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         boolean firstRequest = true;
         long count = 0;
         long startTime;
@@ -93,8 +96,11 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
         }
     }
 
-    @SuppressWarnings("serial")
     static public class Client implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private Server server;
 
         public Client() {

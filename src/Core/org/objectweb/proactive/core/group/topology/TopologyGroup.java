@@ -41,8 +41,13 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
  *
  * @author The ProActive Team
  */
-@SuppressWarnings("serial")
+
 public abstract class TopologyGroup<E> extends ProxyForGroup<E> {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /**
      * Constructor : a Topology is build with a group with the specified size

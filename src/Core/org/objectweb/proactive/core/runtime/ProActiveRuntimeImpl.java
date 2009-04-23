@@ -135,9 +135,14 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since ProActive 0.91
  * 
  */
-@SuppressWarnings("serial")
+
 public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl implements ProActiveRuntime,
         LocalProActiveRuntime {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /**
      * 
@@ -158,6 +163,8 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             proActiveRuntime = new ProActiveRuntimeImpl();
             proActiveRuntime.createMBean();
         } catch (UnknownProtocolException e) {
+            e.printStackTrace();
+        } catch (ProActiveException e) {
             e.printStackTrace();
         }
     }
@@ -204,7 +211,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // -----------------------------------------------------------
     //
     // singleton
-    protected ProActiveRuntimeImpl() throws UnknownProtocolException {
+    protected ProActiveRuntimeImpl() throws ProActiveException {
         try {
             this.vmInformation = new VMInformationImpl();
             this.proActiveRuntimeMap = new java.util.Hashtable<String, ProActiveRuntime>();
@@ -453,23 +460,27 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             nodeSecurityManager.setParent(this);
         }
 
-        LocalNode localNode = new LocalNode(nodeName, jobId, nodeSecurityManager, vnName);
-
-        if (replacePreviousBinding && (this.nodeMap.get(nodeName) != null)) {
-            localNode.setActiveObjects(this.nodeMap.get(nodeName).getActiveObjectsId());
-            this.nodeMap.remove(nodeName);
-        }
-
-        this.nodeMap.put(nodeName, localNode);
-
-        Node node = null;
         try {
-            node = new NodeImpl((ProActiveRuntime) PARemoteObject.lookup(URI.create(localNode.getURL())),
-                localNode.getURL(), URIBuilder.getProtocol(localNode.getURL()), jobId);
+            LocalNode localNode = new LocalNode(nodeName, jobId, nodeSecurityManager, vnName);
+            if (replacePreviousBinding && (this.nodeMap.get(nodeName) != null)) {
+                localNode.setActiveObjects(this.nodeMap.get(nodeName).getActiveObjectsId());
+                this.nodeMap.remove(nodeName);
+            }
+
+            this.nodeMap.put(nodeName, localNode);
+
+            Node node = null;
+            try {
+                node = new NodeImpl((ProActiveRuntime) PARemoteObject.lookup(URI.create(localNode.getURL())),
+                    localNode.getURL(), URIBuilder.getProtocol(localNode.getURL()), jobId);
+            } catch (ProActiveException e) {
+                throw new NodeException("Failed to created NodeImpl", e);
+            }
+            return node;
         } catch (ProActiveException e) {
-            throw new NodeException("Failed to created NodeImpl", e);
+            throw new NodeException("Failed to create the LocalNode for " + nodeName, e);
         }
-        return node;
+
     }
 
     public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId,
@@ -767,7 +778,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     }
 
     public void registerVirtualNode(String virtualNodeName, boolean replacePreviousBinding)
-            throws UnknownProtocolException {
+            throws ProActiveException {
         this.roe.createRemoteObject(virtualNodeName);
     }
 
@@ -1359,6 +1370,11 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // -- INNER CLASSES -----------------------------------------------
     //
     protected static class VMInformationImpl implements VMInformation, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
+
         private final java.net.InetAddress hostInetAddress;
 
         // the Unique ID of the JVM

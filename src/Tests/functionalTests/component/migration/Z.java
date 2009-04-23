@@ -36,9 +36,12 @@ import java.io.Serializable;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
-@SuppressWarnings("serial")
 public class Z implements D, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /**
      *
      */

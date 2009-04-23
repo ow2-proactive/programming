@@ -49,6 +49,7 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
  *
  *
  */
+
 public class RmiRemoteObjectImpl extends UnicastRemoteObject implements RmiRemoteObject {
     /**
      * 

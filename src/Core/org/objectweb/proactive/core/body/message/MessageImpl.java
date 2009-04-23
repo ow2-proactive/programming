@@ -47,8 +47,13 @@ import org.objectweb.proactive.core.body.ft.protocols.FTManager;
  * @since   ProActive 0.9
  *
  */
-@SuppressWarnings("serial")
+
 public class MessageImpl implements Message, java.io.Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /** The name of the method called */
     protected String methodName;

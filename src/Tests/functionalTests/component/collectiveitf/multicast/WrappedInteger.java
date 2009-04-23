@@ -34,9 +34,12 @@ package functionalTests.component.collectiveitf.multicast;
 import java.io.Serializable;
 
 
-@SuppressWarnings("serial")
 public class WrappedInteger implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /**
      *
      */

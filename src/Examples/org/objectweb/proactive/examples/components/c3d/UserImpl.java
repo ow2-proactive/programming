@@ -35,6 +35,7 @@ import java.io.IOException;
 
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.proactive.Body;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.component.Fractive;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.examples.c3d.C3DUser;
@@ -43,8 +44,13 @@ import org.objectweb.proactive.examples.c3d.gui.NameAndHostDialog;
 
 
 /** The component container for a User. */
-@SuppressWarnings("serial")
+
 public class UserImpl extends C3DUser implements BindingController, User {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /** Mandatory ProActive empty no-arg constructor */
     public UserImpl() {
@@ -77,7 +83,7 @@ public class UserImpl extends C3DUser implements BindingController, User {
         // Register the User in the Registry.
         try {
             Fractive.registerByName(Fractive.getComponentRepresentativeOnThis(), "User");
-        } catch (IOException e) {
+        } catch (ProActiveException e) {
             logger.error("Registering 'User' for future lookup failed");
             e.printStackTrace();
         }

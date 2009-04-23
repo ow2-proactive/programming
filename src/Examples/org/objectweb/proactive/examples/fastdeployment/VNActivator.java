@@ -61,8 +61,12 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  * Activate a set of ProActive descriptor
  */
 @ActiveObject
-@SuppressWarnings("serial")
 public class VNActivator implements Serializable, RunActive, NodeCreationEventListener, InitActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** Created slave are returned to this manager */

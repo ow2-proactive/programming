@@ -73,13 +73,18 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
  * runtime.
  *  - cache the vmInformation field
  */
-@SuppressWarnings("serial")
+
 public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntime> implements
         ProActiveRuntime {
 
     /**
      * generated serial uid
      */
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /**
      * Cache the vmInformation field

@@ -65,8 +65,13 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  * A 3-D partial differential equation solution using FFTs. This kernel performs the essence of many
  * "spectral" codes. It is a rigorous test of long-distance communication performance.
  */
-@SuppressWarnings("serial")
+
 public class WorkerFT extends Timed implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
 

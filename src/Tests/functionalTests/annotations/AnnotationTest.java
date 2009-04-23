@@ -169,7 +169,7 @@ public abstract class AnnotationTest extends FunctionalTest {
     protected final Result ERROR = new Result(1, 0);
 
     // the errors of compilation execution
-    @SuppressWarnings("serial")
+
     public final class CompilationExecutionException extends Exception {
 
         public CompilationExecutionException(String str) {
@@ -183,7 +183,7 @@ public abstract class AnnotationTest extends FunctionalTest {
     }
 
     // if I don't find a compiler...
-    @SuppressWarnings("serial")
+
     public class NoCompilerDetectedException extends Exception {
 
         public NoCompilerDetectedException(String message) {

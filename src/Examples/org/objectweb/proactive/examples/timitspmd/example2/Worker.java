@@ -56,8 +56,12 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  */
 
 // Launcher must implements Startable and Workers must extends Timed
-@SuppressWarnings("serial")
 public class Worker extends Timed {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /**
      *

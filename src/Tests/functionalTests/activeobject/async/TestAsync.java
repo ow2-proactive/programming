@@ -347,11 +347,19 @@ public class TestAsync extends FunctionalTest {
         }
     }
 
-    @SuppressWarnings("serial")
     final static public class StaticFinalClass extends Object implements Serializable {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
     }
 
-    @SuppressWarnings("serial")
     static public class StaticNonFinalClass extends Object implements Serializable {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
     }
 }

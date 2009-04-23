@@ -38,8 +38,11 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
-@SuppressWarnings("serial")
 public class Vector extends Object implements Serializable, Cloneable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     int size;
     double[] elements;

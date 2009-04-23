@@ -34,9 +34,12 @@ package org.objectweb.proactive.examples.scilab.gui;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
-@SuppressWarnings("serial")
 public class TreeEngineNode extends DefaultMutableTreeNode {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /**
      *
      */

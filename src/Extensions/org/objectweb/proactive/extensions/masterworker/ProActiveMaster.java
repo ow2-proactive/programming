@@ -85,8 +85,12 @@ import java.util.List;
  * @see org.objectweb.proactive.extensions.masterworker.interfaces.Master
  */
 @PublicAPI
-@SuppressWarnings("serial")
 public class ProActiveMaster<T extends Task<R>, R extends Serializable> implements Master<T, R>, Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     protected ProActiveMaster<T, R> activeThis = null;
 

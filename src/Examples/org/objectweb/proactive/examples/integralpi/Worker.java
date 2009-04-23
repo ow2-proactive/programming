@@ -50,8 +50,13 @@ import org.objectweb.proactive.core.util.wrapper.DoubleWrapper;
  * @author The ProActive Team
  *
  */
-@SuppressWarnings("serial")
+
 public class Worker implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /** The number that identifies the worker in a group */
     private int rank;

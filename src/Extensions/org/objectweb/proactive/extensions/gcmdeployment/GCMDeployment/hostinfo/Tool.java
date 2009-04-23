@@ -34,8 +34,11 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo;
 import java.io.Serializable;
 
 
-@SuppressWarnings("serial")
 public class Tool implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     private String id;
     private String path;
 

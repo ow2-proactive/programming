@@ -34,8 +34,13 @@ package org.objectweb.proactive.examples.webservices.c3dWS.geom;
 /**
  * This class reflects the 3d vectors used in 3d computations
  */
-@SuppressWarnings("serial")
+
 public class Vec implements java.io.Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /**
      * The x coordinate

@@ -44,8 +44,12 @@ import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.StubObject;
 
 
-@SuppressWarnings("serial")
 public class TimedRequestWithLocationServer extends RequestImpl implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
+
     private static final int MAX_TRIES = 30;
 
     /**

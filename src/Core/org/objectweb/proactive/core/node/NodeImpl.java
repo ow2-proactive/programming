@@ -68,9 +68,13 @@ import org.objectweb.proactive.core.runtime.VMInformation;
  * @since   ProActive 0.9
  *
  */
-@SuppressWarnings("serial")
+
 public class NodeImpl implements Node, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     protected NodeInformation nodeInformation;
     protected ProActiveRuntime proActiveRuntime;
     protected String vnName;
@@ -238,6 +242,10 @@ public class NodeImpl implements Node, Serializable {
     //
     protected class NodeInformationImpl implements NodeInformation {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 41L;
         private String nodeName;
         private String nodeURL;
         private String protocol;

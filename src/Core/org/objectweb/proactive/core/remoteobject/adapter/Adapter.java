@@ -43,9 +43,13 @@ import org.objectweb.proactive.core.mop.StubObject;
  * Thus it is possible to insert personalized mechanisms within the remote objects like a cache mechanism
  * @param <T>
  */
-@SuppressWarnings("serial")
+
 public abstract class Adapter<T> implements Serializable, StubObject, Cloneable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /**
      * the generated stub
      */

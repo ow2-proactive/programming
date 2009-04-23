@@ -100,7 +100,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @see ProActiveDescriptorInternal
  * @see VirtualMachine
  */
-@SuppressWarnings("serial")
+
 public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements VirtualNodeInternal,
         Serializable, ServiceUser {
 
@@ -108,6 +108,10 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
      *
      */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /** Logger */
     private final static Logger FILETRANSFER_LOGGER = ProActiveLogger.getLogger(Loggers.FILETRANSFER);
     private final static Logger DEPLOYMENT_FILETRANSFER_LOGGER = ProActiveLogger

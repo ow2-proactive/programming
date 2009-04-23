@@ -74,8 +74,12 @@ import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 
 
-@SuppressWarnings("serial")
 public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
 
     /*
      * 

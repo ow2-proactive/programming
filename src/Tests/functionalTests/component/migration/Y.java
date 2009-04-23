@@ -42,9 +42,12 @@ import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
-@SuppressWarnings("serial")
 public class Y implements B, BindingController, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /**
      *
      */

@@ -40,9 +40,13 @@ import java.io.Serializable;
  * @author The ProActive Team
  *
  */
-@SuppressWarnings("serial")
+
 public class TimerCounter implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /**
      *
      */

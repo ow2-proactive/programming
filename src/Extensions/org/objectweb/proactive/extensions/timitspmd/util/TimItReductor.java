@@ -48,13 +48,17 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventDataBag;
  * @author The ProActive Team
  *
  */
-@SuppressWarnings("serial")
+
 public class TimItReductor implements ProActiveInternalObject, Serializable {
 
     /**
      *
      */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 41L;
     /** timeout (in seconds) when gatehering statistics from Timeds */
     public static final int TIMEOUT = 5000;
     private transient Service service;

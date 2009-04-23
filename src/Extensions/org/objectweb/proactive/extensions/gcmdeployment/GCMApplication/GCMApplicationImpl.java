@@ -244,8 +244,8 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         String name = this.getDeploymentId() + "/VirtualNode/" + vn.getName();
         RemoteObjectExposer<GCMVirtualNode> roe = new RemoteObjectExposer<GCMVirtualNode>(
             GCMVirtualNode.class.getName(), vn, GCMVirtualNodeRemoteObjectAdapter.class);
-        roe.createRemoteObject(name);
         try {
+            roe.createRemoteObject(name);
             return (GCMVirtualNode) RemoteObjectHelper.generatedObjectStub(roe.getRemoteObject());
         } catch (ProActiveException e) {
             GCMA_LOGGER.error(e);
