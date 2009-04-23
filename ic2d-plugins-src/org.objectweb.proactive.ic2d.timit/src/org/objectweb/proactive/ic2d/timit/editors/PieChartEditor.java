@@ -95,9 +95,7 @@ public class PieChartEditor extends EditorPart {
      */
     public void createPartControl(Composite parent) {
         Chart chart = createChart();
-        GenericChartCanvas canvas = new GenericChartCanvas(parent, SWT.NONE);
-        canvas.setChart(chart);
-        canvas.setSize(640, 480);
+        new GenericChartCanvas(parent, SWT.NONE, chart);
     }
 
     /**

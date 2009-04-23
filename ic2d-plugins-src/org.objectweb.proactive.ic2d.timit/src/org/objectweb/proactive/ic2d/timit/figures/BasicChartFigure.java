@@ -32,6 +32,7 @@
 package org.objectweb.proactive.ic2d.timit.figures;
 
 import org.eclipse.birt.chart.device.IDeviceRenderer;
+import org.eclipse.birt.chart.exception.ChartException;
 import org.eclipse.birt.chart.factory.GeneratedChartState;
 import org.eclipse.birt.chart.factory.Generator;
 import org.eclipse.birt.chart.model.Chart;
@@ -63,14 +64,15 @@ public class BasicChartFigure extends Figure {
     private Chart chart;
     private Color currentBorderColor;
     private int currentBorderSize;
-    private final Generator gr;
     private final Bounds bo;
 
-    private GeneratedChartState state;
     private Image imgChart;
-    private GC gc;
-    private boolean bDirty;
     private IDeviceRenderer idr;
+
+    /**
+     * To know if we need to recompute the chart
+     */
+    public boolean recomputeChart;
 
     public BasicChartFigure(final Chart chart) {
         this.chart = chart;
@@ -78,11 +80,12 @@ public class BasicChartFigure extends Figure {
         this.currentBorderColor = UNSELECTED_BORDER_COLOR;
         this.currentBorderSize = UNSELECTED_BORDER_SIZE;
 
-        this.gr = Generator.instance();
+        this.imgChart = new Image(Display.getDefault(), 200, 100);
 
         this.bo = chart.getBlock().getBounds().scaledInstance(SCALED_VALUE);
 
-        this.bDirty = true;
+        this.recomputeChart = true;
+
         try {
             idr = PluginSettings.instance().getDevice("dv.SWT");
         } catch (Exception pex) {
@@ -96,22 +99,22 @@ public class BasicChartFigure extends Figure {
      */
     public final void setChart(final Chart chart) {
         this.chart = chart;
-        this.bDirty = true;
+        this.recomputeChart = true;
         // Since the chart has changed we need to compute a new ChartState 
-        this.computeState();
+        this.repaint();
     }
 
     public final void setSelected() {
         this.currentBorderColor = SELECTED_BORDER_COLOR;
         this.currentBorderSize = SELECTED_BORDER_SIZE;
-        this.bDirty = false;
+        this.recomputeChart = false;
         this.repaint();
     }
 
     public final void setUnselected() {
         this.currentBorderColor = UNSELECTED_BORDER_COLOR;
         this.currentBorderSize = UNSELECTED_BORDER_SIZE;
-        this.bDirty = false;
+        this.recomputeChart = false;
         this.repaint();
     }
 
@@ -126,35 +129,33 @@ public class BasicChartFigure extends Figure {
             return;
         }
 
-        if (this.bDirty) {
-            this.bDirty = false;
-            final Display d = Display.getCurrent();
+        if (this.recomputeChart) {
+            // Dispose the precedent image
+            this.imgChart.dispose();
+            // Then create another
+            this.imgChart = new Image(Display.getCurrent(), r.width, r.height);
 
-            // OFFSCREEN IMAGE CREATION STRATEGY
-            if ((this.imgChart == null) || (this.imgChart.getImageData().width != r.width) ||
-                (imgChart.getImageData().height != r.height)) {
-                if (this.gc != null) {
-                    this.gc.dispose();
-                }
-                if (this.imgChart != null) {
-                    this.imgChart.dispose();
-                }
-
-                this.imgChart = new Image(d, r.width, r.height);
-                this.gc = new GC(this.imgChart);
-                this.computeState();
-
-                this.idr.setProperty(IDeviceRenderer.GRAPHICS_CONTEXT, this.gc);
-            }
-            // Fill background
-            gc.setBackground(WHITE_BACKGROUND_COLOR);
-            gc.fillRectangle(0, 0, r.width, r.height);
-
+            // Chart rendering be called when data is changed.
+            // May be slow : 20-60ms Intel(R) Core(TM)2 Duo CPU E4400 @ 2.00GHz JVM 1.5 64bits               
+            // RESCALE THE RENDERING AREA
+            this.bo.setWidth(getClientArea().width);
+            this.bo.setHeight(getClientArea().height);
+            this.bo.scale(SCALED_VALUE);
+            // The cached image must not be null
+            final GC gcImage = new GC(this.imgChart);
+            this.idr.setProperty(IDeviceRenderer.GRAPHICS_CONTEXT, gcImage);
+            final Generator gr = Generator.instance();
             try {
-                this.gr.render(this.idr, this.state);
-            } catch (Exception e) {
-                e.printStackTrace();
+                final GeneratedChartState state = gr.build(this.idr.getDisplayServer(), this.chart, bo, null,
+                        null, null);
+                gr.render(this.idr, state);
+            } catch (ChartException ex) {
+                ex.printStackTrace();
+            } finally {
+                gcImage.dispose();
             }
+
+            this.recomputeChart = false;
         }
 
         if (imgChart != null) {
@@ -164,17 +165,5 @@ public class BasicChartFigure extends Figure {
         graphics.setForegroundColor(this.currentBorderColor);
         graphics.drawRectangle(r.x + (this.currentBorderSize / 2), r.y + (this.currentBorderSize / 2),
                 r.width - this.currentBorderSize, r.height - this.currentBorderSize);
-    }
-
-    private final void computeState() {
-        try {
-            // RESCALE THE RENDERING AREA
-            this.bo.setWidth(getClientArea().width);
-            this.bo.setHeight(getClientArea().height);
-            this.bo.scale(SCALED_VALUE);
-            this.state = gr.build(this.idr.getDisplayServer(), this.chart, this.bo, null, null, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
