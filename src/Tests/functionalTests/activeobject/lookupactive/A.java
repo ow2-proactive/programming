@@ -51,12 +51,12 @@ public class A {
         return name;
     }
 
-    public int register() {
+    public String register() {
         try {
-            PAActiveObject.registerByName(PAActiveObject.getStubOnThis(), "A");
+            return PAActiveObject.registerByName(PAActiveObject.getStubOnThis(), "A");
         } catch (ProActiveException e) {
             e.printStackTrace();
+            return null;
         }
-        return 0;
     }
 }

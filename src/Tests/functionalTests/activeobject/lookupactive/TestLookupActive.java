@@ -54,11 +54,8 @@ public class TestLookupActive extends FunctionalTest {
     @Test
     public void action() throws Exception {
         A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" });
-        a.register();
+        String url = a.register();
 
-        // check lookup works
-        String url = URIBuilder.buildURIFromProperties(ProActiveInet.getInstance().getHostname(), "A")
-                .toString();
         a = (A) PAActiveObject.lookupActive(A.class.getName(), url);
 
         assertTrue(a != null);
@@ -67,7 +64,7 @@ public class TestLookupActive extends FunctionalTest {
         // check listActive contains the previous lookup
         String host = URIBuilder.buildURIFromProperties(ProActiveInet.getInstance().getHostname(), "")
                 .toString();
-        String[] registered = PAActiveObject.listActive(host);
+        String[] registered = PAActiveObject.listActive(url);
         assertNotNull(registered);
 
         for (int i = 0; i < registered.length; i++) {
