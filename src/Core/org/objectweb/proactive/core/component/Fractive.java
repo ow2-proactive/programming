@@ -771,14 +771,16 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
      *            ProActiveComponentRepresentative)
      * @param name
      *            the name of the component
-     * @throws IOException
+     * @return
+     *            The URI at which the component is bound
+     * @throws ProActiveException
      *             if the component cannot be registered
      */
-    public static void registerByName(Component ref, String name) throws ProActiveException {
+    public static String registerByName(Component ref, String name) throws ProActiveException {
         if (!(ref instanceof ProActiveComponentRepresentative)) {
             throw new IllegalArgumentException("This method can only register ProActive components");
         }
-        PAActiveObject.registerByName(ref, name);
+        return PAActiveObject.registerByName(ref, name);
     }
 
     /**

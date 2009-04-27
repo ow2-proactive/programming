@@ -42,8 +42,6 @@ import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Fractive;
-import org.objectweb.proactive.core.util.ProActiveInet;
-import org.objectweb.proactive.core.util.URIBuilder;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.I1;
@@ -70,9 +68,8 @@ public class Test extends ComponentTest {
                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE) });
         componentA = componentFactory.newFcInstance(typeA, new ControllerDescription("component-a",
             Constants.PRIMITIVE), new ContentDescription(A.class.getName()));
-        Fractive.registerByName(componentA, "componentA");
-        String url = URIBuilder.buildURIFromProperties(ProActiveInet.getInstance().getHostname(),
-                "componentA").toString();
+        String url = Fractive.registerByName(componentA, "componentA");
+
         Component retreived = Fractive.lookup(url);
         Assert.assertEquals(componentA, retreived);
     }
