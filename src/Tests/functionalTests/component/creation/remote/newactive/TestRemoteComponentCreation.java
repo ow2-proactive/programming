@@ -88,7 +88,7 @@ public class TestRemoteComponentCreation extends ComponentTestDefaultNodes {
         String nodeUrl = ref.getNodeUrl();
 
         Assert.assertEquals(name, "toto");
-        Assert.assertTrue(nodeUrl.indexOf(remoteHost) != -1);
+        Assert.assertEquals(remoteNode.getNodeInformation().getURL(), nodeUrl);
     }
 
     @org.junit.Test
