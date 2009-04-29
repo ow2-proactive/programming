@@ -65,10 +65,6 @@
 	<property name="manifest.example.management.dir" value="${src.examples.dir}/org/objectweb/proactive/examples/jmx/remote/management/osgi/Manifest/"/>
 	<property name="example.management.classes.dir" value="${classes.dir}/Examples/org/objectweb/proactive/examples/jmx/remote/management/"/>	
 	
-	<!-- IC2d properties -->
-	<property name="ic2d-plugin.dir" value="${base.dir}/ic2d-plugins-src" />
-	<property name="plugin.lib" value="org.objectweb.proactive.ic2d.lib" />
-	
 	<property name="stubgenerator.class" value="org.objectweb.proactive.ext.util.StubGenerator" />
 	
 	<!-- junit properties -->

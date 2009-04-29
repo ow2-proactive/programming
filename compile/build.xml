@@ -115,8 +115,6 @@
 	<target name="tests" depends="compile.tests" />
 	<target name="proActiveJar" depends="deploy" description="Deprecated, see deploy" />
 	<!-- <target name="all" depends="compile,docs" description="build the class files and the documentation" />-->
-	<target name="ic2dLibClean" depends="ic2d.libClean" description="Deprecated, see ic2d.libClean" />
-	<target name="ic2dLib" depends="ic2d.libCopy" description="Deprecated, see ic2d.libCopy" />
 
 
 
@@ -829,36 +827,11 @@
 	</target>
 
 
-
-
-
-	<!-- ************
-		IC2D		
-	-->
-
-
-	<target name="ic2d.libCopy" depends="deploy" description="Copy all needed libraries to IC2D">
-		<copy todir="${ic2d-plugin.dir}/${plugin.lib}/lib" includeemptydirs="no">
-			<fileset dir="${lib.dir}" />
-		</copy>
-		<copy file="${deploy.lib.dir}/ProActive.jar" todir="${ic2d-plugin.dir}/${plugin.lib}" />
-	</target>
-
-
-	<target name="ic2d.libClean" description="Clean all needed libraries to IC2D">
-		<delete dir="${ic2d-plugin.dir}/${plugin.lib}/lib" />
-		<delete file="${ic2d-plugin.dir}/${plugin.lib}/ProActive.jar" />
-	</target>
-
-
-
-
-
 	<!-- ************
 		Misc		
 	-->
 
-	<target name="clean" description="Remove all generated files" depends="ic2d.libClean">
+	<target name="clean" description="Remove all generated files">
 		<delete dir="${classes.dir}" />
 		<delete dir="${release.dir}" />
 		<delete dir="${deploy.dir}" />
