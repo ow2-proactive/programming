@@ -19,7 +19,6 @@
 	<property file="${user.home}/.proactive/build.properties" />
 	<import file="common.xml" />
 	
-	<import file="../doc/ic2d/build.xml"  optional="true" />
 	<import file="../doc/pa/build.xml"  optional="true" />
 	
 	<!-- ************
@@ -796,7 +795,6 @@
 		<eclipse_format_m>
 			<sourcefileset>
 				<fileset dir="${src.dir}" includes="**/*.java" />
-				<fileset dir="${ic2d-plugin.dir}" includes="**/*.java" />
 			</sourcefileset>
 		</eclipse_format_m>
 	</target>
@@ -808,9 +806,6 @@
 			<fileset dir="${src.dir}">
 				<include name="**/*.java" />
 			</fileset>
-			<!-- 
-				<fileset dir="${ic2d-plugin.dir}" includes="**/*.java" />
-				-->
 		</copy>
 
 		<eclipse_format_m>
