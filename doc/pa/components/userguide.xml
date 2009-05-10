@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
 	xml:id="userguide">
-<info>
-<title xml:id="Userguide_53">User guide</title>
+	<info>
+		<title xml:id="Userguide_53">User guide</title>
 	</info>
 
 	<para>
@@ -10,7 +10,9 @@
 		of the GCM Implementation.
 	</para>
 
-	<section xml:id="ArchitectureDescriptionLanguage_53"><info><title>Architecture Description Language</title>
+	<section xml:id="ArchitectureDescriptionLanguage_53">
+		<info>
+			<title>Architecture Description Language</title>
 		</info>
 
 		<indexterm significance="preferred">
@@ -94,7 +96,9 @@
 			</literal>
 			.
 		</para>
-		<section xml:id="Overview_500"><info><title>Overview</title>
+		<section xml:id="Overview_500">
+			<info>
+				<title>Overview</title>
 			</info>
 
 			<para>
@@ -140,13 +144,13 @@
 					</listitem>
 					<listitem>
 						<para>
-							2-3: The syntax of the document is validated
+							2: The syntax of the document is validated
 							against a DTD retrieved from the classpath.
 						</para>
 					</listitem>
 					<listitem>
 						<para>
-							5: The
+							4: The
 							<emphasis role="bold">definition</emphasis>
 							element has a name (which must be the same
 							name that the file's) and inheritance is
@@ -155,7 +159,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							6: The
+							5: The
 							<emphasis role="bold">interface</emphasis>
 							element allows to specify interfaces of the
 							current enclosing component.
@@ -163,7 +167,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							9-21: Nesting is allowed for composite
+							7-16: Nesting is allowed for composite
 							components and is done by adding other
 							<emphasis role="bold">component</emphasis>
 							elements. Components can be specified and
@@ -174,7 +178,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							14: Primitive components specify the
+							10: Primitive components specify the
 							<emphasis role="bold">content</emphasis>
 							element, which indicates the implementation
 							class containing the business logic for this
@@ -183,7 +187,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							15-19: Components can specify a
+							11-14: Components can specify a
 							<emphasis role="bold">attributes</emphasis>
 							element, which allows to initialize
 							attributes of a component.
@@ -195,7 +199,7 @@
 							<secondary>adl</secondary>
 						</indexterm>
 						<para>
-							23-24: The
+							18-19: The
 							<emphasis role="bold">binding</emphasis>
 							element specifies bindings between
 							interfaces of components and specifying
@@ -205,7 +209,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							26: The
+							21: The
 							<emphasis role="bold">controller</emphasis>
 							elements can have the following 'desc'
 							values: 'composite' or 'primitive'.
@@ -213,7 +217,7 @@
 					</listitem>
 					<listitem>
 						<para>
-							28: The
+							23: The
 							<emphasis role="bold">
 								virtual-node
 							</emphasis>
