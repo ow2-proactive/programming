@@ -60,15 +60,6 @@ public class TestRemoteGathercast extends ComponentTest {
     private ProActiveDescriptor oldDeploymentDescriptor = null;
 
     @org.junit.Test
-    public void testRemoteGathercastPADeployement() throws Exception {
-        oldDeploymentDescriptor = PADeployment.getProactiveDescriptor(TestRemoteGathercast.class.getResource(
-                "/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
-                (VariableContractImpl) super.vContract.clone());
-
-        useRemoteGathercastItf(oldDeploymentDescriptor);
-    }
-
-    @org.junit.Test
     public void testRemoteGathercastGCMDeployement() throws Exception {
 
         URL descriptorPath = TestRemoteGathercast.class
@@ -87,6 +78,15 @@ public class TestRemoteGathercast extends ComponentTest {
         newDeploymentDescriptor.startDeployment();
 
         useRemoteGathercastItf(newDeploymentDescriptor);
+    }
+
+    @org.junit.Test
+    public void testRemoteGathercastPADeployement() throws Exception {
+        oldDeploymentDescriptor = PADeployment.getProactiveDescriptor(TestRemoteGathercast.class.getResource(
+                "/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
+                (VariableContractImpl) super.vContract.clone());
+
+        useRemoteGathercastItf(oldDeploymentDescriptor);
     }
 
     private void useRemoteGathercastItf(Object deploymentDesc) throws Exception {

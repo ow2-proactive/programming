@@ -211,6 +211,28 @@ public class Utils {
         if (Utils.isRepresentativeClassName(classname)) {
             // try to generate a representative
             //            logger.info("Trying to generate representative class : " + classname);
+
+            if (classname.contains(GATHERCAST_ITF_PROXY_DEFAULT_SUFFIX) &&
+                classname.endsWith(REPRESENTATIVE_DEFAULT_SUFFIX)) {
+                try {
+                    //          try to fetch the class from the default class loader
+                    Thread.currentThread().getContextClassLoader().loadClass(
+                            Utils.getInterfaceSignatureFromRepresentativeClassName(classname));
+                } catch (ClassNotFoundException cnfe) {
+                    byte[] bytecodeG = GatherInterfaceGenerator.generateInterfaceByteCode(Utils
+                            .getInterfaceSignatureFromRepresentativeClassName(classname));
+
+                    try {
+                        // convert the bytes into a Class<?>
+                        Utils.defineClass(Utils.getInterfaceSignatureFromRepresentativeClassName(classname),
+                                bytecodeG);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }
+
             bytecode = RepresentativeInterfaceClassGenerator.generateInterfaceByteCode(classname, null);
 
             if (bytecode != null) {
