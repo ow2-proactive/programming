@@ -686,9 +686,7 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
 
         InterfaceType[] itfTypes = ((ComponentType) ((ProActiveComponentImpl) getFcItfOwner()).getNFType())
                 .getFcInterfaceTypes();
-        ProActiveInterfaceType paItfT;
         for (InterfaceType itfT : itfTypes) {
-            paItfT = (ProActiveInterfaceType) itfT;
             if (!itfT.isFcOptionalItf()) {//Are all mandatory interfaces bound??
                 try {
                     ProActiveInterface paItf = (ProActiveInterface) getFcItfOwner().getFcInterface(
