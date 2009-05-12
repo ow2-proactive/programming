@@ -40,7 +40,6 @@ import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.util.Fractal;
-import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.component.adl.Registry;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.util.OperatingSystem;
@@ -54,20 +53,20 @@ import functionalTests.GCMFunctionalTest;
 import functionalTests.GCMFunctionalTestDefaultNodes;
 
 
-public class TestRemoteGathercast extends ComponentTest {
+public class TestGather_GCMdep extends ComponentTest {
 
-    private GCMApplication newDeploymentDescriptor = null;
-    private ProActiveDescriptor oldDeploymentDescriptor = null;
+    protected GCMApplication newDeploymentDescriptor = null;
+    protected ProActiveDescriptor oldDeploymentDescriptor = null;
 
     @org.junit.Test
-    public void testRemoteGathercastGCMDeployement() throws Exception {
+    public void testRemoteGathercast() throws Exception {
 
-        URL descriptorPath = TestRemoteGathercast.class
+        URL descriptorPath = TestGather_GCMdep.class
                 .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
 
         vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
                 .name(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(2)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
@@ -80,16 +79,7 @@ public class TestRemoteGathercast extends ComponentTest {
         useRemoteGathercastItf(newDeploymentDescriptor);
     }
 
-    @org.junit.Test
-    public void testRemoteGathercastPADeployement() throws Exception {
-        oldDeploymentDescriptor = PADeployment.getProactiveDescriptor(TestRemoteGathercast.class.getResource(
-                "/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
-                (VariableContractImpl) super.vContract.clone());
-
-        useRemoteGathercastItf(oldDeploymentDescriptor);
-    }
-
-    private void useRemoteGathercastItf(Object deploymentDesc) throws Exception {
+    protected void useRemoteGathercastItf(Object deploymentDesc) throws Exception {
         Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
         Map<String, Object> context = new HashMap<String, Object>();
 
