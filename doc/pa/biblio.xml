@@ -94,7 +94,7 @@
   </authorgroup>
       <citetitle>Communicating mobile active objects in java</citetitle>
       <pagenums>633--643</pagenums>
-      <bibliosource class="uri">http://www-sop.inria.fr/oasis/Julien.Vayssiere/publications/18230633.pdf</bibliosource>
+      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/Julien.Vayssiere/publications/18230633.pdf">http://www-sop.inria.fr/oasis/Julien.Vayssiere/publications/18230633.pdf</link></bibliosource>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup>
@@ -118,7 +118,7 @@
   </authorgroup>
       <citetitle>Interactive and descriptor-based deployment of object-oriented grid applications</citetitle>
       <pagenums>93--102</pagenums>
-      <bibliosource class="uri">http://www-sop.inria.fr/oasis/Julien.Vayssiere/publications/hpdc2002vayssiere.pdf</bibliosource>
+      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/Julien.Vayssiere/publications/hpdc2002vayssiere.pdf">http://www-sop.inria.fr/oasis/Julien.Vayssiere/publications/hpdc2002vayssiere.pdf</link></bibliosource>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup>
@@ -139,7 +139,7 @@
    <author><personname><firstname>Matthieu</firstname><surname>Morel</surname></personname></author>
   </authorgroup>
       <citetitle>From distributed objects to hierarchical grid components</citetitle>
-      <bibliosource class="uri">http://www-sop.inria.fr/oasis/ProActive/doc/HierarchicalGridComponents.pdf</bibliosource>
+      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/doc/HierarchicalGridComponents.pdf">http://www-sop.inria.fr/oasis/ProActive/doc/HierarchicalGridComponents.pdf</link></bibliosource>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup>
@@ -158,7 +158,7 @@
       <author><personname><firstname>Denis</firstname><surname>Caromel</surname></personname></author>
       <citetitle>Toward a method of object-oriented concurrent programming</citetitle>
       <pagenums>90--102</pagenums>
-      <bibliosource class="uri">citeseer.nj.nec.com/300829.html</bibliosource>
+      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://citeseer.ist.psu.edu/300829.html">http://citeseer.ist.psu.edu/300829.html</link></bibliosource>
     </biblioset>
     <biblioset role="journal">
       <citetitle>Communications of the ACM</citetitle>
@@ -189,7 +189,7 @@
   </authorgroup>
       <citetitle>Asynchronous and deterministic objects</citetitle>
       <pagenums>123--134</pagenums>
-      <bibliosource class="doi">http://doi.acm.org/10.1145/964001.964012</bibliosource>
+      <bibliosource class="doi"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://doi.acm.org/10.1145/964001.964012">http://doi.acm.org/10.1145/964001.964012</link></bibliosource>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup>
@@ -210,7 +210,7 @@
   </authorgroup>
       <citetitle>Towards seamless computing and metacomputing in java</citetitle>
       <pagenums>1043--1061</pagenums>
-      <bibliosource class="uri">http://proactive.inria.fr/doc/javallCPE.ps</bibliosource>
+      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/doc/javallCPE.ps">http://proactive.inria.fr/doc/javallCPE.ps</link></bibliosource>
     </biblioset>
     <biblioset role="proceedings">
       <confgroup>
@@ -232,7 +232,7 @@
    <author><personname><firstname>Henri E.</firstname><surname>Bal</surname></personname></author>
   </authorgroup>
       <citetitle>A High Performance Java Middleware with a Real Application</citetitle>
-      <bibliosource class="uri">http://proactive.inria.fr/doc/sc2004.pdf</bibliosource>
+      <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/doc/sc2004.pdf">http://proactive.inria.fr/doc/sc2004.pdf</link></bibliosource>
      </biblioset>
     <biblioset role="proceedings">
       <confgroup><conftitle>Proceedings of the Supercomputing conference</conftitle>
@@ -251,7 +251,7 @@
     <author><personname><firstname>L.</firstname><surname>Henrio</surname></personname></author>
    </authorgroup>
     <citetitle>A fault tolerance protocol for asp calculus : Design and proof</citetitle>
-    <bibliosource class="uri">http://www-sop.inria.fr/oasis/personnel/Christian.Delbe/publis/rr5246.pdf</bibliosource>
+    <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/personnel/Christian.Delbe/publis/rr5246.pdf">http://www-sop.inria.fr/oasis/personnel/Christian.Delbe/publis/rr5246.pdf</link></bibliosource>
     <bibliomisc role="type">Technical ReportRR-5246</bibliomisc>
     
     <orgname>INRIA</orgname>
@@ -270,7 +270,7 @@
     </authorgroup>
     <citetitle>A security architecture for computational grids</citetitle>
     <pagenums>83--92</pagenums>
-    <bibliosource class="uri">citeseer.ist.psu.edu/foster98security.html</bibliosource>
+    <bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://citeseer.ist.psu.edu/foster98security.html">http://citeseer.ist.psu.edu/foster98security.html</link></bibliosource>
    </biblioset>
    <biblioset role="proceedings">
     <confgroup>
@@ -363,7 +363,7 @@
 				Components for Grid Computing
 			</citetitle>
 		</biblioset>
-		<bibliosource class="uri">http://www-sop.inria.fr/oasis/personnel/Matthieu.Morel/publis/phd_thesis_matthieu_morel.pdf</bibliosource>
+		<bibliosource class="uri"><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/personnel/Matthieu.Morel/publis/phd_thesis_matthieu_morel.pdf">http://www-sop.inria.fr/oasis/personnel/Matthieu.Morel/publis/phd_thesis_matthieu_morel.pdf</link></bibliosource>
     <bibliomisc role="type">PhD thesis</bibliomisc>
     
     <orgname>University of Nice Sophia-Antipolis</orgname>
