@@ -12,49 +12,23 @@
 
 	<para>
 		Grids gather large amounts of heterogeneous resources across geographically distributed
-		sites for use by virtual organizations. Resources are usually organized in groups of 
+		sites so as to be used by virtual organizations. Resources are usually organized in groups of
 		desktop machines and/or clusters, which are managed by different administrative domains 
-		(labs, universities, companies, etc.). The large amount of heterogeneous resources complicate the deployment task in terms of 
-		configuration and connection to remote resources. Deployment sites targeted may be specified 
+		(labs, universities, companies, etc.). The large amounts of heterogeneous resources complicate the deployment task in terms of
+		configuration and connection to remote resources. Targeted deployment sites may be specified
 		beforehand, or automatically discovered at runtime. Each domain may have its own management and 
-		security policies. Grid applications aim to use a large number of resources, which are geographically 
+		security policies. Grid applications aim at using a large number of resources, which are geographically
 		distributed. Hence, Grid frameworks have to help applications with scalability issues, such as providing 
 		parallelism capabilities for a large number of resources. 
 	</para>
 	<para>
 		The large number of resources distributed
 		on different domains implies a high probability of faults, such as hardware failures, network downtime, 
-		or maintenance. Since a grid gathers geographically disperse and administratively independent computational sites into a large federated 
+		or maintenance. Since a grid gathers geographically dispersed and administratively independent computational sites into a large federated
 		computing system with common interfaces, new programming models have to be defined to abstract away these complexities 
 		from programmers.
 	</para>
-	<!--
-	<sect1>
-<title xml:id="ProActiveParallelSuite_20">ProActive Parallel Suite</title>
-		<sect2>
-<title xml:id="Introduction_20">Introduction</title>
-			<para>//TODO</para>
-		</sect2>
-		<sect2>
-<title xml:id="IC2DEclipseIDE_20">IC2D Eclipse IDE</title>
-			<para>//TODO</para>
-		</sect2>
-		<sect2>
-<title xml:id="ProgrammingandComposing_20">Programming and Composing</title>
-			<para>//TODO</para>
-		</sect2>
-		<sect2>
-<title xml:id="ActivatingTechnicalServices_20">Activating Technical Services</title>
-			<para>//TODO</para>		
-		</sect2>
-		<sect2>
-<title xml:id="DeploymentAndVirtualization_20">Deployment And Virtualization</title>
-			<para>//TODO</para>
-		</sect2>
-		
-	</sect1>
-	
-		-->
+
    <section xml:id="ProActiveProgrammingFrameworks_20"><info><title>ProActive Programming Frameworks</title></info>
   	
 		<section xml:id="Introduction_20"><info><title>Introduction</title></info>
@@ -70,7 +44,7 @@
   	programming and offers distributed and asynchronous communications, mobility, and a deployment framework. 
   	With a small set of primitives, ProActive provides an API allowing the development of parallel 
   	applications, which may be deployed on distributed systems and on Grids. ProActive does not
-  	require any modifications to Java or to the Java Virtual Machine (JVM) therefore allowing the deployment
+	require any modifications to Java or to the Java Virtual Machine (JVM), therefore allowing the deployment
   	of applications using the ProActive API on any operating system that provides a compatible JVM. 
   	</para>
   
@@ -110,9 +84,9 @@
 
   	<section xml:id="ActiveObjectsModel_20"><info><title>Active Objects Model</title></info>
   		
-  		<para>ProActive is based on the concept of an active object, which is an entity
+		<para>ProActive is based on the concept of active object, which is an entity
   		with its own configurable activity.
-		A distributed or concurrent application built using ProActive is composed of a number
+		A distributed or concurrent application using ProActive is composed of a number
 		of entities called active objects. Each active object has one distinguished 
 		element, the root, which is the only entry point to the active object. Each active object
 		has its own thread of control and is granted the ability to decide in which order to
@@ -125,14 +99,14 @@
 		</para>
 		 <para>
 		 The ProActive  solution relies on  asynchronous method
-		  calls mastering both complexity and efficiency and proposes advanced features such as groups,
+		  calls mastering both complexity and efficiency. It also proposes advanced features such as groups,
 		  mobility, and components. In the framework of formal calculus, Asynchronous Sequential Processes
 		  (ASP), confluence, and determinism have been
 		  proven for this programming model: <xref endterm="TDO-book.abbrev" linkend="TDO-book"/> and <xref endterm="CHSPOPL04.abbrev" linkend="CHSPOPL04"/>.</para>
 	 </section>
 	<section xml:id="ImplementationLanguage_20"><info><title>Implementation Language</title></info> 
 		<para>
-			Grids gather large amount of heterogeneous resources, different processor architectures 
+			Grids gather large amounts of heterogeneous resources, different processor architectures
 			and operating systems. In this context, using a language which relies on 
 			a virtual machine allows maximum portability. ProActive is developed in Java, a 
 			cross-platform language and the compiled application may run on any operating system 
@@ -143,11 +117,11 @@
 		</para>
 	</section>
 	
-	<section xml:id="Communicationthroughtypedasychronousmessages_20"><info><title>Communication through typed asychronous messages</title></info> 
+	<section xml:id="Communicationthroughtypedasychronousmessages_20"><info><title>Communication through typed asynchronous messages</title></info>
 		<para>
 			In ProActive, the distribution is transparent: invoking methods on remote objects
-			does not require the developer to design remote objects with an explicit remoting mechanism.
-			Therefore, the developer can concentrate on the business logic as the distribution is
+			does not require the developer to design remote objects with an explicit remote mechanism.
+			Therefore, the developer can focus on the business logic since the distribution is
 			automatically handled and transparent. Moreover, the ProActive library preserves polymorphism
 			on remote objects (through the reference stub, which is a subclass of the remote root object).
 		</para>
@@ -164,46 +138,56 @@
 		<para>
 			<itemizedlist>
 				<listitem>
-				    <para>
-					Synchronous invocation - the method returns a non reifiable object: primitive type or final class:
-                    </para>
+						<para>Synchronous invocation:</para>
+					<itemizedlist>
+						<listitem>
+							<para>The method returns a non reifiable object (primitive type or final class):</para>
+							<programlisting language="java"> boolean foo() </programlisting>
+						</listitem>
                     
-                    <programlisting language="java"> boolean foo() </programlisting>
-         			<para>
-        			the method declares a thrown exception: 
-        			</para>
-               <programlisting language="java">public void bar() throws AnException </programlisting>
-					<para>
-					  In this case, the caller thread is blocked until the reified invocation
-				      is effectively processed and the eventual result (or exception) is returned. 
-				      It is fundamental to keep this case in mind, because some APIs define methods 
-				      which throw exceptions or return non-reifiable results. 
-				      </para>
-				</listitem>
-				<listitem>
-					<para>
-						One-way asynchronous invocation - the method does not throw any exception
-						and does not return any result: 
+						<listitem>
+							<para>The method declares a thrown exception:</para>
+							<programlisting language="java">public void bar() throws AnException </programlisting>
+							<para>
+								In this case, the caller thread is blocked until the reified invocation
+								is effectively processed and the eventual result (or exception) is returned.
+								It is fundamental to keep this case in mind, because some APIs define methods
+								which throw exceptions or return non-reifiable results.
 							</para>
-							<programlisting language="java">public void gee()</programlisting>
-						 <para>
-						 The invocation is asynchronous and the process flow of the caller 
-						 continues once the reified invocation has been received by the active 
-						 object (in other words, once the rendezvous is finished).
-					</para>
+						</listitem>
+					</itemizedlist>
 				</listitem>
 				<listitem>
-					<para>
-						Asynchronous invocation with future result -  the return type is a reifiable type,
-						and the method does not throw any exception:
-						</para>	
+					<para>One-way asynchronous invocation:</para>
+					<itemizedlist>
+						<listitem>
+							<para>The method does not throw any exception
+								and does not return any result:</para>
+							<programlisting language="java">public void gee()</programlisting>
+							<para>
+								The invocation is asynchronous and the process flow of the caller
+								continues once the reified invocation has been received by the active
+								object (in other words, once the rendezvous is finished).
+							</para>
+						</listitem>
+					</itemizedlist>
+				</listitem>
+				<listitem>
+					<para>Asynchronous invocation with future result:</para>
+					<itemizedlist>
+						<listitem>
+							<para>the return type is a reifiable type,
+								and the method does not throw any exception:
+							</para>
 							<programlisting language="java">public MyReifiableType baz() </programlisting>
-						<para>
-						In this case, a future object is returned and the caller continues its execution 
-						flow. The active object will process the reified invocation according to its serving 
-						policy, and the future object will then be updated with the value of the result of the 
-						method execution.
-					</para>
+							<para>
+								In this case, a future object is returned and the caller continues its execution
+								flow. The active object will process the reified invocation according to its serving
+								policy, and the future object will then be updated with the value of the result of the
+								method execution.
+							</para>
+						</listitem>
+					</itemizedlist>
 				</listitem>
 			</itemizedlist>
 			
@@ -222,27 +206,30 @@
 	ProActive programming also features a general purpose component
 	framework allowing software architects to design their parallel applications
 	using a hierarchical component framework: the Grid Component Model
-	(GCM).
+	(GCM).</para>
+	<para>
 	The GCM is a high level programming framework which relies on
-	Active Object and as such inherits usual ProActive properties
-	asynchronous call, automatic continuation, deployment interoperability
-	... The GCM extends the Fractal
+	Active Object and therefore inherits usual ProActive properties like
+	asynchronous call, automatic continuation, deployment interoperability...
+	</para>
+	<para>
+	The GCM extends the Fractal
 	component model to cover
 	distribution and parallel application's needs.
-	Using the GCM you can
+	Using the GCM, you can
 	easily express at design time the dependencies
 	between software blocks
 	composing your application. In addition, GCM
-	components provide non
-	functional features allowing developers to
+	components provide non-functional features allowing developers to
 	benefits extra capabilities such as monitoring, autonomic management...
-
-	The GCM targets all software
-	architects in need of a comprehensive framework to express at design
+	</para>
+	<para>
+	The GCM provides software
+	architects with a comprehensive framework to express at design
 	time the parallelism and the distribution of an application.
-	Therefore, the architecture of the system itself captures the
+	Thus, the architecture of the system itself captures the
 	parallel/distributed aspects, acting as a powerful specification and
-	documentation. Further, developers do not need to spend extensive time
+	documentation. Furthermore, developers do not need to spend extensive time
 	to learn distribute programming or implement collective communication,
 	but rather concentrate on the business code and leverage the GCM
 	framework.
@@ -277,13 +264,13 @@
 		requiring changes to the JVM or Java.  
 		</para>
 		<para>
-		 The programming model consists of the active objects model which offer asynchronous communication,
+		 The programming model consists of the active objects model which offers asynchronous communication,
 		typed group communication, and the object-oriented SPMD programming paradigm. In addition to the
 		standard object oriented programming paradigm, ProActive also proposes a component-based programming
 		paradigm, by providing an implementation of the Fractal component model geared at Grid computing. 
 		</para>
 				
-		<para>The deployment layer includes a deployment framework; it is detailed in <xref linkend="ProActiveDeployment"/>, 
+		<para>The deployment layer includes a deployment framework (detailed in <xref linkend="ProActiveDeployment"/>)
 		and it allows the
 		 creation of remote active objects on various infrastructures. A scheduler is also proposed to manage the deployment
 		 of jobs. The load-balancing framework uses the migration capabilities to optimize the placement of the
@@ -298,10 +285,10 @@
 		
 		</para>
 		<para>
-		 In the communication layer several protocols are provided for the communication between active objects: 
+		 In the communication layer, several protocols are provided for the communication between active objects:
 			Java RMI as the default protocol, SSH, HTTP, tunneled RMI. It is also possible to export active objects as Web 
 			Services, which can then be accessed using the standard SOAP protocol. A file transfer mechanism is also 
-			implemented; it allows the transfer of files between active objects, for instance to send large data input files 
+			implemented. It allows the transfer of files between active objects, for instance to send large data input files
 			or to retrieve results files.</para>
 		</section>
 </section>
