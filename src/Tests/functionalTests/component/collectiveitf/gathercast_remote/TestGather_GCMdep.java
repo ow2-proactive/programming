@@ -66,7 +66,7 @@ public class TestGather_GCMdep extends ComponentTest {
 
         vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
                 .name(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(2)
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
