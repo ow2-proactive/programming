@@ -90,7 +90,16 @@
 	<property name="docs.javadoc.window.title" 	value="${doc.name}"/>
 	<property name="javadoc.tmp.dir"  		value="../doc/tmp" />
 
-   <!-- Directory of xml configuration files for highlighting -->
+	<!-- ================================================================ -->
+	<!--                   checkstyle properties                          -->
+	<!--  =============================================================== -->
+
+	<property name="checkstyle.path"		value="${docs.toolchain.dir}/checkstyle/" />
+	<property name="checkstyle.suppressions.file"	value="${checkstyle.path}/suppressions.xml"/>
+	<property name="checkstyle.header.file" 	value="${checkstyle.path}/proactive.header"/>
+	<property name="checkstyle.importcontrol.file" 	value="${checkstyle.path}/import-control.xml"/>
+	<property name="checkstyle.config" 		value="${checkstyle.path}/proactive_checks.xml"/>
+  <!-- Directory of xml configuration files for highlighting -->
    <property name="docs.highlighting.dir" value="${docs.toolchain.dir}/highlighting"/>
 
 </project>

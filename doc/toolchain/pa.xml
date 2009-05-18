@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-	<!-- properties needed to customize the manual generation -->
-	<!-- where to include the subant targets from-->
+
 	<property name="pa.file.set" value="../doc/toolchain" />
-	<!-- the folder containing the manual xml files-->
-	<property name="pa.src.dir" value="../doc/src" />
-	<!-- do manual name -->
+	<property name="pa.src.dir" value="../doc/pa" />
 	<property name="pa.doc.name" value="ProActive" />
 	<property name="docs.tmp.dir"	value="${basedir}/../doc/tmp" />
 
@@ -107,7 +104,6 @@
 
 
 	<target name="doc.ProActive.javadoc.complete" depends="compile.util, deploy" description="Generate the ProActive Programming complete javadoc ">
-	  <mkdir dir="${docs.tmp.dir}" />
 	  <javadoc
 	      destdir="../doc/built/ProActive/api_complete"
 	      author="true"
@@ -249,5 +245,15 @@
             </group>
 
         </javadoc>
+	<delete dir="${docs.tmp.dir}" />
+    </target>
+
+    <target name="doc.ProActive.checkstyle"
+        description="Generates a report of code convention violations.">
+	<subant target="javadoc.checkstyle" inheritall="true">
+		<property name="doc.name"               value="${pa.doc.name}" />
+		<property name="checkstyle.src.set" value="${src.dir}" />
+		<fileset dir="${pa.file.set}" includes="doc.xml"/>
+	</subant>
     </target>
 </project>
