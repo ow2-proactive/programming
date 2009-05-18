@@ -136,8 +136,16 @@ public class Utils {
         return result;
     }
 
+    /**
+     * Check whether a component interface name match a controller interface. According to the 
+     * Fractal specification a controller interface name is either "component" or ends with
+     * "-component". 
+     * 
+     * @param itfName an interface name
+     * @return true if it's a controller interface name
+     */
     public static boolean isControllerInterfaceName(String itfName) {
         // according to Fractal spec v2.0 , section 4.1
-        return ((itfName != null) && (itfName.endsWith("-controller") || itfName.equals("component")));
+        return ((itfName != null) && (itfName.endsWith("-controller") || itfName.equals(Constants.COMPONENT)));
     }
 }

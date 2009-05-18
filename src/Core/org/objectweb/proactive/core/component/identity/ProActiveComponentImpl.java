@@ -531,7 +531,7 @@ public class ProActiveComponentImpl implements ProActiveComponent, Serializable 
             }
             return (controlItfs.get(interfaceName));
         }
-        if (interfaceName.equals("component")) {
+        if (interfaceName.equals(Constants.COMPONENT)) {
             return this;
         }
         if (serverItfs.containsKey(interfaceName)) {

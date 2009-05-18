@@ -389,7 +389,7 @@ public class ProActiveComponentRepresentativeImpl implements ProActiveComponentR
         if (fcInterfaceReferences.containsKey(interfaceName)) {
             return fcInterfaceReferences.get(interfaceName);
         } else {
-            if (interfaceName.equals("component")) {
+            if (interfaceName.equals(Constants.COMPONENT)) {
                 return this;
             }
 
