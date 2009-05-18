@@ -3,7 +3,7 @@
 	xsi:schemaLocation="urn:gcm:deployment:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd	">
 
 	<environment>
-		<javaPropertyVariable name="user.dir" />
+		<javaPropertyVariable name="user.home" />
         <javaPropertyVariable name="os" />
 	</environment>
 
@@ -15,7 +15,7 @@
 
 		<hosts>
 			<host id="hLocalhost" os="${os}" hostCapacity="${hostCapacity}" vmCapacity="${vmCapacity}">
-				<homeDirectory base="root" relpath="${user.dir}" />
+				<homeDirectory base="root" relpath="${user.home}" />
 			</host>
 
 		</hosts>

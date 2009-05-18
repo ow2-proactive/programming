@@ -7,7 +7,7 @@
 		<!-- CHANGE THIS -->
 		<descriptorVariable name="HOST" value="localhost" />
 		<javaPropertyDescriptorDefault name="os" value="windows" />
-		<javaPropertyVariable name="user.dir" />
+		<javaPropertyVariable name="user.home" />
 	</environment>
 
 	<resources>
@@ -20,7 +20,7 @@
 
 		<hosts>
 			<host id="host" os="${os}" hostCapacity="1" vmCapacity="1">
-				<homeDirectory base="root" relpath="${user.dir}" />
+				<homeDirectory base="root" relpath="${user.home}" />
 			</host>
 
 		</hosts>
