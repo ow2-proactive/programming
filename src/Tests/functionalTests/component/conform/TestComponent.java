@@ -37,6 +37,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;
+import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
@@ -98,6 +99,11 @@ public class TestComponent extends Conformtest {
         assertEquals("1", ca.getX9());
         ca.setWriteOnlyX11(true);
         assertEquals(true, i.n(false, null));
+    }
+
+    @Test(expected = InstantiationException.class)
+    public void testParametricPrimitiveWithBadContentClass() throws Exception {
+        Component c = gf.newFcInstance(t, parametricPrimitive, TestComponent.class.getName());
     }
 
     @Test
