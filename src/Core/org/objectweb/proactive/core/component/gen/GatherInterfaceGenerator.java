@@ -48,6 +48,13 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
+/**
+ * Gathercast proxy interface generator. There is a special case for gathercast interface before
+ * generating a representative we have to generate its proxy interface.
+ * 
+ * @author The ProActive Team
+ *
+ */
 public class GatherInterfaceGenerator {
     protected static final transient ClassPool pool = ClassPool.getDefault();
     private static Logger gatherLogger = ProActiveLogger.getLogger(Loggers.COMPONENTS_GATHERCAST);
@@ -74,14 +81,19 @@ public class GatherInterfaceGenerator {
         return generated;
     }
 
-    static byte[] generateInterfaceByteCode(String gatherProxyItfName) {
+    public synchronized static byte[] generateInterfaceByteCode(String gatherProxyItfName) {
         if (ClassDataCache.instance().getClassData(gatherProxyItfName) != null) {
             return ClassDataCache.instance().getClassData(gatherProxyItfName);
         }
         try {
             Class<?> serverItfClass = Class.forName(Utils
                     .getInterfaceSignatureFromGathercastProxyClassName(gatherProxyItfName));
-            CtClass repGatherItfClass = pool.makeInterface(gatherProxyItfName);
+            CtClass repGatherItfClass = null;
+            try {
+                repGatherItfClass = pool.makeInterface(gatherProxyItfName);
+            } catch (RuntimeException e) {
+                return ClassDataCache.instance().getClassData(gatherProxyItfName);
+            }
             Method[] serverItfMethods = serverItfClass.getMethods();
 
             //        CtMethod[] resultingServerItfMethods = new CtMethod[serverItfMethods.length];
@@ -163,7 +175,6 @@ public class GatherInterfaceGenerator {
             //            System.out.println("added " + gatherProxyItfName + " to cache");
             //            System.out.println("cache is now " + ClassDataCache.instance().toString());
 
-            //
             return bytecode;
         } catch (Exception e) {
             e.printStackTrace();
