@@ -31,48 +31,18 @@
  */
 package org.objectweb.proactive.core.component;
 
-import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
-import org.objectweb.fractal.api.Type;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.mop.StubObject;
 
 
 /**
- * Abstract implementation of the {@link Interface} interface of the Fractal api.
- * As functional interfaces are specified for each component, they are generated at
- * instantiation time (bytecode generation), by subclassing this class.
+ * Extension of the Fractal {@link Interface} to deal with ProActive concerns.
  *
  * @author The ProActive Team
- *
  */
 @PublicAPI
 public interface ProActiveInterface extends Interface, StubObject {
-
-    /**
-     * Sets the isInternal.
-     * @param isInternal The isInternal to set
-     */
-    public abstract void setFcIsInternal(boolean isInternal);
-
-    /**
-     * Sets the name.
-     * @param name The name to set
-     */
-    public abstract void setFcItfName(String name);
-
-    /**
-     * Sets the owner.
-     * @param owner The owner to set
-     */
-    public abstract void setFcItfOwner(Component owner);
-
-    /**
-     * Sets the type.
-     * 
-     * @param type The type to set
-     */
-    public abstract void setFcType(Type type);
 
     /**
      * Return the object implementing this interface.
@@ -90,8 +60,4 @@ public interface ProActiveInterface extends Interface, StubObject {
      * @see #getFcItfImpl getFcItfImpl
      */
     public abstract void setFcItfImpl(final Object impl);
-
-    //    this method comes from the merge with the java5 branch but does not seem useful,
-    //    uncommenting this method will break some components tests, not sure what to do with
-    //    public abstract boolean isFcCollective();
 }

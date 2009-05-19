@@ -41,7 +41,7 @@ import org.objectweb.proactive.core.component.representative.ProActiveComponentR
 
 
 /**
- * Abstract implementation of the Interface interface of the Fractal api
+ * Abstract implementation of the {@link Interface} interface of the Fractal API.
  * <p>
  * As functional interfaces are specified for each component, they are generated
  * at instantiation time (bytecode generation), by subclassing this class.
@@ -89,33 +89,36 @@ public abstract class ProActiveInterfaceImpl implements ProActiveInterface, Seri
         return isInternal;
     }
 
-    /*
-     *
-     * @see org.objectweb.proactive.core.component.ProActiveInterface#setFcIsInternal(boolean)
+    // The four following setters are only used once after the interface generation
+
+    /**
+     * Sets the isInternal.
+     * @param isInternal The isInternal to set
      */
     public void setFcIsInternal(boolean isInternal) {
         this.isInternal = isInternal;
     }
 
-    /*
-     *
-     * @see org.objectweb.proactive.core.component.ProActiveInterface#setFcItfName(java.lang.String)
+    /**
+     * Sets the name.
+     * @param name The name to set
      */
     public void setFcItfName(String name) {
         this.name = name;
     }
 
-    /*
-     *
-     * @see org.objectweb.proactive.core.component.ProActiveInterface#setFcItfOwner(org.objectweb.fractal.api.Component)
+    /**
+     * Sets the owner.
+     * @param owner The owner to set
      */
     public void setFcItfOwner(Component owner) {
         this.owner = owner;
     }
 
-    /*
-     *
-     * @see org.objectweb.proactive.core.component.ProActiveInterface#setFcType(org.objectweb.fractal.api.Type)
+    /**
+     * Sets the type.
+     * 
+     * @param type The type to set
      */
     public void setFcType(Type type) {
         this.type = type;
