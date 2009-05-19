@@ -46,14 +46,14 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public interface ProActiveBindingController extends BindingController {
 
     /**
-     * Check if the current component is bound on a client interface
+     * Check if the current component's client interfaces are bounded.
      *
      * @return true if this component is bound on a client interface
      */
     public Boolean isBound();
 
     /**
-     * Check if the current component is bound to the given component
+     * Check if the current component is bound to an interface belonged to the given component.
      *
      * @param component A component
      * @return true if the current component is bound on this other component

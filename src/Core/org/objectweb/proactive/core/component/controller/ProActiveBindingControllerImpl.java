@@ -457,29 +457,16 @@ public class ProActiveBindingControllerImpl extends AbstractProActiveController 
         // Thus we have to add the link to the new interface in this group
         // same for client interfaces of parallel components
         if (clientItfType.getFcItfName().equals(clientItfName)) {
-            //            if ((isParallel() && !clientItfType.isFcClientItf())) {
-            //                // collective binding, unnamed interface
-            //                // TODO provide a default name?
-            //                Group itf_group = ProActiveGroup.getGroup(clientItf.getFcItfImpl());
-            //                itf_group.add(serverItf);
-            //            } else {
             // single binding
             clientItf.setFcItfImpl(serverItf);
-            //            }
         } else {
             if (Utils.getItfType(clientItfName, owner).isFcCollectionItf()) {
                 clientItf.setFcItfImpl(serverItf);
             } else {
-                //            if ((isParallel() && !clientItfType.isFcClientItf())) {
-                //            		
-                //                Group itf_group = ProActiveGroup.getGroup(clientItf.getFcItfImpl());
-                //                itf_group.addNamedElement(clientItfName, serverItf);
-                //            } else {
                 throw new NoSuchInterfaceException("Cannot bind interface " + clientItfName +
                     " because it does not correspond to the specified type");
             }
         }
-        //        }
         addBinding(new Binding(clientItf, clientItfName, serverItf));
     }
 
