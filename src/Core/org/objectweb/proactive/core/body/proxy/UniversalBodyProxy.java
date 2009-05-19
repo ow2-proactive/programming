@@ -31,14 +31,12 @@
  */
 package org.objectweb.proactive.core.body.proxy;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.Vector;
-
-import javassist.scopedpool.ScopedClassPool;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Active;
@@ -46,21 +44,30 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.AbstractBody;
+import org.objectweb.proactive.core.body.ActiveBody;
+import org.objectweb.proactive.core.body.BodyImpl;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.MetaObjectFactory;
 import org.objectweb.proactive.core.body.SendingQueue;
 import org.objectweb.proactive.core.body.UniversalBody;
+import org.objectweb.proactive.core.body.exceptions.InactiveBodyException;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.future.FutureProxy;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.exceptions.ExceptionHandler;
 import org.objectweb.proactive.core.gc.GCTag;
 import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.mop.ConstructorCallImpl;
+import org.objectweb.proactive.core.mop.MOP;
+import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.mop.ObjectReferenceReplacer;
+import org.objectweb.proactive.core.mop.ObjectReplacer;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
@@ -209,6 +216,39 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         try {
             reifiedObjectConstructorCall.makeDeepCopyOfArguments();
 
+            // Modify result object
+            Object[] initialObject = null;
+            Object stubOnActiveObject = null;
+            Object[] modifiedObject = null;
+            Body body = PAActiveObject.getBodyOnThis();
+
+            ObjectReplacer objectReplacer = null;
+            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
+                body.getClass().isAssignableFrom(ActiveBody.class)) {
+
+                try {
+                    BodyImpl bodyImpl = (BodyImpl) body;
+                    stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass()
+                            .getName(), bodyImpl.getRemoteAdapter());
+                    initialObject = reifiedObjectConstructorCall.getEffectiveArguments();
+                    long begin = System.currentTimeMillis();
+
+                    objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(),
+                        stubOnActiveObject);
+                    modifiedObject = (Object[]) objectReplacer.replaceObject(initialObject);
+
+                    //                    System.out.println("UniversalBodyProxy.createLocalBody() replaceObject took " +
+                    //                        (System.currentTimeMillis() - begin));
+
+                    reifiedObjectConstructorCall.setEffectiveArguments(modifiedObject);
+                } catch (MOPException e) {
+                    throw new ProActiveRuntimeException("Cannot create Stub for this Body e=" + e);
+                } catch (InactiveBodyException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
             // The node is local, so is the proActiveRuntime
             // acessing it direclty avoids to get a copy of the body
             ProActiveRuntime part = ProActiveRuntimeImpl.getProActiveRuntime();
@@ -218,7 +258,22 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             // if (logger.isDebugEnabled()) {
             // logger.debug("LocalBodyProxy created using " + body + " from ConstructorCall");
             // }
-            return part.createBody(node.getNodeInformation().getName(), bodyConstructorCall, true);
+            UniversalBody result = part.createBody(node.getNodeInformation().getName(), bodyConstructorCall,
+                    true);
+
+            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
+                try {
+                    objectReplacer.restoreObject();
+                } catch (IllegalArgumentException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+            return result;
             // ---------------------added lines------------------------------
         } catch (ConstructorCallExecutionFailedException e) {
             throw new ProActiveException(e);
@@ -233,7 +288,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             throws ProActiveException {
         try {
             ProActiveRuntime part = node.getProActiveRuntime();
-
+            UniversalBody result = null;
             // if (logger.isDebugEnabled()) {
             // //logger.debug("UniversalBodyProxy.createRemoteBody bodyClass="+bodyClass+"
             // node="+node);
@@ -244,8 +299,52 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             // logger.debug("RemoteBodyProxy created bodyID=" + getBodyID() +
             // " from ConstructorCall");
             // } // TODO log causes exception
-            return part.createBody(node.getNodeInformation().getName(), bodyConstructorCall, false);
+
+            // Modify result object
+            Object[] initialObject = null;
+            Object stubOnActiveObject = null;
+            Object[] modifiedObject = null;
+            ObjectReplacer objectReplacer = null;
+            Body body = PAActiveObject.getBodyOnThis();
+            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
+                body.getClass().isAssignableFrom(ActiveBody.class)) {
+                initialObject = bodyConstructorCall.getEffectiveArguments();
+                try {
+                    BodyImpl bodyImpl = (BodyImpl) body;
+                    stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass()
+                            .getName(), bodyImpl.getRemoteAdapter());
+
+                    objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(),
+                        stubOnActiveObject);
+                    modifiedObject = (Object[]) objectReplacer.replaceObject(initialObject);
+
+                    bodyConstructorCall.setEffectiveArguments(modifiedObject);
+                } catch (MOPException e) {
+                    throw new ProActiveRuntimeException("Cannot create Stub for this Body e=" + e);
+                } catch (InactiveBodyException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            result = part.createBody(node.getNodeInformation().getName(), bodyConstructorCall, false);
             // --------------added lines
+
+            // Restore Result Object
+            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
+                try {
+                    objectReplacer.restoreObject();
+                } catch (IllegalArgumentException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+            return result;
+
         } catch (ConstructorCallExecutionFailedException e) {
             throw new ProActiveException(e);
         } catch (java.lang.reflect.InvocationTargetException e) {
@@ -367,6 +466,33 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         ArrayList<UniversalBody> destinations = new ArrayList<UniversalBody>();
         destinations.add(this.universalBody.getRemoteAdapter());
         sourceBody.getFuturePool().registerDestinations(destinations);
+
+        // Modify result object
+        Object[] initialObject = null;
+        Object stubOnActiveObject = null;
+        Object[] modifiedObject = null;
+        ObjectReplacer objectReplacer = null;
+        Body body = PAActiveObject.getBodyOnThis();
+        if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
+            body.getClass().isAssignableFrom(ActiveBody.class)) {
+            initialObject = methodCall.getParameters();
+            try {
+                BodyImpl bodyImpl = (BodyImpl) body;
+                stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass()
+                        .getName(), bodyImpl.getRemoteAdapter());
+
+                objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(), stubOnActiveObject);
+                modifiedObject = (Object[]) objectReplacer.replaceObject(initialObject);
+
+                methodCall.setEffectiveArguments(modifiedObject);
+            } catch (MOPException e) {
+                throw new ProActiveRuntimeException("Cannot create Stub for this Body e=" + e);
+            } catch (InactiveBodyException e) {
+                e.printStackTrace();
+            }
+
+        }
+
         if (this.isLocal) {
             if (Profiling.TIMERS_COMPILED) {
                 TimerWarehouse.startTimer(sourceBody.getID(), TimerWarehouse.LOCAL_COPY);
@@ -402,6 +528,20 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         if (Profiling.TIMERS_COMPILED) {
             TimerWarehouse.stopTimer(sourceBody.getID(), TimerWarehouse.SEND_REQUEST);
         }
+
+        // Restore Result Object
+        if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
+            try {
+                objectReplacer.restoreObject();
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
     }
 
     protected void sendRequestInternal(MethodCall methodCall, Future future, Body sourceBody)

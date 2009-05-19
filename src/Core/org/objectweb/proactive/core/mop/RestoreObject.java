@@ -22,43 +22,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
+ *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.mop;
 
-import java.lang.reflect.InvocationTargetException;
-
-
 /**
- * A reified constructor call.
+ * this class represents a replacement of an object by another one
  */
-public interface ConstructorCall {
+public class RestoreObject implements FieldToRestore {
 
-    /**
-     * Makez a deep copy of all arguments of the constructor
-     */
-    public void makeDeepCopyOfArguments() throws java.io.IOException;
+    protected Object from;
+    protected Object to;
 
-    /**
-     * Return the name of the target class that constructor is for
-     */
-    public String getTargetClassName();
+    public RestoreObject(Object from, Object to) {
+        this.from = from;
+        this.to = to;
+    }
 
-    /**
-     * Performs the object construction that is reified vy this object
-     * @throws InvocationTargetException
-     * @throws ConstructorCallExecutionFailedException
-     */
-    public Object execute() throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException;
-
-    public Object[] getEffectiveArguments();
-
-    public void setEffectiveArguments(Object[] effectiveArguments);
+    public Object restore(Object modifiedObject) throws IllegalArgumentException, IllegalAccessException {
+        return this.from;
+    }
 
 }

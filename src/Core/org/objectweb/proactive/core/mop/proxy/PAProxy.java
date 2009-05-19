@@ -22,43 +22,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
+ *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.mop;
+package org.objectweb.proactive.core.mop.proxy;
 
-import java.lang.reflect.InvocationTargetException;
+public interface PAProxy<T> {
 
-
-/**
- * A reified constructor call.
- */
-public interface ConstructorCall {
-
-    /**
-     * Makez a deep copy of all arguments of the constructor
-     */
-    public void makeDeepCopyOfArguments() throws java.io.IOException;
-
-    /**
-     * Return the name of the target class that constructor is for
-     */
-    public String getTargetClassName();
-
-    /**
-     * Performs the object construction that is reified vy this object
-     * @throws InvocationTargetException
-     * @throws ConstructorCallExecutionFailedException
-     */
-    public Object execute() throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException;
-
-    public Object[] getEffectiveArguments();
-
-    public void setEffectiveArguments(Object[] effectiveArguments);
+    public T getTarget();
 
 }

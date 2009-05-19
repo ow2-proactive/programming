@@ -96,4 +96,23 @@ public class MethodCallResult implements Serializable {
             cause.initCause(origCause);
         }
     }
+
+    /**
+     * Provide access to the result object.
+     * Override the behavior of getResult() by not throwing the exception if the method
+     * call has thrown an exception.
+     * @return
+     */
+    public Object getResultObjet() {
+        return this.result;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
+    }
+
+    public void setException(Throwable exception) {
+        this.exception = exception;
+    }
+
 }

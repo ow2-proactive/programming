@@ -22,43 +22,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
+ *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.mop;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
 
 
-/**
- * A reified constructor call.
- */
-public interface ConstructorCall {
+public class FieldToRestoreInArray extends FieldToRestoreNormalField {
 
-    /**
-     * Makez a deep copy of all arguments of the constructor
-     */
-    public void makeDeepCopyOfArguments() throws java.io.IOException;
+    protected int indice;
 
-    /**
-     * Return the name of the target class that constructor is for
-     */
-    public String getTargetClassName();
+    public FieldToRestoreInArray(Field f, Object targetObject, Object value, int indice) {
+        super(f, targetObject, value);
+        this.indice = indice;
+    }
 
-    /**
-     * Performs the object construction that is reified vy this object
-     * @throws InvocationTargetException
-     * @throws ConstructorCallExecutionFailedException
-     */
-    public Object execute() throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException;
-
-    public Object[] getEffectiveArguments();
-
-    public void setEffectiveArguments(Object[] effectiveArguments);
+    @Override
+    public Object restore(Object modifiedObject) throws IllegalArgumentException, IllegalAccessException {
+        f.setAccessible(true);
+        Object[] o = (Object[]) f.get(target);
+        o[indice] = value;
+        f.setAccessible(false);
+        return null;
+    }
 
 }

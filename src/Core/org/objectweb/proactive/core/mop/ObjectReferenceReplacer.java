@@ -22,43 +22,41 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
+ *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.mop;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.Hashtable;
 
 
-/**
- * A reified constructor call.
- */
-public interface ConstructorCall {
+public class ObjectReferenceReplacer implements ObjectReplacer {
 
-    /**
-     * Makez a deep copy of all arguments of the constructor
-     */
-    public void makeDeepCopyOfArguments() throws java.io.IOException;
+    private Object initialReference;
+    private Object from;
+    private Object to;
+    private RestoreManager restoreManager;
+    private Hashtable<Integer, Object> visitedObjects;
 
-    /**
-     * Return the name of the target class that constructor is for
-     */
-    public String getTargetClassName();
+    public ObjectReferenceReplacer(Object from, Object to) {
+        this.from = from;
+        this.to = to;
+        this.restoreManager = new RestoreManager();
+        this.visitedObjects = new Hashtable<Integer, Object>();
+    }
 
-    /**
-     * Performs the object construction that is reified vy this object
-     * @throws InvocationTargetException
-     * @throws ConstructorCallExecutionFailedException
-     */
-    public Object execute() throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException;
+    public Object replaceObject(Object objectToAnalyse) {
+        this.initialReference = objectToAnalyse;
+        return MOP.replaceObject(objectToAnalyse, from, to, restoreManager, visitedObjects);
+    }
 
-    public Object[] getEffectiveArguments();
-
-    public void setEffectiveArguments(Object[] effectiveArguments);
+    public Object restoreObject() throws IllegalArgumentException, IllegalAccessException {
+        return restoreManager.restore(this.initialReference);
+    }
 
 }

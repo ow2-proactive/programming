@@ -22,43 +22,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
+ *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.mop;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
 
 
-/**
- * A reified constructor call.
- */
-public interface ConstructorCall {
+public class FieldToRestoreNormalField implements FieldToRestore {
 
-    /**
-     * Makez a deep copy of all arguments of the constructor
-     */
-    public void makeDeepCopyOfArguments() throws java.io.IOException;
+    protected Field f;
+    protected Object value;
+    protected Object target;
 
-    /**
-     * Return the name of the target class that constructor is for
-     */
-    public String getTargetClassName();
+    public FieldToRestoreNormalField(Field f, Object fieldTarget, Object previousValue) {
+        //        System.out.println("FieldToRestoreNormalField.FieldToRestoreNormalField() " + f + ": " + fieldTarget + "// " + previousValue);
 
-    /**
-     * Performs the object construction that is reified vy this object
-     * @throws InvocationTargetException
-     * @throws ConstructorCallExecutionFailedException
-     */
-    public Object execute() throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException;
+        this.f = f;
 
-    public Object[] getEffectiveArguments();
+        this.value = previousValue;
+        this.target = fieldTarget;
+    }
 
-    public void setEffectiveArguments(Object[] effectiveArguments);
+    public Object restore(Object modifiedObject) throws IllegalArgumentException, IllegalAccessException {
+        f.setAccessible(true);
+        f.set(target, value);
+        f.setAccessible(false);
+        return null;
+    }
 
 }

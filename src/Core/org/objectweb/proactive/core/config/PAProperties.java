@@ -537,7 +537,10 @@ public enum PAProperties {
     /**
      * TODO
      */
-    PA_UNICORE_FORKCLIENT("proactive.unicore.forkclient", PAPropertiesType.BOOLEAN);
+    PA_UNICORE_FORKCLIENT("proactive.unicore.forkclient", PAPropertiesType.BOOLEAN),
+
+    PA_IMPLICITGETSTUBONTHIS("proactive.implicitgetstubonthis", PAPropertiesType.BOOLEAN);
+
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
     public static final String TRUE = "true";
     public static final String FALSE = "false";

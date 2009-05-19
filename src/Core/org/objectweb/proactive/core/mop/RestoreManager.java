@@ -22,43 +22,52 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
+ *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.mop;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
- * A reified constructor call.
+ * A restore manager logs all modifications made to an object
+ * through the method  @see MOP#replaceObject() and is able to
+ * restore the initial state of the object
  */
-public interface ConstructorCall {
+public class RestoreManager implements FieldToRestore {
+
+    protected Object objectToRestore;
+    protected List<FieldToRestore> list;
+
+    public RestoreManager() {
+        this.list = new ArrayList<FieldToRestore>();
+    }
 
     /**
-     * Makez a deep copy of all arguments of the constructor
+     * add a new modification to be taken into account by this manager
+     * @param f
      */
-    public void makeDeepCopyOfArguments() throws java.io.IOException;
+    public void add(FieldToRestore f) {
+        list.add(f);
+    }
 
-    /**
-     * Return the name of the target class that constructor is for
-     */
-    public String getTargetClassName();
+    public Object restore(Object modifiedObject) throws IllegalArgumentException, IllegalAccessException {
+        Object result = modifiedObject;
 
-    /**
-     * Performs the object construction that is reified vy this object
-     * @throws InvocationTargetException
-     * @throws ConstructorCallExecutionFailedException
-     */
-    public Object execute() throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException;
-
-    public Object[] getEffectiveArguments();
-
-    public void setEffectiveArguments(Object[] effectiveArguments);
+        for (FieldToRestore f : list) {
+            Object r = f.restore(modifiedObject);
+            if (r != null) {
+                result = r;
+            }
+        }
+        return result;
+    }
 
 }

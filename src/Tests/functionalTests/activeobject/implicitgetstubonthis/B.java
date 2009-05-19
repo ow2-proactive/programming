@@ -22,43 +22,54 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
+ *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.mop;
+package functionalTests.activeobject.implicitgetstubonthis;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.Serializable;
+
+import org.objectweb.proactive.core.mop.StubObject;
 
 
-/**
- * A reified constructor call.
- */
-public interface ConstructorCall {
+public class B implements Serializable {
 
-    /**
-     * Makez a deep copy of all arguments of the constructor
-     */
-    public void makeDeepCopyOfArguments() throws java.io.IOException;
+    int toto;
+    private A a;
 
-    /**
-     * Return the name of the target class that constructor is for
-     */
-    public String getTargetClassName();
+    public B() {
 
-    /**
-     * Performs the object construction that is reified vy this object
-     * @throws InvocationTargetException
-     * @throws ConstructorCallExecutionFailedException
-     */
-    public Object execute() throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException;
+        new C().init(this);
+        toto = 1;
+    }
 
-    public Object[] getEffectiveArguments();
+    public B(A a) {
+        this.setA(a);
+    }
 
-    public void setEffectiveArguments(Object[] effectiveArguments);
+    public int getToto() {
+        return toto;
+    }
 
+    public boolean takeA(A a) {
+        return a instanceof StubObject;
+
+    }
+
+    public static void main(String[] args) {
+        new B();
+    }
+
+    public void setA(A a) {
+        this.a = a;
+    }
+
+    public A getA() {
+        return a;
+    }
 }

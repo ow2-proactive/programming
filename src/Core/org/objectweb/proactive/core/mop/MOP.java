@@ -33,21 +33,29 @@ package org.objectweb.proactive.core.mop;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Active;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.body.ActiveBody;
+import org.objectweb.proactive.core.body.BodyImpl;
 import org.objectweb.proactive.core.body.MetaObjectFactory;
 import org.objectweb.proactive.core.body.UniversalBody;
+import org.objectweb.proactive.core.body.future.FutureProxy;
+import org.objectweb.proactive.core.mop.proxy.PAProxy;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -1154,4 +1162,171 @@ public abstract class MOP {
             return result;
         }
     }
+
+    /**
+     * replaceObject performs a in-depth parse of an object in order to find if the object
+     * contains some references to the object 'from' and replace these references by the object 'to'
+     * @param objectToAnalyse the object in which some replacement must be performed
+     * @param from the object that has to be replaced
+     * @param to the the replacement object
+     * @param rm the restore manager that logs all changes made in the objectToAnalyse
+     * @param visitedObjects hastable of already parsed objects
+     * @return a reference to the modified object
+     */
+    public static Object replaceObject(Object objectToAnalyse, Object from, Object to, RestoreManager rm,
+            Hashtable<Integer, Object> visitedObjects) {
+        return replaceObject(objectToAnalyse, from, to, rm, true, visitedObjects);
+    }
+
+    /**
+     * replaceObject performs a in-depth parse of an object in order to find if the object
+     * contains some references to the object 'from' and replace these references by the object 'to'
+     * @param objectToAnalyse the object in which some replacement must be performed
+     * @param from the object that has to be replaced
+     * @param to the the replacement object
+     * @param rm the restore manager that logs all changes made in the objectToAnalyse
+     * @param root indicates if it is the first call to replaceObject for this replacement operation
+     * @param visitedObjects hastable of already parsed objects
+     * @return a reference to the modified object
+     */
+    private static Object replaceObject(Object objectToAnalyse, Object from, Object to, RestoreManager rm,
+            boolean root, Hashtable<Integer, Object> visitedObjects) {
+
+        if (objectToAnalyse == null) {
+            return null;
+        }
+
+        // do not perform the replacement on expected future
+        if (PAFuture.isAwaited(objectToAnalyse)) {
+            return objectToAnalyse;
+        }
+
+        // do not perform the replacement on the content of a Body
+        if (ActiveBody.class.isAssignableFrom(objectToAnalyse.getClass())) {
+            return objectToAnalyse;
+        }
+
+        // special case for PAProxy
+        if ((from != null) && (PAProxy.class.isAssignableFrom(from.getClass())) &&
+            (!StubObject.class.isAssignableFrom(from.getClass()))) {
+
+            Object toutou = PAProxy.class.cast(from).getTarget();
+            if (objectToAnalyse == toutou) {
+                if (root) {
+                    rm.add(new RestoreObject(objectToAnalyse, to));
+                }
+                return to;
+            }
+        }
+
+        if (visitedObjects.contains(objectToAnalyse)) {
+            return objectToAnalyse;
+        }
+
+        // System.out.println("MOP.changeObject() Object to Analyse " + objectToAnalyse + " "+
+        // "root "+ root + " "+ objectToAnalyse.getClass() + ", isPrimitive:" +
+        // objectToAnalyse.getClass().isPrimitive());
+
+        if (objectToAnalyse == from) {
+            if (root) {
+                // special case if the object to replace is the root of the replacement operation
+                // as we cannot change references we have to return the new reference.
+                rm.add(new RestoreObject(from, to));
+            }
+            return to;
+        }
+
+        // do not perform replacement on primitive
+        if (objectToAnalyse.getClass().isPrimitive()) {
+            return objectToAnalyse;
+        }
+
+        //        if ((objectToAnalyse instanceof Number) || (objectToAnalyse instanceof Boolean)) {
+        //            return objectToAnalyse;
+        //        }
+
+        // entering the object itself, mark it as visited (prevent loops)
+        visitedObjects.put(System.identityHashCode(objectToAnalyse), objectToAnalyse);
+
+        if (objectToAnalyse.getClass().isArray()) {
+
+            int arrayLength = Array.getLength(objectToAnalyse);
+
+            Object currentObject = null;
+            for (int j = 0; j < arrayLength; j++) {
+                currentObject = Array.get(objectToAnalyse, j);
+                Object newObject = replaceObject(currentObject, from, to, rm, false, visitedObjects);
+                if (newObject != currentObject) {
+                    Array.set(objectToAnalyse, j, newObject);
+                    rm.add(new RestoreObjectInArray(objectToAnalyse, currentObject, j));
+                }
+            }
+        }
+
+        Field[] fields = objectToAnalyse.getClass().getDeclaredFields();
+        // Field.setAccessible(fields, true);
+
+        Object currentlyTestedField = null;
+        // iterates over object fields
+        for (int i = 0; i < fields.length; i++) {
+            try {
+
+                int mod = fields[i].getModifiers();
+
+                if (!Modifier.isFinal(mod) && (!Modifier.isStatic(mod))) {
+
+                    fields[i].setAccessible(true);
+
+                    currentlyTestedField = fields[i].get(objectToAnalyse);
+                    //                    System.out.println("Name:"+fields[i].getName());
+                    if (currentlyTestedField != null) {
+                        if (currentlyTestedField == from) {
+                            //                            System.out.println("ahaha found an internal reference to change " + from +
+                            //                                " is now " + to);
+                            fields[i].set(objectToAnalyse, to);
+                            rm.add(new FieldToRestoreNormalField(fields[i], objectToAnalyse, from));
+                        } else if (PAProxy.class.isAssignableFrom(from.getClass()) &&
+                            !StubObject.class.isAssignableFrom(from.getClass())) {
+                            Object toutou = PAProxy.class.cast(from).getTarget();
+                            if (currentlyTestedField == toutou) {
+
+                                //                                System.out.println("ahaha found an internal PROXIED reference to change, Field "+ fields[i].getName()+" " + toutou +
+                                //                                        " is now " + to);
+                                fields[i].set(objectToAnalyse, to);
+                                rm.add(new FieldToRestoreNormalField(fields[i], objectToAnalyse,
+                                    currentlyTestedField));
+                            }
+                        }
+
+                        else if (!currentlyTestedField.getClass().isPrimitive()) {
+                            // System.out.println("MOP.changeObject() not array, not primitive" +
+                            // tmp);
+
+                            // if ( ! (objectToAnalyse instanceof Number)) {
+                            Object modifiedObject = replaceObject(currentlyTestedField, from, to, rm, false,
+                                    visitedObjects);
+                            if (modifiedObject != currentlyTestedField) {
+                                // fields[i].setAccessible(true);
+                                fields[i].set(objectToAnalyse, modifiedObject);
+                                rm.add(new FieldToRestoreNormalField(fields[i], objectToAnalyse,
+                                    currentlyTestedField));
+                                // fields[i].setAccessible(false);
+                                // }
+                            }
+                        }
+                    }
+                }
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            fields[i].setAccessible(false);
+        }
+
+        return objectToAnalyse;
+    }
+
 }

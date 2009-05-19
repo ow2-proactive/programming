@@ -49,6 +49,7 @@ import javax.management.ObjectName;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.ProActiveInternalObject;
+import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.benchmarks.timit.util.CoreTimersContainer;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -69,6 +70,7 @@ import org.objectweb.proactive.core.body.request.RequestQueue;
 import org.objectweb.proactive.core.body.request.RequestReceiver;
 import org.objectweb.proactive.core.body.request.RequestReceiverImpl;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.debug.stepbystep.BreakpointType;
 import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapper;
@@ -76,7 +78,11 @@ import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.jmx.notification.RequestNotificationData;
 import org.objectweb.proactive.core.jmx.server.ServerConnector;
+import org.objectweb.proactive.core.mop.MOP;
+import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.mop.ObjectReferenceReplacer;
+import org.objectweb.proactive.core.mop.ObjectReplacer;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
@@ -599,6 +605,29 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             destinations.add(request.getSender());
             this.getFuturePool().registerDestinations(destinations);
 
+            // Modify result object
+            Object initialObject = null;
+            Object stubOnActiveObject = null;
+            Object modifiedObject = null;
+            ObjectReplacer objectReplacer = null;
+            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue()) {
+                initialObject = reply.getResult().getResultObjet();
+                try {
+                    PAActiveObject.getStubOnThis();
+                    stubOnActiveObject = (Object) MOP.createStubObject(BodyImpl.this.getReifiedObject()
+                            .getClass().getName(), BodyImpl.this.getRemoteAdapter());
+                    objectReplacer = new ObjectReferenceReplacer(BodyImpl.this.getReifiedObject(),
+                        stubOnActiveObject);
+                    modifiedObject = objectReplacer.replaceObject(initialObject);
+                    reply.getResult().setResult(modifiedObject);
+                } catch (InactiveBodyException e) {
+                    e.printStackTrace();
+                } catch (MOPException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            }
             // FAULT-TOLERANCE
             if (BodyImpl.this.ftmanager != null) {
                 BodyImpl.this.ftmanager.sendReply(reply, request.getSender());
@@ -631,6 +660,19 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             }
 
             this.getFuturePool().removeDestinations();
+
+            // Restore Result Object
+            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
+                try {
+                    objectReplacer.restoreObject();
+                } catch (IllegalArgumentException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
         }
 
         // If a reply sending has failed, try to send the exception as reply
