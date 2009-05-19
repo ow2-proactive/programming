@@ -58,7 +58,7 @@
 			
 			<mediaobject xml:id="pamr_usecase_laptop">
 				<imageobject>
-					<imagedata format="PNG" align="center" fileref="message_routing/laptop_nok.png" scalefit="1" />
+					<imagedata format="PNG" width="80%" align="center" fileref="message_routing/laptop_nok.png" scalefit="1" />
 				</imageobject>
 				<caption>
 					<para>
@@ -75,7 +75,7 @@
 			
 			<mediaobject xml:id="pamr_usecase_virtualization">
 				<imageobject>
-					<imagedata format="PNG" align="center" fileref="message_routing/virtualization_nok.png"/>
+					<imagedata format="PNG" width="80%" align="center" fileref="message_routing/virtualization_nok.png"/>
 				</imageobject>
 				<caption>
 					<para>
