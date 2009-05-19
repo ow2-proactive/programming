@@ -264,7 +264,6 @@ public class TestGenericFactory extends Conformtest {
     }
 
     @Test(expected = InstantiationException.class)
-    @Ignore
     public void testContentClassInterfaceMissing() throws Exception {
         // Z does not implement I
         gf.newFcInstance(t, "primitive", Z.class.getName());

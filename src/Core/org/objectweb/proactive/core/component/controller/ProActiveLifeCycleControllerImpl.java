@@ -89,14 +89,13 @@ public class ProActiveLifeCycleControllerImpl extends AbstractProActiveControlle
         //                                             : LifeCycleController.STOPPED;
     }
 
-    /*
+    /**
      * @see org.objectweb.fractal.api.control.LifeCycleController#startFc() recursive if composite (
      *      recursivity is allowed here as we do not implement sharing )
      */
-    public void startFc() {
+    public void startFc() throws IllegalLifeCycleException {
         try {
             //check that all mandatory client interfaces are bound
-            //            Object[] itfs = getFcItfOwner().getFcInterfaces();
             InterfaceType[] itfTypes = ((ComponentType) getFcItfOwner().getFcType()).getFcInterfaceTypes();
 
             for (int i = 0; i < itfTypes.length; i++) {
@@ -121,7 +120,7 @@ public class ProActiveLifeCycleControllerImpl extends AbstractProActiveControlle
                             }
                         }
                     } else if (((ProActiveInterfaceType) itfTypes[i]).isFcMulticastItf() &&
-                        !!itfTypes[i].isFcOptionalItf()) {
+                        !!itfTypes[i].isFcOptionalItf()) { // FIXME the double bang ????      !!
                         if (Fractive.getMulticastController(getFcItfOwner()).lookupFcMulticast(
                                 itfTypes[i].getFcItfName()).getDelegatee().isEmpty()) {
                             throw new IllegalLifeCycleException("compulsory multicast client interface " +
@@ -164,7 +163,7 @@ public class ProActiveLifeCycleControllerImpl extends AbstractProActiveControlle
                                     "Before starting all subcomponents, make sure that the membrane of all of them is started");
                             }
                         } catch (NoSuchInterfaceException e) {
-                            //the subComponent doesn't have a MembraneController, no need to check what's is in theprevious try block
+                            //the subComponent doesn't have a MembraneController, no need to check what's is in the previous try block
                         }
                         ((LifeCycleController) inner_components[i]
                                 .getFcInterface(Constants.LIFECYCLE_CONTROLLER)).startFc();
@@ -180,9 +179,6 @@ public class ProActiveLifeCycleControllerImpl extends AbstractProActiveControlle
         } catch (NoSuchInterfaceException nsie) {
             logger.error("interface not found : " + nsie.getMessage());
             nsie.printStackTrace();
-        } catch (IllegalLifeCycleException ilce) {
-            logger.error("illegal life cycle operation : " + ilce.getMessage());
-            ilce.printStackTrace();
         }
     }
 
@@ -232,10 +228,10 @@ public class ProActiveLifeCycleControllerImpl extends AbstractProActiveControlle
         return getFcState();
     }
 
-    /*
+    /**
      * @see org.objectweb.proactive.core.component.controller.ProActiveLifeCycleController#startFc(short)
      */
-    public void startFc(short priority) {
+    public void startFc(short priority) throws IllegalLifeCycleException {
         startFc();
     }
 

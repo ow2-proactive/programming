@@ -66,7 +66,7 @@ public class MulticastHelper {
      *             if there is an error in the dispatch of the parameters
      */
     public static List<MethodCall> generateMethodCallsForMulticastDelegatee(ProActiveComponent owner,
-            MethodCall mc, ProxyForComponentInterfaceGroup delegatee) throws ParameterDispatchException {
+            MethodCall mc, ProxyForComponentInterfaceGroup<?> delegatee) throws ParameterDispatchException {
         try {
             return Fractive.getMulticastController(owner).generateMethodCallsForMulticastDelegatee(mc,
                     delegatee);

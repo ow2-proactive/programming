@@ -111,7 +111,6 @@ public class TestBindingController extends Conformtest {
     }
 
     @Test
-    @Ignore
     public void testBindLookupUnbind() throws Exception {
         BindingController bc = Fractal.getBindingController(c);
         bc.bindFc("client", d.getFcInterface("server"));
@@ -122,7 +121,6 @@ public class TestBindingController extends Conformtest {
     }
 
     @Test
-    @Ignore
     public void testCollectionBindLookupUnbind() throws Exception {
         BindingController bc = Fractal.getBindingController(c);
         bc.bindFc("clients0", d.getFcInterface("server"));

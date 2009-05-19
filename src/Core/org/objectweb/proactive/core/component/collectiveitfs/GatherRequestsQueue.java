@@ -67,7 +67,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class GatherRequestsQueue implements Serializable {
-    private ProActiveComponent owner;
+    //private ProActiveComponent owner;
     private GatherFuturesHandler futuresHandler; // primitive pooling
     private List<ItfID> connectedClientItfs; // consistency?
     private Map<ItfID, ComponentRequest> requests;
@@ -87,7 +87,7 @@ public class GatherRequestsQueue implements Serializable {
 
     public GatherRequestsQueue(ProActiveComponent owner, String serverItfName, Method itfTypeMethod,
             List<ItfID> connectedClientItfs, GatherFuturesHandlerPool gatherFuturesHandlerPool) {
-        this.owner = owner;
+        //this.owner = owner;
         this.serverItfName = serverItfName;
         //        this.conditionChecker = gatherConditionChecker;
         //        this.invokedMethodSignature = methodSignature;
