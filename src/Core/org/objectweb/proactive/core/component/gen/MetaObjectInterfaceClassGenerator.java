@@ -244,7 +244,6 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
 
             return reference;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new InterfaceGenerationFailedException(
                 "Cannot generate meta object representative on interface [" + interfaceName +
                     "] with signature [" + interfaceType.getFcItfSignature() + "] with javassist", e);
