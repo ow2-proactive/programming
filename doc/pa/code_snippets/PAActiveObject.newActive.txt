@@ -1,6 +1,6 @@
 Worker charlie;
 //set the constructor values to be used
-Object[] params = new Object[] { new IntegerWrapper (26), "Charlie" };
+Object[] params = new Object[] { new IntWrapper (26), "Charlie" };
 try {
 	charlie = (Worker)PAActiveObject.newActive(Worker.class.getName(),
 				params);

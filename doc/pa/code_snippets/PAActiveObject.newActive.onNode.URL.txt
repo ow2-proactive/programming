@@ -2,7 +2,7 @@ Worker charlie;
 String nodeURL;
 Node node;
 //set the constructor values to be used
-Object[] params = new Object[] { new IntegerWrapper (26), "Charlie" };
+Object[] params = new Object[] { new IntWrapper (26), "Charlie" };
 try {
 	//get the node form a virtual node
 	node = someVirtualNode.getNode();
