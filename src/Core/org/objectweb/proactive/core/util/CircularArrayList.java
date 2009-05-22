@@ -36,7 +36,9 @@ import static junit.framework.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.Random;
+
+import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -59,7 +61,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since   ProActive 0.9
  *
  */
-
 public class CircularArrayList<E> extends java.util.AbstractList<E> implements java.util.List<E>,
         java.io.Serializable {
     /**
@@ -289,22 +290,6 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
     }
 
     @Override
-    public boolean addAll(java.util.Collection<? extends E> c) {
-        modCount++;
-        int numNew = c.size();
-
-        // We have to have at least one empty space
-        ensureCapacity(size + numNew + 1);
-        java.util.Iterator<? extends E> e = c.iterator();
-        for (int i = 0; i < numNew; i++) {
-            array[tail] = e.next();
-            tail = (tail + 1) % array.length;
-            size++;
-        }
-        return numNew != 0;
-    }
-
-    @Override
     public void add(int index, E element) {
         if (index == size) {
             add(element);
@@ -336,12 +321,38 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
 
     @Override
     public boolean addAll(int index, java.util.Collection<? extends E> c) {
-        boolean result = true;
-        Iterator<? extends E> it = c.iterator();
-        while (it.hasNext()) {
-            result &= this.add(it.next());
+        modCount++;
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
-        return result;
+
+        int numNew = c.size();
+        ensureCapacity(size + numNew + 1);
+
+        // shift old data
+        int j = size;
+        while (j >= index) {
+            int src = this.convert(j);
+            int dst = this.convert(j + numNew);
+            array[dst] = array[src];
+            j--;
+        }
+
+        // insert new data
+        java.util.Iterator<? extends E> e = c.iterator();
+        for (int i = 0; i < numNew; i++) {
+            array[this.convert(index + i)] = e.next();
+        }
+
+        // Fix tail & size
+        size += numNew;
+        tail = (head + size) % array.length;
+        return true;
+    }
+
+    @Override
+    public boolean addAll(java.util.Collection<? extends E> c) {
+        return this.addAll(this.size, c);
     }
 
     // The convert() method takes a logical index (as if head was
@@ -356,8 +367,8 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
         }
     }
 
-    @SuppressWarnings("unused")
     static public class UnitTestCircularArrayList {
+        private Random rand = new Random();
         private CircularArrayList<Integer> cal;
 
         @Before
@@ -416,6 +427,94 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
             assertTrue(col.equals(o));
 
             assertTrue(o.size() == col.size());
+        }
+
+        @Test
+        public void testAddAll() {
+            for (int test = 0; test < 1000; test++) {
+                CircularArrayList<Integer> cal = getRandomList();
+                Integer[] orig = (Integer[]) cal.toArray(new Integer[0]);
+
+                ArrayList<Integer> l = new ArrayList<Integer>();
+                for (int i = -10; i < 0; i++)
+                    l.add(i);
+
+                int size = cal.size();
+                cal.addAll(l);
+
+                // Unchanged values
+                for (int i = 0; i < size; i++) {
+                    int expected = (int) orig[i];
+                    int actual = (int) cal.get(i);
+                    Assert.assertEquals("Bad unchanged value", expected, actual);
+                }
+
+                // Inserted values
+                for (int i = 0; i < l.size(); i++) {
+                    int expected = (int) l.get(i);
+                    int actual = (int) cal.get(size + i);
+                    Assert.assertEquals("Bad inserted value", expected, actual);
+                }
+
+                Assert.assertEquals("Bad size value", (size + l.size()), cal.size());
+            }
+
+        }
+
+        @Test
+        public void testAddAllWithIndex() {
+            for (int test = 0; test < 5000; test++) {
+                CircularArrayList<Integer> cal = getRandomList();
+                Integer[] orig = (Integer[]) cal.toArray(new Integer[0]);
+
+                ArrayList<Integer> l = new ArrayList<Integer>();
+                for (int i = -10; i < 0; i++)
+                    l.add(i);
+
+                int size = cal.size();
+                int index = cal.isEmpty() ? 0 : rand.nextInt(cal.size);
+                cal.addAll(index, l);
+
+                // Unchanged values
+                for (int i = 0; i < index; i++) {
+                    int expected = (int) orig[i];
+                    int actual = (int) cal.get(i);
+                    Assert.assertEquals("Bad unchanged value", expected, actual);
+                }
+
+                // Inserted values
+                for (int i = 0; i < l.size(); i++) {
+                    int expected = (int) l.get(i);
+                    int actual = (int) cal.get(index + i);
+                    Assert.assertEquals("Bad inserted value", expected, actual);
+                }
+
+                // Shifter values
+                for (int i = 0; i < cal.size() - index - l.size(); i++) {
+                    int expected = (int) orig[index + i];
+                    int actual = (int) cal.get(index + l.size() + i);
+                    Assert.assertEquals("Bad shifted value", expected, actual);
+
+                }
+
+                Assert.assertEquals("Bad size value", (size + l.size()), cal.size());
+
+            }
+        }
+
+        private CircularArrayList<Integer> getRandomList() {
+            CircularArrayList<Integer> cal = new CircularArrayList<Integer>(rand.nextInt(10));
+            for (int i = 0; i < rand.nextInt(15); i++) {
+                for (int j = 0; j < rand.nextInt(100); j++) {
+                    cal.add(rand.nextInt(1000));
+                }
+
+                for (int j = 0; j < rand.nextInt(cal.size() + 1); j++) {
+                    cal.remove(rand.nextInt(cal.size()));
+                }
+            }
+
+            return cal;
         }
     }
 }
