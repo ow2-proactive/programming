@@ -68,23 +68,6 @@ public class Utils {
         return null;
     }
 
-    public static InterfaceType getItfType(String itfName, Component owner) throws NoSuchInterfaceException {
-        InterfaceType[] itfTypes = (((ComponentType) owner.getFcType()).getFcInterfaceTypes());
-        for (int i = 0; i < itfTypes.length; i++) {
-            if (itfTypes[i].isFcCollectionItf()) {
-                if (itfName.startsWith(itfTypes[i].getFcItfName()) &&
-                    !itfName.equals(itfTypes[i].getFcItfName())) {
-                    return itfTypes[i];
-                }
-            } else {
-                if (itfName.equals(itfTypes[i].getFcItfName())) {
-                    return itfTypes[i];
-                }
-            }
-        }
-        return null;
-    }
-
     public static boolean hasSingleCardinality(String itfName, Component owner) {
         Iterator<Interface> it = Arrays.<Interface> asList((Interface[]) owner.getFcInterfaces()).iterator();
         while (it.hasNext()) {

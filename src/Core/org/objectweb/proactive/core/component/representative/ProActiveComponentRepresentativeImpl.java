@@ -398,7 +398,7 @@ public class ProActiveComponentRepresentativeImpl implements ProActiveComponentR
             }
 
             // maybe the member of a collection itf?
-            InterfaceType itfType = Utils.getItfType(interfaceName, this);
+            InterfaceType itfType = ((ComponentType) this.getFcType()).getFcInterfaceType(interfaceName);
             if ((itfType != null) && itfType.isFcCollectionItf()) {
                 try {
                     // generate the corresponding interface locally
