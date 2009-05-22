@@ -106,7 +106,7 @@
 			 the <literal>String</literal> class is final, it’s not
 			possible to subclass a String and to perform asynchronous calls.	
 			ProActive provides several wrappers for final classes: <literal>StringWrapper, BooleanWrapper, 
-			IntegerWrapper, DoubleWrapper</literal> and <literal>FloatWrapper</literal>.
+			IntWrapper, DoubleWrapper</literal> and <literal>FloatWrapper</literal>.
 			 These have to be used in
 			replacement of <literal>String, Boolean, Integer, Double</literal> and <literal>Float</literal>
 			in classes which will be active objects. If you don’t use wrappers, method calls will be synchronous.
