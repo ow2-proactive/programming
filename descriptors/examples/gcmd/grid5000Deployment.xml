@@ -46,7 +46,7 @@
 
 		<hosts>
 			<host id="gridNode" os="unix">
-				<homeDirectory base="root" relpath="${user.dir}" />
+				<homeDirectory base="root" relpath="${user.home}" />
 			</host>
 		</hosts>
 
