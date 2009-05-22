@@ -218,11 +218,35 @@
 	</section>
 	
 	<section xml:id="ProgrammingWithComponentsGCM_20"><info><title>Programming With Components: GCM</title></info>
-	 
-	 <!-- 
-	  //******************* TODO ********************
-	  -->
-	 <para/> 
+	<para>
+	ProActive programming also features a general purpose component
+	framework allowing software architects to design their parallel applications
+	using a hierarchical component framework: the Grid Component Model
+	(GCM).
+	The GCM is a high level programming framework which relies on
+	Active Object and as such inherits usual ProActive properties
+	asynchronous call, automatic continuation, deployment interoperability
+	... The GCM extends the Fractal
+	component model to cover
+	distribution and parallel application's needs.
+	Using the GCM you can
+	easily express at design time the dependencies
+	between software blocks
+	composing your application. In addition, GCM
+	components provide non
+	functional features allowing developers to
+	benefits extra capabilities such as monitoring, autonomic management...
+
+	The GCM targets all software
+	architects in need of a comprehensive framework to express at design
+	time the parallelism and the distribution of an application.
+	Therefore, the architecture of the system itself captures the
+	parallel/distributed aspects, acting as a powerful specification and
+	documentation. Further, developers do not need to spend extensive time
+	to learn distribute programming or implement collective communication,
+	but rather concentrate on the business code and leverage the GCM
+	framework.
+	 </para> 
 	</section>
 	
 	
