@@ -31,6 +31,7 @@
  */
 package org.objectweb.proactive.api;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -58,7 +59,7 @@ import org.objectweb.proactive.core.util.TimeoutAccounter;
 public class PAFuture {
 
     /**
-     * This negative value is returned by waitForAny(java.util.Vector futures) if the parameter
+     * This negative value is returned by waitForAny(List futures) if the parameter
      * futures is an empty collection.
      */
     public static final int INVALID_EMPTY_COLLECTION = -1337;
@@ -167,7 +168,7 @@ public class PAFuture {
     }
 
     /**
-     * Blocks the calling thread until all futures in the vector are available.
+     * Blocks the calling thread until all futures in the collection are available.
      *
      *	<b>Warning</b> : this method must be called by either any active object or by the thread that 
      *  performed the method calls corresponding to the futures in the collection.
@@ -175,7 +176,7 @@ public class PAFuture {
      * @param futures
      *            a collection of futures
      */
-    public static void waitForAll(List<?> futures) {
+    public static void waitForAll(Collection<?> futures) {
         try {
             PAFuture.waitForAll(futures, 0);
         } catch (ProActiveTimeoutException e) {
@@ -185,7 +186,7 @@ public class PAFuture {
     }
 
     /**
-     * Blocks the calling thread until all futures in the vector are available or until the timeout
+     * Blocks the calling thread until all futures in the collection are available or until the timeout
      * expires.
      *
      *	<b>Warning</b> : this method must be called by either any active object or by the thread that 
@@ -198,7 +199,7 @@ public class PAFuture {
      * @throws ProActiveException
      *             if the timeout expires
      */
-    public static void waitForAll(List<?> futures, long timeout) throws ProActiveTimeoutException {
+    public static void waitForAll(Collection<?> futures, long timeout) throws ProActiveTimeoutException {
         TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
         for (Object future : futures) {
             if (time.isTimeoutElapsed()) {
@@ -209,14 +210,14 @@ public class PAFuture {
     }
 
     /**
-     * Blocks the calling thread until one of the futures in the vector is available.
+     * Blocks the calling thread until one of the futures in the list is available.
      *
      *	<b>Warning</b> : this method must be called by either any active object or by the thread that 
      *  performed the method calls corresponding to the futures in the collection.
      *
      * @param futures
-     *            a collection of futures
-     * @return index of the available future in the vector
+     *            a list of futures
+     * @return index of the available future in the list
      */
     public static int waitForAny(List<?> futures) {
         try {
@@ -229,22 +230,49 @@ public class PAFuture {
     }
 
     /**
-     * Blocks the calling thread until one of the futures in the vector is available or until the
+     * Blocks the calling thread until one of the futures in the list is available or until the
      * timeout expires. 
      *
      *	<b>Warning</b> : this method must be called by either any active object or by the thread that 
+     *  performed the method calls corresponding to the futures in the list.
+     *
+     *
+     * @param futures
+     *            a list of futures
+     * @param timeout
+     *            to wait in ms
+     * @return index of the available future in the list
+     * @throws ProActiveException
+     *             if the timeout expires
+     */
+    public static <E> int waitForAny(List<E> futures, long timeout) throws ProActiveException {
+        return waitForAnyImpl(futures, timeout);
+    }
+
+    /**
+     * Blocks the calling thread until one of the futures in the collection is available or until the
+     * timeout expires. 
+     *
+     *  <b>Warning</b> : this method must be called by either any active object or by the thread that 
      *  performed the method calls corresponding to the futures in the collection.
      *
      *
      * @param futures
-     *            a collection of futures
+     *            a list of futures
      * @param timeout
      *            to wait in ms
-     * @return index of the available future in the vector
+     * @return index of the available future in the list
      * @throws ProActiveException
      *             if the timeout expires
+     * @deprecated Replaced by {@link #waitForAny(List, long)}. Since an index is returned, a List should
+     * be used instead of a collection.
      */
-    public static <E> int waitForAny(java.util.Collection<E> futures, long timeout) throws ProActiveException {
+    @Deprecated
+    public static <E> int waitForAny(Collection<E> futures, long timeout) throws ProActiveException {
+        return waitForAnyImpl(futures, timeout);
+    }
+
+    private static <E> int waitForAnyImpl(Collection<E> futures, long timeout) throws ProActiveException {
         if (futures.isEmpty()) {
 
             /*
@@ -291,7 +319,7 @@ public class PAFuture {
      * @return <code>true</code> if all futures are awaited, else <code>false
      * </code>.
      */
-    public static boolean allAwaited(List<?> futures) {
+    public static boolean allAwaited(Collection<?> futures) {
         FuturePool fp = PAActiveObject.getBodyOnThis().getFuturePool();
 
         synchronized (fp) {
