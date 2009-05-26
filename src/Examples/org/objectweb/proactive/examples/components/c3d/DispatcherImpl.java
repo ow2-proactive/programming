@@ -136,7 +136,9 @@ public class DispatcherImpl extends C3DDispatcher implements Dispatcher, Dispatc
                     initActivity(body);
 
                     try {
+                        //@snippet-start C3D_Components_2
                         Fractive.registerByName(Fractive.getComponentRepresentativeOnThis(), "Dispatcher");
+                        //@snippet-end C3D_Components_2
                     } catch (ProActiveException e) {
                         System.err.println("HEY, couldn't register dispatcher");
                         e.printStackTrace();

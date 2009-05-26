@@ -80,7 +80,11 @@ public class Launcher {
 
             List<Node> nodes = provideNodes(args[0]);
             Node[] nodesArray = nodes.toArray(new Node[0]);
+
+            //@snippet-start integralPi_2
+            // Group creation
             Worker workers = (Worker) PASPMD.newSPMDGroup(Worker.class.getName(), params, nodesArray);
+            //@snippet-break integralPi_2
 
             String input = "";
 
@@ -88,9 +92,12 @@ public class Launcher {
             long numOfIterations = 1;
             double result;
             double error;
+            //@snippet-resume integralPi_2
             DoubleWrapper wrappedResult;
 
             while (numOfIterations > 0) {
+                //@snippet-break integralPi_2
+
                 // Prompt the user
                 System.out.print("\nEnter the number of iterations (0 to exit) : ");
 
@@ -111,14 +118,18 @@ public class Launcher {
                 if (numOfIterations <= 0) {
                     break;
                 }
-
+                //@snippet-resume integralPi_2
                 // Send the number of iterations to the first worker
                 Worker firstWorker = (Worker) PAGroup.getGroup(workers).get(0);
                 wrappedResult = firstWorker.start(numOfIterations);
+                //@snippet-break integralPi_2
+
                 result = wrappedResult.doubleValue();
                 error = result - Math.PI;
                 System.out.println("\nCalculated PI is " + result + " error is " + error);
+                //@snippet-resume integralPi_2
             }
+            //@snippet-end integralPi_2
 
             finish();
         } catch (Exception e) {

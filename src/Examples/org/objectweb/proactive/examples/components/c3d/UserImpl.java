@@ -102,6 +102,7 @@ public class UserImpl extends C3DUser implements BindingController, User {
         return null;
     }
 
+    //@snippet-start C3D_Components_1
     /** Binds to this UserImpl component the dispatcher which should be used. */
     public void bindFc(final String interfaceName, final Object serverInterface) {
         if (interfaceName.equals("user2dispatcher")) {
@@ -110,6 +111,8 @@ public class UserImpl extends C3DUser implements BindingController, User {
             // Registering back to the dispatcher is done in the go() method
         }
     }
+
+    //@snippet-end C3D_Components_1
 
     /** Detaches the user from its dispatcher.
      * Notice how it has not been called in terminate() ?

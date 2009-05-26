@@ -62,10 +62,13 @@ public class NameAndHostDialogForComponent extends NameAndHostDialog {
 
             String protocol = URIBuilder.getProtocol(hostNameTextField.getText());
 
+            //@snippet-start C3D_Components_3
+            /* COMPONENT_ALIAS = "Dispatcher" */
             ProActiveComponentRepresentative a;
             a = Fractive.lookup(URIBuilder.buildURI(hostName, COMPONENT_ALIAS, protocol, portNumber)
                     .toString());
             this.c3dDispatcher = (Dispatcher) a.getFcInterface("user2dispatcher");
+            //@snippet-end C3D_Components_3
             setVisible(false);
         } catch (UnknownHostException e) {
             treatException(e, "Sorry, host name '" + hostName + "' not found.");
