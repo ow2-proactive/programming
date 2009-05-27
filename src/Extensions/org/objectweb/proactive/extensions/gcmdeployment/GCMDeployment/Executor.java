@@ -64,7 +64,6 @@ public class Executor {
         Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT + ".job." + jobId);
         jobId++;
 
-        command = command.replaceAll("'", "\"");
         logger.debug("Command submited: " + command);
         try {
             logger.info("executing command=" + command);
