@@ -68,6 +68,7 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
             neighbour.setPreviousNeighbour((CMAgentChained) PAActiveObject.getStubOnThis());
         //@snippet-resume synch_cma_skeleton
     }
+
     //@snippet-end synch_getstub_usage 
 
     public CMAgentChained getPreviousNeigbour() {

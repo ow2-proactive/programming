@@ -73,6 +73,7 @@ public class Main {
         return vn;
         //@snippet-resume deploy_CMA_skeleton
     }
+
     //@snippet-end cma_deploy_method
 
     public static void main(String args[]) {

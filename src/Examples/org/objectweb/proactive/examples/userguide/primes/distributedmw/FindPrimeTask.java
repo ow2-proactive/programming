@@ -63,7 +63,7 @@ public class FindPrimeTask implements Task<Boolean> {
     //TOOD 2. Fill the code that checks if the taskCandidate
     // is prime. Note that no wrappers are needed !
     public Boolean run(WorkerMemory memory) {
-      //@snippet-break primes_distributedmw_task_skeleton
+        //@snippet-break primes_distributedmw_task_skeleton
         try {
             Thread.sleep(300);
         } catch (Exception e) {
