@@ -80,9 +80,6 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
     protected static final String IMPL_FIELD_NAME = "impl"; //delegatee
     private static MetaObjectInterfaceClassGenerator instance;
 
-    // this boolean for deciding of a possible indirection for the functionnal calls
-    protected boolean isPrimitive = false;
-
     public MetaObjectInterfaceClassGenerator() {
     }
 
@@ -116,9 +113,6 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
                 CtMethod[] reifiedMethods;
                 CtClass generatedCtClass = pool.makeClass(generatedClassFullName);
 
-                //this.fcInterfaceName = fcInterfaceName;
-                //isPrimitive = ((ProActiveComponentRepresentativeImpl) owner).getHierarchicalType()
-                //                                                    .equals(ComponentParameters.PRIMITIVE);
                 List<CtClass> interfacesToImplement = new ArrayList<CtClass>();
 
                 // add interface to reify
@@ -156,7 +150,7 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
                 methodsField.setModifiers(Modifier.STATIC);
                 generatedCtClass.addField(methodsField);
 
-                // field for generics parameters
+                // field for generic parameters
                 CtField genericTypesMappingField = new CtField(pool.get("java.util.Map"),
                     "genericTypesMapping", generatedCtClass);
 

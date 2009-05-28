@@ -95,11 +95,7 @@ public class TestGather_GCMdep extends ComponentTest {
 
         // bind components
         System.out.println("\nBind components...");
-
-        // CgeneratedCCgeneratedfunctionalTestsCCPcomponentCCPcollectiveitfCCPgathercast_remoteCCPGatherItfCCOreceiverCCgathercastItfProxyCOreceiverCrepresentative
-        //     TestRemoteGathercast.class.getClassLoader().loadClass("CgeneratedCCgeneratedorgCCPobjectwebCCPproactiveCCPexamplesCCPcomponentsCCPjacobiCCPGathercastDataReceiverCCOreceiverCCgathercastItfProxyCOreceiverCrepresentative");
         BindingController bc = Fractal.getBindingController(gatherCmpClient);
-
         // binding
         bc.bindFc("sender", gatherCmpServer.getFcInterface("receiver"));
 

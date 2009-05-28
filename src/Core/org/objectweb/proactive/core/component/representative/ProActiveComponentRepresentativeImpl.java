@@ -60,7 +60,6 @@ import org.objectweb.proactive.core.component.ComponentParameters;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.Fractive;
 import org.objectweb.proactive.core.component.ProActiveInterface;
-import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.config.ComponentConfigurationHandler;
 import org.objectweb.proactive.core.component.controller.AbstractProActiveController;
 import org.objectweb.proactive.core.component.gen.RepresentativeInterfaceClassGenerator;

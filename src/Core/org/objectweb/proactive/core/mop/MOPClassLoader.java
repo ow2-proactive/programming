@@ -67,7 +67,7 @@ public class MOPClassLoader extends URLClassLoader {
 
     /**
      * Get the bytecode of a stub given its name. If the stub can not be found
-     * the cache, the MOPClassLoader tries to generate it.
+     * in the cache, the MOPClassLoader tries to generate it.
      * @param classname The name of the stub class
      * @return An array representing the bytecode of the stub, null if the
      *  stub could not be found or created
