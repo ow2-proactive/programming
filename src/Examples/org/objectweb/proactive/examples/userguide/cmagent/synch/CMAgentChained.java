@@ -31,6 +31,7 @@
  * $$ACTIVEEON_INITIAL_DEV$$
  */
 //@snippet-start synch_cma_full
+//@snippet-start synch_cma_skeleton
 package org.objectweb.proactive.examples.userguide.cmagent.synch;
 
 import java.io.Serializable;
@@ -52,19 +53,23 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
         this.previousNeighbour = neighbour;
         //TODO 1. Pass a remote reference of this object to the neighbour
         // Hint: This object is "nextNeighbour" for previous neighbour if not null
+        //@snippet-break synch_cma_skeleton
         if (neighbour.getNextNeigbour() == null)
             neighbour.setNextNeighbour((CMAgentChained) PAActiveObject.getStubOnThis());
+        //@snippet-resume synch_cma_skeleton
     }
 
     public void setNextNeighbour(CMAgentChained neighbour) {
         this.nextNeighbour = neighbour;
         //TODO 2. Pass a remote reference of this object to the neighbour
         // Hint: This object is "previousNeighbour" for next neighbour if not null
+        //@snippet-break synch_cma_skeleton
         if (neighbour.getPreviousNeigbour() == null)
             neighbour.setPreviousNeighbour((CMAgentChained) PAActiveObject.getStubOnThis());
+        //@snippet-resume synch_cma_skeleton
     }
-
     //@snippet-end synch_getstub_usage 
+
     public CMAgentChained getPreviousNeigbour() {
         return previousNeighbour;
     }
@@ -83,7 +88,9 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
             // states is a future
 
             // TODO 3. Is this explicit synchronization mandatory ? (NO the wait was removed)
+            //@snippet-break synch_cma_skeleton
             states.add(this.getCurrentState());
+            //@snippet-resume synch_cma_skeleton
 
             return states;
         } else {
@@ -102,8 +109,10 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
             Vector<State> states = this.nextNeighbour.getAllNextStates();
             // states is a future
 
-            // TODO 4. Is this explicit synchronization mandatory ?	(NO the wait was removed)		
+            // TODO 4. Is this explicit synchronization mandatory ?	(NO the wait was removed)
+            //@snippet-break synch_cma_skeleton
             states.add(this.getCurrentState());
+            //@snippet-resume synch_cma_skeleton
 
             return states;
         } else {
@@ -114,4 +123,5 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
         }
     }
 }
+//@snippet-end synch_cma_skeleton
 //@snippet-end synch_cma_full

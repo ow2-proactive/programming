@@ -30,9 +30,11 @@
  * $$PROACTIVE_INITIAL_DEV$$
  */
 //@snippet-start CMA_Main
+//@snippet-start simple_CMA_skeleton
 package org.objectweb.proactive.examples.userguide.cmagent.simple;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.ActiveObjectCreationException;
 
@@ -43,17 +45,27 @@ public class Main {
             String currentState = new String();
             //@snippet-start CMA_instantiation
             //TODO 1. Create the active object
+            //@snippet-break simple_CMA_skeleton
             CMAgent ao = (CMAgent) PAActiveObject.newActive(CMAgent.class.getName(), null);
             //@snippet-end CMA_instantiation
             //@snippet-start CMA_call
+            //@snippet-resume simple_CMA_skeleton
             //TODO 2. Get the current state
+            //@snippet-break simple_CMA_skeleton
             currentState = ao.getCurrentState().toString();
-            //@snippet-end CMA_call
+            //@snippet-resume simple_CMA_skeleton
             //TODO 3. Print the state
+            //@snippet-break simple_CMA_skeleton
             System.out.println(currentState);
+            //@snippet-end CMA_call
             //@snippet-start CMA_terminate_call
-            //TODO 4. Stop the active object
+            //@snippet-resume simple_CMA_skeleton
+            //TODO 4. Stop the active object and
+            //        terminate the application
+            //@snippet-break simple_CMA_skeleton
             PAActiveObject.terminateActiveObject(ao, true);
+            PALifeCycle.exitSuccess();
+            //@snippet-resume simple_CMA_skeleton
             //@snippet-end CMA_terminate_call
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
@@ -63,4 +75,4 @@ public class Main {
     }
 }
 //@snippet-end CMA_Main
-
+//@snippet-end simple_CMA_skeleton

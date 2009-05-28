@@ -29,6 +29,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+//@snippet-start groups_cma_main_skeleton
 package org.objectweb.proactive.examples.userguide.cmagent.groups;
 
 import java.io.BufferedReader;
@@ -79,18 +80,22 @@ public class Main {
             GCMVirtualNode vn = deploy(args[0]);
             //@snippet-start groups_group_creation	
             //TODO 1. Create a new empty group
+            //@snippet-break groups_cma_main_skeleton
             CMAgentMigrator monitorsGroup = (CMAgentMigrator) PAGroup.newGroup(CMAgentMigrator.class
                     .getName());
-
+            //@snippet-resume groups_cma_main_skeleton
             //TODO 2. Create a collection of active objects with on object on each node
+            //@snippet-break groups_cma_main_skeleton
             for (Node node : vn.getCurrentNodes()) {
                 CMAgentMigrator ao = (CMAgentMigrator) PAActiveObject.newActive(CMAgentMigrator.class
                         .getName(), new Object[] {}, node);
                 agents.add(ao);
             }
-
+            //@snippet-resume groups_cma_main_skeleton
             //TODO 3. Get a management representation of the monitors group
+            //@snippet-break groups_cma_main_skeleton
             Group<CMAgentMigrator> gA = PAGroup.getGroup(monitorsGroup);
+            //@snippet-resume groups_cma_main_skeleton
             //@snippet-end groups_group_creation	
             //ask for adding or removing nodes
             //get statistics
@@ -101,12 +106,16 @@ public class Main {
                 k = 1;
                 System.out.println("Toggle monitored nodes (*) or display statistics: ");
                 for (CMAgentMigrator agent : agents) {
-                    if (gA.contains(agent))
-
-                        //TODO 5. Print the node URL
+                    //TODO 4. Print the node URL
+                    if (gA.contains(agent)) {
+                        //@snippet-break groups_cma_main_skeleton
                         System.out.println(" " + k + ".* " + PAActiveObject.getActiveObjectNodeUrl(agent));
-                    else
+                        //@snippet-resume groups_cma_main_skeleton
+                    } else {
+                        //@snippet-break groups_cma_main_skeleton
                         System.out.println(" " + k + ".  " + PAActiveObject.getActiveObjectNodeUrl(agent));
+                        //@snippet-resume groups_cma_main_skeleton
+                    }
                     k++;
                 }
                 System.out.println("-1.  Display statistics for monitored nodes");
@@ -130,15 +139,24 @@ public class Main {
                     while (PAGroup.size(resultsGroup) > 0) {
                         //@snippet-start groups_wbn
                         //TODO 5. Use PAGroup.waitAndGetOneThenRemoveIt() to control the list of State futures
+                        //@snippet-break groups_cma_main_skeleton
                         State statistic = (State) PAGroup.waitAndGetOneThenRemoveIt(resultsGroup);
+                        //@snippet-resume groups_cma_main_skeleton
                         //@snippet-end groups_wbn
                         System.out.println(statistic.toString());
                     }
                 } else {
-                    if (gA.contains(agents.elementAt(choice - 1)))
+                    //TODO 6. Use the management representation to add or remove
+                    //        the agent (choice-1) to/from the group.
+                    //@snippet-break groups_cma_main_skeleton
+                    //@snippet-start groups_add_remove
+                    if (gA.contains(agents.elementAt(choice - 1))) {
                         gA.remove(agents.elementAt(choice - 1));
-                    else
+                    } else {
                         gA.add(agents.elementAt(choice - 1));
+                    }
+                    //@snippet-end groups_add_remove
+                    //@snippet-resume groups_cma_main_skeleton
                 }
             }
 
@@ -153,7 +171,6 @@ public class Main {
         } catch (ClassNotFoundException e) {
             System.err.println(e.getMessage());
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
             System.err.println(e.getMessage());
         } finally {
             //stopping all the objects and JVMS
@@ -164,3 +181,4 @@ public class Main {
     }
     //@snippet-end groups_cma_full
 }
+//@snippet-end groups_cma_main_skeleton

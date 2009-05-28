@@ -31,6 +31,7 @@
  * $$ACTIVEEON_INITIAL_DEV$$
  */
 //@snippet-start primes_distributedmw_task
+//@snippet-start primes_distributedmw_task_skeleton
 package org.objectweb.proactive.examples.userguide.primes.distributedmw;
 
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
@@ -50,16 +51,19 @@ public class FindPrimeTask implements Task<Boolean> {
     private long end;
     private long taskCandidate;
 
-    //TODO 1. Write the constructor for this task 
+    //TODO 1. Write the constructor for this task
     public FindPrimeTask(long taskCandidate, long begin, long end) {
+        //@snippet-break primes_distributedmw_task_skeleton
         this.begin = begin;
         this.end = end;
         this.taskCandidate = taskCandidate;
+        //@snippet-resume primes_distributedmw_task_skeleton
     }
 
     //TOOD 2. Fill the code that checks if the taskCandidate
     // is prime. Note that no wrappers are needed !
     public Boolean run(WorkerMemory memory) {
+      //@snippet-break primes_distributedmw_task_skeleton
         try {
             Thread.sleep(300);
         } catch (Exception e) {
@@ -70,7 +74,9 @@ public class FindPrimeTask implements Task<Boolean> {
                 return Boolean.valueOf(false);
             }
         }
+        //@snippet-resume primes_distributedmw_task_skeleton
         return Boolean.valueOf(true);
     }
 }
 //@snippet-end primes_distributedmw_task
+//@snippet-end primes_distributedmw_task_skeleton

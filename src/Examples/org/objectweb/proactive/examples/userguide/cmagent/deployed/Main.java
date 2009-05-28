@@ -30,6 +30,7 @@
  * $$PROACTIVE_INITIAL_DEV$$
  */
 //@snippet-start cma_deploy_full
+//@snippet-start deploy_CMA_skeleton
 package org.objectweb.proactive.examples.userguide.cmagent.deployed;
 
 import java.io.File;
@@ -51,39 +52,54 @@ public class Main {
     //@snippet-start cma_deploy_method
     //deployment method
     private static GCMVirtualNode deploy(String descriptor) throws NodeException, ProActiveException {
-
         //TODO 1. Create object representation of the deployment file
+        //@snippet-break deploy_CMA_skeleton
         pad = PAGCMDeployment.loadApplicationDescriptor(new File(descriptor));
+        //@snippet-resume deploy_CMA_skeleton
         //TODO 2. Activate all Virtual Nodes
+        //@snippet-break deploy_CMA_skeleton
         pad.startDeployment();
+        //@snippet-resume deploy_CMA_skeleton
         //TODO 3. Wait for all the virtual nodes to become ready
+        //@snippet-break deploy_CMA_skeleton
         pad.waitReady();
-
+        //@snippet-resume deploy_CMA_skeleton
         //TODO 4. Get the first Virtual Node specified in the descriptor file
+        //@snippet-break deploy_CMA_skeleton
         GCMVirtualNode vn = pad.getVirtualNodes().values().iterator().next();
-
+        //@snippet-resume deploy_CMA_skeleton
         //TODO 5. Return the virtual node
+        //@snippet-break deploy_CMA_skeleton
         return vn;
+        //@snippet-resume deploy_CMA_skeleton
     }
-
     //@snippet-end cma_deploy_method
+
     public static void main(String args[]) {
         try {
             //TODO 6. Get the virtual node through the deploy method
+            //@snippet-break deploy_CMA_skeleton
             GCMVirtualNode vn = deploy(args[0]);
+            //@snippet-resume deploy_CMA_skeleton
             //@snippet-start cma_deploy_object
             //TODO 7. Create the active object using a node on the virtual node
+            //@snippet-break deploy_CMA_skeleton
             CMAgentInitialized ao = (CMAgentInitialized) PAActiveObject.newActive(CMAgentInitialized.class
                     .getName(), new Object[] {}, vn.getANode());
+            //@snippet-resume deploy_CMA_skeleton
             //@snippet-end cma_deploy_object
             //TODO 8. Get the current state from the active object
+            //@snippet-break deploy_CMA_skeleton
             String currentState = ao.getCurrentState().toString();
-
+            //@snippet-resume deploy_CMA_skeleton
             //TODO 9. Print the state
+            //@snippet-break deploy_CMA_skeleton
             System.out.println(currentState);
-
+            //@snippet-resume deploy_CMA_skeleton
             //TODO 10. Stop the active object
+            //@snippet-break deploy_CMA_skeleton
             PAActiveObject.terminateActiveObject(ao, false);
+            //@snippet-resume deploy_CMA_skeleton
 
         } catch (NodeException nodeExcep) {
             System.err.println(nodeExcep.getMessage());
@@ -93,10 +109,13 @@ public class Main {
             System.err.println(poExcep.getMessage());
         } finally {
             //TODO 11. Stop the virtual node
+            //@snippet-break deploy_CMA_skeleton
             if (pad != null)
                 pad.kill();
             PALifeCycle.exitSuccess();
+            //@snippet-resume deploy_CMA_skeleton
         }
     }
 }
+//@snippet-end deploy_CMA_skeleton
 //@snippet-end cma_deploy_full

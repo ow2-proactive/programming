@@ -1126,7 +1126,7 @@ Enter the number of iterations (0 to exit) :  </screen>
             <para>
                 The
                 <literal>Fractive.lookup</literal>
-                method uses an URL to find the host which holds the
+                method uses a URL to find the host which holds the
                 component. This URL contains the machine name of the
                 host, the communication protocol and the port number, but also the
                 lookup name under which the desired component has been
