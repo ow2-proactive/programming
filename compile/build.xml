@@ -160,13 +160,33 @@
             <arg value="-class"/>
             <arg value="org/objectweb/proactive/core/runtime/ProActiveRuntime" />
 		</java>
-
 		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
 			<classpath refid="project.classpath" />
             <arg value="-srcDir"/>
 			<arg value="${cl.proactive.dir}"/>
             <arg value="-class"/>
             <arg value="org/objectweb/proactive/core/body/UniversalBody" />
+		</java>
+		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
+			<classpath refid="project.classpath" />
+            <arg value="-srcDir"/>
+			<arg value="${cl.proactive.dir}"/>
+            <arg value="-class"/>
+            <arg value="org/objectweb/proactive/core/component/type/Composite" />
+		</java>
+		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
+			<classpath refid="project.classpath" />
+            <arg value="-srcDir"/>
+			<arg value="${cl.proactive.dir}"/>
+            <arg value="-class"/>
+            <arg value="org/objectweb/proactive/core/component/ProActiveInterfaceImpl" />
+		</java>
+		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
+			<classpath refid="project.classpath" />
+            <arg value="-srcDir"/>
+			<arg value="${cl.proactive.dir}"/>
+            <arg value="-class"/>
+            <arg value="org/objectweb/proactive/core/jmx/util/JMXNotificationListener" />
 		</java>
 
 	    <antcall target="ibis"/>
