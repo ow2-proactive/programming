@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -58,8 +59,10 @@ public class CMAgentService extends CMAgentInitialized {
             /* of 'hw' CMAgentService. Name your service  "cmAgentService"*/
             /*******************************************************/
             //@snippet-start ws_call
+            //@tutorial-break
             WebServices.exposeAsWebService(hw, url, "cmAgentService", new String[] {
                     "getLastRequestServeTime", "getCurrentState" });
+            //@tutorial-resume
             //@snippet-end ws_call
 
         } catch (ActiveObjectCreationException e) {
@@ -68,6 +71,6 @@ public class CMAgentService extends CMAgentInitialized {
             e.printStackTrace();
         }
     }
-
 }
 //@snippet-end webservice_cma_full
+//@tutorial-end

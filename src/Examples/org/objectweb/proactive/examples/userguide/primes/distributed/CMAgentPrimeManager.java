@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -95,13 +96,17 @@ public class CMAgentPrimeManager {
             //TODO 1. Send asynchronous method call to the worker 
             //@snippet-break primes_distributed_manager_skeleton
             // Send asynchronous method call to the worker
+            //@tutorial-break
             BooleanWrapper res = worker.isPrime(number, begin, end);
+            //@tutorial-resume
             //@snippet-resume primes_distributed_manager_skeleton
 
             //TODO 2. Add the future result to the vector of answers 
             //@snippet-break primes_distributed_manager_skeleton
             // Adds the future to the vector
+            //@tutorial-break
             answers.add(res);
+            //@tutorial-resume
             //@snippet-resume primes_distributed_manager_skeleton
 
             // Update the begin and the end of the interval
@@ -117,8 +122,10 @@ public class CMAgentPrimeManager {
             // TODO 3. Block until a new response is available 
             // by using a static method from org.objectweb.proactive.api.PAFuture
             //@snippet-break primes_distributed_manager_skeleton
-            // Will block until a new response is available                             
+            //@tutorial-break
+            // Will block until a new response is available
             intervalNumber = PAFuture.waitForAny(answers);
+            //@tutorial-resume
             //@snippet-resume primes_distributed_manager_skeleton
 
             // Check the answer
@@ -143,3 +150,4 @@ public class CMAgentPrimeManager {
 }
 // @snippet-end primes_distributed_manager
 //@snippet-end primes_distributed_manager_skeleton
+//@tutorial-end

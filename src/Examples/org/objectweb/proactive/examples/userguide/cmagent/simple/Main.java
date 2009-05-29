@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -38,33 +39,40 @@ import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.ActiveObjectCreationException;
 
-
 public class Main {
     public static void main(String args[]) {
         try {
             String currentState = new String();
             //@snippet-start CMA_instantiation
             //TODO 1. Create the active object
+            //@tutorial-break
             //@snippet-break simple_CMA_skeleton
             CMAgent ao = (CMAgent) PAActiveObject.newActive(CMAgent.class.getName(), null);
+            //@tutorial-resume
             //@snippet-end CMA_instantiation
             //@snippet-start CMA_call
             //@snippet-resume simple_CMA_skeleton
             //TODO 2. Get the current state
             //@snippet-break simple_CMA_skeleton
+            //@tutorial-break
             currentState = ao.getCurrentState().toString();
+            //@tutorial-resume
             //@snippet-resume simple_CMA_skeleton
             //TODO 3. Print the state
             //@snippet-break simple_CMA_skeleton
+            //@tutorial-break
             System.out.println(currentState);
+            //@tutorial-resume
             //@snippet-end CMA_call
             //@snippet-start CMA_terminate_call
             //@snippet-resume simple_CMA_skeleton
             //TODO 4. Stop the active object and
             //        terminate the application
             //@snippet-break simple_CMA_skeleton
+            //@tutorial-break
             PAActiveObject.terminateActiveObject(ao, true);
             PALifeCycle.exitSuccess();
+            //@tutorial-resume
             //@snippet-resume simple_CMA_skeleton
             //@snippet-end CMA_terminate_call
         } catch (NodeException nodeExcep) {
@@ -74,5 +82,6 @@ public class Main {
         }
     }
 }
+//@tutorial-end
 //@snippet-end CMA_Main
 //@snippet-end simple_CMA_skeleton

@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -54,8 +55,10 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
         //TODO 1. Pass a remote reference of this object to the neighbour
         // Hint: This object is "nextNeighbour" for previous neighbour if not null
         //@snippet-break synch_cma_skeleton
+        //@tutorial-break
         if (neighbour.getNextNeigbour() == null)
             neighbour.setNextNeighbour((CMAgentChained) PAActiveObject.getStubOnThis());
+        //@tutorial-resume
         //@snippet-resume synch_cma_skeleton
     }
 
@@ -64,8 +67,10 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
         //TODO 2. Pass a remote reference of this object to the neighbour
         // Hint: This object is "previousNeighbour" for next neighbour if not null
         //@snippet-break synch_cma_skeleton
+        //@tutorial-break
         if (neighbour.getPreviousNeigbour() == null)
             neighbour.setPreviousNeighbour((CMAgentChained) PAActiveObject.getStubOnThis());
+        //@tutorial-resume
         //@snippet-resume synch_cma_skeleton
     }
 
@@ -90,7 +95,9 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
 
             // TODO 3. Is this explicit synchronization mandatory ? (NO the wait was removed)
             //@snippet-break synch_cma_skeleton
+            //@tutorial-break
             states.add(this.getCurrentState());
+            //@tutorial-resume
             //@snippet-resume synch_cma_skeleton
 
             return states;
@@ -112,7 +119,9 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
 
             // TODO 4. Is this explicit synchronization mandatory ?	(NO the wait was removed)
             //@snippet-break synch_cma_skeleton
+            //@tutorial-break
             states.add(this.getCurrentState());
+            //@tutorial-resume
             //@snippet-resume synch_cma_skeleton
 
             return states;
@@ -126,3 +135,4 @@ public class CMAgentChained extends CMAgentInitialized implements Serializable {
 }
 //@snippet-end synch_cma_skeleton
 //@snippet-end synch_cma_full
+//@tutorial-end

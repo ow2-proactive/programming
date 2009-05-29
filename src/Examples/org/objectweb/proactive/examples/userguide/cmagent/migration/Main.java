@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -84,7 +85,9 @@ public class Main {
                 for (Node node : vn.getCurrentNodes()) {
                     //TODO 2. Add the node URL to the menu
                     //@snippet-break migrate_main_cma_skeleton
+                    //@tutorial-break
                     System.out.println(k + ".  Statistics for node :" + node.getNodeInformation().getURL());
+                    //@tutorial-resume
                     //@snippet-resume migrate_main_cma_skeleton
                     k++;
                 }
@@ -107,17 +110,23 @@ public class Main {
 
                 //TODO 3. Migrate the active object to the selected node:  choice-1
                 //@snippet-break migrate_main_cma_skeleton
+                //@tutorial-break
                 ao.migrateTo(nodeArray[choice - 1]); //migrate
+                //@tutorial-resume
                 //@snippet-resume migrate_main_cma_skeleton
                 //TODO 4. Get the state and the last request time and print them out
                 //@snippet-break migrate_main_cma_skeleton
+                //@tutorial-break
                 String currentState = ao.getCurrentState().toString(); //get the state
                 System.out.println("\n" + currentState);
+                //@tutorial-resume
                 //@snippet-resume migrate_main_cma_skeleton
                 //TODO 5. Print the execution time of the last request
                 //@snippet-break migrate_main_cma_skeleton
+                //@tutorial-break
                 System.out.println("Calculating the statistics took " +
                     ao.getLastRequestServeTime().longValue() + "ms \n");
+                //@tutorial-resume
                 //@snippet-resume migrate_main_cma_skeleton
             }
         } catch (NodeException nodeExcep) {
@@ -131,12 +140,15 @@ public class Main {
         } finally {
             //TODO 6. Stop all the objects and JVM
             //@snippet-break migrate_main_cma_skeleton
+            //@tutorial-break
             if (pad != null)
                 pad.kill();
             PALifeCycle.exitSuccess();
             //@snippet-resume migrate_main_cma_skeleton
+            //@tutorial-resume
         }
     }
 }
 //@snippet-end migrate_main_cma_skeleton
 //@snippet-end migrate_main_cma_full
+//@tutorial-end

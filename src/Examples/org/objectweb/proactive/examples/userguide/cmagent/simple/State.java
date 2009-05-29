@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -80,3 +81,4 @@ public class State implements Serializable {
     }
 }
 //@snippet-end state_full
+//@tutorial-end

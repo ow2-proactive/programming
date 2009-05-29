@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -103,6 +104,7 @@ public class Main {
             //TODO 5:  iterate through all nodes, deploy
             // a worker per node and add it to the manager
             //@snippet-break primes_distributed_main_skeleton
+            //@tutorial-break
             Iterator<Node> nodesIt = vNode.getCurrentNodes().iterator();
             while (nodesIt.hasNext()) {
                 Node node = nodesIt.next();
@@ -110,6 +112,7 @@ public class Main {
                         CMAgentPrimeWorker.class.getName(), new Object[] {}, node);
                 manager.addWorker(worker);
             }
+            //@tutorial-resume
             //@snippet-resume primes_distributed_main_skeleton
 
             // Check the primality (Send a synchronous method call to the manager)
@@ -125,5 +128,6 @@ public class Main {
         }
     }
 }
+//@tutorial-end
 // @snippet-end primes_distributed_main
 //@snippet-end primes_distributed_main_skeleton

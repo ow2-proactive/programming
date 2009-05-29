@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -43,7 +44,7 @@ public class Main {
             String currentState = new String();
             //create the active oject
             CMAgentInitialized ao = (CMAgentInitialized) PAActiveObject.newActive(CMAgentInitialized.class
-                    .getName(), null); // 
+                    .getName(), null);
             currentState = ao.getCurrentState().toString();
             System.out.println(currentState);
             PAActiveObject.terminateActiveObject(ao, false);
@@ -55,3 +56,4 @@ public class Main {
         }
     }
 }
+//@tutorial-end

@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -81,20 +82,26 @@ public class Main {
             //@snippet-start groups_group_creation	
             //TODO 1. Create a new empty group
             //@snippet-break groups_cma_main_skeleton
+            //@tutorial-break
             CMAgentMigrator monitorsGroup = (CMAgentMigrator) PAGroup.newGroup(CMAgentMigrator.class
                     .getName());
+            //@tutorial-resume
             //@snippet-resume groups_cma_main_skeleton
             //TODO 2. Create a collection of active objects with on object on each node
             //@snippet-break groups_cma_main_skeleton
+            //@tutorial-break
             for (Node node : vn.getCurrentNodes()) {
                 CMAgentMigrator ao = (CMAgentMigrator) PAActiveObject.newActive(CMAgentMigrator.class
                         .getName(), new Object[] {}, node);
                 agents.add(ao);
             }
+            //@tutorial-resume
             //@snippet-resume groups_cma_main_skeleton
             //TODO 3. Get a management representation of the monitors group
             //@snippet-break groups_cma_main_skeleton
+            //@tutorial-break
             Group<CMAgentMigrator> gA = PAGroup.getGroup(monitorsGroup);
+            //@tutorial-resume
             //@snippet-resume groups_cma_main_skeleton
             //@snippet-end groups_group_creation	
             //ask for adding or removing nodes
@@ -109,11 +116,15 @@ public class Main {
                     //TODO 4. Print the node URL
                     if (gA.contains(agent)) {
                         //@snippet-break groups_cma_main_skeleton
+                        //@tutorial-break
                         System.out.println(" " + k + ".* " + PAActiveObject.getActiveObjectNodeUrl(agent));
+                        //@tutorial-resume
                         //@snippet-resume groups_cma_main_skeleton
                     } else {
                         //@snippet-break groups_cma_main_skeleton
+                        //@tutorial-break
                         System.out.println(" " + k + ".  " + PAActiveObject.getActiveObjectNodeUrl(agent));
+                        //@tutorial-resume
                         //@snippet-resume groups_cma_main_skeleton
                     }
                     k++;
@@ -140,7 +151,9 @@ public class Main {
                         //@snippet-start groups_wbn
                         //TODO 5. Use PAGroup.waitAndGetOneThenRemoveIt() to control the list of State futures
                         //@snippet-break groups_cma_main_skeleton
+                        //@tutorial-break
                         State statistic = (State) PAGroup.waitAndGetOneThenRemoveIt(resultsGroup);
+                        //@tutorial-resume
                         //@snippet-resume groups_cma_main_skeleton
                         //@snippet-end groups_wbn
                         System.out.println(statistic.toString());
@@ -150,11 +163,13 @@ public class Main {
                     //        the agent (choice-1) to/from the group.
                     //@snippet-break groups_cma_main_skeleton
                     //@snippet-start groups_add_remove
+                    //@tutorial-break
                     if (gA.contains(agents.elementAt(choice - 1))) {
                         gA.remove(agents.elementAt(choice - 1));
                     } else {
                         gA.add(agents.elementAt(choice - 1));
                     }
+                    //@tutorial-resume
                     //@snippet-end groups_add_remove
                     //@snippet-resume groups_cma_main_skeleton
                 }
@@ -182,3 +197,4 @@ public class Main {
     //@snippet-end groups_cma_full
 }
 //@snippet-end groups_cma_main_skeleton
+//@tutorial-end

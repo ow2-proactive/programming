@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -52,10 +53,12 @@ public class CMAgentMigrator extends CMAgentInitialized implements Serializable 
         try {
             //TODO 1. Migrate the active object to the Node received as parameter
             //@snippet-break migrate_cma_skeleton
+            //@tutorial-break
             //should be the last call in this method
             //instructions after a call to PAMobileAgent.migrateTo are NOT executed 
             PAMobileAgent.migrateTo(whereTo);
             //@snippet-resume migrate_cma_skeleton
+            //@tutorial-resume
         } catch (ProActiveException moveExcep) {
             System.err.println(moveExcep.getMessage());
         }
@@ -63,3 +66,4 @@ public class CMAgentMigrator extends CMAgentInitialized implements Serializable 
 }
 //@snippet-end migrate_cma_skeleton
 //@snippet-end migrate_cma_full
+//@tutorial-end

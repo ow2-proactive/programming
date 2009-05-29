@@ -1,0 +1,72 @@
+<project name="Tutorial">
+
+   <import file="build_paths.xml"/>
+
+   <macrodef name="compile">
+      <attribute name="sourceDir"/>
+      <sequential>
+         <mkdir dir="${java.classes.dir}" />
+         <copy  file="${log4j.properties}" todir="${java.classes.dir}"/>
+         <javac srcdir="@{sourceDir}" destdir="${java.classes.dir}" includes="**" deprecation="on" source="${source}" debug="${debug}">
+            <classpath refid="compile.classpath" />
+         </javac>
+      </sequential>
+   </macrodef>
+
+   <target name="all" description="Compile all tutorials">
+      <compile sourceDir="${java.dir}" />
+   </target>
+
+   <target name="cmagent.simple" description="Compile the Simple CMAgent tutorial">
+      <compile sourceDir="${tutorial.cmagent.simple}" />
+   </target>
+
+   <target name="cmagent.initialized" description="Compile the Initialized CMAgent tutorial">
+      <compile sourceDir="${tutorial.cmagent.initialized}" />
+   </target>
+
+   <target name="cmagent.deployed" description="Compile the Deployed CMAgent tutorial">
+      <compile sourceDir="${tutorial.cmagent.deployed}" />
+   </target>
+
+   <target name="cmagent.synch" description="Compile the Synchronized CMAgent tutorial">
+      <compile sourceDir="${tutorial.cmagent.synch}" />
+   </target>
+
+   <target name="cmagent.migration" description="Compile the Migration CMAgent tutorial">
+      <compile sourceDir="${tutorial.cmagent.migration}" />
+   </target>
+
+   <target name="cmagent.groups" description="Compile the Group CMAgent tutorial">
+      <compile sourceDir="${tutorial.cmagent.groups}" />
+   </target>
+
+   <target name="cmagent.webservice" description="Compile the WebService CMAgent tutorial">
+      <compile sourceDir="${tutorial.cmagent.webservice}" />
+   </target>
+
+   <target name="primes.sequential" description="Compile the Sequential Prime tutorial">
+      <compile sourceDir="${tutorial.primes.sequential}" />
+   </target>
+
+   <target name="primes.distributed" description="Compile the Distributed Prime tutorial">
+      <compile sourceDir="${tutorial.primes.distributed}" />
+   </target>
+
+   <target name="primes.distributedmw" description="Compile the Distributed Master-Worker Prime tutorial">
+      <compile sourceDir="${tutorial.primes.distributedmw}" />
+   </target>
+
+
+   <!-- ==================================================================== -->
+   <!--            Cleans the built files			                             -->
+   <!-- ==================================================================== -->
+   <target  name="clean" description="Deletes the generated files">
+      <delete verbose="true" includeemptydirs="true">
+         <fileset dir="${base.dir}">
+            <include name="classes/**"/>
+         </fileset>
+      </delete>
+   </target>
+
+</project>

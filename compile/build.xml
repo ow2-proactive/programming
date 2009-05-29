@@ -859,6 +859,7 @@
 		<delete dir="${test.classes.dir}" />
 		<delete file="tests.log" />
 		<delete dir="${junit.dir}" />
+		<delete dir="${tutorials.dir}" />
 		<subant target="doc.clean" inheritall="true">
 			<fileset dir="../doc/toolchain" includes="doc.xml"/>
 		</subant>
@@ -1092,4 +1093,43 @@
 		</chmod>
 	</target>
 
+	<!-- ====================================== -->
+	<!--          Create the tutorial           -->
+	<!-- ====================================== -->
+	<target name="tutorials" depends="deploy" description="Extracts tutorials from sources and creates the tutorials directory with building and launching scripts">
+      <delete quiet="true">
+         <fileset dir="${tutorials.src}"/>
+      </delete>
+      <mkdir dir="${tutorials.src}"/>
+      <java classname="doc.tutorials.Tutorializer" fork="true">
+         <classpath>
+            <fileset dir="${base.dir}/doc/toolchain/lib">
+               <include name="**/*.jar"/>
+            </fileset>
+         </classpath>
+         <arg value="${src.dir}" />
+         <arg value="${tutorials.src}" />
+      </java>
+      <mkdir dir="${tutorials.lib}"/>
+		<copy toDir="${tutorials.lib}">
+			<fileset dir="${deploy.lib.dir}">
+				<include name="**/*.jar" />
+				<exclude name="ProActive_examples.jar" />
+				<exclude name="ProActive_utils.jar" />
+				<exclude name="ProActive_tests.jar" />
+			</fileset>
+		</copy>
+      <!-- Use exec instead of copy in order to keep right permissions -->
+      <exec executable="cp">
+         <arg value="-r" />
+         <arg value="${src.examples.dir}/${examples.path}/userguide/scripts" />
+         <arg value="${tutorials.dir}/." />
+      </exec>
+      <!-- Use exec instead of copy in order to keep right permissions -->
+      <exec executable="cp">
+         <arg value="-r" />
+         <arg value="${src.examples.dir}/${examples.path}/userguide/compile" />
+         <arg value="${tutorials.dir}/." />
+      </exec>
+	</target>
 </project>

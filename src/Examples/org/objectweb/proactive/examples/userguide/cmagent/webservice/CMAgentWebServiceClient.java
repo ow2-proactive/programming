@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -87,3 +88,4 @@ public class CMAgentWebServiceClient {
     }
 }
 //@snippet-end webservice_cma_client_full
+//@tutorial-end

@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -54,9 +55,11 @@ public class FindPrimeTask implements Task<Boolean> {
     //TODO 1. Write the constructor for this task
     public FindPrimeTask(long taskCandidate, long begin, long end) {
         //@snippet-break primes_distributedmw_task_skeleton
+        //@tutorial-break
         this.begin = begin;
         this.end = end;
         this.taskCandidate = taskCandidate;
+        //@tutorial-resume
         //@snippet-resume primes_distributedmw_task_skeleton
     }
 
@@ -64,6 +67,7 @@ public class FindPrimeTask implements Task<Boolean> {
     // is prime. Note that no wrappers are needed !
     public Boolean run(WorkerMemory memory) {
         //@snippet-break primes_distributedmw_task_skeleton
+        //@tutorial-break
         try {
             Thread.sleep(300);
         } catch (Exception e) {
@@ -74,9 +78,11 @@ public class FindPrimeTask implements Task<Boolean> {
                 return Boolean.valueOf(false);
             }
         }
+        //@tutorial-resume
         //@snippet-resume primes_distributedmw_task_skeleton
         return Boolean.valueOf(true);
     }
 }
+//@tutorial-end
 //@snippet-end primes_distributedmw_task
 //@snippet-end primes_distributedmw_task_skeleton

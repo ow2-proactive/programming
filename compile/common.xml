@@ -44,6 +44,7 @@
 	<property name="proactive.core.path" value="${proactive.path}/core" />
 	<property name="proactive.ext.path" value="${proactive.path}/ext" />
 	<property name="extensions.path"    value="${proactive.path}/extensions"/>
+	<property name="examples.path"    value="${proactive.path}/examples"/>
 	<property name="extra.path"    		value="${proactive.path}/extra"/>
 
 	<!-- Javac properties -->
@@ -73,6 +74,12 @@
 	<!-- Performance test properties -->
 	<property name="performanceTestClass" value="performanceTests.simple.PerformanceTest" />
 	<property name="config.dir" value="${cl.proactive.dir}/${proactive.core.path}/config" />
+
+   <!-- Tutorial properties -->
+   <property name="tutorials.dir"		value="${base.dir}/tutorials" />
+   <property name="tutorials.src"		value="${tutorials.dir}/src" />
+   <property name="tutorials.lib"		value="${tutorials.dir}/dist/lib" />
+
 
 	<!-- ================================================================ -->
 	<!--                   define the different classpaths                -->

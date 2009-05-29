@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -54,14 +55,18 @@ public class CMAgentInitialized extends CMAgent implements InitActive, RunActive
     public void initActivity(Body body) {
         //TODO 1. Print start information
         //@snippet-break init_CMA_skeleton
+        //@tutorial-break
         System.out.println("### Started Active object " + body.getMBean().getName() + " on " +
             body.getMBean().getNodeUrl());
         //@snippet-resume init_CMA_skeleton
+        //@tutorial-resume
 
         //TODO 2. Record start time
         //@snippet-break init_CMA_skeleton
+        //@tutorial-break
         startTime = System.currentTimeMillis();
         //@snippet-resume init_CMA_skeleton
+        //@tutorial-resume
     }
 
     public void runActivity(Body body) {
@@ -70,21 +75,28 @@ public class CMAgentInitialized extends CMAgent implements InitActive, RunActive
         while (body.isActive()) {
             //TODO 3. wait for a request
             //@snippet-break init_CMA_skeleton
+            //@tutorial-break
             service.waitForRequest(); // block until a request is received
             //@snippet-resume init_CMA_skeleton
+            //@tutorial-resume
 
             //TODO 4. Record time
             //@snippet-break init_CMA_skeleton
+            //@tutorial-break
             currentRequestDuration = System.currentTimeMillis();
             //@snippet-resume init_CMA_skeleton
+            //@tutorial-resume
 
             //TODO 5. Serve request
             //@snippet-break init_CMA_skeleton
+            //@tutorial-break
             service.serveOldest(); //server the requests in a FIFO manner
             //@snippet-resume init_CMA_skeleton
+            //@tutorial-resume
 
             //TODO 6. Calculate request duration
             //@snippet-break init_CMA_skeleton
+            //@tutorial-break
             currentRequestDuration = System.currentTimeMillis() - currentRequestDuration;
 
             // an intermediary variable is used so
@@ -96,34 +108,44 @@ public class CMAgentInitialized extends CMAgent implements InitActive, RunActive
             // AFTER the previous calculated value has been returned
             lastRequestDuration = currentRequestDuration;
             //@snippet-resume init_CMA_skeleton
+            //@tutorial-resume
 
             //TODO 7. Increment the number of requests served
             //@snippet-break init_CMA_skeleton
+            //@tutorial-break
             requestsServed++;
             //@snippet-resume init_CMA_skeleton
+            //@tutorial-resume
         }
     }
 
     public void endActivity(Body body) {
         //TODO 8. Calculate the running time of the active object using the start time recorded in initActivity()
         //@snippet-break init_CMA_skeleton
+        //@tutorial-break
         long runningTime = System.currentTimeMillis() - startTime;
         //@snippet-resume init_CMA_skeleton
+        //@tutorial-resume
 
         //TODO 9. Print various stop information
         //@snippet-break init_CMA_skeleton
+        //@tutorial-break
         System.out.println("### You have killed the active object. The final" + " resting place is on " +
             body.getNodeURL() + "\n### It has faithfully served " + requestsServed + " requests " +
             "and has been an upstanding active object for " + runningTime + " ms ");
         //@snippet-resume init_CMA_skeleton
+        //@tutorial-resume
     }
 
     public LongWrapper getLastRequestServeTime() {
         //TODO 10. Use wrappers for primitive types so the calls are asynchronous
         //@snippet-break init_CMA_skeleton
+        //@tutorial-break
         return new LongWrapper(lastRequestDuration);
         //@snippet-resume init_CMA_skeleton
+        //@tutorial-resume
     }
     //@snippet-end cma_init_full
 }
 //@snippet-end init_CMA_skeleton
+//@tutorial-end

@@ -1,3 +1,4 @@
+//@tutorial-start
 /*
  * ################################################################
  *
@@ -80,8 +81,10 @@ public class PrimeExampleMW {
 
             //TODO 3. Wait all results from master
             //@snippet-break primes_distributedmw_skeleton
+            //@tutorial-break
             // Collect results            
             List<Boolean> results = master.waitAllResults();
+            //@tutorial-resume
             //@snippet-resume primes_distributedmw_skeleton
 
             // Test the primality
@@ -126,8 +129,10 @@ public class PrimeExampleMW {
             //TODO 4. Create a new task for the current interval and 
             // add it to the list of tasks 
             //@snippet-break primes_distributedmw_skeleton
+            //@tutorial-break
             // Adds the task for the current interval to the list of tasks
             tasks.add(new FindPrimeTask(number, begin, end));
+            //@tutorial-resume
             //@snippet-resume primes_distributedmw_skeleton
 
             // Update the begin and the end of the interval
@@ -138,5 +143,6 @@ public class PrimeExampleMW {
         return tasks;
     }
 }
+//@tutorial-end
 //@snippet-end primes_distributedmw_example
 //@snippet-end primes_distributedmw_skeleton
