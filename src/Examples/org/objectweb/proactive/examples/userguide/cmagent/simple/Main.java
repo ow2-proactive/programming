@@ -39,6 +39,7 @@ import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.ActiveObjectCreationException;
 
+
 public class Main {
     public static void main(String args[]) {
         try {
