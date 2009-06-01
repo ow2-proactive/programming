@@ -223,4 +223,42 @@
 
 </section>
 
+
+<section xml:id="ActivatingGroup_66"><info><title>Activating a ProActive Group</title></info>
+<para>A group contains the references on its member elements. When a reference on a group is sent from one active object to another one, what is sent is a copy of the group reference.
+This leads to the existence of different group proxies referencing the same set of elements. These copies are not coherent and when one action is performed on a element of one of the existing instances, the change is not replicated on the others.
+To overcome this limitation, it is possible to active a group using <literal>PAGroup.turnActive(...)</literal>. The group becomes an active object, a remotely accessible object. The new references are no longer copies of a set of element but a pointer to the active group.
+The benefits are twofold:
+<itemizedlist>
+ <listitem><para>Consistency: there is only one instance of the group, any change on the group's members is seen by all objects having a reference on it.</para></listitem>
+ <listitem><para>You get a remotely accessible group even if the members are not active objects</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+Known limitation:
+An org.objectweb.proactive.core.body.exceptions.InactiveBodyException can be thrown if the following  elements are met:
+<itemizedlist>
+<listitem><para>a class that implements RunActive thus defines runActivity()</para> </listitem>
+<listitem><para>the creation of a group of the previously mentioned class</para> </listitem>
+<listitem><para>the activation of the group using PAGroup.turnActiveAsGroup()</para> </listitem>
+</itemizedlist>
+
+Explanation: <br/>
+
+It is worth mentioning that a ProActive group is able to perform asynchronous method call.
+
+When activated, the group becomes the reified object used within the active object.
+
+The initialization logic of an active object calls that runActivity() method if the reified object's class defines it and expects that method to manage the life cycle of the active object (mainly serves incoming requests).
+When the runActivity() method exits, the body shuts down.
+
+When the runActivity() is called on the group, the call is reified into an asynchronous method call while the caller (the active object's thread) continues its execution flow. In other terms, the method runActivity() almost exits immediately from the caller point-of-view leading the active object in the shutdown sequence.
+</para>
+
+<para>
+To overcome this limitation, the solution is to create an intermediary class in the inheritance graph that does not implement RunActive and use this class as base class for the group.
+</para>
+</section>
+
 </chapter>
