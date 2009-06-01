@@ -238,12 +238,13 @@ The benefits are twofold:
 <para>
 Known limitation:
 An org.objectweb.proactive.core.body.exceptions.InactiveBodyException can be thrown if the following  elements are met:
+</para>
 <itemizedlist>
 <listitem><para>a class that implements RunActive thus defines runActivity()</para> </listitem>
 <listitem><para>the creation of a group of the previously mentioned class</para> </listitem>
 <listitem><para>the activation of the group using PAGroup.turnActiveAsGroup()</para> </listitem>
 </itemizedlist>
-
+<para>
 Explanation: 
 
 It is worth mentioning that a ProActive group is able to perform asynchronous method call.
