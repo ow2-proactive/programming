@@ -244,7 +244,7 @@ An org.objectweb.proactive.core.body.exceptions.InactiveBodyException can be thr
 <listitem><para>the activation of the group using PAGroup.turnActiveAsGroup()</para> </listitem>
 </itemizedlist>
 
-Explanation: <br/>
+Explanation: 
 
 It is worth mentioning that a ProActive group is able to perform asynchronous method call.
 
