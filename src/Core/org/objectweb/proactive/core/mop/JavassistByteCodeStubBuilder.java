@@ -299,8 +299,8 @@ public class JavassistByteCodeStubBuilder {
             return bytecode;
         } catch (Exception e) {
             //                        generatedCtClass.debugWriteFile();
-            throw new RuntimeException("Cannot generated stub for class " + className + " with javassist : " +
-                e.getMessage(), e);
+            throw new RuntimeException("Failed to generate stub for class " + className +
+                " with javassist : " + e.getMessage(), e);
         }
     }
 
