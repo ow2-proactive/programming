@@ -155,7 +155,7 @@ public class StubGenerator {
         // ClassPool.releaseUnmodifiedClassFile = true;
         for (File file : files) {
             String str = file.toString().replaceFirst(Matcher.quoteReplacement(srcDir.toString()), "");
-            try {
+
                 if (!verbose) {
                     System.setErr(mute);
                 }
@@ -165,9 +165,6 @@ public class StubGenerator {
                     System.out.println("Generated stub: " +
                         Utils.convertClassNameToStubClassName(processClassName(str), null));
                 }
-            } catch (Throwable e) {
-                System.out.println("Stub generation failed: " + str);
-            }
         }
 
         if (!verbose) {
@@ -225,7 +222,7 @@ public class StubGenerator {
             fos.flush();
             fos.close();
             success = true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             System.err.println("Stub generation failed for class: " + className);
             e.printStackTrace();
         }
