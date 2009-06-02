@@ -156,15 +156,15 @@ public class StubGenerator {
         for (File file : files) {
             String str = file.toString().replaceFirst(Matcher.quoteReplacement(srcDir.toString()), "");
 
-                if (!verbose) {
-                    System.setErr(mute);
-                }
+            if (!verbose) {
+                System.setErr(mute);
+            }
 
-                boolean success = StubGenerator.generateClass(str, destDir.toString() + File.separator);
-                if (success) {
-                    System.out.println("Generated stub: " +
-                        Utils.convertClassNameToStubClassName(processClassName(str), null));
-                }
+            boolean success = StubGenerator.generateClass(str, destDir.toString() + File.separator);
+            if (success) {
+                System.out.println("Generated stub: " +
+                    Utils.convertClassNameToStubClassName(processClassName(str), null));
+            }
         }
 
         if (!verbose) {
