@@ -78,8 +78,7 @@
    <!-- Tutorial properties -->
    <property name="tutorials.dir"		value="${base.dir}/tutorials" />
    <property name="tutorials.src"		value="${tutorials.dir}/src" />
-   <property name="tutorials.lib"		value="${tutorials.dir}/dist/lib" />
-
+   <property name="tutorials.dist"       value="${tutorials.dir}/dist" />
 
 	<!-- ================================================================ -->
 	<!--                   define the different classpaths                -->

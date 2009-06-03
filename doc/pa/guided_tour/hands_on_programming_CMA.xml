@@ -4,7 +4,7 @@
   programming with ProActive.</para>
 
   <para>The program that we will develop is a remote computation and monitoring agent. As we
-  progress through the example we 
+  progress through the example, we
   will increase the complexity of the agent by using different features of ProActive.</para>
 
   <itemizedlist>
@@ -39,12 +39,35 @@
 		into a distributed one. In this parts, we will also use the ProActive Master-Worker API.
    </para></listitem>
   </itemizedlist>
-	<para>
-		All the exercises in this chapter are available as an Eclipse workspace. 
-		The Eclipse environment is set up to run each exercises as soon as 
-		the needed code is inserted. The tasks needed for the examples to run properly are annotated with
-      <emphasis role="bold">//TODO</emphasis> tags and thus are shown up under the Eclipse tasks list.
-	</para>
+<!--	<para>-->
+<!--		All the exercises in this chapter are available as an Eclipse workspace. -->
+<!--		The Eclipse environment is set up to run each exercises as soon as -->
+<!--		the needed code is inserted. The tasks needed for the examples to run properly are annotated with-->
+<!--      <emphasis role="bold">//TODO</emphasis> tags and thus are shown up under the Eclipse tasks list.-->
+<!--	</para>-->
+   <para>
+      In order to get the tutorials, that is to say, code sources with missing lines, go to the <literal>compile/</literal> directory
+      and type <literal>build tutorials</literal>. This command will create a new directory in the ProActive home directory, called
+      <literal>tutorials</literal>. This directory will be composed of four directory:
+   </para>
+   <itemizedlist>
+      <listitem>
+         <para><literal>src</literal> - source directory. You will find in this directory all sources to fill in.</para>
+      </listitem>
+      <listitem>
+         <para><literal>compile</literal> - compilation directory. In this directory, you will be able to compile your code.
+         Type <literal>build</literal> to know all the available targets. Normally, you will see one target per tutorial example.
+         Targets will be described after each example throughout this chapter.</para>
+      </listitem>
+      <listitem>
+         <para><literal>scripts</literal> - launch scripts directory. You will find in this directory all scripts to launch your compiled code.
+         Scripts will be described after each example throughout this chapter.</para>
+      </listitem>
+      <listitem>
+         <para><literal>dist</literal> - library directory. You will find in this directory all libraries needed to compile your code.
+         Normally, you will not have to deal with directory.</para>
+      </listitem>
+   </itemizedlist>
 	
 	<para> To further learn what is needed for the 
 		running ProActive applications, please refer to <xref linkend="Installation"/>.
@@ -169,8 +192,8 @@
 	<section xml:id="ProposedWork_3"><info><title>Proposed Work</title></info>
 		
 		<para>
-			You can find the skeleton code for the exercise in the Eclipse exercises workspace under the name
-			<literal>1. SimpleCMAgent</literal>. Full code is also available into the directory
+			You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/simple/</literal>
+         directory. Full code is also available into the directory
          <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/simple/</literal>.
 		</para>
 	<orderedlist>
@@ -186,6 +209,11 @@
 				</para>
 			</listitem>
 		</orderedlist>
+      <para>
+         Once filled in, go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] cmagent.simple</literal> to compile your code.
+         Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>simpleCMA.[sh|bat]</literal> script
+         to execute your code.
+      </para>
 	</section>
 	
 	<section xml:id="SolutionsandFullCode_5"><info><title>Solutions and Full Code </title></info>
@@ -338,8 +366,8 @@
     	<section xml:id="ProposedWork_4"><info><title>Proposed Work</title></info>
 		
 		<para>
-			You can find the skeleton code for the exercise in the Eclipse exercises workspace under the name
-			<literal>2. InitializedCMAgent</literal>. Full code is also available into the directory
+			You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/initialized/</literal>
+         directory. Full code is also available into the directory
          <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/initialized/</literal>.
 		</para>
 		<orderedlist>
@@ -356,6 +384,11 @@
 			to return a wrapped <literal>Long</literal> value.</para></listitem>
 		</orderedlist>
 
+      <para>
+         Once filled in, go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] cmagent.initialized</literal> to compile your code.
+         Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>initializedCMA.[sh|bat]</literal> script
+         to execute your code.
+      </para>
 	</section>
     
     <section xml:id="SolutionandFullCode_1"><info><title>Solution and Full Code</title></info>
@@ -541,6 +574,16 @@
 			To read about the deprecated deployment structure, please refer to
   			<xref linkend="XML_Descriptors"/>. 
   		</para>
+      <warning>
+         <para>
+            The deployment descriptor described hereafter is not the one linked by default to the application descriptor (see below to know where these two descriptors are linked).
+            This tutorial provides you with two deployment descriptor: a default one which defines nodes on your local machine and thus, can be used without modification, and
+            another one (the one described below) which uses rsh connection. The latter therefore involves a configuration of machines connection.
+            Deployment descriptors and application descriptor are located into the <literal>tutorials/scripts/GCMDeployment</literal>. If you want to use the rsh deployment,
+            change the <literal>GCMA.xml</literal> file in order to use the <literal>RSHLan.xml</literal> deployment file.
+            Other deployment templates such as SSH deployment can be found in the <literal>ProActive/descriptors/examples/gcmd</literal> directory.
+         </para>
+      </warning>
   		<para>
   			The document uses the
   			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd">
@@ -735,6 +778,12 @@
   	</section>
   		<section xml:id="ProposedWork_5"><info><title>Proposed Work</title></info>
   			
+         <para>
+			You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/deployed/</literal>
+         directory. Full code is also available into the directory
+         <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/deployed/</literal>.
+         </para>
+
   			<orderedlist>
 			<listitem><para>Create GCMApplication from the application descriptor file using <literal> PAGCMDeployment.loadApplicationDescriptor(String descriptor)</literal></para></listitem>
   			<listitem><para>Start the deployment of all the virtual nodes using <literal>GCMApplication.startDeployment()</literal></para></listitem>
@@ -752,6 +801,11 @@
 			<listitem><para>Change the <literal>State</literal> class so that the initialization of variables takes place in the <literal>toString()</literal> method.
 			 Run the deployed application again and explain the different results. Hint: try to deploy the application on a remote host.</para></listitem>
   			</orderedlist>
+         <para>
+            Once filled in, go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] cmagent.deployed</literal> to compile your code.
+            Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>deployedCMA.[sh|bat]</literal> script
+            to execute your code.
+         </para>
   		</section>
   		
   		<section xml:id="SolutionandFullCode_2"><info><title>Solution and Full Code</title></info>
@@ -820,7 +874,7 @@
          ===============================================================================
       </screen>
 		<para>
-         You can therefore realise that information return in the second display are information about the local host but not about
+         You can therefore realise that information returned in the second display are information about the local host but not about
          the host where the active object was running on. This is totally normal since when you call the <literal>toString()</literal>
          method, you will implicitly get the active object from the remote host and call this method next. So, if variable initializations
          are done in the <literal>toString()</literal> method, returned information will be information on the local host, whereas if variable
@@ -888,11 +942,22 @@
   		</section>
   		<section xml:id="ProposedWork_6"><info><title>Proposed Work</title></info>
   			
-  			<orderedlist>
+         <para>
+			You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/synch/</literal>
+         directory. Full code is also available into the directory
+         <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/synch/</literal>.
+			</para>
+
+         <orderedlist>
   			<listitem><para>Write the code for connecting to the previous neighbour</para></listitem>
   			<listitem><para>Write the code for connecting to the next neighbour</para></listitem>
   			<listitem><para>Add and remove explicit synchronization between the agents when retrieving the states</para></listitem>
   			</orderedlist>
+         <para>
+            Once filled in, go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] cmagent.synch</literal> to compile your code.
+            Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>synchCMA.[sh|bat]</literal> script
+            to execute your code.
+         </para>
   		</section>
   		<section xml:id="SolutionAndFullCode_1"><info><title>Solution And Full Code</title></info>
   			
@@ -992,6 +1057,12 @@
 	</section>
 	
 	<section xml:id="ProposedWork_7"><info><title>Proposed Work</title></info>
+
+      <para>
+      You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/migration/</literal>
+      directory. Full code is also available into the directory
+      <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/migration/</literal>.
+      </para>
 		
 		<orderedlist>
 			<listitem><para>Write the code for the migration method using <literal>org.objectweb.proactive.api.PAMobileAgent.migrateTo(Node URL)</literal></para></listitem>
@@ -1003,6 +1074,11 @@
 <!--			<listitem><para>Start the application and exit immediately (press 0). While is there a 1 request processed ?</para></listitem>-->
 <!--			<listitem><para>Start the application migrate the agent once and then exit. Why are there 3 requests processed ?</para></listitem>-->
 		</orderedlist>		
+      <para>
+         Once filled in, go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] cmagent.migration</literal> to compile your code.
+         Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>migrateCMA.[sh|bat]</literal> script
+         to execute your code.
+      </para>
 	</section>	
     <section xml:id="SolutionandFullCode_4"><info><title>Solution and Full Code</title></info>
       
@@ -1091,6 +1167,12 @@
   		</section>
   		<section xml:id="ProposedWork_9"><info><title>Proposed Work</title></info>
   			
+         <para>
+         You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/groups/</literal>
+         directory. Full code is also available into the directory
+         <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/groups/</literal>.
+         </para>
+
   			<orderedlist>
   			<listitem><para>Create a new empty group using <literal>PAGroup.newGroup(..)</literal></para></listitem>
   			<listitem><para>Create a collection of active objects with on object on each node</para></listitem>
@@ -1100,6 +1182,11 @@
 			<listitem><para>Use the management representation to add or remove the agent (choice-1) to/from the group.</para></listitem>
   			</orderedlist>
             
+         <para>
+            Once filled in, go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] cmagent.groups</literal> to compile your code.
+            Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>groups.[sh|bat]</literal> script
+            to execute your code.
+         </para>
             
   		</section>
   		<section xml:id="SolutionAndFullCode_2"><info><title>Solution And Full Code</title></info>
@@ -1176,9 +1263,22 @@
   		</section>
   		<section xml:id="ProposedWork_2"><info><title>Proposed Work</title></info>
   			
+         <para>
+         You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/webservice/</literal>
+         directory. Full code is also available into the directory
+         <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/cmagent/webservice/</literal>.
+         </para>
+
   			<orderedlist>
   			<listitem><para>Deploy the agent as a web service</para> </listitem>
   			</orderedlist>
+
+         <para>
+            Once filled in, go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] cmagent.webservice</literal> to compile your code.
+            Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>webservice.[sh|bat]</literal> script
+            to execute your code.
+         </para>
+
   		</section>
   		<section xml:id="SolutionAndCode_1"><info><title>Solution And Code</title></info>
   			
@@ -1258,6 +1358,11 @@
 				 </listitem> 
 			</itemizedlist>
 		
+         <para>
+         You can find code for this version into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/primes/sequential/</literal>
+         directory.
+         </para>
+
 		
 		</section>
 
@@ -1282,20 +1387,14 @@
 
 		<section xml:id="RunningtheSequentialVersion_18"><info><title>Running the Sequential Version</title></info>
 			
-
-			<para>
-				To compile and run the applicationi, you need the
-				<literal>Main</literal>
-				class of this example.
-			</para>
-			<para>
-				The command line for running the application is the
-				following, the optional first parameter being the number
-				to test:
-			</para>
-			<para>
-				<screen>java Main 2147483647</screen>
-			</para>
+         <para>
+            Go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] primes.sequential</literal> to compile your code.
+            Then, after a successful compilation, go to the <literal>scripts/Primes</literal> directory and launch the <literal>sequential.[sh|bat]</literal> script
+            with the integer you want to test.
+         </para>
+         <para>
+         <screen>sequential.[sh|bat] 2147483647</screen>
+         </para>
 		</section>
 	</section>
 
@@ -1446,6 +1545,12 @@
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/primes_distributed_main_skeleton.snip"/></textobject></programlisting>
 
 
+         <para>
+         You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/primes/distributed/</literal>
+         directory. Full code is also available into the directory
+         <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/primes/distributed/</literal>.
+         </para>
+
 			<!-- FT-TEST -->
 			
 			<para>
@@ -1517,19 +1622,15 @@
 
 		<section xml:id="RunningtheDistributedVersion_18"><info><title>Running the Distributed Version</title></info>
 			
+         <para>
+            Go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] primes.distributed</literal> to compile your code.
+            Then, after a successful compilation, go to the <literal>scripts/Primes</literal> directory and launch the <literal>distributed.[sh|bat]</literal> script
+            with the integer you want to test.
+         </para>
+         <para>
+         <screen>distributed.[sh|bat] 2147483647</screen>
+         </para>
 
-			<para>
-				To compile and run the application, you need the
-				<literal>Main</literal> class of this example.
-			</para>
-			<para>
-				The command line for running the application is the
-				following one, the optional second parameter being the number
-				to test:
-			</para>
-			<para>
-				<screen>java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:proactive-log4j Main deployment.xml 2147483647</screen>
-			</para>
 		</section>
 	</section>
 
@@ -1622,6 +1723,12 @@
 <!--			<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_skeleton.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/primes_distributedmw_skeleton.snip"/></textobject></programlisting>
 			
+         <para>
+         You can find the skeleton codes for this exercise into the <literal>tutorials/src/Examples/org/objectweb/proactive/examples/userguide/primes/distributedmw/</literal>
+         directory. Full code is also available into the directory
+         <literal>ProActive/src/Examples/org/objectweb/proactive/examples/userguide/primes/distributedmw/</literal>.
+         </para>
+
 			<!-- FT-TEST -->
 			
 			<para>
@@ -1671,19 +1778,14 @@
 
 		<section xml:id="RunningtheMasterWorkerVersion_18"><info><title>Running the Master-Worker Version</title></info>
 			
-
-			<para>
-				To compile and run the application, you need the
-				<literal>PrimeExampleMW</literal> class of this example.
-			</para>
-			<para>
-				The command line for running the application is the
-				following one, the optional second parameter being the number
-				to test:
-			</para>
-			<para>
-				<screen>java -Djava.security.policy=proactive.java.policy -Dlog4j.configuration=file:proactive-log4j PrimeExampleMW GCMA.xml 2147483647</screen>
-			</para>
+         <para>
+            Go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] primes.distributedmw</literal> to compile your code.
+            Then, after a successful compilation, go to the <literal>scripts/Primes</literal> directory and launch the <literal>distributedMW.[sh|bat]</literal> script
+            with the integer you want to test.
+         </para>
+         <para>
+         <screen>distributedMW.[sh|bat] 2147483647</screen>
+         </para>
 		</section>
 		
 	</section>

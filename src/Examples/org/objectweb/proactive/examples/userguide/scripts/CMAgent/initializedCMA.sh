@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo
-echo --- Userguide CMAgent ---------------------------------------------
+echo --- User Guide: Initialized CMAgent ---------------------------------------------
 
 workingDir=`dirname $0`
 . ${workingDir}/../env.sh

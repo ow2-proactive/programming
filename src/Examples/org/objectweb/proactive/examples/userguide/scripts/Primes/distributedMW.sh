@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo
-echo --- Userguide CMAgent ---------------------------------------------
+echo --- User Guide: Distributed Master-Worker Primality Test ---------------------------------------------
 
 workingDir=`dirname $0`
 . ${workingDir}/../env.sh

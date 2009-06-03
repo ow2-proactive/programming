@@ -1093,43 +1093,47 @@
 		</chmod>
 	</target>
 
-	<!-- ====================================== -->
-	<!--          Create the tutorial           -->
-	<!-- ====================================== -->
-	<target name="tutorials" depends="deploy" description="Extracts tutorials from sources and creates the tutorials directory with building and launching scripts">
-      <delete quiet="true">
-         <fileset dir="${tutorials.src}"/>
-      </delete>
-      <mkdir dir="${tutorials.src}"/>
-      <java classname="doc.tutorials.Tutorializer" fork="true">
-         <classpath>
-            <fileset dir="${base.dir}/doc/toolchain/lib">
-               <include name="**/*.jar"/>
+    <!-- ====================================== -->
+    <!--          Create the tutorial           -->
+    <!-- ====================================== -->
+    <target name="tutorials" depends="deploy.core" description="Extracts tutorials from sources and creates the tutorials directory with building and launching scripts">
+        <delete quiet="true">
+            <fileset dir="${tutorials.src}"/>
+        </delete>
+        <mkdir dir="${tutorials.src}"/>
+        <java classname="doc.tutorials.Tutorializer" fork="true">
+            <classpath>
+                <fileset dir="${base.dir}/doc/toolchain/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <arg value="${src.dir}" />
+            <arg value="${tutorials.src}" />
+        </java>
+        <mkdir dir="${tutorials.dist}"/>
+        <copy toDir="${tutorials.dist}">
+            <fileset dir="${deploy.dir}">
+                <include name="**/*" />
+                <exclude name="ProActive_examples.jar" />
+                <exclude name="ProActive_utils.jar" />
+                <exclude name="ProActive_tests.jar" />
+             </fileset>
+        </copy>
+        <mkdir dir="${tutorials.dir}/scripts"/>
+        <copy toDir="${tutorials.dir}/scripts">
+            <fileset dir="${src.examples.dir}/${examples.path}/userguide/scripts">
+                <include name="**/*" />
             </fileset>
-         </classpath>
-         <arg value="${src.dir}" />
-         <arg value="${tutorials.src}" />
-      </java>
-      <mkdir dir="${tutorials.lib}"/>
-		<copy toDir="${tutorials.lib}">
-			<fileset dir="${deploy.lib.dir}">
-				<include name="**/*.jar" />
-				<exclude name="ProActive_examples.jar" />
-				<exclude name="ProActive_utils.jar" />
-				<exclude name="ProActive_tests.jar" />
-			</fileset>
-		</copy>
-      <!-- Use exec instead of copy in order to keep right permissions -->
-      <exec executable="cp">
-         <arg value="-r" />
-         <arg value="${src.examples.dir}/${examples.path}/userguide/scripts" />
-         <arg value="${tutorials.dir}/." />
-      </exec>
-      <!-- Use exec instead of copy in order to keep right permissions -->
-      <exec executable="cp">
-         <arg value="-r" />
-         <arg value="${src.examples.dir}/${examples.path}/userguide/compile" />
-         <arg value="${tutorials.dir}/." />
-      </exec>
-	</target>
+        </copy>
+        <chmod dir="${tutorials.dir}/scripts"
+               perm="755"
+               includes="**/*.sh"/>
+        <mkdir dir="${tutorials.dir}/compile"/>
+        <copy toDir="${tutorials.dir}/compile">
+            <fileset dir="${src.examples.dir}/${examples.path}/userguide/compile">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+        <chmod file="${tutorials.dir}/compile/build" perm="755"/>
+    </target>
 </project>
