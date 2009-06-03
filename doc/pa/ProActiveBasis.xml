@@ -7,20 +7,20 @@
   	<section xml:id="Overview_60"><info><title>Overview</title></info>
   		
   		<!-- //TODO  expand -->
-  		<para>In this part we will present the process of creating an active object
+  		<para>In this part, we will present the process of creating an active object
   		from a class or from another already existing object. We will also look 
   		at the internal structure of an active object and at its thread. 
-  		In the last chapters we will examine group communication, mobile agents  and
+  		In the last chapters, we will examine group communication, mobile agents  and
   		exception handling for active objects. </para>
   	</section>
     <section xml:id="ProActiveBasis_html_def"><info><title xml:id="ActiveObjectStructure_60">Active Object Structure</title></info>
     
 
     <para>Active objects are the basic units of activity and distribution used
-    for building concurrent applications using ProActive. As opposed to passive(regular)
-    objects, the active object has its own thread and execution queue. ProActive manages
-    the active objects threads  relieving the programmer from explicitly manipulating Thread
-    objects thus making the use of the threads transparent.  </para>
+    for building concurrent applications using ProActive. As opposed to passive (regular)
+    objects, an active object has its own thread and execution queue. ProActive manages
+    active object threads relieving programmers from explicitly manipulating Thread
+    objects and thus, making the use of threads transparent.</para>
     
     
         <para><figure xml:id="Threedifferentcomputationalmodels_60"><info><title>Three different computational models</title></info>
@@ -48,7 +48,7 @@
 	</para>
 
     <para>This has consequences on the semantics of message-passing
-    between subsystems.</para>
+    between subsystems:</para>
 
     <itemizedlist>
       <listitem>
@@ -58,7 +58,7 @@
         This is why passive objects passed as parameters of calls on active
         objects are always passed by <emphasis>deep-copy</emphasis>. Active
         objects, on the other hand, are always passed by reference.
-        Symmetrically, this also applies to objects returned from methods
+        Symmetrically, this is also applied to the objects returned from methods
         called on active objects.</para>
       </listitem>
 
@@ -69,8 +69,8 @@
         placeholder for the result of the methods invocation, is returned.
         From the point of view of the caller subsystem, no difference can be
         made between the future object and the object that would have been
-        returned if the same call had been issued onto a passive object. Then,
-        the calling thread can continue executing its code just like if the
+        returned if the same call had been issued from a passive object. Then,
+        the calling thread can continue executing its code just as if the
         call had been effectively performed. The role of the future object is
         to block this thread if it invokes a method on the future object and
         the result has not yet been set (i.e. the thread of the subsystem on
@@ -91,7 +91,7 @@
       </figure>
 
 
-	 <para>The active object is the composition of two objects: </para>
+	 <para>An active object is the composition of two objects: </para>
  	<itemizedlist>
   
       <listitem>
@@ -108,35 +108,36 @@
     storing these calls in the <emphasis>queue</emphasis> of pending calls (also called requests).
     It will execute these calls in an order
     specified by a specific synchronization policy. If no specific
-    synchronization policy is provided, calls are managed in a FIFO manner
-    (first come, first served). The body is not
-    visible from the outside of the active object therefore the active
+    synchronization policy is provided, calls are managed in a FIFO order
+    (First In, First Out, in other word, the first arrived request is the first one to be served). 
+    The body is not visible from the outside of its active object. Thus, an active
     object looks exactly like a standard object from the user's perspective.
     It is important to note
     that no parallelism is provided inside an active object. This is an
     important decision in the design of ProActive which enables the use of
     pre and post conditions and class invariants.</para>
       
-    <para>On the side of the subsystem which sends a call to an active object,
-    the active object is accessed through a <emphasis>stub</emphasis> and a <emphasis>proxy</emphasis>.
-    The proxy's  main responsibility is to generate future objects for representing future
-    values, transform calls into request objects (in terms of meta-object programming, this
-    is a reification) and perform deep-copy of passive objects passed as
-    parameters.  The passive objects are not shared between subsystems. Any call on an remote active object
-        using passive objects as arguments leads to a deep-copy of the passive objects on the subsystem of
-        the remote active object.
-     The role of the <emphasis>stub </emphasis>, is to reify the all the method 
+    <para>On the side of the subsystem sending a call to an active object,
+    the active object is accessed through a <emphasis>stub</emphasis> and a <emphasis>proxy</emphasis>.</para>
+    <para>
+    The main responsibilities of the <emphasis>proxy</emphasis> are to generate future objects for representing future
+    values and perform deep-copy of passive objects passed as
+    parameters. Passive objects are not shared between subsystems. Any call on an remote active object
+        using passive objects as arguments leads to a deep-copy of the passive objects for the subsystem of
+        the remote active object.</para>
+     <para>
+     As for the role of the <emphasis>stub</emphasis>, it is in charge of reifying all the method 
       calls that can be performed through a reference to the active object. Reifying a call
       simply means constructing an object (in our case, all reified calls are
       instance of class MethodCall) that represents the call, so that
        it can be manipulated as any other object. This reified call is
-       then processed by the other components of the active object in order
+       then processed by the other active object components in order
        to achieve the behavior we expect from an active object.
      </para>
   	<para>
   		However, the use of the <emphasis>stub</emphasis>, <emphasis>proxy</emphasis>,
   		<emphasis>body</emphasis>, and <emphasis>queue</emphasis> is transparent. 
-  		ProActive manages all of them, with the user accessing the active objects in 
+  		ProActive manages all of them. Users access to active objects in 
   		the same way as passive objects.
   	</para>
   	</section>
