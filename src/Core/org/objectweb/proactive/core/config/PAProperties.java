@@ -539,6 +539,12 @@ public enum PAProperties {
      */
     PA_UNICORE_FORKCLIENT("proactive.unicore.forkclient", PAPropertiesType.BOOLEAN),
 
+    /**
+     * if true, any reference on the reified object within an outgoing request or reply is
+     * replaced by a reference on the active object. This feature can be used when activating 
+     * an object whose source code cannot be modified to replace the code that return <code>this</code>
+     * by the reference on the active object using <code>PAActiveObject.getStubOnThis()</code>
+     */
     PA_IMPLICITGETSTUBONTHIS("proactive.implicitgetstubonthis", PAPropertiesType.BOOLEAN);
 
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
