@@ -29,57 +29,35 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-//@snippet-start Exchange_2
-package functionalTests.hpc.exchange;
+//@snippet-start class_Pair
+package org.objectweb.proactive.examples.documentation.classes;
 
-import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
+public class Pair<X, Y> {
+    private X first;
+    private Y second;
 
-
-/**
- * Implementation example of an {@link ExchangeableDouble} used by the exchange operation.
- */
-public class ComplexDoubleArray implements ExchangeableDouble {
-    private double[] array;
-    private int getPos, putPos;
-
-    public ComplexDoubleArray(int size, boolean odd) {
-        this.array = new double[size];
-        this.getPos = odd ? 1 : 0;
-        this.putPos = odd ? 0 : 1;
-        for (int i = getPos; i < array.length; i += 2) {
-            array[i] = Math.random();
-        }
+    public Pair() {
     }
 
-    public double getChecksum() {
-        double sum = 0;
-        for (int i = 0; i < array.length; i++) {
-            sum += array[i];
-        }
-        return sum;
+    public Pair(X a1, Y a2) {
+        first = a1;
+        second = a2;
     }
 
-    public String toString() {
-        return java.util.Arrays.toString(array);
+    public X getFirst() {
+        return first;
     }
 
-    public double get() {
-        double res = array[getPos];
-        getPos += 2;
-        return res;
+    public Y getSecond() {
+        return second;
     }
 
-    public boolean hasNextGet() {
-        return getPos < array.length;
+    public void setFirst(X arg) {
+        first = arg;
     }
 
-    public boolean hasNextPut() {
-        return putPos < array.length;
-    }
-
-    public void put(double value) {
-        array[putPos] = value;
-        putPos += 2;
+    public void setSecond(Y arg) {
+        second = arg;
     }
 }
-//@snippet-end Exchange_2
+//@snippet-end class_Pair

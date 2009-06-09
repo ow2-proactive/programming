@@ -8,14 +8,14 @@
 			application can contain active as well as passive instances
 			of a given class. In this section, we will present the three
 			methods for creating active instances of classes and how to
-			use the arguments passed to the methods to control creation.
+			use arguments passed to the methods to control creation.
 			Although almost any object can be turned into an Active
 			Object, there are some restrictions that will be detailed
-			below. We also present a in depth explanation of the
-			structure and behaviour of an active object.The examples in
-			this chapter contain only the code necessary for creation of
-			active object. To see how to start the nodes, JVMs, and
-			virtual nodes on which objects can be instantiated read
+			below. We will also present a deep explanation of the
+			active object structure and behaviour. Examples in
+			this chapter contain only the code necessary for the creation of
+			active objects. To see how to start nodes, JVMs, and
+			virtual nodes on which objects can be instantiated, please refer to
 			<xref linkend="Configuration"/>
 			
 			
@@ -23,21 +23,20 @@
 
 		<para>
 		
-			In
-			<emphasis role="bold">ProActive</emphasis>
+			In <emphasis role="bold">ProActive</emphasis>,
 			there are two ways to create active objects: instantiation
-			based creation and by using an existing object. Instantion
-			based creation is done through
+			based creation and by using an existing object. Instantiation
+			based creation is done through the
 			<literal>PAActiveObject.newActive(...)</literal>
-			and
-			<literal>PAActiveObject.newActiveInParallel(...)</literal>
-			and object based creation is done through
-			<literal>PAActiveObject.turnActive(...)</literal>.
-			The methods are part of the
+			and the
+			<literal>PAActiveObject.newActiveInParallel(...)</literal> method
+			whereas object based creation is done through the
+			<literal>PAActiveObject.turnActive(...)</literal> method.
+			These methods are part of the
 			<literal>org.objectweb.proactive.api</literal>
-			package. Each method takes several parameters that control
+			package. Each method takes several parameters that indicate
 			how the active object is created and most of the parameters
-			are common between creation methods. All the available
+			are common among creation methods. All the available
 			creation methods with parameters are presented in the
 			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_published/org/objectweb/proactive/api/PAActiveObject.html">
 				PAActiveObject Javadoc
@@ -66,10 +65,11 @@
 		</figure>
  -->
 		<para>	
-			For the examples  in this chapter we will be using the following
+			For the examples described in this chapter, we will use the following
 			class that can be instantiated as an active	object:
 		</para>	
-		<programlisting language="java"><textobject><textdata fileref="code_snippets/ActiveWorker.txt"/></textobject></programlisting>
+<!--		<programlisting language="java"><textobject><textdata fileref="code_snippets/ActiveWorker.txt"/></textobject></programlisting>-->
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_Worker.snip"/></textobject></programlisting>
 
 	</section>
 
@@ -77,12 +77,12 @@
 		
 		<para>
 			Not all classes can be used to instantiate active objects.
-			There are some restrictions, most of them caused by the 100%
-			Java compliance, which forbids modifying the Java Virtual
-			Machine or the compiler.
+			There are some restrictions, most of them being caused by the 100%
+			Java compliance, which forbids the modification of the Java Virtual
+			Machine and of the compiler.
 		</para>
 
-		<para>Some of these restrictions work are at class-level:</para>
+		<para>Some of these restrictions are at class-level such as:</para>
 
 		<itemizedlist>
 			<listitem>
@@ -110,14 +110,14 @@
 
 		<para>
 			Member classes (i.e. non-static named internal classes) can be 
-			used to instantiate active objects only through 
+			used to instantiate active objects only through the
 			<literal>PAActiveObject.turnActive(...)</literal> method 
 			(see <xref linkend="ObjectBasedCreationusingliteralPAActiveObjectturnActiveliteral_71"/>). 
 			In other words, an instance of a member class can only be 
 			activated after creation, and not directly 
 			created as an active object. Attempting to directly create an
 			active object from a member class with 
-			<literal>PAActiveObject.turnActive(...)</literal> method will
+			<literal>PAActiveObject.newActive(...)</literal> method will
 			throw a NotActivatableException.
 			
 			This is mainly due to the fact that active objects created 
@@ -147,11 +147,11 @@
 		
 
 		<para>
-			When creating new instances of active objects we can use
-			<literal>PAActiveObject.newActive(...)</literal>
+			For creating new instances of active objects, we can either use the
+			<literal>PAActiveObject.newActive(...)</literal> method
 			or
-			<literal>PAActiveObject.newActiveInParallel(...)</literal>
-			. ProActive also provides a way to create multiple active
+			<literal>PAActiveObject.newActiveInParallel(...)</literal> one.
+			ProActive also provides a way to create multiple active
 			objects in parallel on several nodes.
 			<literal>PAActiveObject.newActiveInParallel(...)</literal>
 			creates a number of active objects deployed on one or more
@@ -168,12 +168,12 @@
 			because the model behind
 			<emphasis role="bold">ProActive</emphasis>
 			is uniform whether the active object is instantiated locally
-			or remotely. The parameters are therefore guaranteed to be
+			or remotely. Parameters are therefore guaranteed to be
 			passed by copy to the constructor. When using
-			<literal>PAActiveObject.newActive(...)</literal>
-			, one needs to make sure that the constructor arguments are
-			<literal>Serializable</literal>
-			. On the other hand, the class used to create the active
+			<literal>PAActiveObject.newActive(...)</literal>,
+		   one needs to make sure that the constructor arguments are
+			<literal>Serializable</literal>.
+			On the other hand, the class used to create the active
 			object does not need to be
 			<literal>Serializable</literal>
 			even in the case of remotely-created Active Objects. Bear in
@@ -187,19 +187,20 @@
 			<para>
 				To create a single active object from the class
 				<literal>Worker</literal>
-				in the local JVM we use the following code. If the
+				in the local JVM, we use the code hereafter. If the
 				invocation of the constructor of class
 				<literal>Worker</literal>
 				throws an exception, it is placed inside an exception of
 				type
-				<literal>ActiveObjectCreationException</literal>
-				. When the call to
+				<literal>ActiveObjectCreationException</literal>.
+				When the call to
 				<literal>newActive</literal>
 				returns, the active object has been created and its
 				active thread is started.
 			</para>
 
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_1.snip"/></textobject></programlisting>
 		</section>
 
 
@@ -212,22 +213,22 @@
 			
 
 			<para>
-				The following code deploys an active object on each node
+				The following code deploys an active object on nodes
 				contained in the virtual node
-				<literal>someVirtualNode</literal>
-				. In this case the
+				<literal>VN</literal> (current nodes).
+				In this case, the
 				<literal>Worker</literal>
-				constructor doesn't take any arguments. However, we have
+				constructor does not take any arguments. However, we have
 				to create an
 				<literal>Object</literal>
-				array equal in length with the number of nodes. The
+				array whose length is equal to the number of nodes. The
 				creation of active objects is optimized by a thread
 				pool. When the call to
 				<literal>newActiveInParallel</literal>
 				returns, the active objects have been created and their
 				threads have been started.
 			</para>
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActiveInParallel.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_2.snip"/></textobject></programlisting>
 
 
 		</section>
@@ -247,7 +248,7 @@
 		</para>
 
 		<para>
-			Because the object already exists before turning it active,
+			Since the object already exists before turning it active,
 			there is no serialization involved when we create the
 			object. When we invoke
 			<literal>PAActiveObject.turnActive</literal>
@@ -255,12 +256,12 @@
 			active object locally (on a local node), it will not be
 			serialized. If we create the active object remotely (on a
 			remote node), the reified object will be serialized.
-			Therefore, if the
+			Thus, if the
 			<literal>turnActive</literal>
 			is done on a remote node, the class used to create the
 			active object this way has to be
-			<literal>Serializable</literal>
-			. In addition, when using
+			<literal>Serializable</literal>.
+			In addition, when using
 			<literal>turnActive</literal>
 			, care must be taken that no other references to the
 			originating object are kept by other objects after the call
@@ -273,17 +274,14 @@
 			The simplest code for object based creation looks like this:
 		</para>
 
-		<programlisting language="java"><textobject><textdata fileref="code_snippets/simpleTurnActive.txt"/></textobject></programlisting>
+<!--		<programlisting language="java"><textobject><textdata fileref="code_snippets/simpleTurnActive.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_3.snip"/></textobject></programlisting>
 
 		<para>
-			The second parameter of
-			<literal>turnActive</literal>
-			is the location where the active object will be created. No
-			parameter or
-			<literal>null</literal>
-			means that the active object is created locally in the
-			current node.
-		</para>
+         In this case, the active object is created locally in the current node.
+			However, you can specify a second parameter which
+			is the location where the active object will be created.
+      </para>
 
 		<para>
 			When using this method, the programmer has to make sure that
@@ -316,10 +314,7 @@
 				argument must be of type
 				<literal>java.lang.String</literal>
 				and its value is usually obtained by calling
-				<literal>
-					ClassToInstantiateFrom.class.getName()
-				</literal>
-				.
+				<literal>ClassToInstantiateFrom.class.getName()</literal>.
 
 				<literal>PAActiveObject.turnActive(...)</literal>
 				does not create an active object from a class but from
@@ -332,18 +327,18 @@
 			
 			<para>
 
-				In order to create the active object
+				In order to create the active object,
 				<literal>PAActiveObject.newActive(...)</literal>
 				and
 				<literal>
 					PAActiveObject.newActiveInParallel(...)
 				</literal>
-				must take a list of constructor arguments to be passed
+				have to take a list of constructor arguments to be passed
 				to the constructor of the class to be instantiated as an
 				active object. Arguments to the constructor of the class
 				have to be passed as an array of
-				<literal>Object</literal>
-				. Also, we have to make sure that the constructor
+				<literal>Object</literal>.
+				Also, we have to make sure that the constructor
 				arguments are
 				<literal>Serializable</literal>
 				since they are passed by a serialized copy to the
@@ -355,8 +350,8 @@
 				are stored in an array of type
 				<literal>Object[]</literal>
 				or
-				<literal>Object[][]</literal>
-				. If one argument is null the runtime can obviously not
+				<literal>Object[][]</literal>.
+				If one argument is null the runtime can obviously not
 				determine its type. In this case a exception is thrown
 				specifying that ProActive cannot determine the
 				constructor. In the example below, an ambiguity exists
@@ -365,104 +360,127 @@
 				<literal>Object</literal>
 				array is
 				<literal>null</literal>
-				.
 			</para>
 
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/ConstructorAmbiguities.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/ConstructorAmbiguities.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_4.snip"/></textobject></programlisting>
 			<para>
 				If we use
 				<literal>
 					PAActiveObject.newActiveInParallel(..., Nodes[]
 					nodes)
 				</literal>
-				we have the make sure the length of the first dimension
+				we have the make sure that the length of the first dimension
 				of
 				<literal>java.lang.Object[][]</literal>
 				is equal to the number of nodes since an active object
-				will be deployed on each node. The second dimension of
-				the array contains the constructor arguments for each
+				will be deployed on each node. The second dimension contains
+            the number of the constructor arguments for each
 				deployed active object. Different active objects can
 				have different constructor arguments.
 
-
-				If we use
-				<literal>
-					PAActiveObject.newActiveInParallel(..., VirtualNode
-					virtualNode)
-				</literal>
-				the virtual node will be activated if it is not active
-				and one active object will be started on each node
-				contained in the virtual node. In this case all the
-				active objects take the same constructor arguments as we
-				use a one dimensional array
-				<literal>java.lang.Object[]</literal>
-				.
+<!--				If we use-->
+<!--				<literal>-->
+<!--					PAActiveObject.newActiveInParallel(..., VirtualNode-->
+<!--					virtualNode)-->
+<!--				</literal>-->
+<!--				the virtual node will be activated if it is not active-->
+<!--				and one active object will be started on each node-->
+<!--				contained in the virtual node. In this case all the-->
+<!--				active objects take the same constructor arguments as we-->
+<!--				use a one dimensional array-->
+<!--				<literal>java.lang.Object[]</literal>-->
+<!--				.-->
 			</para>
 		</section>
 
-	<!--
-		<sect2>
-<title xml:id="UsingParameterizedClasses_71">Using Parameterized Classes</title>
-			//TODO explain generics
-		</sect2>
-		-->
+		<section xml:id="UsingParameterizedClasses_71"><info><title>Using Parameterized Classes</title></info>
+		   <para>
+            If you want to instantiate a generic object as an active object, you have to specify its type parameters
+            into the constructor methods. For instance, let's consider the generic class <literal>Pair</literal> hereafter:
+         </para>
+
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_Pair.snip"/></textobject></programlisting>
+
+         <para>
+            <literal>Pair</literal> is a generic class which requires two type parameters. When we create an active object
+            using this class, we have to specify these two types. This is done through the
+            second argument of the <literal>PAActiveObject.newActive()</literal> method
+            which has to be an array of classes.
+            In that case, the array of constructor arguments is therefore moved to
+            the third position of the arguments of <literal>PAActiveObject.newActive()</literal>.
+         </para>
+
+         <para>
+            Thus, instantiation of a <literal>Pair</literal> active object will look like this:
+         </para>
+
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_5.snip"/></textobject></programlisting>
+
+         <para>
+            As you can see, we have created an active object of <literal>Pair</literal> whose type parameters are
+            <literal>Worker</literal> and <literal>String</literal>. As the constructor used for this creation takes
+            the two type parameters as parameters, we gave a <literal>Worker</literal> (first type parameter) and
+            a <literal>String</literal> to the <literal>PAActiveObject.newActive()</literal> method.
+         </para>
+         <para>
+            We have presented this particularity using the <literal>PAActiveObject.newActive()</literal> method but obviously,
+            it can also be applied to the <literal>PAActiveObject.newActiveInParallel()</literal> method as well as to
+            the <literal>PAActiveObject.turnActive()</literal> method.
+         </para>
+		</section>
+
 		<section xml:id="UsingANode_71"><info><title>Using A Node</title></info>
 			
 			<para>
-				It is possible to pass an argument to the call to
-				<literal>newActive</literal>
-				in order to create the new active object on a specific
-				JVM, possibly remote. The JVM is identified using a
+				In order to create the new active object on a specific
+				(remote) JVM, we can also give a node as parameter to
+            <literal>newActive</literal> method. The JVM is identified using a
 				<literal>Node</literal>
-				object, an array of
-				<literal>Node</literal>
-				or a
+				object or a
 				<literal>String</literal>
-				that contains an URL pointing to the node. If the
+				that contains an URL pointing to the node. If this
 				parameter is not given, the active object is created in
 				the current JVM and is attached to a default
-				<literal>Node</literal>
-				. The node argument and the URL string are used with
+				<literal>Node</literal>.
+				The node argument or the URL string can be used with
 				<literal>PAActiveObject.newActive(...)</literal>
 				and
 				<literal>PAActiveObject.turnActive(...)</literal>.
-				The array of
-				<literal>Node</literal>
-				and the virtual node argument is used with
-				<literal>
-					PAActiveObject.newActiveInParallel(...)
-				</literal>
-				. The virtual node will be activated if it is not active
-				and one active object will be started on each node
-				contained in the virtual node.
-
+				As for the <literal>PAActiveObject.newActiveInParallel(..)</literal>
+            method, we can specify nodes using an array of
+				<literal>Node</literal> since we create several active objects.
+            In that case, an active object will be created on each node contained in
+            this array.
 			</para>
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.Node.txt"/></textobject></programlisting>
+
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.Node.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_6.snip"/></textobject></programlisting>
 
 			<para>
-				To deploy using the node's URL we just have the use the
-				URL instead of the Node as argument:
+				To deploy using the URL of a node, we just have to replace the node previously used
+				by its URL:
 			</para>
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.URL.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.URL.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_7.snip"/></textobject></programlisting>
 			<para>
-				The usage is similar for
-				<literal>PAActiveObject.turnActive(...)</literal>
-				as in the examples above.
+				If you want to use the
+				<literal>PAActiveObject.turnActive(...)</literal> method instead of the
+            <literal>PAActiveObject.newActive(...)</literal> one, you can proceed
+            exactly in the same way as previously.
 			</para>
 			<para>
 				In order to deploy several active objects with
 				<literal>
 					PAActiveObject.newActiveInParallel(...)
-				</literal>
-				we can just pass an array of
+				</literal>,
+				we can only pass an array of
 				<literal>Node</literal>
 				(see the example in
-				<xref linkend="newActiveInParallel_nodes"/>
-				) or a
-				<literal>VirtualNode</literal>
-				.
-			</para>
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/newActiveInParallel.onVirtualNode.txt"/></textobject></programlisting>
+				<xref linkend="newActiveInParallel_nodes"/>).
+            </para>
+
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/newActiveInParallel.onVirtualNode.txt"/></textobject></programlisting>-->
 
 
 		</section>
@@ -477,7 +495,7 @@
 				turned into an active object serves its incoming
 				requests in a FIFO manner. In order to specify another
 				policy for serving the requests or to specify any other
-				behaviors one can implement interfaces defining methods
+				behaviors, we can implement interfaces defining methods
 				that will be automatically called by ProActive.
 			</para>
 
@@ -513,17 +531,24 @@
 
 			<itemizedlist>
 				<listitem>
-					<para>InitActive</para>
+					<para><literal>InitActive</literal> - contains the <literal>initActivity(Body body)</literal> method to be implemented</para>
 				</listitem>
 
 				<listitem>
-					<para>RunActive</para>
+					<para><literal>RunActive</literal> - contains the <literal>runActivity(Body body)</literal> method to be implemented</para>
 				</listitem>
 
 				<listitem>
-					<para>EndActive</para>
+					<para><literal>EndActive</literal> - contains the <literal>endActivity(Body body)</literal> method to be implemented</para>
 				</listitem>
 			</itemizedlist>
+
+<!--         <para>-->
+<!--            These three methods can either be implemented into the class we want to turn into active or into a external class.-->
+<!--            Using an external class, we have to instantiate an object of this class and then give it to the <literal>newActive()</literal>-->
+<!--            method as parameter. Obviously, that also works with the <literal>newActiveInParallel()</literal> and <literal>turnActive()</literal>-->
+<!--            methods.-->
+<!--         </para>-->
 
 			<para>
 				In case of a migration, an active object stops and
@@ -533,8 +558,8 @@
 			</para>
 
 			<para>
-				Two ways are possible to define each of the three phases
-				of an active object.
+			   They are two ways to define each of the three phases
+				of an active object:
 			</para>
 
 			<itemizedlist>
@@ -550,18 +575,18 @@
 					<para>
 						passing an object implementing one or more of
 						the three interfaces in parameter to the method
-						<literal>newActive</literal>
-						or
+						<literal>newActive</literal>,
+						<literal>newActiveInParallel</literal> or
 						<literal>turnActive</literal>
-						(parameter
-						<literal>active</literal>
-						in those methods)
+						(parameter <literal>activity</literal> of the
+						type <literal>Active</literal>
+						in those methods).
 					</para>
 				</listitem>
 			</itemizedlist>
 
 			<para>
-				Note that the methods defined by those 3 interfaces are
+				Note that methods defined by those 3 interfaces are
 				guaranteed to be called by the active thread of the
 				active object.
 			</para>
@@ -570,34 +595,48 @@
 				
 
 				<para>
-					The algorithms for each running phase 
-					are the following (
-					<literal>activity</literal>
+               Activity invocations follow the
+               algorithm hereafter (<literal>activity</literal>
 					is the object passed as a parameter to
 					<literal>newActive</literal>
 					or
-					<literal>turnActive</literal>
-					):
+					<literal>turnActive</literal>):
 				</para>
 
 
-		<!-- 
-			//TODO add explanation
-			
-		 -->
-		<figure xml:id="Activityalgorithm_71"><info><title>Activity algorithm</title></info>
-			
-			<mediaobject>
-				<imageobject>
-			<!--  		<imagedata scalefit="1" width="100%" contentdepth="100%"    depth="5.5in" scalefit="0" format="PNG" 
-						fileref="images/init_run_end_Activity.png" />
-				-->
-					<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/init_run_end_Activity.png"/>
-				
-				</imageobject>
-			</mediaobject>
-		</figure>
+         <figure xml:id="Activityalgorithm_71"><info><title>Activity algorithm</title></info>
+            <mediaobject>
+               <imageobject>
+                  <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/init_run_end_Activity.png"/>
+               </imageobject>
+            </mediaobject>
+         </figure>
 
+         <para>
+            When the active object is about to be instantiated, if an <literal>activity</literal> object has been given to the creation method and if
+            it implements the <literal>initActivity</literal> method, then this method is executed. Else, if the object
+            we want to activate implements this method, then this one is executed. Otherwise, no method is executed before the active object creation.
+         </para>
+         <para>
+            In the same way, the activity itself used for the object is first the one defined in the <literal>activity</literal> object (implementing
+            the <literal>runActivity</literal> method). Then, if no <literal>runActivity</literal> method has been defined in an <literal>activity</literal>
+            object, the one defined in the object itself is executed. Otherwise, the standard activity phase will be used (which serves requests in a
+            FIFO order).
+         </para>
+         <para>
+            Finally, when terminating the active object, the same scenario occurs. In that case, as it was for the initialising phase, if no
+            <literal>endActivity</literal> method has been defined anywhere, no method will be executed. In other word, there is no default behaviour
+            for ending.
+         </para>
+         <note>
+            <para>
+            If an activity method (<literal>initActivity</literal>, <literal>runActivity</literal> or <literal>endActivity</literal>) is implemented
+            both in an <literal>activity</literal> object passed as parameter to the creation method
+            and also in the object we want to activate, then it is the method defined in the <literal>activity</literal> object that will be executed.
+            This behaviour enables in particular to override activity phases of an object that we do not have access to its code
+            (or that we do not want to modify).
+            </para>
+         </note>
 
 			</section>
 
@@ -609,24 +648,24 @@
 					used to create the active object is the easiest
 					solution when you control the class that you make
 					active. Depending on which phase in the life of the
-					active object you want to customize, you implement
+					active object you want to customize, you have to implement
 					the corresponding interface (one or more):
-					<literal>InitActive</literal>
-					,
+					<literal>InitActive</literal>,
 					<literal>RunActive</literal>
 					and
-					<literal>EndActive</literal>
-					. Here is an example that has a custom
-					initialization and activity.
+					<literal>EndActive</literal>.
+					Here is the <literal>Worker</literal> into which we have customized its
+					initialization and its ending.
 				</para>
 
-				<programlisting language="java"><textobject><textdata fileref="code_snippets/CustomInitAndRun.txt"/></textobject></programlisting>
+<!--				<programlisting language="java"><textobject><textdata fileref="code_snippets/CustomInitAndRun.txt"/></textobject></programlisting>-->
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_Worker_With_Activity.snip"/></textobject></programlisting>
 
-					<example xml:id="runActivity_start_stop_suspend"><info><title>Start, stop, suspend, restart a simulation algorithm in runActivity method</title></info>					
+<!--					<example xml:id="runActivity_start_stop_suspend"><info><title>Start, stop, suspend, restart a simulation algorithm in runActivity method</title></info>					-->
 						
 						
 						<para>
-							Bellow is the skeleton code for a class that
+							Here is the skeleton code for a class that
 							can run, suspend, restart and stop a
 							simulation. It uses a implementation of
 							<literal>RunActive</literal>
@@ -634,10 +673,11 @@
 						</para>
 
 			
-						<para>
-							<programlisting language="java"><textobject><textdata fileref="code_snippets/SimulationWithActivity.txt"/></textobject></programlisting>
-						</para>
-			</example>
+<!--						<para>-->
+<!--                  <programlisting language="java"><textobject><textdata fileref="code_snippets/SimulationWithActivity.txt"/></textobject></programlisting>-->
+                  <programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_Simulation.snip"/></textobject></programlisting>
+<!--						</para>-->
+<!--			</example>-->
 
 			</section>
 
@@ -667,15 +707,17 @@
 					be passed to the active object. We do so by
 					implementing one or more interfaces.
 				</para>
-				<programlisting language="java"><textobject><textdata fileref="code_snippets/activityImplementation.txt"/></textobject></programlisting>
+<!--				<programlisting language="java"><textobject><textdata fileref="code_snippets/activityImplementation.txt"/></textobject></programlisting>-->
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_LIFOActivity.snip"/></textobject></programlisting>
 				<para>
-					The implemented interface can be used with
-					<literal>PAActiveObject.newActive(..)</literal>
+					The implemented interface can be used with any of the creation methods
+					(<literal>PAActiveObject.newActive(...)</literal>, <literal>PAActiveObject.newActiveInParallel(...)</literal>
 					or
-					<literal>PAActiveObject.turnActive(...)</literal>
+					<literal>PAActiveObject.turnActive(...)</literal>).
 					.
 				</para>
-				<programlisting language="java"><textobject><textdata fileref="code_snippets/usingActivity.txt"/></textobject></programlisting>
+<!--				<programlisting language="java"><textobject><textdata fileref="code_snippets/usingActivity.txt"/></textobject></programlisting>-->
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_8.snip"/></textobject></programlisting>
 
 			</section>
 
@@ -684,29 +726,27 @@
 		<section xml:id="ActiveObjectCreation_html_factory"><info><title xml:id="UsingthefactorypatternwithActiveObjects_71">Using the factory pattern with Active Objects</title></info>
 			
 			<para>
-				<emphasis role="bold">
-					<!-- //TODO - very complex, it might need its own section  -->
-				</emphasis>
-			</para>
-			<para>
 				Creating an active object using ProActive might be a
 				little bit cumbersome and requires more lines of code
 				that for creating a regular object. A nice solution to
 				this problem is through the use of the
 				<emphasis role="bold">factory</emphasis>
 				pattern. This mainly applies to class based creation. It
-				consists in adding a static method to class
-				<literal>WorkerFactory</literal>
+				consists in creating a
+				<literal>WorkerFactory</literal> class with
+            a static method to class
 				that takes care of instantiating the active object and
-				returns it. The code is:
+				returns it.
 			</para>
 
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/factoryAO.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/factoryAO.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_WorkerFactory.snip"/></textobject></programlisting>
 			<para>
 				The static method in the factory class is then used to
 				create active objects:
 			</para>
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/factoryCall.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/factoryCall.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_9.snip"/></textobject></programlisting>
 
 			<para>
 				It is up to the programmer to decide whether this method
@@ -722,7 +762,7 @@
 
 
 
-		<section xml:id="using_metaobjects_to_customize"><info><title>Using <literal>MetaObjectFactory</literal> to customize the meta objects	</title></info>
+		<section xml:id="using_metaobjects_to_customize"><info><title>Using <literal>MetaObjectFactory</literal> to customize the meta objects</title></info>
 			
 
 			<para>
@@ -771,7 +811,8 @@
 			</para>
 
 			<para>
-				<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactory.txt"/></textobject></programlisting>
+<!--				<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactory.txt"/></textobject></programlisting>-->
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_CustomMetaObjectFactory.snip"/></textobject></programlisting>
 			</para>
 
 			<para>
@@ -789,43 +830,28 @@
 				singleton. 
 				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/proactivemetaobjectfactory.snip"/></textobject></programlisting>
 							
-				More explanations can be found in the<!-- This url can only work in the html generated files: in pdf there's no ".." -->
-				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/body/ProActiveMetaObjectFactory.html" os="html">
-					javadoc of that class
-				</link>
-				<phrase os="pdf">
-					<literal>
-						org.objectweb.proactive.core.body.ProActiveMetaObjectFactory
-					</literal>
-					javadoc
-				</phrase>
-				. The use of that factory is fairly simple. All you have
+				More explanations can be found in the
+				<uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/release-doc/pa/api_published/index.html">
+               javadoc
+				</uri>
+            of the <literal>org.objectweb.proactive.core.body.ProActiveMetaObjectFactory</literal> class.
+				The use of that factory is fairly simple. All you have
 				to do is to pass an instance of the factory when
 				creating a new active object. If we take the same
 				example as before we have:
 			</para>
 
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.newActive.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.newActive.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_10.snip"/></textobject></programlisting>
 
-			<para>
-				In the case of a
-				<literal>turnActive</literal>
-				we would have:
-			</para>
-
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.turnActive.txt"/></textobject></programlisting>
+<!--			<para>-->
+<!--				In the case of a-->
+<!--				<literal>turnActive</literal>-->
+<!--				we would have:-->
+<!--			</para>-->
+<!---->
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.turnActive.txt"/></textobject></programlisting>-->
 		</section>
-	<!--//TODO - why doesn't newActive have the same parameter ?
-		<sect2>
-<title>
-				Using
-				<literal>nameOfTargetType</literal>
-				with
-				<literal>PAActiveObject.turnActive(...)</literal>
-			</title>
-		</sect2>
--->
-			
 	</section>
  
 
@@ -843,23 +869,21 @@
 		</para>
 
 		<para>
-			Consider that some code in an instance of class
+			Consider that some code of a class
 			<literal>A</literal>
 			creates an active object of class
 			<literal>Worker</literal>
 			using a piece of code like this:
 		</para>
 
-	<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>
+<!--	<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>-->
+	<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_1.snip"/></textobject></programlisting>
 
 		<para>
-			If the creation of the active instance of B is successful,
-			the graph of objects is as described in figure below (with
-			arrows denoting references).
+			If the creation of the active instance of A is successful,
+			the graph of objects is as described in the following figure (with
+			arrows denoting references):
 		</para>
-		
-		
-		
 
 		<para>
 			<figure xml:id="Thecomponentsofanactiveobjectandof_710"><info><title>The components of an active object and of a referencing object</title></info>
@@ -892,7 +916,7 @@
 				</para>
 			</listitem>
 		</itemizedlist>
-		<para> Besides the active object composed of a body and an object there is 
+		<para> Besides the active object composed of a body and an object, there is
 		also a proxy and a stub for each active or passive object referencing the active object. 
 		
 		</para>
@@ -911,7 +935,7 @@
 				through a reference of type
 				<literal>Worker</literal>.
 				Reifying a call simply means constructing an object 
-				that represents the call(in
+				that represents the call (in
 				our case, all reified calls are instance of class
 				<literal>org.objectweb.proactive.core.mop.MethodCall</literal>),
 				so it can be
@@ -927,8 +951,8 @@
 				(such as method calls, constructor calls, references,
 				types,...) is at the core of
 				<emphasis>metaobject programming</emphasis>.
-				The metaobject protocol (MOP) ProActive is
-				built on is described in
+				The ProActive metaobject protocol (MOP) is
+				is described in
 				<xref linkend="MOP"/> 
 				but it is not a prerequisite for understanding and using
 				ProActive.
@@ -964,13 +988,12 @@
 				<literal>org.objectweb.proactive.core.mop.MethodCall</literal>
 				in order to represent the call to this method. This
 				object is then passed to the
-				<literal>BodyProxy</literal>
-				, which returns an object that is returned as the result
+				<literal>BodyProxy</literal>,
+				which returns an object that is returned as the result
 				of the method call. From the caller's point of view,
 				everything looks like if the call had been performed on
 				an instance of
-				<literal>Worker</literal>
-				.
+				<literal>Worker</literal>.
 			</para>
 
 			<para>
@@ -987,7 +1010,7 @@
 						<literal>final</literal>
 						methods inherited from class
 						<literal>Worker</literal>.
-						If the methods are final, calls to these methods are not
+						If methods are final, calls to these methods are not
 						reified but are executed on the stub, which may
 						lead to unpredictable behavior.
 					</para>
@@ -998,13 +1021,11 @@
 						there is the question of how ProActive deals with these
 						methods. In
 						fact, 5 out of this 6 methods deal with thread
-						synchronization (
-						<literal>notify()</literal>
-						,
+						synchronization (<literal>notify()</literal>,
 						<literal>notifyAll()</literal>
 						and the 3 versions of
-						<literal>wait()</literal>
-						). Those methods should not be used since an
+						<literal>wait()</literal>).
+						Those methods should not be used since an
 						active object provides thread synchronization.
 						Using the standard thread
 						synchronization mechanism and ProActive thread
@@ -1016,17 +1037,15 @@
 						The last final method in the class
 						<literal>Object</literal>
 						is
-						<literal>getClass()</literal>
-						. When invoked on an active object,
+						<literal>getClass()</literal>.
+						When invoked on an active object,
 						<literal>getClass()</literal>
 						is not reified and therefore performed on the
 						stub object, which returns an object of class
 						<literal>Class</literal>
-						that represents the class of the stub (
-						<literal>Stub_Worker</literal>
+						that represents the class of the stub (<literal>Stub_Worker</literal>
 						in our example) and not the class of the active
-						object itself (
-						<literal>Worker</literal>
+						object itself (<literal>Worker</literal>
 						in our example). However, this method is seldom
 						used in standard applications and it doesn't
 						prevent the operator
@@ -1083,11 +1102,11 @@
 				is responsible for storing calls (actually,
 				<literal>Request</literal>
 				objects) in a queue of pending requests and processing
-				these request according to a given synchronization
+				these requests according to a given synchronization
 				policy. The default behaviour for the synchronization policy is FIFO.
 				The Body has its
 				own thread which chooses requests from the
-				queue of request and executes the associated call.
+				queue of requests and executes the associated call.
 			</para>
 		</section>
 
@@ -1096,8 +1115,8 @@
 
 			<para>
 				There is also a standard instance of class
-				<literal>Worker</literal>
-				. It may contain some synchronized information in its
+				<literal>Worker</literal>.
+			   It may contain some synchronized information in its
 				<literal>live</literal>
 				method, if any. As the body executes calls one by one,
 				there cannot be any concurrent execution of two portions
@@ -1126,36 +1145,33 @@
 
 			<para>
 				<!--  //TODO Explain asynchronous request -->
-				Whenever possible a method call on an active object is
-				reified as an asynchronous request. If not possible the
-				call is synchronous and blocks until the reply is
-				received. In case the request is asynchronous, it
+				Whenever it is possible, a method call on an active object is
+				reified as an asynchronous request. In that case, it
 				immediately returns a future object.
+            If it is not possible, the
+				call is synchronous and blocks until the reply is
+				received.
 			</para>
 
 			<para>
-				This object acts as a placeholder for the result of the
+				This future object acts as a placeholder for the result of the
 				not-yet-performed method invocation. As a consequence,
 				the calling thread can go on with executing its code, as
-				long as it doesn't need to invoke methods on the
-				returned object, in which case the calling thread is
+				long as it does not need to invoke methods on the
+				returned object. At the time when the real result is needed, the calling thread is
 				automatically blocked if the result of the method
 				invocation is not yet available. Below are shown the
 				different cases that can lead to an asynchronous call.
 				Note that this table does not apply when using the
-				tryWithCatch anotators to deal with asynchronous
+				tryWithCatch annotators to deal with asynchronous
 				exceptions. See
-				<xref linkend="exceptions"/>
-				.
+				<xref linkend="exceptions"/>.
 			</para>
 		
 
-			<informaltable><info><title>
-					Future creation, and asynchronous calls depending on
-					return type
-					</title>
-				</info>
-				
+         <table>
+            <title>Future creation, and asynchronous calls depending on
+					return type</title>
 
 				<tgroup cols="4">
 					<colspec colnum="1" colname="col1" colwidth="1*"/>
@@ -1347,7 +1363,7 @@
 						</row>
 					</tbody>
 				</tgroup>
-			</informaltable>
+			</table>
 
 			<para>
 				As we can see, the creation of a future depends not only
@@ -1403,7 +1419,7 @@
 				<para>
 					There are some drawbacks with this technique, the
 					main one being the impossibility to have a user
-					override the default
+					override of the default
 					<literal>HashTable</literal>
 					and
 					<literal>equals()</literal>
@@ -1414,7 +1430,7 @@
 				<listitem>
 				
 				<para>
-					<emphasis role="bold">hashCode()</emphasis>
+					<emphasis role="bold">hashCode()</emphasis> -
 					Instead of returning the hashcode of the object, it
 					returns the hashcode of its proxy. Since there is
 					only one proxy per future object, there is a unique
@@ -1425,12 +1441,12 @@
 				<listitem>
 
 				<para>
-				<emphasis role="bold">equals()</emphasis>
+				<emphasis role="bold">equals()</emphasis> -
 					The default implementation of
 					<literal>equals()</literal>
 					in the Object class is to compare the references of
-					two objects. In ProActive it is redefined to compare
-					the hashcode of two proxies. As a consequence it is
+					two objects. In ProActive, it is redefined to compare
+					the hashcode of two proxies. As a consequence, it is
 					only possible to compare two future object, and not
 					a future object with a normal object.
 				</para>
@@ -1438,7 +1454,7 @@
 
 				<listitem>
 				<para>
-					<emphasis role="bold">toString()</emphasis>
+					<emphasis role="bold">toString()</emphasis> -
 					The
 					<literal>toString()</literal>
 					method is most of the time called with
@@ -1465,12 +1481,12 @@
 				
 
 				<para>
-					First, let's introduce the example we'll use
+					First, let us introduce the example we will use
 					throughout this section. Let us say that some piece
-					of code in an instance of class
-					<literal>A</literal>
-					calls method
-					<literal>foo</literal>
+					of code of a class (that we named
+					<literal>Caller</literal>)
+					calls the method
+					<literal>foo()</literal>
 					on an active instance of class
 					<literal>Worker</literal>.
 					This call is asynchronous and returns a future
@@ -1478,42 +1494,47 @@
 					<literal>Value</literal>.
 					Then, possibly after having executed some other
 					code, the same thread that issued the call calls
-					method
-					<literal>bar</literal>
+					the method
+					<literal>bar()</literal>
 					on the future object returned by the call to
-					<literal>foo</literal>.
+					<literal>foo()</literal>.
 					
 				</para>
 				<para>
 					The code for the following example is: 
 				</para>
 				
-					<programlisting language="java"><textobject><textdata fileref="code_snippets/flowExampleCode.txt"/></textobject></programlisting>
+<!--					<programlisting language="java"><textobject><textdata fileref="code_snippets/flowExampleCode.txt"/></textobject></programlisting>-->
+					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Caller_1.snip"/></textobject></programlisting>
 			</section>
 
 			<section xml:id="what_whould_have_happened_in_sequential_world"><info><title>What would have happened in a sequential world</title></info>
 				
+            <para>
+               In a sequential world, the method in charge of the call would look like as follows:
+            </para>
+					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Caller_2.snip"/></textobject></programlisting>
 
 				<para>
-					In a sequential, single-threaded version of the same
-					application, the thread would have executed the code 
-
-					of the caller object <literal>A</literal>
-					up to the call of <literal>foo</literal>, then the code of
+					In this single-threaded version,
+					the thread executes the code
+					of the caller object <literal>Caller</literal>
+					up to the call of <literal>foo</literal>.
+               Then, the code of
 					<literal>foo()</literal>
 					in class
-					<literal>Worker</literal>,
-					 then the code of the calling method in
-					object	<literal>A</literal>
+					<literal>Worker</literal> is executed.
+					After that, the thread comes back to the code of the calling method in
+					object <literal>Caller</literal>
 					up to the call to
-					<literal>bar</literal>
-					, then the code of
-					<literal>bar</literal>
+					<literal>bar()</literal>.
+				   Next, the code of
+					<literal>bar()</literal>
 					in class
-					<literal>V</literal>
-					, and finally the code of the calling method
+					<literal>Value</literal> is executed
+					and finally, the thread returns to the code of the calling method
 					in class
-					<literal>A</literal>
+					<literal>Caller</literal>
 					until its end. The sequence diagram below summarizes
 					this execution. You can notice how the single thread
 					successively executes code of different methods in
@@ -1537,8 +1558,8 @@
 				
 
 				<para>
-					Now we will show how an active object handles the call for the code above.
-					Instead of blocking on the execution of <literal>foo()</literal> it will create a future
+					Now, we will show how an active object handles the call for the code above.
+					Instead of blocking on the execution of <literal>foo()</literal>, it will create a future
 					and continue execution.
 					Let us first get an idea of what the graph of
 					objects at execution (the objects with their
@@ -1550,15 +1571,15 @@
 					<listitem>
 						<para>
 							Before calling
-							<literal>foo</literal>
+							<literal>foo()</literal>,
 							 we have exactly the same setup as after
 							the creation of the active instance of
-							<literal>worker</literal>: an
+							<literal>Worker</literal>: an
 							instance of class
-							<literal>A</literal>
+							<literal>Caller</literal>
 							and an active instance of class
-							<literal>Worker</literal>
-							. As with all active objects, the instance of
+							<literal>Worker</literal>.
+							As with all active objects, the instance of
 							the class
 							<literal>Worker</literal>
 							is composed a
@@ -1583,10 +1604,9 @@
 
 					<listitem>
 						<para>
-							After the asynchronous call to
-							<literal>foo</literal>
-							has returned,
-							<literal>A</literal>
+							After the asynchronous call of
+							<literal>foo()</literal>,
+							<literal>Caller</literal>
 							now holds a reference onto a future object
 							representing the not yet available result of
 							the call. It is actually composed of a
@@ -1612,15 +1632,15 @@
 					<listitem>
 						<para>
 							Right after having executed
-							<literal>foo</literal>
+							<literal>foo()</literal>
 							on the instance of
-							<literal>Worker</literal>
-							, the thread of the
+							<literal>Worker</literal>,
+							the thread of the
 							<literal>Body</literal>
-							sets the result in the future, which results
-							in the
+							sets the result in the future.
+                     For that, it gives
 							<literal>FutureProxy</literal>
-							having a reference onto a
+							a reference onto a
 							<literal>Value</literal>
 							(see figure below).
 						</para>
@@ -1646,27 +1666,27 @@
 				<para>
 					The sequence of calls is more complex for the active object
 					case.	We have now two
-					threads: the thread that belongs to object's <literal>A</literal>
-					subsystem,  and the thread that belongs to
-					 the <literal>Worker</literal>'s subsystem. 
+					threads: the thread that belongs to the subsystem of <literal>Caller</literal>
+					and the one that belongs to
+					the subsystem of <literal>Worker</literal>.
 					We will call these the first and second threads. 
 			</para>
 
 				<para>
 					The first thread invokes
-					<literal>foo</literal>
+					<literal>foo()</literal>
 					on an instance of
-					<literal>Stub_Worker</literal>
-					, which builds a
+					<literal>Stub_Worker</literal>,
+					which builds a
 					<literal>MethodCall</literal>
 					object and passes it to the
 					<literal>BodyProxy</literal>
 					as a parameter of the call to be
-					<literal>reified</literal>
-					. The proxy then checks the return type of the call
+					<literal>reified</literal>.
+					The proxy then checks the return type of the call
 					(in this case
-					<literal>Value</literal>
-					) and generates a future object of type
+					<literal>Value</literal>)
+					and generates a future object of type
 					<literal>Value</literal>
 					for representing the result of the method
 					invocation. The future object is actually composed
@@ -1677,7 +1697,7 @@
 					A reference onto this future object is set in the
 					<literal>MethodCall</literal>
 					object. This reference will be used to set the value 
-					after the call has executed. When the
+					after the call has been executed. When the
 					<literal>MethodCall</literal>
 					object is ready, it is passed as a parameter for a Request to the
 					<literal>Body</literal>
@@ -1685,7 +1705,7 @@
 					<literal>Body</literal> simply
 					appends this request to the queue of pending
 					requests and returns immediately. The call to
-					<literal>foo</literal> issued by <literal>A</literal>
+					<literal>foo()</literal> issued by <literal>Caller</literal>
 					returns a future object of type	<literal>Stub_Value</literal>,
 					that is a subclass of
 					<literal>Value</literal>.
@@ -1696,9 +1716,9 @@
 					other requests, the
 					second thread
 					(the active object's thread) picks up the previous request issued by
-					the	first thread. It then executes the embedded call by
+					the first thread. It then executes the embedded call by
 					calling
-					<literal>foo</literal>
+					<literal>foo()</literal>
 					on the instance of
 					<literal>Worker</literal>
 					with the actual parameters stored in the
@@ -1709,7 +1729,7 @@
 					is responsible for setting this object in the
 					future object (which is the reason why
 					<literal>MethodCall</literal>
-					objects hold a reference on the future object
+					objects hold a reference onto the future object
 					created by the <literal>FutureProxy</literal>).
 					The execution of the call is now over, and the
 					second thread can select and serve another request from
@@ -1721,19 +1741,19 @@
 					first thread
 					has continued executing the code of the calling
 					method in class
-					<literal>A</literal>.
+					<literal>Caller</literal>.
 					At some point, it calls
-					<literal>bar</literal>
+					<literal>bar()</literal>
 					on the object of type
 					<literal>Stub_Value</literal>
-					that was returned by the call to
-					<literal>foo</literal>. This call is reified thanks to the
-					<literal> Stub_Value </literal>and processed by the
-					<literal> FutureProxy</literal>. If the object the
+					that was returned by the call of
+					<literal>foo()</literal>. This call is reified thanks to the
+					<literal>Stub_Value </literal>and processed by the
+					<literal>FutureProxy</literal>. If the object the
 					 future represents is available
-					(the second thread	has already set it in the future object),
+					(the second thread has already set it in the future object),
 					the call is executed and returns a value to the calling code in
-					<literal>A</literal>. The sequence diagram below presents the
+					<literal>Caller</literal>. The sequence diagram below presents the
 					process graphically. 
 				
 				</para>
@@ -1751,11 +1771,11 @@
 				</para>
 
 				<para>
-					If the value in the future it is not yet available, the first thread is
+					If the value in the future it is not available yet, the first thread is
 					suspended in <literal>FutureProxy</literal>
 					until the second thread sets the result in the
 					future object (see figure below). This is called 
-					<literal> wait-by-necessity</literal>.
+					<literal>wait-by-necessity</literal>.
 				</para>
 
 				<para>
@@ -1788,7 +1808,7 @@
 							 A constructor with no-args
 						</emphasis>
 						needs to be used either for the
-						Active Objects creation(if not present, an
+						Active Objects creation (if not present, an
 						exception might be thrown) or Future creation
 						for a method call (if not present, the method
 						call is synchronous). Avoid placing
@@ -1818,9 +1838,9 @@
 						Use
 						<emphasis role="bold">wrappers</emphasis>
 						instead of primitive types or final classes for
-						methods result types. Otherwise you will loose the
-						asynchronism capabilities. For instance if one
-						of your object has a method
+						methods result types. Otherwise, you will loose the
+						asynchronism capabilities. For instance, if one
+						of your object has a method whose signature looks like this:
 					</para>
 
 					<programlisting language="java">
@@ -1828,7 +1848,7 @@
 
 					<para>
 						calling this method with ProActive is
-						synchronous. To have asynchronous calls use
+						synchronous. To have asynchronous calls, use:
 					</para>
 
 					<programlisting language="java"><emphasis role="bold">IntWrapper</emphasis> giveSolution(parameter)</programlisting>
@@ -1848,7 +1868,7 @@
 					</para>
 
 					<para>
-						To make the call asynchronous only the methods return types
+						To make the call asynchronous, only the methods return types
 						have to use wrappers. The parameters can use the regular
 						Java types.
 					</para>
@@ -1868,26 +1888,44 @@
 						result_from_method cannot be <literal>null</literal>:
 					</para>
 
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/avoidNull.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/avoidNull.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Good_Practice_1.snip"/></textobject></programlisting>
 
 					<para>On the caller side:</para>
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/callerSideAvoidNull.txt"/></textobject></programlisting>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Good_Practice_2.snip"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/callerSideAvoidNull.txt"/></textobject></programlisting>-->
 
 
 					<para>
 						This test is never true because 
-						result_from_method is
+						either worker is equal to
 						<literal>
 							Stub--&gt;Proxy--&gt;null
 						</literal>
-						if the future is not yet available or the method
-						returns <literal>null</literal> or
+						if the future is not available yet or if the method
+						returns <literal>null</literal>, or worker is equal to
 						<literal>
 							Stub--&gt;Proxy--&gt;Object
 						</literal>
-						if the future is available, but
-						<literal>result_from_method</literal> is never <literal>null</literal>.
+						if the future is available.
+						But <literal>worker</literal> is never <literal>null</literal>.
+                  In our case, the method has returned null since worker's name is
+                  <literal>Anonymous</literal> and the execution trace of the caller is
+                  the following:
 					</para>
+               <screen>
+                  === Started Active object:
+                  org.objectweb.proactive.examples.documentation.classes.Worker on rmi://kisscool.inria.fr:6618/Node1346108379
+                  worker is not null
+                  Exception in thread "main" java.lang.NullPointerException
+                     at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+                     at sun.reflect.NativeMethodAcccumentation.activeobjectconcepts.Caller.goodPractice(Caller.java:71)
+                     at org.objectweb.proactive.examples.documentation.activeobjectconcepts.Caller.main(Caller.java:86)
+               </screen>
+               <para>
+                  As you can see, <literal>worker</literal> is considered as not null and, as we call one of its method and since
+                  it is actually null, we get a <literal>NullPointerException</literal>.
+               </para>
 				</listitem>
 			</itemizedlist>
 		</section>
@@ -1908,18 +1946,19 @@
 
 			<para>
 				By default, ProActive continuously pings active objects
-				expected to update awaited futures. When such a ping fails,
+				awaited for updating futures. When such a ping fails,
 				the associated awaited future is updated with a runtime
 				exception. Accessing the future will throw
 				an exception.
 			</para>
 
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/futureException.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/futureException.txt"/></textobject></programlisting>-->
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Good_Practice_3.snip"/></textobject></programlisting>
 
 			<para>
 				The ping is started when the future is being awaited, but
 				it is also possible to start it beforehand using the
-				<literal>ProFuture.monitorFuture(java.lang.Object future)</literal>. 
+				<literal>ProFuture.monitorFuture(java.lang.Object future)</literal> method.
 				To find out more about the fault tolerance mechanism read <xref linkend="faultTolerance"/>
 			</para>
 		</section>
@@ -1955,15 +1994,18 @@
 			
 
 					<para>
-						An automatic continuation can occur when sending a
-						request (parameter of the request is a future or
-						contains a future) or when sending a reply (the
-						result is a future or contains a future).
+						An automatic continuation can occur either when sending a
+						request (request parameter is or contains a future) or
+                  when sending a reply (the
+						result is or contains a future.
 						Outgoing futures are registered in the
 						<literal>FuturePool</literal>
-						of the Active Object sending the future.
-						Registration for the couple Future - destination Body 
-						as an automatic	continuation occurs when the future is
+						of the active object which sends the future. For instance,
+                  In the example presented in the <xref linkend="IllustrationofanAutomaticContinuation_71"/>,
+                  a <literal>FuturePool</literal> is created on the <literal>Caller</literal> side.
+						This <literal>FuturePool</literal> is a pool of couples
+                  &lt;Future, Destination&gt;
+						and is filled in when the future is
 						serialized. Every request or reply are
 						serialized before being sent, and the future is
 						part of the request or the reply. 
@@ -1972,10 +2014,10 @@
 						A thread
 						<literal>Thread</literal>
 						sending the message keeps in a static table (<literal>FuturePool.bodyDestination</literal>)
-						 a reference to the destination body. Hence
+						 a reference to the destination body. Hence,
 						when a future
 						<literal>Future</literal>
-						is serialized by the same thread, looks up in the
+						is serialized by the same thread, this thread looks up in the
 						static table the destination
 						<literal>Destination</literal>
 						registered for the thread
@@ -1983,8 +2025,8 @@
 						 If it finds a destination for the future, the future notifies the
 						<literal>FuturePool</literal>
 						that it is going to leave, which in turn
-						registers the couple Future - Destination Body as an automatic
-						continuation
+						registers the &lt;Future, Destination&gt; as an automatic
+						continuation.
 					</para>
 
 					<para>
@@ -2023,35 +2065,38 @@
 				<primary>Automatic Continuation</primary>
 			</indexterm>
 						<para>
-				To illustrate how automatic continuation takes place we will use three classes:
-				<literal>A</literal>, <literal>B</literal>, and <literal>Worker</literal>. The
-				 <literal>A</literal> and <literal>B</literal> classes are used to instantiate passive
-				 objects and the <literal> Worker </literal> class is used to instantiate an active object.
-				 The <literal>Worker</literal> class has a <literal> foo() </literal> method and the
-				 <literal>B</literal> class has a <literal> bar(Value v) </literal> method. 
+				To illustrate how automatic continuation takes place,  we will use three classes:
+				<literal>Caller</literal>, <literal>Value</literal> and <literal>Worker</literal>. The
+				 <literal>Caller</literal> and <literal>Value</literal> classes are used to instantiate passive
+				 objects and the <literal>Worker</literal> class is used to instantiate an active object.
+				 The <literal>Worker</literal> class has a <literal>foo()</literal> method and the
+				 <literal>Value</literal> class has a <literal> bar(Value v, int nbYears)</literal> method.
 			
 			</para>
 
-			<para>
-				<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePassing.txt"/></textobject></programlisting>
-			</para>
+<!--         <programlisting language="java"><textobject><textdata fileref="code_snippets/futurePassing.txt"/></textobject></programlisting>-->
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Continuation_1.snip"/></textobject></programlisting>
 
 			<para>where</para>
 
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePasserClassWorker.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePasserClassWorker.txt"/></textobject></programlisting>-->
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Continuation_2.snip"/></textobject></programlisting>
 
 			<para>and</para>
 
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePasserClassB.txt"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePasserClassB.txt"/></textobject></programlisting>-->
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Continuation_3.snip"/></textobject></programlisting>
 			
 			
 			<para>
 			We will first call <literal>foo()</literal> on the worker. The call goes through the worker stub
 			and the body proxy and it is placed in the queue of the body. We are using
-			a passive object as an example, however the process is similar if the
-			caller was an active object or if the the objects were all on the same machine.In 
-			those cases the call
-			will also go through the stub and proxy as described in the sequence diagrams above. 
+			a passive object as an example, however the process would be similar if the
+			caller was an active object or if the objects were all on the same machine. In
+			those cases, the call
+			will also go through the stub and proxy as described in the sequence diagrams above.
+         The following pictures represent the continuation process. Note that in this diagram, the caller is named <literal>A</literal>
+         and the value is named <literal>B</literal>.
 			</para>
 			<para>
 				<informalfigure>
@@ -2064,9 +2109,9 @@
 			</para>
 			<para>
 				
-				After sending the request the thread of object <literal>A</literal> continues immediately
+				After sending the request, the thread of object <literal>A</literal> continues immediately
 				(asynchronous call)
-				and <literal> v1 </literal> points to a future that has not been updated yet.   
+				and <literal>v1</literal> points to a future that has not been updated yet.
 				</para>
 			
 			<para>
@@ -2079,7 +2124,7 @@
 				</informalfigure>
 			</para>
 
-			<para>Next, object <literal>A</literal> calls <literal>bar(v1)</literal> on B.</para> 
+			<para>Next, object <literal>A</literal> calls <literal>bar(v1, 1)</literal> on <literal>B</literal>.</para>
 			<para>
 				<informalfigure>
 					<mediaobject>
@@ -2092,9 +2137,9 @@
 			<para>
 
 				The call on <literal>B</literal> leads to the creation of another future 
-				to which <literal>v2</literal> will point to. Also because  <literal>v1</literal> 
-				has not been updated yet there will be a another future created on object <literal>
-				B</literal>. 
+				to which <literal>v2</literal> will point to. Since <literal>v1</literal>
+				has not been updated yet, there will be another future created on object
+            <literal>B</literal>.
 			</para>
 
 			<para>
@@ -2108,7 +2153,7 @@
 			</para>
 
 			<para>
-			At some point the active object finishes executing <literal>foo</literal>
+			At some point, the active object finishes executing <literal>foo()</literal>
 			and the value of the future for <literal>v1</literal> will be updated by the
 			<literal>Body</literal>.	 
 			</para>
@@ -2140,8 +2185,8 @@
 			</para>
 
 			<para>
-				Once <literal>B</literal> has the value for the future it will execute 
-				<literal>bar()</literal> with the recieved value and update the value
+				Once <literal>B</literal> has the value for the future, it will execute
+				<literal>bar()</literal> with the received value and update the value
 				<literal>v2</literal> in <literal>A</literal>.
 			</para>
 
@@ -2167,9 +2212,9 @@
 					</mediaobject>
 				</informalfigure>
 			</para>
-			<para>As seen above, as long there is a future needed for a computation, it
-			will be passed to the object doing the computation as long as it is not 
-			need it immediately. If the value is needed right away, the caller thread will
+			<para>As seen above, as long as there is a future needed for a computation, it
+			will be passed to the object doing the computation when it is not
+			needed immediately. If the value is needed right away, the caller thread will
 			block until the future is updated, just like in single threaded call.
 			</para>
 			<para>
@@ -2195,9 +2240,9 @@
 			data in an efficient way.
 		</para>
 		
-		<para>
-			This operator is *not* compatible with the ProActive Fault-Tolerance mechanism.
-		</para>
+		<warning>
+			<para>This operator is <emphasis>NOT</emphasis> compatible with the ProActive Fault-Tolerance mechanism.</para>
+		</warning>
 		
 		<para>
 			To use it, you have to specify different variables :
@@ -2206,27 +2251,27 @@
 		<itemizedlist>
       		<listitem>
       			<para>a <literal>tag</literal> which is an unique identifier for the exchange
-      			operation in case of multiple exchanges	performed in parallel,</para>
+			operation in case of multiple exchanges	performed in parallel</para>
       		</listitem>
 
       		<listitem>
         		<para>a <literal>reference to the active object</literal> you want to exchange
-        		data with,</para>
+			data with</para>
       		</listitem>
 
       		<listitem>
-        		<para>a <literal>reference to the data source</literal>	you want to send to the
-        		other Active Object,</para>
+			<para>a <literal>reference to the data source</literal> you want to send to the
+			other active object</para>
       		</listitem>
 
       		<listitem>
         		<para>a <literal>reference to the location</literal> where the received data
-        		will be put,</para>
+			will be put</para>
       		</listitem>
       		
       		<listitem>
         		<para>the <literal>amount of data</literal> you want to exchange (must be
-        		symmetric).</para>
+			symmetric)</para>
       		</listitem>      		
     	</itemizedlist>
     	
@@ -2236,26 +2281,24 @@
 			local array to get a full one.
 		</para>
 		
-		<para>
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/exchangeOperator.txt"/></textobject></programlisting>
-		</para>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/exchangeOperator.txt"/></textobject></programlisting>-->
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Exchange_1.snip"/></textobject></programlisting>
 		
 		<para>
 			Standard exchangeable data are array of integers, doubles and bytes. Also, you
 			can exchange your own complex double structure by implementing the
-			<literal>ExchangeablDouble</literal> interface. Here is an example of an
+			<literal>ExchangeableDouble</literal> interface. Here is an example of an
 			implementation:			
 		</para>
 		
-		<para>
-			<programlisting language="java"><textobject><textdata fileref="code_snippets/exchangeableDouble.txt"/></textobject></programlisting>
-		</para>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Exchange_2.snip"/></textobject></programlisting>
+<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/exchangeableDouble.txt"/></textobject></programlisting>-->
 	</section>
 	
 			<!-- //TODO add immediateService maybe and expand or remove this section, it is present in other parts of the manual		
 	
-	<sect1 id="ActiveObjectCreation_html_events">
-<title xml:id="Eventbasedprogramming_71">Event based programming</title>
+	<section xml:id="ActiveObjectCreation_html_events">
+<info><title>Event based programming</title></info>
 
   	<para>
 			ProActive supports an event based programming model. That
@@ -2265,19 +2308,25 @@
 			an excerpt from a class using the mechanism:
 		</para>
 
-		<programlisting lang="java">
-			public class MyActiveObject { public void
-			myCallback(Future&lt;StringWrapper&gt; future) { try {
-			String s = future.get().stringValue();
-			System.out.println("Got this value: " + s); } catch
-			(InterruptedException e) { /* This cannot happen */ return;
-			} catch (ExecutionException e) { System.out.println("Got an
-			exception instead of the future: " + e.getCause()); return;
-			} }
+		<programlisting language="java">
+			public class MyActiveObject {
+            public void myCallback(Future&lt;StringWrapper&gt; future) {
+               try {
+			         String s = future.get().stringValue();
+			         System.out.println("Got this value: " + s);
+               } catch (InterruptedException e) { /* This cannot happen */
+                  return;
+			      } catch (ExecutionException e) {
+                  System.out.println("Got an exception instead of the future: " + e.getCause());
+                  return;
+			      }
+            }
 
-			public void someRunningMethod(SomeActiveObjectClass ao) {
-			StringWrapper result = ao.foo();
-			ProFuture.addActionOnFuture(result, "myCallback"); } }
+            public void someRunningMethod(SomeActiveObjectClass ao) {
+               StringWrapper result = ao.foo();
+               ProFuture.addActionOnFuture(result, "myCallback");
+            }
+         }
 		</programlisting>
 
 		<para>
@@ -2286,10 +2335,8 @@
 			is also possible to set the callback method to an immediate
 			service method.
 		</para>
-	</sect1>
-	
-	-->
-	
+	</section>
+-->
 
 
 </chapter>
