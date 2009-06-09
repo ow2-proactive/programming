@@ -11,15 +11,15 @@
     </indexterm>
     <!-- //TODO add a more in depth explanation -->
 	<para>
-		Active Objects have the ability to migrate between nodes while
-		the application is running. Whatever application was using the active
+		Active objects have the ability to migrate between nodes while
+		the application is running. Whatever application is used the active
 		objects will continue running regardless of the migration of active
 		objects.  
 	</para>
     <para>The migration of an active object can be triggered by the active
-    object itself, or by an external agent. In both cases a single method
-    will eventually get called to perform the migration. It is the method
-    <literal> migrateTo(...)</literal> accessible from a migratable body (a body
+    object itself, or by an external agent. In both cases, a single method
+    will eventually get called to perform the migration. This method is
+    <literal>migrateTo(...)</literal> which is accessible from a migratable body (a body
     that inherits from <literal>MigratableBody</literal>).</para>
 
     <para>In order to ease the use of the migration, ProActive provides 2 sets of
@@ -49,7 +49,7 @@
     agent than the target active object. In this case the external agent must
     have a reference to the Body of the active object it wants to
     migrate. The <literal>boolean</literal> value in the following methods
-    indicates if the migration modifies the application's computation.</para>
+    indicates whether the migration modifies the computation of the application.</para>
 
     <itemizedlist>
       <listitem>
@@ -73,7 +73,7 @@
         <para><literal>PAMobileAgent.migrateTo(Body body, Node node,  boolean isNFRequest,
                              int priority)</literal>: migrate to the location of the given node
           The <literal>int</literal> value indicates the priority of the non functional request.
-          The levels are defined in the <literal>Request</literal> interface.</para>
+          Levels are defined in the <literal>Request</literal> interface.</para>
       </listitem>
 
 
@@ -86,13 +86,15 @@
 
     <para>Any active object has the ability to migrate. If it references some
     passive objects, they will also migrate to the new location. Since we rely
-    on the serialization to send the object on the network, <emphasis role="bold">the active object must implement the serializable
-    interface</emphasis>. To migrate, an active object must have a method
+    on the serialization to send the object on the network, 
+    <emphasis role="bold">the active object has to implement the <literal>Serializable</literal>
+    interface</emphasis>. To migrate, an active object has to implement a method
     which contains a call to <literal> PAMobileAgent.migrateTo(...)</literal>. This call must be the
-    last one in the method, i.e the method must return immediately after. Here
+    last one in the method, i.e the method has to return immediately after. Here
     is an example of a method in an active object:</para>
 
-    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_method.txt"/></textobject></programlisting>
+<!--    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_method.txt"/></textobject></programlisting>-->
+    <programlisting language="java"><textobject><textdata fileref="automatic_snippets/method_moveTo.snip"/></textobject></programlisting>
 
 
     <para>We don't provide any test to check if the call to migrateTo is the
@@ -103,8 +105,8 @@
 
   <section xml:id="Completeexample_77"><info><title>Complete example</title></info>
     
-	<!-- TODO code hasn't been run, check it really works -->
-    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_example.txt"/></textobject></programlisting>
+<!--    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_example.txt"/></textobject></programlisting>-->
+    <programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_SimpleAgent.snip"/></textobject></programlisting>
 
     <para>The class SimpleAgent implements <literal>Serializable</literal> so
     the objects created will be able to migrate. We need to provide an empty
@@ -113,15 +115,17 @@
     migrate to the specified location, and <literal>whereAreYou()</literal>
     which returns the hostname of the new location of the agent.</para>
 
+    <programlisting language="java"><textobject><textdata fileref="automatic_snippets/migration_simple.snip"/></textobject></programlisting>
+
     <para>In the main method, we first need to create an active object, which
-    is done through the call to <literal>newActive()</literal>. Once this is
-    done, we can call methods on it as on any object. We call its
+    is done through the call to <literal>newActive()</literal>. Once
+    done, we load an application description in order to get a node. Then, we call its
     <literal>moveTo</literal> method which will make it migrate to the node
-    specified as parameter and then we ask it what is its current
-    location. For our application we pass the location of the node as runtime
+    specified as parameter and finally, we ask it what is its current
+    location. For our application, we pass the location of the node as runtime
     parameter to the application. </para>
     
-     <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_example_main.txt"/></textobject></programlisting>
+<!--     <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_example_main.txt"/></textobject></programlisting>-->
     
     
     <para>To see another example of migration look at the migration example in 
@@ -131,25 +135,20 @@
 
   <section xml:id="Dealingwithnonserializableattributes_77"><info><title>Dealing with non-serializable attributes</title></info>
     
-
-	<para>Implementing a MigrationStrategy (specifying what to do on departure
-	and on arrival).</para>
-    <para>The migration of an active object uses serialization.
-    Unfortunately, not all the objects in the Java language are serializable so 
-    the first step to solve the problem is to identify the unserializable 
-    components.
-    In front the declaration of unserializable fields we will  put the keyword <literal>transient</literal>. This
-	    indicates that the value of this variable should not be serialized.
-	    After the first migration, these fields will be set to null since they have not been
-	    saved. So we have to explicitly rebuild them upon arrival of the active object at its
-	    new location. This can be done by using 
-	    the <literal>MigrationStrategyManager</literal> interface or 
-	    by implementing <literal>readObject(java.io.ObjectInputStream in)</literal> and 
-    			<literal>writeObject(java.io.ObjectOutputStream out)</literal>
-    			from the
-    			interface <literal>Serializable</literal>.
-    
-
+      <para>The migration of an active object uses serialization.
+      Unfortunately, not all the objects in the Java language are serializable so 
+      the first step to solve the problem is to identify the unserializable 
+      components.
+      In front of the declaration of unserializable fields, we will put the keyword <literal>transient</literal>. This
+      indicates that the value of this variable should not be serialized.
+      After the first migration, these fields will be set to null since they have not been
+      saved. So we have to explicitly rebuild them upon arrival of the active object at its
+      new location. This can be done by using 
+      the <literal>MigrationStrategyManager</literal> interface or 
+      by implementing <literal>readObject(java.io.ObjectInputStream in)</literal> and 
+      <literal>writeObject(java.io.ObjectOutputStream out)</literal>
+      from the
+      interface <literal>Serializable</literal>.
     </para>
     
     <section xml:id="UsingTheliteralMigrationStrategyManagerliteralInterface_77"><info><title>Using The <literal>MigrationStrategyManager</literal> Interface</title></info>
@@ -159,26 +158,47 @@
     	be run when the active objects migrates. </para>
     	<para>
     	The arguments for <literal>onArrival(String) </literal>
-    	and <literal>onDeparture(String) </literal> are the methods to be run before 
-    	serialization and after deserialization. We create a new <literal>
+    	and <literal>onDeparture(String) </literal> are respectively the methods to be run before 
+    	serialization and after deserialization. We instantiate a new <literal>
     	MigrationStrategyManagerImpl</literal> for the body of the object to 
-    	be migrated and assign the methods to be run. For this we use the 
-    	<literal> initActivity(Body)</literal> method because we only need to run
-    	the creation and assignment once.</para> 
-      <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_strategy_example.txt"/></textobject></programlisting>
+    	be migrated and assign the methods to be run. For this, we use the 
+    	<literal>initActivity(Body)</literal> method since we only need to run
+    	the creation and assignment once.</para>
+      
+      <para>Here is the code of our <literal>UnSerializableAgent</literal> class:</para>
+
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_UnSerializableAgent.snip"/></textobject></programlisting>
+    
+      <para>This class is normally non-serializable since <literal>BigInteger</literal> is not serializable. If we tried to migrate the active object without implementing
+      the <literal>initActivity()</literal> method as previously, we would get a <literal>NullPointerException</literal> when invoking a method on our
+      <literal>toBeSaved</literal> variable.</para>
+
+      <para>
+         The following method is in charge of instantiate our object and to migrate it:
+      </para>
+
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/migration_unserializable.snip"/></textobject></programlisting>
+    
     </section>
+
+
     <section xml:id="using_readObject_and_writeObject"><info><title> Using <literal>readObject(...)</literal> and	<literal>writeObject(...)</literal></title></info>
     	
-		    <para>Another way of dealing with unserializable attributes is 
+		    <para>Another way to deal with unserializable attributes is 
 		    using the methods from the Serializable interface: </para>
-		    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/serializable_methods.txt"/></textobject></programlisting>
+<!--		    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/serializable_methods.txt"/></textobject></programlisting>-->
+          <programlisting language="java">
+private void writeObject(java.io.ObjectOutputStream out) throws IOException;
+private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException;
+private void readObjectNoData() throws ObjectStreamException;</programlisting>
 		    <para>
 		    We override these methods to provide a way to save and restore the 
 		    non-serializable components of the active object:
 		    </para>
-      <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_read_writeObject.txt"/></textobject></programlisting>
+<!--      <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_read_writeObject.txt"/></textobject></programlisting>-->
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_UnSerializableAgent2.snip"/></textobject></programlisting>
 
-    <para>To learn how to use the methods see the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/javase/6/docs/api/java/io/Serializable.html">Serializable</link> interface in the standard
+    <para>To learn how to use the methods, see the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/javase/6/docs/api/java/io/Serializable.html">Serializable</link> interface in the standard
     JavaDoc.</para>
 
     </section>
@@ -187,27 +207,24 @@
   <section xml:id="MixedLocationMigration_77"><info><title>Mixed Location Migration</title></info>
     
 
-    <para/>
-
     <section xml:id="ForwardersAndAgents_77"><info><title>Forwarders And Agents</title></info>
       
 
-      <para>There are two way to communicate with an active object which has
-      migrated :</para>
+      <para>There are two ways to communicate with an active object which has
+      migrated:</para>
 
       <itemizedlist>
         <listitem>
           <para><emphasis>Forwarders</emphasis></para>
 
-          <para>An active object upon leaving a site leaves behind a special
-          object, a forwarder, which is in charge of forwarding incoming
+          <para>An active object, which is about to leave a site, leaves behind a special
+          object called a forwarder which is in charge of forwarding incoming
           messages to the next destination. As time goes, a chain of
-          forwarders builds between a caller and the mobile object. Any
-          message sent to the latter will go through the chain to reach the
+          forwarders is built between a caller and the mobile object. Any
+          message sent to the latter will go through this chain to reach the
           agent. There is a virtual path between a caller and a mobile
-          object. As soon as a call is peformed on the agent the chain of forwarders 
+          object. As soon as a call is performed on the agent, the chain of forwarders 
           is shortened into a direct link to the agent called. </para>
-          <!-- TODO check with Fabrice -->
         </listitem>
       </itemizedlist>
 
@@ -233,14 +250,14 @@
       <para>Both techniques have their drawbacks. Two problems arise when
       using a forwarding scheme, especially if the ambition is scalable mobile
       agents over WAN. First, the forwarders use resources on a site as long
-      as they have not been garbage collected. Thus if a chain exists between
+      as they have not been garbage collected. Thus, if a chain exists between
       to objects, it will remains even if there is no new communications going
       by. Second, the longer the chain is, the more likely it will be cut
       because of a hardware or software failure. As a consequence, while
       forwarders are more efficient under some conditions, they do not appear
       to be scalable, nor reliable.</para>
 
-      <para>The server on the other hand is a single point of failure and a
+      <para>On the other hand, the server is a single point of failure and a
       potential bottleneck. If a server is to help communicating with a higher
       number of mobile agents, then it might not be able to serve requests
       quickly enough. Furthermore, in case of a crash, it is not possible to
@@ -282,21 +299,20 @@
 			        of the agent by having them update the server. When they reach the end
 			        of their lifetime, they can send to the server their outgoing
 			        reference which could be the address of the agent or another forwarder.
-			        The updatingForwarder parameter can be true or false. If true
-			         it releases the agent from most of the updates. <!-- TODO most ? -->
+			        The <literal>updatingForwarder</literal> parameter can be true or false. If true
+			         it releases the agent from most of the updates.
 			        In order to increase reliability, it is possible to have also the agent
-			         update the server on a regular basis. This value can be <literal>true</literal>
-			         or <literal>false</literal>.</para>
+			         update the server on a regular basis.</para>
       		</listitem>
-      		<listitem><para> <emphasis role="bold"> agent time to update in milliseconds</emphasis></para>
+      		<listitem><para> <emphasis role="bold">agent time to update in milliseconds</emphasis></para>
       			<para> 
       			Each mobile agent has a nominal Time To Update (TTU) after which
        			it will inform the localization server of its new location. 
-       			The TTu is defined as the first occurence of two potential events since the last update:
+       			The TTU is defined as the first occurrence of two potential events since the last update:
        				<itemizedlist>
 	       				<listitem><para><emphasis role="bold">agent migrations number, integer</emphasis> - <literal>
 			      		proactive.mixedlocation.maxMigrationNb</literal> </para>
-			      		<para>This parameter ndicates the number of migrations before updating the
+			      		<para>This parameter indicates the number of migrations before updating the
 			            server. Use -1 to indicate that the agent never updates the server.</para>
 			      		</listitem>
 			      		<listitem><para><emphasis role="bold">agent time on site in milliseconds</emphasis> - <literal>
@@ -311,8 +327,8 @@
       	
       	        <para>If we consider that both the agent and the forwarders can send
         updates to the server, the server must be able to make the difference
-        between messages from the forwarders and from the agent; those are
-        always the most up to date. Also, since we don't have any constraint
+        between messages from the forwarders and from the agent which are
+        always the most up to date. Also, since we do not have any constraint
         on the Time To Live (TTL) of the forwarders, it could be that a
         forwarder at the beginning of a chain dies after on at the end. If
         this happens and we are not careful when dealing with the requests,
@@ -325,11 +341,11 @@
 
       <section xml:id="ConfigurationFile_77"><info><title>Configuration File</title></info>
       	
-            <para>As a default, ProActive uses a "Forwarder based" strategy .
+            <para>As a default, ProActive uses a "Forwarder based" strategy.
              It means that the forwarders have a unlimited lifetime and the agent never updates the location server.</para>
            
             <para>To configure your own strategy, you have to
-             edit the file  <literal>
+             edit the file <literal>
              ProActive/src/Core/org/objectweb/proactive/core/config/ProActiveConfiguration.xml</literal> and change the four values listed above.
              </para>
             <programlisting language="xml"><textobject><textdata fileref="../../src/Core/org/objectweb/proactive/core/config/ProActiveConfiguration.xml"/></textobject></programlisting>
@@ -337,16 +353,17 @@
         
       
       <section xml:id="LocationServer_77"><info><title>Location Server</title></info>
-      	<!-- TODO where is the script for launching the migration server? -->
-        
 
         <para>A location server is available in the package
-        org.objectweb.proactive.core.body.migration.MixedLocationServer. It
-        can be launched using scripts/unix/migration/LocationServer. You can
-        indicate on which node it have to be running.</para>
+        <literal>org.objectweb.proactive.core.body.migration.MixedLocationServer</literal>. A simpler one is also
+        available in the package <literal>org.objectweb.proactive.ext.util.SimpleLocationServer</literal>. The use of location
+        is a little more cumbersome. If want to use this functionality, please refer to
+        the <literal>functionalTests.activeobject.locationserver.TestLocationServer</literal>
+        functional test. It gives an implementation of an active object migration using
+        the <literal>SimpleLocationServer</literal> class as location server.</para>
 
-        <para><emphasis>Limitation</emphasis> : there can be only one
-        LocationServer for the migration. </para>
+        <para><emphasis>Limitation of this functionality</emphasis>: there can be only one
+        LocationServer for the migration.</para>
       </section>
     
   </section>
