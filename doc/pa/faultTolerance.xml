@@ -489,7 +489,6 @@ Choose which version you want to run [12345]:
 4
 Thank you!
  --&gt; This ClassFileServer is reading resources from classpath
-Jini enabled
 Ibis enabled
 Created a new registry on port 1099
 //tranquility.inria.fr/Node-157559959 successfully bound in registry at //t\

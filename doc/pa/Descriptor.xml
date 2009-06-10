@@ -436,7 +436,7 @@
             <para>VirtualNode registration</para>
 
             <para>Descriptors provide the ability to register a VirtualNode in
-            a registry such RMIRegistry, JINI Lookup, HTTP registry, IBIS/RMI
+            a registry such RMIRegistry, HTTP registry, IBIS/RMI
             Registry Service. Hence this VirtualNode will be accessible by
             another application as it is described in the <emphasis role="bold">VirtualNodes Acquisition</emphasis> section. The
             protocol(registry) to use can be specified in the descriptor, if
@@ -824,10 +824,6 @@
  value='/home/ProActive/lib/bcel.jar'/&gt;
       &lt;absolutePath
  value='/home/ProActive/lib/asm.jar'/&gt;
-      &lt;absolutePath
- value='/home/ProActive/lib/jini-core.jar'/&gt;
-      &lt;absolutePath
- value='/home/ProActive/lib/jini-ext.jar'/&gt;
       &lt;absolutePath
  value='/home/ProActive/lib/reggie.jar'/&gt;
      &lt;/classpath&gt;
@@ -1740,10 +1736,6 @@
  value='/ProActive/lib/bcel.jar'/&gt;
       &lt;relativePath origin='userHome'
  value='/ProActive/lib/asm.jar'/&gt;
-      &lt;relativePath origin='userHome'
- value='/ProActive/lib/jini-core.jar'/&gt;
-      &lt;relativePath origin='userHome'
- value='/ProActive/lib/jini-ext.jar'/&gt;
       &lt;relativePath origin='userHome'
  value='/ProActive/lib/reggie.jar'/&gt;
  .............

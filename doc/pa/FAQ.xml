@@ -222,8 +222,8 @@ Default target: compile.all
           started automatically as needed.</para>
          
          <para>As we support other ways of registration and discovery (such
-          as Jini), getting a node can be protocol dependant. For instance,
-          the url of a node <literal>jini://host.org/node</literal> won't be
+          as HTTP), getting a node can be protocol dependant. For instance,
+          the url of a node <literal>http://host.org/node</literal> won't be
           accessed the same way as <literal>rmi://host.org/node</literal>. The
           class <literal>NodeFactory</literal> is able to read the protocol
           and to use the right way to access the node.</para>
@@ -1029,20 +1029,6 @@ Default target: compile.all
         </answer>
        </qandaentry>
   
-      
-       <qandaentry>
-	       <question xml:id="jini_with_PA_1">
-         <para>How can I use Jini in ProActive?</para>
-        </question>
-        
-        <answer>
-         <para>In order to use <emphasis role="bold">Jini</emphasis> in
-          ProActive you have to configure properly the deployment descriptor.
-          All informations on how to configure XML deployment descriptor are
-          provided in <xref linkend="XML_Descriptors"/>.</para>
-        </answer>
-       </qandaentry>
-       
        <qandaentry>
 	       <question xml:id="why_not_asynch">
          <para>Why is my call not asynchronous?</para>
