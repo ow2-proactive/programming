@@ -42,10 +42,10 @@ public class TryCatch extends Anything {
     private List<Catch> catchBlocks;
     private Block finallyBlock;
     public static boolean addPackageName = false;
-    public static final String PACKAGE = "org.objectweb.proactive";
-    private static final String TRY_WITH_CATCH = "ProActive.tryWithCatch";
-    private static final String END_TRY_WITH_CATCH = "ProActive.endTryWithCatch();";
-    private static final String REMOVE_TRY_WITH_CATCH = "ProActive.removeTryWithCatch();";
+    public static final String PACKAGE = "org.objectweb.proactive.api";
+    private static final String TRY_WITH_CATCH = "PAException.tryWithCatch";
+    private static final String END_TRY_WITH_CATCH = "PAException.endTryWithCatch();";
+    private static final String REMOVE_TRY_WITH_CATCH = "PAException.removeTryWithCatch();";
 
     public TryCatch(Terminal tt, Block tb, List<Catch> cb, Block fb) {
         tryTerminal = tt;

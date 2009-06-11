@@ -91,5 +91,22 @@ public class A implements Serializable {
     public void display() {
         System.out.println("A display =====> " + str);
     }
+
+    //@snippet-break class_A
+    //@snippet-start class_A_exception
+    /**
+     * Example of a method which can throw an exception
+     *
+     * @param hasToThrow boolean saying whether the method should
+     *                   throw an exception
+     * @throws Exception
+     */
+    public void throwsException(boolean hasToThrow) throws Exception {
+        Thread.sleep(5000);
+        if (hasToThrow)
+            throw new Exception("Class A has thrown an exception");
+    }
+    //@snippet-resume class_A
+    //@snippet-end class_A_exception
 }
-// @snippet-end class_A
+//@snippet-end class_A

@@ -24,13 +24,13 @@ IF DEFINED CLASSPATHEXT (
 
 rem Test if classes exists and is not empty
 IF EXIST "%PROACTIVE%\classes\Core" (
-	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\classes\Core;%PROACTIVE%\classes\Extensions;%PROACTIVE%\classes\Extra;%PROACTIVE%\classes\Examples
+	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\classes\Core;%PROACTIVE%\classes\Extensions;%PROACTIVE%\classes\Extra;%PROACTIVE%\classes\Examples;%PROACTIVE%\classes\Utils
 	SET JARS=%PROACTIVE%\lib
 	FOR %%j IN ("%PROACTIVE%\lib\*.jar") DO SET JARS=!JARS!;%%j
 	SET CLASSPATH=%CLASSPATH%;%JARS%
 	IF EXIST "%PROACTIVE%\ProActive_examples.jar" set CLASSPATH=%CLASSPATH%;"%PROACTIVE%\ProActive_examples.jar"
 ) ELSE (
-	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive.jar;%PROACTIVE%\dist\lib\ProActive_examples.jar
+	SET CLASSPATH=%CLASSPATH%;%PROACTIVE%\dist\lib\ProActive.jar;%PROACTIVE%\dist\lib\ProActive_examples.jar;%PROACTIVE%\dist\lib\ProActive_utils.jar
 )
 
 
