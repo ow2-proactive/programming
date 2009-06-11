@@ -68,7 +68,6 @@
 			For the examples described in this chapter, we will use the following
 			class that can be instantiated as an active	object:
 		</para>	
-<!--		<programlisting language="java"><textobject><textdata fileref="code_snippets/ActiveWorker.txt"/></textobject></programlisting>-->
 		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_Worker.snip"/></textobject></programlisting>
 
 	</section>
@@ -199,7 +198,6 @@
 				active thread is started.
 			</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_1.snip"/></textobject></programlisting>
 		</section>
 
@@ -274,7 +272,6 @@
 			The simplest code for object based creation looks like this:
 		</para>
 
-<!--		<programlisting language="java"><textobject><textdata fileref="code_snippets/simpleTurnActive.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_3.snip"/></textobject></programlisting>
 
 		<para>
@@ -362,7 +359,6 @@
 				<literal>null</literal>
 			</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/ConstructorAmbiguities.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_4.snip"/></textobject></programlisting>
 			<para>
 				If we use
@@ -454,14 +450,12 @@
             this array.
 			</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.Node.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_6.snip"/></textobject></programlisting>
 
 			<para>
 				To deploy using the URL of a node, we just have to replace the node previously used
 				by its URL:
 			</para>
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.onNode.URL.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_7.snip"/></textobject></programlisting>
 			<para>
 				If you want to use the
@@ -480,10 +474,8 @@
 				<xref linkend="newActiveInParallel_nodes"/>).
             </para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/newActiveInParallel.onVirtualNode.txt"/></textobject></programlisting>-->
-
-
 		</section>
+
 		<section xml:id="ActiveObjectCreationWithCustomActivity"><info><title xml:id="UsingACustomActivity_71">Using A Custom Activity</title></info>
 			
 
@@ -658,12 +650,8 @@
 					initialization and its ending.
 				</para>
 
-<!--				<programlisting language="java"><textobject><textdata fileref="code_snippets/CustomInitAndRun.txt"/></textobject></programlisting>-->
 				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_Worker_With_Activity.snip"/></textobject></programlisting>
 
-<!--					<example xml:id="runActivity_start_stop_suspend"><info><title>Start, stop, suspend, restart a simulation algorithm in runActivity method</title></info>					-->
-						
-						
 						<para>
 							Here is the skeleton code for a class that
 							can run, suspend, restart and stop a
@@ -673,11 +661,7 @@
 						</para>
 
 			
-<!--						<para>-->
-<!--                  <programlisting language="java"><textobject><textdata fileref="code_snippets/SimulationWithActivity.txt"/></textobject></programlisting>-->
                   <programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_Simulation.snip"/></textobject></programlisting>
-<!--						</para>-->
-<!--			</example>-->
 
 			</section>
 
@@ -707,7 +691,6 @@
 					be passed to the active object. We do so by
 					implementing one or more interfaces.
 				</para>
-<!--				<programlisting language="java"><textobject><textdata fileref="code_snippets/activityImplementation.txt"/></textobject></programlisting>-->
 				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_LIFOActivity.snip"/></textobject></programlisting>
 				<para>
 					The implemented interface can be used with any of the creation methods
@@ -716,7 +699,6 @@
 					<literal>PAActiveObject.turnActive(...)</literal>).
 					.
 				</para>
-<!--				<programlisting language="java"><textobject><textdata fileref="code_snippets/usingActivity.txt"/></textobject></programlisting>-->
 				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_8.snip"/></textobject></programlisting>
 
 			</section>
@@ -739,13 +721,11 @@
 				returns it.
 			</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/factoryAO.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_WorkerFactory.snip"/></textobject></programlisting>
 			<para>
 				The static method in the factory class is then used to
 				create active objects:
 			</para>
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/factoryCall.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_9.snip"/></textobject></programlisting>
 
 			<para>
@@ -810,10 +790,7 @@
 				. Here is an example:
 			</para>
 
-			<para>
-<!--				<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactory.txt"/></textobject></programlisting>-->
-				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_CustomMetaObjectFactory.snip"/></textobject></programlisting>
-			</para>
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_CustomMetaObjectFactory.snip"/></textobject></programlisting>
 
 			<para>
 				The factory above simply redefines the
@@ -841,16 +818,8 @@
 				example as before we have:
 			</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.newActive.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_10.snip"/></textobject></programlisting>
 
-<!--			<para>-->
-<!--				In the case of a-->
-<!--				<literal>turnActive</literal>-->
-<!--				we would have:-->
-<!--			</para>-->
-<!---->
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/metaObjectFactoryUsage.turnActive.txt"/></textobject></programlisting>-->
 		</section>
 	</section>
  
@@ -876,7 +845,6 @@
 			using a piece of code like this:
 		</para>
 
-<!--	<programlisting language="java"><textobject><textdata fileref="code_snippets/PAActiveObject.newActive.txt"/></textobject></programlisting>-->
 	<programlisting language="java"><textobject><textdata fileref="automatic_snippets/AO_Creation_1.snip"/></textobject></programlisting>
 
 		<para>
@@ -1504,7 +1472,6 @@
 					The code for the following example is: 
 				</para>
 				
-<!--					<programlisting language="java"><textobject><textdata fileref="code_snippets/flowExampleCode.txt"/></textobject></programlisting>-->
 					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Caller_1.snip"/></textobject></programlisting>
 			</section>
 
@@ -1888,12 +1855,10 @@
 						result_from_method cannot be <literal>null</literal>:
 					</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/avoidNull.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Good_Practice_1.snip"/></textobject></programlisting>
 
 					<para>On the caller side:</para>
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Good_Practice_2.snip"/></textobject></programlisting>
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/callerSideAvoidNull.txt"/></textobject></programlisting>-->
 
 
 					<para>
@@ -1952,7 +1917,6 @@
 				an exception.
 			</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/futureException.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Good_Practice_3.snip"/></textobject></programlisting>
 
 			<para>
@@ -2074,17 +2038,14 @@
 			
 			</para>
 
-<!--         <programlisting language="java"><textobject><textdata fileref="code_snippets/futurePassing.txt"/></textobject></programlisting>-->
          <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Continuation_1.snip"/></textobject></programlisting>
 
 			<para>where</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePasserClassWorker.txt"/></textobject></programlisting>-->
          <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Continuation_2.snip"/></textobject></programlisting>
 
 			<para>and</para>
 
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/futurePasserClassB.txt"/></textobject></programlisting>-->
          <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Continuation_3.snip"/></textobject></programlisting>
 			
 			
@@ -2281,7 +2242,6 @@
 			local array to get a full one.
 		</para>
 		
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/exchangeOperator.txt"/></textobject></programlisting>-->
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Exchange_1.snip"/></textobject></programlisting>
 		
 		<para>
@@ -2292,7 +2252,6 @@
 		</para>
 		
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/Exchange_2.snip"/></textobject></programlisting>
-<!--			<programlisting language="java"><textobject><textdata fileref="code_snippets/exchangeableDouble.txt"/></textobject></programlisting>-->
 	</section>
 	
 			<!-- //TODO add immediateService maybe and expand or remove this section, it is present in other parts of the manual		

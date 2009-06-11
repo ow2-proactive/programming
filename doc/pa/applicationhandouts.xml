@@ -722,7 +722,9 @@ Enter the number of iterations (0 to exit) :  </screen>
                 In the folder
                 <literal>ProActive/examples/</literal>, run:
             </para>
-        <programlisting><textobject><textdata fileref="guided_tour/code_snippets/nbody_run.txt"/></textobject></programlisting>
+            
+            <screen>nbody.[bat|sh] [-nodisplay | -displayft | -3d | -3dft] totalNbBodies maxIter</screen>
+
             <itemizedlist>
                 <listitem>
                     <para>

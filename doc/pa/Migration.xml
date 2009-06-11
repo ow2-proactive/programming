@@ -93,7 +93,6 @@
     last one in the method, i.e the method has to return immediately after. Here
     is an example of a method in an active object:</para>
 
-<!--    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_method.txt"/></textobject></programlisting>-->
     <programlisting language="java"><textobject><textdata fileref="automatic_snippets/method_moveTo.snip"/></textobject></programlisting>
 
 
@@ -105,7 +104,6 @@
 
   <section xml:id="Completeexample_77"><info><title>Complete example</title></info>
     
-<!--    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_example.txt"/></textobject></programlisting>-->
     <programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_SimpleAgent.snip"/></textobject></programlisting>
 
     <para>The class SimpleAgent implements <literal>Serializable</literal> so
@@ -125,7 +123,6 @@
     location. For our application, we pass the location of the node as runtime
     parameter to the application. </para>
     
-<!--     <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_example_main.txt"/></textobject></programlisting>-->
     
     
     <para>To see another example of migration look at the migration example in 
@@ -186,7 +183,6 @@
     	
 		    <para>Another way to deal with unserializable attributes is 
 		    using the methods from the Serializable interface: </para>
-<!--		    <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/serializable_methods.txt"/></textobject></programlisting>-->
           <programlisting language="java">
 private void writeObject(java.io.ObjectOutputStream out) throws IOException;
 private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException;
@@ -195,7 +191,6 @@ private void readObjectNoData() throws ObjectStreamException;</programlisting>
 		    We override these methods to provide a way to save and restore the 
 		    non-serializable components of the active object:
 		    </para>
-<!--      <programlisting language="java"><textobject><textdata fileref="code_snippets/migration/migration_read_writeObject.txt"/></textobject></programlisting>-->
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/class_UnSerializableAgent2.snip"/></textobject></programlisting>
 
     <para>To learn how to use the methods, see the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/javase/6/docs/api/java/io/Serializable.html">Serializable</link> interface in the standard

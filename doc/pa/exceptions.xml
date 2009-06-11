@@ -17,7 +17,6 @@
       As you can see, we have inserted a waiting time. This is done in order to examine the asynchronous/synchronous behaviour.
       With a common exception handling, we would proceed as follows:
     </para>
-<!--    <programlisting language="java"><textobject><textdata fileref="code_snippets/exceptions/basic_exception.txt"/></textobject></programlisting>-->
     <programlisting language="java"><textobject><textdata fileref="automatic_snippets/basic_exception.snip"/></textobject></programlisting>
 
     <para>As the method call in line 2 is asynchronous, the program continues its execution
@@ -61,7 +60,6 @@
       <para>Let's reuse the previous example to see how to use these
       barriers:</para>
 
-<!--      <programlisting language="java"><textobject><textdata fileref="code_snippets/exceptions/trywithcatch_exception.txt"/></textobject></programlisting>-->
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/tryWithCatch_exception.snip"/></textobject></programlisting>
 
       <para>With this code, the method call will be asynchronous, and the

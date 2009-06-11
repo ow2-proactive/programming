@@ -601,7 +601,6 @@
   		</para>
 
 		<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/deployed_CMA_1.snip"/></textobject></programlisting>
-<!--  		<programlisting language="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/schema_location.txt"/></textobject></programlisting>-->
 
       <para>
          As for your application descriptor, here is the line you have to add:
@@ -623,7 +622,6 @@
 <!--  			<xref linkend="Installation"/>.-->
   		</para>
       <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/deployed_CMA_3.snip"/></textobject></programlisting>
-<!--  			<programlisting language="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/variable_definition.txt"/></textobject></programlisting>-->
       <para>
          However, you can define many more environment variables. For instance, our application descriptor defines the proactive home as well as two descriptor variables which are respectively
          the host capacity (number of JVMs per host) and the vmCapacity (number of nodes per JVM).
@@ -650,7 +648,6 @@
   			</itemizedlist>
 
       <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/deployed_CMA_5.snip"/></textobject></programlisting>
-<!--  			<programlisting language="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/resources.txt"/></textobject></programlisting>-->
 
   		</para>
   		  		
@@ -665,7 +662,6 @@
   		</para>
   		
       <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/deployed_CMA_6.snip"/></textobject></programlisting>
-<!--		<programlisting language="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/infrastructure.txt"/></textobject></programlisting>-->
 
       <para>
          Thus, our full deployment descriptor looks like this:
@@ -685,7 +681,6 @@
 			Virtual nodes refer to node providers, which are defined in the next section,
   			as sources of physical nodes.
   		</para>
-<!--      <programlisting language="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/app_desc_application.txt"/></textobject></programlisting>-->
       <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/deployed_CMA_8.snip"/></textobject></programlisting>
   		
   		<para>
@@ -693,7 +688,6 @@
 			through its <literal>resources</literal> part. Into this part, you can define the node providers that are referenced
   			by the virtual nodes in the previous section.   
   		</para>
-<!--  			<programlisting language="xml"><textobject><textdata fileref="code_snippets/deployment_descriptor/application_descriptor.txt"/></textobject></programlisting>-->
       <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/deployed_CMA_9.snip"/></textobject></programlisting>
   		
 		<para>
@@ -937,7 +931,6 @@
   			 </para>
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/synch_cma_skeleton.snip"/></textobject></programlisting>
   		
-<!--         <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/CMAgent/synch_cma_agent.txt"/></textobject></programlisting>-->
   			 
   		</section>
   		<section xml:id="ProposedWork_6"><info><title>Proposed Work</title></info>
@@ -1045,12 +1038,10 @@
       </para>
 		
       <para>CMAgentMigrator skeleton class:</para>
-<!--      <programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/CMAgent/migrate_cma_class.txt"/></textobject></programlisting>-->
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/migrate_cma_skeleton.snip"/></textobject></programlisting>
 
 		<para>In the <literal>Main</literal> class, we only have to change a few lines of code to migrate the agent. As you may notice
 		there is more code for creating the textual menu than for controlling the agents.</para>
-<!--		<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/CMAgent/migrate_main_cma_skeleton.txt"/></textobject></programlisting>-->
 		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/migrate_main_cma_skeleton.snip"/></textobject></programlisting>
       
       
@@ -1162,7 +1153,6 @@
   			class that we have defined previously.
   			</para>
   		<para>Main skeleton class:</para>
-<!--      	<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/CMAgent/groups_cma_main.txt"/></textobject></programlisting>-->
 	<programlisting language="java"><textobject><textdata fileref="automatic_snippets/groups_cma_main_skeleton.snip"/></textobject></programlisting>
   		</section>
   		<section xml:id="ProposedWork_9"><info><title>Proposed Work</title></info>
@@ -1257,10 +1247,12 @@
   			here only a Java example of how to access the webservice.</para>
   			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservice_cma_client_full.snip"/></textobject></programlisting>
       		
-		<para>In the <literal>CMAgentWebService</literal>, we only need to write one line of code to use the
-      		active object as an webservice.</para>
-            	<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/CMAgent/ws_cma.txt"/></textobject></programlisting>		
-  		</section>
+		   <para>In the <literal>CMAgentWebService</literal>, we only need to write one line of code to use the
+      	active object as an webservice.</para>
+      
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservice_cma_skeleton.snip"/></textobject></programlisting>		
+  		
+      </section>
   		<section xml:id="ProposedWork_2"><info><title>Proposed Work</title></info>
   			
          <para>
@@ -1717,10 +1709,8 @@
 			
 			<!-- SKELETON CODE -->
 
-<!--			<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_task_skeleton.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/primes_distributedmw_task_skeleton.snip"/></textobject></programlisting>
 			
-<!--			<programlisting language="java"><textobject><textdata fileref="guided_tour/code_snippets/Primes/primes_distributedmw_skeleton.txt"/></textobject></programlisting>-->
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/primes_distributedmw_skeleton.snip"/></textobject></programlisting>
 			
          <para>

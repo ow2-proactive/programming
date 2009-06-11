@@ -44,7 +44,7 @@
             access</emphasis> - If you get the following exceptions, you probably
             didn't change the file java.policy as described in <xref linkend="Create_Java_Policy"/>.</para>
 
-            <programlisting language="java"><textobject><textdata fileref="code_snippets/java_policy_error.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="code_snippets/trouble_shooting/java_policy_error.txt"/></textobject></programlisting>
          </listitem>
 
          <listitem>
@@ -54,7 +54,7 @@
             <literal>-Dlog4j.configuration</literal> property to the java command.
             Be sure that the given path is right, try also to add <literal>file:</literal> before the
             path.</para>
-            <programlisting language="java"><textobject><textdata fileref="code_snippets/log4j_notfound_error.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="code_snippets/trouble_shooting/log4j_notfound_error.txt"/></textobject></programlisting>
          </listitem>
 
          <listitem>
@@ -74,7 +74,7 @@
             that you are using a JRE that is at least version 1.5 since ProActive needs 
             certain features which are only available starting from Java 1.5.</para>
             
-            <programlisting language="java"><textobject><textdata fileref="code_snippets/jdk_version_error.txt"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="code_snippets/trouble_shooting/jdk_version_error.txt"/></textobject></programlisting>
 
          </listitem>
       </itemizedlist>
@@ -86,13 +86,13 @@
       <para>To enable the debugging loggers, the following log file can be
       used:</para>
 
-      <programlisting language="java"><textobject><textdata fileref="code_snippets/enable_debugging_loggers.txt"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/trouble_shooting/enable_debugging_loggers.txt"/></textobject></programlisting>
 
       <para>In this file, the relevant loggers can be uncommented (by removing
       the leading #). For example, the deployment loggers
       are activated with the following lines:</para>
 
-      <programlisting language="java"><textobject><textdata fileref="code_snippets/enable_deployment_loggers.txt"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/trouble_shooting/enable_deployment_loggers.txt"/></textobject></programlisting>
 
    </section>
 
@@ -104,7 +104,7 @@
       machine. To work around bad-configured domain names, ProActive can be activated
       to use IP addresses through the following java property:</para>
 
-      <programlisting language="java"><textobject><textdata fileref="code_snippets/misconfigured_domains.txt"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="code_snippets/trouble_shooting/misconfigured_domains.txt"/></textobject></programlisting>
 
       <para>This property should be given as parameter to Java virtual machines
       deployed on computers which have names that do not resolve properly.</para>

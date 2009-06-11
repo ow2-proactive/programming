@@ -237,7 +237,7 @@
          Then, set the <literal>CLASSPATH</literal> as follows:
          </para>
 
-         <programlisting language="java"><textobject><textdata fileref="code_snippets/class_path_linux.txt"/></textobject></programlisting>
+         <programlisting language="java"><textobject><textdata fileref="code_snippets/installation/class_path_linux.txt"/></textobject></programlisting>
 
          <para>Under Windows:</para>
          <para> Open a Windows command terminal by executing either <literal>cmd</literal> or
@@ -247,7 +247,7 @@
          set the <literal>CLASSPATH</literal> by executing the following commands:
          </para>
 
-         <programlisting language="java"><textobject><textdata fileref="code_snippets/class_path_windows.txt"/></textobject></programlisting>
+         <programlisting language="java"><textobject><textdata fileref="code_snippets/installation/class_path_windows.txt"/></textobject></programlisting>
 
          <note><para>Keep in mind that some JAR files are needed by ProActive.jar and so, they have to be in the same directory. If not, add them to the <literal>CLASSPATH</literal>.</para></note>
 

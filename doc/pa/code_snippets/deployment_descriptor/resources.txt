@@ -1,5 +1,0 @@
-<resources>
-	<bridge refid="rsh_cheypa">
-		<host refid="chepya" />
-	</bridge>
-</resources>
