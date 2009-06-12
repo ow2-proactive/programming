@@ -323,6 +323,15 @@ public interface ProActiveRuntime extends SecurityEntity {
     public byte[] getClassDataFromParentRuntime(String className) throws ProActiveException;
 
     /**
+     * Looks for class bytecode in the current runtime. Stub generation can be intented
+     * to get the class bytecode.
+     *
+     * @param className name of the class
+     * @return the bytecode corresponding to the given class, or null if not found
+     */
+    public byte[] getClassData(String className);
+
+    /**
      * launch the main method of the main class with parameters
      * @param className
      * @param parameters

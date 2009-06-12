@@ -188,6 +188,15 @@
             <arg value="-class"/>
             <arg value="org/objectweb/proactive/core/jmx/util/JMXNotificationListener" />
 		</java>
+		<!--
+		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
+			<classpath refid="project.classpath" />
+			<arg value="-srcDir"/>
+			<arg value="${cl.proactive.dir}"/>
+			<arg value="-class"/>
+			<arg value="org/objectweb/proactive/core/util/log/remote/ProActiveLogCollector" />
+		</java>
+		-->
 
 	    <antcall target="ibis"/>
 

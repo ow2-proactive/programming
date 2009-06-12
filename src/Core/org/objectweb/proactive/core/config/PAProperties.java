@@ -295,6 +295,9 @@ public enum PAProperties {
     PA_RMI_PORT("proactive.rmi.port", PAPropertiesType.INTEGER), JAVA_RMI_SERVER_CODEBASE(
             "java.rmi.server.codebase", PAPropertiesType.STRING, true),
 
+    PA_CODEBASE("proactive.codebase", PAPropertiesType.STRING, true),
+
+    PA_CLASSLOADING_USEHTTP("proactive.classloading.useHTTP", PAPropertiesType.BOOLEAN, false),
     /* ------------------------------------
      *  HTTP
      */

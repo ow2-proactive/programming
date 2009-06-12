@@ -50,7 +50,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class ClassDataCache {
     static Logger logger = ProActiveLogger.getLogger(Loggers.CLASSLOADING);
-    private static ClassDataCache classCache = null;
+    private static ClassDataCache classCache = new ClassDataCache();
     private static Map<String, byte[]> classStorage;
 
     private ClassDataCache() {
@@ -58,11 +58,7 @@ public class ClassDataCache {
     }
 
     public static ClassDataCache instance() {
-        if (classCache == null) {
-            return classCache = new ClassDataCache();
-        } else {
-            return classCache;
-        }
+        return classCache;
     }
 
     /**
@@ -80,8 +76,8 @@ public class ClassDataCache {
      * @param classData bytecode of the class
      */
     public void addClassData(String fullname, byte[] classData) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(ProActiveRuntimeImpl.getProActiveRuntime().getURL() + " --> " +
+        if (logger.isTraceEnabled()) {
+            logger.trace(ProActiveRuntimeImpl.getProActiveRuntime().getURL() + " --> " +
                 ("ClassDataCache caching class " + fullname));
         }
         classStorage.put(fullname, classData);
@@ -92,8 +88,8 @@ public class ClassDataCache {
      * @param fullname the name of the class
      */
     public byte[] getClassData(String fullname) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(ProActiveRuntimeImpl.getProActiveRuntime().getURL() + " --> " +
+        if (logger.isTraceEnabled()) {
+            logger.trace(ProActiveRuntimeImpl.getProActiveRuntime().getURL() + " --> " +
                 ("ClassDataCache was asked for class " + fullname));
         }
         return classStorage.get(fullname);

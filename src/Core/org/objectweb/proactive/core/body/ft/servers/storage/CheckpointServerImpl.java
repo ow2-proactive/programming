@@ -43,9 +43,11 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
 import org.objectweb.proactive.core.body.ft.servers.FTServer;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -78,8 +80,14 @@ public abstract class CheckpointServerImpl implements CheckpointServer {
 
         this.checkpointStorage = new Hashtable<UniqueID, List<Checkpoint>>();
 
-        ClassServerServlet.get();
-        this.codebase = ClassServerServlet.get().getCodeBase();
+        if (PAProperties.PA_CLASSLOADING_USEHTTP.isTrue()) {
+            ClassServerServlet.get();
+            this.codebase = ClassServerServlet.get().getCodeBase();
+        } else {
+            // URL must be prefixed by pa tu use our custom protocol handlers
+            // URL must be terminated by a / according to the RMI specification
+            this.codebase = "pa" + ProActiveRuntimeImpl.getProActiveRuntime().getURL() + "/";
+        }
 
         try {
             NodeFactory.getDefaultNode();

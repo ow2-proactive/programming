@@ -33,6 +33,7 @@ package org.objectweb.proactive.core.httpserver;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -84,10 +85,6 @@ public class ClassServerServlet extends HttpServlet {
         if ((System.getSecurityManager() == null) && PAProperties.PA_SECURITYMANAGER.isTrue()) {
             System.setSecurityManager(new java.rmi.RMISecurityManager());
         }
-
-        // Add the servlet to the codebase to handle object migration
-        PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(getCodeBase());
-
     }
 
     public String getCodeBase() {

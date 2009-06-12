@@ -321,4 +321,8 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
             List<TechnicalService> tsList) throws NodeException, AlreadyBoundException {
         return target.createGCMNode(nodeSecurityManager, vnName, jobId, tsList);
     }
+
+    public byte[] getClassData(String className) {
+        return target.getClassData(className);
+    }
 }

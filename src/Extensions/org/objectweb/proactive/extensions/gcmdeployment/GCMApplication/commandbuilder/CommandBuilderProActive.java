@@ -420,10 +420,6 @@ public class CommandBuilderProActive implements CommandBuilder {
         command.append("-" + StartPARuntime.Params.deploymentId.shortOpt() + " " + gcma.getDeploymentId());
         command.append(" ");
 
-        command.append("-" + StartPARuntime.Params.codebase.shortOpt() + " " +
-            ClassServerServlet.get().getCodeBase());
-        command.append(" ");
-
         // TODO cdelbe Check FT properties here
         // was this.ftService.buildParamsLine();
 

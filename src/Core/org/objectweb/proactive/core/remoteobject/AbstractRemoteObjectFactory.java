@@ -53,34 +53,29 @@ public abstract class AbstractRemoteObjectFactory {
     }
 
     /**
-     * insert a new location within the codebase property
-     * @param newLocationURL the new location to add
-     * @return the new codebase
-     */
-    protected static synchronized String addCodebase(String newLocationURL) {
-        // Local class server is useful when an object migrate
-        // Other class servers  are used only if local class server fail
-        String oldCodebase = PAProperties.JAVA_RMI_SERVER_CODEBASE.getValue();
-        ProActiveRuntimeImpl.getProActiveRuntime();
-        String newCodebase = null;
-        if (oldCodebase != null) {
-            // RMI support multiple class server locations
-            newCodebase = newLocationURL + " " + oldCodebase;
-        } else {
-            newCodebase = newLocationURL;
-        }
-
-        PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(newCodebase);
-        return newCodebase;
-    }
-
-    /**
      *        create the class server -- mandatory for class file transfer
      */
     protected static synchronized void createClassServer() {
-        ClassServerServlet classServerServlet = ClassServerServlet.get();
-        String codebase = classServerServlet.getCodeBase();
-        addCodebase(codebase);
+        // If HTTP class server is used add its URL to the codebase
+        // Otherwise, the ProActiveRMIClassloader and the ProActiveRuntime use their
+        // own ProActive codebase.
+        if (PAProperties.PA_CLASSLOADING_USEHTTP.isTrue()) {
+            ClassServerServlet classServerServlet = ClassServerServlet.get();
+            String servletCodebase = classServerServlet.getCodeBase();
+
+            // Local class server is useful when an object migrate
+            // Other class servers  are used only if local class server fail
+            String oldCodebase = PAProperties.JAVA_RMI_SERVER_CODEBASE.getValue();
+            ProActiveRuntimeImpl.getProActiveRuntime();
+            String newCodebase = null;
+            if (oldCodebase != null) {
+                // RMI support multiple class server locations
+                newCodebase = servletCodebase + " " + oldCodebase;
+            } else {
+                newCodebase = servletCodebase;
+            }
+            PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(newCodebase);
+        }
     }
 
     /**
