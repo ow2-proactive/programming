@@ -140,7 +140,6 @@ public class StartPARuntime {
         options.addOption(Params.deploymentId.sOpt, Params.deploymentId.toString(), true,
                 Params.deploymentId.desc);
         options.addOption(Params.topologyId.sOpt, Params.topologyId.toString(), true, Params.topologyId.desc);
-        options.addOption(Params.codebase.sOpt, Params.codebase.toString(), true, Params.codebase.desc);
 
         CommandLine line = null;
 
@@ -173,17 +172,6 @@ public class StartPARuntime {
                 deploymendId = -1;
             }
 
-            arg = line.getOptionValue(Params.codebase.sOpt);
-            if (arg != null) {
-                String oldCodebase = PAProperties.JAVA_RMI_SERVER_CODEBASE.getValue();
-                String newCodebase = null;
-                if (oldCodebase != null) {
-                    newCodebase = oldCodebase + " " + arg;
-                } else {
-                    newCodebase = arg;
-                }
-                PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(newCodebase);
-            }
         } catch (ParseException e) {
             logger.warn("Cannot parse command line arguments", e);
             abort();
@@ -259,8 +247,7 @@ public class StartPARuntime {
 
     public enum Params {
         parent("p", "URL of the parent ProActive Runtime"), topologyId("i", "Topology Node"), deploymentId(
-                "d", "GCM Application identifier"), capacity("c", "Number of Node to be created"), codebase(
-                "b", "Code base");
+                "d", "GCM Application identifier"), capacity("c", "Number of Node to be created");
         protected String sOpt;
         protected String desc;
 
