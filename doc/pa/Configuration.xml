@@ -329,21 +329,6 @@
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">proactive.classloader</emphasis>
-              runtimes created with this property enabled fetch missing
-              classes using a special mechanism
-              (see the 
-              
-              <!-- This url can only work in the html generated files: in pdf there's no ".." -->
-              <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/classloader/package-summary.html" os="html">
-              classloader package javadoc</link>
-              <phrase os="pdf">org.objectweb.proactive.core.classloader javadoc</phrase>). 
-              This is an alternative to RMI dynamic class
-              downloading, useful for instance when performing hierarchical
-              deployment.</para>
-            </listitem>
-
-            <listitem>
               <para>Note that as mentionned above, user-defined properties can
               be added.</para>
             </listitem>

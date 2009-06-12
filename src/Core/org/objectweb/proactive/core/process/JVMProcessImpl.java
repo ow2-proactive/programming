@@ -339,22 +339,6 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
             javaCommand.append(checkWhiteSpaces(log4jFile));
         }
 
-        // dynamic classloading through runtimes
-        // check system classloader when ProActive.jar is used (where by default : "proactive.classloader" == "disable")
-        if (PAProperties.PA_CLASSLOADER.isTrue() ||
-            "org.objectweb.proactive.core.classloader.ProActiveClassLoader".equals(System
-                    .getProperty("java.system.class.loader"))) {
-            javaCommand
-                    .append(" -Djava.system.class.loader=org.objectweb.proactive.core.classloader.ProActiveClassLoader ");
-            // the following allows the deserializing of streams that were annotated with rmi utilities
-            javaCommand
-                    .append(" -Djava.rmi.server.RMIClassLoaderSpi=org.objectweb.proactive.core.classloader.ProActiveRMIClassLoaderSpi");
-            // to avoid clashes due to multiple classloader, we initiate the
-            // configuration of log4j ourselves 
-            // (see StartRuntime.main)
-            javaCommand.append(" -Dlog4j.defaultInitOverride=true");
-        }
-
         // append proactive policy File
         // if (securityFile != null) {
         //      javaCommand.append(PROACTIVE_POLICYFILE_OPTION);

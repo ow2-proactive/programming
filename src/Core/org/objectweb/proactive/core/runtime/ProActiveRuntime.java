@@ -304,25 +304,6 @@ public interface ProActiveRuntime extends SecurityEntity {
     public String getVNName(String Nodename) throws ProActiveException;
 
     /**
-     * Looks for class bytecode in the current runtime.
-     * If current runtime has no father, stub generation can be intented to
-     * get the class bytecode
-     * @param className name of the class
-     * @return the bytecode corresponding to the given class, or null if not found
-     * @exception ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
-     */
-    public byte[] getClassDataFromThisRuntime(String className) throws ProActiveException;
-
-    /**
-     * Looks for class bytecode in the ancestors of the current runtime : first it tries in the father runtime,
-     * then in the grand-father etc...
-     * @param className name of the class
-     * @return the bytecode corresponding to the given class, or null if not found
-     * @exception ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
-     */
-    public byte[] getClassDataFromParentRuntime(String className) throws ProActiveException;
-
-    /**
      * Looks for class bytecode in the current runtime. Stub generation can be intented
      * to get the class bytecode.
      *

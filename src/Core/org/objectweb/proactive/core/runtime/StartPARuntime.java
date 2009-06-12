@@ -77,7 +77,6 @@ public class StartPARuntime {
 
     public static void main(String[] args) {
         try {
-            initLog4j();
             ProActiveConfiguration.load();
             StartPARuntime startRuntime = new StartPARuntime(args);
             startRuntime.start();
@@ -98,32 +97,6 @@ public class StartPARuntime {
 
     static private void abort() {
         abort("");
-    }
-
-    static private boolean initLog4j() {
-        boolean ret = true;
-
-        if (PAProperties.LOG4J_DEFAULT_INIT_OVERRIDE.isTrue()) {
-            // configure log4j here to avoid classloading problems with
-            // log4j classes
-            String log4jConfiguration = PAProperties.LOG4J.getValue();
-            if (log4jConfiguration != null) {
-                try {
-                    File f = new File(log4jConfiguration);
-                    PropertyConfigurator.configure(new URL(f.getPath()));
-                } catch (IOException e) {
-                    System.err.println("Error : incorrect path for log4j configuration : " +
-                        PAProperties.LOG4J.getValue());
-                    ret &= false;
-                }
-            } else {
-                System.err
-                        .println("-Dlog4.defaultInitOverride is specified but -Dlog4j.configuration property is missing");
-                ret &= false;
-            }
-        }
-
-        return ret;
     }
 
     protected StartPARuntime(String[] args) {

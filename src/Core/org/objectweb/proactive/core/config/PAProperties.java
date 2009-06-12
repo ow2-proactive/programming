@@ -125,17 +125,6 @@ public enum PAProperties {
     LOG4J("log4j.configuration", PAPropertiesType.STRING),
 
     /**
-     * Skip the default initialization procedure
-     *
-     * <strong>Internal Property</strong>
-     *
-     * Used to skip the default log4j initialization procedure when the ProActive classloader is
-     * activated. See log4j documentation
-     * @see StartRuntime
-     */
-    LOG4J_DEFAULT_INIT_OVERRIDE("log4j.defaultInitOverride", PAPropertiesType.BOOLEAN),
-
-    /**
      * URI of the remote log collector
      * 
      */
@@ -145,11 +134,6 @@ public enum PAProperties {
      * Qualified name of the flushing provider to use
      */
     PA_LOG4J_APPENDER_PROVIDER("proactive.log4j.appender.provider", PAPropertiesType.STRING),
-
-    /**
-     * Activates ProActive classloader
-     */
-    PA_CLASSLOADER("proactive.classloader", PAPropertiesType.BOOLEAN),
 
     /**
      * Specifies the name of the ProActive Runtime
