@@ -74,7 +74,7 @@ public class TestHalfBody extends FunctionalTest {
             count++;
         }
 
-        public boolean  finish() {
+        public boolean finish() {
             long endTime = System.currentTimeMillis();
             double throughput = (1000.0 * count) / (endTime - startTime);
 
