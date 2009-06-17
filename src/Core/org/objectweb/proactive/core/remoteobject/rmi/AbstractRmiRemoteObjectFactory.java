@@ -72,9 +72,6 @@ public class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjectFactory 
     protected static RegistryHelper registryHelper;
 
     static {
-        if ((System.getSecurityManager() == null) && PAProperties.PA_SECURITYMANAGER.isTrue()) {
-            System.setSecurityManager(new java.rmi.RMISecurityManager());
-        }
 
         createClassServer();
         createRegistry();

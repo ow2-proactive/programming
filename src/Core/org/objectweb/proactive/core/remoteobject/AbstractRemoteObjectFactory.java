@@ -49,6 +49,11 @@ public abstract class AbstractRemoteObjectFactory {
 
     static {
         activatedRemoteObjectFactories = new Hashtable<String, RemoteObjectFactory>();
+
+        if ((System.getSecurityManager() == null) && PAProperties.PA_SECURITYMANAGER.isTrue()) {
+            System.setSecurityManager(new java.rmi.RMISecurityManager());
+        }
+
         createClassServer();
     }
 
