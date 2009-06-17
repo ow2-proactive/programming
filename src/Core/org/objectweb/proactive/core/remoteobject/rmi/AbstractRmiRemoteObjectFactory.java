@@ -161,9 +161,9 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
         try {
             if (replacePreviousBinding) {
-                reg.rebind(URIBuilder.removeProtocol(url).toString(), rro);
+                reg.rebind(url.getPath().toString().substring(1), rro);
             } else {
-                reg.bind(URIBuilder.removeProtocol(url).toString(), rro);
+                reg.bind(url.getPath().toString().substring(1), rro);
             }
             LOGGER_RO.debug(" successfully bound in registry at " + url);
         } catch (java.rmi.AlreadyBoundException e) {
@@ -209,7 +209,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         // Try if URL is the address of a RmiRemoteBody
         try {
             Registry reg = getRegistry(uri);
-            o = reg.lookup(URIBuilder.removeProtocol(modifiedURI).toString());
+            o = reg.lookup(modifiedURI.getPath().toString().substring(1));
             LOGGER_RO.debug(modifiedURI.toString() + " looked up successfully");
         } catch (java.rmi.NotBoundException e) {
             // there are one rmiregistry on target computer but nothing bound to this url isn t bound
