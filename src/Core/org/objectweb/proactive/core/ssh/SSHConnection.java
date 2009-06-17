@@ -48,8 +48,8 @@ import com.trilead.ssh2.Session;
 /**
  * A connection to a SSH-2 server
  *
- * This class is an interface between ganymed and ProActive. It encapsulates
- * a ch.ethz.ssh2.Connection and all tunnels and sessions related to this
+ * This class is an interface between trilead and ProActive. It encapsulates
+ * a com.trilead.ssh2.Connection and all tunnels and sessions related to this
  * connection
  */
 public class SSHConnection {
@@ -87,9 +87,8 @@ public class SSHConnection {
         for (String key : keys) {
             connection = new Connection(hostname, port);
             connection.connect();
-
             try {
-                System.out.println("Trying " + key);
+                logger.info("Trying " + key);
                 connection.authenticateWithPublicKey(username, new File(key), null);
                 if (connection.isAuthenticationComplete()) {
                     break;
@@ -97,27 +96,23 @@ public class SSHConnection {
             } catch (IOException e) {
                 // Gracefully handle password protected private key
                 boolean isPasswordProtected = false;
-
                 Throwable t = e;
                 while (t != null || !isPasswordProtected) {
-                    if (t.getMessage().contains("PEM is encrypted, but no password was specified")) {
+                    if (t.getMessage().contains("PEM is encrypted, but no password was specified") ||
+                    // discard RSA-1 key
+                        t.getMessage().contains("Invalid PEM structure")) {
                         isPasswordProtected = true;
                     }
                     t = t.getCause();
                 }
 
                 if (isPasswordProtected) {
-                    logger.warn(key + " is password protected. Ignore it !");
+                    logger.warn(key + " is password protected or RSA-1. Ignore it !");
                     connection.close();
                 } else {
                     throw e;
                 }
             }
-        }
-
-        if (connection == null) {
-            throw new IOException("No SSH private key found. Failed to open a SSH connection to " + username +
-                "@" + hostname + ":" + port);
         }
 
         if (connection.isAuthenticationComplete()) {
@@ -134,13 +129,14 @@ public class SSHConnection {
                     logger.info("\t" + key);
                 }
             }
-
-            throw new IOException("Authentication failed");
+            connection.close();
+            throw new IOException("Failed to open a SSH connection to " + username + "@" + hostname + ":" +
+                port);
         }
     }
 
     /**
-     * Get the encapslutation Connection object
+     * Get the encapsulated Connection object
      * @return the Connection
      * @see Connection
      */
