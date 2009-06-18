@@ -1,0 +1,36 @@
+<!-- @tutorial-start -->
+<!-- @snippet-start adl_multicast_Composite_fractal_skeleton -->
+<!-- @snippet-start adl_multicast_Composite_fractal -->
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+
+<definition name="org.objectweb.proactive.examples.userguide.components.adl.multicast.adl.Composite">
+  <interface signature="org.objectweb.proactive.examples.userguide.components.adl.multicast.Runner" role="server" name="runner"/>
+
+  <component name="Master" definition="org.objectweb.proactive.examples.userguide.components.adl.multicast.adl.Master"/>
+  <component name="Slave1" definition="org.objectweb.proactive.examples.userguide.components.adl.multicast.adl.Slave"/>
+
+  <!-- TODO: Add a second Slave Component -->
+  <!-- @tutorial-break -->
+  <!-- @snippet-break adl_multicast_Composite_fractal_skeleton -->
+  <component name="Slave2" definition="org.objectweb.proactive.examples.userguide.components.adl.multicast.adl.Slave"/>
+  <!-- @snippet-resume adl_multicast_Composite_fractal_skeleton -->
+  <!-- @tutorial-resume -->
+
+  <binding client="this.runner" server="Master.runner"/>
+
+  <!-- TODO: Do the binding between the Master Component and the Slave Components on the Multicast Interface -->
+  <!-- @tutorial-break -->
+  <!-- @snippet-break adl_multicast_Composite_fractal_skeleton -->
+  <binding client="Master.i1" server="Slave1.i1"/>
+  <binding client="Master.i1" server="Slave2.i1"/>
+  <!-- @snippet-resume adl_multicast_Composite_fractal_skeleton -->
+  <!-- @tutorial-resume -->
+
+  <binding client="Master.i2" server="Slave1.i2"/>
+
+  <controller desc="composite"/>
+</definition>
+<!-- @tutorial-end -->
+<!-- @snippet-end adl_multicast_Composite_fractal_skeleton -->
+<!-- @snippet-end adl_multicast_Composite_fractal -->

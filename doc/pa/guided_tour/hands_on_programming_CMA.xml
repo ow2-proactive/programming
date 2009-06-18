@@ -48,7 +48,7 @@
    <para>
       In order to get the tutorials, that is to say, code sources with missing lines, go to the <literal>compile/</literal> directory
       and type <literal>build tutorials</literal>. This command will create a new directory in the ProActive home directory, called
-      <literal>tutorials</literal>. This directory will be composed of four directory:
+      <literal>tutorials</literal>. This directory will be composed of four directories:
    </para>
    <itemizedlist>
       <listitem>
@@ -65,7 +65,7 @@
       </listitem>
       <listitem>
          <para><literal>dist</literal> - library directory. You will find in this directory all libraries needed to compile your code.
-         Normally, you will not have to deal with directory.</para>
+         Normally, you will not have to deal with this directory.</para>
       </listitem>
    </itemizedlist>
 	

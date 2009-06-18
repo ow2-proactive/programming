@@ -1,0 +1,35 @@
+<!-- @tutorial-start -->
+<!-- @snippet-start adl_composite_Composite_fractal_skeleton -->
+<!-- @snippet-start adl_composite_Composite_fractal -->
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+
+<definition name="org.objectweb.proactive.examples.userguide.components.adl.composite.adl.Composite">
+  <interface signature="org.objectweb.proactive.examples.userguide.components.adl.composite.Runner" role="server" name="runner"/>
+
+  <!-- TODO: Add the Master Component -->
+  <!-- @tutorial-break -->
+  <!-- @snippet-break adl_composite_Composite_fractal_skeleton -->
+  <component name="Master" definition="org.objectweb.proactive.examples.userguide.components.adl.composite.adl.Master"/>
+  <!-- @snippet-resume adl_composite_Composite_fractal_skeleton -->
+  <!-- @tutorial-resume -->
+  <component name="Slave" definition="org.objectweb.proactive.examples.userguide.components.adl.composite.adl.Slave"/>
+
+  <!-- TODO: Do the bindings -->
+  <!-- @tutorial-break -->
+  <!-- @snippet-break adl_composite_Composite_fractal_skeleton -->
+  <binding client="this.runner" server="Master.runner"/>
+  <binding client="Master.i1" server="Slave.i1"/>
+  <!-- @snippet-resume adl_composite_Composite_fractal_skeleton -->
+  <!-- @tutorial-resume -->
+
+  <!-- TODO: Indicates that this component is a composite component -->
+  <!-- @tutorial-break -->
+  <!-- @snippet-break adl_composite_Composite_fractal_skeleton -->
+  <controller desc="composite"/>
+  <!-- @tutorial-resume -->
+  <!-- @snippet-resume adl_composite_Composite_fractal_skeleton -->
+</definition>
+<!-- @tutorial-end -->
+<!-- @snippet-end adl_composite_Composite_fractal_skeleton -->
+<!-- @snippet-end adl_composite_Composite_fractal -->

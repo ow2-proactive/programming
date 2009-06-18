@@ -1,0 +1,19 @@
+<!-- @tutorial-start -->
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+
+<definition name="org.objectweb.proactive.examples.userguide.components.adl.deployment.adl.Composite">
+  <interface signature="org.objectweb.proactive.examples.userguide.components.adl.deployment.Runner" role="server" name="runner"/>
+
+  <component name="Master" definition="org.objectweb.proactive.examples.userguide.components.adl.deployment.adl.Master"/>
+  <component name="Slave1" definition="org.objectweb.proactive.examples.userguide.components.adl.deployment.adl.Slave"/>
+  <component name="Slave2" definition="org.objectweb.proactive.examples.userguide.components.adl.deployment.adl.Slave"/>
+
+  <binding client="this.runner" server="Master.runner"/>
+  <binding client="Master.i1" server="Slave1.i1"/>
+  <binding client="Master.i1" server="Slave2.i1"/>
+  <binding client="Master.i2" server="Slave1.i2"/>
+
+  <controller desc="composite"/>
+</definition>
+<!-- @tutorial-end -->

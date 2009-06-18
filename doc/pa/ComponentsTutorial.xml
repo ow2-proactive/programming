@@ -1,250 +1,647 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsTutorial"><info><title xml:id="GCMComponentsTutorial_27">GCM Components Tutorial</title></info>
 	<section xml:id="Introduction_27"><info><title>Introduction</title></info> 
-		
-		<para>
+      <para>
 			This chapter presents a short user guide which explains how to use the ProActive/GCM implementation.
-			The chapter will not explain how to program with components but instead focus on the particularities
-			of the GCM implementation for ProActive. 
+         It is composed of two parts: the first one shows how to use components with ADL files and the second one
+         describes how to use them in a programmatic way. If you want more information about GCM Components,
+         please refer to <xref linkend="ProActiveComponents"/>.
 		</para>
+      <para>
+         As in the previous chapter, ProActive provides you with an empty tutorial which enables you to fill in code
+         sources and test them easily. To build the tutorial directory, go to the <literal>ProActive/compile</literal> directory
+         and type:
+      </para>
+      <screen>build tutorials</screen>
+      <para>This command will create a new directory in the ProActive home directory, called
+      <literal>tutorials</literal>. This directory will be composed of four sub-directories:
+   </para>
+   <itemizedlist>
+      <listitem>
+         <para><literal>src</literal> - source directory. You will find in this directory all sources to fill in.</para>
+      </listitem>
+      <listitem>
+         <para><literal>compile</literal> - compilation directory. In this directory, you will be able to compile your code.
+         Type <literal>build</literal> to know all the available targets. Normally, you will see one target per tutorial example.
+         Targets will be described after each example throughout this chapter.</para>
+      </listitem>
+      <listitem>
+         <para><literal>scripts</literal> - launch scripts directory. You will find in this directory all scripts to launch your compiled code.
+         Scripts will be described after each example throughout this chapter.</para>
+      </listitem>
+      <listitem>
+         <para><literal>dist</literal> - library directory. You will find in this directory all libraries needed to compile your code.
+         Normally, you will not have to deal with this directory.</para>
+      </listitem>
+   </itemizedlist>
+
 	</section>
 		
-	<section xml:id="Creatingandusingcomponentsinaprogramaticway_27"><info><title>Creating and using components in a programatic way</title></info>
-					<para> Along this short user guide, we will show: how to
- 			  create primitive and composite components, how to assemble
- 			   them using Fractal/GCM API and Fractal API files, how
- 		  	to interoperate with components, and then how to describe
- 			the deployment of components using deployment descriptor file.
- 			</para>
- 	
- 				<para> The first step of this user guide explains how
- 				 to create a single primitive component. Next, we will use an
- 				  assembly of two primitive components in a composite one.</para>
- 				  <section xml:id="the_first_component"><info><title>The first component </title></info>
- 				  	
-				
-					<para>We want to create a primitive component, 
-					called PrimitiveComputer. It exposes one server interface 
-					called computer-itf which provides the two following
-					 methods: compute and doNothing. To do that, we need to write the two following classes.
-					 	</para>
-					 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/simple_composite_interface.snip"/></textobject></programlisting>
+   <section xml:id="CreateandusecomponentsusingADL_29"><info><title>Create and use components using ADL</title></info>
+      <section xml:id="IntroductionTutoComponentADL"><info><title>Introduction</title></info>
+      <para>
+         This first part of the tutorial shows you how to use ADL files in order to construct GCM components.
+         ADL stands for Architecture Description Language and it allows to describe a component assembly thought a text file.
+         This part is composed of five exercises:
+         <itemizedlist>
+            <listitem>
+               <para><emphasis>Starter</emphasis> - this exercise make you create a simple primitive component called Slave</para>
+            </listitem>
+            <listitem>
+               <para><emphasis>Composite</emphasis> - this exercise make you create a composite component composed of
+               a Master and a Slave component.</para>
+            </listitem>
+            <listitem>
+               <para><emphasis>Interfaces</emphasis> - this exercise make you modified the previous Slave component to have it implement
+               two server interfaces.</para>
+            </listitem>
+            <listitem>
+               <para><emphasis>Multicast</emphasis> - this exercise make you modified the previous Master component so as to have its
+               client interface be a multicast interface binded to the server interface of two different Slave components.</para>
+            </listitem>
+            <listitem>
+               <para><emphasis>Deployment</emphasis> - this exercise make you deploy your component on different nodes located in
+               your local host.</para>
+            </listitem>
+         </itemizedlist>
+      </para>
+      </section>
+      <section xml:id="StarterTuto"><info><title>Starter tutorial</title></info>
+         <section xml:id="StarterTutorialDescription"><info><title>Tutorial description</title></info>
+            <para>This tutorial explains how to create a simple component named Slave using ADL files. This component looks like that:</para>
+            <figure xml:id="slave_component"><info><title xml:id="SlaveComponent_27">Slave component</title></info>
+              <mediaobject>
+                <imageobject>
+                  <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/Slave.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </figure>
+            <para>The interface used for this example is the following one:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_starter_Itf1.snip"/></textobject></programlisting>
+            <para>This interface defines a <literal>compute()</literal> method which is implemented in the following
+            <literal>SlaveImpl</literal> class:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_starter_SlaveImpl.snip"/></textobject></programlisting>
+            <para>In order to define the component, we need an ADL file which describes all the interfaces, the component content class as well as potential binding
+            between interfaces.
+            In that case, the file is very simple:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_starter_Slave_fractal.snip"/></textobject></programlisting>
+            <para>With the <literal>interface</literal> tag, we can define components interfaces. In our case, there is only one interface whose signature is
+            defined in <literal>org.objectweb.proactive.examples.userguide.components.adl.starter.Itf1</literal>, which is a <literal>server</literal> interface
+            and whose name is <literal>i1</literal>.
+            As for the <literal>content</literal> tag, it enables to define the component contents.
+            Eventually, the <literal>controller</literal> tag indicates whether the component is a <literal>primitive</literal> component or
+            a <literal>composite</literal> one (component composed of several components).</para>
+         </section>
 
-					 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/primitive_computer.snip"/></textobject></programlisting>
-					 
-				<para>Now, we will discuss on the different ways to use this component.
-					First, we must create the component with
-					the ProActive/GCM framework. Two kinds of component
-					instantiation are shown. In the first case, we can
-					do all these steps in the application. However, in
-					the second case, we will show how we can use the ADL
-					files to simplify the application and create it in a simpler way.
-					</para>
-					<para>
-					In order to illustrate these different ways,
-					a new class, Main, containing the possible main
-					method of our application (see the source code below), 
-					is written. In this main method, four different methods
-					are called and will be described in the following parts
-					of this document, launchFirstPrimitive,
-					launchWithoutADL, launchWithADL, and finally
-					the last launchAndDeployWithADL. To launch this
-					class, you must put in your classpath all
-					the libraries contained in the lib directory
-					 and subdirectories and the ProActive jar. And finally,
-					 you must set the three Java properties 
-					 (fractal.provider, java.security.policy, log4j.configuration) as shown in the command line:
-					 
-					</para>
-					 <programlisting><textobject><textdata fileref="guided_tour/code_snippets/components/simple_component_run.txt"/></textobject></programlisting>
+         <section xml:id="StarterProposedWork"><info><title>Proposed work</title></info>
+
+            <para>
+               Now that we have created our Slave component, it still remain to instantiate it and to use it. That is our proposed work for
+               this first exercise.
+            </para>
+            <para>
+               Here is the <literal>main</literal> class that we want you to fill in:
+            </para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_starter_Main_skeleton.snip"/></textobject></programlisting>
+            <para>
+               Thus, we propose you to:
+            </para>
+            <orderedlist>
+               <listitem><para>Get the factory using the <literal>org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory()</literal> method.</para></listitem>
+               <listitem><para>Create the <literal>Slave</literal> component using the <literal>newComponent</literal> method of the factory previously retrieved.
+                         You will need to put in parameters the name of your component definition (written in the ADL file) as well as a <literal>Map&lt;String, Object&gt;</literal>
+                         defining a context.</para>
+               </listitem>
+               <listitem><para>Start the component using the <literal>Fractal.getLifeCycleController()</literal> method to get the life cycle controller of your component
+               and then, using the <literal>startFc()</literal> on this controller, get your component started.</para></listitem>
+               <listitem><para>Get the <literal>i1</literal> interface using the <literal>getFcInterface()</literal> method on your component.</para></listitem>
+               <listitem><para>Call the <literal>compute()</literal> method with the parameters you want</para></listitem>
+               <listitem><para>Stop the component using a way quite similar to the one you proceed for starting it.</para></listitem>
+            </orderedlist>
+
+         </section>
+
+         <section xml:id="TestStarterWork"><info><title>Test your work</title></info>
+         <para>
+            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory (not the one located into the
+            <literal>ProActive</literal> directory) and type:
+         </para>
+         <screen>build components.adl.starter</screen>
+         <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
+         and launch the <literal>adl-starter.[sh|bat]</literal> script. You should then see a display looking like this:</para>
+         <screen>rmi://kisscool.inria.fr:6618/Node494021116Slave: org.objectweb.proactive.examples.userguide.components.adl.starter.SlaveImpl@15fa713
+arg: hello - bye</screen>
+         </section>
+
+         <section xml:id="StarterSolutions"><info><title>Solutions and full code</title></info>
+            <para>Here is how you should have filled in the <literal>main()</literal> method:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_starter_Main.snip"/></textobject></programlisting>
+         </section>
+      </section>
+
+      <section xml:id="CompositeTuto"><info><title>Composite tutorial</title></info>
+         <section xml:id="CompositeTutorialDescription"><info><title>Tutorial description</title></info>
+            <para>This tutorial shows how to create a composite component composed of a <literal>Master</literal> and
+            a <literal>Slave</literal> component. This tutorials aims at making you manipulate ADL files. Java sources are
+            filled in but they will be explain to you however. These explanations will be useful for the next tutorials.</para>
+            <para>This composite can be represented as follows:</para>
+            <figure xml:id="composite_component"><info><title xml:id="CompositeComponent_27">Composite component</title></info>
+              <mediaobject>
+                <imageobject>
+                  <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/Composite.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </figure>
+
+            <para>The <literal>Slave</literal> component is exactly the same as in the previous tutorial. It is defined by the <literal>Itf1</literal> interface
+            implemented by the <literal>SlaveImpl</literal> class and the corresponding ADL file is <literal>Slave.fractal</literal>.</para>
+
+            <para>Concerning the <literal>Master</literal> component, it is defined by the following <literal>Runner</literal> interface:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_composite_Runner.snip"/></textobject></programlisting>
+            <para>which is implemented by the <literal>MasterImpl</literal> class:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_composite_MasterImpl.snip"/></textobject></programlisting>
+
+            <para>This class contains an <literal>Itf1</literal> member representing the client interface which is used in the <literal>BindingController</literal>
+            method. These methods are:</para>
+            <itemizedlist>
+               <listitem><para>bindFc() - used to bind interfaces</para></listitem>
+               <listitem><para>listFc() - used to list interfaces</para></listitem>
+               <listitem><para>lookupFc() - used to get one of the available interfaces using its name</para></listitem>
+               <listitem><para>unbindFc() - used to unbind interfaces</para></listitem>
+            </itemizedlist>
+
+            <para>The ADL file corresponding to this component is the <literal>Master.fractal</literal> file which is almost empty since it will
+            be one of your work.</para>
+
+            <para>The only things that remain to do now so as to be able to use our composite component are first, to define that composite with an
+            ADL file and then to write our <literal>main</literal> method to use it. The writing of the composite ADL file is the second work you have to
+            do and the <literal>main</literal> method, which is quite similar to the one you have written in the previous tutorial, is exposed hereafer.</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_composite_Main.snip"/></textobject></programlisting>
+            <para>You can notice that the only thing that changed is the first argument of the <literal>newComponent()</literal> method which is now the name
+            of the ADL file representing the composite component.</para>
+         </section>
+
+         <section xml:id="CompositeProposedWork"><info><title>Proposed work</title></info>
+
+            <para>Here are the two ADL files that you have to fill in:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_composite_Master_fractal_skeleton.snip"/></textobject></programlisting>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_composite_Composite_fractal_skeleton.snip"/></textobject></programlisting>
+            <para>We propose you to:</para>
+            <orderedlist>
+               <listitem><para>Write the definition of the Master ADL file. Hint: draw your inspiration from the Slave ADL file.</para></listitem>
+               <listitem><para>In the Composite ADL file, define the Master component</para></listitem>
+               <listitem><para>Write the bindings. There are two bindings: one for the runner interfaces and another one for the i1 interfaces.
+               Hint: use the <literal>&lt;binding client="..." server="..."&gt;</literal> tag.</para></listitem>
+               <listitem><para>Add the <literal>controller</literal> tag to indicate the type of component</para></listitem>
+            </orderedlist>
+
+         </section>
+
+         <section xml:id="TestCompositeWork"><info><title>Test your work</title></info>
+         <para>
+            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+         </para>
+         <screen>build components.adl.composite</screen>
+         <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
+         and launch the <literal>adl-composite.[sh|bat]</literal> script. You should then see a display looking like this:</para>
+         <screen>rmi://kisscool.inria.fr:6618/Node82553583Slave: org.objectweb.proactive.examples.userguide.components.adl.composite.SlaveImpl@50078e
+arg: hello - world</screen>
+         </section>
+
+         <section xml:id="CompositeSolutions"><info><title>Solutions and full code</title></info>
+            <para>Here is how you should have filled in the two ADL files:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_composite_Master_fractal.snip"/></textobject></programlisting>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_composite_Composite_fractal.snip"/></textobject></programlisting>
+         </section>
+      </section>
+      <section xml:id="InterfaceTuto"><info><title>Interface tutorial</title></info>
+         <section xml:id="InterfaceTutorialDescription1"><info><title>Tutorial description</title></info>
+            <para>In this tutorial, we will add a new server interface to the Slave component and bind it to a new client interface of
+            the master component. Our composite component will therefore look like as follows:</para>
+            <figure xml:id="interfaces_component"><info><title xml:id="InterfacesComponent_27">Composite component with the new interface</title></info>
+              <mediaobject>
+                <imageobject>
+                  <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/Interfaces.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </figure>
+
+            <para>We introduce a second interface named <literal>Itf2</literal> which source code is the following one:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Itf2.snip"/></textobject></programlisting>
+
+            <para>The aim of this tutorial is to make you modified all the necessary files to add this new interface.</para>
+
+         </section>
+
+         <section xml:id="InterfaceProposedWork"><info><title>Proposed work</title></info>
+
+            <para>The first thing to do when adding a new interface is to implement it. In our case, it is <literal>SlaveImpl</literal> class that implements it:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_interfaces_SlaveImpl_skeleton.snip"/></textobject></programlisting>
+
+            <para>Then, you have to modified the ADL file of the Slave component to add this new interface:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Slave_fractal_skeleton.snip"/></textobject></programlisting>
+
+            <para>Now, you have to do the same thing for the Master component, that is, you have to add a new interface. However, in that case, you have to
+            add a client interface and thus, you have to modified the <literal>BindingController</literal> methods:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_interfaces_MasterImpl_skeleton.snip"/></textobject></programlisting>
+
+            <para>Then, Master's ADL file needs also to be modified:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Master_fractal_skeleton.snip"/></textobject></programlisting>
+
+            <para>Finally, you have to add a binding in the Composite's ADL file:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Composite_fractal_skeleton.snip"/></textobject></programlisting>
+
+            <para>Thus, we propose you to:</para>
+            <orderedlist>
+               <listitem><para>Make the <literal>SlaveImpl</literal> class implement the <literal>Itf2</literal> interface </para></listitem>
+               <listitem><para>Modify the Slave's ADL file to add the new interface</para></listitem>
+               <listitem><para>Modify method implementation of the <literal>BindingController</literal> methods in the <literal>MasterImpl</literal> class </para></listitem>
+               <listitem><para>Modify the Master's ADL file to add the new interface</para></listitem>
+               <listitem><para>Modify the Composite's ADL file to add a binding between the two new interfaces</para></listitem>
+            </orderedlist>
+
+         </section>
+
+         <section xml:id="TestInterfaceWork"><info><title>Test your work</title></info>
+         <para>
+            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+         </para>
+         <screen>build components.adl.interfaces</screen>
+         <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
+         and launch the <literal>adl-interfaces.[sh|bat]</literal> script. You should then see a display looking like this:</para>
+         <screen>rmi://kisscool.inria.fr:6618/Node438557290Slave: org.objectweb.proactive.examples.userguide.components.adl.interfaces.SlaveImpl@97aaa6
+arg: hello - world
+
+rmi://kisscool.inria.fr:6618/Node438557290Slave: org.objectweb.proactive.examples.userguide.components.adl.interfaces.SlaveImpl@97aaa6
+I do nothing</screen>
+         </section>
+
+         <section xml:id="InterfaceSolutions"><info><title>Solutions and full code</title></info>
+            <para>Here is the solution:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_interfaces_SlaveImpl.snip"/></textobject></programlisting>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Slave_fractal.snip"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_interfaces_MasterImpl.snip"/></textobject></programlisting>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Master_fractal.snip"/></textobject></programlisting>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Composite_fractal.snip"/></textobject></programlisting>
+         </section>
+      </section>
+
+      <section xml:id="MulticastTuto"><info><title>Multicast tutorial</title></info>
+         <section xml:id="MulticastTutorialDescription1"><info><title>Tutorial description</title></info>
+            <para>This tutorial will explain you how to create a multicast interface in order to get a component looking like this:</para>
+            <figure xml:id="multicast_component"><info><title xml:id="MulticastComponent_27">Composite component with a multicast client interface</title></info>
+              <mediaobject>
+                <imageobject>
+                  <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/CompositeMulticast.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </figure>
+            <para>
+            For this, a new interface called <literal>Itf1Multicast</literal>
+            will be added and will be used for the client interface of the Master component.</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_multicast_Itf1Multicast.snip"/></textobject></programlisting>
+
+            <para>Except this new interface and the replacement of <programlisting language="java">private Itf1 i1</programlisting> by <programlisting language="java">private Itf1Multicast i1</programlisting>
+            in the <literal>MasterImpl</literal> class, there is no need of changes in Java code source. Only changes in ADL files are needed.</para>
+         </section>
+
+         <section xml:id="MulticastProposedWork"><info><title>Proposed work</title></info>
+
+            <para>First, you have to change the client interface into the Master's ADL file in order to refer to the Itf1Multicast signature. You also have to change its cardinality
+            to indicate that this interface is now a multicast interface.</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_multicast_Master_fractal_skeleton.snip"/></textobject></programlisting>
+
+            <para>Then, you have to modify the Composite's ADL file to add a new Slave component and to add also some bindings.</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_multicast_Composite_fractal_skeleton.snip"/></textobject></programlisting>
+
+            <para>Thus, we propose you to:</para>
+            <orderedlist>
+               <listitem><para>Modify the client interface of the Master component</para></listitem>
+               <listitem><para>Add a Slave component into the composite</para></listitem>
+               <listitem><para>Add bindings to realise the multicast</para></listitem>
+               <listitem><para>Optional: Change the dispatch parameter policy in the multicast interface</para></listitem>
+            </orderedlist>
+
+         </section>
+
+         <section xml:id="TestMulticastWork"><info><title>Test your work</title></info>
+         <para>
+            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+         </para>
+         <screen>build components.adl.multicast</screen>
+         <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
+         and launch the <literal>adl-interfaces.[sh|bat]</literal> script. You should then see a display looking like this:</para>
+         <screen>rmi://kisscool.inria.fr:6618/Node1434753324Slave: org.objectweb.proactive.examples.userguide.components.adl.multicast.SlaveImpl@3861e6
+arg: hello - world
+
+rmi://kisscool.inria.fr:6618/Node1434753324Slave: org.objectweb.proactive.examples.userguide.components.adl.multicast.SlaveImpl@1132e76
+arg: hello - world
+
+rmi://kisscool.inria.fr:6618/Node1434753324Slave: org.objectweb.proactive.examples.userguide.components.adl.multicast.SlaveImpl@3861e6
+I do nothing</screen>
+         <para>If you have done the optional work, you should have a display as follows:</para>
+         <screen>rmi://kisscool.inria.fr:6618/Node1653076599Slave: org.objectweb.proactive.examples.userguide.components.adl.multicast.SlaveImpl@789d63
+arg: hello
+
+rmi://kisscool.inria.fr:6618/Node1653076599Slave: org.objectweb.proactive.examples.userguide.components.adl.multicast.SlaveImpl@a4ed99
+arg: world
+
+rmi://kisscool.inria.fr:6618/Node1653076599Slave: org.objectweb.proactive.examples.userguide.components.adl.multicast.SlaveImpl@789d63
+I do nothing
+         </screen>
+         </section>
+
+         <section xml:id="MulticastSolutions"><info><title>Solutions and full code</title></info>
+            <para>Here are solutions for the ADL files:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_multicast_Master_fractal.snip"/></textobject></programlisting>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_multicast_Composite_fractal.snip"/></textobject></programlisting>
+            <para>If you do not want to do the optional work, you do not have to modify other files. Otherwise, if you want to change the dispatch parameter policy,
+            you have to make some little modification in Java code sources. The first one is to change the signature of the <literal>compute</literal> method in
+            the <literal>Itf1Multicast</literal> interface. Change the line <programlisting language="java">void compute(List&lt;String&gt; arg);</programlisting>
+            by <programlisting language="java">void compute(@ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN) List&lt;String&gt; arg);</programlisting></para>
+            <para>Then, you have to change the <literal>Itf1</literal> interface since the server interface will no longer receive af list of <literal>String</literal>
+            but instead, just a <literal>String</literal>. Thus, in the <literal>Itf1</literal> interface, change the line
+            <programlisting language="java">void compute(List&lt;String&gt; arg);</programlisting> by <programlisting language="java">void compute(String arg);</programlisting> and
+            in the <literal>SlaveImpl</literal> class, change the implementation of <literal>compute</literal> so that it returns a <literal>String</literal>:</para>
+            <programlisting language="java">
+public void compute(String arg) {
+   String str = "\n" + PAActiveObject.getBodyOnThis().getNodeURL() + "Slave: " + this + "\n";
+   str += "arg: " + arg;
+   System.err.println(str);
+}</programlisting>
+         </section>
+      </section>
 
 
-					 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/full-main.snip"/></textobject></programlisting>
-					<para> If we want to create and call components in
-					 a standard Java application, we need to use the GCM API [1].
-					 The method launchFirstPrimitive shows all the steps
-					 to create and use our first primitive component.
-					 Firstly, define the type of the component. Secondly,
-					 create component using a factory. Thirdly,
-					 start the component. And finally, retrieve the component’s
-					 interface and use it as a standard Java object to access our component.
-					 </para>
+      <section xml:id="DeploymentTuto"><info><title>Deployment tutorial</title></info>
+         <section xml:id="DeployemntTutorialDescription"><info><title>Tutorial description</title></info>
+            <para>Now that we know how to use component, we would like to benefit from active object properties. One of these is the deployment on several Java Virtual Machines (JVM).
+            This tutorial will explain you how to deploy our component on 3 differents JVM. For this, we will use GCM deployment model. If you have done the active object tutorials, you
+            should know what this model is and how to use it. If not, please refer to <xref linkend="deployment_guide_CMA" />.</para>
 
-					 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/launch_first_primitive.snip"/></textobject></programlisting>
-				
-				
-				
-				
-				<para> Uncomment the line calling the <literal>launchFirstPrimitive</literal>
-				 method in the main method, launch it and see
-				  below the expected output. The first lines are ProActive
-				  log, and at the end, information printed in the component and in the Main class is visible.
-				  </para>
-					 <programlisting><textobject><textdata fileref="guided_tour/code_snippets/components/simple_run_output.txt"/></textobject></programlisting>
-							</section>
-			<section xml:id="Defineanassembly_27"><info><title>Define an assembly</title></info>
-				
-					<para> Now that we succeeded to create and use
-					 a primitive component, we will learn how to use
-					  it in a component assembly. First of all, we want
-					   use the previous shown primitive component with another
-					    primitive component to explain how to define, implement and
-					     use client interfaces. Moreover, in order to use composite
-					      component, we put the two primitive components in
-					       a composite. The <xref linkend="component_assembly"/> shows this assembly. 
-					       </para>
-			
-	      	<figure xml:id="component_assembly"><info><title xml:id="Componentassembly_27">Component assembly </title></info> 
-			  <mediaobject>
-	          <imageobject>
-	            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="guided_tour/pics/gcm/component_assembly.png" format="PNG"/>
-	          </imageobject>
-	        </mediaobject>
-	      </figure>
-			<para> To implement this assembly we need one more class,
-			 PrimitiveMaster. This class implements the following Java interfaces: 
-			 java.lang.Runnable and moreover the BindindController to allow binding
-			 on the compute-itf client interface. In the run method we
-			 put the call to the PrimitiveComputer component, we
-			 don’t need to retrieve the compute-itf interface since the assembling
-			 it’s done in the launchWithoutADL method or in the following part using ADL.
-			  </para>
-			 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/primitive_master.snip"/></textobject></programlisting>
-			   <para> In the launchWithoutADL method, we extend component type definition
-			    and component creation parts. And we add one more part, 
-			    the component assembling. In this part, at first 
-			    we put the two primitives, PrimitiveComputer and PrimitiveMaster 
-			    in the composite component. Next, we make the binding between each component interfaces.
-			    </para>
-			 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/launch_without_ADL.snip"/></textobject></programlisting>
-			    <para> This way isn’t the simplest one to create and use
-			     component. There is a lot of code to write, that
-			      could introduce mistakes or errors in an assembly. We will show an easier one next.
-			      </para>
-			      </section>
-			      </section>
-			<section xml:id="CreateandusecomponentsusingADL_27"><info><title>Create and use components using ADL</title></info>
-			
-				<para> We want create the same component directly using
-				 ADL capabilities. The source code of the method launchWithADL shows
-				  how to use it. Another factory is used, and we can create
-				   directly the component without defining at first its
-				    type. Utilization of the created component is still the same. You can
-				     see that we don’t need to define
-				      and assemble parts any more. Moreover, we need to create only one
-				       component, the other ones are automatically created.
-				       </para>
-			 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/launch_with_ADL.snip"/></textobject></programlisting>
-				<para> ADL allows describing a component assembly through a text
-				 file. In our case, we have defined fives files. These
-				 files need to be in the classpath of
-				 the application, for instance the PrimitiveComputer.fractal
-				 file needs to be in the <literal>org/objectweb/proactive/examples/components/userguide/adl</literal>
-				 directory in the classpath. The first one, PrimitiveComputerType.fractal, 
-				 describes the component type, in particular the interface and
-				 the membrane with the tags interface and controller. The second one, 
-				 PrimitiveComputer.fractal, adds two necessary information: the 
-				 implementation class with the content tag and a virtual node
-				  with the virtual-node tag. These tags are explained in the following section.
-				  </para>
-			 <programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveComputerType.fractal"/></textobject></programlisting>
-					<para> 		It is quite the same for the
-					PrimitiveMaster component; just the name
-					 and definition class change, and there is one more interface, a client one.
-					 </para>
-			<programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveMasterType.fractal"/></textobject></programlisting>
+            <para>For the deployment, we will use the following application description:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_deployment_application_descriptor.snip"/></textobject></programlisting>
+            <para>which refers to the following deployment descriptor, used both for the deployment of the Master component and for the Slave components:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_deployment_GCMD_Local.snip"/></textobject></programlisting>
 
-				<para>And finally, there is the composite one. It
-				 defines one interface, and include the two primitive
-				  described previously. The binding tag is new; it describes
-				   the binding between the interface from composite and inner components.
-				   </para>
-			<programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/adl/PrimitiveMaster.fractal"/></textobject></programlisting>
+            <para>The main things that change comparing to the previous tutorial are the <literal>Main</literal> method where deployment has to be loaded and used, and
+            ADL files into which virtual node of the corresponding component deployment has to be added.</para>
+         </section>
 
-				<para>Now, we can run the example; uncomment the line calling the
-				 launchWithADL method in the main and then you can see the same output as in the previous section.
-				 </para>
-				 </section>
-				 <section xml:id="CreatingusinganddeployingcomponentsusingADL_27"><info><title>Creating, using and deploying components using ADL </title></info>
-				 
-				 	<para>To deploy components on a specific virtual node, we need
-				 	 to use ADL files. Just before we saw that the tag
-				 	 virtual-node allows to specify which virtual node to
-				 	 use for a component. The virtual node is defined in a separate
-				 	 file: a deployment descriptor. You can find more information on how to write a
-				 	 deployment descriptor file in the ProActive documentation, 
-				 	 <!-- TODO add xref -->chapter 21, XML Deployment Descriptors. 
-				 	 The deployment descriptor file used in this example is in the Appendix: <literal>deploymentDescriptor.xml.</literal>
-				 	 </para>
-				 	 <para>Furthermore, we need to inform the factory how
-				 	  to use this deployment descriptor; we do
-				 	   this in the launchPrimitiveADLAndDeployment method :
-				 	   </para>
-				 	   <itemizedlist>
-				 	   <listitem><para>We create a ProActiveDescriptor object</para></listitem> 
-						<listitem><para>We put this object in the context HashMap</para></listitem>
-						<listitem><para>We give this HashMap to the factory</para></listitem>
-						</itemizedlist>
-							<para>Thus, the factory can retrieve the virtual node defined, 
-							and use it as described in the ADL files. </para>
-							<para> There is another specific point in the
-							 end of this method with the 
-							 <literal>deploymentDescriptor.killall(false);</literal> call.
-							This method kills all the JVM deployed using the
-							original deployment descriptor file. Before this call, we need 
-							to suspend the program since the method calls in GCM
-							 are asynchronous, in order to not kill JVM before the end of the component execution.
-							 </para>
+         <section xml:id="DeploymentProposedWork"><info><title>Proposed work</title></info>
 
-			 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/launch_and_deploy_with_ADL.snip"/></textobject></programlisting>
+            <para>First, you have to add a <literal>virtual-node</literal> tag into the Slave's ADL file to indicate where to deploy the Slave components:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_deployment_Slave_fractal_skeleton.snip"/></textobject></programlisting>
 
-				 <para> Now we can run this example; uncomment the
-				  line calling the launchPrimitiveADLAndDeployment method, launch it and see
-				    the  output. The first lines are
-				    ProActive log; it’s more verbose than during previous 
-				    execution because we deploy the two JVMs defined in the
-				     deployment descriptor file. After that, you can see information
-				      printed from the component and the Main class
-				      . And finally, the ProActive log again when the created JVMs are killed.
-				      </para>
-				      
-				      
-				      
-				      <!--  TODO  launchPrimitiveADLAndDeployment Output
-Launch primitive component example
-Launch component assembly example
-Launch component assembly example with ADL
-Launch and deploy component assembly example with ADL
-				      -->
-				      </section>
-				      <section xml:id="ComponentinterfaceCardinality_27"><info><title>Component interface Cardinality</title></info>
-				      
-				      <para> Client and server also support multicast and gathercast
-				       interface cardinality. The GCM [1] explains which constraints
-				        the server and client interfaces must respect.
-				         </para>
-				         <para> For multicast interfaces you can specify the parameter dispatching
-				          mode thanks to Java annotations available in
-				           the org.objectweb.proactive.core.component.type.annotations.multicast package.
-				           </para>
-				           </section>
-				   <section xml:id="Additionalexamples_27"><info><title>Additional examples</title></info>
-				   
-				   <para> Two component applications are included in ProActive the HelloWorld and C3D example.
-				   </para>
-				   <para>A Hello World example is provided. It shows the
-				    different ways of creating a component system programmatically and using
-				     ADL. You can find the code for this example in the package 
-				     <literal>org.objectweb.proactive.examples.components.helloworld </literal> of the CFI prototype distribution. 
-				     </para>
-				     <para>The example code can either be compiled and run manually or using scripts
-				      (hello-world_fractal.sh (or .bat) in the scripts/unix/components directory) can
-				       be used to launch it. If you choose the first solution, do not forget to set the fractal.provider system property.
-				       </para>
-				       <para> The other example, C3D application — a parallel, distributed and collaborative
-				        3D renderer, is in the org.objectweb.proactive.examples.components.c3d package.
-				        </para>
-				        
-				        <programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/deploymentDescriptor.xml"/></textobject></programlisting>
-				        
-	        </section>				        
+            <para>Then, you have to modify the <literal>Main</literal> method so as to load and use the application descriptor.</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_deployment_Main_skeleton.snip"/></textobject></programlisting>
+
+            <para>Thus, we propose you to:</para>
+            <orderedlist>
+               <listitem><para>Add a <literal>virtual-node</literal> tag in the Slave's ADL file. Hint: draw your inspiration on the Master's ADL file.</para></listitem>
+               <listitem><para>Complete the <literal>Main</literal> method. Hint: Look at the deployment of active objects</para></listitem>
+            </orderedlist>
+
+         </section>
+
+         <section xml:id="TestDeploymentWork"><info><title>Test your work</title></info>
+         <para>
+            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+         </para>
+         <screen>build components.adl.deployment</screen>
+         <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
+         and launch the <literal>adl-deployment.[sh|bat]</literal> script. You should then see a display looking like this:</para>
+         <screen>--- User Guide: ADL Deployment ---------------------------------------------
+30447@kisscool - [INFO oactive.remoteobject] Remote Object Factory provider &lt;pamr, class org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory&gt; found
+30447@kisscool - [INFO    communication.rmi] Created a new registry on port 6618
+30447@kisscool - [INFO        proactive.mop] Generating class : pa.stub.org.objectweb.proactive.gcmdeployment._StubGCMVirtualNode
+30447@kisscool - [INFO        proactive.mop] Generating class : pa.stub.org.objectweb.lector -Djava.security.policy="/home/ffonteno/proactive-git/programming/tutorials/scripts/proactive.java.policy" org.objectweb.proactive.core.runtime.StartPARuntime -p rmi://kisscool.inria.fr:6618/PA_JVM798723297 -c 1 -i 1 -d 8194810407958514089 -b http://kisscool.inria.fr:49352/classServer/  '
+30447@kisscool - [INFO                job.1] executing command=/usr/bin/ssh -l ffonteno localhost '"/home/ffonteno/src/java/jdk1.5.0_17/jre/bin/java" -cp "/home/ffonteno/proactive-git/programming/tutorials/dist/lib/ProActive.jar:/home/ffonteno/proactive-git/programming/tutorials/classes" -Dproactive.log4j.collector=rmi://kisscool.inria.fr:6618/8194810407958514089/logCollector -Djava.security.policy="/home/ffonteno/proactive-git/programming/tutorials/scripts/proactive.java.policy" org.objectweb.proactive.core.runtime.StartPARuntime -p rmi://kisscool.inria.fr:6618/PA_JVM798723297 -c 1 -i 1 -d 8194810407958514089 -b http://kisscool.inria.fr:49352/classServer/  '
+30447@kisscool - [INFO      deployment.GCMD] Starting group id=gCluster #commands=1
+30447@kisscool - [INFO                job.2] executing command=/usr/bin/ssh -l ffonteno localhost '"/home/ffonteno/src/java/jdk1.5.0_17/jre/bin/java" -cp "/home/ffonteno/proactive-git/programming/tutorials/dist/lib/ProActive.jar:/home/ffonteno/proactive-git/programming/tutorials/classes" -Dproactive.log4j.collector=rmi://kisscool.inria.fr:6618/8194810407958514089/logCollector -Djava.security.policy="/home/ffonteno/proactive-git/programming/tutorials/scripts/proactive.java.policy" org.objectweb.proactive.core.runtime.StartPARuntime -p rmi://kisscool.inria.fr:6618/PA_JVM798723297 -c 1 -i 2 -d 8194810407958514089 -b http://kisscool.inria.fr:49352/classServer/  '
+30447@kisscool - [INFO        proactive.mop] Generating class : pa.stub.org.objectweb.proactive.core.util.log.remote._StubProActiveLogCollector
+30447@kisscool - [INFO        proactive.mop] Generating class : pa.stub.org.objectweb.proactive.examples.userguide.components.adl.deployment._StubMasterImpl
+30447@kisscool - [INFO        proactive.mop] Generating class : pa.stub.org.objectweb.proactive.examples.userguide.components.adl.deployment._StubSlaveImpl
+30447@kisscool - [INFO                job.1]
+30447@kisscool - [INFO                job.1] rmi://kisscool.inria.fr:6618/PA_JVM539286369_GCMNode-0Slave: org.objectweb.proactive.examples.userguide.components.adl.deployment.SlaveImpl@e931d9
+30447@kisscool - [INFO                job.1] arg: hello - world
+30447@kisscool - [INFO                job.0]
+30447@kisscool - [INFO                job.0] rmi://kisscool.inria.fr:6618/PA_JVM1043221418_GCMNode-0Slave: org.objectweb.proactive.examples.userguide.components.adl.deployment.SlaveImpl@e9a7c2
+30447@kisscool - [INFO                job.0] arg: hello - world
+30447@kisscool - [INFO                job.0]
+30447@kisscool - [INFO                job.0] rmi://kisscool.inria.fr:6618/PA_JVM1043221418_GCMNode-0Slave: org.objectweb.proactive.examples.userguide.components.adl.deployment.SlaveImpl@e9a7c2
+30447@kisscool - [INFO                job.0] I do nothing</screen>
+         </section>
+
+         <section xml:id="DeploymentSolutions"><info><title>Solutions and full code</title></info>
+            <para>Here are the solutions:</para>
+            <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_deployment_Slave_fractal.snip"/></textobject></programlisting>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_deployment_Main.snip"/></textobject></programlisting>
+         </section>
+      </section>
+   </section>
+
+
+   <section xml:id="CreateandusecomponentsusingAPI_29"><info><title>Create and use components using the API</title></info>
+      <section xml:id="IntroductionTutoComponentAPI"><info><title>Introduction</title></info>
+      <para>
+         This second part of the tutorial shows you how to use the API in order to construct GCM components.
+         This component is composed of three exercises:
+         <itemizedlist>
+            <listitem>
+               <para><emphasis>Starter</emphasis> - this exercise make you create a simple primitive component called Slave</para>
+            </listitem>
+            <listitem>
+               <para><emphasis>Composite</emphasis> - this exercise make you create a composite component composed of
+               a Master and a Slave component.</para>
+            </listitem>
+            <listitem>
+               <para><emphasis>Interfaces</emphasis> - this exercise make you modified the previous Slave component to have it implement
+               two server interfaces.</para>
+            </listitem>
+         </itemizedlist>
+      </para>
+      </section>
+      <section xml:id="APIStarterTuto"><info><title>Starter tutorial</title></info>
+         <section xml:id="APIStarterTutorialDescription"><info><title>Tutorial description</title></info>
+            <para>This tutorial explains how to create a simple component named Slave using the API. This component looks like that:</para>
+            <figure xml:id="APIslave_component"><info><title xml:id="APISlaveComponent_27">Slave component</title></info>
+              <mediaobject>
+                <imageobject>
+                  <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/Slave.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </figure>
+            <para>The interface used for this example is the following one:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_starter_Itf1.snip"/></textobject></programlisting>
+            <para>This interface defines a <literal>compute()</literal> method which is implemented in the following
+            <literal>SlaveImpl</literal> class:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_starter_SlaveImpl.snip"/></textobject></programlisting>
+            <para>These two classes are strictly the same as the ones used in the Starter tutorial using ADL files. In this tutorial, instead of
+            describing the component into an ADL file, we will describe it directly in the <literal>main()</literal> method.</para>
+         </section>
+
+         <section xml:id="APIStarterProposedWork"><info><title>Proposed work</title></info>
+
+            <para>
+               Here is the <literal>main()</literal> method that you have to complete:
+            </para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_starter_Main_skeleton.snip"/></textobject></programlisting>
+            <para>
+               Thus, we propose you to:
+            </para>
+            <orderedlist>
+               <listitem><para>Get the Bootstrap component using the <literal>Fractal.getBootstrapComponent()</literal> method</para></listitem>
+               <listitem><para>Get the TypeFactory using the <literal>Fractal.getTypeFactory()</literal> method</para></listitem>
+               <listitem><para>Get the GenericFactory using the <literal>Fractal.getGenericFactory()</literal> method</para></listitem>
+               <listitem><para>Create the i1 Interface Type (org.objectweb.proactive.examples.userguide.components.api.starter.Itf1) using the <literal>createFcItfType()</literal> method
+               of the <literal>TypeFactory</literal> class</para></listitem>
+               <listitem><para>Create the Slave Component type using the <literal>createFcType()</literal> method
+               of the <literal>TypeFactory</literal> class</para></listitem>
+               <listitem><para>Create the Slave Component type using the <literal>newFcInstance()</literal> method
+               of the <literal>GenericFactory</literal> class</para></listitem>
+            </orderedlist>
+
+         </section>
+
+         <section xml:id="APITestStarterWork"><info><title>Test your work</title></info>
+         <para>
+            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory (not the one located into the
+            <literal>ProActive</literal> directory) and type:
+         </para>
+         <screen>build components.api.starter</screen>
+         <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
+         and launch the <literal>api-starter.[sh|bat]</literal> script. You should then see a display looking like this:</para>
+         <screen>rmi://kisscool.inria.fr:6618/Node564429316Slave: org.objectweb.proactive.examples.userguide.components.api.starter.SlaveImpl@109da93
+arg: hello - world</screen>
+         </section>
+
+         <section xml:id="APIStarterSolutions"><info><title>Solutions and full code</title></info>
+            <para>Here is how you should have filled in the <literal>main()</literal> method:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_starter_Main.snip"/></textobject></programlisting>
+         </section>
+      </section>
+
+      <section xml:id="APICompositeTuto"><info><title>Composite tutorial</title></info>
+         <section xml:id="APICompositeTutorialDescription"><info><title>Tutorial description</title></info>
+            <para>This tutorial shows how to create a composite component composed of a <literal>Master</literal> and
+            a <literal>Slave</literal> component.</para>
+            <para>This composite can be represented as follows:</para>
+            <figure xml:id="APIcomposite_component"><info><title xml:id="APICompositeComponent_27">Composite component</title></info>
+              <mediaobject>
+                <imageobject>
+                  <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/Composite.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </figure>
+
+            <para>The <literal>Slave</literal> component is exactly the same as in the previous tutorial. It is defined by the <literal>Itf1</literal> interface
+            implemented by the <literal>SlaveImpl</literal> class.</para>
+
+            <para>Concerning the <literal>Master</literal> component, it is defined by the following <literal>Runner</literal> interface:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_composite_Runner.snip"/></textobject></programlisting>
+            <para>which is implemented by the <literal>MasterImpl</literal> class:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_composite_MasterImpl.snip"/></textobject></programlisting>
+
+            <para>This class contains an <literal>Itf1</literal> member representing the client interface which is used in the <literal>BindingController</literal>
+            method. These methods are:</para>
+            <itemizedlist>
+               <listitem><para>bindFc() - used to bind interfaces</para></listitem>
+               <listitem><para>listFc() - used to list interfaces</para></listitem>
+               <listitem><para>lookupFc() - used to get one of the available interfaces using its name</para></listitem>
+               <listitem><para>unbindFc() - used to unbind interfaces</para></listitem>
+            </itemizedlist>
+
+            <para>The only things that remain to do now so as to be able to use our composite component are first, to define all the three components
+            (Slave, Master and Composite) in our <literal>main()</literal> method using the Java API
+            and then, to write the two bindings.</para>
+         </section>
+
+         <section xml:id="APICompositeProposedWork"><info><title>Proposed work</title></info>
+
+            <para>Here is the <literal>Main</literal> class that you have to fill in:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_composite_Main_skeleton.snip"/></textobject></programlisting>
+            <para>We propose you to:</para>
+            <orderedlist>
+               <listitem><para>Create the Master component type as you created the Slave component type in the previous tutorial.
+               Hint: in that case, there are two interfaces (one client and one server interface)</para></listitem>
+               <listitem><para>Instantiate the Master component</para></listitem>
+               <listitem><para>Do the bindings. Hint: For doing a binding, you should first get the <literal>BindingController</literal> of the component containing the client interface
+               you want to bind and then, call the method <literal>bindFc()</literal> on it. To get the <literal>BindingController</literal>, use the
+               <literal>Fractal.getBindingController()</literal> mehtod.</para></listitem>
+            </orderedlist>
+
+         </section>
+
+         <section xml:id="APITestCompositeWork"><info><title>Test your work</title></info>
+         <para>
+            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+         </para>
+         <screen>build components.api.composite</screen>
+         <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
+         and launch the <literal>api-composite.[sh|bat]</literal> script. You should then see a display looking like this:</para>
+         <screen>rmi://kisscool.inria.fr:6618/Node480011239Slave: org.objectweb.proactive.examples.userguide.components.api.composite.SlaveImpl@c62080
+arg: hello - world</screen>
+         </section>
+
+         <section xml:id="APICompositeSolutions"><info><title>Solutions and full code</title></info>
+            <para>Here is how you should have filled in the <literal>Main</literal> class:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_composite_Main.snip"/></textobject></programlisting>
+         </section>
+      </section>
+      <section xml:id="APIInterfaceTuto"><info><title>Interface tutorial</title></info>
+         <section xml:id="APIInterfaceTutorialDescription1"><info><title>Tutorial description</title></info>
+            <para>In this tutorial, we will add a new server interface to the Slave component and bind it to a new client interface of
+            the Master component. Our composite component will therefore look like as follows:</para>
+            <figure xml:id="APIinterfaces_component"><info><title xml:id="APIInterfacesComponent_27">Composite component with the new interface</title></info>
+              <mediaobject>
+                <imageobject>
+                  <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/Interfaces.png" format="PNG"/>
+                </imageobject>
+              </mediaobject>
+            </figure>
+
+            <para>We introduce a second interface named <literal>Itf2</literal> which source code is the following one:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_interfaces_Itf2.snip"/></textobject></programlisting>
+
+            <para>The aim of this tutorial is to make you modified the previous code in order to add this new interface using the API.
+            All the necessary modification are made into the <literal>Main</literal> class.</para>
+
+         </section>
+
+         <section xml:id="APIInterfaceProposedWork"><info><title>Proposed work</title></info>
+
+            <para>
+               Here is the <literal>main()</literal> method that you have to complete:
+            </para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_interfaces_Main_skeleton.snip"/></textobject></programlisting>
+
+            <para>Thus, we propose you to:</para>
+            <orderedlist>
+               <listitem><para>Add the new client interface in the Master component type</para></listitem>
+               <listitem><para>Add the new server interface in the Slave component type</para></listitem>
+               <listitem><para>Add a new binding between these two interfaces</para></listitem>
+            </orderedlist>
+         </section>
+
+         <section xml:id="APITestInterfaceWork"><info><title>Test your work</title></info>
+         <para>
+            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+         </para>
+         <screen>build components.api.interfaces</screen>
+         <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
+         and launch the <literal>api-interfaces.[sh|bat]</literal> script. You should then see a display looking like this:</para>
+         <screen>rmi://kisscool.inria.fr:6618/Node275638725Slave: org.objectweb.proactive.examples.userguide.components.api.interfaces.SlaveImpl@3aa791
+arg: hello - world
+
+rmi://kisscool.inria.fr:6618/Node275638725Slave: org.objectweb.proactive.examples.userguide.components.api.interfaces.SlaveImpl@3aa791
+I do nothing</screen>
+         </section>
+
+         <section xml:id="APIInterfaceSolutions"><info><title>Solutions and full code</title></info>
+            <para>Here is the solution:</para>
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_interfaces_Main.snip"/></textobject></programlisting>
+         </section>
+      </section>
+   </section>
+
 </chapter>
