@@ -152,7 +152,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         } catch (Exception e) {
             LOGGER_RO.debug("creating new rmiregistry on port : " + url.getPort());
             try {
-                LocateRegistry.createRegistry(url.getPort());
+                LocateRegistry.createRegistry(URIBuilder.getPortNumber(url));
             } catch (RemoteException e1) {
                 LOGGER_RO.warn("damn cannot start a rmiregistry on port " + url.getPort());
                 throw new ProActiveException(e1);
@@ -161,9 +161,9 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
         try {
             if (replacePreviousBinding) {
-                reg.rebind(url.getPath().toString().substring(1), rro);
+                reg.rebind(URIBuilder.getNameFromURI(url), rro);
             } else {
-                reg.bind(url.getPath().toString().substring(1), rro);
+                reg.bind(URIBuilder.getNameFromURI(url), rro);
             }
             LOGGER_RO.debug(" successfully bound in registry at " + url);
         } catch (java.rmi.AlreadyBoundException e) {
@@ -182,7 +182,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
     public void unregister(URI url) throws ProActiveException {
         try {
             Registry reg = getRegistry(url);
-            reg.unbind(URIBuilder.removeProtocol(url).toString());
+            reg.unbind(URIBuilder.getNameFromURI(url));
             LOGGER_RO.debug(url + " unbound in registry");
         } catch (IOException e) {
             //No need to throw an exception if an object is already unregistered
@@ -209,10 +209,10 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         // Try if URL is the address of a RmiRemoteBody
         try {
             Registry reg = getRegistry(uri);
-            o = reg.lookup(modifiedURI.getPath().toString().substring(1));
+            o = reg.lookup(URIBuilder.getNameFromURI(modifiedURI));
             LOGGER_RO.debug(modifiedURI.toString() + " looked up successfully");
         } catch (java.rmi.NotBoundException e) {
-            // there are one rmiregistry on target computer but nothing bound to this url isn t bound
+            // there are one rmiregistry on target computer but nothing bound to this url is not bound
             throw new ProActiveException("The url " + modifiedURI + " is not bound to any known object", e);
         } catch (RemoteException e) {
             throw new ProActiveException("Registry could not be contacted, " + modifiedURI, e);
