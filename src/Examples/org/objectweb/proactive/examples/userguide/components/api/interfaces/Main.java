@@ -67,9 +67,10 @@ public class Main {
                 //TODO: Add the new client interface
                 //@tutorial-break
                 //@snippet-break api_interfaces_Main_skeleton
-                , tf.createFcItfType("i2", Itf2.class.getName(), TypeFactory.CLIENT, TypeFactory.MANDATORY,
+                ,
+                tf.createFcItfType("i2", Itf2.class.getName(), TypeFactory.CLIENT, TypeFactory.MANDATORY,
                         TypeFactory.SINGLE)
-                //@snippet-resume api_interfaces_Main_skeleton
+        //@snippet-resume api_interfaces_Main_skeleton
                 //@tutorial-resume
                 });
         ComponentType tSlave = tf.createFcType(new InterfaceType[] {
@@ -78,9 +79,10 @@ public class Main {
                 //TODO: Add the new server interface
                 //@tutorial-break
                 //@snippet-break api_interfaces_Main_skeleton
-                , tf.createFcItfType("i2", Itf2.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                ,
+                tf.createFcItfType("i2", Itf2.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                         TypeFactory.SINGLE)
-                //@snippet-resume api_interfaces_Main_skeleton
+        //@snippet-resume api_interfaces_Main_skeleton
                 //@tutorial-resume
                 });
         Component slave = gf.newFcInstance(tSlave, new ControllerDescription("slave", Constants.PRIMITIVE),

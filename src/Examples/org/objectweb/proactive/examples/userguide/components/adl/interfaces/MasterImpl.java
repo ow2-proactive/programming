@@ -76,13 +76,13 @@ public class MasterImpl implements Runner, BindingController {
 
     public String[] listFc() {
         return new String[] { ITF_CLIENT_1
-                //TODO: Add the new client interface name
+        //TODO: Add the new client interface name
                 //@tutorial-break
                 //@snippet-break adl_interfaces_MasterImpl_skeleton
                 , ITF_CLIENT_2
-                //@snippet-resume adl_interfaces_MasterImpl_skeleton
-                //@tutorial-resume
-                };
+        //@snippet-resume adl_interfaces_MasterImpl_skeleton
+        //@tutorial-resume
+        };
     }
 
     public Object lookupFc(String clientItfName) throws NoSuchInterfaceException {

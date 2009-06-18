@@ -52,8 +52,10 @@ public class Main {
         Factory factory = FactoryFactory.getFactory();
 
         Map<String, Object> context = new HashMap<String, Object>();
-        Component composite = (Component) factory.newComponent(
-                "org.objectweb.proactive.examples.userguide.components.adl.interfaces.adl.Composite", context);
+        Component composite = (Component) factory
+                .newComponent(
+                        "org.objectweb.proactive.examples.userguide.components.adl.interfaces.adl.Composite",
+                        context);
 
         Fractal.getLifeCycleController(composite).startFc();
 

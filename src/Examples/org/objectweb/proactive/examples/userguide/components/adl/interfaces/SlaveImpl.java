@@ -43,13 +43,13 @@ import org.objectweb.proactive.api.PAActiveObject;
  * @author The ProActive Team
  */
 public class SlaveImpl implements Itf1
-    //TODO: Add the new interface org.objectweb.proactive.examples.userguide.components.adl.interfaces.Itf2
-    //@tutorial-break
-    //@snippet-break adl_interfaces_SlaveImpl_skeleton
-    , Itf2
-    //@tutorial-resume
-    //@snippet-resume adl_interfaces_SlaveImpl_skeleton
-    {
+//TODO: Add the new interface org.objectweb.proactive.examples.userguide.components.adl.interfaces.Itf2
+        //@tutorial-break
+        //@snippet-break adl_interfaces_SlaveImpl_skeleton
+        , Itf2
+//@tutorial-resume
+//@snippet-resume adl_interfaces_SlaveImpl_skeleton
+{
 
     public void compute(List<String> arg) {
         String str = "\n" + PAActiveObject.getBodyOnThis().getNodeURL() + "Slave: " + this + "\n";

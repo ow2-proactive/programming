@@ -91,8 +91,10 @@ public class Main {
         //@snippet-resume adl_deployment_Main_skeleton
         //@tutorial-resume
 
-        Component composite = (Component) factory.newComponent(
-                "org.objectweb.proactive.examples.userguide.components.adl.deployment.adl.Composite", context);
+        Component composite = (Component) factory
+                .newComponent(
+                        "org.objectweb.proactive.examples.userguide.components.adl.deployment.adl.Composite",
+                        context);
 
         Fractal.getLifeCycleController(composite).startFc();
 
