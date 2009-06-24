@@ -27,7 +27,7 @@
         <prop key="proactive.tunneling.try_normal_first" value="true" />
         <prop key="proactive.tunneling.use_gc" value="true" />
         <prop key="proactive.tunneling.gc_period" value="10000" />
-        <prop key="proactive.classloader" value="false" />
+		<prop key="proactive.classloading.useHTTP" value="true"/>            
 		<!-- <prop key="proactive.ssh.known_hosts" value="/user/mlacage/home/.ssh/known_hosts"/> -->
 		<!-- <prop key="proactive.ssh.key_directory" value="/user/mlacage/home/.ssh/"/> -->
 		<!-- <prop key="proactive.ssh.port" value="22"/> -->
@@ -59,7 +59,7 @@
         <prop key="proactive.log4j.appender.provider" value="org.objectweb.proactive.core.util.log.remote.ThrottlingProvider" />
     </properties>
     <javaProperties>
-        <prop key="java.rmi.server.RMIClassLoaderSpi" value="org.objectweb.proactive.core.classloading.protocols.ProActiveRMIClassLoader"/>
+      <!-- <prop key="java.rmi.server.RMIClassLoaderSpi" value="org.objectweb.proactive.core.classloading.protocols.ProActiveRMIClassLoader"/> -->
         <prop key="java.protocol.handler.pkgs" value="org.objectweb.proactive.core.ssh|org.objectweb.proactive.core.classloading.protocols" />
         <prop key="ibis.name_server.host" value="localhost" />
         <prop key="ibis.name_server.key" value="1" />
