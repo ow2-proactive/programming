@@ -122,7 +122,8 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             if (names != null) {
                 URI[] uris = new URI[names.length];
                 for (int i = 0; i < names.length; i++) {
-                    uris[i] = URIBuilder.setProtocol(URI.create(names[i]), protocolIdentifier);
+                    uris[i] = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(url), names[i],
+                            protocolIdentifier, URIBuilder.getPortNumber(url));
                 }
                 return uris;
             }
