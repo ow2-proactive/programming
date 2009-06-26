@@ -32,10 +32,7 @@
 		<!-- <prop key="proactive.ssh.key_directory" value="/user/mlacage/home/.ssh/"/> -->
 		<!-- <prop key="proactive.ssh.port" value="22"/> -->
 		<!-- <prop key="proactive.ssh.username" value="mlacage"/> -->
-        <prop key="components.creation.timeout" value="10000" /> <!-- timeout in seconds for parallel creation of components -->
-
-		<prop key="proactive.classloading.useHTTP" value="false"/>
-		
+        <prop key="components.creation.timeout" value="10000" /> <!-- timeout in seconds for parallel creation of components -->		
 		<!-- ***************************************************** -->
 		<!-- MASTER/WORKER PROPERTIES VALUE -->
 		<!-- Period of the slave pinging (in ms) -->
