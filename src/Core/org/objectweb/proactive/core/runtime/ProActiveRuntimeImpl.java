@@ -81,6 +81,7 @@ import org.objectweb.proactive.core.event.RuntimeRegistrationEvent;
 import org.objectweb.proactive.core.event.RuntimeRegistrationEventProducerImpl;
 import org.objectweb.proactive.core.filetransfer.FileTransferEngine;
 import org.objectweb.proactive.core.gc.GarbageCollector;
+import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.jmx.mbean.JMXClassLoader;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapper;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
@@ -264,10 +265,17 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             ProActiveRuntimeRemoteObjectAdapter.class);
         this.roe.createRemoteObject(vmInformation.getName());
 
-        // Publish the URL of this runtime in the ProActive codebase
-        // URL must be prefixed by pa tu use our custom protocol handlers
-        // URL must be terminated by a / according to the RMI specification
-        PAProperties.PA_CODEBASE.setValue("pa" + this.getURL() + "/");
+        if (PAProperties.PA_CLASSLOADING_USEHTTP.isTrue()) {
+            // Set the codebase in case of useHTTP is true and the ProActiveRMIClassLoader is in use
+            String codebase = ClassServerServlet.get().getCodeBase();
+            PAProperties.PA_CODEBASE.setValue(codebase);
+        } else {
+            // Publish the URL of this runtime in the ProActive codebase
+            // URL must be prefixed by pa tu use our custom protocol handlers
+            // URL must be terminated by a / according to the RMI specification
+            PAProperties.PA_CODEBASE.setValue("pa" + this.getURL() + "/");
+        }
+
         // logging info
         MDC.remove("runtime");
         MDC.put("runtime", getURL());
