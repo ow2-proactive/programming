@@ -172,7 +172,7 @@
           space-before.optimum="1em"
           space-before.maximum="1.2em">
     <xsl:apply-templates/>
-
+    
     <xsl:if test="$style='kr'">
       <fo:block
           space-before.minimum="0.8em"
@@ -229,7 +229,7 @@
   <xsl:variable name="style">
     <xsl:call-template name="funcsynopsis.style"/>
   </xsl:variable>
-
+  
   <xsl:variable name="paramnum">
     <xsl:number count="paramdef" format="1"/>
   </xsl:variable>

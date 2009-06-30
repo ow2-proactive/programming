@@ -37,7 +37,7 @@
   <!-- If the object is a set or book, generate a bookmark for the toc -->
 
   <xsl:choose>
-    <xsl:when test="self::index and $generate.index = 0"/>
+    <xsl:when test="self::index and $generate.index = 0"/>	
     <xsl:when test="parent::*">
       <fo:bookmark internal-destination="{$id}">
         <fo:bookmark-title>
@@ -111,7 +111,7 @@
 	      <xsl:choose>
 		<xsl:when test="$authors[self::authorgroup]">
                   <xsl:call-template name="person.name.list">
-                    <xsl:with-param name="person.list"
+                    <xsl:with-param name="person.list" 
                        select="$authors/*[self::author|self::corpauthor|
                                      self::othercredit|self::editor]"/>
                   </xsl:call-template>

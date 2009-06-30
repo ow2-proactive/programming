@@ -29,7 +29,7 @@
 
 <xsl:template match="caption" mode="htmlTable">
   <!-- do not use xsl:copy because of XHTML's needs -->
-  <caption>
+  <caption>  
     <xsl:copy-of select="@*"/>
 
     <xsl:apply-templates select=".." mode="object.title.markup">

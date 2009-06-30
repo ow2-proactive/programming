@@ -283,7 +283,7 @@ set       toc,title
 <xsl:param name="make.valid.html" select="0"/>
 <xsl:param name="make.year.ranges" select="0"/>
     <xsl:param name="manifest">HTML.manifest</xsl:param>
-
+    
 <xsl:param name="manifest.in.base.dir" select="0"/>
 <xsl:param name="manual.toc"/>
 <xsl:param name="menuchoice.menu.separator"> &#8594; </xsl:param>
@@ -304,7 +304,7 @@ set       toc,title
 <xsl:param name="insert.olink.pdf.frag" select="0"/>
 <xsl:param name="prefer.internal.olink" select="0"/>
 <xsl:param name="olink.lang.fallback.sequence"/>
-<xsl:param name="olink.doctitle">no</xsl:param>
+<xsl:param name="olink.doctitle">no</xsl:param> 
 <xsl:param name="olink.fragid">fragid=</xsl:param>
 <xsl:param name="olink.outline.ext">.olink</xsl:param>
 <xsl:param name="olink.pubid">pubid</xsl:param>
@@ -397,7 +397,7 @@ set       toc,title
 <xsl:param name="use.embed.for.svg" select="0"/>
 <xsl:param name="use.extensions" select="0"/>
 <xsl:param name="use.id.as.filename" select="0"/>
-<xsl:param name="use.local.olink.style" select="0"/>
+<xsl:param name="use.local.olink.style" select="0"/> 
 <xsl:param name="use.role.as.xrefstyle" select="1"/>
 <xsl:param name="use.role.for.mediaobject" select="1"/>
 <xsl:param name="use.svg" select="1"/>

@@ -39,7 +39,7 @@
       <xsl:otherwise>2.5em</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-
+  
   <xsl:variable name="toc">
     <xsl:call-template name="pi.dbfo_toc"/>
   </xsl:variable>
@@ -64,8 +64,8 @@
           <xsl:call-template name="qandaset.titlepage"/>
         </xsl:otherwise>
       </xsl:choose>
-
-      <xsl:if test="(contains($toc.params, 'toc') and $toc != '0')
+  
+      <xsl:if test="(contains($toc.params, 'toc') and $toc != '0') 
                     or $toc = '1'">
         <xsl:call-template name="qandaset.toc">
           <xsl:with-param name="toc.title.p"
@@ -80,7 +80,7 @@
                                    and local-name(.) != 'qandadiv'
                                    and local-name(.) != 'qandaentry']"/>
       <xsl:apply-templates select="qandadiv"/>
-
+  
       <xsl:if test="qandaentry">
         <fo:list-block xsl:use-attribute-sets="list.block.spacing"
                        provisional-label-separation="0.2em">
@@ -110,7 +110,7 @@
       </xsl:apply-templates>
     </xsl:otherwise>
   </xsl:choose>
-
+  
 </xsl:template>
 
 <xsl:template match="qandaset/blockinfo/title|qandset/info/title|qandaset/title">
@@ -263,7 +263,7 @@
     <fo:list-item-label id="{$id}" end-indent="label-end()">
         <xsl:if test="string-length($label.content) &gt; 0">
 			<fo:block font-weight="bold">
-			  <xsl:copy-of select="$label.content"/>
+			  <xsl:copy-of select="$label.content"/>          
 			</fo:block>
         </xsl:if>
     </fo:list-item-label>

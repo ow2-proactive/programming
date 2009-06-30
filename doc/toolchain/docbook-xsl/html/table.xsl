@@ -710,7 +710,7 @@
                           or ancestor-or-self::tbody/preceding-sibling::tfoot)">
         <xsl:value-of select="0"/>
       </xsl:when>
-      <xsl:when test="@morerows and not(@morerows &lt;
+      <xsl:when test="@morerows and not(@morerows &lt; 
                  count(ancestor-or-self::row[1]/following-sibling::row))">
         <xsl:value-of select="0"/>
       </xsl:when>
@@ -863,7 +863,7 @@
           </xsl:attribute>
         </xsl:if>
 
-        <xsl:if test="not(preceding-sibling::*) and
+        <xsl:if test="not(preceding-sibling::*) and 
                     (ancestor::row[1]/@id or ancestor::row[1]/@xml:id)">
           <xsl:call-template name="anchor">
             <xsl:with-param name="node" select="ancestor::row[1]"/>

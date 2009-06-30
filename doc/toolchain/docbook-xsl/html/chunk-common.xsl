@@ -160,7 +160,7 @@
        http://nagoya.apache.org/bugzilla/show_bug.cgi?id=6063 -->
 
   <xsl:variable name="prev-v1"
-     select="(ancestor::sect1[$chunk.section.depth &gt; 0
+     select="(ancestor::sect1[$chunk.section.depth &gt; 0 
 	                           and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])
                                and preceding-sibling::sect1][1]
 
@@ -226,7 +226,7 @@
                                and ancestor::sect1[preceding-sibling::sect1]][1]
 
              |preceding::section[$chunk.section.depth &gt; count(ancestor::section)
-	                             and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])
+  	                             and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])
                                  and preceding-sibling::section
                                  and not(ancestor::section[not(preceding-sibling::section)])][1])[last()]"/>
 
@@ -288,8 +288,8 @@
                                and ancestor::sect1[preceding-sibling::sect1]][1]
 
              |following::section[$chunk.section.depth &gt; count(ancestor::section)
-	                             and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])
-                                 and preceding-sibling::section
+  	                             and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])
+                                 and preceding-sibling::section 
                                  and not(ancestor::section[not(preceding-sibling::section)])][1])[1]"/>
 
   <xsl:variable name="next-v2"
@@ -324,7 +324,7 @@
                                and ancestor::sect1[preceding-sibling::sect1]][1]
 
              |descendant::section[$chunk.section.depth &gt; count(ancestor::section)
-	                             and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])
+   	                             and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])
                                  and preceding-sibling::section
                                  and not(ancestor::section[not(preceding-sibling::section)])])[1]"/>
 
@@ -428,7 +428,7 @@
              |descendant::sect3[$chunk.section.depth &gt; 2 and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])][1]
              |descendant::sect4[$chunk.section.depth &gt; 3 and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])][1]
              |descendant::sect5[$chunk.section.depth &gt; 4 and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])][1]
-             |descendant::section[$chunk.section.depth
+             |descendant::section[$chunk.section.depth 
                                   &gt; count(ancestor::section) and not(ancestor::*/processing-instruction('dbhtml')[normalize-space(.) ='stop-chunking'])][1])[1]"/>
 
   <xsl:variable name="next"
@@ -1194,7 +1194,7 @@
         <xsl:value-of select="key('targetptr-key', $olink.key)/@href" />
       </xsl:for-each>
     </xsl:variable>
-
+  
     <!-- an olink starting point may be in a subdirectory, so need
          the "from" reference point to compute a relative path -->
 
@@ -1217,7 +1217,7 @@
     <xsl:variable name="targetdoc">
       <xsl:value-of select="substring-before($olink.key, '/')"/>
     </xsl:variable>
-
+  
     <!-- Does the target database use a sitemap? -->
     <xsl:variable name="use.sitemap">
       <xsl:choose>
@@ -1225,8 +1225,8 @@
         <xsl:otherwise>0</xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
-
+  
+  
     <!-- Get the baseuri for this targetptr -->
     <xsl:variable name="baseuri" >
       <xsl:choose>
@@ -1246,7 +1246,7 @@
                 <xsl:when test="$currentdoc.key != ''">
                   <xsl:for-each select="$target.database" >
                     <xsl:call-template name="targetpath" >
-                      <xsl:with-param name="dirnode"
+                      <xsl:with-param name="dirnode" 
                           select="key('targetdoc-key', $current.docid)/parent::dir"/>
                       <xsl:with-param name="targetdoc" select="$targetdoc"/>
                     </xsl:call-template>
@@ -1268,7 +1268,7 @@
                 <xsl:text>sitemap path without $current.docid parameter</xsl:text>
               </xsl:message>
             </xsl:otherwise>
-          </xsl:choose>
+          </xsl:choose> 
           <!-- In either case, add baseuri from its document entry-->
           <xsl:variable name="docbaseuri">
             <xsl:for-each select="$target.database" >
@@ -1293,7 +1293,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-
+  
     <!-- Form the href information -->
     <xsl:if test="not(contains($baseuri, ':'))">
       <!-- if not an absolute uri, add upward path from olink chunk -->
@@ -1319,7 +1319,7 @@
 <!-- Computes "../" to reach top -->
 <xsl:template name="upward.path">
   <xsl:param name="path" select="''"/>
-  <xsl:choose>
+  <xsl:choose> 
     <!-- Don't bother with absolute uris -->
     <xsl:when test="contains($path, ':')"/>
     <xsl:when test="starts-with($path, '/')"/>
@@ -1488,7 +1488,7 @@
 
   <xsl:variable name="row1" select="$navig.showtitles != 0"/>
   <xsl:variable name="row2" select="count($prev) &gt; 0
-                                    or (count($up) &gt; 0
+                                    or (count($up) &gt; 0 
                                         and generate-id($up) != generate-id($home)
                                         and $navig.showtitles != 0)
                                     or count($next) &gt; 0"/>
@@ -1753,14 +1753,14 @@
 <!-- * types specified in the $html.head.legalnotice.link.types param, -->
 <!-- * popping off link types and generating links for them until it -->
 <!-- * depletes the list. -->
-
+  
 <xsl:template name="make.legalnotice.head.links">
   <!-- * the following ID is used as part of the legalnotice filename; -->
   <!-- * we need it in order to construct the filename for use in the -->
   <!-- * value of the href attribute on the link -->
 
   <xsl:param name="ln-node" select="(//legalnotice)[1]"/>
-
+  
   <xsl:param name="linktype">
     <xsl:choose>
       <xsl:when test="contains($html.head.legalnotice.link.types, ' ')">
@@ -1786,7 +1786,7 @@
 	<xsl:with-param name="node" select="$ln-node"/>
       </xsl:call-template>
     </xsl:variable>
-
+   
     <link rel="{$linktype}">
       <xsl:attribute name="href">
         <xsl:value-of select="$file"/>

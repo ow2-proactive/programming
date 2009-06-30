@@ -671,7 +671,7 @@ title of the element. This does not include the label.
   <xsl:variable name="targets" select="key('id',@linkend)"/>
   <xsl:variable name="target" select="$targets[1]"/>
   <xsl:variable name="refelem" select="local-name($target)"/>
-
+  
   <xsl:call-template name="check.id.unique">
     <xsl:with-param name="linkend" select="@linkend"/>
   </xsl:call-template>
@@ -710,16 +710,16 @@ title of the element. This does not include the label.
     </xsl:when>
 
     <xsl:otherwise>
-
+   
       <xsl:choose>
-	<!-- Watch out for the case when there is a xref or link inside
+	<!-- Watch out for the case when there is a xref or link inside 
 	     a title. See bugs #1811721 and #1838136. -->
 	<xsl:when test="not(ancestor::*[@id = $target/@id] or ancestor::*[@xml:id = $target/@xml:id])">
 
 	  <xsl:apply-templates select="$target" mode="xref-to-prefix"/>
-
+	  
 	  <xsl:apply-templates select="$target" mode="xref-to">
-
+	    
 	    <xsl:with-param name="referrer" select="."/>
 	    <xsl:with-param name="xrefstyle">
 	      <xsl:choose>
@@ -732,14 +732,14 @@ title of the element. This does not include the label.
 	      </xsl:choose>
 	    </xsl:with-param>
 	  </xsl:apply-templates>
-
+	  
 	  <xsl:apply-templates select="$target" mode="xref-to-suffix"/>
 	</xsl:when>
-
+	
 	<xsl:otherwise>
 	  <xsl:apply-templates/>
 	</xsl:otherwise>
-
+      
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>

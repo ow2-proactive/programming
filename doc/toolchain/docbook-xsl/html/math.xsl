@@ -57,7 +57,7 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:message>
-            Unsupported TeX math notation:
+            Unsupported TeX math notation: 
             <xsl:value-of select="$tex.math.in.alt"/>
           </xsl:message>
         </xsl:otherwise>
@@ -182,11 +182,11 @@
     <xsl:text>\special{dvi2bitmap outputfile </xsl:text>
     <xsl:value-of select="$filename"/>
     <xsl:text>} &#xA;</xsl:text>
-    <xsl:if test="$output.delims != 0">
+    <xsl:if test="$output.delims != 0">  
       <xsl:text>$</xsl:text>
     </xsl:if>
     <xsl:value-of select="$tex"/>
-    <xsl:if test="$output.delims != 0">
+    <xsl:if test="$output.delims != 0">  
       <xsl:text>$ &#xA;</xsl:text>
     </xsl:if>
     <xsl:text>\newpage &#xA;</xsl:text>

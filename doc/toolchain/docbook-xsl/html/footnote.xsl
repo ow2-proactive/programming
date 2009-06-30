@@ -53,8 +53,8 @@
 
   <xsl:if test="not(local-name($footnote) = 'footnote')">
    <xsl:message terminate="yes">
-ERROR: A footnoteref element has a linkend that points to an element that is not a footnote.
-Typically this happens when an id attribute is accidentally applied to the child of a footnote element.
+ERROR: A footnoteref element has a linkend that points to an element that is not a footnote. 
+Typically this happens when an id attribute is accidentally applied to the child of a footnote element. 
 target element: <xsl:value-of select="local-name($footnote)"/>
 linkend/id: <xsl:value-of select="@linkend"/>
    </xsl:message>

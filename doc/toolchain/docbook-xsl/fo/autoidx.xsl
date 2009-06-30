@@ -54,14 +54,14 @@
 
 <xsl:key name="see-also"
          match="indexterm[seealso]"
-         use="concat(&primary;, &sep;,
-                     &secondary;, &sep;,
+         use="concat(&primary;, &sep;, 
+                     &secondary;, &sep;, 
                      &tertiary;, &sep;, seealso)"/>
 
 <xsl:key name="see"
          match="indexterm[see]"
-         use="concat(&primary;, &sep;,
-                     &secondary;, &sep;,
+         use="concat(&primary;, &sep;, 
+                     &secondary;, &sep;, 
                      &tertiary;, &sep;, see)"/>
 
 
@@ -87,7 +87,7 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-
+      
 <xsl:template name="generate-basic-index">
   <xsl:param name="scope" select="NOTANODE"/>
 
@@ -137,7 +137,7 @@
           <xsl:with-param name="scope" select="$scope"/>
           <xsl:with-param name="role" select="$role"/>
           <xsl:with-param name="type" select="$type"/>
-          <xsl:sort select="translate(&primary;, &lowercase;,
+          <xsl:sort select="translate(&primary;, &lowercase;, 
                             &uppercase;)"/>
         </xsl:apply-templates>
       </fo:block>
@@ -312,12 +312,12 @@
               <rx:index-item xsl:use-attribute-sets="xep.index.item.properties"
                 ref-key="{$primary}"/>
             </xsl:if>
-          </rx:page-index>
+          </rx:page-index>        
         </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="page-number-citations">
-          <xsl:for-each select="$refs[not(see)
+          <xsl:for-each select="$refs[not(see) 
                                 and not(secondary)]">
             <xsl:apply-templates select="." mode="reference">
               <xsl:with-param name="scope" select="$scope"/>
@@ -437,7 +437,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="page-number-citations">
-          <xsl:for-each select="$refs[not(see)
+          <xsl:for-each select="$refs[not(see) 
                                 and not(tertiary)]">
             <xsl:apply-templates select="." mode="reference">
               <xsl:with-param name="scope" select="$scope"/>
@@ -482,7 +482,7 @@
           <xsl:with-param name="type" select="$type"/>
           <xsl:sort select="translate(seealso, &lowercase;, &uppercase;)"/>
       </xsl:apply-templates>
-      <xsl:apply-templates select="$refs[tertiary and count(.|key('tertiary', concat($key, &sep;, &tertiary;))[&scope;][1]) = 1]"
+      <xsl:apply-templates select="$refs[tertiary and count(.|key('tertiary', concat($key, &sep;, &tertiary;))[&scope;][1]) = 1]" 
                            mode="index-tertiary">
           <xsl:with-param name="scope" select="$scope"/>
           <xsl:with-param name="role" select="$role"/>
@@ -754,13 +754,13 @@
                                        ancestor::refsect3|ancestor::refsection|ancestor::refsynopsisdiv|
                                        ancestor::sect1|ancestor::sect2|ancestor::sect3|ancestor::sect4|ancestor::sect5|
                                        ancestor::section|ancestor::setindex|ancestor::set|ancestor::sidebar|ancestor::mediaobject)[&scope;]"/>
-
+  
   <xsl:variable name="id">
     <xsl:call-template name="object.id">
       <xsl:with-param name="object" select="$target[position() = last()]"/>
     </xsl:call-template>
   </xsl:variable>
-
+  
   <fo:basic-link internal-destination="{$id}"
                  xsl:use-attribute-sets="index.page.number.properties">
     <fo:page-number-citation ref-id="{$id}"/>
@@ -944,7 +944,7 @@
       <xsl:sort select="translate(seealso, &lowercase;, &uppercase;)"/>
     </xsl:apply-templates>
 
-    <xsl:apply-templates select="$refs[secondary and count(.|key('secondary', concat($key, &sep;, &secondary;))[&scope;][1]) = 1]"
+    <xsl:apply-templates select="$refs[secondary and count(.|key('secondary', concat($key, &sep;, &secondary;))[&scope;][1]) = 1]" 
                          mode="index-secondary-markup">
       <xsl:with-param name="scope" select="$scope"/>
       <xsl:with-param name="role" select="$role"/>
@@ -997,7 +997,7 @@
       <xsl:with-param name="type" select="$type"/>
       <xsl:sort select="translate(seealso, &lowercase;, &uppercase;)"/>
     </xsl:apply-templates>
-    <xsl:apply-templates select="$refs[tertiary and count(.|key('tertiary', concat($key, &sep;, &tertiary;))[&scope;][1]) = 1]"
+    <xsl:apply-templates select="$refs[tertiary and count(.|key('tertiary', concat($key, &sep;, &tertiary;))[&scope;][1]) = 1]" 
                          mode="index-tertiary-markup">
       <xsl:with-param name="scope" select="$scope"/>
       <xsl:with-param name="role" select="$role"/>

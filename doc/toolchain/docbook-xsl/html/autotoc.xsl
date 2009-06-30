@@ -291,7 +291,7 @@
       <xsl:with-param name="toc-context" select="$toc-context"/>
     </xsl:call-template>
     <xsl:if test="$toc.listitem.type = 'li'
-                  and $toc.section.depth > $depth and
+                  and $toc.section.depth > $depth and 
                   ( ($qanda.in.toc = 0 and count($nodes)&gt;0) or
                     ($qanda.in.toc != 0 and count($nodes.plus)&gt;0) )
                   and $toc.max.depth > $depth.from.context">
@@ -299,7 +299,7 @@
     </xsl:if>
   </xsl:element>
   <xsl:if test="$toc.listitem.type != 'li'
-                and $toc.section.depth > $depth and
+                and $toc.section.depth > $depth and 
                 ( ($qanda.in.toc = 0 and count($nodes)&gt;0) or
                   ($qanda.in.toc != 0 and count($nodes.plus)&gt;0) )
                 and $toc.max.depth > $depth.from.context">
@@ -334,7 +334,7 @@
         <xsl:with-param name="toc-context" select="$toc-context"/>
       </xsl:call-template>
     </xsl:attribute>
-
+    
   <!-- * if $autotoc.label.in.hyperlink is non-zero, then output the label -->
   <!-- * as part of the hyperlinked title -->
   <xsl:if test="not($autotoc.label.in.hyperlink = 0)">

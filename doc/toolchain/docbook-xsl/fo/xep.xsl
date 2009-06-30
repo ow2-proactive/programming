@@ -18,14 +18,14 @@
 
 <xsl:template name="xep-document-information">
   <rx:meta-info>
-    <xsl:variable name="authors"
+    <xsl:variable name="authors" 
                   select="(//author|//editor|//corpauthor|//authorgroup)[1]"/>
     <xsl:if test="$authors">
       <xsl:variable name="author">
         <xsl:choose>
           <xsl:when test="$authors[self::authorgroup]">
             <xsl:call-template name="person.name.list">
-              <xsl:with-param name="person.list"
+              <xsl:with-param name="person.list" 
                         select="$authors/*[self::author|self::corpauthor|
                                self::othercredit|self::editor]"/>
             </xsl:call-template>
@@ -124,7 +124,7 @@
   <!-- Put the root element bookmark at the same level as its children -->
   <!-- If the object is a set or book, generate a bookmark for the toc -->
   <xsl:choose>
-    <xsl:when test="self::index and $generate.index = 0"/>
+    <xsl:when test="self::index and $generate.index = 0"/>	
     <xsl:when test="parent::*">
       <rx:bookmark internal-destination="{$id}">
         <rx:bookmark-label>

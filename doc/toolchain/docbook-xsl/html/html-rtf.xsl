@@ -175,7 +175,7 @@
         <xsl:variable name="leading" select="set:leading($nodes,$block)"/>
         <xsl:variable name="trailing" select="set:trailing($nodes,$block)"/>
 
-        <xsl:if test="(($wrap/@id or $wrap/@xml:id)
+        <xsl:if test="(($wrap/@id or $wrap/@xml:id) 
                         and $first = 1) or $leading">
           <xsl:element name="{local-name($wrap)}" namespace="{namespace-uri($wrap)}">
             <xsl:for-each select="$wrap/@*">
@@ -257,7 +257,7 @@
             <xsl:with-param name="text"
                             select="substring($text, ($half + 1), $len)"/>
           </xsl:call-template>
-	</xsl:otherwise>
+    	</xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>
@@ -280,15 +280,15 @@
         </xsl:when>
 
         <xsl:otherwise>
-	  <xsl:variable name="half" select="$len div 2"/>
+    	  <xsl:variable name="half" select="$len div 2"/>
           <xsl:call-template name="make-verbatim-recursive">
-	    <xsl:with-param name="text" select="substring($text, 1, $half)"/>
-	  </xsl:call-template>
-	  <xsl:call-template name="make-verbatim-recursive">
-	    <xsl:with-param name="text"
-			    select="substring($text, ($half + 1), $len)"/>
-	  </xsl:call-template>
-	</xsl:otherwise>
+    	    <xsl:with-param name="text" select="substring($text, 1, $half)"/>
+    	  </xsl:call-template>
+    	  <xsl:call-template name="make-verbatim-recursive">
+    	    <xsl:with-param name="text"
+    			    select="substring($text, ($half + 1), $len)"/>
+    	  </xsl:call-template>
+    	</xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
   </xsl:choose>

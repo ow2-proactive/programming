@@ -162,7 +162,7 @@
         <xsl:with-param name="master-reference" select="$master-reference"/>
       </xsl:call-template>
     </xsl:attribute>
-
+    
     <xsl:attribute name="initial-page-number">
       <xsl:call-template name="initial.page.number">
         <xsl:with-param name="master-reference" select="$master-reference"/>
@@ -428,7 +428,7 @@
 				<xsl:sort lang="{$language}" select="normalize-space(translate(concat(@sortas, glossterm[not(parent::glossentry/@sortas) or parent::glossentry/@sortas = '']), &lowercase;, &uppercase;))"/>
                   <xsl:variable name="cterm" select="glossterm"/>
                   <xsl:if test="$terms[@baseform = $cterm or . = $cterm]">
-                    <xsl:apply-templates select="."
+                    <xsl:apply-templates select="." 
                                          mode="auto-glossary-as-list"/>
                   </xsl:if>
                 </xsl:for-each>
@@ -437,7 +437,7 @@
                 <xsl:for-each select="$collection//glossentry">
                   <xsl:variable name="cterm" select="glossterm"/>
                   <xsl:if test="$terms[@baseform = $cterm or . = $cterm]">
-                    <xsl:apply-templates select="."
+                    <xsl:apply-templates select="." 
                                          mode="auto-glossary-as-list"/>
                   </xsl:if>
                 </xsl:for-each>
@@ -453,7 +453,7 @@
 					<xsl:sort lang="{$language}" select="normalize-space(translate(concat(@sortas, glossterm[not(parent::glossentry/@sortas) or parent::glossentry/@sortas = '']), &lowercase;, &uppercase;))"/>
                 <xsl:variable name="cterm" select="glossterm"/>
                 <xsl:if test="$terms[@baseform = $cterm or . = $cterm]">
-                  <xsl:apply-templates select="."
+                  <xsl:apply-templates select="." 
                                        mode="auto-glossary-as-blocks"/>
                 </xsl:if>
               </xsl:for-each>
@@ -462,7 +462,7 @@
               <xsl:for-each select="$collection//glossentry">
                 <xsl:variable name="cterm" select="glossterm"/>
                 <xsl:if test="$terms[@baseform = $cterm or . = $cterm]">
-                  <xsl:apply-templates select="."
+                  <xsl:apply-templates select="." 
                                        mode="auto-glossary-as-blocks"/>
                 </xsl:if>
               </xsl:for-each>
@@ -480,7 +480,7 @@
 				<xsl:sort lang="{$language}" select="normalize-space(translate(concat(@sortas, glossterm[not(parent::glossentry/@sortas) or parent::glossentry/@sortas = '']), &lowercase;, &uppercase;))"/>
                   <xsl:variable name="cterm" select="glossterm"/>
                   <xsl:if test="$terms[@baseform = $cterm or . = $cterm]">
-                    <xsl:apply-templates select="."
+                    <xsl:apply-templates select="." 
                                          mode="auto-glossary-as-list"/>
                   </xsl:if>
                 </xsl:for-each>
@@ -489,7 +489,7 @@
                 <xsl:for-each select="$collection//glossentry">
                   <xsl:variable name="cterm" select="glossterm"/>
                   <xsl:if test="$terms[@baseform = $cterm or . = $cterm]">
-                    <xsl:apply-templates select="."
+                    <xsl:apply-templates select="." 
                                          mode="auto-glossary-as-list"/>
                   </xsl:if>
                 </xsl:for-each>
@@ -724,15 +724,15 @@ GlossEntry ::=
           <xsl:when test="$glossentry.show.acronym = 'primary'">
             <xsl:choose>
               <xsl:when test="acronym|abbrev">
-                <xsl:apply-templates select="acronym|abbrev"
+                <xsl:apply-templates select="acronym|abbrev" 
                                      mode="glossary.as.list"/>
                 <xsl:text> (</xsl:text>
-                <xsl:apply-templates select="glossterm"
+                <xsl:apply-templates select="glossterm" 
                                      mode="glossary.as.list"/>
                 <xsl:text>)</xsl:text>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:apply-templates select="glossterm"
+                <xsl:apply-templates select="glossterm" 
                                      mode="glossary.as.list"/>
               </xsl:otherwise>
             </xsl:choose>
@@ -743,7 +743,7 @@ GlossEntry ::=
 
             <xsl:if test="acronym|abbrev">
               <xsl:text> (</xsl:text>
-              <xsl:apply-templates select="acronym|abbrev"
+              <xsl:apply-templates select="acronym|abbrev" 
                                    mode="glossary.as.list"/>
               <xsl:text>)</xsl:text>
             </xsl:if>
@@ -930,7 +930,7 @@ GlossEntry ::=
   </xsl:variable>
 
   <fo:block xsl:use-attribute-sets="list.item.spacing"
-           keep-with-next.within-column="always"
+           keep-with-next.within-column="always" 
            keep-together.within-column="always">
     <xsl:call-template name="anchor">
       <xsl:with-param name="conditional">

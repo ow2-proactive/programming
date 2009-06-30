@@ -62,8 +62,8 @@
 
   <xsl:if test="not(local-name($footnote) = 'footnote')">
    <xsl:message terminate="yes">
-ERROR: A footnoteref element has a linkend that points to an element that is not a footnote.
-Typically this happens when an id attribute is accidentally applied to the child of a footnote element.
+ERROR: A footnoteref element has a linkend that points to an element that is not a footnote. 
+Typically this happens when an id attribute is accidentally applied to the child of a footnote element. 
 target element: <xsl:value-of select="local-name($footnote)"/>
 linkend/id: <xsl:value-of select="@linkend"/>
    </xsl:message>
@@ -116,8 +116,8 @@ linkend/id: <xsl:value-of select="@linkend"/>
         <!-- * ulink.footnotes is non-zero and the value of ulink.show is -->
         <!-- * non-zero -->
         <!-- FIXME: list in @from is probably not complete -->
-        <xsl:number level="any"
-                    from="chapter|appendix|preface|article|refentry|bibliography"
+        <xsl:number level="any" 
+                    from="chapter|appendix|preface|article|refentry|bibliography" 
                     count="footnote[not(@label)][not(ancestor::table) and not(ancestor::informaltable)]
                     |ulink[$ulink.footnotes != 0][node()][@url != .][not(ancestor::footnote)][$ulink.show != 0]
                     |*[node()][@xlink:href][not(@xlink:href = .)][not(starts-with(@xlink:href,'#'))]

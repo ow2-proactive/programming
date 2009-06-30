@@ -119,7 +119,7 @@
         <xsl:when test="$glossary.sort != 0">
           <xsl:apply-templates select="glossentry">
             <xsl:sort lang="{$language}"
-                      select="translate(glossterm, $lowercase,
+                      select="translate(glossterm, $lowercase, 
                                         $uppercase)"/>
           </xsl:apply-templates>
         </xsl:when>
@@ -348,7 +348,7 @@ GlossEntry ::=
 
 <xsl:template match="glossary[@role='auto']" priority="2">
   &setup-language-variable;
-  <xsl:variable name="terms"
+  <xsl:variable name="terms" 
                 select="//glossterm[not(parent::glossdef)]|//firstterm"/>
   <xsl:variable name="collection" select="document($glossary.collection, .)"/>
 

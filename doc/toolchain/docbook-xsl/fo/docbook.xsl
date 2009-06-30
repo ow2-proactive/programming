@@ -106,12 +106,12 @@
     </xsl:if>
     <xsl:text>, but no template matches.</xsl:text>
   </xsl:message>
-
+  
   <fo:block color="red">
     <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="name(.)"/>
     <xsl:text>&gt;</xsl:text>
-    <xsl:apply-templates/>
+    <xsl:apply-templates/> 
     <xsl:text>&lt;/</xsl:text>
     <xsl:value-of select="name(.)"/>
     <xsl:text>&gt;</xsl:text>
@@ -247,10 +247,10 @@
       <xsl:otherwise>[could not find document title]</xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-
+  
   <!-- Include all id values in XEP output -->
   <xsl:if test="$xep.extensions != 0">
-    <xsl:processing-instruction
+    <xsl:processing-instruction 
      name="xep-pdf-drop-unused-destinations">false</xsl:processing-instruction>
   </xsl:if>
 
@@ -278,7 +278,7 @@
     <xsl:if test="$fop1.extensions != 0">
       <xsl:call-template name="fop1-document-information"/>
       <xsl:variable name="bookmarks">
-        <xsl:apply-templates select="$document.element"
+        <xsl:apply-templates select="$document.element" 
                              mode="fop1.outline"/>
       </xsl:variable>
       <xsl:if test="string($bookmarks) != ''">

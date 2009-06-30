@@ -218,7 +218,7 @@
     <xsl:choose>
       <xsl:when test="local-name(.) = 'graphic'
                       or local-name(.) = 'inlinegraphic'">
-        <!-- handle legacy graphic and inlinegraphic by new template -->
+        <!-- handle legacy graphic and inlinegraphic by new template --> 
         <xsl:call-template name="mediaobject.filename">
           <xsl:with-param name="object" select="."/>
         </xsl:call-template>
@@ -770,7 +770,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
             <xsl:otherwise>calspair</xsl:otherwise>
           </xsl:choose>
         </xsl:variable>
-
+ 
         <xsl:choose>
           <xsl:when test="$units = 'calspair' or
                           $units = 'imagemap'">
@@ -787,7 +787,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
-
+ 
               <xsl:variable name="href">
                 <xsl:choose>
                   <xsl:when test="@xlink:href">
@@ -798,7 +798,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
-
+ 
               <xsl:choose>
                 <xsl:when test="$linkends != ''">
                   <xsl:variable name="linkend">
@@ -811,9 +811,9 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
                       </xsl:otherwise>
                     </xsl:choose>
                   </xsl:variable>
-
+                  
                   <xsl:variable name="target" select="key('id', $linkend)[1]"/>
-
+                 
                   <xsl:if test="$target">
                     <xsl:attribute name="href">
                       <xsl:call-template name="href.target">
@@ -828,13 +828,13 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
                   </xsl:attribute>
                 </xsl:when>
               </xsl:choose>
-
+ 
               <xsl:if test="alt">
                 <xsl:attribute name="alt">
                   <xsl:value-of select="alt[1]"/>
                 </xsl:attribute>
               </xsl:if>
-
+ 
               <xsl:attribute name="coords">
                 <xsl:choose>
                   <xsl:when test="$units = 'calspair'">
@@ -843,17 +843,17 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
                                 select="substring-before($coords, ' ')"/>
                     <xsl:variable name="p2"
                                 select="substring-after($coords, ' ')"/>
-
+         
                     <xsl:variable name="x1" select="substring-before($p1,',')"/>
                     <xsl:variable name="y1" select="substring-after($p1,',')"/>
                     <xsl:variable name="x2" select="substring-before($p2,',')"/>
                     <xsl:variable name="y2" select="substring-after($p2,',')"/>
-
+         
                     <xsl:variable name="x1p" select="$x1 div 100.0"/>
                     <xsl:variable name="y1p" select="$y1 div 100.0"/>
                     <xsl:variable name="x2p" select="$x2 div 100.0"/>
                     <xsl:variable name="y2p" select="$y2 div 100.0"/>
-
+         
          <!--
                     <xsl:message>
                       <xsl:text>units: </xsl:text>
@@ -864,38 +864,38 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
                       <xsl:value-of select="$x2p"/><xsl:text>, </xsl:text>
                       <xsl:value-of select="$y2p"/><xsl:text>, </xsl:text>
                     </xsl:message>
-
+         
                     <xsl:message>
                       <xsl:text>      </xsl:text>
                       <xsl:value-of select="$intrinsicwidth"/>
                       <xsl:text>, </xsl:text>
                       <xsl:value-of select="$intrinsicdepth"/>
                     </xsl:message>
-
+         
                     <xsl:message>
                       <xsl:text>      </xsl:text>
                       <xsl:value-of select="$units"/>
                       <xsl:text> </xsl:text>
-                      <xsl:value-of
+                      <xsl:value-of 
                             select="round($x1p * $intrinsicwidth div 100.0)"/>
                       <xsl:text>,</xsl:text>
                       <xsl:value-of select="round($intrinsicdepth
                                        - ($y2p * $intrinsicdepth div 100.0))"/>
                       <xsl:text>,</xsl:text>
-                      <xsl:value-of select="round($x2p *
+                      <xsl:value-of select="round($x2p * 
                                             $intrinsicwidth div 100.0)"/>
                       <xsl:text>,</xsl:text>
                       <xsl:value-of select="round($intrinsicdepth
                                        - ($y1p * $intrinsicdepth div 100.0))"/>
                     </xsl:message>
          -->
-                    <xsl:value-of
+                    <xsl:value-of 
                              select="round($x1p * $intrinsicwidth div 100.0)"/>
                     <xsl:text>,</xsl:text>
                     <xsl:value-of select="round($intrinsicdepth
                                         - ($y2p * $intrinsicdepth div 100.0))"/>
                     <xsl:text>,</xsl:text>
-                    <xsl:value-of
+                    <xsl:value-of 
                              select="round($x2p * $intrinsicwidth div 100.0)"/>
                     <xsl:text>,</xsl:text>
                     <xsl:value-of select="round($intrinsicdepth
@@ -1093,7 +1093,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
         <xsl:otherwise>
 	  <xsl:message terminate="yes">
 	    <xsl:text>Cannot insert </xsl:text><xsl:value-of select="$filename"/>
-	    <xsl:text>. Check use.extensions and textinsert.extension parameters.</xsl:text>
+	    <xsl:text>. Check use.extensions and textinsert.extension parameters.</xsl:text> 
 	  </xsl:message>
 	</xsl:otherwise>
       </xsl:choose>
@@ -1177,7 +1177,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
     <xsl:when test="mml:*" xmlns:mml="http://www.w3.org/1998/Math/MathML">
       <xsl:apply-templates/>
     </xsl:when>
-
+    
     <xsl:when test="svg:*" xmlns:svg="http://www.w3.org/2000/svg">
       <xsl:apply-templates/>
     </xsl:when>
@@ -1441,7 +1441,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
     <xsl:otherwise>
       <xsl:message terminate="yes">
 	<xsl:text>Cannot insert </xsl:text><xsl:value-of select="$filename"/>
-	<xsl:text>. Check use.extensions and textinsert.extension parameters.</xsl:text>
+	<xsl:text>. Check use.extensions and textinsert.extension parameters.</xsl:text> 
       </xsl:message>
     </xsl:otherwise>
   </xsl:choose>

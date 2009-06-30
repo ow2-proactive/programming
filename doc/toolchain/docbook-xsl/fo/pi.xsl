@@ -132,7 +132,7 @@
   </refparameter>
   <refsee role="params">
     <para><parameter>sidebar.float.type</parameter> (parameter),
-      <parameter>sidebar.float.width</parameter> (parameter),
+      <parameter>sidebar.float.width</parameter> (parameter), 
       <parameter>sidebar.properties</parameter> (attribute-set),
       <parameter>sidebar.title.properties</parameter> (attribute-set)
     </para>
@@ -311,7 +311,7 @@
     <para>Use the <tag class="xmlpi">dbfo keep-together</tag> PI as a child of a
       formal object (<tag>table</tag>, <tag>example</tag>,
       <tag>figure</tag>, <tag>equation</tag>, <tag>procedure</tag>, or
-      <tag>task</tag>) to specify “keep” behavior (to allow the object to
+      <tag>task</tag>) to specify “keep” behavior (to allow the object to 
     “break” across a page).</para>
     <para>The PI also works with <tag>informaltable</tag>, <tag>informalexample</tag>,
       <tag>informalfigure</tag> and <tag>informalequation</tag>.
@@ -357,7 +357,7 @@
   or calloutlist</refpurpose>
   <refdescription>
     <para>Use the <tag class="xmlpi">dbfo label-width</tag> PI as a child of a
-      <tag>qandaset</tag>, <tag>itemizedlist</tag>, <tag>orderedlist</tag>,
+      <tag>qandaset</tag>, <tag>itemizedlist</tag>, <tag>orderedlist</tag>, 
       or <tag>calloutlist</tag> to specify the width of labels.</para>
   </refdescription>
   <refsynopsisdiv>
@@ -384,7 +384,7 @@
     <xsl:with-param name="pis" select="$node/processing-instruction('dbfo')"/>
     <xsl:with-param name="attribute" select="'label-width'"/>
   </xsl:call-template>
-</xsl:template>
+</xsl:template> 
 
 <doc:pi name="dbfo_linenumbering.everyNth" xmlns="">
   <refpurpose>Specifies interval for line numbers in verbatims</refpurpose>
@@ -653,7 +653,7 @@
   <refpurpose>Specifies the width for a CALS table <tag>entry</tag> or
     <tag>row</tag></refpurpose>
   <refdescription>
-    <para>Use the <tag class="xmlpi">dbfo rotated-width</tag> PI as a child of
+    <para>Use the <tag class="xmlpi">dbfo rotated-width</tag> PI as a child of 
       <tag>entry</tag> or <tag>row</tag> instance in a CALS table to specify the
       width of that the <tag>entry</tag> or <tag>row</tag>; or
       use it higher up in table to cause the width to be inherited
@@ -700,7 +700,7 @@
   </refparameter>
   <refsee role="params">
     <para><parameter>sidebar.float.type parameter</parameter>,
-      <parameter>sidebar.float.width parameter</parameter>,
+      <parameter>sidebar.float.width parameter</parameter>, 
       <parameter>sidebar.properties attribute-set</parameter>,
       <parameter>sidebar.title.properties</parameter>
     </para>
@@ -941,7 +941,7 @@
       </fo:block>
     </xsl:when>
     <xsl:when test="following-sibling::para">
-      <fo:block space-after="0pt"
+      <fo:block space-after="0pt" 
         xsl:use-attribute-sets="normal.para.spacing">
         <xsl:copy-of select="$spacer"/>
       </fo:block>
@@ -950,7 +950,7 @@
       following-sibling::figure or
       following-sibling::example or
       following-sibling::equation">
-      <fo:block space-after="0pt"
+      <fo:block space-after="0pt" 
         xsl:use-attribute-sets="formal.object.properties">
         <xsl:copy-of select="$spacer"/>
       </fo:block>
@@ -959,7 +959,7 @@
       following-sibling::informalfigure or
       following-sibling::informalexample or
       following-sibling::informalequation">
-      <fo:block space-after="0pt"
+      <fo:block space-after="0pt" 
         xsl:use-attribute-sets="informal.object.properties">
         <xsl:copy-of select="$spacer"/>
       </fo:block>
@@ -968,14 +968,14 @@
       following-sibling::orderedlist or
       following-sibling::variablelist or
       following-sibling::simplelist">
-      <fo:block space-after="0pt"
+      <fo:block space-after="0pt" 
         xsl:use-attribute-sets="informal.object.properties">
         <xsl:copy-of select="$spacer"/>
       </fo:block>
     </xsl:when>
     <xsl:when test="following-sibling::listitem or
       following-sibling::step">
-      <fo:list-item space-after="0pt"
+      <fo:list-item space-after="0pt" 
         xsl:use-attribute-sets="informal.object.properties">
         <fo:list-item-label/>
         <fo:list-item-body start-indent="0pt" end-indent="0pt">
@@ -989,7 +989,7 @@
       following-sibling::sect4 or
       following-sibling::sect5 or
       following-sibling::section">
-      <fo:block space-after="0pt"
+      <fo:block space-after="0pt" 
         xsl:use-attribute-sets="section.title.properties">
         <xsl:copy-of select="$spacer"/>
       </fo:block>

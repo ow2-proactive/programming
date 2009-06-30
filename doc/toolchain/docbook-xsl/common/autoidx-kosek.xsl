@@ -39,18 +39,18 @@
 <!-- Returns index group code for given term  -->
 <func:function name="i:group-index">
   <xsl:param name="term"/>
-
+  
   <xsl:variable name="letters-rtf">
     <xsl:variable name="lang">
       <xsl:call-template name="l10n.language"/>
     </xsl:variable>
-
+    
     <xsl:variable name="local.l10n.letters"
       select="($local.l10n.xml//l:i18n/l:l10n[@language=$lang]/l:letters)[1]"/>
-
+    
     <xsl:variable name="l10n.letters"
       select="($l10n.xml/l:i18n/l:l10n[@language=$lang]/l:letters)[1]"/>
-
+    
     <xsl:choose>
       <xsl:when test="count($local.l10n.letters) &gt; 0">
         <xsl:copy-of select="$local.l10n.letters"/>
@@ -72,14 +72,14 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:message>
-
+        
         <xsl:copy-of select="($l10n.xml/l:i18n/l:l10n[@language='en']/l:letters)[1]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-
+  
   <xsl:variable name="letters" select="exslt:node-set($letters-rtf)/*"/>
-
+  
   <xsl:variable name="long-letter-index" select="$letters/l:l[. = substring($term,1,2)]/@i"/>
   <xsl:variable name="short-letter-index" select="$letters/l:l[. = substring($term,1,1)]/@i"/>
   <xsl:variable name="letter-index">
@@ -104,13 +104,13 @@
     <xsl:variable name="lang">
       <xsl:call-template name="l10n.language"/>
     </xsl:variable>
-
+    
     <xsl:variable name="local.l10n.letters"
       select="($local.l10n.xml//l:i18n/l:l10n[@language=$lang]/l:letters)[1]"/>
-
+    
     <xsl:variable name="l10n.letters"
       select="($l10n.xml/l:i18n/l:l10n[@language=$lang]/l:letters)[1]"/>
-
+    
     <xsl:choose>
       <xsl:when test="count($local.l10n.letters) &gt; 0">
         <xsl:copy-of select="$local.l10n.letters"/>
@@ -132,14 +132,14 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:message>
-
+        
         <xsl:copy-of select="($l10n.xml/l:i18n/l:l10n[@language='en']/l:letters)[1]"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-
+  
   <xsl:variable name="letters" select="exslt:node-set($letters-rtf)/*"/>
-
+  
   <func:result select="$letters/l:l[@i=$index][1]"/>
 </func:function>
 

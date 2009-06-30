@@ -215,7 +215,7 @@
     <xsl:with-param name="pis" select="$node/processing-instruction('dbhtml')"/>
     <xsl:with-param name="attribute" select="'class'"/>
   </xsl:call-template>
-</xsl:template>
+</xsl:template> 
 
 <doc:pi name="dbhtml_dir" xmlns="">
   <refpurpose>Specifies a directory name in which to write files</refpurpose>
@@ -400,7 +400,7 @@
     <xsl:with-param name="pis" select="$node/processing-instruction('dbhtml')"/>
     <xsl:with-param name="attribute" select="'label-width'"/>
   </xsl:call-template>
-</xsl:template>
+</xsl:template> 
 
 <doc:pi name="dbhtml_linenumbering.everyNth" xmlns="">
   <refpurpose>Specifies interval for line numbers in verbatims</refpurpose>
@@ -627,7 +627,7 @@
     <xsl:with-param name="pis" select="$node/processing-instruction('dbhtml')"/>
     <xsl:with-param name="attribute" select="'row-height'"/>
   </xsl:call-template>
-</xsl:template>
+</xsl:template> 
 
 <doc:pi name="dbhtml_start" xmlns="">
   <refpurpose>(obsolete) Sets the starting number on an ordered list</refpurpose>
@@ -682,7 +682,7 @@
   </refdescription>
   <refsynopsisdiv>
     <synopsis><tag class="xmlpi">dbhtml stop-chunking</tag></synopsis>
-  </refsynopsisdiv>
+  </refsynopsisdiv>	
   <refsee role="tcg">
     <para><link role="tcg"
         xlink:href="Chunking.html"

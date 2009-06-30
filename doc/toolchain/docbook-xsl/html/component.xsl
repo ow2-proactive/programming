@@ -89,14 +89,14 @@
   </div>
 </xsl:template>
 
-<xsl:template match="dedication/title|dedication/info/title"
+<xsl:template match="dedication/title|dedication/info/title" 
               mode="titlepage.mode" priority="2">
   <xsl:call-template name="component.title">
     <xsl:with-param name="node" select="ancestor::dedication[1]"/>
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="dedication/subtitle|dedication/info/subtitle"
+<xsl:template match="dedication/subtitle|dedication/info/subtitle" 
               mode="titlepage.mode" priority="2">
   <xsl:call-template name="component.subtitle">
     <xsl:with-param name="node" select="ancestor::dedication[1]"/>

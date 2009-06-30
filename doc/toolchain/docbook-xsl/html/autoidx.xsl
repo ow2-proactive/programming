@@ -92,7 +92,7 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
-
+      
 <xsl:template name="generate-basic-index">
   <xsl:param name="scope" select="NOTANODE"/>
 
@@ -136,7 +136,7 @@
           <xsl:apply-templates select="$others[count(.|key('primary',
                                        &primary;)[&scope;][1]) = 1]"
                                mode="index-symbol-div">
-            <xsl:with-param name="position" select="position()"/>
+            <xsl:with-param name="position" select="position()"/>                                
             <xsl:with-param name="scope" select="$scope"/>
             <xsl:with-param name="role" select="$role"/>
             <xsl:with-param name="type" select="$type"/>
@@ -305,7 +305,7 @@
           <xsl:with-param name="type" select="$type"/>
           <xsl:sort select="translate(seealso, &lowercase;, &uppercase;)"/>
         </xsl:apply-templates>
-        <xsl:apply-templates select="$refs[secondary and count(.|key('secondary', concat($key, &sep;, &secondary;))[&scope;][1]) = 1]"
+        <xsl:apply-templates select="$refs[secondary and count(.|key('secondary', concat($key, &sep;, &secondary;))[&scope;][1]) = 1]" 
                              mode="index-secondary">
           <xsl:with-param name="position" select="position()"/>
           <xsl:with-param name="scope" select="$scope"/>
@@ -358,7 +358,7 @@
           <xsl:with-param name="type" select="$type"/>
           <xsl:sort select="translate(seealso, &lowercase;, &uppercase;)"/>
         </xsl:apply-templates>
-        <xsl:apply-templates select="$refs[tertiary and count(.|key('tertiary', concat($key, &sep;, &tertiary;))[&scope;][1]) = 1]"
+        <xsl:apply-templates select="$refs[tertiary and count(.|key('tertiary', concat($key, &sep;, &tertiary;))[&scope;][1]) = 1]" 
                              mode="index-tertiary">
           <xsl:with-param name="position" select="position()"/>
           <xsl:with-param name="scope" select="$scope"/>
@@ -421,7 +421,7 @@
   <xsl:param name="role" select="''"/>
   <xsl:param name="type" select="''"/>
   <xsl:param name="position"/>
-
+  
   <xsl:variable name="term.separator">
     <xsl:call-template name="index.separator">
       <xsl:with-param name="key" select="'index.term.separator'"/>

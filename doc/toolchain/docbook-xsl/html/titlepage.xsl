@@ -531,7 +531,7 @@
 
   <xsl:choose>
     <xsl:when test="$generate.legalnotice.link != 0">
-
+      
       <!-- Compute name of legalnotice file -->
       <xsl:variable name="file">
 	<xsl:call-template name="ln.or.rh.filename"/>
@@ -777,10 +777,10 @@
       </table>
     </div>
   </xsl:variable>
-
+  
   <xsl:choose>
     <xsl:when test="$generate.revhistory.link != 0">
-
+      
       <!-- Compute name of revhistory file -->
       <xsl:variable name="file">
 	<xsl:call-template name="ln.or.rh.filename">
@@ -992,7 +992,7 @@
       <xsl:with-param name="node" select="$node"/>
     </xsl:call-template>
   </xsl:variable>
-
+ 
   <xsl:choose>
     <!--  1. If there is a dbhtml_filename PI, use that -->
     <xsl:when test="$dbhtml-filename != ''">
@@ -1025,7 +1025,7 @@
     </xsl:when>
   </xsl:choose>
 </xsl:template>
-
+    
 <!-- ==================================================================== -->
 
 </xsl:stylesheet>

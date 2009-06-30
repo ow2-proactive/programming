@@ -193,8 +193,8 @@
 <xsl:template name="table.container">
   <xsl:param name="table.block"/>
   <xsl:choose>
-    <xsl:when test="@orient='land' and
-                    $fop.extensions = 0 and
+    <xsl:when test="@orient='land' and 
+                    $fop.extensions = 0 and 
                     $passivetex.extensions = 0" >
       <fo:block-container reference-orientation="90"
             padding="6pt"
@@ -225,7 +225,7 @@
 
   <xsl:variable name="rowsep">
     <xsl:choose>
-      <!-- If this is the last row, rowsep never applies (except when
+      <!-- If this is the last row, rowsep never applies (except when 
 	   the ancestor tgroup has a following sibling tgroup) -->
       <xsl:when test="not(ancestor-or-self::row[1]/following-sibling::row
                           or ancestor-or-self::thead/following-sibling::tbody
@@ -480,11 +480,11 @@
                 $passivetex.extensions != 0">
     <xsl:attribute name="table-layout">fixed</xsl:attribute>
   </xsl:if>
-
+ 
     <xsl:attribute name="width">
       <xsl:value-of select="$table.width"/>
     </xsl:attribute>
-
+ 
   <xsl:choose>
     <xsl:when test="$use.extensions != 0
                     and $tablecolumns.extension != 0">
@@ -804,7 +804,7 @@
 
   <xsl:variable name="rowsep">
     <xsl:choose>
-      <!-- If this is the last row, rowsep never applies (except when
+      <!-- If this is the last row, rowsep never applies (except when 
 	   the ancestor tgroup has a following sibling tgroup) -->
       <xsl:when test="not(ancestor-or-self::row[1]/following-sibling::row
                           or ancestor-or-self::thead/following-sibling::tbody
@@ -1091,7 +1091,7 @@
         </xsl:call-template>
       </xsl:if>
 
-      <xsl:if test="$colsep.inherit &gt; 0 and
+      <xsl:if test="$colsep.inherit &gt; 0 and 
                       $col &lt; (ancestor::tgroup/@cols|ancestor::entrytbl/@cols)[last()]">
         <xsl:call-template name="border">
           <xsl:with-param name="side" select="'right'"/>
@@ -1132,7 +1132,7 @@
     </xsl:when>
     <xsl:otherwise>
       <!-- HTML table -->
-      <xsl:variable name="border"
+      <xsl:variable name="border" 
                     select="(ancestor::table |
                              ancestor::informaltable)[last()]/@border"/>
       <xsl:if test="$border != '' and $border != 0">
@@ -1499,7 +1499,7 @@ proportional-column-width() function.</para>
   <xsl:if test="contains($colwidth, '*')">
     <xsl:text>proportional-column-width(</xsl:text>
     <xsl:choose>
-      <xsl:when test="substring-before($colwidth, '*') != ''">
+      <xsl:when test="substring-before($colwidth, '*') != ''"> 
         <xsl:value-of select="substring-before($colwidth, '*')"/>
       </xsl:when>
       <xsl:otherwise>

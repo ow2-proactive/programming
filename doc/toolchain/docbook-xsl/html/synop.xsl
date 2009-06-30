@@ -150,7 +150,7 @@
   <xsl:variable name="snum">
     <xsl:apply-templates select="." mode="synopfragment.number"/>
   </xsl:variable>
-  <!-- You can't introduce another <p> here, because you're
+  <!-- You can't introduce another <p> here, because you're 
        already in a <p> from cmdsynopsis-->
   <span>
     <xsl:variable name="id">

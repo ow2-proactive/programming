@@ -11,7 +11,7 @@
      simulate desired behaviour.
      ******************************************************************** -->
 
-<xsl:template match="text()[namespace-uri(..) = '' or
+<xsl:template match="text()[namespace-uri(..) = '' or 
 		     namespace-uri(..) = 'http://docbook.org/ns/docbook']">
   <xsl:choose>
     <xsl:when test="$passivetex.extensions != 0">
