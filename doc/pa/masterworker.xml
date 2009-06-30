@@ -77,12 +77,16 @@
         <section xml:id="LoggerSettings_36"><info><title>Logger Settings</title>            
             </info>
 
-            <para>Before using the Master-Worker, launch the examples, or write your own code, it is very useful to
+            <para>Before using the Master-Worker, launching examples or writing your own code, it is very useful to
                 enable the maximum logging information to have a deeper look at how the API works. In order to do that
-                you'll need to add the following lines in the proactive-log4j file that you are using:
+                you will need to add the following lines in the proactive-log4j file you are using:
             </para>
-            <programlisting><textobject><textdata fileref="code_snippets/masterworker/logger_settings.txt"/></textobject></programlisting>
+<!--            <programlisting><textobject><textdata fileref="code_snippets/masterworker/logger_settings.txt"/></textobject></programlisting>-->
+            <screen>log4j.logger.proactive.masterworker = DEBUG
+log4j.additivity.proactive.masterworker = false</screen>
+
         </section>
+
         
 
 
@@ -90,8 +94,8 @@
 
         <section xml:id="MasterCreationAndDeployment_36"><info><title>Master Creation And Deployment</title>
             </info>
-            <para>When creating the master the user application has the possibility to create either a local master (on
-                the machine the user application is running on) or a remote master. Regardless of the way it is created
+            <para>When creating the master, the user application has the possibility to create either a local master (on
+                the machine the user application is running on) or a remote one. Regardless of the way it is created,
                 the active object instantiation is transparent. The deployment process can be controlled by using the
                 deployment descriptors.
             </para>
@@ -113,35 +117,31 @@
             </itemizedlist>
 
             <para>For a full explanation of the ProActive deployment mechanism and of ProActive deployment descriptors,
-                see
-                <xref linkend="XML_Descriptors"/>
-                .
+                please refer to <xref linkend="XML_Descriptors"/>.
             </para>
 
-            <figure xml:id="deployment_of_mw_framework"><info><title>Deployment of the Master-Worker framework</title>
-                </info>
-
-
+            <figure xml:id="deployment_of_mw_framework"><info><title>Deployment of the Master-Worker framework</title></info>
                 <mediaobject>
                     <imageobject>
                         <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/masterWorkerDeployment.png" format="PNG"/>
                     </imageobject>
                 </mediaobject>
             </figure>
+
             <para>The figure represents one case of deployment as it is possible to have several workers on a single
-                core machine each running in its own independent thread, one worker in its own JVM on a multicore
+                core machine each running in its own independent thread, one worker in its own JVM on a multi-core
                 machine, or workers deployed on the machine running the master. The worker-JVM-machine mappings depend
                 on the deployment descriptor. The only restriction is that each Worker is always started in its own
-                Node. However, from the user application perspective, this is transparent as the Master performes
-                communication and load balancing automatically. In the following figures we will show only the case of
-                several single core machines as the same principles apply regardless of machine type.
+                Node. However, from the user application perspective, this is transparent as the Master performs
+                communication and loads balancing automatically. In the following sections, we will consider only the case of
+                several single core machines since the same principles apply regardless of machine type.
             </para>
         <section xml:id="LocalMastercreation_36"><info><title>Local Master creation</title>
                 </info>
 
-                <para>In order to create a local master we use a constructor without parameters</para>
+                <para>In order to create a local master, we use a constructor without parameters:</para>
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/master_creation.snip"/></textobject></programlisting>
-                <para>Using this constructor, a master will be created in the current JVM, the master will share CPU
+                <para>Using this constructor, a master will be created in the current JVM and it will share CPU
                     usage and memory with the user JVM. This master will compute tasks of type
                     <literal>A</literal>
                     and will produce
@@ -192,7 +192,7 @@
                 interface. In this interface, the unique method
                 <literal>run</literal>
                 will contain the code to be executed remotely. After the tasks have been submitted to the master, the
-                master will dispatches them automatically to the workers.
+                master will dispatch them automatically to the workers.
             </para>
             <para>
                 <warning>
@@ -201,7 +201,7 @@
                         will also be copied. When tasks are submitted to the remote workers, the user task objects will
                         be
                         <emphasis>serialized</emphasis>
-                        and sent though the network. As a consequence, information which has only local meaning will be
+                        and sent through the network. As a consequence, information which have only local meaning will be
                         lost (database connections, references to etc.)
                     </para>
                 </warning>
@@ -221,7 +221,7 @@
             </para>
         
         <para>The task interface is
-                <literal>org.objectweb.proactive.extensions.masterworker.interfaces.Task</literal>
+                <literal>org.objectweb.proactive.extensions.masterworker.interfaces.Task</literal>:
             </para>
 
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_task.snip"/></textobject></programlisting>
@@ -235,15 +235,14 @@
                 section.
             </para>
 		
-			<para>The tasks are submitted to the master which in turn sends them to the workers. The following method submits the tasks: </para>
+			<para>Tasks are submitted to the master which in turn sends them to the workers. The following method submits the tasks: </para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_solve.snip"/></textobject></programlisting>
             <warning><para>
                 The master keeps a track of task objects that have
                 been submitted to it and which are currently computing.
                 Submitting twice the same task object without
                 waiting for the result of the first computation will produce a 
-                <literal>TaskAlreadySubmittedException</literal>
-                .
+                <literal>TaskAlreadySubmittedException</literal>.
                 </para>
             </warning>
 
@@ -253,9 +252,9 @@
             </info>
 
             <para>Results are collected by the master when the calculations are complete.</para>
-            <para>There are two ways of waiting for the results.The users application can either wait until one or every
+            <para>There are two ways of waiting for the results. The user application can either wait until one or every
                 result is available (the thread blocks until the results are available) or ask the master for result
-                availability and continue until the results are finally available. In the second case the application
+                availability and continue until the results are finally available. In the second case, the application
                 thread does not block while the results are computed.
             </para>
 
@@ -275,16 +274,16 @@
                 <itemizedlist>
                     <listitem>
                         <para>
-                            <emphasis>Completion order</emphasis>
-                            mode (default) : in this mode, user applications will receive the results in an unspecified
+                            <emphasis>Completion order mode (default)</emphasis>:
+                            in this mode, user applications will receive the results in an unspecified
                             order, depending on tasks completion order.
                         </para>
                     </listitem>
 
                     <listitem>
                         <para>
-                            <emphasis>Submission order</emphasis>
-                            mode : in this mode, user applications will receive the results in the same order as the
+                            <emphasis>Submission order mode</emphasis>:
+                            in this mode, user applications will receive the results in the same order as the
                             task submitted to the master.
                         </para>
 
@@ -297,13 +296,13 @@
                 <emphasis>Completion</emphasis>
                 order to
                 <emphasis>Submission</emphasis>
-                order using the following method :
+                order using the following method:
             </para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_order.snip"/></textobject></programlisting>
             <para>The default mode of the Master-Worker API is
                 <emphasis>Completion</emphasis>
                 order. The mode can be switched dynamically, which means that subsequent calls to wait methods (see
-                below), will be done according to the new mode.
+                below) will be done according to the new mode.
             </para>
 
             <para>Five methods can be used in order to collect results:
@@ -355,16 +354,16 @@
                     reachable. The Ping period configuration parameter is the period in millisecond between two "ping"
                     messages. The default value of this parameter is 10000 (which corresponds to 10 seconds).
                 </para>
-                <para>In order to change this default value, the method described underneath can be called :</para>
+                <para>In order to change this default value, the method described underneath can be called:</para>
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_ping.snip"/></textobject></programlisting>
-                <para>If the Master does not receive an answer for the ping it will remove the Worker from its list and
+                <para>If the Master does not receive an answer for the ping, then it will remove the Worker from its list and
                     reassign the tasks the Worker has been assigned.
                 </para>
             </section>
             <section xml:id="Workertaskflooding_36"><info><title>Worker task flooding</title>
                 </info>
 
-                <para>The Master-Worker API's internal scheduling mechanism is quite simple as it is based on a pulling
+                <para>The Master-Worker API's internal scheduling mechanism is quite simple since it is based on a pulling
                     strategy. When a worker has no more task to run, it asks the master for new tasks. The master
                     usually gives a worker one task at a time, except the first time the worker asks for a task and each
                     time the worker has no more tasks to compute. In this case, the master will do a
@@ -375,7 +374,7 @@
                     should lead to a high flooding value (&gt;10) where a small number of big tasks should lead to a
                     small value (1-5).
                 </para>
-                <para>Use the following method to change the flooding parameter :</para>
+                <para>Use the following method to change the flooding parameter:</para>
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_flood.snip"/></textobject></programlisting>
             </section>
             
@@ -386,8 +385,8 @@
 
 
                 <para>The Worker Memory purpose is to allow users to store and retrieve data from a
-                    <emphasis>Worker's address space</emphasis>
-                    . The typical use case is the Master-Worker API computation if an iterative process. An iterative
+                    <emphasis>Worker's address space</emphasis>. 
+                    The typical use case is the Master-Worker API computation with an iterative process. An iterative
                     process consists generally of an initialization step 0, followed by n computation steps, where step
                     n needs the results of step n-1. The initialization steps often requires that a large amount of
                     information is "loaded" into the worker. Without the worker memory access, this information would be
@@ -406,16 +405,15 @@
 
                     <para>The Worker memory structure is very simple: it consists of
                         <emphasis>&lt;key, value&gt;</emphasis>
-                        associations. A java object value is therefore saved in the memory with the given name, and this
+                        associations. A Java object value is therefore saved in the memory with the given name, and this
                         name will be needed to retrieve the value later on.
                     </para>
                     <para>The Worker Memory API consists of three methods
-                        <emphasis>save</emphasis>
-                        ,
-                        <emphasis>load</emphasis>
-                        , and
-                        <emphasis>erase</emphasis>
-                        . The interface to the worker memory is available when running a Task as a parameter of the run
+                        <emphasis>save</emphasis>,
+                        <emphasis>load</emphasis>,
+                        and
+                        <emphasis>erase</emphasis>.
+                        The interface to the worker memory is available when running a Task as a parameter of the run
                         method. The user can use this interface to save, load or erase objects in the local worker's
                         memory. Below is the detailed WorkerMemory interface:
                     </para>
@@ -424,13 +422,13 @@
                 <section xml:id="Storingdata_36"><info><title>Storing data</title>
                     </info>
 
-                    <para>A user can store data in the Workers' memory either when :</para>
+                    <para>A user can store data in the Workers' memory either when:</para>
                     <orderedlist>
                         <listitem>
                             <para>Workers are created remotely</para>
                         </listitem>
                         <listitem>
-                            <para>A task is run on the Worker.</para>
+                            <para>A task is run on the Worker</para>
                         </listitem>
                     </orderedlist>
                     <para>Usage of the first mechanism is done by providing a list of &lt;key, value&gt; pairs (Map) to
@@ -464,30 +462,29 @@
     <section xml:id="ms_example"><info><title xml:id="MonteCarloPIExample_36">Monte-Carlo PI Example</title>
         </info>
 
-
         <para>This very simple example computes PI using the Monte-Carlo method. The Monte-Carlo methods groups under
             the same name method which solves a problem by generating random numbers and examining how a fraction of the
-            generated numbers follow certain patterns. The method can be used to obtain numerical results for problems
+            generated numbers follows certain patterns. The method can be used to obtain numerical results for problems
             which would be hard to solve through analytical methods. The complete example is available, along with more
             complex ones in the package
             <literal>org.objectweb.proactive.examples.masterworker</literal>
         </para>
-        <para>The task randomly creates a set of points belonging to the [0, 1[x[0, 1[ interval and tests how many
+        <para>The task randomly creates a set of points belonging to the <literal>[0, 1[x[0, 1[</literal> interval and tests how many
             points are inside the unit circle. The number of points inside the unit circle allow us to calculate the 
             value of PI with an arbitrary precision. The more points generated the better the accuracy for PI.
         </para>
 
         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi.snip"/></textobject></programlisting>
 
-        <para>In the main method the master is created and resources are added using a deployment descriptor .</para>
+        <para>In the main method, the master is created and resources are added using a deployment descriptor .</para>
 
         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_master_creation.snip"/></textobject></programlisting>
 
-        <para>After the master is created the tasks are created and submitted to the master.</para>
+        <para>After the master is created, the tasks are created and submitted to the master.</para>
 
         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_tasks_submit.snip"/></textobject></programlisting>
 
-        <para>After the task submission the results are gathered and displayed.</para>
+        <para>After the task submission, the results are gathered and displayed.</para>
 
         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/masterworker_montecarlopi_results.snip"/></textobject></programlisting>
 
