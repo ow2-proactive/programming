@@ -92,7 +92,7 @@ public class Blast {
         // @snippet-break calcium_Blast
         calcium.boot();
         // @snippet-resume calcium_Blast
-        
+
         try {
             File res = future.get();
             // @snippet-break calcium_Blast

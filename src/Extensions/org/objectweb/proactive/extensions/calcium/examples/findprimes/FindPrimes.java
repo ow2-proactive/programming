@@ -50,8 +50,9 @@ import org.objectweb.proactive.extensions.calcium.statistics.StatsGlobal;
 public class FindPrimes implements Serializable {
     // @snippet-start calcium_primes_1
     public Skeleton<Interval, Primes> root;
+
     // @snippet-break calcium_primes_1
-    
+
     public static void main(String[] args) throws InterruptedException, PanicException {
         FindPrimes st = new FindPrimes();
         st.solve();
@@ -62,6 +63,7 @@ public class FindPrimes implements Serializable {
         root = new DaC<Interval, Primes>(new IntervalDivide(), new IntervalDivideCondition(),
             new SearchInterval(), new JoinPrimes());
     }
+
     // @snippet-end calcium_primes_1
 
     public void solve() throws InterruptedException, PanicException {
@@ -70,7 +72,7 @@ public class FindPrimes implements Serializable {
         String descriptor = FindPrimes.class.getResource("LocalDescriptor.xml").getPath();
         // @snippet-break calcium_primes_17
         // @snippet-break calcium_primes_15
-        
+
         // @snippet-start calcium_primes_8
         // @snippet-start calcium_primes_14
         Environment environment = EnvironmentFactory.newMultiThreadedEnvironment(2);
@@ -80,20 +82,19 @@ public class FindPrimes implements Serializable {
         // @snippet-resume calcium_primes_15
         Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor);
         // @snippet-end calcium_primes_15
-        */
+         */
         /*
         // @snippet-resume calcium_primes_17
         Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeployment(descriptor);
         // @snippet-end calcium_primes_17
-        */
+         */
         //Environment environment = ProActiveSchedulerEnvironment.factory("localhost","chri", "chri");
         // @snippet-resume calcium_primes_8
-        
         Calcium calcium = new Calcium(environment);
-        
+
         Stream<Interval, Primes> stream = calcium.newStream(root);
         // @snippet-end calcium_primes_8
-        
+
         // @snippet-start calcium_primes_9
         Vector<CalFuture<Primes>> futures = new Vector<CalFuture<Primes>>(3);
         futures.add(stream.input(new Interval(1, 6400, 300)));
@@ -101,7 +102,7 @@ public class FindPrimes implements Serializable {
         futures.add(stream.input(new Interval(1, 640, 64)));
         calcium.boot(); //begin the evaluation
         // @snippet-end calcium_primes_9
-        
+
         try {
             // @snippet-start calcium_primes_10
             // @snippet-start calcium_resultStats

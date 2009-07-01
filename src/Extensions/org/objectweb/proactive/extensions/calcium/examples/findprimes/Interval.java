@@ -34,6 +34,7 @@ package org.objectweb.proactive.extensions.calcium.examples.findprimes;
 
 import java.io.Serializable;
 
+
 class Interval implements Serializable {
     public int min;
     public int max;
@@ -50,6 +51,7 @@ class Interval implements Serializable {
         this.max = max;
         this.solvableSize = solvableSize;
     }
+
     // @snippet-break calcium_primes_2
 
     @Override
