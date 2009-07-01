@@ -29,6 +29,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+// @snippet-start calcium_primes_7
 package org.objectweb.proactive.extensions.calcium.examples.findprimes;
 
 import java.util.Collections;
@@ -49,3 +50,4 @@ public class JoinPrimes implements Conquer<Primes, Primes> {
         return conquered;
     }
 }
+//@snippet-end calcium_primes_7

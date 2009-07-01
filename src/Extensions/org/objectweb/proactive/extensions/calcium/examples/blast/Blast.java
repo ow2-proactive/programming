@@ -69,7 +69,7 @@ public class Blast {
     }
 
     public static void main(String[] args) throws Exception {
-        String descriptor = Blast.class.getResource("../SSHDescriptor.xml").getPath();
+        String descriptor = Blast.class.getResource("LocalDescriptor.xml").getPath();
         BlastParams param = new BlastParams(new File("/home/mleyton/NOSAVE/blast/query.nt"), new File(
             "/home/mleyton/NOSAVE/blast/db.nt"), new File("/home/mleyton/NOSAVE/blast/bin-linux/formatdb"),
             new File("/home/mleyton/NOSAVE/blast/bin-linux/blastall"), true, 2000 * 1024);
@@ -86,19 +86,27 @@ public class Blast {
         //Environment environment = ProActiveSchedulerEnvironment.factory("localhost","chri", "chri");
 
         Calcium calcium = new Calcium(environment);
+        // @snippet-start calcium_Blast
         Stream<BlastParams, File> stream = calcium.newStream(root);
         CalFuture<File> future = stream.input(parameters);
+        // @snippet-break calcium_Blast
         calcium.boot();
-
+        // @snippet-resume calcium_Blast
+        
         try {
             File res = future.get();
+            // @snippet-break calcium_Blast
             System.out.println("Result in:" + res + " " + res.length() + " [bytes]");
             System.out.println(future.getStats());
+            // @snippet-resume calcium_Blast
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // @snippet-end calcium_Blast
 
+        // @snippet-start calcium_GlobalStat
         StatsGlobal stats = calcium.getStatsGlobal();
+        // @snippet-end calcium_GlobalStat
         System.out.println(stats);
         calcium.shutdown();
     }

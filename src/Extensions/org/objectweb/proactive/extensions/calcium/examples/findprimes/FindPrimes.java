@@ -43,57 +43,97 @@ import org.objectweb.proactive.extensions.calcium.exceptions.PanicException;
 import org.objectweb.proactive.extensions.calcium.futures.CalFuture;
 import org.objectweb.proactive.extensions.calcium.skeletons.DaC;
 import org.objectweb.proactive.extensions.calcium.skeletons.Skeleton;
+import org.objectweb.proactive.extensions.calcium.statistics.Stats;
 import org.objectweb.proactive.extensions.calcium.statistics.StatsGlobal;
 
 
 public class FindPrimes implements Serializable {
+    // @snippet-start calcium_primes_1
     public Skeleton<Interval, Primes> root;
-
+    // @snippet-break calcium_primes_1
+    
     public static void main(String[] args) throws InterruptedException, PanicException {
         FindPrimes st = new FindPrimes();
         st.solve();
     }
 
+    // @snippet-resume calcium_primes_1
     public FindPrimes() {
         root = new DaC<Interval, Primes>(new IntervalDivide(), new IntervalDivideCondition(),
             new SearchInterval(), new JoinPrimes());
     }
+    // @snippet-end calcium_primes_1
 
     public void solve() throws InterruptedException, PanicException {
+        // @snippet-start calcium_primes_15
+        // @snippet-start calcium_primes_17
         String descriptor = FindPrimes.class.getResource("LocalDescriptor.xml").getPath();
-
+        // @snippet-break calcium_primes_17
+        // @snippet-break calcium_primes_15
+        
+        // @snippet-start calcium_primes_8
+        // @snippet-start calcium_primes_14
         Environment environment = EnvironmentFactory.newMultiThreadedEnvironment(2);
-        //Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor);
+        // @snippet-end calcium_primes_14
+        // @snippet-break calcium_primes_8
+        /*
+        // @snippet-resume calcium_primes_15
+        Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor);
+        // @snippet-end calcium_primes_15
+        */
+        /*
+        // @snippet-resume calcium_primes_17
+        Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeployment(descriptor);
+        // @snippet-end calcium_primes_17
+        */
         //Environment environment = ProActiveSchedulerEnvironment.factory("localhost","chri", "chri");
-
+        // @snippet-resume calcium_primes_8
+        
         Calcium calcium = new Calcium(environment);
-
+        
         Stream<Interval, Primes> stream = calcium.newStream(root);
-
+        // @snippet-end calcium_primes_8
+        
+        // @snippet-start calcium_primes_9
         Vector<CalFuture<Primes>> futures = new Vector<CalFuture<Primes>>(3);
         futures.add(stream.input(new Interval(1, 6400, 300)));
         futures.add(stream.input(new Interval(1, 100, 20)));
         futures.add(stream.input(new Interval(1, 640, 64)));
-
-        calcium.boot();
-
+        calcium.boot(); //begin the evaluation
+        // @snippet-end calcium_primes_9
+        
         try {
+            // @snippet-start calcium_primes_10
+            // @snippet-start calcium_resultStats
             for (CalFuture<Primes> future : futures) {
                 Primes res = future.get();
+                // @snippet-break calcium_resultStats
                 for (Integer i : res.primes) {
                     System.out.print(i + " ");
                 }
+                // @snippet-break calcium_primes_10
                 System.out.println();
-                System.out.println(future.getStats());
+                // @snippet-start calcium_primes_11
+                // @snippet-resume calcium_resultStats
+                Stats futureStats = future.getStats();
+                System.out.println(futureStats);
+                // @snippet-end calcium_primes_11
+                // @snippet-resume calcium_primes_10
             }
+            // @snippet-end calcium_resultStats
+            // @snippet-end calcium_primes_10
         } catch (MuscleException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // @snippet-start calcium_primes_12
         StatsGlobal stats = calcium.getStatsGlobal();
         System.out.println(stats);
+        // @snippet-end calcium_primes_12
+        // @snippet-start calcium_primes_13
         calcium.shutdown();
+        // @snippet-end calcium_primes_13
     }
 }

@@ -29,6 +29,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+// @snippet-start calcium_WSpace
 package org.objectweb.proactive.extensions.calcium.system;
 
 import java.io.File;
@@ -119,3 +120,4 @@ public interface WSpace {
      */
     public File[] listFiles(FileFilter filter);
 }
+//@snippet-end calcium_WSpace

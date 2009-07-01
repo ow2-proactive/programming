@@ -1,313 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="Calcium">
-<info>
-<title xml:id="TheCalciumSkeletonFramework_62">The Calcium Skeleton Framework</title>
-  </info>
+   <info><title xml:id="TheCalciumSkeletonFramework_62">The Calcium Skeleton Framework</title></info>
+   
+   <section xml:id="Introduction_62"><info><title>Introduction</title></info>
 
-  <section xml:id="Introduction_62"><info><title>Introduction</title></info>
+	   <section xml:id="AboutCalcium_62"><info><title >About Calcium</title></info>
 
-	  <section xml:id="AboutCalcium_62"><info><title >About Calcium</title></info>
+         <para>Calcium is part of the ProActive Grid Middleware for programming
+         structured parallel and distributed applications. The framework provides
+         a basic set of structured patterns (skeletons) that can be nested to
+         represents more complex patterns. Skeletons are considered as a high level
+         programming model because all the parallelisms details are hidden from
+         the programmer. In Calcium, distributed programming is achieved by using
+         ProActive deployment framework and active object model.</para>
 
-      <para>Calcium is part of the ProActive Grid Middleware for programming
-      structured parallel and distributed applications. The framework provides
-      a basic set of structured patterns (skeletons) that can be nested to
-      represents more complex patterns. Skeletons are considered a high level
-      programming model because all the parallelisms details are hidden from
-      the programmer. In Calcium, distributed programming is achieved by using
-      ProActive deployment framework and active object model.</para>
+         <para>The Calcium implementation can be found in the following package
+         of the ProActive Middleware distribution:</para>
 
-      <para>The Calcium implementation can be found in the following package
-      of the ProActive Middleware distribution:</para>
+         <programlisting language="java">package org.objectweb.proactive.extensions.calcium;</programlisting>
 
-      <programlisting language="java">package org.objectweb.proactive.extensions.calcium;</programlisting>
-    </section>
-
-    <section xml:id="TheBigPicture_62"><info><title >The Big Picture</title></info>
-
-      <para>The following steps must be performed for programming with the
-      framework.</para>
-
-      <orderedlist>
-        <listitem>
-          <para>Define the skeleton structure.</para>
-        </listitem>
-
-        <listitem>
-          <para>Implement the missing classes of the structure (the muscle
-          codes).</para>
-        </listitem>
-
-        <listitem>
-          <para>Create a new Calcium instance.</para>
-        </listitem>
-
-        <listitem>
-          <para>Provide a inputs of the problems to be solved by the
-          framework.</para>
-        </listitem>
-
-        <listitem>
-          <para>Collect the results.</para>
-        </listitem>
-
-        <listitem>
-          <para>View the performance statistics.</para>
-        </listitem>
-      </orderedlist>
-
-      <para>Problems inputed into the framework are treated as tasks. The
-      tasks are interpreted by the remote skeleton interpreters as shown in
-      the following Figure:</para>
-
-<figure xml:id="TaskFlowinCalcium_62"><info><title>Task Flow in Calcium</title>
-        </info>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata contentdepth="100%" fileref="images/CalciumTaskFlow.png" scalefit="1" width="100%"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-
-      <para>All the generation, distribution of tasks and their resource is
-      completely hidden from the programmer. In fact, the task concept is
-      never used when programming in Calcium.</para>
-
-      <indexterm/>
-    </section>
-  </section>
-
-  <section xml:id="QuickExample_62"><info><title >Quick Example</title></info>
-    <para>In this example we implement a skeleton program that finds prime
-    numbers between an interval using a brute force (naive) approach.</para>
-
-<section xml:id="Definetheskeletonstructure_62"><info><title >Define the skeleton structure</title></info>
-
-      <para>The approach consists of dividing the original search space into
-      several smaller search spaces, and computing each sub search space in
-      parallel. Therefore, the most suitable pattern corresponds to Divide and
-      Conquer.</para>
-
-      <programlisting language="java">//DaC(&lt;Divide&gt;,&lt;Condition&gt;,&lt;Skeleton&gt;,&lt;Conquer&gt;)
-Skeleton&lt;Interval, Primes&gt; root = new DaC&lt;Interval, Primes&gt;(
-    new IntervalDivide(),
-    new IntervalDivideCondition(),
-    new SearchInterval(),
-    new JoinPrimes()
-);</programlisting>
-    </section>
-
-    <section xml:id="ImplementingtheMuscleFunctions_62"><info><title>Implementing the Muscle Functions</title></info>
-
-      <para>We will call the problem an <emphasis role="bold">Interval</emphasis> and we will represent it using the
-      following class.</para>
-
-      <programlisting language="java">class Interval implements Serializable {
-    public int min,max;
-    public int solvableSize;
-
-    /**
-     * Creates a new interval to search for primes.
-     * @param min  Beginning of interval
-     * @param max  End of interval
-     * @param solvableSize Acceptable size of search interval
-     */
-    public Interval(int min, int max, int solvableSize) {
-        this.min = min;
-        this.max = max;
-        this.solvableSize = solvableSize;
-    }
-}</programlisting>
-
-      <para>The primes that are found will be stored in a <emphasis role="bold">Primes</emphasis> class.</para>
-
-      <programlisting language="java">public class Primes implements Serializable {
-
-    public Vector&lt;Integer&gt; list;
-
-    public Primes(){
-        primes=new Vector&lt;Integer&gt;();
-    }
-}</programlisting>
-
-      <section xml:id="Divide_62"><info><title>Divide</title>
-        </info>
-
-        <para>The divition of an <emphasis role="bold">Interval</emphasis>
-        into smaller intervals is handled by an <emphasis role="bold">IntervalDivide</emphasis> class:</para>
-
-        <programlisting language="java">public class IntervalDivide implements Divide&lt;Interval, Interval&gt;{
-    
-    public Interval[] divide(Interval param, SkeletonSystem system) {
-        
-        int middle = param.min+(param.max-param.min)/2;
-
-        Interval ttUp = new Interval(middle + 1,param.max,param.solvableSize);
-
-        Interval ttDown = new Interval(param.min, middle, param.solvableSize);
-                
-        return new Interval[] {ttDown, ttUP};
-    }
-}</programlisting>
       </section>
 
-      <section xml:id="Condition_62"><info><title>Condition</title>
-        </info>
+      <section xml:id="TheBigPicture_62"><info><title >The Big Picture</title></info>
 
-        <para>The class <emphasis role="bold"> IntervalDivideCondition
-        </emphasis> is used to determine if an <emphasis role="bold">Interval</emphasis> must be subdivided or not.</para>
+         <para>The following steps must be performed for programming with this
+         framework.</para>
 
-        <programlisting language="java">public class IntervalDivideCondition implements Condition&lt;Interval&gt;{
-    
-    public boolean condition(Interval params, SkeletonSystem system) {
-        
-        return params.max-params.min &gt; params.solvableSize;
-    }
-}</programlisting>
+         <orderedlist>
+            <listitem>
+               <para>Define the skeleton structure.</para>
+            </listitem>
+
+            <listitem>
+               <para>Implement the missing classes of the structure (the muscle
+               codes).</para>
+            </listitem>
+
+            <listitem>
+               <para>Create a new Calcium instance.</para>
+            </listitem>
+
+            <listitem>
+               <para>Provide inputs of the problems to be solved by the
+               framework.</para>
+            </listitem>
+
+            <listitem>
+               <para>Collect the results.</para>
+            </listitem>
+
+            <listitem>
+               <para>View the performance statistics.</para>
+            </listitem>
+         </orderedlist>
+
+         <para>Problems inputed into the framework are treated as tasks. The
+         tasks are interpreted by the remote skeleton interpreters as shown in
+         the following figure:</para>
+
+         <figure xml:id="TaskFlowinCalcium_62"><info><title>Task Flow in Calcium</title></info>
+            <mediaobject>
+               <imageobject>
+                  <imagedata contentdepth="100%" fileref="images/CalciumTaskFlow.png" scalefit="1" width="100%"/>
+               </imageobject>
+            </mediaobject>
+         </figure>
+
+         <para>All the generation, the distribution of tasks and their resources are
+         completely hidden from the programmer. In fact, the task concept is
+         never used when programming in Calcium.</para>
+
+         <indexterm/>
+      </section>
+   </section>
+
+   <section xml:id="QuickExample_62"><info><title >Quick Example</title></info>
+      <para>In this example, we implement a skeleton program that finds prime
+      numbers between an interval using a brute force (naive) approach.</para>
+
+      <section xml:id="Definetheskeletonstructure_62"><info><title >Define the skeleton structure</title></info>
+
+         <para>The approach consists of dividing the original search space into
+         several smaller search spaces, and computing each sub search space in
+         parallel. Therefore, the most suitable pattern corresponds to Divide and
+         Conquer.</para>
+
+
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_1.snip"/></textobject></programlisting>
+
       </section>
 
-      <section xml:id="Skeleton_62"><info><title>Skeleton</title>
-        </info>
+      <section xml:id="ImplementingtheMuscleFunctions_62"><info><title>Implementing the Muscle Functions</title></info>
 
-        <para>The <emphasis role="bold">SearchInterval</emphasis> class
-        performes the actual findinf of primes. This class wil recieve an
-        <emphasis role="bold">Interval</emphasis> object and return a
-        <emphasis role="bold">Primes</emphasis> object</para>
+         <para>We will call the problem an <emphasis role="bold">Interval</emphasis> and we will represent it using the
+         following class.</para>
 
-        <programlisting language="java">public class SearchInterval implements Execute&lt;Interval, Primes&gt; {
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_2.snip"/></textobject></programlisting>
 
-    public Primes execute(Interval param, SkeletonSystem system) {
+         <para>The primes that are found will be stored in a <emphasis role="bold">Primes</emphasis> class.</para>
 
-        Primes primes = new Primes();
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_3.snip"/></textobject></programlisting>
 
-        for (int i = param.min; i &lt;= param.max; i++) {
-            if (isPrime(i)) {
-                primes.list.add(new Integer(i));
-            }
-        }
 
-        return primes;
-    }
-    //...
-}</programlisting>
+         <section xml:id="Divide_62"><info><title>Divide</title></info>
+            <para>The division of an <emphasis role="bold">Interval</emphasis>
+            into smaller intervals is handled by an <emphasis role="bold">IntervalDivide</emphasis> class:</para>
+
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_4.snip"/></textobject></programlisting>
+         </section>
+
+         <section xml:id="Condition_62"><info><title>Condition</title></info>
+
+            <para>The class <emphasis role="bold">IntervalDivideCondition
+            </emphasis> is used to determine whether an <emphasis role="bold">Interval</emphasis> has to be subdivided or not.</para>
+
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_5.snip"/></textobject></programlisting>
+         </section>
+
+         <section xml:id="Skeleton_62"><info><title>Skeleton</title></info>
+
+            <para>The <emphasis role="bold">SearchInterval</emphasis> class
+            performs the actual finding of primes. This class will receive an
+            <emphasis role="bold">Interval</emphasis> object and return a
+            <emphasis role="bold">Primes</emphasis> object.</para>
+
+            <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_6.snip"/></textobject></programlisting>
       </section>
 
-      <section xml:id="Conquer_62"><info><title>Conquer</title>
-        </info>
+      <section xml:id="Conquer_62"><info><title>Conquer</title></info>
 
-        <para>The <emphasis role="bold">JoinPrimes</emphasis> class
-        consolidates the result of the sub intervals into a single
-        result.</para>
+         <para>The <emphasis role="bold">JoinPrimes</emphasis> class
+         consolidates the result of the sub intervals into a single
+         result.</para>
 
-        <programlisting language="java">public class JoinPrimes implements Conquer&lt;Primes, Primes&gt; {
-
-    public Primes conquer(Primes[] p, SkeletonSystem system) {
-        Primes conquered = new Primes();
-
-        for (Primes param : p) {
-            conquered.list.addAll(param.primes);
-        }
-
-        Collections.sort(conquered.primes);
-        return conquered;
-    }
-}</programlisting>
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_7.snip"/></textobject></programlisting>
       </section>
     </section>
 
-    <section xml:id="CreateanewCalciumInstance_62"><info><title>Create a new Calcium Instance</title>
-      </info>
+    <section xml:id="CreateanewCalciumInstance_62"><info><title>Create a new Calcium Instance</title></info>
 
-      <para>The instantiation of the framework is performed in the following
-      way</para>
+      <para>The instantiation of the framework is performed in the following way:</para>
 
-      <programlisting language="java">Skeleton&lt;Interval,Primes&gt; root = ...; //Step 1
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_8.snip"/></textobject></programlisting>
 
-EnvironmentFactory enviroment = new MultiThreadedEnvironment(2);
-
-Calcium calcium = new Calcium(enviroment);
-
-Stream&lt;Interval, Primes&gt; stream = calcium.newStream(root);</programlisting>
     </section>
 
     <section xml:id="Provideaninputofproblemstobesolvedbytheframework"><info><title>Provide an input of problems to be solved by the framework</title></info>
 
-      <para/>
-
-      <programlisting language="java">Vector&lt;CalFuture&lt;Primes&gt;&gt; futures = new Vector&lt;Future&lt;Primes&gt;&gt;();
-
-futures.add(stream.input(new Interval(1,6400,300)));
-futures.add(stream.input(new Interval(1,100,20)));
-futures.add(stream.input(new Interval(1,640,64)));
-
-calcium.boot(); //begin the evaluation</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_9.snip"/></textobject></programlisting>
     </section>
 
-    <section xml:id="Collecttheresults_62"><info><title>Collect the results</title>
-      </info>
+    <section xml:id="Collecttheresults_62"><info><title>Collect the results</title></info>
 
-      <programlisting language="java">for(CalFuture&lt;Primes&gt; future:futures){
-    Primes res=future.get();
-    System.out.print(res.list);
-}
-
-calcium.shutdown(); //release the resources</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_10.snip"/></textobject></programlisting>
     </section>
 
-    <section xml:id="Viewtheperformancestatistics_62"><info><title>View the performance statistics</title>
-      </info>
+    <section xml:id="Viewtheperformancestatistics_62"><info><title>View the performance statistics</title></info>
 
-      <para/>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_11.snip"/></textobject></programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_12.snip"/></textobject></programlisting>
+    </section>
 
-      <programlisting language="java">Stats stats = future.get(0).getStats(res);
-System.out.println(stats);</programlisting>
+    <section xml:id="ReleaseResources_62"><info><title>Release the resources</title></info>
+
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_13.snip"/></textobject></programlisting>
     </section>
   </section>
 
   <section xml:id="SupportedPatterns_62"><info><title>Supported Patterns</title>
     </info>
 
-    <para>Skeletons can be composed in the following way:</para>
-
-    <screen>
-            S :=
-            farm(S)|pipe(S1,S2)|if(cond,S1,S2)|while(cond,S)|for(i,S)|dac(cond,div,S,conq)|map(div,
-            S, conq)|fork(div, S1...SN, conq)|seq(f)
-        </screen>
 
     <para>Each skeleton represents a different parallelism described as
     follows:</para>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis role="bold">Farm</emphasis> , also known as <emphasis role="bold">Master-Slave</emphasis> , corresponds to the task
+        <para><emphasis role="bold">Farm</emphasis>: also known as <emphasis role="bold">Master-Slave</emphasis>, corresponds to the task
         replication pattern where a specific function must be executed over a
         set of slaves.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis role="bold">Pipe</emphasis> corresponds to computation
+        <para><emphasis role="bold">Pipe</emphasis>: corresponds to computation
         divided in stages were the stage n+1 is always executed after the n-th
         stage.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis role="bold">If</emphasis> corresponds to a decision
+        <para><emphasis role="bold">If</emphasis>: corresponds to a decision
         pattern, were a choice must be made between executing two
         functions.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis role="bold">While</emphasis> corresponds to a pattern
+        <para><emphasis role="bold">While</emphasis>: corresponds to a pattern
         were a function is executed while a condition is met.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis role="bold">For</emphasis> corresponds to a pattern
+        <para><emphasis role="bold">For</emphasis>: corresponds to a pattern
         were a function is executed a specific number of times.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis role="bold">Divide and Conquer</emphasis> corresponds
+        <para><emphasis role="bold">Divide and Conquer</emphasis>: corresponds
         to a pattern were a problem is divided into several smaller problems
         while a condition is met. The tasks are solved and then solutions are
         then conquered into a single final solution for the original
@@ -315,21 +211,29 @@ System.out.println(stats);</programlisting>
       </listitem>
 
       <listitem>
-        <para><emphasis role="bold">Map</emphasis> corresponds to a pattern
+        <para><emphasis role="bold">Map</emphasis>: corresponds to a pattern
         were the same function is applied to several parts of a problem:
         single instruction multiple data.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis role="bold">Fork</emphasis> is like map, but models
+        <para><emphasis role="bold">Fork</emphasis>: is like map, but models
         multiple data multiple instruction.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis role="bold">Seq</emphasis> is used to wrap muscle
+        <para><emphasis role="bold">Seq</emphasis>: is used to wrap muscle
         functions into terminal skeletons.</para>
       </listitem>
     </itemizedlist>
+
+    <para>Skeletons can be composed in the following way:</para>
+
+    <screen>S := Farm(S)|Pipe(S1,S2)|If(cond,S1,S2)|While(cond,S)|For(i,S)|DaC(cond,div,S,conq)|Map(div, S, conq)|Fork(div, S1...SN, conq)|Seq(f)</screen>
+
+    <para>For instance, you can use an <emphasis role="bold">If</emphasis> pattern to decide, depending on the value of <emphasis role="bold">cond</emphasis>, which pattern you
+    want to use then (for example, if <emphasis role="bold">cond</emphasis> is true, then we will use a <emphasis role="bold">While</emphasis> pattern, otherwise, we will
+    use a <emphasis role="bold">For</emphasis> one).</para>
 
     <para>The Skeleton's API is the following:</para>
 
@@ -343,7 +247,7 @@ class Fork&lt;P,R&gt; implements Skeleton&lt;P,R&gt;   { public &lt;X,Y&gt; Fork
 class DaC&lt;P,R&gt; implements Skeleton&lt;P,R&gt;   { public DaC(Divide&lt;P,P&gt; div, Condition&lt;P&gt; cond, Skeleton&lt;P,R&gt; sub, Conquer&lt;R,R&gt; conq); }
 class Seq&lt;P,R&gt; implements Skeleton&lt;P,R&gt;   { public Seq(Execute&lt;P,R&gt; secCode); }</programlisting>
 
-    <para>Where the muscle functions are user provided, and must implement the
+    <para>Where the muscle functions are user provided, and have to implement the
     following interfaces:</para>
 
     <programlisting language="java">interface Execute&lt;P,R&gt;  extends Muscle&lt;P,R&gt;       { public R exec(P param); }
@@ -352,14 +256,13 @@ interface Divide&lt;P,X&gt;   extends Muscle&lt;P,X[]&gt;     { public List&lt;X
 interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer(Y[] param); }</programlisting>
   </section>
 
-  <section xml:id="ExecutionEnvironments_62"><info><title>Execution Environments</title>
-    </info>
+  <section xml:id="ExecutionEnvironments_62"><info><title>Execution Environments</title></info>
 
-    <para>Calcium can be used with different execution evironments. This
-    means, that an application implemented in one environment is capable of
-    running on a different one. There are currently 3 supported environments:
+    <para>Calcium can be used with different execution environments, that is,
+    an application implemented in one environment is able to
+    run on a different one. There are currently 3 supported environments:
     <emphasis role="bold">MultiThreadedEnvironment</emphasis> (stable),
-    <emphasis role="bold">ProActiveEnvironment</emphasis> (stable), <emphasis role="bold"> ProActiveSchedulerEnvironment </emphasis> (beta).</para>
+    <emphasis role="bold">ProActiveEnvironment</emphasis> (stable), <emphasis role="bold">ProActiveSchedulerEnvironment</emphasis> (beta).</para>
 
     <section xml:id="MultiThreadedEnvironment_62"><info><title>MultiThreadedEnvironment</title>
       </info>
@@ -370,7 +273,8 @@ interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer
       easier environment to debug applications, before submitting them to a
       distributed environment.</para>
 
-      <programlisting language="java">Environment environment = new EnvironmentFactory.newMultiThreadedEnvironment(2); //Number of threads to use.</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_14.snip"/></textobject></programlisting>
+<!--      <programlisting language="java">Environment environment = new EnvironmentFactory.newMultiThreadedEnvironment(2); //Number of threads to use.</programlisting>-->
     </section>
 
     <section xml:id="ProActiveEnvironment_62"><info><title>ProActiveEnvironment</title>
@@ -380,45 +284,42 @@ interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer
       skeleton program on a distributed, but controlled, execution
       environment. It is mostly suitable for short lived distributed
       applications, as it does not yet support a suitable fault-tolerance
-      mechanism. The ProActiveEnvironment uses ProActive Deployment Descriptos
-      to acquire computation nodes, and active object to communicate and
+      mechanism. The ProActiveEnvironment uses ProActive Deployment Descriptors
+      to acquire computation nodes and it uses active objects to communicate and
       distribute the program to the computation nodes.</para>
 
-      <programlisting language="java">String descriptorPath = "/home/user/descriptor.xml";
-Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor);</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_15.snip"/></textobject></programlisting>
+<!--      <programlisting language="java">String descriptorPath = "/home/user/descriptor.xml";-->
+<!--Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor);</programlisting>-->
 
-      <para>To instantiate the environment, a descriptor deployment's path
-      must be specified. The ProActiveEnvironment requires that the descriptor
+      <para>To instantiate the environment, a path toward a descriptor deployment
+      has to be specified. The ProActiveEnvironment requires that this descriptor
       file provides the following contractual variables:</para>
 
-      <programlisting language="java">&lt;variables&gt;
-  &lt;descriptorVariable name="SKELETON_FRAMEWORK_VN" value="framework" /&gt;
-  &lt;descriptorVariable name="INTERPRETERS_VN" value="interpreters" /&gt;
-  &lt;programDefaultVariable name="MAX_CINTERPRETERS" value="3"/&gt;
-&lt;/variables&gt;</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_16.snip"/></textobject></programlisting>
 
       <para>Where the variables represent:</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis role="bold"> SKELETON_FRAMEWORK_VN </emphasis> The
+          <para><emphasis role="bold">SKELETON_FRAMEWORK_VN</emphasis>: The
           virtual-node pointing to the node where the service active object
-          will be placed. This node should be stable and underloadad, since it
+          will be placed. This node should be stable and underloaded, since it
           will hold important objects like the TaskPool and the
           FileServer.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">INTERPRETERS_VN</emphasis> The
+          <para><emphasis role="bold">INTERPRETERS_VN</emphasis>: The
           virtual-node pointing to the nodes that will be used for
           computation. It is important that this nodes can communicate with
           the nodes identified in SKELETON_FRAMEWORK_VN.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold"> MAX_CINTERPRETERS </emphasis> Is an
-          optional variable, and represents the number of maximum tasks that
-          can be queued on an interpreter. By default this value is <emphasis role="bold">3</emphasis> , but can be overriden using this
+          <para><emphasis role="bold">MAX_CINTERPRETERS</emphasis>:
+          (optional variable) Represents the number of maximum tasks that
+          can be queued on an interpreter. By default, this value is <emphasis role="bold">3</emphasis>, but can be overridden using this
           variable.</para>
         </listitem>
       </itemizedlist>
@@ -426,12 +327,10 @@ Environment environment = EnvironmentFactory.newProActiveEnvironment(descriptor)
       <para>The new GCM Deployment mechanism is also supported through the
       following factory mechanism:</para>
 
-      <para><programlisting language="java">String descriptorPath = "/home/user/GCMApplication.xml";
-Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeployment(descriptor);</programlisting></para>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_17.snip"/></textobject></programlisting>
     </section>
 
-    <section xml:id="ProActiveSchedulerEnvironmentunstable_62"><info><title>ProActiveSchedulerEnvironment (unstable)</title>
-      </info>
+    <section xml:id="ProActiveSchedulerEnvironmentunstable_62"><info><title>ProActiveSchedulerEnvironment (unstable)</title></info>
 
       <para>The ProActiveSchedulerEnvironment is suitable for executing long
       running applications, and uses the ProActive Scheduler at the lower
@@ -457,7 +356,7 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
 
     <para>Calcium provides a transparent support for file data access, based
     on the Proxy Pattern. The <emphasis role="bold">BLAST</emphasis> example
-    is implemented using this support in:</para>
+    is implemented using this support:</para>
 
     <programlisting language="java">package org.objectweb.proactive.extensions.calcium.examples.blast;</programlisting>
 
@@ -469,65 +368,21 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       </info>
 
       <para>The <emphasis role="bold">workspace</emphasis> is an abstraction
-      that can be used to create <emphasis role="bold">File</emphasis> s from
+      that can be used to create files from
       inside muscle functions. The framework guarantees that: 1. Any <emphasis role="bold">File</emphasis> created in the workspace will have
-      read/write permissions; 2. if a <emphasis role="bold">File</emphasis> is
+      read/write permissions; 2. If a <emphasis role="bold">File</emphasis> is
       passed as parameter to other muscle functions, the <emphasis role="bold">File</emphasis> will be locally available when another
       muscle function access it. Where <emphasis role="bold">File</emphasis>
-      corresponds to the standard java type <emphasis role="bold">java.io.File</emphasis> .</para>
+      corresponds to the standard Java type <emphasis role="bold">java.io.File</emphasis>.</para>
 
-      <programlisting language="java">    /**
-     * This method is used to get a reference on a file inside the workspace.
-     *
-     * Note that this is only a reference, and can point to an unexistent File.
-     * ie. no File is actually created by invoking this method.
-     *
-     * @param path The path to look inside the workspace.
-     * @return A reference to the path inside the workspace.
-     */
-    public File newFile(String name);
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_WSpace.snip"/></textobject></programlisting>
 
-    /**
-     * Copies a File into the workspace, and returns
-     * a reference on the new File.
-     *
-     * @param src  The original location of the file.
-     * @return A reference to the file inside the workspace.
-     * @throws IOException
-     */
-    public File copyInto(File src) throws IOException;
-
-    /**
-     * Downloads the file specified by the URL and places a copy inside
-     * the workspace.
-     *
-     * @param src The location of the original file
-     * @return A reference to the file inside the workspace.
-     * @throws IOException
-     */
-    public File copyInto(URL src) throws IOException;
-
-    /**
-     * This method returns true if a file with this name exists in the work space.
-     *
-     * @return true if the file exists, false otherwise.
-     */
-    public boolean exists(File path);
-
-    /**
-     * This method returns a list of the files currently available on the root
-     * of the workspace.
-     *
-     * @return The list of files that are currently held in the workspace.
-     */
-    public File[] listFiles();</programlisting>
-
-      <para><emphasis role="bold">File</emphasis> s are treated in a deep-copy
+      <para>Files are treated in a deep-copy
       fashion, analogous with parameters/results of muscle functions. That is
       to say, when a <emphasis role="bold">File</emphasis> reference is passed
-      from one muscle function to the next, the <emphasis role="bold">File</emphasis> 's data is copied. From this point
+      from one muscle function to the next, the <emphasis role="bold">File</emphasis>'s data is copied. From this point
       modifications made on on the <emphasis role="bold">File</emphasis> by
-      different muscle functions are made on copies of the <emphasis role="bold">File</emphasis> 's data.</para>
+      different muscle functions are made on copies of the <emphasis role="bold">File</emphasis>'s data.</para>
     </section>
 
     <section xml:id="AnnotatedMuscleFunctions_62"><info><title>Annotated Muscle Functions</title>
@@ -537,72 +392,41 @@ Environment environment = EnvironmentFactory.newProActiveEnviromentWithGCMDeploy
       performance. By annotating a muscle function, the Calcium framework will
       try to pre-fetch files matching the annotation, and passed as parameters
       to the function in advance, before the function is executed. The current
-      supported annotation can fetch a file based on its name, and
+      supported annotation can fetch a file based on its name and
       size:</para>
 
-      <programlisting language="java">public @interface PrefetchFilesMatching {
-
-    String name() default "[unassigned]";
-    long sizeSmallerThan() default Long.MIN_VALUE;
-    long sizeBiggerThan() default Long.MAX_VALUE;
-}</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_PrefetchFilesMatching.snip"/></textobject></programlisting>
 
       <para>It is important to note that annotations only represent an
-      optimization, and are not required for the <emphasis role="bold">File</emphasis> support to work.</para>
+      optimization and are not required for the <emphasis role="bold">File</emphasis> support to work.</para>
     </section>
 
-    <section xml:id="MuscleFunctionExample_62"><info><title>Muscle Function Example</title>
-      </info>
+    <section xml:id="MuscleFunctionExample_62"><info><title>Muscle Function Example</title></info>
 
       <para>The following example is taken from the BLAST skeleton program.
       The muscle function presented here conquers the results of several
       parallel BLASTs into a single file. First, the annotation is used to try
       and pre-fetch files that begging with the prefix "merged". Then, a new
       <emphasis role="bold">File</emphasis> is created in the workspace to
-      hold the merged files. Then a mergeFiles function is called to merge the
+      hold the merged files. Then, a mergeFiles function is called to merge the
       results, and is not detailed here since it is specific to BLAST. Finally
       the new <emphasis role="bold">File</emphasis> holding the merged results
       is returned.</para>
 
-      <programlisting language="java">@PrefetchFilesMatching(name = "merged.*")
-public class ConquerResults implements Conquer&lt;File, File&gt; {
-
-    public File conquer(File[] param, SkeletonSystem system) throws Exception {
-
-        WSpace wspace = system.getWorkingSpace();
-
-        //Create a reference on the result merged file
-        File merged = wspace.newFile("merged.result" + ProActiveRandom.nextPosInt());
-
-        //Merge the files
-        mergeFiles(merged, param);
-
-        //Return the result
-        return merged;
-    }
-
-    //... mergeFiles(File, File[]) is not shown in this example
-}</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_ConquerResults.snip"/></textobject></programlisting>
     </section>
 
-    <section xml:id="InputandOutputFilesfromtheframework_62"><info><title>Input and Output Files from the framework</title>
-      </info>
+    <section xml:id="InputandOutputFilesfromtheframework_62"><info><title>Input and output files from the framework</title></info>
 
-      <para>The input and output is transparent as long as the <emphasis role="bold">File</emphasis> type class is used to reference Files. All
-      File type referenced from inside the input parameter, are imported into
+      <para>The input and output are transparent as long as the <emphasis role="bold">File</emphasis> type class is used to reference files. All
+      File type referenced from inside the input parameter are imported into
       the Calcium framework when submitting the parameter into the
       stream.</para>
 
-      <programlisting language="java">Stream&lt;File, File&gt; stream = ...;
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_Blast.snip"/></textobject></programlisting>
 
-CalFuture&lt;File&gt; future = stream.input(new File("/home/user/input.data")); //input.data is copied and imported into the framework.
-
-...
-
-File result = future.get(); //The data referenced by result is downloaded into the local machine before result is returned.</programlisting>
-
-      <para>Then when the result is available, all <emphasis role="bold">File</emphasis> typed referenced in the result object are
-      copied into the local machine, before the result is returned to the
+      <para>Then, when the result is available, all <emphasis role="bold">File</emphasis> typed referenced in the result object are
+      copied into the local machine before the result is returned to the
       user.</para>
     </section>
   </section>
@@ -633,18 +457,13 @@ File result = future.get(); //The data referenced by result is downloaded into t
       <para>Statistics for a specific moment can be directly retrieved from
       the Calcium instance:</para>
 
-      <programlisting language="java">StatsGlobal statsGlobal = calcium.getStatsGlobal()</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_GlobalStat.snip"/></textobject></programlisting>
 
-      <para>An alternative is to create a monitor that can be performe
-      functions based on the statistics. In the following example we activate
-      a simple logger monitor that prints the statistics every 5
-      seconds.</para>
+      <para>An alternative is to create a monitor that can perform
+      functions based on the statistics. In the following example, we activate
+      a simple logger monitor that prints the statistics every second.</para>
 
-      <programlisting language="java">Monitor monitor= new SimpleLogMonitor(calcium, 5);
-
-monitor.start();
-...
-monitor.stop();</programlisting>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_simpleLogMonitor.snip"/></textobject></programlisting>
     </section>
 
     <section xml:id="LocalResultStatistics_62"><info><title>Local Result Statistics</title>
@@ -662,7 +481,7 @@ monitor.stop();</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para>Time spent by this task in the <emphasis role="bold">ready</emphasis> , <emphasis role="bold">processing</emphasis> , <emphasis role="bold">waiting</emphasis> and <emphasis role="bold">executing</emphasis> state. Also, the wallclock and
+          <para>Time spent by this task in the <emphasis role="bold">ready</emphasis>, <emphasis role="bold">processing</emphasis>, <emphasis role="bold">waiting</emphasis> and <emphasis role="bold">executing</emphasis> state. Also, the wallclock and
           computation time are provided.</para>
         </listitem>
       </itemizedlist>
@@ -673,6 +492,7 @@ monitor.stop();</programlisting>
           elements in the tree.</para>
         </listitem>
       </itemizedlist>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_resultStats.snip"/></textobject></programlisting>
     </section>
   </section>
 </chapter>

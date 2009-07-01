@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ProActiveDescriptor xmlns="urn:proactive:deployment:3.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:proactive:deployment:3.3 http://www-sop.inria.fr/oasis/ProActive/schemas/deployment/3.3/deployment.xsd">
+	<!-- @snippet-start calcium_primes_16 -->
 	<variables>
  	    <descriptorVariable name="SKELETON_FRAMEWORK_VN" value="framework" />     	
 		<descriptorVariable name="INTERPRETERS_VN" value="interpreters" />
  	    <programDefaultVariable name="MAX_CINTERPRETERS" value="3"/>
     </variables>
+    <!-- @snippet-end calcium_primes_16 -->
 	
 	<componentDefinition>
 		<virtualNodesDefinition>

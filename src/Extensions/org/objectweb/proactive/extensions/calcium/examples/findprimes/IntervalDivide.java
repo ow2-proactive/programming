@@ -29,6 +29,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+// @snippet-start calcium_primes_4
 package org.objectweb.proactive.extensions.calcium.examples.findprimes;
 
 import org.objectweb.proactive.extensions.calcium.muscle.Divide;
@@ -48,3 +49,4 @@ public class IntervalDivide implements Divide<Interval, Interval> {
         return new Interval[] { top, bottom };
     }
 }
+//@snippet-end calcium_primes_4

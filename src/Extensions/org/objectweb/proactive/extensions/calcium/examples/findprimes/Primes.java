@@ -29,6 +29,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+// @snippet-start calcium_primes_3
 package org.objectweb.proactive.extensions.calcium.examples.findprimes;
 
 import java.io.Serializable;
@@ -42,3 +43,4 @@ public class Primes implements Serializable {
         primes = new Vector<Integer>();
     }
 }
+//@snippet-end calcium_primes_3
