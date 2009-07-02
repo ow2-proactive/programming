@@ -5,10 +5,10 @@
     
 
     <para>In order to get easier and more flexible configuration in ProActive,
-    we introduced an xml file where all ProActive related configuration is
+    we introduced an XML file where all ProActive related configuration is
     located. It represents properties that will be added to the System when an
     application using ProActive is launched. Some well-known
-    properties(explained after) will determine the behaviour of ProActive
+    properties (explained after) will determine the behaviour of ProActive
     services inside a global application. That file can also contain <emphasis role="bold">user-defined</emphasis> properties to be used in their
     application.</para>
   </section>
@@ -17,37 +17,37 @@
   <section xml:id="Howdoesitwork_69"><info><title>How does it work?</title></info>
     
 
-    <para>Using this file is very straightforward, since all lines must follow
-    the model: &lt;prop <emphasis role="bold">key</emphasis>='somekey'
-    <emphasis role="bold">value</emphasis>='somevalue'/&gt;</para>
+    <para>Using this file is very straightforward since all lines must follow
+    the model:</para>
+    <programlisting language="xml">&lt;prop key="somekey" value="somevalue" /&gt;</programlisting>
 
     <para>Those properties will be set in the System using
     System.setProperty(key,value) <emphasis role="bold">if and only
     if</emphasis> this property is not already set in the System.</para>
 
     <para>If an application is using ProActive, that file is loaded once when
-    a method is called through a ProActive 'entry point'. By 'entry point' we
-    mean ProActive class, NodeFactory class, RuntimeFactory class (static
+    a method is called through a ProActive 'entry point'. By 'entry point', we
+    mean ProActive class, NodeFactory class or RuntimeFactory class (static
     block in all that classes).</para>
 
-    <para>For instance calling <emphasis role="bold">PAActiveObject.newActive or
-    NodeFactory.getNode</emphasis> .... loads that file. This only occurs once
-    inside a jvm.</para>
+    <para>For instance, calling <emphasis role="bold">PAActiveObject.newActive or
+    NodeFactory.getNode</emphasis> will load that file. This only occurs once
+    inside a JVM.</para>
 
     <para>As said before this file can contain <emphasis role="bold">user-defined</emphasis> properties. It means that people used
     to run their application with:</para>
 
-    <para>java .... -Dprop1=value1 -Dprop2=value2 .... -Dpropn=valuen can
-    define all their properties in the ProActive configuration file
+    <screen>java -Dprop1=value1 -Dprop2=value2 ... -Dpropn=valuen</screen>
+    
+    <para>can define all their properties in the ProActive configuration file
     with:</para>
 
-    <para>&lt;prop <emphasis role="bold">key</emphasis>='prop1' <emphasis role="bold">value</emphasis>='value1'/&gt;</para>
-
-    <para>&lt;prop <emphasis role="bold">key</emphasis>='prop2' <emphasis role="bold">value</emphasis>='value2'/&gt;</para>
-
-    <para>...</para>
-
-    <para>&lt;prop <emphasis role="bold">key</emphasis>='propn' <emphasis role="bold">value</emphasis>='valuen'/&gt;</para>
+    <programlisting language="xml">
+&lt;prop <emphasis role="bold">key</emphasis>='prop1' <emphasis role="bold">value</emphasis>='value1'/&gt;
+&lt;prop <emphasis role="bold">key</emphasis>='prop2' <emphasis role="bold">value</emphasis>='value2'/&gt;
+...
+&lt;prop <emphasis role="bold">key</emphasis>='propn' <emphasis role="bold">value</emphasis>='valuen'/&gt;
+    </programlisting>
   </section>
 
   <section xml:id="Wheretoaccessthisfile"><info><title>Where to access this file?</title></info>
@@ -55,89 +55,88 @@
 
 	<section xml:id="ProActiveDefaultConfigurationfile_69"><info><title>ProActive Default Configuration file</title></info> 
     <para>There is a default file with default ProActive options located under
-    ProActive/src/org/objectweb/proactive/core/config/ProActiveConfiguration.xml.
+    <literal>ProActive/src/org/objectweb/proactive/core/config/ProActiveConfiguration.xml</literal>.
     This file is automatically copied with the same package structure under
     the classes directory when compiling source files with the
-    ProActive/compile/build facility. Hence it is included in the jar file of
+    <literal>ProActive/compile/build</literal> facility. Hence, it is included in the jar file of
     the distribution under
-    org/objectweb/proactive/core/config/ProActiveConfiguration.xml (See below
+    <literal>org/objectweb/proactive/core/config/ProActiveConfiguration.xml</literal> (See below
     for default options).</para>
 	</section>
 	<section xml:id="UserdefinedProActiveConfigurationfile_69"><info><title>User-defined ProActive Configuration file</title></info> 
 	<para>
-		It is possible for an user to override the default ProActive configuration file
-		by setting properties in a file located at the following path :
-	    <screen>
-	     for unix users : $HOME/.proactive/ProActiveConfiguration.xml
-	     for windows users : $HOME\.proactive\ProActiveConfiguration.xml  </screen>
+		It is possible for a user to override the default ProActive configuration file
+		by setting properties in a file located at the following path:
+	    <screen>for unix users: $HOME/.proactive/ProActiveConfiguration.xml
+for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
 	</para>
     </section>
     <section xml:id="AlternateUserConfigurationfile_69"><info><title>Alternate User Configuration file</title></info> 
 
     <para>People can specify their own configuration file by running their
-    application with proactive.configuration option, i.e</para>
+    application with proactive.configuration option, i.e. with the following command:</para>
 
-
-    <para>java ... <emphasis role="bold">-Dproactive.configuration=pathToTheConfigFile</emphasis>. In
-    that case, the given xml file is loaded. Some ProActive properties(defined
+    <screen>java ... <emphasis role="bold">-Dproactive.configuration=pathToTheConfigFile</emphasis></screen>
+    <para>In that case, the given XML file is loaded. Some ProActive properties (defined
     below) are required for applications using ProActive to work, so even if
     not defined in user config file, they will be loaded programatically with
     default values. So people can just ignore the config file if they are
     happy with the default configuration or create their own file if they want
-    to change ProActive properties values or add their own properties</para>
+    to change ProActive properties values or add their own properties.</para>
 
-    <para>A specific tag: <emphasis role="bold">&lt;ProActiveUserPropertiesFile&gt;</emphasis> is provided in
-     Deployment Descriptors (see <xref linkend="XML_Descriptors"/>) to notify
-    remote jvms which configuration file to load once created:</para>
+    <para>The specific tag <emphasis role="bold">&lt;ProActiveUserPropertiesFile&gt;</emphasis> is provided in
+     deployment descriptors (see <xref linkend="XML_Descriptors"/>) to notify
+     the remote JVMs which configuration file to load once created:</para>
 
-    <screen>&lt;jvmProcess class='org.objectweb.proactive.core.process.JVMNodeProcesss'&gt;
-...
- &lt;ProActiveUserPropertiesFile&gt;
- &lt;absolutePath value='/net/home/rquilici/config.xml'/&gt;
- &lt;/ProActiveUserPropertiesFile&gt;
-...
-&lt;/jvmProcess&gt; </screen>
-</section>
-  </section>
+    <programlisting language="xml">
+&lt;jvmProcess class='org.objectweb.proactive.core.process.JVMNodeProcesss'&gt;
+   ...
+   &lt;ProActiveUserPropertiesFile&gt;
+      &lt;absolutePath value='/net/home/rquilici/config.xml'/&gt;
+   &lt;/ProActiveUserPropertiesFile&gt;
+   ...
+&lt;/jvmProcess&gt;</programlisting>
+   </section>
+   </section>
 
   <section xml:id="ProActiveproperties_69"><info><title>ProActive properties</title></info>
     
+    <para>All the properties described here after are defined in the <literal>org.objectweb.proactive.core.config.PAProperties</literal> class.
+    To have an exhaustive list of ProActive properties, please refer to this class.</para>
 
     <section xml:id="Required_69"><info><title>Required</title></info>
      
 
         <para><itemizedlist>
             <listitem>
-              <para><emphasis role="bold">proactive.communication.protocol</emphasis>
-              represents the communication protocol i.e the protocol, objects
-              on remote JVMS are exported with. At this stage several
+              <para><emphasis role="bold">proactive.communication.protocol</emphasis>:
+              Represents the communication protocol, i.e. the protocol used to export objects
+              on remote JVMs. At this stage, several
               protocols are supported: <emphasis role="bold">RMI(rmi),
               HTTP(http), IBIS/RMI(ibis), SSH tunneling for RMI/HTTP(rmissh),
-              ProActive Message Routing(pamr)</emphasis>. It means that once the JVM starts, Nodes,
-              Active Objects that will be created on this JVM, will export
+              ProActive Message Routing(pamr)</emphasis>. It means that once the JVM starts, nodes and
+              active objects that will be created on this JVM will export
               themselves using the protocol specified in <emphasis role="bold">proactive.communication.protocol</emphasis>
               property. They will be reachable transparently through the given
               protocol.</para>
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">schema.validation</emphasis> . Two
-              values are possible:<emphasis role="bold">true,
-              false</emphasis>. If true, all xml files will be validated
-              against provided schema. Default is <emphasis role="bold">true</emphasis></para>
+              <para><emphasis role="bold">schema.validation</emphasis>: 
+              Boolean property indicating whether to validate XML files against the
+              provided schema.Default is <emphasis role="bold">true</emphasis></para>
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">proactive.future.ac</emphasis> . Two
-              values are possible:<emphasis role="bold">true,
-              false</emphasis> If 'true' is chosen, Automatic Continuations
+              <para><emphasis role="bold">proactive.future.ac</emphasis>: 
+              Boolean value saying whether to activate Automatic Continuations
               <indexterm><primary>Automatic Continuation</primary><secondary>proactive.future.ac</secondary></indexterm>
-              are activated (see <xref linkend="AC"/>). Default is <emphasis role="bold">true</emphasis></para>
+              (see <xref linkend="AC"/>). Default is <emphasis role="bold">true</emphasis></para>
             </listitem>
           </itemizedlist></para>
 
-        <para>Note that if not specified those properties are set
-        programmatically with the default value.</para>
+        <note><para>If not specified, those properties are set
+        programmatically with the default value.</para></note>
         
       </section>
       <section xml:id="Faulttoleranceproperties_69"><info><title>Fault-tolerance properties</title></info>
@@ -151,42 +150,42 @@
 
         <itemizedlist>
           <listitem>
-            <para><emphasis role="bold">proactive.ft</emphasis> . Two values
-            are possible: <emphasis role="bold">true, false</emphasis>. If
-            true, the fault-tolerance is enable and a set of servers must be
+            <para><emphasis role="bold">proactive.ft</emphasis>:
+            Boolean indicating whether to enable
+            the fault-tolerance and if so, a set of servers has to be
             defined with the following properties. Default value is <emphasis role="bold">false</emphasis>.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis role="bold">proactive.ft.server.checkpoint</emphasis> is the URL
+            <para><emphasis role="bold">proactive.ft.server.checkpoint</emphasis>: URL
              of the checkpoint server.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis role="bold">proactive.ft.server.location</emphasis> is the URL of
+            <para><emphasis role="bold">proactive.ft.server.location</emphasis>: URL of
              the location server.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis role="bold">proactive.ft.server.recovery</emphasis> is the URL of
-             the recovery process .</para>
+            <para><emphasis role="bold">proactive.ft.server.recovery</emphasis>: URL of
+             the recovery process.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis role="bold">proactive.ft.server.resource</emphasis> is the URL of
+            <para><emphasis role="bold">proactive.ft.server.resource</emphasis>: URL of
              the resource server.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis role="bold">proactive.ft.server.global</emphasis>
-             is the URL of the global server.
-            If this property is set, all others <emphasis role="bold">proactive.fr.server.*</emphasis> are ignored.</para>
+            <para><emphasis role="bold">proactive.ft.server.global</emphasis>:
+             URL of the global server.
+             If this property is set, all others <emphasis role="bold">proactive.fr.server.*</emphasis> are ignored.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis role="bold">proactive.ft.ttc</emphasis> is the
-             value of the Time To Checkpoint counter, in seconds. 
-             The default value is 30 sec.</para>
+            <para><emphasis role="bold">proactive.ft.ttc</emphasis>:
+             Value of the Time To Checkpoint counter (in seconds). 
+             The default value is <emphasis role="bold">30 sec</emphasis>.</para>
           </listitem>
         </itemizedlist>
        </section>
@@ -198,64 +197,63 @@
 
     <para><itemizedlist>
         <listitem>
-          <para><emphasis role="bold">proactive.ssh.port</emphasis>: the port
-          number on which all the ssh daemons to which this JVM must connect
-          to are expected to listen. If this property is not set, the default
-          is 22.</para>
+          <para><emphasis role="bold">proactive.ssh.port</emphasis>: Port
+          number on which all the ssh daemons to which this JVM has to connect
+          to are expected to listen. The default value
+          is <emphasis role="bold">22</emphasis>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.ssh.username</emphasis>: the
-          username which will be used during authentication with all the ssh
-          daemons to which this JVM will need to connect to. If this property
-          is not set, the default is the user.name java property.</para>
+          <para><emphasis role="bold">proactive.ssh.username</emphasis>:
+          Username which will be used during authentication with all the ssh
+          daemons to which this JVM will need to connect to.
+          The default is the <emphasis role="bold">user.name</emphasis> java property.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.ssh.known_hosts</emphasis>: a
-          filename which identifies the file which contains the traditional
+          <para><emphasis role="bold">proactive.ssh.known_hosts</emphasis>:
+          Filename which identifies the file which contains the traditional
           ssh known_hosts list. This list of hosts is used during
           authentication with each ssh daemon to which this JVM will need to
           connect to. If the host key does not match the one stored in this
-          file, the authentication will fail. If this property is not set, the
-          default is System.getProperty ('user.home') +
-          '/.ssh/known_hosts'</para>
+          file, the authentication will fail. The
+          default is <emphasis role="bold">System.getProperty('user.home') +
+          '/.ssh/known_hosts'</emphasis></para>
         </listitem>
 
         <listitem>
           <para><emphasis role="bold">proactive.ssh.key_directory</emphasis>:
-          a directory which is expected to contain the pairs of public/private
-          keys used during authentication. the private keys must not be
-          encrypted. The public keys filenames must match '*.pub'. Private
-          keys are ignored if their associated public key is not present. If
-          this property is not set, the default is System.getProperty
-          ('user.home') + '/.ssh/'</para>
+          Directory which is expected to contain the pairs of public/private
+          keys used during authentication. The private keys must not be
+          encrypted. The public keys filenames has to be suffixed by '.pub'. Private
+          keys are ignored if their associated public key is not present.
+          The default is <emphasis role="bold">System.getProperty('user.home') + '/.ssh/'</emphasis>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.tunneling.try_normal_first</emphasis>: if this
+          <para><emphasis role="bold">proactive.tunneling.try_normal_first</emphasis>: If this
           property is set to 'yes', the tunneling code always attempts to make
           a direct rmi connection to the remote object before tunneling. If
-          this property is not set, the default is not to make these
-          direct-connection attempts. This property is especially useful if
+          The default is <emphasis role="bold">no</emphasis> meaning these
+          direct-connection will not be attempted. This property is especially useful if
           you want to deploy a number of objects on a LAN where only one of
           the hosts needs to run with the rmissh protocol to allow hosts
-          outside the LAN to connect to this frontend host. The other hosts
+          outside the LAN to connect to this front-end host. The other hosts
           located on the LAN can use the try_normal_first property to avoid
-          using tunneling to make requests to the LAN frontend.</para>
+          using tunneling to make requests to the LAN front-end.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.tunneling.connect_timeout</emphasis>: this
+          <para><emphasis role="bold">proactive.tunneling.connect_timeout</emphasis>: This
           property specifies how long the tunneling code will wait while
           trying to establish a connection to a remote host before declaring
-          that the connection failed. If this property is not set, the default
-          value is 2000ms.</para>
+          that the connection failed. The default
+          value is <emphasis role="bold">2000 ms</emphasis>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis role="bold">proactive.tunneling.use_gc</emphasis>:
-          if this property is set to 'yes', the client JVM does not destroy
+          If this property is set to 'yes', the client JVM does not destroy
           the ssh tunnels are soon as they are not used anymore. They are
           queued into a list of unused tunnels which can be reused. If this
           property is not set or is set to another value, the tunnels are
@@ -263,11 +261,11 @@
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.tunneling.gc_period</emphasis>: this property
+          <para><emphasis role="bold">proactive.tunneling.gc_period</emphasis>: This property
           specifies how long the tunnel garbage collector will wait before
-          destroying a unused tunnel. If a tunnel is older than this value, it
-          is automatically destroyed. If this property is not set, the default
-          value is 10000ms.</para>
+          destroying an unused tunnel. If a tunnel is older than this value, it
+          is automatically destroyed. The default
+          value is <emphasis role="bold">10000 ms</emphasis>.</para>
         </listitem>
       </itemizedlist></para>
     </section>
@@ -276,63 +274,63 @@
 
     
 
-        <para><itemizedlist>
+        <itemizedlist>
             <listitem>
-              <para><emphasis role="bold">proactive.rmi.port</emphasis>
-              represents the port number on which to start the RMIRegistry.
-              Default is 1099. If an RMIRegistry is already running on the
-              given port, jms use the existing registry</para>
+              <para><emphasis role="bold">proactive.rmi.port</emphasis>:
+              Represents the port number on which to start the RMIRegistry.
+              Default is <emphasis role="bold">1099</emphasis>. If an RMIRegistry is already running on the
+              given port, JMS uses the existing registry.</para>
             </listitem>
 
             <listitem>
               
              <indexterm><primary>Http</primary><secondary>port</secondary></indexterm>
 
-             <para><emphasis role="bold">proactive.http.port</emphasis>
-              represents the port number on which to start the HTTP server.
-              Default is 2010. If this port is occupied by another
-              application, the http server starts on the first free port(given
-              port is incremented transparently)</para>
+             <para><emphasis role="bold">proactive.http.port</emphasis>:
+              Represents the port number on which to start the HTTP server.
+              Default is <emphasis role="bold">2010</emphasis>. If this port is occupied by another
+              application, the http server starts on the first free port (given
+              port is transparently incremented).</para>
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">proactive.useIPaddress</emphasis> if
+              <para><emphasis role="bold">proactive.useIPaddress</emphasis>: If
               set to <emphasis role="bold">true</emphasis>, IP adresses will
               be used instead of machines names. This property is particularly
-              usefull to deal with sites that do not host a DNS</para>
+              useful to deal with sites that do not host a DNS.</para>
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">proactive.hostname</emphasis> when
-              this property is set, the host name on which the jvm is started
+              <para><emphasis role="bold">proactive.hostname</emphasis>: When
+              this property is set, the host name on which the JVM is started
               is given by the value of the property. This property is
-              particularly usefull to deal with machines with two network
-              interfaces</para>
+              particularly useful to deal with machines with two network
+              interfaces.</para>
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">proactive.locationserver</emphasis>
-              represents the location server class to instantiate when using
-              Active Objects with Location Server</para>
+              <para><emphasis role="bold">proactive.locationserver</emphasis>:
+              Represents the location server class to instantiate when using
+              Active Objects with Location Server.</para>
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">proactive.locationserver.rmi</emphasis> represents
-              the url under which the Location Server is registered in the
-              RMIRegistry</para>
+              <para><emphasis role="bold">proactive.locationserver.rmi</emphasis>: Represents
+              the URL under which the Location Server is registered in the
+              RMIRegistry.</para>
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">fractal.provider</emphasis> This
+              <para><emphasis role="bold">fractal.provider</emphasis>: This
               property defines the bootstrap component for the Fractal
-              component model</para>
+              component model.</para>
             </listitem>
+          </itemizedlist>
 
-            <listitem>
+            <note>
               <para>Note that as mentionned above, user-defined properties can
               be added.</para>
-            </listitem>
-          </itemizedlist></para>
+            </note>
         </section>
   </section>
 
@@ -342,20 +340,20 @@
     <para>A configuration file could have following structure:</para>
 
     <example xml:id="Aconfigurationfileexample_69"><info><title>A configuration file example</title></info>
-    
-     
-    <screen>&lt;ProActiveUserProperties&gt;
- &lt;properties&gt;
-   &lt;prop <emphasis role="bold">key</emphasis>='schema.validation' <emphasis role="bold">value</emphasis>='disable'/&gt;
-   &lt;prop <emphasis role="bold">key</emphasis>='proactive.future.ac' <emphasis role="bold">value</emphasis>='true'/&gt;
-   &lt;prop <emphasis role="bold">key</emphasis>='proactive.communication.protocol' <emphasis role="bold">value</emphasis>='rmi'/&gt;
-   &lt;prop <emphasis role="bold">key</emphasis>='proactive.rmi.port' <emphasis role="bold">value</emphasis>='2001-2005'/&gt;
-   ....
-   &lt;prop <emphasis role="bold">key</emphasis>='myprop' <emphasis role="bold">value</emphasis>='myvalue'/&gt;
- ....
- &lt;/properties&gt;
-&lt;/ProActiveUserProperties&gt;</screen>
-</example>
+       <programlisting language="xml">
+&lt;ProActiveUserProperties&gt;
+   &lt;properties&gt;
+      &lt;prop <emphasis role="bold">key</emphasis>='schema.validation' <emphasis role="bold">value</emphasis>='disable'/&gt;
+      &lt;prop <emphasis role="bold">key</emphasis>='proactive.future.ac' <emphasis role="bold">value</emphasis>='true'/&gt;
+      &lt;prop <emphasis role="bold">key</emphasis>='proactive.communication.protocol' <emphasis role="bold">value</emphasis>='rmi'/&gt;
+      &lt;prop <emphasis role="bold">key</emphasis>='proactive.rmi.port' <emphasis role="bold">value</emphasis>='2001-2005'/&gt;
+      ...
+      &lt;prop <emphasis role="bold">key</emphasis>='myprop' <emphasis role="bold">value</emphasis>='myvalue'/&gt;
+      ...
+   &lt;/properties&gt;
+&lt;/ProActiveUserProperties&gt;
+      </programlisting>
+    </example>
     <note><para>
       In order to have ProActive parse correctly the document, the following are mandatory:
       <itemizedlist>
@@ -376,48 +374,48 @@
   
   
   	<para>
-		A ProActive runtime is only able to bind to one and only one InetAddress.
+		   A ProActive runtime is only able to bind to one and only one InetAddress.
    		Usually, this limitation is not seen by the user and no special configuration
    		is required. ProActive tries to use the most suitable network address available. 
    		But sometimes, ProActive fails to elect the right IP address or the user wants to
    		use a given IP address. In such case, you can specify the IP address to use by using 
-   		theses properties: <emphasis>proactive.hostname</emphasis>, 
-   		<emphasis>proactive.net.interface</emphasis>,  <emphasis>proactive.net.netmask</emphasis>, 
-   		<emphasis>proactive.net.nolocal</emphasis>, <emphasis>proactive.net.noprivate</emphasis>.
+   		theses properties: <emphasis role="bold">proactive.hostname</emphasis>, 
+   		<emphasis role="bold">proactive.net.interface</emphasis>,  <emphasis role="bold">proactive.net.netmask</emphasis>, 
+   		<emphasis role="bold">proactive.net.nolocal</emphasis>, <emphasis role="bold">proactive.net.noprivate</emphasis>.
    	</para>
   
   	<para>
   		IPv6 can be enabled by setting the <emphasis>proactive.net.disableIPv6</emphasis>
-  		property to false. By default ProActive will not use IPv6 addresses.
+  		property to <emphasis role="bold">false</emphasis>. By default, ProActive will not use IPv6 addresses.
   	</para>
   	 	
    	<para>
    		If none of the <emphasis>proactive.hostname</emphasis>, 
-   		<emphasis>proactive.net.interface</emphasis>,  <emphasis>proactive.net.netmask</emphasis>, 
+   		<emphasis>proactive.net.interface</emphasis>, <emphasis>proactive.net.netmask</emphasis>, 
    		<emphasis>proactive.net.nolocal</emphasis>, <emphasis>proactive.net.noprivate</emphasis>   		
    		 properties is defined, then the following algorithm is used to elect an IP address:
    		<itemizedlist>
    			<listitem>
    				<para>
-					If a public IP address is available use it. If several ones are 
-					available, one is chosen randomly.					
+					If a public IP address is available, then use it. If several ones are 
+					available, one is randomly chosen.					
    				</para>
    			</listitem>
    			<listitem>
    				<para>
-   					If a private IP address is available use it. If several ones are
-   					available, one is chosen randomly.
+   					If a private IP address is available, then use it. If several ones are
+   					available, one is randomly chosen.
    				</para>
    			</listitem>
    			<listitem>
    				<para>
-   					If a loopback IP address is available use it. If several ones are
-   					available, one is chosen randomly.
+   					If a loopback IP address is available, then use it. If several ones are
+   					available, one is randomly chosen.
    				</para>
    			</listitem>
    			<listitem>
    				<para>
-					If no IP address is available at all. Then the runtime exits with an 
+					If no IP address is available at all, then the runtime exits with an 
 					error message.
    				</para>
    			</listitem>
@@ -425,15 +423,15 @@
 	</para> 
    	
    	<para>
-   		If <emphasis>proactive.hostname</emphasis> is set, then the value returned by
-   		<emphasis>InetAddress.getByName(proactive.hostname)</emphasis> is elected. If no
+   		If <emphasis role="bold">proactive.hostname</emphasis> is set, then the value returned by
+   		<emphasis role="bold">InetAddress.getByName(proactive.hostname)</emphasis> is elected. If no
    		IP address is found, then the runtime exits with an error message.
    	</para>
    	
    	<para>
-	   	If <emphasis>proactive.hostname</emphasis> is not set, and at least one of the
-	    <emphasis>proactive.net.interface</emphasis>,  <emphasis>proactive.net.netmask</emphasis>, 
-   		<emphasis>proactive.net.nolocal</emphasis>, <emphasis>proactive.net.noprivate</emphasis> 
+	   	If <emphasis role="bold">proactive.hostname</emphasis> is not set, and at least one of the
+	    <emphasis role="bold">proactive.net.interface</emphasis>,  <emphasis role="bold">proactive.net.netmask</emphasis>, 
+   		<emphasis role="bold">proactive.net.nolocal</emphasis>, <emphasis role="bold">proactive.net.noprivate</emphasis> 
    		is set, then one of the addresses matching all the requirements is elected. Requirements are:
    		
    		<itemizedlist>
@@ -470,16 +468,14 @@
   	
   	<para>
   		The easiest way to check if ProActive elect the address you want is to run the following command:
-  		<screen>
-java -jar dist/lib/ProActive.jar
-  		</screen>
+  		<screen>java -jar dist/lib/ProActive.jar</screen>
   		
-  		It shows the elected IP address, and shows all the network interfaces and IP addresses available. It also 
+  		It shows the elected IP address and  all the network interfaces and IP addresses available. It also 
   		displays all the configuration properties and their value.
   		
   		<screen>
   		--------------------
-		ProActive 4.1.0-beta
+		ProActive 2008-07-10 11:59:18
 		--------------------
 
 
@@ -497,7 +493,7 @@ Available properties:
   	</para>
   	
   	<para>
-  		Some examples follows:
+  		Here are some examples you can adapt to your situation:
   		
   		<screen>
 $ # Use the default algorithm, since no public IP address is available, 192.168.1.22 is elected.
@@ -515,7 +511,7 @@ $ java -Dproactive.net.netmask="192.168.2.0/24" -Dproactive.net.noprivate=true -
   	</para>
 
 	<para>
-		The log4j logger <emphasis>proactive.configuration.network</emphasis> can be used to diagnosis why
+		The log4j logger <emphasis role="bold">proactive.configuration.network</emphasis> can be used to diagnosis why
 		an IP address is elected or rejected.
 	</para>
   </section>
@@ -526,9 +522,9 @@ $ java -Dproactive.net.netmask="192.168.2.0/24" -Dproactive.net.noprivate=true -
   	</info>
 
 	<para>
-		ProActive Programming uses log4j as logging framework. This section present various log4j
+		ProActive Programming uses log4j as logging framework. This section presents various log4j
 		setups for distributed applications. It also introduces the ProActive log4j appender. It aims 
-		to allow easy centralization of all the logging events created by a distributed application.
+		at allowing easy centralization of all the logging events created by a distributed application.
 		It relies on ProActive communications to send logging events from computational resources 
 		to a collector.
 	</para>
@@ -545,9 +541,9 @@ $ java -Dproactive.net.netmask="192.168.2.0/24" -Dproactive.net.noprivate=true -
 		</info>
 		
 		<para>
-			Until ProActive Programming 4.1.0, a default log4j configuration file was shipped with the
+			Before ProActive Programming 4.1.0, a default log4j configuration file was shipped with the
 			ProActive Programming jar file. This configuration file defined a ConsoleAppender to log
-			all the logging event on the standard output with a custom layout. With this configuration,
+			all the logging events on the standard output with a custom layout. With this configuration,
 			it was not easy to gather all the logging events. Even if the GCM Deployment monitors the
 			standard output of the forked processes, job scheduler like LSF or PBS redirect the standard 
 			output to a file. The user had to collect the log by itself.
@@ -676,8 +672,7 @@ log4j.rootLogger=INFO,REMOTE
 
 log4j.appender.REMOTE=org.objectweb.proactive.core.util.log.remote.ProActiveAppender
 log4j.appender.REMOTE.layout=org.apache.log4j.PatternLayout
-log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20c{2}] %m%n
-			</screen>
+log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20c{2}] %m%n</screen>
 		</para>
 		
 		<para>
@@ -704,12 +699,12 @@ log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20
 			communication (bullet 4). It defines its owns buffering and flushing policy. By default the 
 			<code>org.objectweb.proactive.core.util.log.remote.ThrottlingProvider</code> is used. It 
 			defines a simple but flexible and robust flushing policy. Logging events are buffered until
-			one of the following condition is met:
+			one of the following conditions is met:
 			
 			<itemizedlist>
 				<listitem>
 					<para>
-						The number of buffered messages reach a threshold
+						The number of buffered messages has reached a threshold
 					</para>
 				</listitem>
 				<listitem>
@@ -726,9 +721,9 @@ log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20
 		</para>
 		
 		<para>
-			When the log collector receives a set of logging events it forwards each logging events to 
+			When the log collector receives a set of logging events, it forwards each logging events to 
 			the local Logger which invoke the appenders defined by <filename>local.log4j</filename> 
-			(bullet 5). Appenders then write the logging events somewhere (file, standard output etc).
+			(bullet 5). Appenders then write the logging events somewhere (file, standard output etc.).
 		</para>
 	</section>
 	
@@ -746,12 +741,12 @@ log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20
 			When the GCM Deployment framework starts a ProActive runtime, if no <code>log4jProperties</code> 
 			tag is defined in the GCM Application descriptor file, then the <filename>distributed-log4j</filename>
 			is used as log4j configuration file. It sends all the logging events with a level equals 
-			or higher than <code>INFO</code> to a log collector located on the machine who loaded the 
+			or higher than <code>INFO</code> to a log collector located on the machine which has loaded the 
 			GCM Application descriptor. The logging events are handled by the appenders defined in 
-			the <filename>local.log4j</filename> file. Logging events filtering is done client side,
-			not server side (ie. all the logging events received by the log collector are forwarded 
-			to the appenders). To enable the DEBUG level on deployed machines you 
-			must write a <filename>remote.log4j</filename> configuration file and set 
+			the <filename>local.log4j</filename> file. Logging events filtering is done on the client side,
+			not on the server side (i.e. all the logging events received by the log collector are forwarded 
+			to the appenders). To enable the DEBUG level on deployed machines, you 
+			have to write a <filename>remote.log4j</filename> configuration file and set 
 			the <code>log4jProperties</code> tag in the GCM Application descriptor file. 
 		</para>
 		
@@ -780,21 +775,21 @@ log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20
 		
 		<para>
 			The ProActiveAppender is well suited for development and most production needs. It is 
-			easy to setup and well integrated to the ProActive GCM Deployment.  But if your
-			application generates a lot of logging events, or if you don't want to rely on ProActive
+			easy to setup and well integrated to the ProActive GCM Deployment. But if your
+			application generates a lot of logging events, or if you do not want to rely on ProActive
 			to transport the logging events, you can use some other appenders provided with log4j. 
 			Useful appenders for distributed application are quickly described in this section.
 		</para>
 		
 		<para>
-			The <emphasis>JDBCAppender</emphasis> sends logging events into a relational database via JDBC. The version shipped 
+			The <emphasis role="bold">JDBCAppender</emphasis> sends logging events into a relational database via JDBC. The version shipped 
 			with log4j 1.2 is known to be broken and have some severe limitations. Alternative implementations 
 			of this appender exist. 
 		</para>
 
 		<para>
-			<emphasis>SocketAppender</emphasis> sends logging events to a remote log server. It is very 
-			similar to the  ProActiveAppender but use plain TCP connections. Main differences are:
+			The <emphasis>SocketAppender</emphasis> sends logging events to a remote log server. It is very 
+			similar to the  ProActiveAppender but uses plain TCP connections. Main differences are:
 			
 			<itemizedlist>
 				<listitem>
@@ -804,23 +799,23 @@ log4j.appender.REMOTE.layout.ConversionPattern=%X{shortid@hostname} - [%p %20.20
 				</listitem>
 				<listitem>
 					<para>
-						If the remote log server is down, logging events a dropped.
+						If the remote log server is down, logging events are dropped.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						SocketAppender does not flush buffered logging events on JVM exit. They are lost.
+						The SocketAppender does not flush buffered logging events on JVM exit. They are lost.
 					</para>
 				</listitem>
 			</itemizedlist>
 			
-			<emphasis>SocketHubAppender</emphasis> can sends logging events to several remote log server. 
+			The <emphasis role="bold">SocketHubAppender</emphasis> sends logging events to several remote log server. 
 			Both only define the client side of distributed logging. You have to write your 
 			own <code>SocketNode</code> to handle the received logging events.
 		</para>
 
 		<para>
-			<emphasis>JMSAppender</emphasis> publishes logging events to a JMS topic.
+			The <emphasis role="bold">JMSAppender</emphasis> publishes logging events to a JMS topic.
 		</para>
 	</section>
 
