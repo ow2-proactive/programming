@@ -84,18 +84,13 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
     happy with the default configuration or create their own file if they want
     to change ProActive properties values or add their own properties.</para>
 
-    <para>The specific tag <emphasis role="bold">&lt;ProActiveUserPropertiesFile&gt;</emphasis> is provided in
-     deployment descriptors (see <xref linkend="XML_Descriptors"/>) to notify
+    <para>The specific tag <emphasis role="bold">&lt;userProperties&gt;</emphasis> is provided in
+     application descriptors to notify
      the remote JVMs which configuration file to load once created:</para>
 
-    <programlisting language="xml">
-&lt;jvmProcess class='org.objectweb.proactive.core.process.JVMNodeProcesss'&gt;
-   ...
-   &lt;ProActiveUserPropertiesFile&gt;
-      &lt;absolutePath value='/net/home/rquilici/config.xml'/&gt;
-   &lt;/ProActiveUserPropertiesFile&gt;
-   ...
-&lt;/jvmProcess&gt;</programlisting>
+      <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/GCMA_user_properties.snip"/></textobject></programlisting>
+
+      <para>To know more about GCM deployment, please refer to <xref linkend="GCMDeployment"/>.</para>
    </section>
    </section>
 
@@ -340,19 +335,7 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
     <para>A configuration file could have following structure:</para>
 
     <example xml:id="Aconfigurationfileexample_69"><info><title>A configuration file example</title></info>
-       <programlisting language="xml">
-&lt;ProActiveUserProperties&gt;
-   &lt;properties&gt;
-      &lt;prop <emphasis role="bold">key</emphasis>='schema.validation' <emphasis role="bold">value</emphasis>='disable'/&gt;
-      &lt;prop <emphasis role="bold">key</emphasis>='proactive.future.ac' <emphasis role="bold">value</emphasis>='true'/&gt;
-      &lt;prop <emphasis role="bold">key</emphasis>='proactive.communication.protocol' <emphasis role="bold">value</emphasis>='rmi'/&gt;
-      &lt;prop <emphasis role="bold">key</emphasis>='proactive.rmi.port' <emphasis role="bold">value</emphasis>='2001-2005'/&gt;
-      ...
-      &lt;prop <emphasis role="bold">key</emphasis>='myprop' <emphasis role="bold">value</emphasis>='myvalue'/&gt;
-      ...
-   &lt;/properties&gt;
-&lt;/ProActiveUserProperties&gt;
-      </programlisting>
+       <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/PAConfig_example.snip"/></textobject></programlisting>
     </example>
     <note><para>
       In order to have ProActive parse correctly the document, the following are mandatory:
