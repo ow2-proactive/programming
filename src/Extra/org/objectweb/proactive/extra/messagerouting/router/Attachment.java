@@ -33,6 +33,7 @@
 package org.objectweb.proactive.extra.messagerouting.router;
 
 import java.io.IOException;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.atomic.AtomicLong;
@@ -114,6 +115,19 @@ public class Attachment {
             logger.warn("Attachement.setClientId() cannot be called twice. Current client: " + this.client +
                 ", discarded: " + client);
         }
+    }
+
+    public String getRemoteEndpoint() {
+        String unknown = "unknown";
+
+        if (socketChannel == null)
+            return unknown;
+
+        SocketAddress sa = socketChannel.socket().getRemoteSocketAddress();
+        if (sa == null)
+            return unknown;
+
+        return sa.toString();
     }
 
     public void send(ByteBuffer byteBuffer) throws IOException {
