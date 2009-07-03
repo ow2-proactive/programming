@@ -117,6 +117,36 @@
 	<!-- <target name="all" depends="compile,docs" description="build the class files and the documentation" />-->
 
 
+	<macrodef name="generate_stub_for_pkg">
+		<attribute name="srcDir"/>
+		<attribute name="package"/>
+		<element name="extra.exclusion.pattern" optional="yes"/>
+		<sequential>
+			<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
+				<classpath refid="project.classpath" />
+					<arg value="-srcDir"/>
+					<arg value="@{srcDir}"/>
+					<arg value="-pkg"/>
+					<arg value="@{package}"/>
+			</java>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="generate_stub_for_class">
+		<attribute name="srcDir"/>
+		<attribute name="class"/>
+		<element name="extra.exclusion.pattern" optional="yes"/>
+		<sequential>
+			<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
+				<classpath refid="project.classpath" />
+					<arg value="-srcDir"/>
+					<arg value="@{srcDir}"/>
+					<arg value="-class"/>
+					<arg value="@{class}"/>
+			</java>
+		</sequential>
+	</macrodef>
+
 
 
 
@@ -151,59 +181,15 @@
 		</rmic>
 
 		<echo message="Java primitive type wrapper stubs generating..." />
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-			<arg value="-srcDir"/>
-            <arg value="${cl.proactive.dir}"/>
-            <arg value="-pkg"/>
-            <arg value="org.objectweb.proactive.core.util.wrapper"/>
-		</java>
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-            <arg value="-srcDir"/>
-			<arg value="${cl.proactive.dir}"/>
-            <arg value="-class"/>
-            <arg value="org/objectweb/proactive/core/runtime/ProActiveRuntime" />
-		</java>
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-            <arg value="-srcDir"/>
-			<arg value="${cl.proactive.dir}"/>
-            <arg value="-class"/>
-            <arg value="org/objectweb/proactive/core/body/UniversalBody" />
-		</java>
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-            <arg value="-srcDir"/>
-			<arg value="${cl.proactive.dir}"/>
-            <arg value="-class"/>
-            <arg value="org/objectweb/proactive/core/component/type/Composite" />
-		</java>
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-            <arg value="-srcDir"/>
-			<arg value="${cl.proactive.dir}"/>
-            <arg value="-class"/>
-            <arg value="org/objectweb/proactive/core/component/ProActiveInterfaceImpl" />
-		</java>
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-            <arg value="-srcDir"/>
-			<arg value="${cl.proactive.dir}"/>
-            <arg value="-class"/>
-            <arg value="org/objectweb/proactive/core/jmx/util/JMXNotificationListener" />
-		</java>
-		<!--
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-			<arg value="-srcDir"/>
-			<arg value="${cl.proactive.dir}"/>
-			<arg value="-class"/>
-			<arg value="org/objectweb/proactive/core/util/log/remote/ProActiveLogCollector" />
-		</java>
-		-->
+		<generate_stub_for_pkg   srcDir="${cl.proactive.dir}" package="org.objectweb.proactive.core.util.wrapper" />
+		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/runtime/ProActiveRuntime" />
+		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/body/UniversalBody" />
+		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/component/type/Composite" />
+		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/component/ProActiveInterfaceImpl" />
+		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/jmx/util/JMXNotificationListener" />
+		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/util/log/remote/ProActiveLogCollector" />
 
-	    <antcall target="ibis"/>
+		<antcall target="ibis"/>
 
 		<!-- XXX: MPI should be in Extensions -->
 		<if>
@@ -919,13 +905,7 @@
 	<target name="stub" depends="compile.stubGenerator, compile.core">
 		<property name="stub.classdir" value="${cl.proactive.dir}" />
 
-		<java classname="org.objectweb.proactive.ext.util.StubGenerator" fork="true">
-			<classpath refid="project.classpath" />
-			<arg value="-srcDir"/>
-            <arg value="${cl.proactive.dir}"/>
-            <arg value="-pkg"/>
-            <arg value="org.objectweb.proactive" />
-		</java>
+		<generate_stub_for_pkg   srcDir="${cl.proactive.dir}" package="org.objectweb.proactive" />
 	</target>
 
 
