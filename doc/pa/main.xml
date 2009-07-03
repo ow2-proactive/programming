@@ -112,15 +112,17 @@
   &mpi;
  </part>
  
- <part xml:id="ProActiveDeployment"><info><title xml:id="DeploymentAndVirtualization_2">Deployment And Virtualization</title></info>
-  
+ <part xml:id="ProActiveConfiguration"><info><title xml:id="ProActiveConfiguration_2">ProActive Configuration</title></info>
   &PAConfiguration;
+  &MessageRouting;
+  &SSHTunneling;
+ </part>
+
+ <part xml:id="ProActiveDeployment"><info><title xml:id="DeploymentAndVirtualization_2">Deployment And Virtualization</title></info>
   &GCMDeployment;
   &Descriptor;
   &VariableContract;
   &FileTransfer;
-  &MessageRouting;
-  &SSHTunneling;
   &technicalService;
  </part>
  
