@@ -109,7 +109,6 @@
 					<xsd:element name="host" type="hostRefType" minOccurs="0" maxOccurs="1" />
 				</xsd:sequence>
 				<xsd:attribute name="refid" type="idType" use="required" />
-				<xsd:attribute name="relay" type="xsd:string"></xsd:attribute>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
