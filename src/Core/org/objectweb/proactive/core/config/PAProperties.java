@@ -532,7 +532,12 @@ public enum PAProperties {
      * an object whose source code cannot be modified to replace the code that return <code>this</code>
      * by the reference on the active object using <code>PAActiveObject.getStubOnThis()</code>
      */
-    PA_IMPLICITGETSTUBONTHIS("proactive.implicitgetstubonthis", PAPropertiesType.BOOLEAN);
+    PA_IMPLICITGETSTUBONTHIS("proactive.implicitgetstubonthis", PAPropertiesType.BOOLEAN),
+
+    /**
+     * on unix system, define the shell that the GCM deployment invokes when creating new runtimes.
+     */
+    PA_GCMD_UNIX_SHELL("proactive.gcmd.unix.shell", PAPropertiesType.STRING);
 
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
     public static final String TRUE = "true";

@@ -136,7 +136,7 @@ public class ProActiveConfigurationParser {
                             prop.getType().toString());
                     }
                 } else {
-                    logger.warn("Skiped unknown ProActive Java property: " + key);
+                    logger.warn("Skipped unknown ProActive Java property: " + key);
                     unknownProperty = true;
                 }
             }

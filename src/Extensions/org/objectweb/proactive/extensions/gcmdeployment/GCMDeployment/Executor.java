@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -71,7 +72,8 @@ public class Executor {
             Process p = null;
             switch (OperatingSystem.getOperatingSystem()) {
                 case unix:
-                    p = Runtime.getRuntime().exec(new String[] { "sh", "-c", command });
+                    p = Runtime.getRuntime().exec(
+                            new String[] { PAProperties.PA_GCMD_UNIX_SHELL.getValue(), "-c", command });
                     break;
                 case windows:
                     p = Runtime.getRuntime().exec(command);
