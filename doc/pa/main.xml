@@ -67,6 +67,7 @@
                 <!ENTITY MessageRouting SYSTEM "MessageRouting.xml">
 	        <!ENTITY JMX SYSTEM "Jmx.xml">
          	 <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
+                 <!ENTITY scilab SYSTEM "scilab/ScilabDoc.xml">
                 ]>
                 
 <book xmlns="http://docbook.org/ns/docbook" version="5.0">
@@ -145,7 +146,7 @@
   &OSGi;
   &JMX;
   &JMXMBean;
-  
+  &scilab;
  </part>
  
  <part xml:id="ExtendingProActive"><info><title xml:id="ExtendingProActive_2">Extending ProActive</title></info>
