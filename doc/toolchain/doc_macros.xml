@@ -127,6 +127,7 @@
 	<!-- ==================================================================== -->
 	<macrodef name="manualSingleHtml" description="Make only the big html file in the manual">
 		<sequential>
+        <schemas />
 		  <docbookPreProcess output.docs.dir="${docs.html.single.dir}" />
 		  <docbookTransform docbookInputFile="${docs.mainFile}" 
 			  docbookOutputFile="${docs.html.single.output}" 
@@ -143,6 +144,7 @@
 	<!-- ==================================================================== -->
 	<macrodef name="manualPdf" description="Make only the pdf files in the manual">
 		<sequential>
+         <schemas />
 			<docbookPreProcess output.docs.dir="${docs.pdf.dir}" />
 			<!--   First translate into intermediate fo format -->
 			<docbookTransform docbookInputFile="${docs.mainFile}"
@@ -175,6 +177,7 @@
 	<!-- ==================================================================== -->
 	<macrodef name="manualHtml" description="Make only the html files in the manual">
 		<sequential>
+         <schemas />
 			<docbookPreProcess output.docs.dir="${docs.html.multiple.dir}" />
 			<docbookTransform docbookInputFile="${docs.mainFile}" 
 					docbookOutputFile="${docs.html.multiple.output}" 
@@ -215,4 +218,50 @@
 	    </checkstyle>
 	  </sequential>
 	</macrodef>
+
+
+   <taskdef name="xsddoc" classname="net.sf.xframe.xsddoc.Task">
+        <classpath>
+            <fileset dir="${docs.lib.dir}">
+                   <include name="xalan-2.7.0.jar" />
+                   <include name="xercesImpl-2.7.1.jar" />
+                   <include name="xerces.jar" />
+                   <include name="xml-apis.jar"/>
+                   <include name="xsddoc.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+
+    <macrodef name="xsddoc.gcmd" description="build documentation for GCM Deployment schema using xsddoc">
+        <sequential>
+            <property name="gcmd.dir" value="${docs.schemas.dir}/gcmd" />
+            <mkdir dir="${gcmd.dir}"/>
+            <xsddoc out="${gcmd.dir}" 
+                    title="GCM Deployment Schema" 
+                    verbose="true"
+                    header="&lt;img width='70%' src='${base.dir}/doc/pa/images/Logo-ProActive.png' /&gt;"
+                    bottom=" "
+                    file="${src.extensions.dir}/${extensions.path}/gcmdeployment/schema/ExtensionSchemas.xsd" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="xsddoc.gcma" description="build documentation for GCM Application schema using xsddoc">
+        <sequential>
+            <property name="gcma.dir" value="${docs.schemas.dir}/gcma" />
+            <mkdir dir="${gcma.dir}"/>
+            <xsddoc out="${gcma.dir}" 
+                    title="GCM Application Schema" 
+                    verbose="true"
+                    header="&lt;img width='70%' src='${base.dir}/doc/pa/images/Logo-ProActive.png' /&gt;"
+                    bottom=" "
+                    file="${src.extensions.dir}/${extensions.path}/gcmdeployment/schema/ApplicationDescriptorSchema.xsd" />
+        </sequential>
+    </macrodef>
+
+    <macrodef name="schemas" description="build documentation for GCM schemas">
+        <sequential>
+            <xsddoc.gcmd/>
+            <xsddoc.gcma/>
+        </sequential>
+    </macrodef>
 </project>

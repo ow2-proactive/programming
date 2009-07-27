@@ -247,4 +247,12 @@
         </javadoc>
 	<delete dir="${docs.tmp.dir}" />
     </target>
+
+	<target name="doc.ProActive.schemas" description="Generate the ProActive Programming HTML manual">
+	     <subant target="schemas"             inheritall="true">
+	         <property name="doc.name"               value="${pa.doc.name}" />
+	         <fileset dir="${pa.file.set}"   includes="doc.xml"/>
+	     </subant>
+	</target>
+
 </project>

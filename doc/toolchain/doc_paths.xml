@@ -19,7 +19,7 @@
 	<property name="docs.html.multiple.dir"		value="${docs.built.dir}/multiple_html/" />
 	<property name="docs.html.single.dir"		value="${docs.built.dir}/single_html/" />
 	<property name="docs.pdf.dir"			value="${docs.built.dir}/pdf/" />
-	
+	<property name="docs.schemas.dir"          value="${docs.built.dir}/schemas/" />
 	
 	<property name="docs.mainFile" 			value="main.xml" />
 	<property name="snippets.start"			value="${docs.dir}/../src" />
