@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="XML_Descriptors"><info><title>XML Deployment Descriptors</title></info>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="XML_Descriptors"><info><title>XML Deployment Descriptors</title></info>
   
 
   <indexterm>
@@ -2019,4 +2020,6 @@ pad.killall(false);
 
     <screen><link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_complete/org/objectweb/proactive/core/process/package-summary.html">org.objectweb.proactive.core.process</link></screen>
   </section>
+
+  &FileTransfer;
 </chapter>

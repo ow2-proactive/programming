@@ -3,6 +3,13 @@
 	targetNamespace="urn:gcm:deployment:1.0"
 	xmlns="urn:gcm:deployment:1.0"	
 	elementFormDefault="qualified">
+    <xsd:annotation>
+        <xsd:documentation>
+            <p>
+                Schema used for GCM Deployment Descriptors. The root element is <a href="element/GCMDeployment.html">&lt;GCMDeployment&gt;</a>.
+            </p>
+        </xsd:documentation>
+    </xsd:annotation>
 
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupCCSSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupGLiteSchema.xsd" />

@@ -10,13 +10,62 @@
 		<xs:complexContent>
 			<xs:extension base="abstractGroupSchedulerElementType">
 				<xs:sequence>
-					<xs:element name="directory" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="resources" type="NonEmptyTextOrVariableType" minOccurs="0" />
-					<xs:element name="maxTime" type="NonEmptyTextOrVariableType" minOccurs="0" />
-					<xs:element name="arguments" type="argumentListType" minOccurs="0" />
-					<xs:element name="taskRepartition" type="LoadLevelerTaskRepartitionType" minOccurs="1" />
+					<xs:element name="directory" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Working directory of the job script</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the standard output of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the error output of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="resources" type="NonEmptyTextOrVariableType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Resources that will be allowed to the job</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="maxTime" type="NonEmptyTextOrVariableType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Duration wall time limit of the job</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="arguments" type="argumentListType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Arguments to be passed to the executable (poe)</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="taskRepartition" type="LoadLevelerTaskRepartitionType" minOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Load leveler task repartition</p>
+                                <p>This element contains one of the following elements:</p>
+                                <ul>
+                                    <li>&lt;modeBlock&gt;</li>
+                                    <li>&lt;modeTotalTasks&gt;</li>
+                                    <li>&lt;modeTaskPerNode&gt;</li>
+                                    <li>&lt;modeGeometry&gt;</li>
+                                </ul>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -32,31 +81,110 @@
     </xs:complexType>
     
     <xs:complexType name="LoadLevelerBlockingGroup">
-	  <xs:sequence>
-        	<xs:element name="totalTasks" type="xs:nonNegativeInteger" />
-        	<xs:element name="blocking" type="xs:nonNegativeInteger" />        	
-	  </xs:sequence>
+        <xs:annotation>
+		<xs:documentation>
+                <p>Specifies that tasks be assigned to machines in multiples of a certain integer.</p>
+                <p>
+                    With a blocking factor of 4, LoadLeveler will allocate 4 tasks at a time to each machine with at least 4 initiators available.
+                    In cases where total_tasks is not a multiple of the blocking factor, LoadLeveler assigns the remaining number of tasks as soon as possible
+                    (even if that means assigning the remainder to a machine at the same time as it assigns another block).
+                </p>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="totalTasks" type="xs:nonNegativeInteger">
+                <xs:annotation>
+			<xs:documentation>
+                        <p>Total number of tasks</p>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+		<xs:element name="blocking" type="xs:nonNegativeInteger">
+                <xs:annotation>
+			<xs:documentation>
+                        <p>Blocking factor to be used</p>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
 	</xs:complexType>
 
     <xs:complexType name="LoadLevelerTotalTasksGroup">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Specifies the total number of tasks of a parallel job you want to run on all available nodes.</p>
+            </xs:documentation>
+        </xs:annotation>
 	  <xs:sequence>
-	        <xs:element name="totalTasks" type="xs:nonNegativeInteger" />
-         	<xs:element name="node" type="xs:nonNegativeInteger" />
+	        <xs:element name="totalTasks" type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>
+                        <p>Total number of tasks of a parallel job you want to run on all available nodes</p>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+		<xs:element name="node" type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>
+                        <p>Number of node requested by the job</p>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
 	  </xs:sequence>
 	</xs:complexType>
 
     <xs:complexType name="LoadLevelerTasksPerNodeGroup">
-	  <xs:sequence>
-        	<xs:element name="tasksPerNode" type="xs:nonNegativeInteger" />
-        	<xs:element name="node" type="xs:nonNegativeInteger" />        	
-	  </xs:sequence>
+        <xs:annotation>
+            <xs:documentation>
+                <p>Specifies the number of tasks of a parallel job you want to run per node</p>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="tasksPerNode" type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>
+                        <p>Number of tasks per node</p>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="node" type="xs:nonNegativeInteger">
+                <xs:annotation>
+                    <xs:documentation>
+                        <p>Number of node requested by the job</p>
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
 	</xs:complexType>
 
    <xs:complexType name="LoadLevelerGeometryGroup">
+        <xs:annotation>
+		<xs:documentation>
+                <p>The geometry mode allows you to group tasks of a parallel job step to run together on the same node.</p>
+                <p>
+                    Although this mode allows for a great deal of flexibility in how tasks are grouped,
+                    you cannot specify the particular nodes that these groups run on;
+                    the scheduler will decide which nodes will run the specified groupings.
+                </p>
+            </xs:documentation>
+        </xs:annotation>
 	  <xs:sequence>
-        	<xs:element name="taskGeometry" type="xs:string" />
+		<xs:element name="taskGeometry" type="xs:string">
+            <xs:annotation>
+		<xs:documentation>
+                    <p>This string should be of the form: <i>{(task id,task id,...)(task id,task id, ...) ...}</i></p>
+                    <p>Example of job with 6 tasks that will run on 4 different nodes: <i>{(0,1) (3) (5,4) (2)}</i></p>
+                </xs:documentation>
+            </xs:annotation>
+            </xs:element>
 	  </xs:sequence>
 	</xs:complexType>
     
-	<xs:element name="loadLevelerGroup" type="loadLevelerProcessType" substitutionGroup="abstractShElement" />
+	<xs:element name="loadLevelerGroup" type="loadLevelerProcessType" substitutionGroup="abstractShElement" >
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a LoadLeveler Group</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
 </xs:schema>

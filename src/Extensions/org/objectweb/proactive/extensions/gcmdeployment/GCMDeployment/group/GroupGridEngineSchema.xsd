@@ -11,25 +11,93 @@
 		<xs:complexContent>
 			<xs:extension base="abstractGroupSchedulerElementType">
                 <xs:sequence>
-                	<xs:element name="resources" type="gridEngineResourcesType" minOccurs="1"/>
-					<xs:element name="directory" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0" />
+			<xs:element name="resources" type="gridEngineResourcesType" minOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Resources that will be allowed to the job</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="directory" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Working directory of the job script</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the standard output of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                              <p>Path of the file where the error output of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 				</xs:sequence>
-				<xs:attribute name="queue" type="NonEmptyTextOrVariableType" use="optional" />
-				<xs:attribute name="jobName" type="NonEmptyTextOrVariableType" use="optional" />
+				<xs:attribute name="queue" type="NonEmptyTextOrVariableType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Destination queue for the job.</p>
+                            <p>
+                                This attribute can be of the following format:
+                                <ul>
+                                    <li>- queue: a queue on the default server</li>
+									<li>- @server: the default queue on the server</li>
+                                    <li>- queue@server: the queue on the given server</li>
+                                </ul>
+                            </p>
+						</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="jobName" type="NonEmptyTextOrVariableType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Name of the job (15 char long string, no whitespace, first char must be alphabetic)</p>
+						</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:element name="gridEngineGroup" type="gridEngineProcessType" substitutionGroup="abstractShElement"/>
+	<xs:element name="gridEngineGroup" type="gridEngineProcessType" substitutionGroup="abstractShElement">
+        <xs:annotation>
+            <xs:documentation>
+			<p>Describes a gridEngine Group</p>
+			</xs:documentation>
+        </xs:annotation>
+    </xs:element>
 
 	<xs:complexType name="gridEngineResourcesType">
 		<xs:simpleContent>
 			<xs:extension base="TextOrVariableType">
-				<xs:attribute name="nodes" type="PosintOrVariableType" use="optional"/>
-				<xs:attribute name="parallelEnvironment" type="NonEmptyTextOrVariableType" use="optional"/>
-				<xs:attribute name="walltime" type="TimeOrVariableType" use="optional"/>
+				<xs:attribute name="nodes" type="PosintOrVariableType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+						<p>Number of requested nodes</p>
+						</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="parallelEnvironment" type="NonEmptyTextOrVariableType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+						<p>Cluster parallel environment (e.g. mpi)</p>
+						</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="walltime" type="TimeOrVariableType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+						<p>Maximal time allowed for this job</p>
+						</xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

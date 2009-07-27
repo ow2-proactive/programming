@@ -9,10 +9,22 @@
 	<xs:complexType name="groupTypeRSH">
 		<xs:complexContent>
 			<xs:extension base="abstractGroupElementType">
-				<xs:attribute name="hostList" type="NonEmptyTextOrVariableType" use="required" />
+				<xs:attribute name="hostList" type="NonEmptyTextOrVariableType" use="required">
+                    <xs:annotation>
+			<xs:documentation>
+                            <p>List of hosts to connect to</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:element name="rshGroup" substitutionGroup="abstractShElement" type="groupTypeRSH" />
+	<xs:element name="rshGroup" substitutionGroup="abstractShElement" type="groupTypeRSH">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a RSH Group</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
 </xs:schema>

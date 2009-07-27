@@ -70,7 +70,7 @@
    <programlisting language="java"><textobject><textdata fileref="./automatic_snippets/mw_primes_resources.snip"/></textobject></programlisting>
 	
 	
-	<para>To learn how deployment descriptors work read <xref linkend="deployment_guide_CMA"/>
+	<para>To learn how deployment descriptors work read <xref linkend="GCMDeployment"/>
 	and <xref linkend="XML_Descriptors"/>. </para>
 	
 	<para>After specifying the resources we need to create a master to coordinate the

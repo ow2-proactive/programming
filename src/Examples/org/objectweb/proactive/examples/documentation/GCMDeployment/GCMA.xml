@@ -17,7 +17,7 @@
     <!--@snippet-start deployed_CMA_8-->
     <application>
         <proactive base="root" relpath="${proactive.home}">
-            <configuration>
+           <configuration>
                 <applicationClasspath>
                     <pathElement base="proactive" relpath="dist/lib/ProActive_examples.jar"/>
                     <pathElement base="proactive" relpath="dist/lib/ibis-1.4.jar"/>

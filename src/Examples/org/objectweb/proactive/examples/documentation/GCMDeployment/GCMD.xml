@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GCMDeployment xmlns="urn:gcm:deployment:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:gcm:deployment:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd">
+
+    <!-- @snippet-start GCMD_environment_1 -->
+    <environment>
+        <descriptorVariable name="myVariable" value="myValue"/>
+    </environment>
+    <!-- @snippet-end GCMD_environment_1 -->
+
+    <!-- @snippet-start GCMD_resources_1 -->
+    <!-- @snippet-start GCMD_resources_2 -->
+    <!-- @snippet-start GCMD_resources_3 -->
+    <resources>
+        <!-- @snippet-break GCMD_resources_2 -->
+        <!-- @snippet-break GCMD_resources_3 -->
+        <host refid="myHost" />
+        <!-- @snippet-break GCMD_resources_1 -->
+        <!-- @snippet-resume GCMD_resources_2 -->
+        <group refid="myGroup">
+            <host refid="hostsOfMyGroup" />
+        </group>
+        <!-- @snippet-break GCMD_resources_2 -->
+        <!-- @snippet-resume GCMD_resources_3 -->
+        <bridge refid="myBridge">
+            <group refid="groupAccessibleThroughMyBridge">
+                <host refid="hostsOfMyGroupAccessibleThroughMyBridge"/>
+            </group>
+        </bridge>
+        <!-- @snippet-resume GCMD_resources_1 -->
+        <!-- @snippet-resume GCMD_resources_2 -->
+    </resources>
+    <!-- @snippet-end GCMD_resources_3 -->
+    <!-- @snippet-end GCMD_resources_2 -->
+    <!-- @snippet-end GCMD_resources_1 -->
+
+    <!-- @snippet-start GCMD_resources_4 -->
+    <infrastructure>
+        <!-- Hosts Description -->
+        <hosts>
+            <host id="myHost" os="unix" hostCapacity="2">
+
+                <!-- Mandatory element -->
+                <homeDirectory base="root" relpath="/home" />
+
+                <!-- Optional element -->
+                <networkInterface name="eth0"/>
+            </host>
+
+            <host id="hostsOfMyGroup" os="unix">
+                <!-- Mandatory element -->
+                <homeDirectory base="root" relpath="/home" />
+            </host>
+
+            <host id="hostsOfMyGroupAccessibleThroughMyBridge" os="unix" hostCapacity="2" vmCapacity="3">
+                <!-- Mandatory element -->
+                <homeDirectory base="root" relpath="/home" />
+            </host>
+        </hosts>
+
+        <groups>
+            <rshGroup id="myGroup" hostList="host1 host2 host3" />
+
+            <sshGroup id="groupAccessibleThroughMyBridge" hostList="host3 host4">
+                <privateKey base="root" relpath="/home/.ssh/id_rsa"/>
+            </sshGroup>
+        </groups>
+
+        <bridges>
+            <sshBridge  id="myBridge" hostname="brideHost" username="ProActiveTeam" />
+        </bridges>
+    </infrastructure>
+    <!-- @snippet-end GCMD_resources_4 -->
+</GCMDeployment>

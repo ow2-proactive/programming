@@ -10,15 +10,51 @@
 		<xs:complexContent>
 			<xs:extension base="abstractBridgeElementType">
 				<xs:sequence>
-					<xs:element name="privateKey" type="pathElementType" minOccurs="0" maxOccurs="1" />
+					<xs:element name="privateKey" type="pathElementType" minOccurs="0" maxOccurs="1">
+                        <xs:annotation>
+				<xs:documentation>
+                                <p>Path to of the private SSH key needed to access the bridge</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 				</xs:sequence>
-				<xs:attribute name="hostname" type="hostnameOrVariableType" use="required" />
-				<xs:attribute name="username" type="usernameOrVariableType"/>
-				<xs:attribute name="commandPath" type="NonEmptyTextOrVariableType"/>
-				<xs:attribute name="commandOptions" type="NonEmptyTextOrVariableType"/>
+				<xs:attribute name="hostname" type="hostnameOrVariableType" use="required">
+                <xs:annotation>
+                        <xs:documentation>
+                            <p>Network hostname of the physical machine which acts as the bridge</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="username" type="usernameOrVariableType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>User name under which the machine can be accessed</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="commandPath" type="NonEmptyTextOrVariableType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Path of the ssh command to use</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="commandOptions" type="NonEmptyTextOrVariableType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Options to be passed to the ssh command</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:element name="sshBridge" type="bridgeTypeSSH" substitutionGroup="abstractBridgeElement"/>
+	<xs:element name="sshBridge" type="bridgeTypeSSH" substitutionGroup="abstractBridgeElement">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a SSH Bridge</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
 </xs:schema>

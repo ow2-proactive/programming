@@ -10,14 +10,55 @@
 		<xs:complexContent>
 			<xs:extension base="abstractGroupSchedulerElementType">
 				<xs:sequence>
-					<xs:element name="resources" type="oarResourcesType" minOccurs="1" />
-					<xs:element name="directory" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0" />
+					<xs:element name="resources" type="oarResourcesType" minOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Resources that will be allowed to the job</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="directory" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+				<xs:documentation>
+                                <p>Working directory of the job script</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the standard output of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the standard error of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 				</xs:sequence>
-				<xs:attribute name="interactive" type="BooleanOrVariableType" use="optional" />
-				<xs:attribute name="queue" type="NonEmptyTextOrVariableType" use="optional" />
+				<xs:attribute name="interactive" type="BooleanOrVariableType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Whether the job is interactive or not. If true, it will open a login shell on the first node instead of running a script (default is false).</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="queue" type="NonEmptyTextOrVariableType" use="optional">
+                    <xs:annotation>
+			<xs:documentation>
+                            <p>Name of the queue to submit the job to</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 				<xs:attribute name="type" use="optional">
+                    <xs:annotation>
+			<xs:documentation>
+                            <p>Job type. It can be "deploy" (default), "besteffort", "cosystem", "checkpoint" or "timesharing".</p>
+                        </xs:documentation>
+                    </xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="deploy" />
@@ -35,13 +76,44 @@
 	<xs:complexType name="oarResourcesType">
 		<xs:simpleContent>
 			<xs:extension base="TextOrVariableType">
-				<xs:attribute name="nodes"    type="PosintOrVariableType" use="optional"/>
-				<xs:attribute name="cpu"      type="PosintOrVariableType" use="optional"/>
-				<xs:attribute name="core"     type="PosintOrVariableType" use="optional"/>
-				<xs:attribute name="walltime" type="TimeOrVariableType"   use="optional"/>
+				<xs:attribute name="nodes"    type="PosintOrVariableType" use="optional">
+                    <xs:annotation>
+			<xs:documentation>
+                            <p>Number of requested nodes</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="cpu"      type="PosintOrVariableType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Number of requested CPUs</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="core"     type="PosintOrVariableType" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Number of requested cores</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="walltime" type="TimeOrVariableType"   use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Maximal time allowed for this job</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
 
-	<xs:element name="oarGroup" type="oarGroupType" substitutionGroup="abstractShElement" />
+	<xs:element name="oarGroup" type="oarGroupType" substitutionGroup="abstractShElement">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a OAR Group</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
 </xs:schema>

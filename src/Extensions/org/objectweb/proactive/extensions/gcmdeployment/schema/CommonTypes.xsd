@@ -7,14 +7,31 @@
 	-->
 
 	<xsd:simpleType name="variableRefType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of variable references: <i>${variable}</i> bonjour <i>hi</i></p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="\$\{[A-Za-z0-9._]+\}" />
 		</xsd:restriction>
 	</xsd:simpleType>
+
 	<xsd:simpleType name="TimeOrVariableType"><!-- hour:mn:sec│hour:mn│hour -->
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of TimeType or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="TimeType" />
 	</xsd:simpleType>
+
 	<xsd:simpleType name="TimeType">
+	    <xsd:annotation>
+	        <xsd:documentation>
+                <p>Type of time. It is as tring of the form "hour:mn:sec", "hour:mn", or "hour" where hour, mn and sec are composed of 2 digits</p>
+            </xsd:documentation>
+	    </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="\d\d?(:\d\d)?(:\d\d)?" />
 		</xsd:restriction>
@@ -22,106 +39,250 @@
 
 	<!--PosintOrVariableType is defined as a xsd:union of a positive integer or a variable ref-->
 	<xsd:simpleType name="PosintOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of positive integer or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="xsd:positiveInteger" />
 	</xsd:simpleType>
+
 	<!--BooleanOrVariableType is defined as a xsd:union of a positive integer or a variable ref-->
 	<xsd:simpleType name="BooleanOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of boolean or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="xsd:boolean" />
 	</xsd:simpleType>
 
 	<xsd:simpleType name="NonEmptyText">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of non empty texts: string with at least one character</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:minLength value="1" />
 		</xsd:restriction>
 	</xsd:simpleType>
+
 	<xsd:simpleType name="NonEmptyTextOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of NonEmptyText or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="NonEmptyText" />
 	</xsd:simpleType>
 
 	<xsd:simpleType name="TextOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of Text or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="xsd:string" />
 	</xsd:simpleType>
+
 	<xsd:simpleType name="IdOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of idType or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="idType" />
 	</xsd:simpleType>
 
 	<!--ListType is defined as a xsd:union of a positive integer or a variable ref-->
 	<xsd:simpleType name="ListType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>List of hostnameOrVariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:list itemType="hostnameOrVariableType" />
 	</xsd:simpleType>
 
 	<!--CloseStreamType is defined as a global xsd:element, it's the xsd:union of a CloseStream and a variable type.-->
 	<xsd:simpleType name="CloseStreamOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of CloseStreamType or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="CloseStreamType" />
 	</xsd:simpleType>
+
 	<xsd:simpleType name="CloseStreamType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of close streams: can be either "yes" or "no"</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="yes" />
 			<xsd:enumeration value="no" />
 		</xsd:restriction>
 	</xsd:simpleType>
+
 	<xsd:simpleType name="pathElementBaseType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of path bases: can be "proactive", "home" or "root"</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="proactive" />
 			<xsd:enumeration value="home" />
 			<xsd:enumeration value="root" />
 		</xsd:restriction>
 	</xsd:simpleType>
+
 	<xsd:simpleType name="idType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of IDs: alphanumeric non empty string which can contains "-" and  "_"</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="[0-9a-zA-Z_\-]+"></xsd:pattern>
 			<xsd:whiteSpace value="collapse"></xsd:whiteSpace>
 			<xsd:minLength value="1"></xsd:minLength>
 		</xsd:restriction>
 	</xsd:simpleType>
+
 	<xsd:simpleType name="pathElementGeneralType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of general paths: non empty string into which all white spaces will be removed</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:minLength value="1" />
 			<xsd:whiteSpace value="collapse"></xsd:whiteSpace>
 		</xsd:restriction>
 	</xsd:simpleType>
+
 	<xsd:complexType name="pathElementType">
-		<xsd:attribute name="base" type="pathElementBaseType" use="required"></xsd:attribute>
-		<xsd:attribute name="relpath" type="pathElementGeneralType" use="required"></xsd:attribute>
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of paths: constituted of a base and a relative paths</p>
+            </xsd:documentation>
+        </xsd:annotation>
+		<xsd:attribute name="base" type="pathElementBaseType" use="required">
+		    <xsd:annotation>
+		        <xsd:documentation>
+                    <p>Base path from which the relative will be considered</p>
+                </xsd:documentation>
+		    </xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="relpath" type="pathElementGeneralType" use="required">
+		    <xsd:annotation>
+                <xsd:documentation>
+                    <p>Relative path (relative to the base path)</p>
+                </xsd:documentation>
+            </xsd:annotation>
+		</xsd:attribute>
 	</xsd:complexType>
+
 	<xsd:complexType name="pathType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Sequence of paths</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:sequence>
 			<xsd:element name="pathElement" type="pathElementType" maxOccurs="unbounded" minOccurs="1"></xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
+
 	<xsd:complexType name="classpathType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of classpaths</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:complexContent>
 			<xsd:extension base="pathType">
 				<xsd:attribute name="type" use="required">
+				    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>Indicates whether this classpath should override the previous one or be appended to it</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
 					<xsd:simpleType>
 						<xsd:restriction base="xsd:string">
-							<xsd:enumeration value="append"></xsd:enumeration>
-							<xsd:enumeration value="overwrite"></xsd:enumeration>
+							<xsd:enumeration value="append">
+							    <xsd:annotation>
+                                    <xsd:documentation>
+                                        <p>In this case, the classpath will be appended</p>
+                                    </xsd:documentation>
+                                </xsd:annotation>
+							</xsd:enumeration>
+							<xsd:enumeration value="overwrite">
+							    <xsd:annotation>
+                                    <xsd:documentation>
+                                        <p>In this case, the classpath will overwrite the previous one</p>
+                                    </xsd:documentation>
+                                </xsd:annotation>
+							</xsd:enumeration>
 						</xsd:restriction>
 					</xsd:simpleType>
 				</xsd:attribute>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
+
 	<xsd:simpleType name="osType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of OS: can de "unix", "windows" or "cygwin"</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="unix"></xsd:enumeration>
 			<xsd:enumeration value="windows"></xsd:enumeration>
 			<xsd:enumeration value="cygwin"></xsd:enumeration>
 		</xsd:restriction>
 	</xsd:simpleType>
+
 	<xsd:simpleType name="osOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of osType or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="osType" />
 	</xsd:simpleType>
+
 	<xsd:simpleType name="hostnameOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of NonEmtpyText or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="NonEmptyText" />
 	</xsd:simpleType>
+
 	<xsd:simpleType name="usernameType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of user names: alphanumeric non empty string</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:restriction base="xsd:string">
 			<xsd:pattern value="[a-zA-Z0-9]+" />
 		</xsd:restriction>
 	</xsd:simpleType>
+
 	<xsd:simpleType name="usernameOrVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Union of usernameType or VariableType</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:union memberTypes="usernameType" />
 	</xsd:simpleType>
 
@@ -131,6 +292,11 @@
 		<xsd:complexContent>
 			<xsd:extension base="environmentElementType">
 				<xsd:attribute name="name">
+				    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>Name of the variable.</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
 					<xsd:simpleType>
 						<xsd:restriction base="NonEmptyText"></xsd:restriction>
 					</xsd:simpleType>
@@ -138,15 +304,26 @@
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
+
 	<xsd:complexType name="variableType">
 		<xsd:complexContent>
 			<xsd:extension base="environmentElementType">
 				<xsd:attribute name="name">
+				    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>Name of the variable.</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
 					<xsd:simpleType>
 						<xsd:restriction base="NonEmptyText"></xsd:restriction>
 					</xsd:simpleType>
 				</xsd:attribute>
 				<xsd:attribute name="value">
+				    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>Value of the variable.</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
 					<xsd:simpleType>
 						<xsd:restriction base="NonEmptyTextOrVariableType"></xsd:restriction>
 					</xsd:simpleType>
@@ -154,36 +331,157 @@
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
+
 	<xsd:complexType name="includeFileType">
 		<xsd:complexContent>
 			<xsd:extension base="environmentElementType">
-				<xsd:attribute name="location" type="NonEmptyTextOrVariableType" use="required" />
+				<xsd:attribute name="location" type="NonEmptyTextOrVariableType" use="required">
+				    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>Location of the included file</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+				</xsd:attribute>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
 
-	<xsd:element name="abstractEnvironmentElement" abstract="true" type="environmentElementType"></xsd:element>
+	<xsd:element name="abstractEnvironmentElement" abstract="true" type="environmentElementType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Abstract element which has to be substituted by one of the environment elements:</p>
+                <ul>
+                    <li><tt><a href="element/descriptorDefaultVariable.html">&lt;descriptorDefaultVariable&gt;</a></tt></li>
+                    <li><tt><a href="element/descriptorVariable.html">&lt;descriptorVariable&gt;</a></tt></li>
+                    <li><tt><a href="element/includePropertyFile.html">&lt;includePropertyFile&gt;</a></tt></li>
+                    <li><tt><a href="element/javaPropertyDescriptorDefault.html">&lt;javaPropertyDescriptorDefault&gt;</a></tt></li>
+                    <li><tt><a href="element/javaPropertyProgramDefault.html">&lt;javaPropertyProgramDefault&gt;</a></tt></li>
+                    <li><tt><a href="element/javaPropertyVariable.html">&lt;javaPropertyVariable&gt;</a></tt></li>
+                    <li><tt><a href="element/programDefaultVariable.html">&lt;programDefaultVariable&gt;</a></tt></li>
+                    <li><tt><a href="element/programVariable.html">&lt;programVariable&gt;</a></tt></li>
+                </ul>
+                <p>To get more information about environment variables, please refer to the corresponding chapter.</p>
+            </xsd:documentation>
+        </xsd:annotation>
+	</xsd:element>
 
-	<xsd:element name="descriptorVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
-	<xsd:element name="descriptorDefaultVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
-	<xsd:element name="javaPropertyVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
-	<xsd:element name="programVariable" substitutionGroup="abstractEnvironmentElement" type="programVariableType"></xsd:element>
-	<xsd:element name="programDefaultVariable" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
-	<xsd:element name="javaPropertyDescriptorDefault" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
-	<xsd:element name="javaPropertyProgramDefault" substitutionGroup="abstractEnvironmentElement" type="variableType"></xsd:element>
-	<xsd:element name="includePropertyFile" substitutionGroup="abstractEnvironmentElement" type="includeFileType"></xsd:element>
+	<xsd:element name="descriptorVariable" substitutionGroup="abstractEnvironmentElement" type="variableType">
+        <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    The value has to be set in the descriptor, and cannot be specified in the program.
+                    This variable type is useful when the deployer wants to use a value,
+                    without giving the possibility to the programmer to modify it.
+                    The programmer can define this variable to empty, to force the descriptor to set a value.
+                </p>
+            </xsd:documentation>
+        </xsd:annotation>
+	</xsd:element>
+
+	<xsd:element name="descriptorDefaultVariable" substitutionGroup="abstractEnvironmentElement" type="variableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    A default value has to be specified in the descriptor. The programmer has the ability to change the value in the program.
+                    If the value is changed in the program, then this new value will have precedence over the one defined in the descriptor.
+                    The programmer may override the default value, but the responsibility of setting a default belongs to the deployer.
+                </p>
+            </xsd:documentation>
+        </xsd:annotation>
+	</xsd:element>
+
+	<xsd:element name="javaPropertyVariable" substitutionGroup="abstractEnvironmentElement" type="variableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    Takes the value from the corresponding Java property.
+                    This variable type is useful when a variable will only be known at runtime through the Java properties,
+                    and no default has to be provided by the descriptor or the application.
+               </p>
+            </xsd:documentation>
+        </xsd:annotation>
+	</xsd:element>
+
+	<xsd:element name="programVariable" substitutionGroup="abstractEnvironmentElement" type="programVariableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    The value has to be set in the program, and cannot be specified in the descriptor.
+                    This variable type is useful when the programmer wants to use a value,
+                    without giving the possibility to the descriptor to modify it.
+                    The descriptor can define this variable to empty, to force the programmer to set a value.
+                </p>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+	<xsd:element name="programDefaultVariable" substitutionGroup="abstractEnvironmentElement" type="variableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    A default value has to be specified in the program. The descriptor has the ability to change the value.
+                    If the value is changed in the descriptor, then this new value will have precedence over the one defined in the program.
+                </p>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+	<xsd:element name="javaPropertyDescriptorDefault" substitutionGroup="abstractEnvironmentElement" type="variableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    Takes the value from the corresponding java property. A default value can also be set from the the descriptor.
+                    If no property is found, the descriptor default value will override the program default value.
+                    This variable type is useful when the descriptor sets a default value, that can be overridden at deployment using a java property.
+                </p>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+	<xsd:element name="javaPropertyProgramDefault" substitutionGroup="abstractEnvironmentElement" type="variableType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    Takes the value from the corresponding java property. A default value can also be set from the program.
+                    If no property is found, the program default value will override the program default value.
+                    This variable type is useful when the program sets a default value, that can be overridden at deployment using a java property.
+                </p>
+            </xsd:documentation>
+        </xsd:annotation>
+	</xsd:element>
+
+	<xsd:element name="includePropertyFile" substitutionGroup="abstractEnvironmentElement" type="includeFileType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Includes a property file.</p>
+                <p>This file can contain property declarations as follows:</p>
+                <ul>
+                    <li>test_var1 = value1</li>
+                    <li>test_var2 = value2</li>
+                    <li>test_var3 : value3</li>
+                </ul>
+            </xsd:documentation>
+        </xsd:annotation>
+	</xsd:element>
 
 	<xsd:complexType name="environmentType">
 		<xsd:sequence>
 			<xsd:element ref="abstractEnvironmentElement" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
+
 	<xsd:complexType name="environmentVariablesType">
 		<xsd:sequence>
 			<xsd:element name="variable" type="variableType" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
+
 	<xsd:complexType name="argumentListType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Type of lists of argument: sequence of strings</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:sequence>
 			<xsd:element name="arg" type="xsd:string" maxOccurs="unbounded" />
 		</xsd:sequence>

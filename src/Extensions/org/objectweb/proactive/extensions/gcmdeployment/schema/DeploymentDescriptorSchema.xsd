@@ -9,16 +9,40 @@
 
 	<xsd:complexType name="abstractTupleElementType" abstract="true">
 		<xsd:sequence>
-			<xsd:element name="environment" type="environmentVariablesType" minOccurs="0" />
+			<xsd:element name="environment" type="environmentVariablesType" minOccurs="0">
+                <xsd:annotation>
+			<xsd:documentation>
+                        <p>Environment variables</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="id" type="idType" use="required" />
-		<xsd:attribute name="commandPath" type="pathElementGeneralType" />
+		<xsd:attribute name="id" type="idType" use="required">
+            <xsd:annotation>
+		<xsd:documentation>
+                    <p>Id of the group this element represents</p>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+		<xsd:attribute name="commandPath" type="pathElementGeneralType">
+            <xsd:annotation>
+		<xsd:documentation>
+                    <p>Path of the command which is used to submit a job to the group protocol</p>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
 	</xsd:complexType>
 
 	<xsd:complexType name="abstractGroupElementType">
 		<xsd:complexContent>
 			<xsd:extension base="abstractTupleElementType">
-				<xsd:attribute name="username" type="ns:usernameOrVariableType" />
+				<xsd:attribute name="username" type="ns:usernameOrVariableType">
+                    <xsd:annotation>
+			<xsd:documentation>
+                            <p>User name to use for the connection</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
@@ -27,9 +51,20 @@
 		<xsd:complexContent>
 			<xsd:extension base="abstractTupleElementType">
 				<xsd:sequence>
-					<xsd:element name="scriptPath" type="pathElementType" minOccurs="0" />
+					<xsd:element name="scriptPath" type="pathElementType" minOccurs="0">
+                        <xsd:annotation>
+				<xsd:documentation>
+                                <p>TODO: Complete me</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
 				</xsd:sequence>
 				<xsd:attribute name="bookedNodesAccess" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>Specifies which protocol has to be used to access nodes: can be "rsh", "ssh" or "oarsh"</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
 					<xsd:simpleType>
 						<xsd:restriction base="xsd:string">
 							<xsd:enumeration value="rsh" />
@@ -42,20 +77,25 @@
 		</xsd:complexContent>
 	</xsd:complexType>
 
-	<xsd:element name="abstractShElement" type="abstractTupleElementType"></xsd:element>
-
-	<xsd:complexType name="peerSetType">
-		<xsd:sequence>
-			<xsd:element name="peer" type="xsd:string" maxOccurs="unbounded" />
-		</xsd:sequence>
-	</xsd:complexType>
-
-	<!-- a 'MAX' xsd:string constant -->
-	<xsd:simpleType name="MAX">
-		<xsd:restriction base="xsd:string">
-			<xsd:enumeration value="MAX"></xsd:enumeration>
-		</xsd:restriction>
-	</xsd:simpleType>
+	<xsd:element name="abstractShElement" type="abstractTupleElementType">
+        <xsd:annotation>
+		<xsd:documentation>
+                <p>Abstract element which has to be substituted by one of the following elements:</p>
+                <ul>
+                    <li><tt><a href="element/ccsGroup.html">&lt;cssGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/gLiteGroup.html">&lt;gLiteGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/gridEngineGroup.html">&lt;gridEngineGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/loadLevelerGroup.html">&lt;loadLevelerGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/lsfGroup.html">&lt;lsfGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/oarGroup.html">&lt;oarGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/pbsGroup.html">&lt;pbsGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/prunGroup.html">&lt;prunGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/rshGroup.html">&lt;rshGroup&gt;</a></tt></li>
+                    <li><tt><a href="element/sshGroup.html">&lt;sshGroup&gt;</a></tt></li>
+                </ul>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
 
 	<xsd:simpleType name="lookupProtocolType">
 		<xsd:restriction base="xsd:string">
@@ -76,7 +116,6 @@
 		<xsd:attribute name="port" type="xsd:positiveInteger"></xsd:attribute>
 	</xsd:complexType>
 
-
 	<xsd:complexType name="acquisitionType">
 		<xsd:sequence>
 			<xsd:element name="lookup" type="lookupType" minOccurs="0" maxOccurs="unbounded"/>
@@ -85,86 +124,269 @@
 
 	<xsd:complexType name="abstractResourceType"></xsd:complexType>
 
-	<xsd:complexType name="groupRefType">
-		<xsd:complexContent>
-			<xsd:extension base="abstractResourceType">
-				<xsd:sequence>
-					<xsd:element name="host" type="hostRefType"></xsd:element>
+    <xsd:complexType name="groupRefType">
+        <xsd:complexContent>
+            <xsd:extension base="abstractResourceType">
+                <xsd:sequence>
+                    <xsd:element name="host" type="hostRefType">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                <p>Reference to an host (described into the &lt;infrastructure&gt; element)</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+					</xsd:element>
 				</xsd:sequence>
-				<xsd:attribute name="refid" type="idType" use="required" />
+				<xsd:attribute name="refid" type="idType" use="required">
+				    <xsd:annotation>
+				        <xsd:documentation>
+                            <p>Group ID</p>
+                        </xsd:documentation>
+				    </xsd:annotation>
+				</xsd:attribute>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
 
 	<xsd:complexType name="bridgeRefType">
+        <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    FIXME: At least one of these elements must be present - but this can't be done
+                    because there must be at most one host, so either we turn this into a xsd:sequence of elements
+                    of an abstract common type, and then we have to check in the parser that there is at most one host,
+                    or we keep it as it is and check in the parser that at least one element is present
+                </p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:complexContent>
 			<xsd:extension base="abstractResourceType">
-				<!-- FIXME: At least one of these elements mustbe present - but this can't be done
+				<!-- FIXME: At least one of these elements must be present - but this can't be done
 					because there must be at most one host, so either we turn this into a xsd:sequence of elements
 					of an abstract common type, and then we have to check in the parser that there is at most one host,
 					or we keep it as it is and check in the parser that at least one element is present -->
 				<xsd:sequence>
-					<xsd:element name="group" type="groupRefType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
-					<xsd:element name="bridge" type="bridgeRefType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
-					<xsd:element name="host" type="hostRefType" minOccurs="0" maxOccurs="1" />
+					<xsd:element name="group" type="groupRefType" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:annotation>
+				<xsd:documentation>
+                                <p>Reference to a group (described into the &lt;infrastructure&gt; element)</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+					<xsd:element name="bridge" type="bridgeRefType" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                <p>Reference to an other bridge (described into the &lt;infrastructure&gt; element)</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+					<xsd:element name="host" type="hostRefType" minOccurs="0" maxOccurs="1">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                <p>Reference to a host (described into the &lt;infrastructure&gt; element)</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
 				</xsd:sequence>
-				<xsd:attribute name="refid" type="idType" use="required" />
+				<xsd:attribute name="refid" type="idType" use="required">
+                    <xsd:annotation>
+			<xsd:documentation>
+                            <p>Bridge id</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
 
-	<xsd:element name="abstractResourceElement" abstract="true" type="abstractResourceType"></xsd:element>
+	<xsd:element name="abstractResourceElement" abstract="true" type="abstractResourceType">
+        <xsd:annotation>
+            <xsd:documentation>
+                <p>Abstract element which has to be substituted by either <a href="element/bridge.html">&lt;bridge&gt;</a> or <a href="element/group.html">&lt;group&gt;</a></p>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
 
-	<xsd:element name="group" substitutionGroup="abstractResourceElement" type="groupRefType"></xsd:element>
+    <xsd:element name="bridge" substitutionGroup="abstractResourceElement" type="bridgeRefType">
+        <xsd:annotation>
+            <xsd:documentation>
+                <p>Describes a a gateway to a set of machines which cannot be reached individually.</p>
+            </xsd:documentation>
+            <xsd:documentation>
+                <p>
+                    A bridge is meant to represent a front-end to a computing resource.
+                    Many grid architectures have such a feature: each physical machine is not accessible directly,
+                    the user has to go through a single machine called a front-end.
+                </p>
+                <p>
+                    In a deployment descriptor, a bridge is a gateway toward either:
+                    <ul>
+                        <li>a host</li>
+                        <li>a group of machines</li>
+                        <li>another bridge</li>
+                    </ul>
+                </p>
+            </xsd:documentation>
+            <xsd:documentation>
+                <p>A bridge is defined as a base structure meant to be derived. The base structure only defines an id (string)</p>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
 
-	<xsd:element name="bridge" substitutionGroup="abstractResourceElement" type="bridgeRefType"></xsd:element>
+	<xsd:element name="group" substitutionGroup="abstractResourceElement" type="groupRefType">
+	   <xsd:annotation>
+            <xsd:documentation>
+                <p>Describes a group of machine sharing an identical configuration (like a cluster)</p>
+            </xsd:documentation>
+	   </xsd:annotation>
+	</xsd:element>
 
 	<xsd:complexType name="resourceType">
 		<xsd:sequence>
-			<xsd:element name="host" type="hostRefType" minOccurs="0" maxOccurs="1"></xsd:element>
-			<xsd:element ref="abstractResourceElement" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+			<xsd:element name="host" type="hostRefType" minOccurs="0" maxOccurs="1">
+			     <xsd:annotation>
+			         <xsd:documentation>
+                        <p>Describes a single machine</p>
+                     </xsd:documentation>
+			     </xsd:annotation>
+			</xsd:element>
+			<xsd:element ref="abstractResourceElement" minOccurs="0" maxOccurs="unbounded">
+			</xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="toolType">
-		<xsd:attribute name="id" type="xsd:string"></xsd:attribute>
-		<xsd:attribute name="path" type="pathElementGeneralType"></xsd:attribute>
-		<xsd:attribute name="version" type="xsd:string"></xsd:attribute>
+		<xsd:attribute name="id" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <p>Id of the tool</p>
+                </xsd:documentation>
+            </xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="path" type="pathElementGeneralType">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <p>Path of the tool</p>
+                </xsd:documentation>
+            </xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="version" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <p>Version of the tool</p>
+                </xsd:documentation>
+            </xsd:annotation>
+		</xsd:attribute>
 	</xsd:complexType>
 
 	<xsd:complexType name="homeDirectoryType">
 		<xsd:complexContent>
 			<xsd:restriction base="pathElementType">
-				<xsd:attribute name="base" type="pathElementBaseType" fixed="root" use="required"></xsd:attribute>
-				<xsd:attribute name="relpath" type="pathElementGeneralType" use="required"></xsd:attribute>
+				<xsd:attribute name="base" type="pathElementBaseType" fixed="root" use="required">
+                    <xsd:annotation>
+			<xsd:documentation>
+                            <p>Base path: fixed to "root"</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+				<xsd:attribute name="relpath" type="pathElementGeneralType" use="required">
+                    <xsd:annotation>
+			<xsd:documentation>
+                            <p>Relative path (relative to the root path)</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
 			</xsd:restriction>
 		</xsd:complexContent>
 	</xsd:complexType>
 
 	<xsd:complexType name="hostType">
 		<xsd:sequence>
-			<xsd:element name="homeDirectory" type="homeDirectoryType"></xsd:element>
-			<xsd:element name="tool" type="toolType" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+			<xsd:element name="homeDirectory" type="homeDirectoryType">
+			    <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Absolute path to the home directory</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+			</xsd:element>
+			<xsd:element name="tool" type="toolType" minOccurs="0" maxOccurs="unbounded">
+			     <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Information on a tool identified by an id (e.g. java or ProActive directory)</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+			</xsd:element>
 			<xsd:element name="networkInterface" minOccurs="0" maxOccurs="1">
+			    <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Network interface</p>
+                    </xsd:documentation>
+                </xsd:annotation>
 				<xsd:complexType>
-					<xsd:attribute name="name" type="ns:TextOrVariableType" use="required"/>
+					<xsd:attribute name="name" type="ns:TextOrVariableType" use="required">
+					    <xsd:annotation>
+                            <xsd:documentation>
+                                <p>Interface name (e.g. "eth0")</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+					</xsd:attribute>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="id" type="idType" use="required"></xsd:attribute>
-		<xsd:attribute name="os" type="osOrVariableType" use="required"></xsd:attribute>
-		<xsd:attribute name="username" type="TextOrVariableType"></xsd:attribute>
-		<xsd:attribute name="hostCapacity" type="PosintOrVariableType" use="optional" />
-		<xsd:attribute name="vmCapacity" type="PosintOrVariableType" use="optional" />
+		<xsd:attribute name="id" type="idType" use="required">
+		    <xsd:annotation>
+                <xsd:documentation>
+                    <p>Id identifying the host</p>
+                </xsd:documentation>
+            </xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="os" type="osOrVariableType" use="required">
+		    <xsd:annotation>
+                <xsd:documentation>
+                    <p>Operating system running on the host</p>
+                </xsd:documentation>
+            </xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="username" type="TextOrVariableType">
+		     <xsd:annotation>
+                <xsd:documentation>
+                    <p>User name to be used when connecting to the host</p>
+                </xsd:documentation>
+             </xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="hostCapacity" type="PosintOrVariableType" use="optional">
+		     <xsd:annotation>
+                <xsd:documentation>
+                    <p>Maximal number of JVMs to start on the host (default is 1)</p>
+                </xsd:documentation>
+             </xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute name="vmCapacity" type="PosintOrVariableType" use="optional">
+		     <xsd:annotation>
+                <xsd:documentation>
+                    <p>Maximal number of JVMs to start on the host (default is 1)</p>
+                </xsd:documentation>
+             </xsd:annotation>
+		</xsd:attribute>
 	</xsd:complexType>
 
 	<xsd:complexType name="hostRefType">
-		<xsd:attribute name="refid" type="idType" use="required" />
+		<xsd:attribute name="refid" type="idType" use="required">
+		  <xsd:annotation>
+            <xsd:documentation>
+                <p>Host ID</p>
+            </xsd:documentation>
+          </xsd:annotation>
+		</xsd:attribute>
 	</xsd:complexType>
 
 	<xsd:complexType name="abstractInfrastructureType"></xsd:complexType>
 
 	<xsd:complexType name="hostsType">
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>Sequence of &lt;host&gt; elements</p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<xsd:sequence>
 			<xsd:element name="host" type="hostType" minOccurs="1" maxOccurs="unbounded" />
 		</xsd:sequence>
@@ -177,10 +399,28 @@
 	</xsd:complexType>
 
 	<xsd:complexType name="abstractBridgeElementType">
-		<xsd:attribute name="id" type="idType" use="required" />
+		<xsd:attribute name="id" type="idType" use="required">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <p>Bridge id</p>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
 	</xsd:complexType>
 
-	<xsd:element name="abstractBridgeElement" type="abstractBridgeElementType"></xsd:element>
+	<xsd:element name="abstractBridgeElement" type="abstractBridgeElementType">
+        <xsd:annotation>
+            <xsd:documentation>
+                <p>Abstract element representing a bridge.</p>
+                <p>It has to be substituted by one of the following elements:</p>
+                <ul>
+                    <li><tt><a href="element/rshBridge.html">&lt;rshBridge&gt;</a></tt></li>
+                    <li><tt><a href="element/sshBridge.html">&lt;sshBridge&gt;</a></tt></li>
+                    <li><tt><a href="element/oarshBridge.html">&lt;oarshBridge&gt;</a></tt></li>
+                </ul>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
 
 
 	<xsd:complexType name="bridgesType">
@@ -191,19 +431,83 @@
 
 	<xsd:complexType name="infrastructureType">
 		<xsd:all>
-			<xsd:element name="hosts" type="hostsType" minOccurs="0" />
-			<xsd:element name="groups" type="groupsType" minOccurs="0" />
-			<xsd:element name="bridges" type="bridgesType" minOccurs="0" />
+			<xsd:element name="hosts" type="hostsType" minOccurs="0">
+			    <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Describes the hosts referenced into the &lt;resources&gt; element</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+			</xsd:element>
+			<xsd:element name="groups" type="groupsType" minOccurs="0">
+			    <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Describes the groups referenced into the &lt;resources&gt; element</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+			</xsd:element>
+			<xsd:element name="bridges" type="bridgesType" minOccurs="0">
+			    <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Describes the bridges referenced into the &lt;resources&gt; element</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+			</xsd:element>
 		</xsd:all>
 	</xsd:complexType>
 
-	<xsd:element name="GCMDeployment">
+	<xsd:element name="GCMDeployment" >
+	    <xsd:annotation>
+            <xsd:documentation>
+                <p>
+                    <b style="color:#FF0000">Root element of the deployment descriptor file.</b>
+                </p>
+                <p>
+                    Add the following attributes to validate your deployment descriptor:
+                </p>
+                <p>
+                    <tt>&lt;GCMDeployment xmlns="urn:gcm:deployment:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:gcm:deployment:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd"&gt;</tt>
+                </p>
+                </xsd:documentation>
+        </xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="environment" type="environmentType" minOccurs="0" />
-				<xsd:element name="resources" type="resourceType" />
-				<xsd:element name="acquisition" type="acquisitionType" minOccurs="0" />
-				<xsd:element name="infrastructure" type="infrastructureType" />
+				<xsd:element name="environment" type="environmentType" minOccurs="0">
+				    <xsd:annotation>
+				        <xsd:documentation>
+                            <p>Environment variables.</p>
+                        </xsd:documentation>
+				        <xsd:documentation>
+                            <p>Variables defined here can be used latter on in the deployment descriptor. For instance, java property variables, descriptor properties, etc. can be defined here.</p>
+                        </xsd:documentation>
+				    </xsd:annotation>
+				</xsd:element>
+				<xsd:element name="resources" type="resourceType">
+				    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>
+                                Description of resources.
+                                This element is used to describe with a tree-like structure how grid resources are organized together.
+                            </p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+				</xsd:element>
+				<xsd:element name="acquisition" type="acquisitionType" minOccurs="0">
+				    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>This feature is no longer supported</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+				</xsd:element>
+				<xsd:element name="infrastructure" type="infrastructureType">
+				    <xsd:annotation>
+                        <xsd:documentation>
+                            <p>Description of the infrastructure.</p>
+                        </xsd:documentation>
+                        <xsd:documentation>
+                            <p>This element is used to describe the elements (hosts, bridges, groups) referenced into the &lt;resources&gt; element.</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+				</xsd:element>
 			</xsd:sequence>
 		</xsd:complexType>
 
@@ -247,6 +551,3 @@
 	</xsd:element>
 
 </xsd:schema>
-
-
-

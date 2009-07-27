@@ -376,7 +376,7 @@ public void compute(String arg) {
          <section xml:id="DeployemntTutorialDescription"><info><title>Tutorial description</title></info>
             <para>Now that we know how to use component, we would like to benefit from active object properties. One of these is the deployment on several Java Virtual Machines (JVM).
             This tutorial will explain you how to deploy our component on 3 differents JVM. For this, we will use GCM deployment model. If you have done the active object tutorials, you
-            should know what this model is and how to use it. If not, please refer to <xref linkend="deployment_guide_CMA" />.</para>
+            should know what this model is and how to use it. If not, please refer to <xref linkend="GCMDeployment" />.</para>
 
             <para>For the deployment, we will use the following application description:</para>
             <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_deployment_application_descriptor.snip"/></textobject></programlisting>

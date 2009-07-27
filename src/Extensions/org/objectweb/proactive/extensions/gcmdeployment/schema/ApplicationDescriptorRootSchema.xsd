@@ -7,47 +7,134 @@
 	<xsd:complexType name="nodeProviderType">
 		<xsd:sequence>
 			<xsd:element name="file" maxOccurs="unbounded">
+                <xsd:annotation>
+			<xsd:documentation>
+                        <p>Deployment descriptor file</p>
+                    </xsd:documentation>
+                </xsd:annotation>
 				<xsd:complexType>
-					<xsd:attribute name="path" type="pathElementGeneralType"></xsd:attribute>
+					<xsd:attribute name="path" type="pathElementGeneralType">
+                        <xsd:annotation>
+				<xsd:documentation>
+                                <p>Path to the deployment descriptor file</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="id" type="IdOrVariableType"/>
+		<xsd:attribute name="id" type="IdOrVariableType">
+            <xsd:annotation>
+		<xsd:documentation>
+                    <p>Id of the node provider</p>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
 	</xsd:complexType>
 
 	<xsd:complexType name="commandType">
 		<xsd:sequence>
-			<xsd:element name="path" type="pathElementType" minOccurs="0" />
-			<xsd:element name="arg" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="path" type="pathElementType" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Path to the executable command</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+			<xsd:element name="arg" type="xsd:string" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Arguments passed to the command</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="name" type="xsd:string"/>
+		<xsd:attribute name="name" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    <p>
+                        Name of the executable. If a &lt;path&gt; child element is present,
+                        the value of this attribute will be appended to the value of the &lt;path&gt; child element
+                    </p>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
 	</xsd:complexType>
 
 	<xsd:complexType name="applicationNodeType" abstract="true"></xsd:complexType>
 
-	<xsd:element name="abstractApplicationElement" type="applicationNodeType" />
+	<xsd:element name="abstractApplicationElement" type="applicationNodeType" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation>
+                <p>Abstract element which has to be substituted either by one of the two following elements:</p>
+                <ul>
+                    <li><tt><a href="element/executable.html">&lt;executable&gt;</a></tt></li>
+                    <li><tt><a href="element/proactive.html">&lt;proactive&gt;</a></tt></li>
+                </ul>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
 
 	<xsd:complexType name="applicationType">
 		<xsd:sequence>
-			<xsd:element ref="abstractApplicationElement" maxOccurs="1" minOccurs="1"></xsd:element>
+			<xsd:element ref="abstractApplicationElement" maxOccurs="1" minOccurs="1" />
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="resourcesType">
 		<xsd:sequence>
-			<xsd:element name="nodeProvider" type="nodeProviderType" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+			<xsd:element name="nodeProvider" type="nodeProviderType" minOccurs="1" maxOccurs="unbounded">
+                <xsd:annotation>
+			<xsd:documentation>
+                        <p>Describes a node provider used by the application</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:complexType name="GCMApplicationType">
 		<xsd:sequence>
-			<xsd:element name="environment" type="environmentType" minOccurs="0" />
-			<xsd:element name="application" type="applicationType" minOccurs="1" maxOccurs="1"></xsd:element>
-			<xsd:element name="resources" type="resourcesType" minOccurs="1" maxOccurs="1"></xsd:element>
+			<xsd:element name="environment" type="environmentType" minOccurs="0">
+                <xsd:annotation>
+			<xsd:documentation>
+                        <p>Environment variables.</p>
+                        <p>
+                            Variables defined here can be used latter on in the deployment descriptor.
+                            For instance, java property variables, descriptor properties, etc. can be defined here.
+                        </p>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+			<xsd:element name="application" type="applicationType" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Description of the application</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+			<xsd:element name="resources" type="resourcesType" minOccurs="1" maxOccurs="1">
+                <xsd:annotation>
+			<xsd:documentation>
+                        <p>Describes the resources, that is, the node providers.</p>
+                        <p>This element is used to link node providers to one or several deployment descriptors</p>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 
 	<xsd:element name="GCMApplication" type="GCMApplicationType">
+        <xsd:annotation>
+            <xsd:documentation>
+                <p><b style="color:#FF0000">Root element of the application descriptor file.</b></p>
+                <p>Add the following attributes to validate your application descriptor:</p>
+		    <p>
+                    &lt;GCMApplication xmlns="urn:gcm:application:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="urn:gcm:application:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ApplicationDescriptorSchema.xsd"&gt;
+                </p>
+            </xsd:documentation>
+        </xsd:annotation>
 		<!-- resource providers refid/id key correctness -->
 		<!--  -->
 		<xsd:key name="idnodeProviders">

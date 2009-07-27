@@ -13,52 +13,155 @@
 				  
 				    <!-- MUST INCLUDE MANDATORY JAVA_HOME and PROACTIVE_HOME -->
 				
-					<xs:element name="rank" type="gLiteRankType"  minOccurs="1"/>
-					<!-- Environments variables that must be set before executing job -->
-					<xs:element name="gliteEnv" type="xs:string" minOccurs="0" />
+					<xs:element name="rank" type="gLiteRankType"  minOccurs="1">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Enables to choose between several resources which hold the requirements.</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+                    <!-- Environments variables that must be set before executing job -->
+					<xs:element name="gliteEnv" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                            <xs:documentation>
+                                <p>Environments variables which has to be set before executing job</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 					
 				    <!-- Std IN/OUT. Obs. stdin must be on inputSandbox -->
-				    <xs:element name="stdout" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stdin" type="pathElementGeneralType" minOccurs="0" />
+				    <xs:element name="stdout" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the standard output of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the error output of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 				    
 				    <!-- Files to be sent to CEs and retrieved as results -->
-				    <xs:element name="inputSandbox" type="TextOrVariableType" minOccurs="0" />
-					<xs:element name="outputSandbox" type="TextOrVariableType" minOccurs="0" />
+				    <xs:element name="inputSandbox" type="TextOrVariableType" minOccurs="0">
+                    <xs:annotation>
+                            <xs:documentation>
+                                <p>Files to be sent to CEs</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+
+					<xs:element name="outputSandbox" type="TextOrVariableType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Files to be retrieved as result</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 					
 					<!-- Time to expire jobs (in seconds since epoch): default=24h -->
-					<xs:element name="expiryTime" type="PosintOrVariableType" minOccurs="0" />
+					<xs:element name="expiryTime" type="PosintOrVariableType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Expiry time in second</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 					
 					<!-- Glue Schema requirements for resources. Obs. requires logical expression using && and ||  -->
-					<xs:element name="requirements" type="xs:string" minOccurs="0" />
+					<xs:element name="requirements" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Glue Schema requirements for resources. Obs. requires logical expression using &amp;&amp; and ||</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 					
 					<!-- Classads representings  data requirements for a job-->
-					<xs:element name="dataRequirements" type="gLiteInputDataType" minOccurs="0" />
+					<xs:element name="dataRequirements" type="gLiteInputDataType" minOccurs="0">
+                    <xs:annotation>
+                            <xs:documentation>
+                                <p>Data requirements for a job</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 				
 					<!-- Content for the "vomses" file -->	
-					<xs:element name="configFile" type="pathElementGeneralType" minOccurs="0" />
+					<xs:element name="configFile" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Content for the "vomses" file</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 				
 					<!-- URL of the storage element for output data  -->
-					<xs:element name="outputse" type="xs:string" minOccurs="0" />
+					<xs:element name="outputse" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>URL of the storage element for output data</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 					
 					<!-- Application-related Runtime's parameters, java properties --> 
-				    <xs:element name="arguments" type="pathElementGeneralType" minOccurs="0" />
+				    <xs:element name="arguments" type="pathElementGeneralType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>
+                                <p>Application-related Runtime's parameters, java properties</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
 					
 				</xs:sequence>
 				
 				<!-- VO name -->
-				<xs:attribute name="virtualOrganisation" type="xs:string" use="optional" default="proactive"  />
+				<xs:attribute name="virtualOrganisation" type="xs:string" use="optional" default="proactive">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Virtual organisation name</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 				
-				<xs:attribute name="proactiveHome" type="xs:string" use="required"/>
+				<xs:attribute name="proactiveHome" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>ProActive home</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 				
-				<xs:attribute name="javaHome" type="xs:string" use="required"/>
+				<xs:attribute name="javaHome" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Java home</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 				
 				<!-- proxy server were stores long-term proxy certificate -->
-				<xs:attribute name="myProxyServer" type="xs:string" use="optional"/>
+				<xs:attribute name="myProxyServer" type="xs:string" use="optional">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Proxy server were stores long-term proxy certificate</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 				
 				<!-- single, multiple, parallel or native -->
 				<xs:attribute name="jobType" use="required">
-				<xs:simpleType>
+		        <xs:annotation>
+                        <xs:documentation>
+                            <p>Job type: should be "single", "multiple", "parallel" or "native"</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="single" />
 							<xs:enumeration value="multiple" />
@@ -69,16 +172,42 @@
 				</xs:attribute>
 				
 				<!-- number of nodes, for parallel or multiple jobs -->
-				<xs:attribute name="nodesNumber" type="PosintOrVariableType" default="1" />
+				<xs:attribute name="nodesNumber" type="PosintOrVariableType" default="1">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Number of nodes for parallel or multiple jobs</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+
 				
 				<!-- executable to be run by the job -->
-				<xs:attribute name="executable" type="xs:string" default="/bin/sh" />
+				<xs:attribute name="executable" type="xs:string" default="/bin/sh">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Executable to be run by the job</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 				
 				<!-- number of retries in case of glite components errors -->
-				<xs:attribute name="retryCount" type="xs:string"  default="3"/>
-				
+				<xs:attribute name="retryCount" type="xs:string"  default="3">
+				    <xs:annotation>
+                        <xs:documentation>
+                            <p>Number of retries in case of gLite components errors</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+
 				<!-- file to output jobID -->
-				<xs:attribute name="outputFile" type="xs:string" default="ProActive_JobID"/>
+				<xs:attribute name="outputFile" type="xs:string" default="ProActive_JobID">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>File to output jobID</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -89,7 +218,13 @@
 		<xs:simpleContent>
 			<xs:extension base="TextOrVariableType">
 				<!-- find the best match -->
-				<xs:attribute name="fuzzyrank" type="BooleanOrVariableType" default="false" />
+				<xs:attribute name="fuzzyrank" type="BooleanOrVariableType" default="false">
+                    <xs:annotation>
+			<xs:documentation>
+                            <p>If true, the algorithm will try to find the best match for resources</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -97,13 +232,37 @@
 	<!--gLiteInputDataType-->
 	<xs:complexType name="gLiteInputDataType">
 		<!-- string or list of strings representing the LFNs(Logical File Names) -->
-		<xs:attribute name="inputData" type="xs:string" />
+		<xs:attribute name="inputData" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+                    <p>String or list of strings representing the LFNs(Logical File Names)</p>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 		<!-- RLS(LCG Replica Location Service - lfn,guid), SI(Glite Storage Index - lfn,guid) or DLI(LCG Data Location Interface- lfn,guid,lds,query) -->
-		<xs:attribute name="dataCatalogType" type="xs:string" />
+		<xs:attribute name="dataCatalogType" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+                    <p>RLS(LCG Replica Location Service - lfn,guid), SI(Glite Storage Index - lfn,guid) or DLI(LCG Data Location Interface- lfn,guid,lds,query)</p>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 		<!-- Data catalog service endpoint URL -->
-		<xs:attribute name="dataCatalog" type="xs:string" />
+		<xs:attribute name="dataCatalog" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>
+                    <p>Data catalog service endpoint URL</p>
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
 	</xs:complexType>
 
-	<xs:element name="gLiteGroup" type="gLiteGroupType" substitutionGroup="abstractShElement"/>
+	<xs:element name="gLiteGroup" type="gLiteGroupType" substitutionGroup="abstractShElement">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a gLite Group</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
 
 </xs:schema>

@@ -1,62 +1,191 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:hfp="http://www.w3.org/2001/XMLSchema-hasFacetAndProperty"
 	targetNamespace="urn:gcm:application:1.0"
 	xmlns="urn:gcm:application:1.0"
 	elementFormDefault="qualified">
 
 	<xsd:include schemaLocation="../../schema/ApplicationDescriptorRootSchema.xsd"/>	
 
-	<xsd:element name="proactive" type="proactiveType" substitutionGroup="abstractApplicationElement" />
+	<xsd:element name="proactive" type="proactiveType" substitutionGroup="abstractApplicationElement">
+        <xsd:annotation>
+            <xsd:documentation>
+                <p>ProActive application</p>
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
 
 	<xsd:complexType name="proactiveType">
 		<xsd:complexContent>
 			<xsd:extension base="applicationNodeType">
 				<xsd:sequence>
-					<xsd:element name="configuration" minOccurs="0">
+					<xsd:element name="configuration" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:annotation>
+				<xsd:documentation>
+                                <p>Various configuration parameters</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
 						<xsd:complexType>
 							<xsd:sequence>
-								<xsd:element name="bootClasspath" type="pathType" minOccurs="0" />
-								<xsd:element name="java" type="pathElementType" minOccurs="0" maxOccurs="1" />
+								<xsd:element name="bootClasspath" type="pathType" minOccurs="0">
+                                    <xsd:annotation>
+					<xsd:documentation>
+                                            <p>Boot classpath for the JVMs</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
+								<xsd:element name="java" type="pathElementType" minOccurs="0" maxOccurs="1">
+                                    <xsd:annotation>
+                                        <xsd:documentation>
+                                            <p>Path to the Java executable</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
 								<xsd:element name="jvmarg" minOccurs="0" maxOccurs="unbounded">
+                                    <xsd:annotation>
+                                        <xsd:documentation>
+                                            <p>Arguments passed to the JVMs</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
 									<xsd:complexType>
-										<xsd:attribute name="value" type="xsd:string" use="required" />
+										<xsd:attribute name="value" type="xsd:string" use="required">
+                                            <xsd:annotation>
+                                                <xsd:documentation>
+                                                    <p>Argument value (e.g. "-Dsecurity.manager")</p>
+                                                </xsd:documentation>
+                                            </xsd:annotation>
+                                        </xsd:attribute>
 									</xsd:complexType>
 								</xsd:element>
-								<xsd:element name="applicationClasspath" type="pathType" minOccurs="0" maxOccurs="1" />
-								<xsd:element name="proactiveClasspath" type="classpathType" minOccurs="0" maxOccurs="1" />
-								<xsd:element name="securityPolicy" type="pathElementType" minOccurs="0" maxOccurs="1" />
+								<xsd:element name="applicationClasspath" type="pathType" minOccurs="0" maxOccurs="1">
+                                    <xsd:annotation>
+					<xsd:documentation>
+                                            <p>Classpath for the application</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
+								<xsd:element name="proactiveClasspath" type="classpathType" minOccurs="0" maxOccurs="1">
+                                    <xsd:annotation>
+					<xsd:documentation>
+                                            <p>Classpath used to override the standard ProActive classpath computed from its installation location</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
+								<xsd:element name="securityPolicy" type="pathElementType" minOccurs="0" maxOccurs="1">
+                                    <xsd:annotation>
+					<xsd:documentation>
+                                            <p>Path to the Java security policy file</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
 								<xsd:element name="proactiveSecurity" minOccurs="0" maxOccurs="1">
+                                    <xsd:annotation>
+					<xsd:documentation>
+                                            <p>Security policy for application and runtime</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
 									<xsd:complexType>
 										<xsd:sequence>
-											<xsd:element name="applicationPolicy" type="pathElementType"  minOccurs="0" maxOccurs="1"/>
-											<xsd:element name="runtimePolicy" type="pathElementType"  minOccurs="0" maxOccurs="1"/>
+											<xsd:element name="applicationPolicy" type="pathElementType"  minOccurs="0" maxOccurs="1">
+                                                <xsd:annotation>
+							<xsd:documentation>
+                                                        <p>
+                                                            Path to the Java security policy file that will be applied on the application's objects
+                                                            deployed at runtime like nodes and active objects.
+                                                        </p>
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
+											<xsd:element name="runtimePolicy" type="pathElementType"  minOccurs="0" maxOccurs="1">
+                                                <xsd:annotation>
+							<xsd:documentation>
+                                                        <p>Path to Java security policy file that will be applied on the ProActive Runtime.</p>
+                                                    </xsd:documentation>
+                                                </xsd:annotation>
+                                            </xsd:element>
 										</xsd:sequence>
 									</xsd:complexType>
 								</xsd:element>
-								<xsd:element name="log4jProperties" type="pathElementType" minOccurs="0" maxOccurs="1" />
-								<xsd:element name="userProperties" type="pathElementType" minOccurs="0" maxOccurs="1" />
+								<xsd:element name="log4jProperties" type="pathElementType" minOccurs="0" maxOccurs="1">
+                                    <xsd:annotation>
+					<xsd:documentation>
+                                            <p>Path to the Java log4j configuration file</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
+								<xsd:element name="userProperties" type="pathElementType" minOccurs="0" maxOccurs="1">
+                                    <xsd:annotation>
+					<xsd:documentation>
+                                            <p>Path to the properties file (Java and/or ProActive properties)</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:element>
 								<xsd:element name="debug" minOccurs="0" maxOccurs="1">
-								  <xsd:complexType>
-									<xsd:attribute name="command" use="optional">
-									</xsd:attribute>
+                                    <xsd:annotation>
+                                        <xsd:documentation>
+                                            <p>TODO: Complete me</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+								    <xsd:complexType>
+									    <xsd:attribute name="command" use="optional">
+                                            <xsd:annotation>
+                                                <xsd:documentation>
+                                                    <p>TODO: Complete me</p>
+                                                </xsd:documentation>
+                                            </xsd:annotation>
+									    </xsd:attribute>
 									</xsd:complexType>
 								</xsd:element>
 							</xsd:sequence>
 						</xsd:complexType>
 					</xsd:element>
 
-					<xsd:element name="technicalServices" type="technicalServiceType" minOccurs="0" />
+					<xsd:element name="technicalServices" type="technicalServiceType" minOccurs="0">
+                        <xsd:annotation>
+				<xsd:documentation>
+                                <p>
+                                    A technical service is a non-functional requirement that may be
+                                    dynamically fulfilled at runtime by adapting the configuration of selected resources.
+                                    For instance, we can use a technical service to activate the fault-tolerance mechanism
+                                    on each node. For more information, please refer to the chapter dealing with this feature.
+                                    A technical service can be defined at the application level, at the virtual node level
+                                    or at the node provider level.
+                                </p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
 
 					<xsd:element name="virtualNode" type="virtualNodeType" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:annotation>
+				<xsd:documentation>
+                                <p>Virtual node used for the deployment of the ProActive application</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
 						<xsd:unique name="nodeProviderConstraint">
 							<xsd:selector xpath="nodeProvider"></xsd:selector>
 							<xsd:field xpath="@refid"></xsd:field>
 						</xsd:unique>
 					</xsd:element>
-
 				</xsd:sequence>
-				<xsd:attribute name="relpath" type="pathElementGeneralType" use="required" />
+
+				<xsd:attribute name="relpath" type="pathElementGeneralType" use="required">
+                    <xsd:annotation>
+			<xsd:documentation>
+                            <p>Location of the ProActive installation (path relative to the base)</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+
 				<xsd:attribute name="base" use="required">
+                    <xsd:annotation>
+			<xsd:documentation>
+                            <p>Base location of the ProActive installation: can be "home" or "root":</p>
+                            <ul>
+                                <li>if "home", base path will be the user’s home directory</li>
+                                <li>if "root", base path will be the root directory of the system</li>
+                            </ul>
+                        </xsd:documentation>
+                    </xsd:annotation>
 					<xsd:simpleType>
 						<xsd:restriction base="xsd:string">
 							<xsd:enumeration value="home" />
@@ -71,16 +200,44 @@
 	<xsd:complexType name="technicalServiceType">
 		<xsd:sequence>
 			<xsd:element name="class" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <p>Class defining how to configure nodes. This class has to implements the <i>TechnicalService</i> interface.</p>
+                    </xsd:documentation>
+                </xsd:annotation>
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="property" maxOccurs="unbounded">
+                            <xsd:annotation>
+                                <xsd:documentation>
+                                    <p>Defines a property to be set to the nodes</p>
+                                </xsd:documentation>
+                            </xsd:annotation>
 							<xsd:complexType>
-								<xsd:attribute name="name" type="NonEmptyTextOrVariableType" use="required" />
-								<xsd:attribute name="value" type="TextOrVariableType" use="required" />
+								<xsd:attribute name="name" type="NonEmptyTextOrVariableType" use="required">
+                                    <xsd:annotation>
+                                        <xsd:documentation>
+                                            <p>Name of the property</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:attribute>
+								<xsd:attribute name="value" type="TextOrVariableType" use="required">
+                                    <xsd:annotation>
+                                        <xsd:documentation>
+                                            <p>Value of the property</p>
+                                        </xsd:documentation>
+                                    </xsd:annotation>
+                                </xsd:attribute>
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
-					<xsd:attribute name="name" type="NonEmptyTextOrVariableType" use="required" />
+					<xsd:attribute name="name" type="NonEmptyTextOrVariableType" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                <p>Full name of the class</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
@@ -88,21 +245,83 @@
 	
 	<xsd:complexType name="virtualNodeType">
 		<xsd:sequence>
-			<xsd:element name="technicalServices" type="technicalServiceType" minOccurs="0" />
+			<xsd:element name="technicalServices" type="technicalServiceType" minOccurs="0">
+                <xsd:annotation>
+			<xsd:documentation>
+                        <p>
+                            A technical service is a non-functional requirement that may be
+                            dynamically fulfilled at runtime by adapting the configuration of selected resources.
+                            For instance, we can use a technical service to activate the fault-tolerance mechanism
+                            on each node. For more information, please refer to the chapter dealing with this feature.
+                            A technical service can be defined at the application level, at the virtual node level
+                            or at the node provider level.
+                        </p>
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
 			<xsd:element name="nodeProvider" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+			<xsd:documentation>
+                        <p>Reference to a or several node providers described in the &lt;resources&gt; element.</p>
+                    </xsd:documentation>
+                    <xsd:documentation>
+                        <p>
+                            If there is no reference to a node provider, then the virtual node can retrieve nodes from any node provider
+                            defined into the &lt;resources&gt; element.
+                        </p>
+                    </xsd:documentation>
+                </xsd:annotation>
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="technicalServices" type="technicalServiceType" minOccurs="0" />
+						<xsd:element name="technicalServices" type="technicalServiceType" minOccurs="0">
+                            <xsd:annotation>
+                                <xsd:documentation>
+                                    <p>
+                                        A technical service is a non-functional requirement that may be
+                                        dynamically fulfilled at runtime by adapting the configuration of selected resources.
+                                        For instance, we can use a technical service to activate the fault-tolerance mechanism
+                                        on each node. For more information, please refer to the chapter dealing with this feature.
+                                        A technical service can be defined at the application level, at the virtual node level
+                                        or at the node provider level.
+                                    </p>
+                                </xsd:documentation>
+                            </xsd:annotation>
+                        </xsd:element>
 					</xsd:sequence>
-					<xsd:attribute name="refid" type="IdOrVariableType" use="required" />
-					<xsd:attribute name="capacity" type="PosintOrVariableType" />
+					<xsd:attribute name="refid" type="IdOrVariableType" use="required">
+                        <xsd:annotation>
+				<xsd:documentation>
+                                <p>Id of the node provider that will be used to describe it in the &lt;resources&gt; element</p>
+                            </xsd:documentation>
+                            <xsd:documentation>
+                                <p>This id has to match with the id of one of the node providers described in the &lt;resources&gt; element</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+					<xsd:attribute name="capacity" type="PosintOrVariableType">
+                        <xsd:annotation>
+				<xsd:documentation>
+                                <p>Number of nodes requested by the virtual node to this node provider</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
-		<xsd:attribute name="id" type="IdOrVariableType" use="required"></xsd:attribute>
-		<xsd:attribute name="capacity" type="PosintOrVariableType"></xsd:attribute>
+		<xsd:attribute name="id" type="IdOrVariableType" use="required">
+            <xsd:annotation>
+		<xsd:documentation>
+                    <p>Id of the virtual node</p>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+		<xsd:attribute name="capacity" type="PosintOrVariableType">
+            <xsd:annotation>
+		<xsd:documentation>
+                    <p>Number of nodes requested by the virtual node to all of the node providers.</p>
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
 	</xsd:complexType>
-	
-	
 	
 </xsd:schema>

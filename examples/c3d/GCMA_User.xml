@@ -23,7 +23,7 @@
 				</applicationClasspath>
 			</configuration>
 
-			<virtualNode id="User" capacity="1"/>
+			<virtualNode id="User" capacity="1" />
 		</proactive>
 	</application>
 

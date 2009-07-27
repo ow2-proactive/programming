@@ -11,25 +11,78 @@
 		<xs:complexContent>
 			<xs:extension base="abstractGroupSchedulerElementType">
 				<xs:sequence>
-					<xs:element name="resources" type="lsfResourcesType" minOccurs="1" />
-					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0" />
-				</xs:sequence>
-				<xs:attribute name="interactive" type="BooleanOrVariableType" use="optional" />
-				<xs:attribute name="jobName" type="NonEmptyTextOrVariableType" use="optional" />
-				<xs:attribute name="queue" type="NonEmptyTextOrVariableType" use="optional" />
+					<xs:element name="resources" type="lsfResourcesType" minOccurs="1">
+					    <xs:annotation>
+                            <xs:documentation>
+                                <p>Resources that will be allowed to the job</p>
+                            </xs:documentation>
+                        </xs:annotation>
+					</xs:element>
+					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0">
+					    <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the standard output of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0">
+					    <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the standard error of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+				<xs:attribute name="interactive" type="BooleanOrVariableType" use="optional">
+				    <xs:annotation>
+						<xs:documentation>
+                            <p>Whether the job is interactive or not</p>
+                        </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="jobName" type="NonEmptyTextOrVariableType" use="optional">
+				     <xs:annotation>
+			             <xs:documentation>
+                            <p>Name of the job</p>
+                        </xs:documentation>
+				     </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="queue" type="NonEmptyTextOrVariableType" use="optional">
+				     <xs:annotation>
+                        <xs:documentation>
+                            <p>Name of the queue the job will be submitted in</p>
+                        </xs:documentation>
+					 </xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:element name="lsfGroup" substitutionGroup="abstractShElement" type="lsfGroupType" />
+	<xs:element name="lsfGroup" substitutionGroup="abstractShElement" type="lsfGroupType">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a LSF Group</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
 	
 	
 	<xs:complexType name="lsfResourcesType">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="processorNumber" type="PosintOrVariableType" use="optional"/>
+				<xs:attribute name="processorNumber" type="PosintOrVariableType" use="optional">
+					<xs:annotation>
+		                <xs:documentation>
+                            <p>Number of processors requested</p>
+                        </xs:documentation>
+	                </xs:annotation>
+	            </xs:attribute>
 				<xs:attribute name="walltime" use="optional">
+				    <xs:annotation>
+						<xs:documentation>
+                            <p>Maximum time allowed for the job</p>
+                        </xs:documentation>
+					</xs:annotation>
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:pattern value="\d\d(:\d\d)?" />

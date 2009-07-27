@@ -10,13 +10,37 @@
 		<xs:complexContent>
 			<xs:extension base="abstractGroupElementType">
 				<xs:sequence>
-					<xs:element name="privateKey" type="pathElementType" minOccurs="0" maxOccurs="1" />
+					<xs:element name="privateKey" type="pathElementType" minOccurs="0" maxOccurs="1">
+					    <xs:annotation>
+					        <xs:documentation>
+                                <p>Path to the private SSH key needed to access the host (e.g. /home/.ssh/id_rsa)</p>
+                            </xs:documentation>
+					    </xs:annotation>
+                    </xs:element>
 				</xs:sequence>
-				<xs:attribute name="commandOptions" type="TextOrVariableType"/>
-				<xs:attribute name="hostList" type="NonEmptyTextOrVariableType" use="required"/>
+				<xs:attribute name="commandOptions" type="TextOrVariableType">
+				    <xs:annotation>
+				        <xs:documentation>
+                            <p>List of options which will be passed to the ssh command</p>
+                        </xs:documentation>
+				    </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="hostList" type="NonEmptyTextOrVariableType" use="required">
+				    <xs:annotation>
+                        <xs:documentation>
+                            <p>List of hosts to connect to</p>
+                        </xs:documentation>
+                    </xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:element name="sshGroup" substitutionGroup="abstractShElement" type="groupTypeSSH"/>
+	<xs:element name="sshGroup" substitutionGroup="abstractShElement" type="groupTypeSSH">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a RSH Group</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
 </xs:schema>

@@ -8,23 +8,28 @@
       
 
       <para>The objective of this feature is to allow the use of variables
-      with XML descriptors. Variables can be defined: directly in the
+      into GCM descriptors and XML descriptors. Variables can be defined directly in the
       descriptor, using independent files, or inside the deploying
       application's code (with an API).</para>
 
-      <para>The variable tags are usefull inside a descriptor because they can
-      factorize frequent parameters. (For example, a variable like
-      ${PROACTIVE_HOME} can be defined, set and used in an XML Descriptor.)
+      <para>The variable tags are useful inside a descriptor because they can
+      factorize frequent parameters (for example, a variable like
+      ${PROACTIVE_HOME} can be defined, set and used in a descriptor).
       But also, because they can be used to establish a contract between the
-      Program and the Descriptor.</para>
+      program and the descriptor.</para>
     </section>
 
     <section xml:id="dbdoclet.id.VariableContract_html_variableTypes"><info><title xml:id="VariableTypes_72">Variable Types</title></info>
       
+      <para>Variables can be set in more than one place. The following table describes where each variable type can be defined.
+      When the value is set
+      on multiple places, then the definition specified in the priority column
+      will take precedence. In the priority column, items towards the left
+      have more priority.</para>
 
-      <informaltable><info><title xml:id="VariableTypes_172">Variable Types</title></info>
+      <table>
         
-
+         <title xml:id="VariableTypes_172">Variable Types</title>
         <tgroup cols="4">
           <colspec align="center"/>
 
@@ -42,7 +47,7 @@
 
           <tbody>
             <row>
-              <entry><emphasis role="bold">DescriptorVariable</emphasis></entry>
+              <entry><emphasis role="bold">descriptorVariable</emphasis></entry>
 
               <entry>Descriptor</entry>
 
@@ -52,7 +57,7 @@
             </row>
 
             <row>
-              <entry><emphasis role="bold">ProgramVariable</emphasis></entry>
+              <entry><emphasis role="bold">programVariable</emphasis></entry>
 
               <entry>Program</entry>
 
@@ -62,7 +67,7 @@
             </row>
 
             <row>
-              <entry><emphasis role="bold">DescriptorDefaultVariable</emphasis></entry>
+              <entry><emphasis role="bold">descriptorDefaultVariable</emphasis></entry>
 
               <entry>Descriptor, Program</entry>
 
@@ -72,7 +77,7 @@
             </row>
 
             <row>
-              <entry><emphasis role="bold">ProgramDefaultVariable</emphasis></entry>
+              <entry><emphasis role="bold">programDefaultVariable</emphasis></entry>
 
               <entry>Program, Descriptor</entry>
 
@@ -82,7 +87,7 @@
             </row>
 
             <row>
-              <entry><emphasis role="bold">JavaPropertyVariable</emphasis></entry>
+              <entry><emphasis role="bold">javaPropertyVariable</emphasis></entry>
 
               <entry>Descriptor, Program</entry>
 
@@ -92,7 +97,7 @@
             </row>
 
             <row>
-              <entry><emphasis role="bold">JavaPropertyDescriptorDefault</emphasis></entry>
+              <entry><emphasis role="bold">javaPropertyDescriptorDefault</emphasis></entry>
 
               <entry>JavaProperty, Descriptor, Program</entry>
 
@@ -102,7 +107,7 @@
             </row>
 
             <row>
-              <entry><emphasis role="bold">JavaPropertyProgramDefault</emphasis></entry>
+              <entry><emphasis role="bold">javaPropertyProgramDefault</emphasis></entry>
 
               <entry>JavaProperty, Descriptor, Program</entry>
 
@@ -112,25 +117,22 @@
             </row>
           </tbody>
         </tgroup>
-      </informaltable>
+      </table>
 
-      <para>Variables can be set in more than one place. When the value is set
-      on multiple places, then the definition specified in the priority column
-      will take precedence. In the priority column, items towards the left
-      have more priority.</para>
     </section>
 
     <section xml:id="dbdoclet.id.VariableContract_html_variableTypesDesc"><info><title xml:id="VariableTypesUserGuide_72">Variable Types User Guide</title></info>
       
 
-      <para>To help identify the user cases where the variable types might be
+      <para>In order to help to identify the user cases where the variable types might be
       useful, we have defined the concept of programmer and deployer. The
-      programmer is the person writing the application code. The deployer
+      programmer is the person writing the application code whereas the deployer
       corresponds to the responsible of writing the deployment descriptor. The
-      variables represent rights and responsabilities between the two parties
+      variables represent rights and responsibilities between the two parties
       (contract) as specified in the following table:</para>
 
-      <para><informaltable>
+      <table>
+          <title>Variable behaviors and use cases</title>
           <tgroup cols="3">
             <tbody>
               <row>
@@ -160,7 +162,7 @@
                 <entry><para> <emphasis role="bold">programVariable</emphasis>
                 </para></entry>
 
-                <entry><para>The value must be set in the program, and cannot
+                <entry><para>The value has to be set in the program, and cannot
                 be specified in the descriptor.</para></entry>
 
                 <entry><para>The programmer wants to use a value, without
@@ -173,28 +175,28 @@
                 <entry><para> <emphasis role="bold">descriptorDefaultVariable</emphasis>
                 </para></entry>
 
-                <entry><para>A default value must be specified in the
+                <entry><para>A default value has to be specified in the
                 descriptor. The programmer has the ability to change the
                 value in the program. If the value is changed in
                 the program, then this new value will have precedence over the
                 one defined in the descriptor.</para></entry>
 
                 <entry><para>The programmer may override the default value, but 
-				the responsability of setting a default belongs to the 
+				the responsibility of setting a default belongs to the
                 deployer. </para></entry>
               </row>
 
               <row>
                 <entry><para> <emphasis role="bold">programDefaultVariable</emphasis> </para></entry>
 
-                <entry><para>A default value must be specified in the program.
+                <entry><para>A default value has to be specified in the program.
                 The descriptor has the ability to change the value.
                 If the value is changed in the descriptor, then
                 this new value will have precedence over the one defined in
                 the program.</para></entry>
 
                 <entry><para>The deployer may override the default value,
-                but the responsability of setting a default belongs to the
+                but the responsibility of setting a default belongs to the
                 programmer.</para></entry>
               </row>
 
@@ -218,23 +220,23 @@
                 will override the program default value.</entry>
 
                 <entry>When the descriptor sets a default value, that can be
-                overrided at deployment using a java property.</entry>
+                overridden at deployment using a java property.</entry>
               </row>
 
               <row>
                 <entry><emphasis role="bold">javaPropertyProgramDefault</emphasis></entry>
 
                 <entry>Takes the value from the corresponding java property. A
-                defualt value can also be set from the program or the
+                default value can also be set from the program or the
                 descriptor. If no property is found, the program default value
                 will override the program default value</entry>
 
                 <entry>When the program sets a default value, than can be
-                overrided at deployment using a java property.</entry>
+                overridden at deployment using a java property.</entry>
               </row>
             </tbody>
           </tgroup>
-        </informaltable></para>
+        </table>
     </section>
 
     <section xml:id="VariablesExample_72"><info><title>Variables Example</title></info>
@@ -245,48 +247,61 @@
 
         <indexterm><primary>Descriptor Variables</primary></indexterm>
 
-        <para>All variables must be set in a variable section at the beginning
+        <para>The following example shows how to define and use a variable into a GCM descriptor. All variables has to be set in an environment section.</para>
+
+         <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/VariableContract_1.snip"/></textobject></programlisting>
+
+
+        <para>As for the XML descriptor version, all variables has to be set in a variable section at the beginning
         of the descriptor file in the following way:</para>
 
-        <screen>         &lt;variables&gt;
-         &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">PROACTIVE_HOME</emphasis>" value="<emphasis role="bold">ProActive/dist/ProActive</emphasis>"/&gt;
-         &lt;<emphasis role="bold">descriptorDefaultVariable</emphasis> name="<emphasis role="bold">NUMBER_OF_VIRTUAL_NODES</emphasis>" value="<emphasis role="bold">20</emphasis>"/&gt;
-         &lt;<emphasis role="bold">programVariable</emphasis> name="<emphasis role="bold">VIRTUAL_NODE_NAME</emphasis>"/&gt;
-         &lt;<emphasis role="bold">javaPropertyVariable</emphasis> name="<emphasis role="bold">java.home</emphasis>"/&gt;
-         &lt;<emphasis role="bold">javaPropertyDescriptorDefault</emphasis> name="<emphasis role="bold">host.name</emphasis>" value="<emphasis role="bold">localhost</emphasis>"/&gt; 
-         &lt;<emphasis role="bold">javaPropertyProgramDefault</emphasis> name="<emphasis role="bold">priority.queue</emphasis>"/&gt; 
+   <programlisting language="xml">&lt;variables&gt;
+   &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">PROACTIVE_HOME</emphasis>" value="<emphasis role="bold">ProActive/dist/ProActive</emphasis>"/&gt;
+   &lt;<emphasis role="bold">descriptorDefaultVariable</emphasis> name="<emphasis role="bold">NUMBER_OF_VIRTUAL_NODES</emphasis>" value="<emphasis role="bold">20</emphasis>"/&gt;
+   &lt;<emphasis role="bold">programVariable</emphasis> name="<emphasis role="bold">VIRTUAL_NODE_NAME</emphasis>"/&gt;
+   &lt;<emphasis role="bold">javaPropertyVariable</emphasis> name="<emphasis role="bold">java.home</emphasis>"/&gt;
+   &lt;<emphasis role="bold">javaPropertyDescriptorDefault</emphasis> name="<emphasis role="bold">host.name</emphasis>" value="<emphasis role="bold">localhost</emphasis>"/&gt;
+   &lt;<emphasis role="bold">javaPropertyProgramDefault</emphasis> name="<emphasis role="bold">priority.queue</emphasis>"/&gt;
 
-         &lt;!-- Include external variables from files--&gt;
-         &lt;<emphasis role="bold">includeXMLFile</emphasis> location="<emphasis role="bold">file.xml</emphasis>"/&gt;
-         &lt;<emphasis role="bold">includePropertyFile</emphasis> location="<emphasis role="bold">file.properties</emphasis>"/&gt;
-         &lt;/variables&gt;
+   &lt;!-- Include external variables from files--&gt;
+   &lt;<emphasis role="bold">includeXMLFile</emphasis> location="<emphasis role="bold">file.xml</emphasis>"/&gt;
+   &lt;<emphasis role="bold">includePropertyFile</emphasis> location="<emphasis role="bold">file.properties</emphasis>"/&gt;
+&lt;/variables&gt;
          ...
-         &lt;!-- Usage example--&gt;
-         &lt;classpath&gt;
-         &lt;absolutePath value="<emphasis role="bold">${USER_HOME}/${PROACTIVE_HOME}/ProActive.jar</emphasis>"/&gt;
-         ...
-         &lt;/classpath&gt;
-         ...</screen>
+&lt;!-- Usage example--&gt;
+&lt;classpath&gt;
+   &lt;absolutePath value="<emphasis role="bold">${USER_HOME}/${PROACTIVE_HOME}/ProActive.jar</emphasis>"/&gt;
+   ...
+&lt;/classpath&gt;
+...</programlisting>
       </section>
 
       <section xml:id="ProgramVariables_72"><info><title>Program Variables</title></info>
-        
+        <para>Variables can easily be defined into the Java program in the following way:</para>
 
-        <screen>         XML_LOCATION="/home/user/descriptor.xml";
-         VariableContract variableContract= new VariableContractImpl();
-         variableContract.setVariableFromProgram( "<emphasis role="bold">VIRTUAL_NODE_NAME</emphasis>", "<emphasis role="bold">testnode</emphasis>", <emphasis role="bold">VariableContractType.ProgramVariable</emphasis>);
-         variableContract.setVariableFromProgram( "<emphasis role="bold">NUMBER_OF_VIRTUAL_NODES</emphasis>", "<emphasis role="bold">10</emphasis>", <emphasis role="bold">VariableContractType.DescriptorDefaultVariable</emphasis>);
-         variableContract.setVariableFromProgram( "<emphasis role="bold">priority.queue</emphasis>", "<emphasis role="bold">vip</emphasis>", <emphasis role="bold">VariableContractType.JavaPropertyProgramDefault</emphasis>);
-         ProActiveDescriptor pad = PADeployment.getProactiveDescriptor(XML_LOCATION, variableContract);
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/VariableContract_2.snip"/></textobject></programlisting>
 
-         //Usage example
-         VariableContract vc=pad.getVariableContract;
-         String proActiveHome=vc.getValue("PROACTIVE_HOME");</screen>
+        <para>In you are using the previous deployment, you should proceed as follows:</para>
+
+        <programlisting language="java">XML_LOCATION="/home/user/descriptor.xml";
+VariableContract variableContract= new VariableContractImpl();
+variableContract.setVariableFromProgram( "<emphasis role="bold">VIRTUAL_NODE_NAME</emphasis>", "<emphasis role="bold">testnode</emphasis>", <emphasis role="bold">VariableContractType.ProgramVariable</emphasis>);
+variableContract.setVariableFromProgram( "<emphasis role="bold">NUMBER_OF_VIRTUAL_NODES</emphasis>", "<emphasis role="bold">10</emphasis>", <emphasis role="bold">VariableContractType.DescriptorDefaultVariable</emphasis>);
+variableContract.setVariableFromProgram( "<emphasis role="bold">priority.queue</emphasis>", "<emphasis role="bold">vip</emphasis>", <emphasis role="bold">VariableContractType.JavaPropertyProgramDefault</emphasis>);
+ProActiveDescriptor pad = PADeployment.getProactiveDescriptor(XML_LOCATION, variableContract);
+
+//Usage example
+VariableContract vc=pad.getVariableContract;
+String proActiveHome=vc.getValue("PROACTIVE_HOME");</programlisting>
       </section>
     </section>
 
     <section xml:id="ExternalVariableDefinitionsFiles_72"><info><title>External Variable Definitions Files</title></info>
       
+      <para>
+         Instead of declaring variables into your program or into your descriptor, it is also possible to define them into an external file
+         and to make reference to it in your description. This can be very useful if you want the same variables for several descriptors.
+      </para>
 
       <section xml:id="XMLFiles_72"><info><title>XML Files</title></info>
         
@@ -295,12 +310,12 @@
 
         <para><emphasis role="bold">File: file.xml</emphasis></para>
 
-        <screen>&lt;!-- Definition of the specific context --&gt;
+        <programlisting language="xml">&lt;!-- Definition of the specific context --&gt;
 &lt;variables&gt;
   &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">USER_HOME</emphasis>" value="<emphasis role="bold">/usr/home/team</emphasis>"/&gt;
   &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">PROACTIVE_HOME</emphasis>" value="<emphasis role="bold">ProActive/dist/ProActive</emphasis>"/&gt;
   &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">NUM_NODES</emphasis>" value="<emphasis role="bold">45</emphasis>"/&gt;
-&lt;/variables&gt;                 </screen>
+&lt;/variables&gt;</programlisting>
       </section>
 
       <section xml:id="PropertiesFiles_72"><info><title>Properties Files</title></info>
@@ -316,7 +331,7 @@
         <screen># Definition of the specific context
 USER_HOME = /usr/home/team
 PROACTIVE_HOME = ProActive/dist/ProActive
-NUM_NODES: 45                 </screen>
+NUM_NODES: 45</screen>
 
         <para>Variables defined in this format will be declared as <emphasis role="bold">DescriptorVariable</emphasis> type. Note that colon (:)
         can be used instead of equal (=).</para>
@@ -328,10 +343,8 @@ NUM_NODES: 45                 </screen>
 
       <section xml:id="Relevantimportpackages_72"><info><title>Relevant import packages</title></info>
         
+         <programlisting language="java"><textobject><textdata fileref="automatic_snippets/VariableContract_import.snip"/></textobject></programlisting>
 
-        <screen>import org.objectweb.proactive.core.xml.VariableContract;
-        import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;        </screen>
       </section>
 
       <section xml:id="AvailableVariableTypes_72"><info><title>Available Variable Types</title></info>

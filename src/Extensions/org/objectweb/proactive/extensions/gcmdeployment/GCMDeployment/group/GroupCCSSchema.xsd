@@ -10,22 +10,64 @@
 		<xs:complexContent>
 			<xs:extension base="abstractGroupSchedulerElementType">
 				<xs:sequence>
-					<xs:element name="resources" type="ccsResourcesType" minOccurs="1" />
-					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0" />										
-					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0" />
-					<xs:element name="preCommand" type="TextOrVariableType" minOccurs="0" />
+					<xs:element name="resources" type="ccsResourcesType" minOccurs="1">
+					   <xs:annotation>
+                            <xs:documentation>
+                                <p>Resources that will be allowed to the job</p>
+                            </xs:documentation>
+                        </xs:annotation>
+					</xs:element>
+					<xs:element name="stdout" type="pathElementGeneralType" minOccurs="0">
+					    <xs:annotation>
+						    <xs:documentation>
+                                <p>Path of the file where the standard output of the job will be stored</p>
+                            </xs:documentation>
+					    </xs:annotation>
+					</xs:element>
+					<xs:element name="stderr" type="pathElementGeneralType" minOccurs="0">
+					    <xs:annotation>
+                            <xs:documentation>
+                                <p>Path of the file where the standard error of the job will be stored</p>
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+					<xs:element name="preCommand" type="TextOrVariableType" minOccurs="1">
+					    <xs:annotation>
+                            <xs:documentation>
+                                <p>Enables to execute command before launching JVMs (e.g. mount a network drive)</p>
+                            </xs:documentation>
+                        </xs:annotation>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:element name="ccsGroup" type="ccsProcessType" substitutionGroup="abstractShElement" />
+	<xs:element name="ccsGroup" type="ccsProcessType" substitutionGroup="abstractShElement">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a CCS Group</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
 	
 	<xs:complexType name="ccsResourcesType">		
 		<xs:complexContent>
 			<xs:restriction base="xs:anyType">
-				<xs:attribute name="cpus" type="PosintOrVariableType"/>
-				<xs:attribute name="runtime" type="TimeOrVariableType" use="optional"/>
+				<xs:attribute name="cpus" type="PosintOrVariableType">
+					<xs:annotation>
+		               <xs:documentation>
+                           <p>Number of CPUs allocated for the job</p>
+                       </xs:documentation>
+	                </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="runtime" type="TimeOrVariableType" use="optional">
+					<xs:annotation>
+						<xs:documentation>
+                            <p>Maximum runtime allowed for the job</p>
+                        </xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:restriction>	
 		</xs:complexContent>
 	</xs:complexType>

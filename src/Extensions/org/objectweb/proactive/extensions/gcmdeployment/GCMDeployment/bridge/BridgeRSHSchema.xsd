@@ -4,17 +4,42 @@
 	xmlns="urn:gcm:deployment:1.0"
 	elementFormDefault="qualified">
 
-	<xs:include schemaLocation="../../schema/DeploymentDescriptorSchema.xsd"/>	
-	<xs:complexType name="bridgeTypeRSH">
+	<xs:include schemaLocation="../../schema/DeploymentDescriptorSchema.xsd"/>
+
+    <xs:complexType name="bridgeTypeRSH">
 		<xs:complexContent>
 			<xs:extension base="abstractBridgeElementType">
-				<xs:attribute name="hostname" type="hostnameOrVariableType" use="required" />
-				<xs:attribute name="username" type="usernameOrVariableType"/>
-				<xs:attribute name="commandPath" type="NonEmptyTextOrVariableType"/>
+				<xs:attribute name="hostname" type="hostnameOrVariableType" use="required">
+                    <xs:annotation>
+			<xs:documentation>
+                            <p>Network hostname of the physical machine which acts as the bridge</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="username" type="usernameOrVariableType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>User name under which the machine can be accessed</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+				<xs:attribute name="commandPath" type="NonEmptyTextOrVariableType">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Path of the rsh command to use</p>
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:element name="rshBridge" type="bridgeTypeRSH" substitutionGroup="abstractBridgeElement"/>
+	<xs:element name="rshBridge" type="bridgeTypeRSH" substitutionGroup="abstractBridgeElement">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Describes a RSH Bridge</p>
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
 
 </xs:schema>

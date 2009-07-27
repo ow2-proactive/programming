@@ -4,6 +4,13 @@
 	xmlns="urn:gcm:application:1.0"	
 	elementFormDefault="qualified">
 
+    <xsd:annotation>
+        <xsd:documentation>
+            <p>Schema of Application Descriptors. The root element of this schema is <a href="element/GCMApplication.html">GCMApplication</a>.</p>
+        </xsd:documentation>
+    </xsd:annotation>
+
 	<xsd:include schemaLocation="../GCMApplication/commandbuilder/ProActiveSchema.xsd" />
 	<xsd:include schemaLocation="../GCMApplication/commandbuilder/ExecutableSchema.xsd" />
+
 </xsd:schema>
