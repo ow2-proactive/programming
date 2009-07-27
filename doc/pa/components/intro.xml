@@ -56,8 +56,8 @@
 		<para>
 			Fractal is a component model. A component is a software module offering predefined
 			services, and able to communicate with other components. The Fractal component model
-			is hierarchical, so components can be either primitives or composites. A composite
-			can contain one or many inner components (primitive or composite). Each component
+			is hierarchical, so components can either be primitives or composites. A composite
+			is a component containing one or many inner components (primitive or composite). Each component
 			may define what it needs and provides with its client and server interfaces.
 			Furthermore, server interfaces may be functional interfaces or a non-functional
 			interfaces (also called controllers). Controllers are useful to manage the component.
@@ -76,6 +76,9 @@
 			</figure>
 		</para>
 
+      <para>
+         Server interfaces, client interfaces and controllers are respectively represented in red, green and blue.
+      </para>
 		<para>
 			In addition to that, Fractal defines an Architecture Description Language (ADL).
 			The ADL uses an XML syntax and is a way to describe a component	based system
@@ -89,7 +92,7 @@
 		</para>
 
 		<para>
-			For a complete description of the Fractal component model, please, refer
+			For a complete description of the Fractal component model, please refer
 			to the Fractal specification, available at
 			<link xmlns:xlink="http://www.w3.org/1999/xlink"
 				xlink:href="http://fractal.objectweb.org/specification/fractal-specification.pdf"/>
