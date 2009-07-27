@@ -31,7 +31,15 @@
  */
 package org.objectweb.proactive.core.remoteobject.rmi;
 
+import java.net.URI;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
 import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.RemoteObject;
 
 
 /**
@@ -43,4 +51,11 @@ public class RmiRemoteObjectFactory extends AbstractRmiRemoteObjectFactory {
     public RmiRemoteObjectFactory() {
         super(Constants.RMI_PROTOCOL_IDENTIFIER, RmiRemoteObjectImpl.class);
     }
+
+    @Override
+    protected Registry getRegistry(URI url) throws RemoteException {
+        return LocateRegistry.getRegistry(url.getHost(), url.getPort());
+
+    }
+
 }

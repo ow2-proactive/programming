@@ -31,14 +31,24 @@
  */
 package org.objectweb.proactive.core.remoteobject.rmissh;
 
+import java.net.URI;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.remoteobject.rmi.AbstractRmiRemoteObjectFactory;
+import org.objectweb.proactive.core.ssh.rmissh.SshRMIClientSocketFactory;
 
 
 public class RmiSshRemoteObjectFactory extends AbstractRmiRemoteObjectFactory {
 
     public RmiSshRemoteObjectFactory() {
         super(Constants.RMISSH_PROTOCOL_IDENTIFIER, RmiSshRemoteObjectImpl.class);
+    }
+
+    protected Registry getRegistry(URI url) throws RemoteException {
+        return LocateRegistry.getRegistry(url.getHost(), url.getPort(), new SshRMIClientSocketFactory());
     }
 
 }
