@@ -442,7 +442,11 @@
 
       <para>
         This section aims at giving explanations on the structure of a GCM Deployment descriptor. We will not describe all the possible elements and
-        all the possible attributes since a Javadoc-like documentation (coming soon...) is generated directly from the XSD schema (depicting the XML structure) and is
+        all the possible attributes since a 
+        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+        Javadoc-like documentation
+        </link>
+        is generated directly from the XSD schema (depicting the XML structure) and is
         therefore up to date at any time.
       </para>
 
@@ -481,7 +485,11 @@
 
          <para>
             As a chapter is dedicated for variables, please refer to <xref linkend="VariableContract"/>
-            or directly to the Javadoc-like schema documentation (coming soon...) if you want more information.
+            or directly to the 
+           <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+           Javadoc-like documentation
+           </link>
+            if you want more information.
          </para>
          <note>
             <para>
@@ -518,7 +526,10 @@
          <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/GCMD_resources_3.snip"/></textobject></programlisting>
 
          <para>
-            To get more information on this part, please refer to the Javadoc-like schema documentation (coming soon...).
+            To get more information on this part, please refer to the
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+            Javadoc-like schema documentation
+            </link>.
          </para>
 
       </section>
@@ -562,7 +573,11 @@
                <listitem><para><emphasis role="bold">&lt;rshGroup&gt;</emphasis></para></listitem>
                <listitem><para><emphasis role="bold">&lt;sshGroup&gt;</emphasis></para></listitem>
             </itemizedlist>
-            All these groups are explained in the schema documentation (coming soon...). However, they all have two common attributes and one common child.
+            All these groups are explained in the
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+            schema documentation
+            </link>.
+            However, they all have two common attributes and one common child.
             Indeed, each group has an <emphasis role="bold">"id"</emphasis> attribute (used in the &lt;resources&gt; element) and a <emphasis role="bold">"commandPath"</emphasis> attribute
             (path of the command which is used to submit a job to the group protocol).
             The common child is an <emphasis role="bold">&lt;environment&gt;</emphasis> element which is of the same type as the one seen before and is used for defining variables specific to the group.
@@ -585,7 +600,10 @@
          <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/GCMD_resources_4.snip"/></textobject></programlisting>
 
          <para>
-            To get more information on this part and specially on the different group and bridge type, please refer to the Javadoc-like schema documentation (coming soon...).
+            To get more information on this part and specially on the different group and bridge type, please refer to the
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+            schema documentation
+            </link>.
          </para>
 
       </section>
@@ -1060,7 +1078,11 @@
 
       <para>
         This section aims at giving explanations on the structure of a GCM Application descriptor. We will not describe all the possible elements and
-        all the possible attributes since a Javadoc-like documentation (coming soon...) is generated directly from the XSD schema (depicting the XML structure) and is
+        all the possible attributes since a
+        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcma/index.html">
+        javadoc-like schema documentation
+        </link>
+        is generated directly from the XSD schema (depicting the XML structure) and is
         therefore up to date at any time.
       </para>
 

@@ -303,21 +303,6 @@ String proActiveHome=vc.getValue("PROACTIVE_HOME");</programlisting>
          and to make reference to it in your description. This can be very useful if you want the same variables for several descriptors.
       </para>
 
-      <section xml:id="XMLFiles_72"><info><title>XML Files</title></info>
-        
-
-        <para>Is built using XML property tags.</para>
-
-        <para><emphasis role="bold">File: file.xml</emphasis></para>
-
-        <programlisting language="xml">&lt;!-- Definition of the specific context --&gt;
-&lt;variables&gt;
-  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">USER_HOME</emphasis>" value="<emphasis role="bold">/usr/home/team</emphasis>"/&gt;
-  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">PROACTIVE_HOME</emphasis>" value="<emphasis role="bold">ProActive/dist/ProActive</emphasis>"/&gt;
-  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">NUM_NODES</emphasis>" value="<emphasis role="bold">45</emphasis>"/&gt;
-&lt;/variables&gt;</programlisting>
-      </section>
-
       <section xml:id="PropertiesFiles_72"><info><title>Properties Files</title></info>
         
 
@@ -325,8 +310,6 @@ String proActiveHome=vc.getValue("PROACTIVE_HOME");</programlisting>
         microsystems properties file format</link>. The format is plain text
         with one definition per line in the format <emphasis role="bold">variable = value</emphasis>, as shown in the following
         example:</para>
-
-        <para><emphasis role="bold">File: file.properties</emphasis></para>
 
         <screen># Definition of the specific context
 USER_HOME = /usr/home/team
@@ -336,6 +319,21 @@ NUM_NODES: 45</screen>
         <para>Variables defined in this format will be declared as <emphasis role="bold">DescriptorVariable</emphasis> type. Note that colon (:)
         can be used instead of equal (=).</para>
       </section>
+
+      <section xml:id="XMLFiles_72"><info><title>XML Files</title></info>
+        
+
+        <para>In the previous deployment version, it was also possible to define variables into an XML file. It has been removed for the GCM deployment
+        thinking it was useless.</para>
+
+         <programlisting language="xml">&lt;!-- Definition of the specific context --&gt;
+&lt;variables&gt;
+  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">USER_HOME</emphasis>" value="<emphasis role="bold">/usr/home/team</emphasis>"/&gt;
+  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">PROACTIVE_HOME</emphasis>" value="<emphasis role="bold">ProActive/dist/ProActive</emphasis>"/&gt;
+  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">NUM_NODES</emphasis>" value="<emphasis role="bold">45</emphasis>"/&gt;
+&lt;/variables&gt;</programlisting>
+      </section>
+
     </section>
 
     <section xml:id="ProgramVariableAPI_72"><info><title>Program Variable API</title></info>
