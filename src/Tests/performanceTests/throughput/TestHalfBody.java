@@ -31,19 +31,10 @@
  */
 package performanceTests.throughput;
 
-import java.io.Serializable;
-
-import org.junit.Test;
-import org.objectweb.proactive.ActiveObjectCreationException;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.node.NodeException;
-
-import performanceTests.HudsonReport;
-import functionalTests.FunctionalTest;
 
 
-public class TestHalfBody extends FunctionalTest {
+public class TestHalfBody extends Throughput {
 
     static {
         PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmi");
@@ -78,7 +69,7 @@ public class TestHalfBody extends FunctionalTest {
             count++;
         }
 
-        public void finish() {
+        public boolean  finish() {
             long endTime = System.currentTimeMillis();
             double throughput = (1000.0 * count) / (endTime - startTime);
 
@@ -86,6 +77,7 @@ public class TestHalfBody extends FunctionalTest {
             System.out.println("Duration: " + (endTime - startTime));
             System.out.println("Throughput " + throughput);
             HudsonReport.reportToHudson(TestHalfBody.class, throughput);
+            return true;
         }
     }
 
