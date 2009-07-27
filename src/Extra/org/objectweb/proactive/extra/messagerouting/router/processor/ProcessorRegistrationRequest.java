@@ -104,7 +104,9 @@ public class ProcessorRegistrationRequest extends Processor {
 
         if (client == null) {
             // Send an ERR_ message (best effort)
-            logger.warn("AgentId " + agentId + " asked to reconnect but is not known by this router");
+            logger.warn("AgentId " + agentId +
+                " asked to reconnect but is not known by this router. Remote endpoint is: " +
+                attachment.getRemoteEndpoint());
 
             ErrorMessage errMessage = new ErrorMessage(ErrorType.ERR_INVALID_AGENT_ID, agentId, agentId,
                 this.message.getMessageID());

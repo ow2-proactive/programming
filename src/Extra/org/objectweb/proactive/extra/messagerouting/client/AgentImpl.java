@@ -572,7 +572,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     byte[] msgBuf = tunnel.readMessage();
                     return Message.constructMessage(msgBuf, 0);
                 } catch (IOException e) {
-                    logger.trace("Tunnel failed while waiting for a message asking for a new one", e);
+                    logger
+                            .info(
+                                    "PAMR Connection lost (while waiting for a message). A new connection will be established shortly",
+                                    e);
                     // Create a new tunnel
                     tunnel = null;
                     do {
@@ -580,7 +583,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
                         tunnel = this.agent.getTunnel();
 
                         if (tunnel == null) {
-                            logger.error("Failed to create a new tunnel, sleeping for 10 seconds");
+                            logger
+                                    .error("PAMR Router is unreachable. Will try to estalish a new tunnel in 10 seconds.");
                             new Sleeper(10000).sleep();
                         }
                     } while (tunnel == null);
