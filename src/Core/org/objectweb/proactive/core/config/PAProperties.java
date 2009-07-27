@@ -537,7 +537,7 @@ public enum PAProperties {
     /**
      * TODO
      */
-    PA_UNICORE_FORKCLIENT("proactive.unicore.forkclient", PAPropertiesType.BOOLEAN);
+    PA_UNICORE_FORKCLIENT("proactive.unicore.forkclient", PAPropertiesType.BOOLEAN),
 
     /**
      * if true, any reference on the reified object within an outgoing request or reply is
