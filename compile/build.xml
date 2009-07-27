@@ -135,12 +135,17 @@
 		<replaceregexp file="${src.proactive.dir}/${proactive.path}/Main.java" match="\$Id.*\$" replace="${version}" byline="true" />
 		<replaceregexp file="${base.dir}/README.txt" match="\$Id.*\$" replace="${version}" byline="true" />
 
+
 		<javac srcdir="${src.proactive.dir}" destdir="${cl.proactive.dir}" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
 			<include name="**/*.java" />
 
 			<!-- XXX, MicroTimer should be in core or not used by the core-->
 		</javac>
+
+		<copy toDir="${cl.proactive.dir}">
+                        <fileset dir="${compile.dir}" includes="META-INF/**"/>
+		</copy>
 
 		<rmic base="${cl.proactive.dir}" sourcebase="${cl.proactive.dir}" stubversion="1.2">
 			<classpath refid="project.classpath" />
@@ -384,7 +389,6 @@
 					<include name="*.jar" />
 				</fileset>
 			</indexjars>
-			<fileset dir="${compile.dir}" includes="META-INF/**" />
 		</jar>
 
 		<copy todir="${deploy.lib.dir}">
