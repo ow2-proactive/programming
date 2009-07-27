@@ -113,7 +113,7 @@
               on remote JVMS are exported with. At this stage several
               protocols are supported: <emphasis role="bold">RMI(rmi),
               HTTP(http), IBIS/RMI(ibis), SSH tunneling for RMI/HTTP(rmissh),
-              JINI(jini)</emphasis>. It means that once the JVM starts, Nodes,
+              ProActive Message Routing(pamr)</emphasis>. It means that once the JVM starts, Nodes,
               Active Objects that will be created on this JVM, will export
               themselves using the protocol specified in <emphasis role="bold">proactive.communication.protocol</emphasis>
               property. They will be reachable transparently through the given
