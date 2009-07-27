@@ -538,6 +538,12 @@ public enum PAProperties {
      * TODO
      */
     PA_UNICORE_FORKCLIENT("proactive.unicore.forkclient", PAPropertiesType.BOOLEAN);
+
+    /**
+     * on unix system, define the shell that the GCM deployment invokes when creating new runtimes.
+     */
+    PA_GCMD_UNIX_SHELL("proactive.gcmd.unix.shell", PAPropertiesType.STRING);
+
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
     public static final String TRUE = "true";
     public static final String FALSE = "false";
