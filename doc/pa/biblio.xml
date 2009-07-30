@@ -524,6 +524,30 @@
 
 </biblioentry>   
     
+    <biblioentry xreflabel="MB01" xml:id="MB01">
+      <abbrev xml:id="mb01.abbrev">MB01</abbrev>
+      <authorgroup>
+         <author><personname><firstname>V.</firstname><surname>Mencl</surname></personname></author> 
+         <author><personname><firstname>T.</firstname><surname>Bures</surname></personname></author> 
+      </authorgroup>
+      <citetitle pubwork="article">Microcomponent-based component controllers: A foundation for component aspects</citetitle>
+
+      <confgroup>
+         <conftitle>APSEC</conftitle>
+      </confgroup>
+      <pubdate>Dec. 2005</pubdate>
+      <publisher><publishername>IEEE Computer Society</publishername></publisher>
+   </biblioentry>   
     
+    <biblioentry xreflabel="SPC01" xml:id="SPC01">
+      <abbrev xml:id="spc01.abbrev">SPC01</abbrev>
+      <authorgroup>
+         <author><personname><firstname>L.</firstname><surname>Seinturier</surname></personname></author> 
+         <author><personname><firstname>N.</firstname><surname>Pessemier</surname></personname></author> 
+         <author><personname><firstname>T.</firstname><surname>Coupaye</surname></personname></author> 
+      </authorgroup>
+      <citetitle pubwork="article">AOKell: an Aspect-Oriented Implementation of the Fractal Specifications</citetitle>
+      <pubdate>2005</pubdate>
+   </biblioentry>   
   
 </bibliography>

@@ -5,6 +5,12 @@
                 "docbook.dtd" [
                 <!-- WARNING: Please do not edit with XXE -->
                 <!-- This file is only meant as a concatenation of the other xml files -->
+
+                <!-- This has been added to write some special characters such as en and em dashes -->
+                <!ENTITY % iso-pub PUBLIC "ISO 8879:1986//ENTITIES Publishing//EN//XML"
+                                    "http://www.oasis-open.org/docbook/xmlcharent/0.3/iso-pub.ent">
+                                    %iso-pub;
+
                 <!ENTITY bookinfo SYSTEM "bookinfo.xml">
                 <!ENTITY contributors SYSTEM "contributors.xml">
                 <!ENTITY Principles SYSTEM "Principles.xml">

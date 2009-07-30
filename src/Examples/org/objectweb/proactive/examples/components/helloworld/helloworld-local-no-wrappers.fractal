@@ -3,18 +3,20 @@
 
 <definition name="org.objectweb.proactive.examples.components.helloworld.helloworld-local-no-wrappers">
   <interface name="r" role="server" signature="java.lang.Runnable"/>
-	<exportedVirtualNodes>
-    	<exportedVirtualNode name="null">
-    		<composedFrom>
-        		<composingVirtualNode component="client" name="client-node"/>
-    		</composedFrom>
-    	</exportedVirtualNode>
-    	<exportedVirtualNode name="null">
-    		<composedFrom>
-        		<composingVirtualNode component="server" name="server-node"/>
-    		</composedFrom>
-    	</exportedVirtualNode>
+    <!-- @snippet-start exported_virtual_node_4 -->
+    <exportedVirtualNodes>
+        <exportedVirtualNode name="null">
+            <composedFrom>
+                <composingVirtualNode component="client" name="client-node"/>
+            </composedFrom>
+        </exportedVirtualNode>
+        <exportedVirtualNode name="null">
+            <composedFrom>
+                <composingVirtualNode component="server" name="server-node"/>
+            </composedFrom>
+        </exportedVirtualNode>
     </exportedVirtualNodes>
+    <!-- @snippet-end exported_virtual_node_4 -->
   <component name="client" definition="org.objectweb.proactive.examples.components.helloworld.ClientImpl"/>
   <component name="server" definition="org.objectweb.proactive.examples.components.helloworld.ServerImpl"/>
   <binding client="this.r" server="client.r"/>

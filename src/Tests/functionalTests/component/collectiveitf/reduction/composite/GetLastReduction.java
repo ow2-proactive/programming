@@ -29,6 +29,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+//@snippet-start component_userguide_9
 package functionalTests.component.collectiveitf.reduction.composite;
 
 import java.io.Serializable;
@@ -46,3 +47,4 @@ public class GetLastReduction implements ReduceBehavior, Serializable {
         return values.get(values.size() - 1);
     }
 }
+//@snippet-end component_userguide_9

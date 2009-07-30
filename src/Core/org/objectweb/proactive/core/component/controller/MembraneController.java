@@ -51,6 +51,7 @@ public interface MembraneController {
     public final static String MEMBRANE_STOPPED = "MEMBRANE_STOPPED";
     public final static String MEMBRANE_STARTED = "MEMBRANE_STARTED";
 
+    //@snippet-start component_userguide_16
     /**
      * Adds non-functional components inside the membrane
      * @param component The non-functional component to add
@@ -98,6 +99,9 @@ public interface MembraneController {
      */
     public void stopMembrane() throws NoSuchInterfaceException, IllegalLifeCycleException;
 
+    //@snippet-end component_userguide_16
+
+    //@snippet-start component_userguide_17
     /**
      * Performs bindings inside the membrane, and with non-functional interfaces of internal  functional components
      * @param clientItf
@@ -190,5 +194,6 @@ public interface MembraneController {
      * @return The current state of the membrane
      */
     String getMembraneState();
+    //@snippet-end component_userguide_17
 
 }
