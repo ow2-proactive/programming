@@ -17,7 +17,6 @@ public class ControllerImplementation extends AbstractProActiveController implem
 
     //@snippet-end component_userguide_11
 
-    @Override
     //@snippet-start component_userguide_12
     protected void setControllerItfType() {
         try {
@@ -31,9 +30,7 @@ public class ControllerImplementation extends AbstractProActiveController implem
 
     //@snippet-end component_userguide_12
 
-    @Override
     public void foo() {
         // TODO Auto-generated method stub
-
     }
 }
