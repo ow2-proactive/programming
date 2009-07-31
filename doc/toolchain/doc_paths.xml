@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir=".">
 
+    <!-- ************
+        Taskdefs        
+    -->
+
+    <taskdef name="if" classname="ise.antelope.tasks.IfTask" />
+
+    <condition property="isWindows">
+           <os family="Windows"/>
+    </condition>
+	
 	<!--  =============================================================== -->
 	<!--                   Doc directories paths                          -->
 	<!--  =============================================================== -->
 	<property name="base.dir"      			value="${basedir}" /> <!-- doc/toolchain folder -->		
-	<property name="docs.dir"      			value="${base.dir}/doc/" /> <!-- doc folder -->	
+	<property name="docs.dir"      			value="${base.dir}/doc" /> <!-- doc folder -->	
 	<property name="docs.src.dir"       		value="${docs.dir}/src" /> <!-- doc/src folder -->	
 	<property name="docs.tmp.dir"  			value="${docs.dir}/tmp" /> <!-- doc/tmp folder -->
 	<property name="docs.toolchain.dir"		value="${docs.dir}/toolchain" /> <!-- doc/toolchain folder -->
@@ -46,7 +56,7 @@
 		</fileset>
 		
 	</path>
-
+	
 	<property name="docs.log4j.properties"	value="${docs.lib.dir}/log4j.properties" />
 	
 	<property name="extra.format.dir" 		value=""/>
@@ -99,7 +109,15 @@
 	<property name="checkstyle.header.file" 	value="${checkstyle.path}/proactive.header"/>
 	<property name="checkstyle.importcontrol.file" 	value="${checkstyle.path}/import-control.xml"/>
 	<property name="checkstyle.config" 		value="${checkstyle.path}/proactive_checks.xml"/>
+	
   <!-- Directory of xml configuration files for highlighting -->
    <property name="docs.highlighting.dir" value="${docs.toolchain.dir}/highlighting"/>
 
+    <if name="isWindows">
+        <property name="url.file.prefix" value="file:///" />
+        <else>
+            <property name="url.file.prefix" value="file://" />
+        </else>
+    </if>
+    <property name="xslthl.path" value="${url.file.prefix}${docs.highlighting.dir}/xml/xslthl-config.xml" />
 </project>
