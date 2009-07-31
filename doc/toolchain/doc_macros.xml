@@ -1,5 +1,6 @@
 <project>
 	<import file="doc_paths.xml" />
+	
 	<!-- ==================================================================== -->
 	<!--      Make an archive from the files for the single html manual       -->
 	<!-- ==================================================================== -->
@@ -44,7 +45,7 @@
 				<fileset dir="${snippets.location}"/>
 			</delete>
 			<mkdir dir="${snippets.location}"/>
-			<java classname="doc.snippets.Snippetizer" fork="true">
+			<java classname="doc.snippets.Snippetizer" fork="true" >
 				<classpath refid="docs.utils.classpath"/>
 				<!-- The root for parser start, it will check all the files in the dir and subdirs-->
 				<arg value="${snippets.start}" />
@@ -76,12 +77,13 @@
 			<xslt basedir="${docs.src.dir}"  in="${docs.tmp.dir}/@{docbookInputFile}" out="${docs.tmp.dir}/profiled.xml" style="${docs.xsl.profiling}" force="yes">
 				<param name="profile.os" expression="@{docbook.profile}" />
 				<param name="tmp.dir" expression="${docs.tmp.dir}/" />
+				<param name="url.file.prefix" expression="${url.file.prefix}" />
 				<classpath refid="docs.utils.classpath" />
 			</xslt>
-
+			
 			<java classname="com.icl.saxon.StyleSheet" fork="true" dir="@{docbookOutputDir}">
 				<classpath refid="docs.utils.classpath" />
-				<jvmarg value="-Dxslthl.config=file://${docs.highlighting.dir}/xml/xslthl-config.xml"/>
+				<jvmarg value="-Dxslthl.config=${xslthl.path}"/>
 				<arg line="-o @{docbookOutputFile} ${docs.tmp.dir}/profiled.xml @{docbookStyle}"/>
 				<arg value="TODAY=${TODAY}" />
 				<arg value="VERSION=${version}" />
