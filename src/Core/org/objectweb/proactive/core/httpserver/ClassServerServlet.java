@@ -92,6 +92,8 @@ public class ClassServerServlet extends HttpServlet {
                 .getInetAddress()), NS + "/", Constants.XMLHTTP_PROTOCOL_IDENTIFIER,
                 PAProperties.PA_XMLHTTP_PORT.getValueAsInt());
 
+        System.out.println("ClassServerServlet.getCodeBase() " + uri.toString());
+        
         return uri.toString();
     }
 
