@@ -71,10 +71,10 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-				<xs:attribute name="jobName" type="NonEmptyTextOrVariableType" use="optional">
+				<xs:attribute name="jobName" type="JobNameType" use="optional">
                     <xs:annotation>
                         <xs:documentation>
-                            <p>Name of the job (15 char long string, no whitespace, first char must be alphabetic)</p>
+                            <p>Name of the job</p>
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -124,4 +124,19 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+    
+    <xs:simpleType name="JobNameType">
+        <xs:annotation>
+            <xs:documentation>
+                <p>Type of PBS job name (PBS documentation): The name specified
+                   may be up to and including 15 characters in
+                   length. It must consist of printable, non white
+                   space characters with the first character alphabetic. </p>
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Za-z][&#x0021;-&#x007E;]{14}" />
+            <xs:whiteSpace value="collapse" />
+        </xs:restriction>
+    </xs:simpleType>
 </xs:schema>
