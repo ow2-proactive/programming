@@ -94,13 +94,17 @@ public class ProActiveProvider extends WSConstants implements Provider {
         HttpServlet servlet = (HttpServlet) reqContext.getProperty(Constants.BAG_HTTPSERVLET);
         HttpSession session = (HttpSession) reqContext.getProperty(Constants.BAG_HTTPSESSION);
 
-        logger.info("================================================");
-        logger.info("In ProActiveProvider.locate()");
-        logger.info("Method: " + methodName);
-        logger.info("URI: " + targetObjectURI);
-        logger.info("DD.ServiceClass: " + dd.getServiceClass());
-        logger.info("DD.ProviderClass: " + dd.getProviderClass());
-        logger.info("Call.MethodName: " + call.getMethodName());
+        if (logger.isDebugEnabled()) {
+            StringBuffer sb = new StringBuffer();
+            sb.append("================================================");
+            sb.append("In ProActiveProvider.locate()");
+            sb.append("Method: " + methodName);
+            sb.append("URI: " + targetObjectURI);
+            sb.append("DD.ServiceClass: " + dd.getServiceClass());
+            sb.append("DD.ProviderClass: " + dd.getProviderClass());
+            sb.append("Call.MethodName: " + call.getMethodName());
+            logger.debug(sb);
+        }
 
         @SuppressWarnings("unchecked")
         Hashtable props = dd.getProps();
@@ -126,24 +130,28 @@ public class ProActiveProvider extends WSConstants implements Provider {
         boolean isInterfaceComponent = ((String) props.get(WSConstants.COMPONENT_INTERFACE)).equals("true");
         try {
             if (!isInterfaceComponent) {
-                logger.info("Normal object");
+                logger.debug("Normal object");
                 targetObject = HttpMarshaller.unmarshallObject(serObj);
             } else {
-                logger.info("target object is a component interface");
+                logger.debug("target object is a component interface");
                 Object component = HttpMarshaller.unmarshallObject(serObj);
-                logger.info("component class :" + component.getClass());
+                logger.debug("component class :" + component.getClass());
 
                 String actualName = targetObjectURI.substring(targetObjectURI.lastIndexOf('_') + 1);
 
                 targetObject = ((ProActiveComponentRepresentative) component).getFcInterface(actualName);
-                logger.info("target Object class  = " + targetObject.getClass());
+                logger.debug("target Object class  = " + targetObject.getClass());
                 Class<?> c = targetObject.getClass();
                 Method[] meths = c.getMethods();
-                for (int i = 0; i < meths.length; i++) {
-                    logger.info("--> " + meths[i]);
-                }
-                logger.info("target object superclass : " + targetObject.getClass().getSuperclass());
 
+                if (logger.isDebugEnabled()) {
+                    StringBuffer sb = new StringBuffer();
+                    for (int i = 0; i < meths.length; i++) {
+                        sb.append(meths[i] + ",");
+                    }
+                    sb.append("\ntarget object superclass : " + targetObject.getClass().getSuperclass());
+                    logger.debug(sb);
+                }
             }
         } catch (Exception e) {
             System.out.println("Exception : " + e.getMessage());
@@ -157,28 +165,21 @@ public class ProActiveProvider extends WSConstants implements Provider {
      * @see org.apache.soap.util.Provider
      **/
     public void invoke(SOAPContext reqContext, SOAPContext resContext) throws SOAPException {
-        System.out.println("=============================================");
-        System.out.println("In ProActiveProvider.invoke()");
-
         //  System.out.println("targetObject = " + targetObject);
 
         //dd.setProviderClass(targetObject.getClass().getName());
         // Add logic to invoke the service and get back the result here
         try {
-            System.out.println("avant invoke");
             //	System.out.println("target Object = " + targetObject);
             Response resp = RPCRouter.invoke(dd, call, targetObject, reqContext, resContext);
-            System.out.println("apres invoke");
             //build the enveloppe that contains the response
             Envelope env = resp.buildEnvelope();
-            System.out.println(env);
+            //            System.out.println(env);
             StringWriter sw = new StringWriter();
             env.marshall(sw, call.getSOAPMappingRegistry(), resContext);
             resContext.setRootPart(sw.toString(), Constants.HEADERVAL_CONTENT_TYPE_UTF8);
         } catch (Exception e) {
-            System.out.println("--- >exception ! " + e.getMessage() + " -- " + e.getClass().getName());
-            e.printStackTrace(System.out);
-
+            logger.debug("--- >exception ! " + e.getMessage() + " -- " + e.getClass().getName(), e);
             SOAPException ex = new SOAPException(Constants.FAULT_CODE_SERVER, e.getMessage());
             System.out.println("An error has occured when trying to invoke the method on the object");
             throw ex;
