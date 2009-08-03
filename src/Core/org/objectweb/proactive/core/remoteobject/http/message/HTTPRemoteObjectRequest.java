@@ -31,12 +31,16 @@
  */
 package org.objectweb.proactive.core.remoteobject.http.message;
 
+import java.io.IOException;
 import java.io.Serializable;
 
+import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.remoteobject.http.util.HTTPRegistry;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMessage;
+import org.objectweb.proactive.core.util.Sleeper;
 
 
 public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable {
@@ -51,10 +55,7 @@ public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable
         this.request = request;
     }
 
-    public Object getReturnedObject() { //throws Exception {
-        //        if (this.returnedObject instanceof Exception) {
-        //            throw (Exception) this.returnedObject;
-        //        }
+    public Object getReturnedObject() {
         return this.returnedObject;
     }
 
@@ -70,22 +71,31 @@ public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable
     public Object processMessage() {
         try {
             InternalRemoteRemoteObject ro = HTTPRegistry.getInstance().lookup(url);
-            int max_retry = 10;
-            while ((ro == null) && (max_retry > 0)) {
-                try {
-                    Thread.sleep(1000);
+            int max_retry = 5;
+
+            if (ro == null) {
+                // this case happens when a method call has been performed while the
+                // registration in the registry has not yet been completed.
+                // this mostly appears in multithreaded code.
+                Sleeper sleeper = new Sleeper(1000);
+                while ((ro == null) && (max_retry > 0)) {
+                    sleeper.sleep();
                     ro = HTTPRegistry.getInstance().lookup(url);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
+                    max_retry--;
                 }
-                max_retry--;
             }
 
             Object o = ro.receiveMessage(this.request);
 
             return o;
-        } catch (Exception e) {
-            return e;
+        } catch (Throwable e) {
+            // this point is mostly reached when the remote object is unknown by the registry.
+            // functional exceptions have already been caught deeper in the remote object code.
+            // Due to the current implementation, the only way to return the exception is by wrapping
+            // it into a methodcallresult inside a synchronousreply.
+            // this solves PROACTIVE-717
+            return new SynchronousReplyImpl(new MethodCallResult(null, new IOException("remote object " +
+                url + "not found")));
         }
     }
 }
