@@ -41,6 +41,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.URIBuilder;
 
 import functionalTests.FunctionalTest;
 import static junit.framework.Assert.assertNotNull;
@@ -153,5 +154,28 @@ public class RemoteObjectTest extends FunctionalTest {
         }
 
         assertNull(ro1);
+    }
+
+    @org.junit.Test
+    public void list() throws Exception {
+        ProActiveRuntime p = ProActiveRuntimeImpl.getProActiveRuntime();
+
+        // create a remote object exposer for this object
+        RemoteObjectExposer<ProActiveRuntime> roe = PARemoteObject.newRemoteObject(ProActiveRuntime.class
+                .getName(), p);
+
+        RemoteObject<ProActiveRuntime> ro = roe.getRemoteObject();
+
+        // generate an uri where to rebind the runtime
+        URI uri = RemoteObjectHelper.generateUrl("myruntime-1");
+
+        URI uri2list = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(uri), null, URIBuilder
+                .getProtocol(uri), URIBuilder.getPortNumber(uri));
+
+        // if the results is not an uri, an exception is thrown at the next line
+        URI[] uris = RemoteObjectHelper.getRemoteObjectFactory(uri.getScheme()).list(uri2list);
+
+        System.out.println(uris);
+
     }
 }
