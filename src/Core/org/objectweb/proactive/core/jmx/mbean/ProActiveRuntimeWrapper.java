@@ -36,13 +36,17 @@ import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.security.AccessControlException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 import javax.management.ObjectName;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerRepository;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.debug.dconnection.DebuggerConnection;
@@ -253,4 +257,28 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
     public boolean canBeDebugged() {
         return System.getProperty("debugID") != null;
     }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#getLoggers()
+     */
+    @SuppressWarnings("unchecked")
+    public List<String> getLoggers() {
+        List<String> loggersList = new ArrayList<String>();
+        LoggerRepository r = LogManager.getLoggerRepository();
+        Enumeration<Logger> e = r.getCurrentLoggers();
+        Logger logger = null;
+        while (e.hasMoreElements()) {
+            logger = e.nextElement();
+            loggersList.add(logger.getName());
+        }
+        return loggersList;
+    }
+
+    /**
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#setLogLevel(java.lang.String, java.lang.String)
+     */
+    public void setLogLevel(String loggerName, String level) {
+        Logger.getLogger(loggerName).setLevel(Level.toLevel(level));
+    }
+
 }

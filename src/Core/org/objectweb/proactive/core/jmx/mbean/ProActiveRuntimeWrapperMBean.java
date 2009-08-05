@@ -189,4 +189,16 @@ public interface ProActiveRuntimeWrapperMBean extends Serializable {
      * @return true if the jvm is in ProActive debug mode
      */
     public boolean canBeDebugged();
+
+    /**
+     * returns a list of all activated loggers
+     * @return returns a list of all activated loggers
+     */
+    public List<String> getLoggers();
+
+    /**
+     * allows to dynamically change the level of a logger
+     */
+    public void setLogLevel(String loggerName, String level);
+
 }
