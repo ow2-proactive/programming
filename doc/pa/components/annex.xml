@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="annex">
 <info>
-<title xml:id="Annex_54">Annex</title>
+<title xml:id="Annex_54">Appendix</title>
 	</info>
 
 	<section xml:id="gcmBasicsExampleFile">
@@ -9,49 +9,49 @@
 		</info>
 
 		<para>
-			org.objectweb.proactive.examples.components.userguide.starter.Service
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.Service</literal>:
 		</para>
 
 		<programlisting language="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/Service.java"/></textobject></programlisting>
 
 		<para>
-			org.objectweb.proactive.examples.components.userguide.starter.ServerImpl
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.ServerImpl</literal>:
 		</para>
 
 		<programlisting language="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/ServerImpl.java"/></textobject></programlisting>
 
 		<para>
-			org.objectweb.proactive.examples.components.userguide.starter.Server.fractal
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.Server.fractal</literal>:
 		</para>
 
 		<programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/Server.fractal"/></textobject></programlisting>
 
 		<para>
-			org.objectweb.proactive.examples.components.userguide.starter.ClientImpl.java
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.ClientImpl.java</literal>:
 		</para>
 
 		<programlisting language="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/ClientImpl.java"/></textobject></programlisting>
 
 		<para>
-			org.objectweb.proactive.examples.components.userguide.starter.Client.fractal
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.Client.fractal</literal>:
 		</para>
 
 		<programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/Client.fractal"/></textobject></programlisting>
 
 		<para>
-			org.objectweb.proactive.examples.components.userguide.starter.Main.java
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.Main.java</literal>:
 		</para>
 
 		<programlisting language="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/Main.java"/></textobject></programlisting>
 
 		<para>
-			org.objectweb.proactive.examples.components.userguide.starter.deploymentDescriptor.xml
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.deploymentDescriptor.xml</literal>:
 		</para>
 
 		<programlisting language="xml"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/deploymentDescriptor.xml"/></textobject></programlisting>
 
 		<para>
-			org.objectweb.proactive.examples.components.userguide.starter.applicationDescriptor.xml
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.applicationDescriptor.xml</literal>:
 		</para>
 
 		<programlisting language="java"><textobject><textdata fileref="../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/applicationDescriptor.xml"/></textobject></programlisting>

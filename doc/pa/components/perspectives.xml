@@ -18,7 +18,7 @@
 
 	<para>
 		It is now a mature framework for developing Grid applications,
-		and as such it is a basis for experimenting new research paths.
+		and as such, it is a basis for experimenting new research paths.
 	</para>
 
 	<section xml:id="Dynamicreconfiguration_56"><info><title>Dynamic reconfiguration</title></info>
@@ -44,9 +44,9 @@
 			designing a set of such primitives (e.g., replace, add and
 			bind, unbind and remove, duplicate, recursively add, ...)
 			for reconfiguration ensuring more correctness properties
-			than the Fractal ones, and more autonomicity. By providing
+			than the Fractal ones, and more autonomy. By providing
 			higher level of primitives, the principal aim is to help the
-			programmer to design safe scenarii. For example a
+			programmer to design safe scenarios. For example a
 			replacement primitive seems safer and easier to verify than
 			the equivalent sequence (stop+unbind+remove+add+bind+start)
 			that would implement it in Fractal. One of the difficulties
@@ -67,7 +67,7 @@
 			binding used for the requests.
 		</para>
 		<para>
-			As a consequence, it is important designing a way of
+			As a consequence, it is important to design a way of
 			specifying synchronization between reconfiguration steps and
 			the application, this should be the main interaction between
 			functional and non-functional aspects, and should be studied
@@ -82,7 +82,7 @@
 			to it by automatically optimizing and reconfiguring
 			themselves. The resulting systems are autonomous and
 			automatically fulfill the needs of the users, but the
-			complexity of adaptation is hidden to them. Autonomicity of
+			complexity of adaptation is hidden to them. Autonomy of
 			components represents a key asset for large scale
 			distributed computing.
 		</para>
@@ -110,7 +110,7 @@
 
 			<listitem>
 				<para>
-					Automatas can be generated from behavioral
+					Automatons can be generated from behavioral
 					information and structural description.
 				</para>
 			</listitem>
@@ -118,7 +118,7 @@
 			<listitem>
 				<para>
 					Model checking tools are used to verify the
-					automatas.
+					automaton.
 				</para>
 			</listitem>
 		</orderedlist>
@@ -128,7 +128,7 @@
 			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/Vercors/">
 				Vercors
 			</link>
-			platform investigates such kinds of scenarii.
+			platform investigates such kinds of scenarios.
 		</para>
 
 
@@ -144,26 +144,23 @@
 			nonexistent) dynamic specification of the component
 			behaviour. In fact, state-of-the-art implementations of
 			component models such as SOFA
-			<xref linkend="Plasil02"/>
-			, Fractal
-			<xref linkend="Fractal04"/>
+			(<xref linkend="Plasil02"/>),
+			Fractal
+			(<xref linkend="Fractal04"/>)
 			and CORBA Component Model
-			<xref linkend="CCM"/>
+			(<xref linkend="CCM"/>)
 			only consider interface type-compatibility (through
 			Interface Description Languages or IDLs) for binding
 			interfaces. Nonetheless, a sound static compatibility check
 			of bound interfaces can be achieved if behavioural
 			information is added to the components. There are several
 			related works, that either introduce Behavioural IDLs
-			<xref linkend="JavaA05"/>
-			,
-			<xref linkend="InterfaceAutomata2001"/>
-			,
-			<xref linkend="Reussnerm"/>
-			,
+			<xref linkend="JavaA05"/>,
+			<xref linkend="InterfaceAutomata2001"/>,
+			<xref linkend="Reussnerm"/>,
 			<xref linkend="FACS-06"/>
-			, or that describe behaviour of components
-			<xref linkend="JKP05"/>
+			or that describe behaviour of components
+			<xref linkend="JKP05"/>.
 		</para>
 
 		<para>
@@ -194,10 +191,9 @@
 			specifying the synchronisations. Instead of proving that
 			legacy code is safe, we take a constructive approach similar
 			to
-			<xref linkend="ifip05"/>
-			,
-			<xref linkend="STSLib07"/>
-			. The idea is to specify the system, prove that the
+			<xref linkend="ifip05"/>,
+			<xref linkend="STSLib07"/>.
+		   The idea is to specify the system, prove that the
 			specification is correct, and then generate (Java) code
 			skeletons guaranteed to conform to the specification. pNets
 			is left as the underlying formalism that interfaces with
@@ -215,8 +211,8 @@
 
 		<para>
 			Distributed computational applications are designed by
-			defining a functional or do- main decomposition, and these
-			decompositions often present structural similarities
+			defining a functional (or domain) decomposition, and this
+			decomposition often presents structural similarities
 			(master-slave, 2D-Grid, pipeline etc.).
 		</para>
 

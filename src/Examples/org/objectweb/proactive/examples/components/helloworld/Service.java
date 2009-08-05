@@ -29,8 +29,10 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+//@snippet-start component_examples_12
 package org.objectweb.proactive.examples.components.helloworld;
 
 public interface Service {
     void print(String msg);
 }
+//@snippet-end component_examples_12
