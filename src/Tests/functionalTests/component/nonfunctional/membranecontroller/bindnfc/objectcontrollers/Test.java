@@ -56,7 +56,7 @@ import functionalTests.component.creation.ComponentInfo;
 
 
 /**
- * @author Paul Naoumenko
+ * @author The ProActive Team
  *
  * Experimenting with non-functional type and controller objects
  */

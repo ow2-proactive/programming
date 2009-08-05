@@ -58,7 +58,7 @@ import functionalTests.component.nonfunctional.creation.DummyControllerItf;
 
 
 /**
- * @author Paul Naoumenko
+ * @author The ProActive Team
  *
  *Testing non-functional bindings
  */

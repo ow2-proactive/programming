@@ -33,7 +33,7 @@ package functionalTests.component.nonfunctional.membranecontroller;
 
 /**
  *
- * @author Paul Naoumenko
+ * @author The ProActive Team
  *
  * Class implementing the dummy functional component
  */
