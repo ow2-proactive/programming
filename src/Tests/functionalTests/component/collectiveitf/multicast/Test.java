@@ -31,21 +31,26 @@
  */
 package functionalTests.component.collectiveitf.multicast;
 
+import static org.junit.Assert.fail;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.control.IllegalLifeCycleException;
+import org.objectweb.fractal.api.factory.GenericFactory;
+import org.objectweb.fractal.api.type.ComponentType;
+import org.objectweb.fractal.api.type.InterfaceType;
+import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
 
 import functionalTests.ComponentTest;
 
 
 public class Test extends ComponentTest {
 
-    /**
-     *
-     */
     public static final String MESSAGE = "-Main-";
     public static final int NB_CONNECTED_ITFS = 2;
 
@@ -75,5 +80,21 @@ public class Test extends ComponentTest {
         Fractal.getLifeCycleController(testcase).startFc();
         ((Tester) testcase.getFcInterface("runTestItf")).testConnectedServerMulticastItf();
         ((Tester) testcase.getFcInterface("runTestItf")).testOwnClientMulticastItf();
+    }
+
+    @org.junit.Test
+    public void testMulticastServerItfNotBound() throws Exception {
+        Component boot = Fractal.getBootstrapComponent();
+        ProActiveTypeFactory tf = (ProActiveTypeFactory) Fractal.getTypeFactory(boot);
+        GenericFactory gf = Fractal.getGenericFactory(boot);
+        ComponentType ct = tf.createFcType(new InterfaceType[] { tf.createFcItfType("serverMult",
+                MulticastTestItf.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                ProActiveTypeFactory.MULTICAST_CARDINALITY) });
+        Component composite = gf.newFcInstance(ct, "composite", null);
+        try {
+            Fractal.getLifeCycleController(composite).startFc();
+            fail();
+        } catch (IllegalLifeCycleException ilce) {
+        }
     }
 }

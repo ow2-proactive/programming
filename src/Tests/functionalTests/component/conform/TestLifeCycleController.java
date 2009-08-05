@@ -56,7 +56,7 @@ public class TestLifeCycleController extends Conformtest {
     protected Component d;
 
     // -------------------------------------------------------------------------
-    // Constructor ans setup
+    // Constructor and setup
     // -------------------------------------------------------------------------
     @Before
     public void setUp() throws Exception {

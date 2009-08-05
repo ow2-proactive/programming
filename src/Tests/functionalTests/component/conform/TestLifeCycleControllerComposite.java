@@ -105,6 +105,18 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
     }
 
     @Test
+    public void testCompositeMandatoryServerInterfaceNotBound() throws Exception {
+        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        Fractal.getBindingController(c).bindFc("client", d.getFcInterface("server"));
+        Fractal.getBindingController(d).bindFc("client", c.getFcInterface("server"));
+        try {
+            Fractal.getLifeCycleController(r).startFc();
+            fail();
+        } catch (IllegalLifeCycleException e) {
+        }
+    }
+
+    @Test
     @Ignore
     public void testRemoveNotStopped() throws Exception {
         ContentController cc = Fractal.getContentController(r);
