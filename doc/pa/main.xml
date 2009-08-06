@@ -63,7 +63,6 @@
                 <!ENTITY biblio SYSTEM "biblio.xml">
                 <!ENTITY referenceCard SYSTEM "ReferenceCard.xml">
                 <!ENTITY srcCodeAppendix SYSTEM "srcCodeAppendix.xml">
-                <!ENTITY loadbalancing SYSTEM "LoadBalancing.xml">
                 <!ENTITY glossary SYSTEM "glossary.xml">
                 <!ENTITY reference SYSTEM "definitions.xml">
                 <!ENTITY HighLevelAPITutorial SYSTEM "high_level_api_tutorial.xml">
@@ -144,7 +143,6 @@
  </part>
  <part xml:id="ProActiveAdvancedFeatures"><info><title xml:id="ServicesandAdvancedFeatures_2">Services and Advanced Features</title></info>
   
-  &loadbalancing;
   &faultTolerance;
   &Security;
   &WSDoc;
