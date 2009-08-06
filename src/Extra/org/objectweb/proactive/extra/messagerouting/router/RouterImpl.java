@@ -67,6 +67,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessag
  */
 public class RouterImpl extends RouterInternal implements Runnable {
     public static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
+    public static final Logger admin_logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER_ADMIN);
 
     /** Read {@link ByteBuffer} size. */
     private final static int READ_BUFFER_SIZE = 4096;

@@ -44,6 +44,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.cli.UnrecognizedOptionException;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -89,6 +90,7 @@ class Main {
         this.options.addOption("6", "ipv6", false, "Force the router to use IPv6 addresses only");
         this.options.addOption("w", "nbWorkers", true, "Size of the worker thread pool");
         this.options.addOption("h", "help", false, "Print help message");
+        this.options.addOption("v", "verbose", false, "Verbose mode. Print clients (dis)connections");
 
         CommandLine line = null;
 
@@ -154,6 +156,11 @@ class Main {
                 } catch (NumberFormatException e) {
                     printHelpAndExit("Invalid worker number: " + arg);
                 }
+            }
+
+            if (line.hasOption("v")) {
+                Logger l = Logger.getLogger(Loggers.FORWARDING_ROUTER_ADMIN);
+                l.setLevel(Level.DEBUG);
             }
         } catch (UnrecognizedOptionException e) {
             printHelpAndExit(e.getMessage());
