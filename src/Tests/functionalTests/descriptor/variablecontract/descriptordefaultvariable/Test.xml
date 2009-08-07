@@ -18,5 +18,9 @@
 		</proactive>
 	</application>
 
-	<resources/>	
+	<resources> 
+		<nodeProvider>
+			<file path="/dev/null"/>
+		</nodeProvider>
+	</resources>	
 </GCMApplication>
