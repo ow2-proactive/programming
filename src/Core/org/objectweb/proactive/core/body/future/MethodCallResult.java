@@ -54,15 +54,33 @@ public class MethodCallResult implements Serializable {
     /** The exception to throw */
     private Throwable exception;
 
+    /**
+     * 
+     * @param result the method call's result
+     * @param exception the exception thrown during the method call execution
+     */
     public MethodCallResult(Object result, Throwable exception) {
         this.result = result;
         this.exception = exception;
     }
 
+    /**
+     * returns the exception thrown during the method call's execution
+     * or null if no exception has been raised.
+     * @return returns the exception thrown during the method call's execution
+     * or null if no exception has been raised.
+     */
     public Throwable getException() {
         return exception;
     }
 
+    /**
+     * Return the result of the method call.
+     * If an exception has been raised during the method call's execution then
+     * the exception is thrown.
+     * @return Return the result of the method call. If an exception has been 
+     * raised during the method call's execution then the exception is thrown. 
+     */
     public Object getResult() {
         if (exception != null) {
             ExceptionHandler.throwException(exception);
@@ -101,7 +119,7 @@ public class MethodCallResult implements Serializable {
      * Provide access to the result object.
      * Override the behavior of getResult() by not throwing the exception if the method
      * call has thrown an exception.
-     * @return
+     * @return the result -- can be null if an exception has been thrown.
      */
     public Object getResultObjet() {
         return this.result;
