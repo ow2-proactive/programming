@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
@@ -60,6 +61,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since ProActive 4.1.0
  */
 public class Attachment {
+
     public static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
 
     /** The id of this attachment
@@ -80,11 +82,49 @@ public class Attachment {
     /** The socket channel where to write for this given client */
     final private SocketChannel socketChannel;
 
+    final private AtomicBoolean dtored;
+
     public Attachment(RouterImpl router, SocketChannel socketChannel) {
         this.attachmentId = AttachmentIdGenerator.getId();
         this.assembler = new MessageAssembler(router, this);
         this.socketChannel = socketChannel;
         this.client = null;
+        this.dtored = new AtomicBoolean(false);
+    }
+
+    /** Free the resources (sockets and file descriptor) associated to this attachment. 
+     * 
+     * Must be called before dereferencing an attachment.
+     */
+    public void dtor() {
+        this.dtored.set(true);
+
+        try {
+            this.socketChannel.socket().close();
+        } catch (IOException e) {
+            ProActiveLogger.logEatedException(logger, e);
+        } finally {
+            try {
+                this.socketChannel.close();
+            } catch (IOException e) {
+                ProActiveLogger.logEatedException(logger, e);
+            }
+        }
+    }
+
+    /* To avoid file descriptor leak, we use finalize() to close the fds 
+     * even if dtor() has not been called. 
+     * 
+     * fd are eventually closed when the GC is run
+     */
+    @Override
+    protected void finalize() throws Throwable {
+        if (this.dtored.get() == false) {
+            logger
+                    .info("File descriptor leak detected. Attachment.dtor() must be called. Please fill a bug report");
+            this.dtor();
+            super.finalize();
+        }
     }
 
     public MessageAssembler getAssembler() {

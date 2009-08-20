@@ -115,6 +115,9 @@ public class ProcessorRegistrationRequest extends Processor {
             } catch (IOException e) {
                 logger.info("Failed to notify the client that invalid agent has been advertised");
             }
+
+            // Since we disconnect the client, we must free the resources
+            this.attachment.dtor();
         } else {
             // Acknowledge the registration
             client.setAttachment(attachment);
