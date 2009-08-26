@@ -33,12 +33,13 @@ package functionalTests.activeobject.request.immediateservice;
 
 import java.io.Serializable;
 
-import org.objectweb.proactive.Body;
-import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 
-public class A implements Serializable, RunActive {
+public class A implements Serializable {
+
+    private Thread myServiceThread;
 
     /**
      *
@@ -48,18 +49,50 @@ public class A implements Serializable, RunActive {
     public A() {
     }
 
-    public A(String name) {
-        this.dum = new DummyObject(name);
+    public int init() {
+        PAActiveObject.setImmediateService("getBooleanSynchronous");
+        PAActiveObject.setImmediateService("getBooleanAsynchronous");
+        PAActiveObject.setImmediateService("getObject");
+        this.myServiceThread = Thread.currentThread();
+        return 0;
     }
 
-    public void runActivity(Body body) {
-        PAActiveObject.setImmediateService("getObject");
-        while (body.isActive()) {
-            //do nothing
-        }
+    public A(String name) {
+        this.dum = new DummyObject(name);
     }
 
     public DummyObject getObject() {
         return dum;
     }
+
+    public boolean getBooleanSynchronous() {
+        return (!Thread.currentThread().equals(myServiceThread) && myServiceThread != null);
+    }
+
+    public BooleanWrapper getBooleanAsynchronous() {
+        return new BooleanWrapper(!Thread.currentThread().equals(myServiceThread) && myServiceThread != null);
+    }
+
+    public boolean getExceptionMethodArgs() {
+        try {
+            PAActiveObject.setImmediateService("getObject", new Class<?>[] { Integer.class });
+        } catch (NoSuchMethodError e) {
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+        return false;
+    }
+
+    public boolean getExceptionMethodName() {
+        try {
+            PAActiveObject.setImmediateService("britney");
+        } catch (NoSuchMethodError e) {
+            return true;
+        } catch (Throwable t) {
+            return false;
+        }
+        return false;
+    }
+
 }

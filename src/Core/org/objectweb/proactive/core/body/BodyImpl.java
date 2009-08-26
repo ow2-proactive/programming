@@ -69,6 +69,7 @@ import org.objectweb.proactive.core.body.request.RequestFactory;
 import org.objectweb.proactive.core.body.request.RequestQueue;
 import org.objectweb.proactive.core.body.request.RequestReceiver;
 import org.objectweb.proactive.core.body.request.RequestReceiverImpl;
+import org.objectweb.proactive.core.component.body.ComponentBodyImpl;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.debug.stepbystep.BreakpointType;
@@ -348,26 +349,28 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
     }
 
     public void setImmediateService(String methodName) {
-        // FIXME uncomment this code after PROACTIVE-309 issue has been resolved
-        // if (!checkMethod(methodName)) {
-        // throw new NoSuchMethodError(methodName + " is not defined in " +
-        // getReifiedObject().getClass().getName());
-        // }
+        // FIXME see PROACTIVE-309
+        if (!((ComponentBodyImpl) this).isComponent()) {
+            if (!checkMethod(methodName)) {
+                throw new NoSuchMethodError(methodName + " is not defined in " +
+                    getReifiedObject().getClass().getName());
+            }
+        }
         ((RequestReceiverImpl) this.requestReceiver).setImmediateService(methodName);
     }
 
     public void setImmediateService(String methodName, Class<?>[] parametersTypes) {
-        // FIXME uncomment this code after PROACTIVE-309 issue has been resolved
-        // if (!checkMethod(methodName, parametersTypes)) {
-        // String signature = methodName+"(";
-        // for (int i = 0 ; i < parametersTypes.length; i++) {
-        // signature+=parametersTypes[i] + ((i < parametersTypes.length -
-        // 1)?",":"");
-        // }
-        // signature += " is not defined in " +
-        // getReifiedObject().getClass().getName();
-        // throw new NoSuchMethodError(signature);
-        // }
+        // FIXME see ProActive-309
+        if (!((ComponentBodyImpl) this).isComponent()) {
+            if (!checkMethod(methodName, parametersTypes)) {
+                String signature = methodName + "(";
+                for (int i = 0; i < parametersTypes.length; i++) {
+                    signature += parametersTypes[i] + ((i < parametersTypes.length - 1) ? "," : "");
+                }
+                signature += " is not defined in " + getReifiedObject().getClass().getName();
+                throw new NoSuchMethodError(signature);
+            }
+        }
         ((RequestReceiverImpl) this.requestReceiver).setImmediateService(methodName, parametersTypes);
     }
 
