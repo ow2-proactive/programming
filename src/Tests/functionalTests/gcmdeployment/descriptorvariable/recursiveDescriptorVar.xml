@@ -17,8 +17,8 @@
 	</application>
 	
 	<resources> 
-		<nodeProvider>
-			<file path="/dev/null"/>
+		<nodeProvider id="np">
+			<file path="var_gcmd.xml"/>
 		</nodeProvider>
 	</resources>	
 

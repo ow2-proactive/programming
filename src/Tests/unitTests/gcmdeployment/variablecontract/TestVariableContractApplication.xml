@@ -16,8 +16,8 @@
 	</application>
 
 	<resources> 
-		<nodeProvider>
-			<file path="/dev/null"/>
+		<nodeProvider id="np">
+			<file path="gcmd.xml"/>
 		</nodeProvider>
 	</resources>	
 </GCMApplication>
