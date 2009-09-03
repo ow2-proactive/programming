@@ -46,6 +46,10 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.TechnicalServicesProperties;
+import org.objectweb.proactive.extensions.dataspaces.api.PADataSpaces;
+import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
+import org.objectweb.proactive.extensions.dataspaces.core.SpaceType;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -237,6 +241,35 @@ public class GCMParserHelper implements GCMParserConstants {
         return new TechnicalServicesProperties(techServicesMap);
     }
 
+    public static InputOutputSpaceConfiguration parseInputOuputSpaceConfiguration(XPath xpath,
+            Node spaceNode, SpaceType type) throws XPathExpressionException {
+        String name = getAttributeValue(spaceNode, "id");
+        if (name == null) {
+            // when there is no id - it is default input/output
+            name = PADataSpaces.DEFAULT_IN_OUT_NAME;
+        }
+
+        // Required: remote access
+        Node remoteAccessNode = (Node) xpath.evaluate("app:remoteAccess", spaceNode, XPathConstants.NODE);
+        final String url = getAttributeValue(remoteAccessNode, "url");
+
+        // Optional: location
+        Node locationNode = (Node) xpath.evaluate("app:location", spaceNode, XPathConstants.NODE);
+        String hostname = null;
+        String path = null;
+        if (locationNode != null) {
+            hostname = getAttributeValue(locationNode, "hostname");
+            path = getAttributeValue(locationNode, "path");
+        }
+
+        try {
+            return InputOutputSpaceConfiguration.createConfiguration(url, path, hostname, name, type);
+        } catch (ConfigurationException e) {
+            // it should not happen with proper schema
+            throw new RuntimeException(e);
+        }
+    }
+
     public static DocumentBuilder getNewDocumentBuilder(DocumentBuilderFactory domFactory) {
         return getNewDocumentBuilder(domFactory, null);
     }
@@ -259,5 +292,4 @@ public class GCMParserHelper implements GCMParserConstants {
     public static String elementInNS(String prefixNS, String element) {
         return prefixNS + ":" + element;
     }
-
 }

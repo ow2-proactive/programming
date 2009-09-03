@@ -127,6 +127,9 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
     private static final String XPATH_TOOL = "dep:tool";
     private static final String XPATH_HOME_DIRECTORY = "dep:homeDirectory";
     private static final String XPATH_NETWORK_INTERFACE = "dep:networkInterface";
+    private static final String XPATH_SCRATCH = "dep:scratch";
+    private static final String XPATH_REMOTE_ACCESS = "dep:remoteAccess";
+    private static final String XPATH_PATH = "dep:path";
     private static final String XPATH_BRIDGES = "dep:bridges/*";
     private static final String XPATH_GROUPS = "dep:groups/*";
     private static final String XPATH_HOSTS = "dep:hosts/dep:host";
@@ -622,6 +625,11 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
             hostInfo.setNetworkInterface(GCMParserHelper.getAttributeValue(networkInterfaceNode, "name"));
         }
 
+        Node scratchNode = (Node) xpath.evaluate(XPATH_SCRATCH, hostNode, XPathConstants.NODE);
+        if (scratchNode != null) {
+            parseScratchNode(scratchNode, hostInfo);
+        }
+
         NodeList toolNodes = (NodeList) xpath.evaluate(XPATH_TOOL, hostNode, XPathConstants.NODESET);
         for (int i = 0; i < toolNodes.getLength(); ++i) {
             Node toolNode = toolNodes.item(i);
@@ -631,6 +639,24 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         }
 
         return hostInfo;
+    }
+
+    protected void parseScratchNode(Node scratchNode, HostInfoImpl hostInfo) throws XPathExpressionException {
+        Node remoteAccessNode = (Node) xpath.evaluate(XPATH_REMOTE_ACCESS, scratchNode, XPathConstants.NODE);
+        if (remoteAccessNode != null) {
+            hostInfo.setDataSpacesScratchURL(GCMParserHelper.getAttributeValue(remoteAccessNode, "url"));
+        }
+
+        Node pathNode = (Node) xpath.evaluate(XPATH_PATH, scratchNode, XPathConstants.NODE);
+        if (pathNode != null) {
+            hostInfo.setDataSpacesScratchPath(GCMParserHelper.parsePathElementNode(pathNode));
+        }
+
+        if (remoteAccessNode == null && pathNode == null) {
+            // workaround for XSD limitation(?) - lack of disjunction
+            GCMDeploymentLoggers.GCMD_LOGGER
+                    .error("No access specified for host scratch, scratch not configured");
+        }
     }
 
     /*

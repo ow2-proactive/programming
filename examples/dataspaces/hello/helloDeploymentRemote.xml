@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GCMDeployment xmlns="urn:gcm:deployment:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:gcm:deployment:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd	">
+
+    <environment>
+        <!-- CHANGE THIS -->
+        <descriptorVariable name="HOST" value="localhost" />
+        <javaPropertyDescriptorDefault name="os"
+            value="unix" />
+        <javaPropertyVariable name="user.home" />
+        <javaPropertyVariable name="java.io.tmpdir" />
+    </environment>
+
+    <resources>
+        <group refid="remoteThroughSSH">
+            <host refid="host" />
+        </group>
+    </resources>
+
+    <!-- @snippet-start DataSpacesExample_gcmd -->
+    <infrastructure>
+
+        <hosts>
+            <host id="host" os="${os}" hostCapacity="2" vmCapacity="1">
+                <homeDirectory base="root" relpath="${user.home}" />
+                <scratch>
+                    <path base="root" relpath="${java.io.tmpdir}/dataspaces" />
+                    <!--
+                        Use this if you prefer SFTP rather than ProActiveProvider file access:
+                        <remoteAccess url="sftp://${user.name}@#{hostname}${java.io.tmpdir}/dataspaces"/>
+                    -->
+                </scratch>
+            </host>
+        </hosts>
+
+        <groups>
+            <sshGroup id="remoteThroughSSH" hostList="${HOST}" />
+        </groups>
+
+    </infrastructure>
+    <!-- @snippet-end DataSpacesExample_gcmd -->
+</GCMDeployment>

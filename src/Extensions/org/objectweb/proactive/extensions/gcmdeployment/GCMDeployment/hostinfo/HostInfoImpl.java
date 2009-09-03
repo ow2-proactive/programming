@@ -40,6 +40,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 
 
 public class HostInfoImpl implements HostInfo {
@@ -51,6 +52,8 @@ public class HostInfoImpl implements HostInfo {
     private OperatingSystem os;
     private Set<Tool> tools;
     private String networkInterface;
+    private String dataSpacesScratchURL;
+    private PathElement dataSpacesScratchPath;
 
     private long topologyId;
 
@@ -96,6 +99,15 @@ public class HostInfoImpl implements HostInfo {
         // Theses fields are not mandatory
         if (username == null) {
             GCMD_LOGGER.debug("HostInfo is ready but username has not been set");
+        }
+
+        if (dataSpacesScratchURL == null) {
+            GCMD_LOGGER.debug("HostInfo is ready but Data Spaces scratch space access URL has not been set");
+        }
+
+        if (dataSpacesScratchPath == null) {
+            GCMD_LOGGER
+                    .debug("HostInfo is ready but Data Spaces scratch space local access path has not been set");
         }
     }
 
@@ -178,6 +190,16 @@ public class HostInfoImpl implements HostInfo {
         this.vmCapacity = vmCapacity;
     }
 
+    public void setDataSpacesScratchURL(String url) {
+        GCMD_LOGGER.trace(" Set DataSpaces scratch space access URL to " + url);
+        dataSpacesScratchURL = url;
+    }
+
+    public void setDataSpacesScratchPath(PathElement path) {
+        GCMD_LOGGER.trace(" Set DataSpaces scratch space local access relpath to " + path.getRelPath());
+        dataSpacesScratchPath = path;
+    }
+
     public void addTool(Tool tool) {
         GCMD_LOGGER.trace("HostInfo " + id + " added tool: " + tool);
         this.tools.add(tool);
@@ -218,6 +240,14 @@ public class HostInfoImpl implements HostInfo {
 
     public int getVmCapacity() {
         return vmCapacity;
+    }
+
+    public String getDataSpacesScratchURL() {
+        return dataSpacesScratchURL;
+    }
+
+    public PathElement getDataSpacesScratchPath() {
+        return dataSpacesScratchPath;
     }
 
     public long getToplogyId() {

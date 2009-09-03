@@ -1,0 +1,5 @@
+This may help:
+
+application args: ${PROACTIVE_HOME_HERE}examples/dataspaces/hello/helloApplication.xml
+
+JVM arfs: -Dproactive.home=${PROACTIVE_HOME_HERE} -Dgcmdfile=helloDeploymentRemote.xml -Djava.security.policy=${PROACTIVE_HOME_HERE}/examples/dataspaces/hello/policy

@@ -166,6 +166,18 @@
 							<xsd:field xpath="@refid"></xsd:field>
 						</xsd:unique>
 					</xsd:element>
+
+					<xsd:element name="data" type="dataType" minOccurs="0" maxOccurs="1">
+						<xsd:unique name="inputConstraint">
+							<xsd:selector xpath="input"></xsd:selector>
+							<xsd:field xpath="@id"></xsd:field>
+						</xsd:unique>
+						<xsd:unique name="outputConstraint">
+							<xsd:selector xpath="output"></xsd:selector>
+							<xsd:field xpath="@id"></xsd:field>
+						</xsd:unique>
+					</xsd:element>
+
 				</xsd:sequence>
 
 				<xsd:attribute name="relpath" type="pathElementGeneralType" use="required">
@@ -323,5 +335,63 @@
             </xsd:annotation>
         </xsd:attribute>
 	</xsd:complexType>
-	
+
+	<xsd:simpleType name="DataSpacesInputOutputIdType">
+		<xsd:restriction base="idType">
+			<xsd:pattern
+				value="[^/]{1,6}|[^/]{8,}|[^d][^/]{6}|[^/][^e][^/]{5}|[^/]{2}[^f][^/]{4}|[^/]{3}[^a][^/]{3}|[^/]{4}[^u][^/]{2}|[^/]{5}[^l][^/]|[^/]{6}[^t]" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="DataSpacesInputOutputIdOrVariableType">
+		<xsd:union memberTypes="DataSpacesInputOutputIdType variableRefType" />
+	</xsd:simpleType>
+
+	<xsd:complexType name="locationType">
+		<xsd:attribute name="hostname" type="hostnameOrVariableType" use="required" />
+		<xsd:attribute name="path" type="xsd:string" use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="inputDefaultType">
+		<xsd:all>
+			<xsd:element name="remoteAccess" type="serviceWithURLType" minOccurs="1" />
+			<xsd:element name="location" type="locationType" minOccurs="0" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="inputType">
+		<xsd:complexContent>
+			<xsd:extension base="inputDefaultType">
+				<xsd:attribute name="id" use="required"	type="DataSpacesInputOutputIdOrVariableType" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="outputDefaultType">
+		<xsd:all minOccurs="1">
+			<xsd:element name="remoteAccess" type="serviceWithURLType" minOccurs="1" />
+			<xsd:element name="location" type="locationType" minOccurs="0" />
+		</xsd:all>
+	</xsd:complexType>
+
+	<xsd:complexType name="outputType">
+		<xsd:complexContent>
+			<xsd:extension base="outputDefaultType">
+				<xsd:attribute name="id" type="DataSpacesInputOutputIdOrVariableType" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="dataType">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" maxOccurs="1" name="namingService" type="serviceWithURLType" />
+
+			<xsd:element minOccurs="0" maxOccurs="1" name="inputDefault" type="inputDefaultType" />
+			<xsd:element minOccurs="0" maxOccurs="unbounded" name="input" type="inputType" />
+
+			<xsd:element minOccurs="0" maxOccurs="1" name="outputDefault" type="outputDefaultType" />
+			<xsd:element minOccurs="0" maxOccurs="unbounded" name="output" type="outputType" />
+		</xsd:sequence>
+	</xsd:complexType>
+
 </xsd:schema>

@@ -44,6 +44,7 @@
                 <!ENTITY MonteCarlo SYSTEM "monteCarlo.xml">
                 <!ENTITY mpi SYSTEM "mpi.xml">
                 <!ENTITY plugin SYSTEM "development/plugin.xml">
+                <!ENTITY DataSpaces SYSTEM "DataSpaces.xml">
                 <!ENTITY guidedindex SYSTEM "guided_tour/guidedIndex.xml">
                 <!-- <!ENTITY capabilities-intro SYSTEM "guided_tour/capabilities-intro.xml"> -->
                 <!ENTITY capabilities-intro SYSTEM "applicationhandouts.xml">
@@ -116,6 +117,7 @@
   &Calcium;
   &OOSPMD;
   &mpi;
+  &DataSpaces;
  </part>
  
  <part xml:id="ProActiveConfiguration"><info><title xml:id="ProActiveConfiguration_2">ProActive Configuration</title></info>

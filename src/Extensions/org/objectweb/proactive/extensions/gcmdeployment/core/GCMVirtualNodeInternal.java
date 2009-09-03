@@ -129,4 +129,11 @@ public interface GCMVirtualNodeInternal extends GCMVirtualNode {
 
     public void addNode(FakeNode fakeNode, NodeProviderContract contract);
 
+    /**
+     * Adds technical services properties to set of node technical service properties.
+     * 
+     * @param tsProperties
+     *            properties to add
+     */
+    public void addTechnicalServiceProperties(TechnicalServicesProperties tsProperties);
 }

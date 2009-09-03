@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GCMDeployment xmlns="urn:gcm:deployment:1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:gcm:deployment:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd">
+
+	<environment>
+		<javaPropertyVariable name="java.io.tmpdir"/> 
+		<javaPropertyVariable name="user.home" />
+		<javaPropertyDescriptorDefault name="os" value="unix" />
+	</environment>
+
+	<resources>
+		<host refid="hLocalhost" />
+	</resources>
+
+	<infrastructure>
+
+		<hosts>
+			<host id="hLocalhost" os="${os}" hostCapacity="2" vmCapacity="1">
+				<homeDirectory base="root" relpath="${user.home}" />
+				<scratch>
+					<path base="root" relpath="${java.io.tmpdir}/dataspaces" />
+					<!-- Use this if you prefer SFTP rather than ProActive Provider file access
+					<remoteAccess url="sftp://${user.name}@#{hostname}${java.io.tmpdir}/dataspaces" /> -->
+				</scratch>
+			</host>
+
+		</hosts>
+
+	</infrastructure>
+</GCMDeployment>

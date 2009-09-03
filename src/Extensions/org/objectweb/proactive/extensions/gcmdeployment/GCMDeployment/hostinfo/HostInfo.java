@@ -35,6 +35,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 
 
 /**
@@ -103,6 +104,16 @@ public interface HostInfo extends Serializable {
     public int getVmCapacity();
 
     public boolean isCapacitiyValid();
+
+    /**
+     * @return Data Spaces scratch space access URL
+     */
+    public String getDataSpacesScratchURL();
+
+    /**
+     * @return Data Spaces scratch space local path;
+     */
+    public PathElement getDataSpacesScratchPath();
 
     /**
      * Check that this bridge is in a consistent state and is ready to be

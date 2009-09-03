@@ -70,6 +70,14 @@ log4j.logger.ibis= WARN
 #log4j.logger.proactive.masterworker.repository = DEBUG
 #log4j.logger.proactive.masterworker.workers = DEBUG
 
+#log4j.logger.proactive.dataspaces = DEBUG
+#log4j.logger.proactive.dataspaces.vfs = DEBUG
+#log4j.logger.proactive.dataspaces.mountmanager = DEBUG
+#log4j.logger.proactive.dataspaces.configurator = DEBUG
+#log4j.logger.proactive.dataspaces.namingservice = DEBUG
+
+#log4j.logger.proactive.vfsprovider = DEBUG
+#log4j.logger.proactive.vfsprovider.server = DEBUG
 
 #log4j.logger.proactive.configuration = DEBUG
 #log4j.logger.proactive.remoteobject = DEBUG

@@ -31,7 +31,9 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -48,6 +50,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.TechnicalServicesProperties;
+import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
+import org.objectweb.proactive.extensions.dataspaces.core.SpaceType;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -65,9 +69,17 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
     private static final String XPATH_LOG4J_PROPERTIES = "app:log4jProperties";
     private static final String XPATH_USER_PROPERTIES = "app:userProperties";
     private static final String XPATH_DEBUG_PROPERTIES = "app:debug";
+    private static final String XPATH_DATA = "app:data";
+    private static final String XPATH_NAMING_SERVICE = "app:namingService";
+    private static final String XPATH_INPUT_DEFAULT = "app:inputDefault";
+    private static final String XPATH_INPUT = "app:input";
+    private static final String XPATH_OUTPUT_DEFAULT = "app:outputDefault";
+    private static final String XPATH_OUTPUT = "app:output";
     protected static final String NODE_NAME = "proactive";
     protected TechnicalServicesProperties appTechnicalServicesProperties;
     protected ProActiveSecurityManager proactiveApplicationSecurityManager;
+    protected Set<InputOutputSpaceConfiguration> spacesConfigurations;
+    protected String namingServiceURL;
 
     @Override
     protected CommandBuilder createCommandBuilder() {
@@ -108,6 +120,18 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
                 parseProActiveConfiguration(xpath, commandBuilderProActive, configNode);
                 applicationParser.setProactiveApplicationSecurityManager(proactiveApplicationSecurityManager);
 
+            }
+
+            // Optional: data (Data Spaces) node
+            final Node dataNode = (Node) xpath.evaluate(XPATH_DATA, paNode, XPathConstants.NODE);
+            if (dataNode != null) {
+                parseDataSpaces(xpath, dataNode);
+                // See FIXME in GCMA - we cannot safely add DataSpacesTechnicalService as an app-wide TS.
+                // In current implementation local nodes may be shared, so we cannot safely apply it locally.
+                // addDataSpacesTechnicalService();
+                applicationParser.setDataSpacesEnabled(true);
+                applicationParser.setDataSpacesNamingServiceURL(namingServiceURL);
+                applicationParser.setInputOutputSpacesConfigurations(spacesConfigurations);
             }
 
             commandBuilderProActive.setVirtualNodes(applicationParser.getVirtualNodes());
@@ -230,6 +254,51 @@ public class ApplicationParserProactive extends AbstractApplicationParser {
             commandBuilderProActive.enableDebug(true);
         }
 
+    }
+
+    protected void parseDataSpaces(XPath xpath, Node dataNode) throws XPathExpressionException {
+        // Optional: Naming Service URL
+        final Node namingServiceNode = (Node) xpath.evaluate(XPATH_NAMING_SERVICE, dataNode,
+                XPathConstants.NODE);
+        if (namingServiceNode != null) {
+            namingServiceURL = GCMParserHelper.getAttributeValue(namingServiceNode, "url");
+        }
+
+        spacesConfigurations = new HashSet<InputOutputSpaceConfiguration>();
+        // Optional: default input
+        final Node defaultInputNode = (Node) xpath.evaluate(XPATH_INPUT_DEFAULT, dataNode,
+                XPathConstants.NODE);
+        parseSpaceConfigurationNode(xpath, defaultInputNode, SpaceType.INPUT);
+
+        // Optional: inputs
+        final NodeList inputsNodes = (NodeList) xpath.evaluate(XPATH_INPUT, dataNode, XPathConstants.NODESET);
+        for (int i = 0; i < inputsNodes.getLength(); i++) {
+            parseSpaceConfigurationNode(xpath, inputsNodes.item(i), SpaceType.INPUT);
+        }
+
+        // Optional: default output
+        final Node defaultOutputNode = (Node) xpath.evaluate(XPATH_OUTPUT_DEFAULT, dataNode,
+                XPathConstants.NODE);
+        parseSpaceConfigurationNode(xpath, defaultOutputNode, SpaceType.OUTPUT);
+
+        // Optional: outputs
+        final NodeList outputsNodes = (NodeList) xpath.evaluate(XPATH_OUTPUT, dataNode,
+                XPathConstants.NODESET);
+        for (int i = 0; i < outputsNodes.getLength(); i++) {
+            parseSpaceConfigurationNode(xpath, outputsNodes.item(i), SpaceType.OUTPUT);
+        }
+    }
+
+    protected void parseSpaceConfigurationNode(final XPath xpath, final Node node, final SpaceType type)
+            throws XPathExpressionException {
+        if (node != null) {
+            final InputOutputSpaceConfiguration config = GCMParserHelper.parseInputOuputSpaceConfiguration(
+                    xpath, node, type);
+            if (spacesConfigurations.contains(config)) {
+                throw new IllegalStateException("Duplicate data space definition: " + config);
+            }
+            spacesConfigurations.add(config);
+        }
     }
 
     public TechnicalServicesProperties getTechnicalServicesProperties() {

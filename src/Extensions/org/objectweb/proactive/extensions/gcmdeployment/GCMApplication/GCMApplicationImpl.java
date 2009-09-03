@@ -35,6 +35,7 @@ import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLogg
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,7 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.TimeoutAccounter;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.log.remote.ProActiveLogCollectorDeployer;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
@@ -73,6 +75,14 @@ import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInter
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeRemoteObjectAdapter;
 import org.objectweb.proactive.extensions.gcmdeployment.core.TopologyImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.core.TopologyRootImpl;
+import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
+import org.objectweb.proactive.extensions.dataspaces.core.SpaceInstanceInfo;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService;
+import org.objectweb.proactive.extensions.dataspaces.core.naming.NamingServiceDeployer;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.ApplicationAlreadyRegisteredException;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationException;
+import org.objectweb.proactive.extensions.dataspaces.exceptions.WrongApplicationIdException;
+import org.objectweb.proactive.extensions.dataspaces.service.DataSpacesTechnicalService;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.gcmdeployment.Topology;
@@ -80,6 +90,12 @@ import org.objectweb.proactive.gcmdeployment.Topology;
 
 public class GCMApplicationImpl implements GCMApplicationInternal {
     static private Map<Long, GCMApplication> localDeployments = new HashMap<Long, GCMApplication>();
+
+    /** Flag to store information whether DataSpaces were already on configured for some GCMA on JVM */
+    private static boolean dataSpacesConfiguredOnJVM;
+
+    /** Lock for an above flag */
+    private static Object dataSpacesConfiguredOnJVMLock = new Object();
 
     /** An unique identifier for this deployment */
     private long deploymentId;
@@ -123,6 +139,21 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
     private VariableContractImpl vContract;
 
     final private ProActiveLogCollectorDeployer logCollector;
+
+    /** Whether application requests Data Spaces usage or not */
+    private boolean dataSpacesEnabled;
+
+    /** Configurations of input and output spaces for application */
+    private Set<InputOutputSpaceConfiguration> spacesConfigurations;
+
+    /** URL of Data Spaces Naming Service */
+    private String namingServiceURL;
+
+    /** Deployer of Naming Service if it was requested to be started locally */
+    private NamingServiceDeployer namingServiceDeployer;
+
+    /** Stub to Data Spaces Naming Service */
+    private NamingService namingService;
 
     static public GCMApplication getLocal(long deploymentId) {
         return localDeployments.get(deploymentId);
@@ -180,13 +211,47 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
 
             proactiveApplicationSecurityManager = parser.getProactiveApplicationSecurityManager();
 
+            dataSpacesEnabled = parser.isDataSpacesEnabled();
+            spacesConfigurations = parser.getInputOutputSpacesConfigurations();
+            namingServiceURL = parser.getDataSpacesNamingServiceURL();
+
             this.vContract.close();
+
+            TechnicalServicesProperties appTSProperties = parser.getAppTechnicalServices();
+
+            // always start Data Spaces BEFORE applying tech services on local node
+            // (to provide working Data Spaces, DataSpacesTechnicalService assumes that appId is known and 
+            // application is registered in working NamingService) 
+            if (dataSpacesEnabled) {
+                synchronized (dataSpacesConfiguredOnJVMLock) {
+                    if (dataSpacesConfiguredOnJVM) {
+                        GCMA_LOGGER.error("DataSpaces were already configured for this JVM"
+                            + " for different GCM application, they cannot be configured again");
+                        dataSpacesEnabled = false;
+                    } else {
+                        dataSpacesConfiguredOnJVM = true;
+                    }
+                }
+            }
+            if (dataSpacesEnabled) {
+                startDataSpaces();
+
+                // we need to add technical service properties here, as we already know the application id
+                // (deploymentId) and NamingService URL
+                // TODO this kind of hacks should be eventually moved to CommandBuilderProActive#setup()
+                // or similar developed mechanism
+                final TechnicalServicesProperties dataSpacesTSP = DataSpacesTechnicalService
+                        .createTechnicalServiceProperties(deploymentId, namingServiceURL);
+                for (GCMVirtualNodeInternal vn : virtualNodes.values()) {
+                    vn.addTechnicalServiceProperties(dataSpacesTSP);
+                }
+                appTSProperties = appTSProperties.getCombinationWith(dataSpacesTSP);
+            }
 
             // apply Application-wide tech services on local node
             //
             Node defaultNode = NodeFactory.getDefaultNode();
             Node halfBodiesNode = NodeFactory.getHalfBodiesNode();
-            TechnicalServicesProperties appTSProperties = parser.getAppTechnicalServices();
 
             for (Map.Entry<String, HashMap<String, String>> tsp : appTSProperties) {
 
@@ -270,6 +335,10 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
                 // Connection between the two runtimes will be interrupted 
                 // Eat the exception: Miam Miam Miam
             }
+        }
+
+        if (dataSpacesEnabled) {
+            stopDataSpaces();
         }
     }
 
@@ -533,4 +602,66 @@ public class GCMApplicationImpl implements GCMApplicationInternal {
         return this.logCollector.getCollectorURL();
     }
 
+    private void startDataSpaces() throws ProActiveException {
+        if (namingServiceURL == null) {
+            namingServiceDeployer = new NamingServiceDeployer(this.deploymentId + "/namingService");
+            namingServiceURL = namingServiceDeployer.getNamingServiceURL();
+            if (GCMA_LOGGER.isDebugEnabled()) {
+                GCMA_LOGGER.debug("Started Naming Service at URL: " + namingServiceURL);
+            }
+        }
+
+        try {
+            namingService = NamingService.createNamingServiceStub(namingServiceURL);
+        } catch (ProActiveException e) {
+            GCMA_LOGGER.error("Cannot connect to Naming Service at URL: " + namingServiceURL, e);
+            return;
+        } catch (URISyntaxException e) {
+            GCMA_LOGGER.error("Invalid syntax of provided Naming Service URL: " + namingServiceURL, e);
+            return;
+        }
+
+        Set<SpaceInstanceInfo> spacesInstances = null;
+        if (spacesConfigurations != null) {
+            spacesInstances = new HashSet<SpaceInstanceInfo>();
+            for (final InputOutputSpaceConfiguration config : spacesConfigurations) {
+                try {
+                    spacesInstances.add(new SpaceInstanceInfo(deploymentId, config));
+                } catch (ConfigurationException e) {
+                    ProActiveLogger.logImpossibleException(GCMA_LOGGER, e);
+                }
+            }
+        }
+
+        try {
+            namingService.registerApplication(deploymentId, spacesInstances);
+        } catch (ApplicationAlreadyRegisteredException e) {
+            GCMA_LOGGER.error(
+                    String.format("Application with id=%d is already registered in specified Naming Serivce",
+                            deploymentId), e);
+        } catch (WrongApplicationIdException e) {
+            ProActiveLogger.logImpossibleException(GCMA_LOGGER, e);
+        }
+    }
+
+    private void stopDataSpaces() {
+        if (namingService != null) {
+            try {
+                namingService.unregisterApplication(deploymentId);
+            } catch (WrongApplicationIdException e) {
+                ProActiveLogger.logImpossibleException(GCMA_LOGGER, e);
+            }
+        }
+
+        if (namingServiceDeployer != null) {
+            try {
+                namingServiceDeployer.terminate();
+                if (GCMA_LOGGER.isDebugEnabled()) {
+                    GCMA_LOGGER.debug("Stopped Naming Service at URL: " + namingServiceURL);
+                }
+            } catch (ProActiveException e) {
+                GCMA_LOGGER.error("Cannot stop started Data Spaces Naming Service cleanly", e);
+            }
+        }
+    }
 }

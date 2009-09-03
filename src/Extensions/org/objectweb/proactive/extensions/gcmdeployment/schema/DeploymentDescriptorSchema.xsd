@@ -299,6 +299,14 @@
 		</xsd:complexContent>
 	</xsd:complexType>
 
+	<xsd:complexType name="scratchType">
+		<!-- FIXME: it should be disjunction actually, but perhaps it is impossible to express in XML Schema -->
+		<xsd:all>
+			<xsd:element name="remoteAccess" type="serviceWithURLType" minOccurs="0" />
+			<xsd:element name="path" type="pathElementType" minOccurs="0" />
+		</xsd:all>
+	</xsd:complexType>
+
 	<xsd:complexType name="hostType">
 		<xsd:sequence>
 			<xsd:element name="homeDirectory" type="homeDirectoryType">
@@ -331,6 +339,7 @@
 					</xsd:attribute>
 				</xsd:complexType>
 			</xsd:element>
+			<xsd:element name="scratch" type="scratchType" minOccurs="0" maxOccurs="1"></xsd:element>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="idType" use="required">
 		    <xsd:annotation>

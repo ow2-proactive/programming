@@ -93,12 +93,21 @@
 		</else>
 	</if>
 
-	<fileset dir="${cl.test.dir}" id="performancesuite">
-		<include name="performanceTests/**/*Test*.class" />
-		<exclude name="**/*$*.class" />
-	</fileset>
 
-
+	<if name="test">
+		<fileset dir="${cl.test.dir}" id="performancesuite">
+			<include name="${test}" />
+			<exclude name="**/*$*.class" />
+			<exclude name="**/*Ibis*.class" />
+		</fileset>
+		<else>
+			<fileset dir="${cl.test.dir}" id="performancesuite">
+				<include name="performanceTests/**/*Test*.class" />
+				<exclude name="**/*$*.class" />
+				<exclude name="**/*Ibis*.class" />
+			</fileset>
+		</else>
+	</if>
 
 
 	<!-- ************

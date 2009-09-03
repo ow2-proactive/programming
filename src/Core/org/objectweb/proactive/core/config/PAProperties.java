@@ -495,6 +495,36 @@ public enum PAProperties {
      */
     PA_FILETRANSFER_MAX_BUFFER_SIZE("proactive.filetransfer.buffer_size_kb", PAPropertiesType.INTEGER),
 
+    // -------------- DATA SPACES
+
+    /**
+     * This property indicates an access URL to the scratch data space. If scratch is going to be
+     * used on host, this property and/or {@link #PA_DATASPACES_SCRATCH_PATH} should be set.
+     */
+    PA_DATASPACES_SCRATCH_URL("proactive.dataspaces.scratch_url", PAPropertiesType.STRING),
+
+    /**
+     * This property indicates a location of the scratch data space. If scratch is going to be used
+     * on host, this property and/or {@link #PA_DATASPACES_SCRATCH_URL} should be set.
+     */
+    PA_DATASPACES_SCRATCH_PATH("proactive.dataspaces.scratch_path", PAPropertiesType.STRING),
+
+    // -------------- VFS PROVIDER
+
+    /**
+     * This property indicates how often an auto closing mechanism is started to collect and close
+     * all unused streams open trough file system server interface.
+     */
+    PA_VFSPROVIDER_SERVER_STREAM_AUTOCLOSE_CHECKING_INTERVAL_MILLIS(
+            "proactive.vfsprovider.server.stream_autoclose_checking_millis", PAPropertiesType.INTEGER),
+
+    /**
+     * This property indicates a period after that a stream is perceived as unused and therefore can
+     * be closed by auto closing mechanism.
+     */
+    PA_VFSPROVIDER_SERVER_STREAM_OPEN_MAXIMUM_PERIOD_MILLIS(
+            "proactive.vfsprovider.server.stream_open_maximum_period_millis", PAPropertiesType.INTEGER),
+
     // -------------- Misc
 
     /**

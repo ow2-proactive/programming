@@ -377,6 +377,22 @@ public class CommandBuilderProActive implements CommandBuilder {
             command.append(" ");
         }
 
+        if (hostInfo.getDataSpacesScratchURL() != null) {
+            command.append(PAProperties.PA_DATASPACES_SCRATCH_URL.getCmdLine());
+            command.append("\"");
+            command.append(hostInfo.getDataSpacesScratchURL());
+            command.append("\"");
+            command.append(" ");
+        }
+
+        if (hostInfo.getDataSpacesScratchPath() != null) {
+            command.append(PAProperties.PA_DATASPACES_SCRATCH_PATH.getCmdLine());
+            command.append("\"");
+            command.append(hostInfo.getDataSpacesScratchPath().getFullPath(hostInfo, this));
+            command.append("\"");
+            command.append(" ");
+        }
+
         if (isDebugEnabled) {
             command.append(" " + getDebugCommand(hostInfo, gcma.getDeploymentId()) + " ");
         }

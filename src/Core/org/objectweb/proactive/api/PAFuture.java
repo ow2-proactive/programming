@@ -251,9 +251,9 @@ public class PAFuture {
 
     /**
      * Blocks the calling thread until one of the futures in the collection is available or until the
-     * timeout expires. 
+     * timeout expires.
      *
-     *  <b>Warning</b> : this method must be called by either any active object or by the thread that 
+     *  <b>Warning</b> : this method must be called by either any active object or by the thread that
      *  performed the method calls corresponding to the futures in the collection.
      *
      *

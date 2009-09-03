@@ -33,6 +33,7 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.xpath.XPathExpressionException;
 
@@ -40,6 +41,7 @@ import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserConstants;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
+import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
 import org.xml.sax.SAXException;
 
 
@@ -91,4 +93,55 @@ public interface GCMApplicationParser extends GCMParserConstants {
     public void setProactiveApplicationSecurityManager(
             ProActiveSecurityManager proactiveApplicationSecurityManager);
 
+    /**
+     * Checks whether Data Spaces should be enabled for an application.
+     * 
+     * @return <code>true</code> if Data Spaces are requested to be enabled; <code>false</code>
+     *         otherwise
+     */
+    public boolean isDataSpacesEnabled();
+
+    /**
+     * Sets Data Spaces to be enabled or not for an application.
+     * 
+     * @param dataSpacesEnabled
+     *            <code>true</code> if Data Spaces are requested to be enabled; <code>false</code>
+     *            otherwise (by default)
+     */
+    public void setDataSpacesEnabled(boolean dataSpacesEnabled);
+
+    /**
+     * @return set of input and output data spaces configurations defined for an application; may be
+     *         <code>null</code> (by default) if no spaces are defined or
+     *         {@link #isDataSpacesEnabled()} returns <code>false</code>.
+     */
+    public Set<InputOutputSpaceConfiguration> getInputOutputSpacesConfigurations();
+
+    /**
+     * Sets input and output data spaces configuration for an application.
+     * 
+     * @param inputOutputSpacesConfigurations
+     *            set of input and output data spaces configurations defined for an application; may
+     *            be <code>null</code> if no spaces are defined or {@link #isDataSpacesEnabled()}
+     *            returns <code>false</code>.
+     */
+    public void setInputOutputSpacesConfigurations(
+            Set<InputOutputSpaceConfiguration> inputOutputSpacesConfigurations);
+
+    /**
+     * @return URL of Data Spaces Naming Service; may be <code>null</code> (by default) if Naming
+     *         Service should be created on deployer Node or {@link #isDataSpacesEnabled()} returns
+     *         <code>false</code>.
+     */
+    public String getDataSpacesNamingServiceURL();
+
+    /**
+     * Sets URL of Data Spaces Naming Service.
+     * 
+     * @param dataSpacesNamingServiceURL
+     *            URL of Data Spaces Naming Service; may be <code>null</code> if Naming Service
+     *            should be created on deployer Node or {@link #isDataSpacesEnabled()} returns
+     *            <code>false</code>.
+     */
+    public void setDataSpacesNamingServiceURL(String dataSpacesNamingServiceURL);
 }

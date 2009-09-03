@@ -46,7 +46,7 @@ import functionalTests.GCMFunctionalTestDefaultNodes;
 
 public abstract class Bandwidth extends GCMFunctionalTestDefaultNodes {
     /** The buffer included in each message */
-    static final public byte buf[] = new byte[10 * 1024 * 1024]; // 1Mo
+    static final public byte buf[] = new byte[10 * 1024 * 1024]; // 10Mo
 
     private Class<?> cl;
 

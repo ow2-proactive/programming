@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -70,6 +71,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploym
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.environment.Environment;
+import org.objectweb.proactive.extensions.dataspaces.core.InputOutputSpaceConfiguration;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -111,6 +113,9 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
     protected Map<String, ApplicationParser> applicationParsersMap;
     protected TechnicalServicesProperties appTechnicalServices;
     protected ProActiveSecurityManager proactiveApplicationSecurityManager;
+    protected boolean dataSpacesEnabled;
+    protected Set<InputOutputSpaceConfiguration> inputOutputSpacesConfigurations;
+    protected String dataSpacesNamingServiceURL;
 
     public GCMApplicationParserImpl(URL descriptor, VariableContractImpl vContract) throws Exception {
         this(descriptor, vContract, null);
@@ -454,5 +459,30 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
     public void setProactiveApplicationSecurityManager(
             ProActiveSecurityManager proactiveApplicationSecurityManager) {
         this.proactiveApplicationSecurityManager = proactiveApplicationSecurityManager;
+    }
+
+    public boolean isDataSpacesEnabled() {
+        return dataSpacesEnabled;
+    }
+
+    public void setDataSpacesEnabled(boolean dataSpacesEnabled) {
+        this.dataSpacesEnabled = dataSpacesEnabled;
+    }
+
+    public String getDataSpacesNamingServiceURL() {
+        return dataSpacesNamingServiceURL;
+    }
+
+    public void setDataSpacesNamingServiceURL(String dataSpacesNamingServiceURL) {
+        this.dataSpacesNamingServiceURL = dataSpacesNamingServiceURL;
+    }
+
+    public Set<InputOutputSpaceConfiguration> getInputOutputSpacesConfigurations() {
+        return inputOutputSpacesConfigurations;
+    }
+
+    public void setInputOutputSpacesConfigurations(
+            Set<InputOutputSpaceConfiguration> inputOutputSpacesConfigurations) {
+        this.inputOutputSpacesConfigurations = inputOutputSpacesConfigurations;
     }
 }
