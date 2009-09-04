@@ -187,7 +187,7 @@ public abstract class AbstractStreamBase extends AbstractIOOperationsBase {
         is = new FileInputStream(testFile);
         assertEquals(TEST_FILE_NEW_CONTENT_LEN, is.read(content));
 
-        byte actual[] = new byte[TEST_FILE_CONTENT_LEN];
+        byte actual[] = new byte[TEST_FILE_NEW_CONTENT_LEN];
         System.arraycopy(content, 0, actual, 0, actual.length);
         assertArrayEquals(TEST_FILE_NEW_CONTENT.getBytes(), actual);
         is.close();
@@ -202,7 +202,7 @@ public abstract class AbstractStreamBase extends AbstractIOOperationsBase {
         is = new FileInputStream(testFile);
         assertEquals(TEST_FILE_NEW_CONTENT_LEN, is.read(content));
 
-        byte actual[] = new byte[TEST_FILE_CONTENT_LEN];
+        byte actual[] = new byte[TEST_FILE_NEW_CONTENT_LEN];
         System.arraycopy(content, 0, actual, 0, actual.length);
         assertArrayEquals(TEST_FILE_NEW_CONTENT.getBytes(), actual);
         is.close();
