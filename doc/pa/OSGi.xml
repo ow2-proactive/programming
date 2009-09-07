@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="OSGi"><info><title xml:id="ProActiveontopofOSGi_73">ProActive on top of OSGi</title></info>
   
 
-  <section xml:id="OSGi_html_overview"><info><title xml:id="OverviewofOSGiOpenServicesGatewayinitiative_73">Overview of OSGi -- Open Services Gateway initiative</title></info>
+  <section xml:id="OSGi_html_overview"><info><title xml:id="OverviewofOSGiOpenServicesGatewayinitiative_73">Overview of OSGi &mdash; Open Services Gateway initiative</title></info>
     
 
     <para><emphasis role="bold">OSGi</emphasis> is a corporation that works on
     the definition and promotion of open specifications. These specifications
-    are mainly aimed to packaging and delivering services among all kinds of
+    mainly aim at packaging and delivering services among all kinds of
     networks.</para>
 
     <para><emphasis><emphasis role="bold">OSGi
     Framework</emphasis></emphasis></para>
 
-    <para>The OSGi specification define <emphasis role="bold">a
-    framework</emphasis> that allows to a diversity of services to be executed
-    in a service gateway, by this way, many applications can <emphasis role="bold">share a single JVM</emphasis> .</para>
+    <para>The OSGi specification defines <emphasis role="bold">a
+    framework</emphasis> that allows a diversity of services to be executed
+    in a service gateway. Thus, many applications can <emphasis role="bold">share a single JVM</emphasis>.</para>
 
     <figure xml:id="TheOSGiframeworkentities_73"><info><title>The OSGi framework entities</title></info>
-      
-
       <mediaobject>
         <imageobject>
           <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="osgi_files/framework.jpg" format="JPG"/>
@@ -32,57 +30,59 @@
 
     <para>In order to be <emphasis role="bold">delivered and
     deployed</emphasis> on OSGi, each piece of code is packaged into bundles.
-    Bundles are functionnal entities offering <emphasis role="bold">services
+    Bundles are functional entities offering <emphasis role="bold">services
     and packages</emphasis>. They can be delivered dynamically to the
-    framework. Concretely a bundle is a Java jar file containing:</para>
+    framework. Concretely, a bundle is a Java jar file containing:</para>
 
     <itemizedlist>
       <listitem>
-        <para>The application classes, including the so called bundle
-        <emphasis>Activator</emphasis></para>
+        <para>The application classes, including the so-called bundle
+        <emphasis>Activator</emphasis>.</para>
       </listitem>
 
       <listitem>
         <para>The <emphasis>Manifest file</emphasis> that specifies properties
-        about the application, for instance, which is the bundle Activator,
-        whick packages are required by the application</para>
+        about the application. For instance, this <emphasis>Manifest file</emphasis>
+        specifies the bundle Activator and
+        packages which are required by the application.</para>
       </listitem>
 
       <listitem>
-        <para>Other resources the application could need ( images, native
-        libraries, or data files ... ) .</para>
+        <para>Other resources the application could need (images, native
+        libraries, or data files...).</para>
       </listitem>
     </itemizedlist>
 
     <indexterm><primary>Kill</primary><secondary>bundles</secondary></indexterm>
     
-    <para>Bundles can be plugged dynamically and their so called
-    <emphasis>lifecycle</emphasis> can be managed through the framework (
-    start, stop, update, ...).</para>
+    <para>Bundles can be plugged dynamically and their so-called
+    <emphasis>lifecycle</emphasis> can be managed through the framework
+    (start, stop, update...).</para>
 
     <para><emphasis><emphasis role="bold">Manifest
     file</emphasis></emphasis></para>
 
     <para>This important file contains crucial parameters for the bundle file.
     It specifies which Activator (entry point) the bundle has to use, the
-    bundle classpath, the imported and exported packages, ...</para>
+    bundle classpath, the imported and exported packages and so on...</para>
 
     <para><emphasis><emphasis role="bold">Services</emphasis></emphasis></para>
 
-    <para>Bundles communicates with each other thanks to <emphasis role="bold">services and packages sharing</emphasis>. A <emphasis role="bold">service</emphasis> is an object registered into the framework
+    <para>Bundles communicates with each other thanks to <emphasis role="bold">services and packages sharing</emphasis>.
+    A <emphasis role="bold">service</emphasis> is an object registered into the framework
     in order to be used by other applications. The definition of a service is
     specified in a Java interface. OSGi specify a set of standard services
-    like Http Service, Log Service ...</para>
+    like Http Service, Log Service...</para>
 
-    <para>We currently use the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oscar.objectweb.org">OSCAR objectweb</link>  implementation.
+    <para>We currently use the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oscar.objectweb.org">OSCAR objectweb</link> implementation.
     For more information on OSGi, please visit the 
-    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.osgi.org">OSGi</link> website .</para>
+    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.osgi.org">OSGi</link> website.</para>
   </section>
 
   <section xml:id="OSGi_html_proactiveBundle"><info><title xml:id="ProActivebundleandservice_73">ProActive bundle and service</title></info>
     
 
-    <para>In order to use ProActive on top of OSGi, we have developped the
+    <para>In order to use ProActive on top of OSGi, we have developed the
     <emphasis role="bold">ProActive Bundle</emphasis> that contains all
     classes required to launch a ProActive runtime.</para>
 
@@ -105,7 +105,7 @@
 
     <para>The active object will be accessible remotely from any java
     application, or any other OSGi gateway. The communication can be either
-    <emphasis>rmi</emphasis> or <emphasis>http</emphasis>; in case of using
+    <emphasis>rmi</emphasis> or <emphasis>http</emphasis>. In case of using
     http, the ProActive bundle requires the installation of the <emphasis role="bold">Http Service</emphasis> that will handle http communications
     through a Servlet. We show in the example section how to use the ProActive
     service.</para>
@@ -115,7 +115,7 @@
     
 
     <para>The example below is <emphasis role="bold">a simple hello world that
-    uses ProActive Service</emphasis> . It creates an Hello active Object and
+    uses ProActive Service</emphasis>. It creates an Hello active Object and
     registers it as a service. We reuse the basic hello example provided within the ProActive's examples. We have to write a <emphasis role="bold">bundle
     Activator</emphasis> that will create the active object and register it as
     a OSGi service.</para>
@@ -123,38 +123,39 @@
     <para>The HelloActivator has to implements the BundleActivator
     interface.</para>
 
-    <programlisting language="java">        public class HelloActivator implements BundleActivator {
-                ...
-        } </programlisting>
+    <programlisting language="java">public class HelloActivator implements BundleActivator {
+   ...
+}</programlisting>
 
-    <para>The <literal>start ()</literal> method is the one executed when the
-    bundle starts. When the hello bundle starts we need to get the reference on
+    <para>The <literal>start()</literal> method is the one executed when the
+    bundle starts. When the hello bundle starts, we need to get the reference on
     the ProActive service and use it. Once we have the reference, we can
     create our active object thanks to the
     <literal>ProActiveService.newActive()</literal> method. Finally, we
     register our new service in the framework.</para>
 
-    <programlisting language="java"> public void start(BundleContext context) throws Exception {
-        this.context = context;
+    <programlisting language="java">public void start(BundleContext context) throws Exception {
+   this.context = context;
 
-        /* gets the ProActive Service */
-        ServiceReference sr = this.context.getServiceReference(ProActiveService.class.getName());
-        this.proActiveService = (ProActiveService) this.context.getService(sr);
-        Hello h = (Hello)this.proActiveService.newActive(
-             'org.objectweb.proactive.examples.hello.Hello',
-              new Object [] {});
-        
+   /* gets the ProActive Service */
+   ServiceReference sr = this.context.getServiceReference(ProActiveService.class.getName());
+   this.proActiveService = (ProActiveService) this.context.getService(sr);
+   Hello h = (Hello) this.proActiveService.newActive(
+      'org.objectweb.proactive.examples.hello.Hello',
+      new Object [] {});
 
-/* Register the service */
-        Properties props = new Properties();
-        props.put('name', 'helloWorld');
 
-        reg = this.context.registerService(
-                  'org.objectweb.proactive.osgi.ProActiveService',
-                   h, props);
-        }      </programlisting>
+   /* Register the service */
+   Properties props = new Properties();
+   props.put('name', 'helloWorld');
 
-    <para>Now that we created the hello active service, we have to <emphasis role="bold">package the application</emphasis> into a bundle. First of
+   reg = this.context.registerService(
+      'org.objectweb.proactive.osgi.ProActiveService',
+      h, props);
+}      </programlisting>
+
+    <para>Now that we have created the hello active service,
+    we have to <emphasis role="bold">package the application</emphasis> into a bundle. First of
     all, we have to write a <emphasis role="bold">Manifest File</emphasis>
     where we specify:</para>
 
@@ -171,7 +172,7 @@
 
       <listitem>
         <para>The packages our application requires:
-        <literal>org.objectweb.proactive....</literal></para>
+        <literal>org.objectweb.proactive...</literal></para>
       </listitem>
 
       <listitem>
@@ -180,11 +181,11 @@
       </listitem>
 
       <listitem>
-        <para>We can specify others informations like author, ...</para>
+        <para>We can also specify others informations like author, ...</para>
       </listitem>
     </itemizedlist>
 
-    <para>Here is what the Manifest looks like:</para>
+    <para>Here is how the Manifest looks like:</para>
 
     <screen>Bundle-Name: ProActive Hello World Bundle
 Bundle-Description: Bundle containing Hello World ProActive example
