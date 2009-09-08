@@ -280,8 +280,10 @@ public class AOWorker implements InitActive, Serializable, Worker {
             // We handle the current Task
             stubOnThis.handleTask(newTask);
 
+        } else {
+            // if there is nothing to do or if we are suspended we sleep
+            wakingup = false;
         }
-        // if there is nothing to do or if we are suspended we sleep
     }
 
     /** {@inheritDoc} */
