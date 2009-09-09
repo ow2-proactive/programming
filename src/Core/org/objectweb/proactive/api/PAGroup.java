@@ -275,8 +275,7 @@ public class PAGroup {
 
         if (params != null) {
             for (int i = 0; i < nodeList.length; i++) {
-                g.add(PAActiveObject.newActive(className, genericParameters, params, nodeList[i %
-                    nodeList.length]));
+                g.add(PAActiveObject.newActive(className, genericParameters, params, nodeList[i]));
             }
         }
 
@@ -472,7 +471,7 @@ public class PAGroup {
 
         if (params != null) {
             for (int i = 0; i < nodeList.length; i++) {
-                g.add(PAActiveObject.newActive(className, params, nodeList[i % nodeList.length]));
+                g.add(PAActiveObject.newActive(className, params, nodeList[i]));
             }
         }
 
