@@ -303,7 +303,7 @@ public class PAGroup {
 
         if (params != null) {
             Iterator<Node> it = nodeList.iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 Node node = it.next();
                 g.add(PAActiveObject.newActive(className, genericParameters, params, node));
             }
@@ -555,7 +555,7 @@ public class PAGroup {
 
         if (params != null) {
             Iterator<Node> it = nodeList.iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 Node node = it.next();
                 g.add(PAActiveObject.newActive(className, params, node));
             }
@@ -676,7 +676,6 @@ public class PAGroup {
             NodeException {
         return newGroup(className, (Class<?>[]) null, params, nodeList);
     }
-
 
     /**
      * Creates an object representing a group (a typed group) and creates all members with params on the node.
