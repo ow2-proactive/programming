@@ -32,6 +32,7 @@
 package org.objectweb.proactive.api;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
@@ -283,6 +284,35 @@ public class PAGroup {
     }
 
     /**
+     * Creates an object representing a group (a typed group) and creates members with the same params cycling on nodeList.
+     * @param className the name of the (upper) class of the group's members.
+     * @param genericParameters genericParameters parameterizing types
+     * @param params the parameters used to build all the group's members.
+     * @param nodeList the nodes where the members are created.
+     * @return a typed group with its members.
+     * @throws ActiveObjectCreationException if a problem occur while creating the stub or the body
+     * @throws ClassNotFoundException if the Class<?> corresponding to <code>className</code> can't be found.
+     * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
+     * @throws NodeException if the node was null and that the DefaultNode cannot be created
+     */
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[] params,
+            List<Node> nodeList) throws ClassNotFoundException, ClassNotReifiableException,
+            ActiveObjectCreationException, NodeException {
+        Object result = PAGroup.newGroup(className, genericParameters);
+        Group<Object> g = getGroup(result);
+
+        if (params != null) {
+            Iterator<Node> it = nodeList.iterator();
+            while(it.hasNext()) {
+                Node node = it.next();
+                g.add(PAActiveObject.newActive(className, genericParameters, params, node));
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Creates an object representing a group (a typed group) and creates all members with the same params on the node.
      * @param className the name of the (upper) class of the group's members.
      * @param genericParameters genericParameters parameterizing types
@@ -393,6 +423,34 @@ public class PAGroup {
     }
 
     /**
+     * Creates an object representing a group (a typed group) and creates members with params cycling on nodeList.
+     * @param className the name of the (upper) class of the group's members.
+     * @param genericParameters genericParameters parameterizing types
+     * @param params the array that contain the parameters used to build the group's members.
+     * If <code>params</code> is <code>null</code>, builds an empty group.
+     * @param nodeList the nodes where the members are created.
+     * @return a typed group with its members.
+     * @throws ActiveObjectCreationException if a problem occur while creating the stub or the body
+     * @throws ClassNotFoundException if the Class<?> corresponding to <code>className</code> can't be found.
+     * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
+     * @throws NodeException if the node was null and that the DefaultNode cannot be created
+     */
+    public static Object newGroup(String className, Class<?>[] genericParameters, Object[][] params,
+            List<Node> nodeList) throws ClassNotFoundException, ClassNotReifiableException,
+            ActiveObjectCreationException, NodeException {
+        Object result = newGroup(className, genericParameters);
+        Group<Object> g = getGroup(result);
+
+        if (params != null) {
+            for (int i = 0; i < params.length; i++) {
+                g.add(PAActiveObject.newActive(className, params[i], nodeList.get(i % nodeList.size())));
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Creates an object representing a group (a typed group) and creates all members with params on the node.
      * @param className the name of the (upper) class of the group's members.
      * @param genericParameters genericParameters parameterizing types
@@ -479,6 +537,34 @@ public class PAGroup {
     }
 
     /**
+     * Creates an object representing a group (a typed group) and creates members with the same params cycling on nodeList.
+     * @param className the name of the (upper) class of the group's members.
+     * @param params the parameters used to build all the group's members.
+     * @param nodeList the nodes where the members are created.
+     * @return a typed group with its members.
+     * @throws ActiveObjectCreationException if a problem occur while creating the stub or the body
+     * @throws ClassNotFoundException if the Class<?> corresponding to <code>className</code> can't be found.
+     * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
+     * @throws NodeException if the node was null and that the DefaultNode cannot be created
+     */
+    public static Object newGroup(String className, Object[] params, List<Node> nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
+            NodeException {
+        Object result = newGroup(className, (Class<?>[]) null);
+        Group<Object> g = getGroup(result);
+
+        if (params != null) {
+            Iterator<Node> it = nodeList.iterator();
+            while(it.hasNext()) {
+                Node node = it.next();
+                g.add(PAActiveObject.newActive(className, params, node));
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Creates an object representing a group (a typed group) and creates all members with the same params on the node.
      * @param className the name of the (upper) class of the group's members.
      * @param params the parameters used to build all the group's members.
@@ -557,11 +643,40 @@ public class PAGroup {
         return PAGroup.newGroup(className, params, nodeList);
     }
 
+    /**
+     * Creates an object representing a group (a typed group) and creates all members with params cycling on nodeList.
+     * @param className the name of the (upper) class of the group's members.
+     * @param params the array that contain the parameters used to build the group's members.
+     * @param nodeList the nodes where the members are created.
+     * @return a typed group with its members.
+     * @throws ActiveObjectCreationException if a problem occur while creating the stub or the body
+     * @throws ClassNotFoundException if the Class<?> corresponding to <code>className</code> can't be found.
+     * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
+     * @throws NodeException if the node was null and that the DefaultNode cannot be created
+     */
     public static Object newGroup(String className, Object[][] params, Node[] nodeList)
             throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
             NodeException {
         return newGroup(className, (Class<?>[]) null, params, nodeList);
     }
+
+    /**
+     * Creates an object representing a group (a typed group) and creates all members with params cycling on nodeList.
+     * @param className the name of the (upper) class of the group's members.
+     * @param params the array that contain the parameters used to build the group's members.
+     * @param nodeList the nodes where the members are created.
+     * @return a typed group with its members.
+     * @throws ActiveObjectCreationException if a problem occur while creating the stub or the body
+     * @throws ClassNotFoundException if the Class<?> corresponding to <code>className</code> can't be found.
+     * @throws ClassNotReifiableException if the Class<?> corresponding to <code>className</code> can't be reify.
+     * @throws NodeException if the node was null and that the DefaultNode cannot be created
+     */
+    public static Object newGroup(String className, Object[][] params, List<Node> nodeList)
+            throws ClassNotFoundException, ClassNotReifiableException, ActiveObjectCreationException,
+            NodeException {
+        return newGroup(className, (Class<?>[]) null, params, nodeList);
+    }
+
 
     /**
      * Creates an object representing a group (a typed group) and creates all members with params on the node.
