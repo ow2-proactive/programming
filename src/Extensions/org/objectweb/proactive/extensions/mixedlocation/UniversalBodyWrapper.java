@@ -285,4 +285,8 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
             throws SecurityNotAvailableException, AccessControlException, IOException {
         this.wrappedBody.setProActiveSecurityManager(user, policyServer);
     }
+
+    public String getUrl() {
+        return this.wrappedBody.getUrl();
+    }
 }

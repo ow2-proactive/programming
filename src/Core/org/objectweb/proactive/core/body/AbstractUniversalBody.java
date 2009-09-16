@@ -125,6 +125,10 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
         }
     }
 
+    public String getUrl() {
+        return this.roe.getURL();
+    }
+
     //
     // -- PUBLIC METHODS -----------------------------------------------
     //

@@ -94,6 +94,7 @@ import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
+import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.mop.Utils;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;

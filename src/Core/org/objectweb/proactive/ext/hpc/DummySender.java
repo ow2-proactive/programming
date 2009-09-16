@@ -215,4 +215,9 @@ public class DummySender implements UniversalBody {
         // TODO Auto-generated method stub
         return null;
     }
+
+    public String getUrl() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
