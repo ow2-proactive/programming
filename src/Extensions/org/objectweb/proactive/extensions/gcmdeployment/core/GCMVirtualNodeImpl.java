@@ -150,7 +150,6 @@ public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {
         }
 
         long ret = Math.max(Math.max(capacity, acc), 0);
-        System.out.println("getNbRequiredNodes " + id + " " + ret);
         return ret;
     }
 
