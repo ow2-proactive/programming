@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
@@ -52,9 +53,18 @@ import org.objectweb.proactive.core.body.reply.ReplyImpl;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.mop.Utils;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class FuturePool extends Object implements java.io.Serializable {
+
+    //
+    // -- STATIC MEMBERS -----------------------------------------------
+    //
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
+
+    // set to true each time any future is updated
     protected boolean newState;
 
     // table of future and ACs
@@ -557,14 +567,15 @@ public class FuturePool extends Object implements java.io.Serializable {
                         if (toDo != null) {
                             toDo.doAutomaticContinuation();
                         }
-
+                    } catch (Exception e2) {
+                        // an exception occurs when sending the current reply 
+                        // the AC thread should not be stopped
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Automatic continuation cannot be performed.", e2);
+                        }
+                    } finally {
                         // exit from the threadStore
                         FuturePool.this.getOwnerBody().exitFromThreadStore();
-                    } catch (Exception e2) {
-                        // to unblock active object
-                        e2.printStackTrace();
-                        FuturePool.this.getOwnerBody().exitFromThreadStore();
-                        throw new ProActiveRuntimeException("Error while sending reply for AC ", e2);
                     }
 
                     // kill it after completion of the remaining ACs...
