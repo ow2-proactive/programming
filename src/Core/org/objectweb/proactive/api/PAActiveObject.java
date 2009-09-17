@@ -69,7 +69,6 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
-import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.core.util.NonFunctionalServices;
@@ -1308,6 +1307,15 @@ public class PAActiveObject {
      */
     public static Body getBodyOnThis() {
         return LocalBodyStore.getInstance().getContext().getBody();
+    }
+
+    /**
+     * Indicate if the caller is executing in an active object
+     * 
+     * @return true if in an active object, false otherwise (half body or plain java thread)
+     */
+    public static boolean isInActiveObject() {
+        return LocalBodyStore.getInstance().isInAo();
     }
 
     /**

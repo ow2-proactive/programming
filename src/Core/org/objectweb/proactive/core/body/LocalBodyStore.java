@@ -31,6 +31,7 @@
  */
 package org.objectweb.proactive.core.body;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -167,6 +168,21 @@ public class LocalBodyStore {
     public Context popContext() {
         Stack<Context> stack = this.contexts.get();
         return stack != null ? stack.pop() : null;
+    }
+
+    public boolean isInAo() {
+        Stack<Context> sc = contexts.get();
+        if (sc != null) {
+            try {
+                UniqueID id = sc.peek().getBody().getID();
+                return LocalBodyStore.getInstance().getLocalBody(id) != null;
+            } catch (EmptyStackException e) {
+                logger.warn("Contexts stack was empty", e);
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
