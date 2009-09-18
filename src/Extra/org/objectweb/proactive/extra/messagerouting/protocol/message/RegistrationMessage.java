@@ -54,7 +54,7 @@ public abstract class RegistrationMessage extends Message {
      * These fields are put after the {@link Message} header.
      */
     public enum Field {
-        AGENT_ID(8, Long.class);
+        AGENT_ID(8, Long.class), ROUTER_ID(8, Long.class);
 
         private int length;
         private Class<?> type;
@@ -97,6 +97,12 @@ public abstract class RegistrationMessage extends Message {
     /** The {@link AgentID} */
     final private AgentID agentID;
 
+    /** The router id 
+     *
+     * 0 if unknown (first connection)
+     */
+    final private long routerID;
+
     /** Create a registration message.
      * 
      * @param type
@@ -107,10 +113,11 @@ public abstract class RegistrationMessage extends Message {
      * @param agentID
      * 		The agentID or null
      */
-    public RegistrationMessage(MessageType type, long messageId, AgentID agentID) {
+    public RegistrationMessage(MessageType type, long messageId, AgentID agentID, long routerID) {
         super(type, messageId);
 
         this.agentID = agentID;
+        this.routerID = routerID;
         super.setLength(Message.Field.getTotalOffset() + Field.getTotalOffset());
 
     }
@@ -124,10 +131,15 @@ public abstract class RegistrationMessage extends Message {
         super(byteArray, offset);
 
         this.agentID = readAgentID(byteArray, offset);
+        this.routerID = readRouterID(byteArray, offset);
     }
 
     public AgentID getAgentID() {
         return this.agentID;
+    }
+
+    public long getRouterID() {
+        return this.routerID;
     }
 
     @Override
@@ -141,7 +153,10 @@ public abstract class RegistrationMessage extends Message {
         if (this.agentID != null) {
             id = this.agentID.getId();
         }
+
         TypeHelper.longToByteArray(id, buff, Message.Field.getTotalOffset() + Field.AGENT_ID.getOffset());
+        TypeHelper.longToByteArray(routerID, buff, Message.Field.getTotalOffset() +
+            Field.ROUTER_ID.getOffset());
         return buff;
     }
 
@@ -155,6 +170,18 @@ public abstract class RegistrationMessage extends Message {
         long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
             Field.AGENT_ID.getOffset());
         return (id >= 0) ? new AgentID(id) : null;
+    }
+
+    /**
+     * Reads the router ID  of a formatted message beginning at a certain offset inside a buffer. Encapsulates it in an AgentID object.
+     * @param byteArray the buffer in which to read 
+     * @param offset the offset at which to find the beginning of the message in the buffer
+     * @return the Router ID of the formatted message
+     */
+    static public long readRouterID(byte[] byteArray, int offset) {
+        long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
+            Field.ROUTER_ID.getOffset());
+        return id;
     }
 
     @Override

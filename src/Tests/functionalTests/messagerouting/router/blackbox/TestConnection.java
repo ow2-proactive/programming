@@ -36,6 +36,7 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
@@ -54,7 +55,7 @@ public class TestConnection extends BlackBox {
      */
     @Test
     public void testConnection() throws IOException {
-        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong());
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0);
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
@@ -64,4 +65,19 @@ public class TestConnection extends BlackBox {
         Assert.assertNotNull(reply.getAgentID());
         Assert.assertTrue(reply.getAgentID().getId() >= 0);
     }
+
+    /*
+     * Send a valid Registration Request without agent ID and with a bad router ID
+     *
+     * A registration reply is expected with the same AgentID is expected
+     */
+    @Ignore
+    @Test(expected = IOException.class)
+    public void testInvalidConnection() throws IOException {
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0xbadbad);
+        tunnel.write(message.toByteArray());
+
+        byte[] resp = tunnel.readMessage();
+    }
+
 }

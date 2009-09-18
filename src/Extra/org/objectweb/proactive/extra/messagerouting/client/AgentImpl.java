@@ -63,6 +63,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessag
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 
 
 /**
@@ -82,8 +83,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
     /** Port of the router */
     final private int routerPort;
 
-    /** Local AgentID, set after initialization. **/
+    /** Local AgentID, set after initialization. */
     private AgentID agentID = null;
+    /** Remote router ID, set after initialization */
+    private long routerID = 0;
     /** Request ID Generator **/
     private final AtomicLong requestIDGenerator;
 
@@ -207,7 +210,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
             // if call for the first time then agentID is null
             RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator
-                    .getAndIncrement());
+                    .getAndIncrement(), routerID);
             tunnel.write(reg.toByteArray());
 
             // Waiting the router response
@@ -215,20 +218,39 @@ public class AgentImpl implements Agent, AgentImplMBean {
             Message replyMsg = Message.constructMessage(reply, 0);
 
             if (!(replyMsg instanceof RegistrationReplyMessage)) {
-                throw new IOException("Invalid router response: expected a " +
-                    RegistrationReplyMessage.class.getName() + " message but got " +
-                    replyMsg.getClass().getName());
+                if (replyMsg instanceof ErrorMessage) {
+                    ErrorMessage em = (ErrorMessage) replyMsg;
+                    if (em.getErrorType() == ErrorType.ERR_INVALID_ROUTER_ID) {
+                        tunnel.shutdown();
+                        throw new IOException("The router has been restarted. Disconnecting...");
+                    }
+                } else {
+                    tunnel.shutdown();
+                    throw new IOException("Invalid router response: expected a " +
+                        RegistrationReplyMessage.class.getName() + " message but got " +
+                        replyMsg.getClass().getName());
+                }
             }
 
-            AgentID replyAgentID = ((RegistrationReplyMessage) replyMsg).getAgentID();
+            RegistrationReplyMessage rrm = (RegistrationReplyMessage) replyMsg;
+            AgentID replyAgentID = rrm.getAgentID();
             if (this.agentID == null) {
                 this.agentID = replyAgentID;
                 logger.debug("Router assigned agentID=" + this.agentID + " to this client");
             } else {
                 if (!this.agentID.equals(replyAgentID)) {
+                    tunnel.shutdown();
                     throw new IOException("Invalid router response: Local ID is " + this.agentID +
                         " but server told " + replyAgentID);
                 }
+            }
+
+            if (this.routerID == 0) {
+                this.routerID = rrm.getRouterID();
+            } else if (this.routerID != rrm.getRouterID()) {
+                tunnel.shutdown();
+                throw new IOException("Invalid router response: previous router ID  was " + this.agentID +
+                    " but server now advertises " + rrm.getRouterID());
             }
 
             this.t = tunnel;

@@ -100,7 +100,15 @@ public class ErrorMessage extends DataMessage {
          *  <li>message ID is the message ID of the {@link MessageType#REGISTRATION_REQUEST}</li>
          * </ul>
          */
-        ERR_INVALID_AGENT_ID;
+        ERR_INVALID_AGENT_ID,
+
+        /** Client advertised an unknown router ID on reconnection
+         * 
+         * This message is send when a client send a {@link MessageType#REGISTRATION_REQUEST}
+         * with an unknown router ID. A such error happens when a router is restarted.
+         * Existing clients try to reconnect the endpoint.
+         */
+        ERR_INVALID_ROUTER_ID;
 
         public byte[] toByteArray() {
             byte[] buf = new byte[4];

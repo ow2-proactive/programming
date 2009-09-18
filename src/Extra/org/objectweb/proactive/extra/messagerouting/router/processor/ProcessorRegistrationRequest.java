@@ -81,9 +81,21 @@ public class ProcessorRegistrationRequest extends Processor {
      * in best effort. If succeeded, add the new client to the router
      */
     private void connection() {
+        long routerId = this.message.getRouterID();
+        if (routerId != 0) {
+            logger.warn("Invalid connection request. router ID must be 0. Remote endpoint is: " +
+                attachment.getRemoteEndpoint());
+
+            // Cannot contact the client yet, disconnect it !
+            // Since we disconnect the client, we must free the resources
+            this.attachment.dtor();
+            return;
+        }
+
         AgentID agentId = AgentIdGenerator.getId();
 
-        RegistrationMessage reply = new RegistrationReplyMessage(agentId, this.message.getMessageID());
+        RegistrationMessage reply = new RegistrationReplyMessage(agentId, this.message.getMessageID(),
+            this.router.getId());
 
         Client client = new Client(attachment, agentId);
         boolean resp = this.sendReply(client, reply);
@@ -98,10 +110,30 @@ public class ProcessorRegistrationRequest extends Processor {
      * flush the pending messages.
      */
     private void reconnection() {
-        // Check if the client is know
         AgentID agentId = message.getAgentID();
-        Client client = router.getClient(agentId);
 
+        // Check that it is not an "old" client
+        if (this.message.getRouterID() != this.router.getId()) {
+            logger.warn("AgentId " + agentId +
+                " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
+                attachment.getRemoteEndpoint());
+
+            // Send an ERR_ message (best effort)
+            ErrorMessage errMessage = new ErrorMessage(ErrorType.ERR_INVALID_ROUTER_ID, agentId, agentId,
+                this.message.getMessageID());
+            try {
+                attachment.send(ByteBuffer.wrap(errMessage.toByteArray()));
+            } catch (IOException e) {
+                logger.info("Failed to notify the client that invalid agent has been advertised");
+            }
+
+            // Since we disconnect the client, we must free the resources
+            this.attachment.dtor();
+            return;
+        }
+
+        // Check if the client is know
+        Client client = router.getClient(agentId);
         if (client == null) {
             // Send an ERR_ message (best effort)
             logger.warn("AgentId " + agentId +
@@ -122,7 +154,7 @@ public class ProcessorRegistrationRequest extends Processor {
             // Acknowledge the registration
             client.setAttachment(attachment);
             RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, this.message
-                    .getMessageID());
+                    .getMessageID(), this.router.getId());
 
             boolean resp = this.sendReply(client, reply);
             if (resp) {
@@ -156,5 +188,4 @@ public class ProcessorRegistrationRequest extends Processor {
             return new AgentID(generator.getAndIncrement());
         }
     }
-
 }

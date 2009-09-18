@@ -41,6 +41,7 @@ import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 
@@ -57,18 +58,68 @@ public class TestInvalidReconnection extends BlackBox {
      * An error message is expected is expected
      */
     @Test
-    public void test() throws IOException {
+    public void testInvalidAgentId() throws IOException {
         AgentID agentID = new AgentID(0xcafe);
         long messageID = ProActiveRandom.nextPosLong();
-        Message message = new RegistrationRequestMessage(agentID, messageID);
+        Message message = new RegistrationRequestMessage(agentID, messageID, 0);
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
         ErrorMessage error = (ErrorMessage) Message.constructMessage(resp, 0);
-        Assert.assertEquals(ErrorType.ERR_INVALID_AGENT_ID, error.getErrorType());
+        Assert.assertEquals(ErrorType.ERR_INVALID_ROUTER_ID, error.getErrorType());
         Assert.assertEquals(agentID, error.getRecipient());
         Assert.assertEquals(agentID, error.getSender());
         Assert.assertEquals(messageID, error.getMessageID());
+    }
 
+    /*
+     * Send an invalid Registration Request with an AgentID.
+     * Since this AgentID is not know by the router, an error message
+     * if expected in response
+     *
+     * An error message is expected is expected
+     */
+    @Test
+    public void testInvalidAgentId2() throws IOException {
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0);
+        tunnel.write(message.toByteArray());
+
+        byte[] resp = tunnel.readMessage();
+        RegistrationReplyMessage reply = (RegistrationReplyMessage) Message.constructMessage(resp, 0);
+
+        AgentID agentId = new AgentID(0xbadbad);
+        long messageID = ProActiveRandom.nextLong();
+        message = new RegistrationRequestMessage(agentId, messageID, reply.getRouterID());
+        tunnel.write(message.toByteArray());
+
+        resp = tunnel.readMessage();
+        ErrorMessage error = (ErrorMessage) Message.constructMessage(resp, 0);
+        Assert.assertEquals(ErrorType.ERR_INVALID_AGENT_ID, error.getErrorType());
+        Assert.assertEquals(agentId, error.getRecipient());
+        Assert.assertEquals(agentId, error.getSender());
+        Assert.assertEquals(messageID, error.getMessageID());
+    }
+
+    @Test
+    public void testInvalidRouterID() throws IOException, InstantiationException {
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextLong(), 0);
+        tunnel.write(message.toByteArray());
+
+        byte[] resp = tunnel.readMessage();
+        RegistrationReplyMessage reply = new RegistrationReplyMessage(resp, 0);
+        AgentID firstID = reply.getAgentID();
+        long routerID = reply.getRouterID();
+
+        // Ok it's time to reconnect
+
+        message = new RegistrationRequestMessage(reply.getAgentID(), ProActiveRandom.nextLong(), 0xbadbad);
+        tunnel.write(message.toByteArray());
+
+        resp = tunnel.readMessage();
+        ErrorMessage error = (ErrorMessage) Message.constructMessage(resp, 0);
+
+        Assert.assertEquals(ErrorType.ERR_INVALID_ROUTER_ID, error.getErrorType());
+        Assert.assertEquals(firstID, error.getRecipient());
+        Assert.assertEquals(firstID, error.getSender());
     }
 }

@@ -41,8 +41,8 @@ import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
  */
 public class RegistrationReplyMessage extends RegistrationMessage {
 
-    public RegistrationReplyMessage(AgentID agentID, long messageId) {
-        super(MessageType.REGISTRATION_REPLY, messageId, agentID);
+    public RegistrationReplyMessage(AgentID agentID, long messageId, long routerId) {
+        super(MessageType.REGISTRATION_REPLY, messageId, agentID, routerId);
     }
 
     /**
@@ -55,6 +55,10 @@ public class RegistrationReplyMessage extends RegistrationMessage {
 
         if (this.getType() != MessageType.REGISTRATION_REPLY) {
             throw new IllegalArgumentException("Invalid message type " + this.getType());
+        }
+
+        if (this.getRouterID() <= 0) {
+            throw new IllegalStateException("Invalid router ID value " + this.getRouterID());
         }
     }
 }

@@ -53,6 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.SweetCountDownLatch;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -94,6 +95,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
     private ServerSocketChannel ssc = null;
     private ServerSocket serverSocket = null;
 
+    /** An unique identifier for this router */
+    private final long routerId;
+
     /** Create a new router
      * 
      * When a new router is created it binds onto the given port.
@@ -114,6 +118,12 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
         init(config);
         tpe = Executors.newFixedThreadPool(config.getNbWorkerThreads());
+
+        long rand = 0;
+        while (rand == 0) {
+            rand = ProActiveRandom.nextPosLong(); // can be 0
+        }
+        this.routerId = rand;
     }
 
     private void init(RouterConfig config) throws IOException {
@@ -349,5 +359,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
                 }
             }
         }
+    }
+
+    public long getId() {
+        return this.routerId;
     }
 }

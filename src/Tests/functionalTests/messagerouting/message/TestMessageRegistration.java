@@ -81,15 +81,17 @@ public class TestMessageRegistration extends UnitTests {
         logger.info("agent " + agent);
         long msgId = ProActiveRandom.nextPosLong();
         logger.info("msgId " + msgId);
-
+        long routerId = ProActiveRandom.nextPosLong();
         Constructor<? extends RegistrationMessage> constructor;
-        constructor = cl.getConstructor(AgentID.class, long.class);
-        RegistrationMessage m = (RegistrationMessage) constructor.newInstance(agent, msgId);
+
+        constructor = cl.getConstructor(AgentID.class, long.class, long.class);
+        RegistrationMessage m = (RegistrationMessage) constructor.newInstance(agent, msgId, routerId);
 
         Assert.assertEquals(Message.PROTOV1, m.getProtoID());
         Assert.assertEquals(type, m.getType());
         Assert.assertEquals(msgId, m.getMessageID());
         Assert.assertEquals(agent, m.getAgentID());
+        Assert.assertEquals(routerId, m.getRouterID());
 
         byte[] buf = m.toByteArray();
         Assert.assertEquals(buf.length, m.getLength());

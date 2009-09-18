@@ -50,8 +50,8 @@ public class RegistrationRequestMessage extends RegistrationMessage {
      * @param messageId
      * 		An unique message ID per sender.
      */
-    public RegistrationRequestMessage(AgentID agentID, long messageId) {
-        super(MessageType.REGISTRATION_REQUEST, messageId, agentID);
+    public RegistrationRequestMessage(AgentID agentID, long messageId, long routerId) {
+        super(MessageType.REGISTRATION_REQUEST, messageId, agentID, routerId);
     }
 
     /**
@@ -66,6 +66,9 @@ public class RegistrationRequestMessage extends RegistrationMessage {
         if (this.getType() != MessageType.REGISTRATION_REQUEST) {
             throw new IllegalArgumentException("Invalid message type " + this.getType());
         }
-    }
 
+        if (this.getRouterID() < 0) {
+            throw new IllegalStateException("Invalid router id value " + this.getRouterID());
+        }
+    }
 }
