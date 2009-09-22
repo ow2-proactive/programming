@@ -133,7 +133,11 @@ A    | &lt;----                    ----&gt;  |    B
       </listitem>
 
       <listitem>
-        <para>rmissh</para>
+        <para>rmissh (RMI over SSH)</para>
+      </listitem>
+
+      <listitem>
+        <para>rmissl (RMI over SSL)</para>
       </listitem>
 
       <listitem>
@@ -141,7 +145,7 @@ A    | &lt;----                    ----&gt;  |    B
       </listitem>
 
       <listitem>
-        <para>pamr</para>
+        <para>pamr (plain TCP connection or tunneled over SSH)</para>
       </listitem>
     </itemizedlist>
 
