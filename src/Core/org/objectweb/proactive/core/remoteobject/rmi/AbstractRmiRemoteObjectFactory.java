@@ -41,6 +41,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;

@@ -35,14 +35,12 @@ import java.lang.reflect.Constructor;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.remoteobject.http.HTTPTransportServlet;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -50,27 +48,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class RemoteObjectHelper {
     static final private Logger logger = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
-
-    /**
-     * returns the default port set for the given protocol or -1 if none
-     * @param protocol
-     * @return the default port number associated to the protocol or -1 if none
-     * @throws UnknownProtocolException
-     */
-    public static int getDefaultPortForProtocol(String protocol) throws UnknownProtocolException {
-        if (Constants.XMLHTTP_PROTOCOL_IDENTIFIER.equals(protocol)) {
-            HTTPTransportServlet.get();
-            return Integer.parseInt(PAProperties.PA_XMLHTTP_PORT.getValue());
-        } else if ((Constants.RMI_PROTOCOL_IDENTIFIER.equals(protocol)) ||
-            Constants.IBIS_PROTOCOL_IDENTIFIER.equals(protocol) ||
-            Constants.RMISSH_PROTOCOL_IDENTIFIER.equals(protocol) ||
-            Constants.RMISSL_PROTOCOL_IDENTIFIER.equals(protocol)) {
-            return Integer.parseInt(PAProperties.PA_RMI_PORT.getValue());
-        }
-
-        // default would be to return the RMI default port
-        return -1;
-    }
 
     /**
      * returns an url for a object to be exposed on the current host for a given
@@ -81,7 +58,8 @@ public class RemoteObjectHelper {
      * @throws UnknownProtocolException
      */
     public static URI generateUrl(String protocol, String name) throws UnknownProtocolException {
-        return URIBuilder.buildURI(null, name, protocol, getDefaultPortForProtocol(protocol), true);
+        RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
+        return URIBuilder.buildURI(null, name, protocol, rof.getPort(), true);
     }
 
     /**

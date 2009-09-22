@@ -45,6 +45,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -97,7 +99,8 @@ public class UrlBuilder {
      */
     public static String buildUrl(String host, String name, String protocol) {
         try {
-            return buildUrl(host, name, protocol, RemoteObjectHelper.getDefaultPortForProtocol(protocol));
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
+            return buildUrl(host, name, protocol, rof.getPort());
         } catch (UnknownProtocolException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

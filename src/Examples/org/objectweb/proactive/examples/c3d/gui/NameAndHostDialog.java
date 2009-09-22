@@ -48,6 +48,8 @@ import javax.swing.JTextField;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.ProActiveInet;
@@ -236,7 +238,8 @@ public class NameAndHostDialog extends JDialog implements ActionListener, Proper
         String protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
 
         try {
-            port = RemoteObjectHelper.getDefaultPortForProtocol(protocol);
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
+            port = rof.getPort();
         } catch (UnknownProtocolException e) {
             // Well should not happen ...
             e.printStackTrace();

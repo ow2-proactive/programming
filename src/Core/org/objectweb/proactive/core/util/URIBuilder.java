@@ -39,6 +39,8 @@ import java.net.UnknownHostException;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -90,7 +92,8 @@ public class URIBuilder {
      */
     public static URI buildURI(String host, String name, String protocol) {
         try {
-            return buildURI(host, name, protocol, RemoteObjectHelper.getDefaultPortForProtocol(protocol));
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
+            return buildURI(host, name, protocol, rof.getPort());
         } catch (UnknownProtocolException e) {
             e.printStackTrace();
         }
@@ -185,14 +188,15 @@ public class URIBuilder {
             // ok, awful hack but ensures that the factory for the given
             // protocol has effectively been loaded by the classloader
             // and that the initialization process has been performed
-            port = RemoteObjectHelper.getDefaultPortForProtocol(protocol);
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
+            port = rof.getPort();
         } catch (UnknownProtocolException e) {
             logger.debug(e.getMessage());
         }
         if (port == -1) {
             return buildURI(host, name, protocol);
         } else {
-            return buildURI(host, name, protocol, Integer.valueOf(port).intValue());
+            return buildURI(host, name, protocol, port);
         }
     }
 
