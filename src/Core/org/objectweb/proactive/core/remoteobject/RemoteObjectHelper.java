@@ -63,7 +63,8 @@ public class RemoteObjectHelper {
             return Integer.parseInt(PAProperties.PA_XMLHTTP_PORT.getValue());
         } else if ((Constants.RMI_PROTOCOL_IDENTIFIER.equals(protocol)) ||
             Constants.IBIS_PROTOCOL_IDENTIFIER.equals(protocol) ||
-            Constants.RMISSH_PROTOCOL_IDENTIFIER.equals(protocol)) {
+            Constants.RMISSH_PROTOCOL_IDENTIFIER.equals(protocol) ||
+            Constants.RMISSL_PROTOCOL_IDENTIFIER.equals(protocol)) {
             return Integer.parseInt(PAProperties.PA_RMI_PORT.getValue());
         }
 

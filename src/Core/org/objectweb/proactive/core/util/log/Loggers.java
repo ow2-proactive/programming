@@ -60,6 +60,7 @@ public interface Loggers {
     static final public String STUB_GENERATION = CORE + ".mop.stubgeneration";
     static final public String RMI = CORE + ".communication.rmi";
     static final public String SSH = CORE + ".communication.ssh";
+    static final public String SSL = CORE + ".communication.ssl";
     static final public String COMPONENTS = CORE + ".components";
     static final public String COMPONENTS_CONTROLLERS = COMPONENTS + ".controllers";
     static final public String COMPONENTS_REQUESTS = COMPONENTS + ".requests";

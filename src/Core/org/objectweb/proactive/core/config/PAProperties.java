@@ -356,6 +356,18 @@ public enum PAProperties {
      *  SSH
      */
 
+    /** SSL cipher suites used for RMISSL communications.
+     * List of cipher suites used for RMISSL, separated by commas.
+     * default is SSL_DH_anon_WITH_RC4_128_MD5. This cipher suite is used only
+     * to have encrypted communications, without authentication, and works with default
+     * JVM's keyStore/TrustStore
+     *
+     * Many others can be used. for implementing a certificate authentication...
+     * see http://java.sun.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html
+     *
+     * */
+    PA_SSL_CIPHER_SUITES("proactive.ssl.cipher.suites", PAPropertiesType.STRING),
+
     /**
      * Indicates SSH remote TCP port
      *

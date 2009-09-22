@@ -83,6 +83,9 @@ public interface Constants {
     /** ibis protocol identifier */
     public static final String IBIS_PROTOCOL_IDENTIFIER = "ibis";
 
+    /** RMISSL protocol identifier */
+    public static final String RMISSL_PROTOCOL_IDENTIFIER = "rmissl";
+
     /**xml-http protocol identifier */
     public static final String XMLHTTP_PROTOCOL_IDENTIFIER = "http";
 
