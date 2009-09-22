@@ -122,9 +122,8 @@ public class RemoteObjectExposer<T> implements Serializable {
             int port = url.getPort();
             if (port == -1) {
                 try {
-                    url = new URI(url.getScheme(), url.getUserInfo(), url.getHost(), RemoteObjectHelper
-                            .getDefaultPortForProtocol(protocol), url.getPath(), url.getQuery(), url
-                            .getFragment());
+                    url = new URI(url.getScheme(), url.getUserInfo(), url.getHost(), rof.getPort(), url
+                            .getPath(), url.getQuery(), url.getFragment());
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }

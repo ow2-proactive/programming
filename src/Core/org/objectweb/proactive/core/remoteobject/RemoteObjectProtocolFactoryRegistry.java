@@ -45,7 +45,6 @@ import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.rmissh.RmiSshRemoteObjectFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.core.remoteobject.rmissl.RmiSslRemoteObjectFactory;
 
 
 public class RemoteObjectProtocolFactoryRegistry {
@@ -59,7 +58,6 @@ public class RemoteObjectProtocolFactoryRegistry {
         remoteObjectFactories.put(Constants.XMLHTTP_PROTOCOL_IDENTIFIER, HTTPRemoteObjectFactory.class);
         remoteObjectFactories.put(Constants.RMISSH_PROTOCOL_IDENTIFIER, RmiSshRemoteObjectFactory.class);
         remoteObjectFactories.put(Constants.IBIS_PROTOCOL_IDENTIFIER, IbisRemoteObjectFactory.class);
-        remoteObjectFactories.put(Constants.RMISSL_PROTOCOL_IDENTIFIER, RmiSslRemoteObjectFactory.class);
 
         Iterator<RemoteObjectFactorySPI> iter = ServiceRegistry.lookupProviders(RemoteObjectFactorySPI.class);
         while (iter.hasNext()) {
