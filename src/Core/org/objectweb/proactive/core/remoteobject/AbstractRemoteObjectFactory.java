@@ -84,11 +84,15 @@ public abstract class AbstractRemoteObjectFactory {
     }
 
     /**
-     * @param protocol
+     * @param protocol The protocol schema or null to use the default protocol
      * @return return the remote object factory associated to the given protocol
      * @throws UnknownProtocolException
      */
     public static RemoteObjectFactory getRemoteObjectFactory(String protocol) throws UnknownProtocolException {
+        if (protocol == null) {
+            protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
+        }
+
         try {
             RemoteObjectFactory rof = activatedRemoteObjectFactories.get(protocol);
             if (rof != null) {
