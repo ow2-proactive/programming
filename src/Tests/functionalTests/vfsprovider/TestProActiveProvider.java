@@ -28,13 +28,15 @@ import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileProvider;
 
+import functionalTests.FunctionalTest;
+
 import unitTests.vfsprovider.AbstractIOOperationsBase;
 
 
 /**
  * Test suite for VFS ProActiveProvider basing on VFS generic provider tests (junit3).
  */
-public class TestProActiveProvider extends TestCase implements ProviderTestConfig {
+public class TestProActiveProvider extends FunctionalTest implements ProviderTestConfig {
     private final static URL TEST_DATA_SRC_ZIP_URL = TestProActiveProvider.class
             .getResource("/functionalTests/vfsprovider/_DATA/test-data.zip");
 
