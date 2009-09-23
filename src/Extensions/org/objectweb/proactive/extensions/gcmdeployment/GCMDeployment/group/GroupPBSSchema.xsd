@@ -135,7 +135,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z][&#x0021;-&#x007E;]{14}" />
+            <xs:pattern value="[A-Za-z][&#x0021;-&#x007E;]{1,15}" />
             <xs:whiteSpace value="collapse" />
         </xs:restriction>
     </xs:simpleType>
