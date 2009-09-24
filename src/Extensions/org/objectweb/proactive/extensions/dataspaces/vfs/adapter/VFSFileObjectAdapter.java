@@ -430,6 +430,14 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         throw new FileSystemException("Operation unsupported: destination file system unknown");
     }
 
+    public String getURL() {
+        try {
+            return adaptee.getURL().toExternalForm();
+        } catch (org.apache.commons.vfs.FileSystemException e) {
+            return null;
+        }
+    }
+
     @Override
     public boolean equals(Object candidate) {
 
