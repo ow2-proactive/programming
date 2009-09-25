@@ -233,7 +233,7 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
     public int getPort() {
         // Reverse connections are used with message routing so this method is
         // irrelevant
-        throw new UnsupportedOperationException();
+        return -1;
     }
 
     public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name)
