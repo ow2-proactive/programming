@@ -44,7 +44,7 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
  * This class provides helper methods for manipulation remote objects.
  *
  */
-public abstract class AbstractRemoteObjectFactory {
+public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory {
     final protected static Hashtable<String, RemoteObjectFactory> activatedRemoteObjectFactories;
 
     static {
