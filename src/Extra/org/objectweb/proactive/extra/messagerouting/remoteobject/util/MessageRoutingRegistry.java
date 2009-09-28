@@ -35,8 +35,10 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.remoteobject.AlreadyBoundException;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -56,13 +58,13 @@ public class MessageRoutingRegistry {
     public final static MessageRoutingRegistry singleton = new MessageRoutingRegistry();
 
     /** Registered Remote Objects */
-    private Map<URI, InternalRemoteRemoteObject> rRemteObjectMap;
+    private ConcurrentHashMap<URI, InternalRemoteRemoteObject> rRemteObjectMap;
 
     private MessageRoutingRegistry() {
         if (logger.isTraceEnabled()) {
             logger.trace("Starting the registry for the message routing protocol");
         }
-        this.rRemteObjectMap = Collections.synchronizedMap(new HashMap<URI, InternalRemoteRemoteObject>());
+        this.rRemteObjectMap = new ConcurrentHashMap<URI, InternalRemoteRemoteObject>();
     }
 
     /**
@@ -73,8 +75,16 @@ public class MessageRoutingRegistry {
      * @param body
      *            the remote object
      */
-    public void bind(URI uri, InternalRemoteRemoteObject body) {
-        rRemteObjectMap.put(uri, body);
+    public void bind(URI uri, InternalRemoteRemoteObject body, boolean rebind) throws AlreadyBoundException {
+        if (rebind) {
+            rRemteObjectMap.put(uri, body);
+        } else {
+            InternalRemoteRemoteObject r = rRemteObjectMap.putIfAbsent(uri, body);
+            if (r != null) {
+                throw new AlreadyBoundException("A remote object is already bound to " + uri);
+            }
+        }
+
         if (logger.isDebugEnabled()) {
             logger.debug("Added " + uri + " into the registry");
         }

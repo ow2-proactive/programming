@@ -264,7 +264,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         this.roe = new RemoteObjectExposer<ProActiveRuntime>(
             "org.objectweb.proactive.core.runtime.ProActiveRuntime", this,
             ProActiveRuntimeRemoteObjectAdapter.class);
-        this.roe.createRemoteObject(vmInformation.getName());
+        this.roe.createRemoteObject(vmInformation.getName(), false);
 
         if (PAProperties.PA_CLASSLOADING_USEHTTP.isTrue()) {
             // Set the codebase in case of useHTTP is true and the ProActiveRMIClassLoader is in use
@@ -750,7 +750,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
     public void registerVirtualNode(String virtualNodeName, boolean replacePreviousBinding)
             throws ProActiveException {
-        this.roe.createRemoteObject(virtualNodeName);
+        this.roe.createRemoteObject(virtualNodeName, false);
     }
 
     public void unregisterVirtualNode(String virtualNodeName) {

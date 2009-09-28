@@ -237,7 +237,7 @@ public class MOCKBody implements Body {
 
     }
 
-    public String registerByName(String name) throws IOException {
+    public String registerByName(String name, boolean rebind) throws IOException {
 
         return null;
     }

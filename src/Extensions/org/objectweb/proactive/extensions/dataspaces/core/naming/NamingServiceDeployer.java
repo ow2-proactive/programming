@@ -40,7 +40,7 @@ public class NamingServiceDeployer {
         namingService = new NamingService();
 
         roe = PARemoteObject.newRemoteObject(NamingService.class.getName(), this.namingService);
-        roe.createRemoteObject(name);
+        roe.createRemoteObject(name, false);
         url = roe.getURL();
     }
 

@@ -127,7 +127,7 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
         public String createRemoteObject() throws ProActiveException {
             RO ro = new RO();
             RemoteObjectExposer<RO> roe = new RemoteObjectExposer<RO>(RO.class.getName(), ro);
-            roe.createRemoteObject("remoteObject");
+            roe.createRemoteObject("remoteObject", false);
             return roe.getURL();
 
         }

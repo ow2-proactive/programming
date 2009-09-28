@@ -252,12 +252,12 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
     }
 
-    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name)
-            throws ProActiveException {
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name,
+            boolean rebind) throws ProActiveException {
         URI uri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), name, this.getProtocolId());
         // register the object on the register
         InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
-        RemoteRemoteObject rmo = register(irro, uri, true);
+        RemoteRemoteObject rmo = register(irro, uri, rebind);
         irro.setRemoteRemoteObject(rmo);
 
         return irro;

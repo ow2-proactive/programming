@@ -115,8 +115,8 @@ public interface RemoteObjectFactory {
      */
     public void unexport(RemoteRemoteObject rro) throws ProActiveException;
 
-    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name)
-            throws ProActiveException;
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name,
+            boolean rebind) throws ProActiveException;
 
     /**
      * @return the base URI for all object in this {@link RemoteObjectFactory}

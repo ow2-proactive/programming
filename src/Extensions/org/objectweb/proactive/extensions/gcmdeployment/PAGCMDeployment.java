@@ -128,7 +128,7 @@ public class PAGCMDeployment {
         String name = gcma.getDeploymentId() + "/GCMApplication";
         RemoteObjectExposer<GCMApplication> roe = new RemoteObjectExposer<GCMApplication>(
             GCMApplication.class.getName(), gcma, GCMApplicationRemoteObjectAdapter.class);
-        RemoteRemoteObject rro = roe.createRemoteObject(name);
+        RemoteRemoteObject rro = roe.createRemoteObject(name, false);
         return (GCMApplication) RemoteObjectHelper.generatedObjectStub(new RemoteObjectAdapter(rro));
     }
 }

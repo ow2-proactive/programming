@@ -117,7 +117,7 @@ public class LocalNode implements SecurityEntity {
         this.runtimeRoe = new RemoteObjectExposer<ProActiveRuntime>(
             "org.objectweb.proactive.core.runtime.ProActiveRuntime", ProActiveRuntimeImpl
                     .getProActiveRuntime(), ProActiveRuntimeRemoteObjectAdapter.class);
-        this.runtimeRoe.createRemoteObject(name);
+        this.runtimeRoe.createRemoteObject(name, false);
 
         // JMX registration
         //        if (PAProperties.PA_JMX_MBEAN.isTrue()) {

@@ -55,7 +55,7 @@ final public class ProActiveLogCollectorDeployer {
     public ProActiveLogCollectorDeployer(String name) throws ProActiveException {
         this.collector = new ProActiveLogCollector();
         this.roe = PARemoteObject.newRemoteObject(ProActiveLogCollector.class.getName(), this.collector);
-        this.roe.createRemoteObject(name);
+        this.roe.createRemoteObject(name, false);
         this.url = roe.getURL();
     }
 

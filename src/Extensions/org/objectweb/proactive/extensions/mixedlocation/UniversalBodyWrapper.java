@@ -272,8 +272,8 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
         this.wrappedBody.register(url);
     }
 
-    public String registerByName(String name) throws IOException, ProActiveException {
-        return this.wrappedBody.registerByName(name);
+    public String registerByName(String name, boolean rebind) throws IOException, ProActiveException {
+        return this.wrappedBody.registerByName(name, rebind);
     }
 
     public ProActiveSecurityManager getProActiveSecurityManager(Entity user)

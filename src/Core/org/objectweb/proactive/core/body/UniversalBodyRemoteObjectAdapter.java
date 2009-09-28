@@ -177,8 +177,8 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
         target.register(url);
     }
 
-    public String registerByName(String name) throws IOException, ProActiveException {
-        return target.registerByName(name);
+    public String registerByName(String name, boolean rebind) throws IOException, ProActiveException {
+        return target.registerByName(name, rebind);
     }
 
     public void setRegistered(boolean registered) throws IOException {

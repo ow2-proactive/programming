@@ -113,7 +113,7 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             url = URI.create(HTTPTransportServlet.get().getURL() + url.toString());
         }
 
-        HTTPRegistry.getInstance().bind(url.toString(), ro);
+        HTTPRegistry.getInstance().bind(url.toString(), ro, replacePrevious); // Can throw a ProActiveException
 
         HttpRemoteObjectImpl rro = new HttpRemoteObjectImpl(ro, url);
 
@@ -218,13 +218,13 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         // see PROACTIVE-419
     }
 
-    public InternalRemoteRemoteObject createRemoteObject(RemoteObject remoteObject, String name)
-            throws ProActiveException {
+    public InternalRemoteRemoteObject createRemoteObject(RemoteObject remoteObject, String name,
+            boolean rebind) throws ProActiveException {
         URI uri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), name, this.getProtocolId());
 
         // register the object on the register
         InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
-        RemoteRemoteObject rmo = register(irro, uri, true);
+        RemoteRemoteObject rmo = register(irro, uri, rebind);
         irro.setRemoteRemoteObject(rmo);
 
         return irro;

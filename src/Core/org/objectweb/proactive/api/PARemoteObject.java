@@ -122,7 +122,8 @@ public class PARemoteObject {
     @SuppressWarnings("unchecked")
     public static <T> T turnRemote(T object) throws ProActiveException {
         RemoteObjectExposer<T> roe = newRemoteObject(object.getClass().getName(), object);
-        RemoteRemoteObject rro = roe.createRemoteObject(TURN_REMOTE_PREFIX + counter.incrementAndGet());
+        RemoteRemoteObject rro = roe
+                .createRemoteObject(TURN_REMOTE_PREFIX + counter.incrementAndGet(), false);
         return (T) new RemoteObjectAdapter(rro).getObjectProxy();
     }
 }

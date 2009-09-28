@@ -58,7 +58,7 @@ public class FileSystemServerDeployer {
         fileSystemServer = new FileSystemServerImpl(rootPath);
         try {
             roe = PARemoteObject.newRemoteObject(FileSystemServer.class.getName(), this.fileSystemServer);
-            roe.createRemoteObject(name);
+            roe.createRemoteObject(name, false);
             url = roe.getURL();
         } catch (ProActiveException e) {
             // Ugly but createRemoteObject interface changed
@@ -108,6 +108,7 @@ public class FileSystemServerDeployer {
     public void terminate() throws ProActiveException {
         if (roe != null) {
             roe.unexportAll();
+            roe.unregisterAll();
             roe = null;
             fileSystemServer.stopServer();
             fileSystemServer = null;

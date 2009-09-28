@@ -912,10 +912,14 @@ public class PAActiveObject {
     }
 
     public static String registerByName(Object obj, String name) throws ProActiveException {
+        return registerByName(obj, name, true);
+    }
+
+    public static String registerByName(Object obj, String name, boolean rebind) throws ProActiveException {
         try {
             UniversalBody body = getRemoteBody(obj);
 
-            String url = body.registerByName(name);
+            String url = body.registerByName(name, rebind);
             body.setRegistered(true);
             if (PAActiveObject.logger.isInfoEnabled()) {
                 PAActiveObject.logger.info("Success at binding url " + url);

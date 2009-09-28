@@ -32,7 +32,9 @@
 package org.objectweb.proactive.core.remoteobject.http.util;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.objectweb.proactive.core.remoteobject.AlreadyBoundException;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -46,7 +48,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class HTTPRegistry {
     private static final String REGISTRY_NAME = "HTTP_REGISTRY";
     private static HTTPRegistry instance;
-    private static HashMap<String, InternalRemoteRemoteObject> rRemteObjectMap = new HashMap<String, InternalRemoteRemoteObject>();
+    private static ConcurrentHashMap<String, InternalRemoteRemoteObject> rRemteObjectMap = new ConcurrentHashMap<String, InternalRemoteRemoteObject>();
 
     private HTTPRegistry() {
     }
@@ -66,10 +68,21 @@ public class HTTPRegistry {
      * Binds a body  with a name
      * @param name  the name of the body
      * @param body the body to be binded
+     * @throws AlreadyBoundException 
      */
-    public void bind(String name, InternalRemoteRemoteObject body) {
-        ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).debug("registering remote object at " + name);
-        rRemteObjectMap.put(name, body);
+    public void bind(String name, InternalRemoteRemoteObject body, boolean rebind)
+            throws AlreadyBoundException {
+        if (rebind) {
+            rRemteObjectMap.put(name, body);
+        } else {
+            InternalRemoteRemoteObject r = rRemteObjectMap.putIfAbsent(name, body);
+            if (r != null) {
+                throw new AlreadyBoundException(name + " is already bound");
+            }
+        }
+
+        ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).debug("registed remote object at " + name);
+
     }
 
     /**
