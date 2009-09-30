@@ -144,6 +144,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new Class<?>[] {});
             internalRROMethods[2] = InternalRemoteRemoteObject.class.getDeclaredMethod("getURI",
                     new Class<?>[0]);
+
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -622,7 +623,7 @@ public class RemoteObjectAdapter implements RemoteObject {
     }
 
     // TODO: write a public method which does't throw exception.
-    protected URI getURI() throws ProActiveException {
+    public URI getURI() throws ProActiveException {
         try {
             MethodCall mc = MethodCall.getMethodCall(internalRROMethods[2], new Object[0],
                     new HashMap<TypeVariable<?>, Class<?>>());
