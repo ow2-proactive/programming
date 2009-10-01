@@ -1961,7 +1961,7 @@
 						An automatic continuation can occur either when sending a
 						request (request parameter is or contains a future) or
                   when sending a reply (the
-						result is or contains a future.
+						result is or contains a future).
 						Outgoing futures are registered in the
 						<literal>FuturePool</literal>
 						of the active object which sends the future. For instance,
@@ -1977,7 +1977,7 @@
 						
 						A thread
 						<literal>Thread</literal>
-						sending the message keeps in a static table (<literal>FuturePool.bodyDestination</literal>)
+						sending the message keeps in a static table (<literal>FuturePool.bodiesDestination</literal>)
 						 a reference to the destination body. Hence,
 						when a future
 						<literal>Future</literal>

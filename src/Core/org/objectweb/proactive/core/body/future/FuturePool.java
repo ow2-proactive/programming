@@ -68,7 +68,7 @@ public class FuturePool extends Object implements java.io.Serializable {
     protected boolean newState;
 
     // table of future and ACs
-    // this map is rebuilt on deserailisation of the object
+    // this map is rebuilt on deserialization of the object
     public transient FutureMap futures;
 
     // body corresponding to this futurePool
