@@ -42,6 +42,7 @@ import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.mop.PAObjectOutputStream;
 import org.objectweb.proactive.core.mop.SunMarshalOutputStream;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.MakeDeepCopy.ConversionMode;
 
 
@@ -57,6 +58,11 @@ public class ObjectToByteConverter {
     private static final String CLOSE = "close";
     private static final String FLUSH = "flush";
     private static final String WRITE_OBJECT = "writeObject";
+
+    static {
+        // resolve PROACTIVE-472
+        ProActiveRuntimeImpl.getProActiveRuntime();
+    }
 
     public static class MarshallStream {
 
