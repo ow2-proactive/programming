@@ -349,7 +349,7 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
                         .getOutputStream()));
                 try {
                     writer.write(content);
-                    return fo.getURI();
+                    return fo.getVirtualURI();
                 } finally {
                     writer.close();
                 }
@@ -432,19 +432,19 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
 
         public String getFileURI(String uri) throws MalformedURIException, SpaceNotFoundException,
                 NotConfiguredException, ConfigurationException, FileSystemException {
-            return PADataSpaces.resolveFile(uri).getURI();
+            return PADataSpaces.resolveFile(uri).getVirtualURI();
         }
 
         public String getParentURI(String uri) throws MalformedURIException, SpaceNotFoundException,
                 NotConfiguredException, ConfigurationException, FileSystemException {
-            return PADataSpaces.resolveFile(uri).getParent().getURI();
+            return PADataSpaces.resolveFile(uri).getParent().getVirtualURI();
         }
 
         public List<String> getChildrenURIs(String uri) throws MalformedURIException, SpaceNotFoundException,
                 NotConfiguredException, ConfigurationException, FileSystemException {
             final List<String> result = new ArrayList<String>();
             for (final DataSpacesFileObject child : PADataSpaces.resolveFile(uri).getChildren()) {
-                result.add(child.getURI());
+                result.add(child.getVirtualURI());
             }
             return result;
         }

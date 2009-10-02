@@ -61,7 +61,7 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         this(adaptee, fileObjectAdapter.dataSpaceURI, fileObjectAdapter.dataSpaceVFSFileName);
     }
 
-    public String getURI() {
+    public String getVirtualURI() {
         String relativePath;
         try {
             relativePath = dataSpaceVFSFileName.getRelativeName(adaptee.getName());
@@ -430,10 +430,11 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
         throw new FileSystemException("Operation unsupported: destination file system unknown");
     }
 
-    public String getURL() {
+    public String getRealURI() {
         try {
             return adaptee.getURL().toExternalForm();
         } catch (org.apache.commons.vfs.FileSystemException e) {
+            //null of unknown
             return null;
         }
     }
@@ -445,6 +446,6 @@ public class VFSFileObjectAdapter implements DataSpacesFileObject {
             return false;
 
         final DataSpacesFileObject file = (DataSpacesFileObject) candidate;
-        return this.getURI().equals(file.getURI());
+        return this.getVirtualURI().equals(file.getVirtualURI());
     }
 }

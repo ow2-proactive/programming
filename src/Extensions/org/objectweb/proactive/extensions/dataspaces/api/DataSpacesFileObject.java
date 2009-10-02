@@ -36,7 +36,16 @@ public interface DataSpacesFileObject {
      *
      * @return URI of a represented file without the trailing slash
      */
-    public abstract String getURI();
+    public abstract String getVirtualURI();
+
+    /**
+     * Returns the real file's URI in its current file system.
+     * This URI may not be understood by third application depending on the provider of the real path.<br />
+     * This method returns null if this URI is unknown.
+     *
+     * @return URI of a represented file without the trailing slash
+     */
+    public abstract String getRealURI();
 
     /**
      * Determines if this file exists.
@@ -281,13 +290,6 @@ public interface DataSpacesFileObject {
      * check if someone reads/write to this file
      */
     public abstract boolean isContentOpen();
-
-    /**
-     * Return the URL of this file. 
-     * 
-     * @return the URL of this file. 
-     */
-    public abstract String getURL();
 
     public abstract boolean equals(Object candidate);
 }

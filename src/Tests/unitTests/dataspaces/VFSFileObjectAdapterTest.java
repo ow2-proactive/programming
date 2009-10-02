@@ -97,12 +97,12 @@ public class VFSFileObjectAdapterTest {
         final FileObject rootAdaptee = rootFileObject;
         final DataSpacesFileObject fo = new VFSFileObjectAdapter(rootAdaptee, spaceURI, mountintPointFileName);
 
-        assertEquals(spaceURI.toString(), fo.getURI());
+        assertEquals(spaceURI.toString(), fo.getVirtualURI());
     }
 
     @Test
     public void testGetURI2() throws FileSystemException {
-        assertEquals(fileURI.toString(), dsFileObject.getURI());
+        assertEquals(fileURI.toString(), dsFileObject.getVirtualURI());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class VFSFileObjectAdapterTest {
 
     private void assertIsSomeDir(DataSpacesFileObject parent) throws FileSystemException {
         assertEquals(spaceURI.withActiveObjectId(activeObjectId).withUserPath("dir").toString(), parent
-                .getURI());
+                .getVirtualURI());
         final List<DataSpacesFileObject> desc = parent.getChildren();
         assertEquals(1, desc.size());
         assertTrue(desc.contains(dsFileObject));

@@ -109,7 +109,7 @@ public class ExampleProcessing implements Serializable {
             // finally, write the content and return files URI, valid for every AO
             writer.write(content);
 
-            return file.getURI();
+            return file.getVirtualURI();
         } catch (IOException e) {
             logger.error("Exception while IO operation", e);
             throw e;

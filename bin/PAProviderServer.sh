@@ -23,4 +23,5 @@ if [ "$command" = "start" ]; then
 	CLASS="org.objectweb.proactive.extensions.vfsprovider.console.PAProviderServerStarter"
 fi
 
+echo $JAVACMD "$CLASS" "$@"
 $JAVACMD "$CLASS" "$@"

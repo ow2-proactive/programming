@@ -205,7 +205,7 @@ public class VFSSpacesMountManagerImplTest {
         final DataSpacesFileObject child = fo.getChild(INPUT_FILE);
         assertNotNull(child);
         assertTrue(child.exists());
-        assertEquals(inputUri.toString(), fo.getURI());
+        assertEquals(inputUri.toString(), fo.getVirtualURI());
 
         // check if write access restrictions are computed correctly - this should be denied
         try {
@@ -239,7 +239,7 @@ public class VFSSpacesMountManagerImplTest {
 
     private void assertIsWorkingOutputSpaceDir(DataSpacesFileObject fo) throws FileSystemException {
         assertTrue(fo.exists());
-        assertEquals(outputUri.toString(), fo.getURI());
+        assertEquals(outputUri.toString(), fo.getVirtualURI());
         final DataSpacesFileObject child = fo.resolveFile("new_file");
 
         // check if write access restrictions are computed correctly - this should be allowed
@@ -257,7 +257,7 @@ public class VFSSpacesMountManagerImplTest {
         final InputStream io = fileObject.getContent().getInputStream();
         final BufferedReader reader = new BufferedReader(new InputStreamReader(io));
         assertEquals(INPUT_FILE_CONTENT, reader.readLine());
-        assertEquals(fileUri.toString(), fileObject.getURI());
+        assertEquals(fileUri.toString(), fileObject.getVirtualURI());
     }
 
     @Test
@@ -300,7 +300,7 @@ public class VFSSpacesMountManagerImplTest {
     private void assertIsWorkingScratchForAODir(final DataSpacesFileObject fo, final DataSpacesURI fileUri,
             final boolean owner) throws FileSystemException, IOException {
         assertTrue(fo.exists());
-        assertEquals(fileUri.toString(), fo.getURI());
+        assertEquals(fileUri.toString(), fo.getVirtualURI());
         final DataSpacesFileObject child = fo.resolveFile("new_file");
 
         if (owner) {

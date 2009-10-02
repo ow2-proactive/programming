@@ -48,7 +48,7 @@ public class NamingServiceListing {
     }
 
     private String prettyPrint(DataSpacesFileObject fo) throws FileSystemException {
-        final String uri = fo.getURI();
+        final String uri = fo.getVirtualURI();
         final long time = fo.getContent().getLastModifiedTime();
         final Calendar lastModified = Calendar.getInstance();
 
