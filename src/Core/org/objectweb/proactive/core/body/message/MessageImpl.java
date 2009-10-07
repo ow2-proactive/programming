@@ -34,6 +34,7 @@ package org.objectweb.proactive.core.body.message;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.ft.message.MessageInfo;
 import org.objectweb.proactive.core.body.ft.protocols.FTManager;
+import org.objectweb.proactive.core.body.tags.MessageTags;
 
 
 /**
@@ -74,6 +75,9 @@ public class MessageImpl implements Message, java.io.Serializable {
     /** ftmanager linked to this message */
     protected transient FTManager ftm;
 
+    // DSI
+    protected MessageTags tags;
+
     //
     // -- CONSTRUCTORS -----------------------------------------------
     //
@@ -87,13 +91,16 @@ public class MessageImpl implements Message, java.io.Serializable {
      * @param sequenceNumber the unique sequence number of this message
      * @param isOneWay <code>true</code> if oneWay
      * @param methodName the method name of the method call
+     * @param tags container of all tags for this message
      */
-    public MessageImpl(UniqueID sourceID, long sequenceNumber, boolean isOneWay, String methodName) {
+    public MessageImpl(UniqueID sourceID, long sequenceNumber, boolean isOneWay, String methodName,
+            MessageTags tags) {
         this.sourceID = sourceID;
         this.sequenceNumber = sequenceNumber;
         this.timeStamp = System.currentTimeMillis();
         this.isOneWay = isOneWay;
         this.methodName = methodName;
+        this.tags = tags;
     }
 
     //
@@ -159,5 +166,15 @@ public class MessageImpl implements Message, java.io.Serializable {
 
     public FTManager getFTManager() {
         return this.ftm;
+    }
+
+    public MessageTags getTags() {
+        if (this.tags == null) {
+            // Check if there is already a tag container attached on this message
+            // otherwise, create it.
+            // TODO : use the Metaobject Factory to create it instead of a direct creation
+            this.tags = new MessageTags();
+        }
+        return tags;
     }
 }

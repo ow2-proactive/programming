@@ -39,6 +39,7 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.message.MessageImpl;
 import org.objectweb.proactive.core.body.reply.Reply;
+import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -55,9 +56,9 @@ public class BodyRequest extends MessageImpl implements Request, java.io.Seriali
     // -- CONSTRUCTORS -----------------------------------------------
     //
 
-    protected BodyRequest(Body targetBody, String methodName, Class<?>[] paramClasses, Object[] params)
-            throws NoSuchMethodException {
-        super(null, 0, true, methodName);
+    protected BodyRequest(Body targetBody, MessageTags tags, String methodName, Class<?>[] paramClasses,
+            Object[] params) throws NoSuchMethodException {
+        super(null, 0, true, methodName, tags);
         if (paramClasses == null) {
             paramClasses = new Class<?>[params.length];
             for (int i = 0; i < params.length; i++) {
@@ -69,15 +70,28 @@ public class BodyRequest extends MessageImpl implements Request, java.io.Seriali
     }
 
     public BodyRequest(Body targetBody, String methodName, Class<?>[] paramClasses, Object[] params,
+            boolean isPriority, MessageTags tags) throws NoSuchMethodException {
+        this(targetBody, tags, methodName, paramClasses, params);
+        this.isPriority = isPriority;
+    }
+
+    public BodyRequest(Body targetBody, String methodName, Class<?>[] paramClasses, Object[] params,
             boolean isPriority) throws NoSuchMethodException {
-        this(targetBody, methodName, paramClasses, params);
+        this(targetBody, null, methodName, paramClasses, params);
         this.isPriority = isPriority;
     }
 
     //Non functional BodyRequests constructor
+    public BodyRequest(Body targetBody, MessageTags tags, String methodName, Class<?>[] paramClasses,
+            Object[] params, boolean isNFRequest, int nfRequestPriority) throws NoSuchMethodException {
+        this(targetBody, tags, methodName, paramClasses, params);
+        this.isNFRequest = isNFRequest;
+        this.nfRequestPriority = nfRequestPriority;
+    }
+
     public BodyRequest(Body targetBody, String methodName, Class<?>[] paramClasses, Object[] params,
             boolean isNFRequest, int nfRequestPriority) throws NoSuchMethodException {
-        this(targetBody, methodName, paramClasses, params);
+        this(targetBody, null, methodName, paramClasses, params);
         this.isNFRequest = isNFRequest;
         this.nfRequestPriority = nfRequestPriority;
     }

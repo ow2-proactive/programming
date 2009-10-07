@@ -82,6 +82,7 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
     public UniversalBodyRemoteObjectAdapter(UniversalBody u) {
         super(u);
         if (bodyLogger.isDebugEnabled()) {
+            //Thread.dumpStack();
             bodyLogger.debug(target.getClass());
         }
     }

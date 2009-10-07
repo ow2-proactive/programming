@@ -35,6 +35,7 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.ft.message.MessageInfo;
 import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.message.Message;
+import org.objectweb.proactive.core.body.tags.MessageTags;
 
 
 /**
@@ -169,10 +170,15 @@ public class MessageEvent extends ProActiveEvent implements Message, java.io.Ser
         return getMessage().getFTManager();
     }
 
+    public MessageTags getTags() {
+        return null;
+    }
+
     //
     // -- PRIVATE METHODS -----------------------------------------------
     //
     private final Message getMessage() {
         return (Message) getSource();
     }
+
 }

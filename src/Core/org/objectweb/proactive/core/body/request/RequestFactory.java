@@ -32,6 +32,7 @@
 package org.objectweb.proactive.core.body.request;
 
 import org.objectweb.proactive.core.body.UniversalBody;
+import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.mop.MethodCall;
 
 
@@ -53,5 +54,5 @@ public interface RequestFactory {
      * @return the newly created Request object.
      */
     public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
-            long sequenceID);
+            long sequenceID, MessageTags tags);
 }

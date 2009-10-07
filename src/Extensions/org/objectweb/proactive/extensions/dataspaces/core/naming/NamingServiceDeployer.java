@@ -64,6 +64,7 @@ public class NamingServiceDeployer {
     public void terminate() throws ProActiveException {
         if (roe != null) {
             roe.unexportAll();
+            roe.unregisterAll();
             roe = null;
         }
     }

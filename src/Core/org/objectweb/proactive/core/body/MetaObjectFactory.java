@@ -39,6 +39,7 @@ import org.objectweb.proactive.core.body.reply.ReplyReceiverFactory;
 import org.objectweb.proactive.core.body.request.RequestFactory;
 import org.objectweb.proactive.core.body.request.RequestQueueFactory;
 import org.objectweb.proactive.core.body.request.RequestReceiverFactory;
+import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
 import org.objectweb.proactive.core.component.identity.ProActiveComponentFactory;
 import org.objectweb.proactive.core.debug.stepbystep.DebuggerFactory;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManagerFactory;
@@ -149,6 +150,13 @@ public interface MetaObjectFactory {
     public void setProActiveSecurityManager(ProActiveSecurityManager psm);
 
     public Object clone() throws CloneNotSupportedException;
+
+    // REQUEST-TAGS
+    /**
+     * Create the RequestTags manager.
+     * @return the RequestTags manager
+     */
+    public MessageTagsFactory newRequestTagsFactory();
 
     // FAULT-TOLERANCE
 

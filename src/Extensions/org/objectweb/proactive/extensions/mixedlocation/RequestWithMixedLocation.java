@@ -39,6 +39,7 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.request.RequestImpl;
+import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -55,12 +56,17 @@ public class RequestWithMixedLocation extends RequestImpl implements java.io.Ser
     transient protected LocationServer server;
 
     public RequestWithMixedLocation(MethodCall methodCall, UniversalBody sender, boolean isOneWay,
-            long nextSequenceID, LocationServer server) {
+            long nextSequenceID, LocationServer server, MessageTags tags) {
         super(methodCall, sender, isOneWay, nextSequenceID);
         if (logger.isDebugEnabled()) {
             logger.debug("RequestWithMixedLocation.RequestWithMixedLocation " + ++counter);
         }
         this.server = server;
+    }
+
+    public RequestWithMixedLocation(MethodCall methodCall, UniversalBody sender, boolean isOneWay,
+            long nextSequenceID, LocationServer server) {
+        this(methodCall, sender, isOneWay, nextSequenceID, server, null);
     }
 
     @Override

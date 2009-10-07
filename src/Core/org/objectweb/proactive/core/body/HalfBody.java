@@ -46,7 +46,10 @@ import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFactory;
 import org.objectweb.proactive.core.body.request.RequestQueue;
+import org.objectweb.proactive.core.body.tags.MessageTags;
+import org.objectweb.proactive.core.body.tags.tag.DsiTag;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.gc.HalfBodies;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.node.Node;
@@ -259,8 +262,16 @@ public class HalfBody extends AbstractBody {
         public void sendRequest(MethodCall methodCall, Future future, UniversalBody destinationBody)
                 throws java.io.IOException, RenegotiateSessionException, CommunicationForbiddenException {
             long sequenceID = getNextSequenceID();
+
+            // Create DSI MessageTag
+            MessageTags tags = null;
+            if (PAProperties.PA_TAG_DSF.isTrue()) {
+                tags = messageTagsFactory.newMessageTags();
+                tags.addTag(new DsiTag(bodyID, sequenceID));
+            }
+
             Request request = this.internalRequestFactory.newRequest(methodCall, HalfBody.this,
-                    future == null, sequenceID);
+                    future == null, sequenceID, tags);
 
             // COMPONENTS : generate ComponentRequest for component messages
             if (methodCall.getComponentMetadata() != null) {

@@ -52,6 +52,10 @@
         <!-- Compressing tasks in the repository -->
         <prop key="proactive.masterworker.compresstasks" value="false" />
         
+		<!-- Message Tagging -->
+		<prop key="proactive.tagmemory.lease.max" value="60" />
+		<prop key="proactive.tagmemory.lease.period" value="21" />
+		<prop key="proactive.tag.dsf" value="false" />
 
 		<!-- Workaround to fix rmissh/unicore conflict -->
         <prop key="proactive.unicore.forkclient" value="true" />

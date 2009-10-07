@@ -482,6 +482,18 @@ public enum PAProperties {
     PA_DEBUG("proactive.debug", PAPropertiesType.BOOLEAN),
 
     /* ------------------------------------
+     *  MESSAGE TAGGING 
+     */
+    /** Set the max period for LocalMemoryTag lease time */
+    PA_MAX_MEMORY_TAG_LEASE("proactive.tagmemory.lease.max", PAPropertiesType.INTEGER),
+
+    /** Set the Period of the running thread for tag memory leasing check */
+    PA_MEMORY_TAG_LEASE_PERIOD("proactive.tagmemory.lease.period", PAPropertiesType.INTEGER),
+
+    /** Enable or disable the Distributed Service ID Tag */
+    PA_TAG_DSF("proactive.tag.dsf", PAPropertiesType.BOOLEAN),
+
+    /* ------------------------------------
      *  FILE TRANSFER
      */
 

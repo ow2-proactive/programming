@@ -71,6 +71,7 @@
                 <!ENTITY AnnotationProcessing SYSTEM "Annotations.xml">
                 <!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">
                 <!ENTITY MessageRouting SYSTEM "MessageRouting.xml">
+                <!ENTITY MessageTagging SYSTEM "MessageTagging.xml">
 	        <!ENTITY JMX SYSTEM "Jmx.xml">
          	 <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
 
@@ -147,6 +148,7 @@
   
   &faultTolerance;
   &Security;
+  &MessageTagging;
   &WSDoc;
   &AnnotationProcessing;
   &OSGi;
