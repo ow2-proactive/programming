@@ -33,6 +33,7 @@ package org.objectweb.proactive.extra.messagerouting.remoteobject;
 
 import java.net.InetAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
@@ -239,14 +240,24 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
     public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name,
             boolean rebind) throws ProActiveException {
 
-        URI uri = URI.create(this.getProtocolId() + "://" + this.agent.getAgentID() + "/" + name);
+        try {
+            // Must be a fixed path
+            if (!name.startsWith("/")) {
+                name = "/" + name;
+            }
 
-        // register the object on the register
-        InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
-        RemoteRemoteObject rmo = register(irro, uri, rebind);
-        irro.setRemoteRemoteObject(rmo);
+            URI uri = new URI(this.getProtocolId(), null, this.agent.getAgentID().toString(), this.getPort(),
+                name, null, null);
 
-        return irro;
+            // register the object on the register
+            InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
+            RemoteRemoteObject rmo = register(irro, uri, rebind);
+            irro.setRemoteRemoteObject(rmo);
+
+            return irro;
+        } catch (URISyntaxException e) {
+            throw new ProActiveException("Failed to create remote object " + name, e);
+        }
     }
 
     public Agent getAgent() {
