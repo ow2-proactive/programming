@@ -12,9 +12,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 
+import functionalTests.FunctionalTest;
+
 
 @Ignore
-public abstract class AbstractIOOperationsBase {
+public abstract class AbstractIOOperationsBase extends FunctionalTest {
 
     protected static final String TEST_FILENAME = "test.txt";
     protected static final String TEST_FILE_CONTENT = "qwerty";
