@@ -54,7 +54,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 public abstract class Message {
 
     /** Protocol version implemented by this class */
-    public static final int PROTOV1 = 1;
+    public static final int PROTOV1 = 2;
 
     /** All the message types supported by the ProActive message routing protocol */
     /* ORDER MATTERS ! ordinal() is used to attribute an id to each message type */
@@ -315,7 +315,8 @@ public abstract class Message {
         }
 
         if (this.protoId != PROTOV1) {
-            throw new IllegalArgumentException("Invalid message protocol ID: " + this.protoId);
+            throw new IllegalArgumentException("Invalid message protocol ID: " + this.protoId +
+                ". Should be " + PROTOV1);
         }
     }
 

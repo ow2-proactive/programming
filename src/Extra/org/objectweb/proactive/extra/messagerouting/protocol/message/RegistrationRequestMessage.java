@@ -33,6 +33,7 @@
 package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
 
 /** A {@link MessageType#REGISTRATION_REQUEST} message
@@ -69,6 +70,10 @@ public class RegistrationRequestMessage extends RegistrationMessage {
 
         if (this.getRouterID() < 0) {
             throw new IllegalStateException("Invalid router id value " + this.getRouterID());
+        }
+
+        if (this.getLength() != (Message.Field.getTotalOffset() + Field.getTotalOffset())) {
+            throw new IllegalStateException("Invalid message length: " + this.getLength());
         }
     }
 }

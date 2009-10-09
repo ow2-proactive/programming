@@ -64,11 +64,25 @@ public class ProcessorRegistrationRequest extends Processor {
         this.attachment = attachment;
         this.router = router;
 
-        Message tmpMsg = Message.constructMessage(messageAsByteBuffer.array(), 0);
-        this.message = (RegistrationRequestMessage) tmpMsg;
+        RegistrationRequestMessage message = null;
+        try {
+            Message tmpMsg = Message.constructMessage(messageAsByteBuffer.array(), 0);
+            message = (RegistrationRequestMessage) tmpMsg;
+        } catch (IllegalArgumentException e) {
+            logger.warn("Invalid connection reques. Client disconnected", e);
+            // Cannot contact the client yet, disconnect it !
+            // Since we disconnect the client, we must free the resources
+            this.attachment.dtor();
+        }
+
+        this.message = message;
     }
 
     public void process() {
+        if (this.message == null) {
+            return;
+        }
+
         AgentID agentId = this.message.getAgentID();
         if (agentId == null) {
             connection();
