@@ -216,8 +216,10 @@ public class ProActiveFileName extends GenericFileName {
         buffer.append("://");
         appendCredentials(buffer, true);
         buffer.append(getHostName());
-        buffer.append(':');
-        buffer.append(getPort());
+        if (getPort() != -1) {
+            buffer.append(':');
+            buffer.append(getPort());
+        }
         buffer.append(servicePath);
 
         return buffer.toString();
