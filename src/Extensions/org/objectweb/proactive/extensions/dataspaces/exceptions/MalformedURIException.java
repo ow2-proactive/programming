@@ -40,7 +40,6 @@ public class MalformedURIException extends DataSpacesException {
     /**
      *
      */
-    private static final long serialVersionUID = 3678271228087635694L;
 
     /**
      * Empty constructor with no information.

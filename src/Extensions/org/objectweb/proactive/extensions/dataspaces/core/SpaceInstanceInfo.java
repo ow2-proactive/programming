@@ -50,7 +50,6 @@ public final class SpaceInstanceInfo implements Serializable {
     /**
      *
      */
-    private static final long serialVersionUID = -7402632454423044845L;
 
     protected final String url;
 

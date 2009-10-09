@@ -356,7 +356,6 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         /**
          * 
          */
-        private static final long serialVersionUID = 3003545576343285983L;
 
         private static String readAndCloseFile(final DataSpacesFileObject fo) throws FileSystemException,
                 IOException {

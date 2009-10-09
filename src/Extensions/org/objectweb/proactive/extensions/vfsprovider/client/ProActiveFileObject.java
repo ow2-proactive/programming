@@ -68,7 +68,6 @@ public class ProActiveFileObject extends AbstractFileObject {
     private static Log log = LogFactory.getLog(ProActiveFileObject.class);
 
     private static final FileInfo IMAGINARY_FILE_INFO = new FileInfo() {
-        private static final long serialVersionUID = 7304036230538561807L;
 
         public long getLastModifiedTime() {
             return 0;

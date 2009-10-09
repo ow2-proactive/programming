@@ -39,7 +39,6 @@ public class SpaceNotFoundException extends DataSpacesException {
     /**
      *
      */
-    private static final long serialVersionUID = -127241878737940387L;
 
     public SpaceNotFoundException(String code) {
         super(code);

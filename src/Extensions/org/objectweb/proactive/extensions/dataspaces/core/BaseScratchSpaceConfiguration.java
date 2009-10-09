@@ -54,7 +54,6 @@ public class BaseScratchSpaceConfiguration implements Serializable {
     /**
      *
      */
-    private static final long serialVersionUID = 3878304428956402856L;
 
     public static final String HOSTNAME_VARIABLE_KEYWORD = "#{hostname}";
 

@@ -40,7 +40,6 @@ public class MOCKNodeInformation implements NodeInformation {
     /**
      *
      */
-    private static final long serialVersionUID = 1213394569845089015L;
 
     final private String name;
 

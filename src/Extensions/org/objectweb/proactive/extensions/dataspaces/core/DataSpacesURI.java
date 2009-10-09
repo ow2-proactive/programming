@@ -100,7 +100,6 @@ public final class DataSpacesURI implements Serializable, Comparable<DataSpacesU
     /**
      *
      */
-    private static final long serialVersionUID = 7148704434729348732L;
 
     private static final Pattern PATTERN = Pattern
             .compile("^vfs:///(\\d+)(/(((input|output)(/(([^/]+)(/(.+)?)?)?)?)|scratch(/(([^/]+)(/(([^/]+)(/(([^/]+)(/(.+)?)?)?)?)?)?)?)?)?)?$");
