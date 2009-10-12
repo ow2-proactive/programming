@@ -1,33 +1,25 @@
 /*
- * ################################################################
- *
- * ProActive: The Java(TM) library for Parallel, Distributed,
- *            Concurrent computing with Security and Mobility
- *
- * Copyright (C) 1997-2009 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@ow2.org
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version
- * 2 of the License, or any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * CUP PARSER GENERATOR COPYRIGHT NOTICE, LICENSE AND DISCLAIMER.
+ * 
+ * Copyright 1996 by Scott Hudson, Frank Flannery, C. Scott Ananian
+ * 
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose and without fee is hereby granted,
+ * provided that the above copyright notice appear in all copies and that
+ * both the copyright notice and this permission notice and warranty
+ * disclaimer appear in supporting documentation, and that the names of
+ * the authors or their employers not be used in advertising or publicity 
+ * pertaining to distribution of the software without specific, written 
+ * prior permission.
+ * 
+ * The authors and their employers disclaim all warranties with regard to 
+ * this software, including all implied warranties of merchantability and 
+ * fitness.  In no event shall the authors or their employers be liable 
+ * for any special, indirect or consequential damages or any damages 
+ * whatsoever resulting from loss of use, data or profits, whether in an 
+ * action of contract, negligence or other tortious action, arising out of 
+ * or in connection with the use or performance of this software.
+ * package trywithcatch.java_cup.runtime;
  */
 package trywithcatch.java_cup.runtime;
 
