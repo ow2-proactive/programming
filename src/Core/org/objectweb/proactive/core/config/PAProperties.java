@@ -591,7 +591,14 @@ public enum PAProperties {
     /**
      * on unix system, define the shell that the GCM deployment invokes when creating new runtimes.
      */
-    PA_GCMD_UNIX_SHELL("proactive.gcmd.unix.shell", PAPropertiesType.STRING);
+    PA_GCMD_UNIX_SHELL("proactive.gcmd.unix.shell", PAPropertiesType.STRING),
+
+    /**
+     * Web services framework
+     *
+     * Suppported values are: axis2, cxf
+     */
+    PA_WEBSERVICES_FRAMEWORK("proactive.webservices.framework", PAPropertiesType.STRING);
 
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
     public static final String TRUE = "true";

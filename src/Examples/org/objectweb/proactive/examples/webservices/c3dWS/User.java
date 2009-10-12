@@ -31,20 +31,40 @@
  */
 package org.objectweb.proactive.examples.webservices.c3dWS;
 
+/** Methods which are to be implemented by users.
+ * Represents which services are available for Objects unrelated with User GUIs. */
 public interface User {
-    public String getName();
 
-    public Object getObject();
+    /** shows a String as a log */
+    public void log(String s_message);
 
-    public void setPixels(int[] newPix, Interval inter);
+    /** Shows a String as a message to this user*/
+    public void message(String s_message);
 
-    public void showMessage(String s);
+    /**
+     * Informs the user that a new user has joined the party!!
+     * @param  nUser The new user's ID
+     * @param sName The new user's name
+     */
+    public void informNewUser(int nUser, String sName);
 
-    public void showUserMessage(String s);
+    /**
+     * Informs the user that another user left
+     * @param nUser The id of the old user
+     */
+    public void informUserLeft(String sName);
 
-    public void dialogMessage(String subject, String message);
+    /**
+     * Display an interval of newly calculated pixels
+     * @param newpix        The pixels as int array
+     * @param interval        The interval
+     */
+    public void setPixels(Image2D image);
 
-    public void informNewUser(int i, String name);
-
-    public void informUserLeft(String name);
+    /**
+     * Reflect a change on the dispatcher host.
+     * @param os the Name of the OS supporting the dispatcher
+     * @param machine the name of the physical machine hosting the dispatcher
+     */
+    public void setDispatcherMachine(String machine, String os);
 }

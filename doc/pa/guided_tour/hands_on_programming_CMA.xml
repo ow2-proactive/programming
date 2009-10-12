@@ -911,12 +911,10 @@
   		<para>
 		In this example, we will show how to expose an active object as a web service.
   		We will use the same monitoring agent as in the previous examples and 
-		expose it as a web service through the Tomcat application server. To do this,
-		we have to use the generate <literal>proactive.war</literal> file using the
-      command <literal>build proActiveWar</literal> into the <literal>compile/</literal> directory.
-  		ProActive automatically generates a description of the web service 
-			when the active object is exposed and also create the webservice WDSL file.
-			
+		expose it as a web service. You can expose it either to the local Jetty server or to
+      a Tomcat server (or an other application server). For the latter, you first have to generate
+      the <literal>proactive.war</literal> archive, using the command <literal>build proActiveWar[Axis2|CXF]</literal> into
+      the <literal>compile</literal> directory and to put it in your application server.
 			
   		
   		</para>
@@ -924,7 +922,10 @@
   			
   			<itemizedlist><info><title xml:id="NewClasses_2">New Classes</title></info>
   				
+				<listitem><para><literal>org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory</literal> - used to get a WebServicesFactory depending on the framework (axis2 or cxf)</para></listitem>
+				<listitem><para><literal>org.objectweb.proactive.extensions.webservices.WebServicesFactory</literal> - used to get a WebServices corresponding to a specified url</para></listitem>
   				<listitem><para><literal>org.objectweb.proactive.extensions.webservices.WebServices</literal> - used to transform the active object into a web service</para></listitem>
+				<listitem><para><literal>org.objectweb.proactive.extensions.webservices.exceptions.WebServicesException</literal> - used to report web service exceptions</para></listitem>
   			</itemizedlist>
   			
   			<itemizedlist><info><title xml:id="Previouslyusedclasses_6">Previously used classes</title></info>
@@ -938,14 +939,15 @@
   		</section>
   		<section xml:id="ArchitectureandSkeletonCode_2"><info><title>Architecture and Skeleton Code</title></info>
   			
-  			<para>In this example we extend <literal>CMAgentInitialized</literal>
+			<para>In this example, we extend <literal>CMAgentInitialized</literal>
 			and create a <literal>CMAgentWebService</literal> that we expose through the main method. </para>
   			
 			<para>Since the usage of the webservice is independent of the underlying implementation, we give
-  			here only a Java example of how to access the webservice.</para>
+			here only a Java example of how to access the webservice. This client enables in particular to call either axis2 or cxf services.
+         However, you can simply use your favorite browser.</para>
   			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservice_cma_client_full.snip"/></textobject></programlisting>
       		
-		   <para>In the <literal>CMAgentWebService</literal>, we only need to write one line of code to use the
+		   <para>In the <literal>CMAgentWebService</literal>, we need to write 3 lines of code to use the
       	active object as an webservice.</para>
       
          <programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservice_cma_skeleton.snip"/></textobject></programlisting>		
@@ -960,25 +962,24 @@
          </para>
 
   			<orderedlist>
-  			<listitem><para>Deploy the agent as a web service</para> </listitem>
+			<listitem><para>Get a WebServicesFactory using a static method of the AbstractWebServicesFactory class</para> </listitem>
+			<listitem><para>Get a WebServices using the WebServicesFactory instance you have just got</para></listitem>
+			<listitem><para>Expose your active object using this WebServices instance</para></listitem>
   			</orderedlist>
 
          <para>
             Once filled in, go to the <literal>tutorials/compile</literal> directory and type <literal>build[.bat] cmagent.webservice</literal> to compile your code.
-            Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>webservice.[sh|bat]</literal> script
-            to execute your code.
+            Then, after a successful compilation, go to the <literal>scripts/CMAgent</literal> directory and launch the <literal>exposeCMA.[sh|bat] [url] [axis2|cxf]</literal> script
+            to execute your code. The url is only needed when you want to deploy the agent on an external application server.
          </para>
 
   		</section>
   		<section xml:id="SolutionAndCode_1"><info><title>Solution And Code</title></info>
   			
 
-			<para>There are several parameters that are needed for creating the webservice.
-			The first parameter passed is the active object, the second one is the server URL, 
-			the third one is the name we want for the webservice, and the fourth is an
-			array of <literal>String</literal> with the list of methods we want to expose. </para>
   			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/ws_call.snip"/></textobject></programlisting>
 			<para>
+				Refer to <xref linkend="WSDoc"/> to get more information about web services exposition.
 			</para>
   		</section>
   	</section>

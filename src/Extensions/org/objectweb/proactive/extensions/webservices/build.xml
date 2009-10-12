@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Web Servicesfor ProActive" basedir="../../../../../../../compile/">
-	
+<project name="Web Services for ProActive" basedir="../../../../../../../compile/">
+
 	<import file="${basedir}/build.xml" />
+
 	<target name="compile" depends="core,-compile"/>
-	
+
 	<target name="-compile">
-		<compile_extension module="webservices" />
+
+		<compile_extension module="webservices">
+			<additionalclasspath>
+				<path refid="project.with.ws.classpath"/>
+			</additionalclasspath>
+		</compile_extension>
+
+		<subant target="compile-axis2" inheritall="true" failonerror="true">
+			<fileset dir="${axis2.dir}" includes="build-axis2.xml" />
+		</subant>
+
 	</target>
 </project>

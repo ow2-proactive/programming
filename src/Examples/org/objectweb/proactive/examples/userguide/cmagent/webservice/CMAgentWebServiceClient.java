@@ -32,15 +32,10 @@
  */
 package org.objectweb.proactive.examples.userguide.cmagent.webservice;
 
-import java.rmi.RemoteException;
-
-import javax.xml.namespace.QName;
-import javax.xml.rpc.Call;
-import javax.xml.rpc.Service;
-import javax.xml.rpc.ServiceException;
-import javax.xml.rpc.ServiceFactory;
-
-import org.objectweb.proactive.extensions.webservices.WSConstants;
+import org.objectweb.proactive.examples.userguide.cmagent.simple.State;
+import org.objectweb.proactive.extensions.webservices.client.AbstractClientFactory;
+import org.objectweb.proactive.extensions.webservices.client.Client;
+import org.objectweb.proactive.extensions.webservices.client.ClientFactory;
 
 
 /**
@@ -49,40 +44,37 @@ import org.objectweb.proactive.extensions.webservices.WSConstants;
  */
 //@snippet-start webservice_cma_client_full
 public class CMAgentWebServiceClient {
+
     public static void main(String[] args) {
-        String address;
-        if (args.length == 0) {
-            address = "http://localhost:8080";
-        } else {
-            address = args[0];
-        }
-        if (!address.startsWith("http://")) {
-            address = "http://" + address;
-        }
 
-        address += WSConstants.SERV_RPC_ROUTER;
-        String namespaceURI = "cmAgentService";
-        String serviceName = "cmAgentService";
-        String portName = "getLastRequestServeTime";
-
-        ServiceFactory factory;
         try {
-            factory = ServiceFactory.newInstance();
+            String url = "";
+            String wsFrameWork = "";
+            if (args.length == 1) {
+                url = "http://localhost:8080/";
+                wsFrameWork = args[0];
+            } else if (args.length == 2) {
+                url = args[0];
+                wsFrameWork = args[1];
+            } else {
+                System.out.println("Wrong number of arguments:");
+                System.out.println("Usage: java CMAgentWebServiceClient [url] wsFrameWork");
+                System.out.println("where wsFrameWork is either 'axis2' or 'cxf'");
+                return;
+            }
 
-            Service service = factory.createService(new QName(serviceName));
+            ClientFactory cf = AbstractClientFactory.getClientFactory(wsFrameWork);
+            Client client = cf.getClient(url, "cmAgentService", CMAgentService.class);
 
-            Call call = service.createCall(new QName(portName));
+            Object[] response = client.call("getCurrentState", null, State.class);
 
-            call.setTargetEndpointAddress(address);
+            System.out.println("Current state is:\n" + ((State) response[0]).toString());
 
-            call.setOperationName(new QName(namespaceURI, portName));
+            response = client.call("waitLastRequestServeTime", null, long.class);
 
-            Object[] inParams = new Object[0];
-            String name = ((String) call.invoke(inParams));
-            System.out.println(name);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
+            System.out.println("Last request serve time = " + response[0]);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

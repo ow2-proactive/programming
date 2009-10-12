@@ -31,9 +31,27 @@
  */
 package org.objectweb.proactive.examples.webservices.c3dWS.prim;
 
+/**
+ * Representation of the intersection between a Ray and a Primitive.
+ * Would be set to null if Ray does not hit Primitive.
+ */
 public class Isect implements java.io.Serializable {
+
+    /**
+     * Remember, the ray has two vecs that define it : P and D.
+     * This t is the value so that P + tD = point of collision which Primitive
+     */
     public double t;
-    public int enter;
+
+    /**
+     * The Primitive which was checked for intersection
+     */
     public Primitive prim;
-    public Surface surf;
+
+    /**
+     * Is this a ray that comes frmo the inside of the Primitive, or from the outside?
+     * enter = true means from outside -->  inside
+     * HERM, sort of... In fact, I'm not sure what this is...
+     */
+    public boolean enter;
 }

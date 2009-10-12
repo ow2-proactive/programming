@@ -442,17 +442,17 @@
   <section xml:id="ExportActiveObjectsasWebservices_76"><info><title>Export Active Objects as Web services</title></info>
     
 
-    <para>ProActive allows active objects exportation as web services. The
-    service is deployed onto a Jakarta Tomcat web server with a given URL. It
+    <para>ProActive allows active objects or components exportation as web services. The
+    service is deployed on the local Jetty server or on another application server with a given URL. It
     is identified by its urn, an unique id of the service. It is also possible
     to choose the exported methods of the object.</para>
 
     <para>The WSDL file matching the service will be accesible at
-    <code> http://localhost:8080/servlet/wsdl?id=a </code> for a service which name is 'a'
+    <code> http://localhost:8080/servlet/wsdl? </code> for a service which name is 'a'
     and which id deployed on a web server which location is
     http://localhost:8080.</para>
 
-		<programlisting language="java"><textobject><textdata fileref="code_snippets/reference/export_to_web_service.txt"/></textobject></programlisting>
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_2.snip"/></textobject></programlisting>
   </section>
 
   <section xml:id="Deployingafaulttolerantapplication_76"><info><title>Deploying a fault-tolerant application</title></info>

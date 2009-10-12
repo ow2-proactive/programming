@@ -31,99 +31,110 @@
  */
 package org.objectweb.proactive.extensions.webservices;
 
-import java.io.File;
-import java.io.IOException;
+import java.lang.reflect.Method;
 
-import org.apache.soap.server.DOMFaultListener;
-import org.apache.soap.server.http.MessageRouterServlet;
-import org.apache.soap.server.http.RPCRouterServlet;
-import org.mortbay.jetty.servlet.ServletHolder;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.httpserver.HTTPServer;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.webservices.soap.ProActiveDeployer;
-import org.objectweb.proactive.extensions.webservices.soap.WsdlServlet;
+import org.objectweb.proactive.extensions.webservices.exceptions.WebServicesException;
 
 
-@PublicAPI
-public final class WebServices {
-
-    static {
-        HTTPServer httpServer = HTTPServer.get();
-
-        RPCRouterServlet rpcRouterServlet = new RPCRouterServlet();
-        ServletHolder rpcRouterServletHolder = new ServletHolder(rpcRouterServlet);
-        rpcRouterServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
-        try {
-            File deployedServices = null;
-            deployedServices = File.createTempFile("DeployedServices", "ds");
-            deployedServices.deleteOnExit();
-            rpcRouterServletHolder.setInitParameter("ServicesStore", deployedServices.toString());
-        } catch (IOException e) {
-            ProActiveLogger.getLogger(Loggers.WEB_SERVICES).warn(
-                    "Failed to create a temporary Service Store, " + System.getProperty("user.dir") +
-                        "/DeployedService.ds will be used", e);
-        }
-        httpServer.registerServlet(rpcRouterServletHolder, WSConstants.SERV_RPC_ROUTER);
-
-        MessageRouterServlet messageRouterServlet = new MessageRouterServlet();
-        ServletHolder messaggeRouterServletHolder = new ServletHolder(messageRouterServlet);
-        messaggeRouterServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
-        httpServer.registerServlet(messaggeRouterServletHolder, WSConstants.SERV_MESSAGE_ROUTER);
-
-        WsdlServlet wsdlServlet = new WsdlServlet();
-        ServletHolder wsdlServletHolder = new ServletHolder(wsdlServlet);
-        wsdlServletHolder.setInitParameter("faultListener", DOMFaultListener.class.getName());
-        httpServer.registerServlet(wsdlServletHolder, WSConstants.SERV_WSDL);
-
-        ProActiveLogger.getLogger(Loggers.WEB_SERVICES).info("Deployed SOAP Web Services servlets");
-
-    }
+/**
+ * @author The ProActive Team
+ *
+ */
+public interface WebServices {
 
     /**
-     * Expose an active object as a web service
+     * url getter
+     *
+     * @return the WebServices url
+     */
+    public String getUrl();
+
+    //@snippet-start WebServices_Methods
+    /**
+     * Expose an active object as a web service with the methods specified in <code>methods</code>
+     *
      * @param o The object to expose as a web service
-     * @param url The url of the host where the object will be seployed  (typically http://localhost:8080)
-     * @param urn The name of the object
-     * @param methods The methods that will be exposed as web services functionnalities
+     * @param urn The name of the service
+     * @param methods The methods that will be exposed as web services functionalities
+     *                   If null, then all methods will be exposed
+     * @throws WebServicesException
      */
-    public static void exposeAsWebService(Object o, String url, String urn, String[] methods) {
-        ProActiveDeployer.deploy(urn, url, o, methods);
-    }
+    public void exposeAsWebService(Object o, String urn, String[] methods) throws WebServicesException;
 
     /**
-     * Delete the service on a web server
-     * @param urn The name of the object
-     * @param url The url of the web server
+     * Expose an active object as a web service with the methods specified in <code>methods</code>
+     *
+     * @param o The object to expose as a web service
+     * @param urn The name of the service
+     * @param methods The methods that will be exposed as web services functionalities
+     *                   If null, then all methods will be exposed
+     * @throws WebServicesException
      */
-    public static void unExposeAsWebService(String urn, String url) {
-        ProActiveDeployer.undeploy(urn, url);
-    }
+    public void exposeAsWebService(Object o, String urn, Method[] methods) throws WebServicesException;
 
     /**
-     * Expose a component as webservice. Each server and controller
-     * interface of the component will be accessible by  the urn
-     * [componentName]_[interfaceName]in order to identify the component an
-     * interface belongs to.
-     * All the interfaces public methods will be exposed.
+     * Expose an active object with all its methods as a web service
+     *
+     * @param o The object to expose as a web service
+     * @param urn The name of the service
+     * @throws WebServicesException
+     */
+    public void exposeAsWebService(Object o, String urn) throws WebServicesException;
+
+    /**
+     * Undeploy a service
+     *
+     * @param urn The name of the service
+     * @throws WebServicesException
+     */
+    public void unExposeAsWebService(String urn) throws WebServicesException;
+
+    /**
+     * Expose a component as a web service. Each server interface of the component
+     * will be accessible by  the urn [componentName]_[interfaceName].
+     * Only the interfaces public methods of the specified interfaces in
+     * <code>interfaceNames</code> will be exposed.
+     *
+     * @param component The component owning the interfaces that will be deployed as web services.
+     * @param componentName Name of the component
+     * @param interfaceNames Names of the interfaces we want to deploy.
+      *                           If null, then all the interfaces will be deployed
+     * @throws WebServicesException
+     */
+    public void exposeComponentAsWebService(Component component, String componentName, String[] interfaceNames)
+            throws WebServicesException;
+
+    /**
+     * Expose a component as web service. Each server interface of the component
+     * will be accessible by  the urn [componentName]_[interfaceName].
+     * All the interfaces public methods of all interfaces will be exposed.
+     *
+     * @param component The component owning the interfaces that will be deployed as web services.
+     * @param componentName Name of the component
+     * @throws WebServicesException
+     */
+    public void exposeComponentAsWebService(Component component, String componentName)
+            throws WebServicesException;
+
+    /**
+     * Undeploy all the client interfaces of a component deployed on a web server.
+     *
+     * @param component  The component owning the services interfaces
+     * @param componentName The name of the component
+     * @throws WebServicesException
+     */
+    public void unExposeComponentAsWebService(Component component, String componentName)
+            throws WebServicesException;
+
+    /**
+     * Undeploy specified interfaces of a component deployed on a web server
      *
      * @param componentName The name of the component
-     * @param url  The web server url  where to deploy the service - typically "http://localhost:8080"
-     * @param component The component owning the interfaces that will be deployed as web services.
+     * @param interfaceNames Interfaces to be undeployed
+     * @throws WebServicesException
      */
-    public static void exposeComponentAsWebService(Component component, String url, String componentName) {
-        ProActiveDeployer.deployComponent(componentName, url, component);
-    }
-
-    /**
-     * Undeploy component interfaces on a web server
-     * @param componentName The name of the component
-     * @param url The url of the web server
-     * @param component  The component owning the services interfaces
-     */
-    public static void unExposeComponentAsWebService(String componentName, String url, Component component) {
-        ProActiveDeployer.undeployComponent(componentName, url, component);
-    }
+    public void unExposeComponentAsWebService(String componentName, String[] interfaceNames)
+            throws WebServicesException;
+    //@snippet-end WebServices_Methods
 }

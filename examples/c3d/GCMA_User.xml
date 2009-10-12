@@ -20,6 +20,7 @@
 					<pathElement base="proactive" relpath="dist/lib/ibis-1.4.jar"/>
 					<pathElement base="proactive" relpath="dist/lib/ibis-connect-1.0.jar"/>
 					<pathElement base="proactive" relpath="dist/lib/ibis-util-1.0.jar"/>
+					<pathElement base="proactive" relpath="src/Extensions/org/objectweb/proactive/extensions/webservices/cxf/lib/cxf-manifest.jar"/>
 				</applicationClasspath>
 			</configuration>
 

@@ -29,8 +29,8 @@ fi
 # Set up the classpath
 #
 
-CLASSPATH=$CLASSPATH:$TUTORIAL_HOME/classes
 CLASSPATH=$CLASSPATH:$TUTORIAL_HOME/dist/lib/ProActive.jar
+CLASSPATH=$CLASSPATH:$TUTORIAL_HOME/classes
 
 export CLASSPATH
 

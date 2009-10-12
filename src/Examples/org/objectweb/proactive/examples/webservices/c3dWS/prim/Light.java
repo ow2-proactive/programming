@@ -34,6 +34,9 @@ package org.objectweb.proactive.examples.webservices.c3dWS.prim;
 import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
 
 
+/**
+ * Represents a punctual light source
+ */
 public class Light implements java.io.Serializable {
     public Vec pos;
     public double brightness;

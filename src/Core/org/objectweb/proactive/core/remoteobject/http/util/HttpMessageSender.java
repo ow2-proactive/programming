@@ -45,6 +45,7 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.remoteobject.http.HTTPTransportServlet;
 import org.objectweb.proactive.core.remoteobject.http.util.exceptions.HTTPRemoteException;
 import org.objectweb.proactive.core.util.URIBuilder;
@@ -102,7 +103,12 @@ public class HttpMessageSender {
             }
             int lastIndex = url.lastIndexOf(":");
 
-            URL u = new URL(url + HTTPTransportServlet.NS);
+            URL u;
+            if (!HTTPServer.SERVER_CONTEXT.equals("/")) {
+                u = new URL(url + HTTPServer.SERVER_CONTEXT + HTTPTransportServlet.NS);
+            } else {
+                u = new URL(url + HTTPTransportServlet.NS);
+            }
 
             //connection to the specified url
             HttpURLConnection connection = (HttpURLConnection) u.openConnection();

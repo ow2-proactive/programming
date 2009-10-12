@@ -7,8 +7,8 @@
 	<property name="base.dir"           value="${basedir}/.." />
 	<property name="lib.dir"            value="${base.dir}/lib" />
 	<property name="src.dir"            value="${base.dir}/src" />
-	<property name="scripts.dir"         value="${base.dir}/scripts" />
-	<property name="compile.dir"         value="${base.dir}/compile" />
+	<property name="scripts.dir"        value="${base.dir}/scripts" />
+	<property name="compile.dir"        value="${base.dir}/compile" />
 	<property name="dev.dir"            value="${base.dir}/dev" />
 	<property name="descriptors.dir"    value="${base.dir}/descriptors" />
 	<property name="classes.dir"        value="${base.dir}/classes" />
@@ -34,18 +34,18 @@
 
 	<property name="cl.proactive.dir"   value="${classes.dir}/Core" />
 	<property name="cl.extensions.dir"  value="${classes.dir}/Extensions" />
-	<property name="cl.extra.dir"  		value="${classes.dir}/Extra" />
+	<property name="cl.extra.dir"       value="${classes.dir}/Extra" />
 	<property name="cl.examples.dir"    value="${classes.dir}/Examples" />
 	<property name="cl.test.dir"        value="${classes.dir}/Tests" />
 	<property name="cl.utils.dir"       value="${classes.dir}/Utils" />
 	<property name="cl.benchmarks.dir"  value="${classes.dir}/Benchmarks" />
 	
-	<property name="proactive.path" 	value="org/objectweb/proactive" />
+	<property name="proactive.path"      value="org/objectweb/proactive" />
 	<property name="proactive.core.path" value="${proactive.path}/core" />
-	<property name="proactive.ext.path" value="${proactive.path}/ext" />
-	<property name="extensions.path"    value="${proactive.path}/extensions"/>
-	<property name="examples.path"    value="${proactive.path}/examples"/>
-	<property name="extra.path"    		value="${proactive.path}/extra"/>
+	<property name="proactive.ext.path"  value="${proactive.path}/ext" />
+	<property name="extensions.path"     value="${proactive.path}/extensions"/>
+	<property name="examples.path"       value="${proactive.path}/examples"/>
+	<property name="extra.path"          value="${proactive.path}/extra"/>
 
 	<!-- Javac properties -->
 	<property name="debug" value="on" />
@@ -65,9 +65,9 @@
 	<property name="manifest.connector.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/osgi/connector/Manifest/"/>
 	<property name="manifest.example.management.dir" value="${src.examples.dir}/org/objectweb/proactive/examples/jmx/remote/management/osgi/Manifest/"/>
 	<property name="example.management.classes.dir" value="${classes.dir}/Examples/org/objectweb/proactive/examples/jmx/remote/management/"/>	
-	
+
 	<property name="stubgenerator.class" value="org.objectweb.proactive.ext.util.StubGenerator" />
-	
+
 	<!-- junit properties -->
 	<property name="junit.showoutput" value="false"/>
 
@@ -75,10 +75,45 @@
 	<property name="performanceTestClass" value="performanceTests.simple.PerformanceTest" />
 	<property name="config.dir" value="${cl.proactive.dir}/${proactive.core.path}/config" />
 
-   <!-- Tutorial properties -->
-   <property name="tutorials.dir"		value="${base.dir}/tutorials" />
-   <property name="tutorials.src"		value="${tutorials.dir}/src" />
-   <property name="tutorials.dist"       value="${tutorials.dir}/dist" />
+	<!-- Tutorial properties -->
+	<property name="tutorials.dir"		value="${base.dir}/tutorials" />
+	<property name="tutorials.src"		value="${tutorials.dir}/src" />
+	<property name="tutorials.dist"       value="${tutorials.dir}/dist" />
+
+
+	<!-- Common web service properties -->
+	<property name="webservices.dir" value="${src.extensions.dir}/org/objectweb/proactive/extensions/webservices" />
+	<property name="webservices.class.dir" value="${cl.extensions.dir}/${extensions.path}/webservices" />
+	<property name="ws.common.lib.dir" value="${lib.dir}/ws-common" />
+	<path id="ws.common.libs">
+		<fileset dir="${ws.common.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+
+	<!-- Axis2 properties -->
+	<property name="axis2.dir" value="${webservices.dir}/axis2" />
+	<property name="axis2.lib.dir" value="${lib.dir}/axis2" />
+	<property name="axis2.servicedeployer.class.dir" value="${webservices.class.dir}/axis2/servicedeployer" />
+	<property name="axis2.class.dir" value="${webservices.class.dir}/axis2" />
+	<property name="services.path" value="repository/services" />
+	<property name="temp.class.dir" value="${axis2.class.dir}/temp" />
+	<path id="axis2.libs">
+		<fileset dir="${axis2.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- CXF properties -->
+	<property name="cxf.dir" value="${webservices.dir}/cxf" />
+	<property name="cxf.lib.dir" value="${lib.dir}/cxf" />
+	<path id="cxf.libs">
+		<fileset dir="${cxf.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
 
 	<!-- ================================================================ -->
 	<!--                   define the different classpaths                -->
@@ -91,14 +126,14 @@
 		<!-- XXX ${dev.dir} is not included in the source release ! -->
 		<pathelement location="${base.dir}/compile/lib/junit-4.3.jar"/>
 	</path>
-	
+
 	<path id="deploy.classpath">
 		<fileset dir="${deploy.lib.dir}">
 			<include name="**/*.jar"/>
 			<exclude name="**/ProActive_tests.jar"/>
 		</fileset>
 	</path>
-	
+
 	<path id="test.classpath">
 		<path refid="deploy.classpath"/>
 		<pathelement location="${base.dir}/compile/lib/junit-4.3.jar"/>
@@ -112,14 +147,21 @@
 		<pathelement location="${cl.extra.dir}" />
 		<pathelement location="${cl.utils.dir}" />
 		<pathelement location="${cl.test.dir}"/>
-		<path refid="compile.libs"/>
+		<path refid="compile.libs" />
+	</path>
+
+	<path id="project.with.ws.classpath">
+		<path refid="project.classpath" />
+		<path refid="ws.common.libs" />
+		<path refid="axis2.libs" />
+		<path refid="cxf.libs" />
 	</path>
 
 	<macrodef name="compile_extra">
 		<attribute name="module" />
 		<sequential>
-			<compile_module 
-				module="@{module}" 
+			<compile_module
+				module="@{module}"
 				sourcepath="${src.extra.dir}"
 				package="${extra.path}"
 				dest="${cl.extra.dir}">
@@ -132,12 +174,17 @@
 
 	<macrodef name="compile_extension">
 		<attribute name="module" />
+		<element name="additionalclasspath" optional="yes" />
 		<sequential>
-			<compile_module 
-				module="@{module}" 
+			<compile_module
+				module="@{module}"
 				sourcepath="${src.extensions.dir}"
 				package="${extensions.path}"
-				dest="${cl.extensions.dir}"/>
+				dest="${cl.extensions.dir}">
+				<appendclasspath>
+					<additionalclasspath />
+				</appendclasspath>
+			</compile_module>
 		</sequential>
 	</macrodef>
 
@@ -164,21 +211,21 @@
 			<echo>  [i] dest: @{dest}</echo>
 			<echo>  [i] cp:   ${proactive.jar}</echo>
 
-			<javac 
-			 srcdir="@{sourcepath}" 
-			 destdir="@{dest}" 
-			 deprecation="on" 
-			 source="${source}" 
-			 debug="${debug}"
-			 failonerror="true">
+			<javac
+				srcdir="@{sourcepath}"
+				destdir="@{dest}"
+				deprecation="on"
+				source="${source}"
+				debug="${debug}"
+				failonerror="true">
 				<!-- <compilerarg value="-Xlint:unchecked"/> -->
 				<classpath>
 					<path refid="compile.libs"/>
 					<pathelement location="${proactive.jar}"/>
-				
+
 					<!-- XXX temporary workaround to allow functional tests to be moved in extra -->
 					<pathelement location="${cl.test.dir}"/>
-					
+
 					<appendclasspath />
 				</classpath>
 				<include name="@{package}/@{module}/**/*.java" />

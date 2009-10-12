@@ -41,12 +41,11 @@ import java.awt.event.ActionListener;
 
 
 public class MsgDialog extends Dialog implements ActionListener {
-    Button bOk = new Button("OK");
+    private Button bOk = new Button("OK");
 
     public MsgDialog(Frame frame, String title, String content) {
         super(frame, title, false);
         add("North", new Label(content, Label.CENTER));
-
         Panel panel = new Panel();
 
         panel.add(bOk);

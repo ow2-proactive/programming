@@ -160,7 +160,7 @@ public interface Loggers {
     public static final String EXCEPTIONS_ONE_WAY = EXCEPTIONS + ".one_way";
     public static final String EXCEPTIONS_SEND_REPLY = EXCEPTIONS + ".send_reply";
 
-    public static final String WEB_SERVICES = CORE + "webservices";
+    public static final String WEB_SERVICES = CORE + ".webservices";
 
     public static final String UTILS = CORE + ".utils";
     public static final String SLEEPER = UTILS + ".sleeper";

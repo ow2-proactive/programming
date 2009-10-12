@@ -35,77 +35,110 @@ import org.objectweb.proactive.examples.webservices.c3dWS.geom.Ray;
 import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
 
 
+/**
+ * 3D representation of a Sphere, in space.
+ */
 public class Sphere extends Primitive implements java.io.Serializable {
-    Vec c;
-    double r;
-    double r2;
-    Vec v; // temporary vecs used to minimize the memory load
-    Vec b; // temporary vecs used to minimize the memory load
+    private Vec c;
+    private double r;
+    private double r2;
+    private Vec tmp; // temporary vecs used to minimize the memory load
+    private static double mindiff = 1e-6;
+
+    public Sphere() {
+    }
 
     public Sphere(Vec center, double radius) {
         c = center;
         r = radius;
         r2 = r * r;
-        v = new Vec();
-        b = new Vec();
+        tmp = new Vec();
     }
 
     /**
-     * Modified intersection method - creates _much_ less Vecs
+     * Modified intersection method - creates _many_ less Vecs
      * @author The ProActive Team
      * @author The ProActive Team
      */
     @Override
-    public Isect intersect(Ray ry) {
-        double b;
-        double disc;
-        double t;
+    public Isect intersect(Ray ray) {
         Isect ip;
-        v.sub2(c, ry.P);
-        b = Vec.dot(v, ry.D);
-        disc = (b * b) - Vec.dot(v, v) + r2;
-
+        tmp.sub2(c, ray.P);
+        double dot = Vec.dot(tmp, ray.D);
+        double disc = (dot * dot) - Vec.dot(tmp, tmp) + r2;
         if (disc < 0.0) {
             return null;
         }
-
         disc = Math.sqrt(disc);
-        t = ((b - disc) < 1e-6) ? (b + disc) : (b - disc);
-
-        if (t < 1e-6) {
+        double t = ((dot - disc) < mindiff) ? (dot + disc) : (dot - disc);
+        if (t < mindiff) {
             return null;
         }
-
         ip = new Isect();
         ip.t = t;
-        ip.enter = (Vec.dot(v, v) > (r2 + 1e-6)) ? 1 : 0;
+        ip.enter = (Vec.dot(tmp, tmp) > (r2 + mindiff));
         ip.prim = this;
-        ip.surf = surf;
-
         return ip;
     }
 
+    /**
+     * Normal (outwards) vector at point P of the sphere.
+     */
     @Override
     public Vec normal(Vec p) {
-        Vec r;
-        r = Vec.sub(p, c);
-        r.normalize();
-
-        return r;
+        Vec normal = Vec.sub(p, c);
+        normal.normalize();
+        return normal;
     }
 
     @Override
     public String toString() {
-        return "Sphere {" + c.toString() + "," + r + "}";
+        return "Sphere {" + c.toString() + ", radius " + r + "}";
     }
 
-    @Override
     public Vec getCenter() {
         return c;
     }
 
-    @Override
+    public double getRadius() {
+        return r;
+    }
+
     public void setCenter(Vec c) {
         this.c = c;
+    }
+
+    /**
+     * Rotates the Sphere.
+     * @see org.objectweb.proactive.examples.c3d.prim.Primitive#rotate(org.objectweb.proactive.examples.c3d.geom.Vec)
+     */
+    @Override
+    public void rotate(Vec vec) {
+        double phi;
+        double l;
+
+        // the X axis rotation
+        if (vec.getX() != 0) {
+            phi = Math.atan2(c.getZ(), c.getY());
+            l = Math.sqrt((c.getY() * c.getY()) + (c.getZ() * c.getZ()));
+            c.setY(l * Math.cos(phi + vec.getX()));
+            c.setZ(l * Math.sin(phi + vec.getX()));
+        }
+
+        // the Y axis rotation
+        if (vec.getY() != 0) {
+            phi = Math.atan2(c.getZ(), c.getX());
+            l = Math.sqrt((c.getX() * c.getX()) + (c.getZ() * c.getZ()));
+            c.setX(l * Math.cos(phi + vec.getY()));
+            c.setZ(l * Math.sin(phi + vec.getY()));
+        }
+
+        // the Z axis rotation
+        if (vec.getZ() != 0) {
+            phi = Math.atan2(c.getX(), c.getY());
+            l = Math.sqrt((c.getY() * c.getY()) + (c.getX() * c.getX()));
+            c.setY(l * Math.cos(phi + vec.getZ()));
+            c.setX(l * Math.sin(phi + vec.getZ()));
+        }
     }
 }

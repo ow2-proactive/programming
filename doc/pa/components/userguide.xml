@@ -1945,50 +1945,46 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					The main difference with active objects is that, when exposing a component as web service, all the methods of each server interfaces are
-					automatically exposed as a web service (with active objects you can expose just one method at once).
-					Thus, the way to expose a component as web services is quite simple and can be done in a single call method by using the
-					<emphasis role="bold">org.objectweb.proactive.extensions.webservices.WebServices</emphasis> API.
-					After having defined the component and having started it as usual, the following method must be called:
-					<programlisting language="java">WebService.exposeComponentAsWebService(Component component, String url, String componentName);</programlisting>
+					automatically exposed as a web service (with active objects you can expose just one method at once). However, you can choose the
+					interfaces you want to deploy.
+					After having defined the component and having started it as usual, the following lines enable you to expose a component:
+					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_2.snip"/></textobject></programlisting>
 					where:
 					<itemizedlist>
 	    	  			<listitem>
     	    				<para>
-        						<emphasis role="bold">component</emphasis> is the instance of the component whose interfaces will be exposed as web services.
+							<emphasis role="bold">a</emphasis> is the instance of the component whose interfaces will be exposed as web services.
        					</para>
-   				   </listitem>
-	    	  			<listitem>
-							<para>
-   		     					<emphasis role="bold">url</emphasis> is the url of the web server; typically http://localhost:8080
-       						</para>
-   						</listitem>
-	    	  			<listitem>
-    		    			<para>
-        						<emphasis role="bold">componentName</emphasis> is the name of the component. Each service available in this way will get a name
-        						composed by the component name followed by the interface name: <emphasis>componentName_interfaceName</emphasis>.
-       						</para>
-   						</listitem>
-       				</itemizedlist>
+                    </listitem>
+				<listitem>
+					<para>
+						<emphasis role="bold">myComponent</emphasis> is the name you want to give to the first part of the service name. Each service available in this way will get a name
+						composed by the component name followed by the interface name: <emphasis>componentName_interfaceName</emphasis>.
+						</para>
+					</listitem>
+					</itemizedlist>
 				</para>
 
 				<para>
 					Likewise, to undeploy a component, just call the method:
-					<programlisting language="java"> WebServices.unExposeAsWebService ( String componentName , String url,  Component component);</programlisting>
+					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_3.snip"/></textobject></programlisting>
 					where:
 					<itemizedlist>
-	      				<listitem>
-    	    				<para>
-        						<emphasis role="bold">componentName</emphasis> is the name of the component.
-       						</para>
-    		    			<para>
-        						<emphasis role="bold">url</emphasis> is the url of the web server; typically http://localhost:8080
-       						</para>
-    	    				<para>
-        						<emphasis role="bold">component</emphasis> is the instance of the component.
-       						</para>
-   						</listitem>
-       				</itemizedlist>
-				</para>
+						<listitem>
+							<para>
+								<emphasis role="bold">a</emphasis> is the instance of the component.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">myComponent</emphasis> is the name of the component as given before.
+							</para>
+						</listitem>
+					</itemizedlist>
+                </para>
+
+					<para>The methods expose and unexpose a component with all its non controller server interfaces. If you want to choose the interfaces to
+					expose or unexpose, please refer to <xref linkend="WSDoc"/>.</para>
 
 				<para>
 					Once the component interfaces are deployed, you can access it via any web service enabled client.
@@ -2003,15 +1999,15 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				</para>
 
 				<para>
-					First, below is the only one server interface of the component:
+					First, below are the two server interfaces of the component:
 					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/helloworlditfcomponent.snip"/></textobject></programlisting>
+					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/goodbyeworlditfcomponent.snip"/></textobject></programlisting>
 				</para>
 
 				<para>
-					The implementation class of the component which also contains the main method to create the component, start it and deploy it:
+					The implementation class of the component which also contains the main method to create the component, start it and deploy it, is the following one:
 					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/helloworldcomponent.snip"/></textobject></programlisting>
-					The component <literal>comp</literal> has been deployed as a web service on the web server located at <literal>"http://localhost:8080"</literal>.
-					The accessible service method is <literal>server_hello-world_helloWorld</literal>.
+					The component <literal>comp</literal> has been deployed as a web service on the web server located at <literal>url</literal>.
 				</para>
 
 				<para>
