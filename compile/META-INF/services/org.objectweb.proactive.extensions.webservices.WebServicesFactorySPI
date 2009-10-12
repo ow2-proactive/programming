@@ -1,0 +1,2 @@
+org.objectweb.proactive.extensions.webservices.axis2.Axis2WebServicesFactorySPI
+org.objectweb.proactive.extensions.webservices.cxf.CXFWebServicesFactorySPI
