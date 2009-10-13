@@ -564,6 +564,92 @@
 			</para>
 		</section>
 
+		<section xml:id="Webservicebindings_53"><info><title>Web service bindings</title>
+			</info>
+
+			<para>
+				ProActive also gives the possibility to bind a functional
+				client interface of a component to a web service.
+			</para>
+			<para>
+				For	instance, this feature is useful to enable
+				communication between SCA (Service Component Architecture)
+				components and GCM/ProActive components by using the web
+				service communication protocol. Effectively, communication
+				from SCA component to GCM/ProActive component can be done
+				thanks to the ability of exposing GCM server interface as
+				web service (See
+				<xref linkend="Exporting_components_as_Web_Services"/>)
+				and communication from GCM/ProActive component to SCA
+				component can be done by using this feature.
+			</para>
+			<para>
+				The only requirement for binding a client interface to a
+				web service is that the web service must be known in
+				advance in order to ensure the compatibility between
+				the client interface and the web service to bind to.
+				In other words, the Java interface representing the
+				client interface must have the same method signatures
+				than those exposed by the web service.
+			</para>
+			<para>
+				It is the same principle to bind a client interface to a
+				web service with both the ADL and the API: the web
+				service binding can be done just by replacing the server
+				interface name by the URL of the web service (not the WSDL
+				address) in the call to the method
+				<literal>
+					bindFc
+				</literal>
+				with the API or in the tag
+				<literal>
+					binding
+				</literal>
+				with the ADL.
+			</para>
+			<para>
+				By default, the Axis2 (http://ws.apache.org/axis2/) API is
+				used to call the web service, but it is also possible to
+				specify another library. If so, the URL has to be followed,
+				in parenthesis, by the ID or the full name of the class to
+				use to call the web service. Thus, ProActive offers two ways
+				to call web services: using Axis2 API or using CXF API
+				(http://cxf.apache.org/). Their ID are defined in the class
+				<literal>
+					org.objectweb.proactive.core.component.webservices.WSInfo
+				</literal>.
+				Otherwise, the full	class name has to be the one of a class
+				implementing the
+				<literal>
+					org.objectweb.proactive.core.component.webservices.ProActiveWSCaller
+				</literal>
+				interface:
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/proactivewscaller.snip"/></textobject></programlisting>
+			</para>
+			<para>
+				For instance, the replacing string of the server interface
+				name may be:
+				<itemizedlist>
+					<listitem>
+						<para>
+							"http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.Axis2WSCaller)"
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							which is equivalent to: "http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.WSInfo.AXIS2WSCALLER_ID)"
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							which is also equivalent to: "http://localhost:8080/proactive/services/Server_HelloWorld"
+							since Axis2 is used by default.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</section>
+
 		<section xml:id="Prioritycontroller_53"><info><title>Priority controller</title>
 			</info>
 

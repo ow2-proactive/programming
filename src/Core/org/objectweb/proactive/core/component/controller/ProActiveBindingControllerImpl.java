@@ -62,12 +62,16 @@ import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
 import org.objectweb.proactive.core.component.gen.GatherItfAdapterProxy;
 import org.objectweb.proactive.core.component.gen.OutputInterceptorClassGenerator;
+import org.objectweb.proactive.core.component.gen.WSProxyClassGenerator;
 import org.objectweb.proactive.core.component.identity.ProActiveComponent;
 import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
 import org.objectweb.proactive.core.component.type.ProActiveInterfaceTypeImpl;
+import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
 import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
+import org.objectweb.proactive.core.component.type.WSComponent;
+import org.objectweb.proactive.core.component.webservices.WSInfo;
 
 
 /**
@@ -270,25 +274,64 @@ public class ProActiveBindingControllerImpl extends AbstractProActiveController 
         // get value of (eventual) future before casting
         serverItf = PAFuture.getFutureValue(serverItf);
 
-        ProActiveInterface sItf = (ProActiveInterface) serverItf;
+        ProActiveInterface sItf = null;
+        if (serverItf instanceof ProActiveInterface) {
+            sItf = (ProActiveInterface) serverItf;
 
-        //        if (controllerLogger.isDebugEnabled()) {
-        //            String serverComponentName;
-        //
-        //            if (PAGroup.isGroup(serverItf)) {
-        //                serverComponentName = "a group of components ";
-        //            } else {
-        //                serverComponentName = Fractal.getNameController((sItf).getFcItfOwner()).getFcName();
-        //            }
-        //
-        //            controllerLogger.debug("binding " + Fractal.getNameController(getFcItfOwner()).getFcName() + "." +
-        //                clientItfName + " to " + serverComponentName + "." + (sItf).getFcItfName());
-        //        }
+            //        if (controllerLogger.isDebugEnabled()) {
+            //            String serverComponentName;
+            //
+            //            if (PAGroup.isGroup(serverItf)) {
+            //                serverComponentName = "a group of components ";
+            //            } else {
+            //                serverComponentName = Fractal.getNameController((sItf).getFcItfOwner()).getFcName();
+            //            }
+            //
+            //            controllerLogger.debug("binding " + Fractal.getNameController(getFcItfOwner()).getFcName() + "." +
+            //                clientItfName + " to " + serverComponentName + "." + (sItf).getFcItfName());
+            //        }
 
-        checkBindability(clientItfName, (Interface) serverItf);
+            checkBindability(clientItfName, (Interface) serverItf);
 
-        ((ItfStubObject) serverItf).setSenderItfID(new ItfID(clientItfName,
-            ((ProActiveComponent) getFcItfOwner()).getID()));
+            ((ItfStubObject) serverItf).setSenderItfID(new ItfID(clientItfName,
+                ((ProActiveComponent) getFcItfOwner()).getID()));
+        }
+        // binding on a web service
+        else if (serverItf instanceof WSInfo) {
+            ProActiveInterfaceType serverItfType = null;
+            try {
+                serverItfType = new ProActiveInterfaceTypeImpl(clientItfName, ((ComponentType) owner
+                        .getFcType()).getFcInterfaceType(clientItfName).getFcItfSignature(),
+                    TypeFactory.SERVER, TypeFactory.MANDATORY, ProActiveTypeFactory.SINGLETON_CARDINALITY);
+            } catch (InstantiationException e) {
+                // should never append
+                controllerLogger.error("could not generate ProActive interface type for " + clientItfName +
+                    ": " + e.getMessage());
+                IllegalBindingException ibe = new IllegalBindingException(
+                    "could not generate ProActive interface type for " + clientItfName + ": " +
+                        e.getMessage());
+                ibe.initCause(e);
+                throw ibe;
+            }
+            try {
+                // generate a proxy implementing the Java client interface and calling the web service
+                sItf = WSProxyClassGenerator.instance().generateFunctionalInterface(
+                        serverItfType.getFcItfName(), new WSComponent((WSInfo) serverItf), serverItfType);
+            } catch (InterfaceGenerationFailedException e) {
+                controllerLogger.error("could not generate web service proxy for client interface " +
+                    clientItfName + ": " + e.getMessage());
+                IllegalBindingException ibe = new IllegalBindingException(
+                    "could not generate web service proxy for client interface " + clientItfName + ": " +
+                        e.getMessage());
+                ibe.initCause(e);
+                throw ibe;
+            }
+        }
+        // binding on a web service
+        else if (serverItf instanceof String) {
+            bindFc(clientItfName, new WSInfo((String) serverItf));
+            return;
+        }
 
         // if output interceptors are defined
         // TODO_M check with groups : interception is here done at the beginning

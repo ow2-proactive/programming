@@ -173,7 +173,7 @@
 
 
 		<javac srcdir="${src.proactive.dir}" destdir="${cl.proactive.dir}" deprecation="on" source="${source}" debug="${debug}">
-			<classpath refid="project.classpath" />
+			<classpath refid="project.with.ws.classpath" />
 			<include name="**/*.java" />
 
 			<!-- XXX, MicroTimer should be in core or not used by the core-->

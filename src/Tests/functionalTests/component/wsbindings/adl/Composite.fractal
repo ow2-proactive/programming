@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+
+<definition name="functionalTests.component.wsbindings.adl.Composite">
+  <interface signature="functionalTests.component.wsbindings.Runner" role="server" name="Runner"/>
+  <interface signature="functionalTests.component.wsbindings.Services" role="client" name="Services"/>
+  <!-- <interface signature="functionalTests.component.wsbindings.ServiceMulticast" role="client" cardinality="multicast" name="ServiceMulticastReal"/> -->
+
+  <component definition="functionalTests.component.wsbindings.adl.Client" name="client"/>
+
+  <binding client="this.Runner" server="client.Runner"/>
+  <binding client="client.Services" server="this.Services"/>
+  <!--  <binding client="client.ServiceMulticastFalse" server="this.ServiceMulticastReal"/> -->
+  <binding client="this.Services" server="http://localhost:8080/proactive/services/Server0_Services"/>
+  <!--  <binding client="this.ServiceMulticastReal" server="http://localhost:8080/proactive/services/Server0_Service"/>
+  <binding client="this.ServiceMulticastReal" server="http://localhost:8080/proactive/services/Server1_Service"/>
+  <binding client="this.ServiceMulticastReal" server="http://localhost:8080/proactive/services/Server2_Service"/> -->
+
+  <controller desc="composite"/>
+</definition>
