@@ -57,20 +57,20 @@ public class Axis2WSCaller implements ProActiveWSCaller {
             rsc = new RPCServiceClient();
             rsc.getOptions().setTo(new EndpointReference(wsUrl));
         } catch (AxisFault e) {
-            logger.error("[Axis2] Cannot create RPCServiceClient with the given WSDL address: " + wsUrl);
+            logger.error("[Axis2] Cannot create RPCServiceClient with the given address: " + wsUrl);
         }
     }
 
-    public Object callWS(String methodName, Object[] args, Class<?> returnTypes) {
+    public Object callWS(String methodName, Object[] args, Class<?> returnType) {
         if (rsc != null) {
             try {
                 rsc.getOptions().setAction(methodName);
                 QName qName = new QName(methodName);
-                if (returnTypes == null) {
+                if (returnType == null) {
                     rsc.invokeRobust(qName, args);
                     return null;
                 } else {
-                    return rsc.invokeBlocking(qName, args, new Class<?>[] { returnTypes })[0];
+                    return rsc.invokeBlocking(qName, args, new Class<?>[] { returnType })[0];
                 }
             } catch (AxisFault af) {
                 logger.error(

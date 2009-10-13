@@ -56,12 +56,11 @@ public class CXFWSCaller implements ProActiveWSCaller {
         client = factory.create();
     }
 
-    public Object callWS(String methodName, Object[] args, Class<?> returnTypes) {
+    public Object callWS(String methodName, Object[] args, Class<?> returnType) {
         if (client != null) {
             try {
                 Object[] results = client.invoke(methodName, args);
-                client.destroy();
-                if (returnTypes == null) {
+                if (returnType == null) {
                     return null;
                 } else {
                     return results[0];

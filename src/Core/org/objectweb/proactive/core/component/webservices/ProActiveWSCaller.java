@@ -62,12 +62,12 @@ public interface ProActiveWSCaller {
      * Method to call a web service.
      *
      * @param methodName Name of the service to call.
-     * @param args Arguments of the web service.
-     * @param returnTypes Array of classes of the return types of the web service. Null if the
-     * web service does not return any result.
-     * @return Results of the call to the web service if there is, null otherwise or if the
+     * @param args Parameters of the web service.
+     * @param returnType Class of the return type of the web service. Null if the web
+     * service does not return any result.
+     * @return Result of the call to the web service if there is, null otherwise or if the
      * invocation failed.
      */
-    public Object callWS(String methodName, Object[] args, Class<?> returnTypes);
+    public Object callWS(String methodName, Object[] args, Class<?> returnType);
 }
 //@snippet-end proactivewscaller
