@@ -1,0 +1,1038 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS/DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<book><article>
+  <articleinfo>
+    <title>ProActive deployment on virtual infrastructure</title>
+
+    <author>
+      <firstname>Jean-Michel</firstname>
+      <surname>Guillaume</surname>
+      <affiliation>
+        <address><email>jean-michel.guillaume@activeeon.com</email></address>
+      </affiliation>
+    </author>
+<!--
+    <copyright>
+      <year>2009</year>
+      <holder>ProActive-ActiveEon</holder>
+    </copyright>
+ -->
+    <abstract>
+      <para>
+	This article describes how you can deploy ProActive applications on
+	different kind of virtual infrastructures. It gives you the main requirements
+	you have to ensure to have some virtual environment functional and how to
+	setup ProActive inside those one to be able to deploy.
+      </para>
+    </abstract>
+  </articleinfo>
+
+	<!--													-->
+	<!--			Begin of software introduction			-->
+	<!--													-->
+
+  <sect1>
+    <title>Different kind of Hypervisors</title>
+    <para>
+	In this section is described all supported hypervisors including a brief
+	introduction about how they work, some special features, and how to make
+	them work. We can notice different kind of hypervisors to answer different
+	kind of needs.
+    </para>
+	<sect2>
+		<title>"Type one" or "bare metal" hypervisors</title>
+		<para>
+			This type of hypervisor is named "bare metal" because it doesn't need any
+			operating system beneath to work. Depending on what kind of product you
+			are using, you will benefit different drivers for different hardware and,
+			maybe, won't be able to get the software functional because of unsupported
+			hardware ( see a description at: <ulink url="http://en.wikipedia.org/wiki/Hypervisor">
+			http://en.wikipedia.org/wiki/Hypervisor</ulink> ). The most often,
+			you'll need a <quote>DOM 0</quote> virtual machine, which is in fact the operating
+			system that stands for you workspace, to manage your virtual infrastructure. The
+			virtual machine monitor (VMM) itself is a small footprint software (about 50Mo) which
+			will only check and schedule underlying hardware access. To set up your virtual environment
+			you need an extra software ( xm for XenOss, xe for XenServer, vmx for ESX ... ) which is useable
+			directly from your DOM 0. This type of hypervisor is, in general, more efficient and faster than
+			others hypervisors as it implements its own hardware access policy at the lowest possible level.
+			Thus, you completly avoid overhead induced by an underlying operating system.
+			Here are some well-known hypervisors:
+			<ulink url="http://community.citrix.com/cdn/xs">XenServer</ulink>,
+			<ulink url="http://www.microsoft.com/hyper-v-server/en/us/default.aspx">Hyper-V</ulink>,
+			<ulink url="http://www.sun.com/software/products/xvmserver/index.xml">xVM Server</ulink>,
+			<ulink url="http://www.vmware.com/products/vi/esx/">VMware ESX/ESXi</ulink>,
+			<ulink url="http://www.xen.org/">Xen OSS</ulink>
+		</para>
+	</sect2>
+		<sect2>
+		<title>"Type two" or "hosted" hypervisors</title>
+		<para>
+			This type of hypervisor is running on top of an operating system and is seen as a common process so
+			does any virtual machine container. We can thus measure the host operating system overhead that treat
+			the guest operating system as a child process whereas it was more a "brother" in the case of type one
+			hypervisor. Furthermore, every kind of virtualization process cannot be used in hosted virtualization
+			for some reasons ( browse
+			<ulink url="http://en.wikipedia.org/wiki/Platform_virtualization">http://en.wikipedia.org/wiki/Platform_virtualization</ulink>
+			for more details). Here are the main type two hypervisors:
+			<ulink url="http://www.virtualbox.org/">Virtualbox</ulink>,
+			<ulink url="http://www.vmware.com/products/server/">VMware Server</ulink>,
+			<ulink url="http://www.qumranet.com/">KVM</ulink>
+		</para>
+		</sect2>
+	</sect1>
+	<sect1>
+		<title>Supported Hypervisors</title>
+		<para>
+		The GCM deployment currently supports xVM Virtualbox non OSE, VMware ESX/ESXi, VMware Server, XenServer
+		for ProActive deployment plus Libvirt ( see <ulink url="http://libvirt.org/">http://libvirt.org/</ulink> ) for Executable deployment.
+	</para>
+	<sect2>
+		<title>xVM Virtualbox</title>
+		      <para>
+				<emphasis>
+					<phrase>This hypervisor is supported for ProActive Deployment.</phrase>
+				</emphasis>
+			  </para>
+			  <para>
+			Virtualbox is a type two hypervisor created by Innotek and since February 2008 property of Sun Microsystems.
+			This virtualization software is currently the only one running on Linux, Windows, MacOS and Solaris and is a
+			precursor of some virtualization techniques such as seamless virtualization and 3D hardware virtualization.
+				At the moment, only Virtualbox non open source edition is shipped with vboxwebsrv application which is compulsory
+				to use virtualization features at deployment time. Be sure to install a version of Virtualbox that comes with
+				that add-on. The install process is really straight forward and the software easy to use, see
+				<ulink url="http://www.virtualbox.org/">the project	web site for more information</ulink>.
+		      </para>
+		      <para>
+			For ProActive deployment, we highly recommend to use Virtualbox with NAT network where all the network trafic
+			is emulated by the VMM at the software level ( no impact on the company network when installing/deploying )
+			and ProActive Message Routing Protocol ( PAMR ).
+			You can use other network settings but we don't ensure the deployment will work.
+			You also have to start vboxwebsrv. You can use personal settings, the only one with which you have to be careful is
+			the session time out. We encourage a session time out of 20s. We also notices that some vboxwebsrv releases
+			had some troubles with authentication. If it is your case, just submit the following command:
+				<programlisting>
+					VBoxManage setproperty websrvauthlibrary null
+				</programlisting>
+				and then restart the vboxwebsrv program.
+		      </para>
+		 </sect2>
+		 <sect2>
+			<title>VMware ESX</title>
+			<para>
+				<emphasis>
+					<phrase>This hypervisor is supported for ProActive Deployment.</phrase>
+				</emphasis>
+			</para>
+		    <para>
+			ESX is currently the killer software at VMware and is declined in different version depending on what kind
+			of support you subscribed. However you can use the last ESXi which is pretty akin to ESX except that it is
+			free and comes with less features and hardware support. Both ESX and ESXi can be purchased in
+			<quote>installable and embedded</quote> versions. The embedded release is distributed by OEM vendors
+			with their servers solution hence you don't have to bother with it. You can see it as a firmware
+			settled on the hardware flash memory. It only contains the drivers it
+			needs to work and no more. You can't imagine make it run on an other platform than the one it is made for.
+			The installable release comes with more hardware support and can be installed on a common hard disk or
+			directly boot from a USB key. See <ulink url="http://www.vm-help.com/">http://www.vm-help.com/</ulink>
+			and user guide for more information about that.
+			Finally, once you have your ESX installed and working, you don't need anything else to be able to
+			use GCM to deploy.
+		    </para>
+		    <para>
+			Once the hypervisor is installed, you have several choices to give your virtual machines access the network.
+			With legacy ESX releases, one virtual machine ( really small ) was dedicated to routing network and thus
+			provided a NAT network. Note that that technique is used with several other type one hypervisors.
+			With latest ESX releases you can use virtual switch and other features to minimize the impact on your company network.
+		    </para>
+		    </sect2>
+		    <sect2>
+			<title>VMware Server and Workstation</title>
+			<para>
+					<emphasis>
+						<phrase>This hypervisor is supported for ProActive Deployment.</phrase>
+					</emphasis>
+			    </para>
+			<para>
+				VMware Server ( formerly GSX ) is a major free software for server virtualization as type two hypervisor at VMware's.
+				Depending on what release of VMware Server you are running you'll have to focus on different things.
+			</para>
+			<sect3>
+				<title>VMware Server &lt; 2</title>
+				<para>
+					The VMware Server releases prior to 2 are shipped with a rich client ( VMware Server Console ) to be
+					able to connect to every compatible server.This means that you need two different softwares to
+					manage your virtual environment. If you want to use that product: First, create a new user belonging to
+					the vmware group, this user will be the administrator for your system. Download the software from
+					<ulink url="http://www.vmware.com/support/server/doc/releasenotes_server.html">VMware web site</ulink>
+					and install it. The install is straight forward, the only thing you have to focus on is setup. Prior to
+					launch your VMware Server for the first time you have to run a configuration script, <quote>vmware-config</quote>,
+					that will fix several useful information. Among those one, the previously created user for administration,
+					directory for virtual machine disks storage, directory for documentation, libraries etc... and the port for
+					remote authentication. Set this port and remember its value, we will need it at the deployment time.
+				</para>
+			</sect3>
+			<sect3>
+				<title>VMware Server &ge; 2</title>
+				<para>
+						<emphasis>
+							<phrase>This hypervisor is supported for ProActive Deployment.</phrase>
+						</emphasis>
+					</para>
+				<para>
+					VMware Server after version 2 are
+					<ulink url="http://www.vmware.com/products/vi/">VMware Virtual Infrastructure</ulink> compliant. They come with
+					a web user interface for management ( allow end user to remotely manage his virtual environment ). If you want to
+					use this software first create a new user belonging to the vmware group. This user will be the administrator of
+					your virtual environment. Then download VMware Server from
+					<ulink url="http://www.vmware.com/products/server/">http://www.vmware.com/products/server/</ulink>
+					and install it. Prior to launch VMware Server for the first time you have to run a perl script,
+					vmware-config, to setup your VMware environment. During that step, the most important thing to do is to remember
+					the authentication port you set. We may need it at the deployment time.
+				</para>
+			</sect3>
+		    </sect2>
+		    <sect2>
+			<title>XenServer</title>
+				<para>
+					<emphasis>
+						<phrase>This hypervisor is supported for ProActive Deployment.</phrase>
+					</emphasis>
+			    </para>
+				<para>
+					XenServer is the property of <ulink url="http://www.citrix.fr/">Citrix</ulink> and is based on the free and open source
+					<ulink url="http://www.xen.org/">Xen OSS</ulink>. It is a type one hypervisor compatible with several OEM and which is
+					said to be faster than VMware's equivalent products as it uses
+					<ulink url="http://en.wikipedia.org/wiki/Paravirtualization">paravirtualization technique</ulink> ( whereas VMware uses
+					<ulink url="http://en.wikipedia.org/wiki/Full_virtualization">full-virtualization - binary translation</ulink> ).
+					To use it, just refer to the <ulink url="http://www.citrix.com/lang/English/lp/lp_1688615.asp">user guide</ulink> for installation.
+					You can also install it on an external usb device thanks to that
+					<ulink url="http://community.citrix.com/blogs/citrite/dannyw/2009/03/12/Installing+XenServer+on+an+USB+Drive">tutorial</ulink>.
+					If you want enable efficient cloning feature for your XenServer environment, be sure to use an ext3 file system and nothing else.
+					If you use an LVM base repository, when cloning a virtual machine you won't benefit the Copy on Write ( COW ) feature that allows
+					two virtual machines to share a common backing disk file and saves changes in separated files. An ext3 base repository does.
+					To change the backing file system of your virtual machine pool try
+					<ulink url="http://www.tokeshi.com/index.php?option=com_content&amp;task=view&amp;id=5025">this tutorial</ulink>
+				</para>
+		    </sect2>
+		    <sect2>
+			<title>Xen Open Source</title>
+			<para>
+				<emphasis>
+					<phrase>This hypervisor is not supported for ProActive Deployment.</phrase>
+						<phrase>You can use libvirt to make Xen Oss work at the deployment time.</phrase>
+				</emphasis>
+			</para>
+			<para>
+				Xen OSS is the base component of XenServer. It is a type one hypervisor which comes as a particular kernel
+				for several linux distribution ( redhat, fedora, ubuntu ... ). The best way to have a fully personalized
+				Xen is to compile sources and build its own kernel. If you want to use that software:
+				Download the <ulink url="http://www.xen.org/download/">source tarball</ulink>, CAREFULY read the readme
+				( you also can use <ulink url="http://www.howtoforge.org/debian_etch_xen_3.1">that tutorial</ulink> ) and build your own kernel(s):
+			</para>
+			<para>
+				<programlisting>
+				cd /usr/src
+					wget http://bits.xensource.com/oss-xen/release/3.3.1/xen-3.3.1.tar.gz
+					tar xvf xen-3.3.1.tar.gz
+					ln -s xen-3.3.1 xen
+					cd xen
+				</programlisting>
+					Now we compile Xen with 2 targets kernels
+					<programlisting>
+					make world vmxassist=y KERNELS="linux-2.6-xen0 linux-2.6-xenU"
+					install.sh
+					</programlisting>
+					The vmxassist=y flag means that we want to allow HVM ( Hardware-enhanced Virtual Machine, requires hardware suppport )
+					guests to run, so we ask Xen to build a specific container
+					that will be available in /usr/lib/xen/boot/hvmloader. To be able to compile such a Kernel, you must ensure
+					that the packages glibc-devel, dev86, libvncserver,SDL and SDL-devel are installed.
+					If you want, you can make them more efficient...
+					<programlisting>
+					cd /usr/src/xen/build-linux-2.6.18.8-xen0_[arch]
+					make menuconfig
+					</programlisting>
+					Check the following options:
+					<programlisting>
+					Xen --> [*] Privileged Guest (domain 0)
+					File systems --> [*] Quota support
+		                            [M] Old quota format support
+		                            [M] Quota format v2 support
+
+					Device Drivers ---> Networking support --> [M] Dummy net driver support
+
+					Networking support --> Networking options --> [*] Network packet filtering (replaces ipchains) --> IP: Netfilter Configuration --> [M] IP tables support (required for filtering/masq/NAT).
+					</programlisting>
+					then:
+					<programlisting>
+					make
+					make modules
+					make modules_intall
+					make install
+					</programlisting>
+					Just repeat the whole procedure unchecking
+					<programlisting>
+					Xen --> [ ] Privileged Guest (domain 0)
+					</programlisting>
+					for the domU kernel. Note that you can forget that last build as the last releases of Xen OSS allow to run
+					both host and guest with the same kernel config and the same efficiency.
+					Just be sure that the modified /boot/grub/menu.lst is up to date and reboot on your newly created dom0 install
+			</para>
+			<para>
+				Once your Xen Oss virtual environment is installed you have to setup your virtual machines inside. To help you, you have
+				several client software, among those one: Convirt ( aka Xenman ) and virt-manager. Our favorite one for the installation step
+				is <ulink url="http://www.convirture.com/">Convirt</ulink>. It will allow you to install both paravirtualized and hardware
+				assisted virtualized guest operating systems ( the setup "by hand is feasible" for paravirtualized but more complicated
+				for others and deals with Xen configuration files, thus we encourage to avoid it... ). Here is one of
+				<ulink url="http://blog.fedora-fr.org/smootherfrogz/post/XenMan">the good tutorial</ulink> you can find on the web.
+				Virt-manager is better for virtual machine management and handles more virtual environments ( furthermore it is built on top
+				of <ulink url="http://libvirt.org/">libvirt API</ulink> ).
+			</para>
+		    </sect2>
+		    <sect2>
+			<title>KVM, Qemu-KVM, Qemu</title>
+			<para>
+				<emphasis>
+					<phrase>This hypervisors are not supported for ProActive Deployment.</phrase>
+						<phrase>You need to use libvirt in addition to make this software work with deployment.</phrase>
+				</emphasis>
+			</para>
+			<para>
+				That hypervisors are all based on <ulink url="http://www.nongnu.org/qemu/">Qemu</ulink>. They are all type two hypervisors
+				that allow <ulink url="http://en.wikipedia.org/wiki/Emulator">emulation</ulink> ( Qemu ) and
+				<ulink url="http://en.wikipedia.org/wiki/Hardware-assisted_virtualization">hardware assisted virtualization</ulink>( Qemu-KVM and KVM ).
+				The best advantage with using that softwares ( in fact, only Qemu is concerned )
+				is that it is possible to use them entirely in user space ( don't need root account for installation and use ). If you want to use
+				that solution, download one of the products ( Qemu-KVM is an add-on for Qemu ):
+				<ulink url="http://www.nongnu.org/qemu/download.html">Qemu</ulink> or
+				<ulink url="http://sourceforge.net/project/showfiles.php?group_id=180599&amp;package_id=209008">KVM</ulink> and install it thanks to
+				the README explanations.
+			</para>
+			<para>
+				To install virtual machines and manage your environment you can use
+				<ulink url="http://www.convirture.com/">Convirt ( aka Xenman )</ulink> or
+				<ulink url="http://virt-manager.et.redhat.com/download.html">virt-manager</ulink> or try to get it done	by hand.
+				<programlisting>
+					dd if=/dev/zero of=disk.img bs=512k count=1 seek=2000
+					mkfs.ext2 disk.img
+				</programlisting>
+				build a raw disk image with a capacity of 1Go and an ext2 file system ( for linux based systems ).
+				<programlisting>
+					kvm -net nic -net user -m 512 -boot d -cdrom /home/jmguilla/isos/fedora.iso disk.img
+				</programlisting>
+				install your OS thanks to the .iso file
+				<programlisting>
+					kvm -net nic -net user -m 512 -boot c disk.img
+				</programlisting>
+				to boot your virtual machine once the operating system is installed.
+			</para>
+		    </sect2>
+		    <sect2>
+			<title>Libvirt</title>
+			    <anchor id="libvirt-lib"/>
+			<para>
+				Libvirt ( see <ulink url="http://libvirt.org/">http://libvirt.org/</ulink> ) is a management API project for
+				virtualized infrastructures. This aim is to provide an unique API / Interface to manage several VMM. You can notice that
+				it currently supports: Xen (on Linux and Solaris), QEMU, KVM, LXC, OpenVZ, User Mode Linux, VirtualBox, and that
+				other supports are announced ( VMware server and ESX ).
+			</para>
+			<para>
+				If you used Virt-manager to install and set up your virtualized environment, you must already have Libvirt installed
+				on your computer and your virtual machines registered. Otherwise, download the project
+				<ulink url="http://libvirt.org/downloads.html">here</ulink> and install it. You then have to register your previously created
+				virtual machines. You can read the associated
+				<ulink url="http://libvirt.org/docs.html">documentation</ulink> to get it done.
+			</para>
+			<para>
+				When evaluating this environment, we noticed different "hot points" about which one you have to be careful. Libvirt may use
+				<ulink url="http://libvirt.org/auth.html">different mates</ulink>
+				for authentication, just be sure that you have enable the good user with sufficient permissions and using the good authentication
+				mechanism. Be sure to understand the basic knowledge about <ulink url="http://libvirt.org/uri.html">URLs</ulink>.
+				Understand that, when using Xen Oss, you'll have to perform extra configuration on the server side to set up your Xen VMM
+				the good way ( to use either sockets, http, legacy remote control ... ).
+			</para>
+		    </sect2>
+		</sect1>
+
+	<!--													-->
+	<!--			Begin of Virtualizing API desc.			-->
+	<!--													-->
+
+		<sect1>
+			<title>Virtualizing API</title>
+			<para>
+				To allow basic virtual infrastructure management from you program you can use the virtualizing API. This one is written in Java
+				to be useable from ProActive's GCMDeployment implementation. It is a wrapper of different API designed for special virtualized
+				environment.The main features of the manageable objects are documented in the package org.ow2.proactive.virtualizing.core
+				that only gathers Interfaces. The main objects which you have access to are VirtualMachineManager and VirtualMachine. We also design
+				special packages for every supported software: vmware-vix and vmware-vi for VMware products, libxen for XenServer
+				, libvirt and virtualbox.
+			</para>
+			<sect2>
+				<title>VirtualMachineManager</title>
+				<para>
+					This is the entry point to manage your virtual environment. It is designed to contact a hypervisor and get virtual machines
+					from it. The interface doesn't define any <quote>connect</quote> and <quote>disconnect</quote> methods. Implementations
+					have to handle network considerations automatically and in a transparent way for end user. Every implementation details
+					how to connect to the matching hypervisor, just see the correct section to get information. Once you have your VMM you can
+					get every registered virtual machines through a call to:
+					<programlisting>
+						public ArrayList&lt;? extends VirtualMachine&gt; getVirtualMachines() throws VirtualServiceException;
+					</programlisting>
+					or a specific virtual machine thanks to
+					<programlisting>
+						public VirtualMachine getNewVM(String name) throws VirtualServiceException;
+					</programlisting>
+				</para>
+			</sect2>
+			<sect2>
+				<title>VirtualMachine</title>
+				<para>
+					A virtual machine is the java object standing for a registered virtual machine within your virtual machine monitor
+					software. For GCMDeployment purposes we only wanted to provide ( and fix thanks to the VirtualMachine interface )
+					the capability to start, stop a virtual machine and get its running state. Implementations are free to add more
+					features, besides, notice that to be able to allow dynamic and automatic ProActive deployment, we must add a method
+					to communicate settings to the virtual machine through a private channel of communication ( through the hypervisor ).
+					Thus, from the interface, you only access four methods:
+					<programlisting>
+						public boolean powerOn() throws VirtualServiceException;
+						public boolean powerOff() throws VirtualServiceException;
+						public State getState() throws VirtualServiceException;
+						public String getName() throws VirtualServiceException;
+					</programlisting>
+				</para>
+			</sect2>
+			<sect2>
+				<title>vmware-vi - VMware Virtual Infrastructure</title>
+				<anchor id="vmware-vi-api"/>
+				<para>
+					<emphasis>
+						<phrase>This module allows to manage VMware Server&ge;2, VMware ESX/ESXi&ge;2.5. </phrase>
+						<phrase>You need to reference every Virtualizing/src/vmware-vi/lib/ jars in the classpath. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					This implementation is based on
+					<ulink url="http://www.vmware.com/support/developer/vc-sdk/visdk2xpubs/ReferenceGuide/index.html">VMware Virtual Infrastructure 2.0 SDK</ulink>.
+					You can connect to your hypervisor and get your virtual machines to manage them:
+					<programlisting>
+						VMwareVMM vmm = new VMwareVMM("https://jily.activeeon.com:8333/sdk","user","password");
+						ArrayList&lt;VMwareVM&gt; vms = vmm.getVirtualMachines();
+						VMwareVM vm = vmm.getNewVM("myUbuntu");
+					</programlisting>
+					When you want to get only one virtual machine, you have to supply its name ( the name you gave it at
+					registration time ).
+					It implements extra features to allow ProActive deployment.
+					It is possible to "push" data into registered virtual machines ( as long as guest tools are installed
+					in the guest. To see how to install guest tools refer to your virtualization software documentation )
+					thanks to:
+					<programlisting>
+						public boolean pushData(DataKey key, String value) throws VirtualServiceException
+					</programlisting>
+					This method is only used for the deployment and shouldn't be used by end users.
+					If you have to use it you just have to supply a good org.ow2.proactive.virtualizing.vmwarevi.DataKey Enum.
+					You can then get it from your virtual machine thanks to the vmware-guestd tool ( guest tools need to be installed in guest ):
+					<programlisting>
+						vmware-guestd --cmd "info-get guestinfo.[datakey value]"
+					</programlisting>
+					where [datakey value] is the string value of the VMwareVM.DataKey you supplied.
+				</para>
+				<para>
+					An extra feature especially designed for ProActive deployment make every VMware virtualization environment able
+					to emulate clone feature ( even for product for those it wasn't available ).
+					<programlisting>
+						public VMwareVM clone(String name) throws VirtualServiceException
+					</programlisting>
+					To emulate such a feature on every soft, and because both Server and Workstation don't allow ( real ) Copy on Write, we
+					use independent/non-persistent disks. The cloned virtual machine shares every persistent resources with its clones
+					( loosing exclusive access ) in "read only" mode. That means that once the clone will be powered off, every changes
+					made to the virtual disk will be lost. Every volatile resources will however be freshly allocated.
+					That represents a major advantage but which comes with a certain flaw. You MUST use the
+					<programlisting>
+						public boolean destroy() throws VirtualServiceException
+					</programlisting>
+					method to destroy the clones, or be sure to detach every shared disks before deleting the virtual machine once you
+					don't need it anymore. Otherwise, the cloned virtual will also lose its disks and won't work.
+				</para>
+			</sect2>
+			<sect2>
+				<title>vmware-vix - VMware Server and Workstation</title>
+				<anchor id="vmware-vix-api"/>
+				<para>
+					<emphasis>
+						<phrase>This module allows to manage VMware Server and Workstation. </phrase>
+						<phrase>This module may need an extra installation step. </phrase>
+						<phrase>You need to reference every Virtualizing/src/vmware-vix/lib/ jars in the classpath. </phrase>
+						<phrase>This module uses <ulink url="https://jna.dev.java.net/">JNA</ulink> to bring the API to JAVA framework. </phrase>
+						<phrase>Even if this module supports VMware server 2, we encourage you to use vmware-vi instead. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					The more often, you can choose to install vmware-vix during installation of your VMware product. If you don't, download
+					the last release <ulink url="http://www.vmware.com/support/developer/vix-api/">HERE</ulink> and install it
+					( needs at least 1.6 to work ). Besides, you need to put the JNA's jar in your classpath and to
+					fix the jna.library.path or java.library.path system property ( launch the JVM with -Djna.library.path=... ) to point to
+					the libvixAllProducts.so lib, or specify it thanks to LD_LIBRARY_PATH variable on linux or PATH on windows.
+				</para>
+				<para>
+					This implementation is based on
+					<ulink url="http://www.vmware.com/support/developer/vix-api/vix16_reference/">VMware Vix</ulink>.
+					To connect on the local host you can call VMwareVMM constructor without any parameter.
+					You can connect to your hypervisor and get your virtual machines to manage them:
+					The example underneath matches the requirements for a VMware Workstation or VMware Server before release 2.
+					To connect remotely, you have to supply at least the host, user and user password, then,
+					depending on what kind of product you run you have to supply the port number you have fixed during
+					the installation and the kind of product. If you don't provide any port, the default one is 902.
+					If you don't provide any service type, the Vix API will try to find the good one but we encourage you
+					to fix it. You can choose among those service types:
+					<programlisting>
+						VMwareVMM.Service.vmwareDefault
+						VMwareVMM.Service.vmwareServer
+						VMwareVMM.Service.vmwareWorkstation
+						VMwareVMM.Service.vmwareServerVI
+					</programlisting>
+					The example below shows how to connect to a VMware Server 1.6 and how to get a virtual machine:
+					<programlisting>
+						VMwareVMM vmm = new VMwareVMM("jily.activeeon.com","user","password",902,VMwareVMM.Service.vmwareServer);
+						ArrayList&lt;VMwareVM&gt; vms = vmm.getVirtualMachines();
+						VMwareVM vm = vmm.getNewVM("/home/jily/VMware/Machines/myUbuntu/myUbuntu.vmx");
+					</programlisting>
+					Notice that you don't supply URI here but server's IP Address.
+					Besides, if you want to get only one virtual machine you have to supply the absolute .vmx file path.
+					Indeed, the path depends on what kind of product you run. For VMware Workstation
+					and VMware Server before release 2 just put the absolute file path.
+					Here is an example VMware Server after release 2:
+					<programlisting>
+						VMwareVMM vmm = new VMwareVMM("https://jily.activeeon.com:8333/sdk","inria","inria123",VMwareVMM.Service.vmwareServerVI);
+						ArrayList&lt;VMwareVM&gt; vms = vmm.getVirtualMachines();
+						VMwareVM vm = vmm.getNewVM("[standard] myUbuntu/myUbuntu.vmx;
+					</programlisting>
+					For VMware Server after release 2, you have to supply the URI of your Virtual Infrastructure web access
+					followed by "sdk".
+					Furthermore, if you want to get only one virtual machine, you have to put the relative file path of
+					the .vmx config file from the Datasotre root which contains the file. In the example above, note the
+					space ( "&nbsp;" ) between the Datastore's name	and the begin of the relative path...
+					</para>
+					<para>
+					This module implements extra features to allow ProActive deployment.
+					It is possible to "push" data into registered virtual machines ( as long as guest tools are installed
+					in the guest. To see how to install guest tools refer to your virtualization software documentation )
+					thanks to:
+					<programlisting>
+						public boolean pushData(DataKey key, String value) throws VirtualServiceException
+					</programlisting>
+					This method is only used for the deployment and shouldn't be used by end users.
+					If you have to use it you just have to supply a good org.ow2.proactive.virtualizing.vmwarevix.DataKey Enum.
+					You can then get it from your virtual machine thanks to the vmware-guestd tool ( guest tools need to be installed in guest ) :
+					<programlisting>
+						vmware-guestd --cmd "info-get guestinfo.[datakey value]"
+					</programlisting>
+					where [datakey value] is the string value of the VMwareVM.DataKey you supplied.
+				</para>
+			</sect2>
+			<sect2>
+				<title>xenserver - XenServer, XenOss</title>
+				<anchor id="libxen-api"/>
+				<para>
+					<emphasis>
+						<phrase>This module allows to manage XenServer and XenOss. </phrase>
+						<phrase>Note that if you want to use XenOss with that module, you have to enable http remote support. </phrase>
+						<phrase>You need to reference every Virtualizing/src/xenserver/lib/ jars in the classpath. </phrase>
+						<phrase>Note that not every features are implemented for XenOss support. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					This implementation is based on
+					<ulink url="http://community.citrix.com/display/xs/Download+SDKs">LibXen</ulink>.
+					You can connect to your hypervisor and get your virtual machines to manage them:
+					<programlisting>
+						XenServerVMM vmm = new XenServerVMM("http://jily.activeeon.com","user","password");
+						ArrayList&lt;VMwareVM&gt; vms = vmm.getVirtualMachines();
+						XenServerVM vm = vmm.getNewVM("myUbuntu");
+					</programlisting>
+					It implements extra features to allow ProActive deployment through
+					<programlisting>
+						public boolean pushDataPVM(DataKey key, String val) throws VirtualServiceException
+						public boolean pushDataHVM(DataKey key, String val) throws VirtualServiceException
+					</programlisting>
+					and also allow to clone virtual machines. In opposition to implementation of other modules, the pushData feature
+					is present in two forms. <quote>pushDataHVM</quote> ( for <quote>push data within Hardware Virtual Machine</quote> )
+					is not useable for end users as it stores the given
+					key - value directly within the XenStore. Anyway, to be able to deploy ProActive application, be sure that you don't have
+					any duplicated NIC MAC address. This is the NIC's MAC address that are used as <quote>key</quote> to store data in the
+					XenStore... <quote>pushDataPVM</quote> ( for <quote>push data within Pure Virtual Machine</quote> ) is only suitable
+					for paravirtualized guests. In fact, that makes you able to pass extra parameters to kernel command line
+					( thus, it is compulsory to call that method before launching the virtual ). To read them, just try:
+					<programlisting>
+						cat /proc/cmdline
+					</programlisting>
+					If you want to enable efficient clone feature, be sure that the datastore holding
+					the cloned virtual machine is based on EXT3. This is the only way to use
+					<ulink url="http://fr.wikipedia.org/wiki/Copy-On-Write">Copy on write</ulink>.
+					To modify your datastore's backing file system,
+					<ulink url="http://www.tokeshi.com/index.php?option=com_content&amp;task=view&amp;id=5025">follow this tutorial</ulink>.
+				</para>
+			</sect2>
+			<sect2>
+				<title>libvirt - KVM, Qemu, Qemu-KVM, LXC, UML</title>
+				<anchor id="libvirt-api"/>
+				<para>
+					<emphasis>
+						<phrase>This module allows to manage KVM, Qemu, Qemu-KVM, LXC, UML, VirtualBox. </phrase>
+						<phrase>This implementation doesn't support ProActive deployment. </phrase>
+						<phrase>This module needs an extra installation step to work. </phrase>
+						<phrase>You need to reference every Virtualizing/src/libvirt/lib/ jars in the classpath. </phrase>
+						<phrase>This module uses <ulink url="https://jna.dev.java.net/">JNA</ulink> to bring the API to JAVA framework. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					If you used virt-manager to build your virtualized environment, you most likely don't have to install additional libraries.
+					If you didn't, download the libvirt project <ulink url="http://libvirt.org/downloads.html">HERE</ulink> and install it. Also
+					read the <link linkend="libvirt-lib">Libvirt section</link>. Besides, you need to put the JNA's jar in your classpath and to
+					fix the jna.library.path or java.library.path system property ( launch the JVM with -Djna.library.path=... ) to point to
+					the libvirt.so lib, or specify it thanks to LD_LIBRARY_PATH variable on linux or PATH on windows.
+				</para>
+			</sect2>
+			<sect2>
+				<title>virtualbox - Virtualbox</title>
+				<anchor id="virtualbox-api"/>
+				<para>
+					<emphasis>
+						<phrase>This module allows to manage Virtualbox through vboxwebsrv.</phrase>
+						<phrase>This module requires vboxwebsrv to run to work.</phrase>
+						<phrase>You need to reference every Virtualizing/src/virtualbox/lib/ jars in the classpath</phrase>
+					</emphasis>
+				</para>
+				<para>
+					This implementation is built on top of <ulink url="http://dlc.sun.com/virtualbox/vboxsdkdownload.html">Virtualbox SDK</ulink> and
+					allows ProActive deployment. Prior to use it, launch vboxwebsrv on the server side with <quote>-t 20</quote> as parameter.
+					This fixes the session timeout to 20 seconds. To connect to the hypervisor just supply a user's name with sufficient permissions
+					and belonging to the <quote>vboxusers</quote> group. While testing, we noticed that several vboxwebsrv versions experimented
+					authentication issues, if you do, try the following command on the server side:
+					<programlisting>
+						VBoxManage setproperty websrvauthlibrary null
+					</programlisting>
+				</para>
+				<para>
+					Once you got a functional VirtualboxVMM through
+					<programlisting>
+						VirtualboxVMM vmm = new VirtualboxVMM("http://jily.activeeon.com:18083/","user","password");
+					</programlisting>
+					You can either get a given virtual machine thanks to the name you give it inside the VirtualBox
+					user interface, or get all registered virtual machines:
+					<programlisting>
+						VirtualboxVM vm = vmm.getNewVM("myUbuntu");
+						VirtualboxVM vm = vmm.getVirtualMachines();
+					</programlisting>
+				</para>
+				<para>
+					This module implements extra features to allow ProActive deployment.
+					It is possible to "push" data into registered virtual machines ( as long as guest tools are installed
+					in the guest. To see how to install guest tools refer to your virtualization software documentation )
+					thanks to:
+					<programlisting>
+						public boolean pushData(DataKey key, String value) throws VirtualServiceException
+					</programlisting>
+					This method is only used for the deployment and shouldn't be used by end users.
+					If you have to use it you just have to supply a good org.ow2.proactive.virtualizing.virtualbox.DataKey Enum.
+					You can then get it from your virtual machine thanks to the VBoxControl tool ( guest tools need to be installed in guest ) :
+					<programlisting>
+						VBoxControl guestproperty get datakey
+					</programlisting>
+					where [datakey] is the string value of the VirtualboxVM.DataKey you supplied.
+				</para>
+			</sect2>
+		</sect1>
+
+	<!--													-->
+	<!--			Begin of GCMDeployment desc.			-->
+	<!--													-->
+
+		<sect1>
+			<title>Deployment and Virtual Environment</title>
+			<para>
+				Thanks to the GCMDeployment file you can specify what kind of resources you want to deploy. In the infrastructure
+				part you just precise them in a <quote>flat</quote> way and the in a hierarchical way in the resource part.
+				To be able to dynamically deploy your virtual environment you can use the &lt;vms&gt; part. Here is an example:
+				<programlisting>
+				&lt;vms&gt;
+					&lt;vmware-vi id="vmware-vi"&gt;
+						&lt;hypervisor url="https://jily.activeeon.com:8333/sdk"/&gt;
+						&lt;authentication user="inria" pwd="inria123"/&gt;
+						&lt;image key="myUbuntu" os="unix" count="2"/&gt;
+					&lt;/vmware-vi&gt;
+					&lt;vmware-vix id="vmware-vix" service="vi"&gt;
+						&lt;hypervisor url="https://jily.activeeon.com:8333/sdk"/&gt;
+						&lt;authentication user="inria" pwd="inria123"/&gt;
+						&lt;image key="[standard] myUbuntu/myUbuntu.vmx" os="unix"/&gt;
+					&lt;/vmware-vix&gt;
+					&lt;libxen id="xenserver"&gt;
+						&lt;hypervisor url="http://jily.activeeon.com"/&gt;
+						&lt;authentication user="root" pwd="root123"/&gt;
+						&lt;image key="myUbuntu" os="unix" count="2"/&gt;
+					&lt;/libxen&gt;
+					&lt;virtualbox-ws id="virtualbox"&gt;
+						&lt;hypervisor url="http://jily.activeeon.com:18083"/&gt;
+						&lt;authentication user="inria" pwd="inria123"/&gt;
+						&lt;image key="myUbuntu" os="unix"/&gt;
+					&lt;/virtualbox-ws&gt;
+				&lt;/vms&gt;
+				</programlisting>
+				Depending on what kind of virtualization provider you use, you can benefit different features. See in details the section corresponding
+				to your solution.
+			</para>
+			<sect2>
+				<title>Overall prerequisites</title>
+				<para>
+					To make ProActive GCMDeployment functional on virtualized infrastructures, we provide some python scripts that run on the most
+					popular operating systems and the most widespread python releases. These scripts have to be registered as daemons within your
+					virtual machines. To register a new daemon on your guest, you have to focus on the operating system. For instance, with windows
+					NT core based systems you can use <ulink url="http://support.microsoft.com/kb/243486/fr">autoexnt.exe/autoexnt.bat</ulink>
+					that registers as a service. This application runs the SYSROOT/windows32/autoexnt.bat content at system launch, for example:
+					<programlisting>
+					"C:\\Python26\python.exe" "C:\\ProActive\bin\scripts\proactivemain.py" "C:\\ProActive\bin\scripts\proactive-runtime.log"
+					</programlisting>
+				</para>
+				<para>
+					For a Debian based system, you can use update-rc.d:
+					<programlisting>
+						sudo update-rc.d proactive-runtime start 99 2 3 5 . stop 99 0 1 6 .
+					</programlisting>
+					Here is the content of /etc/init.d/proactive-runtime
+					<programlisting>
+					#!/bin/sh
+					#
+					# This is a basic dummy shell script to get your proactive runtime bootstraping using
+					# the proactive python API.
+					# It can be used on debian like distros. Have it registered using update-rc.d...
+					#
+					# Basic support for IRIX style chkconfig
+					# chkconfig: 235 99 99
+					# description: Manages the services needed to run ProActive
+
+					# Basic support for the Linux Standard Base Specification 1.0.0 (to be used by
+					# insserv for example)
+					### BEGIN INIT INFO
+					# Provides: ProActive
+					# Required-Start: VBoxControl vmware-guestd
+					# Required-Stop:
+					# Default-Start: 2 3 5
+					# Default-Stop: 0 1 6
+					# Description: Manages the services needed to run ProActive
+					### END INIT INFO
+
+					# BEGINNING_OF_UTIL_DOT_SH
+					#!/bin/sh
+					#
+					#
+					# Get lsb functions
+					. /lib/lsb/init-functions
+					. /etc/default/rcS
+
+					PIDFILE=/var/run/proactive-runtime.pid
+					LOGFILE=/var/log/proactive-runtime.log
+					#change the path of you python and proactive apps here
+					EXE="/usr/bin/python /etc/init.d/proactivemain.py ${LOGFILE}"
+					ARGS=
+
+					case "$1" in
+					  start)
+						rsync -avz -e ssh jmguilla@jily.activeeon.com:workspace-git/ProActive/dist /usr/bin/ProActive
+						[ -e ${LOGFILE} ] || touch ${LOGFILE}
+						log_begin_msg "Starting ProActive-Runtime..."
+						start-stop-daemon --start --exec ${EXE} -b -m --pidfile ${PIDFILE} -- ${ARGS}
+						log_end_msg $?
+					    ;;
+					  stop)
+					    log_begin_msg "Stopping ProActive-Runtime..."
+					    start-stop-daemon --stop -p ${PIDFILE}
+					    log_end_msg $?
+					    ;;
+					  restart)
+					    $0 stop
+					    sleep 1
+					    $0 start
+					    ;;
+					  *)
+					    log_success_msg "Usage: /etc/init.d/proactive-runtime {start|stop|restart}"
+					    exit 1
+					esac
+
+					exit 0
+					</programlisting>
+					For redhat based system, you'll have to use chkconfig utility and replace start-stop-daemon by a background launch
+					plus remove log messages.
+				</para>
+				<para>
+					As you can see in that short snippet, the python script that holds the main entry point of the daemon is proactivemain.py.
+					This application accepts zero or one parameter. If you supply one parameter, it will be the file that the daemon will log
+					into. If you don't provide anything as parameter, the program will log on stdout.
+				</para>
+			</sect2>
+			<sect2>
+				<title>VMware Virtual Infrastructure</title>
+				<para>
+					<emphasis>
+						<phrase>This section concerns every VMware products Virtual Infrastructure &ge; 2.0 compliant. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					To deploy your virtual infrastructure with compliant products, you can use a &lt;vmware-vi&gt; section
+					( see the associated section in the <link linkend="vmware-vi-api">previous chapter</link> ). Here is an example on
+					how to use it:
+					<programlisting>
+						&lt;vms&gt;
+						&lt;vmware-vi id="vmware-vi"&gt;
+							&lt;hypervisor url="https://jily.activeeon.com:8333/sdk"/&gt;
+							&lt;hypervisor url="http://excalibur.activeeon.com:8222/sdk"/&gt;
+							&lt;hypervisor url="http://bud.activeeon.com:18965/sdk"/&gt;
+							&lt;authentication user="inria" pwd="inria123"/&gt;
+							&lt;image key="myUbuntu" os="unix" count="2"/&gt;
+							&lt;image key="myDebian" os="unix" /&gt;
+							&lt;image key="myGentoo" os="unix" /&gt;
+						&lt;/vmware-vi&gt;
+						&lt;vms&gt;
+					</programlisting>
+					The &lt;vmware-vi&gt; tag says that one want to use the VMware Virtual Infrastructure module, it has the following
+					child elements:
+					<programlisting>
+						&lt;hypervisor&gt;
+						&lt;authentication&gt;
+						&lt;image&gt;
+					</programlisting>
+					and the following attribute:
+					<programlisting>
+						id="someID"
+					</programlisting>
+					The id attribute is made to be able to reference this section from the resource part of the descriptor and is compulsory.
+					The hypervisor element, if specified, indicates the remote hypervisor to connect to. Note that the only attribute ( the url )
+					you have to supply is software dependent. If you provide a hypervisor without any url or no hypervisor, one tries
+					to connect locally ( but we encourage you to precise the service's url even if connecting locally, at least to specify protocol and port ).
+					You can put how many hypervisors you want.
+				</para>
+				<para>
+					The &lt;authentication&gt; tag is optional if connecting locally and is used to specify a user with sufficient permissions to manage
+					your virtual environment through the VI interface. If you connect locally, you may avoid this tag. The only attributes of that
+					section are user and pwd.
+				</para>
+				<para>
+					The &lt;image&gt; tag points out which virtual machines you want to deploy. It admits the following attributes:
+					<programlisting>
+						key="someName"
+						os="windows"
+						count="3"
+					</programlisting>
+					The <quote>key</quote> attribute designates the unique name of your virtual machine. Not every software force to fix a unique name
+					per virtual machine ( because you almost always manage your virtual infrastructure thanks to an user interface and can <quote>click</quote>
+					the good one. ), we ask you to do so to ensure the good function of the deployment feature. <quote>os</quote> attribute indicates
+					the guest virtual machine's operating system. <quote>count</quote> allows you to precise the number of virtual machine of this type you want
+					to deploy. To be able to ensure the feature for every VMware Virtual Infrastructure compliant software, we in fact emulate the clone
+					feature. One just creates a perfect clone ( regarding non persistent resources ) of the template virtual machine and shares the
+					persistent resources with it in an non-persistent way. That means that the clones will be able to use the parent virtual hard disk,
+					but won't change it, once the virtual clones are powered off, every changes made to the disk will be lost. Because the hard disk
+					is shared between several machines, you have to ensure that the exclusive lock can be taken. Indeed, the template virtual machine
+					( which has exclusive write access on the disk ) must be powered off to allows clones to be powered on.
+				</para>
+			</sect2>
+			<sect2>
+				<title>VMware Server and Workstation</title>
+				<para>
+					<emphasis>
+						<phrase>This section concerns VMware Workstation and Server &lt; 2. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					To deploy your virtual infrastructure with compliant products, you can use a &lt;vmware-vix&gt; section
+					 ( see the associated section in the <link linkend="vmware-vix-api">previous chapter</link> ) . Here is an example on
+					how to use it:
+					<programlisting>
+						<!-- TODO change service and port... -->
+						&lt;vms&gt;
+						&lt;vmware-vix id="vmware-vix"&gt;
+							&lt;hypervisor url="https://jily.activeeon.com:8333/sdk"/&gt;
+							&lt;hypervisor url="http://excalibur.activeeon.com:8222/sdk"/&gt;
+							&lt;hypervisor url="http://bud.activeeon.com:18965/sdk"/&gt;
+							&lt;authentication user="inria" pwd="inria123"/&gt;
+							&lt;image key="myUbuntu" os="unix" /&gt;
+							&lt;image key="myDebian" os="unix" /&gt;
+							&lt;image key="myGentoo" os="unix" /&gt;
+						&lt;/vmware-vix&gt;
+						&lt;vms&gt;
+					</programlisting>
+				</para>
+			</sect2>
+			<sect2>
+				<title>XenServer</title>
+				<para>
+					<emphasis>
+						<phrase>This section concerns products compatible with LibXen ( SDK for web service access for XenServer ). </phrase>
+						<phrase>Note that the associated python script launcher doesn't work with python 3 due to XenAPI.py incompatibility. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					To deploy your virtual infrastructure with compliant products, you can use a &lt;libxen&gt; section
+					( see the associated section in the previous chapter ). Here is an example on
+					how to use it:
+					<programlisting>
+						&lt;vms&gt;
+							&lt;libxen id="xenserver"&gt;
+								&lt;hypervisor url="http://192.168.1.166"/&gt;
+								&lt;authentication user="root" pwd="root123"/&gt;
+								&lt;image key="myUbuntu" os="unix" count="2"/&gt;
+							&lt;/libxen&gt;
+						&lt;vms&gt;
+					</programlisting>
+					The &lt;libxen&gt; tag says that one want to use the module built on LibXen API
+					( see associated section in <link linkend="libxen-api">previous chapter</link> ), it has the following child elements:
+					<programlisting>
+						&lt;hypervisor&gt;
+						&lt;authentication&gt;
+						&lt;image&gt;
+					</programlisting>
+					and the following attribute:
+					<programlisting>
+						id="someID"
+					</programlisting>
+					The id attribute is made to be able to reference this section from the resource part of the descriptor and is compulsory.
+					The hypervisor element, if specified, indicates the remote hypervisor to connect to. Note that the only attribute ( the url )
+					you have to supply is service dependent. If you provide a hypervisor without any url or no hypervisor, one tries
+					to connect locally ( but we encourage you to precise the service's url even if connecting locally, at least to specify protocol and port ).
+					You can put how many hypervisors you want.
+				</para>
+				<para>
+					The &lt;authentication&gt; tag is optional if connecting locally and is used to specify a user with sufficient permissions to manage your virtual environment
+					through XenCenter, xe or xm. If you connect locally, you may avoid this tag. The only attributes of that section are user and pwd.
+				</para>
+				<para>
+					The &lt;image&gt; tag points out which virtual machines you want to deploy. It admits the following attributes:
+					<programlisting>
+						key="someName"
+						os="windows"
+						count="3"
+					</programlisting>
+					The <quote>key</quote> attribute designates the unique name of your virtual machine. Not every software force to fix a unique name
+					per virtual machine ( because you almost always manage your virtual infrastructure thanks to an user interface and can <quote>click</quote>
+					the good one. ), we ask you to do so to ensure the good function of the deployment feature. <quote>os</quote> attribute indicates
+					the guest virtual machine's operating system. <quote>count</quote> allows you to precise the number of virtual machine of this type you want
+					to deploy. To enable an efficient clone feature on XenServer, be sure to host your virtual machines on an EXT based pool.
+					If you want to change the backing file system of your virtual machine disk pool, refer to that
+					<ulink url="http://www.tokeshi.com/index.php?option=com_content&amp;task=view&amp;id=5025">tutorial</ulink>.
+				</para>
+			</sect2>
+			<sect2>
+				<title>KVM, Qemu, Qemu-KVM, LXC, UML</title>
+				<para>
+					<emphasis>
+						<phrase>This section concerns every Libvirt compliant softwares. </phrase>
+						<phrase>This module doesn't allow ProActive deployment. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					To deploy your virtual infrastructure with products compatbile with
+					<ulink url="http://libvirt.org">Libvirt</ulink>, you can use a &lt;libvirt&gt; section. Here is an example on
+					how to use it:
+					<programlisting>
+						<!-- TODO change service and port... -->
+						&lt;vms&gt;
+						&lt;libvirt id="libvirt"&gt;
+							&lt;hypervisor url="qemu+ssh://jily.activeeon.com/system"/&gt;
+							&lt;hypervisor url="xen+ssh://excalibur.activeeon.com"/&gt;
+							&lt;hypervisor url="http://bud.activeeon.com"/&gt;
+							&lt;authentication user="inria" pwd="inria123"/&gt;
+							&lt;image key="myUbuntu" os="unix" /&gt;
+							&lt;image key="myDebian" os="unix" /&gt;
+							&lt;image key="myGentoo" os="unix" /&gt;
+						&lt;/libvirt&gt;
+						&lt;vms&gt;
+					</programlisting>
+					The &lt;libvirt&gt; tag says that one want to use the module built on Libvirt API ( see the associated section in the
+					<link linkend="libvirt-api">previous chapter</link> ),
+					it has the following child elements:
+					<programlisting>
+						&lt;hypervisor&gt;
+						&lt;authentication&gt;
+						&lt;image&gt;
+					</programlisting>
+					and the following attribute:
+					<programlisting>
+						id="someID"
+					</programlisting>
+					The id attribute is made to be able to reference this section from the resource part of the descriptor and is compulsory.
+					The hypervisor element, if specified, indicates the remote hypervisor to connect to. Note that the only attribute ( the url )
+					you have to supply is Libvirt dependent, see
+					<ulink url="http://libvirt.org/uri.html">documentation</ulink> for more information. If you provide a hypervisor without
+					any url or no hypervisor, Libvirt tries	to connect locally. You can put how many hypervisors you want.
+				</para>
+				<para>
+					The &lt;authentication&gt; tag is optional if connecting locally and is used to specify a user with sufficient permissions
+					to manage your virtual environment through Libvirt environment ( virt-manager, virsh... ). If you connect locally, you may
+					avoid this tag. The only attributes of that section are user and pwd.
+				</para>
+				<para>
+					The &lt;image&gt; tag points out which virtual machines you want to deploy. It admits the following attributes:
+					<programlisting>
+						key="someName"
+						os="windows"
+					</programlisting>
+					The <quote>key</quote> attribute designates the unique name of your virtual machine like you registered it
+					( the way it appears thanks to a <quote>virsh -c qemu+ssh://localhost/system list --all</quote> ).
+					<quote>os</quote> attribute indicates the guest virtual machine's operating system.
+					Note that that module doesn't support cloning feature.
+				</para>
+			</sect2>
+			<sect2>
+				<title>VirtualBox</title>
+				<para>
+					<emphasis>
+						<phrase>This section concerns VirtualBox managed through vboxwebsrv. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					To deploy your virtual infrastructure with compliant products, you can use a &lt;virtualbox-ws&gt; section
+					( see the associated section in the previous chapter ). Here is an example on
+					how to use it:
+					<programlisting>
+						&lt;vms&gt;
+							&lt;virtualbox-ws id="virtualbox"&gt;
+								&lt;hypervisor url="http://psychoquack.activeeon.com:18083"/&gt;
+								&lt;hypervisor url="http://noadkoko.activeeon.com:18000"/&gt;
+								&lt;authentication user="inria" pwd="inria123"/&gt;
+								&lt;image key="myUbuntu" os="unix"/&gt;
+								&lt;image key="someLinux" os="unix"/&gt;
+							&lt;/virtualbox-ws&gt;
+						&lt;vms&gt;
+					</programlisting>
+					The &lt;virtualbox-ws&gt; tag says that one want to use the module built on VirtualBox SDK ( see the associated section in the
+					<link linkend="virtualbox-api">previous chapter</link> ),
+					it has the following child elements:
+					<programlisting>
+						&lt;hypervisor&gt;
+						&lt;authentication&gt;
+						&lt;image&gt;
+					</programlisting>
+					and the following attribute:
+					<programlisting>
+						id="someID"
+					</programlisting>
+					The id attribute is made to be able to reference this section from the resource part of the descriptor and is compulsory.
+					The hypervisor element, if specified, indicates the remote hypervisor to connect to. Note that the only attribute ( the url )
+					you have to supply is service dependent. It is the url of the
+					<link linkend="virtualbox-api">vboxwebsrv</link> service you started before launching the deployment.
+				</para>
+				<para>
+					The &lt;authentication&gt; tag is optional if connecting locally and is used to specify a user with sufficient permissions
+					to manage your virtual environment through Libvirt environment ( virt-manager, virsh... ). If you connect locally, you may
+					avoid this tag. The only attributes of that section are user and pwd.
+				</para>
+				<para>
+					The &lt;image&gt; tag points out which virtual machines you want to deploy. It admits the following attributes:
+					<programlisting>
+						key="someName"
+						os="windows"
+					</programlisting>
+					The <quote>key</quote> attribute designates the unique name of your virtual machine like you registered it
+					( the way it appears thanks to a <quote>virsh -c qemu+ssh://localhost/system list --all</quote> ).
+					<quote>os</quote> attribute indicates the guest virtual machine's operating system.
+					Note that that module doesn't support cloning feature.
+				</para>
+			</sect2>
+		</sect1>
+</article></book>

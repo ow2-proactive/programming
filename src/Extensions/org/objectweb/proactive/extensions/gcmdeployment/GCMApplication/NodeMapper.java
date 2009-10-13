@@ -135,7 +135,7 @@ public class NodeMapper implements NotificationListener {
             }
         } catch (Exception e) {
             // If not handled by us, JMX eats the Exception !
-            GCM_NODEMAPPER_LOGGER.warn(e);
+            GCM_NODEMAPPER_LOGGER.warn(e.getMessage(), e);
         }
     }
 

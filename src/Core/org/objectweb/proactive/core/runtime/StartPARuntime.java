@@ -150,7 +150,7 @@ public class StartPARuntime {
             abort();
         } catch (NumberFormatException e) {
             // TODO cmathieu gracefully handle errors
-            logger.error("Capacity must be a number: " + line.getOptionValue(Params.capacity.toString()));
+            logger.error("Capacity must be a number: " + line.getOptionValue(Params.capacity.toString()), e);
             abort();
         }
     }

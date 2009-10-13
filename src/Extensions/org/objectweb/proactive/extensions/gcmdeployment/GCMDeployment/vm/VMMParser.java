@@ -4,7 +4,7 @@
  * ProActive: The Java(TM) library for Parallel, Distributed,
  *            Concurrent computing with Security and Mobility
  *
- * Copyright (C) 1997-2009 INRIA/University of Nice-Sophia Antipolis
+ * Copyright (C) 1997-2008 INRIA/University of Nice-Sophia Antipolis
  * Contact: proactive@ow2.org
  *
  * This library is free software; you can redistribute it and/or
@@ -29,24 +29,24 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
+package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm;
 
-import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
-import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
-import java.net.URL;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.ow2.proactive.virtualizing.core.error.VirtualServiceException;
+import org.w3c.dom.Node;
 
 
-public interface GCMDeploymentDescriptor {
+public interface VMMParser {
+
+    public GCMVirtualMachineManager parseVMMNode(Node vmmNode, XPath xpath) throws XPathExpressionException,
+            VirtualServiceException;
 
     /**
-     * Start the deployment
-     *
-     * The first step is to perform all required file transfers. Then
-     * Use the CommandBuilder to build the command to be launched.
+     * Returns the node's name associated to a particular parser
+     * @return the name as a String
      */
-    public void start(CommandBuilder commandBuilder, GCMApplicationInternal gcma);
+    public String getNodeName();
 
-    public URL getDescriptorURL();
-
-    public GCMDeploymentResources getResources();
 }

@@ -42,6 +42,7 @@ public interface Loggers {
     static final public String CONFIGURATION = CORE + ".configuration";
     static final public String CONFIGURATION_NETWORK = CONFIGURATION + ".network";
     static final public String CLASSLOADING = CORE + ".classloading";
+    static final public String VIRTUALIZATION_BOOTSTRAP = CORE + ".bootstraping";
     static final public String EVENTS = CORE + ".events";
     static final public String RUNTIME = CORE + ".runtime";
     static final public String NODE = RUNTIME + ".node";

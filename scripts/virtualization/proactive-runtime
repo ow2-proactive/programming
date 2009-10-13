@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+# This is a basic dummy shell script to get your proactive runtime bootstraping using
+# the proactive python API.
+# It can be used on debian like distros. Have it registered using update-rc.d...
+#
+# Basic support for IRIX style chkconfig
+# chkconfig: 235 99 99
+# description: Manages the services needed to run ProActive
+
+# Basic support for the Linux Standard Base Specification 1.0.0 (to be used by
+# insserv for example)
+### BEGIN INIT INFO
+# Provides: ProActive
+# Required-Start: VBoxControl vmware-guestd
+# Required-Stop:
+# Default-Start: 2 3 5
+# Default-Stop: 0 1 6
+# Description: Manages the services needed to run ProActive
+### END INIT INFO
+
+# BEGINNING_OF_UTIL_DOT_SH
+#!/bin/sh
+#
+#
+# Get lsb functions
+. /lib/lsb/init-functions
+. /etc/default/rcS
+
+PIDFILE=/var/run/proactive-runtime.pid
+LOGFILE=/var/log/proactive-runtime.log
+#change the path of you python & proactive apps here
+#because we compute python path dynamically, locate proactivemain.py by an absolute path
+#EXE="/usr/bin/python /usr/local/share/ProActive/dist/scripts/virtualization/proactivemain.py ${LOGFILE}"
+EXE=""
+ARGS=
+
+case "$1" in
+  start)
+	#if you want to rsync the ProActive jars at starting time, uncomment the line below and adapt it
+	#rsync -avz -e ssh login@host.network.com:/path/to/ProActive /usr/local/share/ProActive
+	sync
+	[ -e "${LOGFILE}" ] || touch ${LOGFILE}
+	if [ -z "${EXE}" ]
+	then
+		echo "The EXE variable is not set in proactive-runtime script. Please fix it." >> ${LOGFILE}
+		exit 2
+	fi
+	log_begin_msg "Starting ProActive-Runtime..."
+	start-stop-daemon --start --exec ${EXE} -b -m --pidfile ${PIDFILE} -- ${ARGS}
+	log_end_msg $?
+    ;;
+  stop)
+    log_begin_msg "Stopping ProActive-Runtime..."
+    start-stop-daemon --stop -p ${PIDFILE}
+    log_end_msg $?
+    ;;
+  restart)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    log_success_msg "Usage: /etc/init.d/proactive-runtime {start|stop|restart}"
+    exit 1
+esac
+
+exit 0

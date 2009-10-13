@@ -37,6 +37,7 @@ import java.util.Map;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Group;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.GCMVirtualMachineManager;
 
 
 /**
@@ -52,11 +53,13 @@ public class GCMDeploymentInfrastructure {
     private Map<String, Group> groups;
     private Map<String, Bridge> bridges;
     private Map<String, HostInfo> hosts;
+    private Map<String, GCMVirtualMachineManager> vmms;
 
     public GCMDeploymentInfrastructure() {
         groups = new HashMap<String, Group>();
         bridges = new HashMap<String, Bridge>();
         hosts = new HashMap<String, HostInfo>();
+        vmms = new HashMap<String, GCMVirtualMachineManager>();
     }
 
     public Map<String, Group> getGroups() {
@@ -71,6 +74,10 @@ public class GCMDeploymentInfrastructure {
         return hosts;
     }
 
+    public Map<String, GCMVirtualMachineManager> getVMM() {
+        return vmms;
+    }
+
     public void addGroup(Group group) {
         groups.put(group.getId(), group);
     }
@@ -81,5 +88,9 @@ public class GCMDeploymentInfrastructure {
 
     public void addHost(HostInfo host) {
         hosts.put(host.getId(), host);
+    }
+
+    public void addVMM(GCMVirtualMachineManager vmm) {
+        vmms.put(vmm.getId(), vmm);
     }
 }

@@ -74,6 +74,7 @@
                 <!ENTITY MessageTagging SYSTEM "MessageTagging.xml">
 	        <!ENTITY JMX SYSTEM "Jmx.xml">
          	 <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
+				<!ENTITY Virtualization SYSTEM "Virtualization.xml">
 
                 ]>
                 
@@ -131,6 +132,7 @@
   &GCMDeployment;
   &Descriptor;
   &VariableContract;
+  &Virtualization;
   <!--&FileTransfer;-->
   &technicalService;
  </part>

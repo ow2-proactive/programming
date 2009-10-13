@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProActiveUserProperties>
+        <properties>
+                <prop key="proactive.communication.protocol" value="ibis"/>
+                <prop key="proactive.test.timeout" value="0" />
+                <prop key="proactive.net.interface" value="eth0"/>
+				<prop key="java.security.policy" value="/user/jmguilla/home/workspace-git/ProActive/compile/proactive.java.policy"/>
+				<prop key="log4j.configuration" value="file:/user/jmguilla/home/workspace-git/ProActive/compile/proactive-log4j"/>
+				<prop key="proactive.net.interface" value="eth0"/>
+        </properties>
+</ProActiveUserProperties>
