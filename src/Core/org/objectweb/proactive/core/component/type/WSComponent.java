@@ -35,6 +35,7 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
@@ -71,11 +72,6 @@ public class WSComponent implements Serializable, Component, NameController, Lif
     protected static final transient Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
 
     /**
-     * Functional interface type.
-     */
-    private ProActiveInterfaceType fcInterfaceType;
-
-    /**
      * Functional interface implementation.
      */
     private Object fcInterfaceImpl;
@@ -86,36 +82,12 @@ public class WSComponent implements Serializable, Component, NameController, Lif
     private WSInfo wsInfo;
 
     /**
-     * Default constructor.
-     */
-    public WSComponent() {
-    }
-
-    /**
      * Constructor specifying the {@link WSInfo} corresponding to the web service to bind to.
      *
      * @param wsInfo {@link WSInfo} corresponding to the web service to bind to.
      */
     public WSComponent(WSInfo wsInfo) {
         this.wsInfo = wsInfo;
-    }
-
-    /**
-     * Getter for the type of the functional interface corresponding to the generated proxy.
-     *
-     * @return Type of the functional interface corresponding to the generated proxy.
-     */
-    public ProActiveInterfaceType getFcInterfaceType() {
-        return fcInterfaceType;
-    }
-
-    /**
-     * Setter for the type of the functional interface corresponding to the generated proxy.
-     *
-     * @param fcInterfaceType Type of the functional interface corresponding to the generated proxy.
-     */
-    public void setFcInterfaceType(ProActiveInterfaceType fcInterfaceType) {
-        this.fcInterfaceType = fcInterfaceType;
     }
 
     /**
@@ -145,15 +117,6 @@ public class WSComponent implements Serializable, Component, NameController, Lif
         return wsInfo;
     }
 
-    /**
-     * Setter for the {@link WSInfo} corresponding to the web service to bind to.
-     *
-     * @param wsInfo {@link WSInfo} corresponding to the web service to bind to.
-     */
-    public void setWSInfo(WSInfo wsInfo) {
-        this.wsInfo = wsInfo;
-    }
-
     public Object getFcInterface(String interfaceName) throws NoSuchInterfaceException {
         if (interfaceName.equals(Constants.COMPONENT)) {
             return this;
@@ -164,7 +127,7 @@ public class WSComponent implements Serializable, Component, NameController, Lif
         if (interfaceName.equals(Constants.LIFECYCLE_CONTROLLER)) {
             return this;
         }
-        if (interfaceName.equals(fcInterfaceType.getFcItfName())) {
+        if (interfaceName.equals(((Interface) fcInterfaceImpl).getFcItfName())) {
             return fcInterfaceImpl;
         }
         throw new NoSuchInterfaceException(interfaceName);
@@ -178,7 +141,8 @@ public class WSComponent implements Serializable, Component, NameController, Lif
         try {
             Component boot = Fractal.getBootstrapComponent();
             TypeFactory tf = Fractal.getTypeFactory(boot);
-            return tf.createFcType(new InterfaceType[] { fcInterfaceType });
+            return tf.createFcType(new InterfaceType[] { (InterfaceType) ((Interface) fcInterfaceImpl)
+                    .getFcItfType() });
         } catch (InstantiationException e) {
             // should never append
             logger.error("Could not generate type for web service component", e);
@@ -191,7 +155,9 @@ public class WSComponent implements Serializable, Component, NameController, Lif
     }
 
     public String getFcName() {
-        return "WSComponent-" + wsInfo.getWSUrl();
+        return "WSComponent-" +
+            ((InterfaceType) ((Interface) fcInterfaceImpl).getFcItfType()).getFcItfSignature().replaceAll(
+                    "\\.", "_") + "-" + ((Interface) fcInterfaceImpl).getFcItfName();
     }
 
     public void setFcName(String name) {

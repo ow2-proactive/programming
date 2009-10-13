@@ -130,7 +130,8 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
                 // Add fields
                 CtField loggerField = new CtField(pool.get(Logger.class.getName()), "logger",
                     generatedCtClass);
-                loggerField.setModifiers(Modifier.PRIVATE + Modifier.STATIC);
+                loggerField.setModifiers(Modifier.PRIVATE + Modifier.STATIC + Modifier.FINAL +
+                    Modifier.TRANSIENT);
                 generatedCtClass.addField(loggerField,
                         "org.objectweb.proactive.core.util.log.ProActiveLogger.getLogger("
                             + "org.objectweb.proactive.core.util.log.Loggers.COMPONENTS_REQUESTS)");
@@ -138,9 +139,6 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
                     generatedCtClass);
                 wsCallerField.setModifiers(Modifier.PRIVATE);
                 generatedCtClass.addField(wsCallerField, "new " + wsInfo.getWSCallerClassName() + "()");
-                CtField wsUrlField = new CtField(pool.get(Object.class.getName()), "wsUrl", generatedCtClass);
-                wsUrlField.setModifiers(Modifier.PRIVATE);
-                generatedCtClass.addField(wsUrlField);
                 CtField proxyField = new CtField(pool.get(Proxy.class.getName()), "proxy", generatedCtClass);
                 proxyField.setModifiers(Modifier.PRIVATE);
                 generatedCtClass.addField(proxyField);
@@ -150,21 +148,22 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
                 generatedCtClass.addConstructor(constructorNoParam);
 
                 // Add getter and setter for private fields
-                CtMethod getterFcItfImpl = CtNewMethod.getter("getFcItfImpl", wsUrlField);
+                String bodyGetterFcItfImpl = "{\nreturn ((org.objectweb.proactive.core.component.type.WSComponent) getFcItfOwner()).getWSInfo().getWSUrl();\n}";
+                CtMethod getterFcItfImpl = CtNewMethod.make(pool.get("java.lang.Object"), "getFcItfImpl",
+                        null, null, bodyGetterFcItfImpl, generatedCtClass);
                 generatedCtClass.addMethod(getterFcItfImpl);
                 String bodySetterFcItfImpl = "{\ntry {\n"
                     + "((org.objectweb.proactive.core.component.type.WSComponent) getFcItfOwner()).getWSInfo().setWSUrl((String) $1);\n"
-                    + "wsUrl = $1;\n"
-                    + "wsCaller.setup(Class.forName(((org.objectweb.fractal.api.type.InterfaceType) getFcItfType()).getFcItfSignature()), (String) wsUrl);\n"
+                    + "wsCaller.setup(Class.forName(((org.objectweb.fractal.api.type.InterfaceType) getFcItfType()).getFcItfSignature()), (String) $1);\n"
                     + "}\n"
                     + "catch(org.objectweb.fractal.api.control.IllegalBindingException ibe) {\n"
-                    + "logger.error(\"Can not set binding to the WSDL address: \" + $1, ibe);\n"
+                    + "logger.error(\"Can not set binding to the web service address: \" + $1, ibe);\n"
                     + "}\n"
                     + "catch(ClassNotFoundException cnfe) {\n"
                     + "logger.error(\"Can not find class: \" + ((org.objectweb.fractal.api.type.InterfaceType) getFcItfType()).getFcItfSignature(), cnfe);\n"
                     + "}\n" + "}";
                 CtMethod setterFcItfImpl = CtNewMethod.make(CtClass.voidType, "setFcItfImpl",
-                        new CtClass[] { pool.get("java/lang/Object") }, null, bodySetterFcItfImpl,
+                        new CtClass[] { pool.get("java.lang.Object") }, null, bodySetterFcItfImpl,
                         generatedCtClass);
                 generatedCtClass.addMethod(setterFcItfImpl);
                 CtMethod getterProxy = CtNewMethod.getter("getProxy", proxyField);
@@ -222,7 +221,6 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
             reference.setProxy(null);
 
             // Set up owner
-            ((WSComponent) owner).setFcInterfaceType(interfaceType);
             ((WSComponent) owner).setFcInterfaceImpl(reference);
 
             return reference;

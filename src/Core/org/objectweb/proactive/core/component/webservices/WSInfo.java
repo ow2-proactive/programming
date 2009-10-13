@@ -214,14 +214,4 @@ public class WSInfo implements Serializable {
     public String getWSCallerClassName() {
         return wsCallerClassName;
     }
-
-    /**
-     * Setter for the full name of the class to use to call the web service.
-     *
-     * @param wsCallerClassName The full name of the class to use to call the web service.
-     * @throws IllegalBindingException If the class name is incorrect.
-     */
-    public void setWSCallerClassName(String wsCallerClassName) throws IllegalBindingException {
-        this.wsCallerClassName = checkClassName(wsCallerClassName);
-    }
 }
