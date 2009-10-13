@@ -10,6 +10,7 @@
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
 	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
 	<classpathentry kind="lib" path="lib/ajo.jar"/>
+	<classpathentry kind="lib" path="lib/apputils.jar"/>
 	<classpathentry kind="lib" path="lib/asm-2.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
 	<classpathentry kind="lib" path="lib/batik-dom.jar"/>
@@ -55,6 +56,7 @@
 	<classpathentry kind="lib" path="lib/jetty-util-6.1.18.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/jh.jar"/>
+	<classpathentry kind="lib" path="lib/jna.jar"/>
 	<classpathentry kind="lib" path="lib/jsch-0.1.31.jar"/>
 	<classpathentry kind="lib" path="lib/julia-asm.jar"/>
 	<classpathentry kind="lib" path="lib/julia-mixins.jar"/>
@@ -69,6 +71,7 @@
 	<classpathentry kind="lib" path="lib/ow_deployment_scheduling.jar"/>
 	<classpathentry kind="lib" path="lib/ptolemy.jar"/>
 	<classpathentry kind="lib" path="lib/puretls.jar"/>
+	<classpathentry kind="lib" path="lib/saaj.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8-dom.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8.jar"/>
 	<classpathentry kind="lib" path="lib/scriptPlugin.jar"/>
@@ -87,8 +90,21 @@
 	<classpathentry kind="lib" path="lib/sunxacml.jar"/>
 	<classpathentry kind="lib" path="lib/tablelayout.jar"/>
 	<classpathentry kind="lib" path="lib/trilead-ssh2.jar"/>
+	<classpathentry kind="lib" path="lib/vi-java.jar"/>
+	<classpathentry kind="lib" path="lib/vim.jar"/>
+	<classpathentry kind="lib" path="lib/vim25.jar"/>
+	<classpathentry kind="lib" path="lib/virtualization-core.jar"/>
+	<classpathentry kind="lib" path="lib/virtualization-libvirt.jar"/>
+	<classpathentry kind="lib" path="lib/virtualization-virtualbox.jar"/>
+	<classpathentry kind="lib" path="lib/virtualization-vmware-vi.jar"/>
+	<classpathentry kind="lib" path="lib/virtualization-vmware-vix.jar"/>
+	<classpathentry kind="lib" path="lib/virtualization-xenserver.jar"/>
 	<classpathentry kind="lib" path="lib/winp-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/ws-commons-util-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/xenserver-5.0.0-3.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/xmlrpc-client-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/xmlrpc-common-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2/annogen-0.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/axis2/axis2-adb-1.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2/axis2-kernel-1.4.1.jar"/>
