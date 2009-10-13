@@ -45,6 +45,11 @@
 				<fileset dir="${snippets.location}"/>
 			</delete>
 			<mkdir dir="${snippets.location}"/>
+			<if name="snippets.start">
+				<else>
+					<property name="snippets.start" value="${snippets.start.default}" />
+				</else>
+			</if>
 			<java classname="doc.snippets.Snippetizer" fork="true" >
 				<classpath refid="docs.utils.classpath"/>
 				<!-- The root for parser start, it will check all the files in the dir and subdirs-->
@@ -129,7 +134,6 @@
 	<!-- ==================================================================== -->
 	<macrodef name="manualSingleHtml" description="Make only the big html file in the manual">
 		<sequential>
-        <schemas />
 		  <docbookPreProcess output.docs.dir="${docs.html.single.dir}" />
 		  <docbookTransform docbookInputFile="${docs.mainFile}" 
 			  docbookOutputFile="${docs.html.single.output}" 
@@ -146,7 +150,6 @@
 	<!-- ==================================================================== -->
 	<macrodef name="manualPdf" description="Make only the pdf files in the manual">
 		<sequential>
-         <schemas />
 			<docbookPreProcess output.docs.dir="${docs.pdf.dir}" />
 			<!--   First translate into intermediate fo format -->
 			<docbookTransform docbookInputFile="${docs.mainFile}"
@@ -179,7 +182,6 @@
 	<!-- ==================================================================== -->
 	<macrodef name="manualHtml" description="Make only the html files in the manual">
 		<sequential>
-         <schemas />
 			<docbookPreProcess output.docs.dir="${docs.html.multiple.dir}" />
 			<docbookTransform docbookInputFile="${docs.mainFile}" 
 					docbookOutputFile="${docs.html.multiple.output}" 

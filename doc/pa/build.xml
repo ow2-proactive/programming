@@ -5,6 +5,7 @@
 	<property name="pa.src.dir" value="../doc/pa" />
 	<property name="pa.doc.name" value="ProActive" />
 	<property name="docs.tmp.dir"	value="${basedir}/../doc/tmp" />
+	<property name="snippets.start" value="${basedir}/../src:${basedir}/../examples" />
 
 	<!-- ================================================================ -->
 	<!--            Create docs, which is the javadoc + manual            -->
@@ -26,7 +27,7 @@
 	<!-- ==================================================================== -->
 	<!--          Make just the html files for the manual                     -->
 	<!-- ==================================================================== -->
-	<target name="doc.ProActive.manualHtml" description="Generate the ProActive Programming HTML manual">
+	<target name="doc.ProActive.manualHtml" depends="doc.ProActive.schemas" description="Generate the ProActive Programming HTML manual">
 		<subant target="manualHtml" 			inheritall="true">
 			<property name="doc.name"               value="${pa.doc.name}" />
 			<property name="docs.src.dir"           value="${pa.src.dir}" />  
@@ -47,7 +48,7 @@
 	<!-- ==================================================================== -->
 	<!--               Make just the pdf files for the manual                 -->
 	<!-- ==================================================================== -->
-	<target name="doc.ProActive.manualPdf" description="Generate the ProActive Programming PDF manual">
+	<target name="doc.ProActive.manualPdf" depends="doc.ProActive.schemas" description="Generate the ProActive Programming PDF manual">
 		<subant target="manualPdf" inheritall="true">
 			<property name="doc.name"               value="${pa.doc.name}" />
 			<property name="docs.src.dir"           value="${pa.src.dir}" />  
@@ -57,7 +58,7 @@
 	<!-- ==================================================================== -->
 	<!--           Make only one huge html-file from the doc                  -->
 	<!-- ==================================================================== -->
-	<target name="doc.ProActive.manualSingleHtml" description="Generate the ProActive Programming single HTML manual">
+	<target name="doc.ProActive.manualSingleHtml" depends="doc.ProActive.schemas" description="Generate the ProActive Programming single HTML manual">
 		<subant target="manualSingleHtml" inheritall="true">
 			<property name="doc.name"               value="${pa.doc.name}" />
 			<property name="docs.src.dir"           value="${pa.src.dir}" />  
@@ -248,7 +249,7 @@
 	<delete dir="${docs.tmp.dir}" />
     </target>
 
-	<target name="doc.ProActive.schemas" description="Generate the ProActive Programming HTML manual">
+	<target name="doc.ProActive.schemas" description="Build documentation for GCM schemas">
 	     <subant target="schemas"             inheritall="true">
 	         <property name="doc.name"               value="${pa.doc.name}" />
 	         <fileset dir="${pa.file.set}"   includes="doc.xml"/>
