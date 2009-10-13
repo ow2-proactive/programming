@@ -224,6 +224,15 @@ Nb of active objects on the remote node: 1 received message: A message from 2667
 					"services.msc" utility. ("Control Panel->Administrative
 					Tools->Services")</para>
 			</listitem>
+			<listitem>
+				<para>The installer will check if the selected user account have the log on service right assignment.</para>
+				<para>In not follow the following steps to add the log on service right assignment:</para>
+				<itemizedlist>
+					<listitem><para>In the 'Administrative Tools' of the 'Control Panel' open the 'Local Security Policy'.</para></listitem>
+					<listitem><para>In 'Security Settings', select 'Local Policies' then select 'User Rights Assignments'.</para></listitem>
+					<listitem><para>Finally, in the list of policies open the properties of 'Log on as a service' policy and add the needed user.</para></listitem>			
+				</itemizedlist>
+			</listitem>			
 		</itemizedlist>
 		<para> At the end of the installation the user can choose to run the
 			ProActive Agent Control utility. It is explained in the next section.
@@ -257,6 +266,8 @@ Nb of active objects on the remote node: 1 received message: A message from 2667
 			GUI for editing is provided (explained below). Even if it is not
 			recommended you can edit the configuration file by your self with
 			your favorite text editor.</para>
+		<para>Note that configuration files are not compatible between major releases. 
+		</para>		
 		<para>
 			<figure xml:id="PWA_config_editor_general_FIGURE">
 				<info>
@@ -281,8 +292,16 @@ Nb of active objects on the remote node: 1 received message: A message from 2667
 					Files\Java\jdk1.6.0_12).</para>
 			</listitem>
 			<listitem>
+				<para>The number of Runtimes (the number of spawned jvms).</para>
+			</listitem>			
+			<listitem>
 				<para>The jvm parameters.</para>
+				<para>Note that if the parameter contains ${rank} it will be dynamically replaced by the Runtime rank starting from 0.</para>
 			</listitem>
+			<listitem>
+				<para>The On Runtime Exit script. A script executed after a Runtime exits. This can be useful to perform additional cleaning operation.</para>
+				<para>Note that the script receives as parameter the pid of the Runtime.</para>				
+			</listitem>			
 			<listitem>
 				<para>The user can enable the memory management (disabled by
 					default) in order to limit the amount of RAM used by the jvm
@@ -331,9 +350,10 @@ Nb of active objects on the remote node: 1 received message: A message from 2667
 					<emphasis role="bold">Resource Manager Registration
 					</emphasis>
 					- creates a local ProActive node and registers it in the specified
-					Resource Manager. The url must be like 'protocol://host:port/'. The
-					node name is optional. Since the Resource Manager requires an
-					authentication a username and a password are required.
+					Resource Manager. The mandatory Resource Manager's url must be like 'protocol://host:port/'. The
+					node name and the node source name are optional. Since the Resource Manager requires an
+					authentication the user specify the file that contains the credential or use the default one
+					usually located in "%USERPROFILE%\.proactive\security" folder.
 				</para>
 			</listitem>
 			<listitem>
@@ -345,6 +365,13 @@ Nb of active objects on the remote node: 1 received message: A message from 2667
 				</para>
 			</listitem>
 		</itemizedlist>
+		<para>
+		The user can specify the protocol (rmi or http) to be used by the Runtime for incoming communications.
+		</para>
+		<para>
+		To ensure that a unique port is used by a Runtime, the port initial value, if available, will be incremented
+		for each Runtime and given as value of the "-Dproactive.SELECTED_PROTOCOL.port" jvm property.
+		</para>		
 		<para>
 			<figure xml:id="PWA_config_editor_planning_FIGURE">
 				<info>
