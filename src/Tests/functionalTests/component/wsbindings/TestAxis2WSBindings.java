@@ -102,7 +102,7 @@ public class TestAxis2WSBindings extends CommonSetup {
         //        for (int i = 0; i < NUMBER_SERVERS; i++) {
         //            Fractal.getBindingController(composite).bindFc(
         //                    Client.SERVICEMULTICASTREAL_NAME,
-        //                    url + WSConstants.AXIS_SERVICES_PATH + SERVER_DEFAULT_NAME + i + "_" +
+        //                    url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + i + "_" +
         //                        SERVER_SERVICEMULTICAST_NAME);
         //        }
         Fractal.getLifeCycleController(composite).startFc();
