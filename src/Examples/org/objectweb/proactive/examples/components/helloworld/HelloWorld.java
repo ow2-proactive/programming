@@ -34,7 +34,7 @@ package org.objectweb.proactive.examples.components.helloworld;
 /***
  *
  * Author: Eric Bruneton
- * Modified by: Matthieu Morel
+ * Modified by: The ProActive Team
  */
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;

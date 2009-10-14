@@ -48,7 +48,7 @@ import org.objectweb.proactive.core.group.TaskFactoryFactory;
  * 
  * Hence the two distinct factories.
  * 
- * @author Matthieu Morel
+ * @author The ProActive Team
  *
  */
 public class ComponentTaskFactoryFactory {

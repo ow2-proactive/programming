@@ -37,7 +37,7 @@ package org.objectweb.proactive.core.group;
  * Indeed, with the default group TaskFactory, groups dispatch parameters in configurable non-broadcast modes if and only if: 
  * they are instances of groups, and group parameters are tagged as "scatter".
  * 
- * @author Matthieu Morel
+ * @author The ProActive Team
  *
  */
 public class TaskFactoryFactory {
