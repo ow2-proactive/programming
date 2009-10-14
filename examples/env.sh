@@ -54,4 +54,5 @@ JAVACMD=$JAVA_HOME/bin/java"\
 	-Dos=unix"
 
 export PROACTIVE
+echo $PROACTIVE
 export JAVACMD

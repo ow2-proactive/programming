@@ -63,6 +63,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
 import org.objectweb.proactive.extensions.gcmdeployment.Helpers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.ApplicationParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.ApplicationParserExecutable;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.ApplicationParserExecutableMPI;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.ApplicationParserProactive;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.GCMDeploymentDescriptor;
@@ -175,6 +176,7 @@ public class GCMApplicationParserImpl implements GCMApplicationParser {
     private void registerDefaultApplicationParsers() {
         registerApplicationParser(new ApplicationParserProactive());
         registerApplicationParser(new ApplicationParserExecutable());
+        registerApplicationParser(new ApplicationParserExecutableMPI());
     }
 
     public void setupJAXP() throws IOException, ParserConfigurationException, SAXException {

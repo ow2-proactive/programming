@@ -21,6 +21,7 @@
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupPrunSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupRSHSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupSSHSchema.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/group/GroupMPISchema.xsd" />
 
 	<xsd:include schemaLocation="../GCMDeployment/bridge/BridgeRSHSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/bridge/BridgeSSHSchema.xsd" />

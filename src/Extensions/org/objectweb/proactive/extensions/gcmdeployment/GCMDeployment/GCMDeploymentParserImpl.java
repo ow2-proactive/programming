@@ -76,6 +76,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Grou
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupPrunParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupRSHParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupSSHParser;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.GroupMPIParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported.GroupARCParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported.GroupCGSPParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.unsupported.GroupFuraParser;
@@ -233,6 +234,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
         registerGroupParser(new GroupPrunParser());
         registerGroupParser(new GroupRSHParser());
         registerGroupParser(new GroupSSHParser());
+        registerGroupParser(new GroupMPIParser());
         // TODO add other group parsers here
     }
 

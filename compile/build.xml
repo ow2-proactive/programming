@@ -35,8 +35,6 @@
 	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
 
 
-
-
 	<!-- ************
 		Classpath
 	-->
@@ -200,62 +198,10 @@
 
 		<antcall target="ibis"/>
 
-		<!-- XXX: MPI should be in Extensions -->
-		<if>
-			<bool>
-				<and>
-					<os family="Unix" />
-					<available file="mpicc" filepath="/bin:/usr/bin:/usr/local/bin" />
-					<!-- Bug #3128: Disable MPI anyway -->
-					<!--<available file="mpiIsBrokenIDontWantIt" filepath="/bin" /> -->
-				</and>
-			</bool>
-
-			<!-- Delete existing header file to avoid conflict -->
-			<delete>
-				<fileset dir="${src.proactive.dir}/org/objectweb/proactive/mpi/control">
-					<include name="org_objectweb_proactive_mpi_control_ProActiveMPIComm.h" />
-					<include name="org_objectweb_proactive_mpi_control_ProActiveMPIComm_MessageRecvHandler.h" />
-				</fileset>
-			</delete>
-
-			<!-- Generate header file (based on classpath) -->
-			<javah classpath="${cl.proactive.dir}" force="yes" class="org.objectweb.proactive.mpi.control.ProActiveMPIComm" destdir="${src.proactive.dir}/org/objectweb/proactive/mpi/control/" />
-
-			<!-- Generate library -->
-			<exec dir="${cl.proactive.dir}" executable="mpicc" os="Linux">
-				<arg line=" -I${java.home}/../include -I${java.home}/../include/linux ${src.proactive.dir}/org/objectweb/proactive/mpi/control/ProActiveMPIComm.c ${src.proactive.dir}/org/objectweb/proactive/mpi/control/config/src/CommonInternalApi.c -o ${cl.proactive.dir}/${proactive.path}/mpi/control/libProActiveMPIComm.so -shared -fPIC" />
-			</exec>
-
-			<!-- Delete object file generated in classes repository -->
-			<delete>
-				<fileset dir="${cl.proactive.dir}">
-					<include name="ProActiveMPIComm.o" />
-					<include name="CommonInternalApi.o" />
-				</fileset>
-			</delete>
-
-			<!-- Delete existing header file to avoid conflict -->
-			<delete>
-				<fileset dir="${src.proactive.dir}/org/objectweb/proactive/mpi/control">
-					<include name="org_objectweb_proactive_mpi_control_ProActiveMPIComm.h" />
-					<include name="org_objectweb_proactive_mpi_control_ProActiveMPIComm_MessageRecvHandler.h" />
-				</fileset>
-			</delete>
-
-			<!-- execute configure to generate Makefiles -->
-			<exec dir="${src.proactive.dir}/${proactive.path}/mpi/control/config" executable="sh" os="Linux">
-				<arg line="configure.sh " />
-			</exec>
-
-			<else>
-				<echo>Wrapping with control is only available for Unix and mpicc must be installed</echo>
-			</else>
-		</if>
 	</target>
 
 
-	<target name="compile.extensions" depends="compile.core" description="Compile ProActive Extensions classes">
+	<target name="compile.extensions" depends="compile.core, -deploy.mkdir" description="Compile ProActive Extensions classes">
 		<subant target="-compile" inheritall="yes" failonerror="true">
 			<fileset dir="${src.extensions.dir}" includes="**/build.xml" />
 		</subant>
@@ -317,6 +263,39 @@
 			</fileset>
 		</copy>
 
+		<if>
+					<bool>
+						<and>
+							<os family="Unix" />
+							<available file="mpicc" filepath="/bin:/usr/bin:/usr/local/bin" />
+
+						</and>
+					</bool>
+			       <echo>Compiling native examples</echo>
+			        <property name="src.mpi.dir" value="${src.extensions.dir}/${extensions.path}/nativeinterfacempi/control/config/src" />
+			        <property name="src.nativeinterface.dir"  value="${src.extensions.dir}/${extensions.path}/nativeinterface" />
+			    <exec dir="${src.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="mpic++" os="Linux">
+				<arg line="-O3 -lrt
+		                                    -I${src.mpi.dir}
+		                                    -I${src.nativeinterface.dir}
+		                                    -L${deploy.lib.native.dir}
+		                                    -lProActiveNativeInterfaceIPC -lProActiveMPIComm
+		                                    -fPIC -g
+		                                    hello_pampi.c -o hello_pampi " />
+				</exec>
+				<exec dir="${src.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="cp" os="Linux">
+				<arg line="hello_pampi ${cl.examples.dir}/${examples.path}/mpi/proactive_mpi/"/>
+				</exec>
+				<exec dir="${cl.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="chmod" os="Linux">
+		                    <arg line="+x hello_pampi"/>
+				</exec>
+
+					<else>
+						<echo>Native examples are only available for Unix and mpicc must be installed</echo>
+					</else>
+		</if>
+
+
 		<available classname="com.sun.j3d.utils.behaviors.mouse.MouseWheelZoom" property="java3d_present" />
 		<if name="java3d_present">
 			<echo message="Info: Java3D installed." />
@@ -367,7 +346,7 @@
 		Deployment
 	-->
 
-	<target name="deploy.core" depends="compile.all, -deploy.mkdir" description="Populate dist/ with all the files needed">
+	<target name="deploy.core" depends="compile.all, -deploy.mkdir, compile.all" description="Populate dist/ with all the files needed">
 		<!-- Update Implementation-Version -->
 		<if name="isRelease" exists="true">
 			<replaceregexp file="${compile.dir}/Manifest-base.mf" match="\$ID.*\$" replace="${version}" byline="true" />
@@ -501,6 +480,7 @@
 		<!-- Make deploy directories -->
 		<mkdir dir="${deploy.dir}" />
 		<mkdir dir="${deploy.lib.dir}" />
+		<mkdir dir="${deploy.lib.native.dir}" />
 		<mkdir dir="${deploy.scripts.dir}" />
 	</target>
 

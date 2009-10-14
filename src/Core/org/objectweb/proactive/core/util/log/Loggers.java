@@ -105,12 +105,6 @@ public interface Loggers {
     public static final String FAULT_TOLERANCE_CIC = FAULT_TOLERANCE + ".cic";
     public static final String FAULT_TOLERANCE_PML = FAULT_TOLERANCE + ".pml";
 
-    // MPI loggers
-    static final public String MPI = CORE + ".mpi";
-    static final public String MPI_CONTROL = MPI + ".control";
-    static final public String MPI_CONTROL_MANAGER = MPI_CONTROL + ".control";
-    static final public String MPI_CONTROL_COUPLING = MPI_CONTROL + ".coupling";
-
     // Scilab loggers
     public static final String SCILAB = CORE + ".scilab";
     public static final String SCILAB_DEPLOY = SCILAB + ".deploy";
@@ -177,4 +171,11 @@ public interface Loggers {
     // VFS Provider
     public static final String VFS_PROVIDER = CORE + ".vfsprovider";
     public static final String VFS_PROVIDER_SERVER = VFS_PROVIDER + ".server";
+
+    //Native code-wrapping loggers
+    static final public String NATIVE = CORE + ".native";
+    static final public String NATIVE_CONTROL = NATIVE + ".control";
+    static final public String NATIVE_CONTROL_MANAGER = NATIVE_CONTROL + ".manager";
+    static final public String NATIVE_CONTROL_COUPLING = NATIVE_CONTROL + ".coupling";
+
 }

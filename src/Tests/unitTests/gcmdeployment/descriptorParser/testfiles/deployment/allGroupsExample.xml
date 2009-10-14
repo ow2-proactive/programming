@@ -131,6 +131,12 @@
 				</taskRepartition>
 			</loadLevelerGroup>
 
+			<mpiGroup
+                 id="LAN_MPI"
+                 hostList="host10 host11 host12 host13"
+                 distributionPath="/usr/bin/lam"
+                 commandPath="./scripts/gcmdeployment/executable_mpi_lam.sh">
+             </mpiGroup>
 
 			<loadLevelerGroup id="loadlevelergroup4" bookedNodesAccess="rsh">
 				<scriptPath base="root" relpath="/usr/local/loadleveler/scripts/jobscript.sh" />

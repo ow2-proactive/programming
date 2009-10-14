@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ProActiveMPI Native interface " basedir="../../../../../../../compile/">
+
+	<import file="${basedir}/build.xml" />
+	<taskdef name="if" classname="ise.antelope.tasks.IfTask" />
+
+	<target name="compile" depends="core,-compile"/>
+
+	<target name="-compile">
+
+		<compile_extension module="ProActiveMPI"/>
+		<!--TODO bug this target depends and should be compiled after the nativeinterface package
+			This is currently enforced by naming it 'nativeinterfacempi' which is after 'nativeinterface'
+			in the extensions dir -->
+
+		<property name="src.mpi.dir" value="${src.extensions.dir}/${extensions.path}/nativeinterfacempi/control/config/src" />
+		<property name="src.nativeinterface.dir"  value="${src.extensions.dir}/${extensions.path}/nativeinterface" />
+
+		<if>
+			<bool>
+				<and>
+					<os family="Unix" />
+					<available file="mpic++" filepath="/bin:/usr/bin:/usr/local/bin:${user.home}/bin" />
+				</and>
+			</bool>
+			<!-- Delete existing header file to avoid conflict -->
+			<delete failonerror="false">
+				<fileset dir="${deploy.lib.native.dir}">
+					<include name="libProActiveMPIComm.so" />
+				</fileset>
+			</delete>
+
+			<!-- Generate library -->
+			<echo>Generating ProActiveMPI native interface shared library</echo>
+			<exec dir="${deploy.lib.native.dir}" executable="mpic++" os="Linux">
+				<arg line="-O3 -lrt
+							-I${src.mpi.dir}
+							-I${src.nativeinterface.dir}
+							-L${deploy.lib.native.dir} -lProActiveNativeInterfaceIPC
+							-L.
+							${src.mpi.dir}/ProActiveMPI.c
+							${src.mpi.dir}/ProActiveMPI_Message.c
+							${src.mpi.dir}/read_thread.c
+							${src.mpi.dir}/message_queue.c
+						    -shared -fPIC -g -Wl,-soname,libProActiveMPIComm.so.1 -o libProActiveMPIComm.so.1.0.1 " />
+			</exec>
+			<exec dir="${deploy.lib.native.dir}" executable="ln" os="Linux">
+				<arg line="-fs ./libProActiveMPIComm.so.1.0.1 libProActiveMPIComm.so"/>
+			</exec>
+			<exec dir="${deploy.lib.native.dir}" executable="ln" os="Linux">
+				<arg line="-fs ./libProActiveMPIComm.so.1.0.1 libProActiveMPIComm.so.1"/>
+			</exec>
+
+			<!-- execute configure to generate Makefiles -->
+			<!--
+			<exec dir="${src.extensions.dir}/${extensions.path}/mpi/control/config" executable="sh" os="Linux">
+				<arg line="configure.sh " />
+			</exec>
+			-->
+			<else>
+				<echo>Wrapping with control is only available for Unix and mpicc must be installed</echo>
+			</else>
+		</if>
+	</target>
+</project>

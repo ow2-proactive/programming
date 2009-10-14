@@ -20,6 +20,7 @@
 
 	<property name="deploy.dir"         value="${base.dir}/dist" />
 	<property name="deploy.lib.dir"     value="${deploy.dir}/lib" />
+	<property name="deploy.lib.native.dir"     value="${deploy.lib.dir}/native"/>
 	<property name="deploy.scripts.dir" value="${deploy.dir}/scripts" />
 	
 	<property name="release.dir"        value="${base.dir}/release" />

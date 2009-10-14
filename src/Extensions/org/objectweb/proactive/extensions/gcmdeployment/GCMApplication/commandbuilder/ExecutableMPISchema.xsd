@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="urn:gcm:application:1.0"
+	xmlns="urn:gcm:application:1.0"
+	elementFormDefault="qualified">
+
+	<xsd:include schemaLocation="../../schema/ApplicationDescriptorRootSchema.xsd"/>
+
+
+	<xsd:element name="mpi" type="mpiType" substitutionGroup="abstractApplicationElement" />
+
+	<xsd:complexType name="mpiType">
+		<xsd:complexContent>
+			<xsd:extension base="applicationNodeType">
+				<xsd:sequence>
+					<xsd:element name="command" type="commandType"></xsd:element>
+					<xsd:element name="nodeProvider" maxOccurs="unbounded" minOccurs="0">
+						<xsd:complexType>
+							<xsd:attribute name="refid" type="IdOrVariableType" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>
