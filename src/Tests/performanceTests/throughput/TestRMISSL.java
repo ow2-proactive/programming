@@ -38,7 +38,6 @@ public class TestRMISSL extends Throughput {
 
     static {
         PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmissl");
-        PAProperties.PA_SSH_TUNNELING_TRY_NORMAL_FIRST.setValue(false);
     }
 
     public TestRMISSL() {

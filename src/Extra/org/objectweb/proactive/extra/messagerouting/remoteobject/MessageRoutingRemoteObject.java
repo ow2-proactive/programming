@@ -106,7 +106,6 @@ public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializa
                 logger.fatal("Failed to get the local message routing agent", e);
             }
         }
-
         return this.agent;
     }
 

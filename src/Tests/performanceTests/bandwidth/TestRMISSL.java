@@ -37,7 +37,6 @@ import org.objectweb.proactive.core.config.PAProperties;
 public class TestRMISSL extends Bandwidth {
     static {
         PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmissl");
-        PAProperties.PA_SSH_TUNNELING_TRY_NORMAL_FIRST.setValue(false);
     }
 
     public TestRMISSL() {

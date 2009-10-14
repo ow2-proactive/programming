@@ -5,7 +5,7 @@
  *            Concurrent computing with Security and Mobility
  *
  * Copyright (C) 1997-2009 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@ow2.org
+ * Contact: proactive@objectweb.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,34 +27,34 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.ssh;
+package org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory;
+
+import java.io.IOException;
+import java.net.Socket;
+
 
 /**
- * @author The ProActive Team
- * A trivial placeholder for SshTunnels and their "unused" time.
- * Used by the SshTunnel GC.
+ * Interface for pluggable socket factories
+ * The loaded implementation will be used to provide the socket
+ * that is used by the agent to communicate with the router
+ *
+ * @since ProActive 4.2.0
  */
-public class UnusedTunnel {
-    private SshTunnel _tunnel;
-    private long _time;
+public interface MessageRoutingSocketFactorySPI {
 
-    public UnusedTunnel(SshTunnel tunnel) {
-        _tunnel = tunnel;
-        _time = System.currentTimeMillis();
-    }
+    /**
+     * Create a client socket connected to the specified host and port.
+     * @param  host   the host name
+     * @param  port   the port number
+     * @return a socket connected to the specified host and port.
+     * @exception IOException if an I/O error occurs during socket creation
+     * @since 1.2
+     */
+    public Socket createSocket(String host, int port) throws IOException;
 
-    public SshTunnel getTunnel() {
-        return _tunnel;
-    }
-
-    public boolean isOldEnough() {
-        long current = System.currentTimeMillis();
-        if ((current - _time) >= SshParameters.getTunnelGCPeriod()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    /**
+     * @return The alias name of this service provider
+     */
+    public String getAlias();
 }

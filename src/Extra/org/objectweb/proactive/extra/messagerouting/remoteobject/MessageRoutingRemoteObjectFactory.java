@@ -56,6 +56,7 @@ import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingExc
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingRegistryListRemoteObjectsMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingRemoteObjectLookupMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.MessageRoutingRegistry;
+import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSocketFactorySelector;
 
 
 /**
@@ -97,7 +98,8 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
 
         Agent agent = null;
         try {
-            agent = new AgentImpl(routerAddress, routerPort, ProActiveMessageHandler.class);
+            agent = new AgentImpl(routerAddress, routerPort, ProActiveMessageHandler.class,
+                MessageRoutingSocketFactorySelector.get());
         } catch (ProActiveException e) {
             logAndThrowException("Failed to create the local agent", e);
         }

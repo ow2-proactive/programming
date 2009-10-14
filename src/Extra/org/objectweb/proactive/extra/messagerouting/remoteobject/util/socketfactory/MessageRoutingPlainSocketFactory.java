@@ -5,7 +5,7 @@
  *            Concurrent computing with Security and Mobility
  *
  * Copyright (C) 1997-2009 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@ow2.org
+ * Contact: proactive@objectweb.org
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,33 +27,26 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.ssh.rmissh;
+package org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.rmi.server.RMIServerSocketFactory;
+import java.net.Socket;
 
 
-public class SshRMIServerSocketFactory implements RMIServerSocketFactory, java.io.Serializable {
-    public SshRMIServerSocketFactory() {
+/**
+ * The default implementation for message routing socket factory
+ * It offers plain(simple), unsecured sockets
+ *
+ * @since ProActive 4.2.0
+ */
+public class MessageRoutingPlainSocketFactory implements MessageRoutingSocketFactorySPI {
+
+    public Socket createSocket(String host, int port) throws IOException {
+        return new Socket(host, port);
     }
 
-    public ServerSocket createServerSocket(int port) throws IOException {
-        return new ServerSocket(port);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        // the equals method is class based, since all instances are functionally equivalent.
-        // We could if needed compare on an instance basic for instance with the host and port
-        // Same for hashCode
-        return this.getClass().equals(obj.getClass());
-    }
-
-    @Override
-    public int hashCode() {
-        return this.getClass().hashCode();
+    public String getAlias() {
+        return "plain";
     }
 }

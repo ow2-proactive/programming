@@ -35,9 +35,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
 import java.net.ProtocolException;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -46,11 +46,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.ssh.SshParameters;
-import org.objectweb.proactive.core.ssh.SshTunnel;
-import org.objectweb.proactive.core.ssh.SshTunnelFactory;
-import org.objectweb.proactive.core.ssh.TryCache;
+import org.objectweb.proactive.core.ssh.SshConfig;
+import org.objectweb.proactive.core.ssh.SshTunnelPool;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -60,26 +57,18 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class HttpSshUrlConnection extends java.net.HttpURLConnection {
     static Logger logger = ProActiveLogger.getLogger(Loggers.SSH);
-    private SshTunnel _tunnel;
     private HttpURLConnection _httpConnection;
     private java.util.Hashtable<String, List<String>> _properties;
-    static private TryCache _tryCache = null;
-
-    static private TryCache getTryCache() {
-        if (_tryCache == null) {
-            _tryCache = new TryCache();
-        }
-        return _tryCache;
-    }
+    private SshTunnelPool tunnelPool;
 
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        SshTunnelFactory.reportUnusedTunnel(_tunnel);
     }
 
     public HttpSshUrlConnection(java.net.URL u) throws IOException {
         super(u);
+        this.tunnelPool = new SshTunnelPool(new SshConfig());
         _properties = new Hashtable<String, List<String>>();
     }
 
@@ -285,47 +274,9 @@ public class HttpSshUrlConnection extends java.net.HttpURLConnection {
         String host = u.getHost();
         int port = u.getPort();
         String path = u.getPath();
-        if (PAProperties.PA_SSH_TUNNELING_TRY_NORMAL_FIRST.isTrue() && getTryCache().needToTry(host, port)) {
-            if (!getTryCache().everTried(host, port)) {
-                try {
-                    logger.debug("try http socket probing");
-                    InetSocketAddress address = new InetSocketAddress(host, port);
-                    Socket socket = new Socket();
-                    socket.connect(address, SshParameters.getConnectTimeout());
-                    socket.close();
-                    logger.debug("success http socket probing");
-                } catch (Exception e) {
-                    logger.debug("failure http socket probing");
-                    getTryCache().recordTryFailure(host, port);
-                }
-            }
-            if (getTryCache().needToTry(host, port)) {
-                try {
-                    java.net.URL httpURL = new java.net.URL("http://" + host + ":" + port // uncomment the following line and comment the one above to make sure
-                        // you test that connections fallback to tunneling if the main
-                        // connection fails.
-                        //+ 1
-                        + path);
-                    logger.debug("try http not tunneled");
-                    _httpConnection = (HttpURLConnection) httpURL.openConnection();
-                    ensureSetup(_httpConnection);
-                    _httpConnection.connect();
-                    logger.debug("success http not tunneled ");
-                    connected = true;
-                    getTryCache().recordTrySuccess(host, port);
-                    return;
-                } catch (Exception e) {
-                    getTryCache().recordTryFailure(host, port);
-                    logger.debug("failure http not tunneled ");
-                }
-            }
-        }
-        logger.debug("try http ssh tunneled");
-        _tunnel = SshTunnelFactory.createTunnel(host, port);
-        java.net.URL httpURL = new java.net.URL("http://127.0.0.1:" + _tunnel.getPort() + path);
+        Socket socket = tunnelPool.getSocket(host, port);
+        URL httpURL = new URL("http://" + socket.getInetAddress().getHostName() + ":" + socket.getPort());
         _httpConnection = (HttpURLConnection) httpURL.openConnection();
         ensureSetup(_httpConnection);
-        logger.debug("Opened http connection through tunnel 127.0.0.1:" + _tunnel.getPort() + " -> " + host +
-            ":" + port + " ressource " + path + " -- " + _httpConnection.toString());
     }
 }

@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +64,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessag
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
+import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSocketFactorySPI;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 
 
@@ -104,6 +106,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
     /** List of Valves that will process each message */
     final private List<Valve> valves;
 
+    /** The socket factory to use to create the Tunnel */
+    final private MessageRoutingSocketFactorySPI socketFactory;
+
     /**
      * Create a routing agent
      * 
@@ -119,8 +124,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
      *             If the router cannot be contacted.
      */
     public AgentImpl(InetAddress routerAddr, int routerPort,
-            Class<? extends MessageHandler> messageHandlerClass) throws ProActiveException {
-        this(routerAddr, routerPort, messageHandlerClass, new ArrayList<Valve>());
+            Class<? extends MessageHandler> messageHandlerClass, MessageRoutingSocketFactorySPI socketFactory)
+            throws ProActiveException {
+        this(routerAddr, routerPort, messageHandlerClass, new ArrayList<Valve>(), socketFactory);
     }
 
     /**
@@ -141,14 +147,15 @@ public class AgentImpl implements Agent, AgentImplMBean {
      *             If the router cannot be contacted.
      */
     public AgentImpl(InetAddress routerAddr, int routerPort,
-            Class<? extends MessageHandler> messageHandlerClass, List<Valve> valves)
-            throws ProActiveException {
+            Class<? extends MessageHandler> messageHandlerClass, List<Valve> valves,
+            MessageRoutingSocketFactorySPI socketFactory) throws ProActiveException {
         this.routerAddr = routerAddr;
         this.routerPort = routerPort;
         this.valves = valves;
         this.mailboxes = new WaitingRoom();
         this.requestIDGenerator = new AtomicLong(0);
         this.failedTunnels = new LinkedList<Tunnel>();
+        this.socketFactory = socketFactory;
 
         try {
             Constructor<? extends MessageHandler> mhConstructor;
@@ -206,7 +213,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
      */
     private void __reconnectToRouter() {
         try {
-            Tunnel tunnel = new Tunnel(this.routerAddr, this.routerPort);
+            Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
+            Tunnel tunnel = new Tunnel(s);
 
             // if call for the first time then agentID is null
             RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator

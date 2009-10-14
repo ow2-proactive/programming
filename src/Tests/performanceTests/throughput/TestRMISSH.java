@@ -38,7 +38,7 @@ public class TestRMISSH extends Throughput {
 
     static {
         PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmissh");
-        PAProperties.PA_SSH_TUNNELING_TRY_NORMAL_FIRST.setValue(false);
+        PAProperties.PA_RMISSH_TRY_NORMAL_FIRST.setValue(false);
     }
 
     public TestRMISSH() {

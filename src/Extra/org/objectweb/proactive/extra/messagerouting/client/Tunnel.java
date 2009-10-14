@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
+import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSocketFactorySelector;
 
 
 /** The entity in charge to send and receive data on the wire
@@ -62,10 +63,6 @@ public class Tunnel {
     final private BufferedInputStream bis;
 
     final private String debugString;
-
-    public Tunnel(InetAddress routerAddr, int routerPort) throws IOException {
-        this(new Socket(routerAddr, routerPort));
-    }
 
     public Tunnel(Socket socket) throws IOException {
         this.socket = socket;

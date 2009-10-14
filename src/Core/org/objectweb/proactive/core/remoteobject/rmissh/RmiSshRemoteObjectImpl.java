@@ -31,14 +31,15 @@
  */
 package org.objectweb.proactive.core.remoteobject.rmissh;
 
+import java.rmi.server.RMISocketFactory;
+
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectImpl;
-import org.objectweb.proactive.core.ssh.rmissh.SshRMIClientSocketFactory;
-import org.objectweb.proactive.core.ssh.rmissh.SshRMIServerSocketFactory;
 
 
 public class RmiSshRemoteObjectImpl extends RmiRemoteObjectImpl {
+
     public RmiSshRemoteObjectImpl(InternalRemoteRemoteObject target) throws java.rmi.RemoteException {
-        super(target, new SshRMIServerSocketFactory(), new SshRMIClientSocketFactory());
+        super(target, RMISocketFactory.getDefaultSocketFactory(), RmiSshRemoteObjectFactory.sf);
     }
 }

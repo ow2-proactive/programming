@@ -143,13 +143,6 @@ public class HostsInfos {
     final static String REGEXP_KEYVAL = "(([0-9]{1,3}\\.){3}[0-9]{1,3}:([0-9]{1,3}\\.){3}[0-9]{1,3})";
 
     private void loadProperties() {
-        String userNames = PAProperties.PA_SSH_USERNAME.getValue();
-
-        if (userNames == null) {
-            userNames = System.getProperty("user.name");
-        }
-        parseUserNames(userNames);
-
         String secondaryNames = PAProperties.PA_NET_SECONDARYNAMES.getValue();
         if (secondaryNames != null) {
             if (secondaryNames.matches(REGEXP_KEYVAL + "(," + REGEXP_KEYVAL + ")?")) {
@@ -159,27 +152,6 @@ public class HostsInfos {
                 }
             } else {
                 logger.error("Invalid value for proactive.secondaryNames: " + secondaryNames);
-            }
-        }
-    }
-
-    /**
-     * @param userNames
-     */
-    private void parseUserNames(String userNames) {
-        String[] unames = userNames.split(";");
-        for (int i = 0; i < unames.length; i++) {
-            int index = unames[i].indexOf("@");
-            if (index < 0) {
-                if (unames.length > 1) {
-                    logger.error("ERROR: malformed usernames. Should be username1@host1;username2@host2");
-                } else {
-                    setUserName("all", unames[0]);
-                }
-            } else {
-                String username = unames[i].substring(0, index);
-                String hostname = unames[i].substring(index + 1, unames[i].length());
-                setUserName(hostname, username);
             }
         }
     }

@@ -1,0 +1,2 @@
+org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory
+org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSshSocketFactory

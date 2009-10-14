@@ -1,34 +1,3 @@
-/*
- * ################################################################
- *
- * ProActive: The Java(TM) library for Parallel, Distributed,
- *            Concurrent computing with Security and Mobility
- *
- * Copyright (C) 1997-2009 INRIA/University of Nice-Sophia Antipolis
- * Contact: proactive@ow2.org
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version
- * 2 of the License, or any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
- * USA
- *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
- *
- * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
- */
 package org.objectweb.proactive.core.ssh;
 
 import static org.objectweb.proactive.core.ssh.SSH.logger;
@@ -36,6 +5,8 @@ import static org.objectweb.proactive.core.ssh.SSH.logger;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.ProActiveRandom;
@@ -44,22 +15,22 @@ import com.trilead.ssh2.LocalPortForwarder;
 
 
 /**
- *
- * This class represent a SSH Tunnel.
- *
- * It's a wrapper around a LocalPortForwarder and a SSHConnection object.
- * When creating a tunnel {@link SSHConnectionCache} is used to reuse
- * already existing SSH-2 connections.
- *
- * @see SSHConnection
- * @see LocalPortForwarder
- */
+*
+* This class represent a SSH Tunnel.
+*
+* It's a wrapper around a LocalPortForwarder and a SSHConnection object.
+* When creating a tunnel {@link SSHConnectionCache} is used to reuse
+* already existing SSH-2 connections.
+*
+* @see SSHConnection
+* @see LocalPortForwarder
+*/
 public class SshTunnel {
-    private SSHConnection connection = null;
-    private LocalPortForwarder lpf = null;
+    private LocalPortForwarder lpf;
+
     private int localPort;
-    private int distantPort;
-    private String distantHost;
+    final private int distantPort;
+    final private String distantHost;
 
     /**
      * Open a SSH Tunnel between localhost and distantHost.
@@ -76,28 +47,21 @@ public class SshTunnel {
      *             an exception is thrown if either the authentication or the
      *             tunnel establishment fails.
      */
-    public SshTunnel(String distantHost, int distantPort) throws IOException {
-        String username = SshParameters.getSshUsername(distantHost);
-        String sshPort = SshParameters.getSshPort();
-
+    SshTunnel(SshConnection connection, String distantHost, int distantPort) throws IOException {
         this.distantHost = distantHost;
         this.distantPort = distantPort;
 
-        SSHConnectionCache scc = SSHConnectionCache.getSingleton();
-        try {
-            connection = scc.getConnection(username, distantHost, sshPort);
-        } catch (IOException e) {
-            logger.info("Connection to " + distantHost + ":" + sshPort + "cannot be opened");
-            throw e;
-        }
-
         int initialPort = ProActiveRandom.nextInt(65536 - 1024) + 1024;
-
         for (localPort = (initialPort == 65535) ? 1024 : (initialPort + 1); localPort != initialPort; localPort = (localPort == 65535) ? 1024
                 : (localPort + 1)) {
-            logger.debug("initialPort:" + initialPort + " localPort:" + localPort);
+            logger.trace("initialPort:" + initialPort + " localPort:" + localPort);
             try {
-                lpf = connection.createTunnel(localPort, distantHost, distantPort);
+                lpf = connection.getTrileadConnection().createLocalPortForwarder(localPort, distantHost,
+                        distantPort);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Opened SSH tunnel localport=" + localPort + " distantHost=" + distantHost +
+                        " distantPort=" + distantPort);
+                }
                 return;
             } catch (BindException e) {
                 // Try another port
@@ -108,19 +72,24 @@ public class SshTunnel {
         }
 
         // Looped all over the port range
-        logger.error("No free local port can be found to establish a new SSH-2 tunnel");
+        logger.error("No free local port can be found to establish a new SSH-2 tunnel to " + distantHost +
+            ":" + distantPort);
         throw new BindException("No free local port found");
     }
 
-    public void realClose() throws Exception {
+    @Override
+    public String toString() {
+        return "localport=" + localPort + " distanthost=" + distantHost + " distantport=" + distantPort;
+    }
+
+    public void close() throws Exception {
         if (logger.isDebugEnabled()) {
             logger.debug("Closing tunnel from " +
-                ProActiveInet.getInstance().getInetAddress().getHostAddress() + ":" + localPort + "to " +
+                ProActiveInet.getInstance().getInetAddress().getHostAddress() + ":" + localPort + " to " +
                 distantHost + ":" + distantPort);
         }
+
         lpf.close();
-        lpf = null;
-        connection.close(true);
     }
 
     /**
@@ -141,5 +110,12 @@ public class SshTunnel {
 
     public int getDistantPort() {
         return distantPort;
+    }
+
+    public Socket getSocket() throws IOException {
+        InetSocketAddress address = new InetSocketAddress(this.getPort());
+        Socket socket = new Socket();
+        socket.connect(address);
+        return socket;
     }
 }

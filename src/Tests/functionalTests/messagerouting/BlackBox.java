@@ -34,6 +34,7 @@ package functionalTests.messagerouting;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
 
 import org.junit.Before;
 import org.objectweb.proactive.extra.messagerouting.client.Tunnel;
@@ -52,6 +53,7 @@ public class BlackBox extends FunctionalTest {
         RouterConfig config = new RouterConfig();
         this.router = Router.createAndStart(config);
 
-        this.tunnel = new Tunnel(InetAddress.getLocalHost(), this.router.getPort());
+        Socket s = new Socket(InetAddress.getLocalHost(), this.router.getPort());
+        this.tunnel = new Tunnel(s);
     }
 }

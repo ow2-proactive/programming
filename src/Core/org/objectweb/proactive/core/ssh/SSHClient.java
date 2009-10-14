@@ -184,7 +184,9 @@ public class SSHClient {
                     }
                 } else {
                     // 2.2 Try to find identity files automagically
-                    for (String id : SSHKeys.getKeys()) {
+                    SshConfig config = new SshConfig();
+                    SSHKeys keys = new SSHKeys(config.getKeyDir());
+                    for (String id : keys.getKeys()) {
                         File f = new File(id);
                         if (!(f.exists() && f.isFile() && f.canRead())) {
                             continue;
