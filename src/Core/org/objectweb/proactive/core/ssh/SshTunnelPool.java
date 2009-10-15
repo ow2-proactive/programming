@@ -3,6 +3,7 @@ package org.objectweb.proactive.core.ssh;
 import static org.objectweb.proactive.core.ssh.SSH.logger;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.Sleeper;
 
 
@@ -86,7 +88,7 @@ public class SshTunnelPool {
                 SshTunnelStatefull tunnel = pair.getTunnel(host, port);
                 if (tunnel == null) {
                     // Open a tunnel
-                    tunnel = new SshTunnelStatefull(pair.cnx, host, port);
+                    tunnel = createSshTunStatefull(pair.cnx, host, port);
                     pair.registerTunnel(tunnel);
                 }
 
@@ -148,6 +150,29 @@ public class SshTunnelPool {
         }
     }
 
+    // Cannot be static in SshTunnelStatefull 
+    private SshTunnelStatefull createSshTunStatefull(SshConnection connection, String remoteHost,
+            int remotePort) throws IOException {
+        int initialPort = ProActiveRandom.nextInt(65536 - 1024) + 1024;
+        for (int localPort = (initialPort == 65535) ? 1024 : (initialPort + 1); localPort != initialPort; localPort = (localPort == 65535) ? 1024
+                : (localPort + 1)) {
+
+            try {
+                logger.trace("initialPort:" + initialPort + " localPort:" + localPort);
+                SshTunnelStatefull tunnel = new SshTunnelStatefull(connection, remoteHost, remotePort,
+                    localPort);
+                return tunnel;
+            } catch (BindException e) {
+                // Try another port
+                if (logger.isDebugEnabled()) {
+                    logger.debug("The port " + localPort + " is not free");
+                }
+            }
+        }
+
+        throw new IOException("Failed to create a SSH Tunnel to " + remoteHost + ":" + remotePort);
+    }
+
     /**
      * A SshTunnel which manage statistics about the number of opened sockets
      */
@@ -157,8 +182,9 @@ public class SshTunnelPool {
         /** If users == 0, the timestamp of the last call to close() */
         final private AtomicLong unusedSince = new AtomicLong();
 
-        SshTunnelStatefull(SshConnection connection, String distantHost, int distantPort) throws IOException {
-            super(connection, distantHost, distantPort);
+        SshTunnelStatefull(SshConnection connection, String remoteHost, int remotePort, int localport)
+                throws IOException {
+            super(connection, remoteHost, remotePort, localport);
         }
 
         @Override
@@ -203,7 +229,7 @@ public class SshTunnelPool {
 
         public void registerTunnel(SshTunnelStatefull tunnel) {
             String host = tunnel.getDistantHost();
-            int port = tunnel.getDistantPort();
+            int port = tunnel.getRemotePort();
 
             this.tunnels.put(buildKey(host, port), tunnel);
         }

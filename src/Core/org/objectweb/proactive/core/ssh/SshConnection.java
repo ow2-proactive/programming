@@ -4,6 +4,7 @@ import static org.objectweb.proactive.core.ssh.SSH.logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.BindException;
 
 import com.trilead.ssh2.Connection;
 
@@ -102,8 +103,33 @@ public class SshConnection {
         this.connection = connection;
     }
 
-    synchronized public SshTunnel getSSHTunnel(String distantHost, int distantPort) throws IOException {
-        return new SshTunnel(this, distantHost, distantPort);
+    /** Open a SSH tunnel to remoteHost:remotePort over the SSH connection
+     * 
+     * A free port is automatically chosen as local port
+     * 
+     * @param connection The SSH connection to use to create the tunnel
+     * @param remoteHost The remote host
+     * @param remotePort The remote TCP port 
+     * 
+     * @throws IOException if the tunnel cannot be opened
+     */
+    synchronized public SshTunnel getSSHTunnel(String remotetHost, int remotePort) throws IOException {
+        return SshTunnel.getSshTunnel(this, remotetHost, remotePort);
+    }
+
+    /** Open a SSH tunnel to remoteHost:remotePort over the SSH connection
+     * 
+     * @param connection The SSH connection to use to create the tunnel
+     * @param remoteHost The remote host
+     * @param remotePort The remote TCP port
+     * @param localport  The local TCP port to bind to
+     * 
+     * @throws IOException if the tunnel cannot be opened
+     * @throws BindException if localport is not free
+     */
+    synchronized public SshTunnel getSSHTunnel(String remotetHost, int remotePort, int localport)
+            throws IOException {
+        return new SshTunnel(this, remotetHost, remotePort, localport);
     }
 
     /** Close this connection
