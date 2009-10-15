@@ -41,19 +41,14 @@ import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
 
 
-//@snippet-start spmd_typical_class
 public class A implements InitActive, RunActive, EndActive, java.io.Serializable {
 
-    /**
-     *
-     */
     private String name = "anonymous";
     private boolean onewayCallReceived = false;
 
     public A() {
     }
 
-    //@snippet-end spmd_typical_class
     public A(String name) {
         this.name = name;
     }

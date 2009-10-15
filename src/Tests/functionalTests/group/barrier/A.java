@@ -35,11 +35,9 @@ import org.objectweb.proactive.Active;
 import org.objectweb.proactive.api.PASPMD;
 
 
+//@snippet-start spmd_typical_class
 public class A implements Active, java.io.Serializable {
 
-    /**
-     *
-     */
     private String name;
     private int fooCounter = 0;
     private int barCounter = 0;
@@ -48,6 +46,8 @@ public class A implements Active, java.io.Serializable {
 
     public A() {
     }
+
+    //@snippet-break spmd_typical_class
 
     public A(String s) {
         this.name = s;
@@ -105,4 +105,6 @@ public class A implements Active, java.io.Serializable {
         myspmdgroup.gee();
         //@snippet-end spmd_total_barrier_call
     }
+    //@snippet-resume spmd_typical_class
 }
+//@snippet-end spmd_typical_class
