@@ -50,12 +50,9 @@ public class XenServerVMMBean implements VMMBean {
 
     /**
      * returns {@link XenServerVMM}
+     * @throws VirtualServiceException
      */
-    public XenServerVMM getInstance() {
-        try {
-            return new XenServerVMM(uri, user, pwd);
-        } catch (VirtualServiceException e) {
-            return null;
-        }
+    public XenServerVMM getInstance() throws VirtualServiceException {
+		return new XenServerVMM(uri, user, pwd);
     }
 }

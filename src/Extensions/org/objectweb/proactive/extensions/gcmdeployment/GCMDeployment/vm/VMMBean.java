@@ -35,6 +35,7 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm;
 import java.io.Serializable;
 
 import org.ow2.proactive.virtualizing.core.VirtualMachineManager;
+import org.ow2.proactive.virtualizing.core.error.VirtualServiceException;
 
 
 /**
@@ -47,6 +48,6 @@ public interface VMMBean extends Serializable {
      * Used to get the instance of the manager in charge of the underlying infrastructure.
      * @return the suitable {@link VirtualMachineManager} or null if a problem occured.
      */
-    VirtualMachineManager getInstance();
+    VirtualMachineManager getInstance() throws VirtualServiceException;
 
 }

@@ -49,13 +49,10 @@ public class LibvirtVMMBean implements VMMBean {
 
     /**
      * Returns {@link LibvirtVMM}
+     * @throws VirtualServiceException
      */
-    public LibvirtVMM getInstance() {
-        try {
-            return new LibvirtVMM(uri);
-        } catch (VirtualServiceException e) {
-            return null;
-        }
+    public LibvirtVMM getInstance() throws VirtualServiceException{
+		return new LibvirtVMM(uri);
     }
 
 }

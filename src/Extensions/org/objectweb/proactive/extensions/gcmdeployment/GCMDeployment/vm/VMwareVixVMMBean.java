@@ -56,13 +56,10 @@ public class VMwareVixVMMBean implements VMMBean {
 
     /**
      * returns {@link VMwareVMM} instance
+     * @throws VirtualServiceException
      */
-    public VMwareVMM getInstance() {
-        try {
-            return new VMwareVMM(uri, user, pwd, port, service);
-        } catch (VirtualServiceException e) {
-            return null;
-        }
+    public VMwareVMM getInstance() throws VirtualServiceException {
+		return new VMwareVMM(uri, user, pwd, port, service);
     }
 
 }

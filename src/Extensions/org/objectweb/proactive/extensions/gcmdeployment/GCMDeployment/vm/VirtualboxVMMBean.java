@@ -51,13 +51,10 @@ public class VirtualboxVMMBean implements VMMBean {
 
     /**
      * Returns a {@link VirtualboxVMM} instance
+     * @throws VirtualServiceException
      */
-    public VirtualboxVMM getInstance() {
-        try {
-            return new VirtualboxVMM(uri, user, pwd);
-        } catch (VirtualServiceException e) {
-            return null;
-        }
+    public VirtualboxVMM getInstance() throws VirtualServiceException{
+		return new VirtualboxVMM(uri, user, pwd);
     }
 
 }
