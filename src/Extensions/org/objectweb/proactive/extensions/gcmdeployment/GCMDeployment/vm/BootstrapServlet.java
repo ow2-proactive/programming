@@ -127,8 +127,8 @@ public final class BootstrapServlet extends HttpServlet {
 
     public String getBaseURI() {
         final URI uri = URIBuilder.buildURI(URIBuilder.getHostNameorIP(ProActiveInet.getInstance()
-                .getInetAddress()), HTTPServer.SERVER_CONTEXT + NS + "/", Constants.XMLHTTP_PROTOCOL_IDENTIFIER,
-                PAProperties.PA_XMLHTTP_PORT.getValueAsInt());
+                .getInetAddress()), HTTPServer.SERVER_CONTEXT + NS + "/",
+                Constants.XMLHTTP_PROTOCOL_IDENTIFIER, PAProperties.PA_XMLHTTP_PORT.getValueAsInt());
 
         return uri.toString();
     }

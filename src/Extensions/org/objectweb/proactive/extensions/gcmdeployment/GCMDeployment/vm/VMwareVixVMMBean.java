@@ -59,7 +59,7 @@ public class VMwareVixVMMBean implements VMMBean {
      * @throws VirtualServiceException
      */
     public VMwareVMM getInstance() throws VirtualServiceException {
-		return new VMwareVMM(uri, user, pwd, port, service);
+        return new VMwareVMM(uri, user, pwd, port, service);
     }
 
 }

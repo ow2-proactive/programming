@@ -53,8 +53,8 @@ public class VMwareVIVMMBean implements VMMBean {
      * returns a {@link VMwareVMM} instance
      * @throws VirtualServiceException
      */
-    public VMwareVMM getInstance() throws VirtualServiceException{
-		return new VMwareVMM(uri, user, pwd);
+    public VMwareVMM getInstance() throws VirtualServiceException {
+        return new VMwareVMM(uri, user, pwd);
     }
 
 }

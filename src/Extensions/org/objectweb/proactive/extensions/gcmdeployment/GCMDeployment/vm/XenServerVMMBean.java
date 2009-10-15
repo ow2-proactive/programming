@@ -53,6 +53,6 @@ public class XenServerVMMBean implements VMMBean {
      * @throws VirtualServiceException
      */
     public XenServerVMM getInstance() throws VirtualServiceException {
-		return new XenServerVMM(uri, user, pwd);
+        return new XenServerVMM(uri, user, pwd);
     }
 }
