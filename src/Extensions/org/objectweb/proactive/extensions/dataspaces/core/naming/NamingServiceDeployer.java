@@ -40,7 +40,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 /**
  * Deploys {@link NamingService} instance on the local runtime.
  */
-public class NamingServiceDeployer {
+public final class NamingServiceDeployer {
 
     private static final String NAMING_SERVICE_DEFAULT_NAME = "defaultNamingService";
 
@@ -59,16 +59,40 @@ public class NamingServiceDeployer {
     }
 
     /**
+     * Deploys locally a NamingService instance as a RemoteObject with default name.
+     * 
+     * @param rebind true if the service must rebind an existing one, false if not.
+     * 			If false, throws an exception if the service is already bound under the given name.
+     */
+    public NamingServiceDeployer(boolean rebind) throws ProActiveException {
+        this(NAMING_SERVICE_DEFAULT_NAME, rebind);
+    }
+
+    /**
      * Deploys locally a NamingService instance as a RemoteObject with specified name.
+     * This method throws an exception if the service is already bound under the given name.
      *
      * @param name
      *            of deployed RemoteObject
      */
     public NamingServiceDeployer(String name) throws ProActiveException {
+        this(name, false);
+    }
+
+    /**
+     * Deploys locally a NamingService instance as a RemoteObject with specified name.
+     * Also specify if the naming service must rebind an existing one or not.
+     *
+     * @param name
+     *            of deployed RemoteObject
+     * @param rebind true if the service must rebind an existing one, false if not.
+     * 			If false, throws an exception if the service is already bound under the given name.
+     */
+    public NamingServiceDeployer(String name, boolean rebind) throws ProActiveException {
         namingService = new NamingService();
 
         roe = PARemoteObject.newRemoteObject(NamingService.class.getName(), this.namingService);
-        roe.createRemoteObject(name, false);
+        roe.createRemoteObject(name, rebind);
         url = roe.getURL();
     }
 

@@ -52,7 +52,7 @@ import org.objectweb.proactive.extensions.vfsprovider.server.FileSystemServerImp
  * Deploys {@link FileSystemServer} with instance of {@link FileSystemServerImpl} implementation on
  * the local runtime and provides URL access methods.
  */
-public class FileSystemServerDeployer {
+public final class FileSystemServerDeployer {
 
     private static final String FILE_SERVER_DEFAULT_NAME = "defaultFileSystemServer";
 
@@ -69,7 +69,7 @@ public class FileSystemServerDeployer {
     /**
      * Deploys locally a FileSystemServer as a RemoteObject with a default name.
      *
-     * @param rootPath
+     * @param rootPath the real path on which to bind the server
      * @param autoclosing
      * @throws IOException
      */
@@ -78,19 +78,44 @@ public class FileSystemServerDeployer {
     }
 
     /**
+     * Deploys locally a FileSystemServer as a RemoteObject with a default name.
+     *
+     * @param rootPath the real path on which to bind the server
+     * @param autoclosing
+     * @param rebind true if the service must rebind an existing one, false otherwise.
+     * @throws IOException
+     */
+    public FileSystemServerDeployer(String rootPath, boolean autoclosing, boolean rebind) throws IOException {
+        this(FILE_SERVER_DEFAULT_NAME, rootPath, autoclosing, rebind);
+    }
+
+    /**
      * Deploys locally a FileSystemServer as a RemoteObject with a given name.
      *
-     * @param name
-     *            of deployed RemoteObject
-     * @param rootPath
+     * @param name of deployed RemoteObject
+     * @param rootPath the real path on which to bind the server
      * @param autoclosing
      * @throws IOException
      */
     public FileSystemServerDeployer(String name, String rootPath, boolean autoclosing) throws IOException {
+        this(name, rootPath, autoclosing, false);
+    }
+
+    /**
+     * Deploys locally a FileSystemServer as a RemoteObject with a given name.
+     *
+     * @param name of deployed RemoteObject
+     * @param rootPath the real path on which to bind the server
+     * @param autoclosing
+     * @param rebind true if the service must rebind an existing one, false otherwise.
+     * @throws IOException
+     */
+    public FileSystemServerDeployer(String name, String rootPath, boolean autoclosing, boolean rebind)
+            throws IOException {
         fileSystemServer = new FileSystemServerImpl(rootPath);
         try {
             roe = PARemoteObject.newRemoteObject(FileSystemServer.class.getName(), this.fileSystemServer);
-            roe.createRemoteObject(name, false);
+            roe.createRemoteObject(name, true);
             url = roe.getURL();
         } catch (ProActiveException e) {
             // Ugly but createRemoteObject interface changed
