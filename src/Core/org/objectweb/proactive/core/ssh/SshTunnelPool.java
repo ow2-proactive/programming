@@ -79,8 +79,8 @@ public class SshTunnelPool {
                 Pair pair = this.cache.get(host);
                 if (pair == null) {
                     // Open a SSH connection
-                    String[] keys = new SSHKeys(this.config.getKeyDir()).getKeys();
-                    SshConnection cnx = new SshConnection(username, host, sshPort, keys);
+                    SshConnection cnx = new SshConnection(username, host, sshPort, config
+                            .getPrivateKeys(host));
                     pair = new Pair(cnx);
                     this.cache.put(host, pair);
                 }

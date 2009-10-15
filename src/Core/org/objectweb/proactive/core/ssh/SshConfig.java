@@ -1,6 +1,8 @@
 package org.objectweb.proactive.core.ssh;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import static org.objectweb.proactive.core.ssh.SSH.logger;
 
 
 public class SshConfig {
@@ -15,6 +17,8 @@ public class SshConfig {
     private String knowHostFile;
     private String keyDir;
 
+    private String[] keys;
+
     public SshConfig() {
         this.username = System.getProperty("user.name");
         this.tryPlainSocket = false;
@@ -22,6 +26,7 @@ public class SshConfig {
         this.port = 22;
         this.gcInterval = 5000;
         this.gcIdleTime = 10000;
+
     }
 
     /** Seals the configuration */
@@ -106,9 +111,18 @@ public class SshConfig {
         this.keyDir = keyDir;
     }
 
-    public String[] getPrivateKeys(String host) {
-        // FIXME: Parse the configuration file and remove the getKeyDir() method ?
-        return null;
+    synchronized public String[] getPrivateKeys(String host) {
+        if (this.keys == null) {
+            try {
+                SSHKeys sshKeys = new SSHKeys(this.keyDir);
+                this.keys = sshKeys.getKeys();
+            } catch (IOException e) {
+                logger.info("Failed to open the SSH keydir: " + this.keyDir);
+                return new String[] {};
+            }
+        }
+
+        return this.keys;
     }
 
     /** SSH tunnels and connections are garbage collected if unused longer than this amount of time (ms) */

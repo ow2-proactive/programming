@@ -32,7 +32,6 @@ public class SshConnection {
      * @param port port on the server, normally 22
      * @throws IOException If the connection can't be established an IOException
      * is thrown
-     * @see SSHKeys
      * @see SshParameters
      */
     public SshConnection(String username, String hostname, int port, String[] keys) throws IOException {

@@ -42,7 +42,7 @@ import java.io.IOException;
  * A helper class to manager SSH Public keys
  *
  */
-public class SSHKeys {
+class SSHKeys {
     static final public String[] IDENTITY_FILES = new String[] { "identity", "id_rsa", "id_dsa" };
 
     /** Default suffix for public keys */
