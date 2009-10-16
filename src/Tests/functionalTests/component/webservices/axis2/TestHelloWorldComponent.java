@@ -51,12 +51,13 @@ import org.objectweb.proactive.extensions.webservices.client.Client;
 import org.objectweb.proactive.extensions.webservices.client.ClientFactory;
 import org.objectweb.proactive.extensions.webservices.exceptions.UnknownFrameWorkException;
 
+import functionalTests.FunctionalTest;
 import functionalTests.component.webservices.common.GoodByeWorldItf;
 import functionalTests.component.webservices.common.HelloWorldComponent;
 import functionalTests.component.webservices.common.HelloWorldItf;
 
 
-public class TestHelloWorldComponent {
+public class TestHelloWorldComponent extends FunctionalTest {
 
     private String url;
     private Component comp;

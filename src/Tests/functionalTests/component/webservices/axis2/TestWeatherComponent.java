@@ -50,12 +50,13 @@ import org.objectweb.proactive.extensions.webservices.client.AbstractClientFacto
 import org.objectweb.proactive.extensions.webservices.client.Client;
 import org.objectweb.proactive.extensions.webservices.client.ClientFactory;
 
+import functionalTests.FunctionalTest;
 import functionalTests.component.webservices.common.Weather;
 import functionalTests.component.webservices.common.WeatherServiceComponent;
 import functionalTests.component.webservices.common.WeatherServiceItf;
 
 
-public class TestWeatherComponent {
+public class TestWeatherComponent extends FunctionalTest {
 
     private String url;
     private WebServices ws;

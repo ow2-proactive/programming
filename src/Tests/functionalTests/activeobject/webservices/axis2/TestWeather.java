@@ -43,11 +43,12 @@ import org.objectweb.proactive.extensions.webservices.client.Client;
 import org.objectweb.proactive.extensions.webservices.client.ClientFactory;
 import org.objectweb.proactive.extensions.webservices.exceptions.UnknownFrameWorkException;
 
+import functionalTests.FunctionalTest;
 import functionalTests.activeobject.webservices.common.Weather;
 import functionalTests.activeobject.webservices.common.WeatherService;
 
 
-public class TestWeather {
+public class TestWeather extends FunctionalTest {
 
     private String url;
     private WebServices ws;
