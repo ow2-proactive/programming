@@ -622,25 +622,23 @@ public enum PAProperties {
      */
     PA_GCMD_UNIX_SHELL("proactive.gcmd.unix.shell", PAPropertiesType.STRING),
 
-    
     /**
      * Web services framework
      *
      * Suppported values are: axis2, cxf
      */
     PA_WEBSERVICES_FRAMEWORK("proactive.webservices.framework", PAPropertiesType.STRING),
-    
-        
+
     /**
      * if true, write the bytecode of the generated stub on the disk
      * 
      */
     PA_MOP_WRITESTUBONDISK("proactive.mop.writestubondisk", PAPropertiesType.BOOLEAN),
 
-   /**
-     * Specifies the location where to write the classes generated 
-     * using the mop
-     */
+    /**
+      * Specifies the location where to write the classes generated 
+      * using the mop
+      */
     PA_MOP_GENERATEDCLASSES_DIR("proactive.mop.generatedclassesdir", PAPropertiesType.STRING);
 
     static final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
