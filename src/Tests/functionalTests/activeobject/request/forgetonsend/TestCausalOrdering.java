@@ -61,7 +61,7 @@ public class TestCausalOrdering extends FunctionalTest {
     @Test
     public void stressedFifoPtp() {
         try {
-            b = (B) PAActiveObject.newActive(B.class.getName(), new Object[] { "B1" });
+            b = PAActiveObject.newActive(B.class, new Object[] { "B1" });
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();
         } catch (NodeException e) {
@@ -110,8 +110,8 @@ public class TestCausalOrdering extends FunctionalTest {
     public void multiAoCausalOrdering() {
         try {
             a1 = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "A1" });
-            a2 = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "A2" });
-            a3 = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "A3" });
+            a2 = PAActiveObject.newActive(A.class, new Object[] { "A2" });
+            a3 = PAActiveObject.newActive(A.class, new Object[] { "A3" });
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();
         } catch (NodeException e) {

@@ -51,7 +51,7 @@ public class TestHalfBody extends FunctionalTest {
 
     @Test
     public void test() throws ActiveObjectCreationException, NodeException {
-        Server server = (Server) PAActiveObject.newActive(Server.class.getName(), new Object[] {});
+        Server server = PAActiveObject.newActive(Server.class, new Object[] {});
         Client client = new Client(server);
         client.startTest();
     }

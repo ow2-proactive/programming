@@ -62,7 +62,7 @@ public class Test extends FunctionalTest {
     public void action() throws Exception {
         PAProperties.PA_MEMORY_TAG_LEASE_PERIOD.setValue(5);
         PAProperties.PA_MAX_MEMORY_TAG_LEASE.setValue(10);
-        activeA = (A) PAActiveObject.newActive(A.class.getName(), new Object[0]);
+        activeA = PAActiveObject.newActive(A.class, new Object[0]);
         activeA.initialize();
     }
 

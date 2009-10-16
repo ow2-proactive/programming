@@ -50,8 +50,8 @@ public class TestExceptionInInitActivity extends FunctionalTest {
 
     @Test(expected = BodyTerminatedException.class)
     public void test() throws ActiveObjectCreationException, NodeException, InterruptedException {
-        ExceptionInInitActivityAO ao = (ExceptionInInitActivityAO) PAActiveObject.newActive(
-                ExceptionInInitActivityAO.class.getName(), new Object[] {});
+        ExceptionInInitActivityAO ao = PAActiveObject.newActive(ExceptionInInitActivityAO.class,
+                new Object[] {});
         // Should not be executed (or at least a Runtime Exception must been thrown by ao.getTrue())
         ao.getTrue();
     }

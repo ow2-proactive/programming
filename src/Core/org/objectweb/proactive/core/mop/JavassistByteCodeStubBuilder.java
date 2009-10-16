@@ -24,14 +24,15 @@
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.mop;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.TypeVariable;
 import java.util.HashMap;
@@ -46,14 +47,26 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtConstructor;
 import javassist.CtField;
+import javassist.CtMember;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
+import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.LocalVariableAttribute;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.Cache;
 import org.objectweb.proactive.annotation.NoReify;
 import org.objectweb.proactive.annotation.Self;
+import org.objectweb.proactive.annotation.TurnActive;
+import org.objectweb.proactive.annotation.TurnActiveParam;
+import org.objectweb.proactive.annotation.TurnRemote;
+import org.objectweb.proactive.annotation.TurnRemoteParam;
+import org.objectweb.proactive.annotation.UnwrapFuture;
+import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -63,6 +76,7 @@ import org.objectweb.proactive.annotation.Self;
  *
  */
 public class JavassistByteCodeStubBuilder {
+    protected static final Logger logger = ProActiveLogger.getLogger(Loggers.STUB_GENERATION);
     private static CtMethod proxyGetter;
     private static CtMethod proxySetter;
 
@@ -82,7 +96,7 @@ public class JavassistByteCodeStubBuilder {
         if (genericParameters == null) {
             genericParameters = new Class<?>[0];
         }
-        CtMethod[] reifiedMethodsWithoutGenerics;
+        Method[] reifiedMethodsWithoutGenerics;
         try {
             ClassPool pool = ClassPool.getDefault();
 
@@ -105,19 +119,17 @@ public class JavassistByteCodeStubBuilder {
 
             generatedCtClass.addField(outsideOfConstructorField, (superCtClass.isInterface() ? " false"
                     : "true"));
+
             if (superCtClass.isInterface()) {
                 generatedCtClass.addInterface(superCtClass);
                 generatedCtClass.setSuperclass(pool.get(Object.class.getName()));
             } else {
                 generatedCtClass.setSuperclass(superCtClass);
             }
+
             if (!generatedCtClass.subtypeOf(pool.get(Serializable.class.getName()))) {
                 generatedCtClass.addInterface(pool.get(Serializable.class.getName()));
             }
-
-            //            if (!generatedCtClass.subtypeOf(pool.get(StubObject.class.getName()))) {
-            //                generatedCtClass.addInterface(pool.get(StubObject.class.getName()));
-            //            }
 
             CtClass ctStubO = null;
             try {
@@ -129,6 +141,7 @@ public class JavassistByteCodeStubBuilder {
                 pool.appendClassPath(new ClassClassPath(Class.forName(StubObject.class.getName())));
                 ctStubO = pool.get(StubObject.class.getName());
             }
+
             if (!generatedCtClass.subtypeOf(ctStubO)) {
                 generatedCtClass.addInterface(ctStubO);
             }
@@ -148,130 +161,33 @@ public class JavassistByteCodeStubBuilder {
             generatedCtClass.addField(genericTypesMappingField);
 
             //   This map is used for keeping track of the method signatures / methods that are to be reified
-            java.util.Map<String, CtMethod> temp = new HashMap<String, CtMethod>();
-
-            // Recursively calls getDeclaredMethods () on the target type
-            // and each of its superclasses, all the way up to java.lang.Object
-            // We have to be careful and only take into account overriden methods once
-            CtClass currentCtClass = superCtClass;
-
-            CtClass[] params;
-            Object exists;
-
+            java.util.Map<String, Method> temp = new HashMap<String, Method>();
             List<String> classesIndexer = new Vector<String>();
 
-            classesIndexer.add(superCtClass.getName());
+            temp = methodsIndexer(superCtClass, classesIndexer);
 
-            // If the target type is an interface, the only thing we have to do is to
-            // get the list of all its public reifiedMethods.
-            if (superCtClass.isInterface()) {
-                CtMethod[] allPublicMethods = superCtClass.getMethods();
-                for (int i = 0; i < allPublicMethods.length; i++) {
-                    StringBuilder key = new StringBuilder();
-                    key.append(allPublicMethods[i].getName());
-                    params = allPublicMethods[i].getParameterTypes();
-                    for (int k = 0; k < params.length; k++) {
-                        key.append(params[k].getName());
-                    }
-                    temp.put(key.toString(), allPublicMethods[i]);
-                }
-                classesIndexer.add("java.lang.Object");
-            } else // If the target type is an actual class, we climb up the tree
-            {
-                do {
-                    if (!classesIndexer.contains(currentCtClass.getName())) {
-                        classesIndexer.add(currentCtClass.getName());
-                    }
-
-                    // The declared reifiedMethods for the current class
-                    CtMethod[] declaredCtMethods = currentCtClass.getDeclaredMethods();
-
-                    // For each method declared in this class
-                    for (int i = 0; i < declaredCtMethods.length; i++) {
-                        CtMethod currentMethod = declaredCtMethods[i];
-
-                        // Build a key with the simple name of the method
-                        // and the names of its parameters in the right order
-                        StringBuilder key = new StringBuilder();
-                        key.append(currentMethod.getName());
-                        params = currentMethod.getParameterTypes();
-                        for (int k = 0; k < params.length; k++) {
-                            key.append(params[k].getName());
-                        }
-                        // Tests if we already have met this method in a subclass
-                        exists = temp.get(key.toString());
-                        if (exists == null) {
-                            // The only method we ABSOLUTELY want to be called directly
-                            // on the stub (and thus not reified) is
-                            // the protected void finalize () throws Throwable
-                            if ((key.toString().equals("finalize")) && (params.length == 0)) {
-                                // Do nothing, simply avoid adding this method to the list
-                            } else {
-                                // If not, adds this method to the Vector that
-                                // holds all the reifiedMethods for this class
-                                //                                tempVector.addElement(currentMethod);
-                                temp.put(key.toString(), currentMethod);
-                            }
-                        } else {
-                            // We already know this method because it is overriden
-                            // in a subclass. Then do nothing
-                        }
-                    }
-                    currentCtClass = currentCtClass.getSuperclass();
-                } while (currentCtClass != null); // Continue until we ask for the superclass of java.lang.Object
-            }
-
-            // now get the methods from implemented interfaces
-            List<CtClass> superInterfaces = new Vector<CtClass>();
-            addSuperInterfaces(superCtClass, superInterfaces);
-
-            CtClass[] implementedInterfacesTable = (superInterfaces.toArray(new CtClass[superInterfaces
-                    .size()]));
-
-            for (int itfsIndex = 0; itfsIndex < implementedInterfacesTable.length; itfsIndex++) {
-                if (!classesIndexer.contains(implementedInterfacesTable[itfsIndex].getName())) {
-                    classesIndexer.add(implementedInterfacesTable[itfsIndex].getName());
-                }
-
-                //              The declared methods for the current interface
-                CtMethod[] declaredMethods = implementedInterfacesTable[itfsIndex].getDeclaredMethods();
-
-                // For each method declared in this class
-                for (int i = 0; i < declaredMethods.length; i++) {
-                    CtMethod currentMethod = declaredMethods[i];
-
-                    // Build a key with the simple name of the method
-                    // and the names of its parameters in the right order
-                    StringBuilder key = new StringBuilder();
-                    key.append(currentMethod.getName());
-                    params = currentMethod.getParameterTypes();
-                    for (int k = 0; k < params.length; k++) {
-                        key.append(params[k].getName());
-                    }
-
-                    // replace with current one, because this gives the actual declaring Class<?> of this method
-                    temp.put(key.toString(), currentMethod);
-                }
-            }
-
-            reifiedMethodsWithoutGenerics = (temp.values().toArray(new CtMethod[temp.size()]));
+            reifiedMethodsWithoutGenerics = (temp.values().toArray(new Method[temp.size()]));
 
             // Determines which reifiedMethods are valid for reification
             // It is the responsibility of method checkMethod
             // to decide if a method is valid for reification or not
-            Vector<CtMethod> v = new Vector<CtMethod>();
+            Vector<Method> v = new Vector<Method>();
             int initialNumberOfMethods = reifiedMethodsWithoutGenerics.length;
 
             for (int i = 0; i < initialNumberOfMethods; i++) {
-                if (checkMethod(reifiedMethodsWithoutGenerics[i])) {
+                if (checkMethod(reifiedMethodsWithoutGenerics[i].getCtMethod())) {
                     v.addElement(reifiedMethodsWithoutGenerics[i]);
                 }
             }
-            CtMethod[] validMethods = new CtMethod[v.size()];
-            v.copyInto(validMethods);
+            Method[] validMethods = new Method[v.size()];
+            CtMethod[] validCtMethods = new CtMethod[v.size()];
+            //            v.copyInto(validMethods);
 
             // Installs the list of valid reifiedMethods as an instance variable of this object
-            reifiedMethodsWithoutGenerics = validMethods;
+            for (int i = 0; i < validMethods.length; i++) {
+                validMethods[i] = v.get(i);
+                validCtMethods[i] = v.get(i).getCtMethod();
+            }
 
             Class realSuperClass = Class.forName(className);
             TypeVariable<GenericDeclaration>[] tv = realSuperClass.getTypeParameters();
@@ -284,24 +200,143 @@ public class JavassistByteCodeStubBuilder {
             }
 
             // create static block with method initializations
-            createStaticInitializer(generatedCtClass, reifiedMethodsWithoutGenerics, classesIndexer,
-                    className, genericParameters);
+            createStaticInitializer(generatedCtClass, validCtMethods, classesIndexer, className,
+                    genericParameters);
 
-            createReifiedMethods(generatedCtClass, reifiedMethodsWithoutGenerics, superCtClass.isInterface());
+            createReifiedMethods(generatedCtClass, validMethods, superCtClass.isInterface());
 
-            //generatedCtClass.debugWriteFile();
-            //System.out.println("[JAVASSIST] generated class : " + generatedCtClass.getName());
+            //            System.out.println("[JAVASSIST] generated class : " + generatedCtClass.getName());
 
             // detach to fix  "frozen class" errors encountered in some large scale deployments
             byte[] bytecode = generatedCtClass.toBytecode();
 
+            if (PAProperties.PA_MOP_WRITESTUBONDISK.isTrue()) {
+
+                generatedCtClass.debugWriteFile(PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue());
+            }
+
             generatedCtClass.detach();
+
             return bytecode;
         } catch (Exception e) {
-            //                        generatedCtClass.debugWriteFile();
+            //                generatedCtClass.debugWriteFile();
             throw new RuntimeException("Failed to generate stub for class " + className +
                 " with javassist : " + e.getMessage(), e);
         }
+    }
+
+    static Map<String, Method> methodsIndexer(CtClass superCtClass, List<String> classesIndexer)
+            throws NotFoundException {
+        // Recursively calls getDeclaredMethods () on the target type
+        // and each of its superclasses, all the way up to java.lang.Object
+        // We have to be careful and only take into account overriden methods once
+        CtClass currentCtClass = superCtClass;
+
+        java.util.Map<String, Method> temp = new HashMap<String, Method>();
+
+        CtClass[] params;
+        Object exists;
+
+        classesIndexer.add(superCtClass.getName());
+
+        // If the target type is an interface, the only thing we have to do is to
+        // get the list of all its public reifiedMethods.
+        if (superCtClass.isInterface()) {
+            CtMethod[] allPublicMethods = superCtClass.getMethods();
+            for (int i = 0; i < allPublicMethods.length; i++) {
+                String key = generateMethodKey(allPublicMethods[i]);
+                temp.put(key, new Method(allPublicMethods[i]));
+            }
+            classesIndexer.add("java.lang.Object");
+        } else // If the target type is an actual class, we climb up the tree
+        {
+            do {
+                if (!classesIndexer.contains(currentCtClass.getName())) {
+                    classesIndexer.add(currentCtClass.getName());
+                }
+
+                // The declared reifiedMethods for the current class
+                CtMethod[] declaredCtMethods = currentCtClass.getDeclaredMethods();
+
+                // For each method declared in this class
+                for (int i = 0; i < declaredCtMethods.length; i++) {
+                    CtMethod currentMethod = declaredCtMethods[i];
+
+                    // Build a key with the simple name of the method
+                    // and the names of its parameters in the right order
+                    String key = generateMethodKey(currentMethod);
+                    // Tests if we already have met this method in a subclass
+                    exists = temp.get(key);
+                    params = currentMethod.getParameterTypes();
+                    if (exists == null) {
+                        // The only method we ABSOLUTELY want to be called directly
+                        // on the stub (and thus not reified) is
+                        // the protected void finalize () throws Throwable
+                        if ((key.toString().equals("finalize")) && (params.length == 0)) {
+                            // Do nothing, simply avoid adding this method to the list
+                        } else {
+                            // If not, adds this method to the Vector that
+                            // holds all the reifiedMethods for this class
+                            //                                tempVector.addElement(currentMethod);
+                            temp.put(key.toString(), new Method(currentMethod));
+                        }
+                    } else {
+                        // We already know this method because it is overriden
+                        // in a subclass. Then we just check for annotations
+                        Method met = temp.get(key);
+                        met.grabMethodandParameterAnnotation(currentMethod);
+                    }
+                }
+                currentCtClass = currentCtClass.getSuperclass();
+            } while (currentCtClass != null); // Continue until we ask for the superclass of java.lang.Object
+        }
+
+        // now get the methods from implemented interfaces
+        List<CtClass> superInterfaces = new Vector<CtClass>();
+        addSuperInterfaces(superCtClass, superInterfaces);
+
+        CtClass[] implementedInterfacesTable = (superInterfaces.toArray(new CtClass[superInterfaces.size()]));
+
+        for (int itfsIndex = 0; itfsIndex < implementedInterfacesTable.length; itfsIndex++) {
+            if (!classesIndexer.contains(implementedInterfacesTable[itfsIndex].getName())) {
+                classesIndexer.add(implementedInterfacesTable[itfsIndex].getName());
+            }
+
+            // The declared methods for the current interface
+            CtMethod[] declaredMethods = implementedInterfacesTable[itfsIndex].getDeclaredMethods();
+
+            // For each method declared in this class
+            for (int i = 0; i < declaredMethods.length; i++) {
+                CtMethod currentMethod = declaredMethods[i];
+
+                // Build a key with the simple name of the method
+                // and the names of its parameters in the right order
+                String key = generateMethodKey(currentMethod);
+
+                // replace with current one, because this gives the actual declaring Class<?> of this method
+                Method m = temp.get(key);
+                if (m == null) {
+                    m = new Method(currentMethod);
+                    temp.put(key.toString(), m);
+                }
+                m.setCtMethod(currentMethod);
+                m.grabMethodandParameterAnnotation(currentMethod);
+            }
+        }
+
+        return temp;
+    }
+
+    private static String generateMethodKey(CtMethod method) throws NotFoundException {
+        CtClass[] params;
+        StringBuilder key = new StringBuilder();
+        key.append(method.getName());
+        params = method.getParameterTypes();
+        for (int k = 0; k < params.length; k++) {
+            key.append(params[k].getName());
+        }
+
+        return key.toString();
     }
 
     /**
@@ -310,118 +345,109 @@ public class JavassistByteCodeStubBuilder {
      * @throws NotFoundException
      * @throws CannotCompileException
      */
-    private static void createReifiedMethods(CtClass generatedClass, CtMethod[] reifiedMethods,
+    private static void createReifiedMethods(CtClass generatedClass, Method[] reifiedMethods,
             boolean stubOnInterface) throws NotFoundException, CannotCompileException {
         for (int i = 0; i < reifiedMethods.length; i++) {
+            Method reifiedMethod = reifiedMethods[i];
             StringBuilder body = new StringBuilder("{");
 
-            if (hasSelfAnnotation(reifiedMethods[i])) {
+            if (hasAnnotation(reifiedMethod.getCtMethod(), Self.class)) {
                 body.append("return this;");
             } else {
-                CtClass[] paramTypes = reifiedMethods[i].getParameterTypes();
 
-                boolean fieldToCache = hasCacheAnnotation(reifiedMethods[i]);
+                handleUnwrapFutureAnnotation(reifiedMethod, body);
+
+                handleTurnRemoteAnnotation(reifiedMethod, body);
+
+                handleTurnActiveAnnotation(reifiedMethod, body);
+
+                if (hasAnnotation(reifiedMethod.getCtMethod(), TurnRemoteParam.class)) {
+                    TurnRemoteParam trp = getAnnotation(reifiedMethod.getCtMethod(), TurnRemoteParam.class);
+                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(), trp
+                            .parameterName());
+                    body.append("$" + parameterIndex +
+                        " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" + parameterIndex +
+                        "); \n");
+                }
+
+                if (hasAnnotation(reifiedMethod.getCtMethod(), TurnActiveParam.class)) {
+                    TurnActiveParam trp = getAnnotation(reifiedMethod.getCtMethod(), TurnActiveParam.class);
+                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(), trp
+                            .parameterName());
+                    body.append("$" + parameterIndex +
+                        " = org.objectweb.proactive.api.PAActiveObject.turnActive($" + parameterIndex +
+                        "); \n");
+                }
+
+                //                if (hasMethodAnnotation(reifiedMethod.getCtMethod(), UnwrapFuture.class)) {
+                //                    UnwrapFuture trp = getMethodAnnotation(reifiedMethod.getCtMethod(), UnwrapFuture.class);
+                //                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(), trp
+                //                            .parameterName());
+                //                    body
+                //                            .append("$" + parameterIndex +
+                //                                " = org.objectweb.proactive.api.PAFuture.getFutureValue($" + parameterIndex +
+                //                                "); \n");
+                //                }
+
+                boolean fieldToCache = hasAnnotation(reifiedMethod.getCtMethod(), Cache.class);
                 CtField cachedField = null;
 
                 if (fieldToCache) {
                     // the generated has to cache the method
+
                     cachedField = new CtField(ClassPool.getDefault().get(
-                            reifiedMethods[i].getReturnType().getName()), reifiedMethods[i].getName() + i,
-                        generatedClass);
+                            reifiedMethod.getCtMethod().getReturnType().getName()), reifiedMethod
+                            .getCtMethod().getName() +
+                        i, generatedClass);
 
                     generatedClass.addField(cachedField);
 
                     body.append("if (" + cachedField.getName() + " == null) { ");
                 }
 
-                body.append("\nObject[] parameters = new Object[" + paramTypes.length + "];\n");
+                //                body.append("\nObject[] parameters = $args;\n");
 
-                for (int j = 0; j < paramTypes.length; j++) {
-                    if (paramTypes[j].isPrimitive()) {
-                        body.append("  parameters[" + j + "]=" +
-                            wrapPrimitiveParameter(paramTypes[j], "$" + (j + 1)) + ";\n");
-                    } else {
-                        body.append("  parameters[" + j + "]=$" + (j + 1) + ";\n");
-                    }
-                }
-
-                CtClass returnType = reifiedMethods[i].getReturnType();
+                CtClass returnType = reifiedMethod.getCtMethod().getReturnType();
 
                 String postWrap = null;
                 String preWrap = null;
 
-                if (hasNoReifyAnnotation(reifiedMethods[i])) {
+                if (hasAnnotation(reifiedMethod.getCtMethod(), NoReify.class)) {
                     body
-                            .append("if (myproxy instanceof org.objectweb.proactive.core.remoteobject.SynchronousProxy) { return ($r) myproxy.receiveMessage($$); }  \n");
+                            .append("if (myProxy instanceof org.objectweb.proactive.core.remoteobject.SynchronousProxy) { return ($r) ((org.objectweb.proactive.core.remoteobject.SynchronousProxy) myProxy).receiveMessage($$); }  \n");
                 }
 
                 if (returnType != CtClass.voidType) {
                     if (!returnType.isPrimitive()) {
-                        preWrap = "(" + returnType.getName() + ")";
+                        preWrap = "($r)";
                     } else {
-                        //boolean, byte, char, short, int, long, float, double
-                        if (returnType.equals(CtClass.booleanType)) {
-                            preWrap = "((Boolean)";
-                            postWrap = ").booleanValue()";
-                        }
-                        if (returnType.equals(CtClass.byteType)) {
-                            preWrap = "((Byte)";
-                            postWrap = ").byteValue()";
-                        }
-                        if (returnType.equals(CtClass.charType)) {
-                            preWrap = "((Character)";
-                            postWrap = ").charValue()";
-                        }
-                        if (returnType.equals(CtClass.shortType)) {
-                            preWrap = "((Short)";
-                            postWrap = ").shortValue()";
-                        }
-                        if (returnType.equals(CtClass.intType)) {
-                            preWrap = "((Integer)";
-                            postWrap = ").intValue()";
-                        }
-                        if (returnType.equals(CtClass.longType)) {
-                            preWrap = "((Long)";
-                            postWrap = ").longValue()";
-                        }
-                        if (returnType.equals(CtClass.floatType)) {
-                            preWrap = "((Float)";
-                            postWrap = ").floatValue()";
-                        }
-                        if (returnType.equals(CtClass.doubleType)) {
-                            preWrap = "((Double)";
-                            postWrap = ").doubleValue()";
-                        }
+                        preWrap = "($w)";
                     }
+                }
 
-                    if (fieldToCache) {
-                        body.append(cachedField.getName() + "=");
-                    } else {
-                        body.append("return ");
-                    }
+                if (fieldToCache) {
+                    body.append(cachedField.getName() + "=");
+                } else {
+                    body.append("return ($r)");
+                }
 
-                    if (preWrap != null) {
-                        body.append(preWrap);
-                    }
+                if (preWrap != null) {
+                    body.append(preWrap);
                 }
 
                 body.append("myProxy.reify(org.objectweb.proactive.core.mop.MethodCall.getMethodCall(" +
                     "(java.lang.reflect.Method)overridenMethods[" + i + "]" +
-                    ", parameters, genericTypesMapping))");
-
-                if (postWrap != null) {
-                    body.append(postWrap);
-                }
+                    ", $args, genericTypesMapping))");
 
                 if (fieldToCache) {
-                    body.append(";\n } \n return " + cachedField.getName());
+                    body.append(";\n } \n return ($r)" + cachedField.getName());
                 }
 
                 body.append(";");
 
                 // the following is for inserting conditional statement for method code executing
                 // within or outside the construction of the object
-                if (!stubOnInterface && !Modifier.isAbstract(reifiedMethods[i].getModifiers())) {
+                if (!stubOnInterface && !Modifier.isAbstract(reifiedMethod.getCtMethod().getModifiers())) {
                     String preReificationCode = "{if (outsideOfConstructor) ";
 
                     // outside of constructor : object is already constructed
@@ -429,10 +455,11 @@ public class JavassistByteCodeStubBuilder {
 
                     // if inside constructor (i.e. in a method called by a
                     // constructor from a super class)
-                    if (!reifiedMethods[i].getReturnType().equals(CtClass.voidType)) {
+                    if (!reifiedMethod.getCtMethod().getReturnType().equals(CtClass.voidType)) {
                         postReificationCode += "return ";
                     }
-                    postReificationCode += ("super." + reifiedMethods[i].getName() + "($$);");
+                    postReificationCode += ("super." + reifiedMethod.getCtMethod().getName() + "($$);");
+                    //                    postReificationCode += ("super.$proceed($$);");
                     postReificationCode += "}";
                     body.insert(0, preReificationCode);
                     body.append(postReificationCode);
@@ -443,12 +470,13 @@ public class JavassistByteCodeStubBuilder {
 
             CtMethod methodToGenerate = null;
 
-            //                        System.out
-            //                              .println("JavassistByteCodeStubBuilder.createReifiedMethods() body " + reifiedMethods[i].getName() + " = " + body);
+            //                                    System.out
+            //                                          .println("JavassistByteCodeStubBuilder.createReifiedMethods() body " + reifiedMethods[i].getName() + " = " + body);
             try {
-                methodToGenerate = CtNewMethod.make(reifiedMethods[i].getReturnType(), reifiedMethods[i]
-                        .getName(), reifiedMethods[i].getParameterTypes(), reifiedMethods[i]
-                        .getExceptionTypes(), body.toString(), generatedClass);
+                methodToGenerate = CtNewMethod.make(reifiedMethod.getCtMethod().getReturnType(),
+                        reifiedMethod.getCtMethod().getName(), reifiedMethod.getCtMethod()
+                                .getParameterTypes(), reifiedMethod.getCtMethod().getExceptionTypes(), body
+                                .toString(), generatedClass);
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -463,6 +491,30 @@ public class JavassistByteCodeStubBuilder {
             //              proxySetterMethod.insertAfter(statementsToAdd);
             //            }
         }
+    }
+
+    /**
+     * 
+     * @param reifiedMethod a method that has some parameters 
+     * @param parameterName the name of the parameters 
+     * @return the index of the parameters in the list of parameters (first parameter has index 1)
+     */
+    private static int parameterNameToIndex(CtMethod reifiedMethod, String parameterName) {
+        CodeAttribute codeAttribute = (CodeAttribute) reifiedMethod.getMethodInfo().getAttribute(
+                CodeAttribute.tag);
+        LocalVariableAttribute localVariableAttribute = (LocalVariableAttribute) codeAttribute
+                .getAttribute(LocalVariableAttribute.tag);
+        for (int j = 0; j < localVariableAttribute.tableLength(); j++) {
+            String name = localVariableAttribute.getConstPool().getUtf8Info(
+                    localVariableAttribute.nameIndex(j));
+            if (!name.equals("this")) {
+                if (name.equals(parameterName)) {
+                    return j;
+                }
+            }
+        }
+        throw new RuntimeException("parameter " + parameterName + "not found in method " +
+            reifiedMethod.getLongName());
     }
 
     /**
@@ -641,10 +693,10 @@ public class JavassistByteCodeStubBuilder {
     }
 
     private static void addSuperInterfaces(CtClass cl, List<CtClass> superItfs) throws NotFoundException {
-        if (!cl.isInterface() && !Modifier.isAbstract(cl.getModifiers())) {
-            // inspect interfaces AND abstract classes
-            return;
-        }
+        //        if (!cl.isInterface() && !Modifier.isAbstract(cl.getModifiers())) {
+        //            // inspect interfaces AND abstract classes
+        //            return;
+        //        }
         CtClass[] super_interfaces = cl.getInterfaces();
         for (int i = 0; i < super_interfaces.length; i++) {
             superItfs.add(super_interfaces[i]);
@@ -652,54 +704,132 @@ public class JavassistByteCodeStubBuilder {
         }
     }
 
-    private static boolean hasCacheAnnotation(CtMethod method) {
-        try {
-            Object[] o = method.getAnnotations();
-            if (o != null) {
-                for (Object object : o) {
-                    if (object instanceof Cache) {
-                        return true;
-                    }
+    /**
+     * return true if the annotation <code>annotation</code> is set on the member (field, constructor, method) 
+     * @param member the member (field, constructor, method) onto check the annotation's presence
+     * @param annotation the annotation to check
+     * @return returns true if the annotation <code>annotation</code> is set on the method 
+     */
+    public static boolean hasAnnotation(CtMember member, Class<? extends Annotation> annotation) {
+        Object[] o = member.getAvailableAnnotations();
+        if (o != null) {
+            for (Object object : o) {
+                if (annotation.isAssignableFrom(object.getClass())) {
+                    return true;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
         return false;
     }
 
-    private static boolean hasSelfAnnotation(CtMethod method) {
-        try {
-            Object[] o = method.getAnnotations();
-            if (o != null) {
-                for (Object object : o) {
-                    if (object instanceof Self) {
-                        return true;
-                    }
+    /**
+     * return true if the annotation <code>annotation</code> is set on the member (field, constructor, method) 
+     * @param member the member (field, constructor, method) onto check the annotation's presence
+     * @param annotation the annotation to check
+     * @return returns true if the annotation <code>annotation</code> is set on the method 
+     */
+    public static boolean hasAnnotation(CtClass ctClass, Class<? extends Annotation> annotation) {
+        Object[] o = ctClass.getAvailableAnnotations();
+        if (o != null) {
+            for (Object object : o) {
+                if (annotation.isAssignableFrom(object.getClass())) {
+                    return true;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
         return false;
     }
 
-    private static boolean hasNoReifyAnnotation(CtMethod method) {
-        try {
-            Object[] o = method.getAnnotations();
-            if (o != null) {
-                for (Object object : o) {
-                    if (object instanceof NoReify) {
-                        return true;
-                    }
+    public static <T extends Annotation> T getAnnotation(CtMember member, Class<T> annotation) {
+        Object[] o = member.getAvailableAnnotations();
+        if (o != null) {
+            for (Object object : o) {
+                if (annotation.isAssignableFrom(object.getClass())) {
+                    return annotation.cast(object);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
-        return false;
+        return null;
     }
+
+    public static <T extends Annotation> T getAnnotation(CtClass ctClass, Class<T> annotation) {
+        Object[] o = ctClass.getAvailableAnnotations();
+        if (o != null) {
+            for (Object object : o) {
+                if (annotation.isAssignableFrom(object.getClass())) {
+                    return annotation.cast(object);
+                }
+            }
+        }
+        return null;
+    }
+
+    private static void handleTurnRemoteAnnotation(Method method, StringBuilder body) {
+
+        List<MethodParameter> lmp = method.getListMethodParameters();
+
+        for (int i = 0; i < lmp.size(); i++) {
+            MethodParameter mp = lmp.get(i);
+            List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
+            for (javassist.bytecode.annotation.Annotation annotation : la) {
+                try {
+                    if (TurnRemote.class.isAssignableFrom(annotation.toAnnotationType(
+                            method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
+                        body.append("$" + (i + 1) +
+                            " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" + (i + 1) + "); \n");
+                        break;
+                    }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static void handleTurnActiveAnnotation(Method method, StringBuilder body) {
+
+        List<MethodParameter> lmp = method.getListMethodParameters();
+
+        for (int i = 0; i < lmp.size(); i++) {
+            MethodParameter mp = lmp.get(i);
+            List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
+            for (javassist.bytecode.annotation.Annotation annotation : la) {
+                try {
+                    if (TurnActive.class.isAssignableFrom(annotation.toAnnotationType(
+                            method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
+                        body.append("$" + (i + 1) +
+                            " = org.objectweb.proactive.api.PAActiveObject.turnActive($" + (i + 1) + "); \n");
+                        break;
+                    }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static void handleUnwrapFutureAnnotation(Method method, StringBuilder body) {
+        List<MethodParameter> lmp = method.getListMethodParameters();
+
+        for (int i = 0; i < lmp.size(); i++) {
+            MethodParameter mp = lmp.get(i);
+            List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
+            for (javassist.bytecode.annotation.Annotation annotation : la) {
+                try {
+                    if (UnwrapFuture.class.isAssignableFrom(annotation.toAnnotationType(
+                            method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
+                        body.append("$" + (i + 1) +
+                            " = org.objectweb.proactive.api.PAFuture.getFutureValue($" + (i + 1) + "); \n");
+                        break;
+                    }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

@@ -99,8 +99,7 @@ public class Interface {
 
         //System.out.println("initialize Method");
         try {
-            activeSpeed = (CarModel) org.objectweb.proactive.api.PAActiveObject.newActive(CarModel.class
-                    .getName(), arg);
+            activeSpeed = org.objectweb.proactive.api.PAActiveObject.newActive(CarModel.class, arg);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -109,8 +108,7 @@ public class Interface {
         arg[0] = org.objectweb.proactive.api.PAActiveObject.getStubOnThis();
 
         try {
-            activeCruise = (CruiseControl) org.objectweb.proactive.api.PAActiveObject.newActive(
-                    CruiseControl.class.getName(), arg);
+            activeCruise = org.objectweb.proactive.api.PAActiveObject.newActive(CruiseControl.class, arg);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

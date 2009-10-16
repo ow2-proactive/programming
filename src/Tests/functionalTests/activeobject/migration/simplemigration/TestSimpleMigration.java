@@ -53,7 +53,7 @@ public class TestSimpleMigration extends GCMFunctionalTestDefaultNodes {
     public void action() throws Exception {
         Node node = super.getANode();
 
-        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" });
+        A a = PAActiveObject.newActive(A.class, new Object[] { "toto" });
         a.moveTo(node);
 
         Assert.assertEquals("toto", a.getName());

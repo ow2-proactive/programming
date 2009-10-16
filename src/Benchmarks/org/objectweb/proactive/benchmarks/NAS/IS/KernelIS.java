@@ -105,9 +105,8 @@ public class KernelIS extends Kernel {
             // Get the node from the URL
             Node chosenOneNode = NodeFactory.getNode(PAActiveObject.getActiveObjectNodeUrl(chosenOne));
 
-            allBucketSize = (AllBucketSize) PAActiveObject.newActive(AllBucketSize.class.getName(),
-                    new Object[] { workers, new Integer(this.problemClass.NUM_PROCS),
-                            Integer.valueOf(arraySize) }, chosenOneNode);
+            allBucketSize = PAActiveObject.newActive(AllBucketSize.class, new Object[] { workers,
+                    new Integer(this.problemClass.NUM_PROCS), Integer.valueOf(arraySize) }, chosenOneNode);
 
             workers.setAllBucketSize(allBucketSize);
 

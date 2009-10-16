@@ -74,8 +74,8 @@ public class Start {
             Object[] constructorParams = new Object[] { new Integer(i), new Planet(universe) };
             try {
                 // Create all the Domains used in the simulation 
-                domainArray[i] = (Domain) PAActiveObject.newActive(Domain.class.getName(), constructorParams,
-                        nodes[(i + 1) % nodes.length]);
+                domainArray[i] = PAActiveObject.newActive(Domain.class, constructorParams, nodes[(i + 1) %
+                    nodes.length]);
             } catch (ActiveObjectCreationException e) {
                 deployer.abortOnError(e);
             } catch (NodeException e) {
@@ -91,7 +91,7 @@ public class Start {
         // Create a maestro, which will orchestrate the whole simulation, synchronizing the computations of the Domains
         Maestro maestro = null;
         try {
-            maestro = (Maestro) PAActiveObject.newActive(Maestro.class.getName(), new Object[] { domainArray,
+            maestro = PAActiveObject.newActive(Maestro.class, new Object[] { domainArray,
                     new Integer(maxIter), deployer }, nodes[0]);
         } catch (ActiveObjectCreationException e) {
             deployer.abortOnError(e);

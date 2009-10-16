@@ -97,14 +97,13 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
         node4 = getANode();
         nodeLocal = NodeFactory.getDefaultNode();
         // create AOs on hosts on the same and different runtimes
-        ao1 = (TestActiveObject) PAActiveObject.newActive(TestActiveObject.class.getName(), null, node1);
-        ao1B = (TestActiveObject) PAActiveObject.newActive(TestActiveObject.class.getName(), null, node1);
-        ao2 = (TestActiveObject) PAActiveObject.newActive(TestActiveObject.class.getName(), null, node2);
-        ao3 = (TestActiveObject) PAActiveObject.newActive(TestActiveObject.class.getName(), null, node3);
-        ao4 = (TestActiveObject) PAActiveObject.newActive(TestActiveObject.class.getName(), null, node4);
+        ao1 = PAActiveObject.newActive(TestActiveObject.class, null, node1);
+        ao1B = PAActiveObject.newActive(TestActiveObject.class, null, node1);
+        ao2 = PAActiveObject.newActive(TestActiveObject.class, null, node2);
+        ao3 = PAActiveObject.newActive(TestActiveObject.class, null, node3);
+        ao4 = PAActiveObject.newActive(TestActiveObject.class, null, node4);
         // AO for default local node
-        aoLocal = (TestActiveObject) PAActiveObject.newActive(TestActiveObject.class.getName(), null,
-                nodeLocal);
+        aoLocal = PAActiveObject.newActive(TestActiveObject.class, null, nodeLocal);
         // non-AO to test behavior for local half-bodies node
         aoFake = new TestActiveObject();
         // no need for @After, as whole GCMApp will be killed

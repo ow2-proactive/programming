@@ -75,8 +75,7 @@ public class TimItBasicManager {
             return this.timItBasicReductor;
         }
         try {
-            this.timItBasicReductor = (TimItBasicReductor) PAActiveObject.newActive(TimItBasicReductor.class
-                    .getName(), new Object[] {});
+            this.timItBasicReductor = PAActiveObject.newActive(TimItBasicReductor.class, new Object[] {});
             this.timItBasicReductor.registerShutdownHook();
             this.timItBasicReductor.incrementAwaitedResult();
             return this.timItBasicReductor;

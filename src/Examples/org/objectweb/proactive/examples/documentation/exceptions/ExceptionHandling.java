@@ -46,7 +46,7 @@ public class ExceptionHandling {
         //@snippet-start basic_exception
         System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
         try {
-            A a = (A) PAActiveObject.newActive(A.class.getName(), null);
+            A a = PAActiveObject.newActive(A.class, null);
             a.throwsException(true); //Synchronous method due to the potential exception
             System.out.println("Hello");
             //...
@@ -60,7 +60,7 @@ public class ExceptionHandling {
         System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
         PAException.tryWithCatch(Exception.class);
         try {
-            A a = (A) PAActiveObject.newActive(A.class.getName(), null);
+            A a = PAActiveObject.newActive(A.class, null);
             a.throwsException(true); // Asynchronous method call that can throw an exception
             System.out.println("Hello");
             //...
@@ -77,7 +77,7 @@ public class ExceptionHandling {
         System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
         PAException.tryWithCatch(Exception.class);
         try {
-            A a = (A) PAActiveObject.newActive(A.class.getName(), null);
+            A a = PAActiveObject.newActive(A.class, null);
             a.throwsException(true); // Asynchronous method call that can throw an exception
             //...
             // Throws exceptions which has been already raised by active object
@@ -111,7 +111,7 @@ public class ExceptionHandling {
         System.out.println("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
         PAException.tryWithCatch(Exception.class);
         try {
-            A a = (A) PAActiveObject.newActive(A.class.getName(), null);
+            A a = PAActiveObject.newActive(A.class, null);
             a.throwsException(true); // Asynchronous method call that can throw an exception
             //...
             // At that moment, we want to be sure that no exception has been

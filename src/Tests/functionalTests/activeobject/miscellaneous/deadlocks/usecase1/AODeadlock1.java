@@ -79,9 +79,8 @@ public class AODeadlock1 implements Serializable, InitActive, RunActive {
     }
 
     public static void main(String[] args) throws ActiveObjectCreationException, NodeException {
-        AODeadlock2 ao2 = (AODeadlock2) PAActiveObject.newActive(AODeadlock2.class.getName(), new Object[0]);
-        AODeadlock1 ao1 = (AODeadlock1) PAActiveObject.newActive(AODeadlock1.class.getName(),
-                new Object[] { ao2 });
+        AODeadlock2 ao2 = PAActiveObject.newActive(AODeadlock2.class, new Object[0]);
+        AODeadlock1 ao1 = PAActiveObject.newActive(AODeadlock1.class, new Object[] { ao2 });
         ao2.setAODeadlock1(ao1);
 
         int iw = ao1.foo();

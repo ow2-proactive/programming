@@ -51,7 +51,7 @@ public class TestLoopMigration extends GCMFunctionalTestDefaultNodes {
 
         String node1 = super.getANode().getNodeInformation().getURL();
         String node2 = super.getANode().getNodeInformation().getURL();
-        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { node1, node2 }, node1);
+        A a = PAActiveObject.newActive(A.class, new Object[] { node1, node2 }, node1);
 
         assertFalse(a.isException());
     }

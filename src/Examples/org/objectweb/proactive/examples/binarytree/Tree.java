@@ -75,8 +75,8 @@ public class Tree implements Serializable {
                 display.displayMessage("[" + key + "] Creating left");
                 // Create the new node
                 try {
-                    left = (Tree) org.objectweb.proactive.api.PAActiveObject.newActive(this.getClass()
-                            .getName(), new Object[] { key, value, display });
+                    left = org.objectweb.proactive.api.PAActiveObject.newActive(this.getClass(),
+                            new Object[] { key, value, display });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -98,8 +98,8 @@ public class Tree implements Serializable {
             } else {
                 display.displayMessage("[" + key + "] Creating right");
                 try {
-                    right = (Tree) org.objectweb.proactive.api.PAActiveObject.newActive(this.getClass()
-                            .getName(), new Object[] { key, value, display });
+                    right = org.objectweb.proactive.api.PAActiveObject.newActive(this.getClass(),
+                            new Object[] { key, value, display });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

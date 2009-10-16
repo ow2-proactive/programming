@@ -41,8 +41,8 @@ public class TestFutureCallbacks extends FunctionalTest {
 
     @Test
     public void action() throws Exception {
-        A a1 = (A) PAActiveObject.newActive(A.class.getName(), null);
-        A a2 = (A) PAActiveObject.newActive(A.class.getName(), null);
+        A a1 = PAActiveObject.newActive(A.class, null);
+        A a2 = PAActiveObject.newActive(A.class, null);
         a1.giveBrother(a2);
         a1.start();
         synchronized (A.class) {

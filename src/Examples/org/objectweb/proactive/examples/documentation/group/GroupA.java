@@ -126,8 +126,8 @@ public class GroupA {
                  * Definition of one standard Java object and two active objects
                  */
                 A a1 = new A();
-                A a2 = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "A Object" });
-                B b = (B) PAActiveObject.newActive(B.class.getName(), new Object[] { "B Object" });
+                A a2 = PAActiveObject.newActive(A.class, new Object[] { "A Object" });
+                B b = PAActiveObject.newActive(B.class, new Object[] { "B Object" });
 
                 /**
                  * For management purposes, get the management representation
@@ -230,7 +230,7 @@ public class GroupA {
                 //@snippet-end group_A_6
 
                 //@snippet-start group_A_7
-                A a3 = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "Another A object" });
+                A a3 = PAActiveObject.newActive(A.class, new Object[] { "Another A object" });
 
                 /**
                  * Using the previous management representation, we insert

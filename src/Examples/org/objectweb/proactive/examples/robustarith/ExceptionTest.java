@@ -63,7 +63,7 @@ public class ExceptionTest implements Serializable {
     public static void main(String[] args) {
         ExceptionTest test = null;
         try {
-            test = (ExceptionTest) PAActiveObject.newActive(ExceptionTest.class.getName(), null);
+            test = PAActiveObject.newActive(ExceptionTest.class, null);
         } catch (Exception e) {
             e.printStackTrace();
             return;

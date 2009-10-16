@@ -58,7 +58,7 @@ public class Test extends GCMFunctionalTestDefaultNodes {
     public void action() throws Exception {
         Node remoteNode = super.getANode();
 
-        a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" }, remoteNode);
+        a = PAActiveObject.newActive(A.class, new Object[] { "toto" }, remoteNode);
         name = a.getName();
         nodeUrl = a.getNodeUrl();
 

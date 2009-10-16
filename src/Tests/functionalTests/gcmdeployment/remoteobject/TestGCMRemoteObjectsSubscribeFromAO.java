@@ -58,8 +58,7 @@ public class TestGCMRemoteObjectsSubscribeFromAO extends GCMFunctionalTestDefaul
     public void testRemote() throws ActiveObjectCreationException, NodeException, InterruptedException {
 
         Node node = super.getANode();
-        RemoteAO rao = (RemoteAO) PAActiveObject.newActive(RemoteAO.class.getName(),
-                new Object[] { super.gcmad }, node);
+        RemoteAO rao = PAActiveObject.newActive(RemoteAO.class, new Object[] { super.gcmad }, node);
 
         Assert.assertTrue(rao.isSuccess().booleanValue());
     }

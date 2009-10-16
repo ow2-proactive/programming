@@ -149,9 +149,14 @@ public class RemoteObjectHelper {
     @SuppressWarnings("unchecked")
     public static <T> T generatedObjectStub(RemoteObject<T> ro) throws ProActiveException {
         try {
+            //
+            //            Object fakeObject = ro.getTargetClass().newInstance();
+            //
+            //            T reifiedObjectStub = (T) MOP.turnReified( ro.getClassName(), SynchronousProxy.class.getName(),
+            //                    new Object[] { null, new Object[] { ro } } , fakeObject, new Class[] {});
+
             T reifiedObjectStub = (T) MOP.createStubObject(ro.getClassName(), ro.getTargetClass(),
                     new Class[] {});
-
             ((StubObject) reifiedObjectStub).setProxy(new SynchronousProxy(null, new Object[] { ro }));
 
             Class<Adapter<T>> adapter = (Class<Adapter<T>>) ro.getAdapterClass();

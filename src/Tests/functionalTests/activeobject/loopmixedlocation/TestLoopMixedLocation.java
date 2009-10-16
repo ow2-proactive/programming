@@ -67,8 +67,7 @@ public class TestLoopMixedLocation extends GCMFunctionalTestDefaultNodes {
     public TestLoopMixedLocation() throws IOException, ProActiveException {
         super(1, 1);
 
-        this.server = (SimpleLocationServer) PAActiveObject.newActive(SimpleLocationServer.class.getName(),
-                new Object[] {});
+        this.server = PAActiveObject.newActive(SimpleLocationServer.class, new Object[] {});
         String serverUrl = PAActiveObject.registerByName(this.server, "LocationServer");
 
         PAProperties.PA_LOCATION_SERVER_RMI.setValue(serverUrl);
@@ -81,10 +80,10 @@ public class TestLoopMixedLocation extends GCMFunctionalTestDefaultNodes {
     @org.junit.Test
     public void action() throws Exception {
 
-        a = (A) PAActiveObject.newActive(A.class.getName(), null, new Object[] { "toto" }, null, null,
+        a = PAActiveObject.newActive(A.class, null, new Object[] { "toto" }, null, null,
                 MixedLocationMetaObjectFactory.newInstance());
-        migratableA = (MigratableA) PAActiveObject.newActive(MigratableA.class.getName(), null,
-                new Object[] { "toto" }, null, null, MixedLocationMetaObjectFactory.newInstance());
+        migratableA = PAActiveObject.newActive(MigratableA.class, null, new Object[] { "toto" }, null, null,
+                MixedLocationMetaObjectFactory.newInstance());
         idA = ((BodyProxy) ((StubObject) a).getProxy()).getBodyID();
         Node node = super.getANode();
         migratableA.moveTo(node);

@@ -37,14 +37,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.AccessControlException;
 import java.security.PublicKey;
+
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.mop.MOP;
+import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
-import org.objectweb.proactive.core.mop.ReifiedCastException;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -216,7 +216,7 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
     @SuppressWarnings("unchecked")
     public T getObjectProxy() {
         try {
-            T reifiedObjectStub = (T) MOP.createStubObject(this.className, target.getClass(), new Class[] {});
+            T reifiedObjectStub = (T) createStubObject();
             if (adapterClass != null) {
                 Constructor<Adapter<T>> myConstructor = adapterClass.getConstructor(new Class[] { Class
                         .forName(this.className) });
@@ -225,10 +225,6 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
             } else {
                 return reifiedObjectStub;
             }
-        } catch (ClassNotReifiableException e) {
-            e.printStackTrace();
-        } catch (ReifiedCastException e) {
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SecurityException e) {
@@ -259,7 +255,7 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
     @SuppressWarnings("unchecked")
     public T getObjectProxy(RemoteRemoteObject rro) throws ProActiveException {
         try {
-            T reifiedObjectStub = (T) MOP.createStubObject(this.className, target.getClass(), new Class[] {});
+            T reifiedObjectStub = (T) createStubObject();
             ((StubObject) reifiedObjectStub).setProxy(new SynchronousProxy(null, new Object[] { rro }));
             if (adapterClass != null) {
 
@@ -270,10 +266,6 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
             } else {
                 return reifiedObjectStub;
             }
-        } catch (ClassNotReifiableException e) {
-            e.printStackTrace();
-        } catch (ReifiedCastException e) {
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SecurityException e) {
@@ -372,8 +364,7 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
             Constructor myConstructor;
             try {
 
-                T reifiedObjectStub = (T) MOP.createStubObject(this.className, target.getClass(),
-                        new Class[] {});
+                T reifiedObjectStub = (T) createStubObject();
                 myConstructor = adapterClass.getClass().getConstructor(
                         new Class[] { Class.forName(this.className) });
                 Adapter<T> ad = (Adapter<T>) myConstructor.newInstance(reifiedObjectStub);
@@ -389,12 +380,6 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
             } catch (ClassNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            } catch (ReifiedCastException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (ClassNotReifiableException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             } catch (IllegalArgumentException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -408,6 +393,18 @@ public class RemoteObjectImpl<T> implements RemoteObject<T>, Serializable {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+        }
+        return null;
+    }
+
+    protected Object createStubObject() throws ClassNotFoundException {
+        try {
+            return MOP.turnReified(this.className, SynchronousProxy.class.getName(), new Object[] { null,
+                    new Object[] { this } }, target, new Class[] {});
+
+        } catch (MOPException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         return null;
     }

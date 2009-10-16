@@ -40,6 +40,7 @@ import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
+import org.objectweb.proactive.annotation.ImmediateService;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.Sleeper;
@@ -56,7 +57,7 @@ public class TestDelayedInitActive extends FunctionalTest {
 
     @Test
     public void test() throws ActiveObjectCreationException, NodeException, InterruptedException {
-        AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] {});
+        AO ao = PAActiveObject.newActive(AO.class, new Object[] {});
         long before = System.currentTimeMillis();
         /* Race condition: PAActiveObject.setIS() has not yet been called when ao.is() is served
          * The request is put into the request queue instead of being served as an IS -> asynchronous call 

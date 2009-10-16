@@ -52,7 +52,7 @@ public class Test extends FunctionalTest {
 
     @Before
     public void action() throws Exception {
-        a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" });
+        a = PAActiveObject.newActive(A.class, new Object[] { "toto" });
         a.init(); // sync call
         // getObject is set as an IS in the runActivity of A
         synchroCall = a.getBooleanSynchronous();

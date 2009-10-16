@@ -39,7 +39,6 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAMessageTagging;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.body.tags.Tag;
-import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.node.NodeException;
 
 
@@ -51,7 +50,7 @@ public class A implements Serializable {
     }
 
     public void initialize() throws ActiveObjectCreationException, NodeException {
-        activeB = (B) PAActiveObject.newActive(B.class.getName(), new Object[0]);
+        activeB = PAActiveObject.newActive(B.class, new Object[0]);
     }
 
     public int propagateTag() {

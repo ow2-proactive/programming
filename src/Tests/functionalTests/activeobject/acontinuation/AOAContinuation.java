@@ -53,14 +53,12 @@ public class AOAContinuation implements java.io.Serializable {
     }
 
     public void initFirstDeleguate() throws Exception {
-        this.deleguate = (AOAContinuation) PAActiveObject.newActive(AOAContinuation.class.getName(),
-                new Object[] { "deleguate1" });
+        this.deleguate = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "deleguate1" });
         deleguate.initSecondDeleguate();
     }
 
     public void initSecondDeleguate() throws Exception {
-        this.deleguate = (AOAContinuation) PAActiveObject.newActive(AOAContinuation.class.getName(),
-                new Object[] { "deleguate2" });
+        this.deleguate = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "deleguate2" });
     }
 
     public Id getId(String name) {

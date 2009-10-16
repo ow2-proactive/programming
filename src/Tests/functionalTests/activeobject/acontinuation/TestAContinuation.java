@@ -78,8 +78,7 @@ public class TestAContinuation extends FunctionalTest {
         @Override
         public void run() {
             try {
-                a = (AOAContinuation) PAActiveObject.newActive(AOAContinuation.class.getName(),
-                        new Object[] { "principal" });
+                a = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "principal" });
                 //test future by result
                 a.initFirstDeleguate();
                 idDeleguate = a.getId("deleguate2");
@@ -94,25 +93,20 @@ public class TestAContinuation extends FunctionalTest {
                 }
 
                 //test future passed as parameter
-                b = (AOAContinuation) PAActiveObject.newActive(AOAContinuation.class.getName(),
-                        new Object[] { "dummy" });
+                b = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "dummy" });
                 idPrincipal = b.getIdforFuture();
                 a.forwardID(idPrincipal);
                 //Test non-blocking when future passed as parameter
-                AOAContinuation c = (AOAContinuation) PAActiveObject.newActive(AOAContinuation.class
-                        .getName(), new Object[] { "c" });
-                AOAContinuation d = (AOAContinuation) PAActiveObject.newActive(AOAContinuation.class
-                        .getName(), new Object[] { "d" });
-                AOAContinuation e = (AOAContinuation) PAActiveObject.newActive(AOAContinuation.class
-                        .getName(), new Object[] { "e" });
+                AOAContinuation c = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "c" });
+                AOAContinuation d = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "d" });
+                AOAContinuation e = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "e" });
 
                 AOAContinuation de = d.getA(e);
                 AOAContinuation cde = c.getA(de);
                 lastA = e.getA(cde);
 
                 //test multiple wrapped futures with multiples AC destinations
-                AOAContinuation f = (AOAContinuation) PAActiveObject.newActive(AOAContinuation.class
-                        .getName(), new Object[] { "f" });
+                AOAContinuation f = PAActiveObject.newActive(AOAContinuation.class, new Object[] { "f" });
                 c.initSecondDeleguate();
                 AOAContinuation t = c.delegatedGetA(d);
                 t1 = e.getA(t);

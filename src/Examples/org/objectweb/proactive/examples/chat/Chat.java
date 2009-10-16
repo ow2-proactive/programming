@@ -342,7 +342,7 @@ public class Chat implements java.io.Serializable, RunActive {
         try {
             Object[] param = new Object[1];
             param[0] = new String(userName);
-            chat = (Chat) PAActiveObject.newActive(Chat.class.getName(), param, (Node) null);
+            chat = PAActiveObject.newActive(Chat.class, param, (Node) null);
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();
         } catch (NodeException e) {

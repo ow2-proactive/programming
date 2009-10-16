@@ -49,7 +49,7 @@ public class TestProtectedCalls extends FunctionalTest {
 
     @Test
     public void test() throws ActiveObjectCreationException, NodeException {
-        AOChild ao = (AOChild) PAActiveObject.newActive(AOChild.class.getName(), new Object[] {});
+        AOChild ao = PAActiveObject.newActive(AOChild.class, new Object[] {});
         IntWrapper bw = ao.foo2();
         assertTrue("Protected method reached", bw.intValue() == -10);
     }

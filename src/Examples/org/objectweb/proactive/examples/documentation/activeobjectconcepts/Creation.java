@@ -67,7 +67,7 @@ public class Creation {
 
         Worker charlie;
         try {
-            charlie = (Worker) PAActiveObject.newActive(Worker.class.getName(), params);
+            charlie = PAActiveObject.newActive(Worker.class, params);
             //@snippet-break AO_Creation_1
             System.out.println(charlie.getName() + " is " + charlie.getAge());
             //@snippet-resume AO_Creation_1
@@ -109,7 +109,7 @@ public class Creation {
 
         Worker charlie;
         try {
-            charlie = (Worker) PAActiveObject.newActive(Worker.class.getName(), params, node);
+            charlie = PAActiveObject.newActive(Worker.class, params, node);
             //@snippet-break AO_Creation_6
             System.out.println(charlie.getName() + " is " + charlie.getAge());
             //@snippet-resume AO_Creation_6
@@ -152,7 +152,7 @@ public class Creation {
         try {
             //@snippet-start AO_Creation_7
             String nodeURL = node.getNodeInformation().getURL();
-            charlie = (Worker) PAActiveObject.newActive(Worker.class.getName(), params, nodeURL);
+            charlie = PAActiveObject.newActive(Worker.class, params, nodeURL);
             //@snippet-end AO_Creation_7
             System.out.println(charlie.getName() + " is " + charlie.getAge());
         } catch (ActiveObjectCreationException aoExcep) {
@@ -177,8 +177,7 @@ public class Creation {
 
         Worker charlie;
         try {
-            charlie = (Worker) PAActiveObject.newActive(Worker.class.getName(), null, params, null, activity,
-                    null);
+            charlie = PAActiveObject.newActive(Worker.class, null, params, null, activity, null);
 
             System.out.println(charlie.getName() + " is " + charlie.getAge());
             charlie.setAge(new IntWrapper(25));

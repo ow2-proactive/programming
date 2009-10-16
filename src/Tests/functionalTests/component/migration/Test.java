@@ -63,13 +63,13 @@ public class Test extends ComponentTest {
      */
     @org.junit.Test
     public void GCMDeployment() throws Exception {
-        DummyAO testAO = (DummyAO) PAActiveObject.newActive(DummyAO.class.getName(), new Object[] {});
+        DummyAO testAO = PAActiveObject.newActive(DummyAO.class, new Object[] {});
         assertEquals(true, testAO.goGCMDeployment());
     }
 
     @org.junit.Test
     public void OldDeployment() throws Exception {
-        DummyAO testAO = (DummyAO) PAActiveObject.newActive(DummyAO.class.getName(), new Object[] {});
+        DummyAO testAO = PAActiveObject.newActive(DummyAO.class, new Object[] {});
         assertEquals(true, testAO.goOldDeployment());
     }
 }

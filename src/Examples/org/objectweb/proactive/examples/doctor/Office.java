@@ -99,8 +99,7 @@ public class Office {
     public synchronized void createPeople() {
         int i;
         try {
-            rand = (RandomTime) org.objectweb.proactive.api.PAActiveObject.newActive(RandomTime.class
-                    .getName(), null);
+            rand = org.objectweb.proactive.api.PAActiveObject.newActive(RandomTime.class, null);
 
             for (i = 1; i <= NB_DOC; i++)
                 addDoctor(i, MEAN_DOC, SIGM_DOC);
@@ -117,8 +116,7 @@ public class Office {
             Object[] params = { Integer.valueOf(id), Long.valueOf(meanTime), Long.valueOf(sigmaTime), me,
                     rand };
 
-            Doctor newDoc = (Doctor) org.objectweb.proactive.api.PAActiveObject.newActive(Doctor.class
-                    .getName(), params);
+            Doctor newDoc = org.objectweb.proactive.api.PAActiveObject.newActive(Doctor.class, params);
             doctors.insertElementAt(newDoc, id - 1);
             recept.addDoctor(id);
             display.addDoctor(id);
@@ -131,8 +129,7 @@ public class Office {
         try {
             Object[] params = { new Integer(id), new Long(meanTime), new Long(sigmaTime), me, rand };
 
-            Patient newPat = (Patient) org.objectweb.proactive.api.PAActiveObject.newActive(Patient.class
-                    .getName(), params);
+            Patient newPat = org.objectweb.proactive.api.PAActiveObject.newActive(Patient.class, params);
             patients.insertElementAt(newPat, id - 1);
             display.addPatient(id);
             Thread.yield();
@@ -169,10 +166,10 @@ public class Office {
     public static void main(String[] argv) {
         logger.info("The Salishan problems : Problem 3 - The Doctor's Office");
         try {
-            Office off = (Office) org.objectweb.proactive.api.PAActiveObject.newActive(
-                    Office.class.getName(), new Object[] { new Integer(0) });
-            Receptionnist recept = (Receptionnist) org.objectweb.proactive.api.PAActiveObject.newActive(
-                    Receptionnist.class.getName(), new Object[] { off });
+            Office off = org.objectweb.proactive.api.PAActiveObject.newActive(Office.class,
+                    new Object[] { new Integer(0) });
+            Receptionnist recept = org.objectweb.proactive.api.PAActiveObject.newActive(Receptionnist.class,
+                    new Object[] { off });
             off.init(off, recept);
         } catch (Exception e) {
             e.printStackTrace();

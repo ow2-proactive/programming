@@ -58,7 +58,7 @@ public class TestGetStubOnThis extends FunctionalTest {
 
     @Test
     public void fromServiceThread() throws ActiveObjectCreationException, NodeException {
-        AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] {});
+        AO ao = PAActiveObject.newActive(AO.class, new Object[] {});
         Assert.assertTrue(ao.isOk());
     }
 

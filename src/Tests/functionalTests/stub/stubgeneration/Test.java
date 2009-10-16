@@ -99,7 +99,7 @@ public class Test extends FunctionalTest {
                 new String[] { My_PFirst_PType.class.getName(), My_DSecond_PType.class.getName() }));
 
         // test Serializable return type
-        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] {});
+        A a = PAActiveObject.newActive(A.class, new Object[] {});
         assertEquals(A.RESULT, a.foo().toString());
 
         //BENCH

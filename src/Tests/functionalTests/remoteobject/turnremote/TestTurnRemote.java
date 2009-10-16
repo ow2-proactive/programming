@@ -58,7 +58,7 @@ public class TestTurnRemote extends GCMFunctionalTestDefaultNodes {
     @Test
     public void test() throws ProActiveException {
         Node node = super.getANode();
-        AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] {}, node);
+        AO ao = PAActiveObject.newActive(AO.class, new Object[] {}, node);
         RObject ro = ao.deploy();
 
         VMID localVMID = ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getVMID();

@@ -41,4 +41,8 @@ public interface RequestReceiver {
             RenegotiateSessionException, CommunicationForbiddenException;
 
     public boolean isInImmediateService() throws java.io.IOException;
+
+    public boolean hasThreadsForImmediateService();
+
+    public void terminate();
 }

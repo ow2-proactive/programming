@@ -46,7 +46,7 @@ public class Test extends FunctionalTest {
 
     @org.junit.Test
     public void action() throws Exception {
-        Factory f = (Factory) PAActiveObject.newActive(Factory.class.getName(), new Object[] {});
+        Factory f = PAActiveObject.newActive(Factory.class, new Object[] {});
         String url = PAActiveObject.registerByName(f, "myFactory");
 
         Factory factory = (Factory) PAActiveObject.lookupActive(Factory.class.getName(), url);

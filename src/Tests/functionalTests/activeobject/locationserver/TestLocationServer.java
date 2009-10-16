@@ -65,8 +65,7 @@ public class TestLocationServer extends GCMFunctionalTestDefaultNodes {
     public TestLocationServer() throws IOException, ProActiveException {
         super(1, 1);
 
-        this.server = (SimpleLocationServer) PAActiveObject.newActive(SimpleLocationServer.class.getName(),
-                new Object[] {});
+        this.server = PAActiveObject.newActive(SimpleLocationServer.class, new Object[] {});
         String serverUrl = PAActiveObject.registerByName(this.server, "LocationServer");
 
         PAProperties.PA_LOCATION_SERVER_RMI.setValue(serverUrl);
@@ -78,11 +77,11 @@ public class TestLocationServer extends GCMFunctionalTestDefaultNodes {
 
     @org.junit.Test
     public void action() throws Exception {
-        this.a = (A) PAActiveObject.newActive(A.class.getName(), null, new Object[] { "toto" }, null, null,
+        this.a = PAActiveObject.newActive(A.class, null, new Object[] { "toto" }, null, null,
                 LocationServerMetaObjectFactory.newInstance());
 
-        this.migratableA = (MigratableA) PAActiveObject.newActive(MigratableA.class.getName(), null,
-                new Object[] { "toto" }, null, null, LocationServerMetaObjectFactory.newInstance());
+        this.migratableA = PAActiveObject.newActive(MigratableA.class, null, new Object[] { "toto" }, null,
+                null, LocationServerMetaObjectFactory.newInstance());
 
         this.idA = ((BodyProxy) ((StubObject) this.a).getProxy()).getBodyID();
 

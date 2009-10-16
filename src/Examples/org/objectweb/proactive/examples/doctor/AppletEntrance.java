@@ -61,10 +61,10 @@ public class AppletEntrance extends org.objectweb.proactive.examples.StandardFra
     public void start() {
         receiveMessage("Please wait while initializing remote objects");
         try {
-            Office off = (Office) org.objectweb.proactive.api.PAActiveObject.newActive(
-                    Office.class.getName(), new Object[] { Integer.valueOf(0) });
-            Receptionnist recept = (Receptionnist) org.objectweb.proactive.api.PAActiveObject.newActive(
-                    Receptionnist.class.getName(), new Object[] { off });
+            Office off = org.objectweb.proactive.api.PAActiveObject.newActive(Office.class,
+                    new Object[] { Integer.valueOf(0) });
+            Receptionnist recept = org.objectweb.proactive.api.PAActiveObject.newActive(Receptionnist.class,
+                    new Object[] { off });
             receiveMessage("The doctors' office is open!");
             off.init(off, recept);
         } catch (Exception e) {

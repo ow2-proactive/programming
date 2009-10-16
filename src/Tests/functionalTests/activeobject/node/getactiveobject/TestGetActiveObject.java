@@ -53,7 +53,7 @@ public class TestGetActiveObject extends GCMFunctionalTestDefaultNodes {
     public void action() throws Exception {
         Node node = super.getANode();
 
-        PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" }, node);
+        PAActiveObject.newActive(A.class, new Object[] { "toto" }, node);
         A a = (A) node.getActiveObjects(A.class.getName())[0];
 
         Assert.assertEquals("toto", a.getName());

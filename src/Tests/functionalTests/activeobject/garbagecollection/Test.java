@@ -50,11 +50,11 @@ public class Test extends FunctionalTest {
      * \ v \ 1--->---2 \ /| ^ v | \ / | 3 v / \ | v ^ | / \| 4 5
      */
     private static void buildGraph() throws Exception {
-        A a1 = (A) PAActiveObject.newActive(A.class.getName(), null);
-        A a2 = (A) PAActiveObject.newActive(A.class.getName(), null);
-        A a3 = (A) PAActiveObject.newActive(A.class.getName(), null);
-        A a4 = (A) PAActiveObject.newActive(A.class.getName(), null);
-        A a5 = (A) PAActiveObject.newActive(A.class.getName(), null);
+        A a1 = PAActiveObject.newActive(A.class, null);
+        A a2 = PAActiveObject.newActive(A.class, null);
+        A a3 = PAActiveObject.newActive(A.class, null);
+        A a4 = PAActiveObject.newActive(A.class, null);
+        A a5 = PAActiveObject.newActive(A.class, null);
 
         a1.addRef(a2);
         a2.addRef(a3);

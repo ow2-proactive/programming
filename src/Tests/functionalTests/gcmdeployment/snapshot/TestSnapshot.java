@@ -67,7 +67,7 @@ public class TestSnapshot extends GCMFunctionalTestDefaultNodes {
 
     @Test
     public void test() throws ProActiveException {
-        Root r = (Root) PAActiveObject.newActive(Root.class.getName(), new Object[] {}, super.getANode());
+        Root r = PAActiveObject.newActive(Root.class, new Object[] {}, super.getANode());
 
         GCMApplicationSnapshot app = r.deploy();
         PAFuture.waitFor(app);

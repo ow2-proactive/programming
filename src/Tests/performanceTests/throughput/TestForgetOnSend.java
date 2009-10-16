@@ -55,9 +55,8 @@ public class TestForgetOnSend extends GCMFunctionalTestDefaultNodes {
 
     @Test
     public void test() throws ActiveObjectCreationException, NodeException {
-        Server server = (Server) PAActiveObject.newActive(Server.class.getName(), new Object[] {}, super
-                .getANode());
-        Client client = (Client) PAActiveObject.newActive(Client.class.getName(), new Object[] { server });
+        Server server = PAActiveObject.newActive(Server.class, new Object[] {}, super.getANode());
+        Client client = PAActiveObject.newActive(Client.class, new Object[] { server });
 
         PAActiveObject.setForgetOnSend(server, "serve");
 

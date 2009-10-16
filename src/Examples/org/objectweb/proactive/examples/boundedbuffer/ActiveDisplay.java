@@ -69,16 +69,16 @@ public class ActiveDisplay implements ConsumerProducerListener {
         // Producer
         displayMessage("Creating producer...");
         try {
-            producer = (Producer) org.objectweb.proactive.api.PAActiveObject.newActive(Producer.class
-                    .getName(), new Object[] { o, buffer });
+            producer = org.objectweb.proactive.api.PAActiveObject.newActive(Producer.class, new Object[] { o,
+                    buffer });
         } catch (Exception e) {
         }
 
         // Consumer
         displayMessage("Creating Consumer...");
         try {
-            consumer = (Consumer) org.objectweb.proactive.api.PAActiveObject.newActive(Consumer.class
-                    .getName(), new Object[] { o, buffer });
+            consumer = org.objectweb.proactive.api.PAActiveObject.newActive(Consumer.class, new Object[] { o,
+                    buffer });
         } catch (Exception e) {
         }
         displayMessage("Remote objects created...");

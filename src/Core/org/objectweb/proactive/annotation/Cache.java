@@ -42,8 +42,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 /**
- * this annotation indicates that in tte stub generated for the method, caching must be turn on
- *
+ * this annotation makes the stub to cache the value of the first method call.
+ * This annotation is not meant to be used when the result is a primitive type.
  */
 @PublicAPI
 public @interface Cache {

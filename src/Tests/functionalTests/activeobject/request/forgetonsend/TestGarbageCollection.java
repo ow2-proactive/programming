@@ -46,11 +46,11 @@ public class TestGarbageCollection extends FunctionalTest {
      * \ v \ 1--->---2 \ /| ^ v | \ / | 3 v / \ | v ^ | / \| 4 5
      */
     private static void buildGraph() throws Exception {
-        GCObject a1 = (GCObject) PAActiveObject.newActive(GCObject.class.getName(), null);
-        GCObject a2 = (GCObject) PAActiveObject.newActive(GCObject.class.getName(), null);
-        GCObject a3 = (GCObject) PAActiveObject.newActive(GCObject.class.getName(), null);
-        GCObject a4 = (GCObject) PAActiveObject.newActive(GCObject.class.getName(), null);
-        GCObject a5 = (GCObject) PAActiveObject.newActive(GCObject.class.getName(), null);
+        GCObject a1 = PAActiveObject.newActive(GCObject.class, null);
+        GCObject a2 = PAActiveObject.newActive(GCObject.class, null);
+        GCObject a3 = PAActiveObject.newActive(GCObject.class, null);
+        GCObject a4 = PAActiveObject.newActive(GCObject.class, null);
+        GCObject a5 = PAActiveObject.newActive(GCObject.class, null);
 
         PAActiveObject.setForgetOnSend(a1, "addRef");
         PAActiveObject.setForgetOnSend(a2, "addRef");

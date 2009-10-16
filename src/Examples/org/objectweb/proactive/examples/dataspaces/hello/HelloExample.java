@@ -214,10 +214,8 @@ public class HelloExample {
         final Node nodeA = nodesDeployed.get(0);
         final Node nodeB = nodesDeployed.get(1);
 
-        final ExampleProcessing processingA = (ExampleProcessing) PAActiveObject.newActive(
-                ExampleProcessing.class.getName(), null, nodeA);
-        final ExampleProcessing processingB = (ExampleProcessing) PAActiveObject.newActive(
-                ExampleProcessing.class.getName(), null, nodeB);
+        final ExampleProcessing processingA = PAActiveObject.newActive(ExampleProcessing.class, null, nodeA);
+        final ExampleProcessing processingB = PAActiveObject.newActive(ExampleProcessing.class, null, nodeB);
         final Collection<StringWrapper> partialResults = new ArrayList<StringWrapper>();
         try {
             partialResults.add(processingA.computePartials(INPUT_RESOURCE1_NAME));

@@ -60,7 +60,7 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
 
         Node node = super.getANode();
 
-        RemoteAO rao = (RemoteAO) PAActiveObject.newActive(RemoteAO.class.getName(), new Object[] {}, node);
+        RemoteAO rao = PAActiveObject.newActive(RemoteAO.class, new Object[] {}, node);
         String url = rao.createRemoteObject();
         RemoteObject<RO> remoteObject = (RemoteObject<RO>) RemoteObjectHelper.lookup(new URI(url));
         RO ro = (RO) RemoteObjectHelper.generatedObjectStub(remoteObject);

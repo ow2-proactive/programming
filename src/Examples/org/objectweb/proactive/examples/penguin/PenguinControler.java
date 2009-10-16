@@ -90,8 +90,8 @@ public class PenguinControler implements org.objectweb.proactive.RunActive, Peng
 
     public Penguin createPenguin(int n) {
         try {
-            Penguin newPenguin = (Penguin) org.objectweb.proactive.api.PAActiveObject.newActive(Penguin.class
-                    .getName(), new Object[] { new Integer(n) });
+            Penguin newPenguin = org.objectweb.proactive.api.PAActiveObject.newActive(Penguin.class,
+                    new Object[] { new Integer(n) });
             newPenguin.initialize(args);
             newPenguin.setControler((PenguinControler) PAActiveObject.getStubOnThis());
             return newPenguin;

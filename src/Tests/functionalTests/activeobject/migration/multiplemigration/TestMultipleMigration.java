@@ -50,7 +50,7 @@ public class TestMultipleMigration extends GCMFunctionalTestDefaultNodes {
     @org.junit.Test
     public void action() throws Exception {
         Node node;
-        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" });
+        A a = PAActiveObject.newActive(A.class, new Object[] { "toto" });
 
         node = super.getANode();
         a.moveTo(node);

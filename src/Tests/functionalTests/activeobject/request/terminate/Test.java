@@ -52,12 +52,12 @@ public class Test extends FunctionalTest {
 
     @Before
     public void action() throws Exception {
-        a1 = (A) PAActiveObject.newActive(A.class.getName(), new Object[0]);
+        a1 = PAActiveObject.newActive(A.class, new Object[0]);
         a1.method1();
         a1.exit();
 
         // test with remaining ACs
-        a2 = (A) PAActiveObject.newActive(A.class.getName(), new Object[0]);
+        a2 = PAActiveObject.newActive(A.class, new Object[0]);
         a2.initDeleguate();
         returnedValue = a2.getDelegateValue();
         a2.exit();

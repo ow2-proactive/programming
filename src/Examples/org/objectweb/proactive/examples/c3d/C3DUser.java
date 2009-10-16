@@ -256,8 +256,7 @@ public class C3DUser implements InitActive, java.io.Serializable, User, UserLogi
         try {
             //C3DUser c3duser = (C3DUser)
             user.waitReady();
-            org.objectweb.proactive.api.PAActiveObject.newActive(C3DUser.class.getName(), params, user
-                    .getANode());
+            org.objectweb.proactive.api.PAActiveObject.newActive(C3DUser.class, params, user.getANode());
         } catch (Exception e) {
             logger.error("Problemn with C3DUser Active Object creation:");
             e.printStackTrace();

@@ -59,7 +59,7 @@ public class TestAsync extends FunctionalTest {
 
     @BeforeClass
     static public void createAO() throws ActiveObjectCreationException, NodeException {
-        ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] { TIMEOUT });
+        ao = PAActiveObject.newActive(AO.class, new Object[] { TIMEOUT });
     }
 
     @Before

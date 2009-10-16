@@ -66,12 +66,10 @@ public final class TimersTestApplication extends GCMFunctionalTest {
         final GCMVirtualNode vNode = gcmad.getVirtualNode("TestVirtualNode");
         final Node n1 = vNode.getANode();
         final Node n2 = vNode.getANode();
-        this.a1 = (ActiveObjectClass) PAActiveObject.newActive(ActiveObjectClass.class.getName(),
-                new Object[] { "a1" }, n1);
-        this.a1bis = (ActiveObjectClass) PAActiveObject.newActive(ActiveObjectClass.class.getName(),
-                new Object[] { "a1bis" }, n2);
+        this.a1 = PAActiveObject.newActive(ActiveObjectClass.class, new Object[] { "a1" }, n1);
+        this.a1bis = PAActiveObject.newActive(ActiveObjectClass.class, new Object[] { "a1bis" }, n2);
         // Provide the remote reference of a1 and a1bis to a2
-        this.a2 = (ActiveObjectClass) PAActiveObject.newActive(ActiveObjectClass.class.getName(),
+        this.a2 = PAActiveObject.newActive(ActiveObjectClass.class,
                 new Object[] { this.a1, this.a1bis, "a2" }, n2);
         // In order to test the value of the WaitForRequest timer
         // the main will wait a WAITING_TIME, therefore the a2 will be in

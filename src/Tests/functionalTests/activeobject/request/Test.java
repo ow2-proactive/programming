@@ -51,7 +51,7 @@ public class Test extends FunctionalTest {
 
     @Before
     public void action() throws Exception {
-        activeA = (A) PAActiveObject.newActive(A.class.getName(), new Object[0]);
+        activeA = PAActiveObject.newActive(A.class, new Object[0]);
         activeA.method1();
         javaA = activeA.method2();
         counterA = javaA.method3();

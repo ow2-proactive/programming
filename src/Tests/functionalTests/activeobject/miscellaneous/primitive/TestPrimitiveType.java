@@ -45,42 +45,42 @@ public class TestPrimitiveType extends FunctionalTest {
 
     @Test
     public void testBoolean() throws ActiveObjectCreationException, NodeException {
-        PAActiveObject.newActive(Boolean.class.getName(), new Object[] {});
+        PAActiveObject.newActive(Boolean.class, new Object[] {});
     }
 
     @Test
     public void testByte() throws ActiveObjectCreationException, NodeException {
-        PAActiveObject.newActive(Byte.class.getName(), new Object[] {});
+        PAActiveObject.newActive(Byte.class, new Object[] {});
     }
 
     @Test
     public void testChar() throws ActiveObjectCreationException, NodeException {
-        PAActiveObject.newActive(Char.class.getName(), new Object[] {});
+        PAActiveObject.newActive(Char.class, new Object[] {});
     }
 
     @Test
     public void testShort() throws ActiveObjectCreationException, NodeException {
-        PAActiveObject.newActive(Short.class.getName(), new Object[] {});
+        PAActiveObject.newActive(Short.class, new Object[] {});
     }
 
     @Test
     public void testInt() throws ActiveObjectCreationException, NodeException {
-        PAActiveObject.newActive(Int.class.getName(), new Object[] {});
+        PAActiveObject.newActive(Int.class, new Object[] {});
     }
 
     @Test
     public void testLong() throws ActiveObjectCreationException, NodeException {
-        PAActiveObject.newActive(Long.class.getName(), new Object[] {});
+        PAActiveObject.newActive(Long.class, new Object[] {});
     }
 
     @Test
     public void testFloat() throws ActiveObjectCreationException, NodeException {
-        PAActiveObject.newActive(Float.class.getName(), new Object[] {});
+        PAActiveObject.newActive(Float.class, new Object[] {});
     }
 
     @Test
     public void testDouble() throws ActiveObjectCreationException, NodeException {
-        PAActiveObject.newActive(Double.class.getName(), new Object[] {});
+        PAActiveObject.newActive(Double.class, new Object[] {});
     }
 
     static public class Boolean implements Serializable {

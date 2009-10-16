@@ -110,8 +110,8 @@ public class JMXNotificationManager implements NotificationListener {
 
         try {
             // Initalise the JMXNotificationListener which is an active object listening all needed MBeans
-            this.notificationlistener = (JMXNotificationListener) PAActiveObject.newActive(
-                    JMXNotificationListener.class.getName(), new Object[] {});
+            this.notificationlistener = PAActiveObject.newActive(JMXNotificationListener.class,
+                    new Object[] {});
         } catch (ActiveObjectCreationException e) {
             logger.error("Can't create the JMX notifications listener active object", e);
         } catch (NodeException e) {

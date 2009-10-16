@@ -78,7 +78,7 @@ public class Migration {
         SimpleAgent simpleAgent;
         try {
             // Creates the SimpleAgent in this JVM
-            simpleAgent = (SimpleAgent) PAActiveObject.newActive(SimpleAgent.class.getName(), null, node);
+            simpleAgent = PAActiveObject.newActive(SimpleAgent.class, null, node);
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -127,8 +127,7 @@ public class Migration {
         try {
             // Creates the SimpleAgent in this JVM
             Object[] params = new Object[] { 100 };
-            unserializableAgent = (UnSerializableAgent) PAActiveObject.newActive(UnSerializableAgent.class
-                    .getName(), params, node);
+            unserializableAgent = PAActiveObject.newActive(UnSerializableAgent.class, params, node);
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -178,8 +177,7 @@ public class Migration {
         try {
             // Creates the SimpleAgent in this JVM
             Object[] params = new Object[] { 100 };
-            unserializableAgent = (UnSerializableAgent2) PAActiveObject.newActive(UnSerializableAgent2.class
-                    .getName(), params, node);
+            unserializableAgent = PAActiveObject.newActive(UnSerializableAgent2.class, params, node);
         } catch (Exception e) {
             e.printStackTrace();
             return;

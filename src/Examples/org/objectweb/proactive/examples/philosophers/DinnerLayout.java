@@ -105,8 +105,7 @@ public class DinnerLayout {
 
         // Creates the Table 
         try {
-            manager = (Table) org.objectweb.proactive.api.PAActiveObject.newActive(Table.class.getName(),
-                    params, url);
+            manager = org.objectweb.proactive.api.PAActiveObject.newActive(Table.class, params, url);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,8 +121,7 @@ public class DinnerLayout {
         for (int n = 0; n < 5; n++) {
             params[0] = new Integer(n);
             try {
-                phils[n] = (Philosopher) org.objectweb.proactive.api.PAActiveObject.newActive(
-                        Philosopher.class.getName(), params);
+                phils[n] = org.objectweb.proactive.api.PAActiveObject.newActive(Philosopher.class, params);
             } catch (Exception e) {
                 e.printStackTrace();
             }

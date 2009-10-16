@@ -111,7 +111,7 @@ public class TreeApplet extends org.objectweb.proactive.examples.StandardFrame {
 
     public static void main(String[] arg) {
         try {
-            org.objectweb.proactive.api.PAActiveObject.newActive(TreeApplet.class.getName(), new Object[] {
+            org.objectweb.proactive.api.PAActiveObject.newActive(TreeApplet.class, new Object[] {
                     "Binary Tree", Integer.valueOf(900), Integer.valueOf(600) });
         } catch (ActiveObjectCreationException e) {
         } catch (NodeException e) {

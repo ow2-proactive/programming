@@ -196,7 +196,7 @@ public class VNActivator implements Serializable, RunActive, NodeCreationEventLi
                 logger.info("Creating Active Object on " + nodeUrl);
 
                 // CHANGEME: Create your active object here !
-                CPUBurner ao = (CPUBurner) PAActiveObject.newActive(CPUBurner.class.getName(), new Object[] {
+                CPUBurner ao = PAActiveObject.newActive(CPUBurner.class, new Object[] {
                         new IntWrapper(slaveID), manager }, node);
 
                 logger.info("Created Active Object on " + nodeUrl);

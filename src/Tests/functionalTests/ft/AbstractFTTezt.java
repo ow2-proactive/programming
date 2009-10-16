@@ -102,11 +102,11 @@ public class AbstractFTTezt extends FunctionalTest {
         nodes[0] = vnode.getANode();
         nodes[1] = vnode.getANode();
 
-        Agent a = (Agent) PAActiveObject.newActive(Agent.class.getName(), new Object[0], nodes[0]);
-        Agent b = (Agent) PAActiveObject.newActive(Agent.class.getName(), new Object[0], nodes[1]);
+        Agent a = PAActiveObject.newActive(Agent.class, new Object[0], nodes[0]);
+        Agent b = PAActiveObject.newActive(Agent.class, new Object[0], nodes[1]);
 
         // not ft !
-        Collector c = (Collector) PAActiveObject.newActive(Collector.class.getName(), new Object[0]);
+        Collector c = PAActiveObject.newActive(Collector.class, new Object[0]);
 
         a.initCounter(1);
         b.initCounter(1);

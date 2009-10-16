@@ -61,10 +61,10 @@ public class TestMigration extends GCMFunctionalTestDefaultNodes {
         Node node3 = super.getANode();
         Node node4 = super.getANode();
 
-        c1 = (C) PAActiveObject.newActive(C.class.getName(), new Object[] { "C1" }, node1);
-        c2 = (C) PAActiveObject.newActive(C.class.getName(), new Object[] { "C2" }, node2);
-        c3 = (C) PAActiveObject.newActive(C.class.getName(), new Object[] { "C3" }, node3);
-        c4 = (C) PAActiveObject.newActive(C.class.getName(), new Object[] { "C4" }, node4);
+        c1 = PAActiveObject.newActive(C.class, new Object[] { "C1" }, node1);
+        c2 = PAActiveObject.newActive(C.class, new Object[] { "C2" }, node2);
+        c3 = PAActiveObject.newActive(C.class, new Object[] { "C3" }, node3);
+        c4 = PAActiveObject.newActive(C.class, new Object[] { "C4" }, node4);
 
         int r1 = c1.getRuntimeHashCode();
         int r2 = c2.getRuntimeHashCode();

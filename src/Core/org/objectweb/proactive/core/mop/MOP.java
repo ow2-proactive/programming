@@ -24,13 +24,15 @@
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
+
 package org.objectweb.proactive.core.mop;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
@@ -45,16 +47,17 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
+import javassist.CannotCompileException;
+import javassist.NotFoundException;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Active;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.body.ActiveBody;
-import org.objectweb.proactive.core.body.BodyImpl;
 import org.objectweb.proactive.core.body.MetaObjectFactory;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.mop.proxy.PAProxy;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -214,6 +217,31 @@ public abstract class MOP {
         // Throws a ClassNotFoundException
         Class<?> targetClass = forName(nameOfClass);
 
+        try {
+            if (PAProxyBuilder.hasPAProxyAnnotation(targetClass)) {
+                String proxyName = PAProxyBuilder.generatePAProxyClassName(targetClass.getName());
+                Class<?> cl = MOPClassLoader.getMOPClassLoader().loadClass(proxyName);
+                targetClass = cl;
+                nameOfClass = targetClass.getName();
+                nameOfStubClass = PAProxyBuilder.getBaseClassNameFromPAProxyName(targetClass.getName());
+
+                System.out.println("PAPROXY  " + nameOfClass + "? ");
+
+            }
+        } catch (NotFoundException e) {
+            // We could land here if we are trying to
+            // generate a _PAProxy on a runtime that does not
+            // have yet generated a paproxy for that class
+            if (PAProxyBuilder.doesClassNameEndWithPAProxySuffix(targetClass.getName())) {
+                Class<?> cl = MOPClassLoader.getMOPClassLoader().loadClass(targetClass.getName());
+                targetClass = cl;
+                nameOfClass = targetClass.getName();
+                nameOfStubClass = PAProxyBuilder.getBaseClassNameFromPAProxyName(targetClass.getName());
+
+                System.out.println("PAPROXY  " + nameOfClass + "? ");
+            }
+        }
+
         // Class<?> stubClass = null;
         //        try {
         //            targetClass = forName(nameOfStubClass);
@@ -372,6 +400,56 @@ public abstract class MOP {
 
         // Throws a ClassNotFoundException
         Class<?> targetClass = target.getClass();
+
+        try {
+            boolean isPAProxy = PAProxyBuilder.hasPAProxyAnnotation(targetClass);
+            if (isPAProxy) {
+                byte[] paproxyByteCode;
+                try {
+                    paproxyByteCode = PAProxyBuilder.generatePAProxy(targetClass.getName());
+                    String proxyName = PAProxyBuilder.generatePAProxyClassName(targetClass.getName());
+                    MOPClassLoader.classDataCache.put(proxyName, paproxyByteCode);
+
+                    Class<?> proxyClass = Class.forName(proxyName);
+
+                    Constructor<?> construct = proxyClass.getConstructor(new Class<?>[] { targetClass });
+
+                    target = construct.newInstance(target);
+
+                } catch (NotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (CannotCompileException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (SecurityException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IllegalArgumentException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            }
+        } catch (NotFoundException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 
         // Instanciates the stub object
         StubObject stub = createStubObject(nameOfStubClass, targetClass, genericParameters);
@@ -1179,7 +1257,7 @@ public abstract class MOP {
     }
 
     /**
-     * replaceObject performs a in-depth parse of an object in order to find if the object
+     * replaceObject performs an in-depth parse of an object in order to find if the object
      * contains some references to the object 'from' and replace these references by the object 'to'
      * @param objectToAnalyse the object in which some replacement must be performed
      * @param from the object that has to be replaced

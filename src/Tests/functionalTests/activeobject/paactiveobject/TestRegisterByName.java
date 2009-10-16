@@ -54,7 +54,7 @@ public class TestRegisterByName extends FunctionalTest {
      */
     @Test
     public void test() throws ProActiveException {
-        AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] {});
+        AO ao = PAActiveObject.newActive(AO.class, new Object[] {});
 
         String name = null;
         String url = null;

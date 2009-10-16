@@ -103,8 +103,7 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
             return ftsPool.remove(0);
         }
 
-        FileTransferService localFTS = (FileTransferService) PAActiveObject.newActive(
-                FileTransferService.class.getName(), null);
+        FileTransferService localFTS = PAActiveObject.newActive(FileTransferService.class, null);
         --maxFTS;
 
         return localFTS;
@@ -117,8 +116,8 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
     static synchronized public FileTransferEngine getFileTransferEngine() {
         if (singletonFTE == null) {
             try {
-                singletonFTE = (FileTransferEngine) PAActiveObject.newActive(FileTransferEngine.class
-                        .getName(), new Object[] { DEFAULT_MAX_FILE_TRANSFER_SERVICES });
+                singletonFTE = PAActiveObject.newActive(FileTransferEngine.class,
+                        new Object[] { DEFAULT_MAX_FILE_TRANSFER_SERVICES });
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -103,7 +103,7 @@ public class KernelFT extends Kernel {
                 e.printStackTrace();
             }
 
-            reduce = (Reduce) PAActiveObject.newActive(Reduce.class.getName(), paramReduce, nodeWorker1);
+            reduce = PAActiveObject.newActive(Reduce.class, paramReduce, nodeWorker1);
             reduce.init(workers);
 
             TimItManager tManager = TimItManager.getInstance();

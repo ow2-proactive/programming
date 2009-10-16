@@ -59,7 +59,7 @@ public class A implements Serializable, RunActive {
 
     public void initDeleguate() {
         try {
-            this.delegate = (A) PAActiveObject.newActive(A.class.getName(), new Object[0]);
+            this.delegate = PAActiveObject.newActive(A.class, new Object[0]);
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();
         } catch (NodeException e) {

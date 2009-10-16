@@ -358,8 +358,7 @@ public class PiBBP implements Serializable {
         try {
             //            PiBBP piApplication = new PiBBP(args);
             //            piApplication.start();
-            PiBBP piApplication = (PiBBP) PAActiveObject.newActive(PiBBP.class.getName(),
-                    new Object[] { args });
+            PiBBP piApplication = PAActiveObject.newActive(PiBBP.class, new Object[] { args });
 
             if (piApplication.isWebService()) {
                 WebServicesFactory wsf = AbstractWebServicesFactory.getDefaultWebServicesFactory();

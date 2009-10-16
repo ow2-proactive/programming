@@ -48,8 +48,7 @@ public class Main {
         // Creates an active instance of this class
         ProActiveConfiguration.load();
         try {
-            theMainActiveObject = (Main) org.objectweb.proactive.api.PAActiveObject.newActive(Main.class
-                    .getName(), null);
+            theMainActiveObject = org.objectweb.proactive.api.PAActiveObject.newActive(Main.class, null);
         } catch (Exception e) {
             logger.error(e);
             System.exit(1);
@@ -75,8 +74,7 @@ public class Main {
         // * The last parameter 'null' means we want to instanciate this object in the current virtual machine
         try {
             //          Object o = new org.objectweb.proactive.examples.binarytree.ActiveBinaryTree ();
-            myTree = (BinaryTree) org.objectweb.proactive.api.PAActiveObject.newActive(ActiveBinaryTree.class
-                    .getName(), null);
+            myTree = org.objectweb.proactive.api.PAActiveObject.newActive(ActiveBinaryTree.class, null);
         } catch (Exception e) {
             logger.error(e);
             e.printStackTrace();

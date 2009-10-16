@@ -60,7 +60,7 @@ public class SecurityTestContextPropagation extends FunctionalTest {
 
     @Test
     public void action() throws Exception {
-        A a = (A) PAActiveObject.newActive("functionalTests.security.A", new Object[] {});
+        A a = PAActiveObject.newActive(functionalTests.security.A.class, new Object[] {});
 
         assertTrue("hello".equals(a.hello("hello")));
     }

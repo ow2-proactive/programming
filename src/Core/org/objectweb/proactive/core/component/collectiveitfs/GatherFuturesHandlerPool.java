@@ -74,8 +74,7 @@ public class GatherFuturesHandlerPool {
 
     GatherFuturesHandler create() throws ActiveObjectCreationException, NodeException {
         //			System.out.println("CREATED " + ++created );
-        return (GatherFuturesHandler) PAActiveObject.newActive(GatherFuturesHandler.class.getName(),
-                new Object[] {});
+        return PAActiveObject.newActive(GatherFuturesHandler.class, new Object[] {});
     }
 
     boolean validate(GatherFuturesHandler handler) {

@@ -51,7 +51,7 @@ public class Test extends FunctionalTest {
      */
     @Before
     public void initTest() throws Exception {
-        this.ao = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "bernard Lavilliers" });
+        this.ao = PAActiveObject.newActive(A.class, new Object[] { "bernard Lavilliers" });
     }
 
     @org.junit.Test

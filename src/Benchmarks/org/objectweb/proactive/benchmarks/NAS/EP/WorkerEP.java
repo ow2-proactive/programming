@@ -139,8 +139,8 @@ public class WorkerEP extends Timed {
 
         if (rank == this.reductorRank) {
             try {
-                allReduceOp = (ReduceAll) PAActiveObject.newActive(WorkerEP.ReduceSumOp.class.getName(),
-                        new Object[] { typedGroup, Integer.valueOf(groupSize) });
+                allReduceOp = PAActiveObject.newActive(WorkerEP.ReduceSumOp.class, new Object[] { typedGroup,
+                        Integer.valueOf(groupSize) });
             } catch (ActiveObjectCreationException e) {
                 e.printStackTrace();
                 return;

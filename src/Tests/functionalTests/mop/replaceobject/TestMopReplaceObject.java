@@ -30,7 +30,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.mop;
+package functionalTests.mop.replaceobject;
 
 import java.util.Random;
 

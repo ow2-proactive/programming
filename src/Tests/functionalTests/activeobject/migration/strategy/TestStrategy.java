@@ -59,7 +59,7 @@ public class TestStrategy extends GCMFunctionalTestDefaultNodes {
         nodesUrl[1] = super.getANode().getNodeInformation().getURL();
         nodesUrl[2] = NodeFactory.getDefaultNode().getNodeInformation().getURL();
 
-        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { nodesUrl });
+        A a = PAActiveObject.newActive(A.class, new Object[] { nodesUrl });
 
         assertTrue(a.getCounter() == 7);
     }

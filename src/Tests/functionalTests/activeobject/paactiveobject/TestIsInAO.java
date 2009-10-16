@@ -50,7 +50,7 @@ public class TestIsInAO extends FunctionalTest {
 
     @Test
     public void test2() throws ActiveObjectCreationException, NodeException {
-        AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] {});
+        AO ao = PAActiveObject.newActive(AO.class, new Object[] {});
         boolean resp = ao.isInAO();
         System.out.println(resp);
         Assert.assertTrue(resp);

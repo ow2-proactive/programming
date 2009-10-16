@@ -53,7 +53,7 @@ public class TestLookupActive extends FunctionalTest {
 
     @Test
     public void action() throws Exception {
-        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" });
+        A a = PAActiveObject.newActive(A.class, new Object[] { "toto" });
         String url = a.register();
 
         a = (A) PAActiveObject.lookupActive(A.class.getName(), url);
@@ -78,7 +78,7 @@ public class TestLookupActive extends FunctionalTest {
 
     @Test(expected = IOException.class)
     public void lookupNode() throws Exception {
-        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] { "toto" });
+        A a = PAActiveObject.newActive(A.class, new Object[] { "toto" });
         String nodeURL = PAActiveObject.getActiveObjectNodeUrl(a);
         PAActiveObject.lookupActive(A.class.getName(), nodeURL);
     }

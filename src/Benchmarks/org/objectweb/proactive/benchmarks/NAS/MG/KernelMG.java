@@ -107,8 +107,8 @@ public class KernelMG extends Kernel {
             Node chosenOneNode = NodeFactory.getNode(PAActiveObject.getActiveObjectNodeUrl(chosenOne));
 
             // Construct the communicator active object
-            communicator = (Communicator) PAActiveObject.newActive(Communicator.class.getName(),
-                    new Object[] { Integer.valueOf(this.problemClass.NUM_PROCS) }, chosenOneNode);
+            communicator = PAActiveObject.newActive(Communicator.class, new Object[] { Integer
+                    .valueOf(this.problemClass.NUM_PROCS) }, chosenOneNode);
 
             communicator.setup();
 

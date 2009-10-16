@@ -50,7 +50,7 @@ public class B implements Serializable, InitActive {
     }
 
     public void initActivity(Body body) {
-        body.setImmediateService("getResult");
+        body.setImmediateService("getResult", false);
     }
 
     public void runActivity(Body body) {

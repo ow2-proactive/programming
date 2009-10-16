@@ -95,8 +95,8 @@ public class Start {
                 // creation of its sons and computation of the values of mass and mass center of
                 // all the tree's nodes
                 // useless boolean, just for pick up a different constructor
-                listOctTree.add(PAActiveObject.newActive(OctTree.class.getName(), new Object[] { lplanets,
-                        universe, Boolean.valueOf(true) }, nodes[(10 * i + 8) % nodes.length]));
+                listOctTree.add(PAActiveObject.newActive(OctTree.class, new Object[] { lplanets, universe,
+                        Boolean.valueOf(true) }, nodes[(10 * i + 8) % nodes.length]));
             } catch (ActiveObjectCreationException e) {
                 deployer.abortOnError(e);
             } catch (NodeException e) {
@@ -143,8 +143,8 @@ public class Start {
 
         try {
             for (int i = 0; i < nbOctTree; i++) {
-                maestroArray[i] = (Maestro) PAActiveObject.newActive(Maestro.class.getName(), new Object[] {
-                        new Integer(i), domainArray, deployer }, nodes[(10 * i + 9) % nodes.length]);
+                maestroArray[i] = PAActiveObject.newActive(Maestro.class, new Object[] { new Integer(i),
+                        domainArray, deployer }, nodes[(10 * i + 9) % nodes.length]);
             }
         } catch (ActiveObjectCreationException e) {
             deployer.abortOnError(e);
@@ -160,8 +160,8 @@ public class Start {
         BigMaestro bigMaestro = null;
 
         try {
-            bigMaestro = (BigMaestro) PAActiveObject.newActive(BigMaestro.class.getName(), new Object[] {
-                    maestroArray, new Integer(maxIter), deployer }, nodes[nodes.length - 1]);
+            bigMaestro = PAActiveObject.newActive(BigMaestro.class, new Object[] { maestroArray,
+                    new Integer(maxIter), deployer }, nodes[nodes.length - 1]);
         } catch (ActiveObjectCreationException e) {
             deployer.abortOnError(e);
         } catch (NodeException e) {

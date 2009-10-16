@@ -76,8 +76,8 @@ public class TestContext extends GCMFunctionalTestDefaultNodes {
         assertTrue(exceptionOccured);
 
         // test getContext
-        AOContext a1 = (AOContext) PAActiveObject.newActive(AOContext.class.getName(), null, node1);
-        AOContext a2 = (AOContext) PAActiveObject.newActive(AOContext.class.getName(), null, node2);
+        AOContext a1 = PAActiveObject.newActive(AOContext.class, null, node1);
+        AOContext a2 = PAActiveObject.newActive(AOContext.class, null, node2);
 
         a1.init("A1");
         a2.init("A2");

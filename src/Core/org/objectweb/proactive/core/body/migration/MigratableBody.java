@@ -201,6 +201,12 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
             throw new MigrationException("Attempt to migrate a instance of a non static member class");
         }
 
+        // PROACTIVE-731
+        if (this.requestReceiver.hasThreadsForImmediateService()) {
+            // This active object has running threads for IS that cannot be migrated.
+            throw new MigrationException("Cannot migrate an object with active immediate service threads");
+        }
+
         try {
             // check node with Manager
             node = migrationManager.checkNode(node);

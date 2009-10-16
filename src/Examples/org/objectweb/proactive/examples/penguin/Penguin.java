@@ -241,8 +241,8 @@ public class Penguin implements org.objectweb.proactive.RunActive, java.io.Seria
             //	n.startItinerary();
             Object[] param = new Object[1];
             param[0] = n;
-            org.objectweb.proactive.api.PAActiveObject.newActive(PenguinMessageReceiver.class.getName(),
-                    param, (org.objectweb.proactive.core.node.Node) null);
+            org.objectweb.proactive.api.PAActiveObject.newActive(PenguinMessageReceiver.class, param,
+                    (org.objectweb.proactive.core.node.Node) null);
             //	n.setOther(n2);
             //	n2.setOther(null);
             //	n2.startItinerary();

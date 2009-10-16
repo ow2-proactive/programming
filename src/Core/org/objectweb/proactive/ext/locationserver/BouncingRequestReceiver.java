@@ -67,4 +67,12 @@ public class BouncingRequestReceiver implements RequestReceiver {
     public boolean isInImmediateService() throws IOException {
         return false;
     }
+
+    public boolean hasThreadsForImmediateService() {
+        return false;
+    }
+
+    public void terminate() {
+    }
+
 }

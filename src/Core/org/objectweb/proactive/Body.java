@@ -185,9 +185,14 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
 
     /**
      * For setting an immediate service for this body. An immediate service is a method that will be
-     * executed by the calling thread.
+     * executed by the calling thread, or by a dedicated per-caller thread if uniqueThread is true.
+     * 
+     * @param methodName
+     *            the name of the method
+     * @param uniqueThread true if this immediate service should be always executed by the same thread for 
+     * 			  a given caller, false if any thread can be used.
      */
-    public void setImmediateService(String methodName);
+    public void setImmediateService(String methodName, boolean uniqueThread);
 
     /**
      * Removes an immediate service for this body An immediate service is a method that will be
@@ -200,14 +205,17 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
 
     /**
      * Adds an immediate service for this body An immediate service is a method that will be
-     * executed by the calling thread.
+     * executed by the calling thread, or by a dedicated per-caller thread if uniqueThread is true.
      * 
      * @param methodName
      *            the name of the method
      * @param parametersTypes
      *            the types of the parameters of the method
+     * @param uniqueThread true if this immediate service should be always executed by the same thread for 
+     * 			  a given caller, false if any thread can be used.
+     *            
      */
-    public void setImmediateService(String methodName, Class<?>[] parametersTypes);
+    public void setImmediateService(String methodName, Class<?>[] parametersTypes, boolean uniqueThread);
 
     /**
      * Removes an immediate service for this body An immediate service is a method that will be

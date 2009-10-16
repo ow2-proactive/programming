@@ -174,7 +174,7 @@ public class HalfBody extends AbstractBody {
         return this.replyReceiver.receiveReply(reply, this, getFuturePool());
     }
 
-    public void setImmediateService(String methodName) {
+    public void setImmediateService(String methodName, boolean uniqueThread) {
         throw new HalfBodyException();
     }
 
@@ -182,7 +182,7 @@ public class HalfBody extends AbstractBody {
         throw new HalfBodyException();
     }
 
-    public void setImmediateService(String methodName, Class<?>[] parametersTypes) {
+    public void setImmediateService(String methodName, Class<?>[] parametersTypes, boolean uniqueThread) {
         throw new HalfBodyException();
     }
 

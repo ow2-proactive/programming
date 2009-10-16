@@ -190,10 +190,9 @@ public class Start implements Serializable {
                 if (workers == null)
                     throw new ProActiveException("Failed to acquire \"Workers\" virtual node");
 
-                deployer = (Deployer) PAActiveObject.newActive(Deployer.class.getName(), new Object[] {
-                        gcmad, workers });
+                deployer = PAActiveObject.newActive(Deployer.class, new Object[] { gcmad, workers });
 
-                displayer = (Displayer) PAActiveObject.newActive(Displayer.class.getName(), new Object[] {
+                displayer = PAActiveObject.newActive(Displayer.class, new Object[] {
                         Integer.valueOf(totalNbBodies), Boolean.valueOf(displayft), deployer,
                         new BooleanWrapper(ddd) });
             } catch (ProActiveException e) {

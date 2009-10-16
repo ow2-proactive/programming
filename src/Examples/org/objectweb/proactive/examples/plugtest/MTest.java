@@ -57,13 +57,12 @@ public class MTest {
             List<Node> noeuds = mTest.getCurrentNodes();
             System.out.println("Il y a " + noeuds.size() + " noeuds.");
             ObjA[] arrayA = new ObjA[noeuds.size()];
-            ObjB b = (ObjB) org.objectweb.proactive.api.PAActiveObject.newActive(ObjB.class.getName(),
-                    new Object[] { "B" });
+            ObjB b = org.objectweb.proactive.api.PAActiveObject.newActive(ObjB.class, new Object[] { "B" });
 
             int i = 0;
             for (Node node : noeuds) {
-                arrayA[i] = (ObjA) org.objectweb.proactive.api.PAActiveObject.newActive(ObjA.class.getName(),
-                        new Object[] { "object" + i, b }, node);
+                arrayA[i] = org.objectweb.proactive.api.PAActiveObject.newActive(ObjA.class, new Object[] {
+                        "object" + i, b }, node);
                 ++i;
             }
 

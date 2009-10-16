@@ -54,4 +54,12 @@ public class RequestReceiverForwarder implements RequestReceiver {
     public boolean isInImmediateService() throws IOException {
         return false;
     }
+
+    public void terminate() {
+        // nothing to do for a forwarder
+    }
+
+    public boolean hasThreadsForImmediateService() {
+        return false;
+    }
 }

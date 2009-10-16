@@ -118,8 +118,8 @@ public class Main {
             // Create the Virtual Node Activator on this ProActive Runtime
             // For optimal performances, the manager & VNActivator should be in 
             // the same ProActive Runtime.
-            PAActiveObject.newActive(VNActivator.class.getName(), new Object[] { manager, descriptors,
-                    virtualNodes, concurrency, pause });
+            PAActiveObject.newActive(VNActivator.class, new Object[] { manager, descriptors, virtualNodes,
+                    concurrency, pause });
         } catch (ProActiveException e) {
             logger.error("Manager or VNActivator cannot be created", e);
             PALifeCycle.exitFailure();

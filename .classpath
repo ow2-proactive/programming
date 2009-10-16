@@ -10,7 +10,6 @@
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
 	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
 	<classpathentry kind="lib" path="lib/ajo.jar"/>
-	<classpathentry kind="lib" path="lib/apputils.jar"/>
 	<classpathentry kind="lib" path="lib/asm-2.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/batik-awt-util.jar"/>
 	<classpathentry kind="lib" path="lib/batik-dom.jar"/>
@@ -23,7 +22,6 @@
 	<classpathentry kind="lib" path="lib/bundlerepository.jar"/>
 	<classpathentry kind="lib" path="lib/classad.jar"/>
 	<classpathentry kind="lib" path="lib/cog-jglobus-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/cog-jglobus.jar"/>
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
 	<classpathentry kind="lib" path="lib/colobus-0.1.jar"/>
 	<classpathentry kind="lib" path="lib/colt.jar"/>
@@ -71,7 +69,6 @@
 	<classpathentry kind="lib" path="lib/ow_deployment_scheduling.jar"/>
 	<classpathentry kind="lib" path="lib/ptolemy.jar"/>
 	<classpathentry kind="lib" path="lib/puretls.jar"/>
-	<classpathentry kind="lib" path="lib/saaj.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8-dom.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8.jar"/>
 	<classpathentry kind="lib" path="lib/scriptPlugin.jar"/>
@@ -133,5 +130,7 @@
 	<classpathentry kind="lib" path="lib/ws-common/wstx-asl-3.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/ws-common/XmlSchema-1.4.5.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/axis.jar"/>
+	<classpathentry kind="lib" path="lib/virtualbox-wsdl.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

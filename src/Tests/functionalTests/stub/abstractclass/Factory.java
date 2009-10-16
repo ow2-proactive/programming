@@ -43,7 +43,7 @@ public class Factory {
 
     public AbstractClass getWidget(Node node) {
         try {
-            return (AbstractClass) PAActiveObject.newActive(ImplClass.class.getName(), new Object[] {}, node);
+            return PAActiveObject.newActive(ImplClass.class, new Object[] {}, node);
         } catch (ActiveObjectCreationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

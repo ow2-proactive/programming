@@ -60,7 +60,7 @@ public class Test extends GCMFunctionalTestDefaultNodes {
     @org.junit.Test
     public void action() throws Exception {
         Node node = super.getANode();
-        AOCrash2 ao2 = (AOCrash2) PAActiveObject.newActive(AOCrash2.class.getName(), new Object[] {}, node);
+        AOCrash2 ao2 = PAActiveObject.newActive(AOCrash2.class, new Object[] {}, node);
         AOCrash1 ao1 = (AOCrash1) PAActiveObject.newActive(AOCrash1.class.getName(), new Object[] { ao2 },
                 node);
         // The call to foo will trigger a receiveReply on object ao1 from object ao2

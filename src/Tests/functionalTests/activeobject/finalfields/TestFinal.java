@@ -61,7 +61,7 @@ public class TestFinal extends GCMFunctionalTestDefaultNodes {
     @Before
     public void createReceiver() throws ActiveObjectCreationException, NodeException {
         Node node = super.getANode();
-        receiver = (Receiver) PAActiveObject.newActive(Receiver.class.getName(), new Object[] {}, node);
+        receiver = PAActiveObject.newActive(Receiver.class, new Object[] {}, node);
     }
 
     public void test(Class<? extends Data> cl) throws InstantiationException, IllegalAccessException {

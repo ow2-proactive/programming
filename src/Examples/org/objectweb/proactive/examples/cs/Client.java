@@ -124,8 +124,8 @@ public class Client {
 
         try {
             // Creates an active object for the client
-            Client theClient = (Client) org.objectweb.proactive.api.PAActiveObject.newActive(Client.class
-                    .getName(), new Object[] { clientName, serverHostName });
+            Client theClient = org.objectweb.proactive.api.PAActiveObject.newActive(Client.class,
+                    new Object[] { clientName, serverHostName });
             if (theClient.init()) {
                 Thread t = new Thread(new RunClient(theClient));
                 t.start();

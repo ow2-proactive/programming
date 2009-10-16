@@ -59,9 +59,9 @@ public class TestFutureMonitoring extends GCMFunctionalTestDefaultNodes {
 
         // With AC
         boolean exception = false;
-        A a1 = (A) PAActiveObject.newActive(A.class.getName(), null, node1);
+        A a1 = PAActiveObject.newActive(A.class, null, node1);
         A future = a1.sleepForever();
-        A a2 = (A) PAActiveObject.newActive(A.class.getName(), null, node2);
+        A a2 = PAActiveObject.newActive(A.class, null, node2);
         A ac = a2.wrapFuture(future);
         a2.crash();
         try {
@@ -74,9 +74,9 @@ public class TestFutureMonitoring extends GCMFunctionalTestDefaultNodes {
 
         // With AC and Terminate AO
         boolean exceptionT = false;
-        A a1T = (A) PAActiveObject.newActive(A.class.getName(), null, node1);
+        A a1T = PAActiveObject.newActive(A.class, null, node1);
         A futureT = a1T.sleepForever();
-        A a2T = (A) PAActiveObject.newActive(A.class.getName(), null, node3);
+        A a2T = PAActiveObject.newActive(A.class, null, node3);
         A acT = a2T.wrapFuture(futureT);
         a2T.crashWithTerminate();
         try {
@@ -89,7 +89,7 @@ public class TestFutureMonitoring extends GCMFunctionalTestDefaultNodes {
 
         // Without AC
         exception = false;
-        A a1bis = (A) PAActiveObject.newActive(A.class.getName(), null, node1);
+        A a1bis = PAActiveObject.newActive(A.class, null, node1);
         a1bis.crash();
         try {
             //System.out.println(future);

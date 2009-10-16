@@ -55,7 +55,7 @@ public class TestProActive359 extends FunctionalTest {
 
     @Test
     public void test() throws ActiveObjectCreationException, NodeException, InterruptedException {
-        AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), null);
+        AO ao = PAActiveObject.newActive(AO.class, null);
 
         boolean exception;
 

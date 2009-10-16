@@ -54,8 +54,7 @@ public class ErrorReturnsNull {
         Object[] params = new Object[0];
         ErrorReturnsNull lookup_active = null;
         try {
-            lookup_active = (ErrorReturnsNull) PAActiveObject.newActive(ErrorReturnsNull.class.getName(),
-                    params);
+            lookup_active = PAActiveObject.newActive(ErrorReturnsNull.class, params);
         } catch (ActiveObjectCreationException e) {
             //logger.fatal("Couldn't create an active lookup", e);
             return null;

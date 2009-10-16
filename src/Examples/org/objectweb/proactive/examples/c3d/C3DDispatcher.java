@@ -153,8 +153,8 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
                 RenderingEngine tmpEngine;
 
                 try {
-                    tmpEngine = (RenderingEngine) PAActiveObject.newActive(
-                            C3DRenderingEngine.class.getName(), param, node.getNodeInformation().getURL());
+                    tmpEngine = PAActiveObject.newActive(C3DRenderingEngine.class, param, node
+                            .getNodeInformation().getURL());
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new RuntimeException(e.toString());
@@ -518,8 +518,7 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
 
         if ((nbUsers >= 2) && (this.election == null)) {
             try {
-                this.election = (Election) PAActiveObject.newActive(Election.class.getName(),
-                        new Object[] { (C3DDispatcher) me });
+                this.election = PAActiveObject.newActive(Election.class, new Object[] { (C3DDispatcher) me });
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -861,15 +860,15 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
             if (dispatcher == null)
                 throw new ProActiveException("Dispatcher virtual node is not defined");
 
-            Deployer deployer = (Deployer) PAActiveObject.newActive(Deployer.class.getName(), new Object[] {
-                    gcmad, renderer, dispatcher });
+            Deployer deployer = PAActiveObject.newActive(Deployer.class, new Object[] { gcmad, renderer,
+                    dispatcher });
 
             Node[] rendererNodes = deployer.getRendererNodes();
             Object[] param = new Object[] { rendererNodes, deployer };
 
             Node dispatcherNode = deployer.getDispatcherNode();
 
-            PAActiveObject.newActive(C3DDispatcher.class.getName(), param, dispatcherNode);
+            PAActiveObject.newActive(C3DDispatcher.class, param, dispatcherNode);
 
         } catch (ProActiveException e) {
             logger.error(e);

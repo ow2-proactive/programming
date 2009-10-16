@@ -115,7 +115,7 @@ public class AOPinger implements WorkerWatcher, RunActive, InitActive, Serializa
     public void initActivity(final Body body) {
 
         stubOnThis = (AOPinger) PAActiveObject.getStubOnThis();
-        body.setImmediateService("terminate");
+        body.setImmediateService("terminate", false);
 
     }
 

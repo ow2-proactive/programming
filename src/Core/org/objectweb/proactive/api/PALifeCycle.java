@@ -68,4 +68,11 @@ public class PALifeCycle {
     public static void exitFailure() {
         System.exit(1);
     }
+
+    public static final String PA_STARTED_PROP = "proactive.isstarted";
+
+    public static boolean IsProActiveStarted() {
+        return "true".equals(System.getProperty(PA_STARTED_PROP));
+    }
+
 }

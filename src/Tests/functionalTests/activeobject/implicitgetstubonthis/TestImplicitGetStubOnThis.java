@@ -56,7 +56,7 @@ public class TestImplicitGetStubOnThis extends FunctionalTest {
 
         // first test -- one step replacement
 
-        A a = (A) PAActiveObject.newActive(A.class.getName(), new Object[] {});
+        A a = PAActiveObject.newActive(A.class, new Object[] {});
 
         // aa is a future
         A aa = a.returnThis();
@@ -94,7 +94,7 @@ public class TestImplicitGetStubOnThis extends FunctionalTest {
 
         // third test -- AO a send this to AO B, B should receive a stub
 
-        B bb = (B) PAActiveObject.newActive(B.class.getName(), new Object[] {});
+        B bb = PAActiveObject.newActive(B.class, new Object[] {});
 
         Assert.assertTrue(a.callTakeAOnB(bb));
 

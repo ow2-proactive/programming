@@ -62,7 +62,7 @@ public class TestAnnotation extends FunctionalTest {
     @Test
     public void ptpAnnotation() {
         try {
-            b1 = (B) PAActiveObject.newActive(B.class.getName(), new Object[] { "B1" });
+            b1 = PAActiveObject.newActive(B.class, new Object[] { "B1" });
             b2 = (B) PAActiveObject.newActive(B.class.getName(), new Object[] { "B2" });
         } catch (ActiveObjectCreationException e) {
             e.printStackTrace();

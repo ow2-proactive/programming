@@ -31,6 +31,7 @@
  */
 package org.objectweb.proactive.core.mop;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -47,7 +48,7 @@ public class MOPClassLoader extends URLClassLoader {
 
     // retreives the optionnal byteCodeManipulator JVM arg
     // javassist is used by default
-    protected static Hashtable<String, byte[]> classDataCache = new Hashtable<String, byte[]>();
+    public static Hashtable<String, byte[]> classDataCache = new Hashtable<String, byte[]>();
     protected static MOPClassLoader mopCl = null;
 
     /**
@@ -188,10 +189,22 @@ public class MOPClassLoader extends URLClassLoader {
                 return Class.forName(name);
             }
         } catch (ClassNotFoundException e) {
-            // Test if the name of the class is actually a request for
-            // a stub class to be created
+            if (PAProxyBuilder.doesClassNameEndWithPAProxySuffix(name) && !(Utils.isStubClassName(name))) {
+                try {
+                    byte[] data = PAProxyBuilder.generatePAProxy(PAProxyBuilder
+                            .getBaseClassNameFromPAProxyName(name));
+                    return callDefineClassUsingReflection(name, data);
+                } catch (Exception ex) {
+                    logger.debug(ex);
+                    throw new ClassNotFoundException(ex.getMessage());
+                }
+
+            }
+
             if (Utils.isStubClassName(name)) {
-                logger.info("Generating class : " + name);
+                // Test if the name of the class is actually a request for
+                // a stub class to be created
+
                 //    e.printStackTrace();
                 String classname = Utils.convertStubClassNameToClassName(name);
 
@@ -204,32 +217,9 @@ public class MOPClassLoader extends URLClassLoader {
                 // class Access checking. This method is supposed to be protected which means 
                 // we should not be accessing it but the access policy file allows us to access it freely.
                 try {
-                    Class<?> clc = Class.forName("java.lang.ClassLoader");
-                    Class<?>[] argumentTypes = new Class<?>[5];
-                    argumentTypes[0] = name.getClass();
-                    argumentTypes[1] = data.getClass();
-                    argumentTypes[2] = Integer.TYPE;
-                    argumentTypes[3] = Integer.TYPE;
-                    argumentTypes[4] = Class.forName("java.security.ProtectionDomain");
-
-                    Method m = clc.getDeclaredMethod("defineClass", argumentTypes);
-                    m.setAccessible(true);
-
-                    Object[] effectiveArguments = new Object[5];
-                    effectiveArguments[0] = name;
-                    effectiveArguments[1] = data;
-                    effectiveArguments[2] = Integer.valueOf(0);
-                    effectiveArguments[3] = Integer.valueOf(data.length);
-                    effectiveArguments[4] = this.getClass().getProtectionDomain();
-
-                    //  we have been loaded through the bootclasspath
-                    // so we use the context classloader
-                    if (this.getParent() == null) {
-                        return (Class<?>) m.invoke(Thread.currentThread().getContextClassLoader(),
-                                effectiveArguments);
-                    } else {
-                        return (Class<?>) m.invoke(this.getParent(), effectiveArguments);
-                    }
+                    Class<?> clazz = callDefineClassUsingReflection(name, data);
+                    logger.info("Generated class : " + name);
+                    return clazz;
                 } catch (Exception ex) {
                     logger.debug(ex);
                     throw new ClassNotFoundException(ex.getMessage());
@@ -238,6 +228,36 @@ public class MOPClassLoader extends URLClassLoader {
                 logger.debug("Cannot generate class " + name + " as a stub class");
                 throw e;
             }
+        }
+    }
+
+    protected Class<?> callDefineClassUsingReflection(String name, byte[] data)
+            throws ClassNotFoundException, SecurityException, NoSuchMethodException,
+            IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+        Class<?> clc = Class.forName("java.lang.ClassLoader");
+        Class<?>[] argumentTypes = new Class<?>[5];
+        argumentTypes[0] = name.getClass();
+        argumentTypes[1] = data.getClass();
+        argumentTypes[2] = Integer.TYPE;
+        argumentTypes[3] = Integer.TYPE;
+        argumentTypes[4] = Class.forName("java.security.ProtectionDomain");
+
+        Method m = clc.getDeclaredMethod("defineClass", argumentTypes);
+        m.setAccessible(true);
+
+        Object[] effectiveArguments = new Object[5];
+        effectiveArguments[0] = name;
+        effectiveArguments[1] = data;
+        effectiveArguments[2] = Integer.valueOf(0);
+        effectiveArguments[3] = Integer.valueOf(data.length);
+        effectiveArguments[4] = this.getClass().getProtectionDomain();
+
+        //  we have been loaded through the bootclasspath
+        // so we use the context classloader
+        if (this.getParent() == null) {
+            return (Class<?>) m.invoke(Thread.currentThread().getContextClassLoader(), effectiveArguments);
+        } else {
+            return (Class<?>) m.invoke(this.getParent(), effectiveArguments);
         }
     }
 }

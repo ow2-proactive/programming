@@ -82,8 +82,7 @@ public class TestFaultTolerance extends AbstractFTTezt {
         nodes[0] = vnode.getANode();
         nodes[1] = vnode.getANode();
 
-        FTObject a = (FTObject) PAActiveObject.newActive(FTObject.class.getName(), new Object[] { "a" },
-                nodes[0]);
+        FTObject a = PAActiveObject.newActive(FTObject.class, new Object[] { "a" }, nodes[0]);
         FTObject b = (FTObject) PAActiveObject.newActive(FTObject.class.getName(), new Object[] { "b" },
                 nodes[1]);
 

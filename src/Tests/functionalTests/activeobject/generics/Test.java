@@ -62,9 +62,8 @@ public class Test extends FunctionalTest {
         //      new active with '_' in classname of a parametized type.
         //pa.stub.parameterized.nonregressiontest.activeobject.generics.Stub_Pair_Generics_[nonregressiontest_activeobject_generics_My_Type5org_objectweb_proactive_core_util_wrapper_IntWrapper]
         @SuppressWarnings("unchecked")
-        Pair<My_DType, IntWrapper> p_ = (Pair<My_DType, IntWrapper>) PAActiveObject.newActive(Pair.class
-                .getName(), new Class[] { My_DType.class, IntWrapper.class }, new Object[] {
-                new My_DType("toto"), new IntWrapper(12) });
+        Pair<My_DType, IntWrapper> p_ = PAActiveObject.newActive(Pair.class, new Class[] { My_DType.class,
+                IntWrapper.class }, new Object[] { new My_DType("toto"), new IntWrapper(12) });
         assertTrue(My_DType.class.isAssignableFrom(p_.getFirst().getClass()));
         assertTrue(IntWrapper.class.isAssignableFrom(p_.getSecond().getClass()));
         assertEquals("toto", p_.getFirst().toString());
@@ -74,9 +73,9 @@ public class Test extends FunctionalTest {
         // test before non reifiable return types to verify caching of synchronous/asynchrous method calls 
         // works fine with parameterized types
         @SuppressWarnings("unchecked")
-        Pair<StringWrapper, IntWrapper> b = (Pair<StringWrapper, IntWrapper>) PAActiveObject.newActive(
-                Pair.class.getName(), new Class[] { StringWrapper.class, IntWrapper.class }, new Object[] {
-                        new StringWrapper("toto"), new IntWrapper(12) });
+        Pair<StringWrapper, IntWrapper> b = PAActiveObject.newActive(Pair.class, new Class[] {
+                StringWrapper.class, IntWrapper.class }, new Object[] { new StringWrapper("toto"),
+                new IntWrapper(12) });
         assertTrue(StringWrapper.class.isAssignableFrom(b.getFirst().getClass()));
         assertTrue(IntWrapper.class.isAssignableFrom(b.getSecond().getClass()));
         assertEquals("toto", b.getFirst().stringValue());
@@ -84,8 +83,8 @@ public class Test extends FunctionalTest {
 
         // new active with non reifiable parameter types
         @SuppressWarnings("unchecked")
-        Pair<String, Integer> a = (Pair<String, Integer>) PAActiveObject.newActive(Pair.class.getName(),
-                new Class[] { String.class, Integer.class }, new Object[] { "A", 42 });
+        Pair<String, Integer> a = PAActiveObject.newActive(Pair.class, new Class[] { String.class,
+                Integer.class }, new Object[] { "A", 42 });
         assertTrue(String.class.isAssignableFrom(a.getFirst().getClass()));
         assertTrue(Integer.class.isAssignableFrom(a.getSecond().getClass()));
         assertEquals("A", a.getFirst());

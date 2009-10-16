@@ -70,7 +70,7 @@ public class Test extends FunctionalTest {
                 super.vContract);
         proActiveDescriptorAgent.activateMappings();
         VirtualNode vnAgent = proActiveDescriptorAgent.getVirtualNode("Agent");
-        PAActiveObject.newActive(A.class.getName(), new Object[] { "local" }, vnAgent.getNode());
+        PAActiveObject.newActive(A.class, new Object[] { "local" }, vnAgent.getNode());
 
         String url = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "Agent").toString();
 

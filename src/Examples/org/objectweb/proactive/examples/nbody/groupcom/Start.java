@@ -102,7 +102,7 @@ public class Start {
         Maestro maestro = null;
         try {
             // Supervizes the synchronizations
-            maestro = (Maestro) PAActiveObject.newActive(Maestro.class.getName(), new Object[] { domainGroup,
+            maestro = PAActiveObject.newActive(Maestro.class, new Object[] { domainGroup,
                     new Integer(maxIter), deployer }, nodes[nodes.length - 1]);
         } catch (ActiveObjectCreationException e) {
             deployer.abortOnError(e);

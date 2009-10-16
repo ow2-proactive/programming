@@ -10,6 +10,7 @@
             value="false" />
         <prop key="proactive.mixedlocation.maxMigrationNb" value="-1" />
         <prop key="proactive.mixedlocation.maxTimeOnSite" value="-1" />
+     	<prop key="proactive.implicitgetstubonthis" value="false"/>
     
     	<prop key="proactive.net.disableIPv6" value="true" />
 	    
@@ -77,8 +78,10 @@
 
         <prop key="proactive.gcmd.unix.shell" value="/bin/sh"/>
 
-        <prop key="proactive.webservices.framework" value="axis2" />
+        <prop key="proactive.mop.writestubondisk" value="false"/>                                        
 
+        <prop key="proactive.webservices.framework" value="axis2" />
+        
     </properties>
     <javaProperties>
         <!-- <prop key="java.rmi.server.RMIClassLoaderSpi" value="org.objectweb.proactive.core.classloading.protocols.ProActiveRMIClassLoader"/> -->

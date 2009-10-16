@@ -47,9 +47,9 @@ public class TestComplexArray extends GCMFunctionalTestDefaultNodes {
 
     @org.junit.Test
     public void action() throws Exception {
-        b1 = (B) PAActiveObject.newActive(B.class.getName(), new Object[] {}, super.getANode());
-        b2 = (B) PAActiveObject.newActive(B.class.getName(), new Object[] {}, super.getANode());
-        b3 = (B) PAActiveObject.newActive(B.class.getName(), new Object[] {}, super.getANode());
+        b1 = PAActiveObject.newActive(B.class, new Object[] {}, super.getANode());
+        b2 = PAActiveObject.newActive(B.class, new Object[] {}, super.getANode());
+        b3 = PAActiveObject.newActive(B.class, new Object[] {}, super.getANode());
 
         b1.start(1, b1, b2, b3);
         b2.start(2, b1, b2, b3);

@@ -59,7 +59,7 @@ public class TestGetUrl extends GCMFunctionalTestDefaultNodes {
     @Test
     public void testPAAactiveObject() throws ActiveObjectCreationException, NodeException, IOException {
         Node node = super.getANode();
-        AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] {}, node);
+        AO ao = PAActiveObject.newActive(AO.class, new Object[] {}, node);
         String url = PAActiveObject.getUrl(ao);
         ao = (AO) PAActiveObject.lookupActive(AO.class.getName(), url);
         ao.v();

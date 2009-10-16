@@ -64,7 +64,7 @@ public class TestInternalClassAO extends FunctionalTest {
         boolean newActiveException = false;
         MemberClass ao = null;
         try {
-            ao = (MemberClass) PAActiveObject.newActive(MemberClass.class.getName(), new Object[] {});
+            ao = PAActiveObject.newActive(MemberClass.class, new Object[] {});
         } catch (ActiveObjectCreationException e) {
             newActiveException = true;
         }
@@ -72,18 +72,17 @@ public class TestInternalClassAO extends FunctionalTest {
         Assert.assertTrue(newActiveException);
 
         // ok
-        NestedTopLevelClass sao = (NestedTopLevelClass) PAActiveObject.newActive(NestedTopLevelClass.class
-                .getName(), new Object[] {});
+        NestedTopLevelClass sao = PAActiveObject.newActive(NestedTopLevelClass.class, new Object[] {});
 
         /////// turn active ///////
         MemberClass ao2 = new MemberClass();
         // access to the enclosing instance 
         ao2.incrementEnclosingPrivateValue();
-        ao2 = (MemberClass) PAActiveObject.turnActive(ao2);
+        ao2 = PAActiveObject.turnActive(ao2);
         // access to the enclosing instance through activated object
         ao2.incrementEnclosingPrivateValue();
         // access to the enclosing instance through activated object with an intermediate AO
-        RemoteAgent ra = (RemoteAgent) PAActiveObject.newActive(RemoteAgent.class.getName(), new Object[] {});
+        RemoteAgent ra = PAActiveObject.newActive(RemoteAgent.class, new Object[] {});
         ra.doCallOnMemberClassInstance(ao2);
         Assert.assertEquals(AWAITED_VALUE, this.enclosingPrivate);
 

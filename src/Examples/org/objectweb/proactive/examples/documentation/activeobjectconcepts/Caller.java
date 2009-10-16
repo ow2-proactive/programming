@@ -75,7 +75,7 @@ public class Caller {
             System.out.println("===> Asynchronous Call");
             //@snippet-resume Caller_1
             Object[] params = new Object[] { new IntWrapper(26), "Charlie" };
-            Worker charlie = (Worker) PAActiveObject.newActive(Worker.class.getName(), params);
+            Worker charlie = PAActiveObject.newActive(Worker.class, params);
             //@snippet-break Caller_1
             charlie.display();
             //@snippet-resume Caller_1
@@ -101,7 +101,7 @@ public class Caller {
         try {
             //@snippet-start Continuation_1
             Value v = new Value();
-            Worker worker = (Worker) PAActiveObject.newActive(Worker.class.getName(), null);
+            Worker worker = PAActiveObject.newActive(Worker.class, null);
             Value v1 = worker.foo(); //v1 is a future
             Value v2 = v.bar(v1, 1); //v1 is passed as parameter
             //@snippet-end Continuation_1
@@ -128,7 +128,7 @@ public class Caller {
             //@snippet-end Good_Practice_2
 
             //@snippet-start Good_Practice_3
-            Worker ao = (Worker) PAActiveObject.newActive(Worker.class.getName(), null);
+            Worker ao = PAActiveObject.newActive(Worker.class, null);
             IntWrapper future = ao.getAge();
             String str;
             try {

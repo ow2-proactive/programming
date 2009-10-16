@@ -171,7 +171,7 @@ public class Test extends FunctionalTest {
     public void action() throws Exception {
 
         /* Server */
-        Exc r = (Exc) org.objectweb.proactive.api.PAActiveObject.newActive(Exc.class.getName(), null);
+        Exc r = org.objectweb.proactive.api.PAActiveObject.newActive(Exc.class, null);
 
         /* Client */
 

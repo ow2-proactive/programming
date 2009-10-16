@@ -63,7 +63,7 @@ public class TestGetDefaultNode extends GCMFunctionalTestDefaultNodes {
         dnode0 = NodeFactory.getDefaultNode();
 
         Node node = super.getANode();
-        AO ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] {}, node);
+        AO ao = PAActiveObject.newActive(AO.class, new Object[] {}, node);
         dnode1 = ao.getDefaultNode();
 
         String url0 = dnode0.getNodeInformation().getURL();

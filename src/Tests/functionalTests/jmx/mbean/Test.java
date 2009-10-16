@@ -62,7 +62,7 @@ public class Test extends GCMFunctionalTestDefaultNodes {
     @Before
     public void initTest() throws Exception {
         Node node = super.getANode();
-        ao = (A) PAActiveObject.newActive(A.class.getName(), new Object[] {}, node);
+        ao = PAActiveObject.newActive(A.class, new Object[] {}, node);
     }
 
     @org.junit.Test

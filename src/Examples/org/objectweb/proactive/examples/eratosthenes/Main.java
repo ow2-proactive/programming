@@ -136,9 +136,9 @@ public class Main implements ActivePrimeContainerCreator, InitActive {
             }
 
             logger.info("    Creating container with size " + containerSize + " starting with number " + n);
-            result = (ActivePrimeContainer) PAActiveObject.newActive(ActivePrimeContainer.class.getName(),
-                    new Object[] { PAActiveObject.getStubOnThis(), outputListener,
-                            new Integer(containerSize), new Long(n), previous }, node);
+            result = PAActiveObject.newActive(ActivePrimeContainer.class, new Object[] {
+                    PAActiveObject.getStubOnThis(), outputListener, new Integer(containerSize), new Long(n),
+                    previous }, node);
 
             // Workaround for a little bug in ProActive (Exception in receiveRequest)
             // may be removed as the bug is fixed
@@ -164,14 +164,13 @@ public class Main implements ActivePrimeContainerCreator, InitActive {
             }
 
             // create output listener
-            outputListener = (PrimeOutputListener) PAActiveObject.newActive(ConsolePrimeOutputListener.class
-                    .getName(), new Object[] {}, listenerNode);
+            outputListener = PAActiveObject.newActive(ConsolePrimeOutputListener.class, new Object[] {},
+                    listenerNode);
 
             outputListener.newPrimeNumberFound(2);
 
             // create number source  
-            source = (NumberSource) PAActiveObject.newActive(NumberSource.class.getName(), new Object[] {},
-                    sourceNode);
+            source = PAActiveObject.newActive(NumberSource.class, new Object[] {}, sourceNode);
 
             // create first container  			
             ActivePrimeContainer first = newActivePrimeContainer(3, source);
@@ -214,8 +213,8 @@ public class Main implements ActivePrimeContainerCreator, InitActive {
             }
         }
         ProActiveConfiguration.load();
-        Main main = (Main) PAActiveObject.newActive(Main.class.getName(), new Object[] { xmlDescriptor,
-                Boolean.valueOf(gui) });
+        Main main = PAActiveObject
+                .newActive(Main.class, new Object[] { xmlDescriptor, Boolean.valueOf(gui) });
     }
 
     /** class for control window. */

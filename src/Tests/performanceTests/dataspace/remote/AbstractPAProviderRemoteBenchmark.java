@@ -86,7 +86,7 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
         namingServiceDeployer.getLocalNamingService().registerApplication(applicationId, null);
 
         Node node = super.getANode();
-        ao = (AO) PAActiveObject.newActive(AO.class.getName(), new Object[] { fsDeployer.getVFSRootURL(),
+        ao = PAActiveObject.newActive(AO.class, new Object[] { fsDeployer.getVFSRootURL(),
                 namingServiceDeployer.getNamingServiceURL(), applicationId }, node);
     }
 

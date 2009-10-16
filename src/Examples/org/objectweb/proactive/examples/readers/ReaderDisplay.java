@@ -51,8 +51,7 @@ public class ReaderDisplay implements org.objectweb.proactive.InitActive {
         Object[] param = new Object[] { org.objectweb.proactive.api.PAActiveObject.getStubOnThis(),
                 new Integer(ReaderWriter.DEFAULT_POLICY) };
         try {
-            rw = (ReaderWriter) org.objectweb.proactive.api.PAActiveObject.newActive(ReaderWriter.class
-                    .getName(), param);
+            rw = org.objectweb.proactive.api.PAActiveObject.newActive(ReaderWriter.class, param);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,11 +63,9 @@ public class ReaderDisplay implements org.objectweb.proactive.InitActive {
             param[2] = new Integer(i);
             try {
                 // Readers
-                readers[i] = (Reader) org.objectweb.proactive.api.PAActiveObject.newActive(Reader.class
-                        .getName(), param);
+                readers[i] = org.objectweb.proactive.api.PAActiveObject.newActive(Reader.class, param);
                 // Writers
-                writers[i] = (Writer) org.objectweb.proactive.api.PAActiveObject.newActive(Writer.class
-                        .getName(), param);
+                writers[i] = org.objectweb.proactive.api.PAActiveObject.newActive(Writer.class, param);
             } catch (Exception e) {
                 e.printStackTrace();
             }
