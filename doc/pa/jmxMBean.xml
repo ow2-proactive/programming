@@ -31,8 +31,7 @@
 		</para>
 		<section xml:id="subscribeJMXNotifications"><info><title>Subscribe to the JMX notifications of a ProActive object</title></info>
 			
-<screen>
-JMXNotification.getInstance().subscribe(ObjectName objectName, NotificationListener listener, String runtimeUrl);</screen>
+			<programlisting language="java">JMXNotification.getInstance().subscribe(ObjectName objectName, NotificationListener listener, String runtimeUrl);</programlisting>
 			<para><emphasis role="bold">objectName</emphasis> is the identifier of the MBean.</para>
 			<para>The FactoryName class gives you some methods in order to get the objectName:
 			<itemizedlist>
@@ -42,12 +41,12 @@ JMXNotification.getInstance().subscribe(ObjectName objectName, NotificationListe
 				<listitem><para>FactoryName.createVirtualNodeObjectName(String vnName,String jobID);</para></listitem>
 			</itemizedlist>
 			</para>
-			<para><emphasis role="bold">listener</emphasis> is a JMX notification listener.(It needs to implement the NotificationListener interface.)</para>
-			<para><emphasis role="bold">runtimeUrl</emphasis> The url of the runtime, where to find the MBean.</para>
+			<para><emphasis role="bold">listener</emphasis> is a JMX notification listener (It has to implement the NotificationListener interface).</para>
+			<para><emphasis role="bold">runtimeUrl</emphasis> The url of the runtime where to find the MBean.</para>
 		</section>
 		<section xml:id="unsubscribeJMXNotification"><info><title>Unsubscribe to the JMX notifications</title></info>
 			
-			<screen>JMXNotificationManager.getInstance().unsubscribe(ObjectName objectName, NotificationListener listener);</screen>
+			<programlisting language="java">JMXNotificationManager.getInstance().unsubscribe(ObjectName objectName, NotificationListener listener);</programlisting>
 		</section>		
 	</section>
 	<section xml:id="ProActiveJMXNotification"><info><title>The ProActive JMX Notifications</title></info>
@@ -55,7 +54,7 @@ JMXNotification.getInstance().subscribe(ObjectName objectName, NotificationListe
 		<section xml:id="sendJMXNotfication"><info><title>How to send a JMX notification?</title></info>
 			
 			<para>
-			The classes ProActiveRuntimeImpl, LocalNode, AbstractBody contain a MBean and the <emphasis role="bold">getMBean() </emphasis>method.
+			The classes ProActiveRuntimeImpl, LocalNode, AbstractBody contain a MBean and the <emphasis role="bold">getMBean()</emphasis> method.
 			</para>
 			<para>
 			On the MBean, you can call 2 different methods:
@@ -65,38 +64,17 @@ JMXNotification.getInstance().subscribe(ObjectName objectName, NotificationListe
 			</itemizedlist>
 			</para>
 			<para>
-			<emphasis role="bold">type </emphasis>is the type of the notification.
-			The NotificationType class gets a lot of existing notification types.
+			<emphasis role="bold">type</emphasis> is the type of the notification.
+			The NotificationType class contains a lot of existing notification types.
 			</para>
 			<para>
-			<emphasis role="bold">userData </emphasis>is the object to send to the listener.
+			<emphasis role="bold">userData</emphasis> is the object to send to the listener.
 			The package <emphasis role="bold">org.objectweb.proactive.core.jmx.notification</emphasis> contains some existing notification.
 			</para>
 		</section>
-		<section xml:id="exampleJMXNotificationListener"><info><title>example of notification listener</title></info>
+		<section xml:id="exampleJMXNotificationListener"><info><title>Example of notification listener</title></info>
 			
-<programlisting language="java">
-import javax.management.Notification;
-import javax.management.NotificationListener;
-import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.jmx.notification.BodyNotificationData;
-import org.objectweb.proactive.core.jmx.notification.NotificationType;
-
-public class MyListener implements NotificationListener{
-
-	public void handleNotification(Notification notification, Object handback){
-		// Get the type of the notification
-		String type = notification.getType();
-		// Get the data of the notification
-		Object data  = notification.getUserData();
-
-		if(type.equals(NotificationType.bodyCreated)){
-			BodyNotificationData notificationData = (BodyNotificationData) data;
-			UniqueID id = notificationData.getId();
-			System.out.println("Active Object created with id:"+id);
-		}
-	}
-}</programlisting>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/jmx_MyListener.snip" /></textobject></programlisting>
 		</section>
 		<section xml:id="JMXProActiveNotificationSent"><info><title>The JMX notifications sent by the ProActive MBean</title></info>
 			
@@ -114,8 +92,8 @@ public class MyListener implements NotificationListener{
 				User Data: ConcurrentLinkedQueue&lt;Notification&gt;
 				</para>
 				</note>
-				<para>Migration informations</para>
-				<informaltable><info><title>Migration informations</title></info>
+<!--				<para>Migration informations</para>-->
+				<table><title>Migration informations</title>
 				
 			    <tgroup cols="2">
 				     <tbody>
@@ -145,11 +123,11 @@ public class MyListener implements NotificationListener{
 				      </row>      
 				     </tbody>
 				    </tgroup>
-				   </informaltable>
+				   </table>
 				   
 				   
-				<para>Request informations</para>
-				   <informaltable><info><title>Request informationss</title></info>
+<!--				<para>Request informations</para>-->
+				   <table><title>Request informations</title>
 				
 			    <tgroup cols="2">
 				     <tbody>
@@ -195,10 +173,10 @@ public class MyListener implements NotificationListener{
       
 				     </tbody>
 				    </tgroup>
-				   </informaltable>
+				   </table>
 				   
-				<para>Future information</para>
-				    <informaltable><info><title>Future information</title></info>
+<!--				<para>Future information</para>-->
+				    <table><title>Future information</title>
 				
 			    <tgroup cols="2">
 				     <tbody>
@@ -219,12 +197,12 @@ public class MyListener implements NotificationListener{
             
 				     </tbody>
 				    </tgroup>
-				   </informaltable>
+				   </table>
 			</section>
 			<section xml:id="ProActiveRuntimeJMXNotifications"><info><title>Notifications sent by the ProActiveRuntime</title></info>
 				
-				<para>Creation information</para>
-			<informaltable><info><title>Creation information</title></info>
+<!--				<para>Creation information</para>-->
+			<table><title>Creation information</title>
 				
 			    <tgroup cols="2">
 				     <tbody>
@@ -254,10 +232,10 @@ public class MyListener implements NotificationListener{
 				      </row>      
 				     </tbody>
 				    </tgroup>
-				   </informaltable>
+				   </table>
 				   
-				<para>Destruction informations</para>
-				   <informaltable><info><title>Destruction informations</title></info>
+<!--				<para>Destruction informations</para>-->
+				   <table><title>Destruction informations</title>
 				
 			    <tgroup cols="2">
 				     <tbody>
@@ -287,7 +265,7 @@ public class MyListener implements NotificationListener{
 				      </row>      
 				     </tbody>
 				    </tgroup>
-				   </informaltable>
+				   </table>
 			</section>
 		</section>
 	</section>
