@@ -33,7 +33,10 @@ package org.objectweb.proactive.core.component.webservices;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientFactoryBean;
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -44,6 +47,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class CXFWSCaller implements ProActiveWSCaller {
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
+
     private Client client;
 
     public CXFWSCaller() {

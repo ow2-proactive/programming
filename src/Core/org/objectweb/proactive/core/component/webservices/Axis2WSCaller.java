@@ -36,7 +36,10 @@ import javax.xml.namespace.QName;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.rpc.client.RPCServiceClient;
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -47,6 +50,8 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class Axis2WSCaller implements ProActiveWSCaller {
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
+
     private RPCServiceClient rsc;
 
     public Axis2WSCaller() {

@@ -31,10 +31,7 @@
  */
 package org.objectweb.proactive.core.component.webservices;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -47,8 +44,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 @PublicAPI
 //@snippet-start proactivewscaller
 public interface ProActiveWSCaller {
-    static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
-
     /**
      * Method to setup the caller.
      *
