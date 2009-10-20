@@ -31,6 +31,9 @@
  */
 package org.objectweb.proactive.core.component;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
+
 /**
  * Tag interface for allow to check when the component interface type is created if it
  * implements this tag and if all the contained methods have a void return type.
@@ -38,6 +41,7 @@ package org.objectweb.proactive.core.component;
  * @author The ProActive Team
  *
  */
+@PublicAPI
 public interface StreamInterface {
 
 }
