@@ -314,7 +314,8 @@ public class Dummy {
    
    <para>The tag to use is TABLE.</para>
    
-   <informaltable><info><title xml:id="Thisisanexampletable_42">This is an example table</title></info>
+   <table>
+	<title xml:id="Thisisanexampletable_42">This is an example table</title>
     
     
     <tgroup cols="2">
@@ -340,7 +341,7 @@ public class Dummy {
       </row>
      </tbody>
     </tgroup>
-   </informaltable>
+   </table>
   </section>
   
  </section>

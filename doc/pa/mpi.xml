@@ -2024,7 +2024,8 @@ created VirtualNode name=Cluster_Nina
     <section xml:id="API_Simple"><info><title xml:id="SimpleWrappingandDeploymentofMPICode_58">Simple Wrapping and Deployment of MPI Code</title></info>
       
 
-      <informaltable><info><title xml:id="SimpleWrappingofMPICode_59">Simple Wrapping of MPI Code</title></info>
+      <table>
+			<title xml:id="SimpleWrappingofMPICode_58">Simple Wrapping of MPI Code</title>
         
 
         <tgroup cols="3">
@@ -2218,7 +2219,7 @@ created VirtualNode name=Cluster_Nina
             </row>
           </tbody>
         </tgroup>
-      </informaltable>
+      </table>
     </section>
 
     <section xml:id="API_Control"><info><title xml:id="WrappingwithControl_60">Wrapping with Control</title></info>
@@ -2227,7 +2228,8 @@ created VirtualNode name=Cluster_Nina
       <section xml:id="OneActiveObjectperMPIprocess_62"><info><title>One Active Object per MPI process</title></info>
         
 
-        <informaltable><info><title xml:id="APIforcreatingoneActiveObjectperMPI_63">API for creating one Active Object per MPI process</title></info>
+        <table>
+		  		<title xml:id="APIforcreatingoneActiveObjectperMPI_63">API for creating one Active Object per MPI process</title>
           
 
           <tgroup cols="3">
@@ -2332,13 +2334,14 @@ created VirtualNode name=Cluster_Nina
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
+        </table>
       </section>
 
       <section xml:id="MPItoProActiveCommunications_72"><info><title>MPI to ProActive Communications</title></info>
         
 
-        <informaltable><info><title xml:id="MPItoProActiveCommunicationsAPI_77">MPI to ProActive Communications API</title></info>
+        <table>
+		  		<title xml:id="MPItoProActiveCommunicationsAPI_77">MPI to ProActive Communications API</title>
           
 
           <tgroup cols="3">
@@ -2355,9 +2358,9 @@ created VirtualNode name=Cluster_Nina
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
+        </table>
 
-        <informaltable><info><title xml:id="JavaAPIforMPImessageconversion_78">Java API for MPI message conversion</title></info>
+        <table><title xml:id="JavaAPIforMPImessageconversion_78">Java API for MPI message conversion</title>
           
 
           <tgroup cols="3">
@@ -2599,13 +2602,14 @@ created VirtualNode name=Cluster_Nina
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
+        </table>
       </section>
 
       <section xml:id="ProActivetoMPICommunications_79"><info><title>ProActive to MPI Communications</title></info>
         
 
-        <informaltable><info><title xml:id="ProActiveMPIAPIforsendingmessagestoMPI_80">ProActiveMPI API for sending messages to MPI</title></info>
+        <table>
+		  		<title xml:id="ProActiveMPIAPIforsendingmessagestoMPI_80">ProActiveMPI API for sending messages to MPI</title>
           
 
           <tgroup cols="3">
@@ -2797,9 +2801,9 @@ created VirtualNode name=Cluster_Nina
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
+        </table>
 
-        <informaltable><info><title xml:id="MPImessagereceptionfromProActive_81">MPI message reception from ProActive</title></info>
+        <table><title xml:id="MPImessagereceptionfromProActive_81">MPI message reception from ProActive</title>
           
 
           <tgroup cols="3">
@@ -2849,13 +2853,13 @@ created VirtualNode name=Cluster_Nina
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
+        </table>
       </section>
 
       <section xml:id="MPItoMPICommunicationsthroughProActive_89"><info><title>MPI to MPI Communications through ProActive</title></info>
         
 
-        <informaltable><info><title xml:id="MPItoMPIthroughProActiveCAPI_890">MPI to MPI through ProActive C API</title></info>
+        <table><title xml:id="MPItoMPIthroughProActiveCAPI_890">MPI to MPI through ProActive C API</title>
           
 
           <tgroup cols="3">
@@ -2963,14 +2967,14 @@ created VirtualNode name=Cluster_Nina
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
+        </table>
 
         <para><emphasis role="bold">Datatypes:</emphasis> MPI_CHAR,
         MPI_UNSIGNED_CHAR, MPI_BYTE, MPI_SHORT, MPI_UNSIGNED_SHORT, MPI_INT,
         MPI_UNSIGNED, MPI_LONG, MPI_UNSIGNED_LONG, MPI_FLOAT, MPI_DOUBLE,
         MPI_LONG_DOUBLE, MPI_LONG_LONG_INT</para>
 
-        <informaltable><info><title xml:id="MPItoMPIthroughProActiveFortranAPI_140">MPI to MPI through ProActive Fortran API</title></info>
+        <table><title xml:id="MPItoMPIthroughProActiveFortranAPI_140">MPI to MPI through ProActive Fortran API</title>
           
 
           <tgroup cols="3">
@@ -3050,7 +3054,7 @@ created VirtualNode name=Cluster_Nina
               </row>
             </tbody>
           </tgroup>
-        </informaltable>
+        </table>
 
         <para><emphasis role="bold">Datatypes:</emphasis> MPI_CHARACTER,
         MPI_BYTE, MPI_INTEGER, MPI_DOUBLE</para>
