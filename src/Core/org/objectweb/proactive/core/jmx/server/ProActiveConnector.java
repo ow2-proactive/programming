@@ -123,8 +123,7 @@ public class ProActiveConnector implements JMXConnector, Serializable, Notificat
             String serverName = path.substring(index);
             String protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
             String lookupUrl = URIBuilder.buildURI(hostname, serverName, protocol, port).toString();
-            ProActiveServerImpl paServer = (ProActiveServerImpl) PAActiveObject.lookupActive(
-                    ProActiveServerImpl.class.getName(), lookupUrl);
+            ProActiveServerImpl paServer = PAActiveObject.lookupActive(ProActiveServerImpl.class, lookupUrl);
 
             this.connection = paServer.newClient();
         } catch (ActiveObjectCreationException e) {

@@ -61,7 +61,7 @@ public class TestGetUrl extends GCMFunctionalTestDefaultNodes {
         Node node = super.getANode();
         AO ao = PAActiveObject.newActive(AO.class, new Object[] {}, node);
         String url = PAActiveObject.getUrl(ao);
-        ao = (AO) PAActiveObject.lookupActive(AO.class.getName(), url);
+        ao = PAActiveObject.lookupActive(AO.class, url);
         ao.v();
     }
 

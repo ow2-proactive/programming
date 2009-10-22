@@ -169,7 +169,7 @@ public class NameAndHostDialog extends JDialog implements ActionListener, Proper
         this.c3dDispatcher = null;
         // First try with the provided url, if the user entered the exact url for the dispatcher
         try {
-            this.c3dDispatcher = (Dispatcher) PAActiveObject.lookupActive(C3DDispatcher.class.getName(), url);
+            this.c3dDispatcher = PAActiveObject.lookupActive(C3DDispatcher.class, url);
             setVisible(false);
             return;
         } catch (Exception e) {
@@ -193,8 +193,8 @@ public class NameAndHostDialog extends JDialog implements ActionListener, Proper
 
             if (name.equals("Dispatcher") && (name.indexOf("_VN") == -1)) { // replace by (java 1.5 String.contains)
                 try {
-                    this.c3dDispatcher = (Dispatcher) PAActiveObject.lookupActive(C3DDispatcher.class
-                            .getName(), registeredObjects[i]);
+                    this.c3dDispatcher = PAActiveObject.lookupActive(C3DDispatcher.class,
+                            registeredObjects[i]);
                     setVisible(false);
                     return;
                 } catch (ActiveObjectCreationException e) {

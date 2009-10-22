@@ -56,8 +56,7 @@ public class HelloClient {
             } else {
                 // Lookups the server object
                 logger.info("Using server located on " + args[0]);
-                myServer = (Hello) org.objectweb.proactive.api.PAActiveObject.lookupActive(Hello.class
-                        .getName(), args[0]);
+                myServer = org.objectweb.proactive.api.PAActiveObject.lookupActive(Hello.class, args[0]);
             }
 
             // Invokes a remote method on this object to get the message

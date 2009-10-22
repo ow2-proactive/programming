@@ -144,8 +144,7 @@ public class Chat implements java.io.Serializable, RunActive {
     public void connect(String hostName, String userName) {
         Chat neighbour = null;
         try {
-            neighbour = (Chat) PAActiveObject.lookupActive(Chat.class.getName(), "//" + hostName + "/" +
-                userName); // 1
+            neighbour = PAActiveObject.lookupActive(Chat.class, "//" + hostName + "/" + userName); // 1
             this.diffusionGroup = neighbour.getDiffusionGroup(); // 2
             this.writeUsersInTheList();
             this.diffusionGroup.addIntoDiffusionGroup((Chat) PAActiveObject.getStubOnThis(), this.name); // 3

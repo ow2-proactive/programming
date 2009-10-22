@@ -234,8 +234,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                     String domainURL = PAProperties.PA_RUNTIME_DOMAIN_URL.getValue();
 
                     if (domainURL != null) {
-                        SecurityEntity domain = (SecurityDomain) PAActiveObject.lookupActive(
-                                "org.objectweb.proactive.ext.security.domain.SecurityDomain", domainURL);
+                        SecurityEntity domain = PAActiveObject.lookupActive(SecurityDomain.class, domainURL);
                         ProActiveRuntimeImpl.runtimeSecurityManager.setParent(domain);
                     }
                 } else {

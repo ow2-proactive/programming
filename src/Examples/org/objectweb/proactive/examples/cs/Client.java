@@ -76,8 +76,8 @@ public class Client {
         String urlAsString = "//" + serverHostName + "/theServer";
         logger.info("Client " + myName + " is looking up server at " + urlAsString);
         try {
-            this.theServer = (Server) org.objectweb.proactive.api.PAActiveObject.lookupActive(Server.class
-                    .getName(), urlAsString);
+            this.theServer = org.objectweb.proactive.api.PAActiveObject.lookupActive(Server.class,
+                    urlAsString);
             logger.info("Client " + this.myName + " successfully found the server");
             // Registers myself with the server
             Client myself = (Client) org.objectweb.proactive.api.PAActiveObject.getStubOnThis();

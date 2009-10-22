@@ -24,11 +24,12 @@
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
+
 package org.objectweb.proactive.api;
 
 import java.io.IOException;
@@ -1471,15 +1472,40 @@ public class PAActiveObject {
      * Looks-up an active object previously registered in a registry(RMI, IBIS, HTTP). In fact it is
      * the remote version of the body of an active object that can be registered into the Registry
      * under a given URL. If the lookup is successful, the method reconstructs a Stub-Proxy couple
-     * and point it to the RmiRemoteBody found. The registry where to look for is fully determined
+     * and point it to the remote nody found. The registry where to look for is fully determined
      * with the protocol included in the url
      * 
+     * @param clazz
+     *            the class the generated stub should inherit from.
+     * @param url
+     *            the url under which the remote body is registered. The url takes the following
+     *            form: protocol://machine_name:port/name.
+     * @return a remote reference on a Stub of type <code>classname</code> pointing to the remote
+     *         body found
+     * @exception java.io.IOException
+     *                if the remote body cannot be found under the given url or if the object found
+     *                is not of type UniversalBody
+     * @exception ActiveObjectCreationException
+     *                if the stub-proxy couple cannot be created
+     */
+    public static <T> T lookupActive(Class<T> clazz, String url) throws ActiveObjectCreationException,
+            java.io.IOException {
+        return (T) lookupActive(clazz.getName(), url);
+    }
+
+    /**
+     * Looks-up an active object previously registered in a registry(RMI, IBIS, HTTP). In fact it is
+     * the remote version of the body of an active object that can be registered into the Registry
+     * under a given URL. If the lookup is successful, the method reconstructs a Stub-Proxy couple
+     * and point it to the remote body found. The registry where to look for is fully determined
+     * with the protocol included in the url
+     * 
+     *
      * @param classname
      *            the fully qualified name of the class the stub should inherit from.
      * @param url
      *            the url under which the remote body is registered. The url takes the following
-     *            form: protocol://machine_name:port/name. Protocol and port can be ommited if
-     *            respectively RMI and 1099: //machine_name/name
+     *            form: protocol://machine_name:port/name.
      * @return a remote reference on a Stub of type <code>classname</code> pointing to the remote
      *         body found
      * @exception java.io.IOException

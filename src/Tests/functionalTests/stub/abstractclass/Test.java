@@ -49,7 +49,7 @@ public class Test extends FunctionalTest {
         Factory f = PAActiveObject.newActive(Factory.class, new Object[] {});
         String url = PAActiveObject.registerByName(f, "myFactory");
 
-        Factory factory = (Factory) PAActiveObject.lookupActive(Factory.class.getName(), url);
+        Factory factory = PAActiveObject.lookupActive(Factory.class, url);
         AbstractClass abstractClass = factory.getWidget(NodeFactory.getDefaultNode());
         abstractClass.foo();
         abstractClass.bar();
