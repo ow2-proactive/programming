@@ -76,6 +76,12 @@ public interface Future extends LocalFuture {
     public Object getResult();
 
     /**
+     * Returns the object wrapped by this future or throw the exception. This call is blocking on the future update.
+     * @throws ProActiveTimeoutException if the timeout expires
+     */
+    public Object getResult(long timeout) throws ProActiveTimeoutException;
+
+    /**
      * Get the encapsulation of the result and the potential exception.
      */
     public MethodCallResult getMethodCallResult();

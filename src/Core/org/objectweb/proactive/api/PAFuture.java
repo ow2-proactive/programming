@@ -71,6 +71,25 @@ public class PAFuture {
      * this result, and so on.
      */
     public static Object getFutureValue(Object future) {
+        try {
+            return getFutureValue(future, 0);
+        } catch (ProActiveTimeoutException e) {
+            //Exception above should never be thrown since timeout=0 means no timeout
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Return the object contains by the future (ie its target). If parameter is not a future, it is
+     * returned. A wait-by-necessity occurs if future is not available. This method is recursive,
+     * i.e. if result of future is a future too, <CODE>getFutureValue</CODE> is called again on
+     * this result, and so on.
+     * @param timeout to wait in ms
+     * @throws ProActiveException if the timeout expire
+     */
+    public static Object getFutureValue(Object future, long timeout) throws ProActiveTimeoutException {
+        TimeoutAccounter ta = TimeoutAccounter.getAccounter(timeout);
         while (true) {
             // If the object is not reified, it cannot be a future
             if ((MOP.isReifiedObject(future)) == false) {
@@ -82,7 +101,7 @@ public class PAFuture {
                 if (!(theProxy instanceof Future)) {
                     return future;
                 } else {
-                    future = ((Future) theProxy).getResult();
+                    future = ((Future) theProxy).getResult(ta.getRemainingTimeout());
                 }
             }
         }
@@ -164,6 +183,53 @@ public class PAFuture {
             } else {
                 ((Future) theProxy).waitFor(timeout);
             }
+        }
+    }
+
+    /**
+     * Blocks the calling thread until the object <code>future</code> is available.
+     * <code>future</code> must be the result object of an asynchronous call. Usually the the wait
+     * by necessity model take care of blocking the caller thread asking for a result not yet
+     * available. This method allows to block before the result is first used.
+     * 
+     * @param future
+     *            object to wait for
+     * @param recursive if true, wait until the updating value is not a future (i.e. if the updating 
+     * value is a future, wait for this future).
+     */
+    public static void waitFor(Object future, boolean recursive) {
+        if (recursive) {
+            // recursive version
+            getFutureValue(future);
+        } else {
+            // one step version
+            waitFor(future);
+        }
+    }
+
+    /**
+     * Blocks the calling thread until the object <code>future</code> is available or until the
+     * timeout expires. <code>future</code> must be the result object of an asynchronous call.
+     * Usually the the wait by necessity model take care of blocking the caller thread asking for a
+     * result not yet available. This method allows to block before the result is first used.
+     * 
+     * @param future
+     *            object to wait for
+     * @param timeout
+     *            to wait in ms
+     * @param recursive if true, wait until the updating value is not a future (i.e. if the updating 
+     * value is a future, wait for this future).
+     * @throws ProActiveException
+     *             if the timeout expire
+     */
+    public static void waitFor(Object future, long timeout, boolean recursive)
+            throws ProActiveTimeoutException {
+        if (recursive) {
+            // recursive version
+            getFutureValue(future, timeout);
+        } else {
+            // one step version
+            waitFor(future, timeout);
         }
     }
 

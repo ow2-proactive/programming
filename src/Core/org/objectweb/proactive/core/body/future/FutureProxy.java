@@ -263,6 +263,16 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
     }
 
     /**
+     * Returns the result this future is for. The method blocks until the future is available
+     * @return the result of this future object once available.
+     * @throws ProActiveException if the timeout expires
+     */
+    public synchronized Object getResult(long timeout) throws ProActiveTimeoutException {
+        waitFor(timeout);
+        return target.getResult();
+    }
+
+    /**
      * Tests the status of the returned object
      * @return <code>true</code> if the future object is NOT yet available, <code>false</code> if it is.
      */
