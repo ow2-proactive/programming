@@ -204,7 +204,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
         if (uri.getPort() == -1) {
             LOGGER_RO.debug("No port specified, using the default one");
             modifiedURI = URIBuilder.buildURI(URIBuilder.getHostNameFromUrl(uri), URIBuilder
-                    .getNameFromURI(uri));
+                    .getNameFromURI(uri), this.protocolIdentifier);
             modifiedURI = RemoteObjectHelper.expandURI(modifiedURI);
         }
 
