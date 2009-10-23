@@ -263,7 +263,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
         // Remote Object exporter
         this.roe = new RemoteObjectExposer<ProActiveRuntime>(
-            "org.objectweb.proactive.core.runtime.ProActiveRuntime", this,
+            org.objectweb.proactive.core.runtime.ProActiveRuntime.class.getName(), this,
             ProActiveRuntimeRemoteObjectAdapter.class);
         this.roe.createRemoteObject(vmInformation.getName(), false);
 
