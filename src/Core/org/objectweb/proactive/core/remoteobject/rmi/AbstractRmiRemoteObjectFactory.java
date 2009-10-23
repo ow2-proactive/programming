@@ -210,7 +210,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
         // Try if URL is the address of a RmiRemoteBody
         try {
-            Registry reg = getRegistry(uri);
+            Registry reg = getRegistry(modifiedURI);
             o = reg.lookup(URIBuilder.getNameFromURI(modifiedURI));
             LOGGER_RO.debug(modifiedURI.toString() + " looked up successfully");
         } catch (java.rmi.NotBoundException e) {

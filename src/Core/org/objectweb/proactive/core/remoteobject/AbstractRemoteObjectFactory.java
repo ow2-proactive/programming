@@ -71,7 +71,7 @@ public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory
             // Local class server is useful when an object migrate
             // Other class servers  are used only if local class server fail
             String oldCodebase = PAProperties.JAVA_RMI_SERVER_CODEBASE.getValue();
-     
+
             String newCodebase = null;
             if (oldCodebase != null) {
                 // RMI support multiple class server locations
