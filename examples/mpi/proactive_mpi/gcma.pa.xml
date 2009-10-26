@@ -1,0 +1,49 @@
+<!-- @snippet-start MPI_coupling_PA_GCMA --> 
+
+<?xml version="1.0" encoding="UTF-8"?>
+<GCMApplication xmlns="urn:gcm:application:1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:gcm:application:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ApplicationDescriptorSchema.xsd">
+
+    <environment>
+        <javaPropertyVariable name="proactive.home"/>
+        <descriptorVariable name="descriptor.dir" value="${proactive.home}/examples/mpi/proactive_mpi"/>
+        <descriptorVariable name="java.cmd"  value="java"/>
+        <descriptorVariable name="proactive.properties" value="-Djava.library.path=${proactive.home}/dist/lib/native"/>       
+		<descriptorVariable name="deployment.pa1.gcmd" value="${descriptor.dir}/gcmd.pa1.xml"/>
+		<descriptorVariable name="deployment.pa2.gcmd" value="${descriptor.dir}/gcmd.pa2.xml"/>
+    </environment>
+    
+    <application>    				        
+        <proactive base="root" relpath="${proactive.home}">
+			<configuration>
+				<java base="root" relpath="${java.cmd}" />  
+				<jvmarg value="${proactive.properties}" />
+				<applicationClasspath>
+					<pathElement base="proactive" relpath="dist/lib/ProActive_examples.jar"/>
+					<pathElement base="proactive" relpath="dist/lib/ProActive.jar"/>
+				</applicationClasspath>
+				<securityPolicy base="proactive" relpath="examples/proactive.java.policy"/>
+				<log4jProperties base="proactive" relpath="examples/proactive-log4j"/>	
+			</configuration>
+			<virtualNode id="mpivn1" capacity="1">
+					<nodeProvider refid="provider1" capacity="1"/>
+			</virtualNode>
+			<virtualNode id="mpivn2" capacity="1">
+					<nodeProvider refid="provider2" capacity="1"/>
+			</virtualNode>
+		</proactive>
+    </application>
+
+    <resources>
+		<nodeProvider id="provider1">
+		     <file path="${deployment.pa1.gcmd}" />
+        </nodeProvider>
+		<nodeProvider id="provider2">
+		     <file path="${deployment.pa2.gcmd}" />
+        </nodeProvider>
+    </resources>
+
+
+</GCMApplication>
+<!-- @snippet-end MPI_coupling_PA_GCMA --> 

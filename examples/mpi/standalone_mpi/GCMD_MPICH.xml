@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GCMDeployment xmlns="urn:gcm:deployment:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:gcm:deployment:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ExtensionSchemas.xsd">
+
+
+<!-- @snippet-start GCMD_MPI_Descriptor-->
+	<environment>
+		<javaPropertyVariable name="user.home" />
+		<javaPropertyVariable name="proactive.home" />		
+	</environment>
+	
+	<resources>
+		<group refid="LAN_MPI">
+			<host refid="ComputeNode" />
+		</group>
+	</resources>
+		
+	<infrastructure>
+	
+		<hosts>
+			<host id="ComputeNode" os="unix">
+				<homeDirectory base="root" relpath="${user.home}" />
+			</host>
+		</hosts>
+	
+	<!--Definition of the MPI group-->	
+		<groups>
+            <mpiGroup 
+            	id="LAN_MPI" 
+            	hostList="localhost localhost" 
+            	distributionPath="/usr"
+				commandPath="${proactive.home}/scripts/gcmdeployment/executable_mpi_mpich.sh">
+            </mpiGroup>
+        </groups>    
+	</infrastructure>
+<!-- @snippet-end GCMD_MPI_Descriptor-->
+</GCMDeployment>

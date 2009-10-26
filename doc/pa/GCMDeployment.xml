@@ -572,6 +572,7 @@
                <listitem><para><emphasis role="bold">&lt;prunGroup&gt;</emphasis></para></listitem>
                <listitem><para><emphasis role="bold">&lt;rshGroup&gt;</emphasis></para></listitem>
                <listitem><para><emphasis role="bold">&lt;sshGroup&gt;</emphasis></para></listitem>
+		       <listitem><para><emphasis role="bold">&lt;mpiGroup&gt;</emphasis></para></listitem>
             </itemizedlist>
             All these groups are explained in the
             <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
@@ -1111,7 +1112,7 @@
 		<section xml:id="Executable_64"><info><title>Executable</title></info>
 
 			<para>
-				This type of application describes the deployment of a stand-alone executable on the grid. It can have the following child elements:
+				This type of application describes the deployment of a stand-alone executable on the grid. The chapter <xref linkend="WrappingApplicationLegacycode_main"/>  shows a couple of examples of the usage of this application type 
 			</para>
 
 			<itemizedlist>
@@ -1162,6 +1163,14 @@
 
          <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/GCMA_Executable_1.snip"/></textobject></programlisting>
 
+		</section>
+		
+		<section xml:id="MPI_64"><info><title>MPI</title></info>
+
+			<para>
+				This type of application describes the deployment of an MPI application.  It is a variation of "Executeble" type, but specificaly designed for MPI applications. The chapter <xref linkend="WrappingMpiAndLegacyCode"/> shows three different usages of the MPI application type: to launch standalone MPI application, MPI applications coupling and Java-MPI coupling.
+			</para>
+			
 		</section>
 
 

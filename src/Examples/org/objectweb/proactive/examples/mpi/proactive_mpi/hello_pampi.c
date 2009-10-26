@@ -1,6 +1,8 @@
+//@snippet-start MPI_Coupling_Example
 #include <stdio.h>
 #include <stdlib.h>
 #include "mpi.h"
+/*Include ProActiveMPI header*/
 #include "ProActiveMPI.h"
 
 
@@ -24,19 +26,21 @@ int main (int argc, char **argv)
    MPI_Init(&argc, &argv);
    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
+   /*Init ProActiveMPI passing MPI rank as parameter*/
    error = ProActiveMPI_Init(rank);
    if (error < 0){
            printf("[MPI] !!! Error ProActiveMPI init \n");
            MPI_Abort( MPI_COMM_WORLD, 1 );
    }
 
+   /*Obtain Application (or Job) ID*/
    ProActiveMPI_Job (&myjobid, &allprocs);
    otherjobid = (myjobid + 1) % 2;
 
 
-
+   /*Synchronous ProActiveMPI ping-pong*/
    if (myjobid == 0) printf("\n  Synchronous ping-pong\n\n");
-
+ 
    for (size = 8; size <= 8388608; size *= 2) {
 
 	  t0 = MPI_Wtime();
@@ -50,8 +54,8 @@ int main (int argc, char **argv)
       t1 = MPI_Wtime();
       time = 1.e6 * (t1 - t0);
 
-	  if (myjobid == 0 && time > 0.000001) {
-	  printf(" %7d bytes took %9.0f usec (%8.3f MB/sec)\n", size, time, 2.0 * size / time);
+   	  if (myjobid == 0 && time > 0.000001) {
+    	  printf(" %7d bytes took %9.0f usec (%8.3f MB/sec)\n", size, time, 2.0 * size / time);
 
 	  } else if (myjobid == 0) {
 			  printf(" %7d bytes took less than the timer accuracy\n", size);
@@ -60,7 +64,7 @@ int main (int argc, char **argv)
    }
 
 
-
+/*asynchronous ProActiveMPI ping-pong*/
 if (myjobid == 0) printf("\n Asynchronous ping-pong\n\n");
 
     for (size = 8; size <= 8388608; size *= 2) {
@@ -68,30 +72,31 @@ if (myjobid == 0) printf("\n Asynchronous ping-pong\n\n");
 
       ProActiveMPI_IRecv(b, size/8, MPI_DOUBLE, 0, 0, otherjobid, &request);
 
-	  t0 = MPI_Wtime();
+ 	  t0 = MPI_Wtime();
        if (myjobid == 0) {
-	   ProActiveMPI_Send(a, size/8, MPI_DOUBLE, 0, 0, otherjobid);
-	   ProActiveMPI_Wait(&request);
+    	   ProActiveMPI_Send(a, size/8, MPI_DOUBLE, 0, 0, otherjobid);
+    	   ProActiveMPI_Wait(&request);
        } else {
-	   ProActiveMPI_Wait(&request);
-	   ProActiveMPI_Send(b, size/8, MPI_DOUBLE, 0, 0,  otherjobid);
+    	   ProActiveMPI_Wait(&request);
+    	   ProActiveMPI_Send(b, size/8, MPI_DOUBLE, 0, 0,  otherjobid);
        }
        t1 = MPI_Wtime();
        time = 1.e6 * (t1 - t0);
 
-	  if (myjobid == 0 && time > 0.000001) {
-	  printf(" %7d bytes took %9.0f usec (%8.3f MB/sec)\n", size, time, 2.0 * size / time);
+    	  if (myjobid == 0 && time > 0.000001) {
+     	  printf(" %7d bytes took %9.0f usec (%8.3f MB/sec)\n", size, time, 2.0 * size / time);
 
-	  } else if (myjobid == 0) {
-			  printf(" %7d bytes took less than the timer accuracy\n", size);
-	  }
+ 	  } else if (myjobid == 0) {
+ 			  printf(" %7d bytes took less than the timer accuracy\n", size);
+ 	  }
 
     }
 
-
+   /*Finalize ProActiveMPI application (before finalizing MPI application)*/
    ProActiveMPI_Finalize();
    MPI_Finalize();
 }
 
+//@snippet-end MPI_Coupling_Example
 
 

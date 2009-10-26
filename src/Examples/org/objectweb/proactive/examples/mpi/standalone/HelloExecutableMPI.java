@@ -34,23 +34,29 @@ package org.objectweb.proactive.examples.mpi.standalone;
 import java.io.File;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.api.PALifeCycle; //import org.objectweb.proactive.core.util.ProActiveInet;
+import org.objectweb.proactive.api.PALifeCycle; 
 import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger; //import org.objectweb.proactive.core.util.wrapper.StringMutableWrapper;
+import org.objectweb.proactive.core.util.log.ProActiveLogger; 
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
+//@snippet-start Hello_MPI_example
 
 public class HelloExecutableMPI implements java.io.Serializable {
+	//@snippet-break Hello_MPI_example
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
+	//@snippet-resume Hello_MPI_example
 
     public static void main(String[] args) throws Exception {
 
         GCMApplication applicationDescriptor = PAGCMDeployment.loadApplicationDescriptor(new File(args[0]));
         applicationDescriptor.startDeployment();
 
+		//@snippet-break Hello_MPI_example
         Thread.sleep(10000); //workaround
+		//@snippet-resume Hello_MPI_example
 
         PALifeCycle.exitSuccess();
     }
 }
+//@snippet-end Hello_MPI_example
