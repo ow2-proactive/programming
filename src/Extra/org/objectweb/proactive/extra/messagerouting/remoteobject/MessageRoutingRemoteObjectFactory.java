@@ -57,6 +57,7 @@ import org.objectweb.proactive.extra.messagerouting.remoteobject.message.Message
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingRemoteObjectLookupMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.MessageRoutingRegistry;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSocketFactorySelector;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 
 /**
@@ -83,10 +84,16 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
                 PAProperties.PA_NET_ROUTER_ADDRESS.getKey() + " is not set.");
         }
 
-        int routerPort = PAProperties.PA_NET_ROUTER_PORT.getValueAsInt();
-        if (routerPort == 0) {
-            logAndThrowException("Message routing cannot be started because " +
-                PAProperties.PA_NET_ROUTER_PORT.getKey() + " is not set.");
+        int routerPort;
+        if (PAProperties.PA_NET_ROUTER_PORT.isSet()) {
+            routerPort = PAProperties.PA_NET_ROUTER_PORT.getValueAsInt();
+            if (routerPort <= 0 || routerPort > 65535) {
+                logAndThrowException("Invalid  router port value: " + routerPort);
+            }
+        } else {
+            routerPort = RouterImpl.DEFAULT_PORT;
+            logger.debug(PAProperties.PA_NET_ROUTER_PORT.getKey() + " not set. Using the default port: " +
+                routerPort);
         }
 
         InetAddress routerAddress = null;

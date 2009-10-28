@@ -57,8 +57,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 class Main {
     static final private Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
 
-    static final private int DEFAULT_PORT = 33647;
-
     private RouterConfig config;
     private Options options;
 
@@ -108,7 +106,7 @@ class Main {
 
             arg = line.getOptionValue("p");
             if (arg == null) {
-                config.setPort(DEFAULT_PORT);
+                config.setPort(RouterImpl.DEFAULT_PORT);
             } else {
                 try {
                     short i = new Short(arg);
