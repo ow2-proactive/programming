@@ -13,10 +13,31 @@
 		<xsd:complexContent>
 			<xsd:extension base="applicationNodeType">
 				<xsd:sequence>
-					<xsd:element name="command" type="commandType"></xsd:element>
+					<xsd:element name="command" type="commandType">
+				    <xsd:annotation>
+                <xsd:documentation>
+                                <p>MPI command (application binary) which will be run on the portion of the grid defined by the specified node providers</p>
+                            </xsd:documentation>
+                        </xsd:annotation>
+
+					</xsd:element>
+						
 					<xsd:element name="nodeProvider" maxOccurs="unbounded" minOccurs="0">
+                    <xsd:annotation>
+                    	<xsd:documentation>
+                        	<p>Reference to a node provider</p>
+                        </xsd:documentation>
+                    </xsd:annotation>
 						<xsd:complexType>
-							<xsd:attribute name="refid" type="IdOrVariableType" use="required" />
+							<xsd:attribute name="refid" type="IdOrVariableType" use="required">
+	                            <xsd:annotation>
+                                    <xsd:documentation>
+                                        <p>  Id of the node provider that will be used to describe it in the &lt;resources&gt; element.
+                                            This id has to match with the id of one of the node providers described in the &lt;resources&gt; element
+                                        </p>
+                                    </xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:attribute>
 						</xsd:complexType>
 					</xsd:element>
 				</xsd:sequence>
@@ -24,3 +45,4 @@
 		</xsd:complexContent>
 	</xsd:complexType>
 </xsd:schema>
+

@@ -9,11 +9,42 @@
 	<xs:complexType name="groupTypeMPI">
 		<xs:complexContent>
 			<xs:extension base="abstractGroupElementType">
-				<xs:attribute name="commandOptions" type="xs:string" />
-				<xs:attribute name="machineFile" type="xs:string" />
-				<xs:attribute name="execDir" type="xs:string" />
-				<xs:attribute name="hostList" type="xs:string" use="required" />
-				<xs:attribute name="distributionPath" type="xs:string" use="required" />
+				<xs:attribute name="commandOptions" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>List of MPI_related options to be appended on th mpirun command at deployment time</p>
+                        </xs:documentation>
+                    </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="machineFile" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>File containing a list of machines. If this file is not provided, the runtime create automatically the machineFile, including the hostnames defined in the hostlist tag. If the file is generated at runtime, the file is deleted prior to the end of the execution.</p>
+                        </xs:documentation>
+                    </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="execDir" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Directory where the mpirun command will be execute. This allows the usage of relative path on the definition of the MPI binary on the GCMA descriptor</p>
+                        </xs:documentation>
+                    </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="hostList" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>List of machine manes or IP addresses  where the MPI application will be deployed</p>
+                        </xs:documentation>
+                    </xs:annotation>
+				</xs:attribute>
+				<xs:attribute name="distributionPath" type="xs:string" use="required">
+                    <xs:annotation>
+                        <xs:documentation>
+                            <p>Installation path of MPI. If not provided, MPI is supposed to be installed system-wide. In this case, the mpirun command will be /usr/bin/mpirun</p>
+                        </xs:documentation>
+                    </xs:annotation>
+     
+				</xs:attribute>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
