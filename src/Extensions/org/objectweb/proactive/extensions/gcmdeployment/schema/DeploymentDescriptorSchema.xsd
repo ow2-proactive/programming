@@ -92,6 +92,7 @@
                     <li><tt><a href="element/prunGroup.html">&lt;prunGroup&gt;</a></tt></li>
                     <li><tt><a href="element/rshGroup.html">&lt;rshGroup&gt;</a></tt></li>
                     <li><tt><a href="element/sshGroup.html">&lt;sshGroup&gt;</a></tt></li>
+					<li><tt><a href="element/mpiGroup.html">&lt;mpiGroup&gt;</a></tt></li>
                 </ul>
             </xsd:documentation>
         </xsd:annotation>

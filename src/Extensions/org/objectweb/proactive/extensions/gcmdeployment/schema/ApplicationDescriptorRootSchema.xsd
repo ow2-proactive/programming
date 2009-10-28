@@ -70,6 +70,7 @@
                 <ul>
                     <li><tt><a href="element/executable.html">&lt;executable&gt;</a></tt></li>
                     <li><tt><a href="element/proactive.html">&lt;proactive&gt;</a></tt></li>
+					<li><tt><a href="element/mpi.html">&lt;mpi&gt;</a></tt></li>
                 </ul>
             </xsd:documentation>
         </xsd:annotation>

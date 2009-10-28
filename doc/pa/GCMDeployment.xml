@@ -1168,7 +1168,7 @@
 		<section xml:id="MPI_64"><info><title>MPI</title></info>
 
 			<para>
-				This type of application describes the deployment of an MPI application.  It is a variation of "Executeble" type, but specificaly designed for MPI applications. The chapter <xref linkend="WrappingMpiAndLegacyCode"/> shows three different usages of the MPI application type: to launch standalone MPI application, MPI applications coupling and Java-MPI coupling.
+				This type of application describes the deployment of an MPI application.  It is a variation of the "Executable" type, but specifically designed for MPI applications. The chapter <xref linkend="WrappingMpiAndLegacyCode"/> shows three different usages of the MPI application type: to launch standalone MPI application, MPI applications coupling and Java-MPI coupling.
 			</para>
 			
 		</section>

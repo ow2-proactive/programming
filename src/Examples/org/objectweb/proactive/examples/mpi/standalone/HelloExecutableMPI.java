@@ -31,6 +31,7 @@
  */
 package org.objectweb.proactive.examples.mpi.standalone;
 
+//@snippet-start Hello_MPI_example
 import java.io.File;
 
 import org.apache.log4j.Logger;
@@ -40,8 +41,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
-
-//@snippet-start Hello_MPI_example
 
 public class HelloExecutableMPI implements java.io.Serializable {
     //@snippet-break Hello_MPI_example
