@@ -168,6 +168,7 @@ public class FTManagerPMLRB extends FTManager {
         return 0;
     }
 
+    //@snippet-start PML_Protocol_1
     /**
      * Message must be synchronously logged before being delivered.
      * The LatestRcvdIndex table is updated
@@ -209,6 +210,8 @@ public class FTManagerPMLRB extends FTManager {
         }
         return 0;
     }
+
+    //@snippet-end PML_Protocol_1
 
     /*
      * Set the value of m.sourceBody to m.seqNumber
@@ -304,6 +307,7 @@ public class FTManagerPMLRB extends FTManager {
         return 0;
     }
 
+    //@snippet-start PML_Protocol_2
     /**
      * Message logs are contained in the checkpoint info structure.
      */
@@ -373,6 +377,8 @@ public class FTManagerPMLRB extends FTManager {
 
         return 0;
     }
+
+    //@snippet-end PML_Protocol_2
 
     /**
      * @see org.objectweb.proactive.core.body.ft.protocols.FTManager#handleFTMessage(org.objectweb.proactive.core.body.ft.internalmsg.FTMessage)
