@@ -8,6 +8,8 @@
  <!-- Import profiled highlighting color -->
  <xsl:import href="../highlighting/xsl/html-hl.xsl" />
 
+ <xsl:import href="../docbook-xsl/common/personal-templates.xsl" />
+
  <!-- Configure the html stylesheet to use -->
  <xsl:param name="html.stylesheet" select="'main.css'" />
  <!-- Just use the image size for the html output. Width=... has no effect. -->
@@ -383,5 +385,15 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
+	<xsl:template match="programlisting//text()">
+		<xsl:variable name="expandedText">
+			<xsl:call-template name="expandTabs">
+				<xsl:with-param name="text" select="." />
+			</xsl:call-template>
+		</xsl:variable>
+
+		<xsl:value-of select="$expandedText" />
+	</xsl:template>
 
 </xsl:stylesheet>
