@@ -718,12 +718,12 @@ public class Dummy {
 			out what's happening, don't panic! Use many messages
 			to find out what the values of the variables are at a given time:
 			<programlisting language="xml"><![CDATA[<xsl:message>
-	<xsl:text> OK, in question.toc, id is </xsl:text> <xsl:copy-of select="$id" />
+	<xsl:text> OK, in question.toc, id is </xsl:text> <xsl:value-of select="$id" />
 </xsl:message>
 
 <xsl:for-each select="./@*">
 	<xsl:message>
-		<xsl:text>Attribute <xsl:value-of select="name(.)"/> = <xsl:value-of select="."/>  </xsl:text>
+		Attribute <xsl:value-of select="name(.)"/> = <xsl:value-of select="."/>
 	</xsl:message>
 </xsl:for-each>]]></programlisting>
 		</para>
