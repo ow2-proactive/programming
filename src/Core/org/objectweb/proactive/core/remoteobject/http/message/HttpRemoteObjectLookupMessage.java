@@ -24,11 +24,12 @@
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
+
 package org.objectweb.proactive.core.remoteobject.http.message;
 
 import java.io.Serializable;
@@ -57,7 +58,7 @@ public class HttpRemoteObjectLookupMessage extends HttpMessage implements Serial
      * Constructs an HTTP Message
      * @param urn The urn of the Object (it can be an active object or a runtime).
      */
-    public HttpRemoteObjectLookupMessage(String urn, URI url, int port) {
+    public HttpRemoteObjectLookupMessage(String urn, URI url) {
         super(url.toString());
         this.urn = urn;
         if (!this.urn.startsWith("/")) {

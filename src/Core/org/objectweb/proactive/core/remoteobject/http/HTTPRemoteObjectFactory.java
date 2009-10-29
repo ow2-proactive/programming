@@ -24,11 +24,12 @@
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
+
 package org.objectweb.proactive.core.remoteobject.http;
 
 import java.net.MalformedURLException;
@@ -107,7 +108,6 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
 
         try {
             u = new URL(url.toString());
-            int port = u.getPort();
             url = URI.create(u.toString());
         } catch (MalformedURLException e) {
             url = URI.create(HTTPTransportServlet.get().getURL() + url.toString());
@@ -140,14 +140,8 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      * @return a UniversalBody
      */
     public RemoteObject lookup(URI url) throws ProActiveException {
-        int port = url.getPort();
-
-        if (port == -1) {
-            port = PAProperties.PA_XMLHTTP_PORT.getValueAsInt();
-        }
-
         String urn = url.getPath();
-        HttpRemoteObjectLookupMessage message = new HttpRemoteObjectLookupMessage(urn, url, port);
+        HttpRemoteObjectLookupMessage message = new HttpRemoteObjectLookupMessage(urn, url);
         try {
             message.send();
         } catch (HTTPRemoteException e) {

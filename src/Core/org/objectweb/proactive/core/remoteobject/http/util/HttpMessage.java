@@ -24,11 +24,12 @@
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
+
 package org.objectweb.proactive.core.remoteobject.http.util;
 
 import java.io.Serializable;
@@ -45,10 +46,8 @@ public abstract class HttpMessage implements Serializable {
     protected Object returnedObject;
     protected String url;
 
-    //    private int port;
     public HttpMessage(String url) {
         this.url = url;
-        //        this.port = port;
     }
 
     /**
