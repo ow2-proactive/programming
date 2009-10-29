@@ -24,11 +24,12 @@
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
+
 package org.objectweb.proactive.core.body;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
@@ -172,6 +173,10 @@ public class HalfBody extends AbstractBody {
         }
 
         return this.replyReceiver.receiveReply(reply, this, getFuturePool());
+    }
+
+    public void setImmediateService(String methodName) {
+        setImmediateService(methodName, false);
     }
 
     public void setImmediateService(String methodName, boolean uniqueThread) {

@@ -195,6 +195,17 @@ public interface Body extends LocalBodyStrategy, UniversalBody {
     public void setImmediateService(String methodName, boolean uniqueThread);
 
     /**
+     * For setting an immediate service for this body. An immediate service is a method that will be
+     * executed by the calling thread.
+     *
+     * @param methodName the name of the method
+     *
+     * @deprecated Replaced by {@link #setImmediateService(String, boolean)}
+     */
+    @Deprecated
+    public void setImmediateService(String methodName);
+
+    /**
      * Removes an immediate service for this body An immediate service is a method that will be
      * executed by the calling thread.
      * 

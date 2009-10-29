@@ -357,6 +357,10 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         return checkMethod(methodName, null);
     }
 
+    public void setImmediateService(String methodName) {
+        setImmediateService(methodName, false);
+    }
+
     public void setImmediateService(String methodName, boolean uniqueThread) {
         checkImmediateServiceMode(methodName, null, uniqueThread);
         ((RequestReceiverImpl) this.requestReceiver).setImmediateService(methodName, uniqueThread);
