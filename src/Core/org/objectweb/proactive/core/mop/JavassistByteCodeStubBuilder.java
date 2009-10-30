@@ -319,7 +319,7 @@ public class JavassistByteCodeStubBuilder {
                     m = new Method(currentMethod);
                     temp.put(key.toString(), m);
                 }
-                m.setCtMethod(currentMethod);
+                //                                m.setCtMethod(currentMethod);
                 m.grabMethodandParameterAnnotation(currentMethod);
             }
         }
