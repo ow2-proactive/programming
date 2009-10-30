@@ -34,6 +34,7 @@ package org.objectweb.proactive.examples.flowshop;
 import java.util.Arrays;
 import java.util.Vector;
 
+//@snippet-start FlowShop_1
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.extra.branchnbound.core.Result;
 import org.objectweb.proactive.extra.branchnbound.core.Task;
@@ -134,6 +135,8 @@ public class FlowShopTask extends Task {
         this.r = new Result();
     }
 
+    //@snippet-break FlowShop_1
+
     /**
      * Return the next permutation. Warning, the parmeter are modified.
      *
@@ -229,6 +232,7 @@ public class FlowShopTask extends Task {
         return perm;
     }
 
+    //@snippet-start FlowShop_4
     /**
      * Explore all permutation between currentPerm and lastPerm. May decide
      * also to split in sub Task.
@@ -325,6 +329,9 @@ public class FlowShopTask extends Task {
         return r;
     }
 
+    //@snippet-end FlowShop_4
+
+    //@snippet-start FlowShop_3
     /**
      * Split the root Task in subtask. Can be called by the method execute() if
      * we want to split again.
@@ -364,6 +371,8 @@ public class FlowShopTask extends Task {
         return tasks;
     }
 
+    //@snippet-end FlowShop_3
+
     /**
      *
      * @throws NoResultsException
@@ -396,6 +405,7 @@ public class FlowShopTask extends Task {
         return r;
     }
 
+    //@snippet-start FlowShop_2
     @Override
     public void initLowerBound() {
         if (lowerBound == -1) {
@@ -422,6 +432,8 @@ public class FlowShopTask extends Task {
         fsr.permutation = randomInit ? randomPerm : (int[]) currentPerm.clone();
     }
 
+    //@snippet-end FlowShop_2
+
     public void setCom(boolean b) {
         com = b;
     }
@@ -438,4 +450,6 @@ public class FlowShopTask extends Task {
             ",\ncurrent perm : " + Permutation.string(currentPerm) + " and\nlast Perm : " +
             Permutation.string(lastPerm);
     }
+    //@snippet-resume FlowShop_1
 }
+//@snippet-end FlowShop_1

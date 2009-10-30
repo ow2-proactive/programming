@@ -1,50 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="bnb"><info><title xml:id="BranchandBoundAPI_5">Branch and Bound API</title></info>
     
-    <!--  File: /home/irosenbe/PA_new_doc/docbook-tuto/bnb.html  -->
-    <para>The outline of this short handbook:</para>
-    <orderedlist>
-        <listitem>
-            <para>
-                <link linkend="bnb_overview">Overview</link>
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-                <link linkend="bnb_model">The API Architecture</link>
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-                <link linkend="bnb_api">The API Description</link>
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-                <link linkend="bnb_flowshop">An Example: FlowShop</link>
-            </para>
-        </listitem>
-        <listitem>
-            <para>
-                <link linkend="bnb_future_work">Future Work</link>
-            </para>
-        </listitem>
-    </orderedlist>
     <section xml:id="bnb_overview"><info><title xml:id="Overview_5">Overview</title></info>
         
         <para>
-            The Branch and Bound (BnB) consists to an algorithmic
+            The Branch and Bound (BnB) consists in an algorithmic
             technique for exploring a solution tree from which returns
             the optimal solution.
         </para>
         <para>
             The main goal of this BnB API is to provide a set of tools
-            for helping the developpers to parallelize his BnB problem
+            for helping the developers to parallelize his BnB problem
             implementation.
         </para>
         <para>The main features are:</para>
         <itemizedlist>
             <listitem>
-                <para>Hidding computation distribution.</para>
+                <para>Hiding computation distribution.</para>
             </listitem>
             <listitem>
                 <para>Dynamic task splitting.</para>
@@ -54,14 +25,14 @@
             </listitem>
             <listitem>
                 <para>
-                    Task communications for broadcasting best current
+                    Task communications for broadcasting the best current
                     solution.
                 </para>
             </listitem>
             <listitem>
                 <para>
                     Different behaviors for task allocation, provided by
-                    the API or yourself.
+                    the API or on your own.
                 </para>
             </listitem>
             <listitem>
@@ -71,9 +42,9 @@
     </section>
     <section xml:id="bnb_model"><info><title xml:id="TheModelArchitecture_5">The Model Architecture</title></info>
         
-        <para>The next figure show the architecture of the API:</para>
+        <para>The following figure shows the API architecture:</para>
         <para>
-            <figure xml:id="TheAPIarchitecture_5"><info><title>The API architecture.</title></info>
+            <figure xml:id="TheAPIarchitecture_5"><info><title>The API architecture</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -86,10 +57,10 @@
         <itemizedlist>
             <listitem>
                 <para>
-                    <emphasis role="bold">Manager</emphasis>
-                    : the main point of the API. It is the master for
+                    <emphasis role="bold">Manager</emphasis>:
+                    the main point of the API. It is the master for
                     deploying and managing Workers. Also, it attributes
-                    Tasks to free workers. The Tasks are provided the
+                    Tasks to free workers. The Tasks are provided by the
                     Task Queue.
                 </para>
             </listitem>
@@ -99,31 +70,31 @@
                     <secondary>Task Queue</secondary>
                 </indexterm>
                 <para>
-                    <emphasis role="bold">Task Queue</emphasis>
-                    : provides Task in a specific order to the Manager.
+                    <emphasis role="bold">Task Queue</emphasis>:
+                    provides Task in a specific order to the Manager.
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    <emphasis role="bold">Worker</emphasis>
-                    : broadcasts solution to all Task, and provides the
+                    <emphasis role="bold">Worker</emphasis>:
+                    broadcasts the solution to all Tasks, and provides the
                     API environment to the Tasks.
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    <emphasis role="bold">Task</emphasis>
-                    : the user code to compute.
+                    <emphasis role="bold">Task</emphasis>:
+                    the user code to compute.
                 </para>
             </listitem>
         </itemizedlist>
         <para>
             All Workers have a group reference on all the others. The
-            next figure show step by step how a Task can share a new
-            better solution with all:
+            figure hereafter shows step by step how a Task can share a new
+            better solution with all others:
         </para>
         <para>
-            <figure xml:id="Broadcastinganewsolution_5"><info><title>Broadcasting a new solution.</title></info>
+            <figure xml:id="Broadcastinganewsolution_5"><info><title>Broadcasting a new solution</title></info>
                 
                 <mediaobject>
                     <imageobject>
@@ -132,24 +103,21 @@
                 </mediaobject>
             </figure>
         </para>
-        <para>Finally, the methods order execution:</para>
+        <para>Finally, here is the order execution of methods:</para>
         <orderedlist>
             <listitem>
                 <para>
-                    rootTask.initLowerBound(); // compute a first lower
-                    bound
+                    rootTask.initLowerBound(); // compute a first lower bound
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    rootTask.initUpperBound(); // compute a first upper
-                    bound
+                    rootTask.initUpperBound(); // compute a first upper bound
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    Vector splitted = rootTask.split(); // generate a
-                    set of tasks
+                    Vector splitted = rootTask.split(); // generate a set of tasks
                 </para>
             </listitem>
             <listitem>
@@ -160,8 +128,7 @@
             </listitem>
             <listitem>
                 <para>
-                    Result final = rootTask.gather(Result[] ri); //
-                    gathering all result
+                    Result final = rootTask.gather(Result[] ri); // gather all result
                 </para>
             </listitem>
         </orderedlist>
@@ -188,12 +155,12 @@
                     It is the place where the user has to put his code
                     for solving a part and/or the totality of his BnB
                     problem. There are 2 main usages of it. The first
-                    one consists to divide the task and returning no
+                    one consists in dividing the task and returning no
                     result. The second is to try to improve the best
                     solution.
                 </para>
             </section>
-            <section xml:id="publicVectorsplit_5"><info><title>public Vector split()</title></info>
+            <section xml:id="publicVectorsplit_5"><info><title>public Vector&lt;Task&gt; split()</title></info>
                 
                 <para>
                     This is for helping the user when he wants to divide
@@ -219,7 +186,7 @@
                     method.
                 </para>
                 <para>
-                    Some class variables are provided by the API to help
+                    Some instance variables are provided by the API to help
                     the user for keeping a code clear. See next their
                     descriptions:
                 </para>
@@ -228,22 +195,20 @@ protected Result initUpperBound; // to store the upper bound
 protected Object bestKnownSolution; // setted automaticaly by the API with the best current solution
 protected Worker worker; // to interact with the API (see after)</programlisting>
                 <para>
-                    From the Task, specialy within the execute() method,
-                    the user has to interact with the API for sending
-                    sub-tasks, which result from a split call, to the
-                    task queue, or broadcasting to other tasks a new
+                    From the Task, specially within the <literal>execute()</literal> method,
+                    the user has to interact with the API for sending to the
+                    task queue sub-tasks resulting from a split call,
+					or for broadcasting to other tasks a new
                     better solution, etc.
                 </para>
                 <para>
-                    The way to do that is to use the class variable:
-                    <emphasis role="bold">worker</emphasis>
-                    .
+                    The way to do that is to use the <emphasis role="bold">worker</emphasis> instance variable:
                 </para>
                 <itemizedlist>
                     <listitem>
                         <para>
                             Broadcasting a new better solution to all
-                            the other class:
+                            the other workers:
                         </para>
                         <programlisting language="java">this.worker.setBestCurrentResult(newBetterSolution);</programlisting>
                     </listitem>
@@ -251,7 +216,7 @@ protected Worker worker; // to interact with the API (see after)</programlisting
                         <para>
                             Sending a set of sub-tasks for computing:
                         </para>
-                        <programlisting language="java">this.worker.sendSubTasksToTheManager(subTaskList);</programlisting>
+                        <programlisting language="java">this.worker.sendSubTasksToTheManager(subTaskVector);</programlisting>
                     </listitem>
                     <listitem>
                         <para>
@@ -266,8 +231,8 @@ protected Worker worker; // to interact with the API (see after)</programlisting
         <section xml:id="TheTaskQueueDescription_5"><info><title>The Task Queue Description</title></info>
             
             <para>
-                This manages the task allocation. The main functions
-                are: providing tasks in a sepcial order, and keeping
+                The Task Queue manages the task allocation. The main functions
+                are: providing tasks in a special order and keeping
                 results back.
             </para>
             <para>
@@ -277,28 +242,28 @@ protected Worker worker; // to interact with the API (see after)</programlisting
             <itemizedlist>
                 <listitem>
                     <para>
-                        <emphasis role="bold">BasicQueueImpl</emphasis>
-                        : provides tasks in FIFO order.
+                        <emphasis role="bold">BasicQueueImpl:</emphasis>
+                        provides tasks in FIFO order.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
-                        <emphasis role="bold">LargerQueueImpl</emphasis>
-                        : provides tasks in a larger order, as Breadth
+                        <emphasis role="bold">LargerQueueImpl</emphasis>:
+                        provides tasks in a larger order, as Breadth
                         First Search algorithm.
                     </para>
                 </listitem>
             </itemizedlist>
             <para>
                 By extending the
-                <emphasis role="bold">TaskQueue</emphasis>
+                <emphasis role="bold">TaskQueue</emphasis> abstract class,
                 you can use a specialized task allocator for your need.
             </para>
         </section>
         <section xml:id="TheProActiveBranchNBoundDescription_5"><info><title>The ProActiveBranchNBound Description</title></info>
             
             <para>
-                Finally, it is the main entry point for starting, and
+                Finally, it is the main entry point for starting and
                 controlling your computation.
             </para>
             <programlisting language="java">Task task = new YourTask(someArguments);
@@ -306,21 +271,25 @@ Manager manager =  ProActiveBranchNBound.newBnB(task,
                         nodes,
                         LargerQueueImpl.class.getName());
 Result futureResult = manager.start(); // this call is asynchronous</programlisting>
-            <para>
-                <emphasis role="bold">Tip:</emphasis>
-                use the constructor
-                <emphasis role="bold">
-                    ProActiveBranchNBound.newBnB(Task, VirtualNode[],
-                    String)
-                </emphasis>
-                and
-                <emphasis role="bold">do not activate</emphasis>
-                virtual nodes. This method provides a faster deployment
+            <tip>
+				<title>
+					Use the constructor
+					<emphasis role="bold">
+						ProActiveBranchNBound.newBnB(Task, VirtualNode[],
+						String)
+					</emphasis>
+					and
+					<emphasis role="bold">do not activate</emphasis>
+					virtual nodes
+				</title>
+			<para>
+                This method provides a faster deployment
                 and active objects creation way. Communications between
                 workers are also optimized by a hierarchic group based
                 on the array of virtual nodes. That means when it is
-                possible define a virtual node by clusters.
+                possible, define a virtual node by clusters.
             </para>
+			</tip>
         </section>
     </section>
     <section xml:id="bnb_flowshop"><info><title xml:id="AnExampleFlowShop_5">An Example: FlowShop</title></info>
@@ -333,112 +302,42 @@ Result futureResult = manager.start(); // this call is asynchronous</programlist
             problem, with the monoobjective case. The main objective is
             to minimized the overall completion time for all the jobs,
             i.e. makespan. A flowshop problem can be represented as a
-            set of n jobs; this jobs have to scheduled on a set of m
+            set of n jobs; this jobs have to be scheduled on a set of m
             machines. Each jobs is defined by a set of m distinct
             operations. The goal consists to determine the sequence used
             for all machines to execute operations.
         </para>
         <para>
             The algorithm used to find the best solution, tests all
-            permutations and try to cut bad branches.
+            permutations and try to cut bad branches is the following one:
         </para>
         <para>
-            Firstly, the
-            <emphasis role="bold">Flowshop Task</emphasis>
-            :
+            First, the
+            <emphasis role="bold">Flowshop Task</emphasis>:
         </para>
-        <programlisting language="java">import org.objectweb.proactive.ProActive;
-import org.objectweb.proactive.extra.branchnbound.core.Result;
-import org.objectweb.proactive.extra.branchnbound.core.Task;
-import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsExcepti\
-on;
-public class FlowShopTask extends Task {
- public FlowShopTask() {
-   // the empty no args constructor for ProActive
- }
- /**
-  * Contruct a Task which search solution for all permutations to the
-  * Flowshop problem. Use it to create the root Task.
-  */
- public FlowShopTask(FlowShop fs) {
-   this.flowshopProblem = fs;
- }
-}</programlisting>
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/FlowShop_1.snip" /></textobject></programlisting>
         <para>Now, implement all Task abstract methods.</para>
         <para>
             Computation
             <emphasis role="bold">bound</emphasis>
             methods:
         </para>
-        <programlisting language="java">
-            // Compute the lower bound public void initLowerBound() {
-            this.lowerBound = this.computeLowerBound(this.fs); } //
-            Compute the upper bound public void initUpperBound() {
-            this.upperBound = this.computeUpperBound(this.fs); }
-        </programlisting>
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/FlowShop_2.snip" /></textobject></programlisting>
         <para>
             The
             <emphasis role="bold">split</emphasis>
             method:
         </para>
-        <programlisting language="java">public Vector split() {
-  // Divide the set of permutations in 10 sub-tasks
-  int nbTasks = 10;
-  Vector tasks = new Vector(nbTasks);
-  for (int i = 0 ; i &lt; nbTasks ; i++){
-    tasks.add(new FlowShopTask(this, i, nbTasks));
-  }
-        
-  return tasks;
-}</programlisting>
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/FlowShop_3.snip" /></textobject></programlisting>
         <para>
             Then, the
             <emphasis role="bold">execute</emphasis>
             method:
         </para>
-        <programlisting language="java">public Result execute() {
-       
-  if (! this.iHaveToSplit()) {
-  // Test all permutation
-    while((FlowShopTask.nextPerm(currentPerm)) != null) {
-        int currentMakespan;
-        fsr.makespan = ((FlowShopResult)this.bestKnownSolution).makespan;
-        fsr.permutation = ((FlowShopResult)this.bestKnownSolution).permutat\
-ion;
-        if ((currentMakespan = FlowShopTask.computeConditionalMakespan(
-            fs, currentPerm,
-            ((FlowShopResult) this.bestKnownSolution).makespan,
-            timeMachine)) &lt; 0) {
-        //bad branch
-          int n = currentPerm.length + currentMakespan;
-          FlowShopTask.jumpPerm(currentPerm, n, tmpPerm[n]);
-          // ...
-       } else {
-         // better branch than previous best
-         fsr.makespan = currentMakespan;
-         System.arraycopy(currentPerm, 0, fsr.permutation, 0,
-                            currentPerm.length);
-         r.setSolution(fsr);
-         this.worker.setBestCurrentResult(r);
-       } 
-    }
-  } else {
-  // Using the Stub for an asynchronous call
-    this.worker.sendSubTasksToTheManager(
-      ((FlowShopTask) PAActiveObject.getStubOnThis()).split());
-  }
-        
-        // ...
-        
-  r.setSolution(bestKnownSolution);
-  return r;
-}</programlisting>
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/FlowShop_4.snip" /></textobject></programlisting>
         <para>
-            This example is available in a complete version
-            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/ProActive/apps/flowshop.html">
-                here
-            </link>
-            .
+            This example is available in a complete version in the
+			<literal>Proactive/src/Example/org/objectweb/proactive/examples/flowshop/</literal> directory.
         </para>
     </section>
     <section xml:id="bnb_future_work"><info><title xml:id="FutureWork_5">Future Work</title></info>
