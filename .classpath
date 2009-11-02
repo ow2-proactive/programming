@@ -105,7 +105,7 @@
 	<classpathentry kind="lib" path="lib/axis2/backport-util-concurrent-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2/commons-fileupload-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/axis2/woden-api-1.0M8.jar"/>
-	<classpathentry kind="lib" path="lib/cxf/cxf-2.2.2.jar" sourcepath="/home/ffonteno/src/apache-cxf-2.2.2-src"/>
+	<classpathentry kind="lib" path="lib/cxf/cxf-2.2.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/FastInfoset-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/geronimo-activation_1.1_spec-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/cxf/geronimo-javamail_1.4_spec-1.6.jar"/>
