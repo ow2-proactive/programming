@@ -156,6 +156,7 @@ public class SSHClient {
         }
 
         hostname = remArgs.remove(0);
+        int exitCode = 0;
 
         try {
             Connection conn = new Connection(hostname);
@@ -239,7 +240,7 @@ public class SSHClient {
 
                         /* The remote side won't send us further data... */
                         if ((conditions & (ChannelCondition.STDOUT_DATA | ChannelCondition.STDERR_DATA)) == 0) {
-
+                            exitCode = sess.getExitStatus();
                             /* ... and we have consumed all data in the local arrival window. */
                             break;
                         }
@@ -278,6 +279,6 @@ public class SSHClient {
             e.printStackTrace(System.err);
             System.exit(2);
         }
-        System.exit(0);
+        System.exit(exitCode);
     }
 }
