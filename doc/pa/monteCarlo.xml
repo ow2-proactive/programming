@@ -1,23 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="monte_carlo">
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="monte_carlo">
 
-<info>
-<title xml:id="MonteCarloAPI_34">Monte-Carlo API</title>
-    </info>
+	<info>
+		<title xml:id="MonteCarloAPI_34">Monte-Carlo API</title>
+	</info>
     <section xml:id="mc_overview">
-<info>
-<title xml:id="Overview_34">Overview</title>
-        </info>
+		<info>
+			<title xml:id="Overview_34">Overview</title>
+		</info>
 
         <para>
             <link xlink:href="http://en.wikipedia.org/wiki/Monte_Carlo_method">Monte Carlo</link>
-            methods are a class of computational algorithms that rely on repeated random sampling to compute their
+            methods belong to a class of computational algorithms that relies on repeated random sampling to compute their
             results. Monte Carlo methods are often used when simulating physical and mathematical systems. Because of
             their reliance on repeated computation and random or pseudo-random numbers, Monte Carlo methods are most
-            suited to calculation by a computer. Monte Carlo methods tend to be used when it is infeasible or impossible
+            suited for computer calculation. They tend to be used when it is infeasible or impossible
             to compute an exact result with a deterministic algorithm.
         </para>
 
-        <para>The goal of the ProActive Monte-Carlo API is to provide and easy to use API for running Monte-Carlo
+        <para>
+			The goal of the ProActive Monte-Carlo API is to provide and easy to use API for running Monte-Carlo
             simulations in a distributed environment.
         </para>
 
@@ -31,87 +33,88 @@
             </listitem>
             <listitem>
                 <para>
-                    It integrates<link xlink:href="http://www.iro.umontreal.ca/~simardr/ssj/">SSJ</link>, a distributed
-                    random generator written by Pierre l'Ecuyer. Each worker has its own independant stream of random
+                    It integrates <link xlink:href="http://www.iro.umontreal.ca/~simardr/ssj/">SSJ</link>, a distributed
+                    random generator written by Pierre l'Ecuyer. Each worker has its own independent stream of random
                     numbers and there is a guaranty that two different workers, will generate sequences that won't
-                    overlap until a certain number of experiences (2¹²⁷).
+                    overlap until a certain number of experiences (2<superscript>127</superscript>).
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    It is based on ProActive Master-Worker API as the underlying framework (see ProActive documentation,
-                    Master/Worker for more info).
+                    It is based on ProActive Master-Worker API as the underlying framework (see <xref linkend="MasterWorkerAPI_36" />
+                    for more information).
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    Deployment of the workers infrastructure is done through GCM descriptors (see ProActive
-                    documentation, GCMDeployment for more info).
+                    Deployment of the worker infrastructure is done through GCM descriptors (see <xref linkend="ProActiveGridComponentModelDeployment_64" />
+                    for more information).
                 </para>
             </listitem>
             <listitem>
                 <para>
-                    A small set of processes, taken from the financial field, are included as example.
+                    A small set of processes, taken from the financial field, are included as examples.
                 </para>
             </listitem>
         </itemizedlist>
     </section>
     <section xml:id="mc_api">
-<info>
-<title xml:id="API_34">API</title>
+		<info>
+			<title xml:id="API_34">API</title>
         </info>
         <para>
-            The Monte-Carlo APi is located in the following package:
+            The Monte-Carlo API is located in the
+			<literal>org.objectweb.proactive.extra.montecarlo.example</literal>
+			package.
         </para>
-        <screen>org.objectweb.proactive.extra.montecarlo.example</screen>
         <section xml:id="mc_api_main_class">
-<info>
-<title xml:id="MainClass_34">Main Class</title>
+		<info>
+			<title xml:id="MainClass_34">Main Class</title>
             </info>
             <para>
-                The entry point of the Monte-Carlo API is the PAMonteCarlo class. Its main constructor allows you to
-                deploy the monte-carlo framework, using ProActive GCM deployment framework. The first constructor is the
+                The entry point of the Monte-Carlo API is the <literal>PAMonteCarlo</literal> class. Its main constructor allows you to
+                deploy the monte-carlo framework, using ProActive GCM deployment framework. The first argument is the
                 URL of the GCMApplication file which will be used. The next argument is the virtual node name
                 corresponding to the Workers infrastructure of machines. The third argument (optional) is a virtual node
-                name that will correspond to a remote deployment of the master. The final argument is to allow changing
+                name that will correspond to a remote deployment of the master. And the final argument is to allow changing
                 the default Random Number Generator from the SSJ package.
             </para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/montecarlo_constructor.snip"/></textobject></programlisting>
             <para>
-                The run method from the PAMonteCarlo class, is the starting point of the computation. It runs a single
-                task, called a top-level engine task. This task, while running, will most likely generate new children
+                The <literal>run</literal> method of the <literal>PAMonteCarlo</literal> class is the starting point of the computation. It runs a single
+                task, called a top-level engine task. This task, while running, will most likely generate new
                 subtasks. The different tasks existing in the framework are described in<xref linkend="mc_api_tasks"/>.
             </para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/montecarlo_run.snip"/></textobject></programlisting>
             <para>
-                Finally, the terminate method will shut down the framework and every remote JVM created during the
+                Finally, the <literal>terminate</literal> method will shut down the framework and every remote JVM created during the
                 initialization phase.
             </para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/montecarlo_terminate.snip"/></textobject></programlisting>
         </section>
+
         <section xml:id="mc_api_tasks">
-<info>
-<title xml:id="Tasks_34">Tasks</title>
-            </info>
-            <para>This section describes the different types of tasks and their use</para>
-            <section xml:id="mc_api_engine_task">
-<info>
-<title xml:id="EngineTask_34">Engine Task</title>
-                </info>
-                <para>
-                    An Engine Task is a general-purpose task, it is used when any computation which doesn't include
-                    runnig
-                    Monte-Carlo simulation needs to be done. The top-level task, submitted to the PAMonteCarlo class is
-                    an
-                    engine task.
-                    An engine task can, through the access to two interfaces (the Executor and the Simulator), spawn
+		<info>
+			<title xml:id="Tasks_34">Tasks</title>
+		</info>
+		<para>This section describes the different types of tasks and theirs purposes</para>
+
+			<section xml:id="mc_api_engine_task">
+				<info>
+					<title xml:id="EngineTask_34">Engine Task</title>
+				</info>
+				<para>
+                    An Engine Task is a general-purpose task, used when any computation which doesn't include
+                    running Monte-Carlo simulation needs to be done. The top-level task, 
+					submitted to the PAMonteCarlo class is an engine task.
+                    An engine task can, through the access to two interfaces (<literal>Executor</literal> and <literal>Simulator</literal>), spawn
                     children engine tasks or simulation sets.
                 </para>
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/montecarlo_enginetask.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_simulation_set">
-<info>
-<title xml:id="SimuationSet_34">Simuation Set</title>
+				<info>
+					<title xml:id="SimuationSet_34">Simuation Set</title>
                 </info>
                 <para>
                     A Simulation Set is a specific task for running Monte-Carlo simulations. It is given a random number
@@ -124,8 +127,8 @@
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/montecarlo_simulationset.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_simulation_set_post_process">
-<info>
-<title xml:id="SimuationSetPostProcess_34">Simuation Set Post Process</title>
+				<info>
+					<title xml:id="SimuationSetPostProcess_34">Simuation Set Post Process</title>
                 </info>
                 <para>
                     A simulation set task will return as output a huge number of values (e.g. arrays of size 10000 or
@@ -135,21 +138,21 @@
                     Therefore, a post-treatment needs to be done on this big array.
                     Of course, this post-treatment could be done by an engine task that spawned the simulation set task,
                     but
-                    in that case, the big array would be tranferred by the network from the Worker which handles the
-                    simulation set to the worker which handles the parent engine task.
-                    The Simulation Set Post Process avoids this tranfer, and allows to do some computations on the same
+                    in that case, the big array would be transfered by the network from the Worker which handles the
+                    simulation set to the Worker which handles the parent engine task.
+                    The Simulation Set Post Process avoids this transfer, and allows to do some computations on the same
                     machine which generated the Monte-Carlo simulations.
                 </para>
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/montecarlo_simulationsetpostprocess.snip"/></textobject></programlisting>
             </section>
         </section>
         <section xml:id="mc_example">
-<info>
-<title xml:id="Examples_34">Examples</title>
+			<info>
+				<title xml:id="Examples_34">Examples</title>
             </info>
             <section xml:id="mc_api_basic_processes">
-<info>
-<title xml:id="BasicSimulationsProcesses_34">Basic Simulations Processes</title>
+				<info>
+					<title xml:id="BasicSimulationsProcesses_34">Basic Simulations Processes</title>
                 </info>
                 <para>
                     Some basic Simulation Sets are provided as an example. These basic processes are widely used in the
@@ -159,16 +162,16 @@
                 <programlisting language="java"><textobject><textdata fileref="automatic_snippets/montecarlo_geometricbrownianmotion.snip"/></textobject></programlisting>
             </section>
             <section xml:id="mc_api_basic_applications">
-<info>
-<title xml:id="BasicExampleApplications_34">Basic Example Applications</title>
+				<info>
+					<title xml:id="BasicExampleApplications_34">Basic Example Applications</title>
                 </info>
                 <para>
                     Two basic example applications are provided. The first one computes PI using the Monte-Carlo method
-                    (it's only a theoretic approach as the method is very unefficient to compute PI at a good
+                    (it's only a theoretic approach as the method is very inefficient to compute PI at a good
                     precision).
                     The second example is an European Option Pricing from the financial risk analysis world. Both
                     examples can be found in the subpackage example of the monte-carlo package.
-                    A script exists to launch the European Option and is located at PROACTIVE/examples/montecarlo
+                    A script exists to launch the European Option and is located at <literal>ProActive/examples/montecarlo</literal>
                 </para>
             </section>
         </section>
