@@ -89,6 +89,7 @@ public interface WorkerManager extends WorkerDeadListener {
      * @param schedulerURL URL of a scheduler
      * @param login scheduler username
      * @param password scheduler password
+     * @param classpath an array of directory or jars that will be used by the scheduler to find user classes (i.e. tasks definitions)
      * @throws ProActiveException if a problem occurs while adding resources
      */
     void addResources(String schedulerURL, String login, String password, String[] classpath)
