@@ -73,9 +73,14 @@
       </section>
    </section>
 
-   <section xml:id="QuickExample_62"><info><title >Quick Example</title></info>
-      <para>In this example, we implement a skeleton program that finds prime
-      numbers between an interval using a brute force (naive) approach.</para>
+	<section xml:id="QuickExample_62"><info><title>Quick Example</title></info>
+		<para>
+			Three examples are available in <literal>ProActive/src/Example/org/objectweb/proactive/examples/calcium</literal> and theirs launch scripts
+			are located into <literal>ProActive/examples/calcium</literal>.
+			In this section, we will deal with the <literal>FindPrimes</literal> example.
+			We implement a skeleton program that finds prime
+			numbers between an interval using a brute force (naive) approach.
+		</para>
 
       <section xml:id="Definetheskeletonstructure_62"><info><title >Define the skeleton structure</title></info>
 

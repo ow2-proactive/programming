@@ -58,11 +58,15 @@ public class NQueens implements Serializable {
         NQueens nq = new NQueens();
 
         if (args.length != 5) {
-            nq.solve(16, 14, 5, NQueens.class.getResource("../GCMEnvironmentApplication.xml").getPath(),
-                    "local");
+            System.out.println("Wrong number of arguments");
+            System.out.println("[Usage] org.objectweb.proactive.extensions.calcium.examples.nqueens.NQueens"
+                + " descriptor virtualnode boardSize solvableSize times");
+            System.exit(-1);
+            //            nq.solve(16, 14, 5, NQueens.class.getResource("GCMEnvironmentApplication.xml").getPath(),
+            //                    "local");
         } else {
-            nq.solve(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),
-                    args[3], args[4]);
+            nq.solve(Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]),
+                    args[0], args[1]);
         }
 
         System.exit(0);

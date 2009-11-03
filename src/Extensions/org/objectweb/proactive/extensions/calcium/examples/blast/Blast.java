@@ -69,10 +69,17 @@ public class Blast {
     }
 
     public static void main(String[] args) throws Exception {
-        String descriptor = Blast.class.getResource("LocalDescriptor.xml").getPath();
-        BlastParams param = new BlastParams(new File("/home/mleyton/NOSAVE/blast/query.nt"), new File(
-            "/home/mleyton/NOSAVE/blast/db.nt"), new File("/home/mleyton/NOSAVE/blast/bin-linux/formatdb"),
-            new File("/home/mleyton/NOSAVE/blast/bin-linux/blastall"), true, 2000 * 1024);
+
+        if (args.length < 5) {
+            System.out.println("Wrong number of arguments");
+            System.out.println("[Usage] org.objectweb.proactive.extensions.calcium.examples.blast.Blast "
+                + "DeploymentDescriptor Query Batabase path/to/formatdb path/to/blastall");
+            System.exit(-1);
+        }
+
+        String descriptor = args[0];
+        BlastParams param = new BlastParams(new File(args[1]), new File(args[2]), new File(args[3]),
+            new File(args[4]), true, 2000 * 1024);
 
         Blast blast = new Blast();
         blast.solve(param, descriptor);
