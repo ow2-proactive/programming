@@ -113,8 +113,7 @@ public class BasicPrimeExample extends AbstractExample {
      * @throws ProActiveException 
      * @throws LoginException 
      */
-    public static void main(String[] args) throws TaskException, MalformedURLException, ProActiveException,
-            LoginException {
+    public static void main(String[] args) throws Exception {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 
@@ -159,7 +158,7 @@ public class BasicPrimeExample extends AbstractExample {
         PALifeCycle.exitSuccess();
     }
 
-    protected static void init(String[] args) throws MalformedURLException {
+    protected static void init(String[] args) throws Exception {
         command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
                 "number to check for primality").create("p"));
         command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(

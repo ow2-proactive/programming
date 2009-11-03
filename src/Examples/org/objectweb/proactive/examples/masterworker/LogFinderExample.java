@@ -80,8 +80,7 @@ public class LogFinderExample extends AbstractExample {
      * @throws TaskException
      * @throws ProActiveException
      */
-    public static void main(String[] args) throws MalformedURLException, TaskException, ProActiveException,
-            InterruptedException {
+    public static void main(String[] args) throws Exception {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 
@@ -154,7 +153,7 @@ public class LogFinderExample extends AbstractExample {
      * @param args command line arguments
      * @throws MalformedURLException
      */
-    protected static void init(String[] args) throws MalformedURLException {
+    protected static void init(String[] args) throws Exception {
 
         command_options.addOption(OptionBuilder.withArgName("logDirectory").hasArg().withDescription(
                 "directory where the log files are stored").create("logs"));

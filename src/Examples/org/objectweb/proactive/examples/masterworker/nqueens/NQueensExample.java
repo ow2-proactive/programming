@@ -62,7 +62,7 @@ public class NQueensExample extends AbstractExample {
     private static ProActiveMaster<QueryExtern, Pair<Long, Long>> master;
 
     @SuppressWarnings("unchecked")
-    public static void main(String[] args) throws MalformedURLException, ProActiveException, LoginException {
+    public static void main(String[] args) throws Exception {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 
@@ -144,7 +144,7 @@ public class NQueensExample extends AbstractExample {
         PALifeCycle.exitSuccess();
     }
 
-    protected static void init(String[] args) throws MalformedURLException {
+    protected static void init(String[] args) throws Exception {
         command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(
                 "nqueen board size").create("size"));
         command_options.addOption(OptionBuilder.withArgName("value").hasArg().withDescription(

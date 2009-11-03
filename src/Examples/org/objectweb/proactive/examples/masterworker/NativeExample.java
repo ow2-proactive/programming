@@ -60,7 +60,7 @@ public class NativeExample extends AbstractExample {
      * @throws ProActiveException 
      * @throws LoginException 
      */
-    public static void main(String[] args) throws MalformedURLException, ProActiveException, LoginException {
+    public static void main(String[] args) throws Exception {
         //   Getting command line parameters and creating the master (see AbstractExample)
         init(args);
 
@@ -126,7 +126,7 @@ public class NativeExample extends AbstractExample {
         }
     }
 
-    protected static void init(String[] args) throws MalformedURLException {
+    protected static void init(String[] args) throws Exception {
         // automatically generate the help statement
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("NativeExample", command_options);
