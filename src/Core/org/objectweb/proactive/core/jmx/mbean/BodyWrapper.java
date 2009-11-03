@@ -224,7 +224,7 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
             @Override
             public void run() {
                 // first we wait for the creation of the body
-                while (!BodyWrapper.this.body.isActive()) {
+                while (!BodyWrapper.this.body.isActive() && BodyWrapper.this.body.isAlive()) {
                     try {
                         Thread.sleep(updateFrequence);
                     } catch (InterruptedException e) {
