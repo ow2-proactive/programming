@@ -228,13 +228,21 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
         aomaster.addResources(descriptorURL);
     }
 
+    /** {@inheritDoc} */
     public void addResources(URL descriptorURL, VariableContract contract) throws ProActiveException {
         aomaster.addResources(descriptorURL, contract);
     }
 
+    /** {@inheritDoc} */
     public void addResources(URL descriptorURL, VariableContract contract, String virtualNodeName)
             throws ProActiveException {
         aomaster.addResources(descriptorURL, contract, virtualNodeName);
+    }
+
+    /** {@inheritDoc} */
+    public void addResources(String schedulerURL, String user, String password, String[] classpath)
+            throws ProActiveException {
+        aomaster.addResources(schedulerURL, user, password, classpath);
     }
 
     /**

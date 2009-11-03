@@ -250,6 +250,12 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     }
 
     /** {@inheritDoc} */
+    public void addResources(final String schedulerURL, String login, String password,
+            final String[] classpath) throws ProActiveException {
+        (smanager).addResources(schedulerURL, login, password, classpath);
+    }
+
+    /** {@inheritDoc} */
     public void addResources(final URL descriptorURL, final VariableContract contract,
             final String virtualNodeName) throws ProActiveException {
         (smanager).addResources(descriptorURL, contract, virtualNodeName);

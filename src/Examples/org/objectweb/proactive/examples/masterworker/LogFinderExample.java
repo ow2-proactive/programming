@@ -99,7 +99,9 @@ public class LogFinderExample extends AbstractExample {
         });
 
         // Adding resources
-        if (vn_name == null) {
+        if (schedulerURL != null) {
+            master.addResources(schedulerURL, login, password, classpath);
+        } else if (vn_name == null) {
             master.addResources(descriptor_url);
         } else {
             master.addResources(descriptor_url, vn_name);

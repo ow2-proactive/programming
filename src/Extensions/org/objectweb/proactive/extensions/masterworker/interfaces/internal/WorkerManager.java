@@ -84,6 +84,17 @@ public interface WorkerManager extends WorkerDeadListener {
     void addResources(URL descriptorURL, VariableContract contract) throws ProActiveException;
 
     /**
+     * Connects this master to a ProActive Scheduler<br>
+     * <br/>
+     * @param schedulerURL URL of a scheduler
+     * @param login scheduler username
+     * @param password scheduler password
+     * @throws ProActiveException if a problem occurs while adding resources
+     */
+    void addResources(String schedulerURL, String login, String password, String[] classpath)
+            throws ProActiveException;
+
+    /**
      * Adds the given Collection of nodes to the worker manager
      * @param nodes a collection of nodes
      */

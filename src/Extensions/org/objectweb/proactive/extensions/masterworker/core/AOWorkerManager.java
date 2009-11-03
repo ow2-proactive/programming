@@ -253,6 +253,26 @@ public class AOWorkerManager implements WorkerManager, InitActive, Serializable 
         }
     }
 
+    public void addResources(String schedulerURL, String login, String password, String[] classpath)
+            throws ProActiveException {
+        String workername = schedulerURL + "_" + workerNameCounter++;
+
+        // Creates the worker which will automatically connect to the master
+        try {
+            workers.put(workername, (Worker) PAActiveObject.newActive(
+                    "org.ow2.proactive.scheduler.ext.masterworker.AOSchedulerWorker", new Object[] {
+                            workername, provider, memoryFactory.newMemoryInstance(), schedulerURL, login,
+                            password, classpath }));
+        } catch (ActiveObjectCreationException e) {
+            e.printStackTrace(); // bad node
+        } catch (NodeException e) {
+            e.printStackTrace(); // bad node
+        }
+        if (debug) {
+            logger.debug("Worker " + workername + " created on scheduler " + schedulerURL);
+        }
+    }
+
     private void addResourcesInternal(final GCMVirtualNode virtualnode) throws ProActiveException {
         if (!isTerminated) {
             String vnname = virtualnode.getName();
