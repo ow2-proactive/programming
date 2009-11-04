@@ -37,6 +37,10 @@ import org.objectweb.proactive.core.UniqueID;
 
 
 public class GCSimpleMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private final transient Referenced referenced;
     private final UniqueID sender;
     private final boolean consensus;

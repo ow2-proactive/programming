@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.node.NodeException;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class Sum implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private SubSum[] sums;
 
     public Sum() {

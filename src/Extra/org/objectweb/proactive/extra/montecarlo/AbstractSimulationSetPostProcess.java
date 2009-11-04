@@ -49,6 +49,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public abstract class AbstractSimulationSetPostProcess<T extends Serializable, R extends Serializable>
         implements SimulationSetPostProcess<T, R>, SimulationSet<R> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private SimulationSet<T> simulationSet;
 
     public AbstractSimulationSetPostProcess(SimulationSet<T> simulationSet) {

@@ -41,6 +41,11 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
 
 public class ControllerImplementation extends AbstractProActiveController implements ControllerItf {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     //@snippet-start component_userguide_11
     public ControllerImplementation(Component owner) {
         super(owner);

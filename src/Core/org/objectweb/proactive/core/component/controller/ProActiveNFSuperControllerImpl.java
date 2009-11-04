@@ -42,6 +42,11 @@ import org.objectweb.fractal.api.Component;
 public class ProActiveNFSuperControllerImpl extends ProActiveSuperControllerImpl {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      * Constructor for ProActiveNFSuperController
      * @param owner The Component owner object
      */

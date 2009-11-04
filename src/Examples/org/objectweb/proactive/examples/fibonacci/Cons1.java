@@ -47,6 +47,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class Cons1 implements Serializable, InitActive, RunActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private Add add;
     private Cons2 cons2;
     private BigInteger fibN;

@@ -77,6 +77,11 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.Technical
  */
 public class DataSpacesTechnicalService implements TechnicalService {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public static final String PROPERTY_APPLICATION_ID = "proactive.dataspaces.application_id";
 
     public static final String PROPERTY_NAMING_SERVICE_URL = "proactive.dataspaces.naming_service_url";

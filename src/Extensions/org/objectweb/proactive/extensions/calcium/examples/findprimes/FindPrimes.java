@@ -48,6 +48,10 @@ import org.objectweb.proactive.extensions.calcium.statistics.StatsGlobal;
 
 
 public class FindPrimes implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     // @snippet-start calcium_primes_1
     public Skeleton<Interval, Primes> root;
 

@@ -47,6 +47,11 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 public class A implements Serializable, RunActive {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      *
      */
     int counter = 0;

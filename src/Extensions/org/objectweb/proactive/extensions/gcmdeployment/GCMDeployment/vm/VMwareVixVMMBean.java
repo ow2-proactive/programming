@@ -42,6 +42,10 @@ import org.ow2.proactive.virtualizing.vmwarevix.VMwareVMM.Service;
  *
  */
 public class VMwareVixVMMBean implements VMMBean {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private String uri, user, pwd;
     private int port = 904;
     private Service service = Service.vmwareDefault;

@@ -38,6 +38,10 @@ import org.objectweb.proactive.core.group.MethodCallControlForGroup;
  * @author The ProActive Team
  */
 public class MethodCallBarrierWithMethodName extends MethodCallControlForGroup {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private String[] methodNames;
 
     /**

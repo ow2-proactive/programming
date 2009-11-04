@@ -40,6 +40,10 @@ import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
  * The base vector represents the normal vector, and d the distance to the origin.
  */
 public class Plane extends Primitive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private Vec base;
     private float d;
     private static double mindiff = 1e-6;

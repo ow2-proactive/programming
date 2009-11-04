@@ -38,6 +38,10 @@ import org.objectweb.proactive.api.PAFuture;
 public class AOAContinuation implements java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     boolean isFuture = true;

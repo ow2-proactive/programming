@@ -56,6 +56,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public final class BootstrapServlet extends HttpServlet {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     final static public String NS = "/bootstrap";
     final static public String MAPPING = NS + "/*";
     final static public String VM_ID = "vmid";

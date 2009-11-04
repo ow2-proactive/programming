@@ -35,6 +35,11 @@ import java.io.Serializable;
 
 
 public class SessionTicketProperty implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public long ta;
 
     // indicates an expiracyTime

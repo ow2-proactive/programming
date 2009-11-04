@@ -41,6 +41,10 @@ import org.ow2.proactive.virtualizing.vmwarevi.VMwareVMM;
  *
  */
 public class VMwareVIVMMBean implements VMMBean {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private String uri, user, pwd;
 
     public VMwareVIVMMBean(String uri, String user, String pwd) {

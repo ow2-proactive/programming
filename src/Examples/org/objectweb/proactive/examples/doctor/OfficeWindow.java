@@ -32,6 +32,10 @@
 package org.objectweb.proactive.examples.doctor;
 
 public class OfficeWindow extends javax.swing.JFrame implements java.awt.event.ActionListener {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     DisplayPanel pan;
     javax.swing.JButton bLegend;
     javax.swing.JButton bExit;

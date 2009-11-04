@@ -46,6 +46,11 @@ import org.objectweb.proactive.core.body.tags.Tag;
 
 public class B implements Serializable, InitActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public B() {
     }
 
@@ -86,6 +91,11 @@ public class B implements Serializable, InitActive {
     public boolean localMemoryLeaseExceeded() {
         MessageTags tags = PAMessageTagging.getCurrentTags();
         Tag t = tags.addTag(new Tag("TEST_TAGS_03-B") {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 42L;
+
             public Tag apply() {
                 return this;
             }

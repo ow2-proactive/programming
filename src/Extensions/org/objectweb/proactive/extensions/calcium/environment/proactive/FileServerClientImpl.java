@@ -44,6 +44,10 @@ import org.objectweb.proactive.extensions.calcium.environment.StoredFile;
 
 
 public class FileServerClientImpl implements FileServerClient, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     Node node;
     FileServer fserver;
 

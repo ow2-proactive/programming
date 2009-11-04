@@ -57,6 +57,11 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystemImpl;
  *
  */
 public class Task<T> implements Serializable, Comparable<Task> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS);
 
     //Rebirth preserved parameters

@@ -49,6 +49,10 @@ import org.objectweb.proactive.core.migration.MigrationStrategyManagerImpl;
  */
 public class UnSerializableAgent implements InitActive, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private byte[] saved; //will store the values 
     private transient BigInteger toBeSaved; //will be null after serialization
 

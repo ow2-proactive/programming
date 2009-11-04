@@ -60,6 +60,10 @@ import org.objectweb.proactive.extensions.annotation.MigrationSignal;
  * @author The ProActive Team
  */
 public class ChatGUI extends JFrame {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     public JTextField message = new JTextField(); //55
     public JTextField location = new JTextField(); //20
     public JTextArea text = new JTextArea(25, 55); //25,55
@@ -154,6 +158,11 @@ public class ChatGUI extends JFrame {
      * Action to leave the application (with confirmation)
      */
     private class QuitAction extends AbstractAction {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         public QuitAction() {
             putValue(Action.NAME, "Quit");
             putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_Q));
@@ -179,6 +188,11 @@ public class ChatGUI extends JFrame {
      * Action to send a message
      */
     private class SendAction extends AbstractAction {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         public SendAction() {
             putValue(Action.NAME, "Send");
             putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_S));
@@ -201,6 +215,11 @@ public class ChatGUI extends JFrame {
      * Action to migrate to another node
      */
     private class MigrateAction extends AbstractAction {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         public MigrateAction() {
             putValue(Action.NAME, "Migrate !");
             putValue(Action.MNEMONIC_KEY, Integer.valueOf(KeyEvent.VK_M));

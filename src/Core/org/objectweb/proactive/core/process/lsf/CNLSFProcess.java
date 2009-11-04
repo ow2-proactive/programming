@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.process.ExternalProcess;
  * @since   ProActive 3.0
  */
 public class CNLSFProcess extends LSFBSubProcess {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     protected String queueName;
     protected String jobname = "grid";
 

@@ -48,6 +48,10 @@ import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
  */
 public class ProActiveNameController extends AbstractProActiveController implements NameController,
         ControllerStateDuplication {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     // FIXME coherency between this value and the one in component parameters controller
     String name;
 

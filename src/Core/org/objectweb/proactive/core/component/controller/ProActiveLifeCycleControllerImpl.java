@@ -64,6 +64,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class ProActiveLifeCycleControllerImpl extends AbstractProActiveController implements
         ProActiveLifeCycleController, Serializable, ControllerStateDuplication {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
     protected String fcState = LifeCycleController.STOPPED;
 

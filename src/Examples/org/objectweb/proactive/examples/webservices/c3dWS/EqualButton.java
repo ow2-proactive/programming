@@ -36,6 +36,11 @@ import java.awt.Dimension;
 
 
 class EqualButton extends Button {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public EqualButton(String label) {
         super(label);
     }

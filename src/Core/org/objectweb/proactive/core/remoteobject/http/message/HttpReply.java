@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.remoteobject.http.util.HttpUtils;
  * @see HttpMessage
  */
 public class HttpReply extends HttpMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private Reply reply;
     private UniqueID idBody;
 

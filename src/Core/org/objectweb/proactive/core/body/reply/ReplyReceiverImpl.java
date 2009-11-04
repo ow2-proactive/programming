@@ -36,6 +36,11 @@ import org.objectweb.proactive.core.body.future.FuturePool;
 
 
 public class ReplyReceiverImpl implements ReplyReceiver, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public ReplyReceiverImpl() {
     }
 

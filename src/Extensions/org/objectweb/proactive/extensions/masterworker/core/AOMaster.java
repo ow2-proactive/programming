@@ -80,6 +80,10 @@ import java.util.*;
 public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActive, MasterIntern,
         WorkerDeadListener {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     /** log4j logger for the master */
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER);
     private static final boolean debug = logger.isDebugEnabled();
@@ -1455,6 +1459,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      */
     private class FindWaitFilter implements RequestFilter {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         /** Creates a filter */
         public FindWaitFilter() {
         }
@@ -1472,6 +1481,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      *         Internal class for filtering requests in the queue
      */
     private class NotTerminateFilter implements RequestFilter {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
 
         /** Creates a filter */
         public NotTerminateFilter() {
@@ -1492,6 +1506,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      */
     private class FinalNotTerminateFilter implements RequestFilter {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         /** Creates a filter */
         public FinalNotTerminateFilter() {
         }
@@ -1510,6 +1529,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
      */
     private class FindWorkersRequests implements RequestFilter {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         /** Creates the filter */
         public FindWorkersRequests() {
         }
@@ -1524,6 +1548,11 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     }
 
     private class IsClearingFilter implements RequestFilter {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
 
         public IsClearingFilter() {
 

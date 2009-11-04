@@ -36,6 +36,10 @@ import java.io.Serializable;
 
 public class Task implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     int taskIndex;
     int workerIndex;
 

@@ -50,6 +50,10 @@ import java.io.File;
 
 public class EuropeanOption implements EngineTask<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     public static final String DEFAULT_DESCRIPTOR = "WorkersApplication.xml";
     public static final String DEFAULT_WORKERS_NAME = "Workers";
     public static final double DEFAULT_SPOT_PRICE = 100.0;
@@ -101,6 +105,11 @@ public class EuropeanOption implements EngineTask<double[]> {
         for (int i = 0; i < M; i++) {
             sets.add(new AbstractSimulationSetPostProcess<double[], double[]>(new GeometricBrownianMotion(
                 spot, interest, volatility, maturity, N)) {
+                /**
+                     * 
+                     */
+                private static final long serialVersionUID = 42L;
+
                 // Compute the payoff of both call [index 1] and put [index 0]
                 // options
                 public double[] postprocess(double[] experiencesResults) {

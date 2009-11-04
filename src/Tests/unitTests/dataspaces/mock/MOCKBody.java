@@ -67,6 +67,10 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 
 public class MOCKBody implements Body {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private UniqueID uid;
 
     public MOCKBody() {

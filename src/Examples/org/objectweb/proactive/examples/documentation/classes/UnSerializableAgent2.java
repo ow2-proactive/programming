@@ -45,6 +45,10 @@ import org.objectweb.proactive.api.PAMobileAgent;
  */
 public class UnSerializableAgent2 implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private transient BigInteger toBeSaved; //will be null after serialization
 
     /**

@@ -64,6 +64,10 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  */
 @ActiveObject
 public class PiBBP implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private final static int SIMPLE = 1;
     private final static int PARALLEL = 2;
     private final static int PARALLEL_DISTRIBUTED = 3;

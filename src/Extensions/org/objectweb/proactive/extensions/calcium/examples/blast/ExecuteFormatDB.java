@@ -45,6 +45,10 @@ import org.objectweb.proactive.extensions.calcium.system.SkeletonSystem;
 @StateFul(value = false)
 @PrefetchFilesMatching(name = "db.*|formatdb")
 public class ExecuteFormatDB implements Execute<BlastParams, BlastParams> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_APPLICATION);
 
     public BlastParams execute(BlastParams param, SkeletonSystem system) throws IOException,

@@ -39,6 +39,11 @@ import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 public class DefaultProActiveSecurityManager extends ProActiveSecurityManager implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      *
      */
 

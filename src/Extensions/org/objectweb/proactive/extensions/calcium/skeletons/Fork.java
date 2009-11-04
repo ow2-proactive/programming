@@ -173,6 +173,10 @@ public class Fork<P extends java.io.Serializable, R extends java.io.Serializable
      */
     @StateFul(value = false)
     static public class ForkDefaultDivide<T> implements Divide<T, T> {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
         int number;
 
         /**
@@ -210,6 +214,11 @@ public class Fork<P extends java.io.Serializable, R extends java.io.Serializable
      *
      */
     static public class ForkDefaultConquer<T> implements Conquer<T, T> {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
 
         /**
          * @see Conquer#conquer(Object[], SkeletonSystem)

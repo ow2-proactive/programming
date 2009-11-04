@@ -57,6 +57,10 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
  * @author The ProActive Team
  */
 public class FileStaging implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_SYSTEM);
     ArrayList<ProxyFile> beforeProxyFiles;
 

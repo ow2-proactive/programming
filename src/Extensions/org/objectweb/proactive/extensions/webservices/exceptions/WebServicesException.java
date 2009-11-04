@@ -42,6 +42,11 @@ import org.objectweb.proactive.core.ProActiveException;
  */
 public class WebServicesException extends ProActiveException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public WebServicesException() {
         super();
     }

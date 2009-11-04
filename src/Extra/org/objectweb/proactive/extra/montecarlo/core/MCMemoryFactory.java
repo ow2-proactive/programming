@@ -48,6 +48,11 @@ import java.util.Map;
  */
 public class MCMemoryFactory implements MemoryFactory {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     private Class<?> prngClass;
 
     private RandomStreamFactory prngfactory = null;

@@ -40,6 +40,11 @@ import java.io.IOException;
  * @see java.rmi.RemoteException
  */
 public class HTTPRemoteException extends IOException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public HTTPRemoteException() {
         super();
     }

@@ -69,6 +69,11 @@ public class TestDelayedInitActive extends FunctionalTest {
     }
 
     static public class AO implements Serializable, InitActive {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         public void initActivity(Body body) {
             // Enlarge the race condition window
             raceConditionHelper();

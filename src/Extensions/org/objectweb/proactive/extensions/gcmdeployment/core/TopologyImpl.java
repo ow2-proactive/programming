@@ -50,6 +50,10 @@ import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLogg
 
 
 public class TopologyImpl implements Topology, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     protected long id;
     protected String applicationDescriptorPath;
     protected String deploymentDescriptorPath;

@@ -36,6 +36,10 @@ import org.objectweb.proactive.examples.StandardFrame;
 
 
 public class PenguinApplet extends StandardFrame implements PenguinMessageReceiver {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private PenguinControler controler;
     private Action startAction;
     private Action suspendAction;
@@ -263,6 +267,10 @@ public class PenguinApplet extends StandardFrame implements PenguinMessageReceiv
     }
 
     private static class PenguinListModel extends javax.swing.AbstractListModel {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
         private CircularArrayList<PenguinWrapper> penguinList;
 
         //
@@ -306,6 +314,10 @@ public class PenguinApplet extends StandardFrame implements PenguinMessageReceiv
     } // end inner class PenguinListModel
 
     private static class PenguinWrapper implements java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
         Penguin penguin;
         String name;
 

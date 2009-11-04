@@ -45,6 +45,11 @@ import org.objectweb.proactive.core.mop.MethodCall;
 public class MyInputInterceptor extends AbstractProActiveController implements InputInterceptor,
         ControllerItf {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public MyInputInterceptor(Component owner) {
         super(owner);
     }

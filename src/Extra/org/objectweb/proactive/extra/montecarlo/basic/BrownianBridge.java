@@ -47,6 +47,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 @PublicAPI
 public class BrownianBridge implements SimulationSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private double w0, wT, t, T;
 
     /**

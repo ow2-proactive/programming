@@ -62,6 +62,10 @@ import functionalTests.component.descriptor.fractaladl.Test;
 // solution : we run the test from an active object (no HalfBody involved)
 public class DummyAO implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private GCMApplication newDeploymentDescriptor = null;
 
     public boolean goOldDeployment() throws Exception {

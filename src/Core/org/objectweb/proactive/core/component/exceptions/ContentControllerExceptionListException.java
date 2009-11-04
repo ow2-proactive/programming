@@ -49,6 +49,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class ContentControllerExceptionListException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     Map<Component, IllegalLifeCycleException> lifeCycleExceptions = null;
     Map<Component, IllegalContentException> contentExceptions = null;
 

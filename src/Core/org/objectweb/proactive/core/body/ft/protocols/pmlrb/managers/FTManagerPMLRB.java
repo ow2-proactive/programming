@@ -72,6 +72,11 @@ public class FTManagerPMLRB extends FTManager {
      *
      */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     /** Incarantion is not used for PML. Set to a default value */
     public static final int INC_VALUE = Integer.MAX_VALUE;
 

@@ -40,6 +40,10 @@ import org.ow2.proactive.virtualizing.xenserver.XenServerVMM;
  * {@link VMMBean} implementation for XenServer platform
  */
 public class XenServerVMMBean implements VMMBean {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private String uri, user, pwd;
 
     XenServerVMMBean(String uri, String user, String pwd) {

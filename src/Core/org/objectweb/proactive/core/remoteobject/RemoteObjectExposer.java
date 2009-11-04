@@ -55,6 +55,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * references on already activated protocols, allows to unregister and unexport one or more protocols.
  */
 public class RemoteObjectExposer<T> implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     protected Hashtable<URI, InternalRemoteRemoteObject> activeRemoteRemoteObjects;
     private String className;
     private RemoteObjectImpl<T> remoteObject;

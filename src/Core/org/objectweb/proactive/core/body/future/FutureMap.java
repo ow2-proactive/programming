@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.body.UniversalBody;
  * @see FutureProxy
  */
 public class FutureMap extends Object implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     // main map
     private Map<UniqueID, HashMap<Long, FuturesAndACs>> indexedByBodyID;
 

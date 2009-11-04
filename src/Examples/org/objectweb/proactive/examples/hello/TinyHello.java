@@ -46,6 +46,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  * The object does nothing but reflect the host its on. */
 @ActiveObject
 public class TinyHello implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private final String message = "Hello World!";
 

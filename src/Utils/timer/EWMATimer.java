@@ -40,6 +40,10 @@ import java.util.Random;
  *
  */
 public class EWMATimer extends AverageMicroTimer {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     protected double alpha;
     protected double average;
 

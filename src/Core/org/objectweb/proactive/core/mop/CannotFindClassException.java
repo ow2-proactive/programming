@@ -40,6 +40,11 @@ package org.objectweb.proactive.core.mop;
  * RuntimeException, it does not need to be caught within the initializer.
  */
 public class CannotFindClassException extends MOPRuntimeException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public CannotFindClassException() {
     }
 

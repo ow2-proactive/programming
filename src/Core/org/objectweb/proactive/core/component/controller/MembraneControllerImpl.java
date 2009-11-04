@@ -76,6 +76,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class MembraneControllerImpl extends AbstractProActiveController implements MembraneController,
         Serializable, ControllerStateDuplication {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private Map<String, Component> nfcomponents;
     private String membraneState;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);

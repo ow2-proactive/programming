@@ -65,6 +65,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class HalfFTManagerPMLRB extends FTManager {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      *
      */
 

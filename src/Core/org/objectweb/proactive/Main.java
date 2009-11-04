@@ -45,7 +45,7 @@ public class Main {
      * @return String
      */
     public static String getProActiveVersion() {
-        return "2008-07-10 11:59:18";
+        return "4.2.0 Technology preview";
     }
 
     public static void main(String[] args) {

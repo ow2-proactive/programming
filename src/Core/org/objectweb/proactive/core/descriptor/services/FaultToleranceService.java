@@ -53,6 +53,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class FaultToleranceService implements UniversalService {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     public static final String FT_SERVICE_NAME = "Fault-Tolerance Service";
     public static final String DEFAULT_PARAM_LINE = "-Dproactive.ft=false";
 

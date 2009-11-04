@@ -41,6 +41,11 @@ import org.objectweb.proactive.core.ProActiveException;
 public class DataSpacesException extends ProActiveException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      *
      */
     public DataSpacesException() {

@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.mop.ClassNotReifiableException;
  */
 public class ComplexArrayGroup implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private ComplexArray arrays;
     private ComplexArray[] array; // just for efficient access
     private int rank;

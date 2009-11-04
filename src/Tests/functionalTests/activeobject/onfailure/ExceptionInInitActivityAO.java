@@ -38,6 +38,11 @@ import org.objectweb.proactive.InitActive;
 
 
 public class ExceptionInInitActivityAO implements Serializable, InitActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public ExceptionInInitActivityAO() {
 
     }

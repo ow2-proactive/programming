@@ -45,6 +45,11 @@ import org.objectweb.proactive.core.ProActiveException;
 public class UnknownProtocolException extends ProActiveException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      *
      */
     public UnknownProtocolException() {

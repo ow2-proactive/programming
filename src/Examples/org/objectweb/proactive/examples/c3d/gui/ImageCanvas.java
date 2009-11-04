@@ -48,6 +48,10 @@ import org.objectweb.proactive.examples.c3d.Interval;
  * A visual Component for an Image, which displays results coming from Renderers
  */
 public class ImageCanvas extends Canvas {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private int my_HEIGHT;
     private int my_WIDTH;
     private Dimension preferedSize; // the Canvas prefered size

@@ -56,6 +56,10 @@ import org.xml.sax.SAXException;
 
 public class VariableContractImpl implements VariableContract, Serializable, Cloneable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT);
     public static VariableContractImpl xmlproperties = null;
     public static final Lock lock = new Lock();
@@ -64,6 +68,10 @@ public class VariableContractImpl implements VariableContract, Serializable, Clo
     private static final Pattern legalPattern = Pattern.compile("^\\$\\{[\\w\\.]+\\}$");
 
     private class PropertiesDatas implements Serializable, Cloneable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
         public String value;
         public VariableContractType type;
         public String setFrom; //Descriptor, Program

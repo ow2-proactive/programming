@@ -45,6 +45,11 @@ import org.objectweb.proactive.core.mop.StubObject;
 
 
 public class TimedRequestWithLocationServer extends RequestImpl implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     private static final int MAX_TRIES = 30;
 
     /**

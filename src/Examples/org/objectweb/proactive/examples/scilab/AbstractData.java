@@ -49,6 +49,10 @@ import ptolemy.data.Token;
 public class AbstractData implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     private SciData sciData;

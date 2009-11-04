@@ -53,6 +53,10 @@ import org.objectweb.proactive.examples.jmx.remote.management.utils.Constants;
 public class RemoteBundle extends ManageableEntity implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     private ArrayList<RemoteService> services = new ArrayList<RemoteService>();

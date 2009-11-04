@@ -59,6 +59,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class FuturePool extends Object implements java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     //
     // -- STATIC MEMBERS -----------------------------------------------
     //
@@ -616,6 +621,11 @@ public class FuturePool extends Object implements java.io.Serializable {
      * @see ActiveACQueue
      */
     private class ACService implements java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         // bodies that have to be updated
         private ArrayList<UniversalBody> dests;
 

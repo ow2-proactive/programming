@@ -64,6 +64,10 @@ public class TestSubscribeAttachmentFromAO extends FunctionalTest {
     }
 
     static public class TestSubscribeAttachmentFromAODeployer implements Serializable, InitActive {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
         GCMApplication gcma;
         boolean notified = false;
 

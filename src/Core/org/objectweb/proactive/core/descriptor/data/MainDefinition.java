@@ -52,6 +52,11 @@ public class MainDefinition implements Serializable {
     //  ----- PRIVATE MEMBERS -----------------------------------------------------------------------------------
     //
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     /** all virtualNodes are put in a List of VirtualNode */
     private List<VirtualNodeInternal> virtualNodeList;
 

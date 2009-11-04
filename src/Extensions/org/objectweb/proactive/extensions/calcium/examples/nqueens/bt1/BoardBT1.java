@@ -37,6 +37,11 @@ import org.objectweb.proactive.extensions.calcium.examples.nqueens.Board;
 public class BoardBT1 extends Board {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      * Constructor for backtrac1 boards
      *
      * @param n Size of the board

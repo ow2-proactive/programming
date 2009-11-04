@@ -62,6 +62,10 @@ public class DummySender implements UniversalBody {
     // ---- DUMMY SENDER ---
     //
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private static DummySender instance = new DummySender();
 
     public static DummySender getDummySender() {

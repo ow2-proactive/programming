@@ -46,6 +46,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 @PublicAPI
 public class GeometricBrownianMotionMultipleCashDividends implements SimulationSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private double Y, sigma;
     private double T;
     private int N;

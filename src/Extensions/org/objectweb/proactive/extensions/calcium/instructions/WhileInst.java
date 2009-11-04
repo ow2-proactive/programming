@@ -43,6 +43,10 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
 public class WhileInst<P> implements Instruction<P, P> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     Condition<P> cond;
     Stack<Instruction> childStack;
 

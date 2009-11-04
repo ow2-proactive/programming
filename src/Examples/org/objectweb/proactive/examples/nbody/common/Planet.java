@@ -39,6 +39,11 @@ import java.io.Serializable;
  */
 public class Planet implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     /** Time step, the smaller the more precise the movement */
     private final double dt = 0.002;
 

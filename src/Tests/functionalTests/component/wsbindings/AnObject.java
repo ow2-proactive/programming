@@ -48,6 +48,10 @@ import java.io.Serializable;
  * @author The ProActive Team
  */
 public class AnObject implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private String id;
     private int intField;
     private double[] arrayField;

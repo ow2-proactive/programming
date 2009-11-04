@@ -67,6 +67,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class GatherRequestsQueue implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     //private ProActiveComponent owner;
     private GatherFuturesHandler futuresHandler; // primitive pooling
     private List<ItfID> connectedClientItfs; // consistency?

@@ -47,6 +47,11 @@ public class ScilabException extends TaskException {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      * exception with the given message
      * @param message message of the exception
      */

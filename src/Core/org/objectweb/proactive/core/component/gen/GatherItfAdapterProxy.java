@@ -41,6 +41,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class GatherItfAdapterProxy implements InvocationHandler, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_GATHERCAST);
     Object delegatee = null;
 

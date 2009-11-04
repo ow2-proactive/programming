@@ -43,6 +43,10 @@ import org.objectweb.proactive.ext.hpc.exchange.ExchangeableArrayPointer;
 
 public class RequestExchange extends RequestImpl {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     // Variables related to source and destination ranks
     transient private int tagID;
     transient private int destinationUID;

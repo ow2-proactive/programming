@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.UniqueID;
  * @author The ProActive Team
  */
 public class ItfID implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private String itfName;
     private UniqueID componentBodyID;
     boolean isClientItf = false;

@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.component.controller.PriorityController.Requ
  *
  */
 public class NF2RequestFilter implements RequestFilter {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private PriorityController pc;
 
     public NF2RequestFilter(PriorityController pc) {

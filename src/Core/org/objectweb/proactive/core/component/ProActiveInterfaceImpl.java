@@ -49,6 +49,10 @@ import org.objectweb.proactive.core.component.representative.ProActiveComponentR
  * @author The ProActive Team
  */
 public abstract class ProActiveInterfaceImpl implements ProActiveInterface, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private Component owner;
     private String name;
     private Type type;

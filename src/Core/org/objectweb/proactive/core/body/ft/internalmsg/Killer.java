@@ -43,6 +43,11 @@ import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 public class Killer implements FTMessage {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      *
      */
     public Killer() {

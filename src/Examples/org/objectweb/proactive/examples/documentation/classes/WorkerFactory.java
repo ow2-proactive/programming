@@ -46,6 +46,11 @@ import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 public class WorkerFactory extends Worker {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      * Create a new Worker active object
      *
      * @param age

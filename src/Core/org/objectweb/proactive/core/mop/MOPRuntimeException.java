@@ -32,6 +32,10 @@
 package org.objectweb.proactive.core.mop;
 
 public abstract class MOPRuntimeException extends RuntimeException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     protected Throwable detail;
 
     /**

@@ -42,6 +42,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 @ActiveObject
 public class Launcher implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private List<Node> nodesList;
 

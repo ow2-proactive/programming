@@ -41,6 +41,10 @@ import java.rmi.server.RMIServerSocketFactory;
 
 public class BenchSocketFactory extends BenchFactory implements RMIServerSocketFactory,
         RMIClientSocketFactory, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     //protected ArrayList streamList;
     protected static boolean measure = true;
 

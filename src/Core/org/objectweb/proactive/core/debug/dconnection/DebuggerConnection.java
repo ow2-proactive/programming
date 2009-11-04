@@ -63,6 +63,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class DebuggerConnection implements Serializable, NotificationListener {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private static DebuggerConnection debuggerConnection;
     private static Logger debuggerLogger = ProActiveLogger.getLogger(Loggers.DEBUGGER);
     private String nodeName;

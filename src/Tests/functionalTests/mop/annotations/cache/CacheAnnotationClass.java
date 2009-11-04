@@ -39,6 +39,10 @@ import org.objectweb.proactive.annotation.Cache;
 
 public class CacheAnnotationClass implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private int i;
     private Object o;
 

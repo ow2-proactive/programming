@@ -42,6 +42,10 @@ import org.objectweb.proactive.core.util.wrapper.IntWrapper;
  * Used to explain asynchronous behaviour.
  */
 public class Value implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     IntWrapper age;
     String name;
 

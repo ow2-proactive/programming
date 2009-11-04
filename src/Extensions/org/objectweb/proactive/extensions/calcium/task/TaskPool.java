@@ -57,6 +57,11 @@ import org.objectweb.proactive.extensions.calcium.statistics.StatsGlobalImpl;
  *
  */
 public class TaskPool implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_KERNEL);
 
     //State Queues
@@ -434,6 +439,10 @@ public class TaskPool implements Serializable {
     }
 
     class ReadyQueue implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
         //Root tasks that are in this queue for the first time
         PriorityQueue<Task<?>> newRoots;
         //Root tasks that have already been in this queue before

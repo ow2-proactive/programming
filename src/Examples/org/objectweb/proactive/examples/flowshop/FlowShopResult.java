@@ -46,6 +46,11 @@ import java.io.Serializable;
 public class FlowShopResult implements Comparable<FlowShopResult>, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      * A job permutation
      */
     public int[] permutation;

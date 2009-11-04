@@ -50,6 +50,10 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.RealEventObse
 public class Timed implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     private HierarchicalTimer timer;

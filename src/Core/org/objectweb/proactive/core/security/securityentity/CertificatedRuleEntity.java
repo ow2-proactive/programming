@@ -44,6 +44,10 @@ import org.objectweb.proactive.core.security.TypedCertificate;
 public class CertificatedRuleEntity extends RuleEntity {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     protected final TypedCertificate certificate;

@@ -42,6 +42,10 @@ import java.io.Serializable;
 public class Status implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     public static final int OK = 0;

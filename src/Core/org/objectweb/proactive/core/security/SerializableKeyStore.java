@@ -51,6 +51,10 @@ import java.security.cert.CertificateException;
 public class SerializableKeyStore implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     protected transient KeyStore keyStore;

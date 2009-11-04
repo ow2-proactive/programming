@@ -56,6 +56,11 @@ import org.objectweb.proactive.extra.messagerouting.remoteobject.util.MessageRou
 public class MessageRoutingRemoteObjectLookupMessage extends MessageRoutingMessage implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      * Construct a lookup message
      * 
      * @param uri

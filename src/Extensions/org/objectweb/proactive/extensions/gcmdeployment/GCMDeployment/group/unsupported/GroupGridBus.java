@@ -38,6 +38,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group.Abst
 
 
 public class GroupGridBus extends AbstractGroup {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private List<String> argumentsList;
 
     @Override

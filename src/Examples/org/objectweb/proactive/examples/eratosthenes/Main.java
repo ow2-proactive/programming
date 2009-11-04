@@ -219,6 +219,10 @@ public class Main implements ActivePrimeContainerCreator, InitActive {
 
     /** class for control window. */
     class ControlFrame extends JFrame implements ActionListener {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
         private JButton exitButton;
         private JToggleButton pauseButton;
         private Main main;

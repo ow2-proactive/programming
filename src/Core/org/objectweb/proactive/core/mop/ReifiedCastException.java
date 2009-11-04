@@ -32,6 +32,11 @@
 package org.objectweb.proactive.core.mop;
 
 public class ReifiedCastException extends BehavioralException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public ReifiedCastException() {
     }
 

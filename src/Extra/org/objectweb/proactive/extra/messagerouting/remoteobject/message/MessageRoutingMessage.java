@@ -48,6 +48,11 @@ import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingExc
  */
 
 public abstract class MessageRoutingMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_REMOTE_OBJECT);
 
     /** The recipient of this message */

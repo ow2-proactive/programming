@@ -55,6 +55,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class Session implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      *
      */
 

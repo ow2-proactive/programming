@@ -1114,6 +1114,11 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
 
     // a utility class mocking a component
     private static class MockComponent implements Component, Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         public Object getFcInterface(String interfaceName) throws NoSuchInterfaceException {
             return null;
         }

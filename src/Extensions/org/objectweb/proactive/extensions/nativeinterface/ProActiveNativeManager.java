@@ -53,6 +53,10 @@ import org.objectweb.proactive.extensions.nativeinterface.spmd.NativeSpmd;
 
 
 public class ProActiveNativeManager implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.NATIVE_CONTROL_MANAGER);
     public final static String LIBRARY_NAME = "ProActiveNativeComm";
     public final static String FULL_LIBRARY_NAME = "lib" + LIBRARY_NAME + ".so";

@@ -42,6 +42,11 @@ import org.objectweb.proactive.core.mop.MethodCall;
  * process it instead of sending it to the remote object it represents.
  */
 public class InternalRemoteRemoteObjectRequest extends RequestImpl {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public InternalRemoteRemoteObjectRequest(MethodCall methodCall) {
         super(methodCall, false);
     }

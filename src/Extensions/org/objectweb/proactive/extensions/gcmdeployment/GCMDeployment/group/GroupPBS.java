@@ -41,6 +41,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 
 
 public class GroupPBS extends AbstractGroup {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     private String resources = null;
     private String wallTime;
     private int nodes;

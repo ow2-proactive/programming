@@ -44,6 +44,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class ProActiveRuntimeException extends RuntimeException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public ProActiveRuntimeException() {
         super();
     }

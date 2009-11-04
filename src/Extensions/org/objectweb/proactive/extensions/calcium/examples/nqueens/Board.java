@@ -32,6 +32,10 @@
 package org.objectweb.proactive.extensions.calcium.examples.nqueens;
 
 public class Board implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
     //board dimension
     public int n;
     public int solvableSize;

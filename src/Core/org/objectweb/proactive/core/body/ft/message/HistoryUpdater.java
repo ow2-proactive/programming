@@ -49,6 +49,11 @@ public class HistoryUpdater implements Serializable {
      *
      */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     /** Reception events, i.e. id of the senders */
     public List<UniqueID> elements;
 

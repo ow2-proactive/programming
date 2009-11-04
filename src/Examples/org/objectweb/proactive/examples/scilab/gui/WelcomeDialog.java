@@ -43,6 +43,10 @@ import javax.swing.JPanel;
 public class WelcomeDialog extends JDialog {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     private JPanel panelLogo = null;
@@ -53,6 +57,11 @@ public class WelcomeDialog extends JDialog {
 
         logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("img/logo.jpg"));
         panelLogo = new JPanel() {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 42L;
 
             /**
              *

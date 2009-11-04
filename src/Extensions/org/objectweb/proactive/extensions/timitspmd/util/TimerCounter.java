@@ -44,6 +44,10 @@ import java.io.Serializable;
 public class TimerCounter implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     private int id;

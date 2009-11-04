@@ -38,6 +38,11 @@ package org.objectweb.proactive.extensions.dataspaces.exceptions;
 public class ApplicationAlreadyRegisteredException extends ConfigurationException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      *
      */
     public ApplicationAlreadyRegisteredException() {

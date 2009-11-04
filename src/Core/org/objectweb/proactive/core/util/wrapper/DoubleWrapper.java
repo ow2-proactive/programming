@@ -48,6 +48,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class DoubleWrapper implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      * The primitive value.
      */
     protected Double value;

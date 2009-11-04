@@ -80,6 +80,10 @@ import org.objectweb.proactive.extensions.timitspmd.util.XMLHelper;
 public class MatrixChart implements Chart {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+    /**
      *
      */
     public static final URL logoFile = MatrixChart.class
@@ -317,6 +321,11 @@ public class MatrixChart implements Chart {
          *
          */
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
         /** The current viewed row */
         private int currentRow = 0;
 
@@ -443,6 +452,11 @@ public class MatrixChart implements Chart {
     private static class CustomAxis extends NumberAxis {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
+
+        /**
          *
          */
         public CustomAxis(String labelName) {
@@ -492,6 +506,11 @@ public class MatrixChart implements Chart {
     }
 
     private class CustomTickUnit extends NumberTickUnit {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 42L;
 
         /**
          *

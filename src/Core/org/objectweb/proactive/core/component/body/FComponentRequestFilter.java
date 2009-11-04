@@ -43,6 +43,11 @@ import org.objectweb.proactive.core.component.request.ComponentRequest;
  *
  */
 public class FComponentRequestFilter implements RequestFilter {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
     public boolean acceptRequest(Request request) {
         if (request instanceof ComponentRequest) {
             return !((ComponentRequest) request).isControllerRequest();

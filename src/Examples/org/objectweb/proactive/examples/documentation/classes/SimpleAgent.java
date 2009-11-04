@@ -45,6 +45,11 @@ import org.objectweb.proactive.api.PAMobileAgent;
 public class SimpleAgent implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 42L;
+
+    /**
      * Empty, no-arg constructor required by ProActive
      */
     public SimpleAgent() {
