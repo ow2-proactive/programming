@@ -32,7 +32,6 @@
 package org.objectweb.proactive.core.descriptor.legacyparser;
 
 import java.io.File;
-import java.util.StringTokenizer;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
@@ -44,7 +43,6 @@ import org.objectweb.proactive.core.process.IndependentListProcess;
 import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.JVMProcess.PriorityLevel;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferWorkShop;
-import org.objectweb.proactive.core.process.glite.GLiteProcess;
 import org.objectweb.proactive.core.process.globus.GlobusProcess;
 import org.objectweb.proactive.core.process.gridengine.GridEngineSubProcess;
 import org.objectweb.proactive.core.process.lsf.LSFBSubProcess;
@@ -88,7 +86,6 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
         this.addHandler(PBS_PROCESS_TAG, new PBSProcessHandler(proActiveDescriptor));
         this.addHandler(GRID_ENGINE_PROCESS_TAG, new GridEngineProcessHandler(proActiveDescriptor));
         this.addHandler(OAR_PROCESS_TAG, new OARProcessHandler(proActiveDescriptor));
-        this.addHandler(GLITE_PROCESS_TAG, new GLiteProcessHandler(proActiveDescriptor));
         this.addHandler(OARGRID_PROCESS_TAG, new OARGRIDProcessHandler(proActiveDescriptor));
         this.addHandler(MPI_PROCESS_TAG, new MPIProcessHandler(proActiveDescriptor));
         this.addHandler(DEPENDENT_PROCESS_SEQUENCE_TAG, new DependentProcessSequenceHandler(
@@ -1093,253 +1090,6 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
         }
 
         //end of inner class GlobusOptionHandler
-    }
-
-    protected class GLiteProcessHandler extends ProcessHandler {
-        protected Object resultObject = null;
-
-        public GLiteProcessHandler(ProActiveDescriptorInternal proActiveDescriptor) {
-            super(proActiveDescriptor);
-            UnmarshallerHandler pathHandler = new PathHandler();
-            BasicUnmarshallerDecorator bch = new BasicUnmarshallerDecorator();
-            bch.addHandler(ABS_PATH_TAG, pathHandler);
-            bch.addHandler(REL_PATH_TAG, pathHandler);
-            this.addHandler(GLITE_CONFIG_TAG, bch);
-            this.addHandler(GLITE_ENVIRONMENT_TAG, new SingleValueUnmarshaller());
-            this.addHandler(GLITE_REQUIREMENTS_TAG, new SingleValueUnmarshaller());
-            this.addHandler(GLITE_INPUTDATA_TAG, new GLiteInputDataHandler());
-            this.addHandler(GLITE_RANK_TAG, new SingleValueUnmarshaller());
-            this.addHandler(GLITE_PROCESS_OPTIONS_TAG, new GLiteOptionHandler());
-        }
-
-        public void setResultObject(Object obj) {
-            try {
-                resultObject = obj;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public Object getResultObject() throws org.xml.sax.SAXException {
-            setResultObject(targetProcess);
-            return resultObject;
-        }
-
-        @Override
-        public void startContextElement(String name, Attributes attributes) throws org.xml.sax.SAXException {
-            super.startContextElement(name, attributes);
-
-            try {
-                String type = (attributes.getValue("Type"));
-                if (checkNonEmpty(type)) {
-                    ((GLiteProcess) targetProcess).setJobType(type);
-                }
-                String jobJobType = (attributes.getValue("jobType"));
-                if (checkNonEmpty(type)) {
-                    ((GLiteProcess) targetProcess).setJobJobType(jobJobType);
-                }
-                String jdlFile = (attributes.getValue("JDLFileName"));
-                if (checkNonEmpty(jdlFile)) {
-                    ((GLiteProcess) targetProcess).setFileName(jdlFile);
-                }
-                String hostname = (attributes.getValue("hostname"));
-                if (checkNonEmpty(hostname)) {
-                    ((GLiteProcess) targetProcess).setNetServer(hostname);
-                }
-                String executable = (attributes.getValue("executable"));
-                if (checkNonEmpty(executable)) {
-                    ((GLiteProcess) targetProcess).setJobExecutable(executable);
-                    ((GLiteProcess) targetProcess).setCommand_path(executable);
-                }
-                String stdOutput = (attributes.getValue("stdOutput"));
-                if (checkNonEmpty(stdOutput)) {
-                    ((GLiteProcess) targetProcess).setJobStdOutput(stdOutput);
-                }
-                String stdInput = (attributes.getValue("stdInput"));
-                if (checkNonEmpty(stdInput)) {
-                    ((GLiteProcess) targetProcess).setJobStdInput(stdInput);
-                }
-                String stdError = (attributes.getValue("stdError"));
-                if (checkNonEmpty(stdError)) {
-                    ((GLiteProcess) targetProcess).setJobStdError(stdError);
-                }
-                String outputse = (attributes.getValue("outputse"));
-                if (checkNonEmpty(outputse)) {
-                    ((GLiteProcess) targetProcess).setJobOutput_se(outputse);
-                }
-                String virtualOrganisation = (attributes.getValue("virtualOrganisation"));
-                if (checkNonEmpty(virtualOrganisation)) {
-                    ((GLiteProcess) targetProcess).setJobVO(virtualOrganisation);
-                }
-                String retryCount = (attributes.getValue("retryCount"));
-                if (checkNonEmpty(retryCount)) {
-                    ((GLiteProcess) targetProcess).setJobRetryCount(retryCount);
-                }
-                String myProxyServer = (attributes.getValue("myProxyServer"));
-                if (checkNonEmpty(myProxyServer)) {
-                    ((GLiteProcess) targetProcess).setJobMyProxyServer(myProxyServer);
-                }
-                String nodeNumber = (attributes.getValue("nodeNumber"));
-                if (checkNonEmpty(nodeNumber)) {
-                    ((GLiteProcess) targetProcess).setJobNodeNumber(Integer.parseInt(nodeNumber));
-                }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
-                throws org.xml.sax.SAXException {
-            try {
-                if (name.equals(GLITE_CONFIG_TAG)) {
-                    ((GLiteProcess) targetProcess).setConfigFile((String) activeHandler.getResultObject());
-                }
-                if (name.equals(GLITE_ENVIRONMENT_TAG)) {
-                    String value = (String) activeHandler.getResultObject();
-                    ((GLiteProcess) targetProcess).setJobEnvironment(value);
-                } else if (name.equals(GLITE_REQUIREMENTS_TAG)) {
-                    String value = (String) activeHandler.getResultObject();
-                    ((GLiteProcess) targetProcess).setJobRequirements(value);
-                } else if (name.equals(GLITE_RANK_TAG)) {
-                    String value = (String) activeHandler.getResultObject();
-                    ((GLiteProcess) targetProcess).setJobRank(value);
-                } else {
-                    super.notifyEndActiveHandler(name, activeHandler);
-                }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        protected class GLiteInputDataHandler extends PassiveCompositeUnmarshaller {
-            public GLiteInputDataHandler() {
-                super();
-            }
-
-            @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
-                super.startContextElement(name, attributes);
-
-                try {
-                    String dataAccessProtocol = (attributes.getValue("dataAccessProtocol"));
-                    if (checkNonEmpty(dataAccessProtocol)) {
-                        ((GLiteProcess) targetProcess).setJobDataAccessProtocol(dataAccessProtocol);
-                    }
-                    String storageIndex = (attributes.getValue("storageIndex"));
-                    if (checkNonEmpty(storageIndex)) {
-                        ((GLiteProcess) targetProcess).setJobStorageIndex(storageIndex);
-                    }
-
-                    /*String dataCatalog = (attributes.getValue("dataCatalog"));
-                       if (checkNonEmpty(dataCatalog)) {
-                       gLiteProcess.jad.addAttribute(Jdl.CdataCatalog);
-                       }*/
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
-                    throws org.xml.sax.SAXException {
-            }
-        }
-
-        protected class GLiteRankHandler extends PassiveCompositeUnmarshaller {
-            public GLiteRankHandler() {
-                super();
-            }
-
-            @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
-                super.startContextElement(name, attributes);
-
-                try {
-                    String fuzzyrank = (attributes.getValue("fuzzyrank"));
-                    if (checkNonEmpty(fuzzyrank)) {
-                        ((GLiteProcess) targetProcess).setJobFuzzyRank(fuzzyrank);
-                    }
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
-                    throws org.xml.sax.SAXException {
-            }
-        }
-
-        protected class GLiteOptionHandler extends PassiveCompositeUnmarshaller {
-            public GLiteOptionHandler() {
-                UnmarshallerHandler pathHandler = new PathHandler();
-                BasicUnmarshallerDecorator bch = new BasicUnmarshallerDecorator();
-                bch.addHandler(ABS_PATH_TAG, pathHandler);
-                bch.addHandler(REL_PATH_TAG, pathHandler);
-                this.addHandler(GLITE_PATH_TAG, bch);
-                this.addHandler(GLITE_CONFIG_TAG, bch);
-                this.addHandler(GLITE_REMOTE_PATH_TAG, bch);
-                this.addHandler(GLITE_INPUTSANDBOX_TAG, new SingleValueUnmarshaller());
-                this.addHandler(GLITE_OUTPUTSANDBOX_TAG, new SingleValueUnmarshaller());
-                this.addHandler(GLITE_ARGUMENTS_TAG, new SingleValueUnmarshaller());
-            }
-
-            @Override
-            public void startContextElement(String name, Attributes attributes)
-                    throws org.xml.sax.SAXException {
-            }
-
-            @Override
-            protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler)
-                    throws org.xml.sax.SAXException {
-                try {
-                    if (name.equals(GLITE_PATH_TAG)) {
-                        ((GLiteProcess) targetProcess).setFilePath((String) activeHandler.getResultObject());
-                    } else if (name.equals(GLITE_REMOTE_PATH_TAG)) {
-                        ((GLiteProcess) targetProcess).setRemoteFilePath((String) activeHandler
-                                .getResultObject());
-                        ((GLiteProcess) targetProcess).setJdlRemote(true);
-                    } else if (name.equals(GLITE_CONFIG_TAG)) {
-                        ((GLiteProcess) targetProcess)
-                                .setConfigFile((String) activeHandler.getResultObject());
-                        ((GLiteProcess) targetProcess).setConfigFileOption(true);
-                    } else if (name.equals(GLITE_INPUTSANDBOX_TAG)) {
-                        String sandbox = (String) activeHandler.getResultObject();
-                        StringTokenizer st = new StringTokenizer(sandbox);
-                        while (st.hasMoreTokens()) {
-                            ((GLiteProcess) targetProcess).addInputSBEntry(st.nextToken());
-                        }
-                    } else if (name.equals(GLITE_OUTPUTSANDBOX_TAG)) {
-                        String sandbox = (String) activeHandler.getResultObject();
-                        StringTokenizer st = new StringTokenizer(sandbox);
-                        while (st.hasMoreTokens()) {
-                            ((GLiteProcess) targetProcess).addOutputSBEntry(st.nextToken());
-                        }
-                    } else if (name.equals(GLITE_ARGUMENTS_TAG)) {
-                        String value = (String) activeHandler.getResultObject();
-                        ((GLiteProcess) targetProcess).setJobArgument(value);
-                    } else {
-                        super.notifyEndActiveHandler(name, activeHandler);
-                    }
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     //  END OF GLITE PROCESS HANDLER

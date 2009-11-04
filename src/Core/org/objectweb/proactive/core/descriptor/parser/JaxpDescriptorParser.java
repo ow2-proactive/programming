@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
@@ -76,7 +75,6 @@ import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.JVMProcess.PriorityLevel;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferDefinition;
 import org.objectweb.proactive.core.process.filetransfer.FileTransferWorkShop;
-import org.objectweb.proactive.core.process.glite.GLiteProcess;
 import org.objectweb.proactive.core.process.globus.GlobusProcess;
 import org.objectweb.proactive.core.process.gridengine.GridEngineSubProcess;
 import org.objectweb.proactive.core.process.loadleveler.LoadLevelerProcess;
@@ -694,8 +692,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
                 new GridEngineProcessExtractor(node, infrastructureContext);
             } else if (processType.equals(OAR_PROCESS_TAG)) {
                 new OARProcessExtractor(node, infrastructureContext);
-            } else if (processType.equals(GLITE_PROCESS_TAG)) {
-                new GliteProcessExtractor(node, infrastructureContext);
             } else if (processType.equals(OARGRID_PROCESS_TAG)) {
                 new OARGridProcessExtractor(node, infrastructureContext);
             } else if (processType.equals(MPI_PROCESS_TAG)) {
@@ -1237,162 +1233,6 @@ public class JaxpDescriptorParser implements ProActiveDescriptorConstants {
                         globusProcess.setStdout(nodeValue);
                     } else if (nodeName.equals(ERROR_FILE)) {
                         globusProcess.setStderr(nodeValue);
-                    }
-                }
-            }
-        }
-    }
-
-    protected class GliteProcessExtractor extends ProcessExtractor {
-        public GliteProcessExtractor(Node node, Node context) throws XPathExpressionException, SAXException,
-                ProActiveException {
-            super(node, context);
-
-            GLiteProcess gliteProcess = ((GLiteProcess) targetProcess);
-
-            Node namedItem = node.getAttributes().getNamedItem("Type");
-            String t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobType(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("jobType");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobJobType(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("JDLFileName");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setFileName(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("hostname");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setNetServer(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("executable");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobExecutable(t);
-                gliteProcess.setCommand_path(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("stdOutput");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobStdOutput(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("stdInput");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobStdInput(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("stdError");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobStdError(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("outputse");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobOutput_se(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("virtualOrganisation");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobVO(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("retryCount");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobRetryCount(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("myProxyServer");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobMyProxyServer(t);
-            }
-            namedItem = node.getAttributes().getNamedItem("nodeNumber");
-            t = getNodeExpandedValue(namedItem);
-            if (t != null) {
-                gliteProcess.setJobNodeNumber(Integer.parseInt(t));
-            }
-
-            NodeList childNodes = node.getChildNodes();
-            for (int j = 0; j < childNodes.getLength(); ++j) {
-                Node child = childNodes.item(j);
-                if (child.getNodeType() != Node.ELEMENT_NODE) {
-                    continue;
-                }
-
-                String nodeName = child.getNodeName();
-                String nodeValue = getNodeExpandedValue(child);
-                if (nodeName.equals(GLITE_ENVIRONMENT_TAG)) {
-                    gliteProcess.setJobEnvironment(nodeValue);
-                } else if (nodeName.equals(GLITE_REQUIREMENTS_TAG)) {
-                    gliteProcess.setJobRequirements(nodeValue);
-                } else if (nodeName.equals(GLITE_RANK_TAG)) {
-                    gliteProcess.setJobRank(nodeValue);
-                } else if (nodeName.equals(GLITE_INPUTDATA_TAG)) {
-                    new GliteInputExtractor(gliteProcess, child);
-                } else if (nodeName.equals(GLITE_PROCESS_OPTIONS_TAG)) {
-                    new GliteOptionsExtractor(gliteProcess, child);
-                }
-            }
-        }
-
-        protected class GliteInputExtractor {
-            public GliteInputExtractor(GLiteProcess gliteProcess, Node node) throws SAXException {
-                Node namedItem = node.getAttributes().getNamedItem("dataAccessProtocol");
-                String t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    gliteProcess.setJobDataAccessProtocol(t);
-                }
-                namedItem = node.getAttributes().getNamedItem("storageIndex");
-                t = getNodeExpandedValue(namedItem);
-                if (t != null) {
-                    gliteProcess.setJobStorageIndex(t);
-                }
-            }
-        }
-
-        protected class GliteOptionsExtractor {
-            public GliteOptionsExtractor(GLiteProcess gliteProcess, Node node) throws SAXException {
-                NodeList childNodes = node.getChildNodes();
-                for (int i = 0; i < childNodes.getLength(); ++i) {
-                    Node childNode = childNodes.item(i);
-                    if (childNode.getNodeType() != Node.ELEMENT_NODE) {
-                        continue;
-                    }
-
-                    String nodeName = childNode.getNodeName();
-                    if (nodeName.equals(GLITE_PATH_TAG)) {
-                        String path = getPath(childNode);
-                        gliteProcess.setFilePath(path);
-                    } else if (nodeName.equals(GLITE_REMOTE_PATH_TAG)) {
-                        String path = getPath(childNode);
-                        gliteProcess.setRemoteFilePath(path);
-                        gliteProcess.setJdlRemote(true);
-                    } else if (nodeName.equals(GLITE_CONFIG_TAG)) {
-                        String path = getPath(childNode);
-                        gliteProcess.setConfigFile(path);
-                        gliteProcess.setConfigFileOption(true);
-                    } else {
-                        String nodeValue = getNodeExpandedValue(childNode);
-                        if (nodeName.equals(GLITE_INPUTSANDBOX_TAG)) {
-                            String sandbox = nodeValue;
-                            StringTokenizer st = new StringTokenizer(sandbox);
-                            while (st.hasMoreTokens()) {
-                                gliteProcess.addInputSBEntry(st.nextToken());
-                            }
-                        } else if (nodeName.equals(GLITE_OUTPUTSANDBOX_TAG)) {
-                            String sandbox = nodeValue;
-                            StringTokenizer st = new StringTokenizer(sandbox);
-                            while (st.hasMoreTokens()) {
-                                gliteProcess.addOutputSBEntry(st.nextToken());
-                            }
-                        } else if (nodeName.equals(GLITE_ARGUMENTS_TAG)) {
-                            gliteProcess.setJobArgument(nodeValue);
-                        }
                     }
                 }
             }
