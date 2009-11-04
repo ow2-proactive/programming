@@ -70,7 +70,7 @@ public class PAFuture {
      * i.e. if result of future is a future too, <CODE>getFutureValue</CODE> is called again on
      * this result, and so on.
      */
-    public static Object getFutureValue(Object future) {
+    public static <T> T getFutureValue(T future) {
         try {
             return getFutureValue(future, 0);
         } catch (ProActiveTimeoutException e) {
@@ -88,7 +88,7 @@ public class PAFuture {
      * @param timeout to wait in ms
      * @throws ProActiveException if the timeout expire
      */
-    public static Object getFutureValue(Object future, long timeout) throws ProActiveTimeoutException {
+    public static <T> T getFutureValue(T future, long timeout) throws ProActiveTimeoutException {
         TimeoutAccounter ta = TimeoutAccounter.getAccounter(timeout);
         while (true) {
             // If the object is not reified, it cannot be a future
@@ -101,7 +101,7 @@ public class PAFuture {
                 if (!(theProxy instanceof Future)) {
                     return future;
                 } else {
-                    future = ((Future) theProxy).getResult(ta.getRemainingTimeout());
+                    future = (T) ((Future) theProxy).getResult(ta.getRemainingTimeout());
                 }
             }
         }

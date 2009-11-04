@@ -1671,7 +1671,7 @@ public class PAActiveObject {
             return MOP.createStubObject(body.getReifiedObject(), new Object[] { body }, body
                     .getReifiedObject().getClass().getName(), null);
         } catch (MOPException e) {
-            throw new ProActiveRuntimeException("Cannot create Stub for this Body e=" + e);
+            throw new ProActiveRuntimeException("Cannot create Stub for this Body e=", e);
         }
     }
 

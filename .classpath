@@ -43,7 +43,7 @@
 	<classpathentry kind="lib" path="lib/jackrabbit-jcr-commons-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/jackrabbit-webdav-1.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/javasci.jar"/>
-	<classpathentry kind="lib" path="lib/javassist.jar"/>
+	<classpathentry kind="lib" path="lib/javassist.jar" sourcepath="/home/acontes/Download/javassist-3.9.0/src/main"/>
 	<classpathentry kind="lib" path="lib/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/jdom.jar"/>

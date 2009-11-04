@@ -32,20 +32,17 @@
  */
 package org.objectweb.proactive.core.mop;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javassist.CannotCompileException;
 import javassist.CtBehavior;
-import javassist.CtClass;
 import javassist.CtMethod;
-import javassist.NotFoundException;
+import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.CodeAttribute;
 import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.ParameterAnnotationsAttribute;
+import javassist.bytecode.annotation.Annotation;
 
 
 public class Method {
@@ -131,9 +128,19 @@ public class Method {
     public void grabMethodandParameterAnnotation(CtBehavior ctBehavior) {
 
         //get method annotations 
-        Object[] methodAnn = ctBehavior.getAvailableAnnotations();
-        for (Object object : methodAnn) {
-            methodAnnotation.add((Annotation) object);
+        //        Object[] methodAnn = ctBehavior.getAvailableAnnotations();
+        MethodInfo minfo = ctBehavior.getMethodInfo();
+        AnnotationsAttribute methodattr = (AnnotationsAttribute) minfo
+                .getAttribute(AnnotationsAttribute.visibleTag);
+
+        if (methodattr != null) {
+            Annotation[] methodAnn = methodattr.getAnnotations();
+
+            for (Object object : methodAnn) {
+                JavassistByteCodeStubBuilder.logger.debug("adding annotation " + object.getClass().getName() +
+                    " to " + ctBehavior.getLongName());
+                methodAnnotation.add((Annotation) object);
+            }
         }
 
         // get parameter annotations
@@ -157,6 +164,9 @@ public class Method {
                         mp = new MethodParameter(null);
                         listMethodParameters.set(paramIndex, mp);
                     }
+                    JavassistByteCodeStubBuilder.logger.debug("adding annotation " +
+                        parameterAnnotation.getClass().getName() + " to param " + paramIndex + " of " +
+                        ctBehavior.getLongName());
                     mp.getAnnotations().add(parameterAnnotation);
                 }
             }

@@ -34,6 +34,7 @@ package org.objectweb.proactive.core.mop;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -48,9 +49,11 @@ import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+import javassist.LoaderClassPath;
 import javassist.Modifier;
 import javassist.NotFoundException;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.annotation.PAProxyCustomBodyMethod;
@@ -60,11 +63,15 @@ import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.mop.lock.AbstractRemoteLocksManager;
 import org.objectweb.proactive.core.mop.lock.RemoteLocksManager;
 import org.objectweb.proactive.core.mop.proxy.PAProxy;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class PAProxyBuilder {
 
-    public static String PAPROXY_CLASSNAME_SUFFIX = "_PAProxy";
+    static Logger logger = ProActiveLogger.getLogger(Loggers.PAPROXY);
+
+    public static String PAPROXY_CLASSNAME_SUFFIX = "PAProxy";
 
     public static String generatePAProxyClassName(String baseClass) {
         return baseClass + PAPROXY_CLASSNAME_SUFFIX;
@@ -85,13 +92,25 @@ public class PAProxyBuilder {
     }
 
     public static boolean hasPAProxyAnnotation(Class<?> clazz) throws NotFoundException {
-        CtClass ctClass = ClassPool.getDefault().get(clazz.getName());
+        CtClass ctClass = null;
+        try {
+            ctClass = ClassPool.getDefault().get(clazz.getName());
+
+        } catch (NotFoundException e) {
+            ClassPool.getDefault().appendClassPath(new LoaderClassPath(clazz.getClassLoader()));
+            ctClass = ClassPool.getDefault().get(clazz.getName());
+
+        }
+
         return JavassistByteCodeStubBuilder.hasAnnotation(ctClass,
                 org.objectweb.proactive.annotation.PAProxy.class);
     }
 
     public static byte[] generatePAProxy(String superClazzName) throws NotFoundException,
             CannotCompileException, IOException {
+
+        logger.debug("generating paproxy for " + superClazzName);
+
         ClassPool pool = ClassPool.getDefault();
 
         CtClass generatedCtClass = pool.makeClass(generatePAProxyClassName(superClazzName));
@@ -160,18 +179,17 @@ public class PAProxyBuilder {
             if (!Modifier.isPrivate(ctMethod.getModifiers()) && !Modifier.isNative(ctMethod.getModifiers()) &&
                 !Modifier.isFinal(ctMethod.getModifiers()) &&
                 !JavassistByteCodeStubBuilder.hasAnnotation(ctMethod, PAProxyDoNotReifyMethod.class)) {
-                //                System.out.println("adding " + m.getCtMethod().getLongName() + " attr " +
-                //                    Modifier.toString(m.getCtMethod().getModifiers()));
+
                 filtered.put(key, m);
+            } else {
+                logger.debug(m.getCtMethod().getLongName() +
+                    "has PAProxyDoNotReifyMethod annotation, discarding it");
             }
-            //            else {
-            //                System.out.println("discarding " + m.getCtMethod().getLongName() + " attr " +
-            //                    Modifier.toString(m.getCtMethod().getModifiers()));
-            //            }
         }
 
         temp = filtered;
         is = temp.keySet().iterator();
+
         while (is.hasNext()) {
 
             Method m = temp.get(is.next());
@@ -180,6 +198,7 @@ public class PAProxyBuilder {
             String body = "";
             if (m.hasMethodAnnotation(PAProxyEmptyMethod.class)) {
                 body = "{}";
+                logger.debug(m.getCtMethod().getLongName() + "has PAProxyEmptyMethod annotation");
             } else if (m.hasMethodAnnotation(PAProxyCustomBodyMethod.class)) {
                 PAProxyCustomBodyMethod papcbm = JavassistByteCodeStubBuilder.getAnnotation(ctMethod,
                         PAProxyCustomBodyMethod.class);
@@ -187,8 +206,9 @@ public class PAProxyBuilder {
                 if (b != null) {
                     body = b;
                 }
+                logger.debug(m.getCtMethod().getLongName() +
+                    "has PAProxyCustomBodyMethod annotation, body is " + b);
             } else {
-
                 if (returnType != CtClass.voidType) {
                     body = " { return ($r) this.proxiedModel." + ctMethod.getName() + "($$); }";
                 } else {
@@ -200,8 +220,9 @@ public class PAProxyBuilder {
                 methodToGenerate = CtNewMethod.copy(ctMethod, generatedCtClass, null);
                 methodToGenerate.setBody(body.toString());
                 methodToGenerate.setModifiers(methodToGenerate.getModifiers() & ~Modifier.ABSTRACT);
-                //                System.out.println("PAProxyBuilder.generatePAProxy()" + methodToGenerate.getLongName() +
-                //                    " attr " + Modifier.toString(methodToGenerate.getModifiers()));
+
+                logger.debug("adding " + m.getCtMethod().getLongName() + " attr " +
+                    Modifier.toString(m.getCtMethod().getModifiers()));
                 generatedCtClass.addMethod(methodToGenerate);
             } catch (RuntimeException e) {
                 e.printStackTrace();

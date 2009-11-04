@@ -195,6 +195,8 @@ public class MOPClassLoader extends URLClassLoader {
                             .getBaseClassNameFromPAProxyName(name));
                     return callDefineClassUsingReflection(name, data);
                 } catch (Exception ex) {
+                    ex.printStackTrace();
+                    System.out.println("MOPClassLoader.loadClass() " + name);
                     logger.debug(ex);
                     throw new ClassNotFoundException(ex.getMessage());
                 }

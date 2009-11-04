@@ -35,6 +35,7 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.GenericDeclaration;
 import java.lang.reflect.TypeVariable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -52,8 +53,12 @@ import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.ClassFile;
 import javassist.bytecode.CodeAttribute;
+import javassist.bytecode.ConstPool;
 import javassist.bytecode.LocalVariableAttribute;
+import javassist.bytecode.annotation.StringMemberValue;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.Cache;
@@ -379,16 +384,6 @@ public class JavassistByteCodeStubBuilder {
                         "); \n");
                 }
 
-                //                if (hasMethodAnnotation(reifiedMethod.getCtMethod(), UnwrapFuture.class)) {
-                //                    UnwrapFuture trp = getMethodAnnotation(reifiedMethod.getCtMethod(), UnwrapFuture.class);
-                //                    int parameterIndex = parameterNameToIndex(reifiedMethod.getCtMethod(), trp
-                //                            .parameterName());
-                //                    body
-                //                            .append("$" + parameterIndex +
-                //                                " = org.objectweb.proactive.api.PAFuture.getFutureValue($" + parameterIndex +
-                //                                "); \n");
-                //                }
-
                 boolean fieldToCache = hasAnnotation(reifiedMethod.getCtMethod(), Cache.class);
                 CtField cachedField = null;
 
@@ -477,6 +472,23 @@ public class JavassistByteCodeStubBuilder {
                         reifiedMethod.getCtMethod().getName(), reifiedMethod.getCtMethod()
                                 .getParameterTypes(), reifiedMethod.getCtMethod().getExceptionTypes(), body
                                 .toString(), generatedClass);
+                // adding annotations
+                //
+                //                List<Annotation> methodAnnotations = reifiedMethod.getMethodAnnotation()
+                //                ClassFile classFile = generatedClass.getClassFile();
+                //                ConstPool cp = classFile.getConstPool();
+                //
+                //                if (methodAnnotations != null) {
+                //                    AnnotationsAttribute attr = new AnnotationsAttribute(cp, AnnotationsAttribute.visibleTag);
+                //                    for (Annotation a : methodAnnotations) {
+                //                        javassist.bytecode.annotation.Annotation annotation = new javassist.bytecode.annotation.Annotation();
+                //                        annotation.addMemberValue("name", new StringMemberValue("Paul",cp));
+                //                    }
+                //                    attr.setAnnotation(Annotation);
+                //                    methodToGenerate.getMethodInfo().addAttribute(attr);
+                //
+                //                }
+
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
@@ -771,12 +783,16 @@ public class JavassistByteCodeStubBuilder {
         for (int i = 0; i < lmp.size(); i++) {
             MethodParameter mp = lmp.get(i);
             List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
+            logger.debug(method.getCtMethod().getLongName() + " " +
+                Arrays.toString(mp.getAnnotations().toArray()));
             for (javassist.bytecode.annotation.Annotation annotation : la) {
                 try {
                     if (TurnRemote.class.isAssignableFrom(annotation.toAnnotationType(
                             method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
                         body.append("$" + (i + 1) +
                             " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" + (i + 1) + "); \n");
+                        logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                            " has TurnRemote Annotation");
                         break;
                     }
                 } catch (Exception e) {
@@ -800,6 +816,8 @@ public class JavassistByteCodeStubBuilder {
                             method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
                         body.append("$" + (i + 1) +
                             " = org.objectweb.proactive.api.PAActiveObject.turnActive($" + (i + 1) + "); \n");
+                        logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                            " has TurnActive Annotation");
                         break;
                     }
                 } catch (Exception e) {
@@ -822,6 +840,8 @@ public class JavassistByteCodeStubBuilder {
                             method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
                         body.append("$" + (i + 1) +
                             " = org.objectweb.proactive.api.PAFuture.getFutureValue($" + (i + 1) + "); \n");
+                        logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                            " has UnwrapFuture Annotation");
                         break;
                     }
                 } catch (Exception e) {

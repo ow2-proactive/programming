@@ -48,6 +48,7 @@ public interface Loggers {
     static final public String NODE = RUNTIME + ".node";
     static final public String BODY = CORE + ".body";
     static final public String MOP = CORE + ".mop";
+    static final public String PAPROXY = MOP + ".paproxy";
     public static final String SYNC_CALL = CORE + ".sync_call";
     static final public String GROUPS = CORE + ".groups";
     public static final String GC = CORE + ".gc";
