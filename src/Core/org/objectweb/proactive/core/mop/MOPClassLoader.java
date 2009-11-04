@@ -220,6 +220,7 @@ public class MOPClassLoader extends URLClassLoader {
                 // we should not be accessing it but the access policy file allows us to access it freely.
                 try {
                     Class<?> clazz = callDefineClassUsingReflection(name, data);
+
                     logger.info("Generated class : " + name);
                     return clazz;
                 } catch (Exception ex) {

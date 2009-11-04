@@ -242,8 +242,8 @@ public abstract class MOP {
             if (PAProxyBuilder.doesClassNameEndWithPAProxySuffix(targetClass.getName())) {
                 Class<?> cl = MOPClassLoader.getMOPClassLoader().loadClass(targetClass.getName());
                 targetClass = cl;
-                nameOfClass = targetClass.getName();
-                nameOfStubClass = PAProxyBuilder.getBaseClassNameFromPAProxyName(targetClass.getName());
+                nameOfStubClass = nameOfClass = targetClass.getName();
+//                nameOfStubClass = PAProxyBuilder.getBaseClassNameFromPAProxyName(targetClass.getName());
 
                 System.out.println("PAPROXY  " + nameOfClass + "!!!!!!!!!!!!!!!!!!!!!!! ");
             }
@@ -399,23 +399,6 @@ public abstract class MOP {
         }
     }
 
-    /**
-     * Reifies an object
-     * @param proxyParameters Array holding the proxy parameters
-     * @param nameOfStubClass The name of the object's stub class
-     * @param target the object to reify
-     */
-
-    //     public static Object turnReified(Object[] proxyParameters,
-    //			String nameOfStubClass, Object target)
-    //			throws ClassNotFoundException, ReifiedCastException,
-    //			ClassNotReifiableException, CannotGuessProxyNameException,
-    //			InvalidProxyClassException,
-    //			ConstructionOfProxyObjectFailedException {
-    //		String nameOfProxy = guessProxyName(target.getClass());
-    //		return turnReified(nameOfStubClass, nameOfProxy, proxyParameters,
-    //				target);
-    //	}
     /**
      * Reifies an object
      * @param nameOfProxyClass the name of the object's proxy
@@ -761,13 +744,6 @@ public abstract class MOP {
         // if we cannot load the stub class using its name
         // it is probably because it has been downloaded by another classloader
         // thus we ask the classloader of the target class to load it
-        Class<?> baseClass = null;
-        try {
-            baseClass = forName(nameOfBaseClass);
-        } catch (ClassNotFoundException e) {
-            baseClass = targetClass.getClassLoader().loadClass(nameOfBaseClass);
-            MOP.addClassToCache(nameOfBaseClass, baseClass);
-        }
 
         try {
             boolean isPAProxy = PAProxyBuilder.hasPAProxyAnnotation(targetClass);
@@ -781,10 +757,7 @@ public abstract class MOP {
                     Class<?> proxyClass = Class.forName(proxyName);
 
                     targetClass = proxyClass;
-                    genericParameters = new Class<?>[] { targetClass };
-                    //                    Constructor<?> construct = proxyClass.getConstructor(new Class<?>[] { targetClass });
-                    //
-                    //                    target = construct.newInstance(target);
+                    nameOfBaseClass = proxyName;
 
                 } catch (NotFoundException e) {
                     // TODO Auto-generated catch block
@@ -808,6 +781,16 @@ public abstract class MOP {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
+
+
+        Class<?> baseClass = null;
+        try {
+            baseClass = forName(nameOfBaseClass);
+        } catch (ClassNotFoundException e) {
+            baseClass = targetClass.getClassLoader().loadClass(nameOfBaseClass);
+            MOP.addClassToCache(nameOfBaseClass, baseClass);
+        }
+
 
         // Class<?> stubClass =
         // forName(nameOfStubClass,targetClass.getClassLoader());

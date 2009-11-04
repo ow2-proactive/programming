@@ -202,7 +202,7 @@ public class PAProxyBuilder {
             } else if (m.hasMethodAnnotation(PAProxyCustomBodyMethod.class)) {
                 PAProxyCustomBodyMethod papcbm = JavassistByteCodeStubBuilder.getAnnotation(ctMethod,
                         PAProxyCustomBodyMethod.class);
-                String b = papcbm.getBody();
+                String b = papcbm.body();
                 if (b != null) {
                     body = b;
                 }

@@ -35,6 +35,7 @@ package org.objectweb.proactive.core.mop;
 import java.util.ArrayList;
 import java.util.List;
 
+import javassist.ClassPool;
 import javassist.CtBehavior;
 import javassist.CtMethod;
 import javassist.bytecode.AnnotationsAttribute;
@@ -175,9 +176,22 @@ public class Method {
 
     public boolean hasMethodAnnotation(Class<?> annotation) {
 
-        for (Object object : methodAnnotation.toArray()) {
-            if (annotation.isAssignableFrom(object.getClass())) {
+        for (Annotation object : methodAnnotation.toArray(new Annotation[] {})) {
+            if (annotation.getName().equals(object.getTypeName())) {
                 return true;
+            } else {
+                System.out.println("Method.hasMethodAnnotation() " + annotation + " is not " +
+                    object.getClass());
+                System.out.println("type  " + object.getTypeName());
+                try {
+                    System.out.println("assign  " +
+                        annotation.isAssignableFrom(object.toAnnotationType(Method.class.getClassLoader(),
+                                ClassPool.getDefault()).getClass()));
+                } catch (ClassNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
             }
         }
 

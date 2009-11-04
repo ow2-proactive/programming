@@ -43,5 +43,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface PAProxyCustomBodyMethod {
-    String getBody();
+    String body();
 }

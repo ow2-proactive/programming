@@ -786,18 +786,12 @@ public class JavassistByteCodeStubBuilder {
             logger.debug(method.getCtMethod().getLongName() + " " +
                 Arrays.toString(mp.getAnnotations().toArray()));
             for (javassist.bytecode.annotation.Annotation annotation : la) {
-                try {
-                    if (TurnRemote.class.isAssignableFrom(annotation.toAnnotationType(
-                            method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
-                        body.append("$" + (i + 1) +
-                            " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" + (i + 1) + "); \n");
-                        logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
-                            " has TurnRemote Annotation");
-                        break;
-                    }
-                } catch (Exception e) {
-                    // TODO: handle exception
-                    e.printStackTrace();
+                if (TurnRemote.class.getName().equals(annotation.getTypeName())) {
+                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" +
+                        (i + 1) + "); \n");
+                    logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                        " has TurnRemote Annotation");
+                    break;
                 }
             }
         }
@@ -811,18 +805,12 @@ public class JavassistByteCodeStubBuilder {
             MethodParameter mp = lmp.get(i);
             List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
             for (javassist.bytecode.annotation.Annotation annotation : la) {
-                try {
-                    if (TurnActive.class.isAssignableFrom(annotation.toAnnotationType(
-                            method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
-                        body.append("$" + (i + 1) +
-                            " = org.objectweb.proactive.api.PAActiveObject.turnActive($" + (i + 1) + "); \n");
-                        logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
-                            " has TurnActive Annotation");
-                        break;
-                    }
-                } catch (Exception e) {
-                    // TODO: handle exception
-                    e.printStackTrace();
+                if (TurnActive.class.getName().equals(annotation.getTypeName())) {
+                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAActiveObject.turnActive($" +
+                        (i + 1) + "); \n");
+                    logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                        " has TurnActive Annotation");
+                    break;
                 }
             }
         }
@@ -835,18 +823,12 @@ public class JavassistByteCodeStubBuilder {
             MethodParameter mp = lmp.get(i);
             List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
             for (javassist.bytecode.annotation.Annotation annotation : la) {
-                try {
-                    if (UnwrapFuture.class.isAssignableFrom(annotation.toAnnotationType(
-                            method.getClass().getClassLoader(), ClassPool.getDefault()).getClass())) {
-                        body.append("$" + (i + 1) +
-                            " = org.objectweb.proactive.api.PAFuture.getFutureValue($" + (i + 1) + "); \n");
-                        logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
-                            " has UnwrapFuture Annotation");
-                        break;
-                    }
-                } catch (Exception e) {
-                    // TODO: handle exception
-                    e.printStackTrace();
+                if (UnwrapFuture.class.getName().equals(annotation.getTypeName())) {
+                    body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAFuture.getFutureValue($" +
+                        (i + 1) + "); \n");
+                    logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                        " has UnwrapFuture Annotation");
+                    break;
                 }
             }
         }
