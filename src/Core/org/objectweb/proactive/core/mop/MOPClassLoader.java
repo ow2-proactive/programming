@@ -210,15 +210,14 @@ public class MOPClassLoader extends URLClassLoader {
                 String classname = Utils.convertStubClassNameToClassName(name);
 
                 if (PAProxyBuilder.doesClassNameEndWithPAProxySuffix(classname)) {
-                try {
-                    byte[] data = PAProxyBuilder.generatePAProxy(PAProxyBuilder
-                            .getBaseClassNameFromPAProxyName(classname));
-                    callDefineClassUsingReflection(classname, data);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    logger.debug(ex);
-                    throw new ClassNotFoundException(ex.getMessage());
-                }
+                    try {
+                        loadClass(PAProxyBuilder.getBaseClassNameFromPAProxyName(classname));
+                        //                    callDefineClassUsingReflection(classname, data);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        logger.debug(ex);
+                        throw new ClassNotFoundException(ex.getMessage());
+                    }
                 }
 
                 byte[] data = null;
