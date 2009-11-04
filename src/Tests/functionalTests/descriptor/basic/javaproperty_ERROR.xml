@@ -56,10 +56,6 @@
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/osgi/osgi.jar" />
 						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/glite/glite-wms-jdlj.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/glite/classad.jar" />
-						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/unicore/njs_client.jar" />
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/unicore/ajo.jar" />

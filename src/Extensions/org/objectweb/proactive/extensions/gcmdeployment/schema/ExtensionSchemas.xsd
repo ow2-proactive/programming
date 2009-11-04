@@ -12,7 +12,6 @@
     </xsd:annotation>
 
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupCCSSchema.xsd" />
-	<xsd:include schemaLocation="../GCMDeployment/group/GroupGLiteSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupGridEngineSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupLSFSchema.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/group/GroupLoadLevelerSchema.xsd" />
