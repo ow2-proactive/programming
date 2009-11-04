@@ -248,8 +248,6 @@ public class PAProxyBuilder {
 
         // RemoteLockManager 
 
-//        temp = JavassistByteCodeStubBuilder.methodsIndexer(superCtClass, classesIndexer);
-
         CtClass rLockManagerClazz = pool.get(AbstractRemoteLocksManager.class.getName());
 
         java.util.Map<String, Method> rLockManagerMethods = JavassistByteCodeStubBuilder.methodsIndexer(

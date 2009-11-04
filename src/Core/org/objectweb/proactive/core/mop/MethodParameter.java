@@ -38,6 +38,13 @@ import java.util.List;
 import javassist.bytecode.annotation.Annotation;
 
 
+/**
+ * This object stores annotations for a particular attribute of a method.
+ * If the method is defined in superclass or interfaces and the attribute
+ * has additional annotations defined in these superclass/interfaces, this
+ * object is used to store these additional annotations.
+ *
+ */
 public class MethodParameter {
 
     private List<Annotation> annotations;

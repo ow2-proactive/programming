@@ -232,8 +232,6 @@ public abstract class MOP {
 
                 constructorParameters = new Object[] { proxiedObject };
 
-                System.out.println("PAPROXY  " + nameOfClass + "? ");
-
             }
         } catch (NotFoundException e) {
             // We could land here if we are trying to
@@ -243,9 +241,8 @@ public abstract class MOP {
                 Class<?> cl = MOPClassLoader.getMOPClassLoader().loadClass(targetClass.getName());
                 targetClass = cl;
                 nameOfStubClass = nameOfClass = targetClass.getName();
-//                nameOfStubClass = PAProxyBuilder.getBaseClassNameFromPAProxyName(targetClass.getName());
+                //                nameOfStubClass = PAProxyBuilder.getBaseClassNameFromPAProxyName(targetClass.getName());
 
-                System.out.println("PAPROXY  " + nameOfClass + "!!!!!!!!!!!!!!!!!!!!!!! ");
             }
         } catch (ConstructorCallExecutionFailedException e) {
             throw new ConstructionOfReifiedObjectFailedException(e);
@@ -316,8 +313,6 @@ public abstract class MOP {
                 nameOfClass = targetClass.getName();
                 //                stubClass = PAProxyBuilder.getBaseClassNameFromPAProxyName(targetClass.getName());
 
-                System.out.println("PAPROXY  " + nameOfClass + "? ");
-
             }
         } catch (NotFoundException e) {
             // We could land here if we are trying to
@@ -328,7 +323,6 @@ public abstract class MOP {
                 targetClass = cl;
                 nameOfClass = targetClass.getName();
 
-                System.out.println("PAPROXY  " + nameOfClass + "? ");
             }
         }
 
@@ -782,7 +776,6 @@ public abstract class MOP {
             e1.printStackTrace();
         }
 
-
         Class<?> baseClass = null;
         try {
             baseClass = forName(nameOfBaseClass);
@@ -790,7 +783,6 @@ public abstract class MOP {
             baseClass = targetClass.getClassLoader().loadClass(nameOfBaseClass);
             MOP.addClassToCache(nameOfBaseClass, baseClass);
         }
-
 
         // Class<?> stubClass =
         // forName(nameOfStubClass,targetClass.getClassLoader());

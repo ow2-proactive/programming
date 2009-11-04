@@ -338,10 +338,6 @@ public class JavassistByteCodeStubBuilder {
         for (int k = 0; k < params.length; k++) {
             key.append(params[k].getName());
         }
-
-
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> " + key.toString());
-
         return key.toString();
     }
 
@@ -466,30 +462,11 @@ public class JavassistByteCodeStubBuilder {
 
             CtMethod methodToGenerate = null;
 
-            //                                    System.out
-            //                                          .println("JavassistByteCodeStubBuilder.createReifiedMethods() body " + reifiedMethods[i].getName() + " = " + body);
             try {
                 methodToGenerate = CtNewMethod.make(reifiedMethod.getCtMethod().getReturnType(),
                         reifiedMethod.getCtMethod().getName(), reifiedMethod.getCtMethod()
                                 .getParameterTypes(), reifiedMethod.getCtMethod().getExceptionTypes(), body
                                 .toString(), generatedClass);
-                // adding annotations
-                //
-                //                List<Annotation> methodAnnotations = reifiedMethod.getMethodAnnotation()
-                //                ClassFile classFile = generatedClass.getClassFile();
-                //                ConstPool cp = classFile.getConstPool();
-                //
-                //                if (methodAnnotations != null) {
-                //                    AnnotationsAttribute attr = new AnnotationsAttribute(cp, AnnotationsAttribute.visibleTag);
-                //                    for (Annotation a : methodAnnotations) {
-                //                        javassist.bytecode.annotation.Annotation annotation = new javassist.bytecode.annotation.Annotation();
-                //                        annotation.addMemberValue("name", new StringMemberValue("Paul",cp));
-                //                    }
-                //                    attr.setAnnotation(Annotation);
-                //                    methodToGenerate.getMethodInfo().addAttribute(attr);
-                //
-                //                }
-
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
