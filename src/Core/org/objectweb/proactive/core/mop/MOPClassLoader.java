@@ -196,7 +196,6 @@ public class MOPClassLoader extends URLClassLoader {
                     return callDefineClassUsingReflection(name, data);
                 } catch (Exception ex) {
                     ex.printStackTrace();
-                    System.out.println("MOPClassLoader.loadClass() " + name);
                     logger.debug(ex);
                     throw new ClassNotFoundException(ex.getMessage());
                 }
@@ -209,6 +208,18 @@ public class MOPClassLoader extends URLClassLoader {
 
                 //    e.printStackTrace();
                 String classname = Utils.convertStubClassNameToClassName(name);
+
+                if (PAProxyBuilder.doesClassNameEndWithPAProxySuffix(classname)) {
+                try {
+                    byte[] data = PAProxyBuilder.generatePAProxy(PAProxyBuilder
+                            .getBaseClassNameFromPAProxyName(classname));
+                    callDefineClassUsingReflection(classname, data);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    logger.debug(ex);
+                    throw new ClassNotFoundException(ex.getMessage());
+                }
+                }
 
                 byte[] data = null;
 

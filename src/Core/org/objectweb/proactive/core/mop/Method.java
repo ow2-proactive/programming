@@ -77,7 +77,7 @@ public class Method {
 
                 for (int i = 0; i < nbOfParam; i++) {
                     // initialize the list of parameters
-                    listMethodParameters.add(new MethodParameter(null));
+                    listMethodParameters.add(new MethodParameter());
                 }
             }
         }
@@ -137,8 +137,8 @@ public class Method {
         if (methodattr != null) {
             Annotation[] methodAnn = methodattr.getAnnotations();
 
-            for (Object object : methodAnn) {
-                JavassistByteCodeStubBuilder.logger.debug("adding annotation " + object.getClass().getName() +
+            for (Annotation object : methodAnn) {
+                JavassistByteCodeStubBuilder.logger.debug("adding annotation " + object.getTypeName()+
                     " to " + ctBehavior.getLongName());
                 methodAnnotation.add((Annotation) object);
             }
@@ -161,12 +161,12 @@ public class Method {
                 for (javassist.bytecode.annotation.Annotation parameterAnnotation : paramAnnotations) {
 
                     MethodParameter mp = listMethodParameters.get(paramIndex);
-                    if (mp == null) {
-                        mp = new MethodParameter(null);
-                        listMethodParameters.set(paramIndex, mp);
-                    }
+//                    if (mp == null) {
+//                        mp = new MethodParameter(null);
+//                        listMethodParameters.set(paramIndex, mp);
+//                    }
                     JavassistByteCodeStubBuilder.logger.debug("adding annotation " +
-                        parameterAnnotation.getClass().getName() + " to param " + paramIndex + " of " +
+                        parameterAnnotation.getTypeName() + " to param " + paramIndex + " of " +
                         ctBehavior.getLongName());
                     mp.getAnnotations().add(parameterAnnotation);
                 }
@@ -179,22 +179,8 @@ public class Method {
         for (Annotation object : methodAnnotation.toArray(new Annotation[] {})) {
             if (annotation.getName().equals(object.getTypeName())) {
                 return true;
-            } else {
-                System.out.println("Method.hasMethodAnnotation() " + annotation + " is not " +
-                    object.getClass());
-                System.out.println("type  " + object.getTypeName());
-                try {
-                    System.out.println("assign  " +
-                        annotation.isAssignableFrom(object.toAnnotationType(Method.class.getClassLoader(),
-                                ClassPool.getDefault()).getClass()));
-                } catch (ClassNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
             }
         }
-
         return false;
     }
 

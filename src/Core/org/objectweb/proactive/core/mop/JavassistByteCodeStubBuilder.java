@@ -51,14 +51,11 @@ import javassist.CtField;
 import javassist.CtMember;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+import javassist.LoaderClassPath;
 import javassist.Modifier;
 import javassist.NotFoundException;
-import javassist.bytecode.AnnotationsAttribute;
-import javassist.bytecode.ClassFile;
 import javassist.bytecode.CodeAttribute;
-import javassist.bytecode.ConstPool;
 import javassist.bytecode.LocalVariableAttribute;
-import javassist.bytecode.annotation.StringMemberValue;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.Cache;
@@ -104,7 +101,7 @@ public class JavassistByteCodeStubBuilder {
         Method[] reifiedMethodsWithoutGenerics;
         try {
             ClassPool pool = ClassPool.getDefault();
-
+            pool.appendClassPath(new LoaderClassPath(MOPClassLoader.getMOPClassLoader()));
             generatedCtClass = pool.makeClass(Utils.convertClassNameToStubClassName(className,
                     genericParameters));
 
@@ -277,13 +274,13 @@ public class JavassistByteCodeStubBuilder {
                         // The only method we ABSOLUTELY want to be called directly
                         // on the stub (and thus not reified) is
                         // the protected void finalize () throws Throwable
-                        if ((key.toString().equals("finalize")) && (params.length == 0)) {
+                        if ((key.equals("finalize")) && (params.length == 0)) {
                             // Do nothing, simply avoid adding this method to the list
                         } else {
                             // If not, adds this method to the Vector that
                             // holds all the reifiedMethods for this class
                             //                                tempVector.addElement(currentMethod);
-                            temp.put(key.toString(), new Method(currentMethod));
+                            temp.put(key, new Method(currentMethod));
                         }
                     } else {
                         // We already know this method because it is overriden
@@ -326,6 +323,7 @@ public class JavassistByteCodeStubBuilder {
                 }
                 //                                m.setCtMethod(currentMethod);
                 m.grabMethodandParameterAnnotation(currentMethod);
+
             }
         }
 
@@ -340,6 +338,9 @@ public class JavassistByteCodeStubBuilder {
         for (int k = 0; k < params.length; k++) {
             key.append(params[k].getName());
         }
+
+
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> " + key.toString());
 
         return key.toString();
     }
@@ -823,6 +824,7 @@ public class JavassistByteCodeStubBuilder {
             MethodParameter mp = lmp.get(i);
             List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
             for (javassist.bytecode.annotation.Annotation annotation : la) {
+
                 if (UnwrapFuture.class.getName().equals(annotation.getTypeName())) {
                     body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAFuture.getFutureValue($" +
                         (i + 1) + "); \n");

@@ -35,17 +35,14 @@ package org.objectweb.proactive.core.mop;
 import java.util.ArrayList;
 import java.util.List;
 
-import javassist.bytecode.LocalVariableAttribute;
 import javassist.bytecode.annotation.Annotation;
 
 
 public class MethodParameter {
 
-    private LocalVariableAttribute lva;
     private List<Annotation> annotations;
 
-    public MethodParameter(LocalVariableAttribute lva) {
-        this.lva = lva;
+    public MethodParameter() {
         annotations = new ArrayList<Annotation>();
     }
 
@@ -55,10 +52,6 @@ public class MethodParameter {
 
     public void setAnnotations(List<Annotation> annotations) {
         this.annotations = annotations;
-    }
-
-    public LocalVariableAttribute getLva() {
-        return lva;
     }
 
 }

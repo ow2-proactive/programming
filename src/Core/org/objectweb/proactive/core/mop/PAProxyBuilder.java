@@ -248,7 +248,7 @@ public class PAProxyBuilder {
 
         // RemoteLockManager 
 
-        temp = JavassistByteCodeStubBuilder.methodsIndexer(superCtClass, classesIndexer);
+//        temp = JavassistByteCodeStubBuilder.methodsIndexer(superCtClass, classesIndexer);
 
         CtClass rLockManagerClazz = pool.get(AbstractRemoteLocksManager.class.getName());
 
@@ -279,7 +279,9 @@ public class PAProxyBuilder {
 
         }
 
-        generatedCtClass.debugWriteFile(PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue());
+        if (PAProperties.PA_MOP_GENERATEDCLASSES_DIR.isSet()) {
+            generatedCtClass.debugWriteFile(PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue());
+        }
 
         byte[] bytecode = generatedCtClass.toBytecode();
 
