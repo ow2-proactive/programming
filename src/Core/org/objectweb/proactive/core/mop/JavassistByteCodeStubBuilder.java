@@ -112,7 +112,7 @@ public class JavassistByteCodeStubBuilder {
                 // may happen in environments with multiple classloaders: className is not available
                 // in the initial classpath of javassist's class pool
                 // ==> try to append classpath of the class corresponding to className
-                pool.appendClassPath(new ClassClassPath(Class.forName(className)));
+                pool.appendClassPath(new LoaderClassPath(Class.forName(className).getClassLoader()));
                 superCtClass = pool.get(className);
             }
 
