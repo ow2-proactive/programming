@@ -56,19 +56,6 @@
 				<stderr>jobs/jobtrace_err.txt</stderr>
 			</gridEngineGroup>
 
-			<gLiteGroup id="gliteGroup"  jobType="parallel"  virtualOrganisation="proactive" retryCount="3" executable="/bin/echo" 
-						 javaHome="/grid_mnt/home/pro159/java" proactiveHome="/grid_mnt/home/pro159/ProActive" nodesNumber="3" >
-				<rank>-other.GlueCEStateEstimatedResponseTime</rank>
-				<stdout>stdout.log</stdout>
-				<stderr>error.log</stderr>
-				<outputSandbox>
-				   stdout.log
-				   error.log
-				</outputSandbox>
-				<requirements>other.GlueCEUniqueID=="grid10.lal.in2p3.fr:2119/jobmanager-pbs-sdj</requirements>
-				<arguments>\"Hello World\"</arguments>
-			</gLiteGroup>
-
 <!-- 		<globusGroup hostname="globus_frontend" id="globusgroup" bookedNodesAccess="rsh">
 				<count>8</count>
 				<maxTime>120</maxTime>

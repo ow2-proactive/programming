@@ -83,7 +83,6 @@
                 <p>Abstract element which has to be substituted by one of the following elements:</p>
                 <ul>
                     <li><tt><a href="element/ccsGroup.html">&lt;cssGroup&gt;</a></tt></li>
-                    <li><tt><a href="element/gLiteGroup.html">&lt;gLiteGroup&gt;</a></tt></li>
                     <li><tt><a href="element/gridEngineGroup.html">&lt;gridEngineGroup&gt;</a></tt></li>
                     <li><tt><a href="element/loadLevelerGroup.html">&lt;loadLevelerGroup&gt;</a></tt></li>
                     <li><tt><a href="element/lsfGroup.html">&lt;lsfGroup&gt;</a></tt></li>
