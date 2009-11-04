@@ -228,7 +228,7 @@ public abstract class MOP {
 
                 targetClass = cl;
                 nameOfClass = targetClass.getName();
-                nameOfStubClass = PAProxyBuilder.getBaseClassNameFromPAProxyName(targetClass.getName());
+                nameOfStubClass = targetClass.getName();
 
                 constructorParameters = new Object[] { proxiedObject };
 
