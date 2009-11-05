@@ -84,6 +84,16 @@ public class JavassistByteCodeStubBuilder {
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.STUB_GENERATION);
     private static CtMethod proxyGetter;
     private static CtMethod proxySetter;
+    private static volatile boolean classPoolInitialized = false;
+
+    public synchronized static ClassPool getClassPool() {
+        ClassPool pool = ClassPool.getDefault();
+        if (!classPoolInitialized) {
+            pool.appendClassPath(new LoaderClassPath(MOPClassLoader.getMOPClassLoader()));
+            classPoolInitialized = true;
+        }
+        return pool;
+    }
 
     /**
      * <p>Creates the bytecode for a stub on the given class</p>
@@ -103,8 +113,7 @@ public class JavassistByteCodeStubBuilder {
         }
         Method[] reifiedMethodsWithoutGenerics;
         try {
-            ClassPool pool = ClassPool.getDefault();
-            pool.appendClassPath(new LoaderClassPath(MOPClassLoader.getMOPClassLoader()));
+            ClassPool pool = getClassPool();
             generatedCtClass = pool.makeClass(Utils.convertClassNameToStubClassName(className,
                     genericParameters));
 
@@ -390,7 +399,7 @@ public class JavassistByteCodeStubBuilder {
                 if (fieldToCache) {
                     // the generated has to cache the method
 
-                    cachedField = new CtField(ClassPool.getDefault().get(
+                    cachedField = new CtField(getClassPool().get(
                             reifiedMethod.getCtMethod().getReturnType().getName()), reifiedMethod
                             .getCtMethod().getName() +
                         i, generatedClass);
@@ -586,7 +595,7 @@ public class JavassistByteCodeStubBuilder {
      */
     public static void createStubObjectMethods(CtClass generatedClass) throws CannotCompileException,
             NotFoundException {
-        CtField proxyField = new CtField(ClassPool.getDefault().get(Proxy.class.getName()), "myProxy",
+        CtField proxyField = new CtField(getClassPool().getDefault().get(Proxy.class.getName()), "myProxy",
             generatedClass);
         generatedClass.addField(proxyField);
         proxyGetter = CtNewMethod.getter("getProxy", proxyField);
