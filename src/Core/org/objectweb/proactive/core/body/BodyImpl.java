@@ -359,6 +359,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         return checkMethod(methodName, null);
     }
 
+    @Deprecated
     public void setImmediateService(String methodName) {
         setImmediateService(methodName, false);
     }

@@ -177,6 +177,7 @@ public class HalfBody extends AbstractBody {
         return this.replyReceiver.receiveReply(reply, this, getFuturePool());
     }
 
+    @Deprecated
     public void setImmediateService(String methodName) {
         setImmediateService(methodName, false);
     }

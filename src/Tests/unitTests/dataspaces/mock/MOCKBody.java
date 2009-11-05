@@ -157,6 +157,7 @@ public class MOCKBody implements Body {
 
     }
 
+    @Deprecated
     public void setImmediateService(String methodName) {
 
     }
