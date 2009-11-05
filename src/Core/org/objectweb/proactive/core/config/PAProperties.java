@@ -405,7 +405,7 @@ public enum PAProperties {
     PA_RMISSH_CONNECT_TIMEOUT("proactive.communication.rmissh.connect_timeout", PAPropertiesType.INTEGER),
 
     // Not documented, temporary workaround until 4.3.0
-    PA_RMISSH_REMOTE_USERNAME("proactive.communication.rmissh.username", PAPropertiesType.INTEGER),
+    PA_RMISSH_REMOTE_USERNAME("proactive.communication.rmissh.username", PAPropertiesType.STRING),
 
     // Not documented, temporary workaround until 4.3.0
     PA_RMISSH_REMOTE_PORT("proactive.communication.rmissh.port", PAPropertiesType.INTEGER),
