@@ -105,12 +105,6 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
     @Override
     protected void notifyEndActiveHandler(String name, UnmarshallerHandler activeHandler) throws SAXException {
 
-        /*if (name.equals(GLITE_PROCESS_TAG)) {
-           String []chaine = ((GLiteProcess)targetProcess).getTargetProcess().getEnvironment();
-           System.out.println("#######$$$$COMMAND PATH$$$$$$$########");
-           System.out.println(chaine);
-               ((GLiteProcess)activeHandler.getResultObject()).buildJdlFile();
-           }*/
     }
 
     /**
@@ -1092,7 +1086,6 @@ public class ProcessDefinitionHandler extends AbstractUnmarshallerDecorator impl
         //end of inner class GlobusOptionHandler
     }
 
-    //  END OF GLITE PROCESS HANDLER
     protected class NGProcessHandler extends ProcessHandler {
         public NGProcessHandler(ProActiveDescriptorInternal proActiveDescriptor) {
             super(proActiveDescriptor);
