@@ -34,13 +34,22 @@
  */
 package functionalTests.component.collectiveitf.gathercast;
 
+import static org.junit.Assert.fail;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Assert;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.control.ContentController;
+import org.objectweb.fractal.api.control.IllegalLifeCycleException;
+import org.objectweb.fractal.api.factory.GenericFactory;
+import org.objectweb.fractal.api.type.ComponentType;
+import org.objectweb.fractal.api.type.InterfaceType;
+import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 import functionalTests.ComponentTest;
@@ -87,5 +96,39 @@ public class Test extends ComponentTest {
         String result1 = ((TotoItf) testcase.getFcInterface("testA")).testWaitForAll().stringValue();
         String result2 = ((TotoItf) testcase.getFcInterface("testB")).testWaitForAll().stringValue();
         Assert.assertNotSame(result1, result2);
+    }
+
+    @org.junit.Test
+    public void testStartCompositeWithGathercastInternalClientItf() throws Exception {
+        Component boot = Fractal.getBootstrapComponent();
+        ProActiveTypeFactory ptf = (ProActiveTypeFactory) Fractal.getTypeFactory(boot);
+        GenericFactory gf = Fractal.getGenericFactory(boot);
+        ComponentType rType = ptf.createFcType(new InterfaceType[] {
+                ptf.createFcItfType("server", GatherDummyItf.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                ptf.createFcItfType("client", GatherDummyItf.class.getName(), TypeFactory.CLIENT,
+                        TypeFactory.MANDATORY, ProActiveTypeFactory.GATHER_CARDINALITY) });
+        ComponentType cType = ptf.createFcType(new InterfaceType[] {
+                ptf.createFcItfType("server", GatherDummyItf.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                ptf.createFcItfType("client", DummyItf.class.getName(), TypeFactory.CLIENT,
+                        TypeFactory.OPTIONAL, TypeFactory.SINGLE) });
+        Component r = gf.newFcInstance(rType, "composite", null);
+        Component c = gf.newFcInstance(cType, "primitive", GatherClientServer.class.getName());
+        ContentController cc = Fractal.getContentController(r);
+        cc.addFcSubComponent(c);
+        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        try {
+            Fractal.getLifeCycleController(r).startFc();
+            fail();
+        } catch (IllegalLifeCycleException ilce) {
+        }
+        Fractal.getBindingController(c).bindFc("client", r.getFcInterface("client"));
+        try {
+            Fractal.getLifeCycleController(r).startFc();
+        } catch (IllegalLifeCycleException ilce) {
+            fail();
+        }
     }
 }

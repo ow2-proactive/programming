@@ -43,6 +43,9 @@ import org.junit.Test;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.ContentController;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
+import org.objectweb.fractal.api.type.ComponentType;
+import org.objectweb.fractal.api.type.InterfaceType;
+import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.fractal.util.Fractal;
 
 import functionalTests.component.conform.components.C;
@@ -103,7 +106,7 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
         try {
             Fractal.getLifeCycleController(c).startFc();
             fail();
-        } catch (IllegalLifeCycleException e) {
+        } catch (IllegalLifeCycleException ilce) {
         }
     }
 
@@ -115,7 +118,25 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
         try {
             Fractal.getLifeCycleController(r).startFc();
             fail();
-        } catch (IllegalLifeCycleException e) {
+        } catch (IllegalLifeCycleException ilce) {
+        }
+    }
+
+    @Test
+    public void testCompositeMandatoryInternalClientInterfaceNotBound() throws Exception {
+        ComponentType eType = tf.createFcType(new InterfaceType[] { tf.createFcItfType("server", I.class
+                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE) });
+        Component e = gf.newFcInstance(eType, "primitive", C.class.getName());
+        ContentController cc = Fractal.getContentController(r);
+        cc.removeFcSubComponent(d);
+        cc.addFcSubComponent(e);
+        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        Fractal.getBindingController(c).bindFc("client", e.getFcInterface("server"));
+        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        try {
+            Fractal.getLifeCycleController(r).startFc();
+            fail();
+        } catch (IllegalLifeCycleException ilce) {
         }
     }
 
@@ -137,7 +158,7 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
         try {
             cc.removeFcSubComponent(d);
             // fail();
-        } catch (IllegalLifeCycleException e) {
+        } catch (IllegalLifeCycleException ilce) {
         }
     }
 
