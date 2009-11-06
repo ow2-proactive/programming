@@ -32,6 +32,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+//@snippet-start calcium_primes_4
 package org.objectweb.proactive.extensions.calcium.examples.findprimes;
 
 import org.objectweb.proactive.extensions.calcium.muscle.Divide;
