@@ -39,8 +39,10 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.control.ContentController;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
@@ -98,6 +100,41 @@ public class Test extends ComponentTest {
             Fractal.getLifeCycleController(composite).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
+        }
+    }
+
+    @org.junit.Test
+    @Ignore
+    public void testStartCompositeWithInternalClientItfBoundOnMulticast() throws Exception {
+        Component boot = Fractal.getBootstrapComponent();
+        ProActiveTypeFactory ptf = (ProActiveTypeFactory) Fractal.getTypeFactory(boot);
+        GenericFactory gf = Fractal.getGenericFactory(boot);
+        ComponentType rType = ptf.createFcType(new InterfaceType[] {
+                ptf.createFcItfType("server", ServerTestItf.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                ptf.createFcItfType("client", ServerTestItf.class.getName(), TypeFactory.CLIENT,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE) });
+        ComponentType cType = ptf.createFcType(new InterfaceType[] {
+                ptf.createFcItfType("server", ServerTestItf.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                ptf.createFcItfType("client", MulticastTestItf.class.getName(), TypeFactory.CLIENT,
+                        TypeFactory.OPTIONAL, ProActiveTypeFactory.MULTICAST_CARDINALITY) });
+        Component r = gf.newFcInstance(rType, "composite", null);
+        Component c = gf.newFcInstance(cType, "primitive", ClientServerImpl.class.getName());
+        ContentController cc = Fractal.getContentController(r);
+        cc.addFcSubComponent(c);
+        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        try {
+            Fractal.getLifeCycleController(r).startFc();
+            fail();
+        } catch (IllegalLifeCycleException ilce) {
+        }
+        Fractal.getBindingController(c).bindFc("client", r.getFcInterface("client"));
+        try {
+            Fractal.getLifeCycleController(r).startFc();
+        } catch (IllegalLifeCycleException ilce) {
+            fail();
         }
     }
 }
