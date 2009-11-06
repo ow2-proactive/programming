@@ -32,6 +32,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+//@snippet-start calcium_primes_7
 package org.objectweb.proactive.extensions.calcium.examples.findprimes;
 
 import java.util.Collections;
