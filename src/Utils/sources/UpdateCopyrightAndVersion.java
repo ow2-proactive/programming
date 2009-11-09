@@ -111,16 +111,43 @@ public class UpdateCopyrightAndVersion {
         //        }
         int packageStart = program.indexOf("package");
 
-        // it is possible to find a snippet tag between a copyright and the package name
-        // in that case we keep the snippet.
-        int snippetStart = program.indexOf("//@" + "snippet-start");
+        // it is possible to find a snippet or a tutorial tag between a copyright and the package name
+        // in that case we keep the snippet/tutorial.
+        Pattern pattern = Pattern.compile("\\/\\/\\s*\\@snippet-start");
+        Matcher matcher = pattern.matcher(program);
+        int snippetStart = -1;
+        if (matcher.find()) {
+            snippetStart = matcher.start();
+        }
+        pattern = Pattern.compile("\\/\\/\\s*\\@tutorial-start");
+        matcher = pattern.matcher(program);
+        int tutorialStart = -1;
+        if (matcher.find()) {
+            tutorialStart = matcher.start();
+        }
+
+        // No annotation can be placed before copyright.
+        // Otherwise, Copyright cannot be updated.
+        int copyrightIndex = program.indexOf("Copyright");
+        if (copyrightIndex != -1 && snippetStart < copyrightIndex)
+            snippetStart = -1;
+
+        if (copyrightIndex != -1 && tutorialStart < copyrightIndex)
+            tutorialStart = -1;
+
+        int annotationStart;
+        if (snippetStart != -1) {
+            annotationStart = (tutorialStart != -1) ? Math.min(snippetStart, tutorialStart) : snippetStart;
+        } else {
+            annotationStart = (tutorialStart != -1) ? tutorialStart : -1;
+        }
 
         if (packageStart == -1) {
             return;
         }
 
-        if ((snippetStart != -1) && (snippetStart < packageStart)) {
-            packageStart = snippetStart;
+        if ((annotationStart != -1) && (annotationStart < packageStart)) {
+            packageStart = annotationStart;
         }
         int choice = 4;
         String copyrightInFile = program.substring(0, packageStart);
