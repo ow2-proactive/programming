@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start primes_distributedmw_task
 //@snippet-start primes_distributedmw_task_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.primes.distributedmw;
 
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;

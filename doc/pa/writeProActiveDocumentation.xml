@@ -348,11 +348,22 @@
 			To do this, you should insert the following comments into your source code:
 		</para>
 		<itemizedlist>
-			<listitem><para><emphasis role="bold">//@snippet-start MySnippet</emphasis> or <emphasis role="bold">&lt;!-- @snippet-start --&gt;</emphasis> - to start your snippet</para></listitem>
-			<listitem><para><emphasis role="bold">//@snippet-end MySnippet</emphasis> or <emphasis role="bold">&lt;!-- @snippet-end --&gt;</emphasis> - to end your snippet</para></listitem>
-			<listitem><para><emphasis role="bold">//@snippet-break MySnippet</emphasis> or <emphasis role="bold">&lt;!-- @snippet-break --&gt;</emphasis> - to break your snippet</para></listitem>
-			<listitem><para><emphasis role="bold">//@snippet-resume MySnippet</emphasis> or <emphasis role="bold">&lt;!-- @snippet-resume --&gt;</emphasis> - to resume your snippet</para></listitem>
+			<listitem><para><emphasis role="bold">//@snippet-start MySnippet</emphasis> or <emphasis role="bold">&lt;!-- @snippet-start MySnippet --&gt;</emphasis> - to start your snippet</para></listitem>
+			<listitem><para><emphasis role="bold">&lt;!-- @snippet-start-with-header MySnippet --&gt;</emphasis> - to start your snippet adding the XML prologue before (only for XML files)</para></listitem>
+			<listitem><para><emphasis role="bold">//@snippet-start-with-copyright MySnippet</emphasis> - to start your snippet adding the copyright before (only for Java files)</para></listitem>
+			<listitem><para><emphasis role="bold">//@snippet-end MySnippet</emphasis> or <emphasis role="bold">&lt;!-- @snippet-end MySnippet --&gt;</emphasis> - to end your snippet</para></listitem>
+			<listitem><para><emphasis role="bold">//@snippet-break MySnippet</emphasis> or <emphasis role="bold">&lt;!-- @snippet-break MySnippet --&gt;</emphasis> - to break your snippet</para></listitem>
+			<listitem><para><emphasis role="bold">//@snippet-resume MySnippet</emphasis> or <emphasis role="bold">&lt;!-- @snippet-resume MySnippet --&gt;</emphasis> - to resume your snippet</para></listitem>
 		</itemizedlist>
+		<warning>
+			<para>
+				You cannot not insert an annotation before the prologue in case of an XML file and you should not insert an annotation before a copyright in case of a Java file.
+				Adding such an annotation before the prologue of an XML file makes it invalid and if you add one before the copyright of a Java file, it will be removed the next
+				time we will update copyrights.
+				If you want to have the prologue or the copyright displayed in your snippet, use <emphasis role="bold">@snippet-start-with-header</emphasis> and
+				<emphasis role="bold">@snippet-start-with-copyright</emphasis>.
+			</para>
+		</warning>
 		<para>
 			For this moment, only java, xml, c and fractal files are supported for snippet extraction and you must respect some rules:
 		</para>

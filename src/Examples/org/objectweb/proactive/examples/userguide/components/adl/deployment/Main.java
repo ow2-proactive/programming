@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start adl_deployment_Main_skeleton
 //@snippet-start adl_deployment_Main
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.components.adl.deployment;
 
 import java.io.File;

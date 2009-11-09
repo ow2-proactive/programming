@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start synch_cma_full
 //@snippet-start synch_cma_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.synch;
 
 import java.io.Serializable;

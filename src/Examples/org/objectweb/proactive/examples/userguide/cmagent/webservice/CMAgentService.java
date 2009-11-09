@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start webservice_cma_full
 //@snippet-start webservice_cma_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.webservice;
 
 import org.objectweb.proactive.ActiveObjectCreationException;

@@ -11,7 +11,7 @@
                 version='1.0'>
 
 <xsl:import href="../common/personal-templates.xsl" />
-
+	
 <!-- ********************************************************************
      $Id: graphics.xsl 8178 2008-12-15 22:26:38Z bobstayton $
      ********************************************************************
@@ -1444,7 +1444,7 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 			<xsl:otherwise>
 				<xsl:message terminate="yes">
 					<xsl:text>Cannot insert </xsl:text><xsl:value-of select="$filename"/>
-					<xsl:text>. Check use.extensions and textinsert.extension parameters.</xsl:text>
+					<xsl:text>. Check use.extensions and textinsert.extension parameters.</xsl:text> 
 				</xsl:message>
 			</xsl:otherwise>
 		</xsl:choose>

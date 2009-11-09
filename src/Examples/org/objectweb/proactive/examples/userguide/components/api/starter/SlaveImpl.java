@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -34,6 +33,7 @@
  * $$PROACTIVE_INITIAL_DEV$$
  */
 //@snippet-start api_starter_SlaveImpl
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.components.api.starter;
 
 import java.util.List;

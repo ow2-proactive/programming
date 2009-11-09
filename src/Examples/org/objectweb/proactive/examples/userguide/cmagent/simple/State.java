@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -34,6 +33,7 @@
  * $$PROACTIVE_INITIAL_DEV$$
  */
 //@snippet-start state_full
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.simple;
 
 import java.io.Serializable;

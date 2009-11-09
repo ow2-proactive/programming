@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start primes_distributed_manager
 //@snippet-start primes_distributed_manager_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.primes.distributed;
 
 import java.util.Vector;

@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start CMA_Main
 //@snippet-start simple_CMA_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.simple;
 
 import org.objectweb.proactive.api.PAActiveObject;

@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start adl_interfaces_MasterImpl_skeleton
 //@snippet-start adl_interfaces_MasterImpl
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.components.adl.interfaces;
 
 import java.util.List;

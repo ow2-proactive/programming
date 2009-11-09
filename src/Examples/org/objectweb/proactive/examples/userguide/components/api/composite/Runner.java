@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -34,6 +33,7 @@
  * $$PROACTIVE_INITIAL_DEV$$
  */
 //@snippet-start api_composite_Runner
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.components.api.composite;
 
 import java.util.List;

@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -34,6 +33,7 @@
  * $$PROACTIVE_INITIAL_DEV$$
  */
 //@snippet-start adl_interfaces_Itf2
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.components.adl.interfaces;
 
 /**

@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start primes_distributed_main
 //@snippet-start primes_distributed_main_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.primes.distributed;
 
 import java.io.File;

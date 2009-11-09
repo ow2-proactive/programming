@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start primes_distributed_worker
 //@snippet-start primes_distributed_worker_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.primes.distributed;
 
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;

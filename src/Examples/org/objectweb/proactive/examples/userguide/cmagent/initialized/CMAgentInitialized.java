@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -34,6 +33,7 @@
  * $$ACTIVEEON_INITIAL_DEV$$
  */
 //@snippet-start init_CMA_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.initialized;
 
 import org.objectweb.proactive.Body;

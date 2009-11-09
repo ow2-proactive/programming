@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start api_composite_Main_skeleton
 //@snippet-start api_composite_Main
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.components.api.composite;
 
 import java.util.ArrayList;

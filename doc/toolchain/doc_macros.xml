@@ -240,9 +240,10 @@
         <sequential>
             <property name="gcmd.dir" value="${docs.schemas.dir}/gcmd" />
             <mkdir dir="${gcmd.dir}"/>
+			<echo message="Processing GCMD schema documentation..." />
             <xsddoc out="${gcmd.dir}" 
                     title="GCM Deployment Schema" 
-                    verbose="true"
+                    verbose="false"
                     header="&lt;img width='70%' src='${base.dir}/doc/pa/images/Logo-ProActive.png' /&gt;"
                     bottom=" "
                     file="${src.extensions.dir}/${extensions.path}/gcmdeployment/schema/ExtensionSchemas.xsd" />
@@ -253,9 +254,10 @@
         <sequential>
             <property name="gcma.dir" value="${docs.schemas.dir}/gcma" />
             <mkdir dir="${gcma.dir}"/>
+			<echo message="Processing GCMA schema documentation..." />
             <xsddoc out="${gcma.dir}" 
                     title="GCM Application Schema" 
-                    verbose="true"
+                    verbose="false"
                     header="&lt;img width='70%' src='${base.dir}/doc/pa/images/Logo-ProActive.png' /&gt;"
                     bottom=" "
                     file="${src.extensions.dir}/${extensions.path}/gcmdeployment/schema/ApplicationDescriptorSchema.xsd" />

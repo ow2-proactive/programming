@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start primes_distributedmw_example
 //@snippet-start primes_distributedmw_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.primes.distributedmw;
 
 import java.util.ArrayList;

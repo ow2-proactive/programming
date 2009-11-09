@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start migrate_cma_skeleton
 //@snippet-start migrate_cma_full
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.migration;
 
 import java.io.Serializable;

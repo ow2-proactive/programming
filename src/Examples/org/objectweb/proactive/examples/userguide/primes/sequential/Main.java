@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -34,6 +33,7 @@
  * $$ACTIVEEON_INITIAL_DEV$$
  */
 //@snippet-start primes_sequential_main
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.primes.sequential;
 
 /**

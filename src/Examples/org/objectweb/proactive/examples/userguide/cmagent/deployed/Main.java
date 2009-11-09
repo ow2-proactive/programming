@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -35,6 +34,7 @@
  */
 //@snippet-start cma_deploy_full
 //@snippet-start deploy_CMA_skeleton
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.deployed;
 
 import java.io.File;

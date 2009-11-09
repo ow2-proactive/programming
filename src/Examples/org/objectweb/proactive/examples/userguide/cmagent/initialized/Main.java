@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -33,6 +32,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.initialized;
 
 import org.objectweb.proactive.api.PAActiveObject;

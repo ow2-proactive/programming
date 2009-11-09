@@ -1,4 +1,3 @@
-//@tutorial-start
 /*
  * ################################################################
  *
@@ -34,6 +33,7 @@
  * $$PROACTIVE_INITIAL_DEV$$
  */
 //@snippet-start fullCMA
+//@tutorial-start
 package org.objectweb.proactive.examples.userguide.cmagent.simple;
 
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
