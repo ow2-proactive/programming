@@ -293,10 +293,6 @@
                <para><literal>ajo.jar, njs_client.jar, scriptPlugin.jar, jh.jar</literal>
                - used when deploying to a UNICORE site.</para>
             </listitem>
-
-            <listitem>
-               <para><literal>classad.jar, glite-wms-jdlj.jar</literal>  - used when deploying on gLite sites.</para>
-            </listitem>
          </itemizedlist>
 
          <para>

@@ -45,7 +45,7 @@
                 <secondary>XML Descriptor</secondary>
               </indexterm>
 
-              <para>globus(GT2, GT3 and GT4), unicore, glite, arc
+              <para>globus(GT2, GT3 and GT4), unicore, arc
               (nordugrid)</para>
             </listitem>
           </itemizedlist></para>
@@ -91,8 +91,7 @@
             </listitem>
 
             <listitem>
-              <para>other protocols like globus, glite will be supported
-              soon</para>
+              <para>other protocols like globus soon</para>
             </listitem>
           </itemizedlist></para>
       </listitem>
@@ -916,7 +915,7 @@
       <emphasis role="bold">ssh</emphasis>, <emphasis role="bold">rlogin</emphasis>, <emphasis role="bold">lsf</emphasis>,
       <emphasis role="bold">pbs</emphasis>, <emphasis role="bold">oar</emphasis>, <emphasis role="bold">prun</emphasis>,
       <emphasis role="bold">globus</emphasis>, <emphasis role="bold">unicore</emphasis>, <emphasis role="bold">arc
-      (nordugrid)</emphasis>, <emphasis role="bold">glite</emphasis>. How to
+      (nordugrid)</emphasis>. How to
       use these protocols is explained in the following examples. Just remind
       that you can also combine these protocols.The principle of combination
       is fairly simple, you can imagine for instance that you will log on a
@@ -1616,23 +1615,6 @@
           Client</link></para>
 			<programlisting><textobject><textdata fileref="../../descriptors/examples_legacy_descriptors/NorduGrid_Example.xml"/></textobject></programlisting>
 
-        </listitem>
-
-        <listitem>
-          <para>GLITE</para>
-
-          <indexterm significance="preferred">
-            <primary>GLITE</primary>
-
-            <secondary>XML Descriptor</secondary>
-          </indexterm>
-
-          <para>ProActive provides
-          <literal>org.objectweb.proactive.core.process.glite.GLiteProcess</literal>
-          to use such protocol.</para>
-
-
-          <programlisting><textobject><textdata fileref="../../descriptors/examples_legacy_descriptors/SSH_GLite_Example.xml"/></textobject></programlisting>
         </listitem>
 
         <listitem>
