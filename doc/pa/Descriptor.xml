@@ -934,9 +934,6 @@
 
       <!-- This paragraph only appears in the pdfversion  -->
 
-      <para os="pdf">You can find in <xref linkend="xmlFileSrc"/> several
-      examples of supported protocols and useful combinations.</para>
-
       <para><emphasis role="bold">Note that it is mandatory for using all
       these features, that ProActive is installed on each host, of course on
       the local host as well as on each host where you want to create

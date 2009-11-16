@@ -1,185 +1,184 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Converted by db4-upgrade version 1.0 
- !DOCTYPE book PUBLIC "-//INRIA//DTD DocBook V5.0-Based Subset V0.1//EN"-->
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN"
-                "docbook.dtd" [
-                <!-- WARNING: Please do not edit with XXE -->
-                <!-- This file is only meant as a concatenation of the other xml files -->
+!DOCTYPE book PUBLIC "-//INRIA//DTD DocBook V5.0-Based Subset V0.1//EN"-->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "docbook.dtd" [
+	<!-- WARNING: Please do not edit with XXE -->
+	<!-- This file is only meant as a concatenation of the other xml files -->
 
-                <!-- This has been added to write some special characters such as en and em dashes -->
-                <!ENTITY % iso-pub PUBLIC "ISO 8879:1986//ENTITIES Publishing//EN//XML"
-                                    "http://www.oasis-open.org/docbook/xmlcharent/0.3/iso-pub.ent">
-                                    %iso-pub;
+	<!-- This has been added to write some special characters such as en and em dashes -->
+	<!ENTITY % iso-pub PUBLIC "ISO 8879:1986//ENTITIES Publishing//EN//XML"
+		"http://www.oasis-open.org/docbook/xmlcharent/0.3/iso-pub.ent">
+		%iso-pub;
 
-                <!ENTITY bookinfo SYSTEM "bookinfo.xml">
-                <!ENTITY contributors SYSTEM "contributors.xml">
-                <!ENTITY Principles SYSTEM "Principles.xml">
-                <!ENTITY Installation SYSTEM "Installation.xml">
-                <!ENTITY TroubleShooting SYSTEM "TroubleShooting.xml">
-                <!ENTITY ProActiveBasis SYSTEM "ProActiveBasis.xml">
-                <!ENTITY AOCreation SYSTEM "ActiveObjectCreation.xml">
-                <!ENTITY TypedGroupCommunication SYSTEM "TypedGroupCommunication.xml">
-                <!ENTITY OOSPMD SYSTEM "OOSPMD.xml">
-                <!ENTITY Migration SYSTEM "Migration.xml">
-                <!ENTITY exceptions SYSTEM "exceptions.xml">
-                <!ENTITY MasterWorker SYSTEM "masterworker.xml">
-                <!ENTITY bnb SYSTEM "bnb.xml">
-                <!ENTITY Calcium SYSTEM "Calcium.xml">
-                <!ENTITY PAConfiguration SYSTEM "Configuration.xml">
-                <!ENTITY Descriptor SYSTEM "Descriptor.xml">
-                <!ENTITY VariableContract SYSTEM "VariableContract.xml">
-                <!ENTITY FileTransfer SYSTEM "FileTransfer.xml">
-                <!ENTITY SSHTunneling SYSTEM "SSHTunneling.xml">
-                <!ENTITY faultTolerance SYSTEM "faultTolerance.xml">
-                <!ENTITY technicalService SYSTEM "technicalService.xml">
-                <!ENTITY intro SYSTEM "components/intro.xml">
-                <!ENTITY userguide SYSTEM "components/userguide.xml">
-                <!ENTITY architecture SYSTEM "components/architecture.xml">
-                <!ENTITY examples SYSTEM "components/examples.xml">
-                <!ENTITY perspectives SYSTEM "components/perspectives.xml">
-                <!ENTITY annex SYSTEM "components/annex.xml">
-                <!ENTITY Security SYSTEM "Security.xml">
-                <!ENTITY WSDoc SYSTEM "WSDoc.xml">
-                <!ENTITY OSGi SYSTEM "OSGi.xml">
-                <!ENTITY MonteCarlo SYSTEM "monteCarlo.xml">
-                <!ENTITY mpi SYSTEM "mpi.xml">
-                <!ENTITY plugin SYSTEM "development/plugin.xml">
-                <!ENTITY DataSpaces SYSTEM "DataSpaces.xml">
-                <!ENTITY guidedindex SYSTEM "guided_tour/guidedIndex.xml">
-                <!-- <!ENTITY capabilities-intro SYSTEM "guided_tour/capabilities-intro.xml"> -->
-                <!ENTITY capabilities-intro SYSTEM "applicationhandouts.xml">
-                <!ENTITY hands_on_programming_CMA SYSTEM "guided_tour/hands_on_programming_CMA.xml">
-                <!ENTITY StepByStepPi SYSTEM "guided_tour/StepByStepPi.xml">
-                <!ENTITY OOSPMDJacobiexample SYSTEM "guided_tour/OOSPMDJacobiexample.xml">
-                <!ENTITY nbody SYSTEM "guided_tour/nbody.xml">
-                <!ENTITY guidedComp SYSTEM "guided_tour/to_components.xml">
-                <!ENTITY conclusion SYSTEM "guided_tour/conclusion.xml">
-                <!ENTITY writeDoc SYSTEM "writeProActiveDocumentation.xml">
-                <!ENTITY developingConventions SYSTEM "developingConventions.xml">
-                <!ENTITY DescriptorProcess SYSTEM "development/DescriptorProcess.xml">
-                <!ENTITY devFileTransfer SYSTEM "development/AddingAFileTransferProtocol.xml">
-                <!ENTITY devFaultTolerance SYSTEM "development/AddingAFaultToleranceProtocol.xml">
-                <!ENTITY MOP SYSTEM "MOP.xml">
-                <!ENTITY FAQ SYSTEM "FAQ.xml">
-                <!ENTITY biblio SYSTEM "biblio.xml">
-                <!ENTITY referenceCard SYSTEM "ReferenceCard.xml">
-                <!ENTITY srcCodeAppendix SYSTEM "srcCodeAppendix.xml">
-                <!ENTITY glossary SYSTEM "glossary.xml">
-                <!ENTITY reference SYSTEM "definitions.xml">
-                <!ENTITY HighLevelAPITutorial SYSTEM "high_level_api_tutorial.xml">
-                <!ENTITY ComponentsTutorial SYSTEM "ComponentsTutorial.xml">
-                <!ENTITY AnnotationProcessing SYSTEM "Annotations.xml">
-                <!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">
-                <!ENTITY MessageRouting SYSTEM "MessageRouting.xml">
-                <!ENTITY MessageTagging SYSTEM "MessageTagging.xml">
-	        <!ENTITY JMX SYSTEM "Jmx.xml">
-         	 <!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
-				<!ENTITY Virtualization SYSTEM "Virtualization.xml">
+	<!ENTITY bookinfo SYSTEM "bookinfo.xml">
+	<!ENTITY contributors SYSTEM "contributors.xml">
+	<!ENTITY Principles SYSTEM "Principles.xml">
+	<!ENTITY Installation SYSTEM "Installation.xml">
+	<!ENTITY TroubleShooting SYSTEM "TroubleShooting.xml">
+	<!ENTITY ProActiveBasis SYSTEM "ProActiveBasis.xml">
+	<!ENTITY AOCreation SYSTEM "ActiveObjectCreation.xml">
+	<!ENTITY TypedGroupCommunication SYSTEM "TypedGroupCommunication.xml">
+	<!ENTITY OOSPMD SYSTEM "OOSPMD.xml">
+	<!ENTITY Migration SYSTEM "Migration.xml">
+	<!ENTITY exceptions SYSTEM "exceptions.xml">
+	<!ENTITY MasterWorker SYSTEM "masterworker.xml">
+	<!ENTITY bnb SYSTEM "bnb.xml">
+	<!ENTITY Calcium SYSTEM "Calcium.xml">
+	<!ENTITY PAConfiguration SYSTEM "Configuration.xml">
+	<!ENTITY Descriptor SYSTEM "Descriptor.xml">
+	<!ENTITY VariableContract SYSTEM "VariableContract.xml">
+	<!ENTITY SSHTunneling SYSTEM "SSHTunneling.xml">
+	<!ENTITY faultTolerance SYSTEM "faultTolerance.xml">
+	<!ENTITY technicalService SYSTEM "technicalService.xml">
+	<!ENTITY intro SYSTEM "components/intro.xml">
+	<!ENTITY userguide SYSTEM "components/userguide.xml">
+	<!ENTITY architecture SYSTEM "components/architecture.xml">
+	<!ENTITY examples SYSTEM "components/examples.xml">
+	<!ENTITY perspectives SYSTEM "components/perspectives.xml">
+	<!ENTITY annex SYSTEM "components/annex.xml">
+	<!ENTITY Security SYSTEM "Security.xml">
+	<!ENTITY WSDoc SYSTEM "WSDoc.xml">
+	<!ENTITY OSGi SYSTEM "OSGi.xml">
+	<!ENTITY MonteCarlo SYSTEM "monteCarlo.xml">
+	<!ENTITY mpi SYSTEM "mpi.xml">
+	<!ENTITY plugin SYSTEM "development/plugin.xml">
+	<!ENTITY DataSpaces SYSTEM "DataSpaces.xml">
+	<!ENTITY guidedindex SYSTEM "guided_tour/guidedIndex.xml">
+	<!ENTITY capabilities-intro SYSTEM "applicationhandouts.xml">
+	<!ENTITY hands_on_programming_CMA SYSTEM "guided_tour/hands_on_programming_CMA.xml">
+	<!ENTITY OOSPMDJacobiexample SYSTEM "guided_tour/OOSPMDJacobiexample.xml">
+	<!ENTITY writeDoc SYSTEM "writeProActiveDocumentation.xml">
+	<!ENTITY developingConventions SYSTEM "developingConventions.xml">
+	<!ENTITY DescriptorProcess SYSTEM "development/DescriptorProcess.xml">
+	<!ENTITY devFileTransfer SYSTEM "development/AddingAFileTransferProtocol.xml">
+	<!ENTITY devFaultTolerance SYSTEM "development/AddingAFaultToleranceProtocol.xml">
+	<!ENTITY MOP SYSTEM "MOP.xml">
+	<!ENTITY FAQ SYSTEM "FAQ.xml">
+	<!ENTITY biblio SYSTEM "biblio.xml">
+	<!ENTITY referenceCard SYSTEM "ReferenceCard.xml">
+	<!ENTITY glossary SYSTEM "glossary.xml">
+	<!ENTITY reference SYSTEM "definitions.xml">
+	<!ENTITY ComponentsTutorial SYSTEM "ComponentsTutorial.xml">
+	<!ENTITY AnnotationProcessing SYSTEM "Annotations.xml">
+	<!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">
+	<!ENTITY MessageRouting SYSTEM "MessageRouting.xml">
+	<!ENTITY MessageTagging SYSTEM "MessageTagging.xml">
+	<!ENTITY JMX SYSTEM "Jmx.xml">
+	<!ENTITY JMXMBean SYSTEM "jmxMBean.xml">
+	<!ENTITY Virtualization SYSTEM "Virtualization.xml">
+	<!ENTITY FileTransfer SYSTEM "FileTransfer.xml">
+	<!-- <!ENTITY capabilities-intro SYSTEM "guided_tour/capabilities-intro.xml"> -->
+	<!-- <!ENTITY StepByStepPi SYSTEM "guided_tour/StepByStepPi.xml">-->
+	<!-- <!ENTITY nbody SYSTEM "guided_tour/nbody.xml">-->
+	<!-- <!ENTITY guidedComp SYSTEM "guided_tour/to_components.xml">-->
+	<!-- <!ENTITY conclusion SYSTEM "guided_tour/conclusion.xml">-->
+	<!-- <!ENTITY srcCodeAppendix SYSTEM "srcCodeAppendix.xml">-->
+	<!-- <!ENTITY HighLevelAPITutorial SYSTEM "high_level_api_tutorial.xml">-->
 
-                ]>
-                
+]>
+
 <book xmlns="http://docbook.org/ns/docbook" version="5.0">
- &bookinfo;
- &contributors;
- 
- <part xml:id="ProActiveIntroduction"><info><title xml:id="Introduction_2">Introduction</title></info>
-  
-  &Principles;
-  &Installation;
-  &TroubleShooting;  
- </part>
- 
- <part xml:id="ProActiveGuidedTour"><info><title xml:id="GuidedTourandTutorial_2">Guided Tour and Tutorial</title></info>
-  
-  &guidedindex;
-  &capabilities-intro;
-  &hands_on_programming_CMA;
-  <!--&HighLevelAPITutorial; -->
-  &ComponentsTutorial;
-  <!-- TODO to be removed, have been included in capabilities-intro --> 
-  <!--    &StepByStepPi;
-   &OOSPMDJacobiexample;
-   &nbody;
-   &guidedComp;
-   &conclusion;  -->
- </part>
- 
- <part xml:id="ProActiveProgramming"><info><title xml:id="ProgrammingWithActiveObjects_2">Programming With Active Objects</title></info>
-  
-  &ProActiveBasis; 
-  &AOCreation; 
-  &TypedGroupCommunication;
-  &Migration;
-  &exceptions;
- </part>
- 
- <part xml:id="HighLevelAPI"><info><title xml:id="ProgrammingWithHighLevelAPIs_2">Programming With High Level APIs</title></info>
-  
-  &MasterWorker;
-  &Calcium;
-  &OOSPMD;
-  &mpi;
-  &DataSpaces;
- </part>
- 
- <part xml:id="ProActiveConfiguration"><info><title xml:id="ProActiveConfiguration_2">ProActive Configuration</title></info>
-  &PAConfiguration;
-  &MessageRouting;
-  &SSHTunneling;
- </part>
+	&bookinfo;
+	&contributors;
 
- <part xml:id="ProActiveDeployment"><info><title xml:id="DeploymentAndVirtualization_2">Deployment And Virtualization</title></info>
-  &GCMDeployment;
-  &Descriptor;
-  &VariableContract;
-  &Virtualization;
-  <!--&FileTransfer;-->
-  &technicalService;
- </part>
- 
- <part xml:id="ProActiveComponents"><info><title xml:id="ProgrammingWithComponents_2">Programming With Components</title></info>
-  
-  &intro;
-  &userguide;
-  &architecture;
-  &examples;
-  &perspectives;
-  &annex;
- </part>
- <part xml:id="ProActiveAdvancedFeatures"><info><title xml:id="ServicesandAdvancedFeatures_2">Services and Advanced Features</title></info>
-  
-  &faultTolerance;
-  &Security;
-  &MessageTagging;
-  &WSDoc;
-  &AnnotationProcessing;
-  &OSGi;
-  &JMX;
-  &JMXMBean;
- </part>
- 
- <part xml:id="ExtendingProActive"><info><title xml:id="ExtendingProActive_2">Extending ProActive</title></info>
-  
-  &writeDoc;
-  &devFileTransfer;
-  &devFaultTolerance;
-  &MOP;
- </part>
- 
- <part xml:id="Unsupported"><info><title xml:id="ProActiveExtraPackagesExtensionsUnderDevelopment_2">ProActive Extra Packages / Extensions Under Development  </title></info>
-  &bnb;
-  &MonteCarlo;
- </part>
- 
- <part xml:id="backMattersPart"><info><title xml:id="Backmatters_2">Back matters</title></info>
-  
-  &FAQ;   
-  &referenceCard;
-  <index xml:id="keywordIndex"/>
-  &srcCodeAppendix;    
-  &biblio; 
- </part>
- <!-- TODO not written yet --> 
- <!--   &glossary;  
-  &reference;--> 
+	<part xml:id="ProActiveIntroduction"><info><title xml:id="Introduction_2">Introduction</title></info>
+
+		&Principles;
+		&Installation;
+		&TroubleShooting;
+	</part>
+
+	<part xml:id="ProActiveGuidedTour"><info><title xml:id="GuidedTourandTutorial_2">Guided Tour and Tutorial</title></info>
+
+		&guidedindex;
+		&capabilities-intro;
+		&hands_on_programming_CMA;
+		<!--&HighLevelAPITutorial; -->
+		&ComponentsTutorial;
+		<!-- TODO to be removed, have been included in capabilities-intro -->
+		<!--    &StepByStepPi;
+		&nbody;
+		&guidedComp;
+		&conclusion;  -->
+	</part>
+
+	<part xml:id="ProActiveProgramming"><info><title xml:id="ProgrammingWithActiveObjects_2">Programming With Active Objects</title></info>
+
+		&ProActiveBasis;
+		&AOCreation;
+		&TypedGroupCommunication;
+		&Migration;
+		&exceptions;
+	</part>
+
+	<part xml:id="HighLevelAPI"><info><title xml:id="ProgrammingWithHighLevelAPIs_2">Programming With High Level APIs</title></info>
+
+		&MasterWorker;
+		&Calcium;
+		&OOSPMD;
+		&mpi;
+		&DataSpaces;
+	</part>
+
+	<part xml:id="ProActiveConfiguration"><info><title xml:id="ProActiveConfiguration_2">ProActive Configuration</title></info>
+		&PAConfiguration;
+		&MessageRouting;
+		&SSHTunneling;
+	</part>
+
+	<part xml:id="ProActiveDeployment"><info><title xml:id="DeploymentAndVirtualization_2">Deployment And Virtualization</title></info>
+		&GCMDeployment;
+		&Descriptor;
+		&VariableContract;
+		&Virtualization;
+		<!--&FileTransfer;-->
+		&technicalService;
+	</part>
+
+	<part xml:id="ProActiveComponents"><info><title xml:id="ProgrammingWithComponents_2">Programming With Components</title></info>
+
+		&intro;
+		&userguide;
+		&architecture;
+		&examples;
+		&perspectives;
+		&annex;
+	</part>
+
+	<part xml:id="ProActiveAdvancedFeatures"><info><title xml:id="ServicesandAdvancedFeatures_2">Services and Advanced Features</title></info>
+
+		&faultTolerance;
+		&Security;
+		&MessageTagging;
+		&WSDoc;
+		&AnnotationProcessing;
+		&OSGi;
+		&JMX;
+		&JMXMBean;
+	</part>
+
+	<part xml:id="ExtendingProActive"><info><title xml:id="ExtendingProActive_2">Extending ProActive</title></info>
+
+		&writeDoc;
+		&devFileTransfer;
+		&devFaultTolerance;
+		&MOP;
+	</part>
+
+	<part xml:id="Unsupported"><info><title xml:id="ProActiveExtraPackagesExtensionsUnderDevelopment_2">ProActive Extra Packages / Extensions Under Development  </title></info>
+		&bnb;
+		&MonteCarlo;
+	</part>
+
+	<part xml:id="backMattersPart"><info><title xml:id="Backmatters_2">Back matters</title></info>
+
+		&FAQ;
+		&referenceCard;
+		<index xml:id="keywordIndex"/>
+		<!-- &srcCodeAppendix;    -->
+		&biblio;
+	</part>
+	<!-- TODO not written yet -->
+	<!--   &glossary;
+	&reference;-->
 </book>
