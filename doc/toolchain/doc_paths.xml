@@ -16,27 +16,13 @@
 	<!--  =============================================================== -->
 	<property name="base.dir"      			value="${basedir}" /> <!-- doc/toolchain folder -->		
 	<property name="docs.dir"      			value="${base.dir}/doc" /> <!-- doc folder -->	
-	<property name="docs.src.dir"       		value="${docs.dir}/src" /> <!-- doc/src folder -->	
 	<property name="docs.tmp.dir"  			value="${docs.dir}/tmp" /> <!-- doc/tmp folder -->
 	<property name="docs.toolchain.dir"		value="${docs.dir}/toolchain" /> <!-- doc/toolchain folder -->
 	<property name="docs.xsl.dir"			value="${docs.toolchain.dir}/xsl" />
-	<property name="doc.name"			value="generic_manual" />
-	<property name="docs.built.dir"			value="${docs.dir}/built/${doc.name}" /> <!--why-->
-	
-	<property name="docs.api.complete.dir"		value="${docs.built.dir}/api_complete" />
-	<property name="docs.api.published.dir"		value="${docs.built.dir}/api_published" />
-	
-	<property name="docs.html.multiple.dir"		value="${docs.built.dir}/multiple_html/" />
-	<property name="docs.html.single.dir"		value="${docs.built.dir}/single_html/" />
-	<property name="docs.pdf.dir"			value="${docs.built.dir}/pdf/" />
-	<property name="docs.schemas.dir"          value="${docs.built.dir}/schemas/" />
-	
-	<property name="docs.mainFile" 			value="main.xml" />
+
 	<property name="snippets.start.default"	value="${docs.dir}/../src" />
 	<property name="snippets.location"		value="${docs.tmp.dir}/automatic_snippets" />
-	
-	
-	
+
 	<!-- DocBook --> 
 	<property name="docbook.version" 		value="1.74.0" />
 	<property name="docbook.archive"                value="docbook-xsl-ns-${docbook.version}" />
@@ -46,7 +32,6 @@
 		<fileset dir="${docs.lib.dir}">
 			<include name="**/*.jar"/>
 		</fileset>
-		
 	</path>
 	
 	<!-- javadoc paths are not include through subant-->
@@ -54,7 +39,6 @@
 		<fileset dir="${docs.lib.dir}/trunk/doc/lib">
 			<include name="**/*.jar"/>
 		</fileset>
-		
 	</path>
 	
 	<property name="docs.log4j.properties"	value="${docs.lib.dir}/log4j.properties" />
@@ -63,29 +47,13 @@
 	<!-- ================================================================ -->
 	<!--                Documentation files:   XSL,XML,PDF,etc            -->
 	<!--  =============================================================== -->
-	<property name="docs.pdf.name"			value="${doc.name}Manual.pdf" />
-	
 
 	<property name="docs.xsl.profiling"		value="${docs.xsl.dir}/profiling.xsl" />
 	<property name="docs.xsl.pdf"			value="${docs.xsl.dir}/pdf.xsl" />
 	<property name="docs.xsl.html.chunked"		value="${docs.xsl.dir}/chunkedhtml.xsl" />
 	<property name="docs.xsl.html.one"		value="${docs.xsl.dir}/onehtml.xsl" />
 	<property name="docs.xsl.removenewlines" 	value="${docs.xsl.dir}/remove_newlines.xsl" />
-	
-	<property name="docs.html.multiple.zip"		value="${docs.built.dir}/${doc.name}ManualMultipleHtml.zip" />
-	<property name="docs.html.single.zip"		value="${docs.built.dir}/${doc.name}ManualSingleHtml.zip" />
-	<property name="docs.javadoc.published.zip"	value="${docs.built.dir}/${doc.name}JavadocPublished.zip" />
-	<property name="docs.javadoc.complete.zip"	value="${docs.built.dir}/${doc.name}JavadocComplete.zip" />
-	
-	
-	<property name="docs.html.multiple.output"	value="${docs.html.multiple.dir}/empty.html" />
-	<property name="docs.html.single.name"		value="${doc.name}Manual.html" />
-	<property name="docs.html.single.output"	value="${docs.html.single.dir}/${docs.html.single.name}" />
-	<property name="docs.pdf.output"		value="${docs.pdf.dir}/${docs.pdf.name}" />
-	
-	
-	<property name="docs.docbook.dtd.name"		value="docbook.dtd" />
-	<property name="docs.docbook.dtd"		value="${docs.src.dir}/${docs.docbook.dtd.name}" />
+
 	<!--//FIXME ? for html files this is defined in html.xsl -->
 	<property name="docs.html.css.name"		value="main.css" />
 	
@@ -93,11 +61,9 @@
 	<!--                   Javadoc build properties                       -->
 	<!--  =============================================================== -->
 	
-	<property name="javadoc.title" 			value="${doc.name} "/>
 	<property name="javadoc.copyright" 		value="Copyright 1997-2009 INRIA All Rights Reserved."/>
 	<property name="docs.fractal.link"		value="http://fractal.objectweb.org/current/doc/javadoc/fractal/"/>
 	<property name="docs.java.api.link" 		value="http://java.sun.com/j2se/1.5.0/docs/api/"/>
-	<property name="docs.javadoc.window.title" 	value="${doc.name}"/>
 	<property name="javadoc.tmp.dir"  		value="../doc/tmp" />
 
 	<!-- ================================================================ -->
@@ -110,8 +76,8 @@
 	<property name="checkstyle.importcontrol.file" 	value="${checkstyle.path}/import-control.xml"/>
 	<property name="checkstyle.config" 		value="${checkstyle.path}/proactive_checks.xml"/>
 	
-  <!-- Directory of xml configuration files for highlighting -->
-   <property name="docs.highlighting.dir" value="${docs.toolchain.dir}/highlighting"/>
+	<!-- Directory of xml configuration files for highlighting -->
+	<property name="docs.highlighting.dir" value="${docs.toolchain.dir}/highlighting"/>
 
     <if name="isWindows">
         <property name="url.file.prefix" value="file:///" />
