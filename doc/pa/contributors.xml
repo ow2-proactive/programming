@@ -987,7 +987,7 @@
   </para>
 
   <para>
-    <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.objectweb.org/wws/arc/proactive">http://www.objectweb.org/wws/arc/proactive</uri>
+    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.objectweb.org/wws/arc/proactive" />
   </para>
 
   <para>
@@ -995,7 +995,7 @@
   </para>
 
   <para>
-    <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://bugs.activeeon.com/browse/PROACTIVE">http://bugs.activeeon.com/browse/PROACTIVE</uri>
+    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://bugs.activeeon.com/browse/PROACTIVE" />
   </para>
 
   <!-- List to be completed and kept up-to-date, sorted alphabeticly -->

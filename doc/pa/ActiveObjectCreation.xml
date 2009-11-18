@@ -808,7 +808,7 @@
 				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/proactivemetaobjectfactory.snip"/></textobject></programlisting>
 							
 				More explanations can be found in the
-				<uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/release-doc/pa/api_published/index.html">
+				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/release-doc/pa/api_published/index.html">
                javadoc
 				</uri>
             of the <literal>org.objectweb.proactive.core.body.ProActiveMetaObjectFactory</literal> class.
