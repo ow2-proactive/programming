@@ -139,7 +139,7 @@ public class GroupGridEngine extends AbstractGroup {
 
             // build resources 
             if (wallTime != null) {
-                commandBuf.append("-l walltime=");
+                commandBuf.append("-l h_rt=");
                 commandBuf.append(wallTime);
                 commandBuf.append(" ");
             }
