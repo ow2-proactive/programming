@@ -71,13 +71,13 @@ public interface MembraneController {
             IllegalLifeCycleException, NoSuchComponentException;
 
     /**
-     * Retrurns an array containing all the components inside the membrane
+     * Returns an array containing all the components inside the membrane
      * @return All the non-functional components
      */
     Component[] getNFcSubComponents();
 
     /**
-     * Retrurns the non functional component specified by the name parameter
+     * Returns the non functional component specified by the name parameter
      * @return the non functional component specified by the name parameter
      */
     Component getNFcSubComponent(String name) throws NoSuchComponentException;
