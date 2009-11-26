@@ -34,10 +34,11 @@
  */
 package org.objectweb.proactive.examples.webservices.helloWorld;
 
+import java.io.File;
+
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
-import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
@@ -47,9 +48,15 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesFactory;
+import org.objectweb.proactive.extensions.webservices.WebServicesInitActiveFactory;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
@@ -92,12 +99,17 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
     public static void main(String[] args) {
         String url = "";
         String wsFrameWork = "";
+        File applicationDescriptor = null;
         if (args.length == 1) {
             url = AbstractWebServicesFactory.getLocalUrl();
             wsFrameWork = args[0];
         } else if (args.length == 2) {
             url = args[0];
             wsFrameWork = args[1];
+        } else if (args.length == 3) {
+            url = args[0];
+            applicationDescriptor = new File(args[1]);
+            wsFrameWork = args[2];
         } else {
             System.out.println("Wrong number of arguments");
             System.out.println("Usage: HelloWorldComponent [url] wsFrameWork");
@@ -111,7 +123,7 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
             boot = org.objectweb.fractal.api.Fractal.getBootstrapComponent();
 
             TypeFactory tf = Fractal.getTypeFactory(boot);
-            GenericFactory cf = Fractal.getGenericFactory(boot);
+            ProActiveGenericFactory cf = (ProActiveGenericFactory) Fractal.getGenericFactory(boot);
 
             // type of server component
             ComponentType sType = tf
@@ -120,9 +132,33 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
                                     false),
                             tf.createFcItfType("goodbye-world", GoodByeWorldItf.class.getName(), false,
                                     false, false) });
-            // create server component
-            comp = cf.newFcInstance(sType, new ControllerDescription("server", Constants.PRIMITIVE),
-                    new ContentDescription(HelloWorldComponent.class.getName()));
+
+            if (applicationDescriptor != null) {
+                System.out.println("Using a deployment");
+                GCMApplication gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor);
+                gcmad.startDeployment();
+
+                GCMVirtualNode hello = gcmad.getVirtualNode("Hello");
+                Node node1 = hello.getANode();
+
+                if (hello == null)
+                    throw new ProActiveException("Hello virtual node is not defined");
+
+                // create server component
+                //                ControllerDescription cd = new ControllerDescription("server", Constants.PRIMITIVE,
+                //                        "/user/ffonteno/home/proactive-git/programming/src/Extensions/" +
+                //                        "org/objectweb/proactive/extensions/webservices/cxf/initialization/cxf-component-config.xml");
+                ControllerDescription cd = new ControllerDescription("server", Constants.PRIMITIVE);
+                comp = cf.newFcInstance(sType, cd, new ContentDescription(
+                    HelloWorldComponent.class.getName(), null, WebServicesInitActiveFactory
+                            .getInitActive(wsFrameWork), null), node1);
+            } else {
+                System.out.println("Not using a deployment");
+                ControllerDescription cd = new ControllerDescription("server", Constants.PRIMITIVE);
+                comp = cf.newFcInstance(sType, cd,
+                        new ContentDescription(HelloWorldComponent.class.getName()));
+            }
+
             //start the component
             Fractal.getLifeCycleController(comp).startFc();
         } catch (InstantiationException e1) {
@@ -130,6 +166,9 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
         } catch (NoSuchInterfaceException e) {
             e.printStackTrace();
         } catch (IllegalLifeCycleException e) {
+            e.printStackTrace();
+        } catch (ProActiveException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

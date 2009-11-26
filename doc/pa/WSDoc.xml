@@ -79,7 +79,7 @@
   <section xml:id="PrerequisiteInstallingtheWebServerandtheSOAP"><info><title>Pre-requisite: Installing the Web Server and the SOAP engine</title></info>
 
   <para>
-  If you want to expose your active objects or components to th elocal embedded Jetty server, you just have to deploy proactive using
+  If you want to expose your active objects or components on the local embedded Jetty server or on Jetty servers deployed during your deployment, you just have to deploy proactive using
   the <literal>build deploy</literal> command into the <literal>compile</literal> directory. If you want to expose them on an other http
   server, you have to build the <literal>proactive.war</literal> archive.
   For this, you have to go into your <literal>compile</literal> directory of your ProActive home and type <literal>build proActiveWar</literal>.
@@ -181,6 +181,67 @@
     </itemizedlist>
   </section>
 
+  <section xml:id="exposeonremotejettyservers_29"><info><title>Exposing as a web service on remote Jetty servers launched during the deployment</title></info>
+	<para>
+		When you call the exposition of your active object or your component,
+		the Axis2 servlet or the CXF one is deployed on the local Jetty server. It is therefore possible
+		to expose your object locally without doing anything else.
+	</para>
+	<para>
+		Now, let us assume that your active object (or component) is deployed on a remote node.
+		In that case, you have a running jetty server on the remote host containing this node but no servlet has been deployed on it.
+		So, if you want to expose your active object on the remote host, you will have to make a small modification of the previous piece of code.
+	</para>
+	<para>
+		The web service extension provides classes that implements the <literal>InitActive</literal> interface which are in charge of deploying the CXF or the Axis2 servlet on the host
+		where your object has been initialized. Thus, you just have to instantiate you active object or your component using this implementation of <literal>InitActive</literal>.
+	</para>
+
+	<programlisting language="java">// Get the CXF InitActive in charge of deploying the CXF Servlet
+InitActive cxfInitActive = WebServicesInitActiveFactory.getInitActive("cxf");
+MyObject o = (MyObject) PAActiveObject.newActive(
+	MyObject.class.getName(), null, new Object[] {}, myNode, cxfInitActive, null);</programlisting>
+
+	<para>For the component, it would look as follows:</para>
+
+	<programlisting language="java">// Get the Axis2 InitActive in charge of deploying the Axis2 Servlet
+InitActive axis2InitActive = WebServicesInitActiveFactory.getInitActive("axis2");
+Component myComponent = myGenericFactory.newFcInstance(myComponentType,
+	new ControllerDescription("myControllerName", Constants.PRIMITIVE),
+	new ContentDescription(MyComponent.class.getName(), null, axis2InitActive, null), myNode);</programlisting>
+
+	<para>
+		Concerning components, there exists another way to do that using controllers. Indeed, the webservice extension also provides a customized controller
+		that will deploy the chosen servlet at component start.
+	</para>
+
+	<para>So, you can proceed as follows:</para>
+
+	<programlisting language="java">ControllerDescription cd = new ControllerDescription("myControllerName", Constants.PRIMITIVE,
+	"&lt;your ProActive Home&gt;/src/Extensions/" +
+	"org/objectweb/proactive/extensions/webservices/cxf/initialization/cxf-component-config.xml");
+Component myComp = myGenericFactory.newFcInstance(myComponentType, cd,
+	new ContentDescription(MyComponent.class.getName()));</programlisting>
+
+	<para>
+		The <literal>cxf-component-config.xml</literal> file just redefines the controller to be the
+		<literal>org.objectweb.proactive.extensions.webservices.cxf.initialization.CXFProActiveLifeCycleControllerImpl</literal>.
+		For using the <literal>org.objectweb.proactive.extensions.webservices.axis2.initialization.Axis2ProActiveLifeCycleControllerImpl</literal>,
+		use the file located at <literal>"&lt;your ProActive Home&gt;/src/Extensions/org/objectweb/proactive/extensions/webservices/axis2/initialization/axis2-component-config.xml"</literal>
+	</para>
+
+	<para>
+		Now, let us assume that your active object or your component is deployed on a node or locally and that you want to expose it on a host where another node is deployed.
+		On this host, there is only a running Jetty server without any web services servlet.
+		In order to deploy the CXF or Axis2 servlet on it, you can use the following code:
+	</para>
+
+	<programlisting language="java">WebServicesInitActiveFactory.getInitActive("cxf").initServlet(myNode);</programlisting>
+
+	<para>
+		Then, you can expose your active object as a web service as in <xref linkend="Stepstoexposeanactiveobjectasa_29"/>.
+	</para>
+  </section>
   <section xml:id="Accessingtheservices_29"><info><title>Accessing the services</title></info>
     
 
