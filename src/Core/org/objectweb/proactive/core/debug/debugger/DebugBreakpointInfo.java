@@ -32,10 +32,45 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.debug.stepbystep;
+package org.objectweb.proactive.core.debug.debugger;
 
-public interface DebuggerFactory {
+import java.io.Serializable;
 
-    Debugger newDebugger();
+
+public class DebugBreakpointInfo implements Serializable {
+
+    private BreakpointType breakpointType;
+    private String threadName;
+    private String methodName;
+    private long breakpointId;
+
+    public DebugBreakpointInfo(BreakpointInfo breakpointInfo) {
+        breakpointType = breakpointInfo.getType();
+        threadName = breakpointInfo.getThread().getName();
+        if (breakpointInfo.getRequest() != null) {
+            methodName = breakpointInfo.getRequest().getMethodName();
+        }
+        breakpointId = breakpointInfo.getBreakpointId();
+    }
+
+    public BreakpointType getBreakpointType() {
+        return breakpointType;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public boolean isImmediate() {
+        return breakpointType.isImmediate();
+    }
+
+    public long getBreakpointId() {
+        return breakpointId;
+    }
 
 }

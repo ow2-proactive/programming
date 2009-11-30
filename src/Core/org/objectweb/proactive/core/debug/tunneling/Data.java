@@ -32,45 +32,53 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.debug.stepbystep;
+package org.objectweb.proactive.core.debug.tunneling;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 
 
-public class DebugBreakpointInfo implements Serializable {
+public class Data implements Serializable {
+    private static final long serialVersionUID = 4068435103580170397L;
 
-    private BreakpointType breakpointType;
-    private String threadName;
-    private String methodName;
-    private long breakpointId;
+    /** data readed */
+    private byte[] data;
 
-    public DebugBreakpointInfo(BreakpointInfo breakpointInfo) {
-        breakpointType = breakpointInfo.getType();
-        threadName = breakpointInfo.getThread().getName();
-        if (breakpointInfo.getRequest() != null) {
-            methodName = breakpointInfo.getRequest().getMethodName();
+    /** number of byte readed */
+    private int length;
+
+    public Data() {
+    }
+
+    public Data(int length) {
+        this.data = new byte[length];
+        this.length = 0;
+    }
+
+    public void write(OutputStream out) throws IOException {
+        try {
+            out.write(data, 0, length);
+        } catch (java.lang.ArrayIndexOutOfBoundsException e) {
+            System.out.println(toString());
+            System.err.println("data.length: " + data.length + ", length: " + length);
+            throw e;
         }
-        breakpointId = breakpointInfo.getBreakpointId();
     }
 
-    public BreakpointType getBreakpointType() {
-        return breakpointType;
+    public void read(String str) throws UnsupportedEncodingException {
+        data = str.getBytes("UTF-8");
+        length = data.length;
     }
 
-    public String getThreadName() {
-        return threadName;
+    public int read(InputStream in) throws IOException {
+        length = in.read(data, 0, data.length);
+        return length;
     }
 
-    public String getMethodName() {
-        return methodName;
+    public boolean isEmpty() {
+        return length <= 0;
     }
-
-    public boolean isImmediate() {
-        return breakpointType.isImmediate();
-    }
-
-    public long getBreakpointId() {
-        return breakpointId;
-    }
-
 }

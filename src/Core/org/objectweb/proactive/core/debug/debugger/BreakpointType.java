@@ -32,41 +32,45 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.debug.stepbystep;
+package org.objectweb.proactive.core.debug.debugger;
 
 import java.io.Serializable;
 
-import org.objectweb.proactive.core.body.request.Request;
 
+public enum BreakpointType implements Serializable {
 
-public class BreakpointInfo implements Serializable {
+    /** set a breakpoint at the beginning of a new service */
+    NewService("New Service", false),
 
-    private BreakpointType type;
+    /** set a breakpoint before execution a method which is an immediate service */
+    NewImmediateService("New Immediate Service", true),
 
-    private Thread thread;
+    /** set a breakpoint at the end of a service */
+    EndService("End Service", false),
 
-    private Request request;
+    /** set a breakpoint at the end of an immediate service */
+    EndImmediateService("End Immediate Service", true),
 
-    public BreakpointInfo(BreakpointType type, Thread thread, Request request) {
-        this.type = type;
-        this.thread = thread;
-        this.request = request;
+    /** set a breakpoint before sending the request to the target active object */
+    SendRequest("Send Request");
+
+    private String name;
+    private boolean immediate;
+
+    private BreakpointType(String name) {
+        this(name, false);
     }
 
-    public BreakpointType getType() {
-        return type;
+    private BreakpointType(String name, boolean isImmediate) {
+        this.name = name;
+        this.immediate = isImmediate;
     }
 
-    public Thread getThread() {
-        return thread;
+    public boolean isImmediate() {
+        return immediate;
     }
 
-    public Request getRequest() {
-        return request;
+    public String toString() {
+        return name;
     }
-
-    public long getBreakpointId() {
-        return thread.getId();
-    }
-
 }

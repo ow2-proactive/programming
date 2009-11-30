@@ -102,6 +102,11 @@ public class NotificationType {
     public final static String stepByStepISEnabled = "stepByStepISEnabled";
     public final static String stepByStepISDisabled = "stepByStepISDisabled";
 
+    // ExtendedDebugger
+    public final static String connectDebugger = "connectDebugger";
+    public final static String disconnectDebugger = "disconnectDebugger";
+    public final static String requestQueueModified = "requestQueueModified";
+
     /* TODO Send this notification */
     // public final static String forwarderRuntimeRegistered = "forwarderRuntimeRegistered";
     public final static String runtimeDestroyed = "runtimeDestroyed";

@@ -23,24 +23,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2. 
- *
  *  Initial developer(s):               The ActiveEon Team
  *                        http://www.activeeon.com/
  *  Contributor(s):
+ *
  *
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.debug.dconnection;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+import java.lang.reflect.Method;
 import java.security.SecureRandom;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.management.Notification;
 import javax.management.NotificationListener;
@@ -51,8 +52,6 @@ import org.objectweb.proactive.core.jmx.notification.GCMRuntimeRegistrationNotif
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeException;
-import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
 import org.objectweb.proactive.core.process.AbstractExternalProcess.StandardOutputMessageLogger;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
@@ -65,57 +64,101 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class DebuggerConnection implements Serializable, NotificationListener {
 
-    private static DebuggerConnection debuggerConnection;
+    private static DebuggerConnection debuggerConnection = null;
     private static Logger debuggerLogger = ProActiveLogger.getLogger(Loggers.DEBUGGER);
     private String nodeName;
     private ProActiveRuntime tunnelRuntime;
     private boolean created = false;
     private boolean creating = false;
-    private int listeningPort = 0;
+    private int listeningPort = -1;
     private Node debugNode;
     private int debugDeployementId = 54136432;
+    private int timeout = 10;
 
     public static synchronized DebuggerConnection getDebuggerConnection() {
-        if (debuggerConnection == null) {
+        if (debuggerConnection == null)
             debuggerConnection = new DebuggerConnection();
-        }
         return debuggerConnection;
     }
 
     public DebuggerConnection() {
         nodeName = "DebugNode_" + System.getProperty("debugID") + "_" + new SecureRandom().nextInt();
-        parseDebuggingPort();
         subscribeJMXRuntimeEvent();
     }
 
-    private void parseDebuggingPort() {
-        String sPort;
-        int iPort = -1;
-        File file;
-        BufferedReader reader = null;
+    public void update() {
+        creating = false;
+        created = false;
+    }
 
-        String name = System.getProperty("debugID");
-        /*+ "_" +
-            ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getVMID();*/
-        if (name == null) {
-            return;
+    private static Integer tryPattern1(String processName) {
+        Integer result = null;
+
+        /* tested on: */
+        /* - windows xp sp 2, java 1.5.0_13 */
+        /* - mac os x 10.4.10, java 1.5.0 */
+        /* - debian linux, java 1.5.0_13 */
+        /* all return pid@host, e.g 2204@antonius */
+
+        Pattern pattern = Pattern.compile("^([0-9]+)@.+$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(processName);
+        if (matcher.matches()) {
+            result = new Integer(Integer.parseInt(matcher.group(1)));
         }
+        return result;
+    }
+
+    private int findDebuggerPort() throws ProActiveException {
+        RuntimeMXBean rtb = ManagementFactory.getRuntimeMXBean();
+        String processName = rtb.getName();
+        Integer pid = tryPattern1(processName);
+
+        String address = null;
+
         try {
-            file = new File(System.getProperty("java.io.tmpdir") + File.separator + name);
-            reader = new BufferedReader(new FileReader(file));
-            sPort = reader.readLine();
-            iPort = Integer.parseInt(sPort);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+            Class<?> virtualMachineCl = Class.forName("com.sun.tools.attach.VirtualMachine");
             try {
-                reader.close();
-            } catch (IOException e) {
+                Method attachMethod = virtualMachineCl.getMethod("attach", String.class);
+                Object vm = null;
+
+                try {
+                    vm = attachMethod.invoke(null, pid.toString());
+                } catch (Exception e) {
+                    // Failed to attach 
+                    throw new ProActiveException("Failed to attach to the current JVM", e);
+                }
+
+                Method getAgentPropertiesMethod = vm.getClass().getMethod("getAgentProperties");
+                try {
+                    Properties props = (Properties) getAgentPropertiesMethod.invoke(vm);
+                    address = props.getProperty("sun.jdwp.listenerAddress");
+                } catch (Exception e) {
+                    // Probably an IOException
+                    throw new ProActiveException("Failed to get the sun.jdwp.listenerAddress property", e);
+                } finally {
+                    Method detachMethod = vm.getClass().getMethod("detach");
+                    detachMethod.invoke(vm);
+                }
+            } catch (Exception e) {
+                // Java 6 but something gone wrong
+                throw new ProActiveException("Failed to attach to the current VM", e);
+            }
+
+        } catch (ClassNotFoundException e) {
+            String version = System.getProperty("java.specification.version");
+            if ("1.5".equals(version)) { // Java 4 and older are not supported
+                throw new ProActiveException(
+                    "Remote debugging not yet available with Java 5. Please use a JDK 6");
+            } else {
+                throw new ProActiveException(
+                    "Remote debbuging not available. Attach API not found in the classpath. $JDK6/lib/tools.jar must be in the classpath",
+                    e);
             }
         }
-        this.listeningPort = iPort;
+
+        System.out.println("DebuggerConnection.findDebuggerPort() >>>>>>" + address);
+        listeningPort = Integer.parseInt(address.split(":")[1]);
+        return listeningPort;
     }
 
     /**
@@ -125,16 +168,22 @@ public class DebuggerConnection implements Serializable, NotificationListener {
      * @return DebuggerInformation
      */
     public synchronized DebuggerInformation getDebugInfo() {
+        int port = -3;
+
+        try {
+            port = findDebuggerPort();
+        } catch (ProActiveException e1) {
+            e1.printStackTrace();
+        }
         getOrCreateNode();
-        if (creating) {
+        while (creating) {
             try {
-                wait(10000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-        return new DebuggerInformation(debugNode, listeningPort);
+        return new DebuggerInformation(debugNode, port);
     }
 
     private synchronized void getOrCreateNode() {
@@ -168,7 +217,7 @@ public class DebuggerConnection implements Serializable, NotificationListener {
             ProActiveRuntimeImpl.getProActiveRuntime().getMBean().sendNotification(
                     NotificationType.debuggerConnectionTerminated);
         } catch (Exception e) {
-            e.printStackTrace();
+            //            e.printStackTrace();
         } finally {
             tunnelRuntime = null;
             created = false;

@@ -72,8 +72,8 @@ import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.Shortcut;
 import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.debug.stepbystep.BreakpointType;
-import org.objectweb.proactive.core.debug.stepbystep.Debugger;
+import org.objectweb.proactive.core.debug.debugger.BreakpointType;
+import org.objectweb.proactive.core.debug.debugger.Debugger;
 import org.objectweb.proactive.core.gc.GCMessage;
 import org.objectweb.proactive.core.gc.GCResponse;
 import org.objectweb.proactive.core.gc.GarbageCollector;
@@ -969,9 +969,9 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
                 }
             }
 
-            // add StepByStep breakpoint
+            // add StepByStep and ExtrendedDebugger breakpoint
             if (!isProActiveInternalObject) {
-                debugger.breakpoint(BreakpointType.SendRequest, null);
+                debugger.breakpoint(BreakpointType.SendRequest, destinationBody);
             }
 
             this.localBodyStrategy.sendRequest(methodCall, future, destinationBody);
