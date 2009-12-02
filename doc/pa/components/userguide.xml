@@ -2034,7 +2034,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				web service (See
 				<xref linkend="Exporting_components_as_Web_Services"/>)
 				and communication from GCM/ProActive component to SCA
-				component can be done by using this feature.
+				component can be done by using this feature. This has
+				already been successfully tested with two different SCA
+				implementations: Apache Tuscany (http://tuscany.apache.org/)
+				and FraSCAti (https://wiki.ow2.org/frascati/). 
 			</para>
 			<para>
 				The only requirement for binding a client interface to a
