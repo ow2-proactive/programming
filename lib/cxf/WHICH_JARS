@@ -29,7 +29,7 @@ The following jars are required for XML catalog support:
 
 For Java2WSDL and WSDL2Java:
 - The above jars
-- jaxb-xjc.jar (removed)
+- jaxb-xjc.jar
 - velocity.jar (removed)
 - commons-collections.jar (removed)
 - commons-lang.jar (removed)

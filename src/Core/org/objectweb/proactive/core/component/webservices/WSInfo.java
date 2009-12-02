@@ -94,6 +94,16 @@ public class WSInfo implements Serializable {
     public static final String CXFAEGISWSCALLER_CLASSNAME = CXFAegisWSCaller.class.getName();
 
     /**
+     * Shortcut ID to specify that CXF with a dynamic client must be used to call the web service.
+     */
+    public static final String DYNAMICCXFWSCALLER_ID = "DynamicCXF";
+
+    /**
+     * Full name of the class calling web services using CXF with a dynamic client.
+     */
+    public static final String DYNAMICCXFWSCALLER_CLASSNAME = DynamicCXFWSCaller.class.getName();
+
+    /**
      * URL of the web service.
      */
     private String wsUrl;
@@ -194,6 +204,8 @@ public class WSInfo implements Serializable {
                 return CXFWSCALLER_CLASSNAME;
             } else if (wsInfo[1].equalsIgnoreCase(CXFAEGISWSCALLER_ID)) {
                 return CXFAEGISWSCALLER_CLASSNAME;
+            } else if (wsInfo[1].equalsIgnoreCase(DYNAMICCXFWSCALLER_ID)) {
+                return DYNAMICCXFWSCALLER_CLASSNAME;
             } else {
                 return checkClassName(wsInfo[1]);
             }
