@@ -2068,9 +2068,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				used to call the web service, but it is also possible to
 				specify another library. If so, the URL has to be followed,
 				in parenthesis, by the ID or the full name of the class to
-				use to call the web service. Thus, ProActive offers two ways
-				to call web services: using Axis2 API or using CXF API
-				(http://cxf.apache.org/). Their ID are defined in the class
+				use to call the web service. Thus, ProActive offers several
+				ways to call web services: using Axis2 API or using various
+				configurations of CXF API (http://cxf.apache.org/). Their
+				ID are defined in the class
 				<literal>
 					org.objectweb.proactive.core.component.webservices.WSInfo
 				</literal>.
