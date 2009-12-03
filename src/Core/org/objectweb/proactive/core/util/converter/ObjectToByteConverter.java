@@ -63,7 +63,7 @@ public class ObjectToByteConverter {
     private static final String WRITE_OBJECT = "writeObject";
 
     static {
-        // resolve PROACTIVE-472
+        // resolve PROACTIVE-742
         ProActiveRuntimeImpl.getProActiveRuntime();
     }
 
