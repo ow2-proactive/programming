@@ -36,9 +36,6 @@
 		<!-- <prop key="proactive.ssh.username" value="mlacage"/> -->
 		
 		<!-- ***************************************************** -->
-
-		<!-- Workaround to fix rmissh/unicore conflict -->
-		<prop key="proactive.unicore.forkclient" value="true" />
 	</properties>
 </ProActiveUserProperties>
  

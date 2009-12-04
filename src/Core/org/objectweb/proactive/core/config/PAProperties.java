@@ -608,11 +608,6 @@ public enum PAProperties {
     CATALINA_BASE("catalina.base", PAPropertiesType.STRING, true),
 
     /**
-     * TODO
-     */
-    PA_UNICORE_FORKCLIENT("proactive.unicore.forkclient", PAPropertiesType.BOOLEAN),
-
-    /**
      * if true, any reference on the reified object within an outgoing request or reply is
      * replaced by a reference on the active object. This feature can be used when activating 
      * an object whose source code cannot be modified to replace the code that return <code>this</code>

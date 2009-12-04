@@ -45,7 +45,7 @@
                 <secondary>XML Descriptor</secondary>
               </indexterm>
 
-              <para>globus(GT2, GT3 and GT4), unicore, arc
+              <para>globus(GT2, GT3 and GT4), arc
               (nordugrid)</para>
             </listitem>
           </itemizedlist></para>
@@ -87,7 +87,7 @@
             </listitem>
 
             <listitem>
-              <para>unicore, arc (nordugrid)</para>
+              <para>arc (nordugrid)</para>
             </listitem>
 
             <listitem>
@@ -914,7 +914,7 @@
       access the remote host with <emphasis role="bold">rsh</emphasis>,
       <emphasis role="bold">ssh</emphasis>, <emphasis role="bold">rlogin</emphasis>, <emphasis role="bold">lsf</emphasis>,
       <emphasis role="bold">pbs</emphasis>, <emphasis role="bold">oar</emphasis>, <emphasis role="bold">prun</emphasis>,
-      <emphasis role="bold">globus</emphasis>, <emphasis role="bold">unicore</emphasis>, <emphasis role="bold">arc
+      <emphasis role="bold">globus</emphasis>, <emphasis role="bold">arc
       (nordugrid)</emphasis>. How to
       use these protocols is explained in the following examples. Just remind
       that you can also combine these protocols.The principle of combination
@@ -1592,15 +1592,6 @@
         </listitem>
 
         <listitem>
-          <para>UNICORE:</para>
-
-          <para>ProActive provides
-          <literal>org.objectweb.proactive.core.process.unicore.UnicoreProcess</literal>
-          to use such protocol.</para>
-			<programlisting><textobject><textdata fileref="../../descriptors/examples_legacy_descriptors/Unicore_Example.xml"/></textobject></programlisting>
-
-        </listitem>
-
         <listitem>
           <para>ARC (NorduGrid):</para>
 

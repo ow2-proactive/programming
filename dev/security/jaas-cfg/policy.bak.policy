@@ -107,7 +107,6 @@ grant codebase "file:classes/-" {
 	permission java.util.PropertyPermission "proactive.tunneling.use_gc", "read, write";
 	permission java.util.PropertyPermission "proactive.tunneling.gc_period", "read, write";
 	permission java.util.PropertyPermission "proactive.classloader", "read, write";
-	permission java.util.PropertyPermission "proactive.unicore.forkclient", "read, write";
 	permission java.util.PropertyPermission "schema.validation", "read, write";
 	
 	permission java.util.PropertyPermission "proactive.hierarchicalRuntime", "read";

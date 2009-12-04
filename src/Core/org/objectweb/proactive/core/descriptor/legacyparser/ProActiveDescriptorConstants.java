@@ -184,9 +184,6 @@ public interface ProActiveDescriptorConstants {
     public static final String FT_GLOBALSERVER_TAG = "globalServer";
     public static final String FT_TTCVALUE_TAG = "ttc";
     public static final String FT_PROTO_TAG = "protocol";
-    public static final String UNICORE_PROCESS_TAG = "unicoreProcess";
-    public static final String UNICORE_OPTIONS_TAG = "unicoreOption";
-    public static final String UNICORE_DIR_PATH_TAG = "unicoreDirPath";
     public static final String UNICORE_KEYFILE_PATH_TAG = "keyFilePath";
     public static final String UNICORE_USITE_TAG = "usite";
     public static final String UNICORE_VSITE_TAG = "vsite";

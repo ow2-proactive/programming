@@ -285,11 +285,6 @@ and implicitly inferred from the process information. --&gt;
             </listitem>
 
             <listitem>
-              <para><emphasis role="bold">unicore</emphasis> (Unicore
-              processDefault)</para>
-            </listitem>
-
-            <listitem>
               <para><emphasis role="bold">nordugrid</emphasis> (Nordugrid
               processDefault)</para>
             </listitem>
@@ -303,7 +298,7 @@ and implicitly inferred from the process information. --&gt;
         the deployment of the descriptor file is executed. In the case of
         <emphasis>external protocols</emphasis> (<emphasis role="bold">scp,
         rcp</emphasis>), this will take place before the process deployment.
-        In the case of <emphasis>internal protocols</emphasis> (<emphasis role="bold">unicore, nordugrid</emphasis>), this will take place with
+        In the case of <emphasis>internal protocols</emphasis> (<emphasis role="bold">nordugrid</emphasis>), this will take place with
         the process deployment. In any case, it should be noted that
         intersting things can be achieved, such as transfering the ProActive
         libraries into the deploying machine using an <emphasis role="bold">on-the-fly</emphasis> style. This means that it is

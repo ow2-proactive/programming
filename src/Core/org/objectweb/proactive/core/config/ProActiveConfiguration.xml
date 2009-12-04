@@ -62,8 +62,7 @@
 		<prop key="proactive.tagmemory.lease.period" value="21" />
 		<prop key="proactive.tag.dsf" value="false" />
 
-		<!-- Workaround to fix rmissh/unicore conflict -->
-        <prop key="proactive.unicore.forkclient" value="true" />
+		<!-- Workaround to fix rmissh conflict -->
         <prop key="proactive.runtime.stayalive" value="true" />		
 
 		<!-- File Transfer Properties -->

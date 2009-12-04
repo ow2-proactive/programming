@@ -10,8 +10,7 @@
 		Usually external FileTransfer happens before the deployment of the process. On the other hand,
 		internal FileTransfer happens at the same time of the process deployment since the specific
 		tools provided by the process are used. This implies that internal FileTransfer protocols cannot
-		be used with other process (e.g. unicore file transfer can not be used when deploying with ssh),
-		but the opposite is valid (e.g. scp can be used when deploying with unicore).
+		be used with other process, but the opposite is valid.
 	</para>
 
 	<section xml:id="AddingexternalFileTransferCopyProtocol"><info><title>Adding external FileTransfer CopyProtocol</title></info>
@@ -42,7 +41,7 @@
 				Choosing the correct name for the protocol is simple, but must be done carefully.
 				All names already in the array ALLOWED_COPY_PROTOCOLS are forbidden. This includes the name <emphasis role="bold">'processDefault'</emphasis>, which is also forbidden.
 				Some times, <emphasis role="bold">'processDefault'</emphasis> will correspond to an external FileTransfer protocol (e.g. ssh
-				with scp), and some other times, it will correspond to an internal protocol (e.g. unicore with unicore)
+				with scp), and some other times, it will correspond to an internal protocol.
 			</para>
 		</warning>
 	</section>
