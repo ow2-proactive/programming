@@ -286,15 +286,22 @@ public class CommandBuilderProActive implements CommandBuilder {
                     GCMA_LOGGER
                             .warn("GCMApplication/application/proactive/configuration/java is NOT set. Remote debbuging will fail");
                 } else {
-
-                    sb.append(javaCommand.substring(0, javaCommand.lastIndexOf(fs)));
-                    sb.append(fs);
-                    sb.append("..");
-                    sb.append(fs);
-                    sb.append("lib");
-                    sb.append(fs);
-                    sb.append("tools.jar");
-                    sb.append(hostInfo.getOS().pathSeparator());
+                    // Check if we are able to guess tool.jar location
+                    File f = new File(javaCommand.trim());
+                    if (!f.exists() || javaCommand.lastIndexOf(fs) < 0) {
+                        GCMA_LOGGER
+                                .warn("Unable to find tool.jar, please specify a full or relative path for java (" +
+                                    javaCommand + ")");
+                    } else {
+                        sb.append(javaCommand.substring(0, javaCommand.lastIndexOf(fs)));
+                        sb.append(fs);
+                        sb.append("..");
+                        sb.append(fs);
+                        sb.append("lib");
+                        sb.append(fs);
+                        sb.append("tools.jar");
+                        sb.append(hostInfo.getOS().pathSeparator());
+                    }
                 }
             }
         }
@@ -349,6 +356,11 @@ public class CommandBuilderProActive implements CommandBuilder {
         // Java
         command.append(getJava(hostInfo));
         command.append(" ");
+
+        Tool jp = hostInfo.getTool(Tools.JAVA_PARAMETERS.id);
+        if (jp != null) {
+            command.append(" " + jp.getPath() + " "); // Not really a path, but it's ok
+        }
 
         for (String arg : jvmArgs) {
             command.append(arg);
@@ -431,6 +443,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         if (isDebugEnabled) {
             command.append(" " + getDebugCommand(hostInfo, gcma.getDeploymentId()) + " ");
         }
+
         // Class to be started and its arguments
         command.append(StartPARuntime.class.getName());
         command.append(" ");
