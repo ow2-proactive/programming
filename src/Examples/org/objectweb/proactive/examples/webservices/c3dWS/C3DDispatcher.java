@@ -70,7 +70,9 @@ import org.objectweb.proactive.examples.webservices.c3dWS.prim.View;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
+import org.objectweb.proactive.extensions.webservices.AbstractWebServicesInitActive;
 import org.objectweb.proactive.extensions.webservices.WebServices;
+import org.objectweb.proactive.extensions.webservices.WebServicesInitActiveFactory;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
@@ -1006,7 +1008,8 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
             Node dispatcherNode = deployer.getDispatcherNode();
 
             C3DDispatcher c3dd = (C3DDispatcher) PAActiveObject.newActive(C3DDispatcher.class.getName(),
-                    param, dispatcherNode);
+                    null, param, dispatcherNode, WebServicesInitActiveFactory.getInitActive(wsFrameWork),
+                    null);
 
             String[] methods = new String[] { "wsRegisterUser", "wsUnregisterConsumer", "wsResetScene",
                     "wsAddSphere", "wsGetUserList", "wsUserWriteMessageExcept", "wsUserWriteMessage",
