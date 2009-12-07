@@ -34,8 +34,12 @@
  */
 package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
 
 /** A {@link MessageType#ERR_} message
