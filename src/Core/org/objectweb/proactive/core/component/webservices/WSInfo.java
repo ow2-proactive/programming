@@ -74,7 +74,7 @@ public class WSInfo implements Serializable {
     public static final String AXIS2WSCALLER_ID = "Axis2";
 
     /**
-     * Full name of the class using Axis2 to call a web service.
+     * Full name of the class calling web services using Axis2.
      */
     public static final String AXIS2WSCALLER_CLASSNAME = Axis2WSCaller.class.getName();
 
@@ -84,9 +84,19 @@ public class WSInfo implements Serializable {
     public static final String CXFWSCALLER_ID = "CXF";
 
     /**
-     * Full name of the class using CXF to call a web service.
+     * Full name of the class calling web services using CXF.
      */
     public static final String CXFWSCALLER_CLASSNAME = CXFWSCaller.class.getName();
+
+    /**
+     * Shortcut ID to specify that CXF configured for an Aegis data binding must be used to call the web service.
+     */
+    public static final String CXFAEGISWSCALLER_ID = "CXFAegis";
+
+    /**
+     * Full name of the class calling web services using CXF configured for an Aegis data binding.
+     */
+    public static final String CXFAEGISWSCALLER_CLASSNAME = CXFAegisWSCaller.class.getName();
 
     /**
      * URL of the web service.
@@ -187,6 +197,8 @@ public class WSInfo implements Serializable {
                 return AXIS2WSCALLER_CLASSNAME;
             } else if (wsInfo[1].equalsIgnoreCase(CXFWSCALLER_ID)) {
                 return CXFWSCALLER_CLASSNAME;
+            } else if (wsInfo[1].equalsIgnoreCase(CXFAEGISWSCALLER_ID)) {
+                return CXFAEGISWSCALLER_CLASSNAME;
             } else {
                 return checkClassName(wsInfo[1]);
             }
