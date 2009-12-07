@@ -35,7 +35,7 @@
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo;
 
 public enum Tools {
-    PROACTIVE("proactive"), JAVA("java");
+    PROACTIVE("proactive"), JAVA("java"), JAVA_PARAMETERS("java.parameters");
     public String id;
 
     Tools(String id) {

@@ -35,6 +35,7 @@
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
 import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
 
 import java.io.File;
 import java.io.IOException;
@@ -265,6 +266,43 @@ public class CommandBuilderProActive implements CommandBuilder {
             sb.append(fs);
             sb.append(PROACTIVE_JAR);
             sb.append(hostInfo.getOS().pathSeparator());
+
+            if (isDebugEnabled) {
+                String javaCommand = null;
+
+                if (javaPath != null) {
+                    javaCommand = javaPath.getFullPath(hostInfo, this);
+                } else {
+                    Tool javaTool = hostInfo.getTool(Tools.JAVA.id);
+                    if (javaTool != null) {
+                        javaCommand = javaTool.getPath();
+                    }
+                }
+
+                if (javaCommand == null) {
+                    // Java location must be set when the debug mode is enabled
+                    // TODO throw an exception
+                    GCMA_LOGGER
+                            .warn("GCMApplication/application/proactive/configuration/java is NOT set. Remote debbuging will fail");
+                } else {
+                    // Check if we are able to guess tool.jar location
+                    File f = new File(javaCommand.trim());
+                    if (!f.exists() || javaCommand.lastIndexOf(fs) < 0) {
+                        GCMA_LOGGER
+                                .warn("Unable to find tool.jar, please specify a full or relative path for java (" +
+                                    javaCommand + ")");
+                    } else {
+                        sb.append(javaCommand.substring(0, javaCommand.lastIndexOf(fs)));
+                        sb.append(fs);
+                        sb.append("..");
+                        sb.append(fs);
+                        sb.append("lib");
+                        sb.append(fs);
+                        sb.append("tools.jar");
+                        sb.append(hostInfo.getOS().pathSeparator());
+                    }
+                }
+            }
         }
 
         if (proactiveClasspath != null) {
@@ -317,6 +355,11 @@ public class CommandBuilderProActive implements CommandBuilder {
         // Java
         command.append(getJava(hostInfo));
         command.append(" ");
+
+        Tool jp = hostInfo.getTool(Tools.JAVA_PARAMETERS.id);
+        if (jp != null) {
+            command.append(" " + jp.getPath() + " "); // Not really a path, but it's ok
+        }
 
         for (String arg : jvmArgs) {
             command.append(arg);
@@ -399,6 +442,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         if (isDebugEnabled) {
             command.append(" " + getDebugCommand(hostInfo, gcma.getDeploymentId()) + " ");
         }
+
         // Class to be started and its arguments
         command.append(StartPARuntime.class.getName());
         command.append(" ");
