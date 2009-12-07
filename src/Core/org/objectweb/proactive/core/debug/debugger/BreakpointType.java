@@ -32,49 +32,45 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.debug.stepbystep;
+package org.objectweb.proactive.core.debug.debugger;
 
 import java.io.Serializable;
 
 
-public class DebugBreakpointInfo implements Serializable {
+public enum BreakpointType implements Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 42L;
-    private BreakpointType breakpointType;
-    private String threadName;
-    private String methodName;
-    private long breakpointId;
+    /** set a breakpoint at the beginning of a new service */
+    NewService("New Service", false),
 
-    public DebugBreakpointInfo(BreakpointInfo breakpointInfo) {
-        breakpointType = breakpointInfo.getType();
-        threadName = breakpointInfo.getThread().getName();
-        if (breakpointInfo.getRequest() != null) {
-            methodName = breakpointInfo.getRequest().getMethodName();
-        }
-        breakpointId = breakpointInfo.getBreakpointId();
+    /** set a breakpoint before execution a method which is an immediate service */
+    NewImmediateService("New Immediate Service", true),
+
+    /** set a breakpoint at the end of a service */
+    EndService("End Service", false),
+
+    /** set a breakpoint at the end of an immediate service */
+    EndImmediateService("End Immediate Service", true),
+
+    /** set a breakpoint before sending the request to the target active object */
+    SendRequest("Send Request");
+
+    private String name;
+    private boolean immediate;
+
+    private BreakpointType(String name) {
+        this(name, false);
     }
 
-    public BreakpointType getBreakpointType() {
-        return breakpointType;
-    }
-
-    public String getThreadName() {
-        return threadName;
-    }
-
-    public String getMethodName() {
-        return methodName;
+    private BreakpointType(String name, boolean isImmediate) {
+        this.name = name;
+        this.immediate = isImmediate;
     }
 
     public boolean isImmediate() {
-        return breakpointType.isImmediate();
+        return immediate;
     }
 
-    public long getBreakpointId() {
-        return breakpointId;
+    public String toString() {
+        return name;
     }
-
 }

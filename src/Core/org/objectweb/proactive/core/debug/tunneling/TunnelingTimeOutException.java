@@ -32,41 +32,15 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.debug.dconnection;
+package org.objectweb.proactive.core.debug.tunneling;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
+public class TunnelingTimeOutException extends java.lang.Exception {
+    private static final long serialVersionUID = 8684809552270981996L;
 
-
-public class DebuggeePortSetter {
-
-    protected static Logger logger = ProActiveLogger.getLogger(Loggers.DEBUGGER);
-
-    public static void main(String[] argv) {
-        String dir = System.getProperty("java.io.tmpdir");
-        String name = argv[0];
-        String port = argv[2];
-
-        File file = new File(dir + File.separator + name);
-        if (file.isFile()) {
-            file.delete();
-        }
-        try {
-            file.createNewFile();
-            FileWriter writer = new FileWriter(file);
-            writer.write(port);
-            writer.close();
-            logger.debug("Debugger port :" + port + " written to file " + file.getAbsolutePath());
-        } catch (IOException e) {
-            logger.fatal(
-                    "Could not create the file where to store the debuggee port, exception message follows ",
-                    e);
-        }
-
+    public TunnelingTimeOutException() {
     }
 
+    public TunnelingTimeOutException(String message) {
+        super(message);
+    }
 }

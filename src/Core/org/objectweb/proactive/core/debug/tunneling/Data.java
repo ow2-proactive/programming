@@ -32,45 +32,53 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.debug.stepbystep;
+package org.objectweb.proactive.core.debug.tunneling;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 
 
-public enum BreakpointType implements Serializable {
+public class Data implements Serializable {
+    private static final long serialVersionUID = 4068435103580170397L;
 
-    /** set a breakpoint at the beginning of a new service */
-    NewService("New Service", false),
+    /** data readed */
+    private byte[] data;
 
-    /** set a breakpoint before execution a method which is an immediate service */
-    NewImmediateService("New Immediate Service", true),
+    /** number of byte readed */
+    private int length;
 
-    /** set a breakpoint at the end of a service */
-    EndService("End Service", false),
-
-    /** set a breakpoint at the end of an immediate service */
-    EndImmediateService("End Immediate Service", true),
-
-    /** set a breakpoint before sending the request to the target active object */
-    SendRequest("Send Request");
-
-    private String name;
-    private boolean immediate;
-
-    private BreakpointType(String name) {
-        this(name, false);
+    public Data() {
     }
 
-    private BreakpointType(String name, boolean isImmediate) {
-        this.name = name;
-        this.immediate = isImmediate;
+    public Data(int length) {
+        this.data = new byte[length];
+        this.length = 0;
     }
 
-    public boolean isImmediate() {
-        return immediate;
+    public void write(OutputStream out) throws IOException {
+        try {
+            out.write(data, 0, length);
+        } catch (java.lang.ArrayIndexOutOfBoundsException e) {
+            System.out.println(toString());
+            System.err.println("data.length: " + data.length + ", length: " + length);
+            throw e;
+        }
     }
 
-    public String toString() {
-        return name;
+    public void read(String str) throws UnsupportedEncodingException {
+        data = str.getBytes("UTF-8");
+        length = data.length;
+    }
+
+    public int read(InputStream in) throws IOException {
+        length = in.read(data, 0, data.length);
+        return length;
+    }
+
+    public boolean isEmpty() {
+        return length <= 0;
     }
 }

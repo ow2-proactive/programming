@@ -32,7 +32,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.debug.stepbystep;
+package org.objectweb.proactive.core.debug.debugger;
 
 import java.io.Serializable;
 import java.util.ArrayList;

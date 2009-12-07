@@ -32,7 +32,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.debug.stepbystep;
+package org.objectweb.proactive.core.debug.debugger;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.objectweb.proactive.core.body.AbstractBody;
+import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.request.Request;
 
 
@@ -54,13 +55,7 @@ public interface Debugger extends Serializable {
      * enable some breakpointTypes used by stepByStep
      * @param types, a table of BreakpointType
      */
-    public void enableBreakpointTypes(BreakpointType[] types);
-
-    /**
-     * disable some breakpointTypes used by stepByStep
-     * @param types, a table of BreakpointType
-     */
-    public void disableBreakpointTypes(BreakpointType[] types);
+    public void updateBreakpointTypes(Map<String, Boolean> types);
 
     public Set<BreakpointType> getBreakpointTypeFilter();
 
@@ -153,4 +148,41 @@ public interface Debugger extends Serializable {
      */
     public void setStepByStep(boolean activated);
 
+    //
+    // -- EXTENDED DEBUGGER ------------------------------------------------
+    //
+    /**
+     * define a sendRequest breakpoint
+     */
+    public void breakpoint(BreakpointType type, UniversalBody destinationBody);
+
+    /**
+     * enable the extended debugger feature
+     */
+    public void enableExtendedDebugger();
+
+    /**
+     * disable the extended debugger feature
+     */
+    public void disableExtendedDebugger();
+
+    /**
+     * unblock for the debugger connection
+     */
+    public void unblockConnection();
+
+    /**
+     * @return the request queue of the body
+     */
+    public RequestQueueInfo getRequestQueueInfo();
+
+    /**
+     * @param sequenceNumber
+     */
+    public void moveUpRequest(final long sequenceNumber);
+
+    /**
+     * @param sequenceNumber
+     */
+    public void moveDownRequest(final long sequenceNumber);
 }

@@ -39,22 +39,19 @@ import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.security.AccessControlException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.management.Notification;
 import javax.management.NotificationBroadcasterSupport;
 import javax.management.ObjectName;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerRepository;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.debug.dconnection.DebuggerConnection;
 import org.objectweb.proactive.core.debug.dconnection.DebuggerInformation;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
+import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -91,6 +88,8 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
 
     /** Used by the JMX notifications */
     private long counter = 0;
+
+    private boolean eclipseDebugger = false;
 
     public ProActiveRuntimeWrapper() {
 
@@ -246,10 +245,22 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
     }
 
     /**
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#updateDebugInfo()
+     */
+    public void updateDebugInfo() {
+        DebuggerConnection.getDebuggerConnection().update();
+    }
+
+    /**
      * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#removeDebugger()
      */
     public void removeDebugger() {
         DebuggerConnection.getDebuggerConnection().removeDebugger();
+    }
+
+    public void removeEclipseDebugger() {
+        eclipseDebugger = false;
+        sendNotification(NotificationType.disconnectDebugger);
     }
 
     /**
@@ -267,26 +278,20 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
     }
 
     /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#getLoggers()
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#getDebugID()
      */
-    @SuppressWarnings("unchecked")
-    public List<String> getLoggers() {
-        List<String> loggersList = new ArrayList<String>();
-        LoggerRepository r = LogManager.getLoggerRepository();
-        Enumeration<Logger> e = r.getCurrentLoggers();
-        Logger logger = null;
-        while (e.hasMoreElements()) {
-            logger = e.nextElement();
-            loggersList.add(logger.getName());
-        }
-        return loggersList;
+    public String getDebugID() {
+        return System.getProperty("debugID");
     }
 
     /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#setLogLevel(java.lang.String, java.lang.String)
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#isExtendedDebugger()
      */
-    public void setLogLevel(String loggerName, String level) {
-        Logger.getLogger(loggerName).setLevel(Level.toLevel(level));
+    public boolean isExtendedDebugger() {
+        return eclipseDebugger;
     }
 
+    public void setExtendedDebugger(boolean extendedDebugger) {
+        this.eclipseDebugger = extendedDebugger;
+    }
 }
