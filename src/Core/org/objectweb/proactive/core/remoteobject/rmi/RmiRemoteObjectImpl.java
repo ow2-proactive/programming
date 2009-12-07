@@ -75,11 +75,6 @@ public class RmiRemoteObjectImpl extends UnicastRemoteObject implements RmiRemot
 
     public Reply receiveMessage(Request message) throws RemoteException, RenegotiateSessionException,
             ProActiveException, IOException {
-        if (message.isOneWay()) {
-            this.internalrrObject.receiveMessage(message);
-            return null;
-        }
-
         return this.internalrrObject.receiveMessage(message);
     }
 }
