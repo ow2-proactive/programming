@@ -45,6 +45,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.annotation.RemoteObject;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileSystemServer;
 import org.objectweb.proactive.extensions.vfsprovider.server.FileSystemServerImpl;

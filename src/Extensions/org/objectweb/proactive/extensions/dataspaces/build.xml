@@ -6,5 +6,6 @@
 
 	<target name="-compile">
 		<compile_extension module="dataspaces" />
+		<generate_stub_for_class srcDir="${cl.extensions.dir}" class="org/objectweb/proactive/extensions/dataspaces/core/naming/NamingService" />
 	</target>
 </project>
