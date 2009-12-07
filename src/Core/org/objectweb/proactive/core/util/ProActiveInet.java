@@ -70,7 +70,6 @@ public class ProActiveInet {
 
         if (electedAddress == null) {
             logger.error("No local Inet Address found. Exiting");
-            PALifeCycle.exitFailure();
         }
     }
 
@@ -80,6 +79,10 @@ public class ProActiveInet {
      * @return
      */
     public InetAddress getInetAddress() {
+        if (electedAddress == null) {
+            throw new IllegalStateException("No suitable IP address found");
+        }
+
         return electedAddress;
     }
 

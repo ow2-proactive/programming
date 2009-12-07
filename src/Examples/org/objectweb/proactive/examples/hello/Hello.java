@@ -89,6 +89,8 @@ public class Hello implements java.io.Serializable {
     /** The call that starts the Acive Objects, and displays results.
      * @param args must contain the name of an xml descriptor */
     public static void main(String[] args) throws Exception {
+        PALifeCycle.checkConfig();
+
         // Access the nodes of the descriptor file
 
         GCMApplication applicationDescriptor = PAGCMDeployment.loadApplicationDescriptor(new File(args[0]));
