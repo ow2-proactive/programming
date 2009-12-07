@@ -56,16 +56,6 @@
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/osgi/osgi.jar" />
 						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/unicore/njs_client.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/unicore/ajo.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/unicore/client.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/unicore/jh.jar" />
-						<absolutePath
-							value="${PROACTIVE_HOME}/dist/lib/unicore/scriptPlugin.jar" />
-						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/components/julia-runtime.jar" />
 						<absolutePath
 							value="${PROACTIVE_HOME}/dist/lib/components/dtdparser.jar" />

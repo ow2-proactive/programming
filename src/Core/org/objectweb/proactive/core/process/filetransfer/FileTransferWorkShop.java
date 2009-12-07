@@ -66,7 +66,7 @@ public class FileTransferWorkShop implements Serializable {
     private static final long serialVersionUID = 42L;
     private static final String PROCESSDEFAULT_KEYWORD = "processDefault";
     private static final String IMPLICIT_KEYWORD = "implicit";
-    private static final String[] ALLOWED_COPY_PROTOCOLS = { PROCESSDEFAULT_KEYWORD, "scp", "unicore", "rcp",
+    private static final String[] ALLOWED_COPY_PROTOCOLS = { PROCESSDEFAULT_KEYWORD, "scp", "rcp",
             "nordugrid", "pftp" };
     private static final String[] URLPROTOCOLS = { "file://", "http://", "ftp://" };
     final protected static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
@@ -230,7 +230,7 @@ public class FileTransferWorkShop implements Serializable {
         } else if (protocolname.equalsIgnoreCase("rcp")) {
             cp = new RemoteFileCopy(protocolname);
         } else {
-            cp = new DummyCopyProtocol(protocolname); //pftp, unicore, nordugrid are created here
+            cp = new DummyCopyProtocol(protocolname); //pftp, nordugrid are created here
             return cp;
         }
 

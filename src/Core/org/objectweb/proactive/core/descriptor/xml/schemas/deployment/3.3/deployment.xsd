@@ -148,12 +148,6 @@
 			<xs:field xpath="@refid" />
 			<!--This section references the processid key defined above to ensure that the refid attribute defined in  processes/processDefinition/globusProcess/processReference has a corresponding value in infrastructure/processes/processDefinition@id-->
 		</xs:keyref>
-		<xs:keyref name="unicoreprocessReferenceid" refer="processid">
-			<xs:selector
-				xpath="./pa:infrastructure/pa:processes/pa:processDefinition/pa:unicoreProcess/pa:processReference" />
-			<xs:field xpath="@refid" />
-			<!--This section references the processid key defined above to ensure that the refid attribute defined in  processes/processDefinition/unicoreProcess/processReference has a corresponding value in infrastructure/processes/processDefinition@id-->
-		</xs:keyref>
 		<xs:keyref name="hierarchicalprocessProcessReferenceid"
 			refer="processid">
 			<xs:selector
@@ -850,7 +844,6 @@
 			<xs:element name="globusProcess" type="GlobusProcessType" />
 			<xs:element name="prunProcess" type="prunProcessType" />
 			<xs:element name="gridEngineProcess" type="sgeProcessType" />
-			<xs:element name="unicoreProcess" type="unicoreProcessType" />
 			<xs:element name="ngProcess" type="NGProcessType" />
 			<xs:element name="hierarchicalProcess"
 				type="hierarchicalProcessType" />
@@ -1464,84 +1457,6 @@
 			<xs:element name="errorFile" type="TextOrVariableType"
 				minOccurs="0" />
 		</xs:all>
-	</xs:complexType>
-	<!--unicoreProcess element has 4 childs: processReference element which represents a process defined elsewhere, unicoreDirPath
-		which represents the unicore client configuration directory, keyFilePath which represnets de unicore cliente certificate file and
-		the unicoreOption which represent a unicore site options-->
-	<xs:complexType name="unicoreProcessType" mixed="true">
-		<xs:all>
-			<xs:element ref="processReference" />
-			<xs:element name="unicoreDirPath" type="FilePathType"
-				minOccurs="0" />
-			<xs:element name="keyFilePath" type="FilePathType"
-				minOccurs="0" />
-			<xs:element name="unicoreOption" type="unicoreOptionType"
-				minOccurs="0" />
-			<xs:element name="fileTransferDeploy"
-				type="FileTransferStructureType" minOccurs="0" maxOccurs="1" />
-			<xs:element name="fileTransferRetrieve"
-				type="FileTransferRetrieveStructureType" minOccurs="0"
-				maxOccurs="1" />
-		</xs:all>
-		<xs:attribute name="class" type="xs:string" use="required"
-			fixed="org.objectweb.proactive.core.process.unicore.UnicoreProcess" />
-		<xs:attribute name="keypassword" type="xs:string"
-			use="optional" />
-		<xs:attribute name="jobname" type="xs:string" use="optional"
-			default="ProActiveUnicoreJob" />
-		<xs:attribute name="submitjob" type="BooleanOrVariableType"
-			use="optional" default="true" />
-		<xs:attribute name="savejob" type="BooleanOrVariableType"
-			use="optional" default="false" />
-		<!--xs:attribute name="closeStream" type="CloseStreamType" use="optional"/-->
-	</xs:complexType>
-	<!--unicoreOption has 2 childs: unicoreUsiteType represents the Unicore site, unicoreVsiteType represents the virtual site
-		within the Unicore site. Notice that not all unicore features are supported. -->
-	<xs:complexType name="unicoreOptionType" mixed="true">
-		<xs:all>
-			<xs:element name="usite" type="unicoreUsiteType"
-				minOccurs="0" />
-			<xs:element name="vsite" type="unicoreVsiteType"
-				minOccurs="0" />
-		</xs:all>
-	</xs:complexType>
-	<xs:complexType name="unicoreUsiteType">
-		<xs:attribute name="name" type="xs:string" use="optional" />
-		<xs:attribute name="url" type="xs:string" use="required" />
-		<xs:attribute name="type" use="required">
-			<xs:simpleType>
-				<xs:union memberTypes="variableRefType">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="CLASSIC" />
-							<xs:enumeration value="REGISTRY" />
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:union>
-			</xs:simpleType>
-		</xs:attribute>
-	</xs:complexType>
-	<xs:complexType name="unicoreVsiteType">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="nodes" type="xs:string" use="optional" />
-		<xs:attribute name="processors" type="xs:string" use="optional" />
-		<xs:attribute name="memory" type="xs:string" use="optional" />
-		<xs:attribute name="runtime" type="xs:string" use="optional" />
-		<xs:attribute name="priority" use="optional">
-			<xs:simpleType>
-				<xs:union memberTypes="variableRefType">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="normal" />
-							<xs:enumeration value="high" />
-							<xs:enumeration value="low" />
-							<xs:enumeration value="development" />
-							<xs:enumeration value="whenever" />
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:union>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="hierarchicalProcessType" mixed="true">
 		<xs:all>
