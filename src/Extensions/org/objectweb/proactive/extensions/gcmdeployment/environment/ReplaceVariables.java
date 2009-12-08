@@ -45,21 +45,25 @@ public class ReplaceVariables {
     static private java.util.ArrayList<String> valueList = new java.util.ArrayList<String>();
 
     public static String init(String nameListStr, String valueListStr) {
-
         nameList.clear();
         valueList.clear();
 
         String sep = "" + ((char) 5);
 
-        StringTokenizer nametk = new StringTokenizer(nameListStr, sep);
-        StringTokenizer valutk = new StringTokenizer(valueListStr, sep);
-        while (nametk.hasMoreTokens()) {
-            String name = nametk.nextToken();
-            String value = valutk.nextToken();
+        String[] nameSplit = nameListStr.split(sep);
+        String[] valueSplit = valueListStr.split(sep);
 
-            nameList.add(name);
-            valueList.add(value);
+        if (nameSplit.length != valueSplit.length) {
+            throw new IllegalStateException(
+                "A bug occured during the XSLT variable replacement. The number of variables and values does not match: #variables=" +
+                    nameSplit.length + " #values" + valueSplit.length);
         }
+
+        for (int i = 0; i < nameSplit.length; i++) {
+            nameList.add(nameSplit[i]);
+            valueList.add(valueSplit[i]);
+        }
+
         return "";
     }
 

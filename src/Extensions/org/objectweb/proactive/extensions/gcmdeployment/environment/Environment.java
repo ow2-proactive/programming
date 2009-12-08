@@ -60,8 +60,10 @@ import org.xml.sax.SAXException;
 
 public class Environment {
 
-    public static InputSource replaceVariables(URL descriptor, VariableContractImpl vContract, XPath xpath,
-            String namespace) throws IOException, SAXException, XPathExpressionException,
+    /* Since XSLT 1.0 & Java static methods are used to perform the variable replacement, it is not thread safe
+     */
+    synchronized public static InputSource replaceVariables(URL descriptor, VariableContractImpl vContract,
+            XPath xpath, String namespace) throws IOException, SAXException, XPathExpressionException,
             TransformerException {
 
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
