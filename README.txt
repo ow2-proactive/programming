@@ -1,6 +1,6 @@
 Thanks for your interest in ProActive.
 
-ProActive 4.2.0 Technology Preview 
+ProActive 4.2.0
 
 You can find the documentation of ProActive in the docs directory:
 

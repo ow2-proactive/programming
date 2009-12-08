@@ -48,7 +48,7 @@ public class Main {
      * @return String
      */
     public static String getProActiveVersion() {
-        return "4.2.0 Technology preview";
+        return "4.2.0";
     }
 
     public static void main(String[] args) {
