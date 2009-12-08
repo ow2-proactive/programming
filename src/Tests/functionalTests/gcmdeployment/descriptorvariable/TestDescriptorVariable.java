@@ -52,14 +52,27 @@ public class TestDescriptorVariable extends FunctionalTest {
     }
 
     @Test
-    public void recursiveTest1() throws ProActiveException {
+    public void recursiveDesc() throws ProActiveException {
         URL desc = this.getClass().getResource("recursiveDescriptorVar.xml");
         PAGCMDeployment.loadApplicationDescriptor(desc);
     }
 
+    @Test(expected = ProActiveException.class)
+    public void recursiveDesc2() throws ProActiveException {
+        URL desc = this.getClass().getResource("recursiveDescriptorVar2.xml");
+        PAGCMDeployment.loadApplicationDescriptor(desc);
+    }
+
     @Test
-    public void recursiveTest2() throws ProActiveException {
+    public void recursiveJavaProp() throws ProActiveException {
         URL desc = this.getClass().getResource("recursiveJavaProp.xml");
         PAGCMDeployment.loadApplicationDescriptor(desc);
     }
+
+    @Test
+    public void testNoVariable() throws ProActiveException {
+        URL desc = this.getClass().getResource("noVariable.xml");
+        PAGCMDeployment.loadApplicationDescriptor(desc);
+    }
+
 }

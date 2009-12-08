@@ -5,9 +5,9 @@
 	xsi:schemaLocation="urn:gcm:application:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ApplicationDescriptorSchema.xsd">
 
 	<environment>
-		<descriptorVariable name="base" value="plop"/>		
-		<descriptorVariable name="cmd" value="${base}/bin/java"/>
 		<descriptorVariable name="cmd2" value="${cmd}"/>
+		<descriptorVariable name="cmd" value="${base}/bin/java"/>
+		<descriptorVariable name="base" value="plop"/>		
 
 	</environment>
 
