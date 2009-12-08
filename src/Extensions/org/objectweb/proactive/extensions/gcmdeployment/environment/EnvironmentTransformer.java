@@ -77,12 +77,14 @@ class EnvironmentTransformer {
         String nameListStr = "";
         String valueListStr = "";
         String sep = "" + ((char) 5);
-        for (int i = 0; i < nameList.length - 1; i++) {
-            nameListStr += nameList[i] + sep;
-            valueListStr += valueList[i] + sep;
+        if (nameList.length > 0) {
+            for (int i = 0; i < nameList.length - 1; i++) {
+                nameListStr += nameList[i] + sep;
+                valueListStr += valueList[i] + sep;
+            }
+            nameListStr += nameList[nameList.length - 1];
+            valueListStr += valueList[nameList.length - 1];
         }
-        nameListStr += nameList[nameList.length - 1];
-        valueListStr += valueList[nameList.length - 1];
 
         //PAProperties.JAVAX_XML_TRANSFORM_TRANSFORMERFACTORY.setValue("net.sf.saxon.TransformerFactoryImpl");
         DOMSource domSource = new DOMSource(document);
