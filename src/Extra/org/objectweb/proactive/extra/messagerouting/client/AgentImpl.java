@@ -305,6 +305,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
     private class RouterHandshakeException extends Exception {
 
         public RouterHandshakeException() {
+		super();
         }
 
         public RouterHandshakeException(String msg) {
