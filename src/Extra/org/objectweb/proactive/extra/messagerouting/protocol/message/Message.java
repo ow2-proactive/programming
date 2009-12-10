@@ -308,13 +308,13 @@ public abstract class Message {
      * @throws MalformedMessageException if the message type field contains an invalid value
      */
     public static MessageType readType(byte[] byteArray, int offset) throws MalformedMessageException {
-	int typeInt = TypeHelper.byteArrayToInt(byteArray, offset +
-                Field.MSG_TYPE.getOffset());
+        int typeInt = TypeHelper.byteArrayToInt(byteArray, offset + Field.MSG_TYPE.getOffset());
         MessageType type = MessageType.getMessageType(typeInt);
-        if( type!=null )
-		return type;
+        if (type != null)
+            return type;
         else
-		throw new MalformedMessageException("Invalid value for the " + Field.MSG_TYPE + " field:" + typeInt);
+            throw new MalformedMessageException("Invalid value for the " + Field.MSG_TYPE + " field:" +
+                typeInt);
     }
 
     /** Length of this message */

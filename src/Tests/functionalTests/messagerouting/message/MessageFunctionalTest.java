@@ -34,22 +34,14 @@
  */
 package functionalTests.messagerouting.message;
 
-import org.junit.Test;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
-
 import functionalTests.FunctionalTest;
 
 
-public class TestMessage extends FunctionalTest {
+/**
+ * Common superclass of all message routing protocol messages functional tests
+ */
+public class MessageFunctionalTest extends FunctionalTest {
 
-    @Test
-    public void testOffset() {
-        for (Message.Field field : Message.Field.values()) {
-            System.out.println(field.ordinal());
-            System.out.println(field.getLength());
-            System.out.println(field.getOffset());
-        }
+    protected static final int NB_CHECK = 100;
 
-        System.out.println(Message.Field.getTotalOffset());
-    }
 }

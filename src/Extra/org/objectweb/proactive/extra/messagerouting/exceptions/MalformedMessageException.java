@@ -32,6 +32,7 @@ package org.objectweb.proactive.extra.messagerouting.exceptions;
 
 import java.io.IOException;
 
+
 /**
  * This exception should be thrown each time a message
  * which does not meet the Message Routing Protocol format is

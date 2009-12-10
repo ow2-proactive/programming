@@ -34,80 +34,256 @@
  */
 package functionalTests.messagerouting.message;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage.Field;
 
-import unitTests.UnitTests;
 
-
-public class TestMessageRegistration extends UnitTests {
-
-    static final int NB_CHECK = 100;
+/**
+ * Testing the {@link MessageType#REGISTRATION_REQUEST}
+ *  and {@link MessageType#REGISTRATION_REPLY} messages
+ */
+public class TestMessageRegistration extends MessageFunctionalTest {
 
     /* Randomly construct valid registration request then check all the fields.
      */
     @Test
-    public void testRegistrationRequest() throws SecurityException, NoSuchMethodException,
-            IllegalArgumentException, InstantiationException, IllegalAccessException,
-            InvocationTargetException, MalformedMessageException {
-        for (int i = 0; i < NB_CHECK; i++) {
-            buildAndCheckDataRequest(RegistrationRequestMessage.class, MessageType.REGISTRATION_REQUEST);
+    public void testRegistrationRequest() {
+        RegistrationMessageGenerator msgGen = new RegistrationMessageGenerator(
+            MessageType.REGISTRATION_REQUEST);
+        try {
+            for (int i = 0; i < NB_CHECK; i++) {
+                msgGen.buildValidMessage();
+                msgGen.testFields();
+                msgGen.testConversion();
+                msgGen.testInvalidMessage();
+            }
+        } catch (MalformedMessageException e) {
+            Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REQUEST + " implementation:" +
+                " the message " + msgGen.getMessage() + " cannot be reconstructed from its " +
+                "raw byte form, because:" + e.getMessage());
         }
+
+        msgGen.testExtremeValues();
     }
 
     /* Randomly construct valid registration reply then check all the fields.
      */
     @Test
-    public void testRegistrationReply() throws SecurityException, NoSuchMethodException,
-            IllegalArgumentException, InstantiationException, IllegalAccessException,
-            InvocationTargetException, MalformedMessageException {
-        for (int i = 0; i < NB_CHECK; i++) {
-            buildAndCheckDataRequest(RegistrationReplyMessage.class, MessageType.REGISTRATION_REPLY);
+    public void testRegistrationReply() {
+        RegistrationMessageGenerator msgGen = new RegistrationMessageGenerator(MessageType.REGISTRATION_REPLY);
+        try {
+            for (int i = 0; i < NB_CHECK; i++) {
+                msgGen.buildValidMessage();
+                msgGen.testFields();
+                msgGen.testConversion();
+                msgGen.testInvalidMessage();
+            }
+        } catch (MalformedMessageException e) {
+            Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REPLY + " implementation:" +
+                " the message " + msgGen.getMessage() + " cannot be reconstructed from its " +
+                "raw byte form, because:" + e.getMessage());
         }
+
+        msgGen.testExtremeValues();
     }
 
-    private void buildAndCheckDataRequest(Class<? extends RegistrationMessage> cl, MessageType type)
-            throws SecurityException, NoSuchMethodException, IllegalArgumentException,
-            IllegalAccessException, InvocationTargetException, InstantiationException,
-            // can be thrown by RegistrationMessage(buf,0)
-            MalformedMessageException {
-        AgentID agent = new AgentID(ProActiveRandom.nextPosLong());
-        logger.info("agent " + agent);
-        long msgId = ProActiveRandom.nextPosLong();
-        logger.info("msgId " + msgId);
-        long routerId = ProActiveRandom.nextPosLong();
-        Constructor<? extends RegistrationMessage> constructor;
+    private class RegistrationMessageGenerator extends MessageGenerator {
 
-        constructor = cl.getConstructor(AgentID.class, long.class, long.class);
-        RegistrationMessage m = (RegistrationMessage) constructor.newInstance(agent, msgId, routerId);
+        private AgentID agent;
+        private long msgId;
+        private long routerId;
 
-        Assert.assertEquals(Message.PROTOV1, m.getProtoID());
-        Assert.assertEquals(type, m.getType());
-        Assert.assertEquals(msgId, m.getMessageID());
-        Assert.assertEquals(agent, m.getAgentID());
-        Assert.assertEquals(routerId, m.getRouterID());
+        public RegistrationMessageGenerator(MessageType type) {
+            super(type);
+        }
 
-        byte[] buf = m.toByteArray();
-        Assert.assertEquals(buf.length, m.getLength());
+        @Override
+        protected void buildValidMessage() {
+            agent = new AgentID(ProActiveRandom.nextPosLong());
+            logger.debug("agent " + agent);
+            msgId = ProActiveRandom.nextPosLong();
+            logger.debug("msgId " + msgId);
+            routerId = ProActiveRandom.nextPosLong();
+            logger.debug("routerId " + routerId);
+            switch (type) {
+                case REGISTRATION_REQUEST:
+                    this.msg = new RegistrationRequestMessage(agent, msgId, routerId);
+                    break;
+                case REGISTRATION_REPLY:
+                    this.msg = new RegistrationReplyMessage(agent, msgId, routerId);
+                    break;
+                default:
+                    break;
+            }
+        }
 
-        constructor = cl.getConstructor(byte[].class, int.class);
-        RegistrationMessage m2 = (RegistrationMessage) constructor.newInstance(buf, 0);
+        @Override
+        protected void testFields() {
+            RegistrationMessage m = (RegistrationMessage) this.msg;
+            Assert.assertEquals(Message.PROTOV1, m.getProtoID());
+            Assert.assertEquals(type, m.getType());
+            Assert.assertEquals(msgId, m.getMessageID());
+            Assert.assertEquals(agent, m.getAgentID());
+            Assert.assertEquals(routerId, m.getRouterID());
+        }
 
-        Assert.assertEquals(m.getLength(), m2.getLength());
-        Assert.assertEquals(m.getProtoID(), m2.getProtoID());
-        Assert.assertEquals(m.getType(), m2.getType());
-        Assert.assertEquals(m.getMessageID(), m2.getMessageID());
-        Assert.assertEquals(m.getAgentID(), m2.getAgentID());
+        @Override
+        protected void testConversion() throws MalformedMessageException {
+            RegistrationMessage m = (RegistrationMessage) this.msg;
+            byte[] buf = m.toByteArray();
+            Assert.assertEquals(buf.length, m.getLength());
+
+            RegistrationMessage convMsg;
+            switch (type) {
+                case REGISTRATION_REQUEST:
+                    convMsg = new RegistrationRequestMessage(buf, 0);
+                    break;
+                case REGISTRATION_REPLY:
+                    convMsg = new RegistrationReplyMessage(buf, 0);
+                    break;
+                default:
+                    return;
+            }
+
+            Assert.assertEquals(m.getLength(), convMsg.getLength());
+            Assert.assertEquals(m.getProtoID(), convMsg.getProtoID());
+            Assert.assertEquals(m.getType(), convMsg.getType());
+            Assert.assertEquals(m.getMessageID(), convMsg.getMessageID());
+            Assert.assertEquals(m.getAgentID(), convMsg.getAgentID());
+
+        }
+
+        @Override
+        protected void testInvalidMessage() {
+
+            super.testInvalidMessage();
+
+            // agentId
+            try {
+                long invalidAgentId = nextLongLEQ(-2);
+                logger.debug("invalid agentId " + invalidAgentId);
+                RegistrationMessage m = testAgentId(invalidAgentId);
+                Assert.fail("Problem with " + type + " implementation: Attemp to reconstruct the message " +
+                    m + " with a corrupted " + RegistrationMessage.Field.AGENT_ID +
+                    " from its raw byte array representation actually succeeded!");
+            } catch (MalformedMessageException e) {
+                // success
+            }
+
+            // routerId
+            try {
+                long invalidRouterId = nextLongLEQ(-1);
+                logger.debug("invalid routerId " + invalidRouterId);
+                RegistrationMessage m = testRouterId(invalidRouterId);
+                Assert.fail("Problem with " + type + " implementation: Attemp to reconstruct the message " +
+                    m + " with a corrupted " + RegistrationMessage.Field.ROUTER_ID +
+                    " from its raw byte array representation actually succeeded!");
+            } catch (MalformedMessageException e) {
+                // success
+            }
+
+        }
+
+        /*
+         * Extreme values:
+         *  - agentId == -1
+         *  - routerId == 0
+         */
+        protected void testExtremeValues() {
+
+            long UNKNOWN_AGENT_ID = -1;
+            // REG_REQ is allowed to have an unknown AgentID, but REG_REP is NOT
+            try {
+                logger.debug("agent " + UNKNOWN_AGENT_ID);
+                testAgentId(UNKNOWN_AGENT_ID);
+                if (type.equals(MessageType.REGISTRATION_REQUEST)) {
+                    // is allowed
+                } else {
+                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REPLY +
+                        " implementation:" + " the " + RegistrationMessage.Field.AGENT_ID +
+                        " field cannot be filled with the value " + UNKNOWN_AGENT_ID);
+                }
+            } catch (MalformedMessageException e) {
+                if (type.equals(MessageType.REGISTRATION_REQUEST))
+                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REQUEST +
+                        " implementation:" + " the value used to mark an unknown agent ID " +
+                        UNKNOWN_AGENT_ID + " is not accepted as a valid value for the " +
+                        RegistrationMessage.Field.AGENT_ID + " field");
+                else {
+                    // success
+                }
+            }
+
+            long UNKNOWN_ROUTER_ID = 0;
+            // REG_REQ is allowed to have an unknown RouterID, but REG_REP is NOT
+            try {
+                logger.debug("router " + UNKNOWN_ROUTER_ID);
+                testRouterId(UNKNOWN_ROUTER_ID);
+                if (type.equals(MessageType.REGISTRATION_REQUEST)) {
+                    // is allowed
+                } else {
+                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REPLY +
+                        " implementation:" + " the " + RegistrationMessage.Field.ROUTER_ID +
+                        " field cannot be filled with the value " + UNKNOWN_ROUTER_ID);
+                }
+            } catch (MalformedMessageException e) {
+                if (type.equals(MessageType.REGISTRATION_REQUEST))
+                    Assert.fail("There is a problem in the " + MessageType.REGISTRATION_REQUEST +
+                        " implementation:" + " the value used to mark an unknown router ID " +
+                        UNKNOWN_ROUTER_ID + " is not accepted as a valid value for the " +
+                        RegistrationMessage.Field.ROUTER_ID + " field");
+                else {
+                    // success
+                }
+            }
+
+        }
+
+        private RegistrationMessage testAgentId(long invalidAgentId) throws MalformedMessageException {
+            byte[] corruptedMsg = msg.toByteArray();
+            TypeHelper.longToByteArray(invalidAgentId, corruptedMsg, Message.Field.getTotalOffset() +
+                Field.AGENT_ID.getOffset());
+            RegistrationMessage m = null;
+            switch (type) {
+                case REGISTRATION_REQUEST:
+                    m = new RegistrationRequestMessage(corruptedMsg, 0);
+                    break;
+                case REGISTRATION_REPLY:
+                    m = new RegistrationReplyMessage(corruptedMsg, 0);
+                    break;
+                default:
+                    break;
+            }
+            return m;
+        }
+
+        private RegistrationMessage testRouterId(long invalidRouterId) throws MalformedMessageException {
+            byte[] corruptedMsg = msg.toByteArray();
+            TypeHelper.longToByteArray(invalidRouterId, corruptedMsg, Message.Field.getTotalOffset() +
+                Field.ROUTER_ID.getOffset());
+            RegistrationMessage m = null;
+            switch (type) {
+                case REGISTRATION_REQUEST:
+                    m = new RegistrationRequestMessage(corruptedMsg, 0);
+                    break;
+                case REGISTRATION_REPLY:
+                    m = new RegistrationReplyMessage(corruptedMsg, 0);
+                    break;
+                default:
+                    break;
+            }
+            return m;
+        }
+
     }
 }
