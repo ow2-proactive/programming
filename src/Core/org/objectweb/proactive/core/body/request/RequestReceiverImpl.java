@@ -37,8 +37,10 @@ package org.objectweb.proactive.core.body.request;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -316,7 +318,13 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
      * Terminate all the ThreadForImmediateService.
      */
     public void terminate() {
+        // must get a snapshot of threadForCallers, as t.kill() modifies it.
+        Set<ThreadForImmediateService> allThreads = new HashSet<ThreadForImmediateService>();
         for (ThreadForImmediateService t : this.threadsForCallers.values()) {
+            allThreads.add(t);
+        }
+        // kill all threads for caller
+        for (ThreadForImmediateService t : allThreads) {
             t.kill();
         }
         this.threadsForCallers.clear();
