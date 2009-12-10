@@ -4,16 +4,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="urn:gcm:application:1.0 http://proactive.inria.fr/schemas/gcm/1.0/ApplicationDescriptorSchema.xsd">
 
-	<environment>
-		<descriptorVariable name="base" value="plop"/>		
-		<descriptorVariable name="cmd" value="${base}/bin/java"/>
-		<descriptorVariable name="cmd2" value="${cmd}"/>
-
-	</environment>
-
 	<application>
-		<executable>		
-			<command name="${cmd}"/>
+		<executable>			
+			<command name="cmd"/>
 			<nodeProvider refid="plop"/>
 		</executable>
 	</application>
@@ -23,5 +16,4 @@
 			<file path="var_gcmd.xml"/>
 		</nodeProvider>
 	</resources>	
-
 </GCMApplication>
