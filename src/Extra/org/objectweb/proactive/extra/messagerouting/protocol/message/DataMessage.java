@@ -246,7 +246,7 @@ public abstract class DataMessage extends Message {
      *             length etc.)
      */
     protected DataMessage(byte[] byteArray, int offset) throws MalformedMessageException {
-        super(byteArray, offset);
+        super(byteArray, offset, Field.getTotalOffset());
 
         try {
             this.sender = readSender(byteArray, offset);

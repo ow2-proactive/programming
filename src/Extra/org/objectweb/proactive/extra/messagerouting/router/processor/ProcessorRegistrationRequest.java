@@ -146,14 +146,11 @@ public class ProcessorRegistrationRequest extends Processor {
         }
     }
 
-    private void notifyInvalidAgent(RegistrationRequestMessage message, AgentID agentId) {
-        logger.warn("AgentId " + agentId +
-            " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
-            attachment.getRemoteEndpointName());
+    private void notifyInvalidAgent(RegistrationRequestMessage message, AgentID agentId, ErrorType errorCode) {
 
         // Send an ERR_ message (best effort)
-        ErrorMessage errMessage = new ErrorMessage(ErrorType.ERR_INVALID_ROUTER_ID, agentId, agentId, message
-                .getMessageID());
+        ErrorMessage errMessage = new ErrorMessage(errorCode, agentId, agentId, message.getMessageID());
+
         try {
             attachment.send(ByteBuffer.wrap(errMessage.toByteArray()));
         } catch (IOException e) {

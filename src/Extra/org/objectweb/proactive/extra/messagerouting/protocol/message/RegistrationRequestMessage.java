@@ -77,8 +77,5 @@ public class RegistrationRequestMessage extends RegistrationMessage {
                 " message:" + "Invalid value for the " + Field.ROUTER_ID + " field:" + this.getRouterID());
         }
 
-        if (this.getLength() != (Message.Field.getTotalOffset() + Field.getTotalOffset())) {
-            throw new IllegalStateException("Invalid message length: " + this.getLength());
-        }
     }
 }
