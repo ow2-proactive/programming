@@ -53,6 +53,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAGroup;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedReplyException;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedRequestException;
@@ -766,6 +767,18 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
         }
 
         // END JMX unregistration
+
+        try {
+            super.roe.unexportAll();
+        } catch (ProActiveException e) {
+            logger.error("Failed to unexport " + this.getID(), e);
+        }
+
+        try {
+            super.roe.unregisterAll();
+        } catch (ProActiveException e) {
+            logger.error("Failed to unregister " + this.getID(), e);
+        }
     }
 
     public void blockCommunication() {
