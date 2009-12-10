@@ -93,12 +93,6 @@ public class TestTypeHelper {
 
             TypeHelper.longToByteArray(val, buf, offset);
             retval = TypeHelper.byteArrayToLong(buf, offset);
-            System.out.println(val);
-            System.out.println(retval);
-            if (val == retval) {
-                System.out.println("ok");
-            }
-            System.out.println(val == retval);
             Assert.assertTrue((0L + val) == (0L + retval));
         }
     }
