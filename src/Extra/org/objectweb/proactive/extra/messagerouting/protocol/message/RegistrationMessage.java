@@ -51,11 +51,11 @@ import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
  */
 public abstract class RegistrationMessage extends Message {
 
-	private static final long UNKNOWN_AGENT_ID = -1;
+    private static final long UNKNOWN_AGENT_ID = -1;
 
     /**
      * Fields of the {@link RegistrationMessage} header.
-     * 
+     *
      * These fields are put after the {@link Message} header.
      */
     public enum Field {
@@ -196,16 +196,16 @@ public abstract class RegistrationMessage extends Message {
             Field.AGENT_ID.getOffset());
         if (id >= 0)
             return new AgentID(id);
-        else if(id == UNKNOWN_AGENT_ID) {
-		// in the case of REG_REQ message, the Agent ID is unknown
-		MessageType type = Message.readType(byteArray, 0);
-		if(type.equals(MessageType.REGISTRATION_REQUEST))
-			return null;
-		else
-			throw new MalformedMessageException("Invalid value for the " + Field.AGENT_ID + " field:" + id);
-        }
-        else
-            throw new MalformedMessageException("Invalid value for the " +  Field.AGENT_ID + " field:" + id);
+        else if (id == UNKNOWN_AGENT_ID) {
+            // in the case of REG_REQ message, the Agent ID is unknown
+            MessageType type = Message.readType(byteArray, 0);
+            if (type.equals(MessageType.REGISTRATION_REQUEST))
+                return null;
+            else
+                throw new MalformedMessageException("Invalid value for the " + Field.AGENT_ID + " field:" +
+                    id);
+        } else
+            throw new MalformedMessageException("Invalid value for the " + Field.AGENT_ID + " field:" + id);
     }
 
     /**

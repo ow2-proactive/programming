@@ -258,8 +258,8 @@ public abstract class DataMessage extends Message {
 
             this.toByteArray = byteArray;
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new MalformedMessageException( "Malformed " + this.getType() + " message:" +
-			"Invalid value for " + Message.Field.LENGTH + " field:" + super.getLength(), e);
+            throw new MalformedMessageException("Malformed " + this.getType() + " message:" +
+                "Invalid value for " + Message.Field.LENGTH + " field:" + super.getLength(), e);
         } catch (MalformedMessageException e) {
             throw new MalformedMessageException("Malformed " + this.getType() + " message:" + e.getMessage());
         }

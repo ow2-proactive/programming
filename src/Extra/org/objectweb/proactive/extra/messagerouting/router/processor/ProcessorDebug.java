@@ -58,9 +58,9 @@ public class ProcessorDebug extends Processor {
     }
 
     @Override
-    public void process() throws MalformedMessageException{
+    public void process() throws MalformedMessageException {
 
-	DebugMessage message = new DebugMessage(this.rawMessage.array(), 0);
+        DebugMessage message = new DebugMessage(this.rawMessage.array(), 0);
 
         switch (message.getErrorType()) {
             case DEB_DISCONNECT:

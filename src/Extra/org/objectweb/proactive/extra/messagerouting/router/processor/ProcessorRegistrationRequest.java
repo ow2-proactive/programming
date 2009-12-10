@@ -67,9 +67,10 @@ public class ProcessorRegistrationRequest extends Processor {
     }
 
     public void process() throws MalformedMessageException {
-	// Message.constructMessage guarantees that the cast is safe. If the message is not a RegistrationRequestMessage,
-	// a @{link MalformedMessageException} will be thrown
-	RegistrationRequestMessage message = (RegistrationRequestMessage)Message.constructMessage(this.rawMessage.array(), 0);
+        // Message.constructMessage guarantees that the cast is safe. If the message is not a RegistrationRequestMessage,
+        // a @{link MalformedMessageException} will be thrown
+        RegistrationRequestMessage message = (RegistrationRequestMessage) Message.constructMessage(
+                this.rawMessage.array(), 0);
         AgentID agentId = message.getAgentID();
         if (agentId == null) {
             connection(message);
@@ -95,8 +96,8 @@ public class ProcessorRegistrationRequest extends Processor {
 
         AgentID agentId = AgentIdGenerator.getId();
 
-        RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
-            this.router.getId());
+        RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(), this.router
+                .getId());
 
         Client client = new Client(attachment, agentId);
         boolean resp = this.sendReply(client, reply);
@@ -132,8 +133,8 @@ public class ProcessorRegistrationRequest extends Processor {
         } else {
             // Acknowledge the registration
             client.setAttachment(attachment);
-            RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId,
-			message.getMessageID(), this.router.getId());
+            RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
+                this.router.getId());
 
             boolean resp = this.sendReply(client, reply);
             if (resp) {
@@ -146,21 +147,21 @@ public class ProcessorRegistrationRequest extends Processor {
     }
 
     private void notifyInvalidAgent(RegistrationRequestMessage message, AgentID agentId) {
-	logger.warn("AgentId " + agentId +
-			" asked to reconnect but the router IDs do not match. Remote endpoint is: " +
-			attachment.getRemoteEndpointName());
+        logger.warn("AgentId " + agentId +
+            " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
+            attachment.getRemoteEndpointName());
 
-	// Send an ERR_ message (best effort)
-	ErrorMessage errMessage = new ErrorMessage(ErrorType.ERR_INVALID_ROUTER_ID, agentId, agentId,
-			message.getMessageID());
-	try {
-		attachment.send(ByteBuffer.wrap(errMessage.toByteArray()));
-	} catch (IOException e) {
-		logger.info("Failed to notify the client that invalid agent has been advertised");
-	}
+        // Send an ERR_ message (best effort)
+        ErrorMessage errMessage = new ErrorMessage(ErrorType.ERR_INVALID_ROUTER_ID, agentId, agentId, message
+                .getMessageID());
+        try {
+            attachment.send(ByteBuffer.wrap(errMessage.toByteArray()));
+        } catch (IOException e) {
+            logger.info("Failed to notify the client that invalid agent has been advertised");
+        }
 
-	// Since we disconnect the client, we must free the resources
-	this.attachment.dtor();
+        // Since we disconnect the client, we must free the resources
+        this.attachment.dtor();
     }
 
     /* Send the registration reply to the client (best effort)

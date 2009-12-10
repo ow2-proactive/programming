@@ -57,7 +57,7 @@ public class ProcessorDataReply extends Processor {
     }
 
     @Override
-    public void process() throws MalformedMessageException{
+    public void process() throws MalformedMessageException {
         AgentID agentId = DataMessage.readRecipient(rawMessage.array(), 0);
         Client destClient = this.router.getClient(agentId);
 

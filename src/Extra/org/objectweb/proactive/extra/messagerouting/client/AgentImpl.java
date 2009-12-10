@@ -224,11 +224,13 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
             // start router handshake
             try {
-				routerHandshake(tunnel);
-			} catch (RouterHandshakeException e) {
-			logger.error("Failed to reconnect to the router: the router handshake procedure failed. Reason: " + e.getMessage(), e);
-			tunnel.shutdown();
-			}
+                routerHandshake(tunnel);
+            } catch (RouterHandshakeException e) {
+                logger.error(
+                        "Failed to reconnect to the router: the router handshake procedure failed. Reason: " +
+                            e.getMessage(), e);
+                tunnel.shutdown();
+            }
             this.t = tunnel;
         } catch (IOException exception) {
             logger.debug("Failed to reconnect to the router", exception);
@@ -250,63 +252,64 @@ public class AgentImpl implements Agent, AgentImplMBean {
      * </ul>
      * @throws IOException
      */
-    private void routerHandshake(Tunnel tunnel) throws RouterHandshakeException, IOException{
+    private void routerHandshake(Tunnel tunnel) throws RouterHandshakeException, IOException {
 
-	try {
-		// if call for the first time then agentID is null
-		RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator
-				.getAndIncrement(), routerID);
-		tunnel.write(reg.toByteArray());
+        try {
+            // if call for the first time then agentID is null
+            RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator
+                    .getAndIncrement(), routerID);
+            tunnel.write(reg.toByteArray());
 
-		// Waiting the router response
-		byte[] reply = tunnel.readMessage();
-		Message replyMsg = Message.constructMessage(reply, 0);
+            // Waiting the router response
+            byte[] reply = tunnel.readMessage();
+            Message replyMsg = Message.constructMessage(reply, 0);
 
-		if (!(replyMsg instanceof RegistrationReplyMessage)) {
-			if (replyMsg instanceof ErrorMessage) {
-				ErrorMessage em = (ErrorMessage) replyMsg;
-				if (em.getErrorType() == ErrorType.ERR_INVALID_ROUTER_ID) {
-					throw new RouterHandshakeException("The router has been restarted. Disconnecting...");
-				}
-			} else {
-				throw new RouterHandshakeException("Invalid router response: expected a " +
-						MessageType.REGISTRATION_REPLY.toString() + " message but got " +
-						replyMsg.getType().toString() + " message");
-			}
-		}
+            if (!(replyMsg instanceof RegistrationReplyMessage)) {
+                if (replyMsg instanceof ErrorMessage) {
+                    ErrorMessage em = (ErrorMessage) replyMsg;
+                    if (em.getErrorType() == ErrorType.ERR_INVALID_ROUTER_ID) {
+                        throw new RouterHandshakeException("The router has been restarted. Disconnecting...");
+                    }
+                } else {
+                    throw new RouterHandshakeException("Invalid router response: expected a " +
+                        MessageType.REGISTRATION_REPLY.toString() + " message but got " +
+                        replyMsg.getType().toString() + " message");
+                }
+            }
 
-		RegistrationReplyMessage rrm = (RegistrationReplyMessage) replyMsg;
-		AgentID replyAgentID = rrm.getAgentID();
-		if (this.agentID == null) {
-			this.agentID = replyAgentID;
-			logger.debug("Router assigned agentID=" + this.agentID + " to this client");
-		} else {
-			if (!this.agentID.equals(replyAgentID)) {
-				throw new RouterHandshakeException("Invalid router response: Local ID is " + this.agentID +
-						" but server told " + replyAgentID);
-			}
-		}
+            RegistrationReplyMessage rrm = (RegistrationReplyMessage) replyMsg;
+            AgentID replyAgentID = rrm.getAgentID();
+            if (this.agentID == null) {
+                this.agentID = replyAgentID;
+                logger.debug("Router assigned agentID=" + this.agentID + " to this client");
+            } else {
+                if (!this.agentID.equals(replyAgentID)) {
+                    throw new RouterHandshakeException("Invalid router response: Local ID is " +
+                        this.agentID + " but server told " + replyAgentID);
+                }
+            }
 
-		if (this.routerID == 0) {
-			this.routerID = rrm.getRouterID();
-		} else if (this.routerID != rrm.getRouterID()) {
-			throw new RouterHandshakeException("Invalid router response: previous router ID  was " + this.agentID +
-					" but server now advertises " + rrm.getRouterID());
-		}
-	} catch(MalformedMessageException e){
-		throw new RouterHandshakeException("Invalid router response: corrupted " + MessageType.REGISTRATION_REPLY.toString() + " message - " + e.getMessage());
-	}
+            if (this.routerID == 0) {
+                this.routerID = rrm.getRouterID();
+            } else if (this.routerID != rrm.getRouterID()) {
+                throw new RouterHandshakeException("Invalid router response: previous router ID  was " +
+                    this.agentID + " but server now advertises " + rrm.getRouterID());
+            }
+        } catch (MalformedMessageException e) {
+            throw new RouterHandshakeException("Invalid router response: corrupted " +
+                MessageType.REGISTRATION_REPLY.toString() + " message - " + e.getMessage());
+        }
 
     }
 
-    private class RouterHandshakeException extends Exception{
+    private class RouterHandshakeException extends Exception {
 
-	public RouterHandshakeException() {
-		}
+        public RouterHandshakeException() {
+        }
 
-	public RouterHandshakeException(String msg) {
-		super(msg);
-		}
+        public RouterHandshakeException(String msg) {
+            super(msg);
+        }
     }
 
     /**

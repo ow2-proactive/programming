@@ -80,10 +80,10 @@ public class TestMessageAssembler {
 
             // Check is router.handleAsynchronously was called once and only once
             try {
-				router.handleAsynchronouslyCalled(message);
-			} catch (MalformedMessageException e) {
-				Assert.fail("Badly rassembled message - corrupted message: " + e.getMessage());
-			}
+                router.handleAsynchronouslyCalled(message);
+            } catch (MalformedMessageException e) {
+                Assert.fail("Badly rassembled message - corrupted message: " + e.getMessage());
+            }
 
         }
     }

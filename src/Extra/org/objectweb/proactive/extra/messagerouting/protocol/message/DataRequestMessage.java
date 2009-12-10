@@ -74,7 +74,7 @@ public class DataRequestMessage extends DataMessage {
 
         if (this.getType() != MessageType.DATA_REQUEST) {
             throw new MalformedMessageException("Malformed" + MessageType.DATA_REQUEST + " message:" +
-                "Invalid value for " +  Message.Field.MSG_TYPE + " field:" + this.getType());
+                "Invalid value for " + Message.Field.MSG_TYPE + " field:" + this.getType());
         }
     }
 }

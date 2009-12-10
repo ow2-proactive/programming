@@ -68,13 +68,13 @@ public class RegistrationRequestMessage extends RegistrationMessage {
         super(byteArray, offset);
 
         if (this.getType() != MessageType.REGISTRATION_REQUEST) {
-            throw new MalformedMessageException("Malformed " + MessageType.REGISTRATION_REQUEST + " message:"
-			+ "Invalid value for the " + Message.Field.MSG_TYPE + " field:" + this.getType());
+            throw new MalformedMessageException("Malformed " + MessageType.REGISTRATION_REQUEST +
+                " message:" + "Invalid value for the " + Message.Field.MSG_TYPE + " field:" + this.getType());
         }
 
         if (this.getRouterID() < 0) {
-            throw new MalformedMessageException("Malformed " + MessageType.REGISTRATION_REQUEST + " message:"
-			+ "Invalid value for the " + Field.ROUTER_ID + " field:" + this.getRouterID());
+            throw new MalformedMessageException("Malformed " + MessageType.REGISTRATION_REQUEST +
+                " message:" + "Invalid value for the " + Field.ROUTER_ID + " field:" + this.getRouterID());
         }
 
         if (this.getLength() != (Message.Field.getTotalOffset() + Field.getTotalOffset())) {
