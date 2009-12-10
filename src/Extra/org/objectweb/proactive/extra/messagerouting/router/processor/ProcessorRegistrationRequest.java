@@ -85,7 +85,7 @@ public class ProcessorRegistrationRequest extends Processor {
         long routerId = message.getRouterID();
         if (routerId != 0) {
             logger.warn("Invalid connection request. router ID must be 0. Remote endpoint is: " +
-                attachment.getRemoteEndpoint());
+                attachment.getRemoteEndpointName());
 
             // Cannot contact the client yet, disconnect it !
             // Since we disconnect the client, we must free the resources
@@ -115,9 +115,9 @@ public class ProcessorRegistrationRequest extends Processor {
 
         // Check that it is not an "old" client
         if (message.getRouterID() != this.router.getId()) {
-		logger.warn("AgentId " + agentId +
-                    " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
-                    attachment.getRemoteEndpoint());
+            logger.warn("AgentId " + agentId +
+                " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
+                attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
             return;
         }
@@ -125,9 +125,9 @@ public class ProcessorRegistrationRequest extends Processor {
         // Check if the client is know
         Client client = router.getClient(agentId);
         if (client == null) {
-		logger.warn("AgentId " + agentId +
-                    " asked to reconnect but is not known by this router. Remote endpoint is: " +
-                    attachment.getRemoteEndpoint());
+            logger.warn("AgentId " + agentId +
+                " asked to reconnect but is not known by this router. Remote endpoint is: " +
+                attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_AGENT_ID);
         } else {
             // Acknowledge the registration
@@ -148,7 +148,7 @@ public class ProcessorRegistrationRequest extends Processor {
     private void notifyInvalidAgent(RegistrationRequestMessage message, AgentID agentId) {
 	logger.warn("AgentId " + agentId +
 			" asked to reconnect but the router IDs do not match. Remote endpoint is: " +
-			attachment.getRemoteEndpoint());
+			attachment.getRemoteEndpointName());
 
 	// Send an ERR_ message (best effort)
 	ErrorMessage errMessage = new ErrorMessage(ErrorType.ERR_INVALID_ROUTER_ID, agentId, agentId,
