@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import org.junit.After;
 import org.junit.Before;
 import org.objectweb.proactive.extra.messagerouting.client.Tunnel;
 import org.objectweb.proactive.extra.messagerouting.router.Router;
@@ -57,5 +58,11 @@ public class BlackBox extends FunctionalTest {
 
         Socket s = new Socket(InetAddress.getLocalHost(), this.router.getPort());
         this.tunnel = new Tunnel(s);
+    }
+
+    @After
+    public void afterBlackBox() {
+        this.tunnel.shutdown();
+        this.router.stop();
     }
 }
