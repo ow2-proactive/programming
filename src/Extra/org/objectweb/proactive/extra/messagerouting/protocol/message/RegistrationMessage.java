@@ -114,6 +114,8 @@ public abstract class RegistrationMessage extends Message {
      * 		must be the same than the correlated {@link MessageType#REGISTRATION_REQUEST}
      * @param agentID
      * 		The agentID or null
+     * @param routerID
+     * 		The router id
      */
     public RegistrationMessage(MessageType type, long messageId, AgentID agentID, long routerID) {
         super(type, messageId);
@@ -208,6 +210,13 @@ public abstract class RegistrationMessage extends Message {
                 return false;
         } else if (!agentID.equals(other.agentID))
             return false;
+        if(routerID==0){
+		if(other.routerID!=0)
+			return false;
+        }
+        else if(routerID!=other.routerID)
+		// different router
+		return false;
         return true;
     }
 
