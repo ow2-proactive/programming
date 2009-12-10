@@ -41,7 +41,7 @@ import java.nio.channels.SocketChannel;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DebugMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.Attachment;
-import org.objectweb.proactive.extra.messagerouting.router.Router;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 
 /** Asynchronous handler for {@link MessageType#DEBUG_}
@@ -51,11 +51,10 @@ import org.objectweb.proactive.extra.messagerouting.router.Router;
 public class ProcessorDebug extends Processor {
     DebugMessage message;
     Attachment attachment;
-    Router router;
 
-    public ProcessorDebug(ByteBuffer message, Attachment attachment, Router router) {
+    public ProcessorDebug(ByteBuffer message, Attachment attachment, RouterImpl router) {
+        super(message, router);
         this.attachment = attachment;
-        this.router = router;
 
         try {
             this.message = new DebugMessage(message.array(), 0);

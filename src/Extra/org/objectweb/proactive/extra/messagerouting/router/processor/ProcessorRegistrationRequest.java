@@ -59,12 +59,11 @@ public class ProcessorRegistrationRequest extends Processor {
 
     final private RegistrationRequestMessage message;
     final private Attachment attachment;
-    final private RouterImpl router;
 
     public ProcessorRegistrationRequest(ByteBuffer messageAsByteBuffer, Attachment attachment,
             RouterImpl router) {
+        super(messageAsByteBuffer, router);
         this.attachment = attachment;
-        this.router = router;
 
         RegistrationRequestMessage message = null;
         try {

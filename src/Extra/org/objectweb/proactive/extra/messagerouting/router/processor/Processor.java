@@ -34,10 +34,13 @@
  */
 package org.objectweb.proactive.extra.messagerouting.router.processor;
 
+import java.nio.ByteBuffer;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 
 /** Asynchronous handler for a given {@link MessageType}
@@ -47,6 +50,13 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.Mes
 public abstract class Processor {
 
     final static protected Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
+    final protected RouterImpl router;
+    final protected ByteBuffer rawMessage;
+
+    protected Processor(ByteBuffer rawMessage, RouterImpl router) {
+        this.router = router;
+        this.rawMessage = rawMessage;
+    }
 
     abstract public void process();
 }

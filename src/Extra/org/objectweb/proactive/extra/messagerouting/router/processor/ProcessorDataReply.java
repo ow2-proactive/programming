@@ -38,8 +38,8 @@ import java.nio.ByteBuffer;
 
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataMessage;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.Client;
@@ -52,17 +52,13 @@ import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
  */
 public class ProcessorDataReply extends Processor {
 
-    final private ByteBuffer messageAsByteBuffer;
-    final private RouterImpl router;
-
     public ProcessorDataReply(ByteBuffer messageAsByteBuffer, RouterImpl router) {
-        this.messageAsByteBuffer = messageAsByteBuffer;
-        this.router = router;
+        super(messageAsByteBuffer, router);
     }
 
     @Override
     public void process() {
-        AgentID agentId = DataMessage.readRecipient(messageAsByteBuffer.array(), 0);
+        AgentID agentId = DataMessage.readRecipient(rawMessage.array(), 0);
         Client destClient = this.router.getClient(agentId);
 
         if (destClient != null) {
@@ -71,7 +67,7 @@ public class ProcessorDataReply extends Processor {
              * We don't want to send a error message to the sender. Our goal is to unblock
              * the recipient which is waiting for the reply
              */
-            destClient.sendMessageOrCache(this.messageAsByteBuffer);
+            destClient.sendMessageOrCache(this.rawMessage);
         } else {
             /* The recipient is unknown.
              * 
@@ -80,7 +76,7 @@ public class ProcessorDataReply extends Processor {
              */
             try {
                 Message message;
-                message = new DataRequestMessage(messageAsByteBuffer.array(), 0);
+                message = new DataRequestMessage(rawMessage.array(), 0);
                 logger.error("Dropped invalid data reply: unknown recipient. " + message);
             } catch (IllegalArgumentException e) {
                 ProActiveLogger.logImpossibleException(logger, e);
