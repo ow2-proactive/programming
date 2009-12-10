@@ -240,9 +240,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
      * This is the initial handshake process between the {@link Agent} and the {@link Router}
      * <ul>
      * 	<li> The Agent will send a {@link MessageType#REGISTRATION_REQUEST} to the Router
-     * 		with a blank  field
-     *  <li> On first connection, the {@link RegistrationMessage.Field#AGENT_ID} and
-     *  	{@link RegistrationMessage.Field#ROUTER_ID} fields will be set to zero. It is the responsability of the router to fill them.</li>
+     *  <li> On first connection, the {@link RegistrationMessage.Field#AGENT_ID} is set to -1 and the
+     *  	{@link RegistrationMessage.Field#ROUTER_ID} field is set to zero. It is the responsibility of the router to fill them.</li>
      *  <li> The Router will reply with a {@link MessageType#REGISTRATION_REPLY} message</li>
      *  <li> On first connection, the Agent initializes its {@link RegistrationMessage.Field#AGENT_ID} and {@link RegistrationMessage.Field#ROUTER_ID}
      *  	fields according to the Router reply </li>
