@@ -58,26 +58,12 @@ import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
  */
 public class ProcessorRegistrationRequest extends Processor {
 
-    final private RegistrationRequestMessage message;
     final private Attachment attachment;
 
     public ProcessorRegistrationRequest(ByteBuffer messageAsByteBuffer, Attachment attachment,
             RouterImpl router) {
         super(messageAsByteBuffer, router);
         this.attachment = attachment;
-
-        RegistrationRequestMessage message = null;
-        try {
-            Message tmpMsg = Message.constructMessage(messageAsByteBuffer.array(), 0);
-            message = (RegistrationRequestMessage) tmpMsg;
-        } catch (IllegalArgumentException e) {
-            logger.warn("Invalid connection reques. Client disconnected", e);
-            // Cannot contact the client yet, disconnect it !
-            // Since we disconnect the client, we must free the resources
-            this.attachment.dtor();
-        }
-
-        this.message = message;
     }
 
     public void process() throws MalformedMessageException {
@@ -86,17 +72,17 @@ public class ProcessorRegistrationRequest extends Processor {
 	RegistrationRequestMessage message = (RegistrationRequestMessage)Message.constructMessage(this.rawMessage.array(), 0);
         AgentID agentId = message.getAgentID();
         if (agentId == null) {
-            connection();
+            connection(message);
         } else {
-            reconnection();
+            reconnection(message);
         }
     }
 
     /* Generate and unique AgentID and send the registration reply
      * in best effort. If succeeded, add the new client to the router
      */
-    private void connection() {
-        long routerId = this.message.getRouterID();
+    private void connection(RegistrationRequestMessage message) {
+        long routerId = message.getRouterID();
         if (routerId != 0) {
             logger.warn("Invalid connection request. router ID must be 0. Remote endpoint is: " +
                 attachment.getRemoteEndpoint());
@@ -109,7 +95,7 @@ public class ProcessorRegistrationRequest extends Processor {
 
         AgentID agentId = AgentIdGenerator.getId();
 
-        RegistrationMessage reply = new RegistrationReplyMessage(agentId, this.message.getMessageID(),
+        RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
             this.router.getId());
 
         Client client = new Client(attachment, agentId);
@@ -124,7 +110,7 @@ public class ProcessorRegistrationRequest extends Processor {
      * If succeeded, update the attachment in the client, and
      * flush the pending messages.
      */
-    private void reconnection() {
+    private void reconnection(RegistrationRequestMessage message) {
         AgentID agentId = message.getAgentID();
 
         // Check that it is not an "old" client
@@ -146,8 +132,8 @@ public class ProcessorRegistrationRequest extends Processor {
         } else {
             // Acknowledge the registration
             client.setAttachment(attachment);
-            RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, this.message
-                    .getMessageID(), this.router.getId());
+            RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId,
+			message.getMessageID(), this.router.getId());
 
             boolean resp = this.sendReply(client, reply);
             if (resp) {
@@ -158,19 +144,23 @@ public class ProcessorRegistrationRequest extends Processor {
             }
         }
     }
-    private void notifyInvalidAgent(RegistrationRequestMessage message, AgentID agentId, ErrorType errorCode) {
 
-        // Send an ERR_ message (best effort)
-        ErrorMessage errMessage = new ErrorMessage(errorCode, agentId, agentId, message
-                .getMessageID());
-        try {
-            attachment.send(ByteBuffer.wrap(errMessage.toByteArray()));
-        } catch (IOException e) {
-            logger.info("Failed to notify the client that invalid agent has been advertised");
-        }
+    private void notifyInvalidAgent(RegistrationRequestMessage message, AgentID agentId) {
+	logger.warn("AgentId " + agentId +
+			" asked to reconnect but the router IDs do not match. Remote endpoint is: " +
+			attachment.getRemoteEndpoint());
 
-        // Since we disconnect the client, we must free the resources
-        this.attachment.dtor();
+	// Send an ERR_ message (best effort)
+	ErrorMessage errMessage = new ErrorMessage(ErrorType.ERR_INVALID_ROUTER_ID, agentId, agentId,
+			message.getMessageID());
+	try {
+		attachment.send(ByteBuffer.wrap(errMessage.toByteArray()));
+	} catch (IOException e) {
+		logger.info("Failed to notify the client that invalid agent has been advertised");
+	}
+
+	// Since we disconnect the client, we must free the resources
+	this.attachment.dtor();
     }
 
     /* Send the registration reply to the client (best effort)

@@ -50,20 +50,11 @@ import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
  * @since ProActive 4.1.0
  */
 public class ProcessorDebug extends Processor {
-    DebugMessage message;
     Attachment attachment;
 
     public ProcessorDebug(ByteBuffer message, Attachment attachment, RouterImpl router) {
         super(message, router);
         this.attachment = attachment;
-
-        try {
-            this.message = new DebugMessage(message.array(), 0);
-        } catch (IllegalArgumentException e) {
-            logger.warn(e);
-            this.message = null;
-        }
-
     }
 
     @Override
