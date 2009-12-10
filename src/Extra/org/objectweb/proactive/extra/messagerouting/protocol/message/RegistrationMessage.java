@@ -95,6 +95,18 @@ public abstract class RegistrationMessage extends Message {
             }
             return totalOffset;
         }
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case AGENT_ID:
+                    return "AGENT_ID";
+                case ROUTER_ID:
+                    return "ROUTER_ID";
+                default:
+                    return super.toString();
+            }
+        }
     }
 
     /** The {@link AgentID} */
@@ -131,12 +143,17 @@ public abstract class RegistrationMessage extends Message {
      * Construct a message from the data contained in a formatted byte array.
      * @param byteArray the byte array from which to read
      * @param offset the offset at which to find the message in the byte array
+     * @throws MalformedMessageException if the byte buffer does not contain a valid message
      */
     public RegistrationMessage(byte[] byteArray, int offset) throws MalformedMessageException {
         super(byteArray, offset, Field.getTotalOffset());
 
-        this.agentID = readAgentID(byteArray, offset);
-        this.routerID = readRouterID(byteArray, offset);
+        try {
+            this.agentID = readAgentID(byteArray, offset);
+            this.routerID = readRouterID(byteArray, offset);
+        } catch (MalformedMessageException e) {
+            throw new MalformedMessageException("Malformed " + this.getType() + " message:" + e.getMessage());
+        }
     }
 
     public AgentID getAgentID() {
@@ -170,11 +187,15 @@ public abstract class RegistrationMessage extends Message {
      * @param byteArray the buffer in which to read 
      * @param offset the offset at which to find the beginning of the message in the buffer
      * @return the AgentID of the formatted message
+     * @throws MalformedMessageException if the message contains an invalid agentID value
      */
-    static public AgentID readAgentID(byte[] byteArray, int offset) {
+    static public AgentID readAgentID(byte[] byteArray, int offset) throws MalformedMessageException {
         long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
             Field.AGENT_ID.getOffset());
-        return (id >= 0) ? new AgentID(id) : null;
+        if (id >= 0)
+            return new AgentID(id);
+        else
+            throw new MalformedMessageException("Invalid value for the " +  Field.AGENT_ID + " field:" + id);
     }
 
     /**
@@ -211,14 +232,19 @@ public abstract class RegistrationMessage extends Message {
                 return false;
         } else if (!agentID.equals(other.agentID))
             return false;
-        if(routerID==0){
-		if(other.routerID!=0)
-			return false;
-        }
-        else if(routerID!=other.routerID)
-		// different router
-		return false;
+        if (routerID == 0) {
+            if (other.routerID != 0)
+                return false;
+        } else if (routerID != other.routerID)
+            // different router
+            return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + Field.AGENT_ID.toString() + ":" + this.agentID + ";" +
+            Field.ROUTER_ID.toString() + ":" + this.routerID + ";";
     }
 
 }

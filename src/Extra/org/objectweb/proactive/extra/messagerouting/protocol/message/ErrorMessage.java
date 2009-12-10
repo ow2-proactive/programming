@@ -37,6 +37,8 @@ package org.objectweb.proactive.extra.messagerouting.protocol.message;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
@@ -132,6 +134,24 @@ public class ErrorMessage extends DataMessage {
         public static ErrorType getErrorType(int value) {
             return idToErrorType.get(value);
         }
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case ERR_DISCONNECTION_BROADCAST:
+                    return "ERR_DISCONNECTION_BROADCAST";
+                case ERR_INVALID_AGENT_ID:
+                    return "ERR_INVALID_AGENT_ID";
+                case ERR_INVALID_ROUTER_ID:
+                    return "ERR_INVALID_ROUTER_ID";
+                case ERR_NOT_CONNECTED_RCPT:
+                    return "ERR_NOT_CONNECTED_RCPT";
+                case ERR_UNKNOW_RCPT:
+                    return "ERR_UNKNOW_RCPT";
+                default:
+                    return super.toString();
+            }
+        }
     }
 
     /** The type of this error message */
@@ -144,16 +164,16 @@ public class ErrorMessage extends DataMessage {
      * @throws IllegalArgumentException - if the payload contains an unrecognized error code
      * @throws IllegalArgumentException - if the payload is not a four-bytes buffer
      * */
-    static public ErrorType readErrorType(byte[] payload) throws IllegalArgumentException {
+    static public ErrorType readErrorType(byte[] payload) throws MalformedMessageException {
         if (payload.length != 4)
-            throw new IllegalArgumentException("The payload is not four-bytes long");
+            throw new MalformedMessageException("The payload is not four-bytes long");
 
         int errorCode = TypeHelper.byteArrayToInt(payload, 0);
         ErrorType type = ErrorType.getErrorType(errorCode);
         if (type != null)
             return type;
         else
-            throw new IllegalArgumentException("Invalid value for the error code: " + errorCode);
+            throw new MalformedMessageException("Invalid value for the error code: " + errorCode);
     }
 
     /** Create an error message
@@ -181,13 +201,15 @@ public class ErrorMessage extends DataMessage {
      *            the byte array from which to read
      * @param offset
      *            the offset at which to find the message in the byte array
-     * @throws InstantiationException
+     * @throws MalformedMessageException
+     * 			If the buffer does not contain a valid error message
      */
-    public ErrorMessage(byte[] byteArray, int offset) throws IllegalArgumentException {
+    public ErrorMessage(byte[] byteArray, int offset) throws MalformedMessageException {
         super(byteArray, offset);
 
         if (this.getType() != MessageType.ERR_) {
-            throw new IllegalArgumentException("Invalid message type " + this.getType());
+            throw new MalformedMessageException("Malformed" + MessageType.ERR_ + " message:" +
+                "Invalid value for the " + Message.Field.MSG_TYPE + " field:" + this.getType());
         }
 
         this.error = readErrorType(this.getData());

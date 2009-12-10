@@ -36,6 +36,7 @@ package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
 import java.util.Arrays;
 
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 
@@ -125,6 +126,18 @@ public abstract class DataMessage extends Message {
 
             return totalOffset;
         }
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case SRC_AGENT_ID:
+                    return "SRC_AGENT_ID";
+                case DST_AGENT_ID:
+                    return "DST_AGENT_ID";
+                default:
+                    return super.toString();
+            }
+        }
     }
 
     /* @@@@@@@@@@@@@@@@@@@@ Static methods @@@@@@@@@@@@@@@@@@@@@@ */
@@ -137,12 +150,16 @@ public abstract class DataMessage extends Message {
      *            the offset at which the message begins
      * @return The value of the length field of the message contained in buf at
      *         the given offset or null if unknown
+     * @throws MalformedMessageException
+     * 			if the SRC_AGENT_ID field from the message is invalid
      */
-    static public AgentID readSender(byte[] byteArray, int offset) {
+    static public AgentID readSender(byte[] byteArray, int offset) throws MalformedMessageException {
         long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
             Field.SRC_AGENT_ID.getOffset());
-
-        return id < 0 ? null : new AgentID(id);
+        if (id < 0) {
+            throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " + id);
+        }
+        return new AgentID(id);
     }
 
     /** Reads the recipient of a message
@@ -153,13 +170,17 @@ public abstract class DataMessage extends Message {
      *            the offset at which the message begins
      * @return The value of the length field of the message contained in buf at
      *         the given offset or null if unknown
+     * @throws MalformedMessageException
+     * 			if the DST_AGENT_ID field from the message is invalid
      */
-
-    public static AgentID readRecipient(byte[] byteArray, int offset) {
+    public static AgentID readRecipient(byte[] byteArray, int offset) throws MalformedMessageException {
         long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
             Field.DST_AGENT_ID.getOffset());
 
-        return id < 0 ? null : new AgentID(id);
+        if (id < 0) {
+            throw new MalformedMessageException("Invalid value for " + Field.DST_AGENT_ID + " field: " + id);
+        }
+        return new AgentID(id);
     }
 
     /** Sender of this message */
@@ -220,12 +241,12 @@ public abstract class DataMessage extends Message {
      *            a buffer which contains a message
      * @param offset
      *            the offset at which the message begins
-     * @throws IllegalArgumentException
-     *             If the buffer does not match message requirements (proto ID,
+     * @throws MalformedMessageException
+     *             If the buffer does not contain a valid message (proto ID,
      *             length etc.)
      */
     protected DataMessage(byte[] byteArray, int offset) throws MalformedMessageException {
-        super(byteArray, offset, Field.getTotalOffset());
+        super(byteArray, offset);
 
         try {
             this.sender = readSender(byteArray, offset);
@@ -237,20 +258,11 @@ public abstract class DataMessage extends Message {
 
             this.toByteArray = byteArray;
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Message length is invalid: " + super.getLength(), e);
+            throw new MalformedMessageException( "Malformed " + this.getType() + " message:" +
+			"Invalid value for " + Message.Field.LENGTH + " field:" + super.getLength(), e);
+        } catch (MalformedMessageException e) {
+            throw new MalformedMessageException("Malformed " + this.getType() + " message:" + e.getMessage());
         }
-
-        if (this.sender == null) {
-            throw new IllegalArgumentException("SRC_AGENT_ID field must be set");
-        }
-
-        if (this.recipient == null) {
-            throw new IllegalArgumentException("DST_AGENT_ID field must be set");
-        }
-    }
-
-    public String toString() {
-        return super.toString() + " src=" + this.sender + " dst=" + this.recipient;
     }
 
     @Override
@@ -335,4 +347,11 @@ public abstract class DataMessage extends Message {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + Field.SRC_AGENT_ID.toString() + ":" + this.sender + ";" +
+            Field.DST_AGENT_ID.toString() + ":" + this.recipient + ";";
+    }
+
 }

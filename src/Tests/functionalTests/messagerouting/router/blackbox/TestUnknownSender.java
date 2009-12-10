@@ -40,6 +40,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
@@ -77,7 +78,7 @@ public class TestUnknownSender extends BlackBox {
      * - a ERR_UNKNOW_RCPT message is expected in response
      */
     @Test
-    public void testOK() throws IOException, InstantiationException {
+    public void testOK() throws IOException, MalformedMessageException {
         // Connect
         Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0);
         tunnel.write(message.toByteArray());

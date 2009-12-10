@@ -36,7 +36,7 @@ package org.objectweb.proactive.extra.messagerouting.router.processor;
 
 import java.nio.ByteBuffer;
 
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
@@ -57,7 +57,7 @@ public class ProcessorDataReply extends Processor {
     }
 
     @Override
-    public void process() {
+    public void process() throws MalformedMessageException{
         AgentID agentId = DataMessage.readRecipient(rawMessage.array(), 0);
         Client destClient = this.router.getClient(agentId);
 
@@ -74,13 +74,9 @@ public class ProcessorDataReply extends Processor {
              * We can't do better than dropping the reply. Notifying the sender is useless since
              * it will not unblock the recipient. 
              */
-            try {
-                Message message;
-                message = new DataRequestMessage(rawMessage.array(), 0);
-                logger.error("Dropped invalid data reply: unknown recipient. " + message);
-            } catch (IllegalArgumentException e) {
-                ProActiveLogger.logImpossibleException(logger, e);
-            }
+            Message message;
+            message = new DataRequestMessage(rawMessage.array(), 0);
+            logger.error("Dropped invalid data reply: unknown recipient. " + message);
         }
     }
 }

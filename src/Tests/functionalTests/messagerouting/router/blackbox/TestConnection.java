@@ -41,6 +41,7 @@ import junit.framework.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
@@ -56,7 +57,7 @@ public class TestConnection extends BlackBox {
      * A registration reply is expected with the same AgentID is expected
      */
     @Test
-    public void testConnection() throws IOException {
+    public void testConnection() throws IOException, MalformedMessageException {
         Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0);
         tunnel.write(message.toByteArray());
 

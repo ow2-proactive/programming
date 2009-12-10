@@ -39,6 +39,7 @@ import java.util.Map;
 
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 
 
@@ -56,7 +57,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 public abstract class Message {
 
     /** Protocol version implemented by this class */
-    public static final int PROTOV1 = 2;
+    public static final int PROTOV1 = 1;
 
     /** All the message types supported by the ProActive message routing protocol */
     /* ORDER MATTERS ! ordinal() is used to attribute an id to each message type */
@@ -89,6 +90,26 @@ public abstract class Message {
 
         public static MessageType getMessageType(int value) {
             return idToMessageType.get(value);
+        }
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case REGISTRATION_REQUEST:
+                    return "REG_REQ";
+                case REGISTRATION_REPLY:
+                    return "REG_REP";
+                case DATA_REQUEST:
+                    return "DATA_REQ";
+                case DATA_REPLY:
+                    return "DATA_REP";
+                case ERR_:
+                    return "ERR";
+                case DEBUG_:
+                    return "DBG";
+                default:
+                    return super.toString();
+            }
         }
     }
 
@@ -189,6 +210,22 @@ public abstract class Message {
 
             return totalOffset;
         }
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case LENGTH:
+                    return "LEN";
+                case PROTO_ID:
+                    return "PROTO_ID";
+                case MSG_TYPE:
+                    return "MSG_TYPE";
+                case MSG_ID:
+                    return "MSG_ID";
+                default:
+                    return super.toString();
+            }
+        }
     }
 
     /* @@@@@@@@@@@@@@@@@@@@ Static methods @@@@@@@@@@@@@@@@@@@@@@ */
@@ -199,10 +236,10 @@ public abstract class Message {
      * 		a buffer which contains a message
      * @param offset
      * 		the offset at which the message begins  
-     * @throws IllegalArgumentException
-     * 		If a message cannot be constructed from the buffer
+     * @throws MalformedMessageException
+     * 		If the buffer does not contain a valid message
      */
-    public static Message constructMessage(byte[] buf, int offset) throws IllegalArgumentException {
+    public static Message constructMessage(byte[] buf, int offset) throws MalformedMessageException {
         // depending on the type of message, call a different constructor
         MessageType type = MessageType.getMessageType(TypeHelper.byteArrayToInt(buf, offset +
             Field.MSG_TYPE.getOffset()));
@@ -221,7 +258,7 @@ public abstract class Message {
             case DEBUG_:
                 return new DebugMessage(buf, offset);
             default:
-                throw new IllegalArgumentException("Unknown message type: " + type);
+                throw new MalformedMessageException("Unknown message type: " + type);
         }
     }
 
@@ -309,6 +346,7 @@ public abstract class Message {
      * 		If the buffer does not contain a valid message (proto ID, length etc.)
      */
     protected Message(byte[] buf, int offset, int fieldsSize) throws MalformedMessageException {
+
         this.length = readLength(buf, offset);
         this.protoId = readProtoID(buf, offset);
         this.type = readType(buf, offset);
@@ -320,8 +358,8 @@ public abstract class Message {
         }
 
         if (this.protoId != PROTOV1) {
-            throw new IllegalArgumentException("Invalid message protocol ID: " + this.protoId +
-                ". Should be " + PROTOV1);
+            throw new MalformedMessageException("Malformed " + type.toString() + " message: " +
+                "Invalid value for " + Field.PROTO_ID + " field:" + this.protoId);
         }
     }
 
@@ -375,8 +413,9 @@ public abstract class Message {
 
     @Override
     public String toString() {
-        return "length=" + this.length + " protoId=" + this.protoId + " type=" + this.type + " msgId=" +
-            messageId + " ";
+        return Field.MSG_TYPE.toString() + ":" + this.type + ";" + Field.PROTO_ID.toString() + ":" +
+            this.protoId + ";" + Field.MSG_ID.toString() + ":" + this.messageId + ";" +
+            Field.LENGTH.toString() + ":" + this.length + ";";
     }
 
     @Override

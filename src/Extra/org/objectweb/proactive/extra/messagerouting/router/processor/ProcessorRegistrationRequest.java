@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
@@ -79,12 +80,11 @@ public class ProcessorRegistrationRequest extends Processor {
         this.message = message;
     }
 
-    public void process() {
-        if (this.message == null) {
-            return;
-        }
-
-        AgentID agentId = this.message.getAgentID();
+    public void process() throws MalformedMessageException {
+	// Message.constructMessage guarantees that the cast is safe. If the message is not a RegistrationRequestMessage,
+	// a @{link MalformedMessageException} will be thrown
+	RegistrationRequestMessage message = (RegistrationRequestMessage)Message.constructMessage(this.rawMessage.array(), 0);
+        AgentID agentId = message.getAgentID();
         if (agentId == null) {
             connection();
         } else {

@@ -34,7 +34,9 @@
  */
 package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
 
 /** A {@link MessageType#DATA_REQUEST} message
@@ -64,14 +66,15 @@ public class DataRequestMessage extends DataMessage {
      *		a buffer which contains a message
      * @param offset 
      * 		the offset at which the message begins  
-     * @throws IllegalArgumentException
+     * @throws MalformedMessageException
      * 		If the buffer does not match message requirements (proto ID, length etc.)
      */
-    public DataRequestMessage(byte[] byteArray, int offset) throws IllegalArgumentException {
+    public DataRequestMessage(byte[] byteArray, int offset) throws MalformedMessageException {
         super(byteArray, offset);
 
         if (this.getType() != MessageType.DATA_REQUEST) {
-            throw new IllegalArgumentException("Invalid message type " + this.getType());
+            throw new MalformedMessageException("Malformed" + MessageType.DATA_REQUEST + " message:" +
+                "Invalid value for " +  Message.Field.MSG_TYPE + " field:" + this.getType());
         }
     }
 }

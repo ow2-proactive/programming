@@ -40,6 +40,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage;
@@ -59,7 +60,7 @@ public class TestMessageRegistration extends UnitTests {
     @Test
     public void testRegistrationRequest() throws SecurityException, NoSuchMethodException,
             IllegalArgumentException, InstantiationException, IllegalAccessException,
-            InvocationTargetException {
+            InvocationTargetException, MalformedMessageException {
         for (int i = 0; i < NB_CHECK; i++) {
             buildAndCheckDataRequest(RegistrationRequestMessage.class, MessageType.REGISTRATION_REQUEST);
         }
@@ -70,7 +71,7 @@ public class TestMessageRegistration extends UnitTests {
     @Test
     public void testRegistrationReply() throws SecurityException, NoSuchMethodException,
             IllegalArgumentException, InstantiationException, IllegalAccessException,
-            InvocationTargetException {
+            InvocationTargetException, MalformedMessageException {
         for (int i = 0; i < NB_CHECK; i++) {
             buildAndCheckDataRequest(RegistrationReplyMessage.class, MessageType.REGISTRATION_REPLY);
         }
@@ -78,7 +79,9 @@ public class TestMessageRegistration extends UnitTests {
 
     private void buildAndCheckDataRequest(Class<? extends RegistrationMessage> cl, MessageType type)
             throws SecurityException, NoSuchMethodException, IllegalArgumentException,
-            InstantiationException, IllegalAccessException, InvocationTargetException {
+            IllegalAccessException, InvocationTargetException, InstantiationException,
+            // can be thrown by RegistrationMessage(buf,0)
+            MalformedMessageException {
         AgentID agent = new AgentID(ProActiveRandom.nextPosLong());
         logger.info("agent " + agent);
         long msgId = ProActiveRandom.nextPosLong();

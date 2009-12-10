@@ -43,6 +43,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
@@ -63,7 +64,7 @@ public class TestMessageAssembler {
      *
      */
     @Test
-    public void testAssembler() {
+    public void testAssembler() throws MalformedMessageException {
         FakeRouter router = new FakeRouter();
         Attachment attachment = new Attachment(null, null);
         MessageAssembler messageAssembler = new MessageAssembler(router, attachment);
@@ -78,7 +79,11 @@ public class TestMessageAssembler {
             }
 
             // Check is router.handleAsynchronously was called once and only once
-            router.handleAsynchronouslyCalled(message);
+            try {
+				router.handleAsynchronouslyCalled(message);
+			} catch (MalformedMessageException e) {
+				Assert.fail("Badly rassembled message - corrupted message: " + e.getMessage());
+			}
 
         }
     }
@@ -135,7 +140,7 @@ public class TestMessageAssembler {
             this.receivedByteBuffer = message;
         }
 
-        public void handleAsynchronouslyCalled(Message expectedMessage) {
+        public void handleAsynchronouslyCalled(Message expectedMessage) throws MalformedMessageException {
             Assert.assertNotNull("handleAsynchronously not called. Assembler failed", receivedByteBuffer);
 
             Message receivedMessage = Message.constructMessage(receivedByteBuffer.array(), 0);

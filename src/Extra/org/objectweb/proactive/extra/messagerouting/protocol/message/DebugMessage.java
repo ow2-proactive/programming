@@ -35,8 +35,10 @@
 package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
 
 public class DebugMessage extends DataMessage {
@@ -65,19 +67,21 @@ public class DebugMessage extends DataMessage {
      *            the byte array from which to read
      * @param offset
      *            the offset at which to find the message in the byte array
-     * @throws InstantiationException
+     * @throws MalformedMessageException
      */
-    public DebugMessage(byte[] byteArray, int offset) throws IllegalArgumentException {
+    public DebugMessage(byte[] byteArray, int offset) throws MalformedMessageException {
         super(byteArray, offset);
 
         if (this.getType() != MessageType.DEBUG_) {
-            throw new IllegalArgumentException("Invalid message type " + this.getType());
+            throw new MalformedMessageException("Malformed" + MessageType.DEBUG_ + " message:" +
+                "Invalid value for " + Message.Field.MSG_TYPE + " field:" + this.getType());
         }
 
         try {
             this.debug = (DebugType) HttpMarshaller.unmarshallObject(this.getData());
         } catch (ClassCastException e) {
-            throw new IllegalArgumentException("Invalid error type:" + e);
+            throw new MalformedMessageException("Malformed" + MessageType.DEBUG_ + " message:" +
+                "Invalid error type:", e);
         }
     }
 

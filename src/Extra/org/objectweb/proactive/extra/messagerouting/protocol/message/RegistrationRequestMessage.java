@@ -34,6 +34,7 @@
  */
 package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
@@ -61,17 +62,19 @@ public class RegistrationRequestMessage extends RegistrationMessage {
      * Construct a message from the data contained in a formatted byte array.
      * @param byteArray the byte array from which to read
      * @param offset the offset at which to find the message in the byte array
-     * @throws InstantiationException
+     * @throws MalformedMessageException
      */
-    public RegistrationRequestMessage(byte[] byteArray, int offset) throws IllegalArgumentException {
+    public RegistrationRequestMessage(byte[] byteArray, int offset) throws MalformedMessageException {
         super(byteArray, offset);
 
         if (this.getType() != MessageType.REGISTRATION_REQUEST) {
-            throw new IllegalArgumentException("Invalid message type " + this.getType());
+            throw new MalformedMessageException("Malformed " + MessageType.REGISTRATION_REQUEST + " message:"
+			+ "Invalid value for the " + Message.Field.MSG_TYPE + " field:" + this.getType());
         }
 
         if (this.getRouterID() < 0) {
-            throw new IllegalStateException("Invalid router id value " + this.getRouterID());
+            throw new MalformedMessageException("Malformed " + MessageType.REGISTRATION_REQUEST + " message:"
+			+ "Invalid value for the " + Field.ROUTER_ID + " field:" + this.getRouterID());
         }
 
         if (this.getLength() != (Message.Field.getTotalOffset() + Field.getTotalOffset())) {

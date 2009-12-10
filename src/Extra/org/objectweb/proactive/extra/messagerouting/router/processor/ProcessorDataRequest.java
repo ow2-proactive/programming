@@ -36,7 +36,7 @@ package org.objectweb.proactive.extra.messagerouting.router.processor;
 
 import java.nio.ByteBuffer;
 
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
@@ -59,7 +59,7 @@ public class ProcessorDataRequest extends Processor {
     }
 
     @Override
-    public void process() {
+    public void process() throws MalformedMessageException {
         AgentID recipient = DataMessage.readRecipient(rawMessage.array(), 0);
         Client destClient = this.router.getClient(recipient);
 
@@ -98,13 +98,9 @@ public class ProcessorDataRequest extends Processor {
                     ". Sender notified");
             } else {
                 // Something is utterly broken: Unknown sender & recipient
-                try {
-                    Message message;
-                    message = new DataRequestMessage(rawMessage.array(), 0);
-                    logger.error("Dropped invalid data request: unknown sender and recipient. " + message);
-                } catch (IllegalArgumentException e) {
-                    ProActiveLogger.logImpossibleException(logger, e);
-                }
+                Message message;
+                message = new DataRequestMessage(rawMessage.array(), 0);
+                logger.error("Dropped invalid data request: unknown sender and recipient. " + message);
             }
         }
 

@@ -59,6 +59,7 @@ import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.SweetCountDownLatch;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
@@ -255,10 +256,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
             if (byteRead == -1) {
                 clientDisconnected(key);
             }
-        } catch (IOException e) {
-            clientDisconnected(key);
-        } catch (IllegalStateException e) {
+        } catch (MalformedMessageException e) {
             // Disconnect the client to avoid a disaster
+            clientDisconnected(key);
+        } catch (IOException e) {
             clientDisconnected(key);
         }
     }

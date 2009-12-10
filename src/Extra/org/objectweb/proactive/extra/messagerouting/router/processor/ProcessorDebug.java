@@ -38,6 +38,7 @@ import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DebugMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.Attachment;
@@ -66,7 +67,9 @@ public class ProcessorDebug extends Processor {
     }
 
     @Override
-    public void process() {
+    public void process() throws MalformedMessageException{
+
+	DebugMessage message = new DebugMessage(this.rawMessage.array(), 0);
 
         switch (message.getErrorType()) {
             case DEB_DISCONNECT:

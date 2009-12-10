@@ -58,6 +58,7 @@ import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.util.SweetCountDownLatch;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
@@ -218,56 +219,93 @@ public class AgentImpl implements Agent, AgentImplMBean {
             Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
             Tunnel tunnel = new Tunnel(s);
 
-            // if call for the first time then agentID is null
-            RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator
-                    .getAndIncrement(), routerID);
-            tunnel.write(reg.toByteArray());
-
-            // Waiting the router response
-            byte[] reply = tunnel.readMessage();
-            Message replyMsg = Message.constructMessage(reply, 0);
-
-            if (!(replyMsg instanceof RegistrationReplyMessage)) {
-                if (replyMsg instanceof ErrorMessage) {
-                    ErrorMessage em = (ErrorMessage) replyMsg;
-                    if (em.getErrorType() == ErrorType.ERR_INVALID_ROUTER_ID) {
-                        tunnel.shutdown();
-                        throw new IOException("The router has been restarted. Disconnecting...");
-                    }
-                } else {
-                    tunnel.shutdown();
-                    throw new IOException("Invalid router response: expected a " +
-                        RegistrationReplyMessage.class.getName() + " message but got " +
-                        replyMsg.getClass().getName());
-                }
-            }
-
-            RegistrationReplyMessage rrm = (RegistrationReplyMessage) replyMsg;
-            AgentID replyAgentID = rrm.getAgentID();
-            if (this.agentID == null) {
-                this.agentID = replyAgentID;
-                logger.debug("Router assigned agentID=" + this.agentID + " to this client");
-            } else {
-                if (!this.agentID.equals(replyAgentID)) {
-                    tunnel.shutdown();
-                    throw new IOException("Invalid router response: Local ID is " + this.agentID +
-                        " but server told " + replyAgentID);
-                }
-            }
-
-            if (this.routerID == 0) {
-                this.routerID = rrm.getRouterID();
-            } else if (this.routerID != rrm.getRouterID()) {
-                tunnel.shutdown();
-                throw new IOException("Invalid router response: previous router ID  was " + this.agentID +
-                    " but server now advertises " + rrm.getRouterID());
-            }
+            // start router handshake
+            try {
+				routerHandshake(tunnel);
+			} catch (RouterHandshakeException e) {
+			logger.error("Failed to reconnect to the router: the router handshake procedure failed. Reason: " + e.getMessage(), e);
+			tunnel.shutdown();
+			}
 
             this.t = tunnel;
         } catch (IOException exception) {
             logger.debug("Failed to reconnect to the router", exception);
             this.t = null;
         }
+    }
+
+    /**
+     * This is the initial handshake process between the {@link Agent} and the {@link Router}
+     * <ul>
+     * 	<li> The Agent will send a {@link MessageType#REGISTRATION_REQUEST} to the Router
+     * 		with a blank  field
+     *  <li> On first connection, the {@link RegistrationMessage.Field#AGENT_ID} and
+     *  	{@link RegistrationMessage.Field#ROUTER_ID} fields will be set to zero. It is the responsability of the router to fill them.</li>
+     *  <li> The Router will reply with a {@link MessageType#REGISTRATION_REPLY} message</li>
+     *  <li> On first connection, the Agent initializes its {@link RegistrationMessage.Field#AGENT_ID} and {@link RegistrationMessage.Field#ROUTER_ID}
+     *  	fields according to the Router reply </li>
+     *  <li> For subsequent reconnections, the Agent verifies that its {@link RegistrationMessage.Field#AGENT_ID} and {@link RegistrationMessage.Field#ROUTER_ID} fields
+     *  	match the ones sent by the Router in the {@link MessageType#REGISTRATION_REPLY} message.</li>
+     * </ul>
+     * @throws IOException
+     */
+    private void routerHandshake(Tunnel tunnel) throws RouterHandshakeException, IOException{
+
+	try {
+		// if call for the first time then agentID is null
+		RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator
+				.getAndIncrement(), routerID);
+		tunnel.write(reg.toByteArray());
+
+		// Waiting the router response
+		byte[] reply = tunnel.readMessage();
+		Message replyMsg = Message.constructMessage(reply, 0);
+
+		if (!(replyMsg instanceof RegistrationReplyMessage)) {
+			if (replyMsg instanceof ErrorMessage) {
+				ErrorMessage em = (ErrorMessage) replyMsg;
+				if (em.getErrorType() == ErrorType.ERR_INVALID_ROUTER_ID) {
+					throw new RouterHandshakeException("The router has been restarted. Disconnecting...");
+				}
+			} else {
+				throw new RouterHandshakeException("Invalid router response: expected a " +
+						MessageType.REGISTRATION_REPLY.toString() + " message but got " +
+						replyMsg.getType().toString() + " message");
+			}
+		}
+
+		RegistrationReplyMessage rrm = (RegistrationReplyMessage) replyMsg;
+		AgentID replyAgentID = rrm.getAgentID();
+		if (this.agentID == null) {
+			this.agentID = replyAgentID;
+			logger.debug("Router assigned agentID=" + this.agentID + " to this client");
+		} else {
+			if (!this.agentID.equals(replyAgentID)) {
+				throw new RouterHandshakeException("Invalid router response: Local ID is " + this.agentID +
+						" but server told " + replyAgentID);
+			}
+		}
+
+		if (this.routerID == 0) {
+			this.routerID = rrm.getRouterID();
+		} else if (this.routerID != rrm.getRouterID()) {
+			throw new RouterHandshakeException("Invalid router response: previous router ID  was " + this.agentID +
+					" but server now advertises " + rrm.getRouterID());
+		}
+	} catch(MalformedMessageException e){
+		throw new RouterHandshakeException("Invalid router response: corrupted " + MessageType.REGISTRATION_REPLY.toString() + " message - " + e.getMessage());
+	}
+
+    }
+
+    private class RouterHandshakeException extends Exception{
+
+	public RouterHandshakeException() {
+		}
+
+	public RouterHandshakeException(String msg) {
+		super(msg);
+		}
     }
 
     /**
@@ -603,6 +641,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     // Blocking call
                     byte[] msgBuf = tunnel.readMessage();
                     return Message.constructMessage(msgBuf, 0);
+                } catch (MalformedMessageException e) {
+                    // TODO : Send an ERR_ ?
+                    logger.error("Dropping the message received from the router, reason:" + e.getMessage());
                 } catch (IOException e) {
                     logger
                             .info(

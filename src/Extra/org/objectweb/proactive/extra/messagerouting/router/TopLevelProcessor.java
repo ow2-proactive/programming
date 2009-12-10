@@ -39,6 +39,7 @@ import java.nio.ByteBuffer;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.processor.Processor;
@@ -79,34 +80,40 @@ class TopLevelProcessor implements Runnable {
     }
 
     public void run() {
-        if (logger.isTraceEnabled()) {
-            Message message = Message.constructMessage(this.message.array(), 0);
-            logger.trace("Asynchronous handling of " + message);
-        }
 
-        MessageType type = Message.readType(message.array(), 0);
-        Processor processor = null;
-        switch (type) {
-            case REGISTRATION_REQUEST:
-                processor = new ProcessorRegistrationRequest(this.message, this.attachment, this.router);
-                break;
-            case DATA_REPLY:
-                processor = new ProcessorDataReply(this.message, this.router);
-                break;
-            case DATA_REQUEST:
-                processor = new ProcessorDataRequest(this.message, this.router);
-                break;
-            case DEBUG_:
-                processor = new ProcessorDebug(this.message, this.attachment, this.router);
-                break;
-            default:
-                Message msg = Message.constructMessage(message.array(), 0);
-                logger.error("Unexpected message type: " + type + ". Dropped message " + msg);
-                break;
-        }
+	try {
+		if (logger.isTraceEnabled()) {
+			Message message = Message.constructMessage(this.message.array(), 0);
+			logger.trace("Asynchronous handling of " + message);
+		}
 
-        if (processor != null) {
-            processor.process();
-        }
+		MessageType type = Message.readType(message.array(), 0);
+		Processor processor = null;
+		switch (type) {
+		case REGISTRATION_REQUEST:
+			processor = new ProcessorRegistrationRequest(this.message, this.attachment, this.router);
+			break;
+		case DATA_REPLY:
+			processor = new ProcessorDataReply(this.message, this.router);
+			break;
+		case DATA_REQUEST:
+			processor = new ProcessorDataRequest(this.message, this.router);
+			break;
+		case DEBUG_:
+			processor = new ProcessorDebug(this.message, this.attachment, this.router);
+			break;
+		default:
+			logger.error("Unexpected message type: " + type + ". Dropping message " + message);
+		break;
+		}
+
+		if (processor != null) {
+			processor.process();
+		}
+	}
+	catch(MalformedMessageException e){
+		// TODO : Send an ERR_
+		logger.error( "Dropping message " + message + ", reason:" +  e.getMessage() , e);
+	}
     }
 }
