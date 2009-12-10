@@ -323,7 +323,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
      * @param brokenTunnel
      *            the tunnel that threw an IOException
      */
-    synchronized private void reportTunnelFailure(Tunnel brokenTunnel, Throwable failure) {
+    synchronized private void reportTunnelFailure(Tunnel brokenTunnel) {
         if (brokenTunnel == null)
             return;
 
@@ -418,7 +418,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 }
             } catch (IOException e) {
                 // Fail fast
-                this.reportTunnelFailure(tunnel, e);
+                this.reportTunnelFailure(tunnel);
                 throw new MessageRoutingException("Failed to send a message using the tunnel " + tunnel, e);
 
             }
@@ -653,7 +653,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     // Create a new tunnel
                     tunnel = null;
                     do {
-                        this.agent.reportTunnelFailure(this.agent.t, e);
+                        this.agent.reportTunnelFailure(this.agent.t);
                         tunnel = this.agent.getTunnel();
 
                         if (tunnel == null) {
