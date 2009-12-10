@@ -302,18 +302,21 @@ public abstract class Message {
      * @param buf 
      *		a buffer which contains a message
      * @param offset 
-     * 		the offset at which the message begins  
-     * @throws IllegalArgumentException
-     * 		If the buffer does not match message requirements (proto ID, length etc.)
+     * 		the offset at which the message begins
+     * @param fieldsSize
+     * 		the size of the additional fields added by the messages. Can only be known within the particular implementations
+     * @throws MalformedMessageException
+     * 		If the buffer does not contain a valid message (proto ID, length etc.)
      */
-    protected Message(byte[] buf, int offset) throws IllegalArgumentException {
+    protected Message(byte[] buf, int offset, int fieldsSize) throws MalformedMessageException {
         this.length = readLength(buf, offset);
         this.protoId = readProtoID(buf, offset);
         this.type = readType(buf, offset);
         this.messageId = readMessageID(buf, offset);
 
-        if (this.length < Field.getTotalOffset()) {
-            throw new IllegalArgumentException("Invalid message length: " + this.length);
+        if (this.length < Field.getTotalOffset() + fieldsSize) {
+            throw new MalformedMessageException("Malformed " + type.toString() + " message: " +
+                "Invalid value for " + Field.LENGTH + " field:" + this.length);
         }
 
         if (this.protoId != PROTOV1) {

@@ -224,8 +224,8 @@ public abstract class DataMessage extends Message {
      *             If the buffer does not match message requirements (proto ID,
      *             length etc.)
      */
-    protected DataMessage(byte[] byteArray, int offset) throws IllegalArgumentException {
-        super(byteArray, offset);
+    protected DataMessage(byte[] byteArray, int offset) throws MalformedMessageException {
+        super(byteArray, offset, Field.getTotalOffset());
 
         try {
             this.sender = readSender(byteArray, offset);
