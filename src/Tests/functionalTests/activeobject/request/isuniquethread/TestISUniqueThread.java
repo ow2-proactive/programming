@@ -139,6 +139,10 @@ public class TestISUniqueThread extends GCMFunctionalTestDefaultNodes {
         for (int i = 0; i < NB_CALLER; i++) {
             callers[i].synchronousBarrier();
         }
+        for (Vector<BooleanWrapper> v : foo_int) {
+            PAFuture.waitForAll(v);
+        }
+
         //checks services
         for (int i = 0; i < NB_CALLER; i++) {
             for (int j = 0; j < NB_CALL; j++) {
