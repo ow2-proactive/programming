@@ -34,12 +34,16 @@
  */
 package org.objectweb.proactive.extra.messagerouting.remoteobject.message;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 
+import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.extra.messagerouting.client.Agent;
+import org.objectweb.proactive.extra.messagerouting.client.AgentImpl;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.MessageRoutingRegistry;
 
 
@@ -91,10 +95,17 @@ public class MessageRoutingRemoteObjectRequest extends MessageRoutingMessage imp
 
         try {
             InternalRemoteRemoteObject ro;
+
             ro = MessageRoutingRegistry.singleton.lookup(uri);
-            return ro.receiveMessage(this.request);
+            if (ro == null) {
+                return new SynchronousReplyImpl(new MethodCallResult(null, new IOException("remote object " +
+                    uri + " not found. Message " + request + " cannot be processed ")));
+            } else {
+                return ro.receiveMessage(this.request);
+            }
         } catch (Exception e) {
-            return e;
+            return new SynchronousReplyImpl(new MethodCallResult(null, new IOException(uri +
+                " failed to process message " + this.request, e)));
         }
     }
 }
