@@ -34,12 +34,15 @@
  */
 package functionalTests.messagerouting.message;
 
+import org.junit.Ignore;
+
 import functionalTests.FunctionalTest;
 
 
 /**
  * Common superclass of all message routing protocol messages functional tests
  */
+@Ignore
 public class MessageFunctionalTest extends FunctionalTest {
 
     protected static final int NB_CHECK = 100;
