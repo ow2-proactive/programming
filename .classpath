@@ -57,7 +57,6 @@
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
 	<classpathentry kind="lib" path="lib/moduleloader.jar"/>
-	<classpathentry kind="lib" path="lib/njs_client.jar"/>
 	<classpathentry kind="lib" path="lib/oscar.jar"/>
 	<classpathentry kind="lib" path="lib/osgi.jar"/>
 	<classpathentry kind="lib" path="lib/ow_deployment_scheduling.jar"/>
