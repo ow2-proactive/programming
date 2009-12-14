@@ -37,6 +37,7 @@ package org.objectweb.proactive.extensions.vfsprovider.server;
 import java.io.File;
 import java.io.IOException;
 
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileInfo;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileType;
@@ -65,7 +66,7 @@ public class FileInfoImpl implements FileInfo {
             readable = file.canRead();
             writable = file.canWrite();
         } catch (SecurityException sec) {
-            throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+            throw new IOException6("", sec);
         }
         if (lastModifiedTime == 0)
             throw new IOException("Unable to read \"last modified time\" attribute");

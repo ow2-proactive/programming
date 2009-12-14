@@ -40,6 +40,7 @@ import java.net.URISyntaxException;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
@@ -122,7 +123,7 @@ public final class FileSystemServerDeployer {
             url = roe.getURL();
         } catch (ProActiveException e) {
             // Ugly but createRemoteObject interface changed
-            throw new IOException("" + ProActiveLogger.getStackTraceAsString(e));
+            throw new IOException6("", e);
         }
 
         try {

@@ -42,10 +42,16 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class FileSystemException extends IOException {
 
     public FileSystemException(Throwable e) {
-        super(ProActiveLogger.getStackTraceAsString(e));
+        super("");
+        this.initCause(e);
     }
 
     public FileSystemException(String msg) {
         super(msg);
+    }
+
+    public FileSystemException(String msg, Throwable e) {
+        super(msg);
+        this.initCause(e);
     }
 }

@@ -53,11 +53,13 @@ public class MalformedMessageException extends IOException {
     }
 
     public MalformedMessageException(Throwable cause) {
-        super(cause);
+        super();
+        this.initCause(cause);
     }
 
     public MalformedMessageException(String message, Throwable cause) {
-        super(message, cause);
+        super(message);
+        this.initCause(cause);
     }
 
 }

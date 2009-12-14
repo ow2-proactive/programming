@@ -51,6 +51,7 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.annotation.RemoteObject;
@@ -230,7 +231,7 @@ public class FileSystemServerImpl implements FileSystemServer {
             try {
                 instance = StreamFactory.createStreamInstance(file, mode);
             } catch (SecurityException sec) {
-                throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+                throw new IOException6("", sec);
             }
             return storeStream(instance);
         }
@@ -364,7 +365,7 @@ public class FileSystemServerImpl implements FileSystemServer {
                 checkConditionIsTrue(file.isFile(), "File creation failed");
             }
         } catch (SecurityException sec) {
-            throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+            throw new IOException6(sec);
         }
     }
 
@@ -380,7 +381,7 @@ public class FileSystemServerImpl implements FileSystemServer {
             file.delete();
             checkConditionIsTrue(!file.exists(), "Unable to delete a file");
         } catch (SecurityException sec) {
-            throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+            throw new IOException6(sec);
         }
     }
 
@@ -398,7 +399,7 @@ public class FileSystemServerImpl implements FileSystemServer {
         try {
             list = file.list();
         } catch (SecurityException sec) {
-            throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+            throw new IOException6(sec);
         }
         if (list == null) {
             return null;
@@ -414,7 +415,7 @@ public class FileSystemServerImpl implements FileSystemServer {
         try {
             children = file.listFiles();
         } catch (SecurityException sec) {
-            throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+            throw new IOException6(sec);
         }
         if (children == null) {
             return null;
@@ -435,7 +436,7 @@ public class FileSystemServerImpl implements FileSystemServer {
         try {
             result = src.renameTo(dest);
         } catch (SecurityException sec) {
-            throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+            throw new IOException6(sec);
         }
         checkConditionIsTrue(result, "Failed to rename a file");
     }
@@ -446,7 +447,7 @@ public class FileSystemServerImpl implements FileSystemServer {
         try {
             return file.setLastModified(time);
         } catch (SecurityException sec) {
-            throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+            throw new IOException6(sec);
         }
     }
 
@@ -475,7 +476,7 @@ public class FileSystemServerImpl implements FileSystemServer {
         try {
             canonicalPath = file.getCanonicalPath();
         } catch (SecurityException sec) {
-            throw new IOException(ProActiveLogger.getStackTraceAsString(sec));
+            throw new IOException6(sec);
         }
         if (!canonicalPath.startsWith(rootCanonicalPath))
             throw new IOException("Provided path is out of file system tree scope");

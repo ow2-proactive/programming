@@ -58,4 +58,9 @@ public class MessageRoutingException extends ProActiveException {
         super(cause);
     }
 
+    public MessageRoutingException(String msg, Throwable cause) {
+        super(msg);
+        this.initCause(cause);
+    }
+
 }
