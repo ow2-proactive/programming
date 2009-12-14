@@ -68,9 +68,9 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
-import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSocketFactorySPI;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
+import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSocketFactorySPI;
 import org.objectweb.proactive.extra.messagerouting.router.Router;
 
 
@@ -371,7 +371,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
             try {
                 response = mb.waitForResponse(0);
             } catch (TimeoutException e) {
-                throw new MessageRoutingException("Timeout reached", e);
+                throw new MessageRoutingException("Timeout reached " +
+                    ProActiveLogger.getStackTraceAsString(e));
             }
         }
 
@@ -423,7 +424,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
             } catch (IOException e) {
                 // Fail fast
                 this.reportTunnelFailure(tunnel);
-                throw new MessageRoutingException("Failed to send a message using the tunnel " + tunnel, e);
+                throw new MessageRoutingException("Failed to send a message using the tunnel " + tunnel +
+                    ProActiveLogger.getStackTraceAsString(e));
 
             }
         } else {
