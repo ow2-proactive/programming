@@ -58,7 +58,7 @@ public class FlowShopTask extends Task {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //in ms
     private static final long MAX_TIME_TO_SPLIT = 120000; // 2'
     private FlowShop fs;

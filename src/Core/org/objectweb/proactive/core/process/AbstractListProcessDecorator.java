@@ -53,7 +53,7 @@ public abstract class AbstractListProcessDecorator implements ExternalProcessDec
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     //Array of processes
     protected ArrayList<ExternalProcessDecorator> processes;

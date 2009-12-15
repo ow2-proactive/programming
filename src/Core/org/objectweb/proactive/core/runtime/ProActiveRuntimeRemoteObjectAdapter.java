@@ -87,7 +87,7 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Cache the vmInformation field

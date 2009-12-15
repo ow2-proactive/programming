@@ -52,7 +52,7 @@ public class RequestQueueEvent extends ProActiveEvent implements java.io.Seriali
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final int ADD_REQUEST = 10;
     public static final int REMOVE_REQUEST = 40;
     public static final int WAIT_FOR_REQUEST = 60;

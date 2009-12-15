@@ -44,7 +44,7 @@ public class SolveBT2 extends SolveBoard {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public Result execute(Board board, SkeletonSystem system) {
         n1 = board.n - 1;

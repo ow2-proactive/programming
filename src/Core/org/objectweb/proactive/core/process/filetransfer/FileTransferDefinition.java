@@ -53,7 +53,7 @@ public class FileTransferDefinition implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     final protected static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
     private ArrayList<FileDescription> all;
     private ArrayList<FileDescription> files;
@@ -190,7 +190,7 @@ public class FileTransferDefinition implements Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         String srcName;
         String destName;
 
@@ -247,7 +247,7 @@ public class FileTransferDefinition implements Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         String includes;
         String excludes;
 

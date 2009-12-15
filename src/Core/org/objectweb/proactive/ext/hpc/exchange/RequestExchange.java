@@ -49,7 +49,7 @@ public class RequestExchange extends RequestImpl {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     // Variables related to source and destination ranks
     transient private int tagID;
     transient private int destinationUID;

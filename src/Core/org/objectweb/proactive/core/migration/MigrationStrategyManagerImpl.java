@@ -51,7 +51,7 @@ public class MigrationStrategyManagerImpl implements MigrationStrategyManager, M
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Name of the method to be called when the agent reaches a new site

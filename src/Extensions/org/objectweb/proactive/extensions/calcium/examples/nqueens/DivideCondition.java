@@ -43,7 +43,7 @@ public class DivideCondition implements Condition<Board> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Divide while condition holds

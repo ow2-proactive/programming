@@ -45,7 +45,7 @@ public class Column extends Vector implements Serializable, Cloneable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     public Column(int _size) {

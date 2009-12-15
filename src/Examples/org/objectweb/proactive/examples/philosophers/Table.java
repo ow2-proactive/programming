@@ -130,7 +130,7 @@ public class Table implements org.objectweb.proactive.RunActive {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public GetForkRequestFilter() {
         }

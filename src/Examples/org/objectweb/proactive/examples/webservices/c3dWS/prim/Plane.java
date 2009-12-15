@@ -46,7 +46,7 @@ public class Plane extends Primitive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Vec base;
     private float d;
     private static double mindiff = 1e-6;

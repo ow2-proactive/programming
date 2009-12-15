@@ -179,7 +179,7 @@ public class Fork<P extends java.io.Serializable, R extends java.io.Serializable
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         int number;
 
         /**
@@ -221,7 +221,7 @@ public class Fork<P extends java.io.Serializable, R extends java.io.Serializable
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          * @see Conquer#conquer(Object[], SkeletonSystem)

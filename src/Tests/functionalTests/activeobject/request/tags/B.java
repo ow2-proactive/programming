@@ -51,7 +51,7 @@ public class B implements Serializable, InitActive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public B() {
     }
@@ -96,7 +96,7 @@ public class B implements Serializable, InitActive {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public Tag apply() {
                 return this;

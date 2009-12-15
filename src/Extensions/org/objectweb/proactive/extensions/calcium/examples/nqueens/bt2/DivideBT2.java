@@ -46,7 +46,7 @@ public class DivideBT2 implements Divide<Board, Board> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public Board[] divide(Board board, SkeletonSystem system) throws RuntimeException {
         if (board.isRootBoard()) {

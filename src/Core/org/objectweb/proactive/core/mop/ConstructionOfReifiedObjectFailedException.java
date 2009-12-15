@@ -38,7 +38,7 @@ public class ConstructionOfReifiedObjectFailedException extends BehavioralExcept
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public ConstructionOfReifiedObjectFailedException() {
     }

@@ -69,7 +69,7 @@ public class TestClient implements NotificationListener, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private transient ClientConnector cc;
     private transient ProActiveConnection connection;
     private transient JMXConnector connector;

@@ -64,7 +64,7 @@ public class KernelFT extends Kernel {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private FTProblemClass problemClass;
     private WorkerFT workers;
 

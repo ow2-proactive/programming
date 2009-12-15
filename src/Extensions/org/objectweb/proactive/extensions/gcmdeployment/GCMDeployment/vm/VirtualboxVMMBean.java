@@ -46,7 +46,7 @@ public class VirtualboxVMMBean implements VMMBean {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String uri, user, pwd;
 
     public VirtualboxVMMBean(String uri, String user, String pwd) {

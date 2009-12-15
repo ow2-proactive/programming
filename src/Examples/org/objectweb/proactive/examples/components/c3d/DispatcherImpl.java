@@ -68,7 +68,7 @@ public class DispatcherImpl extends C3DDispatcher implements Dispatcher, Dispatc
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

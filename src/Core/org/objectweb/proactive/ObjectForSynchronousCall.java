@@ -55,7 +55,7 @@ public final class ObjectForSynchronousCall extends Object implements java.io.Se
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * No arg constructor for Serializable

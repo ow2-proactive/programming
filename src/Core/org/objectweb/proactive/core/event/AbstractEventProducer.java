@@ -75,7 +75,7 @@ public abstract class AbstractEventProducer implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
@@ -287,7 +287,7 @@ public abstract class AbstractEventProducer implements java.io.Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         @SuppressWarnings("unchecked")
         protected List list;
 
@@ -339,7 +339,7 @@ public abstract class AbstractEventProducer implements java.io.Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public WeakReferenceListenerList() {
         }

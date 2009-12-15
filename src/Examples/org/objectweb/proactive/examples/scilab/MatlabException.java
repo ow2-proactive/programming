@@ -52,7 +52,7 @@ public class MatlabException extends TaskException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * exception with the given message

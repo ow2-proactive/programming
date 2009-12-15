@@ -42,7 +42,7 @@ public class AuthenticationTicket implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public X509Certificate certificate;
     public String identity;
     public long random;

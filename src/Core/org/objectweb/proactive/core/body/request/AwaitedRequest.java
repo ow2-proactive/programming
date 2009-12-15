@@ -71,7 +71,7 @@ public class AwaitedRequest implements Request, java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** Logger */
     public static Logger logger = ProActiveLogger.getLogger(Loggers.REQUESTS);

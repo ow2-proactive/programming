@@ -53,7 +53,7 @@ public class CMAgentMigrator extends CMAgentInitialized implements Serializable 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     @MigrationSignal
     public void migrateTo(Node whereTo) {

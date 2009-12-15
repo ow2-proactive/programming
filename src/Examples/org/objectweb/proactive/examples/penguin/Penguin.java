@@ -51,7 +51,7 @@ public class Penguin implements org.objectweb.proactive.RunActive, java.io.Seria
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private boolean onItinerary;
     private boolean initialized;
     private transient PenguinFrame myFrame;

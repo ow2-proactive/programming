@@ -54,7 +54,7 @@ public class AppletBuffer extends org.objectweb.proactive.examples.StandardFrame
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      * The graphic panes
      */
@@ -189,7 +189,7 @@ public class AppletBuffer extends org.objectweb.proactive.examples.StandardFrame
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private javax.swing.JLabel caption;
         private boolean in;
         private boolean out;

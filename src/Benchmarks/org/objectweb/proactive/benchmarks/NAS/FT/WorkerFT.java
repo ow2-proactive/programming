@@ -74,7 +74,7 @@ public class WorkerFT extends Timed implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
 

@@ -42,7 +42,7 @@ class EqualButton extends Button {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public EqualButton(String label) {
         super(label);

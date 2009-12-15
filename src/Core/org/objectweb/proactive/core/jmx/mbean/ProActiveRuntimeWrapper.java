@@ -71,7 +71,7 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** JMX Logger */
     // private transient Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);

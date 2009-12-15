@@ -50,7 +50,7 @@ public class FileServerClientImpl implements FileServerClient, java.io.Serializa
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     Node node;
     FileServer fserver;
 

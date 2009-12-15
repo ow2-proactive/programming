@@ -42,7 +42,7 @@ public class ProActiveMPIMessage implements java.io.Serializable, NativeMessage 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     private int msg_type = 0;
 

@@ -68,7 +68,7 @@ public class VNActivator implements Serializable, RunActive, NodeCreationEventLi
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

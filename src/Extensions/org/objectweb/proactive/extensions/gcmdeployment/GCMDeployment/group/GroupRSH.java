@@ -45,7 +45,7 @@ public class GroupRSH extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public final static String DEFAULT_RSHPATH = "rsh";
     private String hostList;
     private String domain;

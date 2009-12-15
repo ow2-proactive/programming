@@ -97,7 +97,7 @@ public class TestProActive359 extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private BlockingRequestQueue rqueue;
 
         public AO() {

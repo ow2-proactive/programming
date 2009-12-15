@@ -55,7 +55,7 @@ public class SslRmiClientSocketFactory implements RMIClientSocketFactory, java.i
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static final public Logger logger = ProActiveLogger.getLogger(Loggers.SSH);
 
     public Socket createSocket(String host, int port) throws IOException {

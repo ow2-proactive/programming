@@ -70,7 +70,7 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.UTIL);
     private static final int DEFAULT_SIZE = 5;
     protected E[] array;

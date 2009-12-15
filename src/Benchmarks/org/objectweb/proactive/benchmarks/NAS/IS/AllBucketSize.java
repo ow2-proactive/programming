@@ -51,7 +51,7 @@ public class AllBucketSize implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private WorkerIS typedGroup;
     private int groupSize;
     private int received;

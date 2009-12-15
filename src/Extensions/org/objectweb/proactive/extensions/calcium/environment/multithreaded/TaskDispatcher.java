@@ -169,7 +169,7 @@ class TaskDispatcher extends Thread {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         CallableInterpreter callable;
 
         QueueingFuture(CallableInterpreter c) {

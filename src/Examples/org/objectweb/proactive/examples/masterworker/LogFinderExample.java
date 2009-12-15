@@ -229,7 +229,7 @@ public class LogFinderExample extends AbstractExample {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private File srcFile;
         private File tmpFile;
         private File tmpDir;
@@ -300,7 +300,7 @@ public class LogFinderExample extends AbstractExample {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private File directory;
         private String pattern;
 

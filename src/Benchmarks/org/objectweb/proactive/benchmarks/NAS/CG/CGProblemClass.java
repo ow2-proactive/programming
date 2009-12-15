@@ -52,7 +52,7 @@ public class CGProblemClass extends NASProblemClass {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public int na;
     public int nonzer;
     public int shift;

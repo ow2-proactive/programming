@@ -73,7 +73,7 @@ public class NBody2DFrame extends JFrame implements Serializable, ActionListener
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     // functional
     private String[] bodyname;
     private int[][] bodies; // [index]-> [x,y,w,d,vx,vy]
@@ -214,7 +214,7 @@ public class NBody2DFrame extends JFrame implements Serializable, ActionListener
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private final Image bkground;
         private int iter = 0;
         private BufferedImage[] stars;

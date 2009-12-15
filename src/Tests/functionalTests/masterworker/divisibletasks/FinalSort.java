@@ -51,7 +51,7 @@ public class FinalSort implements Task<ArrayList<Integer>> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private ArrayList<Integer> input;
 
     public FinalSort(ArrayList<Integer> input) {

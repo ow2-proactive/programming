@@ -48,7 +48,7 @@ public class Ratio implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private BigInteger num;
     private BigInteger denum;
 

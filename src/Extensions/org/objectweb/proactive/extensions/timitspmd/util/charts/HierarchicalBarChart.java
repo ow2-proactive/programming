@@ -63,7 +63,7 @@ public class HierarchicalBarChart implements Chart {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      *
      */

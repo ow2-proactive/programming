@@ -45,7 +45,7 @@ public class GroupOARGrid extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String queueName;
     private String accessProtocol;
     private String wallTime;

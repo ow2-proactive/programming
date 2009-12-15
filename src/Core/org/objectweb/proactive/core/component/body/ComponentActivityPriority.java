@@ -61,7 +61,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     //    private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ACTIVITY);
     //    private transient InitActive componentInitActive; // used only once
@@ -167,7 +167,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public void runActivity(Body body) {
             Service componentService = new Service(body);

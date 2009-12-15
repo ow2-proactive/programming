@@ -49,7 +49,7 @@ public class MessageInfoPMLRB implements MessageInfo {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      *
      */

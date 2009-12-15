@@ -38,7 +38,7 @@ public class SearchModel extends javax.swing.table.AbstractTableModel {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static int NUM_COLUMNS = 3;
     protected static int START_NUM_ROWS = 17;
     protected int nextEmptyRow = 0;

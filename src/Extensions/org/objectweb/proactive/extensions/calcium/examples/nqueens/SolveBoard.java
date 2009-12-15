@@ -41,7 +41,7 @@ abstract public class SolveBoard implements Execute<Board, Result> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected int n1;
     protected int n2;
 

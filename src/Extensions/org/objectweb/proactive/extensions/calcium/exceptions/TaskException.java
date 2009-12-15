@@ -48,7 +48,7 @@ public class TaskException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public TaskException(String msg) {
         super(msg);

@@ -48,7 +48,7 @@ public class Scene implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Vector lights = new Vector();
     private Vector objects = new Vector();
     private View view = new View();

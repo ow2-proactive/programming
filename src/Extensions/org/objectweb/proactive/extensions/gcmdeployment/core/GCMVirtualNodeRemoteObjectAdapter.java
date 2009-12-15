@@ -57,7 +57,7 @@ public class GCMVirtualNodeRemoteObjectAdapter extends Adapter<GCMVirtualNode> i
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     boolean isLocal = true;
     transient GCMVirtualNode vn;
 

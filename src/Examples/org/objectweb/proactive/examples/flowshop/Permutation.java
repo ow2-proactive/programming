@@ -49,7 +49,7 @@ public class Permutation implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Return the next permutation. Warning, the parmeter are modified.

@@ -46,7 +46,7 @@ public class StopCommand extends OSGiCommand implements StopCommandMBean {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private long idBundle;
 
     public StopCommand(Transaction t, long id) {

@@ -41,7 +41,7 @@ public class FutureCreationException extends ProActiveRuntimeException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public FutureCreationException(String message, Throwable cause) {
         super(message, cause);

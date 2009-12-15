@@ -54,7 +54,7 @@ public class ProActiveNameController extends AbstractProActiveController impleme
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     // FIXME coherency between this value and the one in component parameters controller
     String name;
 

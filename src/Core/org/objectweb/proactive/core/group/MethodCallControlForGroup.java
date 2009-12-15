@@ -52,7 +52,7 @@ public abstract class MethodCallControlForGroup extends MethodCall {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     transient Method reifiedMethod = null;
 
     public MethodCallControlForGroup() {

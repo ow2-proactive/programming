@@ -49,13 +49,13 @@ public class Legend extends Dialog {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public class LegendPanel extends Panel {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         DisplayPanel display;
 
         public LegendPanel(DisplayPanel _display) {

@@ -59,7 +59,7 @@ public class ProxyFile extends File {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_SYSTEM);
     File wspace;
     public File relative;

@@ -99,7 +99,7 @@ public class ProActiveComponentImpl implements ProActiveComponent, Serializable 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     private transient ProActiveComponent representativeOnMyself = null;
     private ComponentParameters componentParameters;

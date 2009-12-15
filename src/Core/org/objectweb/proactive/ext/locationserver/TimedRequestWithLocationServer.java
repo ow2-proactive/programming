@@ -51,7 +51,7 @@ public class TimedRequestWithLocationServer extends RequestImpl implements java.
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     private static final int MAX_TRIES = 30;
 

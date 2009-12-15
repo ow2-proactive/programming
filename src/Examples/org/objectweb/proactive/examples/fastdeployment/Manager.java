@@ -56,7 +56,7 @@ public class Manager implements Serializable, InitActive, RunActive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** The application logger */
     final static private Logger logger = ProActiveLogger.getLogger(Loggers.CORE + ".app");
     /** List of slaves already in the computation */

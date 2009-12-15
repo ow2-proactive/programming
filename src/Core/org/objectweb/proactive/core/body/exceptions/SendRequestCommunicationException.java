@@ -41,7 +41,7 @@ public class SendRequestCommunicationException extends ProActiveRuntimeException
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public SendRequestCommunicationException(String message, Exception e) {
         super(message, e);

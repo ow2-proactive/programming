@@ -54,7 +54,7 @@ public class EventDataBag implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The rank that identifies the subject ie the worker in a group */
     private int subjectRank;

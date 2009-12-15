@@ -50,7 +50,7 @@ public class HttpRegistryListRemoteObjectsMessage extends HttpMessage implements
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String urn;
 
     //Caller Side

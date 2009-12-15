@@ -47,7 +47,7 @@ public class GroupPrun extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String resources = null;
     private String wallTime = null;
     private int nodes = 0;

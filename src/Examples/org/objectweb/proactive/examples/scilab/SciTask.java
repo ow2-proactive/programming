@@ -58,7 +58,7 @@ public class SciTask extends AbstractGeneralTask {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     private static Logger logger = ProActiveLogger.getLogger(Loggers.SCILAB_TASK);
 

@@ -51,7 +51,7 @@ public abstract class AbstractCollectiveInterfaceController extends AbstractProA
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public AbstractCollectiveInterfaceController(Component owner) {
         super(owner);

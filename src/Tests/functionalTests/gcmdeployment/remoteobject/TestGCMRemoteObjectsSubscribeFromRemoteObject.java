@@ -120,7 +120,7 @@ public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctional
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         GCMVirtualNode vn;
 
         public RemoteAO() {

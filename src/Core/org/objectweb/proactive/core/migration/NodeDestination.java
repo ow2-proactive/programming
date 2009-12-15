@@ -41,7 +41,7 @@ public class NodeDestination implements Destination, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String nodeURL;
     private String methodName;
 

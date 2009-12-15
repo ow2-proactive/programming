@@ -50,7 +50,7 @@ public class MGProblemClass extends NASProblemClass {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public int np;
     public int maxLevel;
     public int nm2;

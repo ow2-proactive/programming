@@ -88,7 +88,7 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * The name of the attribute used to know if the reified object implements

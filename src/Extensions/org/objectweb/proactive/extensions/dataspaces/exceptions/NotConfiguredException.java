@@ -43,7 +43,7 @@ public class NotConfiguredException extends ConfigurationException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      *

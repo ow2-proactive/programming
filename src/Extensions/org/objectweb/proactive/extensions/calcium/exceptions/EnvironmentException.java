@@ -47,7 +47,7 @@ public class EnvironmentException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public EnvironmentException(String msg) {
         super(msg);

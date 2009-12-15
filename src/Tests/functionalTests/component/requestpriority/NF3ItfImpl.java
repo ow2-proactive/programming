@@ -51,7 +51,7 @@ public class NF3ItfImpl extends AbstractProActiveController implements NF3Itf {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     FItf me = null;
 
     public NF3ItfImpl(Component owner) {

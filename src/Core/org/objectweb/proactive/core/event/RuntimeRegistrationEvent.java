@@ -52,7 +52,7 @@ public class RuntimeRegistrationEvent extends ProActiveEvent {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** constant for the registration */
     public static final int RUNTIME_REGISTERED = 10;
     public static final int RUNTIME_ACQUIRED = 20;

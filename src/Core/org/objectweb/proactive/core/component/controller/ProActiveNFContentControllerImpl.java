@@ -48,7 +48,7 @@ public class ProActiveNFContentControllerImpl extends ProActiveContentController
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Constructor for ProActiveNFContentController.

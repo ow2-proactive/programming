@@ -63,7 +63,7 @@ public class TaskPool implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_KERNEL);
 
@@ -445,7 +445,7 @@ public class TaskPool implements Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         //Root tasks that are in this queue for the first time
         PriorityQueue<Task<?>> newRoots;
         //Root tasks that have already been in this queue before

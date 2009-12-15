@@ -55,7 +55,7 @@ public abstract class AbstractSimulationSetPostProcess<T extends Serializable, R
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private SimulationSet<T> simulationSet;
 
     public AbstractSimulationSetPostProcess(SimulationSet<T> simulationSet) {

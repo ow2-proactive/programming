@@ -50,7 +50,7 @@ public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Request request;
 
     public HTTPRemoteObjectRequest(Request request, String url) {

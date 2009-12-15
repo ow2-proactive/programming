@@ -48,7 +48,7 @@ public class ForkInst<P, R> implements Instruction<P, P> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     Divide<P, ?> div;
     Conquer<?, R> conq;
     Vector<Stack<Instruction>> instList;

@@ -57,7 +57,7 @@ public class ResultQueue<R extends Serializable> implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      * log4j logger of the master
      */

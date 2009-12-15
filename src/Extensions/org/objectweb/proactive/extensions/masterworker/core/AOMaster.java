@@ -86,7 +86,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** log4j logger for the master */
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER);
     private static final boolean debug = logger.isDebugEnabled();
@@ -1465,7 +1465,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /** Creates a filter */
         public FindWaitFilter() {
@@ -1488,7 +1488,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /** Creates a filter */
         public NotTerminateFilter() {
@@ -1512,7 +1512,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /** Creates a filter */
         public FinalNotTerminateFilter() {
@@ -1535,7 +1535,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /** Creates the filter */
         public FindWorkersRequests() {
@@ -1555,7 +1555,7 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public IsClearingFilter() {
 

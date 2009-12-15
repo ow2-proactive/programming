@@ -54,7 +54,7 @@ public class FindPrimes implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     // @snippet-start calcium_primes_1
     public Skeleton<Interval, Primes> root;
 

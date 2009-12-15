@@ -71,7 +71,7 @@ public class KernelCG extends Kernel {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public static boolean ROUND_ROBIN_MAPPING_MODE = true;
 

@@ -63,7 +63,7 @@ public class RLoginProcess extends AbstractExternalProcessDecorator {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public final static String DEFAULT_RLOGINPATH = "/usr/bin/rlogin ";
     private boolean exitAfterCommand;
     private String username;

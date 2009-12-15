@@ -51,7 +51,7 @@ public class SSHNodeProcess extends SSHJVMProcess {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Creates a new instance of SSHNodeProcess.

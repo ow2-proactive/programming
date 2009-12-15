@@ -55,7 +55,7 @@ public class VasisekModelInterestRates implements SimulationSet<double[]> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private double a, b, t;
     private int N;
 

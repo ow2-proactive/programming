@@ -57,7 +57,7 @@ public abstract class Tag implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** Message Tagging Logger */
     private static Logger logger = ProActiveLogger.getLogger(Loggers.MESSAGE_TAGGING);

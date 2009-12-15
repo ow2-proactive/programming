@@ -61,7 +61,7 @@ public class KernelEP extends Kernel {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private EPProblemClass problemClass;
     private Node[] nodes;
 

@@ -95,7 +95,7 @@ public class FTManagerCIC extends org.objectweb.proactive.core.body.ft.protocols
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** Value returned by an object if the recieved message must be send again */
     public static final int RESEND_MESSAGE = -3;

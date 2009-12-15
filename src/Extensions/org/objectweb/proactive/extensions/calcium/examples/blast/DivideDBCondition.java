@@ -50,7 +50,7 @@ public class DivideDBCondition implements Condition<BlastParams> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_APPLICATION);
 
     public boolean condition(BlastParams param, SkeletonSystem system) throws IOException {

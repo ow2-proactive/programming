@@ -63,7 +63,7 @@ public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private ProActiveComponent componentIdentity = null;
     private Map<String, Shortcut> shortcutsOnThis = null; // key = functionalItfName, value = shortcut
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);

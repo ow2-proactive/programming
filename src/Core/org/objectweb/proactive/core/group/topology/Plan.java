@@ -49,7 +49,7 @@ public class Plan<E> extends Line<E> { // implements Topology2D {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** height of the two-dimensional topology group */
     protected int height; //  => Y => number of lines
 

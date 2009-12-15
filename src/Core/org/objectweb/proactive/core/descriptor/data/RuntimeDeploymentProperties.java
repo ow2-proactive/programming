@@ -48,7 +48,7 @@ public class RuntimeDeploymentProperties implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected java.util.ArrayList<String> runtimeProperties;
 
     public RuntimeDeploymentProperties() {

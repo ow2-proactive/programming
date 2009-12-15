@@ -45,7 +45,7 @@ class DangerousException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     DangerousException(String str) {
         super(str);
@@ -58,7 +58,7 @@ public class ExceptionTest implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /* Empty constructor for ProActive */
     public ExceptionTest() {

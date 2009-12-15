@@ -46,7 +46,7 @@ public class BodyTerminatedException extends ProActiveRuntimeException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final String TERMINATED_BODY_EXCEPTION_MESSAGE = "The body has been Terminated";
 
     public BodyTerminatedException(String objectName, String message) {

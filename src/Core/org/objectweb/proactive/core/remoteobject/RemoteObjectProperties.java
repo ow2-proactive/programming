@@ -45,7 +45,7 @@ public class RemoteObjectProperties implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected String className;
     protected Class<?> targetClass;
     protected String proxyName;

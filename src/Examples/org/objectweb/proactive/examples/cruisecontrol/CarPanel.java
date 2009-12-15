@@ -44,7 +44,7 @@ public class CarPanel extends javax.swing.JPanel {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     // Fields
     static final int INACTIVE = 0;
     static final int ACTIVE = 1;

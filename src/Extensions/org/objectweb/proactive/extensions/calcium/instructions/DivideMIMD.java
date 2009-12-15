@@ -63,7 +63,7 @@ public class DivideMIMD<P, X> implements Instruction<P, X> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_STRUCTURE);
     Divide<P, X> div;
     private Vector<Stack<Instruction>> stages; //multiple instruction stacks

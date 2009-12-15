@@ -49,7 +49,7 @@ public class EPProblemClass extends NASProblemClass {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public int m;
     public int npm;
 }

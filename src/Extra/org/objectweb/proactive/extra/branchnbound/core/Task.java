@@ -56,7 +56,7 @@ public abstract class Task implements Serializable, Comparable<Task> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
     protected Result initLowerBound;
     protected Result initUpperBound;

@@ -46,7 +46,7 @@ public class GroupSSH extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public final static String DEFAULT_SSHPATH = "ssh";
     private String hostList;
     private String username;

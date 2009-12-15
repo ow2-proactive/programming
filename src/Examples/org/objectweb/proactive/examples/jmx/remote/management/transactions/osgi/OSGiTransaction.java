@@ -68,7 +68,7 @@ public class OSGiTransaction extends Transaction implements OSGiTransactionMBean
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      *
      */

@@ -45,7 +45,7 @@ public class RmiSshRemoteObjectImpl extends RmiRemoteObjectImpl {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public RmiSshRemoteObjectImpl(InternalRemoteRemoteObject target) throws java.rmi.RemoteException {
         super(target, RMISocketFactory.getDefaultSocketFactory(), RmiSshRemoteObjectFactory.sf);

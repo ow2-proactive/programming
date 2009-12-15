@@ -46,7 +46,7 @@ public class GetLastReduction implements ReduceBehavior, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public Object reduce(List<?> values) throws ReductionException {
         System.out.println("--------------");

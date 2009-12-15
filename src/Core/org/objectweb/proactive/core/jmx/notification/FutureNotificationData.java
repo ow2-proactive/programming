@@ -48,7 +48,7 @@ public class FutureNotificationData implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * UniqueID of the body which wait this future

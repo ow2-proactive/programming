@@ -42,7 +42,7 @@ public abstract class Query implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public int n;
     public int done;
     public int left;

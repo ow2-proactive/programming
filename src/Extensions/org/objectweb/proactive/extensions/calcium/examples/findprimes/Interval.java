@@ -42,7 +42,7 @@ class Interval implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public int min;
     public int max;
     public int solvableSize;

@@ -48,7 +48,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static Logger clogger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_PROCESS);
     protected static Logger fileTransferLogger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_FILETRANSFER);
     protected static final boolean IS_WINDOWS_SYSTEM = System.getProperty("os.name").toLowerCase()
@@ -405,7 +405,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private boolean isActive;
 
         public boolean isActive() {
@@ -425,7 +425,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public StandardOutputMessageLogger() {
             //messageLogger.addAppender(new ConsoleAppender(new PatternLayout("%-5p %m %n")));
@@ -454,7 +454,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public NullMessageLogger() {
         }
@@ -478,7 +478,7 @@ public abstract class AbstractExternalProcess extends AbstractUniversalProcess i
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private String message;
         private boolean isActive = true;
 

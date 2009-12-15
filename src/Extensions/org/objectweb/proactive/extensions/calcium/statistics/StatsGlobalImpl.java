@@ -50,7 +50,7 @@ public class StatsGlobalImpl implements java.io.Serializable, StatsGlobal {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private int processingQueueLength;
     private int waitingQueueLength;
     private int readyNewQueueLength;

@@ -48,7 +48,7 @@ public class Activity implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Who increased the counter?

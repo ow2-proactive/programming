@@ -51,7 +51,7 @@ public class MembraneControllerRequestFilter implements RequestFilter {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public boolean acceptRequest(Request request) {
         if (request instanceof ComponentRequest) {

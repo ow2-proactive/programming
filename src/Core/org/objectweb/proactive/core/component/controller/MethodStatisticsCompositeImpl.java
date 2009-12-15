@@ -43,7 +43,7 @@ public class MethodStatisticsCompositeImpl extends MethodStatisticsAbstract impl
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private List<MonitorController> subcomponentMonitors;
 
     public MethodStatisticsCompositeImpl(String itfName, String methodName, Class<?>[] parametersTypes,

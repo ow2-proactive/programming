@@ -45,7 +45,7 @@ public class StartCommand extends OSGiCommand implements StartCommandMBean {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private long idBundle;
 
     public StartCommand(Transaction t, long id) {

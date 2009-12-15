@@ -53,7 +53,7 @@ public class MigrationManagerWithLocationServer extends MigrationManagerImpl {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     transient private LocationServer locationServer;
     protected Body myBody;

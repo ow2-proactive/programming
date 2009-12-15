@@ -42,7 +42,7 @@ public class BridgeGSISSH extends BridgeSSH {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String port;
     private String certificate;
 

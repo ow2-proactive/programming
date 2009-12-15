@@ -51,7 +51,7 @@ public class DoubleMutableWrapper extends DoubleWrapper {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * The no arguments constructor for ProActive.

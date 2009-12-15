@@ -1120,7 +1120,7 @@ public class Fractive implements ProActiveGenericFactory, Component, Factory {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Object getFcInterface(String interfaceName) throws NoSuchInterfaceException {
             return null;

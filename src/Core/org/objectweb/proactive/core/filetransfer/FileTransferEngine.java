@@ -143,7 +143,7 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private String allowedMethodNames;
 
         public RequestFilterOnAllowedMethods(String allowedMethodNames) {

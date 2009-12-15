@@ -49,7 +49,7 @@ public class MessageRoutingException extends ProActiveException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public MessageRoutingException() {
         super();

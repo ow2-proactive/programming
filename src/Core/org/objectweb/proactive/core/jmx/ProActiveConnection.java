@@ -82,7 +82,7 @@ public class ProActiveConnection implements Serializable, MBeanServerConnection,
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
 

@@ -177,7 +177,7 @@ public class DinnerLayout {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         protected javax.swing.JButton bQuit;
         protected javax.swing.JButton bAuto;
 
@@ -380,7 +380,7 @@ public class DinnerLayout {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          * The array holding the images
@@ -422,7 +422,7 @@ public class DinnerLayout {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          * The array holding the images (shared with the phils)

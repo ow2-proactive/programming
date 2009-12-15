@@ -55,7 +55,7 @@ public class GathercastTimeoutException extends ProActiveRuntimeException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public GathercastTimeoutException() {
         super();

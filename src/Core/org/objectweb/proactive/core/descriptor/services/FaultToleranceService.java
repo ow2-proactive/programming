@@ -59,7 +59,7 @@ public class FaultToleranceService implements UniversalService {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final String FT_SERVICE_NAME = "Fault-Tolerance Service";
     public static final String DEFAULT_PARAM_LINE = "-Dproactive.ft=false";
 

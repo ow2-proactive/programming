@@ -49,7 +49,7 @@ public class OctTree implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** max body in a cube while universe's division */
     public static final int MAX_BODIES_IN_DOMAIN = 1;

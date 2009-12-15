@@ -53,7 +53,7 @@ public class OutboundProxy implements Serializable, InitActive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     Map<Integer, InboundProxy[]> inboundProxyMap;
     private InboundProxy groupComm;
 

@@ -48,7 +48,7 @@ public class ComponentA implements Serializable, ComponentInfo {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      *
      */

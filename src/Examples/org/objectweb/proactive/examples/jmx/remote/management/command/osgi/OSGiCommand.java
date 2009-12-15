@@ -64,7 +64,7 @@ public abstract class OSGiCommand extends NotificationBroadcasterSupport impleme
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final String INSTALL = "install ";
     public static final String UNINSTALL = "uninstall ";
     public static final String START = "start ";

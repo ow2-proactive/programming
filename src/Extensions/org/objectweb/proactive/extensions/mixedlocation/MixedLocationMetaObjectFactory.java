@@ -61,7 +61,7 @@ public class MixedLocationMetaObjectFactory extends ProActiveMetaObjectFactory {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
@@ -108,7 +108,7 @@ public class MixedLocationMetaObjectFactory extends ProActiveMetaObjectFactory {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         transient private LocationServer server = LocationServerFactory.getLocationServer();
 
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
@@ -122,7 +122,7 @@ public class MixedLocationMetaObjectFactory extends ProActiveMetaObjectFactory {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public MigrationManager newMigrationManager() {
             //System.out.println("BodyWithMixedLocation.createMigrationManager");

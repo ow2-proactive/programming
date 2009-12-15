@@ -47,7 +47,7 @@ public class Surface implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Vec color;
     private double kd;
     private double ks;

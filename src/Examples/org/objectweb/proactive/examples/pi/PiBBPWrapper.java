@@ -48,7 +48,7 @@ public class PiBBPWrapper extends PiBBP implements MasterComputation, BindingCon
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     PiCompMultiCast clientMultiCast;
 
     public PiBBPWrapper() {

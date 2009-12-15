@@ -66,7 +66,7 @@ public class TestGCMRemoteObjects extends GCMFunctionalTestDefaultNodes {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         GCMApplication gcma;
         boolean success = true;
 

@@ -49,7 +49,7 @@ public class Cube<E> extends Plan<E> { // implements Topology3D {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** depth of the three-dimensional topology group */
     protected int depth; //  => Z => number of plans
 

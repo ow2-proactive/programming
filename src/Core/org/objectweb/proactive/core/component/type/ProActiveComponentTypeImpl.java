@@ -57,7 +57,7 @@ public class ProActiveComponentTypeImpl implements ComponentType, ProActiveInter
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
 

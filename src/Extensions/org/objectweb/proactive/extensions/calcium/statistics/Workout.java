@@ -53,7 +53,7 @@ public class Workout implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public HashMap<Class<?>, Exercise> muscleWorkout;
     public static ClassSorterByName classSorterByName = new ClassSorterByName();
 

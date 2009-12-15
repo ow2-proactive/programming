@@ -54,7 +54,7 @@ public class ActiveNotificationListener implements Serializable, NotificationLis
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      *

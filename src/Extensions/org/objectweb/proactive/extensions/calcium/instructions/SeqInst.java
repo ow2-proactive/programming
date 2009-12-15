@@ -48,7 +48,7 @@ public class SeqInst<P, R> implements Instruction<P, R> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     Execute<P, R> secCode;
 
     public SeqInst(Execute<P, R> secCode) {

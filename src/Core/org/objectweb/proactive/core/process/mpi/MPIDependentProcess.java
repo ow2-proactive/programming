@@ -57,7 +57,7 @@ public class MPIDependentProcess extends MPIProcess implements DependentProcess 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Create a new MPIProcess

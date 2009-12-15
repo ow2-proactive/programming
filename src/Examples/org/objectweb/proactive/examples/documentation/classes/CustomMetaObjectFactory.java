@@ -55,7 +55,7 @@ public class CustomMetaObjectFactory extends ProActiveMetaObjectFactory {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final MetaObjectFactory instance = new CustomMetaObjectFactory();
 
     //return a new factory instance
@@ -77,7 +77,7 @@ public class CustomMetaObjectFactory extends ProActiveMetaObjectFactory {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                 long sequenceID) {
@@ -89,7 +89,7 @@ public class CustomMetaObjectFactory extends ProActiveMetaObjectFactory {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public CustomRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                     long sequenceID) {

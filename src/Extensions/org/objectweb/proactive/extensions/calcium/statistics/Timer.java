@@ -43,7 +43,7 @@ public class Timer implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     long t;
     long accumulated;
     int numberActivatedTimes;

@@ -54,7 +54,7 @@ public class PriorityControllerImpl extends AbstractProActiveController implemen
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final String ANY_PARAMETERS = "any-parameters";
     private Map<String, Object> nf2s;
     private Map<String, Object> nf3s;

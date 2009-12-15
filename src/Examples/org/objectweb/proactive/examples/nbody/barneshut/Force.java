@@ -47,7 +47,7 @@ public class Force implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** Vector of the force */
     public double x = 0;

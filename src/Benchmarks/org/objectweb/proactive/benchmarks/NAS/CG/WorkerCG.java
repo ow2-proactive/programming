@@ -64,7 +64,7 @@ public class WorkerCG extends Timed {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** TimIt related variables * */
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
     private TimerCounter T_total = new TimerCounter("Total");

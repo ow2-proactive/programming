@@ -49,7 +49,7 @@ public class CruiseControlPanel extends JPanel {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** constants : represents the controller on */
     final static int ACTIVE = 1;
     final static int INACTIVE = 0;

@@ -55,7 +55,7 @@ public class RequestWithMixedLocation extends RequestImpl implements java.io.Ser
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     private static final int MAX_TRIES = 15;
     private static int counter = 0;

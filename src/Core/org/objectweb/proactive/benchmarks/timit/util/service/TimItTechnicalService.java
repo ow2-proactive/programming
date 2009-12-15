@@ -50,7 +50,7 @@ public class TimItTechnicalService implements TechnicalService, java.io.Serializ
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String timitActivation;
     private String reduceResults;
     private static String generateOutputFile;

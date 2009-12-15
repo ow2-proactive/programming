@@ -47,7 +47,7 @@ public class AOCrash1 implements Serializable, EndActive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     private AOCrash2 ao2;
 

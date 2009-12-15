@@ -96,7 +96,7 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         String vfsRootUrl;
         String namingServiceUrl;
         long appId;

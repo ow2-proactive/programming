@@ -82,7 +82,7 @@ public class MembraneControllerImpl extends AbstractProActiveController implemen
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Map<String, Component> nfcomponents;
     private String membraneState;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);

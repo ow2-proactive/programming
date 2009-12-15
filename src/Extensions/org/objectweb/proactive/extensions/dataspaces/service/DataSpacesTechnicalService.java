@@ -83,7 +83,7 @@ public class DataSpacesTechnicalService implements TechnicalService {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public static final String PROPERTY_APPLICATION_ID = "proactive.dataspaces.application_id";
 

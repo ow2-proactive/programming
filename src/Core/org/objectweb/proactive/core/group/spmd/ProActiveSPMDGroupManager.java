@@ -47,7 +47,7 @@ public class ProActiveSPMDGroupManager implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      *  The spmd group he object belongs to

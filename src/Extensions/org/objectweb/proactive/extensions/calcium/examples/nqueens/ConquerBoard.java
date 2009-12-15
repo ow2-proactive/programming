@@ -42,7 +42,7 @@ public class ConquerBoard implements Conquer<Result, Result> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public Result conquer(Result[] result, SkeletonSystem system) {
         Result r = new Result(result[0].n);

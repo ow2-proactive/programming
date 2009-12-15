@@ -75,7 +75,7 @@ public class Manager implements Serializable, InitActive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
     private static final boolean enableRealloc = false; // TODO turn it
     private static final boolean enableBackup = false; // TODO turn it

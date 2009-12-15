@@ -63,7 +63,7 @@ public class RemoteGateway extends ManageableEntity implements Serializable, Rem
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private ObjectName on;
     private String url;
     private transient FrameworkConnection fwConnection;

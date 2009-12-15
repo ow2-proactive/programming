@@ -57,7 +57,7 @@ public class RmiRemoteObjectImpl extends UnicastRemoteObject implements RmiRemot
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected InternalRemoteRemoteObject internalrrObject;
 
     public RmiRemoteObjectImpl() throws java.rmi.RemoteException {

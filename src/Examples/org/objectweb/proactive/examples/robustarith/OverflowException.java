@@ -47,7 +47,7 @@ public class OverflowException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String op;
     private BigInteger a;
     private BigInteger b;

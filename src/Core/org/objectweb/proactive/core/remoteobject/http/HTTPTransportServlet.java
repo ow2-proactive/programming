@@ -66,7 +66,7 @@ public class HTTPTransportServlet extends HttpServlet {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     final static public String NS = "/httpTransport";
     final static public String MAPPING = NS;
 

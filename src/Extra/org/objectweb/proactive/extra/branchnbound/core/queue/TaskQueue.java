@@ -65,7 +65,7 @@ public abstract class TaskQueue implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The logger. */
     public final static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);

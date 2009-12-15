@@ -47,7 +47,7 @@ public class BenchSocketFactory extends BenchFactory implements RMIServerSocketF
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //protected ArrayList streamList;
     protected static boolean measure = true;
 

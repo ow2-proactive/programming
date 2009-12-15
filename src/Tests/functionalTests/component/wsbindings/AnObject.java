@@ -54,7 +54,7 @@ public class AnObject implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String id;
     private int intField;
     private double[] arrayField;

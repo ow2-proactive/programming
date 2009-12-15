@@ -58,7 +58,7 @@ public class MessageEvent extends ProActiveEvent implements Message, java.io.Ser
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** constant indicating the encapsulated message has been sent */
     public static final int REQUEST_SENT = 10;

@@ -43,7 +43,7 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     protected String itfName;
 
@@ -250,7 +250,7 @@ public abstract class MethodStatisticsAbstract implements MethodStatistics, Seri
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         private long arrivalTime;
 

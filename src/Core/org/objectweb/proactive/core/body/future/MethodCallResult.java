@@ -43,7 +43,7 @@ class ThisIsNotAnException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public ThisIsNotAnException() {
         super("This is the call in the proxy");
@@ -59,7 +59,7 @@ public class MethodCallResult implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The object to be returned */
     private Object result;

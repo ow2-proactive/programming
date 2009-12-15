@@ -48,7 +48,7 @@ public class NativeSpmdImpl implements NativeSpmd, java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private final static Logger NATIVE_IMPL_LOGGER = ProActiveLogger.getLogger(Loggers.NATIVE);
     private List<Node> nodes;
 

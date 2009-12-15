@@ -56,7 +56,7 @@ public class VirtualMachineImpl implements VirtualMachine, java.io.Serializable 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** the name of this VirtualMachine */
     private String name;

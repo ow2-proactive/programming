@@ -65,7 +65,7 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     long deploymentId;
     Set<String> virtualNodeNames;
     URI baseUri;

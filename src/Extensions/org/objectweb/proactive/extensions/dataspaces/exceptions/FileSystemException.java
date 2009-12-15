@@ -44,7 +44,7 @@ public class FileSystemException extends IOException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public FileSystemException(Throwable e) {
         super(ProActiveLogger.getStackTraceAsString(e));

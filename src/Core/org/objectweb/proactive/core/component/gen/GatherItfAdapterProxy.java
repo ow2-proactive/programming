@@ -47,7 +47,7 @@ public class GatherItfAdapterProxy implements InvocationHandler, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_GATHERCAST);
     Object delegatee = null;
 

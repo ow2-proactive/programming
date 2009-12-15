@@ -39,7 +39,7 @@ public class WrongStreamTypeException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public WrongStreamTypeException() {
         super("Operation not allowed for this stream type");

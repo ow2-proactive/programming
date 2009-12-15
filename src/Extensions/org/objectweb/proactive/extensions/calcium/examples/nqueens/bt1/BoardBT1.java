@@ -42,7 +42,7 @@ public class BoardBT1 extends Board {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Constructor for backtrac1 boards

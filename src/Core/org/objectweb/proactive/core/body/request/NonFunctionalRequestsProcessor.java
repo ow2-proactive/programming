@@ -64,7 +64,7 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private AbstractList<Request> nfRequestsQueue;
     private RequestFilter immediateNFResquestFilter;
     private RequestFilter priorityNFRequestFilter;
@@ -189,7 +189,7 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          *
@@ -213,7 +213,7 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          *
@@ -237,7 +237,7 @@ public class NonFunctionalRequestsProcessor implements RequestProcessor, Seriali
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          *

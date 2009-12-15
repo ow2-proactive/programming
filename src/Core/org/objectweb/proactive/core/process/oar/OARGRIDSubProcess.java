@@ -59,7 +59,7 @@ public class OARGRIDSubProcess extends AbstractExternalProcessDecorator {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public final static String DEFAULT_OARGRIDSUBPATH = "/usr/local/bin/oargridsub";
     private static final String DEFAULT_SCRIPT_LOCATION = System.getProperty("user.home") + File.separator +
         "ProActive" + File.separator + "scripts" + File.separator + "unix" + File.separator + "cluster" +
@@ -291,7 +291,7 @@ public class OARGRIDSubProcess extends AbstractExternalProcessDecorator {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private String clusterName;
         private String clusterFrontEndName;
         private int nodes;

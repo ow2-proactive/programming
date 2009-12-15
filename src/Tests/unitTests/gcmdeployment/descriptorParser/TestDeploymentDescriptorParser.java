@@ -94,7 +94,7 @@ public class TestDeploymentDescriptorParser {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         @Override
         public List<String> internalBuildCommands(CommandBuilder commandBuilder) {
@@ -106,7 +106,7 @@ public class TestDeploymentDescriptorParser {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         @Override
         public String internalBuildCommand(CommandBuilder commandBuilder) {

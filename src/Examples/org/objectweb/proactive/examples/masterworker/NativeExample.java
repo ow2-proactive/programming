@@ -124,7 +124,7 @@ public class NativeExample extends AbstractExample {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          *

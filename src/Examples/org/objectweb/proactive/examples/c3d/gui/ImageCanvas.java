@@ -54,7 +54,7 @@ public class ImageCanvas extends Canvas {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private int my_HEIGHT;
     private int my_WIDTH;
     private Dimension preferedSize; // the Canvas prefered size

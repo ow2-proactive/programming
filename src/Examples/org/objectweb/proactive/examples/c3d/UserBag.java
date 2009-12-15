@@ -48,7 +48,7 @@ public class UserBag implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private ArrayList<Troika> list = new ArrayList<Troika>();
 
     /** Create an empty Bag. */
@@ -155,7 +155,7 @@ public class UserBag implements Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         int key;
         User user;
         String name;

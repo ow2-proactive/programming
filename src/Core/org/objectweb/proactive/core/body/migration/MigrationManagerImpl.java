@@ -66,7 +66,7 @@ public class MigrationManagerImpl extends AbstractEventProducer implements Migra
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     transient protected LocationServer locationServer;
     protected int nbOfMigrationWithoutUpdate; // used to compare with maxMigrationNb

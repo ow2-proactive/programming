@@ -54,7 +54,7 @@ public abstract class AbstractSequentialListProcessDecorator implements External
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     boolean isFirstElementService = false;
 

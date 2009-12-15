@@ -71,7 +71,7 @@ public class GathercastControllerImpl extends AbstractCollectiveInterfaceControl
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Map<String, List<ItfID>> bindingsOnServerItfs = new HashMap<String, List<ItfID>>();
     private Map<String, ProActiveInterface> gatherItfs = new HashMap<String, ProActiveInterface>();
     private GatherRequestsQueues gatherRequestsHandler;
@@ -248,7 +248,7 @@ public class GathercastControllerImpl extends AbstractCollectiveInterfaceControl
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private HashMap<String, List<ItfID>> bindingsOnServerItfs;
         private HashMap<String, ProActiveInterface> gatherItfs;
         private GatherRequestsQueues gatherRequestsHandler;

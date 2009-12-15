@@ -55,7 +55,7 @@ public class RequestWithLocationServer extends RequestImpl implements java.io.Se
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final int MAX_TRIES = 30;
     static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
 

@@ -59,7 +59,7 @@ public class LocationServerMetaObjectFactory extends ProActiveMetaObjectFactory 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
@@ -106,7 +106,7 @@ public class LocationServerMetaObjectFactory extends ProActiveMetaObjectFactory 
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         transient private LocationServer server = LocationServerFactory.getLocationServer();
 
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
@@ -120,7 +120,7 @@ public class LocationServerMetaObjectFactory extends ProActiveMetaObjectFactory 
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public MigrationManager newMigrationManager() {
             return new MigrationManagerWithLocationServer(LocationServerFactory.getLocationServer());

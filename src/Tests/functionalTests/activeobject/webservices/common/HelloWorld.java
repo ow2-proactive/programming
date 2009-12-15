@@ -50,7 +50,7 @@ public class HelloWorld extends HelloWorldSuperClass implements java.io.Serializ
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private LinkedList<String> textsToSay = new LinkedList<String>();
     private Couple[] couples;
 

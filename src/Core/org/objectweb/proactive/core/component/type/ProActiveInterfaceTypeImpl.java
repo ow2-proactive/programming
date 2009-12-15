@@ -58,7 +58,7 @@ public class ProActiveInterfaceTypeImpl implements ProActiveInterfaceType, Seria
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
 

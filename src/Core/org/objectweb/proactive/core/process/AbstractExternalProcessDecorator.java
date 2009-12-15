@@ -45,7 +45,7 @@ public abstract class AbstractExternalProcessDecorator extends AbstractExternalP
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected ExternalProcess targetProcess;
     private int compositionType = APPEND_TO_COMMAND_COMPOSITION;
 
@@ -180,7 +180,7 @@ public abstract class AbstractExternalProcessDecorator extends AbstractExternalP
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private RemoteProcessMessageLogger messageLogger1;
         private RemoteProcessMessageLogger messageLogger2;
 

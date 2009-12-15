@@ -49,7 +49,7 @@ public class ServerImpl implements Service, ServiceAttributes {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             @Override
             public String toString() {

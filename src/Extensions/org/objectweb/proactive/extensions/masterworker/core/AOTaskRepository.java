@@ -71,7 +71,7 @@ public class AOTaskRepository implements TaskRepository, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      * logger of the task repository
      */

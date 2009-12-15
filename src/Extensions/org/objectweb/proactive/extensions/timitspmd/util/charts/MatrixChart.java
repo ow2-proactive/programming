@@ -85,7 +85,7 @@ public class MatrixChart implements Chart {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      *
      */
@@ -327,7 +327,7 @@ public class MatrixChart implements Chart {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /** The current viewed row */
         private int currentRow = 0;
@@ -457,7 +457,7 @@ public class MatrixChart implements Chart {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          *
@@ -513,7 +513,7 @@ public class MatrixChart implements Chart {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          *

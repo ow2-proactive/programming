@@ -44,7 +44,7 @@ public class FTObject implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String name;
     private String services;
     private FTObject b;

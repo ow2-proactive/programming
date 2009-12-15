@@ -68,7 +68,7 @@ public class GCMVirtualMachineManager implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** user's info & id (infrastructure & resources identification) */
     private String pwd, user, id;
     /** to keep all hypervisor's uri */
@@ -314,7 +314,7 @@ public class GCMVirtualMachineManager implements Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private final VMMBean vmmbean;
         private transient VirtualMachineManager vmm;
         private transient Hashtable<String, VirtualMachine> vms;

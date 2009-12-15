@@ -225,7 +225,7 @@ public class Main implements ActivePrimeContainerCreator, InitActive {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private JButton exitButton;
         private JToggleButton pauseButton;
         private Main main;

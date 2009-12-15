@@ -112,7 +112,7 @@ public class TestFinal extends GCMFunctionalTestDefaultNodes {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         Data data;
 
         public Receiver() {
@@ -136,7 +136,7 @@ public class TestFinal extends GCMFunctionalTestDefaultNodes {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         final UniqueID uniqueID = new UniqueID();
 
         public UniqueID get() {
@@ -148,7 +148,7 @@ public class TestFinal extends GCMFunctionalTestDefaultNodes {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         final UniqueID uniqueID;
 
         public Data2() {

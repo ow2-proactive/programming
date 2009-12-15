@@ -68,7 +68,7 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         boolean firstRequest = true;
         long count = 0;
         long startTime;
@@ -101,7 +101,7 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private Server server;
 
         public Client() {

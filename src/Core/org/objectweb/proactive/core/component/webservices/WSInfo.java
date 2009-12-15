@@ -61,7 +61,7 @@ public class WSInfo implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Name of the interface which must be implemented by the class in charge of calling the web service.

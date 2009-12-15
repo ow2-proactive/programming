@@ -47,7 +47,7 @@ public class VMwareVixVMMBean implements VMMBean {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String uri, user, pwd;
     private int port = 904;
     private Service service = Service.vmwareDefault;

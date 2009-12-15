@@ -56,7 +56,7 @@ public class SimpleAgent implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** ProActive compulsory empty no-args constructor */

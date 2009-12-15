@@ -69,7 +69,7 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private VirtualNodeInternal virtualNode;
     private String name;
     private String urlForLookup;

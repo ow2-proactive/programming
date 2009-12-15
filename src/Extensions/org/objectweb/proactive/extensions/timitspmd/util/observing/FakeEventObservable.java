@@ -46,7 +46,7 @@ public class FakeEventObservable implements EventObservable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** Construct an FakeObservable with zero Observers. */
     public FakeEventObservable() {

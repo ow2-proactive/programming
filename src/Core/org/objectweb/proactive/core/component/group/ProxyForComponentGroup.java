@@ -54,7 +54,7 @@ public class ProxyForComponentGroup<E> extends ProxyForGroup<E> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected ComponentType componentType;
     protected ControllerDescription controllerDesc;
 

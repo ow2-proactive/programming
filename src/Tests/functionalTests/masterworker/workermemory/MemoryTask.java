@@ -42,7 +42,7 @@ public class MemoryTask implements Task<String> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public String run(WorkerMemory memory) throws Exception {
         String mes = (String) memory.load("message");

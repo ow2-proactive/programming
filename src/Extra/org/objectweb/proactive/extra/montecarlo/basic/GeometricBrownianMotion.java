@@ -53,7 +53,7 @@ public class GeometricBrownianMotion implements SimulationSet<double[]> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private double s0, mu, sigma, t;
     private int N;
 

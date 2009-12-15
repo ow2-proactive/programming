@@ -70,7 +70,7 @@ public class HalfFTManagerPMLRB extends FTManager {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      *

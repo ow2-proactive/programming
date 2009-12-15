@@ -43,7 +43,7 @@ public class JMXClassLoader extends ClassLoader implements JMXClassLoaderMBean {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public JMXClassLoader() {
 

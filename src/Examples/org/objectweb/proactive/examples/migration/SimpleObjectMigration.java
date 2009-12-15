@@ -63,7 +63,7 @@ public class SimpleObjectMigration implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private static final int SLEEP_TIME = 9000;
     private String name; // The name of the instance

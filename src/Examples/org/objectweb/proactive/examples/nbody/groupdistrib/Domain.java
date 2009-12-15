@@ -54,14 +54,14 @@ public class Domain implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     private static class Carrier implements Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         Planet planet;
         int iter;
 

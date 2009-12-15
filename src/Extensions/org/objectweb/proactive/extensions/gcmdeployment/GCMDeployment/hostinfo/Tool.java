@@ -41,7 +41,7 @@ public class Tool implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String id;
     private String path;
 

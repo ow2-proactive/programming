@@ -43,7 +43,7 @@ public class MethodStatisticsPrimitiveImpl extends MethodStatisticsAbstract impl
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public MethodStatisticsPrimitiveImpl(String itfName, String methodName, Class<?>[] parametersTypes) {
         this.itfName = itfName;

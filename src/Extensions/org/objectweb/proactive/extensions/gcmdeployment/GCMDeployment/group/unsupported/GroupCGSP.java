@@ -44,7 +44,7 @@ public class GroupCGSP extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String hostName;
     private String queue;
     private String count;

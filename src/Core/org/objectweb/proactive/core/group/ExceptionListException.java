@@ -53,7 +53,7 @@ public class ExceptionListException extends RuntimeException implements Iterable
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** A vector implements the list */
     private Vector<ExceptionInGroup> list;
 

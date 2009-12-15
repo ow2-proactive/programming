@@ -52,7 +52,7 @@ public class SimulationSetTask implements Task<Serializable> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private SimulationSet exp;
 
     public SimulationSetTask(SimulationSet exp) {

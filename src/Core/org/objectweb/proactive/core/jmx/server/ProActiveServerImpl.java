@@ -55,7 +55,7 @@ public class ProActiveServerImpl implements Serializable, ProActiveInternalObjec
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private transient MBeanServer mbeanServer;
     private UniqueID id;
 

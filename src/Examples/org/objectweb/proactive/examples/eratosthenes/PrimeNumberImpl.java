@@ -48,7 +48,7 @@ public class PrimeNumberImpl implements PrimeNumber, java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private long value;
     private PrimeNumber next;

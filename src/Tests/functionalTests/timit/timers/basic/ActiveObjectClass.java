@@ -49,7 +49,7 @@ public class ActiveObjectClass implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final int customWaitTimeInMillis = 200;
     private ActiveObjectClass remoteReference;
     private ActiveObjectClass localReference;

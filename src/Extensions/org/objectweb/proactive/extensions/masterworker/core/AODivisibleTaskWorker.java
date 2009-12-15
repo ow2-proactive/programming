@@ -62,7 +62,7 @@ public class AODivisibleTaskWorker extends AOWorker implements RunActive, InitAc
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      * log4j logger of the worker
      */

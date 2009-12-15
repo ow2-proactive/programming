@@ -56,7 +56,7 @@ public class Add implements Serializable, InitActive, RunActive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Cons1 cons1;
     private BigInteger fibN_1;
     private BigInteger fibN_2;

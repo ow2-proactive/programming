@@ -54,7 +54,7 @@ public class ControllerStateDuplicationImpl extends AbstractProActiveController 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public ControllerStateDuplicationImpl(Component owner) {
         super(owner);

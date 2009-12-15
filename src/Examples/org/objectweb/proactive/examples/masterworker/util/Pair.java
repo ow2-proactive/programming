@@ -41,7 +41,7 @@ public class Pair<P extends Serializable, R extends Serializable> implements Ser
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private P first;
     private R second;
 

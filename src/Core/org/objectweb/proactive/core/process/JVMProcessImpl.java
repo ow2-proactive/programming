@@ -73,7 +73,7 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     static Logger logger = ProActiveLogger.getLogger(Loggers.DEPLOYMENT_PROCESS);
 

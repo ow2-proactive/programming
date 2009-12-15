@@ -42,7 +42,7 @@ public class UpdateCommand extends OSGiCommand implements UpdateCommandMBean {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private long idBundle;
 
     public UpdateCommand(Transaction t, long id) {

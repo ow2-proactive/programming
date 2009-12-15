@@ -54,7 +54,7 @@ public class MessageRoutingRegistryListRemoteObjectsMessage extends MessageRouti
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Construct a list message

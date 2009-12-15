@@ -42,7 +42,7 @@ public class BlastParams implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public File formatProg;
     public File blastProg;
     public File queryFile; //query file

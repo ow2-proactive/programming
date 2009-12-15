@@ -48,7 +48,7 @@ public class State implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private long commitedMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getCommitted();
     private long initMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getInit();
     private long maxMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax();

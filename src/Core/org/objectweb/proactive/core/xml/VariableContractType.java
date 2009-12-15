@@ -52,7 +52,7 @@ public class VariableContractType implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static final public VariableContractType DescriptorVariable = new VariableContractType(0, new String[] {
             "Descriptor", "Program" }, new String[] { "Descriptor" }, new String[] { "Program" });
     static final public VariableContractType ProgramVariable = new VariableContractType(1, new String[] {

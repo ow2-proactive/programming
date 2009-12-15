@@ -44,7 +44,7 @@ public class CacheAnnotationClass implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private int i;
     private Object o;
 

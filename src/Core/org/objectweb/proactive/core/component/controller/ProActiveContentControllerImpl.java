@@ -72,7 +72,7 @@ public class ProActiveContentControllerImpl extends AbstractProActiveController 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     protected List<Component> fcSubComponents;
 
@@ -390,7 +390,7 @@ public class ProActiveContentControllerImpl extends AbstractProActiveController 
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private ArrayList<Component> fcSubComponents;
 
         public ContentControllerState(ArrayList<Component> fcSubComponents) {

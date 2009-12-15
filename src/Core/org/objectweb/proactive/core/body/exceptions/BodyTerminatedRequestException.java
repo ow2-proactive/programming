@@ -43,7 +43,7 @@ public class BodyTerminatedRequestException extends BodyTerminatedException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final String TERMINATED_BODY_REQUEST = " while receiving request ";
 
     public BodyTerminatedRequestException(String objectName, String methodName) {

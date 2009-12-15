@@ -39,7 +39,7 @@ public class ComputePolicyException extends RuntimeException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      *

@@ -41,7 +41,7 @@ public class TransactionCancelledNotification extends TransactionNotification {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public TransactionCancelledNotification(String type, Object source, long sequenceNumber, String message,
             long id, Date date) {

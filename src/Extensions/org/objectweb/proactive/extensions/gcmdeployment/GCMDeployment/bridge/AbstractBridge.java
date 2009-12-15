@@ -49,7 +49,7 @@ public abstract class AbstractBridge implements Bridge {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String commandPath;
     private String env;
     private String hostname;

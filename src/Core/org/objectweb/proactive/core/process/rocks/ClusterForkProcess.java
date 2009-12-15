@@ -43,7 +43,7 @@ public class ClusterForkProcess extends AbstractExternalProcessDecorator {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     final protected String DEFAULT_COMMAND = "cluster-fork";
 
     public ClusterForkProcess() {

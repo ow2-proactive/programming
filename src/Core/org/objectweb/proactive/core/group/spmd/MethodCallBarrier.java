@@ -51,7 +51,7 @@ public class MethodCallBarrier extends MethodCallControlForGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** The unique ID of the barrier */
     private String IDName;
 

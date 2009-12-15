@@ -50,7 +50,7 @@ public class TorusCube<E> extends Torus<E> { // implements Topology3D {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** depth of the three-dimensional topology group */
     protected int depth; //  => Y => number of Toruss
 

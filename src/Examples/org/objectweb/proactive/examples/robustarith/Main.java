@@ -57,7 +57,7 @@ public class Main {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
             private final Ratio ONE_64 = new Ratio(BigInteger.ONE, new BigInteger("64"));
 
             private BigInteger i2b(int i) {

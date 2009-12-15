@@ -47,7 +47,7 @@ public class QueryExtern
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Query query;
 
     public QueryExtern(Query query) {

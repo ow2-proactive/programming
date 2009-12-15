@@ -74,7 +74,7 @@ public class ProActiveLifeCycleControllerImpl extends AbstractProActiveControlle
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
     protected String fcState = LifeCycleController.STOPPED;
 

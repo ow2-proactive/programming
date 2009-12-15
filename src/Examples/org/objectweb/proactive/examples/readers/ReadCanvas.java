@@ -42,7 +42,7 @@ public class ReadCanvas extends javax.swing.JPanel {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private int[] readers;
     private int[] writers;
 

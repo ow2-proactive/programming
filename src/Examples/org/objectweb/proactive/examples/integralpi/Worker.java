@@ -59,7 +59,7 @@ public class Worker implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The number that identifies the worker in a group */
     private int rank;

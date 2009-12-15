@@ -43,7 +43,7 @@ public class HTTPUnexpectedException extends HTTPRemoteException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public HTTPUnexpectedException(String s) {
         super(s);

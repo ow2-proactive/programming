@@ -53,7 +53,7 @@ public class FindPrimeTask implements Task<Boolean> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private long begin;
     private long end;
     private long taskCandidate;

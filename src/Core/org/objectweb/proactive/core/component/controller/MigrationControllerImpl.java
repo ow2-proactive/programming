@@ -54,7 +54,7 @@ public class MigrationControllerImpl extends AbstractProActiveController impleme
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public MigrationControllerImpl(Component owner) {
         super(owner);

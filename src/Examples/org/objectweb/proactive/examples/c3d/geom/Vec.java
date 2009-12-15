@@ -43,7 +43,7 @@ public class Vec implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The x coordinate */
     public double x;

@@ -48,7 +48,7 @@ public class ComponentMethodCallMetadata implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static final transient Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
     private String componentInterfaceName = null;
     private boolean isComponentMethodCall;

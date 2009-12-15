@@ -42,7 +42,7 @@ public class Result implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     int workerIndex = -1;
     int value = -1;
 

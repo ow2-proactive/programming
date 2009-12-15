@@ -65,7 +65,7 @@ public class RSHProcess extends AbstractExternalProcessDecorator {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public final static String DEFAULT_RSHPATH = "/usr/bin/rsh ";
     public final static String DEFAULT_RSH_COPYPROTOCOL = "rcp";
 

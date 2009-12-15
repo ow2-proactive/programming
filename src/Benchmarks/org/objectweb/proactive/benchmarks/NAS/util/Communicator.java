@@ -49,7 +49,7 @@ public class Communicator implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private double total, max, min;
     private int[] maxArray;
 

@@ -54,7 +54,7 @@ public class AppletEntrance extends org.objectweb.proactive.examples.StandardFra
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public AppletEntrance(String name, int width, int height) {
         super(name, width, height);

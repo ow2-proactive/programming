@@ -61,7 +61,7 @@ public class RemoteObjectExposer<T> implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected Hashtable<URI, InternalRemoteRemoteObject> activeRemoteRemoteObjects;
     private String className;
     private RemoteObjectImpl<T> remoteObject;

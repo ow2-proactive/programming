@@ -84,7 +84,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     static int i = 0;
 

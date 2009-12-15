@@ -46,7 +46,7 @@ public class SearchPane extends JPanel {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private JScrollPane scrollPane;
     private JTable research;
     private SearchModel model;

@@ -54,7 +54,7 @@ public class DialogBox extends Dialog implements ActionListener, java.io.Seriali
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public DialogBox(Frame parent, String frametitle, String line1, String line2) {
         super(parent, frametitle, true);

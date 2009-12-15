@@ -38,7 +38,7 @@ public class FutureMonitoringPingFailureException extends RuntimeException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public FutureMonitoringPingFailureException(Throwable cause) {
         super("Failure to ping creator body", cause);

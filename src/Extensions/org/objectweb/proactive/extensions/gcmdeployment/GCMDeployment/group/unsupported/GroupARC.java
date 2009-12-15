@@ -45,7 +45,7 @@ public class GroupARC extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String jobName;
     private String count;
     private List<String> args;

@@ -43,5 +43,5 @@ public class GCResponse extends ArrayList<GCSimpleResponse> implements Serializa
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 }

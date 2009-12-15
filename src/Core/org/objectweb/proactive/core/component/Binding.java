@@ -53,7 +53,7 @@ public class Binding implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     protected final ProActiveInterface clientInterface;
     protected final ProActiveInterface serverInterface;

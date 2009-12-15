@@ -52,7 +52,7 @@ public class RMIRegistryLookupService implements UniversalService {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** lookup url */
     protected String url;
     protected static String serviceName = "RMIRegistryLookup";

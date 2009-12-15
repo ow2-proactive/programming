@@ -51,7 +51,7 @@ public class SimpleAgent implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Empty, no-arg constructor required by ProActive

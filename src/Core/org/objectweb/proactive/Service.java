@@ -877,7 +877,7 @@ public class Service {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private String methodName;
 
         public RequestFilterOnMethodName(String methodName) {
@@ -903,7 +903,7 @@ public class Service {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          * Returns true if and only if the given request can be accepted.

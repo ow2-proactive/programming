@@ -75,7 +75,7 @@ public class FunctionalInterfaceProxyImpl implements FunctionalInterfaceProxy, S
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected transient final static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
     private static Field universalBodyField;
     private static Field bodyIDField;

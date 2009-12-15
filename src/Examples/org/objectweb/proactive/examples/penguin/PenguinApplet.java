@@ -42,7 +42,7 @@ public class PenguinApplet extends StandardFrame implements PenguinMessageReceiv
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private PenguinControler controler;
     private Action startAction;
     private Action suspendAction;
@@ -273,7 +273,7 @@ public class PenguinApplet extends StandardFrame implements PenguinMessageReceiv
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private CircularArrayList<PenguinWrapper> penguinList;
 
         //
@@ -320,7 +320,7 @@ public class PenguinApplet extends StandardFrame implements PenguinMessageReceiv
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         Penguin penguin;
         String name;
 

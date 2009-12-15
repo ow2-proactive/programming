@@ -44,7 +44,7 @@ public class UninstallCommand extends OSGiCommand implements UninstallCommandMBe
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private long idBundle;
 
     public UninstallCommand(Transaction t, long id) {

@@ -102,7 +102,7 @@ public class ProActiveComponentRepresentativeImpl implements ProActiveComponentR
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     private ComponentParameters componentParameters;
     protected Map<String, Interface> fcInterfaceReferences;

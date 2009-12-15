@@ -41,7 +41,7 @@ public class BridgeRSH extends AbstractBridge {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public final static String DEFAULT_RSHPATH = "rsh";
 
     public BridgeRSH() {

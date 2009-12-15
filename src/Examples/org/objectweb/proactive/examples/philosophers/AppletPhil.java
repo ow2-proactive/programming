@@ -41,7 +41,7 @@ public class AppletPhil extends org.objectweb.proactive.examples.StandardFrame {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //  private javax.swing.JButton bStart;
     private String url;
     private DinnerLayout theLayout;

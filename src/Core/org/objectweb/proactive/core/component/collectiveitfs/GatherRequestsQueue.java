@@ -73,7 +73,7 @@ public class GatherRequestsQueue implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //private ProActiveComponent owner;
     private GatherFuturesHandler futuresHandler; // primitive pooling
     private List<ItfID> connectedClientItfs; // consistency?

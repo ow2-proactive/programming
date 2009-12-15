@@ -49,7 +49,7 @@ public class IfInst<P> implements Instruction<P, P> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     Condition<P> cond;
     Stack<Instruction> trueChildStack;
     Stack<Instruction> falseChildStack;

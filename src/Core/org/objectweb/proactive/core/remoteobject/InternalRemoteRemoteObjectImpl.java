@@ -73,7 +73,7 @@ public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObjec
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * the remote remote object of the internal remote remote object.

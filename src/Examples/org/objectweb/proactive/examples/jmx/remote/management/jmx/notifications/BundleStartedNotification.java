@@ -43,7 +43,7 @@ public class BundleStartedNotification extends BundleNotification {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private BundleInfo bundleInfo;
     private String url;
     private String message;

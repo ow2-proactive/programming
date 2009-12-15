@@ -88,7 +88,7 @@ public class LocalNode implements SecurityEntity {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);
     private String name;
     private List<UniqueID> activeObjectsId;

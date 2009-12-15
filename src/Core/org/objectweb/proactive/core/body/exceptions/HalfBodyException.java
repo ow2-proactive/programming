@@ -46,7 +46,7 @@ public class HalfBodyException extends ProActiveRuntimeException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final String HALF_BODY_EXCEPTION_MESSAGE = "This method is not implemented in class HalfBody";
 
     public HalfBodyException() {

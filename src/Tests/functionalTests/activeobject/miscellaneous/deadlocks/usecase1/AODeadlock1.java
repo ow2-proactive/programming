@@ -50,7 +50,7 @@ public class AODeadlock1 implements Serializable, InitActive, RunActive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private AODeadlock1 stub;
     private AODeadlock2 ao2;
 

@@ -48,7 +48,7 @@ public class Displayer implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private transient NBodyFrame nbf;
     private boolean displayft;
     private int nbBodies;

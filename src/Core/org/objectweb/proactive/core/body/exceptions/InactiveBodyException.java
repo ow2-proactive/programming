@@ -44,7 +44,7 @@ public class InactiveBodyException extends ProActiveRuntimeException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public InactiveBodyException(UniversalBody body) {
         super("Cannot perform this call because body " + body.getID() + "is inactive");

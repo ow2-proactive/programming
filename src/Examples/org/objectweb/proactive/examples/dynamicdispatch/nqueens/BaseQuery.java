@@ -41,7 +41,7 @@ public class BaseQuery extends Query {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public BaseQuery(String[] args) {
         // unused constructor in NQueen Manager

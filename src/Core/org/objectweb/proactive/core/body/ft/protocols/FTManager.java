@@ -73,7 +73,7 @@ public abstract class FTManager implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     //logger
     final protected static Logger logger = ProActiveLogger.getLogger(Loggers.FAULT_TOLERANCE);

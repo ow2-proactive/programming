@@ -62,7 +62,7 @@ public class Bindings implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //	 In case of collective bindings, the interfaces of the collection can be : 
     //	  1. named (as in Fractal 2.0 spec) : they are mapped in clientInterfaceBindings according to their name
     //	  2. anonymous : they are put in a list which is mapped in clientInterfaceBindings with the type name of the collective interface 

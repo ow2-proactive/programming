@@ -77,7 +77,7 @@ public class NodeImpl implements Node, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected NodeInformation nodeInformation;
     protected ProActiveRuntime proActiveRuntime;
     protected String vnName;
@@ -248,7 +248,7 @@ public class NodeImpl implements Node, Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private String nodeName;
         private String nodeURL;
         private String protocol;

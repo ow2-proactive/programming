@@ -64,7 +64,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public static Logger logger = ProActiveLogger.getLogger(Loggers.REQUESTS);
 
@@ -82,7 +82,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
     }
 
     /**
@@ -93,7 +93,7 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private final Class<?>[] wrappedClassArray;
         // cached hashcode since CAW is final
         private final int myHashcode;

@@ -47,7 +47,7 @@ public class TimedRequestWithMixedLocation extends TimedRequestWithLocationServe
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final int MAX_TRIES = 30;
     private static int counter = 0;
     private int tries;

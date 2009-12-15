@@ -90,7 +90,7 @@ public class TestPrimitiveType extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Boolean() {
         }
@@ -103,7 +103,7 @@ public class TestPrimitiveType extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Byte() {
         }
@@ -116,7 +116,7 @@ public class TestPrimitiveType extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Char() {
         }
@@ -129,7 +129,7 @@ public class TestPrimitiveType extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Short() {
         }
@@ -142,7 +142,7 @@ public class TestPrimitiveType extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Int() {
         }
@@ -155,7 +155,7 @@ public class TestPrimitiveType extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Long() {
         }
@@ -168,7 +168,7 @@ public class TestPrimitiveType extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Float() {
         }
@@ -181,7 +181,7 @@ public class TestPrimitiveType extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Double() {
         }

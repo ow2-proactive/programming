@@ -101,7 +101,7 @@ public class TestInternalClassAO extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public int incrementEnclosingPrivateValue() {
             return TestInternalClassAO.this.enclosingPrivate++;

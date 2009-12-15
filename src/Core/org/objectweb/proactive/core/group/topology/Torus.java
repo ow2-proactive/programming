@@ -50,7 +50,7 @@ public class Torus<E> extends Ring<E> { // implements Topology2D {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** height of the two-dimensional topology group */
     protected int height; //  => Y => number of Rings
 

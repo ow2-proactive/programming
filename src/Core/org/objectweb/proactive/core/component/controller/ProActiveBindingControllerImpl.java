@@ -89,7 +89,7 @@ public class ProActiveBindingControllerImpl extends AbstractProActiveController 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected Bindings bindings; // key = clientInterfaceName ; value = Binding
 
     //    private Map<String, Map<ProActiveComponent, List<String>>> bindingsOnServerItfs = new HashMap<String, Map<ProActiveComponent,List<String>>>(0);

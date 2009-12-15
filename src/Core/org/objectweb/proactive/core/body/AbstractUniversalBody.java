@@ -75,7 +75,7 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** Unique ID of the body. */
     protected UniqueID bodyID;

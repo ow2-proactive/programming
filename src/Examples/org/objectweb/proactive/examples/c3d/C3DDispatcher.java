@@ -84,7 +84,7 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private static int IMAGE_HEIGHT = 500;
     private static int IMAGE_WIDTH = 500;

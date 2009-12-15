@@ -44,7 +44,7 @@ public class IntervalDivide implements Divide<Interval, Interval> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public Interval[] divide(Interval param, SkeletonSystem system) {
 

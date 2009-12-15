@@ -73,7 +73,7 @@ public class RemoteObjectAdapter implements RemoteObject {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * the location of the remote object this remote object adapter represents

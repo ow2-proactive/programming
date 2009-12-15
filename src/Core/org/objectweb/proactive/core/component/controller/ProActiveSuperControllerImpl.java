@@ -54,7 +54,7 @@ public class ProActiveSuperControllerImpl extends AbstractProActiveController im
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public ProActiveSuperControllerImpl(Component owner) {
         super(owner);
@@ -126,7 +126,7 @@ public class ProActiveSuperControllerImpl extends AbstractProActiveController im
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private Component[] parents;
 
         public SuperControllerState(Component[] parents) {

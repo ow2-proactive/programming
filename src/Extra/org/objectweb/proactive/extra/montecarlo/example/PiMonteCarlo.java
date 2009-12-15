@@ -63,7 +63,7 @@ public class PiMonteCarlo implements EngineTask<Double> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final String DEFAULT_DESCRIPTOR = "WorkersApplication.xml";
     public static final String DEFAULT_WORKERS_NAME = "Workers";
     public static final int DEFAULT_NITER = 1000;
@@ -90,7 +90,7 @@ public class PiMonteCarlo implements EngineTask<Double> {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         int N;
 
         MCPi(final int n) {
@@ -227,7 +227,7 @@ public class PiMonteCarlo implements EngineTask<Double> {
                 /**
                  * 
                  */
-                private static final long serialVersionUID = 42L;
+                private static final long serialVersionUID = 420L;
 
                 public Long postprocess(double[] experiencesResults) {
                     long counter = 0;

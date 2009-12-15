@@ -47,7 +47,7 @@ public class HelloApplet extends org.objectweb.proactive.examples.StandardFrame 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The active Hello object */
     private Hello activeHello;

@@ -68,7 +68,7 @@ public class NameAndHostDialog extends JDialog implements ActionListener, Proper
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String userName = "Bob";
     private JTextField userTextField;
     protected JTextField hostNameTextField;

@@ -62,7 +62,7 @@ public class PiBBP implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected int nbDecimals;
     private String deploymentDescriptorLocation_;
     private GCMApplication deploymentDescriptor_;

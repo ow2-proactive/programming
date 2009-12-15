@@ -39,7 +39,7 @@ public class ComplexArray implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final int REAL = 0;
     private static final int IMG = 1;
     private static int quantity = 0; // DEBUG

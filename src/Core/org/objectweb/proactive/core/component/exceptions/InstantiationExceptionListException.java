@@ -51,7 +51,7 @@ public class InstantiationExceptionListException extends InstantiationException 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     List<InstantiationException> exceptions;
 
     public List<InstantiationException> getExceptionList() {

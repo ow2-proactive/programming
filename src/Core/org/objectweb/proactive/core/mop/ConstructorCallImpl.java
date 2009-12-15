@@ -49,7 +49,7 @@ public class ConstructorCallImpl implements ConstructorCall, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * The array holding the arguments of the constructor

@@ -48,7 +48,7 @@ public class NodeNotificationData implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** The node */
     private Node node;
     private String vn;

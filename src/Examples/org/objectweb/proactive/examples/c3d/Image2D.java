@@ -47,7 +47,7 @@ public class Image2D implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     // integer array representing the pixels, starting from interval.yfrom * interval.width 
     private int[] pixels;

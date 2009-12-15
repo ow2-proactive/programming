@@ -53,7 +53,7 @@ public class SslRmiServerSocketFactory implements RMIServerSocketFactory, java.i
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static SSLServerSocketFactory sslServerSocketFactory = null;
 
     static {

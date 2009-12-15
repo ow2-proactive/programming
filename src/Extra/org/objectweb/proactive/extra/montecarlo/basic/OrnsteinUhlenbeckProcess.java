@@ -52,7 +52,7 @@ public class OrnsteinUhlenbeckProcess implements SimulationSet<double[]> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private int N;
     private double base;
     private double factor;

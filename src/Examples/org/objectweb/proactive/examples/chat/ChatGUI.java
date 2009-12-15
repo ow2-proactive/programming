@@ -66,7 +66,7 @@ public class ChatGUI extends JFrame {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public JTextField message = new JTextField(); //55
     public JTextField location = new JTextField(); //20
     public JTextArea text = new JTextArea(25, 55); //25,55
@@ -164,7 +164,7 @@ public class ChatGUI extends JFrame {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public QuitAction() {
             putValue(Action.NAME, "Quit");
@@ -194,7 +194,7 @@ public class ChatGUI extends JFrame {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public SendAction() {
             putValue(Action.NAME, "Send");
@@ -221,7 +221,7 @@ public class ChatGUI extends JFrame {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public MigrateAction() {
             putValue(Action.NAME, "Migrate !");

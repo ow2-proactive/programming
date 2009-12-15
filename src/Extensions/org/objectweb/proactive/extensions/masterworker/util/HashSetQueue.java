@@ -52,7 +52,7 @@ public class HashSetQueue<T> extends LinkedHashSet<T> implements Queue<T> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      *

@@ -61,7 +61,7 @@ public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializa
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     final static private Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_REMOTE_OBJECT);
 

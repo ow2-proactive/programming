@@ -77,7 +77,7 @@ public class OSGiFramework extends NotificationBroadcasterSupport implements OSG
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      *
      */

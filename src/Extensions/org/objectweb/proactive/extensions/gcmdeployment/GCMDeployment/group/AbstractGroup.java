@@ -52,7 +52,7 @@ public abstract class AbstractGroup implements Group {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected HostInfo hostInfo;
     private String commandPath;
     private Map<String, String> env;

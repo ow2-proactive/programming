@@ -41,7 +41,7 @@ public class AppletReader extends org.objectweb.proactive.examples.StandardFrame
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public ReadCanvas readerPanel;
     private ReaderDisplay display;
     private javax.swing.JComboBox policy;

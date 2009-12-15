@@ -53,7 +53,7 @@ public class UserImpl extends C3DUser implements BindingController, User {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** Mandatory ProActive empty no-arg constructor */
     public UserImpl() {

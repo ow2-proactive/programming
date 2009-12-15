@@ -50,7 +50,7 @@ public class ProActiveException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public ProActiveException() {
         super();

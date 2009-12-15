@@ -47,7 +47,7 @@ public class PrimitiveMaster implements Runnable, Serializable, BindingControlle
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final String COMPUTER_CLIENT_ITF = "compute-itf";
     private ComputeItf computer;
 

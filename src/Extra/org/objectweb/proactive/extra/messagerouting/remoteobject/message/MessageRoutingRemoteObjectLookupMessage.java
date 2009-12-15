@@ -61,7 +61,7 @@ public class MessageRoutingRemoteObjectLookupMessage extends MessageRoutingMessa
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Construct a lookup message

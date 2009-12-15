@@ -76,7 +76,7 @@ public class MOCKProActiveRuntime implements ProActiveRuntime {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     final private MOCKVMInformation info;
 
     public MOCKProActiveRuntime(String runtimeId) {

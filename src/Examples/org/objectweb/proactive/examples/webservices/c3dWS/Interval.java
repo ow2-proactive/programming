@@ -43,7 +43,7 @@ public class Interval implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public int number; // each interval has a number (nice to see the progression - no use in the code)
     public int totalImageWidth; // width of total image
     public int totalImageHeight; // height of total image

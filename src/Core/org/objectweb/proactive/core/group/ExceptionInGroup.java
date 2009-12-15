@@ -48,7 +48,7 @@ public class ExceptionInGroup extends RuntimeException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The Object who throwns the Throwable */
     private Object object;

@@ -61,7 +61,7 @@ public class ProActiveNFComponentRepresentativeImpl extends ProActiveComponentRe
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public ProActiveNFComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {

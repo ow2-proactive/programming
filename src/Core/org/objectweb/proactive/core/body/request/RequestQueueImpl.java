@@ -55,7 +55,7 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
@@ -422,7 +422,7 @@ public class RequestQueueImpl extends AbstractEventProducer implements java.io.S
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private String methodName;
 
         public RequestFilterOnMethodName() {

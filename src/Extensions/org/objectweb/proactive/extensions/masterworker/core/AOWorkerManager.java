@@ -92,7 +92,7 @@ public class AOWorkerManager implements WorkerManager, InitActive, Serializable 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      * log4j logger for the worker manager
      */

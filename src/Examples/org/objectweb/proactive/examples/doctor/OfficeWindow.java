@@ -38,7 +38,7 @@ public class OfficeWindow extends javax.swing.JFrame implements java.awt.event.A
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     DisplayPanel pan;
     javax.swing.JButton bLegend;
     javax.swing.JButton bExit;

@@ -47,7 +47,7 @@ public class EngineImpl extends C3DRenderingEngine implements RenderingEngine, E
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The name of the Engine, which is used to be displayed */
     public String getName() {

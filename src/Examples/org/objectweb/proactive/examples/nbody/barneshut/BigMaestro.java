@@ -51,7 +51,7 @@ public class BigMaestro implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** Counts the number of Maestro that have respond */
     private int nbFinished = 0;

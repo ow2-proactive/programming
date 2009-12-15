@@ -73,7 +73,7 @@ public class WSUser implements InitActive, java.io.Serializable, User, UserLogic
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** useful for showing information, if no GUI is available, or for error messages */
     private static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);

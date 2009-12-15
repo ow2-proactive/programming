@@ -43,7 +43,7 @@ public class SearchInterval implements Execute<Interval, Primes> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public Primes execute(Interval param, SkeletonSystem system) {
         Primes primes = new Primes();

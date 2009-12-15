@@ -65,7 +65,7 @@ public class BasicQueueImpl extends TaskQueue {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final String BCK_SEPARTOR = "End pending tasks backup -- Starting not started tasks backup";
     private Vector<Task> queue = new Vector<Task>();
     private int hungryLevel;

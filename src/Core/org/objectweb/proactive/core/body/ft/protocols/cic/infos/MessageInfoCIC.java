@@ -51,7 +51,7 @@ public class MessageInfoCIC implements MessageInfo {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      *
      */

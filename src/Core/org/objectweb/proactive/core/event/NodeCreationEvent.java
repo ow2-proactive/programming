@@ -52,7 +52,7 @@ public class NodeCreationEvent extends ProActiveEvent {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final int NODE_CREATED = 10;
     protected Node node;
     protected VirtualNodeInternal vn;

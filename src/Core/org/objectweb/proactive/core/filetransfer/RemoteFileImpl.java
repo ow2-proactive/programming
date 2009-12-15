@@ -48,7 +48,7 @@ public class RemoteFileImpl implements RemoteFile {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     Node node;
     File file;
     OperationStatus status;

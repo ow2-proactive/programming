@@ -45,7 +45,7 @@ public class XenServerVMMBean implements VMMBean {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String uri, user, pwd;
 
     XenServerVMMBean(String uri, String user, String pwd) {

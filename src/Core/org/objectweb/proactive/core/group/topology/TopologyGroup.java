@@ -50,7 +50,7 @@ public abstract class TopologyGroup<E> extends ProxyForGroup<E> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Constructor : a Topology is build with a group with the specified size

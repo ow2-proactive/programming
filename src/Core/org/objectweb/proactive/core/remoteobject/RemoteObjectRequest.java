@@ -42,7 +42,7 @@ public class RemoteObjectRequest extends RequestImpl {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public RemoteObjectRequest(MethodCall methodCall) {
         super(methodCall, false);

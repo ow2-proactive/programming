@@ -47,7 +47,7 @@ public class ControllerImplementation extends AbstractProActiveController implem
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     //@snippet-start component_userguide_11
     public ControllerImplementation(Component owner) {

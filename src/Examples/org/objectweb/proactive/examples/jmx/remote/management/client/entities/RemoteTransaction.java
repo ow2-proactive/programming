@@ -48,7 +48,7 @@ public class RemoteTransaction extends ManageableEntity implements Serializable 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final long ACTIVE = 0;
     public static final long COMMITED = 1;
     public static final long CANCELLED = 2;

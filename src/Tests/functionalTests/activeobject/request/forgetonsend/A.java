@@ -46,7 +46,7 @@ public class A implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static ArrayList<String> clockTicks = new ArrayList<String>();
     private static ArrayList<Boolean> sterilityCheck = new ArrayList<Boolean>();
     private String name;

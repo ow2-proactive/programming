@@ -58,7 +58,7 @@ public class NQueens implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public Skeleton<Board, Result> root;
 
     public static void main(String[] args) throws Exception {

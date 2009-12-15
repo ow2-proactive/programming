@@ -50,7 +50,7 @@ public class AOTaskPool extends TaskPool implements RunActive, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public AOTaskPool() {
         super();
@@ -79,7 +79,7 @@ public class AOTaskPool extends TaskPool implements RunActive, Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private String allowedMethodNames;
 
         public RequestFilterOnAllowedMethods(String allowedMethodNames) {

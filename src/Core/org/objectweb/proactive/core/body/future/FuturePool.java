@@ -65,7 +65,7 @@ public class FuturePool extends Object implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     //
     // -- STATIC MEMBERS -----------------------------------------------
@@ -627,7 +627,7 @@ public class FuturePool extends Object implements java.io.Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         // bodies that have to be updated
         private ArrayList<UniversalBody> dests;

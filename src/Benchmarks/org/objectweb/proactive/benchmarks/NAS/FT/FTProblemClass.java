@@ -48,7 +48,7 @@ public class FTProblemClass extends NASProblemClass {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public int np1;
     public int np2;
     public int np;

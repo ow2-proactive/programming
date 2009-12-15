@@ -41,7 +41,7 @@ public class EmptyFuture implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String name;
 
     public EmptyFuture() {

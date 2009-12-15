@@ -54,7 +54,7 @@ public class PenguinControler implements org.objectweb.proactive.RunActive, Peng
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //The image panel
     private transient PenguinApplet display;
     @SuppressWarnings("unchecked")

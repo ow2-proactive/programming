@@ -100,7 +100,7 @@ public class MSFrame extends javax.swing.JFrame {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      *
      */
@@ -325,7 +325,7 @@ public class MSFrame extends javax.swing.JFrame {
                     /**
                      * 
                      */
-                    private static final long serialVersionUID = 42L;
+                    private static final long serialVersionUID = 420L;
 
                     /**
                      *
@@ -395,7 +395,7 @@ public class MSFrame extends javax.swing.JFrame {
                     /**
                      * 
                      */
-                    private static final long serialVersionUID = 42L;
+                    private static final long serialVersionUID = 420L;
 
                     /**
                      *
@@ -477,7 +477,7 @@ public class MSFrame extends javax.swing.JFrame {
                     /**
                      * 
                      */
-                    private static final long serialVersionUID = 42L;
+                    private static final long serialVersionUID = 420L;
 
                     /**
                      *
@@ -566,7 +566,7 @@ public class MSFrame extends javax.swing.JFrame {
                             /**
                              * 
                              */
-                            private static final long serialVersionUID = 42L;
+                            private static final long serialVersionUID = 420L;
 
                             /**
                              *
@@ -588,7 +588,7 @@ public class MSFrame extends javax.swing.JFrame {
                             /**
                              * 
                              */
-                            private static final long serialVersionUID = 42L;
+                            private static final long serialVersionUID = 420L;
 
                             /**
                              *

@@ -51,7 +51,7 @@ public class GlobusProcess extends AbstractExternalProcessDecorator {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected JVMProcessImpl jvmProcess;
     protected String count = "1";
     protected String stderr = null;

@@ -44,7 +44,7 @@ public abstract class BundleNotification extends Notification {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final int BUNDLE_ADDED = 0;
     public static final int BUNDLE_STARTED = 1;
     public static final int BUNDLE_STOPPED = 2;

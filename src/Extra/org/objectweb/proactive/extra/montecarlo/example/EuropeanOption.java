@@ -56,7 +56,7 @@ public class EuropeanOption implements EngineTask<double[]> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final String DEFAULT_DESCRIPTOR = "WorkersApplication.xml";
     public static final String DEFAULT_WORKERS_NAME = "Workers";
     public static final double DEFAULT_SPOT_PRICE = 100.0;
@@ -111,7 +111,7 @@ public class EuropeanOption implements EngineTask<double[]> {
                 /**
                      * 
                      */
-                private static final long serialVersionUID = 42L;
+                private static final long serialVersionUID = 420L;
 
                 // Compute the payoff of both call [index 1] and put [index 0]
                 // options

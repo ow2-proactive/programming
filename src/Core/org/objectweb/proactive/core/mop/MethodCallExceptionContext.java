@@ -43,7 +43,7 @@ public class MethodCallExceptionContext implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * If the caller catches some RuntimeException, we have to wait for all calls

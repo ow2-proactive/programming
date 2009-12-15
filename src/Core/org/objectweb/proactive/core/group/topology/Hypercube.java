@@ -45,7 +45,7 @@ public class Hypercube<E> extends TopologyGroup<E> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public Hypercube(Group<E> g, int size) throws ConstructionOfReifiedObjectFailedException {
         super(g, size);

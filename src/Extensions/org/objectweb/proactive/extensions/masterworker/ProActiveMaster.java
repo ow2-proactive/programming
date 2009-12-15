@@ -93,7 +93,7 @@ public class ProActiveMaster<T extends Task<R>, R extends Serializable> implemen
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     protected ProActiveMaster<T, R> activeThis = null;
 

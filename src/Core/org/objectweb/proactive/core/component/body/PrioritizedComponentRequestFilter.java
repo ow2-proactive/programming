@@ -49,7 +49,7 @@ public class PrioritizedComponentRequestFilter extends NFRequestFilterImpl {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     @Override
     public boolean acceptRequest(Request request) {

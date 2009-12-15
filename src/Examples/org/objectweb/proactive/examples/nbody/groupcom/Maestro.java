@@ -49,7 +49,7 @@ public class Maestro implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Domain domainGroup;
     private int nbFinished = 0;
     private int iter = 0;

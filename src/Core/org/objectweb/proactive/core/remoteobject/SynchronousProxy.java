@@ -59,7 +59,7 @@ public class SynchronousProxy implements Proxy, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected RemoteObject remoteObject;
 
     public SynchronousProxy(ConstructorCall contructorCall, Object[] params) throws ProActiveException {

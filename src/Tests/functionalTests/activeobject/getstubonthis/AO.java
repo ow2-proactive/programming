@@ -47,7 +47,7 @@ public class AO implements Serializable, InitActive {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private boolean ok = false;
 
     public AO() {

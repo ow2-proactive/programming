@@ -62,7 +62,7 @@ public abstract class AbstractProActiveController implements ProActiveController
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private boolean isInternal = true;
     private InterfaceType interfaceType;
     final protected static Logger controllerLogger = ProActiveLogger

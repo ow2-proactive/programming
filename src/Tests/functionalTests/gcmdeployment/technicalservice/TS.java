@@ -45,7 +45,7 @@ public class TS implements TechnicalService {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String arg1;
     private String arg2;
 

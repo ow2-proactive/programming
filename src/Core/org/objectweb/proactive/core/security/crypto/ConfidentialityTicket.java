@@ -41,7 +41,7 @@ public class ConfidentialityTicket implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public long timestamp;
     public long random1;
     public long random2;

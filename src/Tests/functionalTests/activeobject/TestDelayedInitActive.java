@@ -74,7 +74,7 @@ public class TestDelayedInitActive extends FunctionalTest {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public void initActivity(Body body) {
             // Enlarge the race condition window

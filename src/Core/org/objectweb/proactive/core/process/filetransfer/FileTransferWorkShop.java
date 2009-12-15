@@ -63,7 +63,7 @@ public class FileTransferWorkShop implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final String PROCESSDEFAULT_KEYWORD = "processDefault";
     private static final String IMPLICIT_KEYWORD = "implicit";
     private static final String[] ALLOWED_COPY_PROTOCOLS = { PROCESSDEFAULT_KEYWORD, "scp", "rcp",
@@ -508,7 +508,7 @@ public class FileTransferWorkShop implements Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         /* FileTransferQueue specific information */
         String prefix;
         String hostname;

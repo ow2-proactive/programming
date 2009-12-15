@@ -125,7 +125,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final String COMPONENT_PARAMETERS_KEY = "component-parameters";
     public static final String SYNCHRONOUS_COMPOSITE_COMPONENT_KEY = "synchronous-composite";
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
@@ -325,7 +325,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                 long sequenceID, MessageTags tags) {
@@ -345,7 +345,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public ReplyReceiver newReplyReceiver() {
             return new org.objectweb.proactive.core.body.reply.ReplyReceiverImpl();
@@ -357,7 +357,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public RequestReceiver newRequestReceiver() {
             if (ProActiveMetaObjectFactory.this.parameters.containsKey(SYNCHRONOUS_COMPOSITE_COMPONENT_KEY) &&
@@ -374,7 +374,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public BlockingRequestQueue newRequestQueue(UniqueID ownerID) {
             if ("true".equals(ProActiveMetaObjectFactory.this.parameters
@@ -398,7 +398,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public MigrationManager newMigrationManager() {
             //########### example de code pour les nouvelles factories
@@ -461,7 +461,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public ThreadStore newThreadStore() {
             return new org.objectweb.proactive.core.util.ThreadStoreImpl();
@@ -474,7 +474,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public ProActiveSPMDGroupManager newProActiveSPMDGroupManager() {
             return new ProActiveSPMDGroupManager();
@@ -486,7 +486,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         // COMPONENTS
         private ComponentParameters componentParameters;
 
@@ -504,7 +504,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public FTManager newFTManager(int protocolSelector) {
             switch (protocolSelector) {
@@ -537,7 +537,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Debugger newDebugger() {
             return new DebuggerImpl();
@@ -550,7 +550,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         /**
          * @see MessageTagsFactory#newMessageTags()

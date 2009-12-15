@@ -49,7 +49,7 @@ public class ConsolePrimeOutputListener implements PrimeOutputListener, java.io.
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private long startTime;
     private int numberCounter;

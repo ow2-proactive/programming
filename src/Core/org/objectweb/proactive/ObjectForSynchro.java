@@ -58,7 +58,7 @@ public class ObjectForSynchro extends Object implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * No arg constructor for Serializable

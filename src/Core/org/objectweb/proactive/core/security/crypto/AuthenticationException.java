@@ -38,7 +38,7 @@ public class AuthenticationException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     String type;
 
     public AuthenticationException(String type) {

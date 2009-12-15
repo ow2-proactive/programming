@@ -52,7 +52,7 @@ public class CruiseControlApplet extends org.objectweb.proactive.examples.Standa
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * the Pane associated with the Active Object CruiseControl

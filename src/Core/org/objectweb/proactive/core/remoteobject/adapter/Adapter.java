@@ -52,7 +52,7 @@ public abstract class Adapter<T> implements Serializable, StubObject, Cloneable 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      * the generated stub
      */

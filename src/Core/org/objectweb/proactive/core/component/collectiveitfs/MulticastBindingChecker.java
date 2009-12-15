@@ -66,7 +66,7 @@ public class MulticastBindingChecker implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * client method List&lst;A&gt; foo (B, List<C>) throws E; <br>

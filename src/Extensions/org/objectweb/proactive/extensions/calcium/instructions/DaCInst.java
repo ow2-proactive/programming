@@ -52,7 +52,7 @@ public class DaCInst<P extends Serializable, R extends Serializable> implements 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     Divide<P, P> div;
     Conquer<R, R> conq;
     Condition<P> cond;

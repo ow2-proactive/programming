@@ -49,7 +49,7 @@ public class A implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private B activeB;
 
     public A() {
@@ -65,7 +65,7 @@ public class A implements Serializable {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public Tag apply() {
                 return this;
@@ -81,7 +81,7 @@ public class A implements Serializable {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public Tag apply() {
                 return null;
@@ -96,7 +96,7 @@ public class A implements Serializable {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public Tag apply() {
                 Integer i = (Integer) getLocalMemory().get("MT_00");
@@ -121,7 +121,7 @@ public class A implements Serializable {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public Tag apply() {
                 return this;
@@ -136,7 +136,7 @@ public class A implements Serializable {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public Tag apply() {
                 return this;
@@ -151,7 +151,7 @@ public class A implements Serializable {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public Tag apply() {
                 return this;
@@ -173,7 +173,7 @@ public class A implements Serializable {
             /**
              * 
              */
-            private static final long serialVersionUID = 42L;
+            private static final long serialVersionUID = 420L;
 
             public Tag apply() {
                 return this;

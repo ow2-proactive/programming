@@ -51,7 +51,7 @@ public class MyInputInterceptor extends AbstractProActiveController implements I
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public MyInputInterceptor(Component owner) {
         super(owner);

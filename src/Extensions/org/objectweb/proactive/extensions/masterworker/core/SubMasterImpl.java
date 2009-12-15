@@ -55,7 +55,7 @@ public class SubMasterImpl implements SubMaster<Task<Serializable>, Serializable
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private final MasterIntern master;
     private final String originatorName;
     private boolean initCalled = false;

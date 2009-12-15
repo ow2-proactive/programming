@@ -98,7 +98,7 @@ public class GatherFuturesHandler implements RunActive, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     List<ItfID> senders;
     List<?> resultOfGatheredInvocation;
     Throwable exceptionToRaise;

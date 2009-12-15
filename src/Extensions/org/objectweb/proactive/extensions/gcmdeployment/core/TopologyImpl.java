@@ -56,7 +56,7 @@ public class TopologyImpl implements Topology, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected long id;
     protected String applicationDescriptorPath;
     protected String deploymentDescriptorPath;

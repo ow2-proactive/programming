@@ -118,7 +118,7 @@ public class ProActiveConfiguration {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         HashMap<String, String> exportedKeys = new HashMap<String, String>();
 
         public synchronized void putAllFromSystem(Map<? extends Object, ? extends Object> t) {

@@ -47,7 +47,7 @@ public class GroupOAR extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     final static public int BEST = -1;
     protected static final String DEFAULT_HOSTS_NUMBER = "1";
     protected String hostNumber = DEFAULT_HOSTS_NUMBER;

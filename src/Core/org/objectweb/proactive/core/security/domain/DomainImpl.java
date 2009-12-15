@@ -55,7 +55,7 @@ public class DomainImpl implements SecurityDomain {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private PolicyServer policyServer;
     private String name;
 

@@ -63,7 +63,7 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /**
      * 
      */

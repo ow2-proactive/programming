@@ -48,7 +48,7 @@ public class MigrationStrategyImpl implements java.io.Serializable, MigrationStr
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     private java.util.Vector<Destination> table;
     private int index;

@@ -51,7 +51,7 @@ public class ProActiveTimeoutException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public ProActiveTimeoutException() {
         super();

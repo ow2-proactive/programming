@@ -66,7 +66,7 @@ public class ExampleProcessing implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

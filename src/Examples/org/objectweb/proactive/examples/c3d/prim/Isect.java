@@ -43,7 +43,7 @@ public class Isect implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Remember, the ray has two vecs that define it : P and D.

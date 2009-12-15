@@ -45,7 +45,7 @@ public class JoinPrimes implements Conquer<Primes, Primes> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public Primes conquer(Primes[] p, SkeletonSystem system) {
         Primes conquered = new Primes();

@@ -68,7 +68,7 @@ public class ProActiveConnector implements JMXConnector, Serializable, Notificat
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final int CLOSED = 0;
     private static final int OPEN = 1;
     private ProActiveConnection connection;

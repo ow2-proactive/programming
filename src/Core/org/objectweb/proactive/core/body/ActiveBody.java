@@ -74,7 +74,7 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.BODY);
 
@@ -314,7 +314,7 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public void runActivity(Body body) {
             new Service(body).fifoServing();

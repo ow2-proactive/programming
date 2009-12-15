@@ -38,7 +38,7 @@ public class JMXException extends Exception {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public JMXException(Throwable t) {
         super(t);

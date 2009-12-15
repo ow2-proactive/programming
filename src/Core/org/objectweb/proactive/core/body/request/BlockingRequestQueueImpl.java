@@ -59,7 +59,7 @@ public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.i
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //

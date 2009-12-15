@@ -43,7 +43,7 @@ public class GCMRuntimeRegistrationNotificationData implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private ProActiveRuntime childRuntime;
     private long deploymentId;
     private long topologyId;

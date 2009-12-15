@@ -48,7 +48,7 @@ public class BodyNotificationData implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** The unique id of the body */
     private UniqueID id;

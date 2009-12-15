@@ -44,7 +44,7 @@ public class RuleEntities extends ArrayList<RuleEntity> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      *

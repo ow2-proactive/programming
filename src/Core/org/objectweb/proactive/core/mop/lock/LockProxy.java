@@ -49,7 +49,7 @@ public class LockProxy implements Lock, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     // lock id
     private int id;

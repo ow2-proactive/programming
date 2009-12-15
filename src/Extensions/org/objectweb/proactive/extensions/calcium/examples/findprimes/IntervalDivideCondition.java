@@ -43,7 +43,7 @@ public class IntervalDivideCondition implements Condition<Interval> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public boolean condition(Interval params, SkeletonSystem system) {
         return (params.max - params.min) > params.solvableSize;

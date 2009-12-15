@@ -49,7 +49,7 @@ public class HelloExecutableMPI implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     //@snippet-break Hello_MPI_example
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 

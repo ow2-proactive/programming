@@ -52,7 +52,7 @@ public class ProActiveEvent extends java.util.EventObject implements java.io.Ser
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     public static final int GENERIC_TYPE = -1;
 

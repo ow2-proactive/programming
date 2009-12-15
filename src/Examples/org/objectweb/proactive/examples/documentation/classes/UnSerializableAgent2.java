@@ -52,7 +52,7 @@ public class UnSerializableAgent2 implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private transient BigInteger toBeSaved; //will be null after serialization
 
     /**

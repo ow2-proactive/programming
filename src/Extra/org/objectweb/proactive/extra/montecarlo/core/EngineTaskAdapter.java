@@ -52,7 +52,7 @@ public class EngineTaskAdapter<T extends Serializable> implements DivisibleTask<
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private EngineTask<T> task;
     private SubMasterLock lock = new SubMasterLock();
 

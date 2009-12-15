@@ -58,7 +58,7 @@ public class ComponentParameters implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private ComponentType componentType;
     private ComponentType componentNFType;
     private ControllerDescription controllerDesc;

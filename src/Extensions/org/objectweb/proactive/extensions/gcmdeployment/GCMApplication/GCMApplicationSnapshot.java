@@ -58,7 +58,7 @@ public class GCMApplicationSnapshot implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     final private boolean isStarted;
     final private Map<String, GCMVirtualNodeSnapshot> vns;
     final private VariableContract variableContract;

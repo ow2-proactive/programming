@@ -52,7 +52,7 @@ public class GeometricBrownianMotionCashDividend implements SimulationSet<double
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private double s0, Y, r, sigma, Dt, t, T;
     private int N;
 

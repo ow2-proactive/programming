@@ -48,7 +48,7 @@ public class Maestro implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private int nbFinished = 0; // iteration related fields
     private int iter = 0; // iteration related fields
     private int maxIter; // iteration related fields

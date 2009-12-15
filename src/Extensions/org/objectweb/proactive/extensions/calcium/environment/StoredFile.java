@@ -50,7 +50,7 @@ public class StoredFile implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_SYSTEM);
     public long fileId;
     public File location;

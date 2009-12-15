@@ -44,7 +44,7 @@ public class GroupGlobus extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String count;
     private String queue;
     private String maxTime;

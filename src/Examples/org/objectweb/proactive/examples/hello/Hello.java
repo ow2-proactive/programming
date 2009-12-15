@@ -55,7 +55,7 @@ public class Hello implements java.io.Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private final String message = "Hello World!";
     private java.text.DateFormat dateFormat = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

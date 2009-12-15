@@ -48,7 +48,7 @@ public class GroupCCS extends AbstractGroup {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private String runTime = null;
     private int cpus = 0;
     private String stdout = null;

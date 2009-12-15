@@ -55,7 +55,7 @@ public class ActivePrimeContainer implements PrimeNumber, java.io.Serializable, 
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private PrimeNumber first;
     private int size;
     private int maxSize;

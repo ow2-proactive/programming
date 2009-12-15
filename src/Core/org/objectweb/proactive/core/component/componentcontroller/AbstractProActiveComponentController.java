@@ -53,7 +53,7 @@ public abstract class AbstractProActiveComponentController implements Serializab
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     protected static Logger controllerLogger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
     ProActiveComponent hostComponent;
 

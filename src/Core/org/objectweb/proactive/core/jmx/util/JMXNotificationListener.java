@@ -64,7 +64,7 @@ public class JMXNotificationListener implements NotificationListener, ProActiveI
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private transient Logger logger = ProActiveLogger.getLogger(Loggers.JMX);
 
     public JMXNotificationListener() {

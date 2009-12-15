@@ -44,7 +44,7 @@ public class AODeadlock2 implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private AODeadlock1 ao1;
 
     public AODeadlock2() {

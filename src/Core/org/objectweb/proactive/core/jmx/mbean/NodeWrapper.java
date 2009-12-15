@@ -68,7 +68,7 @@ public class NodeWrapper extends NotificationBroadcasterSupport implements Seria
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /** JMX Logger */
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);

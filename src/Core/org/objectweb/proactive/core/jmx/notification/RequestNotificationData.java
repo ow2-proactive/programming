@@ -43,7 +43,7 @@ public class RequestNotificationData implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private UniqueID source;
     private UniqueID destination;
     private String methodName;

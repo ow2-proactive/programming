@@ -90,7 +90,7 @@ public class BundleInfo extends NotificationBroadcasterSupport implements Bundle
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public static final int INSTALLED = Bundle.INSTALLED;
     public static final int ACTIVE = Bundle.ACTIVE;
     public static final int RESOLVED = Bundle.RESOLVED;

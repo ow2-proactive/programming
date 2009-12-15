@@ -41,7 +41,7 @@ public class StatsImpl implements Stats {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private long computationTime;
     private long waitingTime;
     private long processingTime;

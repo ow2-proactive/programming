@@ -55,7 +55,7 @@ public class ActiveObjectCreationException extends ProActiveException {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * Constructs a <code>ProActiveException</code> with no specified

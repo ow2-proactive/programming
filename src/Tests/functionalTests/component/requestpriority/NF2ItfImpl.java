@@ -51,7 +51,7 @@ public class NF2ItfImpl extends AbstractProActiveController implements NF2Itf {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     FItf me = null;
 
     public NF2ItfImpl(Component owner) {

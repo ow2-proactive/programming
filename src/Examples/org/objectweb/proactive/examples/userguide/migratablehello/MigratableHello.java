@@ -49,7 +49,7 @@ public class MigratableHello extends InitializedHelloWorld implements Serializab
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     @MigrationSignal
     public void packUpMyVariablesAndHitTheRoad(Node whereTo) {

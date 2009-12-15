@@ -105,7 +105,7 @@ public class TeraSort {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private List<Node> nodes;
         private Dispatcher[] dispatchers;
         private Sorter[] sorters;
@@ -181,7 +181,7 @@ public class TeraSort {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private byte[] buf;
 
         public Record(byte[] line) {
@@ -230,7 +230,7 @@ public class TeraSort {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
         private int id;
         private ArrayList<Record> lines;
 
@@ -276,7 +276,7 @@ public class TeraSort {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         private Sorter[] sorters;
 

@@ -54,7 +54,7 @@ public class Election implements RunActive, Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private static final int WAITMSECS = 4000; // Duration of one election round in milliseconds
     private C3DDispatcher c3ddispatcher; // to give back results
     private int nbUsers = 0; // To know when the election is over
@@ -162,7 +162,7 @@ public class Election implements RunActive, Serializable {
         /**
          * 
          */
-        private static final long serialVersionUID = 42L;
+        private static final long serialVersionUID = 420L;
 
         public Vec winner() {
             if (size() == 1) {

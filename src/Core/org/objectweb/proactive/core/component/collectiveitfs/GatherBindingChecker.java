@@ -57,7 +57,7 @@ public class GatherBindingChecker implements Serializable {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
 
     /**
      * client method <code>B foo (A) throws E;<code><br>

@@ -45,7 +45,7 @@ public class QueryExtern implements Serializable, Task<Pair<Long, Long>> {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private Query query;
 
     public QueryExtern(Query query) {

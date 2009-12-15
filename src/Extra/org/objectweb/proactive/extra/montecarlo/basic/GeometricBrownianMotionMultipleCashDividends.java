@@ -52,7 +52,7 @@ public class GeometricBrownianMotionMultipleCashDividends implements SimulationS
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     private double Y, sigma;
     private double T;
     private int N;

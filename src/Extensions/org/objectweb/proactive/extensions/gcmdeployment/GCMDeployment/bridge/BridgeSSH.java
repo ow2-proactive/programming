@@ -42,7 +42,7 @@ public class BridgeSSH extends AbstractBridge {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     public final static String DEFAULT_SSHPATH = "ssh";
     private PathElement privateKey;
     private String commandOptions;

@@ -72,7 +72,7 @@ public class AOWorker implements InitActive, Serializable, Worker {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     /** log4j logger of the worker */
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER_WORKERS);
     protected static final boolean debug = logger.isDebugEnabled();

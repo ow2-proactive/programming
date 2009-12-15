@@ -51,7 +51,7 @@ public class NF1NF2RequestFilter implements RequestFilter {
     /**
      * 
      */
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 420L;
     PriorityController pc = null;
     NFRequestFilterImpl nfRequestFilter = null;
 
