@@ -39,7 +39,7 @@ import java.net.UnknownHostException;
 
 
 public class DebuggerSocketClient extends AbstractDebuggerSocket {
-    private static final long serialVersionUID = -3968459071256257021L;
+    private static final long serialVersionUID = 420L;
 
     /** Is the client connected ? */
     private boolean connected;

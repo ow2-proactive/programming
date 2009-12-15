@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public class ArrayListSynchronized<E> extends ArrayList<E> {
 
-    private static final long serialVersionUID = 5663142567515737172L;
+    private static final long serialVersionUID = 420L;
 
     @Override
     public synchronized boolean add(E e) {
