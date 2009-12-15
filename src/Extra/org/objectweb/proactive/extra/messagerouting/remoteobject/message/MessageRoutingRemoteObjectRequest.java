@@ -40,6 +40,7 @@ import java.net.URI;
 
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.extra.messagerouting.client.Agent;
@@ -104,7 +105,7 @@ public class MessageRoutingRemoteObjectRequest extends MessageRoutingMessage imp
                 return ro.receiveMessage(this.request);
             }
         } catch (Exception e) {
-            return new SynchronousReplyImpl(new MethodCallResult(null, new IOException(uri +
+            return new SynchronousReplyImpl(new MethodCallResult(null, new IOException6(uri +
                 " failed to process message " + this.request, e)));
         }
     }
