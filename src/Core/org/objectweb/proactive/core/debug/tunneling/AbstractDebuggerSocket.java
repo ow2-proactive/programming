@@ -59,19 +59,18 @@ public abstract class AbstractDebuggerSocket {
         keepReading = true;
         new Thread() {
             public void run() {
-                while (keepReading) {
-                    try {
+                try {
+                    while (keepReading) {
                         if (connection != null && connection.isActive()) {
                             Data data = read();
                             if (data != null && !data.isEmpty()) {
                                 target.write(data);
                             }
                         }
-                    } catch (Exception e) {
-                        //                        e.printStackTrace();
-                        stopRead();
-                        closeConnection();
                     }
+                } catch (IOException e) {
+                    stopRead();
+                    closeConnection();
                 }
             }
         }.start();
@@ -132,7 +131,7 @@ public abstract class AbstractDebuggerSocket {
             return data;
         } catch (SocketException e) {
             sendError(e);
-            return null;
+            throw e;
         }
     }
 
@@ -150,6 +149,7 @@ public abstract class AbstractDebuggerSocket {
             connection.write(data);
         } catch (SocketException e) {
             sendError(e);
+            throw e;
         }
     }
 
