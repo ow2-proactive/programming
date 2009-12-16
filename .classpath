@@ -57,14 +57,11 @@
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
 	<classpathentry kind="lib" path="lib/moduleloader.jar"/>
-	<classpathentry kind="lib" path="lib/njs_client.jar"/>
 	<classpathentry kind="lib" path="lib/oscar.jar"/>
 	<classpathentry kind="lib" path="lib/osgi.jar"/>
 	<classpathentry kind="lib" path="lib/ow_deployment_scheduling.jar"/>
 	<classpathentry kind="lib" path="lib/ptolemy.jar"/>
 	<classpathentry kind="lib" path="lib/puretls.jar"/>
-	<classpathentry kind="lib" path="lib/saxon8-dom.jar"/>
-	<classpathentry kind="lib" path="lib/saxon8.jar"/>
 	<classpathentry kind="lib" path="lib/servicebinder.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.5-6.1.11.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
