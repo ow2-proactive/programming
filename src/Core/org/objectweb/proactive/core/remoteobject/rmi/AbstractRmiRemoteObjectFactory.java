@@ -36,11 +36,15 @@ package org.objectweb.proactive.core.remoteobject.rmi;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URI;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
@@ -75,6 +79,29 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
     protected static RegistryHelper registryHelper;
 
     static {
+        /* Add a custom socket factory to add a connect timeout */
+        if (PAProperties.PA_RMI_CONNECT_TIMEOUT.isSet()) {
+            try {
+                RMISocketFactory.setSocketFactory(new RMISocketFactory() {
+                    public Socket createSocket(String host, int port) throws IOException {
+                        Socket socket = new Socket();
+                        socket.connect(new InetSocketAddress(host, port), PAProperties.PA_RMI_CONNECT_TIMEOUT
+                                .getValueAsInt());
+                        return socket;
+                    }
+
+                    public ServerSocket createServerSocket(int port) throws IOException {
+                        return new ServerSocket(port);
+                    }
+                });
+            } catch (IOException e) {
+                LOGGER_RO
+                        .warn(
+                                "Failed to register a RMI socket factory supporting Connect timeout. The default one will be used",
+                                e);
+                e.printStackTrace();
+            }
+        }
 
         createClassServer();
         createRegistry();

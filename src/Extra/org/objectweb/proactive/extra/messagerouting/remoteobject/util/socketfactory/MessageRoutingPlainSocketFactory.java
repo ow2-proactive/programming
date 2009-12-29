@@ -35,7 +35,10 @@
 package org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+
+import org.objectweb.proactive.core.config.PAProperties;
 
 
 /**
@@ -47,7 +50,11 @@ import java.net.Socket;
 public class MessageRoutingPlainSocketFactory implements MessageRoutingSocketFactorySPI {
 
     public Socket createSocket(String host, int port) throws IOException {
-        return new Socket(host, port);
+        Socket socket = new Socket();
+        int timeout = PAProperties.PA_PAMR_CONNECT_TIMEOUT.isSet() ? PAProperties.PA_PAMR_CONNECT_TIMEOUT
+                .getValueAsInt() : 0;
+        socket.connect(new InetSocketAddress(host, port), timeout);
+        return socket;
     }
 
     public String getAlias() {

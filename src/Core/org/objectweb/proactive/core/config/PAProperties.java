@@ -298,6 +298,13 @@ public enum PAProperties {
     PA_RMI_PORT("proactive.rmi.port", PAPropertiesType.INTEGER), JAVA_RMI_SERVER_CODEBASE(
             "java.rmi.server.codebase", PAPropertiesType.STRING, true),
 
+    /**
+     * Sockets used by the RMI remote object factory connect to the remote server 
+     * with a specified timeout value. A timeout of zero is interpreted as an infinite timeout. 
+     * The connection will then block until established or an error occurs. 
+     */
+    PA_RMI_CONNECT_TIMEOUT("proactive.rmi.connect_timeout", PAPropertiesType.INTEGER),
+
     PA_CODEBASE("proactive.codebase", PAPropertiesType.STRING, true),
 
     PA_CLASSLOADING_USEHTTP("proactive.classloading.useHTTP", PAPropertiesType.BOOLEAN, false),
@@ -337,6 +344,13 @@ public enum PAProperties {
      * for the Jetty syntax reference.
      */
     PA_HTTP_JETTY_XML("proactive.http.jetty.xml", PAPropertiesType.STRING),
+
+    /**
+     * Sockets used by the HTTP remote object factory connect to the remote server 
+     * with a specified timeout value. A timeout of zero is interpreted as an infinite timeout. 
+     * The connection will then block until established or an error occurs. 
+     */
+    PA_HTTP_CONNECT_TIMEOUT("proactive.http.connect_timeout", PAPropertiesType.INTEGER),
 
     /* ------------------------------------
      *  COMPONENTS
@@ -409,6 +423,17 @@ public enum PAProperties {
 
     // Not documented, temporary workaround until 4.3.0
     PA_RMISSH_REMOTE_PORT("proactive.communication.rmissh.port", PAPropertiesType.INTEGER),
+
+    /* ------------------------------------
+     *  PAMR 
+     */
+
+    /**
+     * Sockets used by the PAMR remote object factory connect to the remote server 
+     * with a specified timeout value. A timeout of zero is interpreted as an infinite timeout. 
+     * The connection will then block until established or an error occurs. 
+     */
+    PA_PAMR_CONNECT_TIMEOUT("proactive.communication.pamr.connect_timeout", PAPropertiesType.INTEGER),
 
     /* ------------------------------------
      *  PAMR over SSH
