@@ -46,7 +46,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
- * Implementation of the {@link ProActiveWSCaller} interface using the {@link http://ws.apache.org/axis2/ Axis2} API.
+ * Implementation of the {@link ProActiveWSCaller} interface using the <a href="http://ws.apache.org/axis2/">
+ * Axis2</a> API.
  *
  * @author The ProActive Team
  * @see ProActiveWSCaller

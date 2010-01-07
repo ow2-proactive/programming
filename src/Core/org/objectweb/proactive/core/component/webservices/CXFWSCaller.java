@@ -43,7 +43,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
- * Implementation of the {@link ProActiveWSCaller} interface using the {@link http://cxf.apache.org/ CXF} API.
+ * Implementation of the {@link ProActiveWSCaller} interface using the <a href="http://cxf.apache.org/">CXF</a>
+ * API.
  *
  * @author The ProActive Team
  * @see ProActiveWSCaller

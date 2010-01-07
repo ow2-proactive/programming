@@ -48,7 +48,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * <br>
  * The class in charge to call the web service must implement the {@link ProActiveWSCaller} interface.
  * <br>
- * By default, the class {@link Axis2WSCaller}, using the {@link http://ws.apache.org/axis2/ Axis2} API,
+ * By default, the class {@link Axis2WSCaller}, using the <a href="http://ws.apache.org/axis2/">Axis2</a> API,
  * is used.
  *
  * @author The ProActive Team
