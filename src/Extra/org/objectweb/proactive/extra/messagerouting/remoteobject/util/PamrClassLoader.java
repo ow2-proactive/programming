@@ -1,0 +1,169 @@
+/*
+ * ################################################################
+ *
+ * ProActive: The Java(TM) library for Parallel, Distributed,
+ *            Concurrent computing with Security and Mobility
+ *
+ * Copyright (C) 1997-2009 INRIA/University of Nice-Sophia Antipolis
+ * Contact: proactive@objectweb.org
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version
+ * 2 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
+ *  Contributor(s):
+ *
+ * ################################################################
+ */
+package org.objectweb.proactive.extra.messagerouting.remoteobject.util;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.runtime.ProActiveRuntime;
+import org.objectweb.proactive.core.runtime.RuntimeFactory;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+
+/**
+ *
+ * @author fabratu
+ * @version %G%, %I%
+ * @since ProActive 4.10
+ */
+public class PamrClassLoader {
+
+    final static private Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_CLASSLOADING);
+
+    private final Map<String, Loader> loaderCache;
+
+    public PamrClassLoader() {
+        loaderCache = new ConcurrentHashMap<String, Loader>();
+    }
+
+    public Class<?> loadClass(String clazzName, String runtimeURL) throws ClassNotFoundException {
+
+        ClassLoader parent = Thread.currentThread().getContextClassLoader();
+        // attempt to load using the parent
+        try {
+            return parent.loadClass(clazzName);
+        } catch (ClassNotFoundException e) {
+            try {
+                Loader pamrLoader = getOrCreateLoader(parent, runtimeURL);
+                return pamrLoader.loadClass(clazzName);
+            } catch (ProActiveException proActiveEx) {
+                if (logger.isDebugEnabled()) {
+                    logger
+                            .debug("Cannot load " +
+                                clazzName +
+                                " using the pamr class loader, reason: cannot look up the runtime where the class data is, at url " +
+                                runtimeURL);
+                }
+                throw e;
+            }
+        }
+    }
+
+    private Loader getOrCreateLoader(ClassLoader parent, String runtimeURL) throws ProActiveException {
+
+        synchronized (loaderCache) {
+            if (loaderCache.containsKey(runtimeURL)) {
+                if (logger.isTraceEnabled()) {
+                    logger.trace("ClassLoader for the URL " + runtimeURL + " found in the cache ");
+                }
+                return loaderCache.get(runtimeURL);
+            }
+
+            // we know that it does not contain the key
+            // hold the loaderCache lock; we want the lookup operation to be performed only once
+            // TODO the lock should be on a per-runtimeURL basis
+            if (logger.isTraceEnabled()) {
+                logger.trace("Did not find ClassLoader for the URL " + runtimeURL +
+                    " in the cache, creating a new one...");
+            }
+            // lookup the remote part
+            ProActiveRuntime rt = RuntimeFactory.getRuntime(runtimeURL);
+            Loader loader = new Loader(parent, rt);
+            loaderCache.put(runtimeURL, loader);
+            if (logger.isTraceEnabled()) {
+                logger.trace("Succesfully created a new ClassLoader for the URL " + runtimeURL);
+            }
+            return loader;
+        }
+
+    }
+
+    private static class Loader extends ClassLoader {
+
+        private final ProActiveRuntime clazzLocation;
+
+        public Loader(ClassLoader parent, ProActiveRuntime runtime) {
+            super(parent);
+            this.clazzLocation = runtime;
+        }
+
+        protected Class<?> findClass(String clazzName) throws ClassNotFoundException {
+            // first, the parent
+            try {
+                Class<?> ret = this.getParent().loadClass(clazzName);
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Class " + clazzName + " loaded by the parent class loader " +
+                        this.getParent());
+                }
+                return ret;
+            } catch (ClassNotFoundException e) {
+                try {
+                    if (clazzLocation == null)
+                        throw new ClassNotFoundException("Cannot load class " + clazzName +
+                            " reason: the remote ProActive runtime where this class resides is not available");
+
+                    byte[] clazzData = readClassData(clazzName);
+                    if (logger.isTraceEnabled()) {
+                        logger.trace("Succeffully downloaded " + clazzName + " class definition ");
+                    }
+                    return defineClass(clazzName, clazzData, 0, clazzData.length);
+                } catch (IOException ioEx) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Cannot load class from the remote ProActive runtime:" + e.getMessage(),
+                                e);
+                    }
+                    throw new ClassNotFoundException(clazzName, ioEx);
+                }
+            }
+        }
+
+        private byte[] readClassData(String clazzName) throws IOException {
+
+            if (logger.isTraceEnabled())
+                logger.trace("Attempt to download class " + clazzName + " from the remote runtime");
+
+            byte[] b = this.clazzLocation.getClassData(clazzName);
+
+            if (b != null && b.length != 0) {
+                return b;
+            } else {
+                throw new IOException("Failed to download " + clazzName + " class definition");
+            }
+
+        }
+
+    }
+
+}

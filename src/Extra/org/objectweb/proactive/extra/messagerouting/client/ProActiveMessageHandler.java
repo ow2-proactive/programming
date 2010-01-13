@@ -40,11 +40,12 @@ import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingMessage;
+import org.objectweb.proactive.extra.messagerouting.remoteobject.util.PamrMarshaller;
 
 
 /** Executes a ProActive {@link Request} received and send the response.
@@ -92,10 +93,17 @@ public class ProActiveMessageHandler implements MessageHandler {
         private final DataRequestMessage _toProcess;
         /** the local agent*/
         private final Agent agent;
+        /** serialization*/
+        private final PamrMarshaller marshaller;
 
         public ProActiveMessageProcessor(DataRequestMessage msg, Agent agent) {
             this._toProcess = msg;
             this.agent = agent;
+            // get the runtime URL
+            // if the local Agent has received a DataRequestMessage,
+            // means that a ProActiveRuntime exists on this machine
+            String runtimeUrl = ProActiveRuntimeImpl.getProActiveRuntime().getURL();
+            this.marshaller = new PamrMarshaller(runtimeUrl);
         }
 
         public void run() {
@@ -104,15 +112,15 @@ public class ProActiveMessageHandler implements MessageHandler {
                 Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
                 // Handle the message
-                MessageRoutingMessage message = (MessageRoutingMessage) HttpMarshaller
-                        .unmarshallObject(_toProcess.getData());
+                MessageRoutingMessage message = (MessageRoutingMessage)
+                        this.marshaller.unmarshallObject(_toProcess.getData());
 
                 if (logger.isTraceEnabled()) {
                     logger.trace("Processing message: " + message);
                 }
                 Object result = message.processMessage();
 
-                byte[] resultBytes = HttpMarshaller.marshallObject(result);
+                byte[] resultBytes = this.marshaller.marshallObject(result);
                 agent.sendReply(_toProcess, resultBytes);
             } catch (Exception e) {
                 logger.warn("ProActive Message failed to serve a message", e);

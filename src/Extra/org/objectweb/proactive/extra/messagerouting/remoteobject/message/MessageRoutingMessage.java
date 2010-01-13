@@ -35,15 +35,17 @@
  */
 package org.objectweb.proactive.extra.messagerouting.remoteobject.message;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.client.Agent;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
+import org.objectweb.proactive.extra.messagerouting.remoteobject.util.PamrMarshaller;
 
 
 /** Any kind of routed message.
@@ -73,12 +75,22 @@ public abstract class MessageRoutingMessage implements Serializable {
      */
     protected Object returnedObject;
 
+    /** serialization
+     *  This field is transient - it has significance only on this host
+     * */
+    private transient final PamrMarshaller marshaller;
+
     protected boolean isAsynchronous = false;
 
     public MessageRoutingMessage(URI uri, Agent agent) {
         this.uri = uri;
         this.agent = agent;
         this.returnedObject = null;
+        // get the runtime URL
+        // TODO - maybe properly synchronize, to make sure that
+        // MessageRoutingROF.createRemoteObject() for a PART was called before
+        String runtimeUrl = ProActiveRuntimeImpl.getProActiveRuntime().getURL();
+        this.marshaller = new PamrMarshaller(runtimeUrl);
     }
 
     /**
@@ -93,14 +105,20 @@ public abstract class MessageRoutingMessage implements Serializable {
      */
     public final void send() throws MessageRoutingException {
         try {
-            byte[] bytes = HttpMarshaller.marshallObject(this);
+            byte[] bytes = this.marshaller.marshallObject(this);
             byte[] response = agent.sendMsg(this.uri, bytes, isAsynchronous);
             if (!isAsynchronous) {
-                this.returnedObject = HttpMarshaller.unmarshallObject(response);
+                this.returnedObject = this.marshaller.unmarshallObject(response);
             }
         } catch (MessageRoutingException e) {
             logger.error("Failed to send message to " + this.uri, e);
             throw e;
-        }
+        } catch (IOException e) {
+			logger.error("Failed to serialize this message, reason:" + e.getMessage(),e);
+			throw new MessageRoutingException(e);
+		} catch (ClassNotFoundException e) {
+			logger.error("Failed to deserialize the reply for this message, reason:" + e.getMessage(),e);
+			throw new MessageRoutingException(e);
+		}
     }
 }
