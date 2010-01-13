@@ -112,8 +112,8 @@ public class ProActiveMessageHandler implements MessageHandler {
                 Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
                 // Handle the message
-                MessageRoutingMessage message = (MessageRoutingMessage)
-                        this.marshaller.unmarshallObject(_toProcess.getData());
+                MessageRoutingMessage message = (MessageRoutingMessage) this.marshaller
+                        .unmarshallObject(_toProcess.getData());
 
                 if (logger.isTraceEnabled()) {
                     logger.trace("Processing message: " + message);

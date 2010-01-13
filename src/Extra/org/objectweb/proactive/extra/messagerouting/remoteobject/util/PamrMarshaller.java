@@ -34,6 +34,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+
 /**
  * This class is responsible for the serialization/deserialization process
  *  for the message routing protocol
@@ -44,37 +45,36 @@ import java.io.IOException;
  */
 public class PamrMarshaller {
 
-	private final String localRuntimeURL;
+    private final String localRuntimeURL;
 
-	public PamrMarshaller(String localRuntimeURL) {
-		this.localRuntimeURL = localRuntimeURL;
-	}
+    public PamrMarshaller(String localRuntimeURL) {
+        this.localRuntimeURL = localRuntimeURL;
+    }
 
-	public byte[] marshallObject(Object o) throws IOException {
-		PamrMarshalOutputStream serializer = null;
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			serializer = new PamrMarshalOutputStream(baos, this.localRuntimeURL);
-			serializer.writeObject(o);
-			serializer.flush();
-			return baos.toByteArray();
-		} finally {
-			// cleanup
-			if(serializer!=null)
-				serializer.close(); // this will also close the underlying baos
-		}
-	}
+    public byte[] marshallObject(Object o) throws IOException {
+        PamrMarshalOutputStream serializer = null;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            serializer = new PamrMarshalOutputStream(baos, this.localRuntimeURL);
+            serializer.writeObject(o);
+            serializer.flush();
+            return baos.toByteArray();
+        } finally {
+            // cleanup
+            if (serializer != null)
+                serializer.close(); // this will also close the underlying baos
+        }
+    }
 
-	public Object unmarshallObject(byte[] bytes) throws IOException, ClassNotFoundException {
-		PamrMarshalInputStream deserializer = null;
-		try {
-			deserializer = new PamrMarshalInputStream(
-				new ByteArrayInputStream(bytes));
-			return deserializer.readObject();
-		} finally {
-			// cleanup
-			if(deserializer!=null)
-				deserializer.close(); // this will also close the underlying bais
-		}
-	}
+    public Object unmarshallObject(byte[] bytes) throws IOException, ClassNotFoundException {
+        PamrMarshalInputStream deserializer = null;
+        try {
+            deserializer = new PamrMarshalInputStream(new ByteArrayInputStream(bytes));
+            return deserializer.readObject();
+        } finally {
+            // cleanup
+            if (deserializer != null)
+                deserializer.close(); // this will also close the underlying bais
+        }
+    }
 }
