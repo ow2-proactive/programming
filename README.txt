@@ -1,6 +1,6 @@
 Thanks for your interest in ProActive.
 
-ProActive 4.2.0
+ProActive 4.2.1
 
 You can find the documentation of ProActive in the docs directory:
 
@@ -9,9 +9,9 @@ You can find the documentation of ProActive in the docs directory:
 
 Javadoc and updated documentation are available online:
 
-	* Public API Javadoc   http://proactive.inria.fr/{version}/javadoc
-	* Full API Javadoc     http://proactive.inria.fr/{version}/javadoc.full
-	* HTML documentation   htpp://proactive.inria.fr/{version}/html
+	* Public API Javadoc   http://proactive.inria.fr/release-doc/ProActive/api_published/index.html
+	* Full API Javadoc     http://proactive.inria.fr/release-doc/ProActive/api_complete/index.html
+	* HTML documentation   http://proactive.inria.fr/index.php?page=manual_proactive
 
 
 In order to start experimenting with ProActive:
