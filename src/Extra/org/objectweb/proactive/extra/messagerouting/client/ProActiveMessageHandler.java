@@ -106,17 +106,11 @@ public class ProActiveMessageHandler implements MessageHandler {
                 // Handle the message
                 MessageRoutingMessage message = (MessageRoutingMessage) HttpMarshaller
                         .unmarshallObject(_toProcess.getData());
-                Object result = null;
-                try {
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("Processing message: " + message);
-                    }
-                    result = message.processMessage();
-                } catch (Exception e) {
-                    logger.warn("Exception during execution of message: " + _toProcess, e);
-                    // TODO: Send an ERR_ ?
-                    return;
+
+                if (logger.isTraceEnabled()) {
+                    logger.trace("Processing message: " + message);
                 }
+                Object result = message.processMessage();
 
                 byte[] resultBytes = HttpMarshaller.marshallObject(result);
                 agent.sendReply(_toProcess, resultBytes);
