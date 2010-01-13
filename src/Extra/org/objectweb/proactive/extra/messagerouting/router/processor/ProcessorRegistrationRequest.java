@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.DataMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage;
@@ -70,13 +71,24 @@ public class ProcessorRegistrationRequest extends Processor {
     public void process() throws MalformedMessageException {
         // Message.constructMessage guarantees that the cast is safe. If the message is not a RegistrationRequestMessage,
         // a @{link MalformedMessageException} will be thrown
-        RegistrationRequestMessage message = (RegistrationRequestMessage) Message.constructMessage(
-                this.rawMessage.array(), 0);
-        AgentID agentId = message.getAgentID();
-        if (agentId == null) {
-            connection(message);
-        } else {
-            reconnection(message);
+        try {
+            RegistrationRequestMessage message = (RegistrationRequestMessage) Message.constructMessage(
+                    this.rawMessage.array(), 0);
+            AgentID agentId = message.getAgentID();
+            if (agentId == null) {
+                connection(message);
+            } else {
+                reconnection(message);
+            }
+        } catch (MalformedMessageException e) {
+            // try to see who sent it
+            try {
+                AgentID sender = RegistrationMessage.readAgentID(this.rawMessage.array(), 0);
+                throw new MalformedMessageException(e, sender);
+            } catch (MalformedMessageException e1) {
+                // cannot get the sender
+                throw new MalformedMessageException(e, true);
+            }
         }
     }
 

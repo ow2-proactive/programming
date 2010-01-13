@@ -35,13 +35,17 @@
  */
 package org.objectweb.proactive.extra.messagerouting.router;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
+import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.processor.Processor;
 import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorDataReply;
@@ -112,8 +116,37 @@ class TopLevelProcessor implements Runnable {
                 processor.process();
             }
         } catch (MalformedMessageException e) {
-            // TODO : Send an ERR_
-            logger.error("Dropping message " + message + ", reason:" + e.getMessage(), e);
+            logger.error("Dropping message " + message + ", reason:" + e.getMessage());
+            logger.debug("Stacktrace:", e);
+            notifySender(e);
+        }
+    }
+
+    private static final long AGENT_ID_UNKNOWN = -1;
+
+    private void notifySender(MalformedMessageException e) {
+        if (e.mustNotifySender()) {
+            logger.debug("The sender will be notified about this.");
+            AgentID recipient = e.getRecipient();
+            if (recipient == null) {
+                // not known by the lower layer => put a phony value
+                recipient = new AgentID(AGENT_ID_UNKNOWN);
+            }
+            AgentID faulty = e.getFaulty();
+            if (faulty == null) {
+                // not known by the lower layer => put a phony value
+                faulty = new AgentID(AGENT_ID_UNKNOWN);
+            }
+            // getting the message ID always succeeds
+            long messageId = Message.readMessageID(message.array(), 0);
+            ErrorMessage errMsg = new ErrorMessage(ErrorType.ERR_MALFORMED_MESSAGE, recipient, faulty,
+                messageId);
+            try {
+                attachment.send(ByteBuffer.wrap(errMsg.toByteArray()));
+            } catch (IOException ioExcp) {
+                logger.warn("Could not send the error message " + errMsg + "  to the sender, reason:" +
+                    ioExcp.getMessage(), ioExcp);
+            }
         }
     }
 }

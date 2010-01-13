@@ -37,6 +37,10 @@ package org.objectweb.proactive.extra.messagerouting.exceptions;
 
 import java.io.IOException;
 
+import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
+
 
 /**
  * This exception should be thrown each time a message
@@ -49,22 +53,70 @@ import java.io.IOException;
  */
 public class MalformedMessageException extends IOException {
 
+    private final boolean notifySender;
+    private final AgentID recipient;
+    private final AgentID faulty;
+
     public MalformedMessageException() {
         super();
+        this.notifySender = false;
+        this.recipient = null;
+        this.faulty = null;
     }
 
     public MalformedMessageException(String message) {
         super(message);
+        this.notifySender = false;
+        this.recipient = null;
+        this.faulty = null;
     }
 
     public MalformedMessageException(Throwable cause) {
-        super();
-        this.initCause(cause);
+        super(cause);
+        this.notifySender = false;
+        this.recipient = null;
+        this.faulty = null;
     }
 
     public MalformedMessageException(String message, Throwable cause) {
-        super(message);
-        this.initCause(cause);
+        super(message, cause);
+        this.notifySender = false;
+        this.recipient = null;
+        this.faulty = null;
+    }
+
+    public MalformedMessageException(MalformedMessageException original, AgentID recipient, AgentID faulty) {
+        super(original.getMessage(), original);
+        this.notifySender = true;
+        this.recipient = recipient;
+        this.faulty = faulty;
+    }
+
+    public MalformedMessageException(MalformedMessageException original, AgentID recipient) {
+        super(original.getMessage(), original);
+        this.notifySender = true;
+        this.recipient = recipient;
+        this.faulty = null;
+    }
+
+    /** Notify the message sender of this problem */
+    public MalformedMessageException(MalformedMessageException original, boolean notifySender) {
+        super(original.getMessage(), original);
+        this.notifySender = notifySender;
+        this.recipient = null;
+        this.faulty = null;
+    }
+
+    public boolean mustNotifySender() {
+        return this.notifySender;
+    }
+
+    public AgentID getRecipient() {
+        return this.recipient;
+    }
+
+    public AgentID getFaulty() {
+        return this.faulty;
     }
 
 }

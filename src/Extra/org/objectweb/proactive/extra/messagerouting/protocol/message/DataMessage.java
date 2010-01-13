@@ -40,6 +40,7 @@ import java.util.Arrays;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
 
 /** A data message
@@ -157,10 +158,18 @@ public abstract class DataMessage extends Message {
     static public AgentID readSender(byte[] byteArray, int offset) throws MalformedMessageException {
         long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
             Field.SRC_AGENT_ID.getOffset());
-        if (id < 0) {
+        if (id >= 0)
+            return new AgentID(id);
+        else if (id == UNKNOWN_AGENT_ID) {
+            // in the case of error messages, the Agent ID could be unknown
+            MessageType type = Message.readType(byteArray, 0);
+            if (type.equals(MessageType.ERR_))
+                return null;
+            else
+                throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " +
+                    id);
+        } else
             throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " + id);
-        }
-        return new AgentID(id);
     }
 
     /** Reads the recipient of a message
@@ -178,10 +187,18 @@ public abstract class DataMessage extends Message {
         long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
             Field.DST_AGENT_ID.getOffset());
 
-        if (id < 0) {
-            throw new MalformedMessageException("Invalid value for " + Field.DST_AGENT_ID + " field: " + id);
-        }
-        return new AgentID(id);
+        if (id >= 0)
+            return new AgentID(id);
+        else if (id == UNKNOWN_AGENT_ID) {
+            // in the case of error messages, the Agent ID could be unknown
+            MessageType type = Message.readType(byteArray, 0);
+            if (type.equals(MessageType.ERR_))
+                return null;
+            else
+                throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " +
+                    id);
+        } else
+            throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field: " + id);
     }
 
     /** Sender of this message */

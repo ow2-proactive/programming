@@ -270,6 +270,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     ErrorMessage em = (ErrorMessage) replyMsg;
                     if (em.getErrorType() == ErrorType.ERR_INVALID_ROUTER_ID) {
                         throw new RouterHandshakeException("The router has been restarted. Disconnecting...");
+                    } else if (em.getErrorType() == ErrorType.ERR_MALFORMED_MESSAGE) {
+                        throw new RouterHandshakeException(
+                            "The router received a corrupted version of the original message.");
                     }
                 } else {
                     throw new RouterHandshakeException("Invalid router response: expected a " +
@@ -502,6 +505,23 @@ public class AgentImpl implements Agent, AgentImplMBean {
             }
         }
 
+        /**
+         * Unblock the Patient waiting on a particular messageID
+         * @param agentId
+         */
+        private Patient unlockDueToCorruption(Long messageId) {
+            AgentID agent = null;
+            for (Map.Entry<AgentID, Map<Long, Patient>> entry : this.byRemoteAgent.entrySet()) {
+                if (entry.getValue().containsKey(messageId)) {
+                    agent = entry.getKey();
+                    break;
+                }
+            }
+            if (agent == null)
+                return null;
+            return remove(agent, messageId);
+        }
+
         /** Remove a patient on response arrival */
         private Patient remove(AgentID agentId, long messageId) {
             Patient patient = null;
@@ -692,6 +712,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         }
 
         private void handleError(ErrorMessage error) {
+            long messageId = error.getMessageID();
             switch (error.getErrorType()) {
                 case ERR_DISCONNECTION_BROADCAST:
                     /*
@@ -706,7 +727,6 @@ public class AgentImpl implements Agent, AgentImplMBean {
                      * router Unlock the sender
                      */
                     AgentID sender = error.getSender();
-                    long messageId = error.getMessageID();
 
                     Patient mbox = mailboxes.remove(sender, messageId);
                     if (mbox == null) {
@@ -718,6 +738,32 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
                         // this is a reply containing data
                         mbox.setAndUnlock(new MessageRoutingException("Recipient not connected " + sender));
+                    }
+                    break;
+                case ERR_MALFORMED_MESSAGE:
+                    // do we have the faulty AgentID?
+                    AgentID faulty = error.getFaulty();
+                    Patient patient;
+                    if (faulty != null) {
+                        patient = mailboxes.remove(faulty, messageId);
+                    } else {
+                        // harder without the faulty agent id
+                        patient = mailboxes.unlockDueToCorruption(messageId);
+                    }
+                    if (patient == null) {
+                        if (logger.isTraceEnabled()) {
+                            logger
+                                    .trace("The router got a corrupted version of message with ID " +
+                                        messageId);
+                        }
+                    } else {
+                        if (logger.isTraceEnabled()) {
+                            logger.trace("Unlocked " + patient + " due to corruption of message with ID " +
+                                messageId + " on the router side");
+                        }
+
+                        patient
+                                .setAndUnlock(new MessageRoutingException("Message corruption on router side"));
                     }
                     break;
                 default:

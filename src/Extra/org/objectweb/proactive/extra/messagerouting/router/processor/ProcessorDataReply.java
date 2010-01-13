@@ -40,8 +40,7 @@ import java.nio.ByteBuffer;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.Client;
 import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
@@ -59,25 +58,37 @@ public class ProcessorDataReply extends Processor {
 
     @Override
     public void process() throws MalformedMessageException {
-        AgentID agentId = DataMessage.readRecipient(rawMessage.array(), 0);
-        Client destClient = this.router.getClient(agentId);
+        try {
+            DataReplyMessage replyMsg = new DataReplyMessage(this.rawMessage.array(), 0);
+            AgentID recipient = replyMsg.getRecipient();
+            Client destClient = this.router.getClient(recipient);
 
-        if (destClient != null) {
-            /* The recipient is known. Try to forward the message.
-             * If the reply cannot be send now, we have to cache it to send it later.
-             * We don't want to send a error message to the sender. Our goal is to unblock
-             * the recipient which is waiting for the reply
-             */
-            destClient.sendMessageOrCache(this.rawMessage);
-        } else {
-            /* The recipient is unknown.
-             * 
-             * We can't do better than dropping the reply. Notifying the sender is useless since
-             * it will not unblock the recipient. 
-             */
-            Message message;
-            message = new DataRequestMessage(rawMessage.array(), 0);
-            logger.error("Dropped invalid data reply: unknown recipient. " + message);
+            if (destClient != null) {
+                destClient.sendMessageOrCache(this.rawMessage);
+            } else {
+                /* unknown recipient => malformed message(or attack)
+                 * anyway, inform the sender, maybe the next message will be a valid one
+                 * and we will unlock the recipient
+                 */
+                throw new MalformedMessageException("Invalid data reply message " + replyMsg +
+                    " : unknown recipient.");
+            }
+        } catch (MalformedMessageException e) {
+            AgentID sender;
+            AgentID recipient;
+            try {
+                sender = DataMessage.readSender(this.rawMessage.array(), 0);
+            } catch (MalformedMessageException e1) {
+                // don't know the sender
+                sender = null;
+            }
+            try {
+                recipient = DataMessage.readRecipient(this.rawMessage.array(), 0);
+            } catch (MalformedMessageException e1) {
+                // don't know the recipient
+                recipient = null;
+            }
+            throw new MalformedMessageException(e, sender, recipient);
         }
     }
 }

@@ -57,11 +57,11 @@ public class TestUnknownSender extends BlackBox {
 
     /* - Connect to the router
      * - Send a message to a non existent recipient with a bogus sender
-     * - Do nothing since the router will drop the message
+     * - The router will reply with a ERR_MALFORMED_MESSAGE error message
      */
 
     @Test
-    public void testNOK() throws IOException, InstantiationException {
+    public void testNOK() throws IOException {
         AgentID srcAgentID = new AgentID(ProActiveRandom.nextPosLong());
         AgentID dstAgentID = new AgentID(ProActiveRandom.nextPosLong());
         long msgId = ProActiveRandom.nextPosLong();
@@ -69,9 +69,14 @@ public class TestUnknownSender extends BlackBox {
         Message message = new DataRequestMessage(srcAgentID, dstAgentID, msgId, null);
         tunnel.write(message.toByteArray());
 
-        // Since both src and dst agent are unknown, the router will drop this message
-        // Their is no clean way to check that "no message has been send by the router"
-        // and I don't want to wait for the timeout
+        // router should reply with a ErrorMessage, code ERR_MALFORMED_MESSAGE
+        byte[] resp = tunnel.readMessage();
+        ErrorMessage errMsg = new ErrorMessage(resp, 0);
+        Assert.assertEquals(errMsg.getErrorType(), ErrorType.ERR_MALFORMED_MESSAGE);
+        Assert.assertEquals(errMsg.getRecipient(), srcAgentID);
+        // faulty is the dstAgent; this is because on the agent side we should unlock the waiter
+        Assert.assertEquals(errMsg.getFaulty(), dstAgentID);
+
     }
 
     /* - Connect to the router

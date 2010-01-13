@@ -35,6 +35,7 @@
  */
 package org.objectweb.proactive.extra.messagerouting.router.processor;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
@@ -42,7 +43,6 @@ import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.Client;
@@ -61,48 +61,67 @@ public class ProcessorDataRequest extends Processor {
 
     @Override
     public void process() throws MalformedMessageException {
-        AgentID recipient = DataMessage.readRecipient(rawMessage.array(), 0);
-        Client destClient = this.router.getClient(recipient);
 
-        if (destClient != null) {
-            /* The recipient is known. Try to forward the message.
-             * If an error occurs while sending the message, notify the sender
-             */
-            try {
-                destClient.sendMessage(this.rawMessage);
-            } catch (Exception e) {
-                /* Notify the sender of the failure.
-                 * If the error message cannot be send, the message is cached to be re-send
-                 * later. If this message is lost, the caller will be blocked forever.
+        try {
+            DataRequestMessage msg = new DataRequestMessage(rawMessage.array(), 0);
+            AgentID recipient = msg.getRecipient();
+            AgentID sender = msg.getSender();
+            long messageId = msg.getMessageID();
+
+            Client destClient = this.router.getClient(recipient);
+
+            if (destClient != null) {
+                /* The recipient is known. Try to forward the message.
+                 * If an error occurs while sending the message, notify the sender
                  */
-                AgentID sender = DataMessage.readSender(rawMessage.array(), 0);
-                long messageId = Message.readMessageID(rawMessage.array(), 0);
-                ErrorMessage error = new ErrorMessage(ErrorType.ERR_NOT_CONNECTED_RCPT, sender, recipient,
-                    messageId);
+                try {
+                    destClient.sendMessage(this.rawMessage);
+                } catch (IOException e) {
+                    /* Notify the sender of the failure.
+                     * If the error message cannot be send, the message is cached to be re-send
+                     * later. If this message is lost, the caller will be blocked forever.
+                     */
+                    ErrorMessage error = new ErrorMessage(ErrorType.ERR_NOT_CONNECTED_RCPT, sender,
+                        recipient, messageId);
 
-                Client srcClient = router.getClient(sender);
-                srcClient.sendMessageOrCache(error.toByteArray());
-            }
-        } else {
-            /* The recipient is unknown.
-             * If the sender is known an error message is sent (or cached) to unblock it.
-             * Otherwise the message is dropped (unknown sender & recipient: game over)
-             */
-            AgentID sender = DataMessage.readSender(rawMessage.array(), 0);
-            Client client = router.getClient(sender);
-            if (client != null) {
-                long messageId = Message.readMessageID(rawMessage.array(), 0);
-                ErrorMessage error = new ErrorMessage(ErrorType.ERR_UNKNOW_RCPT, sender, recipient, messageId);
-                // Cache on error to avoid a blocked a sender
-                client.sendMessageOrCache(error.toByteArray());
-                logger.warn("Received invalid data request: unknown recipient: " + recipient +
-                    ". Sender notified");
+                    Client srcClient = router.getClient(sender);
+                    srcClient.sendMessageOrCache(error.toByteArray());
+                }
             } else {
-                // Something is utterly broken: Unknown sender & recipient
-                Message message;
-                message = new DataRequestMessage(rawMessage.array(), 0);
-                logger.error("Dropped invalid data request: unknown sender and recipient. " + message);
+                /* The recipient is unknown.
+                 * If the sender is known an error message is sent (or cached) to unblock it.
+                 * Otherwise the message is dropped (unknown sender & recipient: game over)
+                 */
+                Client client = router.getClient(sender);
+                if (client != null) {
+                    ErrorMessage error = new ErrorMessage(ErrorType.ERR_UNKNOW_RCPT, sender, recipient,
+                        messageId);
+                    // Cache on error to avoid a blocked a sender
+                    client.sendMessageOrCache(error.toByteArray());
+                    logger.warn("Received invalid data request: unknown recipient: " + recipient +
+                        ". Sender notified");
+                } else {
+                    // Something is utterly broken: Unknown sender & recipient
+                    throw new MalformedMessageException("Invalid data request message " + msg +
+                        " : unknown sender and recipient.");
+                }
             }
+        } catch (MalformedMessageException e) {
+            AgentID sender;
+            AgentID recipient;
+            try {
+                sender = DataMessage.readSender(this.rawMessage.array(), 0);
+            } catch (MalformedMessageException e1) {
+                // don't know the sender
+                sender = null;
+            }
+            try {
+                recipient = DataMessage.readRecipient(this.rawMessage.array(), 0);
+            } catch (MalformedMessageException e1) {
+                // don't know the recipient
+                recipient = null;
+            }
+            throw new MalformedMessageException(e, sender, recipient);
         }
 
     }
