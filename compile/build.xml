@@ -6,44 +6,24 @@
 			-Dversion="3.2.1"					Tag a build with this version
 	-->
 
-	<!--
-		Create a timestamp for this build
-		If ${version} is defined its value is used as string version for this build
-		Otherwise the timestamp is used
-	-->
-
-	<!-- ************
-		Imports
-	-->
-
-	<property file="${user.home}/.proactive/build.properties" />
-	<import file="common.xml" />
-
-	<import file="../doc/pa/build.xml"  optional="true" />
-
 	<!-- ************
 		Taskdefs
 	-->
 
 	<taskdef name="if" classname="ise.antelope.tasks.IfTask" />
 
-	<!-- emma -->
-	<path id="emma.lib">
-		<pathelement location="${base.dir}/compile/lib/emma_ant.jar" />
-		<pathelement location="${base.dir}/compile/lib/emma.jar" />
-	</path>
 	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
 
-
-	<!-- ************
-		Classpath
+	<!--
+		Create a timestamp for this build
+		If ${version} is defined its value is used as string version for this build
+		Otherwise the timestamp is used
 	-->
 
-	<path id="check.annotations.classpath">
-		<path refid="project.classpath" />
-		<!-- Annotation processing -->
-		<pathelement path="${deploy.lib.dir}/ProActive_annotations_CTree.jar"/>
-	</path>
+	<!-- Version setting example-->
+	<!-- <property name="version" value="4.2.0" /> -->
+	<!-- Release date -->
+	<!-- <property name="release.date" value="17 Dec. 2009" /> -->
 
 	<tstamp>
 		<!-- <format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" /> -->
@@ -58,6 +38,33 @@
 			<property name="version" value="${TODAY}" />
 		</else>
 	</if>
+
+
+	<!-- ************
+		Imports
+	-->
+
+	<property file="${user.home}/.proactive/build.properties" />
+	<import file="common.xml" />
+
+	<import file="../doc/pa/build.xml"  optional="true" />
+
+	<!-- emma -->
+	<path id="emma.lib">
+		<pathelement location="${base.dir}/compile/lib/emma_ant.jar" />
+		<pathelement location="${base.dir}/compile/lib/emma.jar" />
+	</path>
+
+
+	<!-- ************
+		Classpath
+	-->
+
+	<path id="check.annotations.classpath">
+		<path refid="project.classpath" />
+		<!-- Annotation processing -->
+		<pathelement path="${deploy.lib.dir}/ProActive_annotations_CTree.jar"/>
+	</path>
 
 
 	<!-- Default testsuite can be overriden by using the -Dtest property -->
