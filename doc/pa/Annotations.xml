@@ -257,7 +257,7 @@
 			
 			This constraint is checked by using <literal>@NodeAttchedCallback</literal> annotation with a method definition.
 			For more information about node attachment notification, please refer to
-			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk-doc/javadoc/publicApi/org/objectweb/proactive/gcmdeployment/GCMVirtualNode.html#subscribeNodeAttachment(java.lang.Object,%20java.lang.String,%20boolean)">org.objectweb.proactive.gcmdeployment.GCMVirtualNode.subscribeNodeAttachment(...)</link>
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://hudson.activeeon.com/job/ProActive_Documentation/lastStableBuild/artifact/trunk/doc/built/ProActive/api_complete/org/objectweb/proactive/gcmdeployment/GCMVirtualNode.html#subscribeNodeAttachment(java.lang.Object,%20java.lang.String,%20boolean)">org.objectweb.proactive.gcmdeployment.GCMVirtualNode.subscribeNodeAttachment(...)</link>
 		</para>
 		</section>
 		
@@ -271,7 +271,7 @@
 			
 			This constraint is checked by using <literal>@VirtualNodesReadyCallback</literal> annotation with a method definition.
 			For more information about isReady notification, please refer to
-			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk-doc/javadoc/publicApi/org/objectweb/proactive/gcmdeployment/GCMVirtualNode.html#subscribeIsReady(java.lang.Object,%20java.lang.String)">org.objectweb.proactive.gcmdeployment.GCMVirtualNode.subscribeIsReady(...)</link>
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://hudson.activeeon.com/job/ProActive_Documentation/lastStableBuild/artifact/trunk/doc/built/ProActive/api_complete/org/objectweb/proactive/gcmdeployment/GCMVirtualNode.html#subscribeIsReady(java.lang.Object,%20java.lang.String)">org.objectweb.proactive.gcmdeployment.GCMVirtualNode.subscribeIsReady(...)</link>
 		</para>
 		</section>
 	</section>
