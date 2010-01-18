@@ -72,28 +72,32 @@ public class MalformedMessageException extends IOException {
     }
 
     public MalformedMessageException(Throwable cause) {
-        super(cause);
+        super();
+        this.initCause(cause);
         this.notifySender = false;
         this.recipient = null;
         this.faulty = null;
     }
 
     public MalformedMessageException(String message, Throwable cause) {
-        super(message, cause);
+        super(message);
+        this.initCause(cause);
         this.notifySender = false;
         this.recipient = null;
         this.faulty = null;
     }
 
     public MalformedMessageException(MalformedMessageException original, AgentID recipient, AgentID faulty) {
-        super(original.getMessage(), original);
+        super(original.getMessage());
+        this.initCause(original);
         this.notifySender = true;
         this.recipient = recipient;
         this.faulty = faulty;
     }
 
     public MalformedMessageException(MalformedMessageException original, AgentID recipient) {
-        super(original.getMessage(), original);
+        super(original.getMessage());
+        this.initCause(original);
         this.notifySender = true;
         this.recipient = recipient;
         this.faulty = null;
@@ -101,7 +105,8 @@ public class MalformedMessageException extends IOException {
 
     /** Notify the message sender of this problem */
     public MalformedMessageException(MalformedMessageException original, boolean notifySender) {
-        super(original.getMessage(), original);
+        super(original.getMessage());
+        this.initCause(original);
         this.notifySender = notifySender;
         this.recipient = null;
         this.faulty = null;
