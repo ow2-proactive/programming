@@ -116,7 +116,7 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             url = URI.create(HTTPTransportServlet.get().getURL() + url.toString());
         }
 
-        HTTPRegistry.getInstance().bind(url.toString(), ro, replacePrevious); // Can throw a ProActiveException
+        HTTPRegistry.getInstance().bind(URIBuilder.getNameFromURI(url), ro, replacePrevious); // Can throw a ProActiveException
 
         HttpRemoteObjectImpl rro = new HttpRemoteObjectImpl(ro, url);
 
@@ -132,15 +132,11 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      *            the urn under which the active object has been registered
      */
     public void unregister(URI urn) throws ProActiveException {
-        HTTPRegistry.getInstance().unbind(urn.toString());
+        HTTPRegistry.getInstance().unbind(URIBuilder.getNameFromURI(urn));
     }
 
-    /**
-     * Looks-up a remote object previously registered in the bodies table .
-     * 
-     * @param urn
-     *            the urn (in fact its url + name) the remote Body is registered to
-     * @return a UniversalBody
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#lookup(java.net.URI)
      */
     public RemoteObject lookup(URI url) throws ProActiveException {
         String urn = url.getPath();
@@ -159,20 +155,8 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         }
     }
 
-    /**
-     * List all active object previously registered in the registry
-     * 
-     * @param url
-     *            the url of the host to scan, typically //machine_name
-     * @return a list of Strings, representing the registered names, and {} if no registry
-     * @exception java.io.IOException
-     *                if scanning reported some problem (registry not found, or malformed Url)
-     */
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.objectweb.proactive.core.body.BodyAdapterImpl#list(java.lang.String)
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#list(java.net.URI)
      */
     public URI[] list(URI url) throws ProActiveException {
 
@@ -181,12 +165,12 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         try {
             req.send();
 
-            String[] tmpUrl = req.getReturnedObject();
+            String[] names = req.getReturnedObject();
 
-            URI[] uris = new URI[tmpUrl.length];
+            URI[] uris = new URI[names.length];
 
-            for (int i = 0; i < tmpUrl.length; i++) {
-                uris[i] = URI.create(tmpUrl[i]);
+            for (int i = 0; i < names.length; i++) {
+                uris[i] = URIBuilder.buildURI(url, names[i]);
             }
 
             return uris;

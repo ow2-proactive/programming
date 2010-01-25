@@ -45,6 +45,7 @@ import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.remoteobject.http.util.HTTPRegistry;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMessage;
 import org.objectweb.proactive.core.util.Sleeper;
+import org.objectweb.proactive.core.util.URIBuilder;
 
 
 public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable {
@@ -70,7 +71,7 @@ public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable
     @Override
     public Object processMessage() {
         try {
-            InternalRemoteRemoteObject ro = HTTPRegistry.getInstance().lookup(url);
+            InternalRemoteRemoteObject ro = HTTPRegistry.getInstance().lookup(URIBuilder.getNameFromURI(url));
             int max_retry = 5;
 
             if (ro == null) {

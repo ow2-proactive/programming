@@ -45,6 +45,7 @@ import org.objectweb.proactive.core.remoteobject.http.HTTPRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.http.HttpRemoteObjectImpl;
 import org.objectweb.proactive.core.remoteobject.http.util.HTTPRegistry;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMessage;
+import org.objectweb.proactive.core.util.URIBuilder;
 
 
 /**
@@ -86,7 +87,8 @@ public class HttpRemoteObjectLookupMessage extends HttpMessage implements Serial
     @Override
     public Object processMessage() {
         if (this.urn != null) {
-            InternalRemoteRemoteObject irro = HTTPRegistry.getInstance().lookup(url);
+            InternalRemoteRemoteObject irro = HTTPRegistry.getInstance().lookup(
+                    URIBuilder.getNameFromURI(url));
 
             //            System.out.println("HttpRemoteObjectLookupMessage.processMessage() ++ ro at " + url +" : " +ro) ;
             if (irro != null) {
