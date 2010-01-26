@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsArchitecture">
+<info>
+<title xml:id="Architectureanddesign_57">Architecture and design</title>
+	</info>
+
+	<para>
+		The implementation of the Fractal model is achieved by reusing
+		the extensible architecture of ProActive, notably the
+		meta-object protocol and the management of the request queue.
+		As a consequence, components are fully compatible with
+		standard active objects and as such, inherit from the features
+		active objects exhibit: mobility, security, deployment etc.
+	</para>
+
+	<para>
+		A fundamental idea is to manage the non-functional properties at
+		the meta-level:
+		<emphasis role="bold">
+			each component is actually an active object
+		</emphasis>
+		with dedicated meta-objects in charge of the component aspects.
+	</para>
+
+	<section xml:id="Metaobjectprotocol_57"><info><title>Meta-object protocol</title>
+		</info>
+
+
+		<para>
+			ProActive is based on a meta-object protocol (MOP), that
+			allows the addition of many aspects on top of standard Java
+			objects, such as asynchronism and mobility. Active objects
+			are referenced indirectly through stubs: this allows
+			transparent communications, whether active objects are
+			local or remote.
+		</para>
+
+		<para>The following diagram explains this mechanism:</para>
+
+		<para>
+			<figure  xml:id="ProActivesMetaObjectsProtocol_57"><info><title>ProActive's Meta-Objects Protocol.</title>
+				</info>
+
+
+				<mediaobject>
+					<imageobject>
+						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/standard-mop.png" format="PNG"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</para>
+
+		<para>
+			Java objects 'b' and 'a' can be in different virtual
+			machines (the network being represented here between the
+			proxy and the body, though the invocation might be local).
+			Object 'a' has a reference on active object 'b' (of type
+			<literal>B</literal>)
+			through a stub (of type
+			<literal>Stub_B</literal>)
+			because it is generated as a subclass of
+			<literal>B</literal>)
+			and a proxy. When 'a' invokes a method on
+			'<literal>stub_B</literal>',
+	      the invocation is forwarded through the communication
+			layer (possibly through a network) to the body of the active
+			object. At this point, the call can be intercepted by
+			meta-objects, possibly resulting in induced actions, and
+			then the call is forwarded to the base object 'b'.
+		</para>
+
+		<para>
+			The same idea is used to manage components: we just add a
+			set of meta-objects in charge of the component aspects.
+		</para>
+
+		<para>The following diagram shows what is changed:</para>
+
+		<para>
+			<figure xml:id="mop_with_components"><info><title>The ProActive MOP with component meta-objects and component representative
+					</title>
+				</info>
+
+
+				<mediaobject>
+					<imageobject>
+						<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/components-mop.png" format="PNG"/>
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</para>
+		<para>
+			A new set of meta-objects, managing the component aspect
+			(constituting the controller of the component, in the
+			Fractal terminology), is added to the active object 'b'. The
+			standard ProActive stub (that gives a representation of type
+			B on the figure) is not used here, as we manipulate
+			components. In Fractal, a reference on a component is of
+			type
+			<literal>Component</literal>,
+			and references to interfaces are of type
+			<literal>Interface</literal>.
+			'a' can now manipulate the component based on 'b' through
+			a specific stub, called a
+			<emphasis>component representative</emphasis>.
+			This
+			<emphasis>component representative</emphasis>
+			is of type
+			<literal>Component</literal>,
+			and also offers references to control and functional
+			interfaces, of type
+			<literal>Interface</literal>.
+			Note that classes representing functional interfaces of
+			components are generated on the fly: they are specific to
+			each component and can be unknown at compile-time.
+		</para>
+
+		<para>
+			Method invocations on Fractal interfaces are reified and
+			transmitted (possibly through a network) to the body of the
+			active object corresponding to the involved component. All
+			standard operations of the Fractal API are now accessible.
+		</para>
+
+	</section>
+
+	<section xml:id="Componentsvsactiveobjects_57"><info><title>Components vs active objects</title>
+		</info>
+
+
+		<para>
+			In our implementation, because we make use of the MOP's
+			facilities, all components are constituted of one active
+			object (at least), whether they are composite or primitive
+			components. If the component is a composite, and if it
+			contains other components, then we can say it is constituted
+			of several active objects. Also, if the component is
+			primitive, but the programmer of this component has put some
+			code within it for creating new active objects, the
+			component is again constituted of several active objects.
+		</para>
+
+		<para>
+			As a result, a composite component is an active object built
+			on top of the
+			<literal>CompositeComponent</literal>
+			class, and a parallel component is built on top of the
+			<literal>ParallelComponent</literal>
+			class. These classes are empty classes, because for
+			composite and parallel components, all the action takes
+			place in the meta-level. But they are used as a base to
+			build active objects, and their names help to identify them
+			with the IC2D visual monitoring tool.
+		</para>
+	</section>
+
+	<section xml:id="Methodinvocationsoncomponentsinterfaces_57"><info><title>Method invocations on component interfaces</title>
+		</info>
+
+
+		<para>
+			Invoking a method on an active object means invoking a
+			method on the stub of this active object. What usually
+			happens is that the method call is reified as a
+			<literal>Request</literal>
+			object and transferred (possibly through a network) to the
+			body of the active object. It is then redirected towards the
+			queue of requests, and delegated to the base object
+			according to a customizable serving policy (standard is
+			FIFO).
+		</para>
+
+		<para>
+			Component requests, on the other hand, are tagged so as to
+			distinguish between functional requests and controller
+			requests. A functional request targets a functional
+			interface of the component, while a controller request
+			targets a controller of the component.
+		</para>
+
+      <para>
+         A component has a lifecycle which is managed by a controller allowing to set the state of the
+         component:
+         <itemizedlist>
+            <listitem><para><emphasis role="bold">Stopped</emphasis>: only control requests are served.</para></listitem>
+            <listitem><para><emphasis role="bold">Started</emphasis>: all requests, control and functional, are served.</para></listitem>
+         </itemizedlist>
+      </para>
+      <para>
+               This lifecycle is implemented by customizing the activity of the active objects.
+               In the context of components, we distinguish the component activity (the non-functional
+               activity) from the functional activity. The component activity corresponds to the stopped state
+               of the lifecycle of the component (i.e. only control requests are served). The functional
+               activity is encapsulated and starts when the lifecycle is started. The default behaviour is to
+               serve all control requests in a FIFO order until the component is started using the
+               <literal>lifecycle-controller</literal>. Then, a component serves all requests, control and
+               functional, in a FIFO order, until the lifecycle is stopped. The functional activity is
+               encapsulated in the component activity. This is illustrated in <xref linkend="component_activity" />.
+      </para>
+
+      <figure xml:id="component_activity"><info><title>Default component activity</title></info>
+         <mediaobject>
+            <imageobject>
+               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/component_activity.png" format="PNG"/>
+            </imageobject>
+         </mediaobject>
+      </figure>
+
+      <para>
+         By default in ProActive, an active object is active (the <literal>isActive()</literal> condition is true) until
+         the <literal>terminate</literal> method is called. With components, the <literal>isActive()</literal> condition is
+         overridden when the component is in the functional activity and corresponds then to the state
+         of the lifecycle. During the component activity, the <literal>isActive()</literal> condition reacts as for any
+         active objet.
+      </para>
+      <para>
+         ProActive offers the possibility to customize the activity of an active object; this is actually a
+         fundamental feature of the library, as it allows to fully specify the behaviour of active objects.
+         Thus, in term of components, the component activity may be customized by implementing the
+         <literal>ComponentInitActive</literal>, <literal>ComponentRunActive</literal> and <literal>ComponentEndActive</literal> java
+         interfaces. By default, the component activity initialization and the component activity
+         termination are done only one time:
+         <itemizedlist>
+            <listitem>
+               <para>
+                     The initialization phase is done during the instantiation of the component (directly
+                     followed by the component activity execution). From this moment on, the component
+                     is in the active state in term of activity of active object (the <literal>isActive()</literal>
+                     condition on <xref linkend="component_activity" /> is true).
+               </para>
+           </listitem>
+           <listitem>
+               <para>
+                  The termination phase is done when the <literal>isActive()</literal> condition is false, i.e. when the
+                  terminate method of the active object representing the component is called.
+               </para>
+           </listitem>
+       </itemizedlist>
+    </para>
+    <para>
+      Second, the functional activity may also be customized by implementing the <literal>InitActive</literal>,
+      <literal>RunActive</literal> and <literal>EndActive</literal> interfaces. Two conditions must be respected though, for a
+      smooth integration with the component lifecycle:
+      <orderedlist>
+         <listitem>
+            <para>
+               The control of the request queue must use the <literal>org.objectweb.proactive.Service class</literal>.
+            </para>
+         </listitem>
+         <listitem>
+            <para>
+               The functional activity must loop on the <literal>isActive()</literal> condition (this is not
+               compulsory, but it allows to automatically end the functional activity when the
+               lifecycle of the component is stopped. It may also be managed with a custom filter
+               on the request queue).
+            </para>
+        </listitem>
+     </orderedlist>
+   </para>
+   <para>
+         By default, when the lifecycle is started, the functional activity is initialized, run, then ended
+         when the <literal>isActive()</literal> condition is false, i.e. when the lifecycle is stopped.
+   </para>
+	</section>
+</chapter>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="TechnicalService"><info><title xml:id="TechnicalService_23">Technical Service</title></info>
+
+
+	<indexterm>
+		<primary>Technical Service</primary>
+	</indexterm>
+
+	<section xml:id="Context_23"><info><title>Context</title></info>
+
+
+		<para>
+			For effective components, non-functional aspects must be
+			added to the application functional code. Likewise
+			enterprise middleware and component platforms, in the
+			context of Grids, services must be deployed at execution in
+			the component containers in order to implement those
+			aspects. This work proposes an architecture for defining,
+			configuring, and deploying such
+			<emphasis role="bold">Technical Services</emphasis>
+			in a Grid platform.
+		</para>
+
+	</section>
+	<section xml:id="Overview_23"><info><title>Overview</title></info>
+
+
+		<para>
+			A technical service is a non-functional requirement that may
+			be dynamically fulfilled at runtime by adapting the
+			configuration of selected resources.
+		</para>
+
+		<para>
+			From the programmer point of view, a technical service is a
+			class that implements the
+			<literal>TechnicalService</literal>
+			interface. This class defines how to configure a node.
+		</para>
+      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/TechnicalService_Interface.snip"/></textobject></programlisting>
+
+		<para>
+			From the deployer point of view, a technical service is a
+			set of ”variable-value” tuples, each of them configuring a
+			given aspect of the application environment.
+		</para>
+
+      <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/TechnicalServices_1.snip"/></textobject></programlisting>
+
+      <para>With the previous deployment mechanism, it looks like this:</para>
+		<programlisting language="xml">&lt;technical-service id="myService" class="services.Service1"&gt;
+	&lt;arg name="name1" value="value1" /&gt;
+	&lt;arg name="name2" value="value2" /&gt;
+&lt;/technical-service&gt;</programlisting>
+		<para>
+			The class attribute defines the implementation of the
+			service. This class has to implement the
+			<literal>org.objectweb.proactive.core.descriptor.services.TechnicalService</literal>
+			interface.
+		</para>
+		<para>
+			The configuration parameters of the service are specified by
+			<literal>property</literal>
+			tags in the descriptor (or by <literal>arg</literal> tags for the previous version). Those parameters are
+			passed to the
+			<literal>init</literal>
+			method as a map whose entries correspond to the couples (key =
+         parameter name, value = parameter value). The
+			<literal>apply</literal>
+			method takes as parameter the node on which the service must
+			be applied. This method is called after the creation or
+			acquisition of a node, and before the node is used by the
+			application.
+		</para>
+
+		<note>
+			<para>
+				Two or several technical services could be combined if
+				they touch separate aspects. Indeed, two different
+				technical services, which are conceptually orthogonal,
+				could be
+				<emphasis role="bold">
+					incompatible at source code level
+				</emphasis>
+				.
+			</para>
+			<para>
+				That is why a virtual node can be configured by only
+				<emphasis role="bold">one</emphasis>
+				technical service. However, combining two technical
+				services can be done at source code level, by providing
+				a class extending
+				<literal>TechnicalService</literal>
+				that defines the correct merging of two concurrent
+				technical services.
+			</para>
+		</note>
+	</section>
+
+	<section xml:id="ProgammingGuide_23"><info><title>Progamming Guide</title></info>
+
+
+	<section xml:id="AFullGCMApplicationDescriptor_23"><info><title>A full GCM Application Descriptor</title></info>
+      <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/TechnicalServices_2.snip"/></textobject></programlisting>
+   </section>
+
+	<section xml:id="AfullXMLDescriptorFile_23"><info><title>A full XML Descriptor File (former deployment)</title></info>
+
+		<programlisting language="xml">&lt;ProActiveDescriptor&gt;
+	&lt;componentDefinition&gt;
+		&lt;virtualNodesDefinition&gt;
+			&lt;virtualNode name="master" property="multiple" serviceRefid="ft-master" /&gt;
+			&lt;virtualNode name="slaves" property="multiple" serviceRefid="ft-slaves" /&gt;
+		&lt;/virtualNodesDefinition&gt;
+	&lt;/componentDefinition&gt;
+	...
+	&lt;infrastructure&gt;
+		&lt;processes&gt;
+			&lt;processDefinition id="localJVM"&gt;
+				&lt;jvmProcess class="JVMNodeProcess" /&gt;
+			&lt;/processDefinition&gt;
+		&lt;/processes&gt;
+	&lt;/infrastructure&gt;
+	&lt;technicalServiceDefinitions&gt;
+		&lt;service id="ft-master" class="services.FaultTolerance"&gt;
+			&lt;arg name="proto" value="pml" /&gt;
+			&lt;arg name="server" value="rmi://host/FTServer1" /&gt;
+			&lt;arg name="TTC" value="60" /&gt;
+		&lt;/service&gt;
+		&lt;service id="ft-slaves" class="services.FaultTolerance"&gt;
+			&lt;arg name="proto" value="cic" /&gt;
+			&lt;arg name="server" value="rmi://host/FTServer2" /&gt;
+			&lt;arg name="TTC" value="600" /&gt;
+		&lt;/service&gt;
+	&lt;/technicalServiceDefinitions&gt;
+&lt;/ProActiveDescriptor&gt;</programlisting>
+	</section>
+	<section xml:id="NodesProperties_23"><info><title>Nodes Properties</title></info>
+
+
+		<para>
+			In order to help programmers for implementing their owns
+			technical services, we have added a property system to the
+			nodes. This is useful for configuring technical services.
+		</para>
+
+		<programlisting language="java">String myProperty = node.getProperty(myKeyAsString);
+node.setProperty(myKeyAsString, itsValueAsString);</programlisting>
+	</section>
+	</section>
+	<section xml:id="FurtherInformation_23"><info><title>Further Information</title></info>
+
+		<para>
+			The seminal paper
+			<citation>
+				<xref linkend="CDD06c" endterm="CDD06c.abbrev"/>
+			</citation>.
+		</para>
+		<para>
+			The first presentation of this work is available
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www-sop.inria.fr/oasis/personnel/Alexandre.Di_Costanzo/Alexs_Web_Site/Publications_files/wp4_v1.pdf">
+				here
+			</link>.
+		</para>
+		<para>
+			The work of this paper
+			<citation>
+				<xref linkend="CCDMCompFrame06" endterm="CCDMCompFrame06.abbrev"/>
+			</citation>
+			is based on technical services.
+		</para>
+	</section>
+
+</chapter>

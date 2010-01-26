@@ -55,7 +55,7 @@ public interface WebServices {
      */
     public String getUrl();
 
-    //@snippet-start WebServices_Methods
+    //@snippet-start WebServices_Methods_AO
     /**
      * Expose an active object as a web service with the methods specified in <code>methods</code>
      *
@@ -95,6 +95,9 @@ public interface WebServices {
      */
     public void unExposeAsWebService(String urn) throws WebServicesException;
 
+    //@snippet-end WebServices_Methods_AO
+
+    //@snippet-start WebServices_Methods_Components
     /**
      * Expose a component as a web service. Each server interface of the component
      * will be accessible by  the urn [componentName]_[interfaceName].
@@ -141,5 +144,5 @@ public interface WebServices {
      */
     public void unExposeComponentAsWebService(String componentName, String[] interfaceNames)
             throws WebServicesException;
-    //@snippet-end WebServices_Methods
+    //@snippet-end WebServices_Methods_Components
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+
+	<!-- ================================================================ -->
+	<!--            Create docs, which is the javadoc + manual            -->
+	<!--  =============================================================== -->
+	<target name="doc.ReferenceManual.docs" depends="doc.ReferenceManual.manual, doc.ReferenceManual.doc.zips" description="Generate the ProActive Programming Reference Manual manual, and zip archives" />
+
+	<!-- ================================================================ -->
+	<!--            Create docs, which is the javadoc + manual            -->
+	<!--  =============================================================== -->
+	<target name="doc.ReferenceManual.doc.zips" depends="doc.ReferenceManual.manualSingleHtmlZip, doc.ReferenceManual.manualHtmlZip" description="Generate the ProActive Programming Reference Manual manual zip archives" />
+
+	<!-- ==================================================================== -->
+	<!--          Make just the html files for the manual                     -->
+	<!-- ==================================================================== -->
+	<target name="doc.ReferenceManual.manualHtml" description="Generate the ProActive Programming Reference Manual HTML manual">
+		<var name="doc.relative.name"		value="ReferenceManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingReferenceManual" />
+		<subant target="manualHtml" 			inheritall="true">
+			<fileset dir="${docs.toolchain.dir}" 	includes="doc.xml"/>
+		</subant>
+	</target>
+	<!-- ==================================================================== -->
+	<!--   Make an archive from the files for the multiple html manual        -->
+	<!-- ==================================================================== -->
+	<target name="doc.ReferenceManual.manualHtmlZip" description="Generate the ProActive Programming Reference Manual HTML manual zip" depends="doc.ReferenceManual.manualHtml" >
+		<var name="doc.relative.name"		value="ReferenceManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingReferenceManual" />
+		<subant target="manualHtmlZip" inheritall="true">
+			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
+		</subant>
+	</target>
+
+	<!-- ==================================================================== -->
+	<!--               Make just the pdf files for the manual                 -->
+	<!-- ==================================================================== -->
+	<target name="doc.ReferenceManual.manualPdf" description="Generate the ProActive Programming Reference Manual PDF manual">
+		<var name="doc.relative.name"		value="ReferenceManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingReferenceManual" />
+		<subant target="manualPdf" inheritall="true">
+			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
+		</subant>
+	</target>
+	<!-- ==================================================================== -->
+	<!--           Make only one huge html-file from the doc                  -->
+	<!-- ==================================================================== -->
+	<target name="doc.ReferenceManual.manualSingleHtml" description="Generate the ProActive Programming Reference Manual single HTML manual">
+		<var name="doc.relative.name"		value="ReferenceManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingReferenceManual" />
+		<subant target="manualSingleHtml" inheritall="true">
+			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
+		</subant>
+	</target>
+
+	<!-- ==================================================================== -->
+	<!--      Make an archive from the files for the single html manual       -->
+	<!-- ==================================================================== -->
+	<target name="doc.ReferenceManual.manualSingleHtmlZip" description="Generate the ProActive Programming Reference Manual single HTML manual zip" depends="doc.ReferenceManual.manualSingleHtml" >
+		<var name="doc.relative.name"		value="ReferenceManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingReferenceManual" />
+		<subant target="manualSingleHtmlZip" inheritall="true">
+			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
+		</subant>
+	</target>
+
+	<!-- ==================================================================== -->
+	<!-- Construct the manual from the XML files in {docs.src}                -->
+	<!-- ==================================================================== -->
+	<target name="doc.ReferenceManual.manual" description="Generate all the ProActive Programming Reference Manual manuals  (html, single html, pdf)" depends="doc.ReferenceManual.manualSingleHtml,doc.ReferenceManual.manualHtml,doc.ReferenceManual.manualPdf" />
+
+</project>

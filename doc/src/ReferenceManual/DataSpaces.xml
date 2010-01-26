@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="DataSpaces">
+    <info><title xml:id="DataSpacesAPI">Accessing data with Data Spaces API</title></info>
+
+<section xml:id="ds_intro">
+    <info><title>Introduction</title></info>
+    <indexterm><primary>Data Spaces</primary></indexterm>
+
+    <para>
+    In the ProActive library data can be accessed through Data Spaces API that is to be explained in the following chapter.
+    </para>
+    <para>
+    Data Spaces mechanism conceptually pose the virtual file system layer (further called VFS)  between the user code, that accesses file system trough provided API (like Java IO, POSIX, etc.), and physical (local or remote) location of files. Therefore, a programmer does not need to be aware of real file location, and can use VFS abstraction instead. The Data Spaces mechanism brings such a point of view to the ProActive programmer with a dedicated API from the <literal>org.objectweb.proactive.extensions.dataspaces.api</literal> package.
+    </para>
+    <para>
+    In case of ProActive, Data Spaces API layers the file systems, that can be accessed through variety of access protocols, creating one virtual file system with uniform access among all Active Objects. This is achieved by ensuring that every Active Object has the same view of VFS tree, an URI used for accessing data in one Active Object is correct just after passing it to the others. Therefore sharing data becomes comfortable, as standard ProActive communication mechanism can be used for announcing actual URIs.
+    </para>
+    <para>
+    As already mentioned, the Data Spaces API can be run against variety of data transfer protocols that are provided by the infrastructure, or even against a standard ProActive-compliant communication protocols. This is achieved through <literal>PAProviderServer</literal> that is to be used wherever no supported data transfer protocol is available, but still the ProActive deployment can take place successfully. Hence, Data Spaces API can be used on almost every infrastructure.
+    </para>
+    <para>
+    The programmer can use ProActive's Data Spaces API to read application's input data, write and share temporary results and finally gather outputs in uniform manner among all these operations. Hence there are three types of data space abstraction: input, output and scratch. Data Spaces API provides way to access existing data spaces and files within these data spaces, it also gives the ability to define new data spaces. All operations performed through this API concern data spaces owned by one application.
+    </para>
+    <para>
+        <figure xml:id="ds_tree">
+            <info><title>Abstract VFS layer used in Data Spaces (simplified). Each space is described by URI path that resolves to underneath physical protocol.</title></info>
+           <mediaobject><imageobject><imagedata scalefit="1" width="50%" contentdepth="50%" fileref="images/png/dataspaces-layer.png" format="PNG"/></imageobject></mediaobject>
+        </figure>
+    </para>
+
+    <para>
+        Every file in Data Spaces API is identified by an unique URI. It can be shared between Active Objects even if they reside on different nodes. Files are organized in data stores called data spaces, grouped by their purpose and access. To access a file one can use designated data space to resolve file's name or directly resolve URI received from another Active Object.
+    </para>
+    <para>
+        There are distinguished three different space types: input space with files used as the application's input data, output space for storing the application's result files and scratch space for temporary files with the intermediate results of the computations. Spaces types differ in the access rights, and therefore input is only meant for read operations, output for read and write as well, whereas scratch's access mode depends on the caller. If a calling thread is an owner of a particular scratch, then it can perform both read and write operations. On the other hand, if a calling thread is not an owner (eg. has received URI from another Active Object), its access is limited to read only operations.
+    </para>
+    <para>
+    Input and output spaces are mostly defined by the application, hence their configuration is stored in the application-specific GCM-A Descriptor or in the application code itself. An application can have several inputs and outputs defined, as each input and output space has its unique (within a single application) name. There can be defined a default (single) input or output spaces, so using names is not always needed. For more information please refer to attached JavaDoc.
+    </para>
+    <para>
+    Scratch data space is most likely defined by the system administrator in the GCM-D Descriptor in case of the GCM deployment, or manually. Scratch data space is bounded to Node, and particular scratches within a single scratch data space are bounded to Active Objects that reside on this Node. Hence, there is only one scratch that Active Object owns.
+    </para>
+    <para>
+        <figure xml:id="ds_table">
+            <info><title>Data spaces categories, purpose and access rights. (* for scratch space RW access only for owning AO)</title></info>
+           <mediaobject><imageobject><imagedata scalefit="1" width="50%" contentdepth="50%" fileref="images/png/dataspaces.png" format="PNG"/></imageobject></mediaobject>
+        </figure>
+    </para>
+</section>
+
+<section xml:id="ds_configuration">
+    <info><title>Configuring Data Spaces</title></info>
+    <section xml:id="ds_configuration_gcm">
+        <info><title>Data Spaces and GCM Deployment</title></info>
+        <para>
+        The easiest and typical way to configure Data Spaces is using it together with GCM Deployment, which is described in <xref linkend="GCMDeployment"/>.
+        </para>
+        <para>
+        When using Data Spaces with GCM Deployment, all necessary configuration actions are implemented inside GCM deployment mechanism. User and/or administrator just needs to specify configuration in GCM Application and GCM Deployment descriptor files, as usually with this kind of deployment. Once Data Spaces configuration is placed in GCM descriptors, user can access Data Spaces API from every node deployed through <literal>GCMApplication</literal>.
+        </para>
+        <section xml:id="ds_gcma">
+            <info><title>GCM Application Descriptor</title></info>
+            <para>
+            In GCM Application Descriptor user defines a few application-wide settings:
+            <itemizedlist>
+                <listitem><para>whether to <emphasis>enable or disable Data Spaces</emphasis> for the application,</para></listitem>
+                <listitem><para>(optionally) <emphasis>Naming Service settings</emphasis>,</para></listitem>
+                <listitem><para>(optionally) application's <emphasis>input and output data spaces</emphasis> definitions.</para></listitem>
+            </itemizedlist>
+            </para>
+
+            <para>
+            Let us have a look how example GCM Application Descriptor may look like:
+            <example xml:id="ds_gcma_example">
+            <info>
+                <title>GCMA descriptor fragment - Data Spaces configuration</title>
+            </info>
+            <programlisting language="xml"><textobject><textdata fileref="code_snippets/gcma_fragment.txt"/></textobject></programlisting>
+            </example>
+            </para>
+
+            <para>
+            Step by step - how configuration is specified:
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        <emphasis><literal>&lt;data&gt;</literal></emphasis> tag.
+                    </para>
+                    <para>
+                    Presence of this tag determines whether Data Spaces will be enabled for the whole application. There are no attributes for this tag. All other Data Spaces related tags are included in this one.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis><literal>&lt;namingService&gt;</literal></emphasis> tag (optional).
+                    </para>
+                    <para>
+                        Data Spaces needs so called Naming Service to function properly, which acts as a directory of data spaces. This tag is responsible for Naming Service related settings.
+                    </para>
+                    <para>
+                        For typical configuration it is appropriate to omit this tag, which stands for starting own Naming Service for deployed <literal>GCMApplication</literal> and closing it with the end of that application life time.
+                    </para>
+                    <para>
+                        In some configurations you may want to use already started Naming Service. In that case you may specify its URL within <literal>url</literal> attribute, in the following way:
+                        <programlisting language="xml">&lt;namingService url="rmi://branch.inria.fr:1099/5933540059531990841/namingService" /&gt;</programlisting>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis>Input and output specification</emphasis> tags (optional).
+                    </para>
+                    <para>
+                        These group of tags specify input and output data spaces for the application. Spaces has to be defined in a specific order: default input space <emphasis><literal>&lt;inputDefault&gt;</literal></emphasis>, named input spaces <emphasis><literal>&lt;input&gt;</literal></emphasis>, default output space <emphasis><literal>&lt;outputDefault&gt;</literal></emphasis> and named output spaces <emphasis><literal>&lt;output&gt;</literal></emphasis>. Each of them is optional.
+                    </para>
+                    <para>
+                        Every input or output data space is defined in almost the same way. Such a definition consists of the following tags/attributes:
+                        <itemizedlist>
+                            <listitem>
+                                <para><literal>&lt;remoteAccess&gt;</literal> tag with <literal>url</literal> attribute.</para>
+                                <para>
+                                    This mandatory part of space definition sets URL that will be used for accessing that data space. URL may point to a file or directory. For output space file may not exist yet.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para><literal>&lt;location&gt;</literal> tag with <literal>hostname</literal> and <literal>path</literal> attributes (optional).</para>
+                                <para>
+                                    If this tag is present in space definition, data will be accessed locally on a host specified in <literal>hostname</literal>, under local path specified in <literal>path</literal>. This path should represent the same data as <literal>remoteAccess</literal> tag does.
+                                </para>
+                            </listitem>
+                            <listitem>
+                                <para><literal>id</literal> attribute (only for non-default, named spaces).</para>
+                                <para>Non-default, named input or output spaces have to be identified by unique id, which is set through that attribute.</para>
+                            </listitem>
+                        </itemizedlist>
+                        Example data space definition:
+                        <programlisting language="xml">&lt;input id="precomputation"&gt;
+    &lt;remoteAccess url="sftp://bob@storage.com/var/precomputed/" /&gt;
+    &lt;location hostname="storage.com" path="/var/precomputed/" /&gt;
+&lt;/input&gt;</programlisting>
+                    </para>
+                </listitem>
+            </itemizedlist>
+            </para>
+        </section>
+
+        <section xml:id="ds_gcmd">
+            <info><title>GCM Deployment Descriptor</title></info>
+            <para>
+            In GCM Deployment Descriptor grid administrator defines configuration of a scratch data space for each host configuration. It is done by putting settings inside host definition, like in the following example:
+            <example xml:id="ds_gcmd_example">
+                <info>
+                    <title>GCMD descriptor fragment - Data Spaces configuration</title>
+                </info>
+                <programlisting language="xml"><textobject><textdata fileref="code_snippets/gcmd_fragment.txt"/></textobject></programlisting>
+            </example>
+            As you can see, all Data Spaces related configuration is contained within <emphasis><literal>&lt;scratch&gt;</literal></emphasis> tag.
+            </para>
+            <para>
+            If this tag is not present, there will be no scratch data space configured for Nodes with that host configuration, i.e. <literal>PADataSpaces.resolveScratchForAO()</literal> calls will fail on Node with that host configuration. If the tag is present, scratch data space will be configured on Nodes with that configuration. Definition of scratch configuration consists of two tags, whereas at least one of them have to be present:
+            <itemizedlist>
+                <listitem>
+                    <para><literal>&lt;remoteAccess&gt;</literal> tag with <literal>url</literal> attribute.</para>
+                    <para>
+                        This part of scratch space definition is similar to input and output spaces configuration - it sets URL that will be used for accessing that data space. Any existing file that URL points to will be deleted and replaced with a base scratch space directory. Note that special metavariable <literal>#{hostname}</literal> may be used in URL template, as the same generic host configuration may be applied to more than one real hosts. <literal>#{hostname}</literal> is replaced with actual Node's hostname during deployment.
+                    </para>
+                    <para>
+                        Absence of <literal>&lt;remoteAccess&gt;</literal> tag have a special meaning in context of scratch configuration. If the tag is not present, ProActive provider server will be automatically started for a Node lifetime, exposing this part of a file system remotely through ProActive protocol, so you do not need to configure and run external protocol server.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para><literal>&lt;path&gt;</literal> tag with <literal>base</literal> and <literal>relpath</literal> attributes.</para>
+                    <para>
+                        Path definition part specifies location of scratch space on host's local file system tree. Path specified in <literal>relpath</literal> is relative to <literal>base</literal>, which may be one of following values: <literal>proactive</literal>, <literal>home</literal> or <literal>root</literal> (refer to <xref linkend="GCMDeployment"/> for details).
+                    </para>
+                    <para>
+                        When <literal>&lt;remoteAccess&gt;</literal> tag is present, local path specification is just used for optimizing local data access. If <literal>&lt;remoteAccess&gt;</literal> is not present, this path is also used as a root of file system exposed through ProActive provider server.  In any configuration, if both local path and access URL are provided, they should point to the same data.
+                    </para>
+                </listitem>
+            </itemizedlist>
+            </para>
+        </section>
+    </section>
+
+    <section xml:id="ds_configuration_command_line_tools">
+        <info><title>Command-line tools</title></info>
+        <para>
+            Data Spaces provide some command-line tools that you may find useful in some configurations. Note that they are NOT REQUIRED to be used in basic configurations.
+        </para>
+        <section xml:id="ds_configuration_script_naming_service">
+            <info><title><literal>namingService</literal> script</title></info>
+            <para>
+                This shell script allows you to perform <emphasis>operations on Naming Service</emphasis>. In particular, it allows starting standalone Naming Service, which can be shared among several applications. To start Naming Service, use script with <literal>start</literal> command:
+                <screen>linux &gt; ./namingService.sh start
+Naming Service successfully started on: rmi://branch.inria.fr:1099/defaultNamingService</screen>
+                As you can see, you get information with URL of started Naming Service, that you can later use in GCM Application descriptor or for manual configuration, instead of starting separate Naming Service for each application. See <xref linkend="ds_gcma"/> and <xref linkend="ds_configuration_manual"/> for configuration details.
+            </para>
+            <para>
+                You can also start Naming Service within your Java code using <code>NamingServiceDeployer</code> class.
+            </para>
+            <para>
+                <literal>namingService</literal> script can also be used for monitoring or low-level operations, through <literal>ls</literal> and <literal>add</literal> commands.
+            </para>
+        </section>
+        <section xml:id="ds_configuration_script_proactive_provider">
+            <info><title><literal>PAProviderServer</literal> script</title></info>
+            <para>
+                Using this script you can <emphasis>start ProActive provider server</emphasis>, exposing specified local directory for a remote access. ProActive provider bases on ProActive protocol to create remote file system protocol. Performance of such a protocol may be worse than performance of dedicated protocols like FTP, but it can act as an easy to setup protocol, without lot of configuration nor requirements. To start ProActive provider server, simply use script with <literal>start</literal> command:
+                <screen>linux &gt; ./PAProviderServer.sh start /home/bob/input_data/
+70833@branch - [INFO    communication.rmi] Created a new registry on port 1099
+PAProvider successfully started.
+VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?proactive_vfs_provider_path=/
+</screen>
+                Displayed URL of started server can be used as a remote access URL of data spaces in GCM Application descriptor, <literal>PADataSpaces</literal> API or for manual configuration, to easily set up remote access for some data. See <xref linkend="ds_gcma"/> and <xref linkend="ds_configuration_manual"/> for configuration details and <xref linkend="ds_snippet2"/> or javadoc for API details.
+            </para>
+            <para>
+                You can also start ProActive provider server within your Java code using <code>FileSystemServerDeployer</code> class.
+            </para>
+            <para>
+                ProActive provider server uses two ProActive properties (see <xref linkend="ProActiveproperties_69" /> for details), to adjust <emphasis>streams autoclosing</emphasis> feature. This mechanism is meant to close streams those were not being used for a long time, and automatically reopen them if necessary. It can be used to save resources or avoid orphaned resources. Following properties can be set:
+                <itemizedlist>
+                    <listitem>
+                        <para><literal>proactive.vfsprovider.server.stream_autoclose_checking_millis</literal> - indicating how often an auto closing mechanism is started to collect and close all unused streams open (default: 30 000).</para>
+                    </listitem>
+                    <listitem>
+                        <para><literal>proactive.vfsprovider.server.stream_open_maximum_period_millis</literal> - indicating a period after that a stream is perceived as unused and therefore can be closed by auto closing mechanism. (default: 60 000).</para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+        </section>
+    </section>
+
+    <section xml:id="ds_configuration_manual">
+        <info><title>Manual configuration</title></info>
+        <para>
+            In some environments it may be useful to access Data Spaces configuration API manually. Note that most of the users do NOT NEED to know anything about this API, but it is exposed to give more flexibility for potential usages. When you need to configure Data Spaces manually, you need to be aware of a few assumptions that Data Spaces bases on, which are normally fulfilled by GCM deployment implementation.
+        </para>
+        <para>
+            First of all, Data Spaces uses the concept of <emphasis>application</emphasis> operating on data spaces. Every application is uniquely identified by <emphasis>application id</emphasis>. Set of input, output and scratch data spaces is always associated with some concrete application and typically application accesses only its own data spaces.
+        </para>
+        <para>
+            Secondly, Data Spaces assumes that each Node is used at most by one application at any given time, i.e. <emphasis>Node sharing is not allowed</emphasis> between applications using Data Spaces.
+        </para>
+        <para>
+            Configuration of Data Spaces can be divided into two units - <emphasis>Naming Service-level</emphasis> which is common to the whole application and set up once, and <emphasis>Node-level</emphasis> configuration which is individually applied for each Node. Next two sections discuss these two configuration units in more details, while you can find complete manual configuration example in <literal>ManulConfigurationExample</literal> class from <literal>org.objectweb.proactive.examples.dataspaces.manualconfig</literal> package.
+        </para>
+
+        <section xml:id="ds_configuration_manual_naming_service">
+            <info><title>Naming Service-level configuration</title></info>
+            <para>
+                Data Spaces needs a running service called Naming Service, which acts as a directory of data spaces. One Naming Service may be used to serve more than one application. Each application needs to be explicitly registered and unregistered there. Therefore, unique application identifier is required.
+            </para>
+            <para>
+                Naming Service can be <emphasis>started</emphasis> from Java code using <literal>NamingServiceDeployer</literal> class or using <xref linkend="ds_configuration_command_line_tools"/>:
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_StartingNS.snip"/></textobject></programlisting>
+            </para>
+            <para>
+                Once Naming Service is started and can be accessed, application that will use Data Spaces needs to <emphasis>register</emphasis> there with optional set of initial input and output spaces:
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_RegisteringApp.snip"/></textobject></programlisting>
+            </para>
+            <para>
+                When application terminates, it should be deconfigured by  <emphasis>unregistering</emphasis> itself from Naming Service:
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_UnregisteringApp.snip"/></textobject></programlisting>
+            </para>
+            <para>
+                If Naming Service was started through <literal>NamingServiceDeployer</literal> and is not used anymore, it can be  <emphasis>stopped</emphasis>:
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_StoppingNS.snip"/></textobject></programlisting>
+            </para>
+        </section>
+
+        <section xml:id="ds_configuration_manual_node">
+            <info><title>Node-level configuration</title></info>
+            <para>
+                Configuration of Node is performed through <literal>DataSpacesNodes</literal> class and consists of two steps. Every Node-level configuration needs to be performed locally on a Node that is being configured, it cannot be done remotely without any agent Active Object or other mechanism.
+            </para>
+            <para>
+                The first step is to <emphasis>initialize Node for Data Spaces</emphasis> in general, optionally providing base of scratch space configuration that will be later used by applications on this Node. This step is application agnostic, and it is usually performed only once for a Node.
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_ConfigureNode.snip"/></textobject></programlisting>
+            </para>
+            <para>
+                The second step is to <emphasis>configure Node for a particular application</emphasis>, specifying unique application id and Naming Service URL.
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_ConfigureNodeForApp.snip"/></textobject></programlisting>
+            </para>
+            <para>
+                When Node is configured for Data Spaces this way, Active Objects bodies (or non-Active Objects half bodies) can safely use <literal>PADataSpaces</literal> API.
+            </para>
+            <para>
+                Once Node has been configured for some application, it can be explicitly <emphasis>deconfigured for that application</emphasis> - when application is not using this Node anymore:
+                <programlisting language="java">DataSpacesNodes.tryCloseNodeApplicationConfig(node);</programlisting>
+            </para>
+            <para>
+                ...or it can be <emphasis>reconfigured for another application</emphasis> - when another application is starting to use it in place of previous one:
+                <programlisting language="java">DataSpacesNodes.configureApplication(node, anotherApplicationId, namingServiceURL);</programlisting>
+            </para>
+            <para>
+                If Node will not be used anymore for any application (e.g. it is going to be destroyed), its Data Spaces configuration can be completely <emphasis>closed</emphasis>:
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesManualConfig_CloseNodeConfig.snip"/></textobject></programlisting>
+            </para>
+        </section>
+    </section>
+</section>
+
+<section xml:id="ds_using_api">
+<info><title>Using Data Spaces API</title></info>
+
+    <section xml:id="ds_snippets">
+        <info><title>Code snippets and explanation</title></info>
+        <para>
+        Below you can find a few simple examples that show how to deal with basic tasks using Data Spaces API. Those examples remain just ideas of how Data Spaces API can be used, we encourage you to invent your own tricky-application.
+        </para>
+        <section xml:id="ds_codesnippet1">
+            <info><title>Reading from default input, writing to named output</title></info>
+            <para>
+            The first code snippet shows how to read input of an application and to write the final results (here: some statistics). For reading input data, a default input space is used, as there is only one input store used for this example. Statistics are stored in the named output data space according to <literal>STATS_DATA_SPACE</literal> constant, that could be a hard coded identifier or even an application parameter.
+            </para>
+            <para>
+            Methods from the Data Spaces API used in this snippet are: <literal>PADataSpaces.resolveDefaultInput</literal> and <literal>PADataSpaces.resolveOutput</literal> that resolve default input and named output respectively, returning instance of <literal>DataSpacesFileObject</literal> class. This class is a part of Data Spaces API and represents a file (ordinal file or directory) from any data space and allows to read or write file's content through standard Java APIs streams along with another file system operations. For a convenience, a file name can be specified in the parameters list of above mentioned methods.
+        </para>
+            <example xml:id="ds_snippet1">
+                <info><title>Reading from default input and writing to named output</title></info>
+                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet1.java"/></textobject></programlisting>
+            </example>
+        </section>
+        <section xml:id="ds_codesnippet2">
+            <info><title>Adding named inputs dynamically, reading all defined inputs</title></info>
+            <para>
+            The next snippet could be part of an application composed of a GUI that allows user to define inputs dynamically in the run time, for the further processing. Inputs are added (registered for the application) on user's demand by <literal>addInputClicked</literal> event handler (made up for this example), that calls Data Spaces API routine <literal>PADataSpaces.addInput</literal> and informs other processing objects (Active Objects) about the new input. The processing can be done as follows. Using the <literal>PADataSpaces.resolveAllKnownInputs</literal> method one can iterate over all inputs registered in the moment of resolving. Hence, for each such an input, a processing (reading particular files) can take place.
+            </para>
+            <example xml:id="ds_snippet2">
+                <info><title>Dealing with inputs more dynamically — adding named input, reading all defined inputs</title></info>
+                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet2.java"/></textobject></programlisting>
+            </example>
+        </section>
+        <section xml:id="ds_cotesnippet3">
+            <info><title>Sharing scratch URI between two Active Objects</title></info>
+            <para>
+            This snippet presents how two Active Objects can share data stored in ones scratch. The scenario is as follows. One Active Object resolves a file from its scratch with <literal>PADataSpaces.resolveScratchForAO</literal> Data Spaces APIs method. Once the file is resolved (represented by an instance of <literal>DataSpacesFileObject</literal> class), the intermediate results can be written into its content. As each file within data spaces is identified by its URI, such a URI can be obtained with <literal>getURI</literal> method of <literal>DataSpacesFileObject</literal> class and passed to another Active Object as a parameter of exemplary <literal>readMyFile</literal> method. This method (in a different Active Object or even node!) can finally resolve URI through <literal>PADataSpaces.resolveFile</literal> method call and further process the file's content.
+            </para>
+            <example xml:id="ds_snippet3">
+                <info><title>Writing into ones scratch, that is later read by another AO</title></info>
+                <programlisting language="java"><textobject><textdata fileref="code_snippets/dataspaces-snippet3.java"/></textobject></programlisting>
+            </example>
+        </section>
+    </section>
+    <section xml:id="ds_complete_example">
+        <info><title>Complete example</title></info>
+        <para>
+        In this section a complete example of processing data with ProActive and Data Spaces API is presented. Source code can be found in <literal>org.objectweb.proactive.examples.dataspaces.hello</literal> package, whereas xml descriptors in the <literal>examples/dataspaces/hello/</literal> sub directory of your ProActive installation.
+        </para>
+        <para>
+        The goal of the processing is simple: count the number of lines in a text documents and store the results in a single text file. The computations are performed as follows. Every input document is mapped onto one Active Object so that inputs can be read and processed (lines counted) in parallel. Number of lines in each document (so called intermediate results) are stored in AO's scratches, so one can finally read them and gather into one file placed in the output data space. All these operations are simply done using the Data Spaces API.
+        </para>
+        <section xml:id="ds_section_example_gcmd">
+            <info><title>GCM Deployment Descriptor</title></info>
+            <para>
+            The GCM-D is very simple, as the example is to be run on every infrastructure. In this case, a <emphasis><literal>&lt;scratch&gt;</literal></emphasis> tag is used to enable data spaces on nodes described by the <literal>id="host"</literal> host id. A <emphasis><literal>path</literal></emphasis> element defines a location of a scratch data space, as a sub directory of the system's temporary directory. As there is no <emphasis><literal>&lt;remoteAccess&gt;</literal></emphasis> element, the scratch data space is to be exposed through PAProviderServer that is started automatically.
+            </para>
+            <example xml:id="ds_example_gcmd">
+                <info><title>Part of the GCM-D Descriptor: helloDeploymentRemote.xml</title></info>
+                <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_gcmd.snip"/></textobject></programlisting>
+            </example>
+        </section>
+        <section xml:id="ds_section_example_gcma">
+            <info><title>GCM Application Descriptor</title></info>
+            <para>
+            GCM-A part contains application related information regarding data spaces configuration like inputs and outputs definitions, as well as contract variables used in the example code. The latest is defined as follows:
+                <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_gcma1.snip"/></textobject></programlisting>
+            and represents name of a host that the output data is to be stored on.
+            </para>
+            <para>
+            The data spaces configuration part needs somewhat more explanation. It is placed right after Virtual Node definition, as a last child of the <emphasis><literal>&lt;proactive&gt;</literal></emphasis> element.
+            </para>
+            <example xml:id="ds_example_gcma">
+                <info><title>Part of the GCM-A Descriptor: helloApplication.xml</title></info>
+                <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_gcma2.snip"/></textobject></programlisting>
+            </example>
+            <para>
+            Descriptor defines two named input spaces that serve text resources for our example , a document's lines counter. In this particular case, two resources are accessed by the <literal>HTTP</literal> protocol, as they are two Wikipedia articles on <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://en.wikipedia.org/wiki/ProActive">ProActive library</link> and on <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://en.wikipedia.org/wiki/Grid_computing">grid computing</link>. Those inputs can be later resolved by an application using their names (identifiers), here: <literal>wiki_proactive</literal> and <literal>wiki_grid_computing</literal> respectively.
+            </para>
+            <para>
+            The output space is placed on the <literal>OUTPUT_HOSTNAME</literal> host. Output space is a directory placed in the user's home directory and can be accessed remotely by the <literal>SFTP</literal> protocol or locally, as an explicit location is given.
+            </para>
+        </section>
+        <section xml:id="ds_section_example_code">
+            <info><title>The Java code</title></info>
+            <para>
+            The <literal>HelloExample.java</literal> file contains code responsible for deployment and computation scenario in general. At the beginning, the variable contract is fulfilled, passing the deployer's host name into descriptor. Therefore the output data space is now fully defined , placed on the deployer's host.
+            </para>
+            <example xml:id="ds_example_variables">
+                <info><title>HelloExample.java: setting up variable from the contract </title></info>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_code_variables.snip"/></textobject></programlisting>
+            </example>
+            <para>
+            The GCM deployment used in this example is a common way to deploy your application, as you can see, no additional work is required to enable the Data Spaces API.
+            </para>
+            <example xml:id="ds_example_gcmastart">
+                <info><title>HelloExample.java: starting the GCM deployment</title></info>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_code_startgcm.snip"/></textobject></programlisting>
+            </example>
+            <para>
+            All routines related to processing scenario are gathered into one <literal>exampleUsage</literal> method (<xref linkend="ds_example_scenario" />). At the very beginning, nodes grabbed previously during the deployment phase are now used for placing two Active Objects instantiated from the <literal>ExampleProcessing</literal> class. Both are later called to perform <literal>computePartials</literal> method, that obtains as a parameter the name of an input space to process. Input space names are defined as follows:
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_code_constants.snip"/></textobject></programlisting>
+                and thereby reflect the GCM-A input spaces definition. Partial results (here: number of lines in each document) are stored in text files in the AO's scratches, that URIs appear as a <literal>computePartials</literal> method's return value. Collection of those URI's is later passed to <literal>gatherPartials</literal> method called on one of instantiated Active Objects.
+            </para>
+            <example xml:id="ds_example_scenario">
+                <info><title>HelloExample.java: computation scenario used in the example</title></info>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_code_scenario.snip"/></textobject></programlisting>
+            </example>
+            <para>
+            Finally, let's have a look at routines that are performed by Active Objects instantiated from the <literal>ExampleProcessing</literal> class (<xref linkend="ds_example_processing1" /> , refer to comments for the routines' explanation. There are two main processing methods <literal>computePartials</literal> and <literal>gatherPartials</literal> shown, along with the <literal>writeIntoScratchFile</literal> helper method.
+            </para>
+            <example xml:id="ds_example_processing1">
+                <info><title>ExampleProcessing.java: routines perfomed by Active Objects (1)</title></info>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_processing1.snip"/></textobject></programlisting>
+            </example>
+            <example xml:id="ds_example_processing2">
+                <info><title>ExampleProcessing.java: routines perfomed by Active Objects (2)</title></info>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_processing2.snip"/></textobject></programlisting>
+            </example>
+            <example xml:id="ds_example_processing3">
+                <info><title>ExampleProcessing.java: routines perfomed by Active Objects (3)</title></info>
+                <programlisting language="java"><textobject><textdata fileref="automatic_snippets/DataSpacesExample_processing3.snip"/></textobject></programlisting>
+            </example>
+        </section>
+        <section xml:id="ds_example_output">
+            <info><title>Example's output</title></info>
+            <para>
+            In this section an output of above mentioned example is presented, both: a simplified logger output and the output file's content.
+            </para>
+            <screen>
+# simplified logger's output (info messages from the example of each thread):
+<textobject><textdata fileref="code_snippets/dataspaces-out_log"/></textobject>
+# final results of the processing (order of lines may differ after each run):
+$ cat tmp/output/final_results.txt
+wiki_proactive: 514
+wiki_grid_computing: 732
+            </screen>
+        </section>
+    </section>
+</section>
+</chapter>

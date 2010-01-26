@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preface xml:id="Introduction">
+	<title>Introduction</title>
+	<para>
+		In order to make the ProActive Programming documentation easier to read, it has been split into four manuals:
+	</para>
+	<itemizedlist>
+		<listitem>
+			<para>
+				<emphasis role="bold">ProActive Get Started Manual</emphasis> - This manual contains an overview of ProActive Programming showing differents examples and explaining how to install the middleware.
+				It also includes a tutorial teaching how to use it. This manual should be the first one to be read for beginners.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				<emphasis role="bold">ProActive Reference Manual</emphasis> - This manual is the main manual where the concepts of ProActive are described.
+				Information on configuration and deployment are described in that manual. It also includes guides for high-level APIs usage such as Master-Worker, SMPD APIs.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				<emphasis role="bold">ProActive Advanced Features Manual</emphasis> - This manual describes some advanced features like Fault-Tolerance, ProActive Compile-Time Annotations or Web Services Exportation.
+				In Addition, it gives information on some other high-level APIs such as Monte-Carlo or Branch and Bound APIs. Finally, it helps advanced user to extend ProActive.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				<emphasis role="bold">ProActive Components Manual</emphasis> - ProActive defines a component model called ProActive/GCM suitable to support the development of efficient grid applications.
+				This manual therefore contains all necessary information to be able to understand and use this component model.
+				This model is really linked to ProActive so a ProActive/GCM user may have to refer to the ProActive manuals form time to time.
+			</para>
+		</listitem>
+	</itemizedlist>
+	<para>
+		These manuals should be read in the order defined above. However, this is not essential as these documentations are linked together.
+		Besides, if some links seems to be dead in one of these manuals, make sure that all of them had been built previously	 (multiple html version).
+		So as to build all the manuals at once, go to your ProActive <literal>compile/</literal> directory and type <literal>build[.bat] doc.ProActive.docs</literal>.
+		This builds all manuals in all formats.
+		If you just want to build one of these manuals in a specific format, type <literal>build[.bat]</literal> to see the possible targets and chose the one you are interested in.
+	</para>
+</preface>

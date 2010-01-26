@@ -12,6 +12,12 @@
 
 	<taskdef name="if" classname="ise.antelope.tasks.IfTask" />
 
+	<!-- emma -->
+	<path id="emma.lib">
+		<pathelement location="${base.dir}/compile/lib/emma_ant.jar" />
+		<pathelement location="${base.dir}/compile/lib/emma.jar" />
+	</path>
+
 	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
 
 	<!--
@@ -47,14 +53,7 @@
 	<property file="${user.home}/.proactive/build.properties" />
 	<import file="common.xml" />
 
-	<import file="../doc/pa/build.xml"  optional="true" />
-
-	<!-- emma -->
-	<path id="emma.lib">
-		<pathelement location="${base.dir}/compile/lib/emma_ant.jar" />
-		<pathelement location="${base.dir}/compile/lib/emma.jar" />
-	</path>
-
+	<import file="../doc/src/build.xml"  optional="true" />
 
 	<!-- ************
 		Classpath
