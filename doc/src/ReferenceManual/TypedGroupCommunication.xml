@@ -216,7 +216,7 @@
    <programlisting language="java"><textobject><textdata fileref="./automatic_snippets/group_A_8.snip"/></textobject></programlisting>
    <para>To learn more about groups, see the
    <!-- This url can only work in the html generated files: in pdf there's no ".." -->
-   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/release-doc/pa/api_published/index.html">JavaDoc</link>
+   <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../api_published/index.html">JavaDoc</link>
    <phrase os="pdf"> of org.objectweb.proactive.core.group</phrase>
    and the paper <citation><xref linkend="BBC02" endterm="BBC02.abbrev"/></citation>.
    </para>
