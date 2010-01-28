@@ -12,7 +12,7 @@
 
 	<!ENTITY BookInfo SYSTEM "BookInfo.xml">
 	<!ENTITY Contributors SYSTEM "Contributors.xml">
-	<!ENTITY Introduction SYSTEM "Introduction.xml">
+	<!ENTITY Preface SYSTEM "Preface.xml">
 	<!ENTITY FaultTolerance SYSTEM "FaultTolerance.xml">
 	<!ENTITY Security SYSTEM "Security.xml">
 	<!ENTITY MessageTagging SYSTEM "MessageTagging.xml">
@@ -34,7 +34,7 @@
 	&BookInfo;
 	&Contributors;
 
-	&Introduction;
+	&Preface;
 
 	<part xml:id="ProActiveAdvancedFeatures"><info><title xml:id="ServicesandAdvancedFeatures_2">Services and Advanced Features</title></info>
 

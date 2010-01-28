@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<preface xml:id="Introduction">
-	<title>Introduction</title>
+<preface xml:id="Preface">
+	<title>Preface</title>
 	<para>
 		In order to make the ProActive Programming documentation easier to read, it has been split into four manuals:
 	</para>

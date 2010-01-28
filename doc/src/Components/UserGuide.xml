@@ -1932,76 +1932,280 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			</section>
 		</section>
 
-		<section xml:id="Exporting_components_as_Web_Services"><info><title>Exporting components as Web Services</title>
-			</info>
+		<section xml:id="Exporting_components_as_Web_Services"><info><title>Exporting components as Web Services</title></info>
 
-			<para>
-				As with any active objects, each component can be exposed as a web service.
-			</para>
+			<section xml:id="WS_Overwiew"><info><title xml:id="Overview_290">Overview</title></info>
 
-			<para>
-				For a complete description of Web Services in ProActive, please refer to
-				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../AdvancedFeatures/multiple_html/WebServices.html#WebServices">Chapter 35. Exporting active objects and components as Web Services</link>.
-			</para>
-
-			<section xml:id="UsingProActiveWebServicesAPI"><info><title>Using ProActive Web Services API</title></info>
 				<para>
-					The main difference with active objects is that, when exposing a component as web service, all the methods of each server interfaces are
-					automatically exposed as a web service (with active objects you can expose just one method at once). However, you can choose the
-					interfaces you want to deploy.
-					After having defined the component and having started it as usual, the following lines enable you to expose a component:
-					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_2.snip"/></textobject></programlisting>
-					where:
-					<itemizedlist>
-						<listitem>
-						<para>
-								<emphasis role="bold">a</emphasis> is the instance of the component whose interfaces will be exposed as web services.
-						</para>
-		           </listitem>
-						<listitem>
-							<para>
-								<emphasis role="bold">myComponent</emphasis> is the name you want to give to the first part of the service name. Each service available in this way will get a name
-								composed by the component name followed by the interface name: <emphasis>componentName_interfaceName</emphasis>.
-							</para>
-						</listitem>
-					</itemizedlist>
+					This feature allows to expose a component as a web service and thus, to call it
+					from any client written in any foreign language.
 				</para>
 
 				<para>
-					Likewise, to undeploy a component, just call the method:
-					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_3.snip"/></textobject></programlisting>
-					where:
-					<itemizedlist>
-						<listitem>
-							<para>
-								<emphasis role="bold">a</emphasis> is the instance of the component.
-							</para>
-						</listitem>
-						<listitem>
-							<para>
-								<emphasis role="bold">myComponent</emphasis> is the name of the component as given before.
-							</para>
-						</listitem>
-					</itemizedlist>
-				</para>
-
-				<para>
-					The methods expose and unexpose a component with all its non controller server interfaces. If you want to choose the interfaces to
-					expose or unexpose, please refer to
-					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../AdvancedFeatures/multiple_html/WebServices.html#WebServices">Chapter 35. Exporting active objects and components as Web Services</link>.
-				</para>
-
-				<para>
-					Once the component interfaces are deployed, you can access it via any web service enabled client.
+					Indeed, applications written in C#, for instance, cannot communicate
+					with ProActive applications. We have chosen web services technology to
+					enable interoperability because they are based on XML and HTTP. Thus, any
+					active object can be accessible from any enabled web services language.
 				</para>
 			</section>
 
-			<section xml:id="AsimpleexampleHelloWorldwithcomponent"><info><title>A simple example: Hello World with component</title></info>
+			<section xml:id="Principles_29"><info><title>Principles</title></info>
+
 
 				<para>
-					Here is a very basic example: just a classic HelloWorld programming with component.
+					A <emphasis role="bold">web service</emphasis> is a software entity,
+					providing one or several functionalities, that can be exposed, discovered
+					and accessed over the network. Moreover, web services technology allows
+					heterogeneous applications to communicate and exchange data in a remotely
+					way. In our case, the useful elements, of web services are:
 				</para>
 
+				<itemizedlist>
+					<listitem>
+						<para><emphasis role="bold">The SOAP Message</emphasis></para>
+
+						<indexterm>
+							<primary>SOAP</primary>
+						</indexterm>
+
+						<para>
+							The SOAP message is used to exchange XML based data over the
+							internet. It can be sent via HTTP and provides a serialization format
+							for communicating over a network.
+						</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis role="bold">The HTTP Server</emphasis></para>
+
+						<para>
+							HTTP is the standard web protocol generally used over the 80
+							port. In order to receive SOAP messages, you can either install an HTTP
+							server that will be responsible of the data transfer or use the default HTTP server
+							which is a Jetty server. However, This server is not sufficient to treat a SOAP request.
+							For this, you also need a SOAP engine.
+						</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis role="bold">The SOAP Engine</emphasis></para>
+
+						<para>
+							A SOAP Engine is the mechanism responsible of making transparent
+							the unmarshalling of the request and the marshalling of the response.
+							Thus, the service developer doesn't have to worry with SOAP.
+							In our case, we can use Axis2 or CXF which can be installed into any HTTP server.
+						</para>
+					</listitem>
+
+					<listitem>
+						<para><emphasis role="bold">The client</emphasis></para>
+
+						<para>
+							Client's role is to consume a web service. It is the producer of
+							the SOAP message. The client developer doesn't have to worry about how
+							the service is implemented. The Axis2 java library provides classes to
+							easily invoke a service (see examples).
+						</para>
+					</listitem>
+				</itemizedlist>
+
+				<figure xml:id="SOAP_call_steps"><info><title>Steps taken when an active object is called via SOAP</title></info>
+					<mediaobject>
+						<imageobject>
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/provider_en.png" format="PNG"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</section>
+
+			<section xml:id="PrerequisiteInstallingtheWebServerandtheSOAP"><info><title>Pre-requisite: Installing the Web Server and the SOAP engine</title></info>
+
+				<para>
+					If you want to expose your components on the local embedded Jetty server or on Jetty servers deployed during your deployment, you just have to deploy proactive using
+					the <literal>build deploy</literal> command into the <literal>compile</literal> directory. If you want to expose them on an other http
+					server, you have to build the <literal>proactive.war</literal> archive.
+					For this, you have to go into your <literal>compile</literal> directory of your ProActive home and type <literal>build proActiveWar[Axis2|CXF]</literal>.
+					The <literal>proactive.war</literal> file will be built into the <literal>dist</literal> directory.
+				</para>
+
+				<para>If you have chosen to use the default Jetty server, then you have nothing else to do. Jetty server will automatically take files it needs.</para>
+
+				<para>If you have chosen to use your own HTTP server, then you just have to copy the proactive.war file into the <literal>webapp</literal> directory of your HTTP server.
+				Some HTTP servers need to be restarted to take into account
+				this new web application but some others like Tomcat can handle hot deployment and, thus, do not need to be restarted.</para>
+
+				<warning>
+					<para>if you use your own HTTP server, you have to be aware that the Jetty server will be launched. Most of ProActive examples are launched
+					with the option '-Dproactive.http.port=8080' which specifies Jetty port. So, if you want to use your own server on port 8080, you have to modify the jetty port in
+					launching scripts or to change the port of your own server.</para>
+				</warning>
+			</section>
+
+
+
+			<section xml:id="Stepstoexposeanactiveobjectasa_29"><info><title>Steps to expose or unexpose a component as a web services</title></info>
+
+				<para>The steps for exporting and using a component as a web service
+				are the following:</para>
+
+				<itemizedlist>
+					<listitem>
+						<para>Write your component in a classic way as below:</para>
+
+						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_1.snip" /></textobject></programlisting>
+					</listitem>
+
+					<listitem>
+						<para>Once the element created and activated, a <emphasis role="bold">WebServicesFactory</emphasis> object has to be instantiated: </para>
+						<programlisting language="java">WebServicesFactory wsf = AbstractWebServicesFactory.getWebServicesFactory("axis2");</programlisting>
+						<para>or</para>
+						<programlisting language="java">WebServicesFactory wsf = AbstractWebServicesFactory.getWebServicesFactory("cxf");</programlisting>
+						<para>or else</para>
+						<programlisting language="java">WebServicesFactory wsf = AbstractWebServicesFactory.getDefaultWebServicesFactory();</programlisting>
+					</listitem>
+					<listitem>
+						<para>Then, you have to instantiate a <emphasis role="bold">WebServices</emphasis> object as follows: </para>
+						<programlisting language="java">WebServices ws = wsf.getWebServices(myUrl);</programlisting>
+						<para>If you want to use the local Jetty server to expose your component, you can use the following line
+						to retrieve the good URL:</para>
+						<programlisting language="java">String myUrl = AbstractWebServicesFactory.getLocalUrl();</programlisting>
+						<para>This will get the Jetty port which is a random port and build the url.</para>
+					</listitem>
+					<listitem>
+						<para>And finally, you can used one of the <literal>WebServices</literal> methods: </para>
+						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/WebServices_Methods_Components.snip" /></textobject></programlisting>
+
+						<para>where:</para>
+
+						<itemizedlist>
+							<listitem>
+								<para><emphasis role="bold">component</emphasis> is the component</para>
+							</listitem>
+							<listitem>
+								<para><emphasis role="bold">componentName</emphasis> the first part of the service name
+								which will identify the component on the server. The service will be exposed at the address
+								http://[host]:[port]/proactive/services/componentName_interfaceName</para>
+							</listitem>
+							<listitem>
+								<para><emphasis role="bold">interfaceNames</emphasis> is a String array
+								containing the interfaces of the component you want to make accessible. If
+								this parameters is null (or is absent), all the functional server interfaces of the component will be exposed.</para>
+							</listitem>
+						</itemizedlist>
+
+					</listitem>
+				</itemizedlist>
+			</section>
+
+			<section xml:id="exposeonremotejettyservers_29"><info><title>Exposing as a web service on remote Jetty servers launched during the deployment</title></info>
+				<para>
+				When you call the exposition of your component,
+				the Axis2 servlet or the CXF one is deployed on the local Jetty server. It is therefore possible
+				to expose your object locally without doing anything else.
+				</para>
+				<para>
+				Now, let us assume that your component is deployed on a remote node.
+				In that case, you have a running jetty server on the remote host containing this node but no servlet has been deployed on it.
+				So, if you want to expose your component on the remote host, you will have to make a small modification of the previous piece of code.
+				</para>
+				<para>
+				The web service extension provides classes that implements the <literal>InitActive</literal> interface which are in charge of deploying the CXF or the Axis2 servlet on the host
+				where your object has been initialized. Thus, you just have to instantiate your component using this implementation of <literal>InitActive</literal>.
+				</para>
+
+				<programlisting language="java">// Get the Axis2 InitActive in charge of deploying the Axis2 Servlet
+				InitActive axis2InitActive = WebServicesInitActiveFactory.getInitActive("axis2");
+				Component myComponent = myGenericFactory.newFcInstance(myComponentType,
+				new ControllerDescription("myControllerName", Constants.PRIMITIVE),
+				new ContentDescription(MyComponent.class.getName(), null, axis2InitActive, null), myNode);</programlisting>
+
+				<para>
+				There exists another way to do that using controllers. Indeed, the webservice extension also provides a customized controller
+				that will deploy the chosen servlet at component start.
+				</para>
+
+				<para>So, you can proceed as follows:</para>
+
+				<programlisting language="java">ControllerDescription cd = new ControllerDescription("myControllerName", Constants.PRIMITIVE,
+				"&lt;your ProActive Home&gt;/src/Extensions/" +
+				"org/objectweb/proactive/extensions/webservices/cxf/initialization/cxf-component-config.xml");
+				Component myComp = myGenericFactory.newFcInstance(myComponentType, cd,
+				new ContentDescription(MyComponent.class.getName()));</programlisting>
+
+				<para>
+				The <literal>cxf-component-config.xml</literal> file just redefines the controller to be the
+				<literal>org.objectweb.proactive.extensions.webservices.cxf.initialization.CXFProActiveLifeCycleControllerImpl</literal>.
+				For using the <literal>org.objectweb.proactive.extensions.webservices.axis2.initialization.Axis2ProActiveLifeCycleControllerImpl</literal>,
+				use the file located at <literal>"&lt;your ProActive Home&gt;/src/Extensions/org/objectweb/proactive/extensions/webservices/axis2/initialization/axis2-component-config.xml"</literal>
+				</para>
+
+				<para>
+				Now, let us assume that your component is deployed on a node or locally and that you want to expose it on a host where another node is deployed.
+				On this host, there is only a running Jetty server without any web services servlet.
+				In order to deploy the CXF or Axis2 servlet on it, you can use the following code:
+				</para>
+
+				<programlisting language="java">WebServicesInitActiveFactory.getInitActive("cxf").initServlet(myNode);</programlisting>
+
+				<para>
+				Then, you can expose your component as a web service as in <xref linkend="Stepstoexposeanactiveobjectasa_29"/>.
+				</para>
+			</section>
+			<section xml:id="Accessingtheservices_29"><info><title>Accessing the services</title></info>
+
+				<para>Once the component exposed, you can access it via any web service client (such as C#, SoapUI, Axis2 API, CXF API...) or with your favorite browser
+				(only if the returned type of your service methods are primitive types).</para>
+
+				<para>First of all, the client will get the WSDL file matching this active
+				object. This WSDL file is the 'identity card' of the service. It contains
+				the web service public interfaces and its location. Generally, WSDL files
+				are used to generate a proxy to the service. For example, for a given
+				service, say 'compute', you can get the WSDL document at <code>http://localhost:8080/proactive/services/compute?wsdl</code>.</para>
+
+				<para>Now that this client knows what and where to call the service, it
+				will send a SOAP message to the web server. The web server looks into the
+				message and performs the right call. Then, it returns the response into another
+				SOAP message to the client.</para>
+			</section>
+
+			<section xml:id="Limitations_29"><info><title>Limitations</title></info>
+
+				<para>Contrary to the previous version of the component exposition using Apache SOAP, this new version which uses Axis2 or CXF can handle complex types.
+				That is, with this version, you can implement a service which exposes a method returning or taking in argument an instance of any class.
+				However, the class of this instance has to respect some criterion due to the serialization and CXF/Axis2 restrictions:</para>
+				<itemizedlist>
+				<listitem><para>This class has to be serializable</para></listitem>
+				<listitem><para>This class has to supply a no-args constructor and preferably empty</para></listitem>
+				<listitem><para>All the fields of this class has to be private or protected</para></listitem>
+				<listitem><para>This class has to supply public getters and setters for each field.
+				These getter and setter methods have to be in this class and not in one of its super classes.</para></listitem>
+				</itemizedlist>
+
+
+				<para>
+				Axis2 and CXF are not fully compatible. In particular, clients behave differently.
+				Axis2 client uses to send SOAP requests using "argn" as name for the n-th argument of the requested method. However, CXF creates the WSDL
+				service using parameter names as written into the Java code. Thus, there is a difference of names and the service cannot find argument names in the SOAP
+				message matching with the argument names of the requested method. Null value is therefore used as parameters.
+				To easily solve this issue, you can change the argument names of your service to match with "argn". If you cannot change the service, you have to
+				use another client as those used in the ProActive extension.
+				</para>
+				<para>
+				If you want to use the CXF client provided by ProActive for calling an Axis2 service, you will also face difficulties since this client waits for a returned SOAP message
+				that the Axis2 service will not return for a void method. One thing but not the best you can do, is to modify ProActive CXF client in order to eat the exception
+				for oneWayCall. This is not the best solution since other exceptions will be eaten too.
+				</para>
+
+				<para>
+				In a general manner, we advise you to use the same framework for the exposition as a web service and for the client consuming this service.
+				</para>
+			</section>
+
+			<section xml:id="AsimpleexampleHelloWorld_29"><info><title>A simple example: Hello World</title></info>
+
+				<para>Let's start with a simple example, an Hello world component with two interfaces
+				exposed as a web service:</para>
 				<para>
 					First, below are the two server interfaces of the component:
 					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/helloworlditfcomponent.snip"/></textobject></programlisting>
@@ -2009,17 +2213,128 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				</para>
 
 				<para>
-					The implementation class of the component which also contains the main method to create the component, start it and deploy it, is the following one:
+					The implementation class of the component is the following one:
 					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/helloworldcomponent.snip"/></textobject></programlisting>
-					The component <literal>comp</literal> has been deployed as a web service on the web server located at <literal>url</literal>.
 				</para>
 
 				<para>
-					At last, here is a java program calling the deployed web service:
-					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/wsclientcomponent.snip"/></textobject></programlisting>
+					The following piece of code creates the component and exposes its interfaces as a web services.
 				</para>
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_4.snip" /></textobject></programlisting>
+
+				<para>All the interfaces (<literal>hello-world</literal> and <literal>goodbye-world</literal>) of the component <literal>helloWorld</literal> have been deployed as web
+				services on the web server located at
+				<literal>http://localhost:8080/proactive/services/</literal> and its service names are
+				<literal>"MyHelloWorldComponentService_hello-world"</literal> and <literal>"MyHelloWorldComponentService_goodbye-world"</literal>.
+				You can see the wsdl files through the
+				<literal>http://localhost:8080/proactive/services/MyHelloWorldComponentService_hello-world?wsdl</literal> and
+				<literal>http://localhost:8080/proactive/services/MyHelloWorldComponentService_goddbye-world?wsdl</literal> and you
+				can call the <literal>sayHello</literal> method of the <literal>hello-world</literal> interface with your browser through
+				<literal>http://localhost:8080/proactive/services/MyHelloWorldComponentService_hello-world/sayHello</literal>.</para>
+
+
+				<para>If you have exposed a method which requires arguments, you can call it using the same link as previously but
+				adding <literal>?[arg0]=[value]&amp;[arg1]=[value]...</literal> where [argn] is the name of the n-th argument
+				as written in the wsdl file.</para>
+
+				<para>You can also call a webservice using the ProActive client which uses, depending on the chosen framework, either a axis2 or a cxf client.
+				Here is an example:</para>
+
+				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_5.snip" /></textobject></programlisting>
+
+				<!--
+				<para>Now that the server-side Web service is deployed, we can create a
+				new client application in Visual Studio .NET.</para>
+				-->
 			</section>
 		</section>
+
+
+<!--			<para>-->
+<!--				As with any active objects, each component can be exposed as a web service.-->
+<!--			</para>-->
+<!---->
+<!--			<para>-->
+<!--				For a complete description of Web Services in ProActive, please refer to-->
+<!--				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../AdvancedFeatures/multiple_html/WebServices.html#WebServices">Chapter 35. Exporting active objects and components as Web Services</link>.-->
+<!--			</para>-->
+<!---->
+<!--			<section xml:id="UsingProActiveWebServicesAPI"><info><title>Using ProActive Web Services API</title></info>-->
+<!--				<para>-->
+<!--					The main difference with active objects is that, when exposing a component as web service, all the methods of each server interfaces are-->
+<!--					automatically exposed as a web service (with active objects you can expose just one method at once). However, you can choose the-->
+<!--					interfaces you want to deploy.-->
+<!--					After having defined the component and having started it as usual, the following lines enable you to expose a component:-->
+<!--					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_2.snip"/></textobject></programlisting>-->
+<!--					where:-->
+<!--					<itemizedlist>-->
+<!--						<listitem>-->
+<!--						<para>-->
+<!--								<emphasis role="bold">a</emphasis> is the instance of the component whose interfaces will be exposed as web services.-->
+<!--						</para>-->
+<!--		           </listitem>-->
+<!--						<listitem>-->
+<!--							<para>-->
+<!--								<emphasis role="bold">myComponent</emphasis> is the name you want to give to the first part of the service name. Each service available in this way will get a name-->
+<!--								composed by the component name followed by the interface name: <emphasis>componentName_interfaceName</emphasis>.-->
+<!--							</para>-->
+<!--						</listitem>-->
+<!--					</itemizedlist>-->
+<!--				</para>-->
+<!---->
+<!--				<para>-->
+<!--					Likewise, to undeploy a component, just call the method:-->
+<!--					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_3.snip"/></textobject></programlisting>-->
+<!--					where:-->
+<!--					<itemizedlist>-->
+<!--						<listitem>-->
+<!--							<para>-->
+<!--								<emphasis role="bold">a</emphasis> is the instance of the component.-->
+<!--							</para>-->
+<!--						</listitem>-->
+<!--						<listitem>-->
+<!--							<para>-->
+<!--								<emphasis role="bold">myComponent</emphasis> is the name of the component as given before.-->
+<!--							</para>-->
+<!--						</listitem>-->
+<!--					</itemizedlist>-->
+<!--				</para>-->
+<!---->
+<!--				<para>-->
+<!--					The methods expose and unexpose a component with all its non controller server interfaces. If you want to choose the interfaces to-->
+<!--					expose or unexpose, please refer to-->
+<!--					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../AdvancedFeatures/multiple_html/WebServices.html#WebServices">Chapter 35. Exporting active objects and components as Web Services</link>.-->
+<!--				</para>-->
+<!---->
+<!--				<para>-->
+<!--					Once the component interfaces are deployed, you can access it via any web service enabled client.-->
+<!--				</para>-->
+<!--			</section>-->
+<!---->
+<!--			<section xml:id="AsimpleexampleHelloWorldwithcomponent"><info><title>A simple example: Hello World with component</title></info>-->
+<!---->
+<!--				<para>-->
+<!--					Here is a very basic example: just a classic HelloWorld programming with component.-->
+<!--				</para>-->
+<!---->
+<!--				<para>-->
+<!--					First, below are the two server interfaces of the component:-->
+<!--					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/helloworlditfcomponent.snip"/></textobject></programlisting>-->
+<!--					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/goodbyeworlditfcomponent.snip"/></textobject></programlisting>-->
+<!--				</para>-->
+<!---->
+<!--				<para>-->
+<!--					The implementation class of the component which also contains the main method to create the component, start it and deploy it, is the following one:-->
+<!--					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/helloworldcomponent.snip"/></textobject></programlisting>-->
+<!--					The component <literal>comp</literal> has been deployed as a web service on the web server located at <literal>url</literal>.-->
+<!--				</para>-->
+<!---->
+<!--				<para>-->
+<!--					At last, here is a java program calling the deployed web service:-->
+<!--					<programlisting language="java"><textobject><textdata fileref="automatic_snippets/wsclientcomponent.snip"/></textobject></programlisting>-->
+<!--				</para>-->
+<!--			</section>-->
+<!--		</section>-->
 
 		<section xml:id="Webservicebindings_53"><info><title>Web service bindings</title>
 			</info>

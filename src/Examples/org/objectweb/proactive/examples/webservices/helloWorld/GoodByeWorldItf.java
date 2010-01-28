@@ -44,5 +44,7 @@ public interface GoodByeWorldItf {
     public String sayGoodBye();
 
     public void setText(String arg0);
+
+    public String sayText();
 }
 //@snippet-end goodbyeworlditfcomponent

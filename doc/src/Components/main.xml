@@ -12,15 +12,14 @@
 
 	<!ENTITY BookInfo				SYSTEM "BookInfo.xml">
 	<!ENTITY Contributors			SYSTEM "Contributors.xml">
-	<!ENTITY Introduction			SYSTEM "Introduction.xml">
+	<!ENTITY Preface				SYSTEM "Preface.xml">
 	<!ENTITY ExampleApplications	SYSTEM "ExampleApplications.xml">
 	<!ENTITY Tutorial				SYSTEM "Tutorial.xml">
-	<!ENTITY ComponentsIntro		SYSTEM "ComponentsIntroduction.xml">
+	<!ENTITY Introduction			SYSTEM "Introduction.xml">
 	<!ENTITY UserGuide				SYSTEM "UserGuide.xml">
 	<!ENTITY Architecture			SYSTEM "Architecture.xml">
 	<!ENTITY Examples				SYSTEM "Examples.xml">
 	<!ENTITY Perspectives			SYSTEM "Perspectives.xml">
-	<!ENTITY WebServices			SYSTEM "WebServices.xml">
 	<!ENTITY Appendix				SYSTEM "Appendix.xml">
 	<!ENTITY Biblio					SYSTEM "Biblio.xml">
 ]>
@@ -29,25 +28,22 @@
 	&BookInfo;
 	&Contributors;
 
-	&Introduction;
+	&Preface;
 
 	<part xml:id="ProActiveGuidedTour"><info><title xml:id="GuidedTourandTutorial_2">Guided Tour and Tutorial</title></info>
+		&Introduction;
 		&ExampleApplications;
 		&Tutorial;
 	</part>
 
 
 	<part xml:id="ProActiveComponents"><info><title xml:id="ProgrammingWithComponents_2">Programming With Components</title></info>
-		&ComponentsIntro;
 		&UserGuide;
 		&Architecture;
 		&Examples;
 		&Perspectives;
 	</part>
 
-	<part xml:id="AdvancedFeatures"><info><title xml:id="AdvancedFeatures_2">Advanced Features</title></info>
-		&WebServices;
-	</part>
 	<part xml:id="BackMatters"><info><title xml:id="Backmatters_2">Back matters</title></info>
 		&Appendix;
 		&Biblio;

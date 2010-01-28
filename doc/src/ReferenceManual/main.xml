@@ -12,7 +12,7 @@
 
 	<!ENTITY BookInfo SYSTEM "BookInfo.xml">
 	<!ENTITY Contributors SYSTEM "Contributors.xml">
-	<!ENTITY Introduction SYSTEM "Introduction.xml">
+	<!ENTITY Preface SYSTEM "Preface.xml">
 	<!ENTITY ProActiveBasis SYSTEM "ProActiveBasis.xml">
 	<!ENTITY AOCreation SYSTEM "ActiveObjectCreation.xml">
 	<!ENTITY TypedGroupCommunication SYSTEM "TypedGroupCommunication.xml">
@@ -41,7 +41,7 @@
 	&BookInfo;
 	&Contributors;
 
-	&Introduction;
+	&Preface;
 
 	<part xml:id="ProActiveProgramming"><info><title xml:id="ProgrammingWithActiveObjects_2">Programming With Active Objects</title></info>
 

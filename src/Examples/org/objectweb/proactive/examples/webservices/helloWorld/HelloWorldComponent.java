@@ -98,6 +98,7 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
         return "Good bye ProActive Team !";
     }
 
+    //@snippet-break helloworldcomponent
     public static void main(String[] args) {
         String url = "";
         String wsFrameWork = "";
@@ -182,5 +183,6 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf {
             e.printStackTrace();
         }
     }
+    //@snippet-resume helloworldcomponent
 }
 //@snippet-end helloworldcomponent
