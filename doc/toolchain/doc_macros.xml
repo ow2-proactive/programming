@@ -151,6 +151,18 @@
 				</copy>
 			</if>
 
+			<copy toDir="${docs.tmp.dir}" includeemptydirs="no">
+				<fileset dir="${docs.toolchain.dir}">
+					<include name="docbook.dtd" />
+				</fileset>
+			</copy>
+
+			<copy toDir="@{output.docs.dir}" includeemptydirs="no">
+				<fileset dir="${docs.toolchain.dir}">
+					<include name="main.css" />
+				</fileset>
+			</copy>
+
 			<copy toDir="@{output.docs.dir}" includeemptydirs="no" >
 				<fileset dir="${docs.src.dir}">
 					<include name="**/*.png" />
@@ -334,8 +346,8 @@
 		</sequential>
 	</macrodef>
 
-	<!--
-		 The use of var is normally discouraged but we do not have really the choice.
+	<!-- 
+		 The use of var is normally discouraged but we do not have really the choice. 
 		 Setting properties only after entering the target works find for single targets but not
 		 for multiple target call or for dependencies.
 	-->

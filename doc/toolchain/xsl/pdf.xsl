@@ -2109,7 +2109,11 @@
 		<xsl:value-of select="$expandedText">
 		</xsl:value-of>
 	</xsl:template>
-</xsl:stylesheet><!--
+
+	<xsl:template match="newline">
+		<fo:block>&#160;</fo:block>
+	</xsl:template>
+</xsl:stylesheet><!-- 
 	<xsl:message>
 	<xsl:text> OK, question.toc </xsl:text> <xsl:copy-of select="$id" /> 
 	</xsl:message>
