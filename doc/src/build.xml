@@ -49,6 +49,39 @@
 			description="Generate the ProActive Programming javadoc and manual zip archives" />
 
 	<!-- ================================================================ -->
+	<!--            Create docs in multiple Html format                   -->
+	<!--  =============================================================== -->
+	<target name="doc.ProActive.manualHtml"
+			depends="
+				doc.GetStarted.manualHtml,
+				doc.ReferenceManual.manualHtml,
+				doc.AdvancedFeatures.manualHtml,
+				doc.Components.manualHtml"
+			description="Generate all the Programming documentations in the multiple Html format" />
+
+	<!-- ================================================================ -->
+	<!--            Create docs in single Html format                   -->
+	<!--  =============================================================== -->
+	<target name="doc.ProActive.manualSingleHtml"
+			depends="
+				doc.GetStarted.manualSingleHtml,
+				doc.ReferenceManual.manualSingleHtml,
+				doc.AdvancedFeatures.manualSingleHtml,
+				doc.Components.manualSingleHtml"
+			description="Generate all the Programming documentations in the single Html format" />
+
+	<!-- ================================================================ -->
+	<!--            Create docs in Pdf format                             -->
+	<!--  =============================================================== -->
+	<target name="doc.ProActive.manualPdf"
+			depends="
+				doc.GetStarted.manualPdf,
+				doc.ReferenceManual.manualPdf,
+				doc.AdvancedFeatures.manualPdf,
+				doc.Components.manualPdf"
+			description="Generate all the Programming documentations in the Pdf format" />
+
+	<!-- ================================================================ -->
 	<!--                     Create javadoc                               -->
 	<!-- ================================================================ -->
 	<target name="doc.ProActive.javadoc.all" depends="doc.ProActive.javadoc.published,doc.ProActive.javadoc.complete"/>

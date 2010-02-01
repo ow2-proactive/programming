@@ -33,9 +33,9 @@
 	</itemizedlist>
 	<para>
 		These manuals should be read in the order defined above. However, this is not essential as these documentations are linked together.
-		Besides, if some links seems to be dead in one of these manuals, make sure that all of them had been built previously	 (multiple html version).
-		So as to build all the manuals at once, go to your ProActive <literal>compile/</literal> directory and type <literal>build[.bat] doc.ProActive.docs</literal>.
+		Besides, if some links seems to be dead in one of these manuals, make sure that all of them had been built previously (multiple html version).
+		So as to build all the manuals at once, go to your ProActive <literal>compile/</literal> directory and type <literal>build[.bat] doc.ProActive.manualHtml</literal>.
 		This builds all manuals in all formats.
-		If you just want to build one of these manuals in a specific format, type <literal>build[.bat]</literal> to see the possible targets and chose the one you are interested in.
+		If you just want to build one of these manuals in a specific format, type <literal>build[.bat]</literal> to see all the possible targets and chose the one you are interested in.
 	</para>
 </preface>
