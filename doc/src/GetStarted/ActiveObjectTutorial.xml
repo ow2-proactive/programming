@@ -160,14 +160,6 @@
 		</section>
 	<section xml:id="CMAArchitectureandSkeletonCode_4"><info><title>CMA Architecture and Skeleton Code </title></info>
 
-	<figure xml:id="client_server_architecture_main"><info><title> Client-Server architecture - the <literal>Main</literal> class acts as
-	a client and uses the <literal>CMAgent</literal> class as a server</title></info>
-		  <mediaobject>
-          <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/guided_tour/simpleCMA.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
 	<para>For our Monitoring agent, we use three classes. The first two classes are regular Java objects.
 	The first class is <literal>State</literal> which we use to get some information on the JVM the
 	object is located on. This object will be use as return value for the <literal>getCurrentState()</literal>
@@ -333,16 +325,6 @@
       <literal> CMAgent </literal>class from the previous example, and implements
       the interfaces <literal>InitActive</literal> and <literal>EndActive</literal>.
       It acts as a server for the <literal>Main</literal> class.</para>
-
-      <para><figure xml:id="CMAArchitectureandSkeletonCodeUsingintialization_18"><info><title>CMA architecture and skeleton code using initialization</title></info>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/guided_tour/initCMA.png" format="PNG"/>
-            </imageobject>
-          </mediaobject>
-        </figure></para>
-
 
     <para>
 	To implement the application we will create a class that inherits from the
@@ -1204,16 +1186,6 @@
 				various factors like workers load, network latency, etc.
 			</para>
 			<para>
-				<figure xml:id="ArchitectureoftheDistributedVersion_2"><info><title>Architecture of the Distributed Version </title></info>
-
-					<mediaobject>
-						<imageobject>
-							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/guided_tour/primes_distrib.png" format="JPEG"/>
-						</imageobject>
-					</mediaobject>
-				</figure>
-			</para>
-			<para>
 				<literal>CMAgentPrimeWorker</literal> and <literal>CMAgentPrimeManager</literal> classes have several methods
 				implementing the mechanism described above. The manager
 				class has a method for adding workers to its list
@@ -1387,26 +1359,6 @@
 
 		<section xml:id="ArchitectureoftheMasterWorkerVersion_1"><info><title>Architecture of the Master-Worker Version</title></info>
 
-			<para>
-				The application uses the same trivial distribution pattern as in the
-				precedent version.
-			</para>
-			<para>
-				<figure xml:id="ArchitectureoftheMasterWorkerVersion_2"><info><title>Architecture of the Master-Worker Version</title></info>
-
-					<mediaobject>
-						<imageobject>
-							<!-- CHANGE ME !! -->
-							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/guided_tour/primes_distrib_mw.png" format="JPEG"/>
-						</imageobject>
-					</mediaobject>
-				</figure>
-			</para>
-
-			<para>
-				Note that with the Master-Worker API, there is no need to deal explicitly
-				with primitive type wrappers, these kind of pitfalls are simply handled internally.
-			</para>
 
 			<para>
 				For this example, the master and worker classes without
@@ -1415,6 +1367,12 @@
 				below.
 			</para>
 
+			<note>
+				<para>
+					With the Master-Worker API, there is no need to explicitly deal 
+					with primitive type wrappers, these kind of pitfalls are simply handled internally.
+				</para>
+			</note>
 			<!-- SKELETON CODE -->
 
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/primes_distributedmw_task_skeleton.snip"/></textobject></programlisting>

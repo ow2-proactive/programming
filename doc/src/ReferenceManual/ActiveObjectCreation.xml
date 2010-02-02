@@ -38,31 +38,10 @@
 			how the active object is created and most of the parameters
 			are common among creation methods. All the available
 			creation methods with parameters are presented in the
-			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../api_published/org/objectweb/proactive/api/paactiveobject.html">
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../api_published/org/objectweb/proactive/api/PAActiveObject.html">
 				paactiveobject javadoc
 			</link>.
 		</para>
-
-		<figure xml:id="PAActiveObjectclass_71"><info><title>PAActiveObject class</title></info>
-
-			<mediaobject>
-				<imageobject>
-					<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/PAActiveObject.png" format="PNG" align="center"/>
-
-				</imageobject>
-			</mediaobject>
-		</figure>
-<!--
-		<figure xml:id="ActiveObjectcreationmethodsandparameters_71"><info><title>Active Object creation methods and parameters</title></info>
-
-			<mediaobject>
-				<imageobject>
-					<imagedata scalefit="1" width="100%" contentdepth="100%"  fileref="images/png/creationMethodsTable.png"  format="PNG"  align="center"/>
-
-				</imageobject>
-			</mediaobject>
-		</figure>
- -->
 		<para>
 			For the examples described in this chapter, we will use the following
 			class that can be instantiated as an active	object:

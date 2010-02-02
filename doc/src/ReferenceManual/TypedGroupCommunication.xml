@@ -31,18 +31,9 @@
    Group creation takes several parameters similar to those of active object creation.
    To understand parameters that are not explained here, please refer to <xref linkend="ActiveObjectCreation"/>
    as it contains a detailed explanation of every active object creation parameter.
-   The following diagrams contain
-   all the methods in the <literal>PAGroup</literal> class and <literal>Group</literal> interface:
+   To get more information on <literal>PAGroup</literal> and <literal>Group</literal> methods, please refer to the
+   <link xlink:href="../../api_published/index.html?index-all.html">JavaDoc</link>.
    </para>
-
-   <figure xml:id="PAGroupclassandGroupinterface_66"><info><title>PAGroup class  and Group interface</title></info>
-      <mediaobject>
-         <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/PAGroupAndGroup.png" format="PNG" align="center"/>
-         </imageobject>
-      </mediaobject>
-   </figure>
-
    <para>
    In this chapter, we will describe how to create a group, send a request to
    members of this group and retrieve the results.

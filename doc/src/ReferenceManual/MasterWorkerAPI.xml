@@ -62,16 +62,6 @@
             </listitem>
         </orderedlist>
 
-
-	<figure xml:id="MasterWorkerAPImainclass_36"><info><title>Master-Worker API main class</title>
-            </info>
-
-            <mediaobject>
-                <imageobject>
-                    <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/ProActiveMasterUML.png" format="PNG"/>
-                </imageobject>
-            </mediaobject>
-        </figure>
     </section>
 
         <section xml:id="LoggerSettings_36"><info><title>Logger Settings</title>

@@ -42,9 +42,6 @@
     <para>The main class for the SPMD groups is <literal>org.objectweb.proactive.api.PASPMD</literal>.
     This class contains methods for creating and controlling ProActive SPMD groups.</para>
 
-	<figure xml:id="paspmd_figure"><info><title>PASPMD Class</title></info><mediaobject><imageobject><imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/PASPMD_api.png" format="PNG"/></imageobject></mediaobject></figure>
-
-
     <indexterm><primary>OOSPMD</primary><secondary>groups</secondary></indexterm>
 
     <para>An SPMD group is a ProActive typed group built with the <literal>PASPMD.newSPMDGroup()</literal> method. This method looks
