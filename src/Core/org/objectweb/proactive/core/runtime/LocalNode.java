@@ -127,9 +127,8 @@ public class LocalNode implements SecurityEntity {
                     "registering node certificate for VN " + this.virtualNodeName);
         }
 
-        this.runtimeRoe = new RemoteObjectExposer<ProActiveRuntime>(
-            "org.objectweb.proactive.core.runtime.ProActiveRuntime", ProActiveRuntimeImpl
-                    .getProActiveRuntime(), ProActiveRuntimeRemoteObjectAdapter.class);
+        this.runtimeRoe = new RemoteObjectExposer<ProActiveRuntime>(ProActiveRuntime.class.getName(),
+            ProActiveRuntimeImpl.getProActiveRuntime(), ProActiveRuntimeRemoteObjectAdapter.class);
         this.runtimeRoe.createRemoteObject(name, replacePreviousBinding);
 
         // JMX registration
