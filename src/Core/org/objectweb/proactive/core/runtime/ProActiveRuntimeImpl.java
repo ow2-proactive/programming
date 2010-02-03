@@ -481,7 +481,8 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         }
 
         try {
-            LocalNode localNode = new LocalNode(nodeName, jobId, nodeSecurityManager, vnName);
+            LocalNode localNode = new LocalNode(nodeName, jobId, nodeSecurityManager, vnName,
+                replacePreviousBinding);
             if (replacePreviousBinding && (this.nodeMap.get(nodeName) != null)) {
                 localNode.setActiveObjects(this.nodeMap.get(nodeName).getActiveObjectsId());
                 this.nodeMap.remove(nodeName);
