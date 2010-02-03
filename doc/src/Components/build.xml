@@ -16,7 +16,7 @@
 	<!-- ==================================================================== -->
 	<target name="doc.Components.manualHtml" description="Generate the ProActive Programming Components HTML manual">
 		<var name="doc.relative.name"		value="Components" />
-		<var name="docs.output.name"		value="ProActiveProgrammingComponentsManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingComponents" />
 		<subant target="manualHtml" 			inheritall="true">
 			<fileset dir="${docs.toolchain.dir}" 	includes="doc.xml"/>
 		</subant>
@@ -26,7 +26,7 @@
 	<!-- ==================================================================== -->
 	<target name="doc.Components.manualHtmlZip" description="Generate the ProActive Programming Components HTML manual zip" depends="doc.Components.manualHtml" >
 		<var name="doc.relative.name"		value="Components" />
-		<var name="docs.output.name"		value="ProActiveProgrammingComponentsManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingComponents" />
 		<subant target="manualHtmlZip" inheritall="true">
 			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
 		</subant>
@@ -37,7 +37,7 @@
 	<!-- ==================================================================== -->
 	<target name="doc.Components.manualPdf" description="Generate the ProActive Programming Components PDF manual">
 		<var name="doc.relative.name"		value="Components" />
-		<var name="docs.output.name"		value="ProActiveProgrammingComponentsManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingComponents" />
 		<subant target="manualPdf" inheritall="true">
 			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
 		</subant>
@@ -47,7 +47,7 @@
 	<!-- ==================================================================== -->
 	<target name="doc.Components.manualSingleHtml" description="Generate the ProActive Programming Components single HTML manual">
 		<var name="doc.relative.name"		value="Components" />
-		<var name="docs.output.name"		value="ProActiveProgrammingComponentsManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingComponents" />
 		<subant target="manualSingleHtml" inheritall="true">
 			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
 		</subant>
@@ -58,7 +58,7 @@
 	<!-- ==================================================================== -->
 	<target name="doc.Components.manualSingleHtmlZip" description="Generate the ProActive Programming Components single HTML manual zip" depends="doc.Components.manualSingleHtml" >
 		<var name="doc.relative.name"		value="Components" />
-		<var name="docs.output.name"		value="ProActiveProgrammingComponentsManual" />
+		<var name="docs.output.name"		value="ProActiveProgrammingComponents" />
 		<subant target="manualSingleHtmlZip" inheritall="true">
 			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
 		</subant>
