@@ -103,8 +103,16 @@ public class LocalNode implements SecurityEntity {
     // JMX MBean
     private NodeWrapperMBean mbean;
 
+    /**
+     * @param nodeName the node's name
+     * @param jobId the jobid of the node
+     * @param securityManager the security manager 
+     * @param virtualNodeName the name of the virtual node this node belongs to
+     * @param replacePreviousBinding if a node existing with the same name in the registry, replace it
+     * @throws ProActiveException
+     */
     public LocalNode(String nodeName, String jobId, ProActiveSecurityManager securityManager,
-            String virtualNodeName) throws ProActiveException {
+            String virtualNodeName, boolean replacePreviousBinding) throws ProActiveException {
         this.name = nodeName;
         this.jobId = ((jobId != null) ? jobId : Job.DEFAULT_JOBID);
         this.securityManager = securityManager;
@@ -126,7 +134,7 @@ public class LocalNode implements SecurityEntity {
         this.runtimeRoe = new RemoteObjectExposer<ProActiveRuntime>(
             "org.objectweb.proactive.core.runtime.ProActiveRuntime", ProActiveRuntimeImpl
                     .getProActiveRuntime(), ProActiveRuntimeRemoteObjectAdapter.class);
-        this.runtimeRoe.createRemoteObject(name, false);
+        this.runtimeRoe.createRemoteObject(name, replacePreviousBinding);
 
         // JMX registration
         //        if (PAProperties.PA_JMX_MBEAN.isTrue()) {
