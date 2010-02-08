@@ -49,38 +49,112 @@
 	</para>
 
 
-     <para><figure xml:id="ProActiveFeatures_20"><info><title>ProActive Features</title></info>
+		<para>Overall, ProActive promotes a few basic and simple principles:</para>
+		<itemizedlist>
+			<listitem>
+				<para> Activities are distributed, remotely accessible objects</para>
+			</listitem>
 
+			<listitem>
+				<para>Interactions are done through asynchronous method calls</para>
+			</listitem>
 
-        <mediaobject>
+			<listitem>
+				<para>Results of interactions are called futures and are first class
+				entities.</para>
+			</listitem>
 
-          <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/ProActive_Programming.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </figure></para>
+			<listitem>
+				<para>Callers can wait for results using a mechanism called
+				wait-by-necessity</para>
+			</listitem>
+		</itemizedlist>
 
-  <para>Overall, ProActive promotes a few basic and simple principles:</para>
-  <itemizedlist>
-    <listitem>
-     <para> Activities are distributed, remotely accessible objects</para>
-    </listitem>
+		<figure xml:id="ProActiveFeatures_20"><info><title>ProActive Features</title></info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/ProActive_Programming.png" format="PNG"/>
+				</imageobject>
+			</mediaobject>
+		</figure>
 
-    <listitem>
-      <para>Interactions are done through asynchronous method calls</para>
-    </listitem>
+		<para>
+			<xref linkend="ProActiveFeatures_20" /> exposes the main ProActive features:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis role="bold">Master-Worker</emphasis> - The main goal of the ProActive Master-Worker API is to provide an easy to use framework for parallelizing embarrassingly parallel applications.
+					You can find its documentation in <link xlink:href="../../ReferenceManual/multiple_html/MasterWorker.html" >"Chapter 6. Master-Worker API"</link> of the Reference Manual.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Monte Carlo</emphasis> - The goal of the ProActive Monte-Carlo API is to provide an easy to use API for running Monte-Carlo simulations in a distributed environment.
+					You can find its documentation in <link xlink:href="../../AdvancedFeatures/multiple_html/MonteCarlo.html">"Chapter 14. Monte-Carlo API"</link> of the Advanced Features manual.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Legacy Wrapping</emphasis> - The Message Passing Interface (MPI) is a widely adopted communication library for parallel and distributed computing. This API helps you to deploy, wrap and couple MPI applications for distributed environments.
+					You can find its documentation in <link xlink:href="../../ReferenceManual/multiple_html/WrappingMpiAndLegacyCode.html">"Chapter 9. Wrapping Native MPI Application"</link> of the Reference Manual.
 
-    <listitem>
-      <para>Results of interactions are called futures and are first class
-      entities.</para>
-    </listitem>
-
-    <listitem>
-      <para>Callers can wait for results using a mechanism called
-      wait-by-necessity</para>
-    </listitem>
-  </itemizedlist>
-		</section>
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">SPMD</emphasis> - SPMD stands for Single Program Multiple Data, which is a technique used to parallelize applications by separating tasks and running them simultaneously on different machines or processors.
+					ProActive allows the use of object oriented programming combined with the SPMD techniques. You can find its documentation in <link xlink:href="../../ReferenceManual/multiple_html/OOSPMD.html">"Chapter 8. OOSPMD"</link> of the Reference Manual.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Taskflow</emphasis> - ProActive allows to programmatically create a taskflow using the TaskFlow API for submitted it to the ProActive Scheduler.
+					You can find some information on this API in <link xlink:href="http://proactive.inria.fr/trunk/Scheduler/multiple_html/user_manual.html">"Chapter 2. User guide"</link> of the Scheduler Manual.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">File Split &amp; Merge</emphasis> - The "Files Split Merge" generic framework provides an easy way to develop a distribution layer for a native application in order to run it on a ProActive managed infrastructure through the ProActive Scheduler and Resource Manager.
+					You can find its documentation in <link xlink:href="http://proactive.inria.fr/trunk/Scheduler/multiple_html/Files_Split_Merge.html">"Chapter 9. ProActive Scheduler's Files Split-Merge Extension"</link> of the Scheduler Manual.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Data Spaces</emphasis> - In the ProActive library, data can be accessed through Data Spaces API. You can find the Data Spaces documentation in
+					<link xlink:href="../../ReferenceManual/multiple_html/DataSpaces.html">"Chapter 10. Accessing data with Data Spaces API"</link> of the Reference Manual.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">GCM</emphasis> - ProActive provides an extensible, dynamical and hierarchical component model, Grid Component Model (GCM) based on
+					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://fractal.objectweb.org">Fractal</link>. The GCM was defined by the
+					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.coregrid.net/">CoreGRID NoE project</link> and is available
+					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.coregrid.net/mambo/images/stories/Deliverables/d.pm.04.pdf">here</link>.
+					You can find the GCM Documentation in the <link xlink:href="../../Components/multiple_html/index.html">Components Manual</link>.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Web Services</emphasis> - ProActive allows to expose an active object as a web service. You can find the documentation of this features
+					in <link xlink:href="../../AdvancedFeatures/multiple_html/WebServices.html">"Chapter 4. Exporting active objects as Web Services"</link> of the Advanced Features manual.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Security</emphasis> - ProActive security mechanism provides a set of security features from basic ones like communications authentication, integrity,
+					and confidentiality to more high-level features including secure object migration, hierarchical security policies, and dynamically negotiated policies. You can find Security documentation
+					in <link xlink:href="../../AdvancedFeatures/multiple_html/Security.html">"Chapter 2. Security Framework"</link> of the Advanced Features manual.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis role="bold">Fault Tolerance</emphasis> - ProActive can provide fault-tolerance capabilities through two different protocols: a Communication-Induced Checkpointing protocol (CIC) or a pessimistic message logging protocol (PML).
+					You can find information on ProActive Fault Tolerance in <link xlink:href="../../AdvancedFeatures/multiple_html/FaultTolerance.html">"Chapter 1. Fault-Tolerance"</link> of the Advanced Features manual.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
 
 	<section xml:id="ActiveObjectsModel_20"><info><title>Active Objects Model</title></info>
 

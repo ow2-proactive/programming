@@ -7,7 +7,7 @@
 	<itemizedlist>
 		<listitem>
 			<para>
-				<emphasis role="bold">ProActive Get Started Manual</emphasis> - This manual contains an overview of ProActive Programming showing differents examples and explaining how to install the middleware.
+				<emphasis role="bold">ProActive Get Started Manual</emphasis> - This manual contains an overview of ProActive Programming showing different examples and explaining how to install the middleware.
 				It also includes a tutorial teaching how to use it. This manual should be the first one to be read for beginners.
 			</para>
 		</listitem>
@@ -35,7 +35,8 @@
 		These manuals should be read in the order defined above. However, this is not essential as these documentations are linked together.
 		Besides, if some links seems to be dead in one of these manuals, make sure that all of them had been built previously (multiple html version).
 		So as to build all the manuals at once, go to your ProActive <literal>compile/</literal> directory and type <literal>build[.bat] doc.ProActive.manualHtml</literal>.
-		This builds all manuals in all formats.
+		This builds all manuals in all formats. You may also need the javadoc documentation since these manuals sometime refer to it. To build all the javadoc documentations, type
+		<literal>build[.bat] doc.ProActive.javadoc.complete doc.ProActive.javadoc.published</literal> inside the <literal>compile/</literal> directory.
 		If you just want to build one of these manuals in a specific format, type <literal>build[.bat]</literal> to see all the possible targets and chose the one you are interested in.
 	</para>
 </preface>
