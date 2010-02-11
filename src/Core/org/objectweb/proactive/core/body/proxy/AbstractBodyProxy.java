@@ -85,12 +85,6 @@ public abstract class AbstractBodyProxy extends AbstractProxy implements BodyPro
     //
     // -- PUBLIC METHODS -----------------------------------------------
     //
-    //
-    // -- implements BodyProxy -----------------------------------------------
-    //
-    public UniqueID getBodyID() {
-        return getBody().getID();
-    }
 
     //
     // -- implements Proxy -----------------------------------------------
