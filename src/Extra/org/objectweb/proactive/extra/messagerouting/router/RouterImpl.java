@@ -297,7 +297,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
             Collection<Client> clients = clientMap.values();
             tpe.submit(new DisconnectionBroadcaster(clients, disconnectedAgent));
         }
-        logger.debug("Client " + sc.socket() + " disconnected");
+        logger.debug("Client " + attachment.getRemoteEndpoint() + " disconnected");
 
     }
 
@@ -357,6 +357,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
         public void run() {
             for (Client client : this.clients) {
+                if (this.disconnectedAgent.equals(client.getAgentId()))
+                    continue;
+
                 ErrorMessage error = new ErrorMessage(ErrorType.ERR_DISCONNECTION_BROADCAST, client
                         .getAgentId(), this.disconnectedAgent, 0);
                 try {
