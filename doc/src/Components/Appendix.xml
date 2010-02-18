@@ -54,6 +54,6 @@
 			<literal>org.objectweb.proactive.examples.components.userguide.starter.applicationDescriptor.xml</literal>:
 		</para>
 
-		<programlisting language="java"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/applicationDescriptor.xml"/></textobject></programlisting>
+		<programlisting language="xml"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/applicationDescriptor.xml"/></textobject></programlisting>
 	</section>
 </chapter>

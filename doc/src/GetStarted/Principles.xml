@@ -216,12 +216,12 @@
 					<itemizedlist>
 						<listitem>
 							<para>The method returns a non reifiable object (primitive type or final class):</para>
-							<programlisting language="java"> boolean foo() </programlisting>
+							<programlisting language="java">boolean foo()</programlisting>
 						</listitem>
 
 						<listitem>
 							<para>The method declares a thrown exception:</para>
-							<programlisting language="java">public void bar() throws AnException </programlisting>
+							<programlisting language="java">public void bar() throws AnException</programlisting>
 							<para>
 								In this case, the caller thread is blocked until the reified invocation
 								is effectively processed and the eventual result (or exception) is returned.
@@ -253,7 +253,7 @@
 							<para>the return type is a reifiable type,
 								and the method does not throw any exception:
 							</para>
-							<programlisting language="java">public MyReifiableType baz() </programlisting>
+							<programlisting language="java">public MyReifiableType baz()</programlisting>
 							<para>
 								In this case, a future object is returned and the caller continues its execution
 								flow. The active object will process the reified invocation according to its serving

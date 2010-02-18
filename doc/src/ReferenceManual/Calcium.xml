@@ -301,7 +301,7 @@ interface Conquer&lt;Y,R&gt;  extends Muscle&lt;Y[],R&gt;     { public R conquer
       has to be specified. The ProActiveEnvironment requires that this descriptor
       file provides the following contractual variables:</para>
 
-      <programlisting language="java"><textobject><textdata fileref="automatic_snippets/calcium_primes_16.snip"/></textobject></programlisting>
+      <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/calcium_primes_16.snip"/></textobject></programlisting>
 
       <para>Where the variables represent:</para>
 

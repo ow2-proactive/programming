@@ -295,7 +295,7 @@
 				system. To register a new daemon on your guest, you have to focus on the operating system. For instance, with windows
 				NT core based systems you can use <link xlink:href="http://support.microsoft.com/kb/243486/fr">autoexnt.exe/autoexnt.bat</link>
 				that registers as a service. This application runs the SYSROOT/windows32/autoexnt.bat content at system launch, for example:
-				<programlisting>
+				<programlisting language="sh">
 					set python_path=C:\\Python26\python.exe
 					set pa_home=C:\\ProActive
 					set log_file=C:\\log\proactive-runtime.log
@@ -305,11 +305,11 @@
 			<para>
 				For a Debian based system, you can use update-rc.d:
 				( cp all virtualization scripts in /etc/init.d )
-				<programlisting>
+				<programlisting language="sh">
 					sudo update-rc.d proactive-runtime start 99 2 3 5 . stop 99 0 1 6 .
 				</programlisting>
 				Here is the content of /etc/init.d/proactive-runtime
-				<programlisting>
+				<programlisting language="sh">
 					#!/bin/sh
 					#
 					# This is a basic dummy shell script to get your proactive runtime bootstraping using
@@ -371,7 +371,7 @@
 				</programlisting>
 				For redhat based systems, you'll have to use chkconfig utility and replace start-stop-daemon by a background launch
 				plus remove log messages.
-				<programlisting>
+				<programlisting language="sh">
 					#!/bin/sh
 					#
 					# This is a basic dummy shell script to get your proactive runtime bootstraping using
