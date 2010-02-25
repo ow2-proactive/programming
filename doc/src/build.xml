@@ -112,6 +112,20 @@
 		<var name="doc.relative.name"		value="" />
 		<var name="docs.output.name"               value="ProActiveProgramming" />
 		<setProperties />
+		<if>
+			<bool>
+				<equals arg1="${ant.java.version}" arg2="1.5"/>
+			</bool>
+			<dirset id="package.extensions" dir="${src.extensions.dir}">
+				<include name="org/objectweb/proactive/extensions/**" />
+				<exclude name="org/objectweb/proactive/extensions/annotation/**"/>
+			</dirset>
+			<else>
+				<dirset id="package.extensions" dir="${src.extensions.dir}">
+					<include name="org/objectweb/proactive/extensions/**" />
+				</dirset>
+			</else>
+		</if>
 		<javadoc
 			destdir="${docs.built.dir}/api_complete"
 			author="true"
@@ -129,29 +143,49 @@
 			</classpath>
 
 			<packageset dir="${src.proactive.dir}" />
-			<packageset dir="${src.extensions.dir}" />
+			<packageset refid="package.extensions"/>
 			<packageset dir="${src.extra.dir}" />
+			
 
 			<link href="http://fractal.objectweb.org/current/doc/javadoc/fractal/" />
 			<link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
-			<doctitle>ProActive Programming</doctitle>
+            <doctitle><![CDATA[ProActive Programming ${version}<br>]]></doctitle>
 			<bottom>${javadoc.copyright}</bottom>
 
-			<group title="ProActive packages for end user" packages="org.objectweb.proactive" />
-			<group title="ProActive Core" packages="org.objectweb.proactive.core*" />
-			<group title="ProActive Core : Body" packages="org.objectweb.proactive.core.body*" />
-			<group title="ProActive Core : Components (implementation of the Fractal model)" packages="org.objectweb.proactive.core.component*" />
-			<group title="ProActive P2P : P2P infrastructure" packages="org.objectweb.proactive.extra.p2p*" />
-			<group title="ProActive Extensions : Security" packages="org.objectweb.proactive.ext.security*" />
-			<group title="ProActive Extensions" packages="org.objectweb.proactive.ext*" />
-			<group title="ProActive Branch and Bound API" packages="org.objectweb.proactive.extra.branchnbound*" />
-			<group title="ProActive Calcium API" packages="org.objectweb.proactive.calcium*" />
-			<group title="ProActive Load Balancing API" packages="org.objectweb.proactive.loadbalancing*" />
-			<group title="ProActive MPI API" packages="org.objectweb.proactive.mpi*" />
-			<group title="ProActive OSGI API" packages="org.objectweb.proactive.osgi*" />
-			<group title="ProActive JMX API" packages="org.objectweb.proactive.jmx*" />
-			<group title="ProActive Scheduler API" packages="org.objectweb.proactive.scheduler*" />
+			<group title="ProActive packages for end user">
+				<package name="org.objectweb.proactive.api" />
+				<package name="org.objectweb.proactive" />
+			</group>
+			<group title="ProActive Core: Body" packages="org.objectweb.proactive.core.body*" />
+			<group title="ProActive Core: Components (implementation of the Fractal model)" packages="org.objectweb.proactive.core.component*" />
+			<group title="ProActive Core: JMX API" packages="org.objectweb.proactive.core.jmx*" />
+			<group title="ProActive Core: Security" packages="org.objectweb.proactive.core.security*" />
+			<group title="ProActive Core: XML Descriptor (Deprecated Soon)" packages="org.objectweb.proactive.core.descriptor*" />
+			<group title="ProActive Core: Other packages" packages="org.objectweb.proactive.core*" />
+			<group title="ProActive Extensions: Calcium API" packages="org.objectweb.proactive.extensions.calcium*" />
+			<group title="ProActive Extensions: Dataspaces" packages="org.objectweb.proactive.extensions.dataspaces*" />
+			<group title="ProActive Extensions: GCM Deployment">
+				 <package name="org.objectweb.proactive.extensions.gcmdeployment*" />
+				 <package name="org.objectweb.proactive.gcmdeployment*" />
+			</group>
+			<group title="ProActive Extensions: Master-Worker API" packages="org.objectweb.proactive.extensions.masterworker*" />
+			<group title="ProActive Extensions: VFS Provider" packages="org.objectweb.proactive.extensions.vfsprovider*" />
+			<group title="ProActive Extensions: Web Services" packages="org.objectweb.proactive.extensions.webservices*" />
+			<group title="ProActive Extensions: Native Interface API" packages="org.objectweb.proactive.extensions.nativeinterface*" />
+			<group title="ProActive Extensions: OSGI API" packages="org.objectweb.proactive.extensions.osgi*" />
+			<group title="ProActive Extensions: Annotations">
+				<package name="org.objectweb.proactive.extensions.annotation*"/>
+				<package name="org.objectweb.proactive.annotation*"/>
+			</group>
+			<group title="ProActive Extensions: TimIt SPMD" packages="org.objectweb.proactive.extensions.timitspmd*" />
+			<group title="ProActive Extensions: Other packages" packages="org.objectweb.proactive.ext*" />
+			<group title="ProActive Extras: Branch and Bound API" packages="org.objectweb.proactive.extra.branchnbound*" />
+			<group title="ProActive Extras: Message Routing" packages="org.objectweb.proactive.extra.messagerouting*" />
+			<group title="ProActive Extras: Monte-Carlo API" packages="org.objectweb.proactive.extra.montecarlo*" />
+			<group title="ProActive Extras: Other packages" packages="org.objectweb.proactive.extra*" />
 			<group title="ProActive Benchmarks API" packages="org.objectweb.proactive.benchmarks*" />
+			
+			
 	  </javadoc>
     </target>
 
@@ -221,29 +255,38 @@
             <doctitle><![CDATA[ProActive Programming ${version}<br>]]></doctitle>
             <bottom>${javadoc.copyright}</bottom>
 
-            <group title="ProActive entry point">
-                <package name="org.objectweb.proactive.api" />
-            </group>
-
-            <group title="ProActive Core">
-                <package name="org.objectweb.proactive.core*" />
-                <package name="org.objectweb.proactive.core.filetransfer*" />
-                <package name="org.objectweb.proactive.ext*" />
-                <package name="org.objectweb.proactive.gcmdeployment*" />
-                <package name="org.objectweb.proactive.mpi*" />
-                <package name="org.objectweb.proactive.benchmarks*" />
-                <package name="org.objectweb.proactive" />
-                <package name="org.objectweb.proactive.annotation" />
-
-            </group>
-
-            <group title="ProActive Extensions">
-                <package name="org.objectweb.proactive.extensions.*" />
-            </group>
-
-            <group title="ProActive Extra">
-                <package name="org.objectweb.proactive.extra.*" />
-            </group>
+			<group title="ProActive packages for end user">
+				<package name="org.objectweb.proactive.api" />
+				<package name="org.objectweb.proactive" />
+			</group>
+			<group title="ProActive Core: Body" packages="org.objectweb.proactive.core.body*" />
+			<group title="ProActive Core: Components (implementation of the Fractal model)" packages="org.objectweb.proactive.core.component*" />
+			<group title="ProActive Core: JMX API" packages="org.objectweb.proactive.core.jmx*" />
+			<group title="ProActive Core: Security" packages="org.objectweb.proactive.core.security*" />
+			<group title="ProActive Core: XML Descriptor (Deprecated Soon)" packages="org.objectweb.proactive.core.descriptor*" />
+			<group title="ProActive Core: Other packages" packages="org.objectweb.proactive.core*" />
+			<group title="ProActive Extensions: Calcium API" packages="org.objectweb.proactive.extensions.calcium*" />
+			<group title="ProActive Extensions: Dataspaces" packages="org.objectweb.proactive.extensions.dataspaces*" />
+			<group title="ProActive Extensions: GCM Deployment">
+				 <package name="org.objectweb.proactive.extensions.gcmdeployment*" />
+				 <package name="org.objectweb.proactive.gcmdeployment*" />
+			</group>
+			<group title="ProActive Extensions: Master-Worker API" packages="org.objectweb.proactive.extensions.masterworker*" />
+			<group title="ProActive Extensions: VFS Provider" packages="org.objectweb.proactive.extensions.vfsprovider*" />
+			<group title="ProActive Extensions: Web Services" packages="org.objectweb.proactive.extensions.webservices*" />
+			<group title="ProActive Extensions: Native Interface API" packages="org.objectweb.proactive.extensions.nativeinterface*" />
+			<group title="ProActive Extensions: OSGI API" packages="org.objectweb.proactive.extensions.osgi*" />
+			<group title="ProActive Extensions: Annotations">
+				<package name="org.objectweb.proactive.extensions.annotation*"/>
+				<package name="org.objectweb.proactive.annotation*"/>
+			</group>
+			<group title="ProActive Extensions: TimIt SPMD" packages="org.objectweb.proactive.extensions.timitspmd*" />
+			<group title="ProActive Extensions: Other packages" packages="org.objectweb.proactive.ext*" />
+			<group title="ProActive Extras: Branch and Bound API" packages="org.objectweb.proactive.extra.branchnbound*" />
+			<group title="ProActive Extras: Message Routing" packages="org.objectweb.proactive.extra.messagerouting*" />
+			<group title="ProActive Extras: Monte-Carlo API" packages="org.objectweb.proactive.extra.montecarlo*" />
+			<group title="ProActive Extras: Other packages" packages="org.objectweb.proactive.extra*" />
+			<group title="ProActive Benchmarks API" packages="org.objectweb.proactive.benchmarks*" />
 
         </javadoc>
 		<delete dir="${docs.tmp.dir}" />
