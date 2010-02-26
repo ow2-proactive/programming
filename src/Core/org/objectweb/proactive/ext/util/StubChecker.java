@@ -36,54 +36,61 @@
  */
 package org.objectweb.proactive.ext.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.FileFilter;
 import java.io.ObjectStreamClass;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
 import org.objectweb.proactive.core.mop.Utils;
 
 
 /**
- * StubChecker check the stub of the class given as argument.
+ * StubChecker check the stub of the class given as argument.<br>
  * The generated stub must have the same generated serial version UID than the one
- * inside the second given arguments representing the root of an other project.
- * 
+ * inside the second given arguments representing the root of an other project.<br>
+ * <br>
  * As a consequence, this class must be used between two maintenance version, detecting if stubs 
- * are compatible between each other.
+ * are compatible between each other.<br>
+ * <br>
+ * ClassLoader are based on dist/lib directory, so compile and deploy are useful before checking stubs.
  *
  * @author The ProActive Team
- * @since ProActive Scheduling 2.0
+ * @since ProActive Programming 4.2.1
  */
-public class StubChecker extends ClassLoader {
-
-    public long getSerialVersionUID(String className, byte[] b) {
-        Class<?> c = defineClass(className, b, 0, b.length);
-        return ObjectStreamClass.lookup(c).getSerialVersionUID();
-    }
+public final class StubChecker {
 
     public static void main(String[] args) throws Exception {
         String classArg = null;
-        File rootDir = null;
+        File rootDir_current = null;
+        File rootDir_other = null;
 
         int index = 0;
         while (index < args.length) {
             if (args[index].equals("-class")) {
                 classArg = args[index + 1];
                 index += 2;
-            } else if (args[index].equals("-rootDir")) {
+            } else if (args[index].equals("-rootDirV1")) {
                 String rootStr = args[index + 1];
-                rootDir = new File(rootStr);
-                if (!rootDir.isDirectory()) {
-                    logAndExit("ERROR : rootDir is not a valid directory !");
+                rootDir_current = new File(rootStr);
+                if (!rootDir_current.isDirectory()) {
+                    logAndExit("ERROR : rootDirV1 is not a valid directory !");
                 }
-                if (!rootDir.exists()) {
-                    logAndExit("ERROR : rootDir does not exist !");
+                if (!rootDir_current.exists()) {
+                    logAndExit("ERROR : rootDirV1 does not exist !");
+                }
+                index += 2;
+            } else if (args[index].equals("-rootDirV2")) {
+                String rootStr = args[index + 1];
+                rootDir_other = new File(rootStr);
+                if (!rootDir_other.isDirectory()) {
+                    logAndExit("ERROR : rootDirV2 is not a valid directory !");
+                }
+                if (!rootDir_other.exists()) {
+                    logAndExit("ERROR : rootDirV2 does not exist !");
                 }
                 index += 2;
             } else {
@@ -92,52 +99,75 @@ public class StubChecker extends ClassLoader {
             }
         }
 
-        if (classArg == null || rootDir == null) {
+        if (classArg == null || rootDir_current == null || rootDir_other == null) {
             usage();
             System.exit(1);
         }
 
-        //local class stub in current version
+        //Create classLoader for current version
+        ClassLoader cl_current = getClassLoader(rootDir_current);
+        ClassLoader cl_other = getClassLoader(rootDir_other);
+
+        //local stub class name in current version
         String className = processClassName(classArg);
         String stubClassName = Utils.convertClassNameToStubClassName(className, null);
+
+        //declare both SerialVersionUID
+        long suid_current = 0, suid_other = 0;
+
+        //create stub for current version
         try {
-            /*byte[] data = JavassistByteCodeStubBuilder.create(className, null);
-            long suidLocalStub = new StubChecker().getSerialVersionUID(stubClassName, data);*/
-            long suidLocalStub = ObjectStreamClass.lookup(Class.forName(stubClassName)).getSerialVersionUID();
-
-            //get other version stub
-            byte[] data = null;
-            try {
-                data = lookIntoDirectory(stubClassName, new File(rootDir.getAbsolutePath() + File.separator +
-                    "classes"));
-            } catch (IOException Ex) {
-            }
-            if (data == null) {
-                data = lookIntoDirectory(stubClassName, new File(rootDir.getAbsolutePath() + File.separator +
-                    "dist" + File.separator + "lib"));
-                if (data == null) {
-                    logAndExit("Check Stub '" + stubClassName + "' : WARNING - Stub not found in " +
-                        rootDir.getAbsolutePath());
-                }
-            }
-            long suidComparedStub = new StubChecker().getSerialVersionUID(stubClassName, data);
-
-            //compare
-            if (suidLocalStub == suidComparedStub) {
-                System.out.println("Check Stub '" + stubClassName + "' : OK");
-            } else {
-                throw new VerifyError();
-            }
-        } catch (VerifyError err) {
-            System.out.println("Check Stub '" + stubClassName + "' : WARNING - Incompatible stub");
+            Class<?> stub_current = Class.forName(stubClassName, true, cl_current);
+            suid_current = ObjectStreamClass.lookup(stub_current).getSerialVersionUID();
+        } catch (ClassNotFoundException cnfe) {
+            logAndExit("Check Stub '" + stubClassName + "' : WARNING - Stub not found in " +
+                rootDir_current.getAbsolutePath());
         }
 
+        //create stub for other version
+        try {
+            Class<?> stub_other = Class.forName(stubClassName, true, cl_other);
+            suid_other = ObjectStreamClass.lookup(stub_other).getSerialVersionUID();
+        } catch (ClassNotFoundException cnfe) {
+            logAndExit("Check Stub '" + stubClassName + "' : WARNING - Stub not found in " +
+                rootDir_other.getAbsolutePath());
+        }
+
+        //compare
+        if (suid_current == suid_other) {
+            System.out.println("Check Stub '" + stubClassName + "' : OK");
+        } else {
+            System.out.println("Check Stub '" + stubClassName + "' : WARNING - Incompatible");
+        }
+
+    }
+
+    private static ClassLoader getClassLoader(File rootDir) {
+        File distlib = new File(rootDir.getAbsolutePath() + File.separator + "dist" + File.separator + "lib");
+        if (!distlib.exists() || !distlib.isDirectory()) {
+            logAndExit("ERROR : dist/lib directory does not exist in " + rootDir.getAbsolutePath());
+        }
+        File[] jars = distlib.listFiles(new FileFilter() {
+            public boolean accept(File pathname) {
+                return pathname.getName().toUpperCase().endsWith(".JAR");
+            }
+        });
+        List<URL> urls = new ArrayList<URL>();
+        for (File file : jars) {
+            try {
+                urls.add(file.toURL());
+            } catch (MalformedURLException e) {
+                System.err.println("/!\\ " + e.getMessage());
+            }
+        }
+        return new URLClassLoader(urls.toArray(new URL[] {}));
     }
 
     private static void usage() {
         System.out.println("Usage:");
         System.out.println("\t-class check the stub of this class");
-        System.out.println("\t-rootDir root directory of the other project to be checked with");
+        System.out.println("\t-rootDirV1 root directory of the current project");
+        System.out.println("\t-rootDirV2 root directory of the other project to be checked with");
         System.out.println("");
     }
 
@@ -156,110 +186,6 @@ public class StubChecker extends ClassLoader {
         String tmp = name.endsWith(".class") ? name.substring(0, name.length() - 6) : name;
         tmp = tmp.replaceAll("[/\\\\]", ".");
         return tmp;
-    }
-
-    /**
-     * Look for a classfile into a directory.
-     * 
-     * @param classname the looked up class.
-     * @param directory the directory to look into.
-     * @return the byte[] representation of the class if found, null otherwise.
-     * @throws IOException if the jar file cannot be read.
-     */
-    public static byte[] lookIntoDirectory(String classname, File directory) throws IOException {
-        String pathToClass = convertNameToPath(classname, true);
-        if (directory.exists() && directory.isDirectory()) {
-            File[] files = directory.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].isDirectory()) {
-                    byte[] resInDir = lookIntoDirectory(classname, files[i]);
-                    if (resInDir != null) {
-                        return resInDir;
-                    }
-                } else if (isJarFile(files[i])) {
-                    byte[] resInJar = lookIntoJarFile(classname, new JarFile(files[i]));
-                    if (resInJar != null) {
-                        return resInJar;
-                    }
-                } else if (isClassFile(files[i]) && files[i].getAbsolutePath().endsWith(pathToClass)) {
-                    return convertFileToByteArray(files[i]);
-                }
-            }
-            // not found
-            return null;
-        } else {
-            throw new IOException("Directory " + directory.getAbsolutePath() + " does not exist");
-        }
-    }
-
-    /**
-     * Look for a class definition into a jar file.
-     * @param classname the looked up class.
-     * @param file the jar file.
-     * @return the byte[] representation of the class if found, null otherwise.
-     * @throws IOException if the jar file cannot be read.
-     */
-    public static byte[] lookIntoJarFile(String classname, JarFile file) throws IOException {
-        byte result[] = null;
-        String path = convertNameToPath(classname, false);
-        ZipEntry entry = file.getEntry(path);
-        if (entry != null) {
-            final InputStream inStream = file.getInputStream(entry);
-            final ByteArrayOutputStream bos = new ByteArrayOutputStream(); // ByteArrayOutputStream.close() is noop
-            final byte[] data = new byte[1024];
-            int count;
-            while ((count = inStream.read(data, 0, 1024)) > -1) {
-                bos.write(data, 0, count);
-            }
-            result = bos.toByteArray();
-            inStream.close();
-            return result;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Convert classname parameter (qualified) into path to the class file
-     * (with the .class suffix)
-     */
-    public static String convertNameToPath(String classname, boolean useSystemFileSeparator) {
-        return classname.replace('.', useSystemFileSeparator ? File.separatorChar : '/') + ".class";
-    }
-
-    /**
-     * Return true if f is a jar file.
-     */
-    private static boolean isJarFile(File f) {
-        return f.isFile() && f.getName().endsWith(".jar");
-    }
-
-    /**
-     * Return true if f is a class file.
-     */
-    private static boolean isClassFile(File f) {
-        return f.isFile() && f.getName().endsWith(".class");
-    }
-
-    /** Read contents of a file and return it as a byte array
-     * @param file the file to read
-     * @return an array of bytes containing file's data.
-     * @throws IOException
-     */
-    public static byte[] convertFileToByteArray(File file) throws IOException {
-        InputStream in = null;
-        in = new FileInputStream(file);
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-        byte[] buffer = new byte[1024];
-        long count = 0;
-        int n = 0;
-        while (-1 != (n = in.read(buffer))) {
-            output.write(buffer, 0, n);
-            count += n;
-        }
-        in.close();
-        return output.toByteArray();
     }
 
 }
