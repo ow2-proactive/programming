@@ -83,6 +83,14 @@
     </section>
     <section xml:id="Quickstart"><info><title>Quick start</title></info>
 
+        <section xml:id="QuickStartIntroduction"><info><title>Introduction</title></info>
+			<para>
+				In order to use TimIt, you first have to create a configuration file as explained in <xref linkend="DefineyourTimItconfigurationfile" />.
+				This configuration file is used to describe the application to be launched as well as ouputs you wants (reports and charts).
+				This file will then be used as an argument of the TimIt main method:
+			</para>
+			<screen>java org.objectweb.proactive.extensions.timitspmd.TimIt -c configuration_file.xml</screen>
+		</section>
         <section xml:id="DefineyourTimItconfigurationfile"><info><title>Define your TimIt configuration file</title></info>
 
             <para>
@@ -429,64 +437,8 @@
             <section xml:id="ConfigurationExample"><info><title>Example of a complete configuration file</title></info>
                 <para>
                     Here is a complete example of a configuration file:
-                    <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;timit&gt;
 
-  &lt;!-- GLOBAL VARIABLES DEFINITION
-       Will replace those in ProActive deployment descriptor --&gt;
-  &lt;globalVariables&gt;
-    &lt;descriptorVariable name="VMARGS" value="-Xmx32M -Xms32M" /&gt;
-    &lt;descriptorVariable name="CLASS_PREFIX"
-                        value="org.objectweb.proactive.examples.timit" /&gt;
-    &lt;descriptorVariable name="NP" value="4,8" /&gt;
-    &lt;descriptorVariable name="RUN" value="1" /&gt;
-    &lt;descriptorVariable name="WARMUP" value="0" /&gt;
-  &lt;/globalVariables&gt;
-
-
-  &lt;!-- Running example2 suite and generate different charts --&gt;
-  &lt;serie descriptorBase="${PROJECT_PATH}/descriptors/TimIt.xml"
-         result="${PROJECT_PATH}/results/example2.4-8.xml"
-         class="${CLASS_PREFIX}.example2.Launcher"&gt;
-
-    &lt;charts&gt;
-      &lt;chart type="HierarchicalBarChart"
-             filter="total,init,foo"
-             title="Example2 on 4 and 8 nodes"
-             subtitle="Timing values" width="800" height="600"
-             xaxislabel="Benchmarks" yaxislabel="Time in seconds"
-             filename="${PROJECT_PATH}/results/example2.Timing" /&gt;
-      &lt;chart type="MatrixChart"
-             eventName="commPattern"
-             title="Example2"
-             subtitle="Communications pattern"
-             xaxislabel="Receiver rank" yaxislabel="Sender rank"
-             scalemode="logarithmic" legendFormatMode="pow2"
-             filename="${PROJECT_PATH}/results/example2.Pattern" /&gt;
-      &lt;chart type="Line2dChart"
-             tag="events" filter="nbComms" attribute="avg"
-             title="Example2"
-             subtitle="Total number of communications"
-             xaxislabel="Benchmarks" yaxislabel="Nb communications"
-             filename="${PROJECT_PATH}/results/example2.nbComms" /&gt;
-    &lt;/charts&gt;
-
-    &lt;benchmarks&gt;
-      &lt;benchmark name="Example2 ${NP}"
-                 run="${RUN}" warmup="${WARMUP}" timeout="100"
-                 descriptorGenerated="${PROJECT_PATH}/descriptors/generated.xml"
-                 removeExtremums="true"
-                 note="My first test"
-                 parameters="${PROJECT_PATH}/descriptors/generated.xml ${NP}"
-                 output="${PROJECT_PATH}/results/example2-${NP}.xml"&gt;
-        &lt;descriptorVariable name="NODES" value="${NP}" /&gt;
-        &lt;descriptorVariable name="TIMIT_ACTIVATE"
-                 value="total,init,work,end,foo,densityPattern,commPattern,nbComms"/&gt;
-      &lt;/benchmark&gt;
-    &lt;/benchmarks&gt;
-  &lt;/serie&gt;
-
-&lt;/timit&gt;</programlisting>
+					<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/TimIt_ConfigFile.snip"/></textobject></programlisting>
                 </para>
             </section>
         </section>
@@ -506,82 +458,14 @@
                             Your main class has to implement the
                             <emphasis>Startable</emphasis>
                             interface:
-                            <programlisting language="java">public class Example implements Startable {
-
-  /** TimIt needs a noarg constructor (can be implicit) **/
-  public Example() {}
-
-  /** The main method is not used by TimIt **/
-  public static void main( String[] args ) {
-    new Example().start(args);
-  }
-
-  /** Invoked by TimIt to start your application **/
-  public void start( String[] args ) {
-    // Creation of the Timed object(s)
-    // It can be by example :
-    //   - a classic java object
-    //   - an active object
-    //   - a group of objects
-    Worker workers = ProSPMD.newSPMDGroup(...);
-
-    // You have to create an instance of TimItManager and
-    // give to it the Timed objects
-    TimItManager tManager = TimItManager.getInstance();
-
-    // Timed objects start their job
-    workers.start();
-
-    // At the and of you application, you must invoke
-    // the getBenchmarkStatistics to retrieve the results
-    // from the Timed objects
-    BenchmarkStatistics bStats = tManager.getBenchmarkStatistics();
-
-    // Then, you can modify or print out the results
-    System.out.println(bStats);
-  }
-}</programlisting>
+							<programlisting language="java"><textobject><textdata fileref="automatic_snippets/TimIt_Example_Class.snip"/></textobject></programlisting>
                         </para>
                     </listitem>
                     <listitem>
                         <para>
                             your analyzed class has to extend the
                             <emphasis>Timed</emphasis> class:
-                            <programlisting language="java">public class Worker extends Timed {
-
-  /** Declaration of all TimerCounters and EventObservers **/
-  private TimerCounter T_TOTAL, T_INIT, T_WORK, T_COMM;
-  private EventObserver E_COMM, E_MFLOPS;
-
-  public void start() {
-    // Register the TimerCounters and EventObservers
-    T_TOTAL = TimIt.add(new HierarchicalTimerCounter("total"));
-    T_INIT = TimIt.add(new HierarchicalTimerCounter("init"));
-    T_WORK = TimIt.add(new HierarchicalTimerCounter("work"));
-    T_COMM = TimIt.add(new HierarchicalTimerCounter("comms"));
-    E_MFLOPS = TimIt.add(new DefaultEventObserver("mdlops"));
-    E_COMM = TimIt.add(new CommEventObserver(
-               "communicationPattern", groupSize, timedID));
-
-    // You must activate TimIt before using your counters and observers
-    // According to the 'proactive.timit.activation' property value, it
-    // will activate or not concerned TimerCounters (EventObservers)
-    TimIt.activation();
-
-    // The you can use your counters and observers
-    // (better examples of usage in next section)
-    T_TOTAL.start();
-      for( int destID=0; destID&lt;nbTimeds; destID++ ) {
-        TimIt.notifyObservers(new CommEvent(E_COMM,destID,1));
-      }
-    T_TOTAL.stop();
-    TimIt.notifyObservers(new Event(E_MFLOPS,mflops));
-
-    // At the end, you have invoke finalization method to return results
-    // to the startable object
-    TimIt.finalization(timedID,"Worker "+timedID+" OK");
-  }
-}</programlisting>
+							<programlisting language="java"><textobject><textdata fileref="automatic_snippets/TimIt_Worker_Class.snip"/></textobject></programlisting>
                         </para>
                     </listitem>
                 </orderedlist>

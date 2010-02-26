@@ -60,8 +60,8 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
  * total number of communications<br> - One for building the message density
  * distribution pattern<br> - One for building the data density distribution<br>
  *
- * @see org.objectweb.proactive.benchmarks.timit.util.observing.defaultobserver.DefaultObserver
- * @see org.objectweb.proactive.benchmarks.timit.util.observing.commobserv.CommObserver
+ * @see org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserver.DefaultEventObserver
+ * @see org.objectweb.proactive.extensions.timitspmd.util.observing.commobserv.CommEventObserver
  *
  * @author The ProActive Team
  *
