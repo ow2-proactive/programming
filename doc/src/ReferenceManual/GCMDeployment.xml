@@ -443,7 +443,7 @@
       <para>
         This section aims at giving explanations on the structure of a GCM Deployment descriptor. We will not describe all the possible elements and
         all the possible attributes since a
-        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
         Javadoc-like documentation
         </link>
         is generated directly from the XSD schema (depicting the XML structure) and is
@@ -486,7 +486,7 @@
          <para>
             As a chapter is dedicated for variables, please refer to <xref linkend="VariableContract"/>
             or directly to the
-           <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+           <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
            Javadoc-like documentation
            </link>
             if you want more information.
@@ -527,7 +527,7 @@
 
          <para>
             To get more information on this part, please refer to the
-            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
             Javadoc-like schema documentation
             </link>.
          </para>
@@ -575,7 +575,7 @@
 		       <listitem><para><emphasis role="bold">&lt;mpiGroup&gt;</emphasis></para></listitem>
             </itemizedlist>
             All these groups are explained in the
-            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
             schema documentation
             </link>.
             However, they all have two common attributes and one common child.
@@ -602,7 +602,7 @@
 
          <para>
             To get more information on this part and specially on the different group and bridge type, please refer to the
-            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcmd/index.html">
+            <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcmd/index.html">
             schema documentation
             </link>.
          </para>
@@ -1080,7 +1080,7 @@
       <para>
         This section aims at giving explanations on the structure of a GCM Application descriptor. We will not describe all the possible elements and
         all the possible attributes since a
-        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../schemas/gcma/index.html">
+        <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../schemas/gcma/index.html">
         javadoc-like schema documentation
         </link>
         is generated directly from the XSD schema (depicting the XML structure) and is

@@ -81,6 +81,16 @@
 				doc.Components.manualPdf"
 			description="Generate all the Programming documentations in the Pdf format" />
 
+	<!-- =============================================================== -->
+	<!--     Create Javadoc-like documentation for GCM schemas           -->
+	<!-- =============================================================== -->
+	<target name="doc.ProActive.gcm.schemas" description="Generate the Javadoc-like documentation for GCM schemas">
+		<var name="doc.relative.name"		value="" />
+		<var name="docs.output.name"        value="ProActiveProgramming" />
+		<subant target="schemas" inheritall="true">
+			<fileset dir="${docs.toolchain.dir}" includes="doc.xml"/>
+		</subant>
+	</target>
 	<!-- ================================================================ -->
 	<!--                     Create javadoc                               -->
 	<!-- ================================================================ -->

@@ -14,7 +14,7 @@
 	<!-- ==================================================================== -->
 	<!--          Make just the html files for the manual                     -->
 	<!-- ==================================================================== -->
-	<target name="doc.ReferenceManual.manualHtml" description="Generate the ProActive Programming Reference Manual HTML manual">
+	<target name="doc.ReferenceManual.manualHtml" depends="doc.ProActive.gcm.schemas" description="Generate the ProActive Programming Reference Manual HTML manual">
 		<var name="doc.relative.name"		value="ReferenceManual" />
 		<var name="docs.output.name"		value="ProActiveProgrammingReferenceManual" />
 		<subant target="manualHtml" 			inheritall="true">
@@ -35,7 +35,7 @@
 	<!-- ==================================================================== -->
 	<!--               Make just the pdf files for the manual                 -->
 	<!-- ==================================================================== -->
-	<target name="doc.ReferenceManual.manualPdf" description="Generate the ProActive Programming Reference Manual PDF manual">
+	<target name="doc.ReferenceManual.manualPdf" depends="doc.ProActive.gcm.schemas" description="Generate the ProActive Programming Reference Manual PDF manual">
 		<var name="doc.relative.name"		value="ReferenceManual" />
 		<var name="docs.output.name"		value="ProActiveProgrammingReferenceManual" />
 		<subant target="manualPdf" inheritall="true">
@@ -45,7 +45,7 @@
 	<!-- ==================================================================== -->
 	<!--           Make only one huge html-file from the doc                  -->
 	<!-- ==================================================================== -->
-	<target name="doc.ReferenceManual.manualSingleHtml" description="Generate the ProActive Programming Reference Manual single HTML manual">
+	<target name="doc.ReferenceManual.manualSingleHtml" depends="doc.ProActive.gcm.schemas" description="Generate the ProActive Programming Reference Manual single HTML manual">
 		<var name="doc.relative.name"		value="ReferenceManual" />
 		<var name="docs.output.name"		value="ProActiveProgrammingReferenceManual" />
 		<subant target="manualSingleHtml" inheritall="true">
