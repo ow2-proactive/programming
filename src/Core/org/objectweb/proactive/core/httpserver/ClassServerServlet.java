@@ -112,7 +112,7 @@ public class ClassServerServlet extends HttpServlet {
 
         int index = ret.indexOf(".class");
 
-        if (index > 1) {
+        if (index >= 1) {
             ret = ret.substring(0, index);
             ret = ret.replace('/', '.');
         }

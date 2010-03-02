@@ -36,12 +36,14 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
+import java.net.URI;
 import java.util.Hashtable;
 
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.URIBuilder;
 
 
 /**
@@ -73,6 +75,11 @@ public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory
             ClassServerServlet classServerServlet = ClassServerServlet.get();
             String servletCodebase = classServerServlet.getCodeBase();
 
+            // the class downloading protocol must be accorded to the
+            // selected communication protocol,
+
+            servletCodebase = adaptCodebaseToProtocol(servletCodebase);
+
             // Local class server is useful when an object migrate
             // Other class servers  are used only if local class server fail
             String oldCodebase = PAProperties.JAVA_RMI_SERVER_CODEBASE.getValue();
@@ -87,6 +94,16 @@ public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory
             PAProperties.JAVA_RMI_SERVER_CODEBASE.setValue(newCodebase);
             ProActiveRuntimeImpl.getProActiveRuntime();
         }
+    }
+
+    public static String adaptCodebaseToProtocol(String servletCodebase) {
+
+        if (PAProperties.PA_COMMUNICATION_PROTOCOL.getValue().equals("rmissh")) {
+            URI httpsshservletURI = URI.create(servletCodebase);
+            httpsshservletURI = URIBuilder.setProtocol(httpsshservletURI, "httpssh");
+            return httpsshservletURI.toString();
+        }
+        return servletCodebase;
     }
 
     /**
