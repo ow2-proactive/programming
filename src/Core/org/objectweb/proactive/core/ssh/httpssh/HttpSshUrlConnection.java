@@ -278,9 +278,9 @@ public class HttpSshUrlConnection extends java.net.HttpURLConnection {
         logger.debug("create http " + url.toString());
         String host = u.getHost();
         int port = u.getPort();
-        String path = u.getPath();
         Socket socket = tunnelPool.getSocket(host, port);
-        URL httpURL = new URL("http://" + socket.getInetAddress().getHostName() + ":" + socket.getPort());
+        URL httpURL = new URL("http://" + socket.getInetAddress().getHostName() + ":" + socket.getPort() +
+            u.getPath());
         _httpConnection = (HttpURLConnection) httpURL.openConnection();
         ensureSetup(_httpConnection);
     }
