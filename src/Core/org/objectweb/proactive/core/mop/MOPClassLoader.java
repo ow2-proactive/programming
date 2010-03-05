@@ -36,9 +36,12 @@
  */
 package org.objectweb.proactive.core.mop;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Hashtable;
@@ -198,7 +201,18 @@ public class MOPClassLoader extends URLClassLoader {
                 try {
                     byte[] data = PAProxyBuilder.generatePAProxy(PAProxyBuilder
                             .getBaseClassNameFromPAProxyName(name));
-                    return callDefineClassUsingReflection(name, data);
+                    MOPClassLoader.classDataCache.put(name, data);
+
+                    Class<?> baseCl = Class.forName(PAProxyBuilder.getBaseClassNameFromPAProxyName(name));
+
+                    if (cl == null) {
+                        cl = baseCl.getClassLoader();
+                    }
+
+                    Class<?> clazz = callDefineClassUsingReflection(name, data, cl);
+                    logger.debug("Generated paproxy class : " + name + "loaded into " +
+                        clazz.getClassLoader().toString());
+                    return clazz;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     logger.debug(ex);
@@ -216,7 +230,7 @@ public class MOPClassLoader extends URLClassLoader {
 
                 if (PAProxyBuilder.doesClassNameEndWithPAProxySuffix(classname)) {
                     try {
-                        loadClass(PAProxyBuilder.getBaseClassNameFromPAProxyName(classname));
+                        loadClass(classname);
                         //                    callDefineClassUsingReflection(classname, data);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -234,9 +248,10 @@ public class MOPClassLoader extends URLClassLoader {
                 // class Access checking. This method is supposed to be protected which means 
                 // we should not be accessing it but the access policy file allows us to access it freely.
                 try {
-                    Class<?> clazz = callDefineClassUsingReflection(name, data);
+                    Class<?> clazz = callDefineClassUsingReflection(name, data, null);
 
-                    logger.info("Generated class : " + name);
+                    logger.debug("Generated class : " + name + "loaded into " +
+                        clazz.getClassLoader().toString());
                     return clazz;
                 } catch (Exception ex) {
                     logger.debug(ex);
@@ -249,7 +264,7 @@ public class MOPClassLoader extends URLClassLoader {
         }
     }
 
-    protected Class<?> callDefineClassUsingReflection(String name, byte[] data)
+    protected Class<?> callDefineClassUsingReflection(String name, byte[] data, ClassLoader delegateCl)
             throws ClassNotFoundException, SecurityException, NoSuchMethodException,
             IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         Class<?> clc = Class.forName("java.lang.ClassLoader");
@@ -270,6 +285,10 @@ public class MOPClassLoader extends URLClassLoader {
         effectiveArguments[3] = Integer.valueOf(data.length);
         effectiveArguments[4] = this.getClass().getProtectionDomain();
 
+        if (delegateCl != null) {
+            return (Class<?>) m.invoke(delegateCl, effectiveArguments);
+        }
+
         //  we have been loaded through the bootclasspath
         // so we use the context classloader
         if (this.getParent() == null) {
@@ -277,5 +296,42 @@ public class MOPClassLoader extends URLClassLoader {
         } else {
             return (Class<?>) m.invoke(this.getParent(), effectiveArguments);
         }
+    }
+
+    @Override
+    public InputStream getResourceAsStream(String name) {
+        InputStream is = null;
+
+        name = convertResourceToClass(name);
+
+        byte[] data = getClassData(name);
+        if (data != null) {
+            is = new ByteArrayInputStream(data);
+        }
+
+        return is;
+    }
+
+    @Override
+    public URL getResource(String name) {
+        URL url = super.getResource(name);
+        name = convertResourceToClass(name);
+        if (url == null) {
+            byte[] data = getClassData(name);
+            if (data != null) {
+                try {
+                    url = new URL("pamop:///" + name);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return url;
+    }
+
+    private String convertResourceToClass(String ressource) {
+        String s = ressource.replace(".class", "");
+        s = s.replace("/", ".");
+        return s;
     }
 }

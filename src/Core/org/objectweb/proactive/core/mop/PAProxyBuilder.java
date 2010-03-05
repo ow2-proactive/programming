@@ -98,7 +98,7 @@ public class PAProxyBuilder {
     public static boolean hasPAProxyAnnotation(Class<?> clazz) throws NotFoundException {
         CtClass ctClass = null;
         try {
-            ctClass = ClassPool.getDefault().get(clazz.getName());
+            ctClass = JavassistByteCodeStubBuilder.getClassPool().get(clazz.getName());
 
         } catch (NotFoundException e) {
             ClassPool.getDefault().appendClassPath(new LoaderClassPath(clazz.getClassLoader()));
@@ -139,6 +139,7 @@ public class PAProxyBuilder {
 
         // mandatory fields
 
+        //        CtField proxyField = new CtField(JavassistByteCodeStubBuilder.getClassPool().get(Object.class.getName()), "proxiedModel", generatedCtClass);
         CtField proxyField = new CtField(superCtClass, "proxiedModel", generatedCtClass);
 
         generatedCtClass.addField(proxyField);
@@ -214,9 +215,22 @@ public class PAProxyBuilder {
                     "has PAProxyCustomBodyMethod annotation, body is " + b);
             } else {
                 if (returnType != CtClass.voidType) {
-                    body = " { return ($r) this.proxiedModel." + ctMethod.getName() + "($$); }";
+                    //                    body = " { return ($r) this.proxiedModel." + ctMethod.getName() + "($$); }";
+                    body = "{ ";
+                    body += "java.lang.reflect.Method m = " + ctMethod.getDeclaringClass().getName() +
+                        ".class.getDeclaredMethod(\"" + ctMethod.getName() + "\",$sig);";
+                    body += "m.setAccessible(true);";
+                    body += "return ($r) m.invoke(this.proxiedModel,$args);";
+                    body += "}";
                 } else {
-                    body = " {this.proxiedModel." + ctMethod.getName() + "($$); }";
+                    body = "{ ";
+                    body += "java.lang.reflect.Method m = " + ctMethod.getDeclaringClass().getName() +
+                        ".class.getDeclaredMethod(\"" + ctMethod.getName() + "\",$sig);";
+                    body += "m.setAccessible(true);";
+                    body += "m.invoke(this.proxiedModel,$args);";
+                    body += "}";
+
+                    //                    body = " { this.proxiedModel." + ctMethod.getName() + "($$); }";
                 }
             }
             CtMethod methodToGenerate = null;
@@ -224,7 +238,7 @@ public class PAProxyBuilder {
                 methodToGenerate = CtNewMethod.copy(ctMethod, generatedCtClass, null);
                 methodToGenerate.setBody(body.toString());
                 methodToGenerate.setModifiers(methodToGenerate.getModifiers() & ~Modifier.ABSTRACT);
-
+                methodToGenerate.setModifiers(Modifier.PUBLIC);
                 logger.debug("adding " + m.getCtMethod().getLongName() + " attr " +
                     Modifier.toString(m.getCtMethod().getModifiers()));
                 generatedCtClass.addMethod(methodToGenerate);
@@ -281,8 +295,9 @@ public class PAProxyBuilder {
 
         }
 
-        if (PAProperties.PA_MOP_GENERATEDCLASSES_DIR.isSet()) {
-            generatedCtClass.debugWriteFile(PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue());
+        if (PAProperties.PA_MOP_GENERATEDCLASSES_DIR.isSet() &&
+            PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue() != null) {
+            //            generatedCtClass.debugWriteFile(PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue());
         }
 
         byte[] bytecode = generatedCtClass.toBytecode();

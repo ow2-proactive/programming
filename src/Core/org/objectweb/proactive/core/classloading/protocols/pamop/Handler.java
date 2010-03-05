@@ -27,41 +27,33 @@
  * If needed, contact us to obtain a release under GPL Version 2 
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extra.messagerouting.remoteobject.util;
+package org.objectweb.proactive.core.classloading.protocols.pamop;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.objectweb.proactive.core.classloading.protocols.AbstractHandler;
+import org.objectweb.proactive.core.classloading.protocols.ProActiveConnection;
+import org.objectweb.proactive.core.mop.MOPClassLoader;
 
 
-/**
- * An output stream which defines the serialization behaviour
- * while using the ProActive Message Routing protocol.
- *
- * @author fabratu
- * @version %G%, %I%
- * @since ProActive 4.10
- */
-public class PamrMarshalOutputStream extends ObjectOutputStream {
-
-    private final String localRuntimeUrl;
-
-    public PamrMarshalOutputStream(OutputStream out, String localRuntimeUrl) throws IOException {
-        super(out);
-        this.localRuntimeUrl = localRuntimeUrl;
-    }
+public class Handler extends AbstractHandler {
 
     @Override
-    protected void annotateClass(Class<?> cl) throws IOException {
-        // write the local runtime URL
-        writeObject(this.localRuntimeUrl);
-    }
+    protected URLConnection openConnection(URL u) throws IOException {
 
+        String classname = u.getPath().substring(1);
+        InputStream is = MOPClassLoader.getMOPClassLoader().getResourceAsStream(classname);
+
+        return new ProActiveConnection(u, is);
+    }
 }

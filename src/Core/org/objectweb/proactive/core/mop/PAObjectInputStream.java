@@ -55,7 +55,14 @@ public class PAObjectInputStream extends SunMarshalInputStream {
             //let's see if the mop has seen this class before		
             //		System.out.println("Calling resolClass on " + desc);
             //		System.out.println("Calling resolClass  FAILED trying MOP ");
-            return MOP.loadClass(desc.getName());
+
+            Class<?> clazz = MOPClassLoader.getMOPClassLoader().loadClass(desc.getName());
+
+            if (clazz == null) {
+                clazz = MOP.loadClass(desc.getName());
+            }
+
+            return clazz;
         }
     }
 }
