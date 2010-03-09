@@ -252,9 +252,9 @@
     to external events (method calls). One just has to program non-blocking
     services to take into account external inputs.</para>
 
-    <para><programlisting language="java"><emphasis role="bold">public class </emphasis>BusyButReactive <emphasis role="bold">implements</emphasis> RunActive { <emphasis role="bold">
+    <para><programlisting language="java">public class BusyButReactive implements RunActive {
 
-    public void </emphasis> runActivity(Body body) {
+    public void  runActivity(Body body) {
        Service service = new Service(body);
        while ( ! hasToTerminate ) {
              ...
@@ -264,14 +264,14 @@
              service.serveOldest('changeParameters', 'terminate');
              ...
              }
-       }   <emphasis role="bold">
+       }
 
-    public void </emphasis> changeParameters () {
+    public void  changeParameters () {
              ......
              // change computation parameters
              }
 
-    <emphasis role="bold">public void </emphasis> terminate (){
+    public void  terminate (){
              hasToTerminate=true;
              }
     }</programlisting></para>

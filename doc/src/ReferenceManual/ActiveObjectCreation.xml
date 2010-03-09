@@ -1789,15 +1789,14 @@
 						of your object has a method whose signature looks like this:
 					</para>
 
-					<programlisting language="java">
-<emphasis role="bold">int</emphasis> giveSolution(parameter)</programlisting>
+					<programlisting language="java">int giveSolution(parameter)</programlisting>
 
 					<para>
 						calling this method with ProActive is
 						synchronous. To have asynchronous calls, use:
 					</para>
 
-					<programlisting language="java"><emphasis role="bold">IntWrapper</emphasis> giveSolution(parameter)</programlisting>
+					<programlisting language="java">IntWrapper giveSolution(parameter)</programlisting>
 
 				<para>
 						All wrappers are in the package:

@@ -43,10 +43,10 @@
     with:</para>
 
     <programlisting language="xml">
-&lt;prop <emphasis role="bold">key</emphasis>='prop1' <emphasis role="bold">value</emphasis>='value1'/&gt;
-&lt;prop <emphasis role="bold">key</emphasis>='prop2' <emphasis role="bold">value</emphasis>='value2'/&gt;
+&lt;prop key='prop1' value='value1'/&gt;
+&lt;prop key='prop2' value='value2'/&gt;
 ...
-&lt;prop <emphasis role="bold">key</emphasis>='propn' <emphasis role="bold">value</emphasis>='valuen'/&gt;
+&lt;prop key='propn' value='valuen'/&gt;
     </programlisting>
   </section>
 

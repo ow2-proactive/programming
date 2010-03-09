@@ -256,21 +256,21 @@
         of the descriptor file in the following way:</para>
 
    <programlisting language="xml">&lt;variables&gt;
-   &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">PROACTIVE_HOME</emphasis>" value="<emphasis role="bold">ProActive/dist/ProActive</emphasis>"/&gt;
-   &lt;<emphasis role="bold">descriptorDefaultVariable</emphasis> name="<emphasis role="bold">NUMBER_OF_VIRTUAL_NODES</emphasis>" value="<emphasis role="bold">20</emphasis>"/&gt;
-   &lt;<emphasis role="bold">programVariable</emphasis> name="<emphasis role="bold">VIRTUAL_NODE_NAME</emphasis>"/&gt;
-   &lt;<emphasis role="bold">javaPropertyVariable</emphasis> name="<emphasis role="bold">java.home</emphasis>"/&gt;
-   &lt;<emphasis role="bold">javaPropertyDescriptorDefault</emphasis> name="<emphasis role="bold">host.name</emphasis>" value="<emphasis role="bold">localhost</emphasis>"/&gt;
-   &lt;<emphasis role="bold">javaPropertyProgramDefault</emphasis> name="<emphasis role="bold">priority.queue</emphasis>"/&gt;
+   &lt;descriptorVariable name="PROACTIVE_HOME" value="ProActive/dist/ProActive"/&gt;
+   &lt;descriptorDefaultVariable name="NUMBER_OF_VIRTUAL_NODES" value="20"/&gt;
+   &lt;programVariable name="VIRTUAL_NODE_NAME"/&gt;
+   &lt;javaPropertyVariable name="java.home"/&gt;
+   &lt;javaPropertyDescriptorDefault name="host.name" value="localhost"/&gt;
+   &lt;javaPropertyProgramDefault name="priority.queue"/&gt;
 
    &lt;!-- Include external variables from files--&gt;
-   &lt;<emphasis role="bold">includeXMLFile</emphasis> location="<emphasis role="bold">file.xml</emphasis>"/&gt;
-   &lt;<emphasis role="bold">includePropertyFile</emphasis> location="<emphasis role="bold">file.properties</emphasis>"/&gt;
+   &lt;includeXMLFile location="file.xml"/&gt;
+   &lt;includePropertyFile location="file.properties"/&gt;
 &lt;/variables&gt;
          ...
 &lt;!-- Usage example--&gt;
 &lt;classpath&gt;
-   &lt;absolutePath value="<emphasis role="bold">${USER_HOME}/${PROACTIVE_HOME}/ProActive.jar</emphasis>"/&gt;
+   &lt;absolutePath value="${USER_HOME}/${PROACTIVE_HOME}/ProActive.jar"/&gt;
    ...
 &lt;/classpath&gt;
 ...</programlisting>
@@ -285,9 +285,9 @@
 
         <programlisting language="java">XML_LOCATION="/home/user/descriptor.xml";
 VariableContract variableContract= new VariableContractImpl();
-variableContract.setVariableFromProgram( "<emphasis role="bold">VIRTUAL_NODE_NAME</emphasis>", "<emphasis role="bold">testnode</emphasis>", <emphasis role="bold">VariableContractType.ProgramVariable</emphasis>);
-variableContract.setVariableFromProgram( "<emphasis role="bold">NUMBER_OF_VIRTUAL_NODES</emphasis>", "<emphasis role="bold">10</emphasis>", <emphasis role="bold">VariableContractType.DescriptorDefaultVariable</emphasis>);
-variableContract.setVariableFromProgram( "<emphasis role="bold">priority.queue</emphasis>", "<emphasis role="bold">vip</emphasis>", <emphasis role="bold">VariableContractType.JavaPropertyProgramDefault</emphasis>);
+variableContract.setVariableFromProgram( "VIRTUAL_NODE_NAME", "testnode", VariableContractType.ProgramVariable);
+variableContract.setVariableFromProgram( "NUMBER_OF_VIRTUAL_NODES", "10", VariableContractType.DescriptorDefaultVariable);
+variableContract.setVariableFromProgram( "priority.queue", "vip", VariableContractType.JavaPropertyProgramDefault);
 ProActiveDescriptor pad = PADeployment.getProactiveDescriptor(XML_LOCATION, variableContract);
 
 //Usage example
@@ -328,9 +328,9 @@ NUM_NODES: 45</screen>
 
          <programlisting language="xml">&lt;!-- Definition of the specific context --&gt;
 &lt;variables&gt;
-  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">USER_HOME</emphasis>" value="<emphasis role="bold">/usr/home/team</emphasis>"/&gt;
-  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">PROACTIVE_HOME</emphasis>" value="<emphasis role="bold">ProActive/dist/ProActive</emphasis>"/&gt;
-  &lt;<emphasis role="bold">descriptorVariable</emphasis> name="<emphasis role="bold">NUM_NODES</emphasis>" value="<emphasis role="bold">45</emphasis>"/&gt;
+  &lt;descriptorVariable name="USER_HOME" value="/usr/home/team"/&gt;
+  &lt;descriptorVariable name="PROACTIVE_HOME" value="ProActive/dist/ProActive"/&gt;
+  &lt;descriptorVariable name="NUM_NODES" value="45"/&gt;
 &lt;/variables&gt;</programlisting>
       </section>
 

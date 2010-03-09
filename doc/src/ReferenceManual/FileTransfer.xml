@@ -59,17 +59,17 @@
 
       <programlisting language="java">package org.objectweb.proactive.api.ProFileTransfer;
 
-static <emphasis role="bold">      RemoteFile</emphasis> <emphasis role="bold">pull</emphasis>(<emphasis role="bold">Node</emphasis> srcNode, <emphasis role="bold">File</emphasis> srcFile, <emphasis role="bold">File</emphasis> dstFile) throws IOException;
-static List&lt;<emphasis role="bold">RemoteFile</emphasis>&gt; <emphasis role="bold">pull</emphasis>(<emphasis role="bold">Node</emphasis> srcNode, <emphasis role="bold">File[]</emphasis> srcFile, <emphasis role="bold">File[]</emphasis> dstFile) throws IOException;
+static RemoteFile pull(Node srcNode, File srcFile, File dstFile) throws IOException;
+static List&lt;RemoteFile&gt; pull(Node srcNode, File[] srcFile, File[] dstFile) throws IOException;
 
-static       <emphasis role="bold">RemoteFile</emphasis> <emphasis role="bold">push</emphasis>(<emphasis role="bold">File</emphasis> srcFile, <emphasis role="bold">Node</emphasis> dstNode, <emphasis role="bold">File</emphasis> dstFile) throws IOException;
-static List&lt;<emphasis role="bold">RemoteFile</emphasis>&gt; <emphasis role="bold">push</emphasis>(<emphasis role="bold">File[]</emphasis> srcFile, <emphasis role="bold">Node</emphasis> dstNode, <emphasis role="bold">File[]</emphasis> dstFile) throws IOException;
+static RemoteFile push(File srcFile, Node dstNode, File dstFile) throws IOException;
+static List&lt;RemoteFile&gt; push(File[] srcFile, Node dstNode, File[] dstFile) throws IOException;
 
-static       <emphasis role="bold">RemoteFile</emphasis> <emphasis role="bold">transfer</emphasis>(<emphasis role="bold">Node</emphasis> srcNode, <emphasis role="bold">File</emphasis> srcFile, <emphasis role="bold">Node</emphasis> dstNode, <emphasis role="bold">File</emphasis> dstFile) throws IOException;
-static List&lt;<emphasis role="bold">RemoteFile</emphasis>&gt; <emphasis role="bold">transfer</emphasis>(<emphasis role="bold">Node</emphasis> srcNode, <emphasis role="bold">File[]</emphasis> srcFile, <emphasis role="bold">Node</emphasis> dstNode, <emphasis role="bold">File[]</emphasis> dstFile) throws IOException;
-static List&lt;<emphasis role="bold">RemoteFile</emphasis>&gt; <emphasis role="bold">transfer</emphasis>(<emphasis role="bold">Node</emphasis> srcNode, <emphasis role="bold">File[]</emphasis> srcFile, <emphasis role="bold">Node</emphasis> dstNode, <emphasis role="bold">File[]</emphasis> dstFile, int bsize, int numFlyingBlocks) throws IOException;
+static RemoteFile transfer(Node srcNode, File srcFile, Node dstNode, File dstFile) throws IOException;
+static List&lt;RemoteFile&gt; transfer(Node srcNode, File[] srcFile, Node dstNode, File[] dstFile) throws IOException;
+static List&lt;RemoteFile&gt; transfer(Node srcNode, File[] srcFile, Node dstNode, File[] dstFile, int bsize, int numFlyingBlocks) throws IOException;
 
-static <emphasis role="bold">      RemoteFile mkdirs</emphasis>(<emphasis role="bold">Node</emphasis> node, <emphasis role="bold">File</emphasis> file);</programlisting>
+static RemoteFile mkdirs(Node node, File file);</programlisting>
 
       <para>These methods are static, and handle the transfer of file between
       ProActive <emphasis role="bold">Node</emphasis>s. The <emphasis role="bold">pull</emphasis> methods retrieve a file/directory located on
@@ -128,11 +128,11 @@ VirtualNode testVNode = pad.getVirtualNode("test");
 testVNode.activate();
 Node testnode = testVNode.getNode();
 
-<emphasis role="bold">RemoteFile</emphasis> remoteFileA = <emphasis role="bold">ProFileTransfer.push</emphasis>(new File("/tmp/test.dat"), testnode, new File("/tmp/test.dat"));
-<emphasis role="bold">RemoteFile</emphasis> remoteFileB = <emphasis role="bold">remoteFileA.pull</emphasis>(new File("/tmp/test2.dat"));
+RemoteFile remoteFileA = ProFileTransfer.push(new File("/tmp/test.dat"), testnode, new File("/tmp/test.dat"));
+RemoteFile remoteFileB = remoteFileA.pull(new File("/tmp/test2.dat"));
 
 
-<emphasis role="bold">remoteFileB.waitFor</emphasis>(); //blocking method</programlisting>
+remoteFileB.waitFor(); //blocking method</programlisting>
 
       <section xml:id="HowtoobtainaNodefromanActive_67"><info><title>How to obtain a Node from an Active Object reference</title></info>
 
@@ -332,7 +332,7 @@ and implicitly inferred from the process information. --&gt;
 
         <para><programlisting language="java">import org.objectweb.proactive.core.descriptor.data;
 
-public FileWrapper <emphasis role="bold">VirtualNode.fileTransferRetrieve</emphasis>();</programlisting></para>
+public FileWrapper VirtualNode.fileTransferRetrieve();</programlisting></para>
 
         <para>This will trigger the retrieval of all the files specified in
         the descriptor, from all the nodes that were deployed using this
@@ -343,15 +343,15 @@ public FileWrapper <emphasis role="bold">VirtualNode.fileTransferRetrieve</empha
 
 pad = PADeployment.getProactiveDescriptor(XML_LOCATION);
 
-VirtualNode <emphasis role="bold">testVNode</emphasis> = pad.getVirtualNode("example");
+VirtualNode testVNode = pad.getVirtualNode("example");
 testVNode.activate();
 Node[] examplenode = testVNode.getNodes();
 
 ...
 
-FileWrapper fw = testVNode.<emphasis role="bold">fileTransferRetrieve</emphasis>();
+FileWrapper fw = testVNode.fileTransferRetrieve();
 ...
-File f[]=<emphasis role="bold">fw.getFiles()</emphasis> //wait-for-files to arrive
+File f[]=fw.getFiles() //wait-for-files to arrive
 </programlisting>
 
         <para>As a result of calling this method an array of type File[] will
