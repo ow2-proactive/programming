@@ -137,6 +137,7 @@
 			</else>
 		</if>
 		<javadoc
+			maxmemory="1024m"
 			destdir="${docs.built.dir}/api_complete"
 			author="true"
 			version="true"
