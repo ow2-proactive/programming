@@ -13,10 +13,9 @@
 		</info>
 
 		<para>
-			This Message Tagging allow you to add tags on the ProActive
-			messages such as the requests and replies. Each tag has an identifier
-			and a unique value, and they can
-			take a data of object type. Theses
+			Message Tagging allows you to add tags on the ProActive
+			messages such as requests and replies. Each tag has an identifier
+			and a unique value, and they can take a data of object type. Theses
 			tags have a method called at each propagation. This method is the
 			only needed method in your implementation of the abstract class Tag.
 		</para>
@@ -29,65 +28,57 @@
 		</info>
 
 		<para>
-			To get back the tag list of a request or reply in your application,
-			you can use the following API to get back the MessageTags object from
-			a request being served :
+			To retrieve the tag list of a request or a reply being served in your application,
+			you can use the following API:
 			<itemizedlist>
 				<listitem>
 					<para>
-						<emphasis>PAMessageTagging.getCurrentTags()</emphasis>
-						: Return the current MessageTags object of the current request
-						served.
+						<emphasis>PAMessageTagging.getCurrentTags()</emphasis>:
+						Return the current MessageTags object of the current request served.
 					</para>
 				</listitem>
 			</itemizedlist>
 			From this MessageTags object, you have access to the following API to
-			interract with the tags :
+			interract with tags:
 			<itemizedlist>
 				<listitem>
 					<para>
-						<emphasis>addTag(Tag tag)</emphasis>
-						: append a new Tag to the tag list of this message.
+						<emphasis>addTag(Tag tag)</emphasis>:
+						appends a new Tag to the tag list of this message.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>checkTag(String id)</emphasis>
-						: check if a tag with this
-						<emphasis>id</emphasis>
-						already exist on this message.
+						<emphasis>checkTag(String id)</emphasis>:
+						checks whether a tag with this <emphasis>id</emphasis>
+						already exists on this message.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>getAllTagsId()</emphasis>
-						: get back a
-						<emphasis>Set of String</emphasis>
-						with all the tags ID on this message.
+						<emphasis>getAllTagsId()</emphasis>:
+						retrieves a <emphasis>Set of String</emphasis>
+						with all the tag IDs on this message.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>getData(String id)</emphasis>
-						: get back the
-						<emphasis>data object</emphasis>
-						of the tag with this
-						<emphasis>id</emphasis>
-						.
+						<emphasis>getData(String id)</emphasis>:
+						retrieves the <emphasis>data object</emphasis>
+						of the tag whose ID is <emphasis>id</emphasis>.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>getTag(String id)</emphasis>
-						: get back the tag instance of the tag with this
-						<emphasis>id</emphasis>
-						.
+						<emphasis>getTag(String id)</emphasis>:
+						retireves the tag instance of the tag whose ID is
+						<emphasis>id</emphasis>.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>removeTag(String id)</emphasis>
-						: remove the tag with this
+						<emphasis>removeTag(String id)</emphasis>:
+						removes the tag whose ID is
 						<emphasis>id</emphasis>
 						from the current tag list of this message.
 					</para>
@@ -96,37 +87,37 @@
 		</para>
 
 		<para>
-			Once you have get back the Tag istance, you have acces to the
-			following methods :
+			Once you have retrieved the tag instance, you have acces to the
+			following methods:
 			<itemizedlist>
 				<listitem>
 					<para>
-						<emphasis>getData()</emphasis>
-						: get back the data object of this tag.
+						<emphasis>getData()</emphasis>:
+						gets the data object of this tag.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>getID()</emphasis>
-						: get back the identifier of this tag.
+						<emphasis>getID()</emphasis>:
+						gets the identifier of this tag.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>getLocalMemory()</emphasis>
-						: get back the LocalMemory object of this tag.
+						<emphasis>getLocalMemory()</emphasis>:
+						gets the LocalMemory object of this tag.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>setData()</emphasis>
-						: set a new data object for this tag.
+						<emphasis>setData()</emphasis>:
+						sets a new data object for this tag.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>apply()</emphasis>
-						: execute the job of the tag at the propagation.
+						<emphasis>apply()</emphasis>:
+						executes the job of the tag at the propagation.
 					</para>
 				</listitem>
 			</itemizedlist>
@@ -139,65 +130,112 @@
 		</info>
 
 		<para>
-			All the tag have acces to a <emphasis>LocalMemory</emphasis> object, which
+			All the tags have access to a <emphasis>LocalMemory</emphasis> object, which
 			is a local memory space on the Active Object on which the request is currently
-			being served. They can save or get back data in this space (key/value).
-			This is useful when the Tag need informations of a
-			previous passage on this Active Object. Theses local memory space are
+			being served. They can save or retrieve data in this space (key/value).
+			This is useful when the tag needs information on a
+			previous passage of this Active Object. This local memory space is
 			created for a specified lease time. The <emphasis>max lease time</emphasis>
-			is specified by the	<emphasis>PAProperty</emphasis>	: <emphasis>proactive.tagmemory.lease.max</emphasis>
-			which take the max lease value time in second.
+			is specified by the	<emphasis>proactive.tagmemory.lease.max</emphasis> PAProperty
+			which represents the max lease value time in second.
 		</para>
 
 		<para>
-			You can use this
-			<emphasis>local memory space</emphasis>
-			with the following API in your implementation of your Tag :
+			You can use this <emphasis>local memory space</emphasis>
+			with the following API in your Tag implementation:
 			<itemizedlist>
 				<listitem>
 					<para>
-						<emphasis>createLocalMemory(int lease)</emphasis>
-						: create the local space for your tag on the current active object
-						with this <emphasis>lease</emphasis> time value (in second) for the
-						data saved, and return the LocalMemory instance created.
+						<emphasis>createLocalMemory(int lease)</emphasis>:
+						creates the local space for your tag on the current active object
+						with this <emphasis>lease</emphasis> time value (in second),
+						and returns the LocalMemory instance created.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>getLocalMemory()</emphasis>
-						: get a reference to the local memory of your tag.
+						<emphasis>getLocalMemory()</emphasis>:
+						gets a reference to the local memory of your tag.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<emphasis>clearLocalMemory()</emphasis>
-						: clear the local memory of your tag.
+						<emphasis>clearLocalMemory()</emphasis>:
+						clears the local memory of your tag.
 					</para>
 				</listitem>
 			</itemizedlist>
 
-			Once you have your LocalMemory intance, you have access to :
+			Once you have your LocalMemory instance, you have access to:
 			<itemizedlist>
 				<listitem>
-					<para><emphasis>put(String key, Object value)</emphasis> : to put a value into that space.</para>
-					<para><emphasis>get(String key)</emphasis> : to get back a value previously putted.</para>
+					<para><emphasis>put(String key, Object value)</emphasis>: to put a value into that space.</para>
+					<para><emphasis>get(String key)</emphasis>: to retrieve a value previously putted.</para>
 				</listitem>
 			</itemizedlist>
 		</para>
 
-		<para>Each time a value is accessed, the current lease value of the LocalMemory space is incremented by half of the initial value. A thread run periodicaly
-		(<emphasis>proactive.tagmemory.lease.period</emphasis>) to check the lease value of each LocalMemory, and decrement their current lease.</para>
+		<para>Each time a value is accessed, the current lease value of the LocalMemory space is incremented by half of the initial value. A thread runs periodicaly
+		(<emphasis>proactive.tagmemory.lease.period</emphasis>) to check the lease value of each LocalMemory, and decrements their current lease.</para>
 
 	</section>
 
-	<section xml:id="msgtagging_Exemple">
-		<info><title>Exemple of user Tag implementing the Abstract Class Tag</title></info>
+	<section xml:id="msgtagging_Example">
+		<info><title>Example of a user Tag implementing the abstract class Tag</title></info>
 
 		<para>
-			This exemple show how you can create your own tag :
+			This section presents a tag example which is able to give information on the request depth. 
+			Thus, we can know for example how many requests have been served
+			before serving the current one.
+		</para>
+		<para>
+			Here is the implementation of this tag:
 		</para>
 
-		<programlisting language="java"><textobject><textdata fileref="code_snippets/tagexample.txt"/></textobject></programlisting>
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/IncrementingTag.snip"/></textobject></programlisting>
+
+		<para>Each time this tag is propated, that is, each time the <literal>apply</literal> method is called, the <literal>depth</literal> field is incremented.</para>
+
+		<para>
+			In order to test this tag, we have written a loop between three active objects:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para><emphasis role="bold">A</emphasis> which has a reference to an active object <emphasis role="bold">B</emphasis></para>		
+			</listitem>
+			<listitem>
+				<para><emphasis role="bold">B</emphasis> which has a reference to an active object <emphasis role="bold">C</emphasis></para>		
+			</listitem>
+			<listitem>
+				<para><emphasis role="bold">C</emphasis> which has a reference to the first active object <emphasis role="bold">A</emphasis></para>		
+			</listitem>
+		</itemizedlist>
+		<para>
+			All this classes define a <literal>propagate</literal> method which hava the same principle:
+		</para>
+		<orderedlist>
+			<listitem>
+				<para>Gets the <emphasis role="italics">"TAG_00"</emphasis> tag or creates it if it does not exist (only for class A).</para>
+			</listitem>
+			<listitem>
+				<para>Displays the depth of this tag.</para>
+			</listitem>
+			<listitem>
+				<para>Gets the data of this tags where the current path has been stored and adds the current class.</para>
+			</listitem>
+			<listitem>
+				<para>Gets or creates the local memory and stores the current round number, that is, the number of has been visited.</para>
+			</listitem>
+		</orderedlist>
+
+		<para>
+			Here is the <literal>propagate</literal> method of the class <emphasis role="bold">A</emphasis>:
+		</para>
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/Tag_propagate.snip"/></textobject></programlisting>
+
+		<para>
+			This example is available in the <emphasis role="bold">org.objectweb.proactive.examples.documentation.messagetagging</emphasis> package.
+		</para>
 	</section>
 
 	<section xml:id="msgtagging_TagDSF">
@@ -206,21 +244,19 @@
 		</info>
 
 		<para>
-			The Distributed Services Flow Tag (DSF Tag) allow the following
-			of all messages (request and reply) to know to which services flow
+			The Distributed Services Flow Tag (DSF Tag) allows the following
+			of all messages (requests and replies) so as to know to which services flow
 			these messages belong to.
-			This tag is necessary if you wish to do a graphical analysis in IC2D of
+			This tag is necessary if you want to do a graphical analysis in IC2D of
 			the execution of your application.
 		</para>
 
 		<para>
-			This tag can be enable or disable with the following ProActive
-			Property :
-			<emphasis>proactive.tag.dsf</emphasis>
-			. Set this property to
-			<emphasis>true</emphasis>
-			if you wish to enable the DSF Tag propagation in the execution of the
-			application.
+			This tag can be enable or disable with the
+			<emphasis>proactive.tag.dsf</emphasis> ProActive property.
+			Set this property to <emphasis>true</emphasis>
+			if you want to enable the DSF Tag propagation in the execution of the
+			application. It is set to false by default.
 		</para>
 
 	</section>
