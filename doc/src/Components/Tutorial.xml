@@ -8,7 +8,7 @@
 			<xref linkend="ProActiveComponents"/>.
 		</para>
       <para>
-         As in the previous chapter, ProActive provides you with an empty tutorial which enables you to fill in code
+         As in <link xlink:href="../../GetStarted/multiple_html/ActiveObjectTutorial.html">the active object tutorial</link>, ProActive provides you with an empty tutorial which enables you to fill in code
          sources and test them easily. To build the tutorial directory, go to the <literal>ProActive/compile</literal> directory
          and type:
       </para>

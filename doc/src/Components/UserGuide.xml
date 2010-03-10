@@ -260,7 +260,7 @@
 				Components are deployed on the virtual node that is
 				specified in their definition. It has to appear in the
 				deployment descriptor
-				<emphasis role="underline">unless</emphasis>
+				<emphasis role="bold">unless</emphasis>
 				this virtual node is exported. In this case, the name of
 				the exported virtual node should appear in the
 				deployment descriptor, unless this exported virtual node
