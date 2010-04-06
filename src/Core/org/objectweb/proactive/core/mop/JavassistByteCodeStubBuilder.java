@@ -72,6 +72,7 @@ import org.objectweb.proactive.annotation.TurnRemote;
 import org.objectweb.proactive.annotation.TurnRemoteParam;
 import org.objectweb.proactive.annotation.UnwrapFuture;
 import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
