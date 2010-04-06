@@ -62,7 +62,7 @@
     <para><emphasis><emphasis role="bold">Manifest
     file</emphasis></emphasis></para>
 
-    <para>This important file contains crucial parameters for the bundle file.
+    <para>This important file contains crucial parameters for the bundle.
     It specifies which Activator (entry point) the bundle has to use, the
     bundle classpath, the imported and exported packages and so on...</para>
 
@@ -71,7 +71,7 @@
     <para>Bundles communicates with each other thanks to <emphasis role="bold">services and packages sharing</emphasis>.
     A <emphasis role="bold">service</emphasis> is an object registered into the framework
     in order to be used by other applications. The definition of a service is
-    specified in a Java interface. OSGi specify a set of standard services
+    specified in a Java interface. OSGi specifies a set of standard services
     like Http Service, Log Service...</para>
 
     <para>We currently use the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oscar.objectweb.org">OSCAR objectweb</link> implementation.
@@ -128,7 +128,7 @@
 }</programlisting>
 
     <para>The <literal>start()</literal> method is the one executed when the
-    bundle starts. When the hello bundle starts, we need to get the reference on
+    bundle starts. When the hello bundle starts, we need to get the reference to
     the ProActive service and use it. Once we have the reference, we can
     create our active object thanks to the
     <literal>ProActiveService.newActive()</literal> method. Finally, we
