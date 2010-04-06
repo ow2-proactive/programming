@@ -70,7 +70,7 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
-import org.apache.felix.shell.ShellService;
+import org.ungoverned.osgi.service.shell.ShellService;
 
 
 public class OSGiFramework extends NotificationBroadcasterSupport implements OSGiFrameworkMBean,
@@ -102,12 +102,12 @@ public class OSGiFramework extends NotificationBroadcasterSupport implements OSG
         try {
             this.context = context;
             OSGiStore.getInstance().setContext(this.context);
+            this.shell = OSGiStore.getInstance().getShell();
             this.url = ProActiveInet.getInstance().getInetAddress().getCanonicalHostName();
             this.port = PAProperties.PA_XMLHTTP_PORT.getValueAsInt();
-            OSGiStore.getInstance().setUrl(url);
-            UrlMBean urlMbean = new Url(this.url + '(' + this.port + ')');
+            OSGiStore.getInstance().setUrl(this.url);
+            //UrlMBean urlMbean = new Url(this.url + '(' + this.port + ')');
             this.transactionsManager = TransactionsManager.getInstance(this.url);
-
             this.path = Constants.OSGI_JMX_PATH;
             this.on = new ObjectName(this.path + Constants.ON_GATEWAYS + this.url + '(' + this.port + ')');
 
@@ -282,9 +282,14 @@ public class OSGiFramework extends NotificationBroadcasterSupport implements OSG
         }
     }
 
-    public void executeCommand(long transactionId, String command) {
-        //			Transaction t = this.transactionsManager.getTransaction(transactionId);
-    }
+    //    public void executeCommand(long transactionId, String command) {
+    //        try {
+    //            Transaction t = this.transactionsManager.getTransaction(transactionId);
+    ////            t.executeCommand();
+    //        } catch (InvalidTransactionException e1) {
+    //            e1.printStackTrace();
+    //        }
+    //    }
 
     /**
      * @return the path

@@ -63,5 +63,5 @@ public interface OSGiFrameworkMBean {
     /* operations */
     public Status installBundle(long transactionId, String location);
 
-    public void executeCommand(long transactionId, String command);
+    //    public void executeCommand(long transactionId, String command);
 }

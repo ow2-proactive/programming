@@ -37,15 +37,11 @@
 package org.objectweb.proactive.examples.jmx.remote.management.client.jmx;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
-
 import org.objectweb.proactive.core.jmx.ProActiveConnection;
-import org.objectweb.proactive.core.jmx.ProActiveJMXConstants;
+import org.objectweb.proactive.core.jmx.client.ClientConnector;
+import org.objectweb.proactive.core.util.URIBuilder;
 
 
 public class FrameworkConnection {
@@ -85,25 +81,18 @@ public class FrameworkConnection {
     public void connect() throws IOException {
         this.connection = connectionsMap.get(this.url);
         if (this.connection == null) {
-            String url = "service:jmx:proactive://" + this.url + "///" +
-                ProActiveJMXConstants.SERVER_REGISTERED_NAME;
-            JMXServiceURL jmxUrl;
-            try {
-                jmxUrl = new JMXServiceURL(url);
-                JMXConnector conn = JMXConnectorFactory.connect(jmxUrl,
-                        ProActiveJMXConstants.PROACTIVE_JMX_ENV);
-                this.connection = (ProActiveConnection) conn.getMBeanServerConnection();
-                this.connected = true;
-            } catch (MalformedURLException e1) {
-                e1.printStackTrace();
-                throw new IOException(e1.getMessage());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-                throw new IOException(e1.getMessage());
-            } catch (Exception e1) {
-                e1.printStackTrace();
-                throw new IOException(e1.getMessage());
+
+            String serverName = URIBuilder.getNameFromURI(this.url);
+
+            if ((serverName == null) || serverName.equals("")) {
+                serverName = "serverName";
             }
+            ClientConnector cc = new ClientConnector(this.url, serverName);
+            cc.connect();
+            this.connection = cc.getConnection();
+
+            connectionsMap.put(this.url, this.connection);
+            this.connected = true;
         }
     }
 
@@ -116,5 +105,9 @@ public class FrameworkConnection {
         } catch (Exception e) {
             throw new IOException(e.getMessage());
         }
+    }
+
+    public static void main(String[] args) {
+        FrameworkConnection fc = new FrameworkConnection("//localhost/");
     }
 }

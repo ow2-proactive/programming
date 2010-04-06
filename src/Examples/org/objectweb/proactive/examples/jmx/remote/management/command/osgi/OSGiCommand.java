@@ -133,12 +133,28 @@ public abstract class OSGiCommand extends NotificationBroadcasterSupport impleme
             if (!errString.equals("")) {
                 return new Status(Status.ERR, this.operation, errString, OSGiStore.getInstance().getUrl());
             } else {
+
                 Status s = new Status(Status.OK, this.operation, outString, OSGiStore.getInstance().getUrl());
                 return s;
             }
         } catch (Exception e) {
             //                e.printStackTrace();
             return new Status(Status.ERR, this.operation, e.getMessage(), OSGiStore.getInstance().getUrl());
+        } finally {
+            if (baos != null) {
+                try {
+                    baos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (baosErr != null) {
+                try {
+                    baosErr.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
