@@ -24,8 +24,10 @@ do
 	rm performanceTests.*
 	./compile/build clean junit.performance || exit 1
 
-	mkdir $TMPDIR/$branch
-	cp *.Test* $TMPDIR/$branch
+        branchdir=$(echo $branch | tr -d '/')
+
+	mkdir -p $TMPDIR/$branchdir
+	cp *.Test* $TMPDIR/$branchdir
 done
 python $(dirname $0)/perf_graph.py $TMPDIR  performanceTests.bandwidth  performanceTests.throughput
 git co $ORIG_BRANCH
