@@ -72,6 +72,7 @@ public class TestClient implements NotificationListener, Serializable {
     private transient ProActiveConnection connection;
     private transient JMXConnector connector;
     private String url;
+    private static final String default_url = "//localhost/serverName";
     private ConnectionListener listener;
 
     public static void main(String[] args) {
@@ -83,13 +84,15 @@ public class TestClient implements NotificationListener, Serializable {
      * When connected, gets and show  the JMX domains one can explore
      */
     public TestClient() {
-        System.out.println("Enter the name of the JMX MBean Server :");
+        System.out.println("Enter the name of the JMX MBean Server :  [default is '" + default_url + "']");
+        System.out.println("(Type \"exit\" to quit)");
         this.url = read();
         try {
             connect();
             getMBeanInformations();
         } catch (Exception e) {
-            System.out.println("Cannot contact the connector, did you start one ? (see connector.[sh|bat])");
+            System.out
+                    .println("Cannot contact the connector, have you started one ? (see connector.[sh|bat])");
             e.printStackTrace();
         }
     }
@@ -102,10 +105,18 @@ public class TestClient implements NotificationListener, Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (what.equals("exit")) {
+            System.out.println("Good Bye !");
+            System.exit(0);
+        }
         return what;
     }
 
     private void connect() throws Exception {
+        if ("".equals(url.trim())) {
+            url = default_url;
+        }
+
         System.out.println("Connecting to : " + this.url);
         String serverName = URIBuilder.getNameFromURI(url);
 

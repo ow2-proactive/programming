@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
+ * Copyright (C) 1997-2010 INRIA/University of
  * 				Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -24,7 +24,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
+ * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
  *  Initial developer(s):               The ProActive Team
@@ -34,29 +34,28 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.examples.documentation.jmx;
+package org.objectweb.proactive.examples.documentation.jmx.listeners;
 
-//@snippet-start jmx_MyListener
+//@snippet-start JMX_MyListener
 import javax.management.Notification;
 import javax.management.NotificationListener;
-import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.jmx.notification.BodyNotificationData;
-import org.objectweb.proactive.core.jmx.notification.NotificationType;
+
+import org.objectweb.proactive.examples.documentation.jmx.mbeans.Hello;
 
 
 public class MyListener implements NotificationListener {
 
     public void handleNotification(Notification notification, Object handback) {
-        // Get the type of the notification
-        String type = notification.getType();
-        // Get the data of the notification
-        Object data = notification.getUserData();
 
-        if (type.equals(NotificationType.bodyCreated)) {
-            BodyNotificationData notificationData = (BodyNotificationData) data;
-            UniqueID id = notificationData.getId();
-            System.out.println("Active Object created with id:" + id);
+        String type = notification.getType();
+
+        System.out.println("\nReceiving Notification: ");
+        System.out.println("My type is " + type);
+        if (type.equals(Hello.NOTIFICATION_NAME)) {
+            Hello h = (Hello) notification.getUserData();
+            System.out.println("my current message is: " + h.getMessage());
+            h.saySomething();
         }
     }
 }
-//@snippet-end jmx_MyListener
+//@snippet-end JMX_MyListener

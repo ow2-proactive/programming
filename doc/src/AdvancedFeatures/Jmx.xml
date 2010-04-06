@@ -53,12 +53,12 @@
 					enables the remote management
 					of Java applications. In order to remotely access to
 					managed applications, JMX specification defines two
-					type of remote access: protocol adaptors and
+					types of remote access: protocol adaptors and
 					protocol connectors. Connectors allow a manager to
 					perform method calls onto a distant agent's
 					MBeanServer (for example RMI). Adaptors are
 					components that ensure binding between a specific
-					protocol (for example for SNMP or Http) and the
+					protocol (for example for SNMP or HTTP) and the
 					managed resources. Indeed, they enable Mbeans to be
 					accessed by existing approaches.</para>
 				</listitem>
@@ -115,21 +115,15 @@
 			To perform such a call, you have first to create the server
 			connector on the application you wish to manage. This is
 			simply done by adding one line of code in the application:
-			<programlisting language="java">org.objectweb.proactive.jmx.server.ServerConnector	connector = new org.objectweb.proactive.jmx.server.ServerConnector();</programlisting>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/JMX_ServerConnector.snip" /></textobject></programlisting>
 			Once the connector server part launched, any ProActive JMX
 			connector client can connect to it and manage the
 			application thanks to the ClientConnector class.
-			<programlisting language="java">org.objectweb.proactive.jmx.client.ClientConnector clientConnector = new org.objectweb.proactive.jmx.client.ClientConnector(String serverUrl);</programlisting>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/JMX_ClientConnector_1.snip" /></textobject></programlisting>
 			To perform remote operations on a given MBean, you have to
 			get the reference of the current MBeanServerConnection,
 			which is actually a ProActiveConnection:
-			<programlisting language="java">/* invoke the performAction method
-on the MBean named beanName with
-the parameter param1 which type is typeParam1 ObjectName */
-ProActiveConnection connection =	clientConnector.getConnection();
-ObjectName beanName = new ObjectName ("myDomain:name=beanName");
-GenericTypeWrapper return = connection.invokeAsynchronous( beanName,
-   "performAction", new Object[] { param1 } , new String [] {typeOfParam1});</programlisting>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/JMX_ClientConnector_2.snip" /></textobject></programlisting>
 		</para>
 
 		<note>
@@ -161,13 +155,7 @@ GenericTypeWrapper return = connection.invokeAsynchronous( beanName,
 			</emphasis>
 			and added as a <literal>NotificationListener</literal>:
 
-			<programlisting language="java">/* Creates an active listener MyNotificationListener */
-MyNotificationListener listener =
-   (MyNotificationListener) PAActiveObject.newActive(MyNotificationListener.class.getName(),
-	new Object[] { connection });
-/* Adds the listener to the Mbean server where we are connected to */
-connection.addNotificationListener(beanName, listener, null, handback);
-			</programlisting>
+			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/JMX_ClientConnector_3.snip" /></textobject></programlisting>
 		</para>
 		<note>
 			<para>
@@ -184,7 +172,7 @@ connection.addNotificationListener(beanName, listener, null, handback);
 
 
 		<para>
-			The example available in the ProActive examples directory,
+			The example available in the <literal>$PROACTIVE_HOME/examples/jmx/</literal> directory,
 			is a simple textual tool to connect to a remote MBeanServer
 			and list available domains and mbeans registered in this
 			server.
@@ -192,38 +180,55 @@ connection.addNotificationListener(beanName, listener, null, handback);
 
 		<para>
 			To launch the connector server side, execute the
-			jmx/connector script. To connect this server, execute the
-			jmx/simpleJmx script and specify the machine name where is
-			hosted the Mbean server. For example:
-			<screen>--- JMC Test client connector ---------------------------------------------
-Enter the url of the JMX MBean Server : rmi://localhost:&lt;port&gt;/</screen>
+			<literal>connector.[sh|bat]</literal> script. To connect this server, execute the
+			<literal>simpleJmx.[sh|bat]</literal> script and specify the MBean serber name where is
+			hosted the Mbean server:
+			<screen>--- JMC Test client connector---------------------------------------------
+Enter the name of the JMX MBean Server :  [default is '//localhost/serverName']
+(Type "exit" to quit)</screen>
+			Just typing <literal>Enter</literal> should work since the server location of the mbean server launched
+			with the <literal>connector.[sh|bat]</literal> script is the default one.
 		</para>
 		<para>
-			The console shows the domains list, for example:
-			<screen>Registered Domains:
-   [ 0 ] java.util.logging
-   [ 1 ] JMImplementation
-   [ 2 ] java.lang</screen>
+			The console shows the domains list:
+			<screen>Registered Domains :
+	[ 0 ] JMImplementation
+	[ 1 ] com.sun.management
+	[ 2 ] org.objectweb.proactive
+	[ 3 ] org.objectweb.proactive.core.runtimes
+	[ 4 ] org.objectweb.proactive.core.node
+	[ 5 ] java.lang
+	[ 6 ] java.util.logging
+
+Type the domain number to see all registered MBeans in this domain :</screen>
 		</para>
 		<para>
 			By choosing a specific domain, the console will show the
-			Mbeans registered in this domain.
+			Mbeans registered in this domain:
 		</para>
-			<para>
-				The console shows the domains list, for example:
-				<screen>[ 0 ] java.lang:type=Memory
-[ 1 ] java.lang:type=GarbageCollector,name=Copy
-[ 2 ] java.lang:type=MemoryPool,name=Tenured Gen
-[ 3 ] java.lang:type=MemoryPool,name=Eden Space
-[ 4 ] java.lang:type=MemoryPool,name=Code Cache
-[ 5 ] java.lang:type=Threading
-[ 6 ] java.lang:type=OperatingSystem
-...
-Type the mbean	number to see its properties:</screen>
+		<para>
+			Choosing the <literal>java.lang</literal> domain, you should see the following registered MBeans:
+			<screen>[ 0 ] java.lang:type=OperatingSystem
+[ 1 ] java.lang:type=Compilation
+[ 2 ] java.lang:type=MemoryPool,name=PS Old Gen
+[ 3 ] java.lang:type=Memory
+[ 4 ] java.lang:type=MemoryPool,name=PS Perm Gen
+[ 5 ] java.lang:type=Runtime
+[ 6 ] java.lang:type=GarbageCollector,name=PS MarkSweep
+[ 7 ] java.lang:type=Threading
+[ 8 ] java.lang:type=GarbageCollector,name=PS Scavenge
+[ 9 ] java.lang:type=ClassLoading
+[ 10 ] java.lang:type=MemoryPool,name=PS Survivor Space
+[ 11 ] java.lang:type=MemoryManager,name=CodeCacheManager
+[ 12 ] java.lang:type=MemoryPool,name=Code Cache
+[ 13 ] java.lang:type=MemoryPool,name=PS Eden Space
+[ D ]  Domains list
 
-				If you wish to get informations about Memory, choose 0,
-				and the console will show the whole information about
-				this MBean.
+Type the mbean number to see its properties :</screen>
+
+			If you wish to get informations about Memory, choose 3,
+			and the console will show the whole information about
+			this MBean.
 	</para>
 	</section>
 </chapter>
