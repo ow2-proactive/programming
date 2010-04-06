@@ -987,9 +987,33 @@
 			<fileset dir="${lib.dir}/">
 				<include name="javassist.jar" />
 				<include name="log4j.jar" />
-				<include name="xercesImpl.jar" />
+				<include name="xercesImpl-2.8.1.jar" />
 				<include name="bouncycastle.jar" />
 				<include name="fractal.jar" />
+			</fileset>
+		</jar>
+	</target>
+
+	<!-- ================================================================ -->
+	<!--                    Create OSGi Hello bundle                      -->
+	<!--  =============================================================== -->
+	<target name="helloBundle" description="Creates the Hello example bundle">
+		<mkdir dir="${bundle.dir}" />
+		<jar manifest="${manifest.example.dir}/Manifest.mf" jarfile="${bundle.dir}/helloBundle.jar">
+			<fileset dir="${cl.examples.dir}">
+				<include name="${examples.path}/osgi/hello/HelloActivator.class" />
+				<include name="${examples.path}/osgi/hello/HelloSystemOut.class" />
+				<include name="${examples.path}/osgi/hello/HelloLogInfo.class" />
+				<include name="${examples.path}/osgi/hello/HelloService.class" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="helloClientBundle" description="Creates the Hello Client bundle">
+		<mkdir dir="${bundle.dir}" />
+		<jar manifest="${manifest.example.dir}/ClientManifest.mf" jarfile="${bundle.dir}/helloClientBundle.jar">
+			<fileset dir="${cl.examples.dir}">
+				<include name="${examples.path}/osgi/hello/HelloClientActivator.class" />
 			</fileset>
 		</jar>
 	</target>
@@ -1053,10 +1077,9 @@
 	</target>
 
 	<!-- ================================================================ -->
-	<!--                    Create OSGi  Management Bundle                -->
+<!--                    Create OSGi  Management Bundle                -->
 	<!--  =============================================================== -->
 	<target name="osgiMgt" depends="compile">
-		<mkdir dir="${dist.dir}" />
 		<jar jarfile="${bundle.dir}/OSGiManagement.jar" manifest="${manifest.example.management.dir}/Manifest.mf">
 			<fileset dir="${cl.examples.dir}/">
 				<include name="org/objectweb/proactive/examples/jmx/remote/**" />

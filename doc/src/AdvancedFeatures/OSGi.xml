@@ -74,7 +74,7 @@
     specified in a Java interface. OSGi specifies a set of standard services
     like Http Service, Log Service...</para>
 
-    <para>We currently use the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oscar.objectweb.org">OSCAR objectweb</link> implementation.
+    <para>We currently use the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://felix.apache.org/site/index.html">Apache Felix</link> implementation.
     For more information on OSGi, please visit the
     <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.osgi.org">OSGi</link> website.</para>
   </section>
@@ -87,7 +87,7 @@
     classes required to launch a ProActive runtime.</para>
 
     <para>The <emphasis role="bold">ProActive bundle offers a
-    service</emphasis> , the <emphasis>ProActiveService</emphasis> that has
+    service</emphasis>, the <emphasis>ProActiveService</emphasis> that has
     almost the same interface that the ProActive static class. When
     installed, the ProActive bundle starts a new runtime, and clients that use
     the ProActive Service will be able to create active object on this
@@ -123,36 +123,18 @@
     <para>The HelloActivator has to implements the BundleActivator
     interface.</para>
 
-    <programlisting language="java">public class HelloActivator implements BundleActivator {
-   ...
-}</programlisting>
+    <programlisting language="java"><textobject><textdata fileref="automatic_snippets/HelloActivator_1.snip" /></textobject></programlisting>
 
     <para>The <literal>start()</literal> method is the one executed when the
     bundle starts. When the hello bundle starts, we need to get the reference to
     the ProActive service and use it. Once we have the reference, we can
-    create our active object thanks to the
-    <literal>ProActiveService.newActive()</literal> method. Finally, we
-    register our new service in the framework.</para>
+    create our active objects thanks to the
+    <literal>ProActiveService.newActive()</literal> method.
+	In this example, we use this method to create two active objects: One <literal>HelloSystemOut</literal> object and one <literal>HelloLogInfo</literal> object.
+	This two classes implement the <literal>HelloService</literal> class which defines two methods: <literal>sayHello()</literal> and <literal>saySomething(String something)</literal>.
+	Finally, we register these two objects as a <literal>HelloService</literal> with two different <literal>out</literal> properties that will enable us to differentiate them.</para>
 
-    <programlisting language="java">public void start(BundleContext context) throws Exception {
-   this.context = context;
-
-   /* gets the ProActive Service */
-   ServiceReference sr = this.context.getServiceReference(ProActiveService.class.getName());
-   this.proActiveService = (ProActiveService) this.context.getService(sr);
-   Hello h = (Hello) this.proActiveService.newActive(
-      'org.objectweb.proactive.examples.hello.Hello',
-      new Object [] {});
-
-
-   /* Register the service */
-   Properties props = new Properties();
-   props.put('name', 'helloWorld');
-
-   reg = this.context.registerService(
-      'org.objectweb.proactive.osgi.ProActiveService',
-      h, props);
-}      </programlisting>
+    <programlisting language="java"><textobject><textdata fileref="automatic_snippets/HelloActivator_2.snip" /></textobject></programlisting>
 
     <para>Now that we have created the hello active service,
     we have to <emphasis role="bold">package the application</emphasis> into a bundle. First of
@@ -164,10 +146,14 @@
         <para>The name of the bundle: <literal>Hello World ProActive
         Service</literal></para>
       </listitem>
+      <listitem>
+        <para>The symbolic name of the bundle (required by felix): <literal>Hello World ProActive
+        Service</literal></para>
+      </listitem>
 
       <listitem>
         <para>The class of the Activator:
-        <literal>org.objectweb.proactive.HelloActivator</literal></para>
+        <literal>org.objectweb.proactive.examples.osgi.hello.HelloActivator</literal></para>
       </listitem>
 
       <listitem>
@@ -181,77 +167,81 @@
       </listitem>
 
       <listitem>
-        <para>We can also specify others informations like author, ...</para>
+        <para>We can also specify others informations like author, version, description, ...</para>
       </listitem>
     </itemizedlist>
 
     <para>Here is how the Manifest looks like:</para>
 
-    <screen>Bundle-Name: ProActive Hello World Bundle
-Bundle-Description: Bundle containing Hello World ProActive example
-Bundle-Vendor: OASIS - INRIA Sophia Antipolis
-Bundle-version: 1.0.0
-Export-Package: org.objectweb.proactive.examples.hello
-DynamicImport-Package: org.objectweb.proactive ...
-Bundle-Activator: org.objectweb.proactive.examples.osgi.hello.HelloActivator
-</screen>
+    <programlisting language="java"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/osgi/hello/Manifest/Manifest.mf" /></textobject></programlisting>
 
     <para><emphasis><emphasis role="bold">Installing the ProActive Bundle and
     the Hello Bundle.</emphasis></emphasis></para>
 
-    <para>In order to run the example you need to install an OSGi framework.
-    You can download and install one from the
-    <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://oscar.objectweb.org">OSCAR website</link>. Install the
-    required services on the OSCAR framework:</para>
-
-    <screen> --&gt; obr start 'Http Service' </screen>
+    <para>In order to run the example, you need to install an OSGi framework. Proactive uses felix as an OSGi framework but you can choose another one.</para>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Generation of the ProActive Bundle</emphasis></para>
+        <para><emphasis>Generation of the ProActive Bundle as well as other required bundles</emphasis></para>
 
-        <para>To generate the proActiveBundle you have to run the <emphasis role="bold">build</emphasis> script with the <emphasis role="bold"><literal>proActiveBundle</literal></emphasis>
-        target.</para>
+        <para>The proActiveBundle is the jar archive created when deploying ProActive. Yet, this bundle requires the  <literal>librariesBundle</literal> which emcompasses packages needed by ProActive.
+		To generate these bundles, you have to go to your <literal>$PROACTIVE_HOME/compile</literal> and type:
+        </para>
 
-        <screen>        &gt; cd $PROACTIVE_DIR/compile
-        &gt; ./build proActiveBundle
-</screen>
+        <screen>./build deploy librariesBundle</screen>
 
-        <para>The bundle jar file will be generated in the <emphasis role="bold"><literal>$PROACTIVE_DIR/dist/ProActive/bundle/</literal></emphasis>
-        directory. We need now to install and start it into the OSGi
-        Framework:</para>
+		<para>or, if you want to directly create all the ProActive bundles that you may need latter on, type:</para>
 
-        <screen> --&gt; start file:///$PROACTIVE_DIR/dist/ProActive/bundle/proActiveBundle.jar </screen>
-      </listitem>
+        <screen>build deploy OSGiBundles</screen>
 
-      <listitem>
-        <para>This command will install and start the proActive bundle on the
-        gateway. Users can now deploy application that uses the
-        ProActiveService.</para>
+        <para>The ProActive bundle jar file will be generated in <emphasis role="bold"><literal>$PROACTIVE_HOME/dist/lib/ProActive.jar</literal></emphasis>
+        and all the other bundles will be generated in the <emphasis role="bold"><literal>$PROACTIVE_HOME/dist/bundle/</literal></emphasis> directory.
+        </para>
+
+		<para>In order to start the Felix framework with the ProActive and the libraries bundles started, the simplest way is to go to the <emphasis role="bold"><literal>$PROACTIVE_HOME/examples/osgi</literal></emphasis> directory
+		and launch the <literal>felix.[sh|bat]</literal>script. This script will launch felix with the appropriate arguments and it will automatically start the ProActive and the libraries bundle.</para>
+
+        <screen>felix.[sh|bat]</screen>
       </listitem>
 
       <listitem>
         <para><emphasis>Generation of the Hello World example
-        bundle</emphasis></para>
+        bundle and its client bundle</emphasis></para>
 
-        <para>To generate the Hello World bundle you have to run the <emphasis role="bold">build</emphasis> script with the <emphasis role="bold"><literal>helloWorldBundle</literal></emphasis>
-        target.</para>
+        <para>To generate the Hello World bundle as well as its client bundle, you have to go to your <literal>$PROACTIVE_HOME/compile</literal> and type:
+        </para>
 
-        <screen>        &gt; cd $PROACTIVE_DIR/compile
-        &gt; ./build helloWorldBundle
-</screen>
+        <screen>./build helloBundle helloClientBundle</screen>
 
-        <para>The bundle jar file will be generated in the <emphasis role="bold"><literal>$PROACTIVE_DIR/dist/ProActive/bundle/</literal></emphasis>
-        directory. We need now to install and start it into the OSGi
-        Framework:</para>
-
-        <screen> --&gt; start file:///$PROACTIVE_DIR/dist/ProActive/bundle/helloWorldBundle.jar </screen>
+        <para>The bundle jar files will be generated in the <emphasis role="bold"><literal>$PROACTIVE_DIR/dist/bundle/</literal></emphasis>
+        directory.</para>
       </listitem>
 
       <listitem>
+        <para><emphasis>Installation and starting of the Hello World example
+        bundle</emphasis></para>
+
+		<para>We need now to install and start the hello bundle into the OSGi
+        Framework:</para>
+
+        <screen> --&gt; start file:./../../dist/bundle/helloBundle.jar</screen>
+
         <para>The command will install and start the Hello active service. The
         hello service is now an OSGi service and can be accessed
         remotely.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Installation and starting of the Hello World Client example
+        bundle</emphasis></para>
+        <para>The helloClientBundle shows you how to use the services registered by the helloBundle. Here is its Activator and its manifest file:</para>
+
+		<programlisting language="java"><textobject><textdata fileref="automatic_snippets/HelloClientActivator_1.snip" /></textobject></programlisting>
+
+		<programlisting language="java"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/osgi/hello/Manifest/Manifest.mf" /></textobject></programlisting>
+
+		<para>You can install it and start it into your framework typing:</para>
+        <screen> --&gt; start file:./../../dist/bundle/helloClientBundle.jar</screen>
       </listitem>
     </itemizedlist>
   </section>

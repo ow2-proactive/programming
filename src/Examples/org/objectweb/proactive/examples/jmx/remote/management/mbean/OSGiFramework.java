@@ -70,7 +70,7 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
-import org.ungoverned.osgi.service.shell.ShellService;
+import org.apache.felix.shell.ShellService;
 
 
 public class OSGiFramework extends NotificationBroadcasterSupport implements OSGiFrameworkMBean,

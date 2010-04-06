@@ -37,26 +37,22 @@
 package org.objectweb.proactive.extensions.osgi;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.rmi.AlreadyBoundException;
 
 import javax.servlet.Servlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import org.apache.felix.servicebinder.ServiceBinderContext;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
+import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
-import org.ungoverned.gravity.servicebinder.ServiceBinderContext;
 
 
 /**
@@ -68,7 +64,7 @@ public class ProActiveServicesImpl implements ProActiveService {
     private Node node;
     private Servlet servlet;
     private BundleContext bc;
-    private static final String aliasServlet = "/"; // + ClassServerServlet.SERVLET_NAME;
+    private static final String aliasServlet = "/";
     private static final String OSGI_NODE_NAME = "OSGiNode";
     private HttpService http;
     private int port;
@@ -135,8 +131,12 @@ public class ProActiveServicesImpl implements ProActiveService {
      *
      */
     private void createProActiveService() {
-        //        this.servlet = new ClassServerServlet(port);
+        this.servlet = ClassServerServlet.get();
         boolean b = registerServlet();
+        if (!b) {
+            System.out.println("Servlet has not been registered");
+            return;
+        }
         createNode();
     }
 
@@ -145,10 +145,8 @@ public class ProActiveServicesImpl implements ProActiveService {
      *
      */
     private void createNode() {
-        //    	System.out.println("url du class server = ");
         try {
-            Thread.currentThread().setContextClassLoader(ProActiveServicesImpl.class.getClassLoader());
-            this.node = NodeFactory.createLocalNode(OSGI_NODE_NAME, false, null, null, null);
+            this.node = NodeFactory.createLocalNode(OSGI_NODE_NAME, true, null, null, null);
         } catch (NodeException e) {
             e.printStackTrace();
         } catch (AlreadyBoundException e) {
@@ -162,28 +160,7 @@ public class ProActiveServicesImpl implements ProActiveService {
      */
     private boolean registerServlet() {
         try {
-            HttpContext myContext = new HttpContext() {
-                public boolean handleSecurity(HttpServletRequest arg0, HttpServletResponse arg1)
-                        throws IOException {
-                    return false;
-                }
-
-                public URL getResource(String arg0) {
-                    try {
-                        return new URL(aliasServlet + "?" + arg0);
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-
-                public String getMimeType(String arg0) {
-                    return null;
-                }
-            };
-
             this.http.registerServlet(aliasServlet, this.servlet, null, null);
-            //            this.http.registerResources("/", aliasServlet + "doc", myContext);
             return true;
         } catch (Throwable t) {
             t.printStackTrace();

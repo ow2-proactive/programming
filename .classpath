@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="lib/batik-util.jar"/>
 	<classpathentry kind="lib" path="lib/batik-xml.jar"/>
 	<classpathentry kind="lib" path="lib/bouncycastle.jar"/>
-	<classpathentry kind="lib" path="lib/bundlerepository.jar"/>
 	<classpathentry kind="lib" path="lib/cog-jglobus-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
 	<classpathentry kind="lib" path="lib/colobus-0.1.jar"/>
@@ -34,7 +33,6 @@
 	<classpathentry kind="lib" path="lib/fractal-adl.jar"/>
 	<classpathentry kind="lib" path="lib/fractal.jar"/>
 	<classpathentry kind="lib" path="lib/glite-wms-jdlj.jar"/>
-	<classpathentry kind="lib" path="lib/http.jar"/>
 	<classpathentry kind="lib" path="lib/ibis-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/ibis-connect-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/ibis-util-1.0.jar"/>
@@ -57,19 +55,15 @@
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
 	<classpathentry kind="lib" path="lib/moduleloader.jar"/>
-	<classpathentry kind="lib" path="lib/oscar.jar"/>
 	<classpathentry kind="lib" path="lib/osgi.jar"/>
 	<classpathentry kind="lib" path="lib/ow_deployment_scheduling.jar"/>
 	<classpathentry kind="lib" path="lib/ptolemy.jar"/>
 	<classpathentry kind="lib" path="lib/puretls.jar"/>
-	<classpathentry kind="lib" path="lib/servicebinder.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.5-6.1.11.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/servlet.jar"/>
-	<classpathentry kind="lib" path="lib/shell.jar"/>
 	<classpathentry kind="lib" path="lib/shellgui.jar"/>
 	<classpathentry kind="lib" path="lib/shellplugin.jar"/>
-	<classpathentry kind="lib" path="lib/shelltui.jar"/>
 	<classpathentry kind="lib" path="lib/simple.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.3.jar"/>
 	<classpathentry kind="lib" path="lib/soap.jar"/>
@@ -122,5 +116,12 @@
 	<classpathentry kind="lib" path="lib/axis.jar"/>
 	<classpathentry kind="lib" path="lib/virtualbox-wsdl.jar"/>
 	<classpathentry kind="lib" path="lib/ws-common/org.apache.servicemix.bundles.wsdl4j-1.6.1_1.jar"/>
+	<classpathentry kind="lib" path="lib/bundlerepository-1.4.3.jar"/>
+	<classpathentry kind="lib" path="lib/configadmin-1.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/felix.jar"/>
+	<classpathentry kind="lib" path="lib/http-2.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/servicebinder-0.9.0.jar"/>
+	<classpathentry kind="lib" path="lib/shell-1.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/shelltui-1.4.2.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
