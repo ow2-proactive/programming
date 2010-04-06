@@ -1,4 +1,5 @@
 Bundle-Name: ProActive JMX Connector Bundle
+Bundle-SymbolicName: ProActive JMX Connector Bundle
 Bundle-Description: A JMX Connector on top of ProActive
 Bundle-Vendor: OASIS - INRIA Sophia Antipolis
 Bundle-version: 1.0.0
