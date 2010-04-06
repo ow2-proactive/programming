@@ -270,35 +270,37 @@
 		</copy>
 
 		<if>
-					<bool>
-						<and>
-							<os family="Unix" />
-							<available file="mpicc" filepath="/bin:/usr/bin:/usr/local/bin" />
+			<bool>
+				<and>
+					<os family="Unix" />
+					<available file="mpicc" filepath="/bin:/usr/bin:/usr/local/bin" />
+				</and>
+			</bool>
+				<echo>Compiling native examples</echo>
+				<property name="src.mpi.dir" value="${src.extensions.dir}/${extensions.path}/nativeinterfacempi/control/config/src" />
+				<property name="src.nativeinterface.dir"  value="${src.extensions.dir}/${extensions.path}/nativeinterface" />
 
-						</and>
-					</bool>
-			       <echo>Compiling native examples</echo>
-			        <property name="src.mpi.dir" value="${src.extensions.dir}/${extensions.path}/nativeinterfacempi/control/config/src" />
-			        <property name="src.nativeinterface.dir"  value="${src.extensions.dir}/${extensions.path}/nativeinterface" />
 			    <exec dir="${src.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="mpic++" os="Linux">
 				<arg line="-O3 -lrt
-		                                    -I${src.mpi.dir}
-		                                    -I${src.nativeinterface.dir}
-		                                    -L${deploy.lib.native.dir}
-		                                    -lProActiveNativeInterfaceIPC -lProActiveMPIComm
-		                                    -fPIC -g
-		                                    hello_pampi.c -o hello_pampi " />
-				</exec>
-				<exec dir="${src.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="cp" os="Linux">
-				<arg line="hello_pampi ${cl.examples.dir}/${examples.path}/mpi/proactive_mpi/"/>
-				</exec>
-				<exec dir="${cl.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="chmod" os="Linux">
-		                    <arg line="+x hello_pampi"/>
+					-I${src.mpi.dir}
+					-I${src.nativeinterface.dir}
+					-L${deploy.lib.native.dir}
+					-lProActiveNativeInterfaceIPC -lProActiveMPIComm
+					-fPIC -g
+					hello_pampi.c -o hello_pampi " />
 				</exec>
 
-					<else>
-						<echo>Native examples are only available for Unix and mpicc must be installed</echo>
-					</else>
+				<exec dir="${src.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="cp" os="Linux">
+					<arg line="hello_pampi ${cl.examples.dir}/${examples.path}/mpi/proactive_mpi/"/>
+				</exec>
+
+				<exec dir="${cl.examples.dir}/${examples.path}/mpi/proactive_mpi" executable="chmod" os="Linux">
+					<arg line="+x hello_pampi"/>
+				</exec>
+
+				<else>
+					<echo>Native examples are only available for Unix and mpicc must be installed</echo>
+				</else>
 		</if>
 
 
@@ -977,9 +979,21 @@
 	</target>
 
 
+	<!-- ================================================================ -->
+	<!--                      Create Scilab javasci.jar                   -->
+	<!--  =============================================================== -->
+	<target name="scilabJar">
+		<delete dir="${dev.dir}/scilab/classes" />
+		<mkdir dir="${dev.dir}/scilab/classes" />
+		<javac srcdir="${dev.dir}/scilab/src" destdir="${dev.dir}/scilab/classes" deprecation="on" source="${source}" debug="${debug}">
+			<include name="**/*.java" />
+		</javac>
+		<jar jarfile="${lib.dir}/javasci.jar" basedir="${dev.dir}/scilab/classes" />
+	</target>
+
 
 	<!-- ================================================================ -->
-	<!--                    Create OSGi LibraryBundle.jar                 -->
+	<!--                    Create OSGi Library Bundle                    -->
 	<!--  =============================================================== -->
 	<target name="librariesBundle">
 		<mkdir dir="${bundle.dir}" />
@@ -995,50 +1009,33 @@
 	</target>
 
 	<!-- ================================================================ -->
-	<!--                    Create OSGi Hello bundle                      -->
-	<!--  =============================================================== -->
-	<target name="helloBundle" description="Creates the Hello example bundle">
-		<mkdir dir="${bundle.dir}" />
-		<jar manifest="${manifest.example.dir}/Manifest.mf" jarfile="${bundle.dir}/helloBundle.jar">
-			<fileset dir="${cl.examples.dir}">
-				<include name="${examples.path}/osgi/hello/HelloActivator.class" />
-				<include name="${examples.path}/osgi/hello/HelloSystemOut.class" />
-				<include name="${examples.path}/osgi/hello/HelloLogInfo.class" />
-				<include name="${examples.path}/osgi/hello/HelloService.class" />
-			</fileset>
-		</jar>
-	</target>
-
-	<target name="helloClientBundle" description="Creates the Hello Client bundle">
-		<mkdir dir="${bundle.dir}" />
-		<jar manifest="${manifest.example.dir}/ClientManifest.mf" jarfile="${bundle.dir}/helloClientBundle.jar">
-			<fileset dir="${cl.examples.dir}">
-				<include name="${examples.path}/osgi/hello/HelloClientActivator.class" />
-			</fileset>
-		</jar>
-	</target>
-
-	<!-- ================================================================ -->
-	<!--                      Create Scilab javasci.jar                   -->
-	<!--  =============================================================== -->
-	<target name="scilabJar">
-		<delete dir="${dev.dir}/scilab/classes" />
-		<mkdir dir="${dev.dir}/scilab/classes" />
-		<javac srcdir="${dev.dir}/scilab/src" destdir="${dev.dir}/scilab/classes" deprecation="on" source="${source}" debug="${debug}">
-			<include name="**/*.java" />
-		</javac>
-		<jar jarfile="${lib.dir}/javasci.jar" basedir="${dev.dir}/scilab/classes" />
-	</target>
-
-
-	<!-- ================================================================ -->
-	<!--                      Compile JMX Connector                       -->
+	<!--                     Build the JMX Connector Bundle               -->
 	<!--  =============================================================== -->
 	<target name="proActiveConnectorBundle">
 		<mkdir dir="${bundle.dir}" />
 		<jar manifest="${manifest.connector.dir}/Manifest.mf" jarfile="${bundle.dir}/proactiveConnectorBundle.jar">
+			<fileset dir="${cl.extensions.dir}">
+				<include name="${extensions.path}/osgi/connector/Activator.class" />
+			</fileset>
 		</jar>
 	</target>
+
+	<!-- ================================================================ -->
+	<!--                      Build all OSGi Bundles                      -->
+	<!--  =============================================================== -->
+
+	<target name="OSGiBundles" depends="deploy, librariesBundle, proActiveConnectorBundle">
+		<subant inheritall="yes" failonerror="true">
+			<target name="helloBundle" />
+			<target name="helloClientBundle" />
+			<fileset dir="${src.examples.dir}/${examples.path}/osgi" includes="**/build.xml" />
+		</subant>
+		<subant inheritall="yes" failonerror="true">
+			<target name="OSGiManagement" />
+			<fileset dir="${src.examples.dir}/${examples.path}/jmx/remote/management" includes="**/build.xml" />
+		</subant>
+	</target>
+
 
 	<!-- ================================================================ -->
 	<!--                          Performance test                        -->
@@ -1067,24 +1064,6 @@
 			<arg value="-x" />
 			<arg value="${x}" />
 		</java>
-	</target>
-	<!-- ================================================================ -->
-	<!--                      Compile JMX Connector                       -->
-	<!--  =============================================================== -->
-
-
-	<target name="OSGiBundles" depends="deploy, librariesBundle, proActiveConnectorBundle, osgiMgt">
-	</target>
-
-	<!-- ================================================================ -->
-<!--                    Create OSGi  Management Bundle                -->
-	<!--  =============================================================== -->
-	<target name="osgiMgt" depends="compile">
-		<jar jarfile="${bundle.dir}/OSGiManagement.jar" manifest="${manifest.example.management.dir}/Manifest.mf">
-			<fileset dir="${cl.examples.dir}/">
-				<include name="org/objectweb/proactive/examples/jmx/remote/**" />
-			</fileset>
-		</jar>
 	</target>
 
 

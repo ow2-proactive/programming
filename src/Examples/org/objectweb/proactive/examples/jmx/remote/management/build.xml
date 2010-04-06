@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="./../../../../../../../../../compile">
+
+	<property name="manifest.example.management.dir" value="${src.examples.dir}/${examples.path}/jmx/remote/management/osgi/Manifest/"/>
+
+	<!-- ================================================================ -->
+	<!--                    Create OSGi  Management Bundle                -->
+	<!--  =============================================================== -->
+	<target name="OSGiManagement">
+		<jar jarfile="${bundle.dir}/OSGiManagement.jar" manifest="${manifest.example.management.dir}/Manifest.mf">
+			<fileset dir="${cl.examples.dir}/">
+				<include name="${examples.path}/jmx/remote/**" />
+			</fileset>
+		</jar>
+	</target>
+
+</project>
