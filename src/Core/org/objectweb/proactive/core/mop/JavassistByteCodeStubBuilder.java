@@ -87,10 +87,11 @@ public class JavassistByteCodeStubBuilder {
     private static CtMethod proxyGetter;
     private static CtMethod proxySetter;
     private static volatile boolean classPoolInitialized = false;
+    private static ClassPool pool = ClassPool.getDefault();
 
     public synchronized static ClassPool getClassPool() {
-        ClassPool pool = ClassPool.getDefault();
         if (!classPoolInitialized) {
+            pool.appendClassPath(new LoaderClassPath(ProActiveRuntime.class.getClassLoader()));
             pool.appendClassPath(new LoaderClassPath(MOPClassLoader.getMOPClassLoader()));
             classPoolInitialized = true;
         }
