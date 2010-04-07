@@ -1246,20 +1246,7 @@
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="@role='bold' or @role='' or @role='strong'">
-				<xsl:choose>
-					<!--  BOLD WITHIN PROGRAMLISTING -->
-					<xsl:when test="parent::programlisting">
-						<fo:inline background-color="#eaf91f">
-							<xsl:call-template name="inline.boldseq">
-							</xsl:call-template>
-						</fo:inline>
-					</xsl:when>
-					<!-- NORMAL BOLD  -->
-					<xsl:otherwise>
-						<xsl:call-template name="inline.boldseq">
-						</xsl:call-template>
-					</xsl:otherwise>
-				</xsl:choose>
+				<xsl:call-template name="inline.boldseq"/>
 			</xsl:when>
 			<!--  ITALICS -->
 			<xsl:when test="@role='italics'">
