@@ -192,14 +192,17 @@
 
 		<para>or, if you want to directly create all the ProActive bundles that you may need latter on, type:</para>
 
-        <screen>build deploy OSGiBundles</screen>
+        <screen>./build OSGiBundles</screen>
 
         <para>The ProActive bundle jar file will be generated in <emphasis role="bold"><literal>$PROACTIVE_HOME/dist/lib/ProActive.jar</literal></emphasis>
         and all the other bundles will be generated in the <emphasis role="bold"><literal>$PROACTIVE_HOME/dist/bundle/</literal></emphasis> directory.
         </para>
 
 		<para>In order to start the Felix framework with the ProActive and the libraries bundles started, the simplest way is to go to the <emphasis role="bold"><literal>$PROACTIVE_HOME/examples/osgi</literal></emphasis> directory
-		and launch the <literal>felix.[sh|bat]</literal>script. This script will launch felix with the appropriate arguments and it will automatically start the ProActive and the libraries bundle.</para>
+		and launch the <literal>felix.[sh|bat]</literal>script. This script will launch felix with the appropriate arguments and it will automatically start the ProActive and the libraries bundles. 
+		It will also try to start the ProActive connector bundle as well as the JMX remote management bundle (see below for more information on these bundle). You may have some errors if you have not used the second build target 
+		(<literal>./build OSGiBundles</literal>). This is normal since these two bundles have not been built but it should not pose a problem for the following. 
+		</para>
 
         <screen>felix.[sh|bat]</screen>
       </listitem>
@@ -211,7 +214,7 @@
         <para>To generate the Hello World bundle as well as its client bundle, you have to go to your <literal>$PROACTIVE_HOME/compile</literal> and type:
         </para>
 
-        <screen>./build helloBundle helloClientBundle</screen>
+        <screen>./build OSGiBundles</screen>
 
         <para>The bundle jar files will be generated in the <emphasis role="bold"><literal>$PROACTIVE_DIR/dist/bundle/</literal></emphasis>
         directory.</para>
@@ -224,7 +227,7 @@
 		<para>We need now to install and start the hello bundle into the OSGi
         Framework:</para>
 
-        <screen> --&gt; start file:./../../dist/bundle/helloBundle.jar</screen>
+        <screen>--&gt; start file:./../../dist/bundle/helloBundle.jar</screen>
 
         <para>The command will install and start the Hello active service. The
         hello service is now an OSGi service and can be accessed
@@ -241,7 +244,7 @@
 		<programlisting language="java"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/osgi/hello/Manifest/Manifest.mf" /></textobject></programlisting>
 
 		<para>You can install it and start it into your framework typing:</para>
-        <screen> --&gt; start file:./../../dist/bundle/helloClientBundle.jar</screen>
+        <screen>--&gt; start file:./../../dist/bundle/helloClientBundle.jar</screen>
       </listitem>
     </itemizedlist>
   </section>
