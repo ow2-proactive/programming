@@ -36,6 +36,10 @@
  */
 package functionalTests.stub.stubgeneration;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+
 import java.util.Arrays;
 
 import org.objectweb.proactive.api.PAActiveObject;
@@ -43,9 +47,6 @@ import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
 import org.objectweb.proactive.core.mop.Utils;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

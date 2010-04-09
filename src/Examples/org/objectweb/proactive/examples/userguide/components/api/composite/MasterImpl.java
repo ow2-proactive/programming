@@ -44,8 +44,6 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
-import org.objectweb.proactive.examples.userguide.components.api.composite.Itf1;
-import org.objectweb.proactive.examples.userguide.components.api.composite.Runner;
 
 
 /**

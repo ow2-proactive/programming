@@ -48,7 +48,7 @@ import java.rmi.server.UnicastRemoteObject;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
@@ -70,7 +70,7 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
     static {
-        if ((System.getSecurityManager() == null) && PAProperties.PA_SECURITYMANAGER.isTrue()) {
+        if ((System.getSecurityManager() == null) && CentralPAPropertyRepository.PA_SECURITYMANAGER.isTrue()) {
             System.setSecurityManager(new java.rmi.RMISecurityManager());
         }
 
@@ -216,7 +216,7 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#getPort()
      */
     public int getPort() {
-        return Integer.parseInt(PAProperties.PA_RMI_PORT.getValue());
+        return CentralPAPropertyRepository.PA_RMI_PORT.getValue();
     }
 
     public String getProtocolId() {

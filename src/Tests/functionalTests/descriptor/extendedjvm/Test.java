@@ -36,6 +36,8 @@
  */
 package functionalTests.descriptor.extendedjvm;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,12 +48,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PADeployment;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -85,7 +86,7 @@ public class Test extends FunctionalTest {
     public void initTest() throws Exception {
         String fileName = null;
 
-        if ("ibis".equals(PAProperties.PA_COMMUNICATION_PROTOCOL.getValue())) {
+        if ("ibis".equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
             fileName = "JVMExtensionIbis";
         } else {
             fileName = "JVMExtension";

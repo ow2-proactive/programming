@@ -45,7 +45,7 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.proactive.core.component.Binding;
 import org.objectweb.proactive.core.component.Bindings;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.Setup;
@@ -104,7 +104,8 @@ public class Test extends ComponentTest {
      */
     @Before
     public void initTest() throws Exception {
-        PAProperties.FRACTAL_PROVIDER.setValue("org.objectweb.proactive.core.component.Fractive");
+        CentralPAPropertyRepository.FRACTAL_PROVIDER
+                .setValue("org.objectweb.proactive.core.component.Fractive");
         compA = Setup.createCompositeA();
         compB1 = Setup.createCompositeB1();
         compB2 = Setup.createPrimitiveB2();

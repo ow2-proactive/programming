@@ -72,7 +72,6 @@ import org.objectweb.proactive.examples.webservices.c3dWS.prim.View;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
-import org.objectweb.proactive.extensions.webservices.AbstractWebServicesInitActive;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesInitActiveFactory;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;

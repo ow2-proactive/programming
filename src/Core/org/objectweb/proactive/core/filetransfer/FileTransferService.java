@@ -51,7 +51,7 @@ import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.ProActiveInternalObject;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
@@ -68,10 +68,10 @@ import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 public class FileTransferService implements ProActiveInternalObject, InitActive, FileTransferServiceSend,
         FileTransferServiceReceive {
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.FILETRANSFER);
-    public final static int DEFAULT_MAX_SIMULTANEOUS_BLOCKS = PAProperties.PA_FILETRANSFER_MAX_SIMULTANEOUS_BLOCKS
-            .getValueAsInt();
-    public static final int DEFAULT_BUFFER_SIZE = PAProperties.PA_FILETRANSFER_MAX_BUFFER_SIZE
-            .getValueAsInt() * 1024; //Bytes
+    public final static int DEFAULT_MAX_SIMULTANEOUS_BLOCKS = CentralPAPropertyRepository.PA_FILETRANSFER_MAX_SIMULTANEOUS_BLOCKS
+            .getValue();
+    public static final int DEFAULT_BUFFER_SIZE = CentralPAPropertyRepository.PA_FILETRANSFER_MAX_BUFFER_SIZE
+            .getValue() * 1024; //Bytes
     protected HashMap<File, BufferedOutputStream> writeBufferMap; //Map for storing the opened output sockets
 
     /**

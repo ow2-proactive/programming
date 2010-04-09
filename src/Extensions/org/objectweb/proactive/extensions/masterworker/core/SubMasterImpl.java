@@ -36,13 +36,14 @@
  */
 package org.objectweb.proactive.extensions.masterworker.core;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.MasterIntern;
-import java.io.Serializable;
-import java.util.List;
 
 
 /**

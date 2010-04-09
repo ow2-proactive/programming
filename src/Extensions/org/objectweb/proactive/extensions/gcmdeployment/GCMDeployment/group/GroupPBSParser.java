@@ -36,12 +36,13 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.group;
 
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
+
 import javax.xml.xpath.XPath;
 
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class GroupPBSParser extends AbstractGroupSchedulerParser {

@@ -36,11 +36,12 @@
  */
 package unitTests.uri;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.objectweb.proactive.core.util.URIBuilder;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

@@ -43,8 +43,8 @@ import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDi
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatchMode;
 import org.objectweb.proactive.core.component.type.annotations.multicast.Reduce;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceMode;
-import org.objectweb.proactive.core.group.DispatchMode;
 import org.objectweb.proactive.core.group.Dispatch;
+import org.objectweb.proactive.core.group.DispatchMode;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 

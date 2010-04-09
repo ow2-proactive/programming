@@ -52,6 +52,7 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -165,13 +166,14 @@ public class FileSystemServerImpl implements FileSystemServer {
     }
 
     private void setupParameters() {
-        if (PAProperties.PA_VFSPROVIDER_SERVER_STREAM_AUTOCLOSE_CHECKING_INTERVAL_MILLIS.isSet())
-            streamAutocloseCheckingIntervalMillis = PAProperties.PA_VFSPROVIDER_SERVER_STREAM_AUTOCLOSE_CHECKING_INTERVAL_MILLIS
-                    .getValueAsInt();
+        if (CentralPAPropertyRepository.PA_VFSPROVIDER_SERVER_STREAM_AUTOCLOSE_CHECKING_INTERVAL_MILLIS
+                .isSet())
+            streamAutocloseCheckingIntervalMillis = CentralPAPropertyRepository.PA_VFSPROVIDER_SERVER_STREAM_AUTOCLOSE_CHECKING_INTERVAL_MILLIS
+                    .getValue();
 
-        if (PAProperties.PA_VFSPROVIDER_SERVER_STREAM_OPEN_MAXIMUM_PERIOD_MILLIS.isSet())
-            streamOpenMaximumPeriodMillis = PAProperties.PA_VFSPROVIDER_SERVER_STREAM_OPEN_MAXIMUM_PERIOD_MILLIS
-                    .getValueAsInt();
+        if (CentralPAPropertyRepository.PA_VFSPROVIDER_SERVER_STREAM_OPEN_MAXIMUM_PERIOD_MILLIS.isSet())
+            streamOpenMaximumPeriodMillis = CentralPAPropertyRepository.PA_VFSPROVIDER_SERVER_STREAM_OPEN_MAXIMUM_PERIOD_MILLIS
+                    .getValue();
     }
 
     /**

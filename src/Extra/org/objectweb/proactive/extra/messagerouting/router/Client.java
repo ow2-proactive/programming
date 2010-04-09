@@ -37,7 +37,6 @@
 package org.objectweb.proactive.extra.messagerouting.router;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

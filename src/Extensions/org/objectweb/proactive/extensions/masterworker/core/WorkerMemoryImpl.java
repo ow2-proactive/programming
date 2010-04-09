@@ -36,11 +36,11 @@
  */
 package org.objectweb.proactive.extensions.masterworker.core;
 
-import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 
 
 /**

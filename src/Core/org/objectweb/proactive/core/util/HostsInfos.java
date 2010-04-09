@@ -42,7 +42,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -148,7 +148,7 @@ public class HostsInfos {
     final static String REGEXP_KEYVAL = "(([0-9]{1,3}\\.){3}[0-9]{1,3}:([0-9]{1,3}\\.){3}[0-9]{1,3})";
 
     private void loadProperties() {
-        String secondaryNames = PAProperties.PA_NET_SECONDARYNAMES.getValue();
+        String secondaryNames = CentralPAPropertyRepository.PA_NET_SECONDARYNAMES.getValue();
         if (secondaryNames != null) {
             if (secondaryNames.matches(REGEXP_KEYVAL + "(," + REGEXP_KEYVAL + ")?")) {
                 for (String keyval : secondaryNames.split(",")) {

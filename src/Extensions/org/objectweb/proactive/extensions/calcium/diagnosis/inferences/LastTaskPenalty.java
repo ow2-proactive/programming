@@ -36,7 +36,7 @@
  */
 package org.objectweb.proactive.extensions.calcium.diagnosis.inferences;
 
-import org.objectweb.proactive.extensions.calcium.diagnosis.causes.*;
+import org.objectweb.proactive.extensions.calcium.diagnosis.causes.LastTaskPenaltyCause;
 import org.objectweb.proactive.extensions.calcium.statistics.Stats;
 
 

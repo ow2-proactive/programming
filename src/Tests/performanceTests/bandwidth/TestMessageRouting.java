@@ -36,13 +36,13 @@
  */
 package performanceTests.bandwidth;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class TestMessageRouting extends Bandwidth {
     static {
-        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
-        PAProperties.PA_NET_ROUTER_ADDRESS.setValue("localhost");
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
+        CentralPAPropertyRepository.PA_NET_ROUTER_ADDRESS.setValue("localhost");
     }
 
     public TestMessageRouting() {

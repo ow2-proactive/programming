@@ -36,11 +36,11 @@
  */
 package org.objectweb.proactive.extensions.masterworker.interfaces.internal;
 
-import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
-
 import java.io.Serializable;
-import java.util.Queue;
 import java.util.List;
+import java.util.Queue;
+
+import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 
 /**

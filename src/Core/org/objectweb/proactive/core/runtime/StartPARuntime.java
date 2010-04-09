@@ -36,19 +36,14 @@
  */
 package org.objectweb.proactive.core.runtime;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.jmx.notification.GCMRuntimeRegistrationNotificationData;
 import org.objectweb.proactive.core.util.ProActiveInet;
@@ -178,8 +173,9 @@ public class StartPARuntime {
 
         ProActiveRuntime localRuntime = null;
         try {
-            localRuntime = RuntimeFactory.getProtocolSpecificRuntime(PAProperties.PA_COMMUNICATION_PROTOCOL
-                    .getValue());
+            localRuntime = RuntimeFactory
+                    .getProtocolSpecificRuntime(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
+                            .getValue());
         } catch (ProActiveException e1) {
             logger.warn("Cannot get the local ProActive Runtime", e1);
             abort();
@@ -207,7 +203,7 @@ public class StartPARuntime {
             }
         }
 
-        if (PAProperties.PA_RUNTIME_STAYALIVE.isTrue()) {
+        if (CentralPAPropertyRepository.PA_RUNTIME_STAYALIVE.isTrue()) {
             waitUntilInterupted();
         }
     }

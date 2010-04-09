@@ -38,7 +38,6 @@ package org.objectweb.proactive.examples.documentation.faulttolerance;
 
 import java.io.IOException;
 
-import org.objectweb.proactive.core.body.ft.servers.FTServer;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
 
 

@@ -38,7 +38,6 @@ package org.objectweb.proactive.core.mop;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -63,7 +62,7 @@ import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.annotation.PAProxyCustomBodyMethod;
 import org.objectweb.proactive.annotation.PAProxyDoNotReifyMethod;
 import org.objectweb.proactive.annotation.PAProxyEmptyMethod;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.lock.AbstractRemoteLocksManager;
 import org.objectweb.proactive.core.mop.lock.RemoteLocksManager;
 import org.objectweb.proactive.core.mop.proxy.PAProxy;
@@ -295,9 +294,9 @@ public class PAProxyBuilder {
 
         }
 
-        if (PAProperties.PA_MOP_GENERATEDCLASSES_DIR.isSet() &&
-            PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue() != null) {
-            //            generatedCtClass.debugWriteFile(PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue());
+        if (CentralPAPropertyRepository.PA_MOP_GENERATEDCLASSES_DIR.isSet() &&
+            CentralPAPropertyRepository.PA_MOP_GENERATEDCLASSES_DIR.getValue() != null) {
+            //            generatedCtClass.debugWriteFile(CentralProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue());
         }
 
         byte[] bytecode = generatedCtClass.toBytecode();

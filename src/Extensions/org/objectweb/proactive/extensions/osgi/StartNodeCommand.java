@@ -40,9 +40,9 @@ import java.io.PrintStream;
 import java.rmi.AlreadyBoundException;
 import java.util.StringTokenizer;
 
+import org.apache.felix.shell.Command;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
-import org.apache.felix.shell.Command;
 
 
 public class StartNodeCommand implements Command {

@@ -36,8 +36,9 @@
  */
 package org.objectweb.proactive.extra.montecarlo.basic;
 
-import org.objectweb.proactive.extra.montecarlo.SimulationSet;
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.extra.montecarlo.SimulationSet;
+
 import umontreal.iro.lecuyer.probdist.NormalDist;
 import umontreal.iro.lecuyer.randvar.NormalGen;
 import umontreal.iro.lecuyer.rng.RandomStream;

@@ -41,7 +41,6 @@ import java.util.Arrays;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
 
 /** A data message

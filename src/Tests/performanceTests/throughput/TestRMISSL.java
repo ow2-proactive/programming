@@ -36,13 +36,13 @@
  */
 package performanceTests.throughput;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class TestRMISSL extends Throughput {
 
     static {
-        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmissl");
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("rmissl");
     }
 
     public TestRMISSL() {

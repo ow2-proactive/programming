@@ -42,7 +42,7 @@ import java.net.URL;
 
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
@@ -189,7 +189,7 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#getPort()
      */
     public int getPort() {
-        return PAProperties.PA_XMLHTTP_PORT.getValueAsInt();
+        return CentralPAPropertyRepository.PA_XMLHTTP_PORT.getValue();
     }
 
     public String getProtocolId() {

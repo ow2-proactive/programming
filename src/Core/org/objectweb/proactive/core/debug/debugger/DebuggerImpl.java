@@ -53,7 +53,7 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestImpl;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.debug.tools.ArrayListSynchronized;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
@@ -107,7 +107,7 @@ public class DebuggerImpl implements Debugger {
     //
     public DebuggerImpl() {
         initBreakpointTypes();
-        setStepByStep(PAProperties.PA_DEBUG.isTrue());
+        setStepByStep(CentralPAPropertyRepository.PA_DEBUG.isTrue());
     }
 
     //

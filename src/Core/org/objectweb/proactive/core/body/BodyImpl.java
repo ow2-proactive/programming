@@ -81,7 +81,7 @@ import org.objectweb.proactive.core.body.tags.Tag;
 import org.objectweb.proactive.core.body.tags.tag.DsiTag;
 import org.objectweb.proactive.core.component.body.ComponentBodyImpl;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.debug.debugger.BreakpointType;
 import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapper;
@@ -672,7 +672,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             Object stubOnActiveObject = null;
             Object modifiedObject = null;
             ObjectReplacer objectReplacer = null;
-            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue()) {
+            if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue()) {
                 initialObject = reply.getResult().getResultObjet();
                 try {
                     PAActiveObject.getStubOnThis();
@@ -724,7 +724,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             this.getFuturePool().removeDestinations();
 
             // Restore Result Object
-            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
+            if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
                 try {
                     objectReplacer.restoreObject();
                 } catch (IllegalArgumentException e) {
@@ -857,7 +857,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             }
             // Check the presence of the DSI Tag if enabled
             // Ohterwise add it
-            if (PAProperties.PA_TAG_DSF.isTrue()) {
+            if (CentralPAPropertyRepository.PA_TAG_DSF.isTrue()) {
                 if (!nextTags.check(DsiTag.IDENTIFIER)) {
                     nextTags.addTag(new DsiTag(bodyID, sequenceID));
                 }

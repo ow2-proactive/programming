@@ -36,8 +36,8 @@
  */
 package org.objectweb.proactive.api;
 
-import java.util.List;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.annotation.PublicAPI;

@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.core;
 
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,8 +52,6 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.ProActiveCounter;
 import org.objectweb.proactive.gcmdeployment.GCMHost;
 import org.objectweb.proactive.gcmdeployment.Topology;
-
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
 
 
 public class TopologyImpl implements Topology, Serializable {

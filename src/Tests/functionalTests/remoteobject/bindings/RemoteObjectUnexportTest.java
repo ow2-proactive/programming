@@ -36,6 +36,9 @@
  */
 package functionalTests.remoteobject.bindings;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.fail;
+
 import java.net.URI;
 
 import org.objectweb.proactive.api.PARemoteObject;
@@ -47,8 +50,6 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.fail;
 
 
 /**

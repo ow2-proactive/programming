@@ -38,9 +38,9 @@ package functionalTests.group.dynamicdispatch;
 
 import junit.framework.Assert;
 
+import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.group.DispatchMode;
 import org.objectweb.proactive.core.group.Group;
-import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.FunctionalTest;

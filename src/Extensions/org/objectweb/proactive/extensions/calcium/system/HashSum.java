@@ -36,8 +36,12 @@
  */
 package org.objectweb.proactive.extensions.calcium.system;
 
-import java.io.*;
-import java.security.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class HashSum {

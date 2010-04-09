@@ -46,7 +46,6 @@ import org.objectweb.proactive.api.PASPMD;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
 import org.objectweb.proactive.core.mop.Proxy;
 import org.objectweb.proactive.core.mop.StubObject;
-import org.objectweb.proactive.ext.hpc.exchange.ExchangeableArrayPointer;
 
 
 public class ExchangeManager {

@@ -39,7 +39,6 @@ package org.objectweb.proactive.extra.messagerouting.protocol.message;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;

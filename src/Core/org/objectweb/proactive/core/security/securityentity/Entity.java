@@ -37,9 +37,10 @@
 package org.objectweb.proactive.core.security.securityentity;
 
 import java.io.Serializable;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
+
 import org.objectweb.proactive.core.security.TypedCertificate;
 import org.objectweb.proactive.core.security.TypedCertificateList;
+import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 
 
 public class Entity implements Serializable {

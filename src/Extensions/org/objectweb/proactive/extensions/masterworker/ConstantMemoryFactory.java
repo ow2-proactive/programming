@@ -36,11 +36,11 @@
  */
 package org.objectweb.proactive.extensions.masterworker;
 
-import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
-
 import java.io.Serializable;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+
+import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
 
 
 /**

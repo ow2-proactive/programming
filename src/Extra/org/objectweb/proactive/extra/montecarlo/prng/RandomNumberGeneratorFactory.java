@@ -36,10 +36,10 @@
  */
 package org.objectweb.proactive.extra.montecarlo.prng;
 
-import org.objectweb.proactive.annotation.PublicAPI;
-
 import java.io.Serializable;
 import java.util.Random;
+
+import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**

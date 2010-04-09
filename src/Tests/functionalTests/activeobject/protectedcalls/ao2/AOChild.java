@@ -36,8 +36,9 @@
  */
 package functionalTests.activeobject.protectedcalls.ao2;
 
-import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.util.wrapper.IntWrapper;
+
 import functionalTests.activeobject.protectedcalls.ao.AO;
 
 

@@ -39,9 +39,9 @@
 //@tutorial-start
 package org.objectweb.proactive.examples.userguide.primes.distributedmw;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.net.URL;
 
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 

@@ -45,7 +45,7 @@ import java.rmi.server.RemoteStub;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
 
 
@@ -86,10 +86,10 @@ public class Checkpoint implements java.io.Serializable {
             bodyToCheckpoint.getFuturePool().setCopyMode(true);
             this.bodyID = bodyToCheckpoint.getID();
             String codebase = null;
-            if (PAProperties.PA_CLASSLOADING_USEHTTP.isTrue()) {
-                codebase = PAProperties.JAVA_RMI_SERVER_CODEBASE.getValue();
+            if (CentralPAPropertyRepository.PA_CLASSLOADING_USEHTTP.isTrue()) {
+                codebase = CentralPAPropertyRepository.JAVA_RMI_SERVER_CODEBASE.getValue();
             } else {
-                codebase = PAProperties.PA_CODEBASE.getValue();
+                codebase = CentralPAPropertyRepository.PA_CODEBASE.getValue();
             }
             if (additionalCodebase != null) {
                 codebase += " " + additionalCodebase;

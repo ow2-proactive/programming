@@ -36,12 +36,12 @@
  */
 package performanceTests.bandwidth;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class TestRMI extends Bandwidth {
     static {
-        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmi");
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("rmi");
     }
 
     public TestRMI() {

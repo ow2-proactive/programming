@@ -49,7 +49,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMessage;
@@ -86,9 +86,10 @@ public class HTTPTransportServlet extends HttpServlet {
 
     /** Get the URL of the HTTP Transport endpoint for this runtime */
     public String getURL() {
-        URI uri = URIBuilder.buildURI(URIBuilder
-                .getHostNameorIP(ProActiveInet.getInstance().getInetAddress()), NS,
-                Constants.XMLHTTP_PROTOCOL_IDENTIFIER, PAProperties.PA_XMLHTTP_PORT.getValueAsInt());
+        URI uri = URIBuilder
+                .buildURI(URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress()), NS,
+                        Constants.XMLHTTP_PROTOCOL_IDENTIFIER, CentralPAPropertyRepository.PA_XMLHTTP_PORT
+                                .getValue());
 
         return uri.toString();
     }

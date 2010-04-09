@@ -78,7 +78,7 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
 import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptorInternal;
 import org.objectweb.proactive.core.descriptor.data.VirtualNodeInternal;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
@@ -100,7 +100,6 @@ import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
-import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.mop.Utils;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -222,7 +221,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             this.nodeMap = new java.util.Hashtable<String, LocalNode>();
 
             try {
-                String file = PAProperties.PA_RUNTIME_SECURITY.getValue();
+                String file = CentralPAPropertyRepository.PA_RUNTIME_SECURITY.getValue();
                 ProActiveSecurity.loadProvider();
 
                 if ((file != null) && new File(file).exists()) {
@@ -236,7 +235,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                             EntityType.RUNTIME, this.getVMInformation().getName());
 
                     // Is the runtime included within a Domain ?
-                    String domainURL = PAProperties.PA_RUNTIME_DOMAIN_URL.getValue();
+                    String domainURL = CentralPAPropertyRepository.PA_RUNTIME_DOMAIN_URL.getValue();
 
                     if (domainURL != null) {
                         SecurityEntity domain = PAActiveObject.lookupActive(SecurityDomain.class, domainURL);
@@ -272,26 +271,26 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             ProActiveRuntimeRemoteObjectAdapter.class);
         this.roe.createRemoteObject(vmInformation.getName(), false);
 
-        if (PAProperties.PA_CLASSLOADING_USEHTTP.isTrue()) {
+        if (CentralPAPropertyRepository.PA_CLASSLOADING_USEHTTP.isTrue()) {
             // Set the codebase in case of useHTTP is true and the ProActiveRMIClassLoader is in use
             String codebase = ClassServerServlet.get().getCodeBase();
-            PAProperties.PA_CODEBASE.setValue(codebase);
+            CentralPAPropertyRepository.PA_CODEBASE.setValue(codebase);
         } else {
             // Publish the URL of this runtime in the ProActive codebase
             // URL must be prefixed by pa tu use our custom protocol handlers
             // URL must be terminated by a / according to the RMI specification
-            PAProperties.PA_CODEBASE.setValue("pa" + this.getURL() + "/");
+            CentralPAPropertyRepository.PA_CODEBASE.setValue("pa" + this.getURL() + "/");
         }
 
-        if (PAProperties.PA_CLASSLOADING_USEHTTP.isTrue()) {
+        if (CentralPAPropertyRepository.PA_CLASSLOADING_USEHTTP.isTrue()) {
             // Set the codebase in case of useHTTP is true and the ProActiveRMIClassLoader is in use
             String codebase = ClassServerServlet.get().getCodeBase();
-            PAProperties.PA_CODEBASE.setValue(codebase);
+            CentralPAPropertyRepository.PA_CODEBASE.setValue(codebase);
         } else {
             // Publish the URL of this runtime in the ProActive codebase
             // URL must be prefixed by pa tu use our custom protocol handlers
             // URL must be terminated by a / according to the RMI specification
-            PAProperties.PA_CODEBASE.setValue("pa" + this.getURL() + "/");
+            CentralPAPropertyRepository.PA_CODEBASE.setValue("pa" + this.getURL() + "/");
         }
 
         // logging info
@@ -1348,8 +1347,8 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             this.hostName = URIBuilder.getHostNameorIP(this.hostInetAddress);
             String random = Integer.toString(ProActiveRandom.nextPosInt());
 
-            if (PAProperties.PA_RUNTIME_NAME.isSet()) {
-                this.name = PAProperties.PA_RUNTIME_NAME.getValue();
+            if (CentralPAPropertyRepository.PA_RUNTIME_NAME.isSet()) {
+                this.name = CentralPAPropertyRepository.PA_RUNTIME_NAME.getValue();
 
                 if (this.name.indexOf("PA_JVM") < 0) {
                     runtimeLogger

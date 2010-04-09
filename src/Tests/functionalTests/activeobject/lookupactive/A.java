@@ -36,8 +36,6 @@
  */
 package functionalTests.activeobject.lookupactive;
 
-import java.io.IOException;
-
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 

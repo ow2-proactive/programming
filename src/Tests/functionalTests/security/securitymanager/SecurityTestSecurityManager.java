@@ -36,6 +36,8 @@
  */
 package functionalTests.security.securitymanager;
 
+import static junit.framework.Assert.assertNotNull;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -45,7 +47,6 @@ import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.core.util.converter.MakeDeepCopy;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertNotNull;
 
 
 /**

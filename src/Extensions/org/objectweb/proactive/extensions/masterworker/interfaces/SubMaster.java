@@ -36,11 +36,11 @@
  */
 package org.objectweb.proactive.extensions.masterworker.interfaces;
 
-import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.extensions.masterworker.TaskException;
-
 import java.io.Serializable;
 import java.util.List;
+
+import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.extensions.masterworker.TaskException;
 
 
 /**

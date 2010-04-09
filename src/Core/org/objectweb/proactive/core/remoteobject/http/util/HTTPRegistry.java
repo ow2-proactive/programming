@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.core.remoteobject.http.util;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectweb.proactive.core.remoteobject.AlreadyBoundException;

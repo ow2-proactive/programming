@@ -38,7 +38,6 @@ package org.objectweb.proactive.examples.components.userguide.multicast;
 
 import java.util.List;
 
-//import org.objectweb.proactive.core.component.type.annotations.multicast.ClassDispatchMetadata;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ClassDispatchMetadata;
 import org.objectweb.proactive.core.component.type.annotations.multicast.MethodDispatchMetadata;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatchMetadata;

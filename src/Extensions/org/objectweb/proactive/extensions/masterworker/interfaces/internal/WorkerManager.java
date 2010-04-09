@@ -36,13 +36,13 @@
  */
 package org.objectweb.proactive.extensions.masterworker.interfaces.internal;
 
-import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.xml.VariableContract;
-import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
-
 import java.net.URL;
 import java.util.Collection;
+
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.core.xml.VariableContract;
 
 
 /**

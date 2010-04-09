@@ -36,7 +36,7 @@
  */
 package org.objectweb.proactive.extensions.calcium.diagnosis.inferences;
 
-import org.objectweb.proactive.extensions.calcium.diagnosis.causes.*;
+import org.objectweb.proactive.extensions.calcium.diagnosis.causes.UnderUsedResourceCause;
 import org.objectweb.proactive.extensions.calcium.statistics.Stats;
 
 

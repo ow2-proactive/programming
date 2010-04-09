@@ -43,8 +43,6 @@ import org.objectweb.proactive.core.component.type.annotations.multicast.Reduce;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceMode;
 import org.objectweb.proactive.examples.documentation.classes.T;
 
-import org.objectweb.proactive.examples.documentation.components.GetLastReduction;
-
 
 public interface MyMulticastItf2 {
 

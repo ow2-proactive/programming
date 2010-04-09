@@ -36,8 +36,8 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder;
 
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMA_LOGGER;
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.StartPARuntime;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
@@ -369,8 +369,8 @@ public class CommandBuilderProActive implements CommandBuilder {
             command.append(" ");
         }
 
-        if (PAProperties.PA_TEST.isTrue()) {
-            command.append(PAProperties.PA_TEST.getCmdLine());
+        if (CentralPAPropertyRepository.PA_TEST.isTrue()) {
+            command.append(CentralPAPropertyRepository.PA_TEST.getCmdLine());
             command.append("true ");
         }
 
@@ -386,40 +386,41 @@ public class CommandBuilderProActive implements CommandBuilder {
 
         // Log4j
         if (log4jProperties != null) {
-            command.append(PAProperties.LOG4J.getCmdLine());
+            command.append(CentralPAPropertyRepository.LOG4J.getCmdLine());
             command.append("\"");
             command.append("file:");
             command.append(log4jProperties.getFullPath(hostInfo, this));
             command.append("\"");
             command.append(" ");
         } else {
-            command.append(PAProperties.PA_LOG4J_COLLECTOR.getCmdLine());
+            command.append(CentralPAPropertyRepository.PA_LOG4J_COLLECTOR.getCmdLine());
             command.append(gcma.getLogCollectorUrl());
             command.append(" ");
         }
 
         // Java Security Policy
         if (javaSecurityPolicy != null) {
-            command.append(PAProperties.JAVA_SECURITY_POLICY.getCmdLine());
+            command.append(CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getCmdLine());
             command.append("\"");
             command.append(javaSecurityPolicy.getFullPath(hostInfo, this));
             command.append("\"");
             command.append(" ");
         } else {
-            command.append(PAProperties.JAVA_SECURITY_POLICY.getCmdLine());
+            command.append(CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getCmdLine());
             command.append("\"");
-            command.append(PAProperties.JAVA_SECURITY_POLICY.getValue());
+            command.append(CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getValue());
             command.append("\"");
             command.append(" ");
         }
 
         if (hostInfo.getNetworkInterface() != null) {
-            command.append(PAProperties.PA_NET_INTERFACE.getCmdLine() + hostInfo.getNetworkInterface());
+            command.append(CentralPAPropertyRepository.PA_NET_INTERFACE.getCmdLine() +
+                hostInfo.getNetworkInterface());
             command.append(" ");
         }
 
         if (runtimePolicy != null) {
-            command.append(PAProperties.PA_RUNTIME_SECURITY.getCmdLine());
+            command.append(CentralPAPropertyRepository.PA_RUNTIME_SECURITY.getCmdLine());
             command.append("\"");
             command.append(runtimePolicy.getFullPath(hostInfo, this));
             command.append("\"");
@@ -427,7 +428,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         }
 
         if (hostInfo.getDataSpacesScratchURL() != null) {
-            command.append(PAProperties.PA_DATASPACES_SCRATCH_URL.getCmdLine());
+            command.append(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_URL.getCmdLine());
             command.append("\"");
             command.append(hostInfo.getDataSpacesScratchURL());
             command.append("\"");
@@ -435,7 +436,7 @@ public class CommandBuilderProActive implements CommandBuilder {
         }
 
         if (hostInfo.getDataSpacesScratchPath() != null) {
-            command.append(PAProperties.PA_DATASPACES_SCRATCH_PATH.getCmdLine());
+            command.append(CentralPAPropertyRepository.PA_DATASPACES_SCRATCH_PATH.getCmdLine());
             command.append("\"");
             command.append(hostInfo.getDataSpacesScratchPath().getFullPath(hostInfo, this));
             command.append("\"");

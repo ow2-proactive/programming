@@ -40,7 +40,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.spi.LoggingEvent;
 import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector;
 
 
 /**

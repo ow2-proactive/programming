@@ -36,6 +36,8 @@
  */
 package functionalTests.descriptor.variablecontract.externalfiles;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.io.File;
 
 import org.junit.Before;
@@ -45,7 +47,6 @@ import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

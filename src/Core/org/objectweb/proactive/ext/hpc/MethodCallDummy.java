@@ -36,9 +36,9 @@
  */
 package org.objectweb.proactive.ext.hpc;
 
-import org.objectweb.proactive.core.mop.MethodCall;
-
 import java.lang.reflect.Method;
+
+import org.objectweb.proactive.core.mop.MethodCall;
 
 
 public class MethodCallDummy extends MethodCall {

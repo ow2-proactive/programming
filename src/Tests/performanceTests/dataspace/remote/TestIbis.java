@@ -36,13 +36,13 @@
  */
 package performanceTests.dataspace.remote;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class TestIbis extends AbstractPAProviderRemoteBenchmark {
 
     static {
-        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("ibis");
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("ibis");
     }
 
     public TestIbis() {

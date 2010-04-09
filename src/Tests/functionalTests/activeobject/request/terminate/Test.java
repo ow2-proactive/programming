@@ -36,14 +36,14 @@
  */
 package functionalTests.activeobject.request.terminate;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 import functionalTests.FunctionalTest;
-
 import functionalTests.activeobject.request.A;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

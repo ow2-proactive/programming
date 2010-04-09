@@ -36,6 +36,8 @@
  */
 package functionalTests.filetransfer;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.io.File;
 import java.util.List;
 
@@ -44,7 +46,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.api.PADeployment;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.filetransfer.RemoteFile;
@@ -55,7 +57,6 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -117,8 +118,8 @@ public class TestDeployRetrieve extends FunctionalTest {
         }
 
         // We save the current state of the schema validation and set it to false for this example
-        String validatingProperyOld = PAProperties.SCHEMA_VALIDATION.getValue();
-        PAProperties.SCHEMA_VALIDATION.setValue(false);
+        String validatingProperyOld = CentralPAPropertyRepository.SCHEMA_VALIDATION.getValueAsString();
+        CentralPAPropertyRepository.SCHEMA_VALIDATION.setValue(false);
 
         VariableContractImpl vc = new VariableContractImpl();
         vc.setVariableFromProgram("HOST_NAME", hostName, VariableContractType.DescriptorDefaultVariable);
@@ -126,7 +127,7 @@ public class TestDeployRetrieve extends FunctionalTest {
         pad = PADeployment.getProactiveDescriptor(XML_LOCATION, vc);
 
         // we restore the old state of the schema validation
-        PAProperties.SCHEMA_VALIDATION.setValue(validatingProperyOld);
+        CentralPAPropertyRepository.SCHEMA_VALIDATION.setValue(validatingProperyOld);
 
         VirtualNode testVNode = pad.getVirtualNode("test");
         long initDeployment = System.currentTimeMillis();

@@ -71,7 +71,7 @@ import org.objectweb.proactive.annotation.TurnActiveParam;
 import org.objectweb.proactive.annotation.TurnRemote;
 import org.objectweb.proactive.annotation.TurnRemoteParam;
 import org.objectweb.proactive.annotation.UnwrapFuture;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -228,9 +228,10 @@ public class JavassistByteCodeStubBuilder {
             // detach to fix  "frozen class" errors encountered in some large scale deployments
             byte[] bytecode = generatedCtClass.toBytecode();
 
-            if (PAProperties.PA_MOP_WRITESTUBONDISK.isTrue()) {
+            if (CentralPAPropertyRepository.PA_MOP_WRITESTUBONDISK.isTrue()) {
 
-                generatedCtClass.debugWriteFile(PAProperties.PA_MOP_GENERATEDCLASSES_DIR.getValue());
+                generatedCtClass.debugWriteFile(CentralPAPropertyRepository.PA_MOP_GENERATEDCLASSES_DIR
+                        .getValue());
             }
 
             generatedCtClass.detach();

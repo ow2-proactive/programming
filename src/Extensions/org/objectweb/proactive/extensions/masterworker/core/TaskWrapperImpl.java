@@ -36,14 +36,14 @@
  */
 package org.objectweb.proactive.extensions.masterworker.core;
 
+import java.io.Serializable;
+
 import org.objectweb.proactive.extensions.masterworker.interfaces.DivisibleTask;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Identifiable;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskIntern;
-
-import java.io.Serializable;
 
 
 /**

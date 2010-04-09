@@ -48,11 +48,9 @@ import org.objectweb.proactive.core.component.Fractive;
 import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
 import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
-
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.ComponentTest;
-
 import functionalTests.component.creation.ComponentInfo;
 
 

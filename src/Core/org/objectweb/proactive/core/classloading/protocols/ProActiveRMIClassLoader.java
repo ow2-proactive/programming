@@ -41,7 +41,7 @@ import java.rmi.server.RMIClassLoader;
 import java.rmi.server.RMIClassLoaderSpi;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 /**
@@ -73,7 +73,7 @@ public class ProActiveRMIClassLoader extends RMIClassLoaderSpi {
 
         String pacodebase = cachedPACodebase.get();
         if (pacodebase == null) {
-            pacodebase = PAProperties.PA_CODEBASE.getValue();
+            pacodebase = CentralPAPropertyRepository.PA_CODEBASE.getValue();
             if (pacodebase != null) {
                 cachedPACodebase.compareAndSet(null, pacodebase);
                 codebase += " " + pacodebase;

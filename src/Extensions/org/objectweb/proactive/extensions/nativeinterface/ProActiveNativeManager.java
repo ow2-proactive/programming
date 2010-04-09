@@ -53,8 +53,8 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.nativeinterface.coupling.OutboundProxy;
 import org.objectweb.proactive.extensions.nativeinterface.coupling.InboundProxy;
+import org.objectweb.proactive.extensions.nativeinterface.coupling.OutboundProxy;
 import org.objectweb.proactive.extensions.nativeinterface.spmd.NativeSpmd;
 
 

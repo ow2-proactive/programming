@@ -40,7 +40,7 @@ import java.net.URI;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -83,7 +83,7 @@ public abstract class AbstractClientFactory implements ClientFactory {
      */
     public static ClientFactory getClientFactory(String frameWorkId) throws UnknownFrameWorkException {
         if (frameWorkId == null) {
-            frameWorkId = PAProperties.PA_WEBSERVICES_FRAMEWORK.getValue();
+            frameWorkId = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
         }
 
         try {
@@ -117,7 +117,7 @@ public abstract class AbstractClientFactory implements ClientFactory {
      * @throws UnknownFrameWorkException if the default framework is not known
      */
     public static ClientFactory getDefaultClientFactory() throws UnknownFrameWorkException {
-        String frameWork = PAProperties.PA_WEBSERVICES_FRAMEWORK.getValue();
+        String frameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
         return getClientFactory(frameWork);
     }
 

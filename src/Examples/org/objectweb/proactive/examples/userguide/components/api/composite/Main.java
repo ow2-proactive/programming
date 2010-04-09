@@ -51,10 +51,6 @@ import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.examples.userguide.components.api.composite.Itf1;
-import org.objectweb.proactive.examples.userguide.components.api.composite.MasterImpl;
-import org.objectweb.proactive.examples.userguide.components.api.composite.Runner;
-import org.objectweb.proactive.examples.userguide.components.api.composite.SlaveImpl;
 
 
 /**

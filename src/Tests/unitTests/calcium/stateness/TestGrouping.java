@@ -36,10 +36,13 @@
  */
 package unitTests.calcium.stateness;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.objectweb.proactive.extensions.calcium.stateness.Stateness;
 

@@ -39,13 +39,11 @@ package org.objectweb.proactive.examples.documentation.activeobjectconcepts;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 import org.objectweb.proactive.examples.documentation.classes.Value;
 import org.objectweb.proactive.examples.documentation.classes.Worker;
-
-//@snippet-break Caller_1
-import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 
 
 //@snippet-resume Caller_1

@@ -36,6 +36,19 @@
  */
 package org.objectweb.proactive.extensions.masterworker.core;
 
+import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
@@ -46,32 +59,36 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.xml.VariableContract;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestFilter;
-import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.group.ExceptionListException;
+import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.core.xml.VariableContract;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.DivisibleTask;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Master;
 import org.objectweb.proactive.extensions.masterworker.interfaces.MemoryFactory;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-import org.objectweb.proactive.extensions.masterworker.interfaces.internal.*;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.MasterIntern;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.ResultIntern;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskIntern;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskRepository;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worker;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerDeadListener;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerManager;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerMaster;
+import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerWatcher;
 import org.objectweb.proactive.extensions.masterworker.util.TaskID;
 import org.objectweb.proactive.extensions.masterworker.util.TaskQueue;
-import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
-
-import java.io.Serializable;
-import java.net.URL;
-import java.util.*;
 
 
 /**

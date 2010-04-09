@@ -36,12 +36,12 @@
  */
 package org.objectweb.proactive.extra.montecarlo.core;
 
+import java.io.Serializable;
+
 import org.objectweb.proactive.extensions.masterworker.interfaces.DivisibleTask;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 import org.objectweb.proactive.extra.montecarlo.EngineTask;
-
-import java.io.Serializable;
 
 
 /**

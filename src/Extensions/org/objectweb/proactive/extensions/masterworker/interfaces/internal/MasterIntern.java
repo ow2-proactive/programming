@@ -36,13 +36,13 @@
  */
 package org.objectweb.proactive.extensions.masterworker.interfaces.internal;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.core.IsClearingError;
 import org.objectweb.proactive.extensions.masterworker.interfaces.SubMaster;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-
-import java.io.Serializable;
-import java.util.List;
 
 
 public interface MasterIntern {

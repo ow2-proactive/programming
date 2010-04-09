@@ -36,17 +36,12 @@
  */
 package org.objectweb.proactive.examples.masterworker;
 
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
-import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
-import org.objectweb.proactive.extensions.masterworker.TaskException;
-import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
-import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-import org.objectweb.proactive.api.PALifeCycle;
-import org.objectweb.proactive.examples.masterworker.util.Grep;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -54,6 +49,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
+import org.objectweb.proactive.api.PALifeCycle;
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.examples.masterworker.util.Grep;
+import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
+import org.objectweb.proactive.extensions.masterworker.TaskException;
+import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
+import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 
 
 /**

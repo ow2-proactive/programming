@@ -41,7 +41,7 @@ import java.net.URI;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
@@ -144,7 +144,8 @@ public class RuntimeFactory {
             //defaultRuntime = getProtocolSpecificRuntime(Constants.DEFAULT_PROTOCOL_IDENTIFIER);
             //            defaultRuntime = getProtocolSpecificRuntime(ProActiveConfiguration.getInstance()
             //                                                                              .getProperty(Constants.PROPERTY_PA_COMMUNICATION_PROTOCOL));
-            defaultRuntime = getProtocolSpecificRuntime(PAProperties.PA_COMMUNICATION_PROTOCOL.getValue());
+            defaultRuntime = getProtocolSpecificRuntime(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
+                    .getValue());
             if (runtimeLogger.isDebugEnabled()) {
                 runtimeLogger.debug("default runtime = " + defaultRuntime.getURL());
             }

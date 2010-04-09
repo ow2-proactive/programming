@@ -37,9 +37,9 @@
 //@snippet-start class_Simulation
 package org.objectweb.proactive.examples.documentation.classes;
 
-import org.objectweb.proactive.Service;
-import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Body;
+import org.objectweb.proactive.RunActive;
+import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PALifeCycle;
 
 

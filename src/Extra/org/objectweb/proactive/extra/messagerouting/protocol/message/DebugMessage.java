@@ -40,7 +40,6 @@ import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
 
 public class DebugMessage extends DataMessage {

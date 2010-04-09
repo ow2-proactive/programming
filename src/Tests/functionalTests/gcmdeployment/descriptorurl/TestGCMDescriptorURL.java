@@ -36,7 +36,10 @@
  */
 package functionalTests.gcmdeployment.descriptorurl;
 
-import functionalTests.FunctionalTest;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
@@ -44,9 +47,7 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import functionalTests.FunctionalTest;
 
 
 public class TestGCMDescriptorURL extends FunctionalTest {

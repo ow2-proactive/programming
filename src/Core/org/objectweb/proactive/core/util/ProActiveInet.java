@@ -46,7 +46,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.api.PALifeCycle;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -122,7 +122,7 @@ public class ProActiveInet {
     /**
      * Returns the host name of the local ProActive inet address
      * 
-     * If {@link PAProperties.PA_USE_IP_ADDRESS} is set then the IP address is
+     * If {@link CentralPAPropertyRepository.PA_USE_IP_ADDRESS} is set then the IP address is
      * returned instead of an FQDN
      * 
      * @return
@@ -140,14 +140,14 @@ public class ProActiveInet {
             ia = getDefaultInterface();
         } else {
             // Follow the user defined rules
-            if (PAProperties.PA_HOSTNAME.isSet()) {
-                logger.debug(PAProperties.PA_HOSTNAME.getKey() +
+            if (CentralPAPropertyRepository.PA_HOSTNAME.isSet()) {
+                logger.debug(CentralPAPropertyRepository.PA_HOSTNAME.getName() +
                     " defined. Using getByName() to elected an IP address");
                 // return the result of getByName
                 try {
-                    ia = InetAddress.getByName(PAProperties.PA_HOSTNAME.getValue());
+                    ia = InetAddress.getByName(CentralPAPropertyRepository.PA_HOSTNAME.getValue());
                 } catch (UnknownHostException e) {
-                    logger.info(PAProperties.PA_HOSTNAME.getKey() +
+                    logger.info(CentralPAPropertyRepository.PA_HOSTNAME.getName() +
                         " is set, but no IP address is bound to this hostname");
                 }
             } else {
@@ -163,7 +163,8 @@ public class ProActiveInet {
 
                     for (InetAddress addr : l) {
 
-                        if (PAProperties.PA_NET_DISABLE_IPv6.isTrue() && addr instanceof Inet6Address) {
+                        if (CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isTrue() &&
+                            addr instanceof Inet6Address) {
                             continue;
                         }
 
@@ -200,7 +201,7 @@ public class ProActiveInet {
                 continue;
             if (ia.isSiteLocalAddress())
                 continue;
-            if (PAProperties.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
+            if (CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
                 continue;
 
             return ia;
@@ -210,7 +211,7 @@ public class ProActiveInet {
         for (InetAddress ia : ias) {
             if (ia.isLoopbackAddress())
                 continue;
-            if (PAProperties.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
+            if (CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
                 continue;
 
             return ia;
@@ -218,7 +219,7 @@ public class ProActiveInet {
 
         // Search for a loopback address
         for (InetAddress ia : ias) {
-            if (PAProperties.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
+            if (CentralPAPropertyRepository.PA_NET_DISABLE_IPv6.isTrue() && ia instanceof Inet6Address)
                 continue;
 
             return ia;
@@ -232,19 +233,19 @@ public class ProActiveInet {
      * False otherwise
      */
     private boolean defaultBehavior() {
-        if (PAProperties.PA_HOSTNAME.isSet())
+        if (CentralPAPropertyRepository.PA_HOSTNAME.isSet())
             return false;
 
-        if (PAProperties.PA_NET_NOLOOPBACK.isSet())
+        if (CentralPAPropertyRepository.PA_NET_NOLOOPBACK.isSet())
             return false;
 
-        if (PAProperties.PA_NET_NOPRIVATE.isSet())
+        if (CentralPAPropertyRepository.PA_NET_NOPRIVATE.isSet())
             return false;
 
-        if (PAProperties.PA_NET_NETMASK.isSet())
+        if (CentralPAPropertyRepository.PA_NET_NETMASK.isSet())
             return false;
 
-        if (PAProperties.PA_NET_INTERFACE.isSet())
+        if (CentralPAPropertyRepository.PA_NET_INTERFACE.isSet())
             return false;
 
         return true;
@@ -253,7 +254,7 @@ public class ProActiveInet {
     private List<InetAddress> getAllInetAddresses() {
         LinkedList<InetAddress> ret = new LinkedList<InetAddress>();
 
-        String intf = PAProperties.PA_NET_INTERFACE.getValue();
+        String intf = CentralPAPropertyRepository.PA_NET_INTERFACE.getValue();
 
         Enumeration<NetworkInterface> nis;
         try {
@@ -281,7 +282,8 @@ public class ProActiveInet {
     }
 
     private List<InetAddress> filterPrivate(List<InetAddress> l) {
-        if (!PAProperties.PA_NET_NOPRIVATE.isSet() || !PAProperties.PA_NET_NOPRIVATE.isTrue()) {
+        if (!CentralPAPropertyRepository.PA_NET_NOPRIVATE.isSet() ||
+            !CentralPAPropertyRepository.PA_NET_NOPRIVATE.isTrue()) {
             // All InetAddress match
             return new LinkedList<InetAddress>(l);
         }
@@ -299,7 +301,8 @@ public class ProActiveInet {
     }
 
     private List<InetAddress> filterLoopback(List<InetAddress> l) {
-        if (!PAProperties.PA_NET_NOLOOPBACK.isSet() || !PAProperties.PA_NET_NOLOOPBACK.isTrue()) {
+        if (!CentralPAPropertyRepository.PA_NET_NOLOOPBACK.isSet() ||
+            !CentralPAPropertyRepository.PA_NET_NOLOOPBACK.isTrue()) {
             // All InetAddress match
             return new LinkedList<InetAddress>(l);
         }
@@ -317,17 +320,17 @@ public class ProActiveInet {
     }
 
     private List<InetAddress> filterByNetmask(List<InetAddress> l) {
-        if (!PAProperties.PA_NET_NETMASK.isSet()) {
+        if (!CentralPAPropertyRepository.PA_NET_NETMASK.isSet()) {
             // All InetAddress match
             return new LinkedList<InetAddress>(l);
         }
 
         IPMatcher matcher;
         try {
-            matcher = new IPMatcher(PAProperties.PA_NET_NETMASK.getValue());
+            matcher = new IPMatcher(CentralPAPropertyRepository.PA_NET_NETMASK.getValue());
         } catch (Throwable e) {
-            logger.fatal("Invalid format for property " + PAProperties.PA_NET_NETMASK.getKey() +
-                ". Must be xxx.xxx.xxx.xxx/xx");
+            logger.fatal("Invalid format for property " +
+                CentralPAPropertyRepository.PA_NET_NETMASK.getName() + ". Must be xxx.xxx.xxx.xxx/xx");
             return new LinkedList<InetAddress>();
         }
 

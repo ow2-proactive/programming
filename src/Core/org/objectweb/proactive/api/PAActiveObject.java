@@ -63,7 +63,7 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedException;
 import org.objectweb.proactive.core.body.ft.internalmsg.Heartbeat;
 import org.objectweb.proactive.core.body.proxy.BodyProxy;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.MOPException;
@@ -616,7 +616,7 @@ public class PAActiveObject {
 
         threadPool.shutdown();
         try {
-            threadPool.awaitTermination(PAProperties.PA_COMPONENT_CREATION_TIMEOUT.getValueAsInt(),
+            threadPool.awaitTermination(CentralPAPropertyRepository.PA_COMPONENT_CREATION_TIMEOUT.getValue(),
                     TimeUnit.SECONDS);
         } catch (InterruptedException e1) {
             // TODO Auto-generated catch block

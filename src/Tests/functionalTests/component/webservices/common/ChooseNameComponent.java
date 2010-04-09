@@ -36,9 +36,6 @@
  */
 package functionalTests.component.webservices.common;
 
-import java.lang.Math;
-
-
 /**
  * A simple example to expose an active object as a web service.
  *

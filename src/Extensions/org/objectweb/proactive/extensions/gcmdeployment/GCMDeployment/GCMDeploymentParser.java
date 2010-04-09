@@ -36,10 +36,10 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 
+import java.net.URL;
+
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserConstants;
-
-import java.net.URL;
 
 
 public interface GCMDeploymentParser extends GCMParserConstants {

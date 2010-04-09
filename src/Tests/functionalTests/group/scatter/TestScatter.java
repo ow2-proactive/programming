@@ -45,7 +45,6 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-
 import functionalTests.group.A;
 
 

@@ -38,7 +38,7 @@ package org.objectweb.proactive.ext.locationserver;
 
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class LocationServerFactory {
@@ -69,8 +69,9 @@ public class LocationServerFactory {
     public static LocationServer getLocationServer() {
         LocationServer server = null;
         try {
-            server = (LocationServer) PAActiveObject.lookupActive(PAProperties.PA_LOCATION_SERVER.getValue(),
-                    PAProperties.PA_LOCATION_SERVER_RMI.getValue());
+            server = (LocationServer) PAActiveObject.lookupActive(
+                    CentralPAPropertyRepository.PA_LOCATION_SERVER.getValue(),
+                    CentralPAPropertyRepository.PA_LOCATION_SERVER_RMI.getValue());
         } catch (Exception e) {
             e.printStackTrace();
             return null;

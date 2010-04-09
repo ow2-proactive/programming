@@ -113,7 +113,8 @@ public class ProActiveConfiguration {
         this.properties.putAllFromSystem(this.getsystemProperties());
 
         // Can't use setValue in this constructor
-        System.setProperty(PAProperties.PA_OS.getKey(), OperatingSystem.getOperatingSystem().toString());
+        System.setProperty(CentralPAPropertyRepository.PA_OS.getName(), OperatingSystem.getOperatingSystem()
+                .toString());
     }
 
     class CustomProperties extends Properties {
@@ -141,7 +142,7 @@ public class ProActiveConfiguration {
              * If the value is invalid, a warning message is printed and the value is SET.
              */
 
-            PAProperties prop = PAProperties.getProperty(key);
+            PAProperty prop = PAProperties.getProperty(key);
             if (prop != null) {
                 if (!prop.isValid(value)) {
                     logger.warn("Invalid value, " + value + " for key " + key + ". Must be a " +
@@ -230,7 +231,7 @@ public class ProActiveConfiguration {
      * @param value
      *            the value of the property
      */
-    protected void setProperty(String key, String value) {
+    public void setProperty(String key, String value) {
         this.properties.put(key, value, true);
     }
 
@@ -248,7 +249,7 @@ public class ProActiveConfiguration {
         Properties userProps = new Properties();
 
         /* Filename of the user configuration file */
-        String fname = System.getProperty(PAProperties.PA_CONFIGURATION_FILE.getKey());
+        String fname = System.getProperty(CentralPAPropertyRepository.PA_CONFIGURATION_FILE.getName());
         if (fname == null) {
             defaultFile = true;
             fname = PROACTIVE_USER_CONFIG_FILENAME;

@@ -37,6 +37,7 @@
 package functionalTests.component.requestpriority;
 
 import static org.junit.Assert.assertEquals;
+
 import org.junit.Before;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;

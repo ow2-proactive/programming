@@ -36,6 +36,8 @@
  */
 package functionalTests.security;
 
+import static junit.framework.Assert.assertTrue;
+
 import java.security.InvalidKeyException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -54,7 +56,6 @@ import functionalTests.security.keygeneration.SecurityTestKeyGen;
 import functionalTests.security.policyserver.SecurityTestPolicyServer;
 import functionalTests.security.securitymanager.SecurityTestSecurityManager;
 import functionalTests.security.sessionkeyexchange.SecurityTestSessionKeyExchange;
-import static junit.framework.Assert.assertTrue;
 
 
 @RunWith(Suite.class)

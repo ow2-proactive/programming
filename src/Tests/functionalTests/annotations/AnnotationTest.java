@@ -42,7 +42,7 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 import functionalTests.FunctionalTest;
 
@@ -72,8 +72,8 @@ public abstract class AnnotationTest extends FunctionalTest {
     public abstract void testCleanup();
 
     protected void envInit() {
-        if (PAProperties.PA_HOME.isSet()) {
-            PROACTIVE_HOME = PAProperties.PA_HOME.getValue();
+        if (CentralPAPropertyRepository.PA_HOME.isSet()) {
+            PROACTIVE_HOME = CentralPAPropertyRepository.PA_HOME.getValue();
         } else {
             // guess the value
             String location = AnnotationTest.class.getProtectionDomain().getCodeSource().getLocation()

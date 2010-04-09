@@ -43,7 +43,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.UniversalBody;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -51,7 +51,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 /**
  *  Deamon thread of the Tag LocalMemory Leasing
  *  
- *  Run each "PAProperties.PA_MEMORY_TAG_LEASE_PERIOD" value of time and
+ *  Run each "CentralProperties.PA_MEMORY_TAG_LEASE_PERIOD" value of time and
  *  check if the tags localmemory existing on all the bodies of this runtime
  *  get their lease value under 0 to clean them, or just decrement their lease 
  *  value.  
@@ -72,7 +72,7 @@ public class LocalMemoryLeaseThread implements Runnable {
      *   If the lease value is under 0, clean it.
      */
     public void run() {
-        final int period = PAProperties.PA_MEMORY_TAG_LEASE_PERIOD.getValueAsInt();
+        final int period = CentralPAPropertyRepository.PA_MEMORY_TAG_LEASE_PERIOD.getValue();
 
         for (;;) {
             if (logger.isDebugEnabled()) {

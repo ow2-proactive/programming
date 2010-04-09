@@ -36,10 +36,10 @@
  */
 package functionalTests.activeobject.protectedcalls.ao;
 
-import org.objectweb.proactive.core.util.wrapper.IntWrapper;
-import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Body;
+import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
+import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 
 
 public class AO implements RunActive {

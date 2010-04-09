@@ -46,7 +46,6 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.Context;
@@ -55,7 +54,7 @@ import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.ft.protocols.FTManager;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.reply.ReplyImpl;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.Utils;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -100,7 +99,7 @@ public class FuturePool extends Object implements java.io.Serializable {
         futures = new FutureMap();
         valuesForFutures = new java.util.HashMap<String, MethodCallResult>();
         this.newState = false;
-        if (PAProperties.PA_FUTURE_AC.isTrue()) {
+        if (CentralPAPropertyRepository.PA_FUTURE_AC.isTrue()) {
             this.registerACs = true;
             this.sendACs = true;
             this.queueAC = new ActiveACQueue();

@@ -36,11 +36,11 @@
  */
 package org.objectweb.proactive.extra.montecarlo;
 
-import umontreal.iro.lecuyer.rng.RandomStream;
-
 import java.io.Serializable;
 
 import org.objectweb.proactive.annotation.PublicAPI;
+
+import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 /**

@@ -43,7 +43,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
 import org.objectweb.proactive.core.jmx.notification.BodyNotificationData;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
@@ -334,7 +334,7 @@ public class LocalBodyStore {
         }
 
         // END ProActiveEvent
-        if ((this.localBodyMap.size() == 0) && PAProperties.PA_EXIT_ON_EMPTY.isTrue()) {
+        if ((this.localBodyMap.size() == 0) && CentralPAPropertyRepository.PA_EXIT_ON_EMPTY.isTrue()) {
             PALifeCycle.exitSuccess();
         }
     }

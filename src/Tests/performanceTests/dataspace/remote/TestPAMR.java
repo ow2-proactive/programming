@@ -36,13 +36,13 @@
  */
 package performanceTests.dataspace.remote;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class TestPAMR extends AbstractPAProviderRemoteBenchmark {
 
     static {
-        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
     }
 
     public TestPAMR() {

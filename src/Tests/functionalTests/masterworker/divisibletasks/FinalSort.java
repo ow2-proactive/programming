@@ -36,11 +36,11 @@
  */
 package functionalTests.masterworker.divisibletasks;
 
-import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
-
 import java.util.ArrayList;
 import java.util.Collections;
+
+import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
+import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 
 
 /**

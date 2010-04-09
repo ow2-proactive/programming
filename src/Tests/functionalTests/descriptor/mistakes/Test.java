@@ -36,12 +36,13 @@
  */
 package functionalTests.descriptor.mistakes;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

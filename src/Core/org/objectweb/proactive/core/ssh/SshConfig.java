@@ -36,9 +36,10 @@
  */
 package org.objectweb.proactive.core.ssh;
 
+import static org.objectweb.proactive.core.ssh.SSH.logger;
+
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
-import static org.objectweb.proactive.core.ssh.SSH.logger;
 
 
 public class SshConfig {

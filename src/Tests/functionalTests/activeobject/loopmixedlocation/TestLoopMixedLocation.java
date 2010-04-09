@@ -40,21 +40,18 @@ import static junit.framework.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.proxy.BodyProxy;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.ext.util.SimpleLocationServer;
 import org.objectweb.proactive.extensions.mixedlocation.MixedLocationMetaObjectFactory;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
-
 import functionalTests.activeobject.locationserver.A;
 import functionalTests.activeobject.locationserver.MigratableA;
 
@@ -75,9 +72,10 @@ public class TestLoopMixedLocation extends GCMFunctionalTestDefaultNodes {
         this.server = PAActiveObject.newActive(SimpleLocationServer.class, new Object[] {});
         String serverUrl = PAActiveObject.registerByName(this.server, "LocationServer");
 
-        PAProperties.PA_LOCATION_SERVER_RMI.setValue(serverUrl);
+        CentralPAPropertyRepository.PA_LOCATION_SERVER_RMI.setValue(serverUrl);
 
-        String additionalJVMargs = PAProperties.PA_LOCATION_SERVER_RMI.getCmdLine() + serverUrl;
+        String additionalJVMargs = CentralPAPropertyRepository.PA_LOCATION_SERVER_RMI.getCmdLine() +
+            serverUrl;
         super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVMARG, additionalJVMargs,
                 VariableContractType.DescriptorDefaultVariable);
     }

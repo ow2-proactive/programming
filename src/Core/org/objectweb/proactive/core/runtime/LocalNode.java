@@ -132,7 +132,7 @@ public class LocalNode implements SecurityEntity {
         this.runtimeRoe.createRemoteObject(name, replacePreviousBinding);
 
         // JMX registration
-        //        if (PAProperties.PA_JMX_MBEAN.isTrue()) {
+        //        if (CentralProperties.PA_JMX_MBEAN.isTrue()) {
         String runtimeUrl = ProActiveRuntimeImpl.getProActiveRuntime().getURL();
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName oname = FactoryName.createNodeObjectName(runtimeUrl, nodeName);

@@ -43,10 +43,9 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -195,7 +194,7 @@ public class URIBuilder {
      */
     public static URI buildURIFromProperties(String host, String name) {
         int port = -1;
-        String protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
+        String protocol = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
         try {
             // ok, awful hack but ensures that the factory for the given
             // protocol has effectively been loaded by the classloader
@@ -326,13 +325,13 @@ public class URIBuilder {
      */
     public static String getHostNameorIP(InetAddress address) {
         //        address = UrlBuilder.getNetworkInterfaces();
-        if (PAProperties.PA_HOSTNAME.getValue() != null) {
-            return PAProperties.PA_HOSTNAME.getValue();
+        if (CentralPAPropertyRepository.PA_HOSTNAME.getValue() != null) {
+            return CentralPAPropertyRepository.PA_HOSTNAME.getValue();
         }
 
         String temp = "";
 
-        if (PAProperties.PA_NET_USE_IP_ADDRESS.isTrue()) {
+        if (CentralPAPropertyRepository.PA_NET_USE_IP_ADDRESS.isTrue()) {
             temp = (address).getHostAddress();
         } else {
             temp = address.getCanonicalHostName();

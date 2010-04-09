@@ -36,11 +36,11 @@
  */
 package functionalTests.exception;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.objectweb.proactive.api.PAException;
 
 import functionalTests.FunctionalTest;
-
-import static junit.framework.Assert.assertTrue;
 
 
 /**

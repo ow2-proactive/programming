@@ -36,9 +36,9 @@
  */
 package org.objectweb.proactive.extra.montecarlo;
 
-import org.objectweb.proactive.annotation.PublicAPI;
-
 import java.io.Serializable;
+
+import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**

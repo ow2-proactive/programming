@@ -38,6 +38,7 @@ package org.objectweb.proactive.core.jmx.client;
 
 import java.io.IOException;
 import java.io.Serializable;
+
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;

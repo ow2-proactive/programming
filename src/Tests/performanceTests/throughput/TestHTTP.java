@@ -36,12 +36,12 @@
  */
 package performanceTests.throughput;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class TestHTTP extends Throughput {
     static {
-        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("http");
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("http");
     }
 
     public TestHTTP() {

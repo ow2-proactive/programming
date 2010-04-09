@@ -51,12 +51,12 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extra.branchnbound.ProActiveBranchNBound;
 import org.objectweb.proactive.extra.branchnbound.core.Manager;
 import org.objectweb.proactive.extra.branchnbound.core.Result;
 import org.objectweb.proactive.extra.branchnbound.core.Task;
 import org.objectweb.proactive.extra.branchnbound.core.queue.BasicQueueImpl;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 

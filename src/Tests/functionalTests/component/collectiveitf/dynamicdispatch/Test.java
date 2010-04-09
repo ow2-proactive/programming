@@ -44,6 +44,7 @@ import junit.framework.Assert;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.util.Fractal;
+
 import functionalTests.ComponentTest;
 
 

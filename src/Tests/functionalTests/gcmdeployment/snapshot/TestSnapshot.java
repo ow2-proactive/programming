@@ -46,7 +46,7 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.util.Sleeper;
@@ -118,9 +118,9 @@ public class TestSnapshot extends GCMFunctionalTestDefaultNodes {
             VariableContractImpl vc = new VariableContractImpl();
             vc.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(NB_VMS)
                     .toString(), VariableContractType.DescriptorDefaultVariable);
-            String value = PAProperties.PA_NET_ROUTER_PORT.getCmdLine() +
-                PAProperties.PA_NET_ROUTER_PORT.getValue() + " " +
-                PAProperties.PA_NET_ROUTER_ADDRESS.getCmdLine() + "localhost";
+            String value = CentralPAPropertyRepository.PA_NET_ROUTER_PORT.getCmdLine() +
+                CentralPAPropertyRepository.PA_NET_ROUTER_PORT.getValue() + " " +
+                CentralPAPropertyRepository.PA_NET_ROUTER_ADDRESS.getCmdLine() + "localhost";
             vc.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVMARG, value,
                     VariableContractType.DescriptorDefaultVariable);
             File f = new File(this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml").getFile());

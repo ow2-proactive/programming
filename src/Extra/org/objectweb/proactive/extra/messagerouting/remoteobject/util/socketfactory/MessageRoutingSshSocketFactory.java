@@ -39,7 +39,7 @@ package org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfac
 import java.io.IOException;
 import java.net.Socket;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.ssh.SshConfig;
 import org.objectweb.proactive.core.ssh.SshTunnelPool;
 
@@ -61,38 +61,38 @@ public class MessageRoutingSshSocketFactory implements MessageRoutingSocketFacto
 
         this.config.setGcInterval(60000);
 
-        if (PAProperties.PA_PAMRSSH_CONNECT_TIMEOUT.isSet()) {
-            int connectTimeout = PAProperties.PA_PAMRSSH_CONNECT_TIMEOUT.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_PAMRSSH_CONNECT_TIMEOUT.isSet()) {
+            int connectTimeout = CentralPAPropertyRepository.PA_PAMRSSH_CONNECT_TIMEOUT.getValue();
             this.config.setConnectTimeout(connectTimeout);
         }
 
-        if (PAProperties.PA_PAMRSSH_GC_IDLETIME.isSet()) {
-            int gcIdleTime = PAProperties.PA_PAMRSSH_GC_IDLETIME.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_PAMRSSH_GC_IDLETIME.isSet()) {
+            int gcIdleTime = CentralPAPropertyRepository.PA_PAMRSSH_GC_IDLETIME.getValue();
             this.config.setGcIdleTime(gcIdleTime);
         }
 
-        if (PAProperties.PA_PAMRSSH_GC_PERIOD.isSet()) {
-            int gcInterval = PAProperties.PA_PAMRSSH_GC_PERIOD.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_PAMRSSH_GC_PERIOD.isSet()) {
+            int gcInterval = CentralPAPropertyRepository.PA_PAMRSSH_GC_PERIOD.getValue();
             this.config.setGcInterval(gcInterval);
         }
 
-        if (PAProperties.PA_PAMRSSH_KEY_DIR.isSet()) {
-            String dir = PAProperties.PA_PAMRSSH_KEY_DIR.getValue();
+        if (CentralPAPropertyRepository.PA_PAMRSSH_KEY_DIR.isSet()) {
+            String dir = CentralPAPropertyRepository.PA_PAMRSSH_KEY_DIR.getValue();
             this.config.setKeyDir(dir);
         }
 
-        if (PAProperties.PA_PAMRSSH_KNOWN_HOSTS.isSet()) {
-            String knownhost = PAProperties.PA_PAMRSSH_KNOWN_HOSTS.getValue();
+        if (CentralPAPropertyRepository.PA_PAMRSSH_KNOWN_HOSTS.isSet()) {
+            String knownhost = CentralPAPropertyRepository.PA_PAMRSSH_KNOWN_HOSTS.getValue();
             this.config.setKnowHostFile(knownhost);
         }
 
-        if (PAProperties.PA_PAMRSSH_REMOTE_PORT.isSet()) {
-            int port = PAProperties.PA_PAMRSSH_REMOTE_PORT.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_PAMRSSH_REMOTE_PORT.isSet()) {
+            int port = CentralPAPropertyRepository.PA_PAMRSSH_REMOTE_PORT.getValue();
             this.config.setPort(port);
         }
 
-        if (PAProperties.PA_PAMRSSH_REMOTE_USERNAME.isSet()) {
-            String username = PAProperties.PA_PAMRSSH_REMOTE_USERNAME.getValue();
+        if (CentralPAPropertyRepository.PA_PAMRSSH_REMOTE_USERNAME.isSet()) {
+            String username = CentralPAPropertyRepository.PA_PAMRSSH_REMOTE_USERNAME.getValue();
             this.config.setUsername(username);
         }
 

@@ -48,7 +48,7 @@ import org.mortbay.jetty.servlet.Context;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.servlet.ServletMapping;
 import org.mortbay.xml.XmlConfiguration;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -93,8 +93,8 @@ public class HTTPServer {
          * A SelectSocketConnector is used by default
          */
         final Connector connector;
-        if (PAProperties.PA_HTTP_JETTY_CONNECTOR.isSet()) {
-            String clName = PAProperties.PA_HTTP_JETTY_CONNECTOR.getValue();
+        if (CentralPAPropertyRepository.PA_HTTP_JETTY_CONNECTOR.isSet()) {
+            String clName = CentralPAPropertyRepository.PA_HTTP_JETTY_CONNECTOR.getValue();
             try {
                 final Class<?> cl = Class.forName(clName);
                 final Class<? extends Connector> clConnector = cl.asSubclass(Connector.class);
@@ -111,8 +111,8 @@ public class HTTPServer {
          * If PA_XMLHTTP_PORT is set by the user use the value. Otherwise use a random port.
          */
         int port = 0;
-        if (PAProperties.PA_XMLHTTP_PORT.isSet()) {
-            port = PAProperties.PA_XMLHTTP_PORT.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_XMLHTTP_PORT.isSet()) {
+            port = CentralPAPropertyRepository.PA_XMLHTTP_PORT.getValue();
         }
         connector.setPort(port);
         this.server.addConnector(connector);
@@ -122,8 +122,8 @@ public class HTTPServer {
 
         /* Lets users customize Jetty if needed */
         final URL configUrl;
-        if (PAProperties.PA_HTTP_JETTY_XML.isSet()) {
-            final String fileLoc = PAProperties.PA_HTTP_JETTY_XML.getValue();
+        if (CentralPAPropertyRepository.PA_HTTP_JETTY_XML.isSet()) {
+            final String fileLoc = CentralPAPropertyRepository.PA_HTTP_JETTY_XML.getValue();
             configUrl = new File(fileLoc).toURI().toURL();
         } else {
             configUrl = this.getClass().getResource("jetty.xml");
@@ -140,7 +140,7 @@ public class HTTPServer {
 
         this.server.start();
         // If a random port is used we have to set it
-        PAProperties.PA_XMLHTTP_PORT.setValue(connector.getLocalPort());
+        CentralPAPropertyRepository.PA_XMLHTTP_PORT.setValue(connector.getLocalPort());
 
         logger.debug("Started the HTTP server on port " + connector.getLocalPort());
     }

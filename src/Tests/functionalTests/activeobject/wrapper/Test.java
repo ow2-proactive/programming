@@ -36,6 +36,8 @@
  */
 package functionalTests.activeobject.wrapper;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.junit.After;
 import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -54,8 +56,6 @@ import org.objectweb.proactive.core.util.wrapper.StringMutableWrapper;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 import functionalTests.FunctionalTest;
-
-import static junit.framework.Assert.assertTrue;
 
 
 /**

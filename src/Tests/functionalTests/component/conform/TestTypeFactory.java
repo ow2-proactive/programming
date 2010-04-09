@@ -37,6 +37,7 @@
 package functionalTests.component.conform;
 
 import static org.junit.Assert.fail;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.fractal.api.Component;

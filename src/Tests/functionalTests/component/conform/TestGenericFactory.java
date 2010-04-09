@@ -36,9 +36,11 @@
  */
 package functionalTests.component.conform;
 
+import static org.junit.Assert.fail;
+
 import java.util.Arrays;
 import java.util.HashSet;
-import static org.junit.Assert.fail;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

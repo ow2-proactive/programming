@@ -37,10 +37,8 @@
 package functionalTests.stub.proactive755;
 
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.mop.MOP;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

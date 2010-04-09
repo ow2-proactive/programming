@@ -46,7 +46,6 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
-import org.objectweb.proactive.extensions.calcium.environment.StoredFile;
 import org.objectweb.proactive.extensions.calcium.system.HashSum;
 import org.objectweb.proactive.extensions.calcium.system.SkeletonSystemImpl;
 

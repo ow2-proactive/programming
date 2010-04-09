@@ -36,9 +36,10 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 
+import java.net.URL;
+
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
-import java.net.URL;
 
 
 public interface GCMDeploymentDescriptor {

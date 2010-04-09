@@ -37,7 +37,6 @@
 package org.objectweb.proactive.extensions.calcium;
 
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.extensions.calcium.Stream;
 import org.objectweb.proactive.extensions.calcium.environment.Environment;
 import org.objectweb.proactive.extensions.calcium.environment.EnvironmentServices;
 import org.objectweb.proactive.extensions.calcium.environment.FileServerClient;

@@ -37,9 +37,6 @@
 package org.objectweb.proactive.extra.messagerouting.remoteobject.util;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;

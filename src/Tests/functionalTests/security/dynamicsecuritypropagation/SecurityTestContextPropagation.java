@@ -36,6 +36,8 @@
  */
 package functionalTests.security.dynamicsecuritypropagation;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -47,7 +49,6 @@ import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 
 import functionalTests.FunctionalTest;
 import functionalTests.security.A;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

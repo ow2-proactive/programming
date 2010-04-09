@@ -43,7 +43,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.rmi.AbstractRmiRemoteObjectFactory;
 import org.objectweb.proactive.core.ssh.SshConfig;
 import org.objectweb.proactive.core.ssh.SshRMIClientSocketFactory;
@@ -54,46 +54,46 @@ public class RmiSshRemoteObjectFactory extends AbstractRmiRemoteObjectFactory {
 
     static {
         SshConfig sshConfig = new SshConfig();
-        sshConfig.setTryPlainSocket(PAProperties.PA_RMISSH_TRY_NORMAL_FIRST.isTrue());
+        sshConfig.setTryPlainSocket(CentralPAPropertyRepository.PA_RMISSH_TRY_NORMAL_FIRST.isTrue());
 
         int gcInterval = 10000;
-        if (PAProperties.PA_RMISSH_GC_PERIOD.isSet()) {
-            gcInterval = PAProperties.PA_RMISSH_GC_PERIOD.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_RMISSH_GC_PERIOD.isSet()) {
+            gcInterval = CentralPAPropertyRepository.PA_RMISSH_GC_PERIOD.getValue();
         }
         sshConfig.setGcInterval(gcInterval);
 
         int gcIdleTime = 10000;
-        if (PAProperties.PA_RMISSH_GC_IDLETIME.isSet()) {
-            gcIdleTime = PAProperties.PA_RMISSH_GC_IDLETIME.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_RMISSH_GC_IDLETIME.isSet()) {
+            gcIdleTime = CentralPAPropertyRepository.PA_RMISSH_GC_IDLETIME.getValue();
         }
         sshConfig.setGcIdleTime(gcIdleTime);
 
         int connectTimeout = 2000;
-        if (PAProperties.PA_RMISSH_CONNECT_TIMEOUT.isSet()) {
-            connectTimeout = PAProperties.PA_RMISSH_CONNECT_TIMEOUT.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_RMISSH_CONNECT_TIMEOUT.isSet()) {
+            connectTimeout = CentralPAPropertyRepository.PA_RMISSH_CONNECT_TIMEOUT.getValue();
         }
         sshConfig.setConnectTimeout(connectTimeout);
 
         String knownHostfile = System.getProperty("user.home") + File.separator + ".ssh" + File.separator +
             "know_hosts";
-        if (PAProperties.PA_RMISSH_KNOWN_HOSTS.isSet()) {
-            knownHostfile = PAProperties.PA_RMISSH_KNOWN_HOSTS.getValue();
+        if (CentralPAPropertyRepository.PA_RMISSH_KNOWN_HOSTS.isSet()) {
+            knownHostfile = CentralPAPropertyRepository.PA_RMISSH_KNOWN_HOSTS.getValue();
         }
         sshConfig.setKnowHostFile(knownHostfile);
 
         String keyDir = System.getProperty("user.home") + File.separator + ".ssh" + File.separator;
-        if (PAProperties.PA_RMISSH_KEY_DIR.isSet()) {
-            keyDir = PAProperties.PA_RMISSH_KEY_DIR.getValue();
+        if (CentralPAPropertyRepository.PA_RMISSH_KEY_DIR.isSet()) {
+            keyDir = CentralPAPropertyRepository.PA_RMISSH_KEY_DIR.getValue();
         }
         sshConfig.setKeyDir(keyDir);
 
-        if (PAProperties.PA_RMISSH_REMOTE_PORT.isSet()) {
-            int port = PAProperties.PA_RMISSH_KNOWN_HOSTS.getValueAsInt();
+        if (CentralPAPropertyRepository.PA_RMISSH_REMOTE_PORT.isSet()) {
+            int port = CentralPAPropertyRepository.PA_RMISSH_REMOTE_PORT.getValue();
             sshConfig.setPort(port);
         }
 
-        if (PAProperties.PA_RMISSH_REMOTE_USERNAME.isSet()) {
-            String username = PAProperties.PA_RMISSH_REMOTE_USERNAME.getValue();
+        if (CentralPAPropertyRepository.PA_RMISSH_REMOTE_USERNAME.isSet()) {
+            String username = CentralPAPropertyRepository.PA_RMISSH_REMOTE_USERNAME.getValue();
             sshConfig.setUsername(username);
         }
 

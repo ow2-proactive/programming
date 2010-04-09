@@ -38,10 +38,11 @@ package functionalTests.descriptor.defaultnodes;
 
 import org.junit.Test;
 import org.objectweb.proactive.api.PADeployment;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
+
 import functionalTests.FunctionalTest;
 
 
@@ -58,7 +59,7 @@ public class TestNodes extends FunctionalTest {
         if (value != null) {
             XML_LOCATION = TestNodes.class.getResource(value).getPath();
         } else {
-            if ("ibis".equals(PAProperties.PA_COMMUNICATION_PROTOCOL.getValue())) {
+            if ("ibis".equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
                 XML_LOCATION = TestNodes.class.getResource(
                         "/functionalTests/descriptor/defaultnodes/NodesIbis.xml").getPath();
             } else {

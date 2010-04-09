@@ -36,12 +36,13 @@
  */
 package org.objectweb.proactive.extra.montecarlo.core;
 
+import java.io.Serializable;
+
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 import org.objectweb.proactive.extra.montecarlo.SimulationSet;
-import umontreal.iro.lecuyer.rng.RandomStream;
 
-import java.io.Serializable;
+import umontreal.iro.lecuyer.rng.RandomStream;
 
 
 /**

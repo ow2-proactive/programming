@@ -38,6 +38,7 @@ package org.objectweb.proactive.examples.migration;
 
 import java.io.File;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;

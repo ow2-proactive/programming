@@ -40,7 +40,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -62,7 +61,7 @@ import org.objectweb.proactive.core.body.exceptions.InactiveBodyException;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.future.FutureProxy;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.exceptions.ExceptionHandler;
 import org.objectweb.proactive.core.gc.GCTag;
 import org.objectweb.proactive.core.gc.GarbageCollector;
@@ -233,7 +232,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             Body body = PAActiveObject.getBodyOnThis();
 
             ObjectReplacer objectReplacer = null;
-            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
+            if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
                 body.getClass().isAssignableFrom(ActiveBody.class)) {
 
                 try {
@@ -266,7 +265,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             UniversalBody result = part.createBody(node.getNodeInformation().getName(), bodyConstructorCall,
                     true);
 
-            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
+            if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
                 try {
                     objectReplacer.restoreObject();
                 } catch (IllegalArgumentException e) {
@@ -310,7 +309,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             Object[] modifiedObject = null;
             ObjectReplacer objectReplacer = null;
             Body body = PAActiveObject.getBodyOnThis();
-            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
+            if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
                 body.getClass().isAssignableFrom(ActiveBody.class)) {
                 initialObject = bodyConstructorCall.getEffectiveArguments();
                 try {
@@ -335,7 +334,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             // --------------added lines
 
             // Restore Result Object
-            if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
+            if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
                 try {
                     objectReplacer.restoreObject();
                 } catch (IllegalArgumentException e) {
@@ -477,7 +476,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         Object[] modifiedObject = null;
         ObjectReplacer objectReplacer = null;
         Body body = PAActiveObject.getBodyOnThis();
-        if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
+        if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
             body.getClass().isAssignableFrom(ActiveBody.class)) {
             initialObject = methodCall.getParameters();
             try {
@@ -534,7 +533,7 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         }
 
         // Restore Result Object
-        if (PAProperties.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
+        if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() && (objectReplacer != null)) {
             try {
                 objectReplacer.restoreObject();
             } catch (IllegalArgumentException e) {

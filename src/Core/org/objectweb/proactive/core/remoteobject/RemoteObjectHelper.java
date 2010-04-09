@@ -41,7 +41,7 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
@@ -118,7 +118,8 @@ public class RemoteObjectHelper {
                 uri = URIBuilder.buildURIFromProperties(uri.getHost(), uri.getPath());
             } else {
                 // Set only protocol (using default) 
-                uri = URIBuilder.setProtocol(uri, PAProperties.PA_COMMUNICATION_PROTOCOL.getValue());
+                uri = URIBuilder.setProtocol(uri, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
+                        .getValue());
             }
         } else {
             if (port == -1) {

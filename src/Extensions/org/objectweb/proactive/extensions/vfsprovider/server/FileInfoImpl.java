@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.objectweb.proactive.core.exceptions.IOException6;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileInfo;
 import org.objectweb.proactive.extensions.vfsprovider.protocol.FileType;
 

@@ -36,25 +36,25 @@
  */
 package org.objectweb.proactive.extensions.masterworker.core;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worker;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerDeadListener;
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerWatcher;
-import org.objectweb.proactive.extensions.annotation.ActiveObject;
-
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.ArrayList;
 
 
 /**
@@ -106,7 +106,7 @@ public class AOPinger implements WorkerWatcher, RunActive, InitActive, Serializa
     public AOPinger(final WorkerDeadListener listener) {
         this.listener = listener;
         terminated = false;
-        pingPeriod = Long.parseLong(PAProperties.PA_MASTERWORKER_PINGPERIOD.getValue());
+        pingPeriod = CentralPAPropertyRepository.PA_MASTERWORKER_PINGPERIOD.getValue();
 
         workerGroup = new HashSet<Worker>();
     }

@@ -39,7 +39,6 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm;
 import javax.xml.xpath.XPath;
 
 import org.ow2.proactive.virtualizing.core.error.VirtualServiceException;
-import org.ow2.proactive.virtualizing.vmwarevi.VMwareVMM;
 import org.w3c.dom.Node;
 
 

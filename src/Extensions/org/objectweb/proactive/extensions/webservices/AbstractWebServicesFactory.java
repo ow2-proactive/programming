@@ -40,7 +40,7 @@ import java.net.URI;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -77,7 +77,7 @@ public abstract class AbstractWebServicesFactory implements WebServicesFactory {
             throws UnknownFrameWorkException {
 
         if (frameWorkId == null) {
-            frameWorkId = PAProperties.PA_WEBSERVICES_FRAMEWORK.getValue();
+            frameWorkId = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
         }
 
         try {
@@ -114,7 +114,7 @@ public abstract class AbstractWebServicesFactory implements WebServicesFactory {
      * @throws UnknownFrameWorkException if the default framework is not known
      */
     public static WebServicesFactory getDefaultWebServicesFactory() throws UnknownFrameWorkException {
-        String frameWork = PAProperties.PA_WEBSERVICES_FRAMEWORK.getValue();
+        String frameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
         return getWebServicesFactory(frameWork);
     }
 
@@ -123,7 +123,7 @@ public abstract class AbstractWebServicesFactory implements WebServicesFactory {
      */
     public static String getLocalPort() {
         HTTPServer httpServer = HTTPServer.get();
-        return PAProperties.PA_XMLHTTP_PORT.getValue();
+        return CentralPAPropertyRepository.PA_XMLHTTP_PORT.getValueAsString();
     }
 
     /**

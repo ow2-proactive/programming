@@ -36,9 +36,9 @@
  */
 package org.objectweb.proactive.extensions.masterworker.interfaces.internal;
 
-import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-
 import java.io.Serializable;
+
+import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
 
 
 /**

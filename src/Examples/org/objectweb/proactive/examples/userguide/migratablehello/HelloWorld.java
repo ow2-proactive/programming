@@ -36,9 +36,10 @@
  */
 package org.objectweb.proactive.examples.userguide.migratablehello;
 
-import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public class HelloWorld {

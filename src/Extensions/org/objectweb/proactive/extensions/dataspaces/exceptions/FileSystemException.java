@@ -38,8 +38,6 @@ package org.objectweb.proactive.extensions.dataspaces.exceptions;
 
 import java.io.IOException;
 
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-
 
 public class FileSystemException extends IOException {
 

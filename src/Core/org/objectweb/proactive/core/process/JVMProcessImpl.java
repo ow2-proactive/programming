@@ -41,7 +41,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -83,8 +83,8 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
             .getProperty("java.class.path"));
     public final static String DEFAULT_JAVAPATH = System.getProperty("java.home") + File.separator + "bin" +
         File.separator + "java";
-    public static String DEFAULT_POLICY_FILE = PAProperties.JAVA_SECURITY_POLICY.getValue();
-    public static String DEFAULT_LOG4J_FILE = PAProperties.LOG4J.getValue();
+    public static String DEFAULT_POLICY_FILE = CentralPAPropertyRepository.JAVA_SECURITY_POLICY.getValue();
+    public static String DEFAULT_LOG4J_FILE = CentralPAPropertyRepository.LOG4J.getValue();
 
     static {
         if (DEFAULT_POLICY_FILE != null) {

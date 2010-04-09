@@ -41,7 +41,7 @@ import java.io.Serializable;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
 
 import performanceTests.HudsonReport;
@@ -114,8 +114,8 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
 
             long startTime = System.currentTimeMillis();
             while (true) {
-                if (System.currentTimeMillis() - startTime > PAProperties.PA_TEST_PERF_DURATION
-                        .getValueAsInt())
+                if (System.currentTimeMillis() - startTime > CentralPAPropertyRepository.PA_TEST_PERF_DURATION
+                        .getValue())
                     break;
 
                 for (int i = 0; i < 50; i++) {

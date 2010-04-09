@@ -36,8 +36,8 @@
  */
 package functionalTests.group.dynamicdispatch;
 
-import org.objectweb.proactive.core.group.DispatchMode;
 import org.objectweb.proactive.core.group.Dispatch;
+import org.objectweb.proactive.core.group.DispatchMode;
 
 
 public class Worker {

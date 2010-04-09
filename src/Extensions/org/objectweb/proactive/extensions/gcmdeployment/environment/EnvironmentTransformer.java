@@ -36,8 +36,9 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.environment;
 
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Map;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -47,9 +48,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Map;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 
 class EnvironmentTransformer {

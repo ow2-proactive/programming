@@ -36,10 +36,11 @@
  */
 package functionalTests.stub.stubinterface;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.objectweb.proactive.core.mop.MOP;
 
 import functionalTests.FunctionalTest;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

@@ -39,8 +39,6 @@ package org.objectweb.proactive.extra.messagerouting.exceptions;
 import java.io.IOException;
 
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 
 
 /**

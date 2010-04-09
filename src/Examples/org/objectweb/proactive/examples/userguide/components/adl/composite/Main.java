@@ -47,7 +47,6 @@ import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.adl.FactoryFactory;
-import org.objectweb.proactive.examples.userguide.components.adl.composite.Runner;
 
 
 /**

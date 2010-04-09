@@ -43,7 +43,6 @@ import org.objectweb.proactive.core.body.request.RequestImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.ext.hpc.DummySender;
 import org.objectweb.proactive.ext.hpc.MethodCallDummy;
-import org.objectweb.proactive.ext.hpc.exchange.ExchangeableArrayPointer;
 
 
 public class RequestExchange extends RequestImpl {

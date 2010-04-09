@@ -36,10 +36,6 @@
  */
 package functionalTests.activeobject.request.forgetonsend;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -48,8 +44,6 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
 
 import functionalTests.FunctionalTest;
-
-import static junit.framework.Assert.assertTrue;
 
 
 /**

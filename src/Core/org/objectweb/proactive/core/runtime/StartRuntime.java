@@ -42,7 +42,7 @@ import java.net.URI;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
@@ -88,7 +88,7 @@ public class StartRuntime {
     }
 
     public static void main(String[] args) {
-        // PAProperties cannot be used since we do not want to use log4j
+        // CentralProperties cannot be used since we do not want to use log4j
         String defaultInitOverride = System.getProperty("log4j.defaultInitOverride");
         String log4jFile = System.getProperty("log4j.configuration");
 
@@ -115,7 +115,7 @@ public class StartRuntime {
         }
 
         new StartRuntime(args).run();
-        if (PAProperties.PA_RUNTIME_STAYALIVE.isTrue()) {
+        if (CentralPAPropertyRepository.PA_RUNTIME_STAYALIVE.isTrue()) {
             Object o = new Object();
             synchronized (o) {
                 try {
@@ -169,10 +169,11 @@ public class StartRuntime {
     private void register(ProActiveRuntime PART) {
         try {
             ProActiveRuntime proActiveRuntime = RuntimeFactory
-                    .getProtocolSpecificRuntime(PAProperties.PA_COMMUNICATION_PROTOCOL.getValue());
+                    .getProtocolSpecificRuntime(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
+                            .getValue());
 
             PART.register(proActiveRuntime, proActiveRuntime.getURL(), this.creatorID,
-                    PAProperties.PA_COMMUNICATION_PROTOCOL.getValue(), this.vmName);
+                    CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue(), this.vmName);
         } catch (ProActiveException e) {
             e.printStackTrace();
 

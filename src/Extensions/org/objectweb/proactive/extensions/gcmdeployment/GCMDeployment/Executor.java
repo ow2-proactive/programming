@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 
+import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,11 +46,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers.GCMD_LOGGER;
 
 
 public class Executor {
@@ -78,7 +79,8 @@ public class Executor {
             switch (OperatingSystem.getOperatingSystem()) {
                 case unix:
                     p = Runtime.getRuntime().exec(
-                            new String[] { PAProperties.PA_GCMD_UNIX_SHELL.getValue(), "-c", command });
+                            new String[] { CentralPAPropertyRepository.PA_GCMD_UNIX_SHELL.getValue(), "-c",
+                                    command });
                     break;
                 case windows:
                     p = Runtime.getRuntime().exec(command);

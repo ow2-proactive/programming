@@ -38,7 +38,6 @@ package functionalTests.component.conform.components;
 
 import java.util.List;
 
-//import org.objectweb.proactive.core.component.type.annotations.multicast.ClassDispatchMetadata;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatchMetadata;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatchMode;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;

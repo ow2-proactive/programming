@@ -54,6 +54,7 @@ import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
+
 import functionalTests.ComponentTest;
 import functionalTests.component.creation.ComponentInfo;
 import functionalTests.component.nonfunctional.creation.DummyControllerItf;

@@ -36,12 +36,12 @@
  */
 package performanceTests.throughput;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class TestIbis extends Throughput {
     static {
-        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("ibis");
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("ibis");
     }
 
     public TestIbis() {

@@ -49,14 +49,12 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
-import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
-import org.objectweb.proactive.extensions.webservices.WSConstants;
 import org.objectweb.proactive.extensions.webservices.WebServicesFrameWorkFactoryRegistry;
 
 
@@ -70,7 +68,7 @@ public class WSNameAndHostDialog extends JDialog implements ActionListener, Prop
     private String enterButtonString = "Enter";
     private String cancelButtonString = "Cancel";
     protected JTextField dispatcherUrl;
-    private String wsFrameWork = PAProperties.PA_WEBSERVICES_FRAMEWORK.getValue();
+    private String wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
     private JTextField wsFWTextField;
 
     /** This is NOT an Active Object: constructor is configurable! */
@@ -163,7 +161,7 @@ public class WSNameAndHostDialog extends JDialog implements ActionListener, Prop
                 this.wsFrameWork = this.wsFWTextField.getText();
 
                 if (!WebServicesFrameWorkFactoryRegistry.isValidFrameWork(this.wsFrameWork)) {
-                    this.wsFrameWork = PAProperties.PA_WEBSERVICES_FRAMEWORK.getValue();
+                    this.wsFrameWork = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
                 }
 
             } else { //user closed dialog or clicked cancel
@@ -192,7 +190,7 @@ public class WSNameAndHostDialog extends JDialog implements ActionListener, Prop
         String localhost = "";
 
         int port = -1;
-        String protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
+        String protocol = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
 
         try {
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);

@@ -37,11 +37,11 @@
 //@snippet-start simple_hello_example
 package org.objectweb.proactive.examples.userguide.simplehello;
 
-import org.objectweb.proactive.core.util.wrapper.StringWrapper;
-import org.objectweb.proactive.extensions.annotation.ActiveObject;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
+import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 @ActiveObject

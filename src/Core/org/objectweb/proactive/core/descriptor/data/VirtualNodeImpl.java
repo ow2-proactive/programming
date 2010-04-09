@@ -55,7 +55,7 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.api.PAFileTransfer;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.services.FaultToleranceService;
 import org.objectweb.proactive.core.descriptor.services.ServiceThread;
 import org.objectweb.proactive.core.descriptor.services.ServiceUser;
@@ -891,7 +891,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
     public void createNodeOnCurrentJvm(String protocol) {
         if (protocol == null) {
-            protocol = PAProperties.PA_COMMUNICATION_PROTOCOL.getValue();
+            protocol = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
         }
 
         this.localVirtualMachines.add(protocol);

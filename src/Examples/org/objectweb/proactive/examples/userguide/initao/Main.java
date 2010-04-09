@@ -38,6 +38,7 @@
 package org.objectweb.proactive.examples.userguide.initao;
 
 import java.io.IOException;
+
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PALifeCycle;

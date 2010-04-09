@@ -36,18 +36,20 @@
  */
 package functionalTests.masterworker.userexception;
 
-import functionalTests.FunctionalTest;
-import functionalTests.masterworker.A;
 import static junit.framework.Assert.assertTrue;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Master;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import functionalTests.FunctionalTest;
+import functionalTests.masterworker.A;
 
 
 /**

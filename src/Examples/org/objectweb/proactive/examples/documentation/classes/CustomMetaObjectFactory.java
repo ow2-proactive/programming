@@ -38,6 +38,7 @@
 package org.objectweb.proactive.examples.documentation.classes;
 
 import java.io.Serializable;
+
 import org.objectweb.proactive.core.body.MetaObjectFactory;
 import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
 import org.objectweb.proactive.core.body.UniversalBody;

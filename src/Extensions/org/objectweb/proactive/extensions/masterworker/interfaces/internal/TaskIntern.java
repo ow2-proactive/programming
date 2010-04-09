@@ -36,10 +36,10 @@
  */
 package org.objectweb.proactive.extensions.masterworker.interfaces.internal;
 
+import java.io.Serializable;
+
 import org.objectweb.proactive.extensions.masterworker.interfaces.DivisibleTask;
 import org.objectweb.proactive.extensions.masterworker.interfaces.Task;
-
-import java.io.Serializable;
 
 
 /**

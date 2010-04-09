@@ -38,8 +38,8 @@ package org.objectweb.proactive.core.component.componentcontroller;
 
 import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.component.controller.ControllerStateDuplication;
 import org.objectweb.proactive.core.component.controller.ControllerState;
+import org.objectweb.proactive.core.component.controller.ControllerStateDuplication;
 
 
 /**

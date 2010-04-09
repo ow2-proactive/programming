@@ -37,6 +37,7 @@
 package org.objectweb.proactive.examples.matrix;
 
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;

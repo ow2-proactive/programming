@@ -36,9 +36,6 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.environment;
 
-import java.util.StringTokenizer;
-
-
 /**
  * ReplaceVariables
  *

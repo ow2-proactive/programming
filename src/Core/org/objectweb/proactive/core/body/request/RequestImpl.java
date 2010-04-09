@@ -51,7 +51,7 @@ import org.objectweb.proactive.core.body.message.MessageImpl;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.reply.ReplyImpl;
 import org.objectweb.proactive.core.body.tags.MessageTags;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -140,7 +140,7 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
 
         if (enableStackTrace == null) {
             /* First time */
-            enableStackTrace = PAProperties.PA_STACKTRACE.isTrue();
+            enableStackTrace = CentralPAPropertyRepository.PA_STACKTRACE.isTrue();
         }
         if (enableStackTrace.booleanValue()) {
             this.stackTrace = new Exception().getStackTrace();
@@ -160,7 +160,7 @@ public class RequestImpl extends MessageImpl implements Request, java.io.Seriali
         this.senderNodeURI = "";
         if (enableStackTrace == null) {
             /* First time */
-            enableStackTrace = PAProperties.PA_STACKTRACE.isTrue();
+            enableStackTrace = CentralPAPropertyRepository.PA_STACKTRACE.isTrue();
         }
         if (enableStackTrace.booleanValue()) {
             this.stackTrace = new Exception().getStackTrace();

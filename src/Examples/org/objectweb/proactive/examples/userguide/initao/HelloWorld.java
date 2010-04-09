@@ -38,6 +38,7 @@ package org.objectweb.proactive.examples.userguide.initao;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 

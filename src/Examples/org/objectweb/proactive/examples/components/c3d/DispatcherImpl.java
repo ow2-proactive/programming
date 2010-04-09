@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.examples.components.c3d;
 
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -52,7 +51,6 @@ import org.objectweb.proactive.core.component.Fractive;
 import org.objectweb.proactive.core.component.body.ComponentBody;
 import org.objectweb.proactive.core.component.body.ComponentRunActive;
 import org.objectweb.proactive.core.component.body.NFRequestFilterImpl;
-import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.examples.c3d.C3DDispatcher;

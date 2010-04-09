@@ -38,14 +38,12 @@ package org.objectweb.proactive.extra.messagerouting.client;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
-import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSocketFactorySelector;
 
 
 /** The entity in charge to send and receive data on the wire

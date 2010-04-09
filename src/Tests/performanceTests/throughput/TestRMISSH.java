@@ -36,14 +36,14 @@
  */
 package performanceTests.throughput;
 
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 public class TestRMISSH extends Throughput {
 
     static {
-        PAProperties.PA_COMMUNICATION_PROTOCOL.setValue("rmissh");
-        PAProperties.PA_RMISSH_TRY_NORMAL_FIRST.setValue(false);
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("rmissh");
+        CentralPAPropertyRepository.PA_RMISSH_TRY_NORMAL_FIRST.setValue(false);
     }
 
     public TestRMISSH() {

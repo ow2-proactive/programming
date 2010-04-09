@@ -36,13 +36,13 @@
  */
 package functionalTests.group.accessbyname;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.group.Group;
 
 import functionalTests.FunctionalTest;
-
 import functionalTests.group.A;
-import static junit.framework.Assert.assertTrue;
 
 
 /**

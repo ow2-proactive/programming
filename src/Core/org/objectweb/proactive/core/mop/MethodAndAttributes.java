@@ -39,7 +39,6 @@ package org.objectweb.proactive.core.mop;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import javassist.CtMethod;
 

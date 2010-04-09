@@ -39,7 +39,7 @@ package org.objectweb.proactive.extensions.webservices;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.axis2.initialization.Axis2InitActive;
@@ -65,7 +65,7 @@ public class WebServicesInitActiveFactory {
             throws UnknownFrameWorkException {
 
         if (frameWorkId == null) {
-            frameWorkId = PAProperties.PA_WEBSERVICES_FRAMEWORK.getValue();
+            frameWorkId = CentralPAPropertyRepository.PA_WEBSERVICES_FRAMEWORK.getValue();
         }
 
         try {

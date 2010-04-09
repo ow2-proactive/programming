@@ -37,6 +37,7 @@
 package org.objectweb.proactive.examples.userguide.migratablehello;
 
 import java.io.IOException;
+
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.EndActive;
 import org.objectweb.proactive.InitActive;

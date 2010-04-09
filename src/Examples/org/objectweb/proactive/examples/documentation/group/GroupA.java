@@ -45,11 +45,11 @@ import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
+import org.objectweb.proactive.examples.documentation.classes.A;
+import org.objectweb.proactive.examples.documentation.classes.B;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
-import org.objectweb.proactive.examples.documentation.classes.A;
-import org.objectweb.proactive.examples.documentation.classes.B;
 
 
 /**

@@ -51,7 +51,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
@@ -130,9 +130,10 @@ public final class BootstrapServlet extends HttpServlet {
     }
 
     public String getBaseURI() {
-        final URI uri = URIBuilder.buildURI(URIBuilder.getHostNameorIP(ProActiveInet.getInstance()
-                .getInetAddress()), HTTPServer.SERVER_CONTEXT + NS + "/",
-                Constants.XMLHTTP_PROTOCOL_IDENTIFIER, PAProperties.PA_XMLHTTP_PORT.getValueAsInt());
+        final URI uri = URIBuilder
+                .buildURI(URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress()),
+                        HTTPServer.SERVER_CONTEXT + NS + "/", Constants.XMLHTTP_PROTOCOL_IDENTIFIER,
+                        CentralPAPropertyRepository.PA_XMLHTTP_PORT.getValue());
 
         return uri.toString();
     }

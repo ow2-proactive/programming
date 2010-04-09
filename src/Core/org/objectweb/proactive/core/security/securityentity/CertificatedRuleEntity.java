@@ -42,8 +42,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 
 import org.objectweb.proactive.core.security.KeyStoreTools;
-import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.core.security.TypedCertificate;
+import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 
 
 public class CertificatedRuleEntity extends RuleEntity {

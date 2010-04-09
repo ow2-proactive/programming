@@ -41,7 +41,7 @@ import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.NodeException;
 
@@ -57,7 +57,7 @@ public class TestImplicitGetStubOnThis extends FunctionalTest {
     public void implicitGetStubOnThisNewActive() throws IllegalArgumentException, IllegalAccessException,
             ActiveObjectCreationException, NodeException {
 
-        PAProperties.PA_IMPLICITGETSTUBONTHIS.setValue(true);
+        CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.setValue(true);
 
         // first test -- one step replacement
 

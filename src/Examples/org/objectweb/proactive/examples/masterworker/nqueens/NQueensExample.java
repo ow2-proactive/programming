@@ -36,14 +36,11 @@
  */
 package org.objectweb.proactive.examples.masterworker.nqueens;
 
-import java.net.MalformedURLException;
 import java.util.Vector;
-
-import javax.security.auth.login.LoginException;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
-import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.examples.masterworker.AbstractExample;
 import org.objectweb.proactive.examples.masterworker.nqueens.query.Query;
 import org.objectweb.proactive.examples.masterworker.nqueens.query.QueryExtern;
@@ -51,7 +48,6 @@ import org.objectweb.proactive.examples.masterworker.nqueens.query.QueryGenerato
 import org.objectweb.proactive.examples.masterworker.util.Pair;
 import org.objectweb.proactive.extensions.masterworker.ProActiveMaster;
 import org.objectweb.proactive.extensions.masterworker.TaskException;
-import org.objectweb.proactive.api.PALifeCycle;
 
 
 /**

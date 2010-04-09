@@ -39,23 +39,14 @@ package org.objectweb.proactive.examples.documentation.components;
 //@snippet-start component_userguide_2
 //@snippet-start component_userguide_3
 import java.util.List;
-import org.objectweb.proactive.examples.documentation.classes.T;
 
-//@snippet-break component_userguide_3
 import org.objectweb.proactive.core.component.type.annotations.multicast.ClassDispatchMetadata;
-
-//@snippet-resume component_userguide_3
-//@snippet-break component_userguide_2
 import org.objectweb.proactive.core.component.type.annotations.multicast.MethodDispatchMetadata;
-
-//@snippet-resume component_userguide_2
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatchMetadata;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatchMode;
-
-//@snippet-break component_userguide_2
-//@snippet-break component_userguide_3
 import org.objectweb.proactive.core.group.Dispatch;
 import org.objectweb.proactive.core.group.DispatchMode;
+import org.objectweb.proactive.examples.documentation.classes.T;
 
 
 //@snippet-resume component_userguide_3

@@ -36,11 +36,6 @@
  */
 package org.objectweb.proactive.core.component.representative;
 
-import org.objectweb.fractal.api.control.LifeCycleController;
-import org.objectweb.fractal.api.control.NameController;
-import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
-import org.objectweb.proactive.core.component.ControllerDescription;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.TypeVariable;
@@ -56,13 +51,18 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.api.control.ContentController;
+import org.objectweb.fractal.api.control.LifeCycleController;
+import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
+import org.objectweb.fractal.api.type.TypeFactory;
+import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
 import org.objectweb.proactive.core.component.ComponentParameters;
 import org.objectweb.proactive.core.component.Constants;
+import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Fractive;
 import org.objectweb.proactive.core.component.ProActiveInterface;
 import org.objectweb.proactive.core.component.config.ComponentConfigurationHandler;
@@ -72,7 +72,7 @@ import org.objectweb.proactive.core.component.identity.ProActiveComponent;
 import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
 import org.objectweb.proactive.core.component.request.ComponentRequest;
 import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.group.ProxyForGroup;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.Proxy;
@@ -116,7 +116,7 @@ public class ProActiveComponentRepresentativeImpl implements ProActiveComponentR
     public ProActiveComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {
         this.componentType = componentType;
-        useShortcuts = PAProperties.PA_COMPONENT_USE_SHORTCUTS.isTrue();
+        useShortcuts = CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue();
         this.hierarchicalType = hierarchicalType;
         addControllers(componentType, controllersConfigFileLocation);
 
@@ -136,7 +136,7 @@ public class ProActiveComponentRepresentativeImpl implements ProActiveComponentR
         this.componentParameters = componentParam;
         this.componentType = componentParam.getComponentType();
         this.componentNfType = componentParam.getComponentNFType();
-        useShortcuts = PAProperties.PA_COMPONENT_USE_SHORTCUTS.isTrue();
+        useShortcuts = CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue();
 
         this.hierarchicalType = componentParam.getHierarchicalType();
         ControllerDescription controllerDesc = componentParam.getControllerDescription();

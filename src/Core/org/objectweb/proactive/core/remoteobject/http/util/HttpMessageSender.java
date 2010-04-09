@@ -50,7 +50,7 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.remoteobject.http.HTTPTransportServlet;
 import org.objectweb.proactive.core.remoteobject.http.util.exceptions.HTTPRemoteException;
@@ -118,8 +118,8 @@ public class HttpMessageSender {
 
             //connection to the specified url
             HttpURLConnection connection = (HttpURLConnection) u.openConnection();
-            if (PAProperties.PA_HTTP_CONNECT_TIMEOUT.isSet()) {
-                connection.setConnectTimeout(PAProperties.PA_HTTP_CONNECT_TIMEOUT.getValueAsInt());
+            if (CentralPAPropertyRepository.PA_HTTP_CONNECT_TIMEOUT.isSet()) {
+                connection.setConnectTimeout(CentralPAPropertyRepository.PA_HTTP_CONNECT_TIMEOUT.getValue());
             }
             connection.setDoOutput(true);
             connection.setDoInput(true);

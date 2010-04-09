@@ -40,7 +40,6 @@ package org.objectweb.proactive.examples.userguide.components.adl.composite;
 import java.util.List;
 
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.examples.userguide.components.adl.composite.Itf1;
 
 
 /**

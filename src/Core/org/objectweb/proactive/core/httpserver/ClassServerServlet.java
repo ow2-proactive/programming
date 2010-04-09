@@ -38,7 +38,6 @@ package org.objectweb.proactive.core.httpserver;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -48,7 +47,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.objectweb.proactive.core.Constants;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.rmi.FileProcess;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
@@ -87,7 +86,7 @@ public class ClassServerServlet extends HttpServlet {
 
     private ClassServerServlet() {
         // Set the security manager
-        if ((System.getSecurityManager() == null) && PAProperties.PA_SECURITYMANAGER.isTrue()) {
+        if ((System.getSecurityManager() == null) && CentralPAPropertyRepository.PA_SECURITYMANAGER.isTrue()) {
             System.setSecurityManager(new java.rmi.RMISecurityManager());
         }
     }
@@ -95,7 +94,7 @@ public class ClassServerServlet extends HttpServlet {
     public String getCodeBase() {
         final URI uri = URIBuilder.buildURI(URIBuilder.getHostNameorIP(ProActiveInet.getInstance()
                 .getInetAddress()), NS + "/", Constants.XMLHTTP_PROTOCOL_IDENTIFIER,
-                PAProperties.PA_XMLHTTP_PORT.getValueAsInt());
+                CentralPAPropertyRepository.PA_XMLHTTP_PORT.getValue());
 
         return uri.toString();
     }

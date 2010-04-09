@@ -42,12 +42,10 @@ import java.rmi.dgc.VMID;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;

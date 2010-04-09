@@ -48,8 +48,6 @@ import org.objectweb.proactive.core.component.ProActiveInterface;
 import org.objectweb.proactive.core.component.ProActiveInterfaceImpl;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
 import org.objectweb.proactive.core.component.gen.RepresentativeInterfaceClassGenerator;
-import org.objectweb.proactive.core.component.group.ProxyForComponentGroup;
-import org.objectweb.proactive.core.component.group.ProxyForComponentInterfaceGroup;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
 import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentativeImpl;
 import org.objectweb.proactive.core.component.representative.ProActiveNFComponentRepresentativeImpl;

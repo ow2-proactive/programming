@@ -74,7 +74,7 @@ import org.objectweb.proactive.core.body.tags.LocalMemoryTag;
 import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.debug.debugger.BreakpointType;
 import org.objectweb.proactive.core.debug.debugger.Debugger;
 import org.objectweb.proactive.core.gc.GCMessage;
@@ -1178,7 +1178,7 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
      * @return The LocalMemoryTag 
      */
     public LocalMemoryTag createLocalMemoryTag(String id, int lease) {
-        int maxLease = PAProperties.PA_MAX_MEMORY_TAG_LEASE.getValueAsInt();
+        int maxLease = CentralPAPropertyRepository.PA_MAX_MEMORY_TAG_LEASE.getValue();
         lease = (lease > maxLease) ? maxLease : lease;
         this.localMemoryTags.put(id, new LocalMemoryTag(id, lease));
         return this.localMemoryTags.get(id);

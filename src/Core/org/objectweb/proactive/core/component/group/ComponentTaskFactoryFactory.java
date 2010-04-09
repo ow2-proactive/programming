@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.core.component.group;
 
-import org.objectweb.proactive.core.component.group.ProxyForComponentInterfaceGroup;
 import org.objectweb.proactive.core.group.ProxyForGroup;
 import org.objectweb.proactive.core.group.TaskFactory;
 import org.objectweb.proactive.core.group.TaskFactoryFactory;

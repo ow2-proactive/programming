@@ -50,9 +50,8 @@ import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
@@ -82,13 +81,13 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
     static {
         /* Add a custom socket factory to add a connect timeout */
-        if (PAProperties.PA_RMI_CONNECT_TIMEOUT.isSet()) {
+        if (CentralPAPropertyRepository.PA_RMI_CONNECT_TIMEOUT.isSet()) {
             try {
                 RMISocketFactory.setSocketFactory(new RMISocketFactory() {
                     public Socket createSocket(String host, int port) throws IOException {
                         Socket socket = new Socket();
-                        socket.connect(new InetSocketAddress(host, port), PAProperties.PA_RMI_CONNECT_TIMEOUT
-                                .getValueAsInt());
+                        socket.connect(new InetSocketAddress(host, port),
+                                CentralPAPropertyRepository.PA_RMI_CONNECT_TIMEOUT.getValue());
                         return socket;
                     }
 
@@ -264,7 +263,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
      * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#getPort()
      */
     public int getPort() {
-        return Integer.parseInt(PAProperties.PA_RMI_PORT.getValue());
+        return CentralPAPropertyRepository.PA_RMI_PORT.getValue();
     }
 
     public String getProtocolId() {

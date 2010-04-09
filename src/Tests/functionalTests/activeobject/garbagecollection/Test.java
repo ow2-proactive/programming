@@ -36,13 +36,13 @@
  */
 package functionalTests.activeobject.garbagecollection;
 
+import static junit.framework.Assert.assertTrue;
+
 import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 import functionalTests.FunctionalTest;
-
-import static junit.framework.Assert.assertTrue;
 
 
 /**
@@ -87,7 +87,7 @@ public class Test extends FunctionalTest {
     @Before
     public void initTest() throws Exception {
         /* This must be done before initializing ProActive, and the DGC */
-        PAProperties.PA_DGC.setValue(true);
-        PAProperties.PA_DGC_TTB.setValue(500);
+        CentralPAPropertyRepository.PA_DGC.setValue(true);
+        CentralPAPropertyRepository.PA_DGC_TTB.setValue(500);
     }
 }

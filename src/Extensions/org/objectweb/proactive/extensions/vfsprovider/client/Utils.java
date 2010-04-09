@@ -40,7 +40,6 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.objectweb.proactive.core.exceptions.IOException6;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.StreamNotFoundException;
 import org.objectweb.proactive.extensions.vfsprovider.exceptions.WrongStreamTypeException;
 
