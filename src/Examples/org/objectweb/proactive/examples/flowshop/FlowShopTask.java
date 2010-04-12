@@ -39,6 +39,7 @@ package org.objectweb.proactive.examples.flowshop;
 import java.util.Arrays;
 import java.util.Vector;
 
+//@snippet-start FlowShop_1
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.extra.branchnbound.core.Result;
 import org.objectweb.proactive.extra.branchnbound.core.Task;

@@ -39,10 +39,11 @@
 package org.objectweb.proactive.examples.documentation.classes;
 
 import java.io.Serializable;
-
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
+
+//@snippet-break class_Worker
+import org.objectweb.proactive.InitActive;
 
 
 //@snippet-resume class_Worker
