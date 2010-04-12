@@ -274,5 +274,13 @@
 			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../ReferenceManual/api_complete/org/objectweb/proactive/gcmdeployment/GCMVirtualNode.html#subscribeIsReady(java.lang.Object,%20java.lang.String)">org.objectweb.proactive.gcmdeployment.GCMVirtualNode.subscribeIsReady(...)</link>
 		</para>
 		</section>
+		<section xml:id="ImmediateService">
+			<info><title>@ImmediateService</title></info>
+		<para>
+			When a method is tagged with the <literal>@ImmediateService</literal> annotation, all method calls on this
+			particular method are treated as an immediate service. The legacy way to make a method to be served as an immediate service
+			was by calling the PAActiveObject.setImmediateService(...) method.
+		</para>
+		</section>
 	</section>
 </chapter>
