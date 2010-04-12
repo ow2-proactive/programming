@@ -46,6 +46,11 @@ public class PAPropertyString extends PAProperty {
         super(name, PropertyType.STRING, isSystemProp);
     }
 
+    public PAPropertyString(String name, boolean isSystemProp, String defaultValue) {
+        this(name, isSystemProp);
+        this.setValue(defaultValue);
+    }
+
     /**
      *
      * @return The value of this ProActive property

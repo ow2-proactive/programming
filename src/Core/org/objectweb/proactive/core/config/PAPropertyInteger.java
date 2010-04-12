@@ -49,6 +49,11 @@ public class PAPropertyInteger extends PAProperty {
         super(name, PropertyType.INTEGER, isSystemProp);
     }
 
+    public PAPropertyInteger(String name, boolean isSystemProp, int defaultValue) {
+        this(name, isSystemProp);
+        this.setValue(defaultValue);
+    }
+
     /**
      *
      * @return the value of this proactive property

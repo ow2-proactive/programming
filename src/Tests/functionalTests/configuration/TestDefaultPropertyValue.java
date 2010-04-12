@@ -36,38 +36,34 @@
  */
 package functionalTests.configuration;
 
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.config.PAProperty;
 import org.objectweb.proactive.core.config.PAPropertyBoolean;
 import org.objectweb.proactive.core.config.PAPropertyInteger;
 import org.objectweb.proactive.core.config.PAPropertyString;
 
 
-public class TestRegisterAProperty {
+public class TestDefaultPropertyValue {
 
     @Test
     public void test() {
-        PAProperties.getAllProperties();
-
         PAProperties.register(MyRepository.class);
 
-        Map<Class<?>, List<PAProperty>> map = PAProperties.getAllProperties();
+        PAPropertyBoolean pab = (PAPropertyBoolean) PAProperties.getProperty(MyRepository.myBool.getName());
+        Assert.assertEquals(true, pab.getValue());
 
-        List<PAProperty> list = map.get(MyRepository.class);
-        Assert.assertNotNull(list);
-        Assert.assertEquals(3, list.size());
+        PAPropertyString pas = (PAPropertyString) PAProperties.getProperty(MyRepository.myString.getName());
+        Assert.assertEquals("toto", pas.getValue());
+
+        PAPropertyInteger pai = (PAPropertyInteger) PAProperties.getProperty(MyRepository.myInt.getName());
+        Assert.assertEquals(12, pai.getValue());
     }
 
     static class MyRepository {
-        static PAPropertyBoolean myBool = new PAPropertyBoolean("myBool", false);
-        static public PAPropertyString myString = new PAPropertyString("myString", false);
-        static public PAPropertyInteger myInt = new PAPropertyInteger("myInt", false);
-        PAPropertyBoolean nonStatic = new PAPropertyBoolean("nonStatic", false);
+        static PAPropertyBoolean myBool = new PAPropertyBoolean("myBool", false, true);
+        static public PAPropertyString myString = new PAPropertyString("myString", false, "toto");
+        static public PAPropertyInteger myInt = new PAPropertyInteger("myInt", false, 12);
     }
 }

@@ -58,6 +58,11 @@ public class PAPropertyBoolean extends PAProperty {
         super(name, PropertyType.BOOLEAN, isSystemProp);
     }
 
+    public PAPropertyBoolean(String name, boolean isSystemProp, boolean defaultValue) {
+        this(name, isSystemProp);
+        this.setValue(defaultValue);
+    }
+
     /**
      *
      * @return the value of this property
