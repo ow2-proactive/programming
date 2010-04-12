@@ -103,6 +103,7 @@ public class ProActiveConfiguration {
 
         /* Properties are set from the lower priority to the higher priority sources. */
 
+        Properties sysProperties = this.getsystemProperties();
         // 1- Default config file
         this.properties.putAllFromConfigFile(this.getDefaultProperties());
 
@@ -110,7 +111,7 @@ public class ProActiveConfiguration {
         this.properties.putAllFromConfigFile(this.getUserProperties());
 
         // 3- System java properties
-        this.properties.putAllFromSystem(this.getsystemProperties());
+        this.properties.putAllFromSystem(sysProperties);
 
         // Can't use setValue in this constructor
         System.setProperty(CentralPAPropertyRepository.PA_OS.getName(), OperatingSystem.getOperatingSystem()

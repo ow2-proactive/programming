@@ -101,7 +101,7 @@ abstract public class PAProperties {
     static public synchronized PAProperty getProperty(String name) {
         for (List<PAProperty> list : map.values()) {
             for (PAProperty prop : list) {
-                if (name.equals(name)) {
+                if (prop.getName().equals(name)) {
                     return prop;
                 }
             }
