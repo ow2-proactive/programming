@@ -367,14 +367,14 @@
 		<xsd:attribute name="hostCapacity" type="PosintOrVariableType" use="optional">
 		     <xsd:annotation>
                 <xsd:documentation>
-                    <p>Maximal number of JVMs to start on the host (default is 1)</p>
+                    <p>Maximal number of JVMs per host (default is 1)</p>
                 </xsd:documentation>
              </xsd:annotation>
 		</xsd:attribute>
 		<xsd:attribute name="vmCapacity" type="PosintOrVariableType" use="optional">
 		     <xsd:annotation>
                 <xsd:documentation>
-                    <p>Maximal number of JVMs to start on the host (default is 1)</p>
+                    <p>Maximal number of nodes per JVM (default is 1)</p>
                 </xsd:documentation>
              </xsd:annotation>
 		</xsd:attribute>
