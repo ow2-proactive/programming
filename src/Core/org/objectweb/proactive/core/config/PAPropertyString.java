@@ -48,7 +48,7 @@ public class PAPropertyString extends PAProperty {
 
     public PAPropertyString(String name, boolean isSystemProp, String defaultValue) {
         this(name, isSystemProp);
-        this.setValue(defaultValue);
+        this.setDefaultValue(defaultValue);
     }
 
     /**

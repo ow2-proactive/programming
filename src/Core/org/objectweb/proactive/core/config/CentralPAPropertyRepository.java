@@ -36,6 +36,7 @@
  */
 package org.objectweb.proactive.core.config;
 
+import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
 import org.objectweb.proactive.core.filetransfer.FileTransferService;
 import org.objectweb.proactive.core.util.OperatingSystem;
 
@@ -48,7 +49,7 @@ import org.objectweb.proactive.core.util.OperatingSystem;
  * possible to declare a ProActive property in a centralized enumeration. This
  * central repository contains all the already existing properties.
  */
-public class CentralPAPropertyRepository {
+public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     /**
      * Java security policy file location
      */

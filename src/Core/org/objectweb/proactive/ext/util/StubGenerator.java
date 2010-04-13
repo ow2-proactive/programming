@@ -53,7 +53,7 @@ import org.objectweb.proactive.core.mop.Utils;
 
 
 public class StubGenerator {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         StubGenerator sg = new StubGenerator(args);
         sg.run();
     }

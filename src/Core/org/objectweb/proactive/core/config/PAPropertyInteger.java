@@ -51,7 +51,7 @@ public class PAPropertyInteger extends PAProperty {
 
     public PAPropertyInteger(String name, boolean isSystemProp, int defaultValue) {
         this(name, isSystemProp);
-        this.setValue(defaultValue);
+        this.setDefaultValue(new Integer(defaultValue).toString());
     }
 
     /**

@@ -40,26 +40,60 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceConfigurationError;
+
+import javax.imageio.spi.ServiceRegistry;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
  * The singleton that holds all the known {@link PAProperty}
  *
- * When a module starts, it can register one or several {@link PAProperty} by using
- * the {@link #register(Class)} method.
+ * Modules can register their own ProActive properties by providing a {@link PAPropertiesLoaderSPI}.
+ * The SPI must be defined in META-INF/services/org.objectweb.proactive.core.config.PAProperties$PAPropertiesLoaderSPI
+ * The SPI is automatically discovered by the JDK then all the PAProperty defined as static field are
+ * automatically registered.
  *
  * @since ProActive 4.3.0
  */
+@PublicAPI
 abstract public class PAProperties {
 
-    private static HashMap<Class<?>, List<PAProperty>> map;
+    /**
+     * This interface must be implemented by all the classes defining {@link PAProperties}
+     *
+     * The SPI must be put into META-INF/services/org.objectweb.proactive.core.config.PAProperties$PAPropertiesLoaderSPI
+     */
+    public interface PAPropertiesLoaderSPI {
+    }
+
+    static private final Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
+
+    static private HashMap<Class<?>, List<PAProperty>> map;
 
     static {
         // Loads the default central repository
         map = new HashMap<Class<?>, List<PAProperty>>();
-        register(CentralPAPropertyRepository.class);
+
+        Iterator<PAPropertiesLoaderSPI> iter;
+        iter = ServiceRegistry.lookupProviders(PAPropertiesLoaderSPI.class);
+
+        while (iter.hasNext()) {
+            try {
+                PAPropertiesLoaderSPI spi = iter.next();
+                logger.debug("Registering ProActive properties from " + spi.getClass());
+                register(spi.getClass());
+            } catch (Throwable err) {
+                logger.error("Failed to load ProActive property registry: " + err);
+            }
+        }
     }
 
     /**
@@ -111,11 +145,12 @@ abstract public class PAProperties {
     }
 
     /**
-     *
      * @return All the loaded properties, sorted by declaring class
      */
     static public Map<Class<?>, List<PAProperty>> getAllProperties() {
         return map;
     }
 
+    private PAProperties() {
+    }
 }

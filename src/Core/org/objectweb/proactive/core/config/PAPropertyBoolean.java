@@ -60,7 +60,7 @@ public class PAPropertyBoolean extends PAProperty {
 
     public PAPropertyBoolean(String name, boolean isSystemProp, boolean defaultValue) {
         this(name, isSystemProp);
-        this.setValue(defaultValue);
+        this.setDefaultValue(new Boolean(defaultValue).toString());
     }
 
     /**
