@@ -113,9 +113,9 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
             }
 
             long startTime = System.currentTimeMillis();
+            final long testDuration = CentralPAPropertyRepository.PA_TEST_PERF_DURATION.getValue();
             while (true) {
-                if (System.currentTimeMillis() - startTime > CentralPAPropertyRepository.PA_TEST_PERF_DURATION
-                        .getValue())
+                if (System.currentTimeMillis() - startTime > testDuration)
                     break;
 
                 for (int i = 0; i < 50; i++) {

@@ -117,10 +117,10 @@ public abstract class Bandwidth extends GCMFunctionalTestDefaultNodes {
             }
             System.out.println("End of warmup");
 
+            final long testDuration = CentralPAPropertyRepository.PA_TEST_PERF_DURATION.getValue();
             long startTime = System.currentTimeMillis();
             while (true) {
-                if (System.currentTimeMillis() - startTime > CentralPAPropertyRepository.PA_TEST_PERF_DURATION
-                        .getValue())
+                if (System.currentTimeMillis() - startTime > testDuration)
                     break;
 
                 server.serve(TestRMI.buf);
