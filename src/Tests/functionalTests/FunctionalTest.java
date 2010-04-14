@@ -55,6 +55,7 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory;
 import org.objectweb.proactive.extra.messagerouting.router.Router;
 import org.objectweb.proactive.extra.messagerouting.router.RouterConfig;
@@ -75,12 +76,11 @@ public class FunctionalTest {
                     .equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
                 RouterConfig config = new RouterConfig();
 
-                if (!CentralPAPropertyRepository.PA_NET_ROUTER_PORT.isSet() ||
-                    CentralPAPropertyRepository.PA_NET_ROUTER_PORT.getValue() == 0) {
+                if (!PAMRConfig.PA_NET_ROUTER_PORT.isSet() || PAMRConfig.PA_NET_ROUTER_PORT.getValue() == 0) {
                     router = Router.createAndStart(config);
-                    CentralPAPropertyRepository.PA_NET_ROUTER_PORT.setValue(router.getPort());
+                    PAMRConfig.PA_NET_ROUTER_PORT.setValue(router.getPort());
                 } else {
-                    config.setPort(CentralPAPropertyRepository.PA_NET_ROUTER_PORT.getValue());
+                    config.setPort(PAMRConfig.PA_NET_ROUTER_PORT.getValue());
                     router = Router.createAndStart(config);
                 }
             }
@@ -114,12 +114,12 @@ public class FunctionalTest {
 
         if (MessageRoutingRemoteObjectFactory.PROTOCOL_ID
                 .equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
-            jvmParameters.append(CentralPAPropertyRepository.PA_NET_ROUTER_ADDRESS.getCmdLine());
-            jvmParameters.append(CentralPAPropertyRepository.PA_NET_ROUTER_ADDRESS.getValue());
+            jvmParameters.append(PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine());
+            jvmParameters.append(PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue());
             jvmParameters.append(" ");
 
-            jvmParameters.append(CentralPAPropertyRepository.PA_NET_ROUTER_PORT.getCmdLine());
-            jvmParameters.append(CentralPAPropertyRepository.PA_NET_ROUTER_PORT.getValue());
+            jvmParameters.append(PAMRConfig.PA_NET_ROUTER_PORT.getCmdLine());
+            jvmParameters.append(PAMRConfig.PA_NET_ROUTER_PORT.getValue());
             jvmParameters.append(" ");
         }
 

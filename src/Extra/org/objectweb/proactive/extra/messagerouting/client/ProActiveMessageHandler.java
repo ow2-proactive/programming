@@ -42,8 +42,8 @@ import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.PamrMarshaller;
@@ -55,7 +55,7 @@ import org.objectweb.proactive.extra.messagerouting.remoteobject.util.PamrMarsha
  */
 public class ProActiveMessageHandler implements MessageHandler {
 
-    public static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_CLIENT);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_CLIENT);
 
     /** {@link Request} are handled by a threadpool */
     final private ExecutorService tpe;

@@ -163,7 +163,7 @@ public class TestMessageData extends MessageFunctionalTest {
         @Override
         protected void testFields() {
             DataMessage m = (DataMessage) this.msg;
-            Assert.assertEquals(Message.PROTOV1, m.getProtoID());
+            Assert.assertEquals(Message.PROTOV2, m.getProtoID());
             Assert.assertEquals(type, m.getType());
             Assert.assertEquals(msgId, m.getMessageID());
             Assert.assertEquals(srcAgent, m.getSender());

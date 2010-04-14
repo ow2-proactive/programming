@@ -45,8 +45,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 
 
 /**
@@ -67,7 +67,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class Attachment {
 
-    public static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
 
     /** The id of this attachment
      * 

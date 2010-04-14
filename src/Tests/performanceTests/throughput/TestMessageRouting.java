@@ -37,6 +37,7 @@
 package performanceTests.throughput;
 
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 
 
 /**
@@ -47,7 +48,7 @@ public class TestMessageRouting extends Throughput {
 
     static {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
-        CentralPAPropertyRepository.PA_NET_ROUTER_ADDRESS.setValue("localhost");
+        PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
     }
 
     public TestMessageRouting() {

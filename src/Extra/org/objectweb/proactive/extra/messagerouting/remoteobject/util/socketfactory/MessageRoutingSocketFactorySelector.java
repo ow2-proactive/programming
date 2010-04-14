@@ -41,9 +41,8 @@ import java.util.Iterator;
 import javax.imageio.spi.ServiceRegistry;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 
 
 /**
@@ -54,19 +53,19 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class MessageRoutingSocketFactorySelector {
 
-    static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_CLIENT_TUNNEL);
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_CLIENT_TUNNEL);
 
     /**
      * aliases for the Socket Factories provided with ProActive
      */
     public static MessageRoutingSocketFactorySPI get() {
 
-        if (!CentralPAPropertyRepository.PA_PAMR_SOCKET_FACTORY.isSet()) {
+        if (!PAMRConfig.PA_PAMR_SOCKET_FACTORY.isSet()) {
             // the user wants the default
             return getDefaultSocketFactory();
         }
 
-        String socketFactory = CentralPAPropertyRepository.PA_PAMR_SOCKET_FACTORY.getValue();
+        String socketFactory = PAMRConfig.PA_PAMR_SOCKET_FACTORY.getValue();
 
         Iterator<MessageRoutingSocketFactorySPI> socketFactories = ServiceRegistry
                 .lookupProviders(MessageRoutingSocketFactorySPI.class);

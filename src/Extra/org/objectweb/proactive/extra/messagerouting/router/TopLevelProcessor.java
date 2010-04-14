@@ -40,8 +40,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
@@ -64,7 +64,7 @@ import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorRe
  * @since ProActive 4.1.0
  */
 class TopLevelProcessor implements Runnable {
-    public static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
 
     /** The message to process */
     final private ByteBuffer message;

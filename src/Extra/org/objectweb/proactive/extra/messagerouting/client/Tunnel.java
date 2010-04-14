@@ -41,8 +41,8 @@ import java.io.IOException;
 import java.net.Socket;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 
 
@@ -59,7 +59,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
  * @since ProActive 4.1.0
  */
 public class Tunnel {
-    static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_CLIENT_TUNNEL);
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_CLIENT_TUNNEL);
 
     final private Socket socket;
     final private BufferedInputStream bis;

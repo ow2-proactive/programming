@@ -42,8 +42,8 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 
 
@@ -65,8 +65,9 @@ import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
  * @since ProActive 4.1.0
  */
 public class Client {
-    static final private Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
-    public static final Logger admin_logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER_ADMIN);
+    static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    public static final Logger admin_logger = ProActiveLogger
+            .getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
 
     /** This client represents one remote Agent. */
     final private AgentID agentId;

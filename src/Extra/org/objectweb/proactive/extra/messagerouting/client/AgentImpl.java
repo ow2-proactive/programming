@@ -58,14 +58,15 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.util.SweetCountDownLatch;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
@@ -86,7 +87,7 @@ import org.objectweb.proactive.extra.messagerouting.router.Router;
  * @since ProActive 4.1.0
  */
 public class AgentImpl implements Agent, AgentImplMBean {
-    public static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_CLIENT);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_CLIENT);
 
     /** Address of the router */
     final private InetAddress routerAddr;
@@ -222,6 +223,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
     private void __reconnectToRouter() {
         try {
             Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
+            int heartbeat_period = PAMRConfig.PA_PAMR_SOCKET_TIMEOUT.getValue();
+            if (heartbeat_period > 0) {
+                s.setSoTimeout(heartbeat_period);
+            }
             Tunnel tunnel = new Tunnel(s);
 
             // start router handshake
@@ -705,6 +710,12 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 case ERR_:
                     ErrorMessage error = (ErrorMessage) msg;
                     handleError(error);
+                    break;
+                case HEARTBEAT:
+                    // Nothing to do. Heartbeat are only used to be able to set a soTimeout on the tunnel
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Heartbeat #" + ((HeartbeatMessage) msg).getHeartbeatId() + " received");
+                    }
                     break;
                 default:
                     // Bad message type. Log it.

@@ -40,8 +40,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 
@@ -59,7 +59,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
  * @since ProActive 4.1.0
  */
 public class MessageAssembler {
-    public static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
 
     final private RouterInternal router;
 
@@ -107,9 +107,9 @@ public class MessageAssembler {
 
                     // Check the protocol is correct. Otherwise something fucked up
                     // and the connection is closed to avoid a disaster
-                    if (proto != Message.PROTOV1) {
+                    if (proto != Message.PROTOV2) {
                         logger.error("Invalid protocol ID received from " + attachment + ": expected=" +
-                            Message.PROTOV1 + " received=" + proto);
+                            Message.PROTOV2 + " received=" + proto);
                         throw new MalformedMessageException("Invalid protocol ID");
                     } else if (l < Message.Field.getTotalOffset()) {
                         logger.error("Invalid message length received from " + attachment + ": " + l);

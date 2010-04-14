@@ -132,7 +132,7 @@ public class TestMessageRegistration extends MessageFunctionalTest {
         @Override
         protected void testFields() {
             RegistrationMessage m = (RegistrationMessage) this.msg;
-            Assert.assertEquals(Message.PROTOV1, m.getProtoID());
+            Assert.assertEquals(Message.PROTOV2, m.getProtoID());
             Assert.assertEquals(type, m.getType());
             Assert.assertEquals(msgId, m.getMessageID());
             Assert.assertEquals(agent, m.getAgentID());

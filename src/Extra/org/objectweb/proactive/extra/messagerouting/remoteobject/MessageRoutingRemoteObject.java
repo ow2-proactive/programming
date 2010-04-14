@@ -48,8 +48,8 @@ import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.client.Agent;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingRemoteObjectRequest;
 
@@ -60,7 +60,8 @@ import org.objectweb.proactive.extra.messagerouting.remoteobject.message.Message
  */
 
 public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializable {
-    final static private Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_REMOTE_OBJECT);
+    final static private Logger logger = ProActiveLogger
+            .getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
 
     /** The URL of the RemoteObject */
     private URI remoteObjectURL;

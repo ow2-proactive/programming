@@ -58,12 +58,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.util.SweetCountDownLatch;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 
 
@@ -72,8 +74,9 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessag
  * @since ProActive 4.1.0
  */
 public class RouterImpl extends RouterInternal implements Runnable {
-    public static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
-    public static final Logger admin_logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER_ADMIN);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    public static final Logger admin_logger = ProActiveLogger
+            .getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
 
     static final public int DEFAULT_PORT = 33647;
 
@@ -161,6 +164,55 @@ public class RouterImpl extends RouterInternal implements Runnable {
             logger.error("A select thread has already been started, aborting the current thread ",
                     new Exception());
             return;
+        }
+
+        // Start the thread in charge of sending the heartbeats
+        final int heartbeatPeriod = PAMRConfig.PA_PAMR_SOCKET_TIMEOUT.getValue() / 3;
+        if (heartbeatPeriod > 0) {
+            Thread t = new Thread() {
+                public void run() {
+                    long heartbeatId = 0;
+
+                    while (!stopped.get()) {
+                        try { // preventive try/catch. This thread MUST NOT stop or exit
+                            long startTime = System.currentTimeMillis();
+
+                            Collection<Client> clients;
+                            synchronized (clientMap) {
+                                clients = clientMap.values();
+                            }
+
+                            HeartbeatMessage hbMessage = new HeartbeatMessage(heartbeatId);
+                            byte[] msg = hbMessage.toByteArray();
+                            for (Client client : clients) {
+                                try {
+                                    client.sendMessage(msg);
+                                } catch (IOException e) {
+                                    admin_logger.debug("Failed to send heartbeat #" + heartbeatId + " to " +
+                                        client);
+                                }
+                            }
+
+                            long willSleep = heartbeatPeriod - (System.currentTimeMillis() - startTime);
+                            if (willSleep > 0) {
+                                new Sleeper(willSleep).sleep();
+                            } else {
+                                logger
+                                        .info("Router is late. Sending heartbeat to every clients took more than " +
+                                            heartbeatPeriod + "ms");
+                            }
+                        } catch (Throwable t) {
+                            logger.warn("Failed to send heartbeat #" + heartbeatId, t);
+                        } finally {
+                            heartbeatId++;
+                        }
+                    }
+                }
+            };
+            t.setDaemon(true);
+            t.setPriority(Thread.MAX_PRIORITY);
+            t.setName("PAMR: heartbeat sender");
+            t.start();
         }
 
         Set<SelectionKey> selectedKeys = null;

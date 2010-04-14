@@ -148,15 +148,6 @@ public interface Loggers {
     static final public String MESSAGE_TAGGING_LOCALMEMORY = MESSAGE_TAGGING + ".localmemory";
     static final public String MESSAGE_TAGGING_LOCALMEMORY_LEASING = MESSAGE_TAGGING_LOCALMEMORY + ".leasing";
 
-    // Forwarding
-    static final public String FORWARDING = CORE + ".forwarding";
-    static final public String FORWARDING_MESSAGE = FORWARDING + ".message";
-    static final public String FORWARDING_ROUTER = FORWARDING + ".router";
-    static final public String FORWARDING_CLIENT = FORWARDING + ".client";
-    static final public String FORWARDING_CLIENT_TUNNEL = FORWARDING_CLIENT + ".tunnel";
-    static final public String FORWARDING_REMOTE_OBJECT = FORWARDING + ".remoteobject";
-    static final public String FORWARDING_ROUTER_ADMIN = FORWARDING_ROUTER + ".admin";
-    static final public String FORWARDING_CLASSLOADING = FORWARDING + ".classloading";
     // Exceptions
     public static final String EXCEPTIONS = CORE + ".exceptions";
     public static final String EXCEPTIONS_ONE_WAY = EXCEPTIONS + ".one_way";

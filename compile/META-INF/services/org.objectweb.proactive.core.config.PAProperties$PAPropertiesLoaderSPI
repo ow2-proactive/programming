@@ -1,2 +1,2 @@
 org.objectweb.proactive.core.config.CentralPAPropertyRepository
-
+org.objectweb.proactive.extra.messagerouting.PAMRConfig

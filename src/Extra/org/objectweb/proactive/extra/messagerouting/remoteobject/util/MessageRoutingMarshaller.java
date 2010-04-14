@@ -41,8 +41,8 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
 import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 
 
 // FIXME: This is exactly the same marshaller than HTTPMarshaller
@@ -52,7 +52,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *  @since ProActive 4.1.0
  */
 public class MessageRoutingMarshaller {
-    static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_REMOTE_OBJECT);
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
 
     public static byte[] marshallObject(Object o) {
         byte[] buffer = null;

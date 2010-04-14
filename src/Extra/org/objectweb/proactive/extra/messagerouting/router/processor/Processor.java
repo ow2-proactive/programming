@@ -39,8 +39,8 @@ package org.objectweb.proactive.extra.messagerouting.router.processor;
 import java.nio.ByteBuffer;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
@@ -52,7 +52,7 @@ import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
  */
 public abstract class Processor {
 
-    final static protected Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_ROUTER);
+    final static protected Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
     final protected RouterImpl router;
     final protected ByteBuffer rawMessage;
 

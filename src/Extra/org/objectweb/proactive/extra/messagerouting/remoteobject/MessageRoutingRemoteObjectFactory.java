@@ -44,7 +44,6 @@ import java.net.UnknownHostException;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
@@ -52,8 +51,8 @@ import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.client.Agent;
 import org.objectweb.proactive.extra.messagerouting.client.AgentImpl;
 import org.objectweb.proactive.extra.messagerouting.client.ProActiveMessageHandler;
@@ -71,7 +70,7 @@ import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
  */
 public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFactory implements
         RemoteObjectFactory {
-    static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_REMOTE_OBJECT);
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
 
     /** The protocol id of the facotry */
     static final public String PROTOCOL_ID = "pamr";
@@ -83,22 +82,22 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
         // Start the agent and contact the router
         // Since there is no initialization phase in ProActive, if the router cannot be contacted
         // we log the error and throw a runtime exception. We cannot do better here
-        String routerAddressStr = CentralPAPropertyRepository.PA_NET_ROUTER_ADDRESS.getValue();
+        String routerAddressStr = PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue();
         if (routerAddressStr == null) {
             logAndThrowException("Message routing cannot be started because " +
-                CentralPAPropertyRepository.PA_NET_ROUTER_ADDRESS.getName() + " is not set.");
+                PAMRConfig.PA_NET_ROUTER_ADDRESS.getName() + " is not set.");
         }
 
         int routerPort;
-        if (CentralPAPropertyRepository.PA_NET_ROUTER_PORT.isSet()) {
-            routerPort = CentralPAPropertyRepository.PA_NET_ROUTER_PORT.getValue();
+        if (PAMRConfig.PA_NET_ROUTER_PORT.isSet()) {
+            routerPort = PAMRConfig.PA_NET_ROUTER_PORT.getValue();
             if (routerPort <= 0 || routerPort > 65535) {
                 logAndThrowException("Invalid  router port value: " + routerPort);
             }
         } else {
             routerPort = RouterImpl.DEFAULT_PORT;
-            logger.debug(CentralPAPropertyRepository.PA_NET_ROUTER_PORT.getName() +
-                " not set. Using the default port: " + routerPort);
+            logger.debug(PAMRConfig.PA_NET_ROUTER_PORT.getName() + " not set. Using the default port: " +
+                routerPort);
         }
 
         InetAddress routerAddress = null;

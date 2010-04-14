@@ -40,7 +40,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 
 
 /**
@@ -53,9 +53,7 @@ public class MessageRoutingPlainSocketFactory implements MessageRoutingSocketFac
 
     public Socket createSocket(String host, int port) throws IOException {
         Socket socket = new Socket();
-        int timeout = CentralPAPropertyRepository.PA_PAMR_CONNECT_TIMEOUT.isSet() ? CentralPAPropertyRepository.PA_PAMR_CONNECT_TIMEOUT
-                .getValue()
-                : 0;
+        int timeout = PAMRConfig.PA_PAMR_CONNECT_TIMEOUT.getValue();
         socket.connect(new InetSocketAddress(host, port), timeout);
         return socket;
     }

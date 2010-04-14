@@ -42,8 +42,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.remoteobject.AlreadyBoundException;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 
 
 /** A registry for the message routing protocol
@@ -55,7 +55,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since ProActive 4.1.0
  */
 public class MessageRoutingRegistry {
-    static final Logger logger = ProActiveLogger.getLogger(Loggers.FORWARDING_REMOTE_OBJECT);
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
 
     public final static MessageRoutingRegistry singleton = new MessageRoutingRegistry();
 
