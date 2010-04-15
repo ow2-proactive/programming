@@ -221,27 +221,45 @@ public class AgentImpl implements Agent, AgentImplMBean {
      * <b>This method must only be called by getTunnel</b>
      */
     private void __reconnectToRouter() {
-        try {
-            Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
-            int heartbeat_period = PAMRConfig.PA_PAMR_SOCKET_TIMEOUT.getValue();
-            if (heartbeat_period > 0) {
-                s.setSoTimeout(heartbeat_period);
-            }
-            Tunnel tunnel = new Tunnel(s);
-
-            // start router handshake
+        // Create a new tunnel
+        int delay = 2000;
+        int subtry = 0;
+        while (this.t == null) {
             try {
-                routerHandshake(tunnel);
-            } catch (RouterHandshakeException e) {
-                logger.error(
-                        "Failed to reconnect to the router: the router handshake procedure failed. Reason: " +
-                            e.getMessage(), e);
-                tunnel.shutdown();
+                Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
+                int heartbeat_period = PAMRConfig.PA_PAMR_SOCKET_TIMEOUT.getValue();
+                if (heartbeat_period > 0) {
+                    s.setSoTimeout(heartbeat_period);
+                }
+                Tunnel tunnel = new Tunnel(s);
+
+                // start router handshake
+                try {
+                    routerHandshake(tunnel);
+                    this.t = tunnel;
+                } catch (RouterHandshakeException e) {
+                    logger
+                            .warn(
+                                    "Failed to reconnect to the router: the router handshake procedure failed. Reason: " +
+                                        e.getMessage(), e);
+                    tunnel.shutdown();
+                }
+            } catch (IOException exception) {
+                logger.debug("Failed to reconnect to the router", exception);
             }
-            this.t = tunnel;
-        } catch (IOException exception) {
-            logger.debug("Failed to reconnect to the router", exception);
-            this.t = null;
+
+            if (this.t == null) {
+                subtry = ++subtry % 3;
+                if (subtry == 0) {
+                    if (delay < 1000 * 60) {
+                        delay *= 2;
+                    }
+                }
+
+                logger.error("PAMR Router is unreachable. Will try to estalish a new tunnel in " +
+                    (delay / 1000) + " seconds");
+                new Sleeper(delay).sleep();
+            }
         }
     }
 
@@ -667,8 +685,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
          * @return the received message
          */
         public Message readMessage() {
+
             while (true) {
-                Tunnel tunnel = this.agent.t;
+                Tunnel tunnel = getTunnel();
                 try {
                     // Blocking call
                     byte[] msgBuf = tunnel.readMessage();
@@ -678,21 +697,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     logger.error("Dropping the message received from the router, reason:" + e.getMessage());
                 } catch (IOException e) {
                     logger
-                            .info(
+                            .debug(
                                     "PAMR Connection lost (while waiting for a message). A new connection will be established shortly",
                                     e);
-                    // Create a new tunnel
-                    tunnel = null;
-                    do {
-                        this.agent.reportTunnelFailure(this.agent.t);
-                        tunnel = this.agent.getTunnel();
-
-                        if (tunnel == null) {
-                            logger
-                                    .error("PAMR Router is unreachable. Will try to estalish a new tunnel in 10 seconds.");
-                            new Sleeper(10000).sleep();
-                        }
-                    } while (tunnel == null);
+                    reportTunnelFailure(tunnel);
                 }
             }
         }
@@ -857,5 +865,4 @@ public class AgentImpl implements Agent, AgentImplMBean {
         return this.mailboxes.getBlockedCallers();
 
     }
-
 }
