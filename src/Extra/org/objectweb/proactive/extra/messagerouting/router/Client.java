@@ -254,4 +254,14 @@ public class Client {
             }
         }
     }
+
+    /**
+     * 
+     * @return true if the attachment is not null.
+     */
+    public boolean isConnected() {
+        synchronized (this.attachment_lock) {
+            return this.attachment != null;
+        }
+    }
 }

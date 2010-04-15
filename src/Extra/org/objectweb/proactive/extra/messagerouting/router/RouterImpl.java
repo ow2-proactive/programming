@@ -186,7 +186,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
                             byte[] msg = hbMessage.toByteArray();
                             for (Client client : clients) {
                                 try {
-                                    client.sendMessage(msg);
+                                    if (client.isConnected()) {
+                                        client.sendMessage(msg);
+                                    }
                                 } catch (IOException e) {
                                     admin_logger.debug("Failed to send heartbeat #" + heartbeatId + " to " +
                                         client);
