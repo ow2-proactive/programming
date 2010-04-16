@@ -54,8 +54,10 @@ import org.objectweb.proactive.extra.messagerouting.router.Client;
 import org.objectweb.proactive.extra.messagerouting.router.MessageAssembler;
 import org.objectweb.proactive.extra.messagerouting.router.RouterInternal;
 
+import functionalTests.FunctionalTest;
 
-public class TestMessageAssembler {
+
+public class TestMessageAssembler extends FunctionalTest {
     static final private int NB_MESSAGE = 100;
 
     /* This test create several messages and split them.

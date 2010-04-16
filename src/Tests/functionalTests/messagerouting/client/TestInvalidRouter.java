@@ -45,10 +45,12 @@ import org.objectweb.proactive.extra.messagerouting.client.AgentImpl;
 import org.objectweb.proactive.extra.messagerouting.client.ProActiveMessageHandler;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
 
+import functionalTests.FunctionalTest;
+
 import unitTests.UnitTests;
 
 
-public class TestInvalidRouter extends UnitTests {
+public class TestInvalidRouter extends FunctionalTest {
 
     @Test(expected = ProActiveException.class)
     public void test() throws ProActiveException, UnknownHostException {

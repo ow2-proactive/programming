@@ -45,10 +45,12 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequest
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
 
+import functionalTests.FunctionalTest;
+
 import unitTests.UnitTests;
 
 
-public class TestMessageInvalidConstructor extends UnitTests {
+public class TestMessageInvalidConstructor extends FunctionalTest {
     /*
      *  NOTE: Does not test all the combinations
      *  
