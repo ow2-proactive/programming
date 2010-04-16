@@ -253,6 +253,11 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
     public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name,
             boolean rebind) throws ProActiveException {
 
+        if (this.agent.getAgentID() == null) {
+            throw new ProActiveException(
+                "PAMR agent has not yet been able to connect to the router. Remote object cannot be created");
+        }
+
         try {
             // Must be a fixed path
             if (!name.startsWith("/")) {
