@@ -109,7 +109,7 @@ public class ProActiveConfiguration {
         for (List<PAProperty> list : allProperties.values()) {
             for (PAProperty prop : list) {
                 if (prop.defaultValue != null) {
-                    setProperty(prop.getName(), prop.defaultValue);
+                    setProperty(prop.getName(), prop.defaultValue, prop.isSystemProperty);
                 }
             }
         }
@@ -243,8 +243,8 @@ public class ProActiveConfiguration {
      * @param value
      *            the value of the property
      */
-    public void setProperty(String key, String value) {
-        this.properties.put(key, value);
+    public void setProperty(String key, String value, boolean exportAsSystem) {
+        this.properties.put(key, value, exportAsSystem);
     }
 
     private Properties getDefaultProperties() {

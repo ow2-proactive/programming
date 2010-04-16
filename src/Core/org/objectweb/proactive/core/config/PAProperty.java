@@ -90,7 +90,7 @@ abstract public class PAProperty {
      * @param value new value of the property
      */
     public void setValue(String value) {
-        ProActiveConfiguration.getInstance().setProperty(this.name, value);
+        ProActiveConfiguration.getInstance().setProperty(this.name, value, this.isSystemProperty);
     }
 
     /**
