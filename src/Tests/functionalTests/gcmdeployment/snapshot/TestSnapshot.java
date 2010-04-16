@@ -119,11 +119,14 @@ public class TestSnapshot extends GCMFunctionalTestDefaultNodes {
             VariableContractImpl vc = new VariableContractImpl();
             vc.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(NB_VMS)
                     .toString(), VariableContractType.DescriptorDefaultVariable);
-            String value = PAMRConfig.PA_NET_ROUTER_PORT.getCmdLine() +
-                PAMRConfig.PA_NET_ROUTER_PORT.getValue() + " " +
-                PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine() + "localhost" + " " +
-                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getCmdLine() +
-                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
+            String value = "";
+            value += CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getCmdLine() +
+                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue() + " ";
+            if ("pamr".equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
+                value += PAMRConfig.PA_NET_ROUTER_PORT.getCmdLine() +
+                    PAMRConfig.PA_NET_ROUTER_PORT.getValue() + " " +
+                    PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine() + "localhost";
+            }
             vc.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVMARG, value,
                     VariableContractType.DescriptorDefaultVariable);
             File f = new File(this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml").getFile());
