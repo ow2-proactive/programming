@@ -46,6 +46,7 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.api.PALifeCycle;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.util.Sleeper;
@@ -120,7 +121,9 @@ public class TestSnapshot extends GCMFunctionalTestDefaultNodes {
                     .toString(), VariableContractType.DescriptorDefaultVariable);
             String value = PAMRConfig.PA_NET_ROUTER_PORT.getCmdLine() +
                 PAMRConfig.PA_NET_ROUTER_PORT.getValue() + " " +
-                PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine() + "localhost";
+                PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine() + "localhost" + " " +
+                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getCmdLine() +
+                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
             vc.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVMARG, value,
                     VariableContractType.DescriptorDefaultVariable);
             File f = new File(this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml").getFile());
