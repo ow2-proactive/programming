@@ -195,7 +195,7 @@ public class Client {
      */
     public void discardAttachment() {
         synchronized (this.attachment_lock) {
-            if (admin_logger.isDebugEnabled()) {
+            if (admin_logger.isDebugEnabled() && this.attachment != null) {
                 admin_logger.debug("AgentID " + this.getAgentId() + " disconnected");
             }
 
