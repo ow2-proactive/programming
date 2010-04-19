@@ -126,7 +126,7 @@ public class Attachment {
     protected void finalize() throws Throwable {
         if (this.dtored.get() == false) {
             logger
-                    .info("File descriptor leak detected. Attachment.dtor() must be called. Please fill a bug report");
+                    .trace("File descriptor leak detected. Attachment.dtor() must be called. Please fill a bug report");
             this.dtor();
             super.finalize();
         }
