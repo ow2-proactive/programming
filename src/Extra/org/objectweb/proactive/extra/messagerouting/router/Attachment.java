@@ -179,7 +179,7 @@ public class Attachment {
         SocketAddress sa = socketChannel.socket().getRemoteSocketAddress();
         if (sa == null)
             return unknown;
-        if (!(sa instanceof InetSocketAddress)) {
+        if (sa instanceof InetSocketAddress) {
             // InetSocketAddress is THE implementation for SocketAddress
             return (InetSocketAddress) sa;
         }
