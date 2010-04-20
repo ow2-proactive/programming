@@ -22,6 +22,11 @@
 
       <section xml:id="TheBigPicture_62"><info><title >The Big Picture</title></info>
 
+         <indexterm>
+			<primary>Calcium</primary>
+			<secondary>Task flow</secondary>
+         </indexterm>
+
          <para>The following steps must be performed for programming with this
          framework.</para>
 
@@ -69,7 +74,6 @@
          completely hidden from the programmer. In fact, the task concept is
          never used when programming in Calcium.</para>
 
-         <indexterm/>
       </section>
    </section>
 
