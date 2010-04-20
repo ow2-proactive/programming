@@ -6,8 +6,7 @@
 
 	<variables>
 		<descriptorVariable name="PROACTIVE_HOME" value="/home/user/ProActive"/> <!--CHANGE ME!!!! -->
-		<descriptorVariable name="JAVA_HOME"
-			value="/path/to/jdk1.5.0" /><!-- Path of the remote JVM , CHANGE ME!!!! -->
+		<descriptorVariable name="JAVA_HOME" value="/path/to/jdk1.5.0" /><!-- Path of the remote JVM , CHANGE ME!!!! -->
 	</variables>
 	<componentDefinition>
 		<virtualNodesDefinition>
@@ -35,15 +34,13 @@
 			<processDefinition id="localJVM">
 				<jvmProcess class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<classpath>
-						                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/ProActive.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/bouncycastle.jar"/>
-
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/fractal.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/trilead-ssh2.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/javassist.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/log4j.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/xercesImpl.jar"/>
-
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/ProActive.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/bouncycastle.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/fractal.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/trilead-ssh2.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/javassist.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/log4j.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/xercesImpl.jar"/>
 					</classpath>
 					<javaPath>
 						<absolutePath value="${JAVA_HOME}/bin/java"/>

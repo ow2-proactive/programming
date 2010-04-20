@@ -29,6 +29,7 @@
 	<!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">
 	<!ENTITY XMLDescriptor SYSTEM "XMLDescriptor.xml">
 	<!ENTITY FileTransfer SYSTEM "FileTransfer.xml">
+	<!ENTITY Termination SYSTEM "Termination.xml">
 	<!ENTITY VariableContract SYSTEM "VariableContract.xml">
 	<!ENTITY Virtualization SYSTEM "Virtualization.xml">
 	<!ENTITY TechnicalService SYSTEM "TechnicalService.xml">
@@ -70,6 +71,7 @@
 	<part xml:id="ProActiveDeployment"><info><title xml:id="DeploymentAndVirtualization_2">Deployment And Virtualization</title></info>
 		&GCMDeployment;
 		&XMLDescriptor;
+		&Termination;
 		&VariableContract;
 		&Virtualization;
 		&TechnicalService;

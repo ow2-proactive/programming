@@ -41,15 +41,13 @@
 				<jvmProcess
 					class="org.objectweb.proactive.core.process.JVMNodeProcess">
 					<classpath>
-						                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/ProActive.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/bouncycastle.jar"/>
-
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/fractal.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/trilead-ssh2.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/javassist.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/log4j.jar"/>
-                                                <absolutePath value="${PROACTIVE_HOME}/dist/lib/xercesImpl.jar"/>
-
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/ProActive.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/bouncycastle.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/fractal.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/trilead-ssh2.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/javassist.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/log4j.jar"/>
+						<absolutePath value="${PROACTIVE_HOME}/dist/lib/xercesImpl.jar"/>
 					</classpath>
 					<javaPath>
 						<absolutePath
