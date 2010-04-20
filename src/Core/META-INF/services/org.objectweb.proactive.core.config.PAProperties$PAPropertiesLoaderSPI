@@ -1,1 +1,2 @@
 org.objectweb.proactive.core.config.CentralPAPropertyRepository
+org.objectweb.proactive.core.ssh.proxycommand.ProxyCommandConfig

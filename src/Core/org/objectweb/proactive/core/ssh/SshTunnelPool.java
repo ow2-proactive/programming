@@ -6,7 +6,7 @@
  *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -40,36 +40,83 @@ import static org.objectweb.proactive.core.ssh.SSH.logger;
 
 import java.io.IOException;
 import java.net.BindException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.objectweb.proactive.core.ssh.proxycommand.ProxyCommandConfig;
+import org.objectweb.proactive.core.ssh.proxycommand.SshProxyConnection;
+import org.objectweb.proactive.core.ssh.proxycommand.SshProxySession;
+import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.Sleeper;
 
 
 public class SshTunnelPool {
     /** The SSH configuration to use in this pool */
-    final private SshConfig config;
+    private SshConfig config;
     /** A cache to remember if plain socket connection works for a given destination */
     final private TryCache tryCache;
     /** SSH connection & tunnels cache */
     final private Map<String, Pair> cache;
+    /** SSH proxy connection & sessions cache */
+    final private Map<String, List<ProxyPair>> proxyCommandCache;
     /** The thread in charge of tunnel & connection garbage collection */
-    final private Thread gcThread;
+    private Thread gcThread = null;
 
-    public SshTunnelPool(final SshConfig config) {
+    /**
+     * The garbage collector thread isn't launch by this constructor because
+     * of lack of SshConfig
+     *
+     * @see SshTunnelPool#setSshConfig(SshConfig)
+     * @see SshTunnelPool#createAndStartGCThread()
+     */
+    public SshTunnelPool() {
         logger.debug("Created a new SSH tunnel pool");
 
-        this.config = config;
         this.tryCache = new TryCache();
         this.cache = new HashMap<String, Pair>();
+        this.proxyCommandCache = new HashMap<String, List<ProxyPair>>();
+    }
 
+    /**
+     * If the GCThread hasn't been created and launch before do it
+     */
+    public void createAndStartGCThread() {
+        if (config == null && gcThread == null) {
+            // Throw an exception ?
+            return;
+        }
+        this.gcThread = new Thread(new GCThread());
+        this.gcThread.setDaemon(true);
+        this.gcThread.setName("SSH Tunnel pool GC");
+        if (this.config.getGcInterval() > 0) {
+            logger.debug("Starting SSH GC thread");
+            this.gcThread.start();
+        }
+    }
+
+    public void setSshConfig(SshConfig config) {
+        this.config = config;
+    }
+
+    /**
+     * This constructor launch the garbage collector thread, no need to call
+     * method SshTunnelPool#createAndStartGCThread() after instantiation.
+     *
+     * @param config
+     */
+    public SshTunnelPool(SshConfig config) {
+        this();
+        this.config = config;
         this.gcThread = new Thread(new GCThread());
         this.gcThread.setDaemon(true);
         this.gcThread.setName("SSH Tunnel pool GC");
@@ -99,9 +146,59 @@ public class SshTunnelPool {
                     socket = new Socket();
                     socket.connect(address, this.config.getConnectTimeout());
                     this.tryCache.recordTrySuccess(host, port);
-                } catch (IOException e) {
+                } catch (IOException ioe) {
                     this.tryCache.recordTryFailure(host, port);
                     socket = null;
+                }
+            }
+        }
+
+        // Try proxy command
+        if (socket == null && config.tryProxyCommand() &&
+            !InetAddress.getByName(host).equals(ProActiveInet.getInstance().getInetAddress())) {
+            String gateway = config.getGateway(host);
+            String outGateway = ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT.isSet() ? ProxyCommandConfig.PA_SSH_PROXY_USE_GATEWAY_OUT
+                    .getValue()
+                    : null;
+            // if proxyCommand command mechanism is needed
+            if (gateway != null || outGateway != null) {
+                synchronized (this.proxyCommandCache) {
+                    SshProxyConnection cnx = null;
+                    List<ProxyPair> pairs = this.proxyCommandCache.get(gateway);
+                    if (pairs == null) {
+                        cnx = SshProxyConnection.getInstance(gateway, outGateway, config);
+                        pairs = new ArrayList<ProxyPair>();
+                        ProxyPair p = new ProxyPair(cnx);
+                        pairs.add(p);
+                        this.proxyCommandCache.put(gateway, pairs);
+                    }
+
+                    SshProxySession session = null;
+                    // For each connection, try to open a session
+                    for (int i = 0; i < pairs.size(); i++) {
+                        try {
+                            cnx = (SshProxyConnection) pairs.get(i).cnx;
+                            // Always create a new session because there are not Thread-Safe
+                            session = cnx.getSession(host, port);
+                            pairs.get(i).registerSession(session);
+                            break;
+                        } catch (IOException channelException) {
+                            continue;
+                        }
+                    }
+
+                    if (session == null) {
+                        // No Connections permit to open a new session
+                        // Create a new connection
+                        cnx = SshProxyConnection.getInstance(gateway, outGateway, (SshConfig) config);
+                        session = cnx.getSession(host, port);
+                        ProxyPair pair = new ProxyPair(cnx);
+                        pair.registerSession(session);
+                        pairs.add(pair);
+                    }
+
+                    // Grab a socket
+                    socket = session.getSocket();
                 }
             }
         }
@@ -110,13 +207,13 @@ public class SshTunnelPool {
             // SSH tunnel must be used
             synchronized (this.cache) {
                 int sshPort = this.config.getPort(host);
-                String username = this.config.getUsername(host, sshPort);
+                String username = this.config.getUsername(host);
 
                 Pair pair = this.cache.get(host);
                 if (pair == null) {
                     // Open a SSH connection
                     SshConnection cnx = new SshConnection(username, host, sshPort, config
-                            .getPrivateKeys(host));
+                            .getPrivateKeyPath(host));
                     pair = new Pair(cnx);
                     this.cache.put(host, pair);
                 }
@@ -127,7 +224,6 @@ public class SshTunnelPool {
                     tunnel = createSshTunStatefull(pair.cnx, host, port);
                     pair.registerTunnel(tunnel);
                 }
-
                 // Grab a socket
                 socket = tunnel.getSocket();
             }
@@ -154,6 +250,8 @@ public class SshTunnelPool {
         }
 
         private String getKey(String host, int port) {
+            // port changes a lot, if normal socket works
+            // on one port shouldn't it works on all ?
             return host + ":" + port;
         }
 
@@ -218,9 +316,9 @@ public class SshTunnelPool {
         /** If users == 0, the timestamp of the last call to close() */
         final private AtomicLong unusedSince = new AtomicLong();
 
-        SshTunnelStatefull(SshConnection connection, String remoteHost, int remotePort, int localport)
+        SshTunnelStatefull(SshConnection connection, String distantHost, int distantPort, int localPort)
                 throws IOException {
-            super(connection, remoteHost, remotePort, localport);
+            super(connection, distantHost, distantPort, localPort);
         }
 
         @Override
@@ -275,6 +373,24 @@ public class SshTunnelPool {
         }
     }
 
+    private static class ProxyPair {
+        final private SshProxyConnection cnx;
+        final private List<SshProxySession> sessions;
+
+        private ProxyPair(SshProxyConnection cnx) {
+            this.cnx = cnx;
+            this.sessions = new ArrayList<SshProxySession>();
+        }
+
+        /**
+         * Sessions are stored in order to check if they are used or not
+         * and garbage collect them
+         */
+        public void registerSession(SshProxySession sess) {
+            this.sessions.add(sess);
+        }
+    }
+
     /**
      *  Performs garbage collection of the SSH tunnels and SSH connections
      */
@@ -308,6 +424,18 @@ public class SshTunnelPool {
                         }
                     }
 
+                    // Purge unused proxyCommand session
+                    for (List<ProxyPair> lp : proxyCommandCache.values()) {
+                        for (ProxyPair p : lp) {
+                            for (int i = 0; i < p.sessions.size(); i++) {
+                                SshProxySession s = p.sessions.get(i);
+                                if (s.isUnused()) {
+                                    p.sessions.remove(i);
+                                }
+                            }
+                        }
+                    }
+
                     // Purge unused connections (no opened tunnel)
                     for (Iterator<Pair> iP = cache.values().iterator(); iP.hasNext();) {
                         Pair p = iP.next();
@@ -316,6 +444,22 @@ public class SshTunnelPool {
                             iP.remove();
                         }
                     }
+
+                    // Purge unused proxyCommand connections (no opened session)
+                    for (Iterator<List<ProxyPair>> iLP = proxyCommandCache.values().iterator(); iLP.hasNext();) {
+                        List<ProxyPair> lP = iLP.next();
+                        for (int i = 0; i < lP.size(); i++) {
+                            ProxyPair p = lP.get(i);
+                            if (p.sessions.isEmpty()) {
+                                p.cnx.close();
+                                lP.remove(i);
+                            }
+                        }
+                        if (lP.size() == 0) {
+                            iLP.remove();
+                        }
+                    }
+
                 }
             }
         }

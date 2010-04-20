@@ -5,8 +5,8 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2010 INRIA/University of
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
+ * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
  *  Initial developer(s):               The ActiveEon Team
@@ -34,36 +34,22 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.ssh;
+package org.objectweb.proactive.core.ssh.proxycommand;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.Socket;
-import java.rmi.server.RMIClientSocketFactory;
+import org.objectweb.proactive.core.config.PAPropertyBoolean;
+import org.objectweb.proactive.core.config.PAPropertyString;
+import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
 
 
-public class SshRMIClientSocketFactory implements RMIClientSocketFactory, Serializable {
-    final static private Object tunnelLock = new Object();
+public class ProxyCommandConfig implements PAPropertiesLoaderSPI {
 
-    static private SshTunnelPool tunnelPool;
+    public static PAPropertyString PA_SSH_PROXY_GATEWAY = new PAPropertyString(
+        "proactive.communication.ssh.proxy.gateway", false);
 
-    public SshRMIClientSocketFactory(SshConfig config) {
-        synchronized (tunnelLock) {
-            tunnelPool = new SshTunnelPool(config);
-        }
-    }
+    public static PAPropertyString PA_SSH_PROXY_USE_GATEWAY_OUT = new PAPropertyString(
+        "proactive.communication.ssh.proxy.out_gateway", false);
 
-    public Socket createSocket(String host, int port) throws IOException {
-        return tunnelPool.getSocket(host, port);
-    }
+    public static PAPropertyBoolean PA_RMISSH_TRY_PROXY_COMMAND = new PAPropertyBoolean(
+        "proactive.communication.ssh.try_proxy_command", false, false);
 
-    @Override
-    public int hashCode() {
-        return 1;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this.getClass().equals(obj.getClass());
-    }
 }

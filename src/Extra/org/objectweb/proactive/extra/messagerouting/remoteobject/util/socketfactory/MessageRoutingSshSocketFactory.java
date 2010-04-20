@@ -39,8 +39,11 @@ package org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfac
 import java.io.IOException;
 import java.net.Socket;
 
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.ssh.SshConfig;
 import org.objectweb.proactive.core.ssh.SshTunnelPool;
+import org.objectweb.proactive.core.ssh.SshConfigFileParser.SshToken;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 
 
@@ -88,12 +91,15 @@ public class MessageRoutingSshSocketFactory implements MessageRoutingSocketFacto
 
         if (PAMRConfig.PA_PAMRSSH_REMOTE_PORT.isSet()) {
             int port = PAMRConfig.PA_PAMRSSH_REMOTE_PORT.getValue();
-            this.config.setPort(port);
+            this.config.addHostInformation(PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue(), SshToken.PORT, String
+                    .valueOf(port));
         }
 
         if (PAMRConfig.PA_PAMRSSH_REMOTE_USERNAME.isSet()) {
             String username = PAMRConfig.PA_PAMRSSH_REMOTE_USERNAME.getValue();
-            this.config.setUsername(username);
+
+            this.config.addHostInformation(PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue(), SshToken.USERNAME,
+                    username);
         }
 
         this.tp = new SshTunnelPool(this.config);

@@ -46,7 +46,9 @@ import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.rmi.AbstractRmiRemoteObjectFactory;
 import org.objectweb.proactive.core.ssh.SshConfig;
+import org.objectweb.proactive.core.ssh.SshConfigFileParser;
 import org.objectweb.proactive.core.ssh.SshRMIClientSocketFactory;
+import org.objectweb.proactive.core.ssh.proxycommand.ProxyCommandConfig;
 
 
 public class RmiSshRemoteObjectFactory extends AbstractRmiRemoteObjectFactory {
@@ -55,6 +57,9 @@ public class RmiSshRemoteObjectFactory extends AbstractRmiRemoteObjectFactory {
     static {
         SshConfig sshConfig = new SshConfig();
         sshConfig.setTryPlainSocket(CentralPAPropertyRepository.PA_RMISSH_TRY_NORMAL_FIRST.isTrue());
+        sshConfig.setTryProxyCommand(ProxyCommandConfig.PA_RMISSH_TRY_PROXY_COMMAND.isTrue());
+
+        SshConfigFileParser parser = new SshConfigFileParser();
 
         int gcInterval = 10000;
         if (CentralPAPropertyRepository.PA_RMISSH_GC_PERIOD.isSet()) {
@@ -81,20 +86,17 @@ public class RmiSshRemoteObjectFactory extends AbstractRmiRemoteObjectFactory {
         }
         sshConfig.setKnowHostFile(knownHostfile);
 
-        String keyDir = System.getProperty("user.home") + File.separator + ".ssh" + File.separator;
         if (CentralPAPropertyRepository.PA_RMISSH_KEY_DIR.isSet()) {
-            keyDir = CentralPAPropertyRepository.PA_RMISSH_KEY_DIR.getValue();
-        }
-        sshConfig.setKeyDir(keyDir);
-
-        if (CentralPAPropertyRepository.PA_RMISSH_REMOTE_PORT.isSet()) {
-            int port = CentralPAPropertyRepository.PA_RMISSH_REMOTE_PORT.getValue();
-            sshConfig.setPort(port);
+            sshConfig.setKeyDir(CentralPAPropertyRepository.PA_RMISSH_KEY_DIR.getValue());
         }
 
-        if (CentralPAPropertyRepository.PA_RMISSH_REMOTE_USERNAME.isSet()) {
-            String username = CentralPAPropertyRepository.PA_RMISSH_REMOTE_USERNAME.getValue();
-            sshConfig.setUsername(username);
+        // Parse the ssh configuration file and store information in the sshConfig
+        parser.parse(sshConfig);
+
+        // Parse ProActive Property and store information in the sshConfig
+        if (ProxyCommandConfig.PA_SSH_PROXY_GATEWAY.isSet()) {
+            String property = ProxyCommandConfig.PA_SSH_PROXY_GATEWAY.getValue();
+            parser.parseProperty(property, sshConfig);
         }
 
         sf = new SshRMIClientSocketFactory(sshConfig);

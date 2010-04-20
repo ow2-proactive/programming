@@ -183,7 +183,7 @@ public class SshConnection {
         return this.username + "@" + connection.getHostname() + ":" + connection.getPort();
     }
 
-    Connection getTrileadConnection() {
+    protected Connection getTrileadConnection() {
         return this.connection;
     }
 }
