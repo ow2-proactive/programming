@@ -71,7 +71,7 @@ public class TestSnapshot extends GCMFunctionalTestDefaultNodes {
     }
 
     @Test
-    public void test() throws ProActiveException {
+    public void test() throws ProActiveException, InterruptedException {
         Root r = PAActiveObject.newActive(Root.class, new Object[] {}, super.getANode());
 
         GCMApplicationSnapshot app = r.deploy();
@@ -102,10 +102,18 @@ public class TestSnapshot extends GCMFunctionalTestDefaultNodes {
         app.kill();
 
         for (Node node : nodes) {
-            try {
-                RuntimeFactory.getRuntime(node.getProActiveRuntime().getURL());
+            int retry = 3;
+            while (retry-- > 0) {
+                try {
+                    RuntimeFactory.getRuntime(node.getProActiveRuntime().getURL());
+                    new Sleeper(500).sleep();
+                } catch (ProActiveException e) {
+                    break;
+                }
+            }
+
+            if (retry == 0) {
                 Assert.fail("This call must fail since the runtime has been killed");
-            } catch (ProActiveException e) {
             }
         }
     }
