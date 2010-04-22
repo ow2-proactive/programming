@@ -55,12 +55,13 @@ import org.objectweb.proactive.core.jmx.notification.GCMRuntimeRegistrationNotif
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.jmx.util.JMXNotificationManager;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.process.JVMProcessImpl;
 import org.objectweb.proactive.core.process.AbstractExternalProcess.StandardOutputMessageLogger;
+import org.objectweb.proactive.core.process.JVMProcessImpl;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.StartPARuntime;
+import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -169,23 +170,20 @@ public class DebuggerConnection implements Serializable, NotificationListener {
      * does not exist.
      *
      * @return DebuggerInformation
+     * @throws ProActiveException 
      */
-    public synchronized DebuggerInformation getDebugInfo() {
+    public synchronized DebuggerInformation getDebugInfo() throws ProActiveException {
         int port = -3;
 
-        try {
-            port = findDebuggerPort();
-        } catch (ProActiveException e1) {
-            e1.printStackTrace();
-        }
+        port = findDebuggerPort();
         getOrCreateNode();
+
+        Sleeper sleeper = new Sleeper(500);
+
         while (creating) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            sleeper.sleep();
         }
+
         return new DebuggerInformation(debugNode, port);
     }
 

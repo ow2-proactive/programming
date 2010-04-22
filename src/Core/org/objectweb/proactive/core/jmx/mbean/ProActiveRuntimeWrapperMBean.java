@@ -175,8 +175,9 @@ public interface ProActiveRuntimeWrapperMBean extends Serializable {
     /**
      * Get the information for connect a debugger.
      * Create the debug node if it does not exist.
+     * return null if debug is not enabled
      *
-     * @return DebuggerInformation
+     * @return DebuggerInformation or null if debug mode is not set
      */
     public DebuggerInformation getDebugInfo();
 
