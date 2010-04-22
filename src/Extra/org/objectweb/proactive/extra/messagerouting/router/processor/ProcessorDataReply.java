@@ -61,6 +61,13 @@ public class ProcessorDataReply extends Processor {
     public void process() throws MalformedMessageException {
         try {
             DataReplyMessage replyMsg = new DataReplyMessage(this.rawMessage.array(), 0);
+
+            AgentID sender = replyMsg.getSender();
+            Client sendClient = this.router.getClient(sender);
+            if (sendClient != null) {
+                sendClient.updateLastSeen();
+            }
+
             AgentID recipient = replyMsg.getRecipient();
             Client destClient = this.router.getClient(recipient);
 

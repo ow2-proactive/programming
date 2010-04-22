@@ -49,6 +49,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.router.processor.Processor;
+import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorClientHeartbeat;
 import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorDataReply;
 import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorDataRequest;
 import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorDebug;
@@ -107,6 +108,9 @@ class TopLevelProcessor implements Runnable {
                     break;
                 case DEBUG_:
                     processor = new ProcessorDebug(this.message, this.attachment, this.router);
+                    break;
+                case HEARTBEAT_CLIENT:
+                    processor = new ProcessorClientHeartbeat(this.message, router);
                     break;
                 default:
                     logger.error("Unexpected message type: " + type + ". Dropping message " + message);

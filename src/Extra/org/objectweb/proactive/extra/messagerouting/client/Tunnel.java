@@ -39,6 +39,7 @@ package org.objectweb.proactive.extra.messagerouting.client;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -164,5 +165,13 @@ public class Tunnel {
 
     String getRemoteAddress() {
         return this.socket.getInetAddress().toString();
+    }
+
+    public void setSoTimeout(int l) {
+        try {
+            this.socket.setSoTimeout(l);
+        } catch (SocketException e) {
+            logger.warn("Failed to set the socket timeout on PAMR tunnel", e);
+        }
     }
 }

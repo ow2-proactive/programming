@@ -214,4 +214,12 @@ public class Attachment {
             return generator.getAndIncrement();
         }
     }
+
+    /** Close the underlying {@link SocketChannel}
+     *
+     * @throws IOException if the connexion cannot be closed
+     */
+    public void disconnect() throws IOException {
+        this.socketChannel.close();
+    }
 }

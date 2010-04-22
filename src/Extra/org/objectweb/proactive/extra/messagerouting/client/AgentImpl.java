@@ -46,7 +46,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -66,6 +69,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.HeartbeatClientMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage;
@@ -118,6 +122,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
     /** The socket factory to use to create the Tunnel */
     final private MessageRoutingSocketFactorySPI socketFactory;
 
+    final private Timer timer;
+
+    private HeartbeatTask heartbeatTask;
+
     /**
      * Create a routing agent
      * 
@@ -165,6 +173,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         this.requestIDGenerator = new AtomicLong(0);
         this.failedTunnels = new LinkedList<Tunnel>();
         this.socketFactory = socketFactory;
+        this.timer = new Timer("PAMR: Heartbeat timer");
 
         try {
             Constructor<? extends MessageHandler> mhConstructor;
@@ -217,6 +226,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         int subtry = 0;
 
         while (this.t == null && nbTry > 0) {
+
             this.t = this.__reconnectToRouter();
             nbTry--;
 
@@ -250,10 +260,6 @@ public class AgentImpl implements Agent, AgentImplMBean {
         Tunnel t = null;
         try {
             Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
-            int heartbeat_period = PAMRConfig.PA_PAMR_SOCKET_TIMEOUT.getValue();
-            if (heartbeat_period > 0) {
-                s.setSoTimeout(heartbeat_period);
-            }
             Tunnel tunnel = new Tunnel(s);
 
             // start router handshake
@@ -288,14 +294,14 @@ public class AgentImpl implements Agent, AgentImplMBean {
      * @throws IOException
      */
     private void routerHandshake(Tunnel tunnel) throws RouterHandshakeException, IOException {
-
         try {
             // if call for the first time then agentID is null
             RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator
                     .getAndIncrement(), routerID);
             tunnel.write(reg.toByteArray());
 
-            // Waiting the router response
+            // Waiting the router response. The router has 10 seconds to respond
+            tunnel.setSoTimeout(10 * 1000);
             byte[] reply = tunnel.readMessage();
             Message replyMsg = Message.constructMessage(reply, 0);
 
@@ -333,11 +339,27 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 throw new RouterHandshakeException("Invalid router response: previous router ID  was " +
                     this.agentID + " but server now advertises " + rrm.getRouterID());
             }
+
+            // Cancel the recurrent heartbeat task. Will be replaced by a new one if needed
+
+            int hb = rrm.getHeartbeatPeriod();
+            if (hb > 0) {
+                tunnel.setSoTimeout(hb);
+
+                // Cancel the task in case of heartbeat period change
+                if (this.heartbeatTask != null) {
+                    this.heartbeatTask.cancel();
+                    this.heartbeatTask = null;
+                }
+
+                // Reschedule the task
+                this.heartbeatTask = new HeartbeatTask();
+                this.timer.schedule(this.heartbeatTask, hb / 3, hb / 3);
+            }
         } catch (MalformedMessageException e) {
             throw new RouterHandshakeException("Invalid router response: corrupted " +
                 MessageType.REGISTRATION_REPLY.toString() + " message - " + e.getMessage());
         }
-
     }
 
     private class RouterHandshakeException extends Exception {
@@ -372,9 +394,11 @@ public class AgentImpl implements Agent, AgentImplMBean {
         if (!this.failedTunnels.contains(brokenTunnel)) {
             this.failedTunnels.add(brokenTunnel);
 
+            this.mailboxes.unlockDueToTunnelFailure();
             this.t.shutdown();
             this.t = null;
         }
+
     }
 
     /**
@@ -525,7 +549,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
          * @param agentID
          *            the remote Agent ID
          */
-        private void unlockDueToDisconnection(AgentID agentID) {
+        private void unlockDueToRemoteAgentDisconnection(AgentID agentID) {
             synchronized (this.lock) {
                 MessageRoutingException e = new MessageRoutingException("Remote agent disconnected");
 
@@ -537,6 +561,21 @@ public class AgentImpl implements Agent, AgentImplMBean {
                                 patient.recipient + " disconnected");
                         }
                         patient.setAndUnlock(e);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Unblock all the thread waiting for a response.
+         */
+        private void unlockDueToTunnelFailure() {
+            synchronized (this.lock) {
+                MessageRoutingException e = new MessageRoutingException("Tunnel failure");
+
+                for (Map<Long, Patient> m : this.byRemoteAgent.values()) {
+                    for (Patient p : m.values()) {
+                        p.setAndUnlock(e);
                     }
                 }
             }
@@ -665,6 +704,32 @@ public class AgentImpl implements Agent, AgentImplMBean {
         }
     }
 
+    class HeartbeatTask extends TimerTask {
+        long heartbeatId;
+        volatile boolean stop;
+
+        public HeartbeatTask() {
+            this.stop = false;
+            this.heartbeatId = 0;
+        }
+
+        public void run() {
+            try {
+                Tunnel t = getTunnel();
+                if (t != null) {
+                    HeartbeatMessage msg = new HeartbeatClientMessage(heartbeatId++, getAgentID());
+                    t.write(msg.toByteArray());
+                } else {
+                    logger.debug("Agent is not connected, heartbeat not sent");
+                }
+            } catch (IOException e) {
+                logger.debug("Failed to send heartbeat to the router", e);
+                reportTunnelFailure(t);
+            }
+        }
+
+    }
+
     /** Read incoming messages from the tunnel */
     class MessageReader implements Runnable {
         /** The local Agent */
@@ -732,7 +797,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                     ErrorMessage error = (ErrorMessage) msg;
                     handleError(error);
                     break;
-                case HEARTBEAT:
+                case HEARTBEAT_ROUTER:
                     // Nothing to do. Heartbeat are only used to be able to set a soTimeout on the tunnel
                     if (logger.isDebugEnabled()) {
                         logger.debug("Heartbeat #" + ((HeartbeatMessage) msg).getHeartbeatId() + " received");
@@ -752,7 +817,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                      * An agent disconnected. To avoid blocked thread we have to
                      * unlock all thread that are waiting a response from this agent
                      */
-                    mailboxes.unlockDueToDisconnection(error.getSender());
+                    mailboxes.unlockDueToRemoteAgentDisconnection(error.getSender());
                     break;
                 case ERR_NOT_CONNECTED_RCPT:
                     /*

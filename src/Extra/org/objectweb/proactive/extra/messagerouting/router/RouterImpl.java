@@ -66,6 +66,7 @@ import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageE
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.HeartbeatMessage;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.HeartbeatRouterMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
 
 
@@ -166,9 +167,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
             return;
         }
 
-        // Start the thread in charge of sending the heartbeats
-        final int heartbeatPeriod = PAMRConfig.PA_PAMR_SOCKET_TIMEOUT.getValue() / 3;
-        if (heartbeatPeriod > 0) {
+        // Start the thread in charge of sending the heartbeat
+        final int heartbeatPeriod = PAMRConfig.PA_PAMR_HEARTBEAT_TIMEOUT.getValue();
+        final int period = heartbeatPeriod / 3;
+        if (period > 0) {
             Thread t = new Thread() {
                 public void run() {
                     long heartbeatId = 0;
@@ -182,31 +184,59 @@ public class RouterImpl extends RouterInternal implements Runnable {
                                 clients = clientMap.values();
                             }
 
-                            HeartbeatMessage hbMessage = new HeartbeatMessage(heartbeatId);
-                            byte[] msg = hbMessage.toByteArray();
-                            for (Client client : clients) {
-                                try {
-                                    if (client.isConnected()) {
-                                        client.sendMessage(msg);
-                                    }
-                                } catch (IOException e) {
-                                    admin_logger.debug("Failed to send heartbeat #" + heartbeatId + " to " +
-                                        client);
-                                }
-                            }
+                            sendHeartbeat(clients, heartbeatId);
+                            checkHeartbeat(clients);
 
-                            long willSleep = heartbeatPeriod - (System.currentTimeMillis() - startTime);
+                            long willSleep = period - (System.currentTimeMillis() - startTime);
                             if (willSleep > 0) {
                                 new Sleeper(willSleep).sleep();
                             } else {
                                 logger
                                         .info("Router is late. Sending heartbeat to every clients took more than " +
-                                            heartbeatPeriod + "ms");
+                                            period + "ms");
                             }
                         } catch (Throwable t) {
                             logger.warn("Failed to send heartbeat #" + heartbeatId, t);
                         } finally {
                             heartbeatId++;
+                        }
+                    }
+                }
+
+                public void sendHeartbeat(final Collection<Client> clients, long heartbeatId) {
+                    HeartbeatMessage hbMessage = new HeartbeatRouterMessage(heartbeatId);
+                    byte[] msg = hbMessage.toByteArray();
+                    for (Client client : clients) {
+                        try {
+                            if (client.isConnected()) {
+                                client.sendMessage(msg);
+                            }
+                        } catch (IOException e) {
+                            admin_logger.debug("Failed to send heartbeat #" + heartbeatId + " to " + client);
+                        }
+                    }
+                }
+
+                public void checkHeartbeat(final Collection<Client> clients) {
+                    long currentTime = System.currentTimeMillis();
+
+                    for (Client client : clients) {
+                        if (client.isConnected()) {
+                            if ((currentTime - client.getLastSeen()) > heartbeatPeriod) {
+                                // Disconnect
+                                logger.info("Client " + client + " disconnected due to late heartbeat");
+                                try {
+                                    client.disconnect();
+                                } catch (IOException e) {
+                                    logger.info("Failed to disconnected client " + client, e);
+                                }
+
+                                // Broadcast the disconnection to every client
+                                // If client is null, then the handshake has not completed and we
+                                // don't need to broadcast the disconnection
+                                AgentID disconnectedAgent = client.getAgentId();
+                                tpe.submit(new DisconnectionBroadcaster(clients, disconnectedAgent));
+                            }
                         }
                     }
                 }

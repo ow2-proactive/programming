@@ -69,8 +69,12 @@ public class ProcessorDataRequest extends Processor {
             AgentID sender = msg.getSender();
             long messageId = msg.getMessageID();
 
-            Client destClient = this.router.getClient(recipient);
+            Client sendClient = this.router.getClient(sender);
+            if (sendClient != null) {
+                sendClient.updateLastSeen();
+            }
 
+            Client destClient = this.router.getClient(recipient);
             if (destClient != null) {
                 /* The recipient is known. Try to forward the message.
                  * If an error occurs while sending the message, notify the sender

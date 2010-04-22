@@ -37,6 +37,7 @@
 package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
+import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataMessage.Field;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
@@ -45,13 +46,18 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.Mes
 
 /** A {@link MessageType#HEARTBEAT} message
  *
- * Heartbeat message are used to check the connection. The router periodically sends heartbeat to each
- * client. If the client does not receive the heartbeat in time, it close its tunnel and tries to
- * open a new one.
+ * Heartbeat message are used to check the connection. If clients or router do not
+ * receive an heartbeat in time, the tunnel is closed and the client will try to
+ * reopen a new one.
+ *
+ * Both clients and router must sends heartbeats to be able to detect
+ * disconnection ASAP (xxx.write() will not throw an exception until the TCP kernel
+ * buffer is full).
  *
  * @since ProActive 4.3.0
  */
-public class HeartbeatMessage extends Message {
+public abstract class HeartbeatMessage extends Message {
+    static final private long ROUTER_AGENT_ID = -53;
 
     /**
      * Fields of the {@link DataMessage} header.
@@ -59,8 +65,16 @@ public class HeartbeatMessage extends Message {
      * These fields are put after the {@link Message} header.
      */
     public enum Field {
-        /** The ID of the heartbeat */
-        HEARTBEAT_ID(8, Long.class);
+        /** The ID of the heartbeat
+         *
+         * Only used for easier debugging
+         */
+        HEARTBEAT_ID(8, Long.class),
+        /** The source agent ID
+         *
+         * -1 if the heartbeat is sent by the router
+         */
+        SRC_AGENT_ID(8, Long.class);
 
         private int length;
         private int myOffset = 0;
@@ -130,28 +144,44 @@ public class HeartbeatMessage extends Message {
             switch (this) {
                 case HEARTBEAT_ID:
                     return "HEARTBEAT_ID";
+                case SRC_AGENT_ID:
+                    return "SRC_AGENT_ID";
                 default:
                     return super.toString();
             }
         }
     }
 
-    /** Reads the heartbeatId of a message
+    /** Reads the heartbeat period of a message
      *
      * @param buf
      *            a buffer which contains a message
      * @param offset
      *            the offset at which the message begins
-     * @return The value of the length field of the message contained in buf at
-     *         the given offset or null if unknown
+     * @return The value of the heartbeat period of the message contained in buf at
+     *         the given offset
      */
-    public static long readHeartbeatId(byte[] byteArray, int offset) {
+    private static long readHeartbeatPeriod(byte[] byteArray, int offset) {
         long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
             Field.HEARTBEAT_ID.getOffset());
         return id;
     }
 
+    private AgentID readSrcAgentId(byte[] byteArray, int offset) throws MalformedMessageException {
+        long id = TypeHelper.byteArrayToLong(byteArray, offset + Message.Field.getTotalOffset() +
+            Field.SRC_AGENT_ID.getOffset());
+
+        if (id >= 0) {
+            return new AgentID(id);
+        } else if (id == ROUTER_AGENT_ID) {
+            return null;
+        } else {
+            throw new MalformedMessageException("Invalid value for " + Field.SRC_AGENT_ID + " field:" + id);
+        }
+    }
+
     final private long heartbeatId;
+    final private AgentID srcAgentId;
 
     /** Create an error message
      *
@@ -164,11 +194,12 @@ public class HeartbeatMessage extends Message {
      * @param error
      * 		The error type
      */
-    public HeartbeatMessage(long heartbeatId) {
-        super(MessageType.HEARTBEAT, -1);
+    public HeartbeatMessage(MessageType type, long heartbeatId, AgentID srcAgentId) {
+        super(type, -1);
         super.setLength(Message.Field.getTotalOffset() + Field.getTotalOffset());
 
         this.heartbeatId = heartbeatId;
+        this.srcAgentId = srcAgentId;
     }
 
     /**
@@ -184,16 +215,16 @@ public class HeartbeatMessage extends Message {
     public HeartbeatMessage(byte[] byteArray, int offset) throws MalformedMessageException {
         super(byteArray, offset, Field.getTotalOffset());
 
-        if (this.getType() != MessageType.HEARTBEAT) {
-            throw new MalformedMessageException("Malformed" + MessageType.HEARTBEAT + " message:" +
-                "Invalid value for the " + Message.Field.MSG_TYPE + " field:" + this.getType());
-        }
-
-        this.heartbeatId = readHeartbeatId(byteArray, offset);
+        this.heartbeatId = readHeartbeatPeriod(byteArray, offset);
+        this.srcAgentId = readSrcAgentId(byteArray, offset);
     }
 
     public long getHeartbeatId() {
         return this.heartbeatId;
+    }
+
+    protected AgentID getSrcAgentId() {
+        return this.srcAgentId;
     }
 
     @Override
@@ -244,6 +275,12 @@ public class HeartbeatMessage extends Message {
         super.writeHeader(buf, 0);
         TypeHelper.longToByteArray(this.heartbeatId, buf, Message.Field.getTotalOffset() +
             Field.HEARTBEAT_ID.getOffset());
+
+        long id = ROUTER_AGENT_ID;
+        if (this.srcAgentId != null) {
+            id = this.srcAgentId.getId();
+        }
+        TypeHelper.longToByteArray(id, buf, Message.Field.getTotalOffset() + Field.SRC_AGENT_ID.getOffset());
 
         this.toByteArray = buf;
         return buf;

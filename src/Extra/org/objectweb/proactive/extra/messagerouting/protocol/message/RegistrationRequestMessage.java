@@ -57,7 +57,7 @@ public class RegistrationRequestMessage extends RegistrationMessage {
      * 		An unique message ID per sender.
      */
     public RegistrationRequestMessage(AgentID agentID, long messageId, long routerId) {
-        super(MessageType.REGISTRATION_REQUEST, messageId, agentID, routerId);
+        super(MessageType.REGISTRATION_REQUEST, messageId, agentID, routerId, 0);
     }
 
     /**

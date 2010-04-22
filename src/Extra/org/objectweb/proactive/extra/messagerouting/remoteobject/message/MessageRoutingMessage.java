@@ -112,13 +112,19 @@ public abstract class MessageRoutingMessage implements Serializable {
                 this.returnedObject = this.marshaller.unmarshallObject(response);
             }
         } catch (MessageRoutingException e) {
-            logger.error("Failed to send message to " + this.uri, e);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Failed to send message to " + this.uri, e);
+            }
             throw e;
         } catch (IOException e) {
-            logger.error("Failed to serialize this message, reason:" + e.getMessage(), e);
+            if (logger.isDebugEnabled()) {
+                logger.error("Failed to serialize this message, reason:" + e.getMessage(), e);
+            }
             throw new MessageRoutingException(e);
         } catch (ClassNotFoundException e) {
-            logger.error("Failed to deserialize the reply for this message, reason:" + e.getMessage(), e);
+            if (logger.isDebugEnabled()) {
+                logger.error("Failed to deserialize the reply for this message, reason:" + e.getMessage(), e);
+            }
             throw new MessageRoutingException(e);
         }
     }

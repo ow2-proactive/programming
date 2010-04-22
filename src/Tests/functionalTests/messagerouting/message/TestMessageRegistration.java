@@ -122,7 +122,7 @@ public class TestMessageRegistration extends MessageFunctionalTest {
                     this.msg = new RegistrationRequestMessage(agent, msgId, routerId);
                     break;
                 case REGISTRATION_REPLY:
-                    this.msg = new RegistrationReplyMessage(agent, msgId, routerId);
+                    this.msg = new RegistrationReplyMessage(agent, msgId, routerId, 0);
                     break;
                 default:
                     break;

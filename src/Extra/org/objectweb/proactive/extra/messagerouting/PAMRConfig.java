@@ -46,8 +46,8 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
      * If set to 0 the heartbeat mechanism is disabled.
      *
      */
-    static public PAPropertyInteger PA_PAMR_SOCKET_TIMEOUT = new PAPropertyInteger(
-        "proactive.communication.pamr.socket_timeout", false, 15000);
+    static public PAPropertyInteger PA_PAMR_HEARTBEAT_TIMEOUT = new PAPropertyInteger(
+        "proactive.communication.pamr.heartbeat_timeout", false, 15000);
 
     /* ------------------------------------
      *  PAMR over SSH

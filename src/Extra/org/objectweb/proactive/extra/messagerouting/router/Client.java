@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -93,11 +94,14 @@ public class Client {
     /** List of messages to be sent when the client will reconnect */
     final private Queue<ByteBuffer> pendingMessage;
 
+    private AtomicLong lastSeen;
+
     public Client(Attachment attachment, AgentID agentID) {
         this.attachment = attachment;
         this.attachment.setClient(this);
         this.agentId = agentID;
         this.pendingMessage = new ConcurrentLinkedQueue<ByteBuffer>();
+        this.lastSeen = new AtomicLong();
 
         if (admin_logger.isDebugEnabled()) {
             admin_logger.debug("AgentID " + this.getAgentId() + " connected from " +
@@ -262,6 +266,46 @@ public class Client {
     public boolean isConnected() {
         synchronized (this.attachment_lock) {
             return this.attachment != null;
+        }
+    }
+
+    /**
+     * Update the lastseen timestamp
+     *
+     * This timestamp can be used to know when the router saw
+     * network traffic from the client for the last time.
+     */
+    public void updateLastSeen() {
+        this.lastSeen.set(System.currentTimeMillis());
+
+    }
+
+    /**
+     * @return the lastseen timestamp
+     */
+    public long getLastSeen() {
+        return this.lastSeen.get();
+    }
+
+    /** Close the connection to the remote client and discard the attachment.
+     *
+     * This method can be used to disconnect a client if something goes wrong
+     * (invalid message, late heartbeat etc.).
+     *
+     * Once the connection is closed, the client will detect a broken Tunnel and
+     * reopen a new one.
+     *
+     * @throws IOException If the client cannot be disconneted. The attachement
+     * is discarded anyway.
+     */
+    public void disconnect() throws IOException {
+        synchronized (attachment_lock) {
+            try {
+                this.attachment.disconnect();
+            } finally {
+                discardAttachment();
+                ;
+            }
         }
     }
 }

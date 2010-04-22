@@ -92,8 +92,10 @@ public abstract class Message {
         ERR_,
         /** A message only used for debug and testing */
         DEBUG_,
+        /** An heartbeat send by a client to the the router to check the connection */
+        HEARTBEAT_CLIENT,
         /** An heartbeat send by the router to the clients to check the connection */
-        HEARTBEAT
+        HEARTBEAT_ROUTER;
         /* That's all*/
         ;
 
@@ -127,8 +129,10 @@ public abstract class Message {
                     return "ERR";
                 case DEBUG_:
                     return "DBG";
-                case HEARTBEAT:
-                    return "HEARTBEAT";
+                case HEARTBEAT_CLIENT:
+                    return "HEARTBEAT_CLIENT";
+                case HEARTBEAT_ROUTER:
+                    return "HEARTBEAT_ROUTER";
                 default:
                     return super.toString();
             }
@@ -279,8 +283,10 @@ public abstract class Message {
                 return new ErrorMessage(buf, offset);
             case DEBUG_:
                 return new DebugMessage(buf, offset);
-            case HEARTBEAT:
-                return new HeartbeatMessage(buf, offset);
+            case HEARTBEAT_CLIENT:
+                return new HeartbeatClientMessage(buf, offset);
+            case HEARTBEAT_ROUTER:
+                return new HeartbeatRouterMessage(buf, offset);
             default:
                 throw new MalformedMessageException("Unknown message type: " + type);
         }

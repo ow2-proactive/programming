@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
@@ -75,10 +76,16 @@ public class ProcessorRegistrationRequest extends Processor {
             RegistrationRequestMessage message = (RegistrationRequestMessage) Message.constructMessage(
                     this.rawMessage.array(), 0);
             AgentID agentId = message.getAgentID();
+
+            Client client = null;
             if (agentId == null) {
-                connection(message);
+                client = connection(message);
             } else {
-                reconnection(message);
+                client = reconnection(message);
+            }
+
+            if (client != null) {
+                client.updateLastSeen();
             }
         } catch (MalformedMessageException e) {
             // try to see who sent it
@@ -95,7 +102,7 @@ public class ProcessorRegistrationRequest extends Processor {
     /* Generate and unique AgentID and send the registration reply
      * in best effort. If succeeded, add the new client to the router
      */
-    private void connection(RegistrationRequestMessage message) {
+    private Client connection(RegistrationRequestMessage message) {
         long routerId = message.getRouterID();
         if (routerId != 0) {
             logger.warn("Invalid connection request. router ID must be 0. Remote endpoint is: " +
@@ -104,19 +111,21 @@ public class ProcessorRegistrationRequest extends Processor {
             // Cannot contact the client yet, disconnect it !
             // Since we disconnect the client, we must free the resources
             this.attachment.dtor();
-            return;
+            return null;
         }
 
         AgentID agentId = AgentIdGenerator.getId();
 
         RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(), this.router
-                .getId());
+                .getId(), getHeartbeatPeriod());
 
         Client client = new Client(attachment, agentId);
         boolean resp = this.sendReply(client, reply);
         if (resp) {
             this.router.addClient(client);
         }
+
+        return client;
     }
 
     /* Check if the client is known. If not send an ERR_.
@@ -124,7 +133,7 @@ public class ProcessorRegistrationRequest extends Processor {
      * If succeeded, update the attachment in the client, and
      * flush the pending messages.
      */
-    private void reconnection(RegistrationRequestMessage message) {
+    private Client reconnection(RegistrationRequestMessage message) {
         AgentID agentId = message.getAgentID();
 
         // Check that it is not an "old" client
@@ -133,7 +142,7 @@ public class ProcessorRegistrationRequest extends Processor {
                 " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
                 attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
-            return;
+            return null;
         }
 
         // Check if the client is know
@@ -147,7 +156,7 @@ public class ProcessorRegistrationRequest extends Processor {
             // Acknowledge the registration
             client.setAttachment(attachment);
             RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
-                this.router.getId());
+                this.router.getId(), getHeartbeatPeriod());
 
             boolean resp = this.sendReply(client, reply);
             if (resp) {
@@ -157,6 +166,8 @@ public class ProcessorRegistrationRequest extends Processor {
                 // Drop the attachment
             }
         }
+
+        return client;
     }
 
     private void notifyInvalidAgent(RegistrationRequestMessage message, AgentID agentId, ErrorType errorCode) {
@@ -187,6 +198,10 @@ public class ProcessorRegistrationRequest extends Processor {
             logger.info("Failed to send registration reply to " + reply.getAgentID() + ", IOException");
         }
         return false;
+    }
+
+    private int getHeartbeatPeriod() {
+        return PAMRConfig.PA_PAMR_HEARTBEAT_TIMEOUT.getValue();
     }
 
     static abstract private class AgentIdGenerator {
