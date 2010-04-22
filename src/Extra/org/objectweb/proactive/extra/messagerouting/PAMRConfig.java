@@ -47,7 +47,7 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
      *
      */
     static public PAPropertyInteger PA_PAMR_HEARTBEAT_TIMEOUT = new PAPropertyInteger(
-        "proactive.communication.pamr.heartbeat_timeout", false, 15000);
+        "proactive.communication.pamr.heartbeat_timeout", false, 1000);
 
     /* ------------------------------------
      *  PAMR over SSH
