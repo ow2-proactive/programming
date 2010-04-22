@@ -71,6 +71,7 @@
 	<part xml:id="ProActiveDeployment"><info><title xml:id="DeploymentAndVirtualization_2">Deployment And Virtualization</title></info>
 		&GCMDeployment;
 		&XMLDescriptor;
+		&FileTransfer;
 		&Termination;
 		&VariableContract;
 		&Virtualization;
