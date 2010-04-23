@@ -1171,7 +1171,7 @@
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-			<arg value="${src.dir}" />
+			<arg value="${src.examples.dir}" />
 			<arg value="${tutorials.src}" />
 		</java>
 		<mkdir dir="${tutorials.dist}" />

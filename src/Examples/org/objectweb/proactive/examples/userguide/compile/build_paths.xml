@@ -1,7 +1,7 @@
 <project basedir=".">
     <property name="base.dir" 			value=".."/>
     <property name="compile.dir"        value="${base.dir}/compile" />
-    <property name="src.examples.dir"   value="${base.dir}/src/Examples" />
+    <property name="src.examples.dir"   value="${base.dir}/src" />
     <property name="lib.dir"            value="${base.dir}/dist/lib" />
     <property name="classes.dir"  	    value="${base.dir}/classes" />
     <property name="source"				value="1.5"/>
