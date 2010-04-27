@@ -163,6 +163,13 @@
 							many workers are in the thread pool.
 						</para>
 					</listitem>
+					<listitem>
+						<para>
+							<emphasis>--configFile</emphasis>: The configuration file to use to declare reserved clients.
+							This file is a Java property file. Keys must be integers between 0 and 4095, value must be Unicode
+							strings shorter than 64 characters. If a invalid value is found, the router will not start.
+						</para>
+					</listitem>
 				</itemizedlist>
 			</para>
 		</section>
@@ -194,6 +201,31 @@
 							message router is listening. If omitted, port <emphasis>33647</emphasis> is used.
 						</para>
 					</listitem>
+					<listitem>
+						<para>
+							<emphasis>proactive.communication.pamr.heartbeat_timeout</emphasis>: (optionally) Use a
+							bidirectionnal heartbeat algorithm to detect socket failure. By setting this value you
+							can override the default heartbeat timeout value, 3 seconds. If the router or a client
+							has not received an heartbeat since 3 seconds then the connexion is closed and a new open
+							is reopened. The heartbeat algorithm can be disabled by setting this value to 0.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis>proactive.communication.pamr.agent.id</emphasis>: (optionally) This property
+							can be set to obtain a fixed PAMR agent id from the router. It allows to have well known
+							URL with PAMR. The agent ID must be declared in the router configuration file with a magic
+							cookie.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis>proactive.communication.pamr.agent.magic_cookie</emphasis>: (optionally) When
+							using a fixed PAMR agent id, the agent must provide a magic cookie to register. This
+							cookie must be the same than the one declared in the router configuration file.
+						</para>
+					</listitem>
+
 				</itemizedlist>
 			</para>
 
@@ -233,6 +265,52 @@ Caused by: org.objectweb.proactive.core.ProActiveException: Failed to create the
 
 			The nested exception shows that the ProActive runtime failed to contact the message router.
 			</para>
+		</section>
+
+		<section xml:id="pamr_well_know_urls">
+			<info>
+				<title>Well known urls with PAMR</title>
+			</info>
+
+			<para>
+				By default the router assigns an unique and random Agent ID to each agent. This random ID in
+				the URL can make PAMR quite hard to use to deploy daemons and services. Indeed each time the
+				services is restarted, a new URL is created.
+			</para>
+
+			<para>
+				To address this issue, PAMR provides reserved agent ID. This feature allows a runtime to ask for
+				a specific agent ID. If an agent is already connected then it is disconnected and the slot is
+				given to the new agent. Reserved agent ID must be declared in the router configuration file and
+				a magic cookie must be specified for each reserved agent ID. This cookie is used to secure the slot,
+				a client must provide the right magic cookie to be allowed to use the slot.
+			</para>
+
+			<para>
+				All reserved agent ID must be declared in a configuration file, and the router must be started
+				with the <emphasis role="bold">--configFile</emphasis> option. The configuration file is a standard
+				Java property file. Keys must be an integer between 0 and 4095 (the agent ID) and values are Unicode
+				strings up to 64 characters.
+			</para>
+
+				<screen>
+<![CDATA[
+$ cat services.txt
+# Application 1
+0=magicCookie1
+# Application 2
+2000=toor
+2001=admin
+
+$ ./bin/startRouter.sh --configFile services.txt
+]]></screen>
+
+			<para>
+				The <emphasis role="bold">proactive.communication.pamr.agent.id</emphasis> and
+				<emphasis role="bold">proactive.communication.pamr.agent.magic_cookie</emphasis>
+				ProActive properties must be used on the client runtime to configure the PAMR agent.
+			</para>
+
 		</section>
 	</section>
 </chapter>

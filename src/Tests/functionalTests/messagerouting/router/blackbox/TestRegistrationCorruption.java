@@ -43,11 +43,13 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 import functionalTests.messagerouting.BlackBox;
 
@@ -70,7 +72,9 @@ public class TestRegistrationCorruption extends BlackBox {
         long invalidRouterID = -ProActiveRandom.nextPosLong();
         long msgId = ProActiveRandom.nextPosLong();
 
-        Message message = new RegistrationRequestMessage(new AgentID(invalidAgentID), msgId, 0);
+        MagicCookie magicCookie = new MagicCookie();
+        Message message = new RegistrationRequestMessage(new AgentID(invalidAgentID), msgId,
+            RouterImpl.DEFAULT_ROUTER_ID, magicCookie);
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
@@ -83,14 +87,14 @@ public class TestRegistrationCorruption extends BlackBox {
         Assert.assertEquals(unknown, err.getFaulty());
 
         // Connect
-        message = new RegistrationRequestMessage(null, msgId, 0);
+        message = new RegistrationRequestMessage(null, msgId, RouterImpl.DEFAULT_ROUTER_ID, magicCookie);
         tunnel.write(message.toByteArray());
 
         resp = tunnel.readMessage();
         RegistrationReplyMessage reply = (RegistrationReplyMessage) Message.constructMessage(resp, 0);
         AgentID myAgentId = reply.getAgentID();
 
-        message = new RegistrationRequestMessage(myAgentId, msgId, invalidRouterID);
+        message = new RegistrationRequestMessage(myAgentId, msgId, invalidRouterID, magicCookie);
         tunnel.write(message.toByteArray());
 
         resp = tunnel.readMessage();

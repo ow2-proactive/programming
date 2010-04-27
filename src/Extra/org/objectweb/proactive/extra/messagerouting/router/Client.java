@@ -46,6 +46,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 
 
 /** A remote agent 
@@ -94,20 +95,51 @@ public class Client {
     /** List of messages to be sent when the client will reconnect */
     final private Queue<ByteBuffer> pendingMessage;
 
+    /** The timestamp of the last client activity
+     *
+     * Used to determine if the tunnel is broken
+     */
     private AtomicLong lastSeen;
 
-    public Client(Attachment attachment, AgentID agentID) {
-        this.attachment = attachment;
-        this.attachment.setClient(this);
+    final private MagicCookie magicCookie;
+
+    public Client(AgentID agentID, MagicCookie magicCookie) {
+        this(null, agentID, magicCookie);
+    }
+
+    public Client(Attachment attachment, AgentID agentID, MagicCookie magicCookie) {
         this.agentId = agentID;
         this.pendingMessage = new ConcurrentLinkedQueue<ByteBuffer>();
-        this.lastSeen = new AtomicLong();
-
-        if (admin_logger.isDebugEnabled()) {
-            admin_logger.debug("AgentID " + this.getAgentId() + " connected from " +
-                this.attachment.getRemoteEndpointName());
+        this.lastSeen = new AtomicLong(0);
+        this.magicCookie = magicCookie;
+        if (attachment != null) {
+            this.setAttachment(attachment);
         }
+    }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((agentId == null) ? 0 : agentId.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Client other = (Client) obj;
+        if (agentId == null) {
+            if (other.agentId != null)
+                return false;
+        } else if (!agentId.equals(other.agentId))
+            return false;
+        return true;
     }
 
     public AgentID getAgentId() {
@@ -226,8 +258,13 @@ public class Client {
             this.attachment.setClient(this);
 
             if (admin_logger.isDebugEnabled()) {
-                admin_logger.debug("AgentID " + this.getAgentId() + " reconnected from " +
-                    this.attachment.getRemoteEndpointName());
+                if (this.lastSeen.get() == 0) {
+                    admin_logger.debug("AgentID " + this.getAgentId() + " connected from " +
+                        this.attachment.getRemoteEndpointName());
+                } else {
+                    admin_logger.debug("AgentID " + this.getAgentId() + " reconnected from " +
+                        this.attachment.getRemoteEndpointName());
+                }
             }
 
         }
@@ -300,12 +337,23 @@ public class Client {
      */
     public void disconnect() throws IOException {
         synchronized (attachment_lock) {
-            try {
-                this.attachment.disconnect();
-            } finally {
-                discardAttachment();
-                ;
+            if (this.attachment != null) {
+                try {
+                    this.attachment.disconnect();
+                } finally {
+                    discardAttachment();
+                }
             }
         }
+    }
+
+    public MagicCookie getMagicCookie() {
+        return this.magicCookie;
+    }
+
+    @Override
+    public String toString() {
+        return "Agent id=" + this.agentId + " remote endpoint=" +
+            (isConnected() ? this.attachment.getRemoteEndpointName() : "not connected");
     }
 }

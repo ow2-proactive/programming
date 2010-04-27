@@ -41,6 +41,7 @@ import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage;
@@ -119,10 +120,10 @@ public class TestMessageRegistration extends MessageFunctionalTest {
             logger.debug("routerId " + routerId);
             switch (type) {
                 case REGISTRATION_REQUEST:
-                    this.msg = new RegistrationRequestMessage(agent, msgId, routerId);
+                    this.msg = new RegistrationRequestMessage(agent, msgId, routerId, new MagicCookie());
                     break;
                 case REGISTRATION_REPLY:
-                    this.msg = new RegistrationReplyMessage(agent, msgId, routerId, 0);
+                    this.msg = new RegistrationReplyMessage(agent, msgId, routerId, new MagicCookie(), 0);
                     break;
                 default:
                     break;

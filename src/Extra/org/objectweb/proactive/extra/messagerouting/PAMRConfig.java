@@ -49,6 +49,27 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
     static public PAPropertyInteger PA_PAMR_HEARTBEAT_TIMEOUT = new PAPropertyInteger(
         "proactive.communication.pamr.heartbeat_timeout", false, 1000);
 
+    /** The agent ID to use.
+     *
+     * This property can be set to obtain a given (and fixed) agent ID. This id must be declared
+     * in the router configuration and must be between 0 and 4096.
+     */
+    static public PAPropertyInteger PA_PAMR_AGENT_ID = new PAPropertyInteger(
+        "proactive.communication.pamr.agent.id", false);
+
+    /** The Magic cookie to submit to the router
+     *
+     * If {@link #PA_PAMR_AGENT_ID} is set, then this property must also be set to be able
+     * to use a reserved agent ID.
+     *
+     * If {@link #PA_PAMR_AGENT_ID} is not set, then this property can be set. But there is no
+     * extra value to set it.
+     *
+     * A magic is a string up to 64 Unicode characters.
+     */
+    static public PAPropertyString PA_PAMR_AGENT_MAGIC_COOKIE = new PAPropertyString(
+        "proactive.communication.pamr.agent.magic_cookie", false);
+
     /* ------------------------------------
      *  PAMR over SSH
      */

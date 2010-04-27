@@ -48,6 +48,7 @@ import org.objectweb.proactive.extra.messagerouting.client.AgentImpl;
 import org.objectweb.proactive.extra.messagerouting.client.MessageHandler;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DebugMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
@@ -99,7 +100,8 @@ public class ClientIOException extends BlackBox {
 
         public Agent(InetAddress routerAddr, int routerPort,
                 Class<? extends MessageHandler> messageHandlerClass) throws ProActiveException {
-            super(routerAddr, routerPort, messageHandlerClass, new MessageRoutingPlainSocketFactory());
+            super(routerAddr, routerPort, null, new MagicCookie(), messageHandlerClass,
+                    new MessageRoutingPlainSocketFactory());
         }
 
         public void sendMsg(Message message) throws MessageRoutingException {

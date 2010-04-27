@@ -57,6 +57,8 @@ import org.objectweb.proactive.extra.messagerouting.client.Agent;
 import org.objectweb.proactive.extra.messagerouting.client.AgentImpl;
 import org.objectweb.proactive.extra.messagerouting.client.ProActiveMessageHandler;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
+import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingRegistryListRemoteObjectsMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingRemoteObjectLookupMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.MessageRoutingRegistry;
@@ -107,10 +109,28 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
             logAndThrowException("Router address, " + routerAddressStr + " cannot be resolved", e);
         }
 
-        Agent agent = null;
+        AgentID agentId = null;
+        if (PAMRConfig.PA_PAMR_AGENT_ID.isSet()) {
+            int id = PAMRConfig.PA_PAMR_AGENT_ID.getValue();
+            agentId = new AgentID(id);
+        }
+
+        MagicCookie magicCookie = null;
+        if (PAMRConfig.PA_PAMR_AGENT_MAGIC_COOKIE.isSet()) {
+            String str = PAMRConfig.PA_PAMR_AGENT_MAGIC_COOKIE.getValue();
+            try {
+                magicCookie = new MagicCookie(str);
+            } catch (IllegalArgumentException e) {
+                logAndThrowException("Invalid PAMR Magic cookie. PAMR agent will not start", e);
+            }
+        } else {
+            magicCookie = new MagicCookie();
+        }
+
+        AgentImpl agent = null;
         try {
-            agent = new AgentImpl(routerAddress, routerPort, ProActiveMessageHandler.class,
-                MessageRoutingSocketFactorySelector.get());
+            agent = new AgentImpl(routerAddress, routerPort, agentId, magicCookie,
+                ProActiveMessageHandler.class, MessageRoutingSocketFactorySelector.get());
         } catch (ProActiveException e) {
             logAndThrowException("Failed to create the local agent", e);
         }

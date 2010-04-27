@@ -66,6 +66,7 @@ import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
@@ -79,6 +80,7 @@ import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessag
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingSocketFactorySPI;
 import org.objectweb.proactive.extra.messagerouting.router.Router;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 
 /**
@@ -101,7 +103,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
     /** Local AgentID, set after initialization. */
     private AgentID agentID = null;
     /** Remote router ID, set after initialization */
-    private long routerID = 0;
+    volatile private long routerID;
+    /** The magic cookie to use to connect to the router */
+    final private MagicCookie magicCookie;
+
     /** Request ID Generator **/
     private final AtomicLong requestIDGenerator;
 
@@ -109,7 +114,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
     final private WaitingRoom mailboxes;
 
     /** Current tunnel, can be null */
-    private volatile Tunnel t = null;
+    volatile private Tunnel t = null;
     /** List of tunnel reported as failed */
     final private List<Tunnel> failedTunnels;
 
@@ -135,15 +140,20 @@ public class AgentImpl implements Agent, AgentImplMBean {
      *            Address of the router
      * @param routerPort
      *            TCP port on which the router listen
+     * @param agentId
+     *            If the client want to get a reserved agentId number
+     * @param magicCookie
+     *            The magic cookie to submit to the router
      * @param messageHandlerClass
      *            Class the will handled received message
      * @throws ProActiveException
      *             If the router cannot be contacted.
      */
-    public AgentImpl(InetAddress routerAddr, int routerPort,
+    public AgentImpl(InetAddress routerAddr, int routerPort, AgentID agentId, MagicCookie magicCookie,
             Class<? extends MessageHandler> messageHandlerClass, MessageRoutingSocketFactorySPI socketFactory)
             throws ProActiveException {
-        this(routerAddr, routerPort, messageHandlerClass, new ArrayList<Valve>(), socketFactory);
+        this(routerAddr, routerPort, agentId, magicCookie, messageHandlerClass, new ArrayList<Valve>(),
+                socketFactory);
     }
 
     /**
@@ -155,6 +165,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
      *            Address of the router
      * @param routerPort
      *            TCP port on which the router listen
+     * @param agentId
+     *            If the client want to get a reserved agentId number
+     * @param magicCookie
+     *            The magic cookie to submit to the router
      * @param messageHandlerClass
      *            Class the will handled received message
      * @param valves
@@ -163,7 +177,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
      * @throws ProActiveException
      *             If the router cannot be contacted.
      */
-    public AgentImpl(InetAddress routerAddr, int routerPort,
+    public AgentImpl(InetAddress routerAddr, int routerPort, AgentID agentId, MagicCookie magicCookie,
             Class<? extends MessageHandler> messageHandlerClass, List<Valve> valves,
             MessageRoutingSocketFactorySPI socketFactory) throws ProActiveException {
         this.routerAddr = routerAddr;
@@ -174,6 +188,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
         this.failedTunnels = new LinkedList<Tunnel>();
         this.socketFactory = socketFactory;
         this.timer = new Timer("PAMR: Heartbeat timer");
+        this.agentID = agentId; // Check the agentId number
+        this.magicCookie = magicCookie;
+        this.routerID = RouterImpl.DEFAULT_ROUTER_ID;
 
         try {
             Constructor<? extends MessageHandler> mhConstructor;
@@ -297,7 +314,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         try {
             // if call for the first time then agentID is null
             RegistrationRequestMessage reg = new RegistrationRequestMessage(this.agentID, requestIDGenerator
-                    .getAndIncrement(), routerID);
+                    .getAndIncrement(), routerID, this.magicCookie);
             tunnel.write(reg.toByteArray());
 
             // Waiting the router response. The router has 10 seconds to respond
@@ -308,6 +325,28 @@ public class AgentImpl implements Agent, AgentImplMBean {
             if (!(replyMsg instanceof RegistrationReplyMessage)) {
                 if (replyMsg instanceof ErrorMessage) {
                     ErrorMessage em = (ErrorMessage) replyMsg;
+                    switch (em.getErrorType()) {
+                        case ERR_INVALID_ROUTER_ID:
+                            throw new RouterHandshakeException(
+                                "Router ID does not match. The router has probably been restarted. Disconnecting...");
+                        case ERR_MALFORMED_MESSAGE:
+                            throw new RouterHandshakeException(
+                                "The router received a corrupted version of the original message.");
+                        case ERR_INVALID_AGENT_ID:
+                            if (this.agentID.isReserved()) {
+                                throw new RouterHandshakeException(
+                                    "Cannot register to the router, invalid agent id: " + this.agentID +
+                                        ". This reserved ID has not been configured on the router, check your configuration");
+                            } else {
+                                throw new RouterHandshakeException(
+                                    "Cannot register to the router, invalid agent id: " + this.agentID);
+                            }
+                        case ERR_WRONG_MAGIC_COOKIE:
+                            throw new RouterHandshakeException(
+                                "Cannot register to the router, invalid magic cookie");
+                        default:
+                            break;
+                    }
                     if (em.getErrorType() == ErrorType.ERR_INVALID_ROUTER_ID) {
                         throw new RouterHandshakeException("The router has been restarted. Disconnecting...");
                     } else if (em.getErrorType() == ErrorType.ERR_MALFORMED_MESSAGE) {
@@ -333,14 +372,12 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 }
             }
 
-            if (this.routerID == 0) {
+            if (this.routerID == Long.MIN_VALUE) {
                 this.routerID = rrm.getRouterID();
             } else if (this.routerID != rrm.getRouterID()) {
                 throw new RouterHandshakeException("Invalid router response: previous router ID  was " +
                     this.agentID + " but server now advertises " + rrm.getRouterID());
             }
-
-            // Cancel the recurrent heartbeat task. Will be replaced by a new one if needed
 
             int hb = rrm.getHeartbeatPeriod();
             if (hb > 0) {

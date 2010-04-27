@@ -37,8 +37,12 @@
 package org.objectweb.proactive.extra.messagerouting.router;
 
 import java.net.InetAddress;
+import java.util.Map;
+import java.util.Properties;
 
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 
 
 /** A bean for router configuration. 
@@ -62,6 +66,8 @@ public class RouterConfig {
     private int nbWorkerThreads;
 
     private InetAddress inetAddress;
+
+    private Map<AgentID, MagicCookie> reservedAgentId;
 
     public RouterConfig() {
         this.port = 0;
@@ -133,6 +139,14 @@ public class RouterConfig {
     /** The {@link InetAddress} on which the router will listen */
     public void setInetAddress(InetAddress inetAddress) {
         this.inetAddress = inetAddress;
+    }
+
+    public void setReservedAgentId(Map<AgentID, MagicCookie> reservedAgents) {
+        this.reservedAgentId = reservedAgentId;
+    }
+
+    public Map<AgentID, MagicCookie> getReservedAgentId() {
+        return this.reservedAgentId;
     }
 
 }

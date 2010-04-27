@@ -45,6 +45,7 @@ import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extra.messagerouting.client.AgentImpl;
 import org.objectweb.proactive.extra.messagerouting.client.ProActiveMessageHandler;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
 
 import functionalTests.FunctionalTest;
@@ -55,8 +56,8 @@ public class TestInvalidRouter extends FunctionalTest {
     @Test
     public void test() throws ProActiveException, UnknownHostException {
         InetAddress localhost = InetAddress.getLocalHost();
-        AgentImpl agt = new AgentImpl(localhost, 12423, ProActiveMessageHandler.class,
-            new MessageRoutingPlainSocketFactory());
+        AgentImpl agt = new AgentImpl(localhost, 12423, null, new MagicCookie(),
+            ProActiveMessageHandler.class, new MessageRoutingPlainSocketFactory());
         Assert.assertNull(agt.getAgentID());
     }
 }

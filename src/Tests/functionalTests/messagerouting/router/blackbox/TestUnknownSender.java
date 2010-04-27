@@ -44,12 +44,14 @@ import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 import functionalTests.messagerouting.BlackBox;
 
@@ -87,7 +89,8 @@ public class TestUnknownSender extends BlackBox {
     @Test
     public void testOK() throws IOException, MalformedMessageException {
         // Connect
-        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0);
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(),
+            RouterImpl.DEFAULT_ROUTER_ID, new MagicCookie());
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();

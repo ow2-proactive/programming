@@ -38,6 +38,7 @@ package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 
 
 /** 
@@ -46,8 +47,9 @@ import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
  */
 public class RegistrationReplyMessage extends RegistrationMessage {
 
-    public RegistrationReplyMessage(AgentID agentID, long messageId, long routerId, int heartbeatPeriod) {
-        super(MessageType.REGISTRATION_REPLY, messageId, agentID, routerId, heartbeatPeriod);
+    public RegistrationReplyMessage(AgentID agentID, long messageId, long routerId, MagicCookie magicCookie,
+            int heartbeatPeriod) {
+        super(MessageType.REGISTRATION_REPLY, messageId, agentID, routerId, magicCookie, heartbeatPeriod);
     }
 
     /**

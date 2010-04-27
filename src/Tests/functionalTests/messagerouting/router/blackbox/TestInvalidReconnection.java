@@ -44,11 +44,13 @@ import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 import functionalTests.messagerouting.BlackBox;
 
@@ -66,7 +68,8 @@ public class TestInvalidReconnection extends BlackBox {
     public void testInvalidAgentId() throws IOException, MalformedMessageException {
         AgentID agentID = new AgentID(0xcafe);
         long messageID = ProActiveRandom.nextPosLong();
-        Message message = new RegistrationRequestMessage(agentID, messageID, 0);
+        Message message = new RegistrationRequestMessage(agentID, messageID, RouterImpl.DEFAULT_ROUTER_ID,
+            new MagicCookie());
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
@@ -86,7 +89,9 @@ public class TestInvalidReconnection extends BlackBox {
      */
     @Test
     public void testInvalidAgentId2() throws IOException, MalformedMessageException {
-        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0);
+        MagicCookie magicCookie = new MagicCookie();
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(),
+            RouterImpl.DEFAULT_ROUTER_ID, magicCookie);
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
@@ -94,7 +99,7 @@ public class TestInvalidReconnection extends BlackBox {
 
         AgentID agentId = new AgentID(0xbadbad);
         long messageID = ProActiveRandom.nextLong();
-        message = new RegistrationRequestMessage(agentId, messageID, reply.getRouterID());
+        message = new RegistrationRequestMessage(agentId, messageID, reply.getRouterID(), magicCookie);
         tunnel.write(message.toByteArray());
 
         resp = tunnel.readMessage();
@@ -107,7 +112,9 @@ public class TestInvalidReconnection extends BlackBox {
 
     @Test
     public void testInvalidRouterID() throws IOException, InstantiationException, MalformedMessageException {
-        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextLong(), 0);
+        MagicCookie magicCookie = new MagicCookie();
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextLong(),
+            RouterImpl.DEFAULT_ROUTER_ID, magicCookie);
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
@@ -117,7 +124,8 @@ public class TestInvalidReconnection extends BlackBox {
 
         // Ok it's time to reconnect
 
-        message = new RegistrationRequestMessage(reply.getAgentID(), ProActiveRandom.nextLong(), 0xbadbad);
+        message = new RegistrationRequestMessage(reply.getAgentID(), ProActiveRandom.nextLong(), 0xbadbad,
+            magicCookie);
         tunnel.write(message.toByteArray());
 
         resp = tunnel.readMessage();

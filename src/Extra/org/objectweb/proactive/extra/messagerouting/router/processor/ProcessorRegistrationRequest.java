@@ -40,9 +40,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.objectweb.proactive.core.util.Sleeper;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationMessage;
@@ -77,15 +80,15 @@ public class ProcessorRegistrationRequest extends Processor {
                     this.rawMessage.array(), 0);
             AgentID agentId = message.getAgentID();
 
-            Client client = null;
             if (agentId == null) {
-                client = connection(message);
+                standardConnection(message);
             } else {
-                client = reconnection(message);
-            }
-
-            if (client != null) {
-                client.updateLastSeen();
+                if (agentId.isReserved()) {
+                    // Reserved connection & reconnection
+                    reservedConnection(message);
+                } else {
+                    standardReconnection(message);
+                }
             }
         } catch (MalformedMessageException e) {
             // try to see who sent it
@@ -99,41 +102,9 @@ public class ProcessorRegistrationRequest extends Processor {
         }
     }
 
-    /* Generate and unique AgentID and send the registration reply
-     * in best effort. If succeeded, add the new client to the router
-     */
-    private Client connection(RegistrationRequestMessage message) {
-        long routerId = message.getRouterID();
-        if (routerId != 0) {
-            logger.warn("Invalid connection request. router ID must be 0. Remote endpoint is: " +
-                attachment.getRemoteEndpointName());
+    private void standardReconnection(RegistrationRequestMessage message) {
+        // agentId != null, agentId not reserved, magicCookie != null, routerId != null && correct
 
-            // Cannot contact the client yet, disconnect it !
-            // Since we disconnect the client, we must free the resources
-            this.attachment.dtor();
-            return null;
-        }
-
-        AgentID agentId = AgentIdGenerator.getId();
-
-        RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(), this.router
-                .getId(), getHeartbeatPeriod());
-
-        Client client = new Client(attachment, agentId);
-        boolean resp = this.sendReply(client, reply);
-        if (resp) {
-            this.router.addClient(client);
-        }
-
-        return client;
-    }
-
-    /* Check if the client is known. If not send an ERR_.
-     * Otherwise, send the registration reply in best effort.
-     * If succeeded, update the attachment in the client, and
-     * flush the pending messages.
-     */
-    private Client reconnection(RegistrationRequestMessage message) {
         AgentID agentId = message.getAgentID();
 
         // Check that it is not an "old" client
@@ -142,7 +113,7 @@ public class ProcessorRegistrationRequest extends Processor {
                 " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
                 attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
-            return null;
+            return;
         }
 
         // Check if the client is know
@@ -152,22 +123,114 @@ public class ProcessorRegistrationRequest extends Processor {
                 " asked to reconnect but is not known by this router. Remote endpoint is: " +
                 attachment.getRemoteEndpointName());
             notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_AGENT_ID);
-        } else {
-            // Acknowledge the registration
-            client.setAttachment(attachment);
-            RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
-                this.router.getId(), getHeartbeatPeriod());
-
-            boolean resp = this.sendReply(client, reply);
-            if (resp) {
-                client.sendPendingMessage();
-            } else {
-                logger.info("Failed to acknowledge the registration for " + agentId);
-                // Drop the attachment
-            }
+            return;
         }
 
-        return client;
+        if (!client.getMagicCookie().equals(message.getMagicCookie())) {
+            logger.warn("AgentId " + agentId +
+                " asked to reconnect but provided an incorrect magic cookie. Remote endpoint is: " +
+                attachment.getRemoteEndpointName());
+            notifyInvalidAgent(message, agentId, ErrorType.ERR_WRONG_MAGIC_COOKIE);
+            return;
+        }
+
+        try {
+            client.disconnect();
+        } catch (IOException e) {
+            ProActiveLogger.logEatedException(logger, e);
+        }
+
+        // Acknowledge the registration
+        RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
+            this.router.getId(), client.getMagicCookie(), getHeartbeatPeriod());
+
+        client.setAttachment(attachment);
+        boolean resp = this.sendReply(client, reply);
+        if (resp) {
+            client.updateLastSeen();
+            client.sendPendingMessage();
+        } else {
+            logger.info("Failed to acknowledge the registration for " + agentId);
+        }
+    }
+
+    private void reservedConnection(RegistrationRequestMessage message) {
+        AgentID agentId = message.getAgentID();
+
+        Client client = router.getClient(agentId);
+        if (client == null) {
+            logger.warn("AgentId " + agentId + " asked to connect. But this reserved id " + agentId +
+                " is not known by the router (check your config). Remote endpoint is: " +
+                attachment.getRemoteEndpointName());
+            notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_AGENT_ID);
+            return;
+        }
+
+        if (!client.getMagicCookie().equals(message.getMagicCookie())) {
+            logger.warn("AgentId " + agentId +
+                " asked to reconnect but provided an incorrect magic cookie. Remote endpoint is: " +
+                attachment.getRemoteEndpointName());
+            notifyInvalidAgent(message, agentId, ErrorType.ERR_WRONG_MAGIC_COOKIE);
+            return;
+        }
+
+        if (message.getRouterID() != RouterImpl.DEFAULT_ROUTER_ID &&
+            message.getRouterID() != this.router.getId()) {
+            logger.warn("AgentId " + agentId +
+                " asked to reconnect but the router IDs do not match. Remote endpoint is: " +
+                attachment.getRemoteEndpointName());
+            notifyInvalidAgent(message, agentId, ErrorType.ERR_INVALID_ROUTER_ID);
+            return;
+        }
+
+        // Disconnect the client if needed
+        try {
+            client.disconnect();
+        } catch (IOException e) {
+            ProActiveLogger.logEatedException(logger, e);
+        }
+
+        // Acknowledge the registration
+        RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
+            this.router.getId(), client.getMagicCookie(), getHeartbeatPeriod());
+
+        client.setAttachment(attachment);
+        boolean resp = this.sendReply(client, reply);
+        if (resp) {
+            client.updateLastSeen();
+            client.sendPendingMessage();
+        } else {
+            logger.info("Failed to acknowledge the registration for " + agentId);
+            attachment.dtor();
+        }
+    }
+
+    private void standardConnection(RegistrationRequestMessage message) {
+        // agentId == null, magicCookie != null, routerId == null
+
+        long routerId = message.getRouterID();
+        if (routerId != RouterImpl.DEFAULT_ROUTER_ID) {
+            logger.warn("Invalid connection request. router ID must be " + RouterImpl.DEFAULT_ROUTER_ID +
+                ". Remote endpoint is: " + attachment.getRemoteEndpointName());
+
+            this.attachment.dtor();
+            return;
+        }
+
+        AgentID agentId = AgentIdGenerator.getId();
+        MagicCookie magicCookie = message.getMagicCookie();
+        RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(), this.router
+                .getId(), magicCookie, getHeartbeatPeriod());
+
+        Client client = new Client(attachment, agentId, magicCookie);
+        boolean resp = this.sendReply(client, reply);
+        if (resp) {
+            this.router.addClient(client);
+            client.updateLastSeen();
+        } else {
+            logger.info("Failed to send registration reply to " + this.attachment);
+            this.attachment.dtor();
+        }
     }
 
     private void notifyInvalidAgent(RegistrationRequestMessage message, AgentID agentId, ErrorType errorCode) {
@@ -195,7 +258,7 @@ public class ProcessorRegistrationRequest extends Processor {
             client.sendMessage(reply.toByteArray());
             return true;
         } catch (IOException e) {
-            logger.info("Failed to send registration reply to " + reply.getAgentID() + ", IOException");
+            logger.info("Failed to send registration reply to " + reply.getAgentID() + ": " + e.getCause());
         }
         return false;
     }
@@ -205,7 +268,7 @@ public class ProcessorRegistrationRequest extends Processor {
     }
 
     static abstract private class AgentIdGenerator {
-        static final private AtomicLong generator = new AtomicLong(0);
+        static final private AtomicLong generator = new AtomicLong(AgentID.MIN_DYNAMIC_AGENT_ID);
 
         static public AgentID getId() {
             return new AgentID(generator.getAndIncrement());

@@ -48,6 +48,8 @@ import java.io.Serializable;
  */
 
 public class AgentID implements Serializable {
+    static final public long MIN_DYNAMIC_AGENT_ID = 4096;
+
     final private long id;
 
     public AgentID(long id) {
@@ -56,6 +58,10 @@ public class AgentID implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    public boolean isReserved() {
+        return this.id < MIN_DYNAMIC_AGENT_ID && this.id >= 0;
     }
 
     @Override

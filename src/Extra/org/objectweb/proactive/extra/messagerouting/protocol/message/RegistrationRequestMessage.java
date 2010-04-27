@@ -38,6 +38,7 @@ package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
 
@@ -56,8 +57,8 @@ public class RegistrationRequestMessage extends RegistrationMessage {
      * @param messageId
      * 		An unique message ID per sender.
      */
-    public RegistrationRequestMessage(AgentID agentID, long messageId, long routerId) {
-        super(MessageType.REGISTRATION_REQUEST, messageId, agentID, routerId, 0);
+    public RegistrationRequestMessage(AgentID agentID, long messageId, long routerId, MagicCookie magicCookie) {
+        super(MessageType.REGISTRATION_REQUEST, messageId, agentID, routerId, magicCookie, 0);
     }
 
     /**
@@ -74,7 +75,7 @@ public class RegistrationRequestMessage extends RegistrationMessage {
                 " message:" + "Invalid value for the " + Message.Field.MSG_TYPE + " field:" + this.getType());
         }
 
-        if (this.getRouterID() < 0) {
+        if (this.getRouterID() < 0 && this.getRouterID() != Long.MIN_VALUE) {
             throw new MalformedMessageException("Malformed " + MessageType.REGISTRATION_REQUEST +
                 " message:" + "Invalid value for the " + Field.ROUTER_ID + " field:" + this.getRouterID());
         }

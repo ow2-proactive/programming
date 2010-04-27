@@ -38,6 +38,7 @@ package org.objectweb.proactive.extra.messagerouting.protocol.message;
 
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
 
@@ -75,7 +76,9 @@ public abstract class RegistrationMessage extends Message {
          *
          * Can be 0.
          */
-        HEARTBEAT_PERIOD(4, Integer.class);
+        HEARTBEAT_PERIOD(4, Integer.class),
+        /** The magic cookie used to unlock the client slot on the router */
+        MAGIC_COOKIE(MagicCookie.COOKIE_SIZE, MagicCookie.class);
 
         private int length;
         private Class<?> type;
@@ -123,6 +126,8 @@ public abstract class RegistrationMessage extends Message {
                     return "ROUTER_ID";
                 case HEARTBEAT_PERIOD:
                     return "HEARTBEAT_PERIOD";
+                case MAGIC_COOKIE:
+                    return "MAGIC_COOKIE";
                 default:
                     return super.toString();
             }
@@ -144,6 +149,9 @@ public abstract class RegistrationMessage extends Message {
      */
     final private int heartbeatPeriod;
 
+    /** The magic cookie or null if not set */
+    final private MagicCookie magicCookie;
+
     /** Create a registration message.
      * 
      * @param type
@@ -157,12 +165,13 @@ public abstract class RegistrationMessage extends Message {
      * 		The router id
      */
     public RegistrationMessage(MessageType type, long messageId, AgentID agentID, long routerID,
-            int heartbeatPeriod) {
+            MagicCookie magicCookie, int heartbeatPeriod) {
         super(type, messageId);
 
         this.agentID = agentID;
         this.routerID = routerID;
         this.heartbeatPeriod = heartbeatPeriod;
+        this.magicCookie = magicCookie;
         super.setLength(Message.Field.getTotalOffset() + Field.getTotalOffset());
 
     }
@@ -180,6 +189,7 @@ public abstract class RegistrationMessage extends Message {
             this.agentID = readAgentID(byteArray, offset);
             this.routerID = readRouterID(byteArray, offset);
             this.heartbeatPeriod = readHeartbeatPeriod(byteArray, offset);
+            this.magicCookie = readMagicCookie(byteArray, offset);
         } catch (MalformedMessageException e) {
             throw new MalformedMessageException("Malformed " + this.getType() + " message:" + e.getMessage());
         }
@@ -195,6 +205,10 @@ public abstract class RegistrationMessage extends Message {
 
     public int getHeartbeatPeriod() {
         return this.heartbeatPeriod;
+    }
+
+    public MagicCookie getMagicCookie() {
+        return this.magicCookie;
     }
 
     @Override
@@ -214,6 +228,8 @@ public abstract class RegistrationMessage extends Message {
             Field.ROUTER_ID.getOffset());
         TypeHelper.intToByteArray(heartbeatPeriod, buff, Message.Field.getTotalOffset() +
             Field.HEARTBEAT_PERIOD.getOffset());
+        System.arraycopy(this.magicCookie.getBytes(), 0, buff, Message.Field.getTotalOffset() +
+            Field.MAGIC_COOKIE.getOffset(), (int) Field.MAGIC_COOKIE.getLength());
         return buff;
     }
 
@@ -268,6 +284,13 @@ public abstract class RegistrationMessage extends Message {
                 "Invalid registration message. The hearbeat field must be positive");
         }
         return hb;
+    }
+
+    static public MagicCookie readMagicCookie(byte[] byteArray, int offset) {
+        byte[] cBuf = new byte[MagicCookie.COOKIE_SIZE];
+        System.arraycopy(byteArray, offset + Message.Field.getTotalOffset() + Field.MAGIC_COOKIE.getOffset(),
+                cBuf, 0, (int) Field.MAGIC_COOKIE.getLength());
+        return new MagicCookie(cBuf);
     }
 
     @Override

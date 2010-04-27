@@ -36,9 +36,21 @@
  */
 package org.objectweb.proactive.extra.messagerouting.router;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -52,6 +64,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
+import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 
 
 /** Start a router.
@@ -91,6 +105,7 @@ class Main {
         this.options.addOption("4", "ipv4", false, "Force the router to use IPv4 addresses only");
         this.options.addOption("6", "ipv6", false, "Force the router to use IPv6 addresses only");
         this.options.addOption("w", "nbWorkers", true, "Size of the worker thread pool");
+        this.options.addOption("f", "configFile", true, "configuration file");
         this.options.addOption("h", "help", false, "Print help message");
         this.options.addOption("v", "verbose", false, "Verbose mode. Print clients (dis)connections");
 
@@ -158,6 +173,49 @@ class Main {
                 } catch (NumberFormatException e) {
                     printHelpAndExit("Invalid worker number: " + arg);
                 }
+            }
+
+            arg = line.getOptionValue("f");
+            if (arg != null) {
+                try {
+                    Properties properties = new Properties();
+                    File f = new File(arg);
+                    FileInputStream fis = new FileInputStream(f);
+                    properties.load(fis);
+
+                    Map<AgentID, MagicCookie> map = new HashMap<AgentID, MagicCookie>();
+                    for (Object o : properties.keySet()) {
+                        try {
+                            String sId = (String) o;
+                            String sCookie = (String) properties.get(o);
+                            AgentID agentId = new AgentID(Long.parseLong(sId));
+                            MagicCookie cookie = new MagicCookie(sCookie);
+                            if (!agentId.isReserved()) {
+                                System.err
+                                        .println("Invalid configuration file. Agent ID must be between 0 and " +
+                                            (AgentID.MIN_DYNAMIC_AGENT_ID - 1));
+                                System.exit(1);
+                            } else {
+                                map.put(agentId, cookie);
+                            }
+                        } catch (ClassCastException e) {
+                            System.err.println("Invalid configuration file");
+                            System.exit(1);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Invalid agent ID (" + o +
+                                ") in configuration file. Keys must be a integer between 0 and " +
+                                (AgentID.MIN_DYNAMIC_AGENT_ID - 1));
+                            System.exit(1);
+                        }
+                    }
+
+                    config.setReservedAgentId(map);
+                } catch (IOException e) {
+                    System.err.println("Failed to read the config file: " + e.getMessage());
+                } catch (IllegalArgumentException e) {
+                    System.err.println("Invalid config file: " + e.getMessage());
+                }
+
             }
 
             if (line.hasOption("v")) {

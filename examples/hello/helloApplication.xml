@@ -19,6 +19,7 @@
 					<pathElement base="proactive" relpath="dist/lib/ibis-connect-1.0.jar"/>
 					<pathElement base="proactive" relpath="dist/lib/ibis-util-1.0.jar"/>
 				</applicationClasspath>
+				<log4jProperties base="proactive" relpath="examples/proactive-log4j"/>
 			</configuration>
 			<virtualNode id="Hello" capacity="1">
 				<nodeProvider refid="provider" />

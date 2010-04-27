@@ -49,7 +49,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -64,6 +67,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.HeartbeatRouterMessage;
@@ -83,6 +87,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     /** Read {@link ByteBuffer} size. */
     private final static int READ_BUFFER_SIZE = 4096;
+
+    public final static long DEFAULT_ROUTER_ID = Long.MIN_VALUE;
 
     /** True is the router must stop or is stopped*/
     private final AtomicBoolean stopped = new AtomicBoolean(false);
@@ -138,6 +144,20 @@ public class RouterImpl extends RouterInternal implements Runnable {
     }
 
     private void init(RouterConfig config) throws IOException {
+        // Creates reserved agents
+        Map<AgentID, MagicCookie> rAgents = config.getReservedAgentId();
+        if (rAgents != null) {
+            for (AgentID agentID : rAgents.keySet()) {
+                MagicCookie magicCookie = rAgents.get(agentID);
+                Client client = new Client(agentID, magicCookie);
+                this.clientMap.put(agentID, client);
+
+                if (admin_logger.isDebugEnabled()) {
+                    admin_logger.debug("Added reserved client: " + agentID + " " + magicCookie);
+                }
+            }
+        }
+
         // Create a new selector
         selector = Selector.open();
 

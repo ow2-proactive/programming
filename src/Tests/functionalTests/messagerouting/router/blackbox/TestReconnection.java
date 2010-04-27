@@ -37,16 +37,21 @@
 package functionalTests.messagerouting.router.blackbox;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
+import org.objectweb.proactive.extra.messagerouting.client.Tunnel;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 import functionalTests.messagerouting.BlackBox;
 
@@ -55,17 +60,25 @@ public class TestReconnection extends BlackBox {
 
     @Test
     public void test() throws IOException, MalformedMessageException {
-        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextLong(), 0);
+        MagicCookie magicCookie = new MagicCookie();
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextLong(),
+            RouterImpl.DEFAULT_ROUTER_ID, magicCookie);
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
         RegistrationReplyMessage reply = new RegistrationReplyMessage(resp, 0);
         AgentID firstID = reply.getAgentID();
         long routerID = reply.getRouterID();
+        magicCookie = reply.getMagicCookie();
 
         // Ok it's time to reconnect
 
-        message = new RegistrationRequestMessage(reply.getAgentID(), ProActiveRandom.nextLong(), routerID);
+        this.tunnel.shutdown();
+        Socket s = new Socket(InetAddress.getLocalHost(), this.router.getPort());
+        this.tunnel = new Tunnel(s);
+
+        message = new RegistrationRequestMessage(reply.getAgentID(), ProActiveRandom.nextLong(), routerID,
+            magicCookie);
         tunnel.write(message.toByteArray());
 
         resp = tunnel.readMessage();

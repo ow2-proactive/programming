@@ -44,9 +44,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
+import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
+import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
 
 import functionalTests.messagerouting.BlackBox;
 
@@ -60,7 +62,9 @@ public class TestConnection extends BlackBox {
      */
     @Test
     public void testConnection() throws IOException, MalformedMessageException {
-        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0);
+        MagicCookie magicCookie = new MagicCookie();
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(),
+            RouterImpl.DEFAULT_ROUTER_ID, magicCookie);
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
@@ -69,6 +73,7 @@ public class TestConnection extends BlackBox {
         Assert.assertEquals(message.getMessageID(), reply.getMessageID());
         Assert.assertNotNull(reply.getAgentID());
         Assert.assertTrue(reply.getAgentID().getId() >= 0);
+        Assert.assertEquals(magicCookie, reply.getMagicCookie());
     }
 
     /*
@@ -79,7 +84,8 @@ public class TestConnection extends BlackBox {
     @Ignore
     @Test(expected = IOException.class)
     public void testInvalidConnection() throws IOException {
-        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0xbadbad);
+        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0xbadbad,
+            new MagicCookie());
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
