@@ -37,7 +37,7 @@
 package org.objectweb.proactive.core.component.body;
 
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
+import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 
 
 /**
@@ -49,9 +49,9 @@ import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
 public interface ComponentBody {
 
     /**
-     * @return a reference on the component meta-object ProActiveComponentImpl
+     * @return a reference on the component meta-object {@link PAComponentImpl}
      */
-    public ProActiveComponentImpl getProActiveComponentImpl();
+    public PAComponentImpl getPAComponentImpl();
 
     public boolean isComponent();
 

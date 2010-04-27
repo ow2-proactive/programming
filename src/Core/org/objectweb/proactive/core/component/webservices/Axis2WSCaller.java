@@ -48,14 +48,14 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
- * Implementation of the {@link ProActiveWSCaller} interface using the <a href="http://ws.apache.org/axis2/">
+ * Implementation of the {@link PAWSCaller} interface using the <a href="http://ws.apache.org/axis2/">
  * Axis2</a> API.
  *
  * @author The ProActive Team
- * @see ProActiveWSCaller
+ * @see PAWSCaller
  */
 @PublicAPI
-public class Axis2WSCaller implements ProActiveWSCaller {
+public class Axis2WSCaller implements PAWSCaller {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
 
     private RPCServiceClient rsc;

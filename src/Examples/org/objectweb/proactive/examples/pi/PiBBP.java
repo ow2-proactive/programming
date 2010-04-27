@@ -43,9 +43,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.group.Group;
@@ -223,7 +223,7 @@ public class PiBBP implements Serializable {
             for (int i = 0; i < nbNodes; i++) {
                 worker = (Component) f.newComponent("org.objectweb.proactive.examples.pi.fractal.PiComputer",
                         context);
-                Fractal.getBindingController(master).bindFc("multicastDispatcher",
+                GCM.getBindingController(master).bindFc("multicastDispatcher",
                         worker.getFcInterface("computation")); /*
                  * Master component is bound to each
                  * worker, with its client multicast
@@ -238,7 +238,7 @@ public class PiBBP implements Serializable {
             PiComp picomp;
             for (int j = 0; j < workers.size(); j++) {
                 w = workers.get(j);
-                Fractal.getLifeCycleController(w).startFc();
+                GCM.getGCMLifeCycleController(w).startFc();
                 picomp = (PiComp) w.getFcInterface("computation");
                 picomp.setScale(nbDecimals_); /*
                  * Normally, this is made when instantiating
@@ -247,7 +247,7 @@ public class PiBBP implements Serializable {
                  */
             }
 
-            Fractal.getLifeCycleController(master).startFc();
+            GCM.getGCMLifeCycleController(master).startFc();
             MasterComputation m = (MasterComputation) master.getFcInterface("s");
             m.computePi(intervals); /*
              * Computing and displaying the value of PI(the call is
@@ -256,12 +256,12 @@ public class PiBBP implements Serializable {
 
             /* Stopping all the components */
             /* Stopping master component */
-            Fractal.getLifeCycleController(master).stopFc();
+            GCM.getGCMLifeCycleController(master).stopFc();
 
             /* Stopping workers components */
             for (int j = 0; j < workers.size(); j++) {
                 w = workers.get(j);
-                Fractal.getLifeCycleController(w).stopFc();
+                GCM.getGCMLifeCycleController(w).stopFc();
             }
 
             deploymentDescriptor.kill(); /* Killing deployed runtimes */

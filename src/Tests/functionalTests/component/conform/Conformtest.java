@@ -44,15 +44,24 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.etsi.uri.gcm.api.control.GathercastController;
+import org.etsi.uri.gcm.api.control.MonitorController;
+import org.etsi.uri.gcm.api.control.PriorityController;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.ContentController;
+import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.controller.MonitorController;
-import org.objectweb.proactive.core.component.controller.PriorityController;
+import org.objectweb.proactive.core.component.control.PABindingController;
+import org.objectweb.proactive.core.component.control.PAContentController;
+import org.objectweb.proactive.core.component.control.PAGCMLifeCycleController;
+import org.objectweb.proactive.core.component.control.PAMigrationController;
+import org.objectweb.proactive.core.component.control.PAMulticastController;
+import org.objectweb.proactive.core.component.control.PASuperController;
+import org.objectweb.proactive.core.component.identity.PAComponent;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.conform.components.I;
@@ -60,23 +69,29 @@ import functionalTests.component.conform.components.I;
 
 public abstract class Conformtest extends ComponentTest {
     // FcItfName/FcItfSignature/isFcClientItf ^ internal, isFcOptionalItf, isFcCollectionItf
-    protected final static String COMP = "component/org.objectweb.proactive.core.component.identity.ProActiveComponent/false,false,false";
-    protected final static String BC = "binding-controller/org.objectweb.proactive.core.component.controller.ProActiveBindingController/false,false,false";
-    protected final static String CC = "content-controller/org.objectweb.proactive.core.component.controller.ProActiveContentController/false,false,false";
-    protected final static String NC = "name-controller/org.objectweb.fractal.api.control.NameController/false,false,false";
-
-    //protected final static String NC = "name-controller/org.objectweb.proactive.core.component.controller.ProActiveNameController/false,false,false";
-    protected final static String LC = "lifecycle-controller/org.objectweb.proactive.core.component.controller.ProActiveLifeCycleController/false,false,false";
-    protected final static String SC = "super-controller/org.objectweb.proactive.core.component.controller.ProActiveSuperController/false,false,false";
+    protected final static String COMP = "component/" + PAComponent.class.getName() + "/false,false,false";
+    protected final static String BC = Constants.BINDING_CONTROLLER + "/" +
+        PABindingController.class.getCanonicalName() + "/false,false,false";
+    protected final static String CC = Constants.CONTENT_CONTROLLER + "/" +
+        PAContentController.class.getCanonicalName() + "/false,false,false";
+    protected final static String NC = Constants.NAME_CONTROLLER + "/" +
+        NameController.class.getCanonicalName() + "/false,false,false";
+    protected final static String LC = Constants.LIFECYCLE_CONTROLLER + "/" +
+        PAGCMLifeCycleController.class.getCanonicalName() + "/false,false,false";
+    protected final static String SC = Constants.SUPER_CONTROLLER + "/" +
+        PASuperController.class.getCanonicalName() + "/false,false,false";
     protected final static String F = "factory/org.objectweb.proactive.core.component.Fractive/false,false,false"; //org.objectweb.proactive.core.component.factory.ProActiveGenericFactory
-    protected final static String MC = "migration-controller/org.objectweb.proactive.core.component.controller.MigrationController/false,false,false";
-    protected final static String MCC = "multicast-controller/org.objectweb.proactive.core.component.controller.MulticastController/false,false,false";
-    protected final static String GC = "gathercast-controller/org.objectweb.proactive.core.component.controller.GathercastController/false,false,false";
-    //protected final static String CP = "component-parameters-controller/org.objectweb.proactive.core.component.controller.ComponentParametersController/false,false,false";
-    protected final static String PC = Constants.REQUEST_PRIORITY_CONTROLLER + "/" +
-        PriorityController.class.getCanonicalName() + "/false,false,false";
+    protected final static String MC = Constants.MIGRATION_CONTROLLER + "/" +
+        PAMigrationController.class.getCanonicalName() + "/false,false,false";
+    protected final static String MCC = Constants.MULTICAST_CONTROLLER + "/" +
+        PAMulticastController.class.getCanonicalName() + "/false,false,false";
+    protected final static String GC = Constants.GATHERCAST_CONTROLLER + "/" +
+        GathercastController.class.getCanonicalName() + "/false,false,false";
+    //protected final static String CP = "component-parameters-controller/org.objectweb.proactive.core.component.control.ComponentParametersController/false,false,false";
     protected final static String MoC = Constants.MONITOR_CONTROLLER + "/" +
         MonitorController.class.getCanonicalName() + "/false,false,false";
+    protected final static String PC = Constants.PRIORITY_CONTROLLER + "/" +
+        PriorityController.class.getCanonicalName() + "/false,false,false";
 
     //  protected final static String COMP = "component/"+ComponentItf.TYPE.getFcItfSignature()+"/false,false,false";
     //  protected final static String BC = "binding-controller/"+BindingControllerDef.TYPE.getFcItfSignature()+"/false,false,false";
@@ -188,7 +203,7 @@ public abstract class Conformtest extends ComponentTest {
 
         //        ContentController cc;
         //        try {
-        //            cc = Fractal.getContentController(c);
+        //            cc = GCM.getContentController(c);
         //        } catch (NoSuchInterfaceException e) {
         //            return;
         //        }

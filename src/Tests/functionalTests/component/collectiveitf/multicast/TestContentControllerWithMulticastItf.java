@@ -36,6 +36,8 @@
  */
 package functionalTests.component.collectiveitf.multicast;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -46,17 +48,14 @@ import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
-import org.objectweb.proactive.core.component.Fractive;
-import org.objectweb.proactive.core.component.ProActiveInterface;
-import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
+import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.ComponentTest;
 
 
 public class TestContentControllerWithMulticastItf extends ComponentTest {
     protected Component boot;
-    protected ProActiveTypeFactory tf;
+    protected GCMTypeFactory tf;
     protected GenericFactory gf;
     protected ComponentType tRoot;
     protected ComponentType tTester;
@@ -74,19 +73,19 @@ public class TestContentControllerWithMulticastItf extends ComponentTest {
 
     @Before
     public void setUp() throws Exception {
-        boot = Fractal.getBootstrapComponent();
-        tf = (ProActiveTypeFactory) Fractal.getTypeFactory(boot);
-        gf = Fractal.getGenericFactory(boot);
+        boot = Utils.getBootstrapComponent();
+        tf = GCM.getGCMTypeFactory(boot);
+        gf = GCM.getGenericFactory(boot);
         tRoot = tf.createFcType(new InterfaceType[] {
                 tf.createFcItfType("tester", Tester.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.MANDATORY),
-                tf.createFcItfType("serverMult", MulticastTestItf.class.getName(), TypeFactory.SERVER,
-                        TypeFactory.MANDATORY, ProActiveTypeFactory.MULTICAST_CARDINALITY) });
+                tf.createGCMItfType("serverMult", MulticastTestItf.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, GCMTypeFactory.MULTICAST_CARDINALITY) });
         tTester = tf.createFcType(new InterfaceType[] {
                 tf.createFcItfType("tester", Tester.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.MANDATORY),
-                tf.createFcItfType("clientItf", MulticastTestItf.class.getName(), TypeFactory.CLIENT,
-                        TypeFactory.MANDATORY, ProActiveTypeFactory.MULTICAST_CARDINALITY) });
+                tf.createGCMItfType("clientItf", MulticastTestItf.class.getName(), TypeFactory.CLIENT,
+                        TypeFactory.MANDATORY, GCMTypeFactory.MULTICAST_CARDINALITY) });
         tServer = tf.createFcType(new InterfaceType[] { tf.createFcItfType("server", ServerTestItf.class
                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.MANDATORY) });
         setUpComponents();
@@ -100,7 +99,7 @@ public class TestContentControllerWithMulticastItf extends ComponentTest {
         server2 = gf.newFcInstance(tServer, "primitive", ServerImpl.class.getName());
         server3 = gf.newFcInstance(tServer, "primitive", ServerImpl.class.getName());
         server4 = gf.newFcInstance(tServer, "primitive", ServerImpl.class.getName());
-        ContentController cc = Fractal.getContentController(root);
+        ContentController cc = GCM.getContentController(root);
         cc.addFcSubComponent(tester);
         cc.addFcSubComponent(server1);
         cc.addFcSubComponent(server2);
@@ -109,11 +108,11 @@ public class TestContentControllerWithMulticastItf extends ComponentTest {
     }
 
     protected void setUpBindings() throws Exception {
-        Fractal.getBindingController(root).bindFc("serverMult", server1.getFcInterface("server"));
-        Fractal.getBindingController(root).bindFc("serverMult", server2.getFcInterface("server"));
-        Fractal.getBindingController(root).bindFc("tester", tester.getFcInterface("tester"));
-        Fractal.getBindingController(tester).bindFc("clientItf", server3.getFcInterface("server"));
-        Fractal.getBindingController(tester).bindFc("clientItf", server4.getFcInterface("server"));
+        GCM.getBindingController(root).bindFc("serverMult", server1.getFcInterface("server"));
+        GCM.getBindingController(root).bindFc("serverMult", server2.getFcInterface("server"));
+        GCM.getBindingController(root).bindFc("tester", tester.getFcInterface("tester"));
+        GCM.getBindingController(tester).bindFc("clientItf", server3.getFcInterface("server"));
+        GCM.getBindingController(tester).bindFc("clientItf", server4.getFcInterface("server"));
     }
 
     // -----------------------------------------------------------------------------------------
@@ -121,7 +120,7 @@ public class TestContentControllerWithMulticastItf extends ComponentTest {
     // -----------------------------------------------------------------------------------------
     @Test(expected = IllegalContentException.class)
     public void testRemoveServer1AndFail() throws Exception {
-        ContentController cc = Fractal.getContentController(root);
+        ContentController cc = GCM.getContentController(root);
         cc.removeFcSubComponent(server1);
     }
 
@@ -130,7 +129,7 @@ public class TestContentControllerWithMulticastItf extends ComponentTest {
     // -----------------------------------------------------------------------------------------
     @Test(expected = IllegalContentException.class)
     public void testRemoveTesterAndFail() throws Exception {
-        ContentController cc = Fractal.getContentController(root);
+        ContentController cc = GCM.getContentController(root);
         cc.removeFcSubComponent(tester);
     }
 
@@ -139,7 +138,7 @@ public class TestContentControllerWithMulticastItf extends ComponentTest {
     // -----------------------------------------------------------------------------------------
     @Test(expected = IllegalContentException.class)
     public void testRemoveServer3AndFail() throws Exception {
-        ContentController cc = Fractal.getContentController(root);
+        ContentController cc = GCM.getContentController(root);
         cc.removeFcSubComponent(server3);
     }
 
@@ -149,9 +148,8 @@ public class TestContentControllerWithMulticastItf extends ComponentTest {
     @Test
     @Ignore
     public void testRemoveServer3() throws Exception {
-        ContentController cc = Fractal.getContentController(root);
-        Fractive.getMulticastController(tester).unbindFcMulticast("clientItf",
-                (ProActiveInterface) server3.getFcInterface("server"));
+        ContentController cc = GCM.getContentController(root);
+        GCM.getMulticastController(tester).unbindGCMMulticast("clientItf", server3.getFcInterface("server"));
         cc.removeFcSubComponent(server3);
     }
 }

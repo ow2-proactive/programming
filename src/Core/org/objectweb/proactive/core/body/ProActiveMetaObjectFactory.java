@@ -64,9 +64,9 @@ import org.objectweb.proactive.core.body.request.RequestReceiverFactory;
 import org.objectweb.proactive.core.body.tags.MessageTags;
 import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
 import org.objectweb.proactive.core.component.ComponentParameters;
-import org.objectweb.proactive.core.component.identity.ProActiveComponent;
-import org.objectweb.proactive.core.component.identity.ProActiveComponentFactory;
-import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
+import org.objectweb.proactive.core.component.identity.PAComponent;
+import org.objectweb.proactive.core.component.identity.PAComponentFactory;
+import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 import org.objectweb.proactive.core.component.request.SynchronousComponentRequestReceiver;
 import org.objectweb.proactive.core.debug.debugger.Debugger;
 import org.objectweb.proactive.core.debug.debugger.DebuggerFactory;
@@ -146,7 +146,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     //    protected RemoteBodyFactory remoteBodyFactoryInstance;
     protected ThreadStoreFactory threadStoreFactoryInstance;
     protected ProActiveSPMDGroupManagerFactory proActiveSPMDGroupManagerFactoryInstance;
-    protected ProActiveComponentFactory componentFactoryInstance;
+    protected PAComponentFactory componentFactoryInstance;
     protected ProActiveSecurityManager proActiveSecurityManager;
     protected FTManagerFactory ftmanagerFactoryInstance;
     protected DebuggerFactory debuggerFactoryInstance;
@@ -248,7 +248,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         return this.proActiveSPMDGroupManagerFactoryInstance;
     }
 
-    public ProActiveComponentFactory newComponentFactory() {
+    public PAComponentFactory newComponentFactory() {
         return this.componentFactoryInstance;
     }
 
@@ -298,8 +298,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
         return new ProActiveSPMDGroupManagerFactoryImpl();
     }
 
-    protected ProActiveComponentFactory newComponentFactorySingleton(
-            ComponentParameters initialComponentParameters) {
+    protected PAComponentFactory newComponentFactorySingleton(ComponentParameters initialComponentParameters) {
         return new ProActiveComponentFactoryImpl(initialComponentParameters);
     }
 
@@ -444,7 +443,7 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     }
 
     // end inner class ProActiveGroupManagerFactoryImpl
-    protected class ProActiveComponentFactoryImpl implements ProActiveComponentFactory, java.io.Serializable {
+    protected class ProActiveComponentFactoryImpl implements PAComponentFactory, java.io.Serializable {
         // COMPONENTS
         private ComponentParameters componentParameters;
 
@@ -452,8 +451,8 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
             this.componentParameters = initialComponentParameters;
         }
 
-        public ProActiveComponent newProActiveComponent(Body myBody) {
-            return new ProActiveComponentImpl(this.componentParameters, myBody);
+        public PAComponent newPAComponent(Body myBody) {
+            return new PAComponentImpl(this.componentParameters, myBody);
         }
     }
 

@@ -136,6 +136,19 @@ public interface WebServices {
             throws WebServicesException;
 
     /**
+     * Undeploy the given client interfaces of a component deployed on a web server.
+     * If the array of interface names is null, then undeploy all the interfaces of
+     * the component.
+     *
+     * @param component  The component owning the services interfaces
+     * @param componentName The name of the component
+     * @param interfaceNames Interfaces tp be undeployed
+     * @throws WebServicesException
+     */
+    public void unExposeComponentAsWebService(Component component, String componentName,
+            String[] interfaceNames) throws WebServicesException;
+
+    /**
      * Undeploy specified interfaces of a component deployed on a web server
      *
      * @param componentName The name of the component

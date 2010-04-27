@@ -39,14 +39,15 @@ package org.objectweb.proactive.core.component.adl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.adl.FactoryFactory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.LifeCycleController;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.component.Fractive;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 
@@ -73,7 +74,7 @@ public class Launcher {
         if (comp instanceof Component) {
             LifeCycleController lc = null;
             try {
-                lc = Fractal.getLifeCycleController((Component) comp);
+                lc = GCM.getGCMLifeCycleController((Component) comp);
             } catch (NoSuchInterfaceException ignored) {
             }
             if (lc != null) {
@@ -102,11 +103,10 @@ public class Launcher {
         if (pargs[0].equals("-java")) {
             Factory f = FactoryFactory.getFactory(FactoryFactory.JAVA_BACKEND);
 
-            return ((Map) f.newComponent(pargs[1], new HashMap())).get(pargs[2]);
+            return ((Map) f.newComponent(pargs[1], new HashMap<Object, Object>())).get(pargs[2]);
         } else {
             Factory f;
-            if ("org.objectweb.proactive.core.component.Fractive"
-                    .equals(CentralPAPropertyRepository.FRACTAL_PROVIDER.getValue())) {
+            if (Fractive.class.getName().equals(CentralPAPropertyRepository.GCM_PROVIDER.getValue())) {
                 // return the ProActive factory as defined in
                 // org.objectweb.proactive.core.component.adl.FactoryFactory
                 f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
@@ -117,12 +117,12 @@ public class Launcher {
             // PROACTIVE
             if (pargs[3] != null) {
                 deploymentDescriptor = PADeployment.getProactiveDescriptor(pargs[3]);
-                HashMap context = new HashMap(1);
+                Map<Object, Object> context = new HashMap<Object, Object>(1);
                 context.put("deployment-descriptor", deploymentDescriptor);
                 return f.newComponent(pargs[1], context);
             } else {
                 try {
-                    return f.newComponent(pargs[1], new HashMap());
+                    return f.newComponent(pargs[1], new HashMap<Object, Object>());
                 } catch (ClassCastException e) {
                     if (e.getMessage().indexOf("attribute_controller_representative") != (-1)) {
                         System.out

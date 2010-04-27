@@ -20,7 +20,7 @@
 		<prop key="ibis.name_server.pool" value="rutget"/>
 		<prop key="ibis.pool_host_number" value="1"/>
 		<prop key="ibis.name_server.key" value="12"/>
-		<prop key="fractal.provider" value="org.objectweb.proactive.core.component.Fractive"/>
+		<prop key="gcm.provider" value="org.objectweb.proactive.core.component.Fractive"/>
 		<prop key="ibis.name" value="tcp"/>
 		<prop key="proactive.http.servlet" value="disabled" />
 		<prop key="java.protocol.handler.pkgs" value="org.objectweb.proactive.core.ssh"/>

@@ -45,14 +45,14 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
- * Implementation of the {@link ProActiveWSCaller} interface using the <a href="http://cxf.apache.org/">CXF</a>
+ * Implementation of the {@link PAWSCaller} interface using the <a href="http://cxf.apache.org/">CXF</a>
  * API with a dynamic client.
  *
  * @author The ProActive Team
- * @see ProActiveWSCaller
+ * @see PAWSCaller
  */
 @PublicAPI
-public class DynamicCXFWSCaller implements ProActiveWSCaller {
+public class DynamicCXFWSCaller implements PAWSCaller {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
 
     private Client client;

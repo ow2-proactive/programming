@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.xml.handler.AbstractUnmarshallerDecorator;
@@ -90,7 +89,7 @@ public class ComponentConfigurationHandler extends AbstractUnmarshallerDecorator
     }
 
     public static ComponentConfigurationHandler createComponentConfigurationHandler(
-            String componentsConfigurationLocation) throws IOException, SAXException, ProActiveException {
+            String componentsConfigurationLocation) throws IOException, SAXException {
         String url = null;
         try {
             InitialHandler initial_handler = new InitialHandler();

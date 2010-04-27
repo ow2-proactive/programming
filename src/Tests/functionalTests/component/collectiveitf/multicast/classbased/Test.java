@@ -39,9 +39,9 @@ package functionalTests.component.collectiveitf.multicast.classbased;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.collectiveitf.multicast.Tester;
@@ -74,7 +74,7 @@ public class Test extends ComponentTest {
         Component testcase = (Component) f.newComponent(
                 "functionalTests.component.collectiveitf.multicast.classbased.testcase", context);
 
-        Fractal.getLifeCycleController(testcase).startFc();
+        GCM.getGCMLifeCycleController(testcase).startFc();
         ((Tester) testcase.getFcInterface("runTestItf")).testConnectedServerMulticastItf();
         ((Tester) testcase.getFcInterface("runTestItf")).testOwnClientMulticastItf();
     }

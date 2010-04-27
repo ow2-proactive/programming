@@ -43,11 +43,20 @@ import java.lang.annotation.Target;
 
 
 /**
- * <p>Annotation for specifying timeouts and waitForAll mode at the level of methods.</p>
- * <p>Refer to {@link ItfSynchro} annotation for more information on timeouts and waitForAll mode.</p>
+ * Annotation for specifying timeouts and waitForAll mode at the level of methods.
+ * <br>
+ * Timeouts are only handled for invocations of methods that return a result. When a timeout is detected, the
+ * default behavior is to throw a GathercastTimeoutException to the clients.
+ * <br>
+ * If waitForAll is set to true (default behaviour), the method will wait for the requests of all components binded
+ * on the gathercast interface before to be executed. If waitForAll is set to false, the method will be executed
+ * immediately on the first request received (therefore will not wait for requests from other components binded on
+ * the gathercast interface).
+ * <br>
+ * Also, if waitForAll is set to false then it could not be combined with a timeout (throw an
+ * {@link InstantiationException}).
  *
  * @author The ProActive Team
- *
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -55,12 +64,13 @@ public @interface MethodSynchro {
     public long DEFAULT_TIMEOUT = -1;
 
     /**
-     * @return the timeout in milliseconds
+     * @return The timeout in milliseconds
      */
     long timeout() default DEFAULT_TIMEOUT;
 
     /**
-     * @return true if the method will wait for the requests of all components binded on the gathercast interface before to be executed, false otherwise
+     * @return True if the method will wait for the requests of all components binded on the gathercast interface
+     * before to be executed, false otherwise
      */
     boolean waitForAll() default true;
 }

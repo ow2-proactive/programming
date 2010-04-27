@@ -7,34 +7,34 @@
 	<controllers>
 		<controller>
 			<interface>
-				org.objectweb.proactive.core.component.controller.ProActiveBindingController
+				org.objectweb.proactive.core.component.control.PABindingController
 			</interface>
 			<implementation>
-				org.objectweb.proactive.core.component.controller.ProActiveBindingControllerImpl
+				org.objectweb.proactive.core.component.control.PABindingControllerImpl
 			</implementation>
 		</controller>
 		<controller>
 			<interface>
-				org.objectweb.proactive.core.component.controller.ProActiveContentController
+				org.objectweb.proactive.core.component.control.PAContentController
 			</interface>
 			<implementation>
-				org.objectweb.proactive.core.component.controller.ProActiveContentControllerImpl
+				org.objectweb.proactive.core.component.control.PAContentControllerImpl
 			</implementation>
 		</controller>
 		<controller>
 			<interface>
-				org.objectweb.proactive.core.component.controller.ProActiveSuperController
+				org.objectweb.proactive.core.component.control.PASuperController
 			</interface>
 			<implementation>
-				org.objectweb.proactive.core.component.controller.ProActiveSuperControllerImpl
+				org.objectweb.proactive.core.component.control.PASuperControllerImpl
 			</implementation>
 		</controller>
 		<controller>
 			<interface>
-				org.objectweb.proactive.core.component.controller.ProActiveLifeCycleController
+				org.objectweb.proactive.core.component.control.PAGCMLifeCycleController
 			</interface>
 			<implementation>
-				org.objectweb.proactive.core.component.controller.ProActiveLifeCycleControllerImpl
+				org.objectweb.proactive.core.component.control.PAGCMLifeCycleControllerImpl
 			</implementation>
 		</controller>
 		<controller>
@@ -42,33 +42,33 @@
 				org.objectweb.fractal.api.control.NameController
 			</interface>
 			<implementation>
-				org.objectweb.proactive.core.component.controller.ProActiveNameController
+				org.objectweb.proactive.core.component.control.PANameControllerImpl
 			</implementation>
 		</controller>
 		<controller>
 			<interface>
-				org.objectweb.proactive.core.component.controller.MulticastController
+				org.objectweb.proactive.core.component.control.PAMulticastController
 			</interface>
 			<implementation>
-				org.objectweb.proactive.core.component.controller.MulticastControllerImpl
+				org.objectweb.proactive.core.component.control.PAMulticastControllerImpl
 			</implementation>
 		</controller>
 		<controller>
 			<interface>
-				org.objectweb.proactive.core.component.controller.GathercastController
+				org.etsi.uri.gcm.api.control.GathercastController
 			</interface>
 			<implementation>
-				org.objectweb.proactive.core.component.controller.GathercastControllerImpl
+				org.objectweb.proactive.core.component.control.PAGathercastControllerImpl
 			</implementation>
 		</controller>
-		<controller>
-			<interface>
-				org.objectweb.proactive.core.component.controller.MigrationController
-			</interface>
-			<implementation>
-				org.objectweb.proactive.core.component.controller.MigrationControllerImpl
-			</implementation>
-		</controller>
+        <controller>
+            <interface>
+		org.objectweb.proactive.core.component.control.PAMigrationController
+            </interface>
+            <implementation>
+		org.objectweb.proactive.core.component.control.PAMigrationControllerImpl
+            </implementation>
+        </controller>
 	</controllers>
 
 </componentConfiguration>

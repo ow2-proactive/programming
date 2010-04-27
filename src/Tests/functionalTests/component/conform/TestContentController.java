@@ -40,6 +40,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -50,7 +52,7 @@ import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.component.conform.components.C;
 import functionalTests.component.conform.components.I;
@@ -58,7 +60,7 @@ import functionalTests.component.conform.components.I;
 
 public class TestContentController extends Conformtest {
     protected Component boot;
-    protected TypeFactory tf;
+    protected GCMTypeFactory tf;
     protected GenericFactory gf;
     protected ComponentType t;
     protected Component c;
@@ -74,9 +76,9 @@ public class TestContentController extends Conformtest {
     //  }
     @Before
     public void setUp() throws Exception {
-        boot = Fractal.getBootstrapComponent();
-        tf = Fractal.getTypeFactory(boot);
-        gf = Fractal.getGenericFactory(boot);
+        boot = Utils.getBootstrapComponent();
+        tf = GCM.getGCMTypeFactory(boot);
+        gf = GCM.getGenericFactory(boot);
         t = tf.createFcType(new InterfaceType[] {
                 tf.createFcItfType("server", I.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                         TypeFactory.MANDATORY),
@@ -96,7 +98,7 @@ public class TestContentController extends Conformtest {
     // -------------------------------------------------------------------------
     @Test
     public void testAddAndRemove() throws Exception {
-        ContentController cc = Fractal.getContentController(c);
+        ContentController cc = GCM.getContentController(c);
         cc.addFcSubComponent(e);
         assertTrue(Arrays.asList(cc.getFcSubComponents()).contains(e));
         cc.removeFcSubComponent(e);
@@ -108,7 +110,7 @@ public class TestContentController extends Conformtest {
     // -------------------------------------------------------------------------
     @Test(expected = IllegalContentException.class)
     public void testAlreadySubComponent() throws Exception {
-        ContentController cc = Fractal.getContentController(c);
+        ContentController cc = GCM.getContentController(c);
         cc.addFcSubComponent(e);
         cc.addFcSubComponent(e);
     }
@@ -116,15 +118,15 @@ public class TestContentController extends Conformtest {
     @Test(expected = IllegalContentException.class)
     @Ignore
     public void testWouldCreateCycle1() throws Exception {
-        ContentController cc = Fractal.getContentController(c);
+        ContentController cc = GCM.getContentController(c);
         cc.addFcSubComponent(c);
     }
 
     @Test(expected = IllegalContentException.class)
     @Ignore
     public void testWouldCreateCycle2() throws Exception {
-        ContentController cc = Fractal.getContentController(c);
-        ContentController cd = Fractal.getContentController(d);
+        ContentController cc = GCM.getContentController(c);
+        ContentController cd = GCM.getContentController(d);
         cc.addFcSubComponent(d);
         cd.addFcSubComponent(c);
     }
@@ -134,34 +136,34 @@ public class TestContentController extends Conformtest {
     // -------------------------------------------------------------------------
     @Test(expected = IllegalContentException.class)
     public void testNotASubComponent() throws Exception {
-        ContentController cc = Fractal.getContentController(c);
+        ContentController cc = GCM.getContentController(c);
         // must throw an IllegalContentException
         cc.removeFcSubComponent(d);
     }
 
     @Test(expected = IllegalContentException.class)
     public void testWouldCreateNonLocalExportBinding() throws Exception {
-        ContentController cc = Fractal.getContentController(c);
+        ContentController cc = GCM.getContentController(c);
         cc.addFcSubComponent(e);
-        Fractal.getBindingController(c).bindFc("server", e.getFcInterface("server"));
+        GCM.getBindingController(c).bindFc("server", e.getFcInterface("server"));
         // must throw an IllegalContentException
         cc.removeFcSubComponent(e);
     }
 
     @Test(expected = IllegalContentException.class)
     public void testWouldCreateNonLocalImportBinding() throws Exception {
-        ContentController cc = Fractal.getContentController(c);
+        ContentController cc = GCM.getContentController(c);
         cc.addFcSubComponent(e);
-        Fractal.getBindingController(e).bindFc("client", cc.getFcInternalInterface("client"));
+        GCM.getBindingController(e).bindFc("client", cc.getFcInternalInterface("client"));
         cc.removeFcSubComponent(e);
     }
 
     @Test(expected = IllegalContentException.class)
     public void testWouldCreateNonLocalNormalBinding() throws Exception {
-        ContentController cc = Fractal.getContentController(c);
+        ContentController cc = GCM.getContentController(c);
         cc.addFcSubComponent(d);
         cc.addFcSubComponent(e);
-        Fractal.getBindingController(d).bindFc("client", e.getFcInterface("server"));
+        GCM.getBindingController(d).bindFc("client", e.getFcInterface("server"));
         cc.removeFcSubComponent(e);
     }
 }

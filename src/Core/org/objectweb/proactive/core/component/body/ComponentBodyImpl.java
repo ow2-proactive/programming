@@ -40,29 +40,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.LifeCycleController;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.Active;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.core.body.MetaObjectFactory;
 import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
 import org.objectweb.proactive.core.body.migration.MigratableBody;
 import org.objectweb.proactive.core.component.ComponentParameters;
-import org.objectweb.proactive.core.component.identity.ProActiveComponent;
-import org.objectweb.proactive.core.component.identity.ProActiveComponentImpl;
+import org.objectweb.proactive.core.component.identity.PAComponent;
+import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 import org.objectweb.proactive.core.component.request.Shortcut;
-import org.objectweb.proactive.core.mop.ConstructorCallExecutionFailedException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
  * This class has been inserted into the bodies hierarchy in order to instantiate the
- * component metaobject (ProActiveComponent).
+ * component metaobject {@link PAComponent}.
  */
 public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
-    private ProActiveComponent componentIdentity = null;
+    private PAComponent componentIdentity = null;
     private Map<String, Shortcut> shortcutsOnThis = null; // key = functionalItfName, value = shortcut
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     private boolean insideFunctionalActivity = false;
@@ -84,8 +83,7 @@ public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
      * @param factory factory for the corresponding metaobjects
      */
     public ComponentBodyImpl(Object reifiedObject, String nodeURL, Active activity,
-            MetaObjectFactory factory, String jobID) throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException, ActiveObjectCreationException {
+            MetaObjectFactory factory, String jobID) throws ActiveObjectCreationException {
         super(reifiedObject, nodeURL, factory, jobID);
         //        filterOnNFRequests = new RequestFilterOnPrioritizedNFRequests();
         // create the component metaobject if necessary
@@ -97,7 +95,7 @@ public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
                     if (logger.isDebugEnabled()) {
                         logger.debug("creating metaobject component identity");
                     }
-                    this.componentIdentity = factory.newComponentFactory().newProActiveComponent(this);
+                    this.componentIdentity = factory.newComponentFactory().newPAComponent(this);
 
                     // change activity into a component activity
                     // activity = new ComponentActivity(activity, reifiedObject);
@@ -111,10 +109,10 @@ public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
 
     /**
      * Returns the a reference on the Component meta object
-     * @return the ProActiveComponent meta-object
+     * @return the PAComponent meta-object
      */
-    public ProActiveComponentImpl getProActiveComponentImpl() {
-        return (ProActiveComponentImpl) this.componentIdentity;
+    public PAComponentImpl getPAComponentImpl() {
+        return (PAComponentImpl) this.componentIdentity;
     }
 
     /**
@@ -130,8 +128,8 @@ public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
     public boolean isActive() {
         if (this.insideFunctionalActivity) {
             try {
-                return LifeCycleController.STARTED.equals(Fractal.getLifeCycleController(
-                        getProActiveComponentImpl()).getFcState());
+                return LifeCycleController.STARTED.equals(GCM.getGCMLifeCycleController(getPAComponentImpl())
+                        .getFcState());
             } catch (NoSuchInterfaceException e) {
                 logger.error("could not find the life cycle controller of this component");
                 return false;
@@ -145,7 +143,7 @@ public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
      * @see org.objectweb.proactive.core.component.body.ComponentBody#isComponent()
      */
     public boolean isComponent() {
-        return (getProActiveComponentImpl() != null);
+        return (getPAComponentImpl() != null);
     }
 
     /*

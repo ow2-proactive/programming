@@ -38,7 +38,6 @@ package org.objectweb.proactive.extra.messagerouting.router;
 
 import java.net.InetAddress;
 import java.util.Map;
-import java.util.Properties;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;

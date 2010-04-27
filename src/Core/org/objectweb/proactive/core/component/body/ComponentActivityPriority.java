@@ -38,9 +38,10 @@ package org.objectweb.proactive.core.component.body;
 
 import java.io.Serializable;
 
+import org.etsi.uri.gcm.api.control.PriorityController;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.LifeCycleController;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.Active;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.EndActive;
@@ -48,7 +49,6 @@ import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.component.Constants;
-import org.objectweb.proactive.core.component.controller.PriorityController;
 
 
 /**
@@ -56,7 +56,6 @@ import org.objectweb.proactive.core.component.controller.PriorityController;
  * supporting prioritized request.
  *
  * @author The ProActive Team
- *
  */
 public class ComponentActivityPriority extends ComponentActivity implements RunActive, InitActive, EndActive,
         Serializable {
@@ -111,11 +110,9 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
                 NFRequestFilterImpl nfRequestFilter = new NFRequestFilterImpl();
                 while (body.isActive()) {
                     ComponentBody componentBody = (ComponentBody) body;
-                    while (LifeCycleController.STOPPED.equals(Fractal.getLifeCycleController(
-                            componentBody.getProActiveComponentImpl()).getFcState())) {
-                        PriorityController pc = (PriorityController) componentBody
-                                .getProActiveComponentImpl().getFcInterface(
-                                        Constants.REQUEST_PRIORITY_CONTROLLER);
+                    while (LifeCycleController.STOPPED.equals(GCM.getGCMLifeCycleController(
+                            componentBody.getPAComponentImpl()).getFcState())) {
+                        PriorityController pc = GCM.getPriorityController(componentBody.getPAComponentImpl());
                         NF3RequestFilter nf3RequestFilter = new NF3RequestFilter(pc);
                         if (componentService.getOldest(nf3RequestFilter) != null) {
                             // NF3 bypass all other request 
@@ -170,21 +167,20 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
             NF1NF2RequestFilter nf1nf2RequestFilter = null;
             PriorityController pc = null;
             try {
-                pc = (PriorityController) componentBody.getProActiveComponentImpl().getFcInterface(
-                        Constants.REQUEST_PRIORITY_CONTROLLER);
+                pc = GCM.getPriorityController(componentBody.getPAComponentImpl());
                 nf3RequestFilter = new NF3RequestFilter(pc);
                 nf2RequestFilter = new NF2RequestFilter(pc);
                 nf1nf2RequestFilter = new NF1NF2RequestFilter(pc);
 
                 nf1RequestFilter = new NF1RequestFilter(pc);
             } catch (NoSuchInterfaceException e) {
-                logger.fatal("The " + Constants.REQUEST_PRIORITY_CONTROLLER +
+                logger.fatal("The " + Constants.PRIORITY_CONTROLLER +
                     " interface is required to create a component.", e);
             }
 
             try {
-                while (LifeCycleController.STARTED.equals(Fractal.getLifeCycleController(
-                        componentBody.getProActiveComponentImpl()).getFcState())) {
+                while (LifeCycleController.STARTED.equals(GCM.getGCMLifeCycleController(
+                        componentBody.getPAComponentImpl()).getFcState())) {
                     if (componentService.getOldest(nf3RequestFilter) != null) {
                         // NF3 bypass all other request 
                         //System.err.println("ComponentActivity : NF3");

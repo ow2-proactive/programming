@@ -36,17 +36,19 @@
  */
 package functionalTests.component.lookup;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Fractive;
+import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.I1;
@@ -66,9 +68,9 @@ public class Test extends ComponentTest {
 
     @org.junit.Test
     public void action() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        TypeFactory typeFactory = Fractal.getTypeFactory(boot);
-        GenericFactory componentFactory = Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory typeFactory = GCM.getGCMTypeFactory(boot);
+        GenericFactory componentFactory = GCM.getGenericFactory(boot);
         typeA = typeFactory.createFcType(new InterfaceType[] { typeFactory.createFcItfType("i1", I1.class
                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE) });
         componentA = componentFactory.newFcInstance(typeA, new ControllerDescription("component-a",

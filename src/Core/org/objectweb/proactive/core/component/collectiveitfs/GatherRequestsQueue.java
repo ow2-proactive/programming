@@ -50,7 +50,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.component.exceptions.GathercastTimeoutException;
-import org.objectweb.proactive.core.component.identity.ProActiveComponent;
+import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.ComponentRequest;
 import org.objectweb.proactive.core.component.type.annotations.gathercast.MethodSynchro;
@@ -72,9 +72,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class GatherRequestsQueue implements Serializable {
-    //private ProActiveComponent owner;
     private GatherFuturesHandler futuresHandler; // primitive pooling
-    private List<ItfID> connectedClientItfs; // consistency?
+    private List<Object> connectedClientItfs; // consistency?
     private Map<ItfID, ComponentRequest> requests;
     private String serverItfName;
     private SerializableMethod itfTypeInvokedMethod;
@@ -90,8 +89,8 @@ public class GatherRequestsQueue implements Serializable {
     boolean resultsReturned = false;
     boolean oneWayCall = true;
 
-    public GatherRequestsQueue(ProActiveComponent owner, String serverItfName, Method itfTypeMethod,
-            List<ItfID> connectedClientItfs, GatherFuturesHandlerPool gatherFuturesHandlerPool) {
+    public GatherRequestsQueue(PAComponent owner, String serverItfName, Method itfTypeMethod,
+            List<Object> connectedClientItfs, GatherFuturesHandlerPool gatherFuturesHandlerPool) {
         //this.owner = owner;
         this.serverItfName = serverItfName;
         //        this.conditionChecker = gatherConditionChecker;
@@ -125,7 +124,7 @@ public class GatherRequestsQueue implements Serializable {
         // evaluate waitForAll
         if (!waitForAll) {
             // Non synchronized method, we should not expect other request
-            connectedClientItfs = new ArrayList<ItfID>();
+            connectedClientItfs = new ArrayList<Object>();
             connectedClientItfs.add(clientItfID);
         }
 
@@ -278,7 +277,7 @@ public class GatherRequestsQueue implements Serializable {
     /**
      * @return Returns the connectedClientItfs.
      */
-    public List<ItfID> getConnectedClientItfs() {
+    public List<Object> getConnectedClientItfs() {
         return connectedClientItfs;
     }
 

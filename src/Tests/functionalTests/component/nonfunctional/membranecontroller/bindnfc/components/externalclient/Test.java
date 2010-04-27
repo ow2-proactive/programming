@@ -39,19 +39,20 @@ package functionalTests.component.nonfunctional.membranecontroller.bindnfc.compo
 import java.util.HashMap;
 import java.util.Map;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.Fractive;
-import org.objectweb.proactive.core.component.controller.MembraneController;
-import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
-import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.control.PAMembraneController;
+import org.objectweb.proactive.core.component.factory.PAGenericFactory;
+import org.objectweb.proactive.core.component.representative.PAComponentRepresentative;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 
@@ -79,9 +80,9 @@ public class Test extends ComponentTest {
     @org.junit.Test
     public void action() throws Exception {
 
-        Component boot = Fractal.getBootstrapComponent(); /*Getting the Fractal-Proactive bootstrap component*/
-        TypeFactory type_factory = Fractal.getTypeFactory(boot); /*Getting the Fractal-ProActive type factory*/
-        ProActiveGenericFactory cf = Fractive.getGenericFactory(boot); /*Getting the Fractal-ProActive generic factory*/
+        Component boot = Utils.getBootstrapComponent(); /*Getting the Fractal-Proactive bootstrap component*/
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot); /*Getting the GCM-ProActive type factory*/
+        PAGenericFactory cf = Utils.getPAGenericFactory(boot); /*Getting the GCM-ProActive generic factory*/
 
         Type fType = type_factory.createFcType(new InterfaceType[] { type_factory.createFcItfType(
                 "componentInfo", ComponentInfo.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
@@ -92,44 +93,44 @@ public class Test extends ComponentTest {
                         type_factory
                                 .createFcItfType(
                                         Constants.BINDING_CONTROLLER,
-                                        /*BINDING CONTROLLER*/org.objectweb.proactive.core.component.controller.ProActiveBindingController.class
+                                        /* BINDING CONTROLLER */org.objectweb.proactive.core.component.control.PABindingController.class
                                                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                                         TypeFactory.SINGLE),
                         type_factory
                                 .createFcItfType(
                                         Constants.CONTENT_CONTROLLER,
-                                        /*CONTENT CONTROLLER*/org.objectweb.proactive.core.component.controller.ProActiveContentController.class
+                                        /* CONTENT CONTROLLER */org.objectweb.proactive.core.component.control.PAContentController.class
                                                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                                         TypeFactory.SINGLE),
                         type_factory
                                 .createFcItfType(
                                         Constants.LIFECYCLE_CONTROLLER,
-                                        /*LIFECYCLE CONTROLLER*/org.objectweb.proactive.core.component.controller.ProActiveLifeCycleController.class
+                                        /* LIFECYCLE CONTROLLER */org.objectweb.proactive.core.component.control.PAGCMLifeCycleController.class
                                                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                                         TypeFactory.SINGLE),
                         type_factory
                                 .createFcItfType(
                                         Constants.SUPER_CONTROLLER,
-                                        /*SUPER CONTROLLER*/org.objectweb.proactive.core.component.controller.ProActiveSuperController.class
+                                        /* SUPER CONTROLLER */org.objectweb.proactive.core.component.control.PASuperController.class
                                                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                                         TypeFactory.SINGLE),
                         type_factory.createFcItfType(Constants.NAME_CONTROLLER,
-                        /*NAME CONTROLLER*/org.objectweb.fractal.api.control.NameController.class.getName(),
-                                TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                        /* NAME CONTROLLER */org.objectweb.fractal.api.control.NameController.class
+                                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
 
                         type_factory.createFcItfType(Constants.MEMBRANE_CONTROLLER,
-                        /*MEMBRANE CONTROLLER*/MembraneController.class.getName(), TypeFactory.SERVER,
+                        /* MEMBRANE CONTROLLER */PAMembraneController.class.getName(), TypeFactory.SERVER,
                                 TypeFactory.MANDATORY, TypeFactory.SINGLE),
                         type_factory
                                 .createFcItfType(
                                         "dummy-controller",
-                                        /*DUMMY CONTROLLER*/functionalTests.component.nonfunctional.creation.DummyControllerItf.class
+                                        /* DUMMY CONTROLLER */functionalTests.component.nonfunctional.creation.DummyControllerItf.class
                                                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                                         TypeFactory.SINGLE),
                         type_factory
                                 .createFcItfType(
                                         "dummy-client-controller",
-                                        /*DUMMY CONTROLLER*/functionalTests.component.nonfunctional.creation.DummyControllerItf.class
+                                        /* DUMMY CONTROLLER */functionalTests.component.nonfunctional.creation.DummyControllerItf.class
                                                 .getName(), TypeFactory.CLIENT, TypeFactory.MANDATORY,
                                         TypeFactory.SINGLE), });
 
@@ -139,20 +140,20 @@ public class Test extends ComponentTest {
                         type_factory
                                 .createFcItfType(
                                         Constants.SUPER_CONTROLLER,
-                                        /*SUPER CONTROLLER*/org.objectweb.proactive.core.component.controller.ProActiveSuperController.class
+                                        /* SUPER CONTROLLER */org.objectweb.proactive.core.component.control.PASuperController.class
                                                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                                         TypeFactory.SINGLE),
                         type_factory.createFcItfType(Constants.NAME_CONTROLLER,
-                        /*NAME CONTROLLER*/org.objectweb.fractal.api.control.NameController.class.getName(),
-                                TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                        /* NAME CONTROLLER */org.objectweb.fractal.api.control.NameController.class
+                                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
 
                         type_factory.createFcItfType(Constants.MEMBRANE_CONTROLLER,
-                        /*MEMBRANE CONTROLLER*/MembraneController.class.getName(), TypeFactory.SERVER,
+                        /* MEMBRANE CONTROLLER */PAMembraneController.class.getName(), TypeFactory.SERVER,
                                 TypeFactory.MANDATORY, TypeFactory.SINGLE),
                         type_factory
                                 .createFcItfType(
                                         "dummy-controller",
-                                        /*DUMMY CONTROLLER*/functionalTests.component.nonfunctional.creation.DummyControllerItf.class
+                                        /* DUMMY CONTROLLER */functionalTests.component.nonfunctional.creation.DummyControllerItf.class
                                                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                                         TypeFactory.SINGLE), });
         /************************************NF type for componentB****************/
@@ -162,25 +163,22 @@ public class Test extends ComponentTest {
                     Constants.WITHOUT_CONFIG_FILE), (Node) null);
 
         //Filling the membrane with object  controllers
-        MembraneController memController = Fractive.getMembraneController(componentA);
+        PAMembraneController memController = Utils.getPAMembraneController(componentA);
 
         memController.setControllerObject(Constants.BINDING_CONTROLLER,
-                org.objectweb.proactive.core.component.controller.ProActiveBindingControllerImpl.class
-                        .getName());
+                org.objectweb.proactive.core.component.control.PABindingControllerImpl.class.getName());
         memController.setControllerObject(Constants.CONTENT_CONTROLLER,
-                org.objectweb.proactive.core.component.controller.ProActiveContentControllerImpl.class
-                        .getName());
+                org.objectweb.proactive.core.component.control.PAContentControllerImpl.class.getName());
         memController.setControllerObject(Constants.SUPER_CONTROLLER,
-                org.objectweb.proactive.core.component.controller.ProActiveSuperControllerImpl.class
-                        .getName());
+                org.objectweb.proactive.core.component.control.PASuperControllerImpl.class.getName());
         memController.setControllerObject(Constants.NAME_CONTROLLER,
-                org.objectweb.proactive.core.component.controller.ProActiveNameController.class.getName());
+                org.objectweb.proactive.core.component.control.PANameControllerImpl.class.getName());
 
         Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getNFFactory();
-        Map context = new HashMap();
+        Map<Object, Object> context = new HashMap<Object, Object>();
         Component dummyMaster = (Component) f.newComponent(
                 "functionalTests.component.nonfunctional.adl.dummyMaster", context);
-        Fractal.getNameController(dummyMaster).setFcName("dummyMaster");
+        GCM.getNameController(dummyMaster).setFcName("dummyMaster");
 
         memController.addNFSubComponent(dummyMaster);
         memController.bindNFc("dummy-controller", "dummyMaster.dummy-master");
@@ -190,15 +188,14 @@ public class Test extends ComponentTest {
                 .getName(), new Object[] { "tata" }), new ControllerDescription("componentB",
             Constants.PRIMITIVE, !Constants.SYNCHRONOUS, Constants.WITHOUT_CONFIG_FILE), (Node) null);
 
-        MembraneController memControllerB = Fractive.getMembraneController(componentB);
+        PAMembraneController memControllerB = Utils.getPAMembraneController(componentB);
         memControllerB.setControllerObject(Constants.SUPER_CONTROLLER,
-                org.objectweb.proactive.core.component.controller.ProActiveSuperControllerImpl.class
-                        .getName());
+                org.objectweb.proactive.core.component.control.PASuperControllerImpl.class.getName());
 
         Component dummyController = (Component) f.newComponent(
                 "functionalTests.component.nonfunctional.adl.dummyPrimitive", context);
 
-        Fractal.getNameController(dummyController).setFcName("dummyPrimitive");
+        GCM.getNameController(dummyController).setFcName("dummyPrimitive");
 
         memControllerB.addNFSubComponent(dummyController);
         memControllerB.bindNFc("dummy-controller", "dummyPrimitive.dummy-membrane");
@@ -228,10 +225,10 @@ public class Test extends ComponentTest {
      * @see testsuite.test.AbstractTest#endTest()
      */
     public void endTest() throws Exception {
-        Fractal.getLifeCycleController(componentA).stopFc();
+        GCM.getGCMLifeCycleController(componentA).stopFc();
     }
 
     public boolean postConditions() throws Exception {
-        return (componentA instanceof ProActiveComponentRepresentative);
+        return (componentA instanceof PAComponentRepresentative);
     }
 }

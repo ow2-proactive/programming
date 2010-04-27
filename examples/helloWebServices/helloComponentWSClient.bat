@@ -15,7 +15,7 @@ IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
 
 call "..\init.bat"
 
-set JAVA_CMD=%JAVACMD% -Dfractal.provider=org.objectweb.proactive.core.component.Fractive
+set JAVA_CMD=%JAVACMD% -Dgcm.provider=org.objectweb.proactive.core.component.Fractive
 
 %JAVA_CMD% org.objectweb.proactive.examples.webservices.helloWorld.HelloWorldComponentClient %*
 ENDLOCAL

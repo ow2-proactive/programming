@@ -120,17 +120,15 @@ public class ExportedVirtualNodesList {
             throws ADLException {
         if (composerNode.isMultiple()) {
             if (!composingNode.isMultiple()) {
-                throw new ADLException("cannot compose " + composingNode.getDefiningComponentName() + '.' +
-                    composingNode.getVirtualNodeName() + " which is SINGLE, whith composer virtual node " +
-                    composerNode.getDefiningComponentName() + '.' + composerNode.getVirtualNodeName() +
-                    " because it is already composed from a virtual node of cardinality MULTIPLE", null);
+                throw new ADLException(ExportedVirtualNodeErrors.INVALID_CARDINALITY, "SINGLE", composingNode
+                        .getDefiningComponentName(), composingNode.getVirtualNodeName(), "MULTIPLE",
+                    composerNode.getDefiningComponentName(), composerNode.getVirtualNodeName());
             }
         } else {
             if (!composerNode.getComposingVirtualNodes().isEmpty() && composingNode.isMultiple()) {
-                throw new ADLException("cannot mix a MULTIPLE virtual node (" +
-                    composingNode.getDefiningComponentName() + '.' + composingNode.getVirtualNodeName() +
-                    " with SINGLE virtual nodes in composer node " + composerNode.getDefiningComponentName() +
-                    '.' + composerNode.getVirtualNodeName(), null);
+                throw new ADLException(ExportedVirtualNodeErrors.INVALID_CARDINALITY, "MULTIPLE",
+                    composingNode.getDefiningComponentName(), composingNode.getVirtualNodeName(), "SINGLE",
+                    composerNode.getDefiningComponentName(), composerNode.getVirtualNodeName());
             }
         }
     }
@@ -348,7 +346,7 @@ public class ExportedVirtualNodesList {
             //List to_remove = new ArrayList();
             LinkedVirtualNode to_remove = null;
             while (it.hasNext()) {
-                LinkedVirtualNode lvn = (LinkedVirtualNode) it.next();
+                LinkedVirtualNode lvn = it.next();
                 if (lvn.getVirtualNodeName().equals(virtualNodeName) ||
                     lvn.getExportedVirtualNodeNameAfterComposition().equals(virtualNodeName)) {
                     // as the current list should not be modified while iterated, keep a list

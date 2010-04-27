@@ -48,10 +48,10 @@ import org.objectweb.fractal.adl.Factory;
  * @author The ProActive Team
  */
 public class FactoryFactory {
-    public final static String PROACTIVE_BACKEND = "org.objectweb.proactive.core.component.adl.ProActiveBackend";
-    public final static String PROACTIVE_FACTORY = "org.objectweb.proactive.core.component.adl.ProActiveFactory";
-    public final static String PROACTIVE_NFBACKEND = "org.objectweb.proactive.core.component.adl.ProActiveNFBackend";
-    public final static String PROACTIVE_NFFACTORY = "org.objectweb.proactive.core.component.adl.ProActiveNFFactory";
+    public final static String PROACTIVE_FACTORY = "org.objectweb.proactive.core.component.adl.PAFactory";
+    public final static String PROACTIVE_BACKEND = "org.objectweb.proactive.core.component.adl.PACompiler";
+    public final static String PROACTIVE_NFFACTORY = "org.objectweb.proactive.core.component.adl.PANFFactory";
+    public final static String PROACTIVE_NFBACKEND = "org.objectweb.proactive.core.component.adl.PANFCompiler";
 
     private FactoryFactory() {
     }

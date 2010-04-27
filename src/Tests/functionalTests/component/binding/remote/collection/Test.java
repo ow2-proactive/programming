@@ -38,16 +38,18 @@ package functionalTests.component.binding.remote.collection;
 
 import java.util.List;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 
 import functionalTests.ComponentTestDefaultNodes;
 import functionalTests.component.I1Multicast;
@@ -83,9 +85,9 @@ public class Test extends ComponentTestDefaultNodes {
      */
     @org.junit.Test
     public void action() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        TypeFactory type_factory = Fractal.getTypeFactory(boot);
-        ProActiveGenericFactory cf = (ProActiveGenericFactory) Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
+        PAGenericFactory cf = Utils.getPAGenericFactory(boot);
 
         ComponentType D_Type = type_factory.createFcType(new InterfaceType[] {
                 type_factory.createFcItfType("i1", I1Multicast.class.getName(), TypeFactory.SERVER,
@@ -106,13 +108,13 @@ public class Test extends ComponentTestDefaultNodes {
                         .getANode());
 
         // bind the components
-        Fractal.getBindingController(pD1).bindFc("i2-1", pB2.getFcInterface("i2"));
-        Fractal.getBindingController(pD1).bindFc("i2-2", pB1.getFcInterface("i2"));
+        GCM.getBindingController(pD1).bindFc("i2-1", pB2.getFcInterface("i2"));
+        GCM.getBindingController(pD1).bindFc("i2-2", pB1.getFcInterface("i2"));
 
         // start them
-        Fractal.getLifeCycleController(pD1).startFc();
-        Fractal.getLifeCycleController(pB1).startFc();
-        Fractal.getLifeCycleController(pB2).startFc();
+        GCM.getGCMLifeCycleController(pD1).startFc();
+        GCM.getGCMLifeCycleController(pB1).startFc();
+        GCM.getGCMLifeCycleController(pB2).startFc();
 
         message = null;
         I1Multicast i1 = (I1Multicast) pD1.getFcInterface("i1");

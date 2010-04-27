@@ -39,12 +39,12 @@ package functionalTests.component.nonfunctional.adl.primitive;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.ComponentType;
-import org.objectweb.fractal.util.Fractal;
-import org.objectweb.proactive.core.component.representative.ProActiveNFComponentRepresentative;
+import org.objectweb.proactive.core.component.representative.PANFComponentRepresentative;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.nonfunctional.creation.DummyControllerItf;
@@ -71,11 +71,11 @@ public class Test extends ComponentTest {
 
         root = (Component) f.newComponent("functionalTests.component.nonfunctional.adl.dummyPrimitive",
                 context);
-        Fractal.getLifeCycleController(root).startFc();
+        GCM.getGCMLifeCycleController(root).startFc();
 
         DummyControllerItf ref = (DummyControllerItf) root.getFcInterface("dummy-membrane");
         ref.dummyMethodWithResult();
         ref.dummyVoidMethod("Message");
-        Assert.assertTrue(root instanceof ProActiveNFComponentRepresentative);
+        Assert.assertTrue(root instanceof PANFComponentRepresentative);
     }
 }

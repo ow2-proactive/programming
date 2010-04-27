@@ -54,6 +54,7 @@ import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.util.SerializableMethod;
@@ -113,7 +114,8 @@ public class ServiceDeployer implements ServiceDeployerItf {
         // This method is called to force element to be unqualified
         // It is the default behaviour but if you want to expose an active
         // object using a set of methods, element forms become qualified.
-        serviceFactory.setQualifyWrapperSchema(false);
+        serviceFactory.setQualifyWrapperSchema(CentralPAPropertyRepository.PA_WEBSERVICES_ELEMENTFORMDEFAULT
+                .isTrue());
 
         if (!isComponent) {
             superclass = o.getClass().getSuperclass();

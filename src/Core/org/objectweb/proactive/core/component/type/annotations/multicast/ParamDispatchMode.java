@@ -43,20 +43,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.etsi.uri.gcm.api.control.MulticastController;
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.component.controller.MulticastController;
 import org.objectweb.proactive.core.component.exceptions.ParameterDispatchException;
 
 
 /**
  * <p>This enumeration defines the various dispatch modes available for
- * parameters. 
+ * parameters.
  * </p>
  * <p>It uses the "strategy" pattern: it implements the methods of
  * the <code>ParamDispatch</code> interface depending on the selected mode.
  *
  * @author The ProActive Team
- * 
  */
 @PublicAPI
 public enum ParamDispatchMode implements ParamDispatch, Serializable {

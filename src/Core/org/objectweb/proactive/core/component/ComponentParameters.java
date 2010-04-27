@@ -134,7 +134,7 @@ public class ComponentParameters implements Serializable {
 
     /**
      * setter
-     * @param string the hierarchical type (primitive, composite or parallel)
+     * @param string the hierarchical type (primitive or composite)
      */
     public void setHierarchicalType(String string) {
         controllerDesc.setHierarchicalType(string);
@@ -174,7 +174,7 @@ public class ComponentParameters implements Serializable {
      * @return the types of client interfacess
      */
     public InterfaceType[] getClientInterfaceTypes() {
-        return Fractive.getClientInterfaceTypes(componentType);
+        return Utils.getClientItfTypes(componentType);
     }
 
     /**

@@ -38,10 +38,10 @@ package org.objectweb.proactive.examples.components.userguide.starter;
 
 import java.util.HashMap;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.BindingController;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.adl.FactoryFactory;
 import org.objectweb.proactive.core.component.adl.Registry;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -51,8 +51,7 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        CentralPAPropertyRepository.FRACTAL_PROVIDER
-                .setValue("org.objectweb.proactive.core.component.Fractive");
+        CentralPAPropertyRepository.GCM_PROVIDER.setValue("org.objectweb.proactive.core.component.Fractive");
         GCMApplication gcma = PAGCMDeployment
                 .loadApplicationDescriptor(Main.class
                         .getResource("/org/objectweb/proactive/examples/components/userguide/starter/applicationDescriptor.xml"));
@@ -71,19 +70,19 @@ public class Main {
                 "org.objectweb.proactive.examples.components.userguide.starter.Client", context);
 
         // bind components
-        BindingController bc = ((BindingController) client.getFcInterface("binding-controller"));
+        BindingController bc = GCM.getBindingController(client);
         bc.bindFc("s", server.getFcInterface("s"));
 
         // start components
-        Fractal.getLifeCycleController(server).startFc();
-        Fractal.getLifeCycleController(client).startFc();
+        GCM.getGCMLifeCycleController(server).startFc();
+        GCM.getGCMLifeCycleController(client).startFc();
 
         // launch the application
         ((Runnable) client.getFcInterface("m")).run();
 
         // stop components
-        Fractal.getLifeCycleController(client).stopFc();
-        Fractal.getLifeCycleController(server).stopFc();
+        GCM.getGCMLifeCycleController(client).stopFc();
+        GCM.getGCMLifeCycleController(server).stopFc();
 
         Registry.instance().clear();
         gcma.kill();

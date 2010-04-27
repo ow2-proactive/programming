@@ -197,7 +197,8 @@ public class TestHelloWorld extends FunctionalTest {
 
             assertTrue(false);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("An expected exception occurred: the method 'putHelloWorld' cannot be found "
+                + "but it is normal since this method has not been exposed");
         }
 
         Client clientMethodNames = null;
@@ -234,7 +235,8 @@ public class TestHelloWorld extends FunctionalTest {
 
             assertTrue(false);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("An expected exception occurred: the method 'putHelloWorld' cannot be found "
+                + "but it is normal since this method has not been exposed");
         }
     }
 

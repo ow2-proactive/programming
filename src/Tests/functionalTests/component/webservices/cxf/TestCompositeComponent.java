@@ -38,23 +38,26 @@ package functionalTests.component.webservices.cxf;
 
 import static org.junit.Assert.assertTrue;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.api.control.ContentController;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.client.AbstractClientFactory;
 import org.objectweb.proactive.extensions.webservices.client.Client;
 import org.objectweb.proactive.extensions.webservices.client.ClientFactory;
+import org.objectweb.proactive.extensions.webservices.component.controller.AbstractPAWebServicesControllerImpl;
+import org.objectweb.proactive.extensions.webservices.component.controller.PAWebServicesController;
 
 import functionalTests.FunctionalTest;
 import functionalTests.component.webservices.common.ChooseNameComponent;
@@ -72,6 +75,7 @@ public class TestCompositeComponent extends FunctionalTest {
 
     private String url;
     private WebServices ws;
+    private PAWebServicesController wsc;
 
     @org.junit.Before
     public void deployComposite() {
@@ -83,10 +87,10 @@ public class TestCompositeComponent extends FunctionalTest {
             Component hello = null;
             Component chooseName = null;
 
-            boot = org.objectweb.fractal.api.Fractal.getBootstrapComponent();
+            boot = Utils.getBootstrapComponent();
 
-            TypeFactory tf = Fractal.getTypeFactory(boot);
-            GenericFactory cf = Fractal.getGenericFactory(boot);
+            GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
+            GenericFactory cf = GCM.getGenericFactory(boot);
 
             // type of server component
             ComponentType typeComp = tf.createFcType(new InterfaceType[] { tf.createFcItfType("hello-name",
@@ -100,27 +104,37 @@ public class TestCompositeComponent extends FunctionalTest {
                     "choose-name", ChooseNameItf.class.getName(), false, false, false) });
 
             // create server component
-            comp = cf.newFcInstance(typeComp, new ControllerDescription("composite", Constants.COMPOSITE),
-                    null);
+            String controllersConfigFileLocation = AbstractPAWebServicesControllerImpl.getControllerFileUrl(
+                    "cxf").getPath();
+            ControllerDescription cd = new ControllerDescription("composite", Constants.COMPOSITE,
+                controllersConfigFileLocation);
+            comp = cf.newFcInstance(typeComp, cd, null);
             hello = cf.newFcInstance(typeHello, new ControllerDescription("hello", Constants.PRIMITIVE),
                     new ContentDescription(HelloNameComponent.class.getName(), null));
             chooseName = cf.newFcInstance(typeChoose, new ControllerDescription("choosename",
                 Constants.PRIMITIVE), new ContentDescription(ChooseNameComponent.class.getName(), null));
 
             // start the component
-            ContentController cc = Fractal.getContentController(comp);
+            ContentController cc = GCM.getContentController(comp);
             cc.addFcSubComponent(hello);
             cc.addFcSubComponent(chooseName);
-            BindingController bc = Fractal.getBindingController(comp);
+            BindingController bc = GCM.getBindingController(comp);
             bc.bindFc("hello-name", hello.getFcInterface("hello-name"));
-            bc = Fractal.getBindingController(hello);
+            bc = GCM.getBindingController(hello);
             bc.bindFc("choose-name", chooseName.getFcInterface("choose-name"));
-            Fractal.getLifeCycleController(comp).startFc();
+            GCM.getGCMLifeCycleController(comp).startFc();
 
+            // Deploying the service in the Active Object way
             WebServicesFactory wsf = AbstractWebServicesFactory.getWebServicesFactory("cxf");
             ws = wsf.getWebServices(url);
             ws.exposeComponentAsWebService(comp, "composite", new String[] { "hello-name" });
 
+            // Deploying the service using the web service controller
+            wsc = org.objectweb.proactive.extensions.webservices.component.Utils
+                    .getPAWebServicesController(comp);
+            wsc.initServlet();
+            wsc.setUrl(url);
+            wsc.exposeComponentAsWebService("composite2", new String[] { "hello-name" });
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);
@@ -140,12 +154,29 @@ public class TestCompositeComponent extends FunctionalTest {
             e.printStackTrace();
             assertTrue(false);
         }
+
+    }
+
+    @org.junit.Test
+    public void testComposite2() {
+
+        try {
+            ClientFactory cf = AbstractClientFactory.getClientFactory("cxf");
+            Client client = cf.getClient(url, "composite2_hello-name", HelloNameItf.class);
+            int index = 0;
+            String result = (String) client.call("helloName", new Object[] { index }, String.class)[0];
+            assertTrue(result.equals("Hello ProActive Team!"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
     }
 
     @org.junit.After
     public void undeployComposite() {
         try {
             ws.unExposeComponentAsWebService("composite", new String[] { "hello-name" });
+            wsc.unExposeComponentAsWebService("composite2", new String[] { "hello-name" });
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);

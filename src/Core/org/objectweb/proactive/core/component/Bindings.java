@@ -43,20 +43,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.proactive.core.component.identity.ProActiveComponent;
 
 
 /**
- * A bindings container. This class stores the following bindings for a given
- * component :
- * <ul>
- * <li>thisComponent.clientInterface --> serverComponent.serverInterface (it
- * also takes in charge collective bindings, ie 1 client to several servers)
- * </li>
- * <li>thisParallelComponent.serverInterface -->
- * serverComponents.serverInterface (in the case of a parallel component,
- * requests on a server port are forwarded to the inner components)</li>
- * </ul>
+ * A bindings container. This class stores the bindings for a given component (it also takes in charge collective
+ * bindings, ie 1 client to several servers).
  *
  * @author The ProActive Team
  */
@@ -83,12 +74,7 @@ public class Bindings implements Serializable {
 
         // export bindings
         if (!client_itf_type.isFcClientItf()) {
-            if (((ProActiveComponent) (binding.getClientInterface().getFcItfOwner()))
-                    .getComponentParameters().getHierarchicalType().equals(Constants.PARALLEL)) {
-                addCollectiveBindingOnInternalClientItf(binding);
-            } else {
-                exportBindings.put(binding.getClientInterfaceName(), binding);
-            }
+            exportBindings.put(binding.getClientInterfaceName(), binding);
         } else {
             // normal bindings
             if (client_itf_type.isFcCollectionItf()) {
@@ -177,15 +163,5 @@ public class Bindings implements Serializable {
      */
     private void addCollectiveBindingOnExternalClientItf(Binding binding) {
         addCollectiveBinding(normalBindings, binding);
-    }
-
-    /**
-     * @param binding Binding
-     */
-    private void addCollectiveBindingOnInternalClientItf(Binding binding) {
-        if (exportBindings == null) {
-            exportBindings = new HashMap<String, Object>();
-        }
-        addCollectiveBinding(exportBindings, binding);
     }
 }

@@ -36,7 +36,7 @@
  */
 package functionalTests.component.conform.components;
 
-import org.objectweb.proactive.core.component.StreamInterface;
+import org.objectweb.proactive.core.component.type.StreamInterface;
 
 
 public interface ItfWithStream extends StreamInterface {

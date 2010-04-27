@@ -36,16 +36,18 @@
  */
 package functionalTests.component.creation.remote.newactive;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 import org.objectweb.proactive.core.node.Node;
 
 import functionalTests.ComponentTestDefaultNodes;
@@ -72,9 +74,9 @@ public class TestRemoteComponentCreation extends ComponentTestDefaultNodes {
      */
     @org.junit.Test
     public void primitiveCreation() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        TypeFactory type_factory = Fractal.getTypeFactory(boot);
-        ProActiveGenericFactory cf = (ProActiveGenericFactory) Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
+        PAGenericFactory cf = Utils.getPAGenericFactory(boot);
 
         Node remoteNode = super.getANode();
         String remoteHost = remoteNode.getVMInformation().getHostName();
@@ -87,7 +89,7 @@ public class TestRemoteComponentCreation extends ComponentTestDefaultNodes {
             new Object[] { "toto" }), remoteNode);
         //logger.debug("OK, instantiated the component");
         // start the component!
-        Fractal.getLifeCycleController(componentA).startFc();
+        GCM.getGCMLifeCycleController(componentA).startFc();
         ComponentInfo ref = (ComponentInfo) componentA.getFcInterface("componentInfo");
         String name = ref.getName();
         String nodeUrl = ref.getNodeUrl();
@@ -99,9 +101,9 @@ public class TestRemoteComponentCreation extends ComponentTestDefaultNodes {
     @org.junit.Test
     @Ignore
     public void compositeCreation() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        TypeFactory type_factory = Fractal.getTypeFactory(boot);
-        ProActiveGenericFactory cf = (ProActiveGenericFactory) Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
+        PAGenericFactory cf = Utils.getPAGenericFactory(boot);
 
         Node remoteNode = super.getANode();
         String remoteHost = remoteNode.getVMInformation().getHostName();
@@ -119,9 +121,9 @@ public class TestRemoteComponentCreation extends ComponentTestDefaultNodes {
             "compositetA", Constants.COMPOSITE), null, remoteNode);
         //logger.debug("OK, instantiated the component");
         // start the component!
-        Fractal.getContentController(compositetA).addFcSubComponent(primitiveA);
+        GCM.getContentController(compositetA).addFcSubComponent(primitiveA);
 
-        Fractal.getLifeCycleController(compositetA).startFc();
+        GCM.getGCMLifeCycleController(compositetA).startFc();
         ComponentInfo ref = (ComponentInfo) compositetA.getFcInterface("componentInfo");
         String name = ref.getName();
         String nodeUrl = ((ComponentInfo) compositetA.getFcInterface("componentInfo")).getNodeUrl();

@@ -38,6 +38,8 @@ package functionalTests.component.conform;
 
 import static org.junit.Assert.fail;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.fractal.api.Component;
@@ -45,22 +47,21 @@ import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.component.conform.components.I;
 
 
 public class TestTypeFactory extends Conformtest {
     protected Component boot;
-    protected TypeFactory tf;
+    protected GCMTypeFactory tf;
     protected GenericFactory gf;
 
     @Before
     public void setUp() throws Exception {
-        boot = Fractal.getBootstrapComponent();
-        tf = Fractal.getTypeFactory(boot);
-        gf = Fractal.getGenericFactory(boot);
+        boot = Utils.getBootstrapComponent();
+        tf = GCM.getGCMTypeFactory(boot);
+        gf = GCM.getGenericFactory(boot);
     }
 
     // -------------------------------------------------------------------------

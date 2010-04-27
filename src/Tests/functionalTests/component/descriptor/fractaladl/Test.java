@@ -41,11 +41,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.After;
 import org.junit.Assert;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.component.adl.Registry;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
@@ -124,10 +124,10 @@ public class Test extends ComponentTest {
         context.put("deployment-descriptor", deploymentDesc);
         Component root = (Component) f.newComponent(
                 "functionalTests.component.descriptor.fractaladl.MessagePassingExample", context);
-        Fractal.getLifeCycleController(root).startFc();
-        Component[] subComponents = Fractal.getContentController(root).getFcSubComponents();
+        GCM.getGCMLifeCycleController(root).startFc();
+        Component[] subComponents = GCM.getContentController(root).getFcSubComponents();
         for (Component component : subComponents) {
-            if ("parallel".equals(Fractal.getNameController(component).getFcName())) {
+            if ("parallel".equals(GCM.getNameController(component).getFcName())) {
                 // invoke method on composite
                 I1Multicast i1Multicast = (I1Multicast) component.getFcInterface("i1");
                 //I1 i1= (I1)p1.getFcInterface("i1");
@@ -145,7 +145,7 @@ public class Test extends ComponentTest {
         //        System.out.println("*** received " + nb_messages + "  : " +
         //            resulting_msg.toString());
         //        System.out.println("***" + resulting_msg.toString());
-        // this --> primitiveC --> primitiveA --> primitiveB--> primitiveA --> primitiveC --> this  (message goes through parallel and composite components)
+        // this --> primitiveC --> primitiveA --> primitiveB--> primitiveA --> primitiveC --> this  (message goes through composite components)
         String single_message = Test.MESSAGE + PrimitiveComponentA.MESSAGE + PrimitiveComponentB.MESSAGE +
             PrimitiveComponentA.MESSAGE + Test.MESSAGE;
 

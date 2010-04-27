@@ -36,18 +36,19 @@
  */
 package functionalTests.component.nonfunctional.creation.remote.composite;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.Fractive;
-import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
-import org.objectweb.proactive.core.component.representative.ProActiveNFComponentRepresentative;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.factory.PAGenericFactory;
+import org.objectweb.proactive.core.component.representative.PANFComponentRepresentative;
 
 import functionalTests.ComponentTestDefaultNodes;
 import functionalTests.component.nonfunctional.creation.DummyControllerComponentImpl;
@@ -71,17 +72,17 @@ public class Test extends ComponentTestDefaultNodes {
 
     @org.junit.Test
     public void action() throws Exception {
-        Component boot = Fractal.getBootstrapComponent(); /*
+        Component boot = Utils.getBootstrapComponent(); /*
          * Getting the Fractal-Proactive
          * bootstrap component
          */
-        TypeFactory type_factory = Fractal.getTypeFactory(boot); /*
-         * Getting the Fractal-ProActive
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot); /*
+         * Getting the GCM-ProActive
          * type factory
          */
-        ProActiveGenericFactory cf = Fractive.getGenericFactory(boot); /*
+        PAGenericFactory cf = Utils.getPAGenericFactory(boot); /*
          * Getting the
-         * Fractal-ProActive generic
+         * GCM-ProActive generic
          * factory
          */
 
@@ -98,17 +99,17 @@ public class Test extends ComponentTestDefaultNodes {
                 new ControllerDescription("fitnessController", Constants.PRIMITIVE), new ContentDescription(
                     DummyControllerComponentImpl.class.getName()));
 
-        Fractal.getContentController(dummyNFComposite).addFcSubComponent(dummyNFPrimitive);
-        Fractal.getBindingController(dummyNFComposite).bindFc("fitness-controller-membrane",
+        GCM.getContentController(dummyNFComposite).addFcSubComponent(dummyNFPrimitive);
+        GCM.getBindingController(dummyNFComposite).bindFc("fitness-controller-membrane",
                 dummyNFPrimitive.getFcInterface("fitness-controller-membrane"));
 
-        Fractal.getLifeCycleController(dummyNFComposite).startFc();
+        GCM.getGCMLifeCycleController(dummyNFComposite).startFc();
         DummyControllerItf ref = (DummyControllerItf) dummyNFComposite
                 .getFcInterface("fitness-controller-membrane");
         name = ref.dummyMethodWithResult();
         System.out.println(name);
         ref.dummyVoidMethod("Message to a composite");
-        Assert.assertTrue(dummyNFComposite instanceof ProActiveNFComponentRepresentative);
-        Fractal.getLifeCycleController(dummyNFComposite).stopFc();
+        Assert.assertTrue(dummyNFComposite instanceof PANFComponentRepresentative);
+        GCM.getGCMLifeCycleController(dummyNFComposite).stopFc();
     }
 }

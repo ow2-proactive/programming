@@ -39,6 +39,8 @@ package functionalTests.component.conform;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.fractal.api.Component;
@@ -47,7 +49,7 @@ import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.component.conform.components.C;
 import functionalTests.component.conform.components.I;
@@ -55,7 +57,7 @@ import functionalTests.component.conform.components.I;
 
 public class TestLifeCycleController extends Conformtest {
     protected Component boot;
-    protected TypeFactory tf;
+    protected GCMTypeFactory tf;
     protected GenericFactory gf;
     protected ComponentType t;
     protected Component c;
@@ -66,9 +68,9 @@ public class TestLifeCycleController extends Conformtest {
     // -------------------------------------------------------------------------
     @Before
     public void setUp() throws Exception {
-        boot = Fractal.getBootstrapComponent();
-        tf = Fractal.getTypeFactory(boot);
-        gf = Fractal.getGenericFactory(boot);
+        boot = Utils.getBootstrapComponent();
+        tf = GCM.getGCMTypeFactory(boot);
+        gf = GCM.getGenericFactory(boot);
         t = tf.createFcType(new InterfaceType[] {
                 tf.createFcItfType("server", I.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                         TypeFactory.SINGLE),
@@ -92,10 +94,10 @@ public class TestLifeCycleController extends Conformtest {
     @Test
     public void testStarted() throws Exception {
         // assumes that a method call on a stopped interface hangs
-        Fractal.getBindingController(c).bindFc("client", d.getFcInterface("server"));
-        assertEquals("STOPPED", Fractal.getLifeCycleController(c).getFcState());
-        Fractal.getLifeCycleController(c).startFc();
-        assertEquals("STARTED", Fractal.getLifeCycleController(c).getFcState());
+        GCM.getBindingController(c).bindFc("client", d.getFcInterface("server"));
+        assertEquals("STOPPED", GCM.getGCMLifeCycleController(c).getFcState());
+        GCM.getGCMLifeCycleController(c).startFc();
+        assertEquals("STARTED", GCM.getGCMLifeCycleController(c).getFcState());
         final I i = (I) c.getFcInterface("server");
         i.m(true);
     }
@@ -121,10 +123,10 @@ public class TestLifeCycleController extends Conformtest {
     @Test
     public void testMandatoryInterfaceNotBound() throws Exception {
         try {
-            Fractal.getLifeCycleController(c).startFc();
+            GCM.getGCMLifeCycleController(c).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
-            assertEquals("STOPPED", Fractal.getLifeCycleController(c).getFcState());
+            assertEquals("STOPPED", GCM.getGCMLifeCycleController(c).getFcState());
         }
     }
 
@@ -133,16 +135,16 @@ public class TestLifeCycleController extends Conformtest {
     // -------------------------------------------------------------------------
     @Test
     public void testUnbindNotStopped() throws Exception {
-        Fractal.getBindingController(c).bindFc("client", d.getFcInterface("server"));
-        Fractal.getBindingController(c).bindFc("clients0", d.getFcInterface("servers0"));
-        Fractal.getLifeCycleController(c).startFc();
+        GCM.getBindingController(c).bindFc("client", d.getFcInterface("server"));
+        GCM.getBindingController(c).bindFc("clients0", d.getFcInterface("servers0"));
+        GCM.getGCMLifeCycleController(c).startFc();
         try {
-            Fractal.getBindingController(c).unbindFc("client");
+            GCM.getBindingController(c).unbindFc("client");
             fail();
         } catch (IllegalLifeCycleException ilce) {
         }
         try {
-            Fractal.getBindingController(c).unbindFc("clients0");
+            GCM.getBindingController(c).unbindFc("clients0");
             fail();
         } catch (IllegalLifeCycleException ilce) {
         }

@@ -1,11 +1,14 @@
 #!/bin/sh
 
+echo
+echo --- GCM application: tutorial ---------------------------
+
 workingDir=`dirname $0`
 . ${workingDir}/../env.sh
 
-JAVACMD=$JAVACMD" -Dfractal.provider=org.objectweb.proactive.core.component.Fractive"
+JAVACMD=$JAVACMD" -Dgcm.provider=org.objectweb.proactive.core.component.Fractive"
 
-
-echo --- GCM application: tutorial ---------------------
 $JAVACMD org.objectweb.proactive.examples.components.userguide.Main $*
+
+echo
 echo ---------------------------------------------------------

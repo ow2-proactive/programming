@@ -26,7 +26,10 @@
 			</link>. The GCM was defined by the
 			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.coregrid.net/">
 				CoreGRID NoE project
-			</link> and is available
+			</link> and standardized by
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.etsi.org/WebSite/homepage.aspx">
+				ETSI
+			</link>. The complete GCM specification is available
 			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.coregrid.net/mambo/images/stories/Deliverables/d.pm.04.pdf">
 				here
 			</link>.
@@ -44,8 +47,8 @@
 	<section xml:id="ProgrammingwithcomponentstheFractalcomponentmodel_52"><info><title>Programming with components: the Fractal component model</title></info>
 
 		<para>
-			Fractal defines a general conceptual model, along with a programming
-			application interface (API) in Java. According to the official
+			Fractal defines a general conceptual model, along with an Application
+			Programming Interface (API) in Java. According to the official
 			documentation, the Fractal component model is '<emphasis>a modular and
 			extensible component model that can be used with various programming
 			languages to design, implement, deploy and reconfigure various systems and
@@ -57,12 +60,12 @@
 			Fractal is a component model. A component is a software module offering predefined
 			services, and able to communicate with other components. The Fractal component model
 			is hierarchical, so components can either be primitives or composites. A composite
-			is a component containing one or many inner components (primitive or composite). Each component
-			may define what it needs and provides with its client and server interfaces.
+			is a component containing one or many inner components (primitive or composite). Each
+			component may define what it needs and provides with its client and server interfaces.
 			Furthermore, server interfaces may be functional interfaces or a non-functional
-			interfaces (also called controllers). Controllers are useful to manage the component.
-			For instance, the LifeCycleController allows to control the life cycle of the
-			component and provides methods to start or stop the component.
+			interfaces (also called controllers or membrane). Controllers are useful to manage the
+			component. For instance, the LifeCycleController allows to control the life cycle of
+			the component and provides methods to start or stop the component.
 		</para>
 
 		<para>
@@ -93,9 +96,11 @@
 
 		<para>
 			For a complete description of the Fractal component model, please refer
-			to the Fractal specification, available at
+			to the Fractal specification, available
 			<link xmlns:xlink="http://www.w3.org/1999/xlink"
-				xlink:href="http://fractal.objectweb.org/specification/fractal-specification.pdf"/>
+				xlink:href="http://fractal.objectweb.org/specification/fractal-specification.pdf">
+				here
+			</link>.
 		</para>
 
 	</section>
@@ -143,7 +148,7 @@
 
 			 <listitem>
 				<para>
-					The collective interfaces: component systems designers
+					The collective interfaces: component system designers
 					are able to specify parallelism, synchronization and
 					data distribution. Collective communications refer to multipoint
 					interactions between software entities. Collective interfaces have
@@ -238,39 +243,6 @@ vmCapacity="1"&gt;</programlisting>
 		<xref linkend="ComponentsAppendix"/>.
 	</para>
 	</section>
-
-	<!--
-		<para>It presents:</para>
-
-		<itemizedlist>
-		<listitem>
-		<para>the goals and the reasons for a new implementation of the Fractal
-		model,</para>
-		</listitem>
-
-		<listitem>
-		<para>extensions to Fractal and conformance to the Fractal
-		specification,</para>
-		</listitem>
-
-		<listitem>
-		<para>architectural concepts of the implementation,</para>
-		</listitem>
-
-		<listitem>
-		<para>the current Architecture Description Language,</para>
-		</listitem>
-
-		<listitem>
-		<para>some examples to illustrate the use of the API and the
-		distribution of components,</para>
-		</listitem>
-
-		<listitem>
-		<para>ongoing research work and future directions.</para>
-		</listitem>
-		</itemizedlist>
-	-->
 
 	<!--
 		<note>

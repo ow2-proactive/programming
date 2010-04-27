@@ -38,10 +38,10 @@ package functionalTests.component.conform;
 
 import static org.junit.Assert.assertEquals;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 
 import functionalTests.component.conform.components.C;
 
@@ -58,16 +58,16 @@ public class TestContentControllerTemplate extends TestContentController {
     @Ignore
     public void testInstanceContent() throws Exception {
         Component r = gf.newFcInstance(t, compositeTemplate, null);
-        Fractal.getContentController(r).addFcSubComponent(c);
-        Fractal.getContentController(r).addFcSubComponent(d);
-        Fractal.getContentController(c).addFcSubComponent(e);
-        Fractal.getContentController(d).addFcSubComponent(e);
+        GCM.getContentController(r).addFcSubComponent(c);
+        GCM.getContentController(r).addFcSubComponent(d);
+        GCM.getContentController(c).addFcSubComponent(e);
+        GCM.getContentController(d).addFcSubComponent(e);
 
-        Component root = Fractal.getFactory(r).newFcInstance();
-        Component[] comps = Fractal.getContentController(root).getFcSubComponents();
+        Component root = GCM.getFactory(r).newFcInstance();
+        Component[] comps = GCM.getContentController(root).getFcSubComponents();
         assertEquals(2, comps.length);
-        Component[] cComps = Fractal.getContentController(comps[0]).getFcSubComponents();
-        Component[] dComps = Fractal.getContentController(comps[1]).getFcSubComponents();
+        Component[] cComps = GCM.getContentController(comps[0]).getFcSubComponents();
+        Component[] dComps = GCM.getContentController(comps[1]).getFcSubComponents();
         assertEquals(1, cComps.length);
         assertEquals(1, dComps.length);
         assertEquals(cComps[0], dComps[0]);

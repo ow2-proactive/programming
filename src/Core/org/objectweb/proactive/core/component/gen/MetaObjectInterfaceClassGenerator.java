@@ -54,10 +54,10 @@ import javassist.NotFoundException;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.proactive.core.component.ProActiveInterface;
-import org.objectweb.proactive.core.component.ProActiveInterfaceImpl;
+import org.objectweb.proactive.core.component.PAInterface;
+import org.objectweb.proactive.core.component.PAInterfaceImpl;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
+import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.util.ClassDataCache;
@@ -76,10 +76,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * which the body is attached.<br>
  * - In case of a composite component, the impl field will be a component
  * representative.<br>
- * - For a parallel component, the impl field will be a group of component representatives.<br>
  *
  *  @author The ProActive Team
- *
  */
 public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGenerator {
     protected static final String IMPL_FIELD_NAME = "impl"; //delegatee
@@ -97,8 +95,8 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
     }
 
     @Override
-    public ProActiveInterface generateInterface(final String interfaceName, Component owner,
-            ProActiveInterfaceType interfaceType, boolean isInternal, boolean isFunctionalInterface)
+    public PAInterface generateInterface(final String interfaceName, Component owner,
+            PAGCMInterfaceType interfaceType, boolean isInternal, boolean isFunctionalInterface)
             throws InterfaceGenerationFailedException {
         try {
             if (ProActiveLogger.getLogger(Loggers.COMPONENTS_GEN_ITFS).isDebugEnabled()) {
@@ -138,7 +136,7 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
                     interfacesToImplement);
                 addSuperInterfaces(interfacesToImplementAndSuperInterfaces);
 
-                generatedCtClass.setSuperclass(pool.get(ProActiveInterfaceImpl.class.getName()));
+                generatedCtClass.setSuperclass(pool.get(PAInterfaceImpl.class.getName()));
                 JavassistByteCodeStubBuilder.createStubObjectMethods(generatedCtClass);
 
                 CtField implField = new CtField(pool.get(Object.class.getName()), IMPL_FIELD_NAME,
@@ -235,7 +233,7 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
                 generated_class = Utils.defineClass(generatedClassFullName, bytecode);
             }
 
-            ProActiveInterfaceImpl reference = (ProActiveInterfaceImpl) generated_class.newInstance();
+            PAInterfaceImpl reference = (PAInterfaceImpl) generated_class.newInstance();
             reference.setFcItfName(interfaceName);
             reference.setFcItfOwner(owner);
             reference.setFcType(interfaceType);

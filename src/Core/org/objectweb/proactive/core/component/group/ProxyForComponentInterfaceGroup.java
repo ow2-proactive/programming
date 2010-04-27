@@ -50,9 +50,8 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.component.collectiveitfs.MulticastHelper;
 import org.objectweb.proactive.core.component.exceptions.ParameterDispatchException;
 import org.objectweb.proactive.core.component.exceptions.ReductionException;
-import org.objectweb.proactive.core.component.identity.ProActiveComponent;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceTypeImpl;
+import org.objectweb.proactive.core.component.identity.PAComponent;
+import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.annotations.multicast.Reduce;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceBehavior;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ReduceMode;
@@ -73,13 +72,12 @@ import org.objectweb.proactive.core.mop.StubObject;
  * interfaces.
  * 
  * @author The ProActive Team
- * 
  */
 public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
 
-    protected ProActiveInterfaceType interfaceType;
+    protected PAGCMInterfaceType interfaceType;
     protected Class<?> itfSignatureClass = null;
-    protected ProActiveComponent owner;
+    protected PAComponent owner;
     protected ProxyForComponentInterfaceGroup<E> delegatee = null;
     protected ProxyForComponentInterfaceGroup<E> parent = null; // for a delegatee
 
@@ -105,12 +103,13 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
     /**
      * @return Returns the interfaceType.
      */
-    public ProActiveInterfaceType getInterfaceType() {
+    public PAGCMInterfaceType getInterfaceType() {
         return interfaceType;
     }
 
     /*
-     * @see org.objectweb.proactive.core.group.ProxyForGroup#reify(org.objectweb.proactive.core.mop.MethodCall)
+     * @see org.objectweb.proactive.core.group.ProxyForGroup#reify(org.objectweb.proactive.core.mop.
+     * MethodCall)
      */
     @Override
     public synchronized Object reify(MethodCall mc) throws InvocationTargetException {
@@ -159,7 +158,7 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
     @Override
     public Object getGroupByType() {
         try {
-            Interface result = ProActiveComponentGroup.newComponentInterfaceGroup(interfaceType, owner);
+            Interface result = PAComponentGroup.newComponentInterfaceGroup(interfaceType, owner);
 
             @SuppressWarnings("unchecked")
             ProxyForComponentInterfaceGroup<E> proxy = (ProxyForComponentInterfaceGroup<E>) ((StubObject) result)
@@ -209,8 +208,9 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
     }
 
     /*
-     * @see org.objectweb.proactive.core.group.ProxyForGroup#oneWayCallOnGroup(org.objectweb.proactive.core.mop.MethodCall,
-     *      org.objectweb.proactive.core.group.ExceptionListException)
+     * @see
+     * org.objectweb.proactive.core.group.ProxyForGroup#oneWayCallOnGroup(org.objectweb.proactive
+     * .core.mop.MethodCall, org.objectweb.proactive.core.group.ExceptionListException)
      */
     @Override
     protected void oneWayCallOnGroup(MethodCall mc, ExceptionListException exceptionList)
@@ -218,7 +218,7 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
         if (exceptionList == null) {
             Thread.dumpStack();
         }
-        if (((ProActiveInterfaceTypeImpl) interfaceType).isFcCollective() && (delegatee != null)) {
+        if (interfaceType.isGCMCollectiveItf() && (delegatee != null)) {
             // // 2. generate adapted method calls depending on nb members and
             // parameters distribution
             // // each method call is assigned a given member index
@@ -242,7 +242,7 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
             dispatcher.dispatchTasks(tasksToDispatch, doneSignal, mc.getReifiedMethod().getAnnotation(
                     Dispatch.class));
 
-            // LocalBodyStore.getInstance().setCurrentThreadBody(ProActive.getBodyOnThis());
+            // LocalBodyStore.getInstance().setCurrentThreadBody(PAActiveObject.getBodyOnThis());
         } else {
             super.oneWayCallOnGroup(mc, exceptionList);
         }
@@ -302,14 +302,14 @@ public class ProxyForComponentInterfaceGroup<E> extends ProxyForGroup<E> {
      *            The owner to set.
      */
     public void setOwner(Component owner) {
-        this.owner = (ProActiveComponent) owner;
+        this.owner = (PAComponent) owner;
     }
 
     /**
      * @param interfaceType
      *            The interfaceType to set.
      */
-    public void setInterfaceType(ProActiveInterfaceType interfaceType) {
+    public void setInterfaceType(PAGCMInterfaceType interfaceType) {
         this.interfaceType = interfaceType;
         try {
             itfSignatureClass = Class.forName(interfaceType.getFcItfSignature());

@@ -39,9 +39,9 @@ package org.objectweb.proactive.examples.components.userguide.multicast;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.component.adl.Launcher;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
@@ -93,7 +93,7 @@ public class Main {
                 return;
             }
 
-            Fractal.getLifeCycleController(launcher).startFc(); //root
+            GCM.getGCMLifeCycleController(launcher).startFc(); //root
 
             //     System.out.println("Components started!");
             ((java.lang.Runnable) launcher.getFcInterface("runnable")).run();

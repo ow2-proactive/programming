@@ -38,21 +38,24 @@ package functionalTests.component.webservices.cxf;
 
 import static org.junit.Assert.assertTrue;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.client.AbstractClientFactory;
 import org.objectweb.proactive.extensions.webservices.client.Client;
 import org.objectweb.proactive.extensions.webservices.client.ClientFactory;
+import org.objectweb.proactive.extensions.webservices.component.controller.AbstractPAWebServicesControllerImpl;
+import org.objectweb.proactive.extensions.webservices.component.controller.PAWebServicesController;
 
 import functionalTests.FunctionalTest;
 import functionalTests.component.webservices.common.Weather;
@@ -64,6 +67,7 @@ public class TestWeatherComponent extends FunctionalTest {
 
     private String url;
     private WebServices ws;
+    private PAWebServicesController wsc;
 
     @org.junit.Before
     public void deployWeatherService() {
@@ -73,23 +77,34 @@ public class TestWeatherComponent extends FunctionalTest {
             Component boot = null;
             Component comp = null;
 
-            boot = org.objectweb.fractal.api.Fractal.getBootstrapComponent();
+            boot = Utils.getBootstrapComponent();
 
-            TypeFactory tf = Fractal.getTypeFactory(boot);
-            GenericFactory cf = Fractal.getGenericFactory(boot);
+            GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
+            GenericFactory cf = GCM.getGenericFactory(boot);
 
             ComponentType typeComp = tf.createFcType(new InterfaceType[] { tf.createFcItfType(
                     "weather-service", WeatherServiceItf.class.getName(), false, false, false) });
 
-            comp = cf.newFcInstance(typeComp, new ControllerDescription("server", Constants.PRIMITIVE),
-                    new ContentDescription(WeatherServiceComponent.class.getName(), null));
+            String controllersConfigFileLocation = AbstractPAWebServicesControllerImpl.getControllerFileUrl(
+                    "cxf").getPath();
+            ControllerDescription cd = new ControllerDescription("composite", Constants.PRIMITIVE,
+                controllersConfigFileLocation);
+            comp = cf.newFcInstance(typeComp, cd, new ContentDescription(WeatherServiceComponent.class
+                    .getName(), null));
 
-            Fractal.getLifeCycleController(comp).startFc();
+            GCM.getGCMLifeCycleController(comp).startFc();
 
+            // Deploying the service in the Active Object way
             WebServicesFactory wsf = AbstractWebServicesFactory.getWebServicesFactory("cxf");
             ws = wsf.getWebServices(url);
             ws.exposeComponentAsWebService(comp, "server", new String[] { "weather-service" });
 
+            // Deploying the service using the web service controller
+            wsc = org.objectweb.proactive.extensions.webservices.component.Utils
+                    .getPAWebServicesController(comp);
+            wsc.initServlet();
+            wsc.setUrl(url);
+            wsc.exposeComponentAsWebService("server2", new String[] { "weather-service" });
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);
@@ -130,10 +145,45 @@ public class TestWeatherComponent extends FunctionalTest {
 
     }
 
+    @org.junit.Test
+    public void TestWeatherService2() {
+
+        try {
+            ClientFactory cf = AbstractClientFactory.getClientFactory("cxf");
+            Client client = cf.getClient(url, "server2_weather-service", WeatherServiceItf.class);
+
+            Weather w = new Weather();
+
+            w.setTemperature((float) 39.3);
+            w.setForecast("Cloudy with showers");
+            w.setRain(true);
+            w.setHowMuchRain((float) 4.5);
+
+            Object[] setWeatherArgs = new Object[] { w };
+
+            client.oneWayCall("setWeather", setWeatherArgs);
+
+            Object[] response = client.call("getWeather", null, Weather.class);
+
+            Weather result = (Weather) response[0];
+
+            assertTrue(((Float) result.getTemperature()).equals(new Float(39.3)));
+            assertTrue(result.getForecast().equals("Cloudy with showers"));
+            assertTrue(result.getRain());
+            assertTrue(((Float) result.getHowMuchRain()).equals(new Float(4.5)));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        }
+
+    }
+
     @org.junit.After
     public void undeployWeatherService() {
         try {
             ws.unExposeComponentAsWebService("server", new String[] { "weather-service" });
+            wsc.unExposeComponentAsWebService("server2", new String[] { "weather-service" });
         } catch (Exception e) {
             e.printStackTrace();
             assertTrue(false);

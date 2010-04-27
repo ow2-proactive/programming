@@ -41,6 +41,8 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
@@ -50,8 +52,7 @@ import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
-import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 import functionalTests.ComponentTest;
@@ -82,9 +83,9 @@ public class Test extends ComponentTest {
                 "functionalTests.component.collectiveitf.gathercast.testcase", context);
         //        Component clientB = (Component) f.newComponent("functionalTests.component.collectiveitf.gather.GatherClient("+VALUE_2+")",context);
         //        Component server = (Component) f.newComponent("functionalTests.component.collectiveitf.gather.GatherServer",context);
-        //        Fractal.getBindingController(clientA).bindFc("client", server.getFcInterface("serverGather"));
-        //        Fractal.getBindingController(clientB).bindFc("client", server.getFcInterface("serverGather"));
-        Fractal.getLifeCycleController(testcase).startFc();
+        //        GCM.getBindingController(clientA).bindFc("client", server.getFcInterface("serverGather"));
+        //        GCM.getBindingController(clientB).bindFc("client", server.getFcInterface("serverGather"));
+        GCM.getGCMLifeCycleController(testcase).startFc();
 
         for (int i = 0; i < 100; i++) {
             // several iterations for thoroughly testing concurrency issues
@@ -102,14 +103,14 @@ public class Test extends ComponentTest {
 
     @org.junit.Test
     public void testStartCompositeWithGathercastInternalClientItf() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        ProActiveTypeFactory ptf = (ProActiveTypeFactory) Fractal.getTypeFactory(boot);
-        GenericFactory gf = Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory ptf = GCM.getGCMTypeFactory(boot);
+        GenericFactory gf = GCM.getGenericFactory(boot);
         ComponentType rType = ptf.createFcType(new InterfaceType[] {
                 ptf.createFcItfType("server", GatherDummyItf.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                ptf.createFcItfType("client", GatherDummyItf.class.getName(), TypeFactory.CLIENT,
-                        TypeFactory.MANDATORY, ProActiveTypeFactory.GATHER_CARDINALITY) });
+                ptf.createGCMItfType("client", GatherDummyItf.class.getName(), TypeFactory.CLIENT,
+                        TypeFactory.MANDATORY, GCMTypeFactory.GATHERCAST_CARDINALITY) });
         ComponentType cType = ptf.createFcType(new InterfaceType[] {
                 ptf.createFcItfType("server", GatherDummyItf.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),
@@ -117,18 +118,18 @@ public class Test extends ComponentTest {
                         TypeFactory.OPTIONAL, TypeFactory.SINGLE) });
         Component r = gf.newFcInstance(rType, "composite", null);
         Component c = gf.newFcInstance(cType, "primitive", GatherClientServer.class.getName());
-        ContentController cc = Fractal.getContentController(r);
+        ContentController cc = GCM.getContentController(r);
         cc.addFcSubComponent(c);
-        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
-        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        GCM.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        GCM.getBindingController(r).bindFc("client", r.getFcInterface("server"));
         try {
-            Fractal.getLifeCycleController(r).startFc();
+            GCM.getGCMLifeCycleController(r).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
         }
-        Fractal.getBindingController(c).bindFc("client", r.getFcInterface("client"));
+        GCM.getBindingController(c).bindFc("client", r.getFcInterface("client"));
         try {
-            Fractal.getLifeCycleController(r).startFc();
+            GCM.getGCMLifeCycleController(r).startFc();
         } catch (IllegalLifeCycleException ilce) {
             fail();
         }

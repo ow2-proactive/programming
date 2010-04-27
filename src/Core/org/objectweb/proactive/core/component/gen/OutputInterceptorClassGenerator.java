@@ -55,10 +55,10 @@ import javassist.NotFoundException;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.core.component.ItfStubObject;
-import org.objectweb.proactive.core.component.ProActiveInterface;
-import org.objectweb.proactive.core.component.ProActiveInterfaceImpl;
+import org.objectweb.proactive.core.component.PAInterface;
+import org.objectweb.proactive.core.component.PAInterfaceImpl;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
+import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.util.ClassDataCache;
@@ -68,9 +68,7 @@ import org.objectweb.proactive.core.util.ClassDataCache;
  * This class generates output interceptors for intercepting outgoing functional invocations.
  * We could also use a dynamic proxy, but the current way keeps homogeneity with other generators for ProActive components.
  *
- *
  * @author The ProActive Team
- *
  */
 public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGenerator {
     List<?> outputInterceptors;
@@ -84,18 +82,18 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
         }
     }
 
-    public ProActiveInterface generateInterface(ProActiveInterface representative, List<?> outputInterceptors)
+    public PAInterface generateInterface(PAInterface representative, List<?> outputInterceptors)
             throws InterfaceGenerationFailedException {
         this.outputInterceptors = outputInterceptors;
-        ProActiveInterface generated = generateInterface(representative.getFcItfName(), representative
-                .getFcItfOwner(), (ProActiveInterfaceType) representative.getFcItfType(), false, true);
+        PAInterface generated = generateInterface(representative.getFcItfName(), representative
+                .getFcItfOwner(), (PAGCMInterfaceType) representative.getFcItfType(), false, true);
         ((StubObject) generated).setProxy(((StubObject) representative).getProxy());
         return generated;
     }
 
     @Override
-    public ProActiveInterface generateInterface(final String interfaceName, Component owner,
-            ProActiveInterfaceType interfaceType, boolean isInternal, boolean isFunctionalInterface)
+    public PAInterface generateInterface(final String interfaceName, Component owner,
+            PAGCMInterfaceType interfaceType, boolean isInternal, boolean isFunctionalInterface)
             throws InterfaceGenerationFailedException {
         try {
             String representativeClassName = org.objectweb.proactive.core.component.gen.Utils
@@ -110,7 +108,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
                 CtClass generatedCtClass = pool.makeClass(representativeClassName);
 
                 //this.fcInterfaceName = fcInterfaceName;
-                //isPrimitive = ((ProActiveComponentRepresentativeImpl) owner).getHierarchicalType()
+                //isPrimitive = ((PAComponentRepresentativeImpl) owner).getHierarchicalType()
                 //                                                    .equals(ComponentParameters.PRIMITIVE);
                 List<CtClass> interfacesToImplement = new ArrayList<CtClass>();
 
@@ -135,7 +133,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
                 List<CtClass> interfacesToImplementAndSuperInterfaces = new ArrayList<CtClass>(
                     interfacesToImplement);
                 addSuperInterfaces(interfacesToImplementAndSuperInterfaces);
-                generatedCtClass.setSuperclass(pool.get(ProActiveInterfaceImpl.class.getName()));
+                generatedCtClass.setSuperclass(pool.get(PAInterfaceImpl.class.getName()));
                 JavassistByteCodeStubBuilder.createStubObjectMethods(generatedCtClass);
                 CtField interfaceNameField = new CtField(ClassPool.getDefault().get(String.class.getName()),
                     "interfaceName", generatedCtClass);
@@ -173,7 +171,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
                 // now get the methods from implemented interfaces
                 Iterator<CtClass> it = interfacesToImplementAndSuperInterfaces.iterator();
                 while (it.hasNext()) {
-                    itf = (CtClass) it.next();
+                    itf = it.next();
                     if (!classesIndexer.contains(itf.getName())) {
                         classesIndexer.add(itf.getName());
                     }
@@ -197,7 +195,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
                     }
                 }
 
-                reifiedMethods = (CtMethod[]) (methodsToImplement.values()
+                reifiedMethods = (methodsToImplement.values()
                         .toArray(new CtMethod[methodsToImplement.size()]));
 
                 // Determines which reifiedMethods are valid for reification
@@ -237,7 +235,7 @@ public class OutputInterceptorClassGenerator extends AbstractInterfaceClassGener
                 generated_class = Utils.defineClass(representativeClassName, bytecode);
             }
 
-            ProActiveInterfaceImpl reference = (ProActiveInterfaceImpl) generated_class.newInstance();
+            PAInterfaceImpl reference = (PAInterfaceImpl) generated_class.newInstance();
             reference.setFcItfName(interfaceName);
             reference.setFcItfOwner(owner);
             reference.setFcType(interfaceType);

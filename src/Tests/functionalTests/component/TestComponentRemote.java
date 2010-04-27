@@ -38,16 +38,18 @@ package functionalTests.component;
 
 import java.util.Arrays;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 import org.objectweb.proactive.core.component.type.Composite;
 
 import functionalTests.ComponentTestDefaultNodes;
@@ -100,9 +102,9 @@ public class TestComponentRemote extends ComponentTestDefaultNodes {
      */
     @org.junit.Test
     public void testCreationNewactiveComposite() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        TypeFactory type_factory = Fractal.getTypeFactory(boot);
-        ProActiveGenericFactory cf = (ProActiveGenericFactory) Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
+        PAGenericFactory cf = Utils.getPAGenericFactory(boot);
         ComponentType i1_i2_type = type_factory.createFcType(new InterfaceType[] {
                 type_factory.createFcItfType("i1", I1.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),
@@ -120,10 +122,10 @@ public class TestComponentRemote extends ComponentTestDefaultNodes {
         c2 = cf.newFcInstance(i1_i2_type, new ControllerDescription(C2_NAME, Constants.COMPOSITE),
                 new ContentDescription(Composite.class.getName(), new Object[] {}));
 
-        Assert.assertEquals(Fractal.getNameController(p1).getFcName(), P1_NAME);
-        Assert.assertEquals(Fractal.getNameController(p2).getFcName(), P2_NAME);
-        Assert.assertEquals(Fractal.getNameController(c1).getFcName(), C1_NAME);
-        Assert.assertEquals(Fractal.getNameController(c2).getFcName(), C2_NAME);
+        Assert.assertEquals(GCM.getNameController(p1).getFcName(), P1_NAME);
+        Assert.assertEquals(GCM.getNameController(p2).getFcName(), P2_NAME);
+        Assert.assertEquals(GCM.getNameController(c1).getFcName(), C1_NAME);
+        Assert.assertEquals(GCM.getNameController(c2).getFcName(), C2_NAME);
         //    }
 
         /**
@@ -152,11 +154,11 @@ public class TestComponentRemote extends ComponentTestDefaultNodes {
         //    public void testAssemblyRemoteComposite() throws Exception {
         //        new TestComponentRemote().testCreationNewactiveComposite();
         // ASSEMBLY
-        Fractal.getContentController(c1).addFcSubComponent(p1);
-        Fractal.getContentController(c2).addFcSubComponent(c1);
+        GCM.getContentController(c1).addFcSubComponent(p1);
+        GCM.getContentController(c2).addFcSubComponent(c1);
 
-        Component[] c2SubComponents = Fractal.getContentController(c2).getFcSubComponents();
-        Component[] c1SubComponents = Fractal.getContentController(c1).getFcSubComponents();
+        Component[] c2SubComponents = GCM.getContentController(c2).getFcSubComponents();
+        Component[] c1SubComponents = GCM.getContentController(c1).getFcSubComponents();
         Component[] c2_sub_components = { c1 };
         Component[] c1_sub_components = { p1 };
 
@@ -182,15 +184,15 @@ public class TestComponentRemote extends ComponentTestDefaultNodes {
          *
          */
         // BINDING
-        Fractal.getBindingController(c2).bindFc("i1", c1.getFcInterface("i1"));
-        Fractal.getBindingController(c1).bindFc("i1", p1.getFcInterface("i1"));
-        Fractal.getBindingController(p1).bindFc("i2", c1.getFcInterface("i2"));
-        Fractal.getBindingController(c1).bindFc("i2", c2.getFcInterface("i2"));
-        Fractal.getBindingController(c2).bindFc("i2", p2.getFcInterface("i2"));
+        GCM.getBindingController(c2).bindFc("i1", c1.getFcInterface("i1"));
+        GCM.getBindingController(c1).bindFc("i1", p1.getFcInterface("i1"));
+        GCM.getBindingController(p1).bindFc("i2", c1.getFcInterface("i2"));
+        GCM.getBindingController(c1).bindFc("i2", c2.getFcInterface("i2"));
+        GCM.getBindingController(c2).bindFc("i2", p2.getFcInterface("i2"));
 
         // START LIFE CYCLE
-        Fractal.getLifeCycleController(c2).startFc();
-        Fractal.getLifeCycleController(p2).startFc();
+        GCM.getGCMLifeCycleController(c2).startFc();
+        GCM.getGCMLifeCycleController(p2).startFc();
 
         // INVOKE INTERFACE METHOD
         I1 i1 = (I1) c2.getFcInterface("i1");

@@ -41,9 +41,9 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 
 import functionalTests.ComponentTest;
 
@@ -68,14 +68,14 @@ public class Test extends ComponentTest {
 
         Component simpleTestCase = (Component) f.newComponent(
                 "functionalTests.component.collectiveitf.unicast.testcase", context);
-        Fractal.getLifeCycleController(simpleTestCase).startFc();
+        GCM.getGCMLifeCycleController(simpleTestCase).startFc();
         boolean result = ((RunnerItf) simpleTestCase.getFcInterface("runTestItf")).runTest();
         Assert.assertTrue(result);
 
         //        Component testcase = (Component) f.newComponent("functionalTests.component.collectiveitf.multicast.testcase",
         //                context);
 
-        //        Fractal.getLifeCycleController(testcase).startFc();
+        //        GCM.getGCMLifeCycleController(testcase).startFc();
         //        ((Tester) testcase.getFcInterface("runTestItf")).testConnectedServerMulticastItf();
         //        ((Tester) testcase.getFcInterface("runTestItf")).testOwnClientMulticastItf();
     }

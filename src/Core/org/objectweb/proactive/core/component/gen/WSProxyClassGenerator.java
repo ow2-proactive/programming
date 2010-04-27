@@ -51,12 +51,12 @@ import javassist.Modifier;
 import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.proactive.core.component.ProActiveInterface;
-import org.objectweb.proactive.core.component.ProActiveInterfaceImpl;
+import org.objectweb.proactive.core.component.PAInterface;
+import org.objectweb.proactive.core.component.PAInterfaceImpl;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
+import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.WSComponent;
-import org.objectweb.proactive.core.component.webservices.ProActiveWSCaller;
+import org.objectweb.proactive.core.component.webservices.PAWSCaller;
 import org.objectweb.proactive.core.component.webservices.WSInfo;
 import org.objectweb.proactive.core.mop.Proxy;
 import org.objectweb.proactive.core.util.ClassDataCache;
@@ -66,7 +66,7 @@ import org.objectweb.proactive.core.util.ClassDataCache;
  * This class generates a proxy for binding a client interface of a component to a web service.
  * <br>
  * The generated class implements the Java interface corresponding to the client interface and
- * extends the {@link ProActiveInterfaceImpl} class.
+ * extends the {@link PAInterfaceImpl} class.
  * <br>
  * Its {@link InterfaceType} is the server side {@link InterfaceType} corresponding to the
  * {@link InterfaceType} of the client interface.
@@ -74,11 +74,11 @@ import org.objectweb.proactive.core.util.ClassDataCache;
  * Its owner is a {@link WSComponent} component containing the URL and the name of the class
  * to use to call the web service.
  * <br>
- * The functional interface implementation returned by calling {@link ProActiveInterface#getFcItfImpl()}
+ * The functional interface implementation returned by calling {@link PAInterface#getFcItfImpl()}
  * is the URL of the web service.
  *
  * @author The ProActive Team
- * @see ProActiveInterfaceImpl
+ * @see PAInterfaceImpl
  * @see InterfaceType
  * @see WSComponent
  */
@@ -106,8 +106,8 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
      * @see InterfaceType
      * @see WSComponent
      */
-    public ProActiveInterface generateInterface(String interfaceName, Component owner,
-            ProActiveInterfaceType interfaceType, boolean isInternal, boolean isFunctionalInterface)
+    public PAInterface generateInterface(String interfaceName, Component owner,
+            PAGCMInterfaceType interfaceType, boolean isInternal, boolean isFunctionalInterface)
             throws InterfaceGenerationFailedException {
         try {
             WSInfo wsInfo = ((WSComponent) owner).getWSInfo();
@@ -123,7 +123,7 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
                 CtClass generatedCtClass = pool.makeClass(wsProxyClassName);
 
                 // Set super class
-                generatedCtClass.setSuperclass(pool.get(ProActiveInterfaceImpl.class.getName()));
+                generatedCtClass.setSuperclass(pool.get(PAInterfaceImpl.class.getName()));
 
                 // Set interfaces to implement
                 List<CtClass> itfs = new ArrayList<CtClass>();
@@ -140,7 +140,7 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
                 generatedCtClass.addField(loggerField,
                         "org.objectweb.proactive.core.util.log.ProActiveLogger.getLogger("
                             + "org.objectweb.proactive.core.util.log.Loggers.COMPONENTS_REQUESTS)");
-                CtField wsCallerField = new CtField(pool.get(ProActiveWSCaller.class.getName()), "wsCaller",
+                CtField wsCallerField = new CtField(pool.get(PAWSCaller.class.getName()), "wsCaller",
                     generatedCtClass);
                 wsCallerField.setModifiers(Modifier.PRIVATE);
                 generatedCtClass.addField(wsCallerField, "new " + wsInfo.getWSCallerClassName() + "()");
@@ -217,7 +217,7 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
             }
 
             // Instantiate class
-            ProActiveInterfaceImpl reference = (ProActiveInterfaceImpl) generatedClass.newInstance();
+            PAInterfaceImpl reference = (PAInterfaceImpl) generatedClass.newInstance();
             reference.setFcItfName(interfaceName);
             reference.setFcItfOwner(owner);
             reference.setFcType(interfaceType);

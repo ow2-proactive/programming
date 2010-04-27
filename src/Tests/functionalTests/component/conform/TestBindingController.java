@@ -42,6 +42,8 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -53,7 +55,7 @@ import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.component.conform.components.C;
 import functionalTests.component.conform.components.I;
@@ -62,7 +64,7 @@ import functionalTests.component.conform.components.J;
 
 public class TestBindingController extends Conformtest {
     protected Component boot;
-    protected TypeFactory tf;
+    protected GCMTypeFactory tf;
     protected GenericFactory gf;
     protected ComponentType t;
     protected ComponentType u;
@@ -80,9 +82,9 @@ public class TestBindingController extends Conformtest {
 
     @Before
     public void setUp() throws Exception {
-        boot = Fractal.getBootstrapComponent();
-        tf = Fractal.getTypeFactory(boot);
-        gf = Fractal.getGenericFactory(boot);
+        boot = Utils.getBootstrapComponent();
+        tf = GCM.getGCMTypeFactory(boot);
+        gf = GCM.getGenericFactory(boot);
         t = tf.createFcType(new InterfaceType[] {
                 tf.createFcItfType("server", I.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                         TypeFactory.SINGLE),
@@ -111,13 +113,13 @@ public class TestBindingController extends Conformtest {
     // -------------------------------------------------------------------------
     @Test
     public void testList() throws Exception {
-        BindingController bc = Fractal.getBindingController(c);
+        BindingController bc = GCM.getBindingController(c);
         checkList(bc, new String[] { "client" });
     }
 
     @Test
     public void testBindLookupUnbind() throws Exception {
-        BindingController bc = Fractal.getBindingController(c);
+        BindingController bc = GCM.getBindingController(c);
         bc.bindFc("client", d.getFcInterface("server"));
         checkList(bc, new String[] { "client" });
         assertEquals(d.getFcInterface("server"), bc.lookupFc("client"));
@@ -127,7 +129,7 @@ public class TestBindingController extends Conformtest {
 
     @Test
     public void testCollectionBindLookupUnbind() throws Exception {
-        BindingController bc = Fractal.getBindingController(c);
+        BindingController bc = GCM.getBindingController(c);
         bc.bindFc("clients0", d.getFcInterface("server"));
         checkList(bc, new String[] { "client", "clients0" });
         assertEquals(d.getFcInterface("server"), bc.lookupFc("clients0"));
@@ -157,7 +159,7 @@ public class TestBindingController extends Conformtest {
     @Test
     public void testNoSuchInterfaceLookup() throws Exception {
         try {
-            Fractal.getBindingController(c).lookupFc("c");
+            GCM.getBindingController(c).lookupFc("c");
             fail();
         } catch (NoSuchInterfaceException e) {
         }
@@ -166,7 +168,7 @@ public class TestBindingController extends Conformtest {
     @Test
     public void testNoSuchInterfaceBind() throws Exception {
         try {
-            Fractal.getBindingController(c).bindFc("c", d.getFcInterface("server"));
+            GCM.getBindingController(c).bindFc("c", d.getFcInterface("server"));
             fail();
         } catch (NoSuchInterfaceException e) {
         }
@@ -176,7 +178,7 @@ public class TestBindingController extends Conformtest {
     @Ignore
     public void testNotAServerInterface() throws Exception {
         try {
-            Fractal.getBindingController(c).bindFc("client", c.getFcInterface("client"));
+            GCM.getBindingController(c).bindFc("client", c.getFcInterface("client"));
             fail();
         } catch (IllegalBindingException e) {
         }
@@ -185,7 +187,7 @@ public class TestBindingController extends Conformtest {
     @Test
     public void testWrongType() throws Exception {
         try {
-            Fractal.getBindingController(c).bindFc("client", e.getFcInterface("serverJ"));
+            GCM.getBindingController(c).bindFc("client", e.getFcInterface("serverJ"));
             fail();
         } catch (IllegalBindingException e) {
         }
@@ -195,7 +197,7 @@ public class TestBindingController extends Conformtest {
     @Ignore
     public void testMandatoryToOptional() throws Exception {
         try {
-            Fractal.getBindingController(c).bindFc("client", e.getFcInterface("serverI"));
+            GCM.getBindingController(c).bindFc("client", e.getFcInterface("serverI"));
             fail();
         } catch (IllegalBindingException e) {
         }
@@ -203,7 +205,7 @@ public class TestBindingController extends Conformtest {
 
     @Test
     public void testAlreadyBound() throws Exception {
-        BindingController bc = Fractal.getBindingController(c);
+        BindingController bc = GCM.getBindingController(c);
         bc.bindFc("client", d.getFcInterface("server"));
         try {
             bc.bindFc("client", d.getFcInterface("server"));
@@ -221,7 +223,7 @@ public class TestBindingController extends Conformtest {
     @Test
     public void testNoSuchInterfaceUnind() throws Exception {
         try {
-            Fractal.getBindingController(c).unbindFc("c");
+            GCM.getBindingController(c).unbindFc("c");
             fail();
         } catch (NoSuchInterfaceException e) {
         }
@@ -230,7 +232,7 @@ public class TestBindingController extends Conformtest {
     @Test
     public void testNotBound() throws Exception {
         try {
-            Fractal.getBindingController(c).unbindFc("client");
+            GCM.getBindingController(c).unbindFc("client");
             fail();
         } catch (IllegalBindingException e) {
         }

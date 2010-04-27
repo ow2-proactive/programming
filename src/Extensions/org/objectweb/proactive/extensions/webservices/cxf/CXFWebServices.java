@@ -42,7 +42,8 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
+import org.objectweb.fractal.api.type.InterfaceType;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServices;
@@ -73,6 +74,12 @@ public class CXFWebServices extends AbstractWebServices implements WebServices {
      * @see org.objectweb.proactive.extensions.webservices.WebServices#exposeAsWebService(java.lang.Object, java.lang.String, java.lang.reflect.Method[])
      */
     public void exposeAsWebService(Object o, String urn, Method[] methods) throws WebServicesException {
+
+        if (methods == null || methods.length == 0) {
+            exposeAsWebService(o, urn);
+            return;
+        }
+
         MethodUtils.checkMethodsClass(methods);
         PADeployer.deploy(o, this.url, urn, methods, false);
 
@@ -88,6 +95,12 @@ public class CXFWebServices extends AbstractWebServices implements WebServices {
      * @see org.objectweb.proactive.extensions.webservices.WebServices#exposeAsWebService(java.lang.Object, java.lang.String, java.lang.String[])
      */
     public void exposeAsWebService(Object o, String urn, String[] methodsName) throws WebServicesException {
+
+        if (methodsName == null || methodsName.length == 0) {
+            exposeAsWebService(o, urn);
+            return;
+        }
+
         // Transforms the array methods' name into an array of
         // methods (of type Method)
         MethodUtils mc = new MethodUtils(o.getClass().getSuperclass());
@@ -129,11 +142,29 @@ public class CXFWebServices extends AbstractWebServices implements WebServices {
      */
     public void exposeComponentAsWebService(Component component, String componentName, String[] interfaceNames)
             throws WebServicesException {
+
+        if (interfaceNames == null || interfaceNames.length == 0) {
+            exposeComponentAsWebService(component, componentName);
+            return;
+        }
+
         PADeployer.deployComponent(component, this.url, componentName, interfaceNames);
 
         for (String name : interfaceNames) {
             logger.debug("The component interface '" + name + "' has been deployed on " + this.url +
                 WSConstants.SERVICES_PATH + componentName + "_" + name + "?wsdl");
+        }
+    }
+
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.webservices.WebServices#unExposeComponentAsWebService(org.objectweb.fractal.api.Component, java.lang.String, java.lang.String[])
+     */
+    public void unExposeComponentAsWebService(Component component, String componentName,
+            String[] interfaceNames) throws WebServicesException {
+        if (interfaceNames == null || interfaceNames.length == 0) {
+            unExposeComponentAsWebService(component, componentName);
+        } else {
+            unExposeComponentAsWebService(componentName, interfaceNames);
         }
     }
 
@@ -148,8 +179,8 @@ public class CXFWebServices extends AbstractWebServices implements WebServices {
         for (Object o : interfaces) {
             Interface interface_ = (Interface) o;
             String interfaceName = interface_.getFcItfName();
-            if (!interfaceName.contains("-controller") && !interfaceName.equals("component") &&
-                !((ProActiveInterfaceType) interface_.getFcItfType()).isFcClientItf()) {
+            if (!Utils.isControllerItfName(interfaceName) &&
+                !((InterfaceType) interface_.getFcItfType()).isFcClientItf()) {
 
                 logger.debug("The component interface '" + interfaceName + "' has been deployed on " +
                     this.url + WSConstants.SERVICES_PATH + componentName + "_" + interfaceName + "?wsdl");
@@ -173,8 +204,8 @@ public class CXFWebServices extends AbstractWebServices implements WebServices {
         for (Object o : interfaces) {
             Interface interface_ = (Interface) o;
             String interfaceName = interface_.getFcItfName();
-            if (!interfaceName.contains("-controller") && !interfaceName.equals("component") &&
-                !((ProActiveInterfaceType) interface_.getFcItfType()).isFcClientItf()) {
+            if (!Utils.isControllerItfName(interfaceName) &&
+                !((InterfaceType) interface_.getFcItfType()).isFcClientItf()) {
                 logger.debug("The component interface '" + interfaceName + "' previously deployed on " +
                     this.url + WSConstants.SERVICES_PATH + componentName + "_" + interfaceName +
                     "?wsdl has been undeployed");

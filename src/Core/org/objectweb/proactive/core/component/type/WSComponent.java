@@ -39,6 +39,8 @@ package org.objectweb.proactive.core.component.type;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
@@ -48,10 +50,9 @@ import org.objectweb.fractal.api.control.LifeCycleController;
 import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.component.Constants;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.webservices.WSInfo;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -144,8 +145,8 @@ public class WSComponent implements Serializable, Component, NameController, Lif
 
     public Type getFcType() {
         try {
-            Component boot = Fractal.getBootstrapComponent();
-            TypeFactory tf = Fractal.getTypeFactory(boot);
+            Component boot = Utils.getBootstrapComponent();
+            GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
             return tf.createFcType(new InterfaceType[] { (InterfaceType) ((Interface) fcInterfaceImpl)
                     .getFcItfType() });
         } catch (InstantiationException e) {

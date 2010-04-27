@@ -41,7 +41,7 @@
       <section xml:id="IntroductionTutoComponentADL"><info><title>Introduction</title></info>
       <para>
          This first part of the tutorial shows you how to use ADL files in order to construct GCM components.
-         ADL stands for Architecture Description Language and it allows to describe a component assembly thought a text file.
+         ADL stands for Architecture Description Language and it allows to describe a component assembly thought an XML file.
          This part is composed of five exercises:
          <itemizedlist>
             <listitem>
@@ -52,11 +52,11 @@
                a Master and a Slave component.</para>
             </listitem>
             <listitem>
-               <para><emphasis>Interfaces</emphasis> - this exercise make you modified the previous Slave component to have it implement
+               <para><emphasis>Interfaces</emphasis> - this exercise make you modify the previous Slave component to have it implement
                two server interfaces.</para>
             </listitem>
             <listitem>
-               <para><emphasis>Multicast</emphasis> - this exercise make you modified the previous Master component so as to have its
+               <para><emphasis>Multicast</emphasis> - this exercise make you modify the previous Master component so as to have its
                client interface be a multicast interface binded to the server interface of two different Slave components.</para>
             </listitem>
             <listitem>
@@ -112,7 +112,7 @@
                          You will need to put in parameters the name of your component definition (written in the ADL file) as well as a <literal>Map&lt;String, Object&gt;</literal>
                          defining a context.</para>
                </listitem>
-               <listitem><para>Start the component using the <literal>Fractal.getLifeCycleController()</literal> method to get the life cycle controller of your component
+               <listitem><para>Start the component using the <literal>GCM.getGCMLifeCycleController()</literal> method to get the life cycle controller of your component
                and then, using the <literal>startFc()</literal> on this controller, get your component started.</para></listitem>
                <listitem><para>Get the <literal>i1</literal> interface using the <literal>getFcInterface()</literal> method on your component.</para></listitem>
                <listitem><para>Call the <literal>compute()</literal> method with the parameters you want</para></listitem>
@@ -123,7 +123,7 @@
 
          <section xml:id="TestStarterWork"><info><title>Test your work</title></info>
          <para>
-            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory (not the one located into the
+            To build your work, go to the <literal>compile</literal> directory into the <literal>tutorials</literal> directory (not the one located into the
             <literal>ProActive</literal> directory) and type:
          </para>
          <screen>build components.adl.starter</screen>
@@ -175,7 +175,7 @@ arg: hello - bye</screen>
 
             <para>The only things that remain to do now so as to be able to use our composite component are first, to define that composite with an
             ADL file and then to write our <literal>main</literal> method to use it. The writing of the composite ADL file is the second work you have to
-            do and the <literal>main</literal> method, which is quite similar to the one you have written in the previous tutorial, is exposed hereafer.</para>
+            do and the <literal>main</literal> method, which is quite similar to the one you have written in the previous tutorial, is exposed hereafter.</para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_composite_Main.snip"/></textobject></programlisting>
             <para>You can notice that the only thing that changed is the first argument of the <literal>newComponent()</literal> method which is now the name
             of the ADL file representing the composite component.</para>
@@ -199,7 +199,7 @@ arg: hello - bye</screen>
 
          <section xml:id="TestCompositeWork"><info><title>Test your work</title></info>
          <para>
-            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+            To build your work, go to the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
          </para>
          <screen>build components.adl.composite</screen>
          <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
@@ -229,7 +229,7 @@ arg: hello - world</screen>
             <para>We introduce a second interface named <literal>Itf2</literal> which source code is the following one:</para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Itf2.snip"/></textobject></programlisting>
 
-            <para>The aim of this tutorial is to make you modified all the necessary files to add this new interface.</para>
+            <para>The aim of this tutorial is to make you modify all the necessary files to add this new interface.</para>
 
          </section>
 
@@ -238,11 +238,11 @@ arg: hello - world</screen>
             <para>The first thing to do when adding a new interface is to implement it. In our case, it is <literal>SlaveImpl</literal> class that implements it:</para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_interfaces_SlaveImpl_skeleton.snip"/></textobject></programlisting>
 
-            <para>Then, you have to modified the ADL file of the Slave component to add this new interface:</para>
+            <para>Then, you have to modify the ADL file of the Slave component to add this new interface:</para>
             <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/adl_interfaces_Slave_fractal_skeleton.snip"/></textobject></programlisting>
 
             <para>Now, you have to do the same thing for the Master component, that is, you have to add a new interface. However, in that case, you have to
-            add a client interface and thus, you have to modified the <literal>BindingController</literal> methods:</para>
+            add a client interface and thus, you have to modify the <literal>BindingController</literal> methods:</para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/adl_interfaces_MasterImpl_skeleton.snip"/></textobject></programlisting>
 
             <para>Then, Master's ADL file needs also to be modified:</para>
@@ -264,7 +264,7 @@ arg: hello - world</screen>
 
          <section xml:id="TestInterfaceWork"><info><title>Test your work</title></info>
          <para>
-            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+            To build your work, go to the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
          </para>
          <screen>build components.adl.interfaces</screen>
          <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
@@ -319,14 +319,14 @@ I do nothing</screen>
                <listitem><para>Modify the client interface of the Master component</para></listitem>
                <listitem><para>Add a Slave component into the composite</para></listitem>
                <listitem><para>Add bindings to realise the multicast</para></listitem>
-               <listitem><para>Optional: Change the dispatch parameter policy in the multicast interface</para></listitem>
+               <listitem><para>Optional: Change the dispatch parameter policy in the multicast interface to round robin dispatch mode</para></listitem>
             </orderedlist>
 
          </section>
 
          <section xml:id="TestMulticastWork"><info><title>Test your work</title></info>
          <para>
-            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+            To build your work, go to the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
          </para>
          <screen>build components.adl.multicast</screen>
          <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
@@ -359,7 +359,7 @@ I do nothing
             you have to make some little modification in Java code sources. The first one is to change the signature of the <literal>compute</literal> method in
             the <literal>Itf1Multicast</literal> interface. Change the line <programlisting language="java">void compute(List&lt;String&gt; arg);</programlisting>
             by <programlisting language="java">void compute(@ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN) List&lt;String&gt; arg);</programlisting></para>
-            <para>Then, you have to change the <literal>Itf1</literal> interface since the server interface will no longer receive af list of <literal>String</literal>
+            <para>Then, you have to change the <literal>Itf1</literal> interface since the server interface will no longer receive a list of <literal>String</literal>
             but instead, just a <literal>String</literal>. Thus, in the <literal>Itf1</literal> interface, change the line
             <programlisting language="java">void compute(List&lt;String&gt; arg);</programlisting> by <programlisting language="java">void compute(String arg);</programlisting> and
             in the <literal>SlaveImpl</literal> class, change the implementation of <literal>compute</literal> so that it returns a <literal>String</literal>:</para>
@@ -408,7 +408,7 @@ public void compute(String arg) {
 
          <section xml:id="TestDeploymentWork"><info><title>Test your work</title></info>
          <para>
-            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+            To build your work, go to the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
          </para>
          <screen>build components.adl.deployment</screen>
          <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
@@ -448,7 +448,7 @@ public void compute(String arg) {
       <section xml:id="IntroductionTutoComponentAPI"><info><title>Introduction</title></info>
       <para>
          This second part of the tutorial shows you how to use the API in order to construct GCM components.
-         This component is composed of three exercises:
+         This part is composed of three exercises:
          <itemizedlist>
             <listitem>
                <para><emphasis>Starter</emphasis> - this exercise make you create a simple primitive component called Slave</para>
@@ -458,7 +458,7 @@ public void compute(String arg) {
                a Master and a Slave component.</para>
             </listitem>
             <listitem>
-               <para><emphasis>Interfaces</emphasis> - this exercise make you modified the previous Slave component to have it implement
+               <para><emphasis>Interfaces</emphasis> - this exercise make you modify the previous Slave component to have it implement
                two server interfaces.</para>
             </listitem>
          </itemizedlist>
@@ -493,14 +493,14 @@ public void compute(String arg) {
                Thus, we propose you to:
             </para>
             <orderedlist>
-               <listitem><para>Get the Bootstrap component using the <literal>Fractal.getBootstrapComponent()</literal> method</para></listitem>
-               <listitem><para>Get the TypeFactory using the <literal>Fractal.getTypeFactory()</literal> method</para></listitem>
-               <listitem><para>Get the GenericFactory using the <literal>Fractal.getGenericFactory()</literal> method</para></listitem>
+               <listitem><para>Get the Bootstrap component using the <literal>org.objectweb.proactive.core.component.Utils.getBootstrapComponent()</literal> method</para></listitem>
+               <listitem><para>Get the GCMTypeFactory using the <literal>GCM.getGCMTypeFactory()</literal> method</para></listitem>
+               <listitem><para>Get the GenericFactory using the <literal>GCM.getGenericFactory()</literal> method</para></listitem>
                <listitem><para>Create the i1 Interface Type (org.objectweb.proactive.examples.userguide.components.api.starter.Itf1) using the <literal>createFcItfType()</literal> method
-               of the <literal>TypeFactory</literal> class</para></listitem>
+               of the <literal>GCMTypeFactory</literal> class</para></listitem>
                <listitem><para>Create the Slave Component type using the <literal>createFcType()</literal> method
-               of the <literal>TypeFactory</literal> class</para></listitem>
-               <listitem><para>Create the Slave Component type using the <literal>newFcInstance()</literal> method
+               of the <literal>GCMTypeFactory</literal> class</para></listitem>
+               <listitem><para>Create the Slave Component instance using the <literal>newFcInstance()</literal> method
                of the <literal>GenericFactory</literal> class</para></listitem>
             </orderedlist>
 
@@ -508,7 +508,7 @@ public void compute(String arg) {
 
          <section xml:id="APITestStarterWork"><info><title>Test your work</title></info>
          <para>
-            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory (not the one located into the
+            To build your work, go to the <literal>compile</literal> directory into the <literal>tutorials</literal> directory (not the one located into the
             <literal>ProActive</literal> directory) and type:
          </para>
          <screen>build components.api.starter</screen>
@@ -556,7 +556,7 @@ arg: hello - world</screen>
 
             <para>The only things that remain to do now so as to be able to use our composite component are first, to define all the three components
             (Slave, Master and Composite) in our <literal>main()</literal> method using the Java API
-            and then, to write the two bindings.</para>
+            and then, to add the two sub-components (Master and Slave) to the Composite component and to write the two bindings.</para>
          </section>
 
          <section xml:id="APICompositeProposedWork"><info><title>Proposed work</title></info>
@@ -568,16 +568,18 @@ arg: hello - world</screen>
                <listitem><para>Create the Master component type as you created the Slave component type in the previous tutorial.
                Hint: in that case, there are two interfaces (one client and one server interface)</para></listitem>
                <listitem><para>Instantiate the Master component</para></listitem>
-               <listitem><para>Do the bindings. Hint: For doing a binding, you should first get the <literal>BindingController</literal> of the component containing the client interface
-               you want to bind and then, call the method <literal>bindFc()</literal> on it. To get the <literal>BindingController</literal>, use the
-               <literal>Fractal.getBindingController()</literal> mehtod.</para></listitem>
+			   <listitem><para>Add the two sub-components (Master and Slave) to the Composite component. Hint: use the <literal>GCM.getContentController()</literal>
+			   static method to get a <literal>ContentController</literal> and use it to add these sub-components.</para></listitem>
+			   <listitem><para>Do the bindings. Hint: For doing a binding, you should first get the <literal>BindingController</literal> of the component containing the client interface
+               you want to bind and then, call the <literal>bindFc()</literal> method on it. To get the <literal>BindingController</literal>, use the
+               <literal>GCM.getBindingController()</literal> method.</para></listitem>
             </orderedlist>
 
          </section>
 
          <section xml:id="APITestCompositeWork"><info><title>Test your work</title></info>
          <para>
-            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+            To build your work, go to the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
          </para>
          <screen>build components.api.composite</screen>
          <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one
@@ -606,7 +608,7 @@ arg: hello - world</screen>
             <para>We introduce a second interface named <literal>Itf2</literal> which source code is the following one:</para>
             <programlisting language="java"><textobject><textdata fileref="automatic_snippets/api_interfaces_Itf2.snip"/></textobject></programlisting>
 
-            <para>The aim of this tutorial is to make you modified the previous code in order to add this new interface using the API.
+            <para>The aim of this tutorial is to make you modify the previous code in order to add this new interface using the API.
             All the necessary modification are made into the <literal>Main</literal> class.</para>
 
          </section>
@@ -628,7 +630,7 @@ arg: hello - world</screen>
 
          <section xml:id="APITestInterfaceWork"><info><title>Test your work</title></info>
          <para>
-            To build your work, go the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
+            To build your work, go to the <literal>compile</literal> directory into the <literal>tutorials</literal> directory and type:
          </para>
          <screen>build components.api.interfaces</screen>
          <para>Once you get a successful compilation, go to the <literal>scripts/Components</literal> directory located into the <literal>tutorials</literal> one

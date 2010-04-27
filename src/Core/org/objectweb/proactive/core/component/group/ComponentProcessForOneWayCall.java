@@ -40,8 +40,8 @@ import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.core.component.ProActiveInterface;
-import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
+import org.objectweb.proactive.core.component.PAInterface;
+import org.objectweb.proactive.core.component.representative.PAComponentRepresentative;
 import org.objectweb.proactive.core.group.ExceptionListException;
 import org.objectweb.proactive.core.group.ProcessForOneWayCall;
 import org.objectweb.proactive.core.group.ProxyForGroup;
@@ -61,18 +61,18 @@ public class ComponentProcessForOneWayCall extends ProcessForOneWayCall {
 
     @Override
     public void executeMC(MethodCall mc, Object object) throws Throwable {
-        if (object instanceof ProActiveComponentRepresentative) {
+        if (object instanceof PAComponentRepresentative) {
             // delegate to the corresponding interface
             Object target;
             if (mc.getComponentMetadata().getComponentInterfaceName() == null) {
                 // a call on the Component interface
                 target = object;
             } else {
-                target = ((ProActiveComponentRepresentative) object).getFcInterface(mc.getComponentMetadata()
+                target = ((PAComponentRepresentative) object).getFcInterface(mc.getComponentMetadata()
                         .getComponentInterfaceName());
             }
             mc.execute(target);
-        } else if (object instanceof ProActiveInterface) {
+        } else if (object instanceof PAInterface) {
             mc.execute(object);
         } else
             throw new RuntimeException("Should not be here for component");

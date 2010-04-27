@@ -42,6 +42,7 @@ import org.apache.axis2.AxisFault;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.rpc.client.RPCServiceClient;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 import org.objectweb.proactive.extensions.webservices.client.AbstractClient;
 import org.objectweb.proactive.extensions.webservices.client.Client;
@@ -80,7 +81,8 @@ public class Axis2Client extends AbstractClient implements Client {
 
         EndpointReference targetEPR = new EndpointReference(url + WSConstants.SERVICES_PATH + serviceName);
 
-        serviceClient.getAxisService().setElementFormDefault(false);
+        serviceClient.getAxisService().setElementFormDefault(
+                CentralPAPropertyRepository.PA_WEBSERVICES_ELEMENTFORMDEFAULT.isTrue());
         options.setTo(targetEPR);
 
         return serviceClient;

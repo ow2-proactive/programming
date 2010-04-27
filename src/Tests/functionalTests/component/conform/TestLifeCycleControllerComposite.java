@@ -40,6 +40,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.fractal.api.Component;
@@ -48,7 +49,6 @@ import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 
 import functionalTests.component.conform.components.C;
 import functionalTests.component.conform.components.I;
@@ -64,23 +64,23 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
         r = gf.newFcInstance(t, "composite", null);
         c = gf.newFcInstance(t, "primitive", C.class.getName());
         d = gf.newFcInstance(t, "primitive", C.class.getName());
-        Fractal.getContentController(o).addFcSubComponent(r);
-        Fractal.getContentController(r).addFcSubComponent(c);
-        Fractal.getContentController(r).addFcSubComponent(d);
+        GCM.getContentController(o).addFcSubComponent(r);
+        GCM.getContentController(r).addFcSubComponent(c);
+        GCM.getContentController(r).addFcSubComponent(d);
     }
 
     @Test
     public void testRecursiveStartStop() throws Exception {
-        ContentController cc = Fractal.getContentController(r);
-        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
-        Fractal.getBindingController(c).bindFc("client", d.getFcInterface("server"));
-        Fractal.getBindingController(d).bindFc("client", cc.getFcInternalInterface("client"));
-        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        ContentController cc = GCM.getContentController(r);
+        GCM.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        GCM.getBindingController(c).bindFc("client", d.getFcInterface("server"));
+        GCM.getBindingController(d).bindFc("client", cc.getFcInternalInterface("client"));
+        GCM.getBindingController(r).bindFc("client", r.getFcInterface("server"));
 
-        Fractal.getLifeCycleController(r).startFc();
-        assertEquals("STARTED", Fractal.getLifeCycleController(r).getFcState());
-        assertEquals("STARTED", Fractal.getLifeCycleController(c).getFcState());
-        assertEquals("STARTED", Fractal.getLifeCycleController(d).getFcState());
+        GCM.getGCMLifeCycleController(r).startFc();
+        assertEquals("STARTED", GCM.getGCMLifeCycleController(r).getFcState());
+        assertEquals("STARTED", GCM.getGCMLifeCycleController(c).getFcState());
+        assertEquals("STARTED", GCM.getGCMLifeCycleController(d).getFcState());
         final I i = (I) r.getFcInterface("server");
         Thread t = new Thread(new Runnable() {
             public void run() {
@@ -91,22 +91,22 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
         t.join(50);
         assertTrue(!t.isAlive());
 
-        Fractal.getLifeCycleController(r).stopFc();
-        assertEquals("STOPPED", Fractal.getLifeCycleController(r).getFcState());
-        assertEquals("STOPPED", Fractal.getLifeCycleController(c).getFcState());
-        assertEquals("STOPPED", Fractal.getLifeCycleController(d).getFcState());
+        GCM.getGCMLifeCycleController(r).stopFc();
+        assertEquals("STOPPED", GCM.getGCMLifeCycleController(r).getFcState());
+        assertEquals("STOPPED", GCM.getGCMLifeCycleController(c).getFcState());
+        assertEquals("STOPPED", GCM.getGCMLifeCycleController(d).getFcState());
     }
 
     @Override
     @Test
     public void testMandatoryInterfaceNotBound() throws Exception {
         super.testMandatoryInterfaceNotBound();
-        ContentController cc = Fractal.getContentController(r);
+        ContentController cc = GCM.getContentController(r);
         cc.removeFcSubComponent(c);
         cc.removeFcSubComponent(d);
-        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        GCM.getBindingController(r).bindFc("client", r.getFcInterface("server"));
         try {
-            Fractal.getLifeCycleController(c).startFc();
+            GCM.getGCMLifeCycleController(c).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
         }
@@ -114,11 +114,11 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
 
     @Test
     public void testCompositeMandatoryServerInterfaceNotBound() throws Exception {
-        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
-        Fractal.getBindingController(c).bindFc("client", d.getFcInterface("server"));
-        Fractal.getBindingController(d).bindFc("client", c.getFcInterface("server"));
+        GCM.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        GCM.getBindingController(c).bindFc("client", d.getFcInterface("server"));
+        GCM.getBindingController(d).bindFc("client", c.getFcInterface("server"));
         try {
-            Fractal.getLifeCycleController(r).startFc();
+            GCM.getGCMLifeCycleController(r).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
         }
@@ -129,14 +129,14 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
         ComponentType eType = tf.createFcType(new InterfaceType[] { tf.createFcItfType("server", I.class
                 .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE) });
         Component e = gf.newFcInstance(eType, "primitive", C.class.getName());
-        ContentController cc = Fractal.getContentController(r);
+        ContentController cc = GCM.getContentController(r);
         cc.removeFcSubComponent(d);
         cc.addFcSubComponent(e);
-        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
-        Fractal.getBindingController(c).bindFc("client", e.getFcInterface("server"));
-        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        GCM.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        GCM.getBindingController(c).bindFc("client", e.getFcInterface("server"));
+        GCM.getBindingController(r).bindFc("client", r.getFcInterface("server"));
         try {
-            Fractal.getLifeCycleController(r).startFc();
+            GCM.getGCMLifeCycleController(r).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
         }
@@ -145,17 +145,17 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
     @Test
     @Ignore
     public void testRemoveNotStopped() throws Exception {
-        ContentController cc = Fractal.getContentController(r);
-        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
-        Fractal.getBindingController(c).bindFc("client", cc.getFcInternalInterface("client"));
-        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        ContentController cc = GCM.getContentController(r);
+        GCM.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        GCM.getBindingController(c).bindFc("client", cc.getFcInternalInterface("client"));
+        GCM.getBindingController(r).bindFc("client", r.getFcInterface("server"));
         cc.removeFcSubComponent(d);
-        Fractal.getLifeCycleController(r).startFc();
+        GCM.getGCMLifeCycleController(r).startFc();
 
         // TODO test issue: adding a sub-component in a started composite automatically starts the added one?
         cc.addFcSubComponent(d);
         //crash here
-        //due to org.objectweb.proactive.core.component.controller.AbstractProActiveController.checkLifeCycleIsStopped() 
+        //due to org.objectweb.proactive.core.component.control.AbstractPAController.checkLifeCycleIsStopped()
         //first line which impose the composite to be in stopped state
         try {
             cc.removeFcSubComponent(d);

@@ -3,28 +3,28 @@
  xsi:noNamespaceSchemaLocation="../../../org/objectweb/proactive/core/component/config/component-config.xsd" name="interception">
     <controllers>
         <controller>
-            <interface>org.objectweb.proactive.core.component.controller.ProActiveBindingController</interface>
-            <implementation>org.objectweb.proactive.core.component.controller.ProActiveBindingControllerImpl</implementation>
+            <interface>org.objectweb.proactive.core.component.control.PABindingController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PABindingControllerImpl</implementation>
         </controller>
        <controller>
-            <interface>org.objectweb.proactive.core.component.controller.ProActiveContentController</interface>
-            <implementation>org.objectweb.proactive.core.component.controller.ProActiveContentControllerImpl</implementation>
+            <interface>org.objectweb.proactive.core.component.control.PAContentController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PAContentControllerImpl</implementation>
         </controller>
         <controller>
-            <interface>org.objectweb.proactive.core.component.controller.ProActiveLifeCycleController</interface>
-            <implementation>org.objectweb.proactive.core.component.controller.ProActiveLifeCycleControllerImpl</implementation>
+            <interface>org.objectweb.proactive.core.component.control.PAGCMLifeCycleController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PAGCMLifeCycleControllerImpl</implementation>
         </controller>
         <controller>
-            <interface>org.objectweb.proactive.core.component.controller.ProActiveSuperController</interface>
-            <implementation>org.objectweb.proactive.core.component.controller.ProActiveSuperControllerImpl</implementation>
+            <interface>org.objectweb.proactive.core.component.control.PASuperController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PASuperControllerImpl</implementation>
         </controller>
         <controller>
             <interface>org.objectweb.fractal.api.control.NameController</interface>
-            <implementation>org.objectweb.proactive.core.component.controller.ProActiveNameController</implementation>
+            <implementation>org.objectweb.proactive.core.component.control.PANameControllerImpl</implementation>
         </controller>
         <!-- specific controllers & interceptors -->
          <controller>
-            <interface>org.objectweb.proactive.core.component.controller.MulticastController</interface>
+            <interface>org.objectweb.proactive.core.component.control.PAMulticastController</interface>
             <implementation>functionalTests.component.collectiveitf.unicast.CustomUnicastController</implementation>
         </controller>
     </controllers>

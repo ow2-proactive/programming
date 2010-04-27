@@ -49,7 +49,8 @@ import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
+import org.objectweb.fractal.api.type.InterfaceType;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -150,9 +151,8 @@ public class PADeployer {
             String name = interface_.getFcItfName();
 
             /* only expose server interfaces and not the attributes controller */
-            if (!(interface_.getFcItfName().contains("-controller")) &&
-                !interface_.getFcItfName().equals("component") &&
-                !((ProActiveInterfaceType) interface_.getFcItfType()).isFcClientItf()) {
+            if (!Utils.isControllerItfName(interface_.getFcItfName()) &&
+                !((InterfaceType) interface_.getFcItfType()).isFcClientItf()) {
 
                 Method[] methods = interface_.getClass().getMethods();
                 Vector<String> meths = new Vector<String>();
@@ -227,8 +227,8 @@ public class PADeployer {
             String interfaceName = ((Interface) o).getFcItfName();
 
             /* only expose server interfaces and not the attributes controller */
-            if (!interfaceName.contains("-controller") && !interfaceName.equals("component") &&
-                !((ProActiveInterfaceType) ((Interface) o).getFcItfType()).isFcClientItf())
+            if (!Utils.isControllerItfName(interfaceName) &&
+                !((InterfaceType) ((Interface) o).getFcItfType()).isFcClientItf())
                 undeploy(url, componentName + "_" + interfaceName);
         }
     }

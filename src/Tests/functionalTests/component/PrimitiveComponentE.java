@@ -85,7 +85,7 @@ public class PrimitiveComponentE implements I1Multicast, BindingController {
      */
     public String[] listFc() {
         Set<String> itf_names = i2Map.keySet();
-        return (String[]) itf_names.toArray(new String[itf_names.size()]);
+        return itf_names.toArray(new String[itf_names.size()]);
     }
 
     /*

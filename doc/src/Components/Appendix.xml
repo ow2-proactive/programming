@@ -1,21 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsAppendix">
-<info>
-<title xml:id="Annex_54">Appendix</title>
-	</info>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsAppendix">
+	<info><title xml:id="Annex_54">Appendix</title></info>
 
-	<section xml:id="gcmBasicsExampleFile">
-<info>
-<title xml:id="TheGCMBasicsexamplefiles_54">The GCM Basics example files</title>
-		</info>
+	<section xml:id="gcmBasicsExampleFile"><info><title xml:id="TheGCMBasicsexamplefiles_54">The GCM Basics example files</title></info>
 
 		<para>
-			<literal>org.objectweb.proactive.examples.components.userguide.starter.Service</literal>:
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.Service.java</literal>:
 		</para>
 
 		<programlisting language="java"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/Service.java"/></textobject></programlisting>
 
 		<para>
-			<literal>org.objectweb.proactive.examples.components.userguide.starter.ServerImpl</literal>:
+			<literal>org.objectweb.proactive.examples.components.userguide.starter.ServerImpl.java</literal>:
 		</para>
 
 		<programlisting language="java"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/ServerImpl.java"/></textobject></programlisting>
@@ -55,5 +51,7 @@
 		</para>
 
 		<programlisting language="xml"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/userguide/starter/applicationDescriptor.xml"/></textobject></programlisting>
+
 	</section>
+
 </chapter>

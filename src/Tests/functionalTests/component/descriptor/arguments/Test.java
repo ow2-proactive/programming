@@ -39,10 +39,10 @@ package functionalTests.component.descriptor.arguments;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 
 import functionalTests.ComponentTest;
 
@@ -78,7 +78,7 @@ public class Test extends ComponentTest {
         Map context = new HashMap();
         context.put("message", "hello world");
         dummy = (Component) f.newComponent("functionalTests.component.descriptor.arguments.dummy", context);
-        Fractal.getLifeCycleController(dummy).startFc();
+        GCM.getGCMLifeCycleController(dummy).startFc();
 
         Assert.assertEquals("This component is storing the info : hello world", ((Action) dummy
                 .getFcInterface("action")).doSomething());

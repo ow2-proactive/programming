@@ -97,7 +97,7 @@ import org.objectweb.proactive.core.node.Node;
  *
  */
 public class GatherFuturesHandler implements RunActive, Serializable {
-    List<ItfID> senders;
+    List<Object> senders;
     List<?> resultOfGatheredInvocation;
     Throwable exceptionToRaise;
     String methodName = null;
@@ -130,7 +130,7 @@ public class GatherFuturesHandler implements RunActive, Serializable {
         PAMobileAgent.migrateTo(node);
     }
 
-    public void setConnectedClientItfs(List<ItfID> connectedClientItfs) {
+    public void setConnectedClientItfs(List<Object> connectedClientItfs) {
         senders = connectedClientItfs;
     }
 

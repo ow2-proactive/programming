@@ -222,7 +222,7 @@
 					</xsl:variable>
 					<xsl:if test="$toc_line_name = 'chapter' or $toc_line_name = 'part'  or $toc_line_name = 'appendix'">
 						<xsl:call-template name="gentext">
-							<xsl:with-param name="key" select="$toc_line_name" />
+							<xsl:with-param name="key" select="$toc_line_name"/>
 						</xsl:call-template>
 						<xsl:call-template name="gentext.space">
 						</xsl:call-template>
@@ -757,13 +757,13 @@
 	<xsl:template name="book.version">
 		<fo:block space-after="50mm" text-align="center" font-size="12pt" font-weight="bold">
 			<xsl:text>Version</xsl:text>
-			<xsl:call-template name="gentext.space" />
-			<xsl:copy-of select="$VERSION" />
+			<xsl:call-template name="gentext.space"/>
+			<xsl:copy-of select="$VERSION"/>
 			<xsl:if test="not($RELEASEDATE = 'RELEASE DATE NOT SET')">
-				<xsl:call-template name="gentext.space" />
+				<xsl:call-template name="gentext.space"/>
 				<xsl:text>-</xsl:text>
-				<xsl:call-template name="gentext.space" />
-				<xsl:copy-of select="$RELEASEDATE" />
+				<xsl:call-template name="gentext.space"/>
+				<xsl:copy-of select="$RELEASEDATE"/>
 			</xsl:if>
 			<!--This variable is passed as a parameter in the ant task-->
 		</fo:block>
@@ -786,7 +786,7 @@
 			</fo:block>
 			<!-- The Version -->
 			<fo:block text-align="center">
-				<xsl:call-template name="book.version" />
+				<xsl:call-template name="book.version"/>
 			</fo:block>
 			<!-- The author's name -->
 			<fo:block space-before="10mm" text-align="center">
@@ -853,8 +853,8 @@
 			</fo:table>
 			<!-- The Revision and copyright -->
 			<fo:table space-before="5mm" table-layout="fixed" width="100%">
-				<fo:table-column column-width="proportional-column-width(1)" />
-				<fo:table-column column-width="proportional-column-width(1)" />
+				<fo:table-column column-width="proportional-column-width(1)"/>
+				<fo:table-column column-width="proportional-column-width(1)"/>
 				<fo:table-body>
 					<fo:table-row>
 						<!-- The ObjectWeb Logo -->
@@ -892,25 +892,23 @@
 				</fo:table-body>
 			</fo:table>
 			<fo:table space-before="5mm" table-layout="fixed" width="100%">
-				<fo:table-column column-width="30%" />
-				<fo:table-column column-width="70%" />
+				<fo:table-column column-width="30%"/>
+				<fo:table-column column-width="70%"/>
 				<fo:table-body>
 					<fo:table-row>
 						<fo:table-cell>
 							<fo:block text-align="left" font-size="10pt" font-style="italic">
 								<xsl:text>Generated</xsl:text>
-								<xsl:call-template name="gentext.space" />
+								<xsl:call-template name="gentext.space"/>
 								<xsl:text>on</xsl:text>
-								<xsl:call-template name="gentext.space" />
-								<xsl:copy-of select="$TODAY" />
+								<xsl:call-template name="gentext.space"/>
+								<xsl:copy-of select="$TODAY"/>
 								<!--This variable is passed as a parameter in the ant task-->
 							</fo:block>
 						</fo:table-cell>
 						<fo:table-cell>
-							<fo:block text-align="right"
-								font-size="10pt" font-weight="italic">
-								<xsl:apply-templates
-									mode="book.titlepage.recto.mode" select="bookinfo/copyright" />
+							<fo:block text-align="right" font-size="10pt" font-weight="italic">
+								<xsl:apply-templates mode="book.titlepage.recto.mode" select="bookinfo/copyright"/>
 							</fo:block>
 						</fo:table-cell>
 					</fo:table-row>
@@ -1631,13 +1629,13 @@
 		</xsl:call-template>
 	</xsl:template>
 	<xsl:template match="email">
-		<xsl:call-template name="emailF" />
+		<xsl:call-template name="emailF"/>
 	</xsl:template>
 	<xsl:template match="email" mode="in.address">
 		<fo:block>
 			<xsl:text>e-mail:</xsl:text>
-			<xsl:call-template name="gentext.space" />
-			<xsl:call-template name="emailF" />
+			<xsl:call-template name="gentext.space"/>
+			<xsl:call-template name="emailF"/>
 		</fo:block>
 	</xsl:template>
 	<xsl:template match="phone|fax" mode="in.address">
@@ -1645,7 +1643,7 @@
 			<xsl:value-of select="name(.)">
 			</xsl:value-of>
 			<xsl:text>:</xsl:text>
-			<xsl:call-template name="gentext.space" />
+			<xsl:call-template name="gentext.space"/>
 			<xsl:call-template name="inline.charseq">
 			</xsl:call-template>
 		</fo:block>
@@ -1662,7 +1660,7 @@
 			<xsl:apply-templates select="."/>
 			<xsl:if test="not(count(parent::node()/pob) = 0)">
 				<xsl:text>,</xsl:text>
-				<xsl:call-template name="gentext.space" />
+				<xsl:call-template name="gentext.space"/>
 				<xsl:apply-templates select="parent::node()/pob"/>
 			</xsl:if>
 		</fo:block>
@@ -1680,7 +1678,7 @@
 		<fo:block>
 			<xsl:apply-templates select="."/>
 			<xsl:if test="not(count(parent::node()/city) = 0)">
-				<xsl:call-template name="gentext.space" />
+				<xsl:call-template name="gentext.space"/>
 				<xsl:apply-templates select="parent::node()/city"/>
 			</xsl:if>
 		</fo:block>
@@ -1698,7 +1696,7 @@
 	<!-- Modification of fo/verbatim.xsl Line #158 -->
 	<xsl:template match="address">
 		<xsl:variable name="id">
-			<xsl:call-template name="object.id" />
+			<xsl:call-template name="object.id"/>
 		</xsl:variable>
 		<fo:block id="{$id}" space-before="0.5em">
 <!--			<fo:block>-->
@@ -1721,7 +1719,7 @@
 <!--				<xsl:apply-templates select="country"/>-->
 <!--				<xsl:apply-templates select="phone|fax|email" mode="in.address" />-->
 <!--			</fo:block>-->
-			<xsl:apply-templates select="*" mode="in.address" />
+			<xsl:apply-templates select="*" mode="in.address"/>
 <!--			<xsl:for-each select="*">-->
 <!--				<xsl:message>-->
 <!--					<xsl:text> In ADDRESS, </xsl:text><xsl:value-of select="name(.)" /> <xsl:value-of select="." /> -->
@@ -2103,11 +2101,11 @@
 			<!-- This condition is true when the string is a zero-length string -->
 			<xsl:when test="not(boolean(normalize-space(string(.))))">
 				<xsl:apply-templates mode="mode1" select="following-sibling::node()[1]">
-					<xsl:with-param name="myName" select="$myName" />
+					<xsl:with-param name="myName" select="$myName"/>
 				</xsl:apply-templates>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="'false'" />
+				<xsl:value-of select="'false'"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -2116,10 +2114,10 @@
 		<xsl:param name="myName"/>
 		<xsl:choose>
 			<xsl:when test="name() = $myName">
-				<xsl:value-of select="'true'" />
+				<xsl:value-of select="'true'"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="'false'" />
+				<xsl:value-of select="'false'"/>
 			</xsl:otherwise>
 		</xsl:choose>
 
@@ -2130,7 +2128,7 @@
 		<xsl:variable name="myName" select="name()"/>
 		<xsl:variable name="result">
 			<xsl:apply-templates mode="mode1" select="following-sibling::node()[1]">
-				<xsl:with-param name="myName" select="$myName" />
+				<xsl:with-param name="myName" select="$myName"/>
 			</xsl:apply-templates>
 		</xsl:variable>
 		<xsl:choose>
@@ -2141,11 +2139,11 @@
 				 is not set.
 			-->
 			<xsl:when test="not(boolean(normalize-space($result)))">
-				<xsl:value-of select="'false'" />
+				<xsl:value-of select="'false'"/>
 			</xsl:when>
 			<!-- In this case, result has been set, so we return it as it is -->
 			<xsl:otherwise>
-				<xsl:value-of select="$result" />
+				<xsl:value-of select="$result"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -2153,18 +2151,16 @@
 
 	<xsl:template match="newline">
 		<xsl:variable name="followedByNewLine">
-			<xsl:call-template name="isFollowedBySameElement" />
+			<xsl:call-template name="isFollowedBySameElement"/>
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$followedByNewLine = 'true'">
-				<fo:block>&#160;</fo:block>
+				<fo:block> </fo:block>
 			</xsl:when>
 			<xsl:otherwise>
-				<fo:block
-					linefeed-treatment="preserve"
-					white-space-treatment="preserve"
-					white-space-collapse="false">
-					<fo:inline>&#010;</fo:inline>
+				<fo:block linefeed-treatment="preserve" white-space-treatment="preserve" white-space-collapse="false">
+					<fo:inline>
+</fo:inline>
 				</fo:block>
 			</xsl:otherwise>
 		</xsl:choose>

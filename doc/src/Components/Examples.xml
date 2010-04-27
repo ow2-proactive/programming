@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsExamples"><info><title xml:id="Componentexamples_55">Component examples</title></info>
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsExamples">
+	<info><title xml:id="Componentexamples_55">Component examples</title></info>
 
-
-  <para>Three examples are presented in this chapter: code snippets for visualizing the transition
-  between active objects and components, the 'hello world' from the Fractal
-  tutorial, and C3D component version. The programming model is Fractal, and
-  one should refer to the Fractal documentation for more detailed examples.</para>
+  <para>Two examples are presented in this chapter: code snippets for visualizing the transition
+  between active objects and components, and the 'hello world' from the Fractal
+  tutorial. The programming model is Fractal/GCM, and one should refer to the Fractal documentation
+  for more detailed examples.</para>
 
  <section xml:id="examples_html_From_objects_to_active_objects_to_distributed_components"><info><title xml:id="Fromobjectstoactiveobjectstodistributedcomponents_55">From objects to active objects to distributed components</title></info>
 
@@ -25,7 +26,7 @@
     <programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_examples_3.snip"/></textobject></programlisting>
 
     <para>Active objects are instantiated using factory methods from the
-     ProActive class (see
+     PAActiveObject class (see
 	 <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../GetStarted/multiple_html/ActiveObjectTutorial.html#SimpleCMA">Chapter 6.1. Simple Computation And Monitoring Agent</link>).
      It is also possible to specify the activity of
     the active object, the location (node or virtual node), or a factory for
@@ -38,7 +39,7 @@
     Constructor parameters, nodes, activity, or factories, that can be
     specified for active objects, are also specifiable for components. The
     definition of a component requires 3 sub-definitions: the type, the
-    description of the content, and the description of the controller.</para>
+    description of the content, and the description of the controllers.</para>
 
     <section xml:id="Type_55"><info><title>Type</title></info>
 
@@ -51,12 +52,12 @@
       components. In order to do this, we have first to get a
       bootstrap component. The standard way to do this is the following one
       (this method creates an instance of the class specified in the
-      fractal.provider system property, and uses this instance to get the
-      bootstrap component):</para>
+      gcm.provider system property or in the fractal.provider system property if the
+      first one has not been set, and uses this instance to get the bootstrap component):</para>
 
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_examples_5.snip"/></textobject></programlisting>
 
-      <para>Then, we get the <literal>TypeFactory</literal> interface provided by this bootstrap
+      <para>Then, we get the <literal>GCMTypeFactory</literal> interface provided by this bootstrap
       component:</para>
 
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_examples_6.snip"/></textobject></programlisting>
@@ -77,17 +78,17 @@
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_examples_8.snip"/></textobject></programlisting>
     </section>
 
-    <section xml:id="Descriptionofthecontroller_55"><info><title>Description of the controller</title></info>
+    <section xml:id="Descriptionofthecontroller_55"><info><title>Description of the controllers</title></info>
 
 
-      <para>Properties relative to the controller can be specified in the
+      <para>Properties relative to the controllers can be specified in the
       <literal>ControllerDescription</literal>:</para>
 
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_examples_9.snip"/></textobject></programlisting>
 
       <para>Eventually, the component definition is instantiated using the
-      standard Fractal API. This component can then be manipulated as any
-      other Fractal component.</para>
+      standard Fractal/GCM API. This component can then be manipulated as any
+      other Fractal/GCM component.</para>
 
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/component_examples_10.snip"/></textobject></programlisting>
     </section>
@@ -163,18 +164,10 @@
           <literal>org.objectweb.proactive.component.ControllerDescription</literal>
           and
           <literal>org.objectweb.proactive.component.ContentDescription</literal>
-          classes to define ProActive components. (It is possible to use the
+          classes to define ProActive/GCM components. (It is possible to use the
           same parameters than in Julia, but that hinders you from using some
           functionalities specific to ProActive, such as distributed
           deployment or definition of the activity).</para>
-        </listitem>
-
-        <listitem>
-          <para>Collective interfaces could be implemented the same way than
-          suggested, but using the
-          <literal>Fractive.createCollectiveClientInterface</literal> method
-          will prove useful with this implementation: you are then able to use
-          the functionalities provided by the typed groups API.</para>
         </listitem>
 
         <listitem>
@@ -195,12 +188,7 @@
       both contained in the same root component (root).</para>
 
       <para>Another configuration is also possible, where client and server
-      are wrapped around composite components (C and S). The goal was
-      initially to show the interception shortcut mechanism in Julia. In the
-      current ProActive implementation, there are no such shortcuts, as the
-      different components can be distributed, and all invocations are
-      intercepted. The exercise is still of interest, as it involves composite
-      components.</para>
+      are wrapped around composite components (C and S).</para>
 
       <para><figure xml:id="client_and_server_wrapped_in_composites"><info><title>Client and Server wrapped in composite components (C and S)</title></info>
 
@@ -216,7 +204,7 @@
     <section xml:id="Distributeddeployment_55"><info><title>Distributed deployment</title></info>
 
 
-      <para>This section is specific to the ProActive implementation, as it
+      <para>This section is specific to the ProActive/GCM implementation, as it
       uses the deployment framework of this library.</para>
 
       <para>If the application is started with (only) the parameter
@@ -282,7 +270,8 @@
       <para>You can either compile and run the code yourself, or follow the
       instructions for preparing the examples and use the script
       helloworld_fractal.sh (or .bat). If you choose the first solution, do
-      not forget to set the fractal.provider system property.</para>
+      not forget to set the <literal>gcm.provider</literal> system property
+      (or the <literal>fractal.provider</literal> system property).</para>
 
       <para>If you run the program with no arguments (i.e. not using the
       parser, no wrapper composite components, and local deployment) , you
@@ -494,23 +483,23 @@ Server: print done.c</programlisting>
       <indexterm><primary>ADL</primary><secondary>example</secondary></indexterm>
 
       <para>
-      <literal>org.objectweb.proactive.examples.components.helloworld.helloworld-distributed-wrappers.fractal</literal>:</para>
+      <literal>org.objectweb.proactive.examples.components.helloworld.helloworld-distributed-wrappers</literal>:</para>
 
      <programlisting language="xml"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/helloworld/helloworld-distributed-wrappers.fractal"/></textobject></programlisting>
 
 
       <para>
-      <literal>org.objectweb.proactive.examples.components.helloworld.ClientType.fractal</literal>:</para>
+      <literal>org.objectweb.proactive.examples.components.helloworld.ClientType</literal>:</para>
 
      <programlisting language="xml"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/helloworld/ClientType.fractal"/></textobject></programlisting>
 
       <para>
-      <literal>org.objectweb.proactive.examples.components.helloworld.ClientImpl.fractal</literal>:</para>
+      <literal>org.objectweb.proactive.examples.components.helloworld.ClientImpl</literal>:</para>
 
      <programlisting language="xml"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/helloworld/ClientImpl.fractal"/></textobject></programlisting>
 
       <para>
-      <literal>org.objectweb.proactive.examples.components.ServerType</literal>:</para>
+      <literal>org.objectweb.proactive.examples.components.helloworld.ServerType</literal>:</para>
 
      <programlisting language="xml"><textobject><textdata fileref="../../../src/Examples/org/objectweb/proactive/examples/components/helloworld/ServerType.fractal"/></textobject></programlisting>
 

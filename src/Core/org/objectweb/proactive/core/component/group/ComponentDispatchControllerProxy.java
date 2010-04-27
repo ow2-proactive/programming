@@ -62,11 +62,11 @@ public class ComponentDispatchControllerProxy implements DispatchBehavior {
     ////		try {
     //		    throw new RuntimeException("set context ");
     ////			Object o = ((ComponentBody) PAActiveObject
-    ////					.getBodyOnThis()).getProActiveComponentImpl()
+    ////					.getBodyOnThis()).getPAComponentImpl()
     ////					.getFcInterface(context);
     ////			dispatchController = (AllocationBehavior)o;
-    //////			dispatchController = (AllocationBehavior) ((ComponentBody) ProActiveObject
-    //////					.getBodyOnThis()).getProActiveComponentImpl()
+    //////			dispatchController = (AllocationBehavior) ((ComponentBody) PAObject
+    //////					.getBodyOnThis()).getPAComponentImpl()
     //////					.getFcInterface(context);
     ////		} catch (NoSuchInterfaceException e) {
     ////			e.printStackTrace();

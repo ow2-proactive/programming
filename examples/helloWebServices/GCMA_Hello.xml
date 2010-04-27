@@ -7,7 +7,7 @@
 		<javaPropertyVariable name="proactive.home" />
 		<javaPropertyVariable name="user.dir" />
 
-		<descriptorVariable name="hostCapacity" value="2"/>
+		<descriptorVariable name="hostCapacity" value="1"/>
 		<descriptorVariable name="vmCapacity" value="1"/>
 	</environment>
 
@@ -23,7 +23,7 @@
 				</applicationClasspath>
 			</configuration>
 
-			<virtualNode id="Hello" capacity="2"/>
+			<virtualNode id="Hello" capacity="1"/>
 		</proactive>
 	</application>
 

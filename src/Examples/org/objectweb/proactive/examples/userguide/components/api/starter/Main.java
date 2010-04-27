@@ -42,14 +42,16 @@ package org.objectweb.proactive.examples.userguide.components.api.starter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.Utils;
 
 
 /**
@@ -62,19 +64,19 @@ public class Main {
         // TODO: Get the Bootstrap Component
         //@tutorial-break
         //@snippet-break api_starter_Main_skeleton
-        Component boot = Fractal.getBootstrapComponent();
+        Component boot = Utils.getBootstrapComponent();
         //@snippet-resume api_starter_Main_skeleton
         //@tutorial-resume
         // TODO: Get the TypeFactory
         //@tutorial-break
         //@snippet-break api_starter_Main_skeleton
-        TypeFactory tf = Fractal.getTypeFactory(boot);
+        GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
         //@snippet-resume api_starter_Main_skeleton
         //@tutorial-resume
         // TODO: Get the GenericFactory
         //@tutorial-break
         //@snippet-break api_starter_Main_skeleton
-        GenericFactory gf = Fractal.getGenericFactory(boot);
+        GenericFactory gf = GCM.getGenericFactory(boot);
         //@snippet-resume api_starter_Main_skeleton
         //@tutorial-resume
         // TODO: Create the i1 Interface Type (org.objectweb.proactive.examples.userguide.components.api.starter.Itf1)
@@ -98,7 +100,7 @@ public class Main {
         //@snippet-resume api_starter_Main_skeleton
         //@tutorial-resume
 
-        Fractal.getLifeCycleController(slave).startFc();
+        GCM.getGCMLifeCycleController(slave).startFc();
 
         Itf1 itf1 = (Itf1) slave.getFcInterface("i1");
         List<String> arg = new ArrayList<String>();
@@ -106,7 +108,7 @@ public class Main {
         arg.add("world");
         itf1.compute(arg);
 
-        Fractal.getLifeCycleController(slave).stopFc();
+        GCM.getGCMLifeCycleController(slave).stopFc();
 
         System.exit(0);
     }

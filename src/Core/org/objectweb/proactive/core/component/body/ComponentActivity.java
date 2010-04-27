@@ -39,9 +39,9 @@ package org.objectweb.proactive.core.component.body;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.LifeCycleController;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.Active;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.EndActive;
@@ -162,8 +162,8 @@ public class ComponentActivity implements RunActive, InitActive, EndActive, Seri
                 NFRequestFilterImpl nfRequestFilter = new NFRequestFilterImpl();
                 while (body.isActive()) {
                     ComponentBody componentBody = (ComponentBody) body;
-                    while (LifeCycleController.STOPPED.equals(Fractal.getLifeCycleController(
-                            componentBody.getProActiveComponentImpl()).getFcState())) {
+                    while (LifeCycleController.STOPPED.equals(GCM.getGCMLifeCycleController(
+                            componentBody.getPAComponentImpl()).getFcState())) {
                         componentService.blockingServeOldest(nfRequestFilter);
                         if (!body.isActive()) {
                             // in case of a migration 

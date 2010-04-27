@@ -45,9 +45,9 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.exceptions.ReductionException;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 
@@ -85,7 +85,7 @@ public class Test extends ComponentTest {
             Map<String, Object> context = new HashMap<String, Object>();
             Component root = (Component) f.newComponent(
                     "functionalTests.component.collectiveitf.reduction.primitive.adl.Testcase", context);
-            Fractal.getLifeCycleController(root).startFc();
+            GCM.getGCMLifeCycleController(root).startFc();
             boolean result2 = ((RunnerItf) root.getFcInterface("runTestItf")).runTest();
             Assert.assertTrue(result2);
         } catch (Exception e) {

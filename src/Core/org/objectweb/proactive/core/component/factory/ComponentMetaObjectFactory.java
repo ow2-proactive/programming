@@ -37,7 +37,7 @@
 package org.objectweb.proactive.core.component.factory;
 
 import org.objectweb.proactive.core.body.MetaObjectFactory;
-import org.objectweb.proactive.core.component.identity.ProActiveComponentFactory;
+import org.objectweb.proactive.core.component.identity.PAComponentFactory;
 
 
 /**
@@ -48,9 +48,9 @@ import org.objectweb.proactive.core.component.identity.ProActiveComponentFactory
 public interface ComponentMetaObjectFactory extends MetaObjectFactory {
 
     /**
-     * Creates or reuses a ProActiveComponentFactory
-     * @return a new or existing ProActiveComponentFactory
-     * see {@link ProActiveComponentFactory}
+     * Creates or reuses a PAComponentFactory
+     * @return a new or existing PAComponentFactory
+     * see {@link PAComponentFactory}
      */
-    public ProActiveComponentFactory newComponentIdentityFactory();
+    public PAComponentFactory newComponentIdentityFactory();
 }

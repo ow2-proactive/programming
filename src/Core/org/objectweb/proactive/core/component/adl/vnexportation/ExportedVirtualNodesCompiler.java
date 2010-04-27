@@ -39,16 +39,16 @@ package org.objectweb.proactive.core.component.adl.vnexportation;
 import java.util.List;
 import java.util.Map;
 
-import org.objectweb.deployment.scheduling.component.api.InstanceProviderTask;
-import org.objectweb.deployment.scheduling.component.lib.AbstractConfigurationTask;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
-import org.objectweb.fractal.adl.TaskMap;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.components.PrimitiveCompiler;
 import org.objectweb.fractal.adl.nodes.VirtualNodeContainer;
 import org.objectweb.fractal.api.control.BindingController;
+import org.objectweb.fractal.task.core.TaskMap;
+import org.objectweb.fractal.task.core.TaskMap.TaskHole;
+import org.objectweb.fractal.task.deployment.lib.AbstractConfigurationTask;
 import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 
 
@@ -88,8 +88,8 @@ public class ExportedVirtualNodesCompiler implements PrimitiveCompiler, BindingC
         }
     }
 
-    public void compile(List path, ComponentContainer container, TaskMap tasks, Map context)
-            throws ADLException {
+    public void compile(List<ComponentContainer> path, ComponentContainer container, TaskMap tasks,
+            Map<Object, Object> context) throws ADLException {
         if (container instanceof ExportedVirtualNodesContainer) {
             ExportedVirtualNodes exported_vns = ((ExportedVirtualNodesContainer) container)
                     .getExportedVirtualNodes();
@@ -111,12 +111,12 @@ public class ExportedVirtualNodesCompiler implements PrimitiveCompiler, BindingC
                 SetExportedVirtualNodesTask t = new SetExportedVirtualNodesTask(component_name, builder,
                     exported_vns.getExportedVirtualNodes(), current_component_vn);
 
-                InstanceProviderTask createTask = (InstanceProviderTask) tasks.getTask("create", container);
+                TaskMap.TaskHole virtualNodeTaskHole = tasks.addTask("exportedVirtualNodes", container, t);
+                TaskHole createTask = tasks.getTaskHole("create", container);
 
                 // exportations to be known *before* the creation of components.
-                createTask.addPreviousTask(t);
-
-                tasks.addTask("exportedVirtualNodes", container, t);
+                createTask.addDependency(virtualNodeTaskHole,
+                        org.objectweb.fractal.task.core.Task.PREVIOUS_TASK_ROLE, context);
             }
         }
     }
@@ -135,16 +135,19 @@ public class ExportedVirtualNodesCompiler implements PrimitiveCompiler, BindingC
             this.currentComponentVN = currentComponentVN;
         }
 
-        public void execute(final Object context) throws Exception {
-            //Object component = getInstanceProviderTask().getResult();
-            builder.compose(componentName, exported_vns, currentComponentVN);
-        }
-
         public Object getResult() {
             return null;
         }
 
+        public void setPreviousTask(final TaskMap.TaskHole task) {
+            addPreviousTask(task);
+        }
+
         public void setResult(Object result) {
+        }
+
+        public void execute(Map<Object, Object> arg0) throws Exception {
+            builder.compose(componentName, exported_vns, currentComponentVN);
         }
     }
 }

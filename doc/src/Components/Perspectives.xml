@@ -1,19 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsPerspectives">
-<info>
-<title>
-			Component perspectives: a support for advanced research
-		</title>
-	</info>
-
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ComponentsPerspectives">
+	<info><title>Component perspectives: a support for advanced research</title></info>
 
 	<para>
-		The ProActive/Fractal framework is a functional and flexible
-		implementation of the Fractal API and model. One can configure
+		The ProActive/GCM framework is a functional and flexible
+		implementation of the Fractal/GCM API and model. One can configure
 		and deploy a system of distributed components, including Grids.
-		The framework also proposes extensions for collective
-		interactions (gathercast and multicast interfaces), allocation
-		configuration through virtual nodes extensions, and some
-		optimizations.
 	</para>
 
 	<para>
@@ -44,12 +36,12 @@
 			designing a set of such primitives (e.g., replace, add and
 			bind, unbind and remove, duplicate, recursively add, ...)
 			for reconfiguration ensuring more correctness properties
-			than the Fractal ones, and more autonomy. By providing
+			than the Fractal/GCM ones, and more autonomy. By providing
 			higher level of primitives, the principal aim is to help the
 			programmer to design safe scenarios. For example a
 			replacement primitive seems safer and easier to verify than
 			the equivalent sequence (stop+unbind+remove+add+bind+start)
-			that would implement it in Fractal. One of the difficulties
+			that would implement it in Fractal/GCM. One of the difficulties
 			is that most useful reconfigurations involve changing or
 			augmenting the available behaviors of the system components.
 			During replacement, one can introduce new interfaces, new
@@ -63,7 +55,7 @@
 			necessarily be addressed to the same destination component
 			(for example, the one requests sends additional informations
 			necessary to fulfill the other one). Then, between those two
-			request, no reconfiguration can occur if it involves the
+			requests, no reconfiguration can occur if it involves the
 			binding used for the requests.
 		</para>
 		<para>
@@ -72,11 +64,11 @@
 			the application, this should be the main interaction between
 			functional and non-functional aspects, and should be studied
 			carefully in order to maintain the "good separation of
-			aspects" that exists in Fractal.
+			aspects" that exists in Fractal/GCM.
 		</para>
 		<para>
 			The autonomic computing paradigm is related to this
-			challenge because is consists of building applications out
+			challenge because it consists of building applications out
 			of self-managed components. Components which are
 			self-managed are able to monitor their environment and adapt
 			to it by automatically optimizing and reconfiguring
@@ -220,7 +212,7 @@
 			In order to facilitate the design of complex systems with
 			large number of entities and recurring similar
 			configurations, we plan to propose a mechanism for defining
-			parameterizable assembly patterns in the Fractal ADL,
+			parameterizable assembly patterns in the Fractal/GCM ADL,
 			particularly for systems that contain parameterized numbers
 			of identical components.
 		</para>
@@ -242,11 +234,11 @@
 				interfaces, content and membrane parts for composite
 				components, multicast and gathercast interfaces.
 				Diagrams are validated against a set of static semantic
-				rules. GCM-ADL files can be produced and read by the
-				editor. The behavior diagrams express external behavior
-				of components. They are based on classical
+				rules. Fractal/GCM ADL files can be produced and read by
+				the editor. The behavior diagrams express external
+				behavior of components. They are based on classical
 				state-machines constructions, with specific constructs
-				for GCM/Proactive, in particular for expressing request
+				for Proactive/GCM, in particular for expressing request
 				queue selection, and multicast/gathercast policies.
 			</para>
 	</section>

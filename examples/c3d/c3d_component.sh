@@ -9,7 +9,7 @@ fi
 
 . $PROACTIVE/examples/env.sh
 
-JAVACMD=$JAVACMD" -Dfractal.provider=org.objectweb.proactive.core.component.Fractive"
+JAVACMD=$JAVACMD" -Dgcm.provider=org.objectweb.proactive.core.component.Fractive"
 
 echo --- Fractal C3D example ---------------------------------------------
 $JAVACMD org.objectweb.proactive.examples.components.c3d.Main "$@"

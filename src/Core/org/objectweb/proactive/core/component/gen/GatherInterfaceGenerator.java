@@ -47,7 +47,7 @@ import javassist.CtNewMethod;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.component.exceptions.InterfaceGenerationFailedException;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
+import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.util.ClassDataCache;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -58,14 +58,12 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * generating a representative we have to generate its proxy interface.
  * 
  * @author The ProActive Team
- *
  */
 public class GatherInterfaceGenerator {
     protected static final transient ClassPool pool = ClassPool.getDefault();
     private static Logger gatherLogger = ProActiveLogger.getLogger(Loggers.COMPONENTS_GATHERCAST);
 
-    public static Class<?> generateInterface(ProActiveInterfaceType itfType)
-            throws InterfaceGenerationFailedException {
+    public static Class<?> generateInterface(PAGCMInterfaceType itfType) {
         Class<?> generated = null;
         String gatherProxyItfName = Utils.getGatherProxyItfClassName(itfType);
         try {

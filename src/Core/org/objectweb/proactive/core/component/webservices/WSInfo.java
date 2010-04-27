@@ -46,24 +46,21 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 /**
  * Web service informations used to bind a client interface of a component to a web service: contains the URL
- * of the web service and the name of the class which has to be called to use this web service.
+ * of the web service and the name of the class which has to be used to call this web service.
  * <br>
- * The class in charge to call the web service must implement the {@link ProActiveWSCaller} interface.
+ * The class in charge to call the web service must implement the {@link PAWSCaller} interface.
  * <br>
  * By default, the class {@link Axis2WSCaller}, using the <a href="http://ws.apache.org/axis2/">Axis2</a> API,
  * is used.
  *
  * @author The ProActive Team
- * @see ProActiveWSCaller
- * @see Axis2WSCaller
- * @see CXFWSCaller
  */
 @PublicAPI
 public class WSInfo implements Serializable {
     /**
      * Name of the interface which must be implemented by the class in charge of calling the web service.
      */
-    public static final String PROACTIVEWSCALLER_ITF_NAME = ProActiveWSCaller.class.getName();
+    public static final String PAWSCALLER_ITF_NAME = PAWSCaller.class.getName();
 
     /**
      * Shortcut ID to specify that Axis2 must be used to call the web service.
@@ -124,7 +121,7 @@ public class WSInfo implements Serializable {
      * or the full name of the class to use to call the web service. The ID (not case
      * sensitive) may be Axis2 or CXF to use one of these library to call the web service.
      * Otherwise, the full class name given must be the one of a class implementing the
-     * {@link ProActiveWSCaller} interface.
+     * {@link PAWSCaller} interface.
      * <br>
      * For instance:
      * <br>
@@ -152,7 +149,7 @@ public class WSInfo implements Serializable {
      * Secondary constructor.
      *
      * @param wsUrl The URL of the web service.
-     * @param wsCallerClassName Name of the class, implementing the {@link ProActiveWSCaller}
+     * @param wsCallerClassName Name of the class, implementing the {@link PAWSCaller}
      * interface, to use to call the web service.
      * @throws IllegalBindingException If the URL is malformed or if the ID or class name is incorrect.
      */
@@ -182,9 +179,9 @@ public class WSInfo implements Serializable {
     private String checkClassName(String className) throws IllegalBindingException {
         try {
             Class<?> c = Class.forName(className);
-            if (!Class.forName(PROACTIVEWSCALLER_ITF_NAME).isAssignableFrom(c)) {
+            if (!Class.forName(PAWSCALLER_ITF_NAME).isAssignableFrom(c)) {
                 throw new IllegalBindingException("The web service caller: " + className +
-                    " must implement the " + PROACTIVEWSCALLER_ITF_NAME + " interface");
+                    " must implement the " + PAWSCALLER_ITF_NAME + " interface");
             }
             return className;
         } catch (ClassNotFoundException e) {

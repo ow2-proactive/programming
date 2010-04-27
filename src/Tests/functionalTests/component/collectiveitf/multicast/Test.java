@@ -41,6 +41,8 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Ignore;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
@@ -50,8 +52,7 @@ import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
-import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
+import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.ComponentTest;
 
@@ -77,29 +78,29 @@ public class Test extends ComponentTest {
         // simple test first
         Component simpleTestCase = (Component) f.newComponent(
                 "functionalTests.component.collectiveitf.multicast.simple.testcase", context);
-        Fractal.getLifeCycleController(simpleTestCase).startFc();
+        GCM.getGCMLifeCycleController(simpleTestCase).startFc();
         ((Tester) simpleTestCase.getFcInterface("runTestItf")).testOwnClientMulticastItf();
 
         // more complex testcase now
         Component testcase = (Component) f.newComponent(
                 "functionalTests.component.collectiveitf.multicast.testcase", context);
 
-        Fractal.getLifeCycleController(testcase).startFc();
+        GCM.getGCMLifeCycleController(testcase).startFc();
         ((Tester) testcase.getFcInterface("runTestItf")).testConnectedServerMulticastItf();
         ((Tester) testcase.getFcInterface("runTestItf")).testOwnClientMulticastItf();
     }
 
     @org.junit.Test
     public void testMulticastServerItfNotBound() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        ProActiveTypeFactory tf = (ProActiveTypeFactory) Fractal.getTypeFactory(boot);
-        GenericFactory gf = Fractal.getGenericFactory(boot);
-        ComponentType ct = tf.createFcType(new InterfaceType[] { tf.createFcItfType("serverMult",
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
+        GenericFactory gf = GCM.getGenericFactory(boot);
+        ComponentType ct = tf.createFcType(new InterfaceType[] { tf.createGCMItfType("serverMult",
                 MulticastTestItf.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                ProActiveTypeFactory.MULTICAST_CARDINALITY) });
+                GCMTypeFactory.MULTICAST_CARDINALITY) });
         Component composite = gf.newFcInstance(ct, "composite", null);
         try {
-            Fractal.getLifeCycleController(composite).startFc();
+            GCM.getGCMLifeCycleController(composite).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
         }
@@ -108,9 +109,9 @@ public class Test extends ComponentTest {
     @org.junit.Test
     @Ignore
     public void testStartCompositeWithInternalClientItfBoundOnMulticast() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        ProActiveTypeFactory ptf = (ProActiveTypeFactory) Fractal.getTypeFactory(boot);
-        GenericFactory gf = Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory ptf = GCM.getGCMTypeFactory(boot);
+        GenericFactory gf = GCM.getGenericFactory(boot);
         ComponentType rType = ptf.createFcType(new InterfaceType[] {
                 ptf.createFcItfType("server", ServerTestItf.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),
@@ -119,22 +120,22 @@ public class Test extends ComponentTest {
         ComponentType cType = ptf.createFcType(new InterfaceType[] {
                 ptf.createFcItfType("server", ServerTestItf.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                ptf.createFcItfType("client", MulticastTestItf.class.getName(), TypeFactory.CLIENT,
-                        TypeFactory.OPTIONAL, ProActiveTypeFactory.MULTICAST_CARDINALITY) });
+                ptf.createGCMItfType("client", MulticastTestItf.class.getName(), TypeFactory.CLIENT,
+                        TypeFactory.OPTIONAL, GCMTypeFactory.MULTICAST_CARDINALITY) });
         Component r = gf.newFcInstance(rType, "composite", null);
         Component c = gf.newFcInstance(cType, "primitive", ClientServerImpl.class.getName());
-        ContentController cc = Fractal.getContentController(r);
+        ContentController cc = GCM.getContentController(r);
         cc.addFcSubComponent(c);
-        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
-        Fractal.getBindingController(r).bindFc("client", r.getFcInterface("server"));
+        GCM.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        GCM.getBindingController(r).bindFc("client", r.getFcInterface("server"));
         try {
-            Fractal.getLifeCycleController(r).startFc();
+            GCM.getGCMLifeCycleController(r).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
         }
-        Fractal.getBindingController(c).bindFc("client", r.getFcInterface("client"));
+        GCM.getBindingController(c).bindFc("client", r.getFcInterface("client"));
         try {
-            Fractal.getLifeCycleController(r).startFc();
+            GCM.getGCMLifeCycleController(r).startFc();
         } catch (IllegalLifeCycleException ilce) {
             fail();
         }

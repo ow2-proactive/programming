@@ -14,7 +14,7 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 
 call ..\init.bat
 
-set JAVA_CMD=%JAVA_CMD% -Dfractal.provider="org.objectweb.proactive.core.component.Fractive"
+set JAVA_CMD=%JAVA_CMD% -Dgcm.provider="org.objectweb.proactive.core.component.Fractive"
 
 %JAVA_CMD% org.objectweb.proactive.examples.userguide.components.api.composite.Main %*
 ENDLOCAL

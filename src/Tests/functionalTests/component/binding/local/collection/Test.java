@@ -39,17 +39,19 @@ package functionalTests.component.binding.local.collection;
 import java.util.Arrays;
 import java.util.List;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.type.Composite;
 
 import functionalTests.ComponentTest;
@@ -84,9 +86,9 @@ public class Test extends ComponentTest {
      */
     @org.junit.Test
     public void action() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        TypeFactory type_factory = Fractal.getTypeFactory(boot);
-        GenericFactory cf = Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
+        GenericFactory cf = GCM.getGenericFactory(boot);
         ComponentType D_Type = type_factory.createFcType(new InterfaceType[] {
                 type_factory.createFcItfType("i1", I1Multicast.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),
@@ -117,14 +119,14 @@ public class Test extends ComponentTest {
 
         // check that listFc() does not return the name of the collective interface :
         // it should return no client interface
-        Assert.assertTrue(Fractal.getBindingController(pD1).listFc().length == 0);
+        Assert.assertTrue(GCM.getBindingController(pD1).listFc().length == 0);
 
         // bind the components
-        Fractal.getBindingController(pD1).bindFc("i2_01", pB1.getFcInterface("i2"));
-        Fractal.getBindingController(pD1).bindFc("i2_02", pB2.getFcInterface("i2"));
+        GCM.getBindingController(pD1).bindFc("i2_01", pB1.getFcInterface("i2"));
+        GCM.getBindingController(pD1).bindFc("i2_02", pB2.getFcInterface("i2"));
 
         // check that listFc() does not return the name of the collective interface
-        String[] listFc = Fractal.getBindingController(pD1).listFc();
+        String[] listFc = GCM.getBindingController(pD1).listFc();
         String listItf = "[";
         for (String string : listFc) {
             listItf += (string + ", ");
@@ -135,9 +137,9 @@ public class Test extends ComponentTest {
                 "i2_02" }));
 
         // start them
-        Fractal.getLifeCycleController(pD1).startFc();
-        Fractal.getLifeCycleController(pB1).startFc();
-        Fractal.getLifeCycleController(pB2).startFc();
+        GCM.getGCMLifeCycleController(pD1).startFc();
+        GCM.getGCMLifeCycleController(pB1).startFc();
+        GCM.getGCMLifeCycleController(pB2).startFc();
 
         message = null;
         I1Multicast i1 = (I1Multicast) pD1.getFcInterface("i1");
@@ -159,19 +161,19 @@ public class Test extends ComponentTest {
                 new ContentDescription(PrimitiveComponentB.class.getName(), new Object[] {}));
         Component pE = cf.newFcInstance(eType, new ControllerDescription("pE", Constants.PRIMITIVE),
                 new ContentDescription(PrimitiveComponentE.class.getName(), new Object[] {}));
-        Fractal.getContentController(c1).addFcSubComponent(pB3);
-        Fractal.getContentController(c1).addFcSubComponent(pB4);
-        Fractal.getContentController(c1).addFcSubComponent(pE);
-        Fractal.getBindingController(c1).bindFc("i2-server-01", pB3.getFcInterface("i2"));
-        Fractal.getBindingController(c1).bindFc("i2-server-02", pB4.getFcInterface("i2"));
-        Fractal.getBindingController(pE).bindFc("i2-01", c1.getFcInterface("i2-client-01"));
-        Fractal.getBindingController(pE).bindFc("i2-02", c1.getFcInterface("i2-client-02"));
-        Fractal.getBindingController(c1).bindFc("i2-client-01", pB5.getFcInterface("i2"));
-        Fractal.getBindingController(c1).bindFc("i2-client-02", pB6.getFcInterface("i2"));
+        GCM.getContentController(c1).addFcSubComponent(pB3);
+        GCM.getContentController(c1).addFcSubComponent(pB4);
+        GCM.getContentController(c1).addFcSubComponent(pE);
+        GCM.getBindingController(c1).bindFc("i2-server-01", pB3.getFcInterface("i2"));
+        GCM.getBindingController(c1).bindFc("i2-server-02", pB4.getFcInterface("i2"));
+        GCM.getBindingController(pE).bindFc("i2-01", c1.getFcInterface("i2-client-01"));
+        GCM.getBindingController(pE).bindFc("i2-02", c1.getFcInterface("i2-client-02"));
+        GCM.getBindingController(c1).bindFc("i2-client-01", pB5.getFcInterface("i2"));
+        GCM.getBindingController(c1).bindFc("i2-client-02", pB6.getFcInterface("i2"));
 
-        Fractal.getLifeCycleController(c1).startFc();
-        Fractal.getLifeCycleController(pB5).startFc();
-        Fractal.getLifeCycleController(pB6).startFc();
+        GCM.getGCMLifeCycleController(c1).startFc();
+        GCM.getGCMLifeCycleController(pB5).startFc();
+        GCM.getGCMLifeCycleController(pB6).startFc();
         ((I1Multicast) pE.getFcInterface("i1")).processInputMessage(new Message(""));
         Message m1 = ((I2) c1.getFcInterface("i2-server-01")).processOutputMessage(new Message("composite-"));
         Message m2 = ((I2) c1.getFcInterface("i2-server-02")).processOutputMessage(new Message("composite-"));

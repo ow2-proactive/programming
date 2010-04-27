@@ -41,15 +41,15 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.component.controller.AbstractProActiveController;
-import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
+import org.objectweb.proactive.core.component.control.AbstractPAController;
+import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 
 
 /**
  * @author The ProActive Team
  *
  */
-public class NF3ItfImpl extends AbstractProActiveController implements NF3Itf {
+public class NF3ItfImpl extends AbstractPAController implements NF3Itf {
     FItf me = null;
 
     public NF3ItfImpl(Component owner) {
@@ -74,7 +74,7 @@ public class NF3ItfImpl extends AbstractProActiveController implements NF3Itf {
     @Override
     protected void setControllerItfType() {
         try {
-            setItfType(ProActiveTypeFactoryImpl.instance().createFcItfType(NF3Itf.CONTROLLER_NAME,
+            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(NF3Itf.CONTROLLER_NAME,
                     NF3Itf.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE));
         } catch (InstantiationException e) {
             e.printStackTrace();

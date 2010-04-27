@@ -36,17 +36,18 @@
  */
 package functionalTests.component.wsbindings;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.After;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
+import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WebServices;
 import org.objectweb.proactive.extensions.webservices.WebServicesFactory;
@@ -61,7 +62,7 @@ public abstract class CommonSetup extends ComponentTest {
     public static String SERVER_SERVICEMULTICAST_NAME = "Service";
 
     protected Component boot;
-    protected TypeFactory tf;
+    protected GCMTypeFactory tf;
     protected GenericFactory gf;
     protected String url;
     protected Component[] servers;
@@ -70,39 +71,34 @@ public abstract class CommonSetup extends ComponentTest {
     protected WebServices ws;
 
     public void setUpAndDeploy() throws Exception {
-        boot = Fractal.getBootstrapComponent();
-        tf = Fractal.getTypeFactory(boot);
-        gf = Fractal.getGenericFactory(boot);
+        boot = Utils.getBootstrapComponent();
+        tf = GCM.getGCMTypeFactory(boot);
+        gf = GCM.getGenericFactory(boot);
 
         url = AbstractWebServicesFactory.getLocalUrl();
         ComponentType sType = tf.createFcType(new InterfaceType[] {
-                tf.createFcItfType(SERVER_SERVICES_NAME, Services.class.getName(),
-                        ProActiveTypeFactory.SERVER, ProActiveTypeFactory.MANDATORY,
-                        ProActiveTypeFactory.SINGLE),
-                tf.createFcItfType(SERVER_SERVICEMULTICAST_NAME, Service.class.getName(),
-                        ProActiveTypeFactory.SERVER, ProActiveTypeFactory.MANDATORY,
-                        ProActiveTypeFactory.SINGLE) });
+                tf.createFcItfType(SERVER_SERVICES_NAME, Services.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                tf.createFcItfType(SERVER_SERVICEMULTICAST_NAME, Service.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE) });
         servers = new Component[NUMBER_SERVERS];
         for (int i = 0; i < NUMBER_SERVERS; i++) {
             servers[i] = gf.newFcInstance(sType, new ControllerDescription(SERVER_DEFAULT_NAME + i,
                 Constants.PRIMITIVE), new ContentDescription(Server.class.getName()));
-            Fractal.getLifeCycleController(servers[i]).startFc();
+            GCM.getGCMLifeCycleController(servers[i]).startFc();
             ws = wsf.getWebServices(url);
             ws.exposeComponentAsWebService(servers[i], SERVER_DEFAULT_NAME + i);
         }
 
         componentType = tf.createFcType(new InterfaceType[] {
-                tf.createFcItfType("Runner", Runner.class.getName(), ProActiveTypeFactory.SERVER,
-                        ProActiveTypeFactory.MANDATORY, ProActiveTypeFactory.SINGLE),
-                tf.createFcItfType(Client.SERVICES_NAME, Services.class.getName(),
-                        ProActiveTypeFactory.CLIENT, ProActiveTypeFactory.MANDATORY,
-                        ProActiveTypeFactory.SINGLE),
-                ((ProActiveTypeFactory) tf).createFcItfType(Client.SERVICEMULTICASTREAL_NAME,
-                        ServiceMulticast.class.getName(), ProActiveTypeFactory.CLIENT,
-                        ProActiveTypeFactory.OPTIONAL, ProActiveTypeFactory.MULTICAST_CARDINALITY),
+                tf.createFcItfType("Runner", Runner.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                tf.createFcItfType(Client.SERVICES_NAME, Services.class.getName(), TypeFactory.CLIENT,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                tf.createGCMItfType(Client.SERVICEMULTICASTREAL_NAME, ServiceMulticast.class.getName(),
+                        TypeFactory.CLIENT, TypeFactory.OPTIONAL, GCMTypeFactory.MULTICAST_CARDINALITY),
                 tf.createFcItfType(Client.SERVICEMULTICASTFALSE_NAME, ServiceMulticast.class.getName(),
-                        ProActiveTypeFactory.CLIENT, ProActiveTypeFactory.OPTIONAL,
-                        ProActiveTypeFactory.SINGLE) });
+                        TypeFactory.CLIENT, TypeFactory.OPTIONAL, TypeFactory.SINGLE) });
     }
 
     @After

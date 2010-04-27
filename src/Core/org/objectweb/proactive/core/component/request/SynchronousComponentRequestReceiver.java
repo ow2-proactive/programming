@@ -71,9 +71,8 @@ public class SynchronousComponentRequestReceiver extends RequestReceiverImpl {
         if (r instanceof ComponentRequest) {
             if (!((ComponentRequest) r).isControllerRequest()) {
                 if (CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue()) {
-                    if (!((ComponentBody) bodyReceiver).getProActiveComponentImpl().getInputInterceptors()
-                            .isEmpty() ||
-                        !((ComponentBody) bodyReceiver).getProActiveComponentImpl().getOutputInterceptors()
+                    if (!((ComponentBody) bodyReceiver).getPAComponentImpl().getInputInterceptors().isEmpty() ||
+                        !((ComponentBody) bodyReceiver).getPAComponentImpl().getOutputInterceptors()
                                 .isEmpty()) {
                         if (logger.isDebugEnabled()) {
                             logger

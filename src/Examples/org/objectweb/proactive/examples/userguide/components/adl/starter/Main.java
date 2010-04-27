@@ -44,9 +44,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.adl.FactoryFactory;
 
 
@@ -74,7 +74,7 @@ public class Main {
         // TODO: Start Component
         //@tutorial-break
         //@snippet-break adl_starter_Main_skeleton
-        Fractal.getLifeCycleController(slave).startFc();
+        GCM.getGCMLifeCycleController(slave).startFc();
         //@snippet-resume adl_starter_Main_skeleton
         //@tutorial-resume
         // TODO: Get the interface i1
@@ -95,7 +95,7 @@ public class Main {
         // TODO: Stop Component
         //@tutorial-break
         //@snippet-break adl_starter_Main_skeleton
-        Fractal.getLifeCycleController(slave).stopFc();
+        GCM.getGCMLifeCycleController(slave).stopFc();
         //@snippet-resume adl_starter_Main_skeleton
         //@tutorial-resume
 

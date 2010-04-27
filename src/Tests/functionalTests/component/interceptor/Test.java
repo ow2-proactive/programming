@@ -36,15 +36,17 @@
  */
 package functionalTests.component.interceptor;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Assert;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.controller.DummyController;
@@ -83,9 +85,9 @@ public class Test extends ComponentTest {
      */
     @org.junit.Test
     public void action() throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        TypeFactory type_factory = Fractal.getTypeFactory(boot);
-        GenericFactory cf = Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
+        GenericFactory cf = GCM.getGenericFactory(boot);
 
         componentA = cf.newFcInstance(type_factory.createFcType(new InterfaceType[] {
                 type_factory.createFcItfType(FooItf.SERVER_ITF_NAME, FooItf.class.getName(),
@@ -101,15 +103,15 @@ public class Test extends ComponentTest {
                         TypeFactory.MANDATORY, TypeFactory.SINGLE), }), new ControllerDescription("B",
             Constants.PRIMITIVE), new ContentDescription(B.class.getName(), new Object[] {}));
 
-        Fractal.getBindingController(componentA).bindFc(FooItf.CLIENT_ITF_NAME,
+        GCM.getBindingController(componentA).bindFc(FooItf.CLIENT_ITF_NAME,
                 componentB.getFcInterface(FooItf.SERVER_ITF_NAME));
 
         //logger.debug("OK, instantiated the component");
         ((DummyController) componentA.getFcInterface(DummyController.DUMMY_CONTROLLER_NAME))
                 .setDummyValue(Test.DUMMY_VALUE);
 
-        Fractal.getLifeCycleController(componentA).startFc();
-        Fractal.getLifeCycleController(componentB).startFc();
+        GCM.getGCMLifeCycleController(componentA).startFc();
+        GCM.getGCMLifeCycleController(componentB).startFc();
         // invoke functional methods on A
         // each invocation actually triggers a modification of the dummy value of the dummy controller
         ((FooItf) componentA.getFcInterface(FooItf.SERVER_ITF_NAME)).foo();

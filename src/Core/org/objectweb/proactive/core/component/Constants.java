@@ -40,35 +40,39 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 
 /**
- * Constant strings used throughout the components implementation
+ * Constant strings used throughout the components implementation.
  *
  * @author The ProActive Team
  */
 @PublicAPI
 public interface Constants {
-    public final static String CONTENT_CONTROLLER = "content-controller";
-    public final static String LIFECYCLE_CONTROLLER = "lifecycle-controller";
-    public final static String BINDING_CONTROLLER = "binding-controller";
-    public final static String NAME_CONTROLLER = "name-controller";
-    public final static String ATTRIBUTE_CONTROLLER = "attribute-controller";
-    public final static String SUPER_CONTROLLER = "super-controller";
-    public final static String MULTICAST_CONTROLLER = "multicast-controller";
-    public final static String GATHERCAST_CONTROLLER = "gathercast-controller";
-    public final static String MIGRATION_CONTROLLER = "migration-controller";
-    public final static String COMPONENT = "component";
-    public final static String CYCLIC_NODE_SUFFIX = "-cyclicInstanceNumber-";
-    public final static String MEMBRANE_CONTROLLER = "membrane-controller";
-    public final static String REQUEST_PRIORITY_CONTROLLER = "request-priority-controller";
-    public final static String CONTROLLER_STATE_DUPLICATION = "controller-state-duplication-controller";
-    public final static String HOST_SETTER_CONTROLLER = "host-setter-controller";
-    public final static String REQUEST_QUEUE_CONTROLLER = "request-queue-controller";
-    public final static String AUTONOMIC_CONTROLLER = "autonomic-controller";
-    public final static String MONITOR_CONTROLLER = "monitor-controller";
-
     // hierarchical types of component
     public final static String COMPOSITE = "composite";
     public final static String PRIMITIVE = "primitive";
-    public final static String PARALLEL = "parallel";
+
+    // controller names
+    public final static String ATTRIBUTE_CONTROLLER = "attribute-controller";
+    public final static String AUTONOMIC_CONTROLLER = "autonomic-controller";
+    public final static String BINDING_CONTROLLER = "binding-controller";
+    public final static String COMPONENT = "component";
+    public final static String CONTENT_CONTROLLER = "content-controller";
+    public final static String CONTROLLER_STATE_DUPLICATION = "controller-state-duplication-controller";
+    public final static String GATHERCAST_CONTROLLER = "gathercast-controller";
+    public final static String HOST_SETTER_CONTROLLER = "host-setter-controller";
+    public final static String LIFECYCLE_CONTROLLER = "lifecycle-controller";
+    public final static String MEMBRANE_CONTROLLER = "membrane-controller";
+    public final static String MIGRATION_CONTROLLER = "migration-controller";
+    public final static String MONITOR_CONTROLLER = "monitor-controller";
+    public final static String MULTICAST_CONTROLLER = "multicast-controller";
+    public final static String NAME_CONTROLLER = "name-controller";
+    public final static String PRIORITY_CONTROLLER = "priority-controller";
+    public final static String REQUEST_QUEUE_CONTROLLER = "request-queue-controller";
+    public final static String SUPER_CONTROLLER = "super-controller";
+
+    public final static String FACTORY = "factory";
+    public final static String TYPE_FACTORY = "type-factory";
+    public final static String GENERIC_FACTORY = "generic-factory";
     public final static boolean SYNCHRONOUS = true;
     public final static boolean WITHOUT_CONFIG_FILE = false;
+    public final static String CYCLIC_NODE_SUFFIX = "-cyclicInstanceNumber-";
 }

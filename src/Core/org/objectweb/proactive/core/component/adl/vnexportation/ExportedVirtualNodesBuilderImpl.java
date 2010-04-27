@@ -42,9 +42,7 @@ import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 
 /**
  * An implementation of the {@link org.objectweb.proactive.core.component.adl.vnexportation.ExportedVirtualNodesBuilder} interface.
- *
  * This class performs a logical composition of the exported virtual nodes of the components ADL.
- *
  *
  * @author The ProActive Team
  *
@@ -61,15 +59,12 @@ public class ExportedVirtualNodesBuilderImpl implements ExportedVirtualNodesBuil
                 boolean composing_vn_is_multiple = false;
                 if ("this".equals(composing_vns[j].getComponent())) {
                     if (currentComponentVN == null) {
-                        throw new ADLException("Trying to compose a virtual node from " +
-                            composing_vns[j].getName() + ", which is declared to be in the component " +
-                            componentName + " , but there is no virtual node defined in this component", null);
+                        throw new ADLException(ExportedVirtualNodeErrors.VIRTUAL_NODE_NOT_FOUND,
+                            composing_vns[j].getName(), componentName);
                     }
                     if (!currentComponentVN.getName().equals(composing_vns[j].getName())) {
-                        throw new ADLException("Trying to compose a virtual node from " +
-                            composing_vns[i].getName() + ", which is declared to be in the component " +
-                            componentName + ", but " + currentComponentVN.getName() + " is not defined " +
-                            "in this component", null);
+                        throw new ADLException(ExportedVirtualNodeErrors.VIRTUAL_NODE_NOT_FOUND,
+                            composing_vns[i].getName(), componentName, currentComponentVN.getName());
                     }
 
                     // change "this" into the name of the component

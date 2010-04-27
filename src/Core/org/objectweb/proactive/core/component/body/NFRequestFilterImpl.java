@@ -46,7 +46,6 @@ import org.objectweb.proactive.core.component.request.ComponentRequest;
  * component controller requests from component functional requests.
  *
  * @author The ProActive Team
- *
  */
 public class NFRequestFilterImpl implements RequestFilter, java.io.Serializable {
     public NFRequestFilterImpl() {

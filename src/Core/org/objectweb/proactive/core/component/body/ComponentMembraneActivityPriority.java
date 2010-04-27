@@ -36,22 +36,21 @@
  */
 package org.objectweb.proactive.core.component.body;
 
+import org.etsi.uri.gcm.api.control.PriorityController;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.LifeCycleController;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.Active;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.Service;
-import org.objectweb.proactive.core.component.Constants;
-import org.objectweb.proactive.core.component.Fractive;
-import org.objectweb.proactive.core.component.controller.MembraneController;
-import org.objectweb.proactive.core.component.controller.PriorityController;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.control.PAMembraneController;
 
 
 /**
  * The class for the activity of a component having the membrane and the priority controller inside its membrane
- * @author The ProActive Team
  *
+ * @author The ProActive Team
  */
 public class ComponentMembraneActivityPriority extends ComponentActivityPriority {
 
@@ -93,16 +92,14 @@ public class ComponentMembraneActivityPriority extends ComponentActivityPriority
                     /*
                      * While the membrane is stopped, serve calls only on the Membrane Controller
                      */
-                    while (Fractive.getMembraneController(componentBody.getProActiveComponentImpl())
-                            .getMembraneState().equals(MembraneController.MEMBRANE_STOPPED)) {
+                    while (Utils.getPAMembraneController(componentBody.getPAComponentImpl())
+                            .getMembraneState().equals(PAMembraneController.MEMBRANE_STOPPED)) {
                         componentService.blockingServeOldest(memRequestFilter);
                     }
 
-                    while (LifeCycleController.STOPPED.equals(Fractal.getLifeCycleController(
-                            componentBody.getProActiveComponentImpl()).getFcState())) {
-                        PriorityController pc = (PriorityController) componentBody
-                                .getProActiveComponentImpl().getFcInterface(
-                                        Constants.REQUEST_PRIORITY_CONTROLLER);
+                    while (LifeCycleController.STOPPED.equals(GCM.getGCMLifeCycleController(
+                            componentBody.getPAComponentImpl()).getFcState())) {
+                        PriorityController pc = GCM.getPriorityController(componentBody.getPAComponentImpl());
                         NF3RequestFilter nf3RequestFilter = new NF3RequestFilter(pc);
                         if (componentService.getOldest(nf3RequestFilter) != null) {
                             // NF3 bypass all other request 
@@ -140,13 +137,12 @@ public class ComponentMembraneActivityPriority extends ComponentActivityPriority
                     }
 
                     /*
-                     * While the membrane is started, serve non-functional calls with priority (the same as for Lifecycle Stopped)
+                     * While the membrane is started, serve non-functional calls with priority (the
+                     * same as for Lifecycle Stopped)
                      */
-                    while (Fractive.getMembraneController(componentBody.getProActiveComponentImpl())
-                            .getMembraneState().equals(MembraneController.MEMBRANE_STARTED)) {
-                        PriorityController pc = (PriorityController) componentBody
-                                .getProActiveComponentImpl().getFcInterface(
-                                        Constants.REQUEST_PRIORITY_CONTROLLER);
+                    while (Utils.getPAMembraneController(componentBody.getPAComponentImpl())
+                            .getMembraneState().equals(PAMembraneController.MEMBRANE_STARTED)) {
+                        PriorityController pc = GCM.getPriorityController(componentBody.getPAComponentImpl());
                         NF3RequestFilter nf3RequestFilter = new NF3RequestFilter(pc);
                         if (componentService.getOldest(nf3RequestFilter) != null) {
                             // NF3 bypass all other request 

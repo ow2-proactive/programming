@@ -41,8 +41,8 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.component.controller.AbstractProActiveController;
-import org.objectweb.proactive.core.component.type.ProActiveTypeFactoryImpl;
+import org.objectweb.proactive.core.component.control.AbstractPAController;
+import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
 
 import functionalTests.component.controller.DummyController;
@@ -52,7 +52,7 @@ import functionalTests.component.controller.DummyController;
  * @author The ProActive Team
  *
  */
-public class InputInterceptor1Impl extends AbstractProActiveController implements InputInterceptor1 {
+public class InputInterceptor1Impl extends AbstractPAController implements InputInterceptor1 {
 
     /**
      *
@@ -70,7 +70,7 @@ public class InputInterceptor1Impl extends AbstractProActiveController implement
     @Override
     protected void setControllerItfType() {
         try {
-            setItfType(ProActiveTypeFactoryImpl.instance().createFcItfType(
+            setItfType(PAGCMTypeFactoryImpl.instance().createFcItfType(
                     InputInterceptor1.INPUT_INTERCEPTOR1_NAME, InputInterceptor1.class.getName(),
                     TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE));
         } catch (InstantiationException e) {

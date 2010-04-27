@@ -36,15 +36,16 @@
  */
 package functionalTests.component.nonfunctional.membranecontroller.content;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.Fractive;
-import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.nonfunctional.creation.DummyControllerComponentImpl;
@@ -75,9 +76,9 @@ public class Test extends ComponentTest {
     @org.junit.Test
     public void action() throws Exception {
         // Thread.sleep(2000);
-        Component boot = Fractal.getBootstrapComponent(); /*Getting the Fractal-Proactive bootstrap component*/
-        TypeFactory type_factory = Fractal.getTypeFactory(boot); /*Getting the Fractal-ProActive type factory*/
-        ProActiveGenericFactory cf = Fractive.getGenericFactory(boot); /*Getting the Fractal-ProActive generic factory*/
+        Component boot = Utils.getBootstrapComponent(); /*Getting the Fractal-Proactive bootstrap component*/
+        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot); /*Getting the GCM-ProActive type factory*/
+        PAGenericFactory cf = Utils.getPAGenericFactory(boot); /*Getting the GCM-ProActive generic factory*/
 
         dummyNFComponent = cf.newNFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
                 .createFcItfType("dummy-controller-membrane", DummyControllerItf.class.getName(),
@@ -93,14 +94,14 @@ public class Test extends ComponentTest {
                     "/functionalTests/component/nonfunctional/membranecontroller/content/config.xml")
                     .getPath()), new ContentDescription(DummyFunctionalComponentImpl.class.getName()));
 
-        Fractive.getMembraneController(dummyFComponent).addNFSubComponent(dummyNFComponent);
-        Component[] components = Fractive.getMembraneController(dummyFComponent).getNFcSubComponents();
-        System.out.println("Name : " + Fractal.getNameController(components[0]).getFcName());
-        Fractive.getMembraneController(dummyFComponent).startNFc("dummyController");
-        Fractive.getMembraneController(dummyFComponent).stopNFc("dummyController");
+        Utils.getPAMembraneController(dummyFComponent).addNFSubComponent(dummyNFComponent);
+        Component[] components = Utils.getPAMembraneController(dummyFComponent).getNFcSubComponents();
+        System.out.println("Name : " + GCM.getNameController(components[0]).getFcName());
+        Utils.getPAMembraneController(dummyFComponent).startNFc("dummyController");
+        Utils.getPAMembraneController(dummyFComponent).stopNFc("dummyController");
         System.out.println("Lifecycle state :" +
-            Fractive.getMembraneController(dummyFComponent).getNFcState("dummyController"));
-        Fractive.getMembraneController(dummyFComponent).removeNFSubComponent(dummyNFComponent);
+            Utils.getPAMembraneController(dummyFComponent).getNFcState("dummyController"));
+        Utils.getPAMembraneController(dummyFComponent).removeNFSubComponent(dummyNFComponent);
     }
 
     /**
@@ -113,7 +114,7 @@ public class Test extends ComponentTest {
      * @see testsuite.test.AbstractTest#endTest()
      */
     public void endTest() throws Exception {
-        //Fractal.getLifeCycleController(dummyNFComponent).stopFc();
+        //GCM.getGCMLifeCycleController(dummyNFComponent).stopFc();
     }
 
     public boolean postConditions() throws Exception {

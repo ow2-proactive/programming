@@ -43,7 +43,6 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
-import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
 public class ProcessorImpl implements BindingController, Runnable {
@@ -122,7 +121,7 @@ public class ProcessorImpl implements BindingController, Runnable {
         System.err.println("RUN in Processor");
         for (List<String> list : multicastArgsList) {
             System.err.println("Avec " + list.size() + " arguments.");
-            Object[] sw = ((List<StringWrapper>) slaves.computeAsync(list, "Async")).toArray();
+            Object[] sw = slaves.computeAsync(list, "Async").toArray();
             for (Object object : sw) {
                 System.err.println("Object result: " + object);
             }

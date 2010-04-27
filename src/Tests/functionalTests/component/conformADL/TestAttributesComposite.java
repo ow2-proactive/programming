@@ -40,14 +40,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.fractal.adl.Factory;
-import org.objectweb.fractal.adl.FactoryFactory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.factory.InstantiationException;
-import org.objectweb.fractal.util.Fractal;
+import org.objectweb.proactive.core.component.adl.FactoryFactory;
 
 import functionalTests.ComponentTest;
 import functionalTests.component.conformADL.components.CAttributes;
@@ -58,7 +58,7 @@ public class TestAttributesComposite extends ComponentTest {
 
     @Before
     public void setUp() throws Exception {
-        factory = FactoryFactory.getFactory(FactoryFactory.FRACTAL_BACKEND);
+        factory = FactoryFactory.getFactory();
     }
 
     // -----------------------------------------------------------------------------------
@@ -77,12 +77,12 @@ public class TestAttributesComposite extends ComponentTest {
         // ----------------------------------------------------------
         // Start the Root component
         // ----------------------------------------------------------
-        Fractal.getLifeCycleController(root).startFc();
+        GCM.getGCMLifeCycleController(root).startFc();
 
         // ----------------------------------------------------------
         // Call the attributes methods
         // ----------------------------------------------------------
-        CAttributes ca = (CAttributes) root.getFcInterface("attribute-controller");
+        CAttributes ca = (CAttributes) GCM.getAttributeController(root);
         ca.setX1(true);
         assertEquals(true, ca.getX1());
         ca.setX2((byte) 1);

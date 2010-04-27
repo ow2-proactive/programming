@@ -22,7 +22,7 @@ workingDir=`dirname $0`
 #    exit 1
 #fi
 
-JAVACMD=$JAVACMD" -Dfractal.provider=org.objectweb.proactive.core.component.Fractive"
+JAVACMD=$JAVACMD" -Dgcm.provider=org.objectweb.proactive.core.component.Fractive"
 
 $JAVACMD org.objectweb.proactive.examples.components.helloworld.HelloWorld "$@"
 

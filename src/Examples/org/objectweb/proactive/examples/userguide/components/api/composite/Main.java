@@ -42,15 +42,18 @@ package org.objectweb.proactive.examples.userguide.components.api.composite;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.BindingController;
+import org.objectweb.fractal.api.control.ContentController;
 import org.objectweb.fractal.api.factory.GenericFactory;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.Utils;
 
 
 /**
@@ -59,9 +62,9 @@ import org.objectweb.proactive.core.component.ControllerDescription;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Component boot = Fractal.getBootstrapComponent();
-        TypeFactory tf = Fractal.getTypeFactory(boot);
-        GenericFactory gf = Fractal.getGenericFactory(boot);
+        Component boot = Utils.getBootstrapComponent();
+        GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
+        GenericFactory gf = GCM.getGenericFactory(boot);
         ComponentType tComposite = tf.createFcType(new InterfaceType[] { tf.createFcItfType("runner",
                 Runner.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE) });
 
@@ -93,19 +96,28 @@ public class Main {
         Component composite = gf.newFcInstance(tComposite, new ControllerDescription("composite",
             Constants.COMPOSITE), null);
 
+        // TODO: Add slave and master components to the composite component
+        //@tutorial-break
+        //@snippet-break api_composite_Main_skeleton
+        ContentController cc = GCM.getContentController(composite);
+        cc.addFcSubComponent(slave);
+        cc.addFcSubComponent(master);
+        //@snippet-resume api_composite_Main_skeleton
+        //@tutorial-resume
+
         // TODO: Do the bindings
         //@tutorial-break
         //@snippet-break api_composite_Main_skeleton
-        BindingController bcMaster = Fractal.getBindingController(master);
+        BindingController bcMaster = GCM.getBindingController(master);
         bcMaster.bindFc("i1", slave.getFcInterface("i1"));
-        BindingController bcComposite = Fractal.getBindingController(composite);
+        BindingController bcComposite = GCM.getBindingController(composite);
         bcComposite.bindFc("runner", master.getFcInterface("runner"));
         //@snippet-resume api_composite_Main_skeleton
         //@tutorial-resume
 
-        Fractal.getLifeCycleController(slave).startFc();
-        Fractal.getLifeCycleController(master).startFc();
-        Fractal.getLifeCycleController(composite).startFc();
+        GCM.getGCMLifeCycleController(slave).startFc();
+        GCM.getGCMLifeCycleController(master).startFc();
+        GCM.getGCMLifeCycleController(composite).startFc();
 
         Runner runner = (Runner) composite.getFcInterface("runner");
         List<String> arg = new ArrayList<String>();
@@ -113,7 +125,7 @@ public class Main {
         arg.add("world");
         runner.run(arg);
 
-        Fractal.getLifeCycleController(composite).stopFc();
+        GCM.getGCMLifeCycleController(composite).stopFc();
 
         System.exit(0);
     }

@@ -53,8 +53,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class Binding implements Serializable {
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
-    protected final ProActiveInterface clientInterface;
-    protected final ProActiveInterface serverInterface;
+    protected final PAInterface clientInterface;
+    protected final PAInterface serverInterface;
     protected final String clientInterfaceName;
 
     /**
@@ -63,9 +63,9 @@ public class Binding implements Serializable {
      * @param serverInterface a reference on a server interface
      */
     public Binding(final Interface clientInterface, String clientItfName, final Interface serverInterface) {
-        this.clientInterface = (ProActiveInterface) clientInterface;
+        this.clientInterface = (PAInterface) clientInterface;
         this.clientInterfaceName = clientItfName;
-        this.serverInterface = (ProActiveInterface) serverInterface;
+        this.serverInterface = (PAInterface) serverInterface;
     }
 
     /**

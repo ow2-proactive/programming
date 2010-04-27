@@ -117,7 +117,7 @@ public class LinkedVirtualNode {
         Iterator<LinkedVirtualNode> iter = getComposingVirtualNodes().iterator();
         StringBuffer buff = new StringBuffer();
         while (iter.hasNext()) {
-            LinkedVirtualNode element = (LinkedVirtualNode) iter.next();
+            LinkedVirtualNode element = iter.next();
             if (element.getDefiningComponentName().equals(EMPTY_COMPONENT_NAME) ||
                 element.getVirtualNodeName().equals(EMPTY_VIRTUAL_NODE_NAME)) {
                 continue;

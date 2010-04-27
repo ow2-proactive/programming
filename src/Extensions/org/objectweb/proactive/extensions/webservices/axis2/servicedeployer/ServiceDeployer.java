@@ -53,6 +53,7 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.extensions.webservices.common.MethodUtils;
@@ -128,7 +129,9 @@ public class ServiceDeployer {
         schemaGenerator = new CustomDefaultSchemaGenerator(loader, implClass, null,
             Java2WSDLConstants.SCHEMA_NAMESPACE_PRFIX, service);
         //            }
-        schemaGenerator.setElementFormDefault(Java2WSDLConstants.FORM_DEFAULT_UNQUALIFIED);
+        schemaGenerator.setElementFormDefault((CentralPAPropertyRepository.PA_WEBSERVICES_ELEMENTFORMDEFAULT
+                .isTrue()) ? Java2WSDLConstants.FORM_DEFAULT_QUALIFIED
+                : Java2WSDLConstants.FORM_DEFAULT_UNQUALIFIED);
         Utils.addExcludeMethods(excludedOperations);
         schemaGenerator.setExcludeMethods(excludedOperations);
 

@@ -38,19 +38,20 @@ package org.objectweb.proactive.examples.documentation.components;
 
 import java.io.File;
 
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.fractal.api.type.TypeFactory;
-import org.objectweb.fractal.util.Fractal;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.factory.ProActiveGenericFactory;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
@@ -80,7 +81,7 @@ public class ExampleMain {
         Node aNode = vn.getANode();
 
         //@snippet-start component_examples_4
-        A active_object = (A) PAActiveObject.newActive(AImpl.class.getName(), // signature of the base class
+        A activeObject = (A) PAActiveObject.newActive(AImpl.class.getName(), // signature of the base class
                 new Object[] {}, // Object[]
                 aNode // location, could also be a virtual node
                 );
@@ -103,11 +104,11 @@ public class ExampleMain {
         Node aNode = vn.getANode();
 
         //@snippet-start component_examples_5
-        Component boot = Fractal.getBootstrapComponent();
+        Component boot = Utils.getBootstrapComponent();
         //@snippet-end component_examples_5
 
         //@snippet-start component_examples_6
-        TypeFactory tf = (TypeFactory) boot.getFcInterface("type-factory");
+        GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
         //@snippet-end component_examples_6
 
         //@snippet-start component_examples_7
@@ -125,12 +126,12 @@ public class ExampleMain {
         //@snippet-start component_examples_9
         ControllerDescription controllerDesc = new ControllerDescription("myName", // name of the component
             Constants.PRIMITIVE // the hierarchical type of the component
-        // it could be PRIMITIVE, COMPOSITE, or PARALLEL
+        // it could be PRIMITIVE or COMPOSITE
         );
         //@snippet-end component_examples_9
 
         //@snippet-start component_examples_10
-        ProActiveGenericFactory componentFactory = (ProActiveGenericFactory) Fractal.getGenericFactory(boot);
+        PAGenericFactory componentFactory = Utils.getPAGenericFactory(boot);
         Component component = componentFactory.newFcInstance(aType, // type of the component (defining the client and server interfaces)
                 controllerDesc, // implementation-specific description for the controller
                 contentDesc, // implementation-specific description for the content
@@ -141,9 +142,9 @@ public class ExampleMain {
     }
 
     public void interfacesExamples() throws InstantiationException, NoSuchInterfaceException {
-        Component boot = Fractal.getBootstrapComponent();
+        Component boot = Utils.getBootstrapComponent();
 
-        TypeFactory tf = (TypeFactory) boot.getFcInterface("type-factory");
+        GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
 
         //@snippet-start component_examples_11
         // type of the "a" component

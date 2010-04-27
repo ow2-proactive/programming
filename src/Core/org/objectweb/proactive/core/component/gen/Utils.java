@@ -50,7 +50,7 @@ import javassist.NotFoundException;
 
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.representative.ItfID;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
+import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.util.ClassDataCache;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -60,7 +60,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * Utility class for bytecode generation operations.
  *
  * @author The ProActive Team
- *
  */
 public class Utils {
 
@@ -169,7 +168,7 @@ public class Utils {
         return (getMetaObjectClassName(functionalInterfaceName, javaInterfaceName) + REPRESENTATIVE_DEFAULT_SUFFIX);
     }
 
-    public static String getGatherProxyItfClassName(ProActiveInterfaceType gatherItfType) {
+    public static String getGatherProxyItfClassName(PAGCMInterfaceType gatherItfType) {
         return (getMetaObjectClassName(gatherItfType.getFcItfName(), gatherItfType.getFcItfSignature()) + GATHERCAST_ITF_PROXY_DEFAULT_SUFFIX);
     }
 

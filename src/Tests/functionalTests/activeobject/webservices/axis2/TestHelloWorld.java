@@ -187,7 +187,8 @@ public class TestHelloWorld extends FunctionalTest {
             client.oneWayCall("putHelloWorld", null);
             assertTrue(false);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("An expected exception occurred: the method 'putHelloWorld' cannot be found "
+                + "but it is normal since this method has not been exposed");
         }
 
         try {
@@ -219,7 +220,8 @@ public class TestHelloWorld extends FunctionalTest {
             client.oneWayCall("putHelloWorld", null);
             assertTrue(false);
         } catch (WebServicesException e) {
-            e.printStackTrace();
+            System.err.println("An expected exception occurred: the method 'putHelloWorld' cannot be found "
+                + "but it is normal since this method has not been exposed");
         }
     }
 

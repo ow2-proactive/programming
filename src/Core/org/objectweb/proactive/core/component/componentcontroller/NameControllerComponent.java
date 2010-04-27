@@ -38,8 +38,8 @@ package org.objectweb.proactive.core.component.componentcontroller;
 
 import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
-import org.objectweb.proactive.core.component.controller.ControllerState;
-import org.objectweb.proactive.core.component.controller.ControllerStateDuplication;
+import org.objectweb.proactive.core.component.control.ControllerState;
+import org.objectweb.proactive.core.component.control.ControllerStateDuplication;
 
 
 /**
@@ -47,7 +47,7 @@ import org.objectweb.proactive.core.component.controller.ControllerStateDuplicat
  * @author The ProActive Team
  *
  */
-public class NameControllerComponent extends AbstractProActiveComponentController implements NameController,
+public class NameControllerComponent extends AbstractPAComponentController implements NameController,
         ControllerStateDuplication {
 
     private String name;
@@ -66,9 +66,8 @@ public class NameControllerComponent extends AbstractProActiveComponentControlle
             name = (String) c;
 
         } else {
-            throw new ProActiveRuntimeException(
-                "ProActiveNameController : Impossible to duplicate the controller " + this +
-                    " from the controller" + c);
+            throw new ProActiveRuntimeException("PANameController: Impossible to duplicate the controller " +
+                this + " from the controller" + c);
         }
 
     }

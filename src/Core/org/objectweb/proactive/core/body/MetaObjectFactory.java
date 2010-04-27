@@ -45,7 +45,7 @@ import org.objectweb.proactive.core.body.request.RequestFactory;
 import org.objectweb.proactive.core.body.request.RequestQueueFactory;
 import org.objectweb.proactive.core.body.request.RequestReceiverFactory;
 import org.objectweb.proactive.core.body.tags.MessageTagsFactory;
-import org.objectweb.proactive.core.component.identity.ProActiveComponentFactory;
+import org.objectweb.proactive.core.component.identity.PAComponentFactory;
 import org.objectweb.proactive.core.debug.debugger.DebuggerFactory;
 import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManagerFactory;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -128,7 +128,7 @@ public interface MetaObjectFactory {
      */
 
     // COMPONENTS
-    public ProActiveComponentFactory newComponentFactory();
+    public PAComponentFactory newComponentFactory();
 
     /** Creates a DebuggerFactory
      * @return a new DebuggerFactory

@@ -38,11 +38,11 @@ package functionalTests.component.conform;
 
 import static org.junit.Assert.assertEquals;
 
+import org.etsi.uri.gcm.util.GCM;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.ContentController;
-import org.objectweb.fractal.util.Fractal;
 
 import functionalTests.component.conform.components.C;
 
@@ -58,43 +58,40 @@ public class TestBindingControllerCompositeTemplate extends TestBindingControlle
         c = gf.newFcInstance(t, primitiveTemplate, C.class.getName());
         d = gf.newFcInstance(t, compositeTemplate, null);
         e = gf.newFcInstance(u, compositeTemplate, null);
-        Fractal.getContentController(r).addFcSubComponent(c);
-        Fractal.getContentController(r).addFcSubComponent(d);
-        Fractal.getContentController(r).addFcSubComponent(e);
+        GCM.getContentController(r).addFcSubComponent(c);
+        GCM.getContentController(r).addFcSubComponent(d);
+        GCM.getContentController(r).addFcSubComponent(e);
     }
 
     @Test
     @Ignore
     public void testInstanceBinding() throws Exception {
-        ContentController cc = Fractal.getContentController(r);
-        Fractal.getContentController(e).addFcSubComponent(c);
+        ContentController cc = GCM.getContentController(r);
+        GCM.getContentController(e).addFcSubComponent(c);
 
-        Fractal.getBindingController(r).bindFc("server", c.getFcInterface("server"));
-        Fractal.getBindingController(c).bindFc("client", d.getFcInterface("server"));
-        Fractal.getBindingController(d).bindFc("client", cc.getFcInternalInterface("client"));
+        GCM.getBindingController(r).bindFc("server", c.getFcInterface("server"));
+        GCM.getBindingController(c).bindFc("client", d.getFcInterface("server"));
+        GCM.getBindingController(d).bindFc("client", cc.getFcInternalInterface("client"));
 
-        Fractal.getBindingController(r).bindFc("servers0", c.getFcInterface("servers0"));
-        Fractal.getBindingController(c).bindFc("clients0", d.getFcInterface("servers0"));
-        Fractal.getBindingController(d).bindFc("clients0", cc.getFcInternalInterface("clients0"));
+        GCM.getBindingController(r).bindFc("servers0", c.getFcInterface("servers0"));
+        GCM.getBindingController(c).bindFc("clients0", d.getFcInterface("servers0"));
+        GCM.getBindingController(d).bindFc("clients0", cc.getFcInternalInterface("clients0"));
 
-        Component rComp = Fractal.getFactory(r).newFcInstance();
+        Component rComp = GCM.getFactory(r).newFcInstance();
 
-        cc = Fractal.getContentController(rComp);
+        cc = GCM.getContentController(rComp);
         Component[] comps = cc.getFcSubComponents();
 
         Component cComp = comps[0];
         Component dComp = comps[1];
 
-        assertEquals(Fractal.getBindingController(rComp).lookupFc("server"), cComp.getFcInterface("server"));
-        assertEquals(Fractal.getBindingController(cComp).lookupFc("client"), dComp.getFcInterface("server"));
-        assertEquals(Fractal.getBindingController(dComp).lookupFc("client"), cc
-                .getFcInternalInterface("client"));
+        assertEquals(GCM.getBindingController(rComp).lookupFc("server"), cComp.getFcInterface("server"));
+        assertEquals(GCM.getBindingController(cComp).lookupFc("client"), dComp.getFcInterface("server"));
+        assertEquals(GCM.getBindingController(dComp).lookupFc("client"), cc.getFcInternalInterface("client"));
 
-        assertEquals(Fractal.getBindingController(rComp).lookupFc("servers0"), cComp
-                .getFcInterface("servers0"));
-        assertEquals(Fractal.getBindingController(cComp).lookupFc("clients0"), dComp
-                .getFcInterface("servers0"));
-        assertEquals(Fractal.getBindingController(dComp).lookupFc("clients0"), cc
+        assertEquals(GCM.getBindingController(rComp).lookupFc("servers0"), cComp.getFcInterface("servers0"));
+        assertEquals(GCM.getBindingController(cComp).lookupFc("clients0"), dComp.getFcInterface("servers0"));
+        assertEquals(GCM.getBindingController(dComp).lookupFc("clients0"), cc
                 .getFcInternalInterface("clients0"));
     }
 }

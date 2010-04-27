@@ -50,7 +50,7 @@ import org.apache.axis2.receivers.AbstractInMessageReceiver;
 import org.apache.axis2.rpc.receivers.RPCUtil;
 import org.apache.axis2.wsdl.WSDLConstants;
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.component.representative.ProActiveComponentRepresentative;
+import org.objectweb.proactive.core.component.representative.PAComponentRepresentative;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -88,7 +88,7 @@ public class PAInOnlyMessageReceiver extends AbstractInMessageReceiver {
             String className = (String) axisService.getParameter("ServiceClass").getValue();
 
             // Retrieve the isComponent parameter
-            boolean isComponent = "true".equals((String) axisService.getParameter("isComponent").getValue());
+            boolean isComponent = "true".equals(axisService.getParameter("isComponent").getValue());
 
             // Unmarshall the serialized object stored in a parameter of the service
             byte[] marshallObject = (byte[]) axisService.getParameter("MarshalledObject").getValue();
@@ -116,7 +116,7 @@ public class PAInOnlyMessageReceiver extends AbstractInMessageReceiver {
                 String actualName = serviceName.substring(serviceName.lastIndexOf('_') + 1);
 
                 // Get the interface
-                targetObject = ((ProActiveComponentRepresentative) component).getFcInterface(actualName);
+                targetObject = ((PAComponentRepresentative) component).getFcInterface(actualName);
             } else {
                 targetObject = HttpMarshaller.unmarshallObject(marshallObject);
             }

@@ -46,6 +46,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.etsi.uri.gcm.api.type.GCMTypeFactory;
+import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
@@ -54,15 +56,13 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.ServeException;
-import org.objectweb.proactive.core.component.Fractive;
-import org.objectweb.proactive.core.component.ProActiveInterface;
+import org.objectweb.proactive.core.component.PAInterface;
 import org.objectweb.proactive.core.component.body.ComponentBodyImpl;
-import org.objectweb.proactive.core.component.identity.ProActiveComponent;
+import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.request.ComponentRequest;
 import org.objectweb.proactive.core.component.request.ComponentRequestImpl;
-import org.objectweb.proactive.core.component.type.ProActiveInterfaceType;
-import org.objectweb.proactive.core.component.type.ProActiveTypeFactory;
+import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.SerializableMethod;
@@ -89,9 +89,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class GatherRequestsQueues implements Serializable {
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_GATHERCAST);
     Map<String, Map<SerializableMethod, List<GatherRequestsQueue>>> queues = new HashMap<String, Map<SerializableMethod, List<GatherRequestsQueue>>>();
-    ProActiveComponent owner;
-    List<ItfID> gatherItfs = new ArrayList<ItfID>();
-    ProActiveInterfaceType[] itfTypes;
+    PAComponent owner;
+    List<Object> gatherItfs = new ArrayList<Object>();
+    PAGCMInterfaceType[] itfTypes;
     GatherFuturesHandlerPool gatherFuturesHandlerPool;
 
     /**
@@ -116,16 +116,16 @@ public class GatherRequestsQueues implements Serializable {
         }
     }
 
-    public GatherRequestsQueues(ProActiveComponent owner) {
+    public GatherRequestsQueues(PAComponent owner) {
         this.owner = owner;
         InterfaceType[] untypedItfs = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
-        itfTypes = new ProActiveInterfaceType[untypedItfs.length];
+        itfTypes = new PAGCMInterfaceType[untypedItfs.length];
         for (int i = 0; i < itfTypes.length; i++) {
-            itfTypes[i] = (ProActiveInterfaceType) untypedItfs[i];
+            itfTypes[i] = (PAGCMInterfaceType) untypedItfs[i];
         }
 
         for (int i = 0; i < itfTypes.length; i++) {
-            if (ProActiveTypeFactory.GATHER_CARDINALITY.equals(itfTypes[i].getFcCardinality())) {
+            if (GCMTypeFactory.GATHERCAST_CARDINALITY.equals(itfTypes[i].getGCMCardinality())) {
                 // add a queue for each gather itf
                 Map<SerializableMethod, List<GatherRequestsQueue>> map = new HashMap<SerializableMethod, List<GatherRequestsQueue>>();
                 queues.put(itfTypes[i].getFcItfName(), map);
@@ -152,12 +152,11 @@ public class GatherRequestsQueues implements Serializable {
             throw new ServeException("problem when analysing gather request", e1);
         }
 
-        List<ItfID> connectedClientItfs;
+        List<Object> connectedClientItfs;
         try {
-            connectedClientItfs = Fractive.getGathercastController(owner).getConnectedClientItfs(
-                    serverItfName);
+            connectedClientItfs = GCM.getGathercastController(owner).getGCMConnectedClients(serverItfName);
         } catch (NoSuchInterfaceException e) {
-            throw new ServeException("this component has no binding controller");
+            throw new ServeException("this component has no gathercast controller");
         }
         if (!connectedClientItfs.contains(senderItfID)) {
             throw new ServeException(
@@ -219,11 +218,10 @@ public class GatherRequestsQueues implements Serializable {
         return result;
     }
 
-    private void notifyUpdate(String serverItfName, List<GatherRequestsQueue> requestQueues)
-            throws ServeException {
+    private void notifyUpdate(String serverItfName, List<GatherRequestsQueue> requestQueues) {
         // default: if all connected itfs have sent a request, then process it
         try {
-            List<ItfID> connectedClientItfs = Fractive.getGathercastController(owner).getConnectedClientItfs(
+            List<Object> connectedClientItfs = GCM.getGathercastController(owner).getGCMConnectedClients(
                     serverItfName);
             GatherRequestsQueue firstRequestsInLine = requestQueues.get(0); // need to ensure this
             if (firstRequestsInLine.isFull()) {
@@ -243,7 +241,7 @@ public class GatherRequestsQueues implements Serializable {
                     gatherMethodParamTypes[i] = List.class;
                 }
 
-                Class<?> gatherItfClass = Class.forName(((ProActiveInterfaceType) ((ProActiveInterface) owner
+                Class<?> gatherItfClass = Class.forName(((InterfaceType) ((PAInterface) owner
                         .getFcInterface(serverItfName)).getFcItfType()).getFcItfSignature());
 
                 Method gatherMethod = gatherItfClass
@@ -256,8 +254,8 @@ public class GatherRequestsQueues implements Serializable {
                     List<Object> l;
                     if (waitForAll) {
                         l = new ArrayList<Object>(connectedClientItfs.size());
-                        for (Iterator<ItfID> iter = connectedClientItfs.iterator(); iter.hasNext();) {
-                            ItfID id = iter.next();
+                        for (Iterator<Object> iter = connectedClientItfs.iterator(); iter.hasNext();) {
+                            ItfID id = (ItfID) iter.next();
                             // keep same ordering as connected client itfs
                             l.add(firstRequestsInLine.get(id).getMethodCall().getEffectiveArguments()[i]);
                         }
@@ -305,7 +303,7 @@ public class GatherRequestsQueues implements Serializable {
         }
     }
 
-    private ProActiveInterfaceType getItfType(String name) {
+    private PAGCMInterfaceType getItfType(String name) {
         for (int i = 0; i < itfTypes.length; i++) {
             if (name.equals(itfTypes[i].getFcItfName())) {
                 return itfTypes[i];
