@@ -91,7 +91,7 @@ public abstract class MessageRoutingMessage implements Serializable {
      * Processes the message.
      * @return an object as a result of the execution of the message
      */
-    public abstract Object processMessage() throws Exception;
+    public abstract Object processMessage();
 
     /** Send the message to its recipient using the local agent
      * 
