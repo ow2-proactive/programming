@@ -208,12 +208,13 @@ class Main {
                             System.exit(1);
                         }
                     }
-
                     config.setReservedAgentId(map);
                 } catch (IOException e) {
                     System.err.println("Failed to read the config file: " + e.getMessage());
+                    System.exit(1);
                 } catch (IllegalArgumentException e) {
                     System.err.println("Invalid config file: " + e.getMessage());
+                    System.exit(1);
                 }
 
             }

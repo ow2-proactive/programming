@@ -142,7 +142,7 @@ public class RouterConfig {
     }
 
     public void setReservedAgentId(Map<AgentID, MagicCookie> reservedAgents) {
-        this.reservedAgentId = reservedAgentId;
+        this.reservedAgentId = reservedAgents;
     }
 
     public Map<AgentID, MagicCookie> getReservedAgentId() {
