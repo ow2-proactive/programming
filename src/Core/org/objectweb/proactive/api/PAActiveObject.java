@@ -1193,7 +1193,7 @@ public class PAActiveObject {
                     PAActiveObject.logger.debug("Terminating already terminated body : " + e);
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
+                PAActiveObject.logger.debug("An exception occurs while sending termination request.", e);
             }
         } else {
             throw new ProActiveRuntimeException("The given object " + ao + " is not a reified object");
