@@ -82,8 +82,15 @@ public class URIBuilder {
         }
     }
 
+    /**
+     * returns a new URI where the name part has been set to name
+     * @param baseURI the base URI
+     * @param name the new name
+     * @return the new URI which the new name part
+     */
     public static URI buildURI(URI baseURI, String name) {
-        return URI.create(baseURI.toString() + name);
+        return buildURI(getHostNameFromUrl(baseURI), name, getProtocol(baseURI), getPortNumber(baseURI),
+                false);
     }
 
     /**
