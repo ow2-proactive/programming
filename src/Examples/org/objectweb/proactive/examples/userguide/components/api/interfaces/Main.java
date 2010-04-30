@@ -111,8 +111,6 @@ public class Main {
         //@snippet-resume api_interfaces_Main_skeleton
         //@tutorial-resume
 
-        GCM.getGCMLifeCycleController(slave).startFc();
-        GCM.getGCMLifeCycleController(master).startFc();
         GCM.getGCMLifeCycleController(composite).startFc();
 
         Runner runner = (Runner) composite.getFcInterface("runner");
