@@ -52,7 +52,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public abstract class Router {
 
-    static public Router createAndStart(RouterConfig config) throws IOException {
+    static public Router createAndStart(RouterConfig config) throws Exception {
         // config is now immutable
         config.setReadOnly();
 

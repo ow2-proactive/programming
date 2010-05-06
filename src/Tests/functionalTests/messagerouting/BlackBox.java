@@ -54,7 +54,7 @@ public class BlackBox extends FunctionalTest {
     protected Tunnel tunnel;
 
     @Before
-    public void beforeBlackbox() throws IOException {
+    public void beforeBlackbox() throws Exception {
         RouterConfig config = new RouterConfig();
         this.router = Router.createAndStart(config);
 

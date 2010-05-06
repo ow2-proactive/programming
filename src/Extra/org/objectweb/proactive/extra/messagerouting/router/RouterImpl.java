@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.extra.messagerouting.router;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -47,12 +50,12 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -114,6 +117,13 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     /** An unique identifier for this router */
     private final long routerId;
+    /** The administrator magic cookie 
+     *
+     * This cookie must be provided to perform remote administrative operations
+     */
+    volatile private MagicCookie adminMagicCookie;
+
+    private final File configFile;
 
     /** Create a new router
      * 
@@ -131,7 +141,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
      * @param port port number to bind to
      * @throws IOException if the router failed to bind
      */
-    RouterImpl(RouterConfig config) throws IOException {
+    RouterImpl(RouterConfig config) throws Exception {
+        this.configFile = config.getReservedAgentConfigFile();
 
         init(config);
         tpe = Executors.newFixedThreadPool(config.getNbWorkerThreads());
@@ -143,20 +154,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
         this.routerId = rand;
     }
 
-    private void init(RouterConfig config) throws IOException {
-        // Creates reserved agents
-        Map<AgentID, MagicCookie> rAgents = config.getReservedAgentId();
-        if (rAgents != null) {
-            for (AgentID agentID : rAgents.keySet()) {
-                MagicCookie magicCookie = rAgents.get(agentID);
-                Client client = new Client(agentID, magicCookie);
-                this.clientMap.put(agentID, client);
-
-                if (admin_logger.isDebugEnabled()) {
-                    admin_logger.debug("Added reserved client: " + agentID + " " + magicCookie);
-                }
-            }
-        }
+    private void init(RouterConfig config) throws Exception {
+        reloadConfigurationFile();
 
         // Create a new selector
         selector = Selector.open();
@@ -477,5 +476,115 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     public long getId() {
         return this.routerId;
+    }
+
+    private Map<AgentID, MagicCookie> validateConfigFile() throws Exception {
+        Properties properties = new Properties();
+        MagicCookie configMagicCookie = null;
+
+        try {
+            FileInputStream fis = new FileInputStream(this.configFile);
+            properties.load(fis);
+        } catch (FileNotFoundException e) {
+            throw new IOException("Router configuration file does not exist: " + this.configFile);
+        } catch (IOException e) {
+            throw new IOException("Failed to read the router configuration file: " + this.configFile, e);
+        } catch (IllegalArgumentException e) {
+            throw new IOException("Failed to read the router configuation file: " + this.configFile, e);
+        }
+
+        Map<AgentID, MagicCookie> map = new HashMap<AgentID, MagicCookie>();
+        for (Object o : properties.keySet()) {
+            String sId = (String) o;
+            String sCookie = (String) properties.get(o);
+
+            if ("configuration".equals(sId)) {
+                if (configMagicCookie != null) {
+                    throw new Exception("Duplicated configuration magic cookie");
+                } else {
+                    try {
+                        configMagicCookie = new MagicCookie(properties.getProperty(sId));
+                    } catch (IllegalArgumentException e) {
+                        throw new Exception("Invalid configuration magic cookie", e);
+                    }
+                }
+            } else {
+
+                AgentID agentId = null;
+                try {
+                    agentId = new AgentID(Long.parseLong(sId));
+                } catch (NumberFormatException e) {
+                    throw new Exception("Invalid configuration file" + this.configFile +
+                        ": Keys must be an integer but " + sId + " is not");
+                }
+
+                MagicCookie cookie = null;
+                try {
+                    cookie = new MagicCookie(sCookie);
+                } catch (IllegalArgumentException e) {
+                    throw new Exception("Invalid configuration file " + this.configFile +
+                        ": invalid cookie value  " + sCookie + ". " + e.getMessage());
+                }
+
+                if (!agentId.isReserved()) {
+                    throw new Exception("Invalid configuration file " + this.configFile +
+                        ": invalid Agent ID " + sId + "Agent ID must be between 0 and " +
+                        (AgentID.MIN_DYNAMIC_AGENT_ID - 1));
+                }
+                map.put(agentId, cookie);
+            }
+        }
+
+        if (configMagicCookie == null) {
+            throw new Exception(
+                "Configuration magic cookie must be defined in the configuration file (key: configuration)");
+        }
+
+        admin_logger.debug("Set config magic cookie to: " + configMagicCookie);
+        this.adminMagicCookie = configMagicCookie;
+
+        return map;
+    }
+
+    synchronized public void reloadConfigurationFile() throws Exception {
+        if (this.configFile == null) {
+            return;
+        }
+
+        Map<AgentID, MagicCookie> map = validateConfigFile();
+        synchronized (this.clientMap) {
+            for (AgentID agentId : this.clientMap.keySet()) {
+                if (agentId.isReserved() && !map.containsKey(agentId)) {
+                    try {
+                        this.clientMap.get(agentId).disconnect();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        this.clientMap.remove(agentId);
+                        admin_logger.debug("Removed reserved agent " + agentId + " (configuration change)");
+                    }
+                }
+            }
+
+            for (AgentID agentID : map.keySet()) {
+                Client client = this.clientMap.get(agentID);
+                if (client != null) {
+                    // Disconnect the client and change the id
+                    client.discardAttachment();
+                }
+                client = new Client(agentID, map.get(agentID));
+                this.clientMap.put(agentID, client);
+                admin_logger.debug("Disconnected reserved agent " + agentID +
+                    " and updated magic cookie (configuration change)");
+            }
+        }
+    }
+
+    public MagicCookie getAdminMagicCookie() {
+        return this.adminMagicCookie;
+    }
+
+    public File getConfigurationFile() {
+        return this.configFile;
     }
 }

@@ -37,13 +37,10 @@
 package org.objectweb.proactive.extra.messagerouting.router;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -57,8 +54,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
-import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
 import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
+import org.objectweb.proactive.extra.messagerouting.protocol.message.ReloadConfigurationMessage;
 
 
 /** Start a router.
@@ -68,7 +65,6 @@ import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
 class Main {
     static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
 
-    private RouterConfig config;
     private Options options;
 
     public static void main(String[] args) throws IOException {
@@ -76,19 +72,6 @@ class Main {
     }
 
     private Main(String[] args) throws IOException {
-        this.config = parseOptions(args);
-
-        try {
-            Router.createAndStart(this.config);
-        } catch (IOException e) {
-            logger.fatal("Failed to start the router:", e);
-            System.exit(1);
-        }
-    }
-
-    private RouterConfig parseOptions(String[] args) {
-        RouterConfig config = new RouterConfig();
-
         CommandLineParser parser = new PosixParser();
 
         this.options = new Options();
@@ -101,6 +84,9 @@ class Main {
         this.options.addOption("f", "configFile", true, "configuration file");
         this.options.addOption("h", "help", false, "Print help message");
         this.options.addOption("v", "verbose", false, "Verbose mode. Print clients (dis)connections");
+        this.options.addOption("r", "reload", false, "Reload configuration file");
+        this.options.addOption("c", "cookie", true,
+                "This admin cookie to provide to reload the configuration");
 
         CommandLine line = null;
 
@@ -112,109 +98,186 @@ class Main {
             if (line.hasOption("h")) {
                 HelpFormatter formatter = new HelpFormatter();
                 formatter.printHelp("router", this.options);
-
                 System.exit(0);
             }
 
-            arg = line.getOptionValue("p");
-            if (arg == null) {
-                config.setPort(RouterImpl.DEFAULT_PORT);
-            } else {
-                try {
-                    short i = new Short(arg);
-                    config.setPort(i);
-                } catch (NumberFormatException e) {
-                    printHelpAndExit("Invalid port number: " + arg);
-                } catch (IllegalArgumentException e) {
-                    printHelpAndExit("Invalid port number: " + arg);
+            boolean reload = line.hasOption("r");
+            if (reload) {
+                /*
+                 * RELOAD CONFIGURATION
+                 */
+
+                // Check incompatible options
+                boolean error = false;
+                error |= line.hasOption("4");
+                error |= line.hasOption("6");
+                error |= line.hasOption("w");
+                error |= line.hasOption("f");
+                if (error) {
+                    printHelpAndExit("Options -4 -6 -w -f are not compatible with -r");
                 }
-            }
 
-            if (line.hasOption("4")) {
-                System.setProperty("java.net.preferIPv4Stack", "true");
-            }
+                int port = -1;
+                InetAddress ia = null;
+                MagicCookie magicCookie = null;
 
-            if (line.hasOption("6")) {
-                System.setProperty("java.net.preferIPv6Stack", "true");
-            }
-
-            arg = line.getOptionValue("i");
-            if (arg == null) {
-                try {
-                    InetAddress addr = InetAddress.getLocalHost();
-                    config.setInetAddress(addr);
-                } catch (UnknownHostException e) {
-                    printHelpAndExit(e);
-                }
-            } else {
-                try {
-                    InetAddress addr = InetAddress.getByName(arg);
-                    config.setInetAddress(addr);
-                } catch (UnknownHostException e) {
-                    printHelpAndExit("Unknown hostname or IP address: " + arg);
-                }
-            }
-
-            arg = line.getOptionValue("w");
-            if (arg == null) {
-                int n = Runtime.getRuntime().availableProcessors();
-                config.setNbWorkerThreads(n);
-            } else {
-                try {
-                    int i = new Integer(arg);
-                    config.setNbWorkerThreads(i);
-                } catch (NumberFormatException e) {
-                    printHelpAndExit("Invalid worker number: " + arg);
-                }
-            }
-
-            arg = line.getOptionValue("f");
-            if (arg != null) {
-                try {
-                    Properties properties = new Properties();
-                    File f = new File(arg);
-                    FileInputStream fis = new FileInputStream(f);
-                    properties.load(fis);
-
-                    Map<AgentID, MagicCookie> map = new HashMap<AgentID, MagicCookie>();
-                    for (Object o : properties.keySet()) {
-                        try {
-                            String sId = (String) o;
-                            String sCookie = (String) properties.get(o);
-                            AgentID agentId = new AgentID(Long.parseLong(sId));
-                            MagicCookie cookie = new MagicCookie(sCookie);
-                            if (!agentId.isReserved()) {
-                                System.err
-                                        .println("Invalid configuration file. Agent ID must be between 0 and " +
-                                            (AgentID.MIN_DYNAMIC_AGENT_ID - 1));
-                                System.exit(1);
-                            } else {
-                                map.put(agentId, cookie);
-                            }
-                        } catch (ClassCastException e) {
-                            System.err.println("Invalid configuration file");
-                            System.exit(1);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Invalid agent ID (" + o +
-                                ") in configuration file. Keys must be a integer between 0 and " +
-                                (AgentID.MIN_DYNAMIC_AGENT_ID - 1));
-                            System.exit(1);
-                        }
+                // Parse options
+                arg = line.getOptionValue("p");
+                if (arg == null) {
+                    port = RouterImpl.DEFAULT_PORT;
+                } else {
+                    try {
+                        port = new Short(arg);
+                    } catch (NumberFormatException e) {
+                        printHelpAndExit("Invalid port number: " + arg);
+                    } catch (IllegalArgumentException e) {
+                        printHelpAndExit("Invalid port number: " + arg);
                     }
-                    config.setReservedAgentId(map);
-                } catch (IOException e) {
-                    System.err.println("Failed to read the config file: " + e.getMessage());
-                    System.exit(1);
-                } catch (IllegalArgumentException e) {
-                    System.err.println("Invalid config file: " + e.getMessage());
-                    System.exit(1);
                 }
 
-            }
+                arg = line.getOptionValue("i");
+                if (arg == null) {
+                    try {
+                        ia = InetAddress.getLocalHost();
+                    } catch (UnknownHostException e) {
+                        printHelpAndExit("Failed to resolve localhost: " + e.getMessage());
+                    }
+                } else {
+                    try {
+                        ia = InetAddress.getByName(arg);
+                    } catch (UnknownHostException e) {
+                        printHelpAndExit("Unknown hostname or IP address: " + arg);
+                    }
+                }
 
-            if (line.hasOption("v")) {
-                Logger l = Logger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
-                l.setLevel(Level.DEBUG);
+                arg = line.getOptionValue("c");
+                if (arg == null) {
+                    printHelpAndExit("The --cookie option is mandatory when reloading the configuration");
+                } else {
+                    try {
+                        magicCookie = new MagicCookie(arg);
+                    } catch (IllegalArgumentException e) {
+                        printHelpAndExit(e);
+                    }
+                }
+
+                if (line.hasOption("v")) {
+                    Logger l = Logger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
+                    l.setLevel(Level.DEBUG);
+                }
+
+                // Send a message to the router to reload the configuration
+                try {
+                    Socket socket = new Socket(ia, port);
+                    System.out.println("Asking " + socket + " to reload it's configuration");
+                    ReloadConfigurationMessage rlm = new ReloadConfigurationMessage(magicCookie);
+                    socket.getOutputStream().write(rlm.toByteArray());
+                    socket.close();
+                    System.out.println("Done. Check the router logs");
+                } catch (Throwable e) {
+                    logger.fatal("Failed to reload the conifiguration router:", e);
+                    System.exit(1);
+                }
+            } else {
+                /*
+                 * START ROUTER
+                 */
+
+                RouterConfig config = new RouterConfig();
+
+                // Check incompatible options
+                boolean error = false;
+                error |= line.hasOption("c");
+                if (error) {
+                    printHelpAndExit("");
+                    printHelpAndExit("Option -c is only compatible with -r");
+
+                }
+
+                // Parses option to fill config
+                arg = line.getOptionValue("p");
+                if (arg == null) {
+                    config.setPort(RouterImpl.DEFAULT_PORT);
+                } else {
+                    try {
+                        short i = new Short(arg);
+                        config.setPort(i);
+                    } catch (NumberFormatException e) {
+                        printHelpAndExit("Invalid port number: " + arg);
+                    } catch (IllegalArgumentException e) {
+                        printHelpAndExit("Invalid port number: " + arg);
+                    }
+                }
+
+                if (line.hasOption("4")) {
+                    System.setProperty("java.net.preferIPv4Stack", "true");
+                }
+
+                if (line.hasOption("6")) {
+                    System.setProperty("java.net.preferIPv6Stack", "true");
+                }
+
+                arg = line.getOptionValue("i");
+                if (arg == null) {
+                    try {
+                        InetAddress addr = InetAddress.getLocalHost();
+                        config.setInetAddress(addr);
+                    } catch (UnknownHostException e) {
+                        printHelpAndExit(e);
+                    }
+                } else {
+                    try {
+                        InetAddress addr = InetAddress.getByName(arg);
+                        config.setInetAddress(addr);
+                    } catch (UnknownHostException e) {
+                        printHelpAndExit("Unknown hostname or IP address: " + arg);
+                    }
+                }
+
+                arg = line.getOptionValue("w");
+                if (arg == null) {
+                    int n = Runtime.getRuntime().availableProcessors();
+                    config.setNbWorkerThreads(n);
+                } else {
+                    try {
+                        int i = new Integer(arg);
+                        config.setNbWorkerThreads(i);
+                    } catch (NumberFormatException e) {
+                        printHelpAndExit("Invalid worker number: " + arg);
+                    }
+                }
+
+                arg = line.getOptionValue("f");
+                if (arg != null) {
+                    File f = new File(arg);
+                    if (!f.exists()) {
+                        System.err.println("Invalid configuration file: " + arg + " does not exist");
+                        System.exit(1);
+                    }
+                    if (!f.isFile()) {
+                        System.err.println("Invalid configuration file: " + arg + " is not a file");
+                        System.exit(1);
+                    }
+                    if (!f.canRead()) {
+                        System.err.println("Invalid configuration file: " + arg + " is not readable");
+                        System.exit(1);
+                    }
+
+                    config.setReservedAgentConfigFile(f);
+                }
+
+                if (line.hasOption("v")) {
+                    Logger l = Logger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
+                    l.setLevel(Level.DEBUG);
+                }
+
+                // Start the router 
+                try {
+                    Router.createAndStart(config);
+                } catch (Exception e) {
+                    logger.fatal("Failed to start the router:", e);
+                    System.exit(1);
+                }
             }
         } catch (UnrecognizedOptionException e) {
             printHelpAndExit(e.getMessage());
@@ -223,16 +286,17 @@ class Main {
         } catch (ParseException e) {
             printHelpAndExit(e);
         }
-
-        return config;
     }
 
     private void printHelpAndExit(String error) {
-        System.err.println(error);
-        System.err.println();
+        if (error != null && error.length() != 0) {
+            System.err.println(error);
+            System.err.println();
+        }
 
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("router", options);
+        System.err.println();
 
         System.exit(1);
 

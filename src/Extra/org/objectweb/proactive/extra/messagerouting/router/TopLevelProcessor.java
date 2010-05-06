@@ -54,6 +54,7 @@ import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorDa
 import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorDataRequest;
 import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorDebug;
 import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorRegistrationRequest;
+import org.objectweb.proactive.extra.messagerouting.router.processor.ProcessorReloadConfiguration;
 
 
 /** Asynchronous message handler.
@@ -111,6 +112,9 @@ class TopLevelProcessor implements Runnable {
                     break;
                 case HEARTBEAT_CLIENT:
                     processor = new ProcessorClientHeartbeat(this.message, router);
+                    break;
+                case RELOAD_CONFIGURATION:
+                    processor = new ProcessorReloadConfiguration(this.message, router);
                     break;
                 default:
                     logger.error("Unexpected message type: " + type + ". Dropping message " + message);

@@ -36,6 +36,7 @@
  */
 package org.objectweb.proactive.extra.messagerouting.router;
 
+import java.io.File;
 import java.net.InetAddress;
 import java.util.Map;
 
@@ -66,7 +67,7 @@ public class RouterConfig {
 
     private InetAddress inetAddress;
 
-    private Map<AgentID, MagicCookie> reservedAgentId;
+    private File reservedAgentConfigFile;
 
     public RouterConfig() {
         this.port = 0;
@@ -140,12 +141,12 @@ public class RouterConfig {
         this.inetAddress = inetAddress;
     }
 
-    public void setReservedAgentId(Map<AgentID, MagicCookie> reservedAgents) {
-        this.reservedAgentId = reservedAgents;
+    public void setReservedAgentConfigFile(File file) {
+        this.reservedAgentConfigFile = file;
     }
 
-    public Map<AgentID, MagicCookie> getReservedAgentId() {
-        return this.reservedAgentId;
+    public File getReservedAgentConfigFile() {
+        return this.reservedAgentConfigFile;
     }
 
 }

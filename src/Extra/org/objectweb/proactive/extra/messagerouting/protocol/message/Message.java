@@ -95,7 +95,9 @@ public abstract class Message {
         /** An heartbeat send by a client to the the router to check the connection */
         HEARTBEAT_CLIENT,
         /** An heartbeat send by the router to the clients to check the connection */
-        HEARTBEAT_ROUTER;
+        HEARTBEAT_ROUTER,
+        /** A message sent by the CLI tool, to ask the router to reload its configuration file*/
+        RELOAD_CONFIGURATION;
         /* That's all*/
         ;
 
@@ -133,6 +135,8 @@ public abstract class Message {
                     return "HEARTBEAT_CLIENT";
                 case HEARTBEAT_ROUTER:
                     return "HEARTBEAT_ROUTER";
+                case RELOAD_CONFIGURATION:
+                    return "RELOAD_CONFIGURATION";
                 default:
                     return super.toString();
             }
@@ -287,6 +291,8 @@ public abstract class Message {
                 return new HeartbeatClientMessage(buf, offset);
             case HEARTBEAT_ROUTER:
                 return new HeartbeatRouterMessage(buf, offset);
+            case RELOAD_CONFIGURATION:
+                return new ReloadConfigurationMessage(buf, offset);
             default:
                 throw new MalformedMessageException("Unknown message type: " + type);
         }

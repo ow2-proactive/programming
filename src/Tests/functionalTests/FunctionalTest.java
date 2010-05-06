@@ -84,7 +84,7 @@ public class FunctionalTest {
                     router = Router.createAndStart(config);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

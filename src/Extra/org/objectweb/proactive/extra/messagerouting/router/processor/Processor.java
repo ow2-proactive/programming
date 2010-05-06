@@ -51,7 +51,8 @@ import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
  * @since ProActive 4.1.0
  */
 public abstract class Processor {
-
+    final static protected Logger admin_logger = ProActiveLogger
+            .getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
     final static protected Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
     final protected RouterImpl router;
     final protected ByteBuffer rawMessage;
