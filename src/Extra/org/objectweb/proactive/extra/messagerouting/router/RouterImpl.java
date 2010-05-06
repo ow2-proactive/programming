@@ -63,6 +63,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.util.SweetCountDownLatch;
@@ -488,9 +489,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
         } catch (FileNotFoundException e) {
             throw new IOException("Router configuration file does not exist: " + this.configFile);
         } catch (IOException e) {
-            throw new IOException("Failed to read the router configuration file: " + this.configFile, e);
+            throw new IOException6("Failed to read the router configuration file: " + this.configFile, e);
         } catch (IllegalArgumentException e) {
-            throw new IOException("Failed to read the router configuation file: " + this.configFile, e);
+            throw new IOException6("Failed to read the router configuation file: " + this.configFile, e);
         }
 
         Map<AgentID, MagicCookie> map = new HashMap<AgentID, MagicCookie>();
