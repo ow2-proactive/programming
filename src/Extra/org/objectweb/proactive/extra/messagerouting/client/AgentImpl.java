@@ -861,6 +861,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                      * The recipient of a given message is not connected to the
                      * router Unlock the sender
                      */
+                {
                     AgentID sender = error.getSender();
 
                     Patient mbox = mailboxes.remove(sender, messageId);
@@ -874,6 +875,29 @@ public class AgentImpl implements Agent, AgentImplMBean {
                         // this is a reply containing data
                         mbox.setAndUnlock(new MessageRoutingException("Recipient not connected " + sender));
                     }
+                }
+                    break;
+                case ERR_UNKNOW_RCPT:
+                    /*
+                     * The recipient of a given message is unknown of the router
+                     * Unlock the sender
+                     */
+                {
+                    AgentID sender = error.getSender();
+
+                    Patient mbox = mailboxes.remove(sender, messageId);
+                    if (mbox == null) {
+                        logger.error("Received error for an unknown request: " + error);
+                    } else {
+                        if (logger.isTraceEnabled()) {
+                            logger.trace("Unlocled " + mbox + " because of a unknown recipient");
+                        }
+
+                        // this is a reply containing data
+                        mbox.setAndUnlock(new MessageRoutingException("Recipient unknown & not connected " +
+                            sender));
+                    }
+                }
                     break;
                 case ERR_MALFORMED_MESSAGE:
                     // do we have the faulty AgentID?
