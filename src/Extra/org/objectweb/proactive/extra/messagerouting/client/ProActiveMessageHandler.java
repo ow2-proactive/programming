@@ -36,14 +36,18 @@
  */
 package org.objectweb.proactive.extra.messagerouting.client;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
+import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.util.PamrMarshaller;
@@ -110,22 +114,48 @@ public class ProActiveMessageHandler implements MessageHandler {
         public void run() {
             ClassLoader savedClassLoader = Thread.currentThread().getContextClassLoader();
             try {
-                Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
                 // Handle the message
-                MessageRoutingMessage message = (MessageRoutingMessage) this.marshaller
-                        .unmarshallObject(_toProcess.getData());
+                Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+
+                MessageRoutingMessage message;
+                try {
+                    message = (MessageRoutingMessage) this.marshaller.unmarshallObject(_toProcess.getData());
+                } catch (Throwable t) {
+                    new MessageRoutingException("Failed to unmarshall incoming message", t);
+                    SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, t));
+                    agent.sendReply(_toProcess, this.marshaller.marshallObject(sr));
+                    return;
+                }
 
                 if (logger.isTraceEnabled()) {
                     logger.trace("Processing message: " + message);
                 }
-                Object result = message.processMessage();
+                Object result = message.processMessage(); // Cannot throw an exception
 
-                byte[] resultBytes = this.marshaller.marshallObject(result);
-                agent.sendReply(_toProcess, resultBytes);
-            } catch (Exception e) {
-                logger.warn("ProActive Message failed to serve a message", e);
-                // TODO: Send an ERR_ ?
+                byte[] resultBytes;
+                try {
+                    resultBytes = this.marshaller.marshallObject(result);
+                } catch (Throwable t) {
+                    new MessageRoutingException("Failed to marshall the result bytes", t);
+                    SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, t));
+                    agent.sendReply(_toProcess, this.marshaller.marshallObject(sr));
+                    return;
+                }
+
+                try {
+                    agent.sendReply(_toProcess, resultBytes);
+                } catch (Throwable t) {
+                    logger.info("Failed to send the PAMR reply to " + this._toProcess +
+                        ". The router should discover the disconnection and unlock the caller", t);
+                    return;
+                }
+            } catch (MessageRoutingException e) {
+                logger.info("Failed to send the PAMR error reply to " + this._toProcess +
+                    ". The router should discover the disconnection and unlock the caller", e);
+            } catch (IOException e) {
+                logger.info("Failed to send the PAMR error reply to " + this._toProcess +
+                    ". The router should discover the disconnection and unlock the caller", e);
             } finally {
                 Thread.currentThread().setContextClassLoader(savedClassLoader);
             }
