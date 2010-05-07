@@ -170,6 +170,22 @@
 							strings shorter than 64 characters. If a invalid value is found, the router will not start.
 						</para>
 					</listitem>
+					<listitem>
+						<para>
+							<emphasis>--timeout</emphasis>: PAMR uses an heartbeat mecanism to detect network failures. 
+							As soon as an agent detects that the tunnel is broken, it will try to reconnect to the router. 
+							If the router detects a broken tunnel it sends a notification to every clients to unlock blocked
+							thread waiting for a response from the disconnected client. This option sets the hearbeat timeout
+							in milliseconds. It means that if the router or a client does not receive an heartbeat before the 
+							timeout, then the tunnel is closed and the client is disconnected. An heartbeat is sent every at an 
+							timeout/3 frequency.
+						</para>
+						
+						<para>
+							This value should not be set to a too low value. Value lower than 600ms on a LAN are unreliable (lot 
+							of false positive due to scheduling/network latency). 
+						</para>
+					</listitem>
 				</itemizedlist>
 			</para>
 		</section>
@@ -199,15 +215,6 @@
 						<para>
 							<emphasis>proactive.net.router.port</emphasis>: (optionally) set to the TCP port on which the
 							message router is listening. If omitted, port <emphasis>33647</emphasis> is used.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							<emphasis>proactive.communication.pamr.heartbeat_timeout</emphasis>: (optionally) Use a
-							bidirectionnal heartbeat algorithm to detect socket failure. By setting this value you
-							can override the default heartbeat timeout value, 3 seconds. If the router or a client
-							has not received an heartbeat since 3 seconds then the connexion is closed and a new open
-							is reopened. The heartbeat algorithm can be disabled by setting this value to 0.
 						</para>
 					</listitem>
 					<listitem>
@@ -292,10 +299,17 @@ Caused by: org.objectweb.proactive.core.ProActiveException: Failed to create the
 				Java property file. Keys must be an integer between 0 and 4095 (the agent ID) and values are Unicode
 				strings up to 64 characters.
 			</para>
+			
+			<para>
+				A magic cookie for the key <emphasis role="bold">configuration</emphasis> must be set. It allows the administrator
+				to reload the router configuration at runtime. See the <emphasis role="bold">--reload</emphasis> option.
+			</para>
 
 				<screen>
 <![CDATA[
 $ cat services.txt
+# Admin cookie
+configuration=mySecretPassword
 # Application 1
 0=magicCookie1
 # Application 2

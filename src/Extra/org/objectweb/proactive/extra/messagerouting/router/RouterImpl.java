@@ -126,6 +126,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     private final File configFile;
 
+    private final int heartbeatTimeout;
+
     /** Create a new router
      * 
      * When a new router is created it binds onto the given port.
@@ -144,6 +146,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
      */
     RouterImpl(RouterConfig config) throws Exception {
         this.configFile = config.getReservedAgentConfigFile();
+        this.heartbeatTimeout = config.getHeartbeatTimeout();
 
         init(config);
         tpe = Executors.newFixedThreadPool(config.getNbWorkerThreads());
@@ -173,7 +176,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
         serverSocket.bind(isa);
 
         this.port = serverSocket.getLocalPort();
-        logger.info("Message router listening on " + serverSocket.toString());
+        logger.info("Message router listening on " + serverSocket.toString() + ". Heartbeat timeout is " +
+            this.heartbeatTimeout + " ms");
 
         // register the listener with the selector
         ssc.register(selector, SelectionKey.OP_ACCEPT);
@@ -188,8 +192,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
         }
 
         // Start the thread in charge of sending the heartbeat
-        final int heartbeatPeriod = PAMRConfig.PA_PAMR_HEARTBEAT_TIMEOUT.getValue();
-        final int period = heartbeatPeriod / 3;
+        final int period = this.heartbeatTimeout / 3;
         if (period > 0) {
             Thread t = new Thread() {
                 public void run() {
@@ -242,7 +245,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
                     for (Client client : clients) {
                         if (client.isConnected()) {
-                            if ((currentTime - client.getLastSeen()) > heartbeatPeriod) {
+                            if ((currentTime - client.getLastSeen()) > heartbeatTimeout) {
                                 // Disconnect
                                 logger.info("Client " + client + " disconnected due to late heartbeat");
                                 try {
@@ -587,5 +590,9 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
     public File getConfigurationFile() {
         return this.configFile;
+    }
+
+    public int getHeartbeatTimeout() {
+        return this.heartbeatTimeout;
     }
 }

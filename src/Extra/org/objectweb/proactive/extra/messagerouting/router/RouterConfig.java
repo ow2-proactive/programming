@@ -69,11 +69,14 @@ public class RouterConfig {
 
     private File reservedAgentConfigFile;
 
+    private int heartbeatTimeout;
+
     public RouterConfig() {
         this.port = 0;
         this.isDaemon = false;
         this.nbWorkerThreads = 4;
         this.inetAddress = null;
+        this.heartbeatTimeout = 1000;
     }
 
     public void setReadOnly() {
@@ -147,6 +150,14 @@ public class RouterConfig {
 
     public File getReservedAgentConfigFile() {
         return this.reservedAgentConfigFile;
+    }
+
+    public int getHeartbeatTimeout() {
+        return heartbeatTimeout;
+    }
+
+    public void setHeartbeatTimeout(int heartbeatTimeout) {
+        this.heartbeatTimeout = heartbeatTimeout;
     }
 
 }

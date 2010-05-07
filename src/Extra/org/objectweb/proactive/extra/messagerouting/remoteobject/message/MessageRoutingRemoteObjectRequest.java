@@ -105,9 +105,9 @@ public class MessageRoutingRemoteObjectRequest extends MessageRoutingMessage imp
             } else {
                 return ro.receiveMessage(this.request);
             }
-        } catch (Exception e) {
+        } catch (Throwable t) {
             return new SynchronousReplyImpl(new MethodCallResult(null, new IOException6(uri +
-                " failed to process message " + this.request, e)));
+                " failed to process message " + this.request, t)));
         }
     }
 }

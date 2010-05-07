@@ -142,7 +142,7 @@ public class ProcessorRegistrationRequest extends Processor {
 
         // Acknowledge the registration
         RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
-            this.router.getId(), client.getMagicCookie(), getHeartbeatPeriod());
+            this.router.getId(), client.getMagicCookie(), this.router.getHeartbeatTimeout());
 
         client.setAttachment(attachment);
         boolean resp = this.sendReply(client, reply);
@@ -192,7 +192,7 @@ public class ProcessorRegistrationRequest extends Processor {
 
         // Acknowledge the registration
         RegistrationReplyMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(),
-            this.router.getId(), client.getMagicCookie(), getHeartbeatPeriod());
+            this.router.getId(), client.getMagicCookie(), this.router.getHeartbeatTimeout());
 
         client.setAttachment(attachment);
         boolean resp = this.sendReply(client, reply);
@@ -220,7 +220,7 @@ public class ProcessorRegistrationRequest extends Processor {
         AgentID agentId = AgentIdGenerator.getId();
         MagicCookie magicCookie = message.getMagicCookie();
         RegistrationMessage reply = new RegistrationReplyMessage(agentId, message.getMessageID(), this.router
-                .getId(), magicCookie, getHeartbeatPeriod());
+                .getId(), magicCookie, this.router.getHeartbeatTimeout());
 
         Client client = new Client(attachment, agentId, magicCookie);
         boolean resp = this.sendReply(client, reply);
@@ -261,10 +261,6 @@ public class ProcessorRegistrationRequest extends Processor {
             logger.info("Failed to send registration reply to " + reply.getAgentID() + ": " + e.getCause());
         }
         return false;
-    }
-
-    private int getHeartbeatPeriod() {
-        return PAMRConfig.PA_PAMR_HEARTBEAT_TIMEOUT.getValue();
     }
 
     static abstract private class AgentIdGenerator {

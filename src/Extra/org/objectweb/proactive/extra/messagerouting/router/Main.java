@@ -80,6 +80,7 @@ class Main {
         this.options.addOption("i", "ip", true, "Bind to a given IP address or hostname");
         this.options.addOption("4", "ipv4", false, "Force the router to use IPv4 addresses only");
         this.options.addOption("6", "ipv6", false, "Force the router to use IPv6 addresses only");
+        this.options.addOption("t", "timeout", true, "The heartbeat timeout value");
         this.options.addOption("w", "nbWorkers", true, "Size of the worker thread pool");
         this.options.addOption("f", "configFile", true, "configuration file");
         this.options.addOption("h", "help", false, "Print help message");
@@ -113,8 +114,9 @@ class Main {
                 error |= line.hasOption("6");
                 error |= line.hasOption("w");
                 error |= line.hasOption("f");
+                error |= line.hasOption("t");
                 if (error) {
-                    printHelpAndExit("Options -4 -6 -w -f are not compatible with -r");
+                    printHelpAndExit("Options -4 -6 -w -f -t are not compatible with -r");
                 }
 
                 int port = -1;
@@ -269,6 +271,19 @@ class Main {
                 if (line.hasOption("v")) {
                     Logger l = Logger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
                     l.setLevel(Level.DEBUG);
+                }
+
+                arg = line.getOptionValue("t");
+                if (arg != null) {
+                    try {
+                        int i = Integer.parseInt(arg);
+                        if (i < 0) {
+                            printHelpAndExit("Invalid timeout value. Must be a positive long");
+                        }
+                        config.setHeartbeatTimeout(i);
+                    } catch (NumberFormatException e) {
+                        printHelpAndExit("Invalid timeout value");
+                    }
                 }
 
                 // Start the router 

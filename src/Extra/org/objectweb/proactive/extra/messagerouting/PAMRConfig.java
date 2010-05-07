@@ -36,19 +36,6 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
     static public PAPropertyInteger PA_PAMR_CONNECT_TIMEOUT = new PAPropertyInteger(
         "proactive.communication.pamr.connect_timeout", false, 3000);
 
-    /**
-     * PAMR can use an heartbeat mechanism to detect dead connection.
-     *
-     * This value specify the maximum amount time a client will wait before discovering
-     * that the connection is broken. An heartbeat is sent by the router every 1/3 of this
-     * value.
-     *
-     * If set to 0 the heartbeat mechanism is disabled.
-     *
-     */
-    static public PAPropertyInteger PA_PAMR_HEARTBEAT_TIMEOUT = new PAPropertyInteger(
-        "proactive.communication.pamr.heartbeat_timeout", false, 1000);
-
     /** The agent ID to use.
      *
      * This property can be set to obtain a given (and fixed) agent ID. This id must be declared
