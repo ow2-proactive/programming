@@ -5,6 +5,8 @@
 	<target name="compile" depends="core, stubGenerator, -compile"/>
 	
 	<target name="-compile">
-		<compile_extension module="gcmdeployment" />	
+		<compile_extension module="gcmdeployment" />
+		<generate_stub_for_class srcDir="${cl.extensions.dir}" class="org/objectweb/proactive/extensions/gcmdeployment/GCMApplication/GCMApplicationImpl" />
+		<generate_stub_for_class srcDir="${cl.extensions.dir}" class="org/objectweb/proactive/extensions/gcmdeployment/core/GCMVirtualNodeImpl" />
 	</target>
 </project>
