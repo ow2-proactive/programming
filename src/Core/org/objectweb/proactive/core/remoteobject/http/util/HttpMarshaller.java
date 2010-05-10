@@ -59,7 +59,7 @@ public class HttpMarshaller {
         byte[] buffer = null;
 
         try {
-            buffer = ObjectToByteConverter.MarshallStream.convert(o);
+            buffer = ObjectToByteConverter.ProActiveObjectStream.convert(o);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,7 +70,7 @@ public class HttpMarshaller {
     public static Object unmarshallObject(byte[] bytes) {
         Object o = null;
         try {
-            o = ByteToObjectConverter.MarshallStream.convert(bytes);
+            o = ByteToObjectConverter.ProActiveObjectStream.convert(bytes);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
