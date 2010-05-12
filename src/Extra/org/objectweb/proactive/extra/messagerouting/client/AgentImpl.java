@@ -759,7 +759,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 } else {
                     logger.debug("Agent is not connected, heartbeat not sent");
                 }
-            } catch (IOException e) {
+            } catch (Throwable e) {
                 logger.debug("Failed to send heartbeat to the router", e);
                 reportTunnelFailure(t);
             }

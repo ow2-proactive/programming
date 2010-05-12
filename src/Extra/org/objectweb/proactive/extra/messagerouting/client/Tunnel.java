@@ -127,7 +127,7 @@ public class Tunnel {
         return this.socket.isConnected();
     }
 
-    public void shutdown() {
+    public synchronized void shutdown() {
         try {
             this.socket.close();
         } catch (IOException e) {
