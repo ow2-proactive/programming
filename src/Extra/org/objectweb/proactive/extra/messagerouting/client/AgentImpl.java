@@ -866,7 +866,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
                     Patient mbox = mailboxes.remove(sender, messageId);
                     if (mbox == null) {
-                        logger.error("Received error for an unknown request: " + error);
+                        // This is no longer an error since the thread can have been unlocked
+                        // by another error message
+                        logger.debug("Received error for an unknown request: " + error);
                     } else {
                         if (logger.isTraceEnabled()) {
                             logger.trace("Unlocled " + mbox + " because of a non connected recipient");
