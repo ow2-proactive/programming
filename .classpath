@@ -130,5 +130,6 @@
 	<classpathentry kind="lib" path="lib/servicebinder-0.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/shell-1.4.2.jar"/>
 	<classpathentry kind="lib" path="lib/shelltui-1.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/netty-3.2.0.ALPHA2.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

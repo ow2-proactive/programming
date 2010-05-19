@@ -1,2 +1,3 @@
 org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactorySPI
 org.objectweb.proactive.extra.rmissl.RmiSslRemoteObjectFactorySPI
+org.objectweb.proactive.extra.pnp.PNPRemoteObjectFactorySPI

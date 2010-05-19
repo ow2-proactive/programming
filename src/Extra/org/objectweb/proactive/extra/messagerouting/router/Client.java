@@ -250,7 +250,8 @@ public class Client {
     public void setAttachment(Attachment attachment) {
         synchronized (this.attachment_lock) {
             if (this.attachment != null) {
-                logger.warn("set attachment called but attachment is not null. Race condition occured !");
+                logger.warn("set attachment called on client #" + this.agentId +
+                    " but attachment is not null. Race condition occured !");
             }
 
             logger.debug("New attachment for " + this.agentId);

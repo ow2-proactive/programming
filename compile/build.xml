@@ -107,7 +107,8 @@
 		</fileset>
 		<else>
 			<fileset dir="${cl.test.dir}" id="performancesuite">
-				<include name="performanceTests/**/*Test*.class" />
+				<include name="performanceTests/bandwidth/Test*.class" />
+				<include name="performanceTests/throughput/Test*.class" />
 				<exclude name="**/*$*.class" />
 				<exclude name="**/*Ibis*.class" />
 			</fileset>
@@ -619,6 +620,8 @@
 				<jvmargs />
 
 				<!--
+
+					<jvmarg value="-agentlib:yjpagent=onexit=snapshot,tracing,alloceach=5" />
 					Remote Debug:
 					<jvmarg value="-Xdebug" />
 					<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000" />
@@ -678,6 +681,10 @@
 				<jvmarg value="-Dproactive.net.router.port=0" />
 			</jvmargs>
 		</junitMacro>
+	</target>
+
+	<target name="junit.pnp" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
+		<junitMacro communication.protocol="pnp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
 	</target>
 
 	<target name="with.clover">

@@ -175,5 +175,4 @@ public interface Loggers {
     static final public String NATIVE_CONTROL = NATIVE + ".control";
     static final public String NATIVE_CONTROL_MANAGER = NATIVE_CONTROL + ".manager";
     static final public String NATIVE_CONTROL_COUPLING = NATIVE_CONTROL + ".coupling";
-
 }
