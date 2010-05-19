@@ -2615,7 +2615,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 			<para>
 				In this implementation of the Fractal/GCM component model,
-				Fractal components are active objects. Therefore, it is
+				Fractal/GCM components are active objects. Therefore, it is
 				possible to redefine their activity. In this context of
 				component based programming, we call an activity
 				redefined by a user a
@@ -2651,28 +2651,44 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				<listitem>
 					<para>
 						the control of the request queue has to use the
-						org.objectweb.proactive.Service class
+						<literal>org.objectweb.proactive.Service</literal>
+						class
 					</para>
 				</listitem>
 				<listitem>
 					<para>
 						the functional activity has to loop on the
-						body.isActive() condition. This is not
-						compulsory but it allows to automatically end
-						the functional activity when the lifecycle of
-						the component is stopped. It may also be managed
-						with a custom filter.
+						<literal>body.isActive()</literal> condition.
+						This is not compulsory but it allows to
+						automatically end the functional activity when the
+						lifecycle of the component is stopped. It may also
+						be managed with a custom filter.
 					</para>
 				</listitem>
 			</orderedlist>
 
 			<para>
 				Control invocations to stop the component will
-				automatically set the isActive() return value to false,
-				which implies that when the functional activity loops on
-				the body.isActive() condition, it will end when the
-				lifecycle of the component is set to STOPPED.
+				automatically set the <literal>isActive()</literal> return
+				value to false, which implies that when the functional
+				activity loops on the <literal>body.isActive()</literal>
+				condition, it will end when the lifecycle of the component
+				is set to STOPPED.
 			</para>
+
+			<note>
+				<para>
+					By the way, it should be specified that in this
+					implementation of the
+					<literal>org.etsi.uri.gcm.api.control.GCMLifeCycleController</literal>,
+					the <literal>startFc</literal> and
+					<literal>stopFc</literal> methods are recursive (ie.
+					starting or stopping a component, starts or stops
+					all its subcomponents) whereas the
+					<literal>terminateGCMComponent</literal> method is not
+					recursive (ie. only terminates the current component).
+				</para>
+			</note>
 
 		</section>
 
