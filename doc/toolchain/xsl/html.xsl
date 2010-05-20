@@ -14,7 +14,7 @@
 	<!-- Configure the html stylesheet to use -->
 	<xsl:param name="html.stylesheet" select="'main.css'" />
 	<!-- Just use the image size for the html output. Width=... has no effect. -->
-	<xsl:param name="ignore.image.scaling">1</xsl:param>
+	<xsl:param name="ignore.image.scaling">0</xsl:param>
 	<!-- Relative position for the htmlized java files -->
 	<xsl:param name="html.java.files">../ProActive_src_html/org/objectweb/proactive/</xsl:param>
 	<xsl:param name="html.java.suffix">.html</xsl:param>
