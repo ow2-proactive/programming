@@ -21,6 +21,6 @@
 
     <controller desc="composite"/>
 
-    <virtual-node name="helooworld-node" cardinality="single"/>
+    <virtual-node name="helloworld-node" cardinality="single"/>
 </definition>
 <!-- @snippet-end component_userguide_1 -->

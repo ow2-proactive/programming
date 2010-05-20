@@ -162,17 +162,17 @@
 						</para>
 						<para>
 							The component will be instantiated on the
-							specified virtual node (or the one that
-							is exported). For a composite component, it
-							means it will be instantiated on the first
-							(if there are several nodes mapped) node of
-							the virtual node. For a primitive component,
-							if the virtual node defines several nodes
-							(cardinality='multiple'), there will be as
-							many instances of the primitive component as
-							there are underlying nodes. Each of these
-							instances will have a suffixed name looking
-							like this:
+							specified virtual node (or the one that is
+							exported). If there are several nodes mapped
+							on the virtual node, the component will be
+							instantiated on one of the nodes of the
+							virtual node. The cardinality attribute is
+							useful only for primitive components. When
+							setting the cardinality to 'multiple', there
+							will be as many instances of the primitive
+							component as there are underlying nodes. Each
+							of these instances will have a suffixed name
+							looking like this:
 							<screen>primiveComponentName-cyclicInstanceNumber-n</screen>
 							where primitiveComponentName is the name
 							defined in the ADL.
