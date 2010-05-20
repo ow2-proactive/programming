@@ -3,8 +3,10 @@
 
   <para>In order to use the Proactive Security features, you have to
   install <emphasis role="bold">the Java(TM) Cryptography Extension (JCE)
-  Unlimited Strength Jurisdiction Policy Files</emphasis> available at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.java.sun.com">Sun's website</link>. Extract the file and
-  copy jar files to your &lt;jre_home&gt;/lib/security.</para>
+  Unlimited Strength Jurisdiction Policy Files</emphasis> available at <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://java.sun.com/javase/downloads/index.jsp">Sun's website</link>.
+  Extract the file and copy jar files to your &lt;jre_home&gt;/lib/security. That will override the <emphasis role="italics">local_policy.jar</emphasis> and <emphasis role="italics">US_export_policy.jar</emphasis> files,
+  so if you want to be able to undo this operation, rename these files before copying the new ones.
+  </para>
 
   <section xml:id="Overview_63"><info><title>Overview</title></info>
 
@@ -17,7 +19,7 @@
     <para>ProActive security mechanism provides a set of security features
     from basic ones like communications authentication, integrity, and
     confidentiality to more high-level features including secure object
-    migration, hierarchical security policies, and dynamically negotiated
+    migrations, hierarchical security policies, and dynamically negotiated
     policies. All these features are expressed at the ProActive middleware
     level and used transparently by applications.</para>
 
@@ -32,19 +34,17 @@
     <section xml:id="Basemodel_63"><info><title>Base model</title></info>
 
 
-      <para>A distributed or concurrent application built using
+      <para>A distributed or concurrent application built with
       <emphasis>ProActive</emphasis> is composed of a number of medium-grained
       entities called <emphasis>active objects</emphasis>. Each active object
       has one distinguished element, the <emphasis>root</emphasis>, which is
-      the only entry point to the active object; all other objects inside the
+      the only entry point to the active object. All other objects inside the
       active object are called <emphasis>passive objects</emphasis> and cannot
-      be referenced directly from objects which are outside this active object
-      (see following figure); the absence of sharing is important with respect
-      to security.</para>
+      be referenced directly from objects which are outside of this active object
+      (see <xref linkend="Settingupvirtualdistributedsandboxsatruntime_63" />).
+	  This absence of sharing is important with respect to security.</para>
 
       <para><figure xml:id="Settingupvirtualdistributedsandboxsatruntime_63"><info><title>Setting up virtual distributed sandboxs at runtime</title></info>
-
-
           <mediaobject>
             <imageobject>
               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/secureDeployment.png" format="PNG"/>
@@ -53,19 +53,16 @@
         </figure></para>
 
       <para>The security is based on Public Key Infrastructure. Each entity
-      owns a certificate and an private key generated from the certificate of
-      a user.</para>
+      owns a certificate and an private key generated from a user's certificate.</para>
 
       <para>Certificates are generated automatically by the security
       mechanism. The validity of a certificate is checked by validating its
       certificate chain. As shown in the next figure, before validating the
-      certificate of an active object, the application certificate and user
-      certificate will be checked. If a valid path is found then the object
-      certificate is validated.</para>
+      certificate of an active object, the certificate of the application and the user's
+      one will be checked. If a valid path is found then the
+      certificate of the object is validated.</para>
 
       <para><figure xml:id="Certificatechain_63"><info><title>Certificate chain</title></info>
-
-
           <mediaobject>
             <imageobject>
               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/certificateGeneration.png" format="PNG"/>
@@ -82,13 +79,13 @@
 
       <itemizedlist>
         <listitem>
-          <para>Administrators set policy at domain level. It contains general
+          <para>Administrators set policy at the domain level. It contains general
           security rules.</para>
         </listitem>
 
         <listitem>
-          <para>Resource provider set policy for resource. People who have
-          access to a cluster and wants to offer cpu time under some
+          <para>Resource provider set policy for resources. People who have
+          access to a cluster and wants to offer CPU time under some
           restrictions. The runtime loads its policy file at launch
           time.</para>
         </listitem>
@@ -100,12 +97,10 @@
       </itemizedlist>
 
       <para>The ProActive middleware will enforce the security policy of all
-      entites interacting within the system, ensuring that all policies are
-      adhered to.</para>
+      entities interacting within the system, ensuring that all policies are
+      applied.</para>
 
       <para><figure xml:id="Hierarchicalsecurity_63"><info><title>Hierarchical security</title></info>
-
-
           <mediaobject>
             <imageobject>
               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/security-hierarchy.png" format="PNG"/>
@@ -131,10 +126,10 @@
       <emphasis>Virtual Nodes</emphasis> (VNs). A VN is identified as a name
       (a simple string), used in a program source, defined and configured in
       an descriptor. The user can attach policy to these virtual nodes.
-      Virtual Nodes are used within application code to structure it. By
+      Virtual Nodes are used within application code to structure it. For
       example, an object which will be used as a server will be set inside a
-      virtual node named "Server_VN", client objects will
-      be set inside "Client_VN". The user expresses policy between server and
+      virtual node named "Server_VN" and client objects will
+      be set inside a "Client_VN" virtual node. The user expresses policy between server and
       client object inside a descriptor file. The mapping between Virtual
       Nodes and Nodes is done when the application starts.</para>
     </section>
@@ -144,14 +139,14 @@
 
       <para>Grid programming is about deploying processes (activities) on
       various machines. The final security policy that must be set for those
-      processes depends upon many factors: primarily, this is dictated by the
-      application's policy, but the machine locations, the security policies
+      processes depends on many factors: that is dictated by the
+      application's policy, but other factor such as the machine locations, the security policies
       of their administrative domain, and the network being used to reach
-      those machines must also be considered.</para>
+      those machines has to be considered too.</para>
 
       <para>The previous section defined the notions of <emphasis>Virtual
-      Nodes</emphasis>, and <emphasis>Nodes</emphasis>. Virtual Nodes are
-      application abstractions, and nodes are only a run-time entity resulting
+      Nodes</emphasis> and <emphasis>Nodes</emphasis>. Virtual Nodes are
+      application abstractions, and nodes are only a runtime entity resulting
       from the deployment: a mapping of Virtual Nodes to processes and hosts.
       A first decisive feature allows the definition of application-level
       security on those abstractions:</para>
@@ -164,10 +159,10 @@
           </mediaobject>
         </informalfigure></para>
 
-      <para>As such, virtual nodes are the foundation for intrinsic
+      <para>Thus, virtual nodes are the foundation for intrinsic
       application level security. If, at design time, it appears that a
       process always requires a specific level of security (e.g. authenticated
-      and encrypted communications at all time), then that process should be
+      and encrypted communications all the time), then that process should be
       attached to a virtual node on which those security features are imposed.
       It is the designer responsibility to structure his/her application or
       components into virtual node abstractions compatible with the required
@@ -193,7 +188,7 @@
 
       <para>Domains are a standard way to structure (virtual) organizations
       involved in a Grid infrastructure; they are organized in a hierarchical
-      manner. They are the logical concept which allow the expression of
+      manner. This logical concept allows the expression of
       security policies in a hierarchical way.</para>
 
       <para><informalfigure>
@@ -206,20 +201,26 @@
 
       <para>This principle deals with the two issues mentioned above:</para>
 
-      <para>(1) the administrator of a domain can define specific policy rules
-      that must be obeyed by the applications running within the domain.
-      However, a general rule expressed inside a domain may prevent the
-      deployment of a specific application. To solve this issue, a policy rule
-      can allow a well-defined entity to weaken it. As we are in a
-      hierarchical organization, allowing an entity to weaken a rule means
-      allowing all entities included to weaken the rule. The entity can be
-      identified by its certificate;</para>
+		<itemizedlist>
+			<listitem>
+			  <para>The administrator of a domain can define specific policy rules
+			  that must be obeyed by the applications running within the domain.
+			  However, a general rule expressed inside a domain may prevent the
+			  deployment of a specific application. To solve this issue, a policy rule
+			  can allow a well-defined entity to weaken it. As we are in a
+			  hierarchical organization, allowing an entity to weaken a rule means
+			  allowing all included entities to weaken the rule. The entity can be
+			  identified by its certificate;</para>
+			</listitem>
+			<listitem>
+			  <para>a Grid user can, at the time he runs an application, specify
+			  additional security based on the domains being deployed onto.</para>
+			</listitem>
+		</itemizedlist>
 
-      <para>(2) a Grid user can, at the time he runs an application, specify
-      additional security based on the domains being deployed onto.</para>
 
       <para>The Grid user can specify additional rules directly in his
-      deployment descriptor for the domains he deploys onto. Note that those
+      deployment descriptor for the domains his application is deployed on. Note that those
       domains are actually dynamic as they can be obtained through external
       allocators, or even Web Services in an OGSA infrastructure (see
       <citation><xref endterm="foster98security.abbrev" linkend="foster98security"/></citation>). Catch-all rules might be
@@ -240,7 +241,7 @@
       <para>In open applications, e.g. several principals interacting in a
       collaborative Grid application, a JVM (a process) launched by a given
       principal can actually host an activity executing under another
-      principal. The above principle specific security privileges to be
+      principal. The secutiry of this latter principal has to be
       retained in such a case. Moreover, it can also serve as a basis to
       offer, in a secure manner, hosting environments for mobile
       agents.</para>
@@ -262,8 +263,8 @@
       <para>Prior to an application starting on a grid, a user needs to
       acquire some resources (CPU time, disk storage, bandwidth) from the
       grid. A <emphasis>resource provider</emphasis> is an individual, a
-      research institute, an organization who wants to offer some resources
-      under a certain security policy to a restricted set of peoples.
+      research institute or an organization who wants to offer some resources
+      under a certain security policy to a restricted set of people.
       According to our definition, the resource provider will set up one or
       more runtimes where clients will be able to perform computation. Each
       runtime is set with its own policy. Theses runtimes could be globally
@@ -325,8 +326,8 @@
       </itemizedlist>
 
       <para>For instance, a domain is able to specify that it accepts
-      downloading of code from a given set of domains, provided the transfers
-      are authenticated and guaranteed not to be tampered with. As a policy
+      downloading code from a given set of domains, whose transfer
+      has been authenticated and guaranteed not to be altered. As a policy
       might allow un-authenticated communications, or because a domain (or
       even country) policy may specify that all communications are
       un-encrypted, the three security attributes Authentication (A),
@@ -340,7 +341,7 @@
       <para>As grids are decentralized, without a central administrator
       controlling the correctness of all security policies, these policies
       must be <emphasis>combined</emphasis>, <emphasis>checked</emphasis>, and
-      <emphasis>negotiated</emphasis> dynamically. The next two sections
+      dynamically <emphasis>negotiated</emphasis>. The next two sections
       discuss how this is done.</para>
     </section>
 
@@ -350,10 +351,10 @@
       <para>As the proposed infrastructure takes into account different actors
       of the grid (e.g. domain administrator, grid user), even for a
       single-principal single-domain application, there are potentially
-      several security policies in effect. This section deals with the
-      combination of those policies to obtain the final security tuples of a
-      single entity. An important principle being that a sub-domain cannot
-      weaken the rules of its super-domains.</para>
+      several security policies to be considered. This section deals with the
+      combination of those policies to obtain the final security tuple of a
+      single entity. An important principle being is <emphasis role="bold">a sub-domain cannot
+      weaken the rules of its super-domains</emphasis>.</para>
 
       <para>During execution, each activity (Active Object) is always included
       in a <emphasis>Node</emphasis> (due to the Virtual Node mapping) and at
@@ -367,8 +368,6 @@
       rules.</para>
 
       <para><figure xml:id="HierarchicalSecurityLevels"><info><title xml:id="HierarchicalSecurityLevels_63">Hierarchical Security Levels</title></info>
-
-
           <mediaobject>
             <imageobject>
               <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/img11.png" format="PNG"/>
@@ -376,22 +375,39 @@
           </mediaobject>
         </figure></para>
 
-      <para>There are three main principles: (1) choosing the <emphasis>most
-      specific rules</emphasis> within a given domain (as a single grid actor
-      is responsible for it), (2) an interaction is valid only if all levels
-      accept it (absence of weakening of authorizations), (3) the security
-      attributes retained are the most constrained based on a partial order
-      (absence of weakening of security). Consider the following example,
+      <para>There are three main principles:</para>
+	  <orderedlist>
+		  <listitem>
+			  <para>
+				choosing the <emphasis>most specific rules</emphasis>
+				within a given domain (as a single grid actor is responsible for it),
+			  </para>
+		  </listitem>
+		  <listitem>
+			  <para>
+				an interaction is valid only if all levels
+				accept it (absence of weakening of authorizations),
+			  </para>
+		  </listitem>
+		  <listitem>
+			  <para>
+				the security retained attributes are the most constrained based on a partial order
+				(absence of weakening of security).
+			  </para>
+		  </listitem>
+	  </orderedlist>
+
+	  <para>Let us consider the following example,
       where the catch-all rule specifies that all Requests (Q) and Replies (P)
-      must be authenticated, integrity checked, and confidential, however
+      must be authenticated, integrity checked, and confidential, but
       within the specific "CardPlus" domain integrity and confidentiality will
       be optional.</para>
 
-      <screen>          Domain[*] -&gt; Domain[*]: Q,P: [+A,+I,+C]
-          Domain[CardPlus] -&gt; Domain[CardPlus]: Q,P: [+A,?I,?C] </screen>
+      <screen>Domain[*] -&gt; Domain[*]: Q,P: [+A,+I,+C]
+Domain[CardPlus] -&gt; Domain[CardPlus]: Q,P: [+A,?I,?C]</screen>
 
-      <para>This means that any activity taking place within the CardPlus
-      domain the second rule will be chosen (integrity and confidentiality
+      <para>This means that for any activity taking place within the CardPlus
+      domain, the second rule will be chosen (integrity and confidentiality
       will be optional), as the catch-all rule is less-specific than the
       "CardPlus" domain rule, and there is no hierarchical domain relationship
       between the two rules. Of course, comparison of rules is only a partial
@@ -411,9 +427,9 @@
     <section xml:id="DynamicPolicyNegotiation_63"><info><title>Dynamic Policy Negotiation</title></info>
 
 
-      <para>During execution, entities interact in a pairwise fashion. Each
-      entity, for each interaction (JVM creation, communication, migration,
-      ...), will want to apply a security policy based on the resolution
+      <para>During execution, entities interact in a pairwise fashion.
+	  For each interaction (JVM creation, communication, migration,
+      ...), each entity will want to apply a security policy based on the resolution
       presented in the previous section. Before starting an interaction, a
       <emphasis>negotiation</emphasis> occurs between the two entities
       involved. <xref linkend="Result_of_security_negotiations"/> shows the
@@ -423,30 +439,20 @@
       attribute as optional, the attribute is not activated.</para>
 
       <para>The other case which leads to an error is when an attribute is
-      required by one, and disallowed by the other. In such cases, the
+      required by one, and disallowed by the other. In such a case, the
       interaction is not authorized and an error is reported. If the two
       entities security policies agree, then the interaction can occur. In the
       case that the agreed security policy includes confidentiality, the two
       entities negotiate a session key.</para>
 
-      <table frame="none" xml:id="Result_of_security_negotiations">
+		<figure xml:id="Result_of_security_negotiations">
 			<title xml:id="Resultofsecuritynegotiations_63">Result of security negotiations</title>
-
-
-        <tgroup cols="1">
-          <tbody>
-            <row>
-              <entry align="center"><para><informalfigure xml:id="SecurityNegotiation">
-                  <mediaobject>
-                    <imageobject>
-                      <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/negotiation.png" format="PNG"/>
-                    </imageobject>
-                  </mediaobject>
-                </informalfigure></para></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/negotiation.png" format="PNG"/>
+				</imageobject>
+			</mediaobject>
+		</figure>
     </section>
 
     <section xml:id="MigrationandNegotiation_63"><info><title>Migration and Negotiation</title></info>
@@ -476,8 +482,8 @@
           <para>the object migrates to a known node (created during the
           deployment step) but which belongs to another virtual node. In this
           case, all current negotiated sessions become invalid. This kind of
-          migration requires reestablishing the object security policy, and if
-          it changes, renegotiating with interacting entities.</para>
+          migration requires to reestablish the object security policy, and if
+          it changes, to renegotiate with interacting entities.</para>
         </listitem>
 
         <listitem>
@@ -492,144 +498,114 @@
     </section>
   </section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   <section xml:id="Howtocreatepolicyfilesandcertificates_63"><info><title>How to create policy files and certificates</title></info>
 
 
     <para>A GUI has been created to facilitate certificate generation. It is a
-    RCP plugin shipped with the IC2D tool.</para>
+    RCP plugin shipped with the IC2D tool. Once IC2D started, go to
+	<emphasis role="bold">Window -&gt; Open Perspective -&gt; Other...</emphasis> and select <emphasis role="bold">Security</emphasis>.</para>
 
-    <para>The first screenshot presents a root certificate. Notice that the
-    certificate chain table is empty.</para>
+	<para>The following window should then appear:</para>
 
-    <para><figure xml:id="TheProActiveCertificateGeneratorforoasis_63"><info><title>The ProActive Certificate Generator (for oasis)</title></info>
-
-
+     <para><figure xml:id="TheIC2DSecurityPerspective"><info><title>The IC2D Security Perspective</title></info>
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/gui-oasis.png" format="PNG"/>
+            <imagedata scale="70" fileref="images/png/security_gui_security_perspective.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
 
-    <para>The second screenshot presents a certificate generated from the
-    previous one using menu entry 'Certificate -&gt; generate a
-    sub-certificate'.</para>
+	<para>
+		From this tab, you can generate a root certificate filling the certificate information column and clicking on
+		<emphasis role="bold">Generate self signed certificate</emphasis>.
+	</para>
 
-    <para>Notice that the certification table contains one entry and
-    Distinguished Name of the Entity ID 1 is the same as the subject DN of the
-    certificate</para>
-
-    <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_1"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
-
-
+     <para><figure xml:id="SecurityRootCertificate"><info><title>Creating a root certificate</title></info>
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/gui-proactive.png" format="PNG"/>
+            <imagedata scale="70" fileref="images/png/security_gui_root_certificate.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
 
+	<para>
+		Then, you can generate a child certificate filling the certificate information column and clicking on
+		<emphasis role="bold">Generate child certificate</emphasis> after having selected the parent certificate on the second column.
+	</para>
 
-
-     <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_2"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
-
-
+     <para><figure xml:id="SecurityChildCertififcate"><info><title>Creating a child certificate</title></info>
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/security_gui_cert_chain_edit.png" format="PNG"/>
+            <imagedata scale="70" fileref="images/png/security_gui_child_certificate.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
 
- <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_3"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
+	  <para>Once you have generated all the certificates you need, you can drag'n drop the ones you want to activate from the second column to the last one.
+		Activating certificates allows you to use them afterwards for rule creation. It also allows you to save them into a file.
+	  </para>
 
-
+     <para><figure xml:id="SecurityActiveKeytore"><info><title>Activating a keystore</title></info>
         <mediaobject>
           <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/security_gui_cert_chain_edit_activeks.png" format="PNG"/>
+            <imagedata scale="70" fileref="images/png/security_gui_active_keystore.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </figure></para>
 
- <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_4"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
-
-
-        <mediaobject>
-          <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/security_gui_ks_edit.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </figure></para>
-
-
- <para><figure xml:id="TheProActiveCertificateGeneratorforproactive_5"><info><title>The ProActive Certificate Generator (for proactive)</title></info>
-
-
-        <mediaobject>
-          <imageobject>
-            <imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/security_gui_rule_edit.png" format="PNG"/>
-          </imageobject>
-        </mediaobject>
-      </figure></para>
-
-
-    <para>Using this GUI, a user is able to generate a certificate and if
-    needed a certificate chain.</para>
-
-    <para>Certificates are saved under a PKCS12 format (extension .p12). This
+	<para>Now, let us have a look at the <emphasis role="italics">Keystore Editor</emphasis> tab. This tab allows you to get some information on the generated
+	keytores, to save them into files or to load some others to be used after for rule edition.
+    Certificates are saved under a PKCS12 format (extension .p12). This
     format is natively supported by the ProActive Security mechanism.</para>
+
+	<para><figure xml:id="SecurityKeystoreEditor"><info><title>Keystore Editor</title></info>
+        <mediaobject>
+          <imageobject>
+            <imagedata scale="70" fileref="images/png/security_gui_keystore_editor.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+
+
+	<para>Finally, you can use the <emphasis role="italics">Rule Editor</emphasis> tab to edit your rules.
+	These rules can be saved into a policy file using the <emphasis role="italics">Save rules</emphasis> button.
+	To get familiar with the generated policy file, please refer to <xref linkend="TheXMLSecurityDescriptorindetails_63" />.
+	To create a new rule, you just have to click on the <emphasis role="italics">New</emphasis> button and then fill the right panel.
+	The <emphasis role="italics">From</emphasis> and <emphasis role="italics">To</emphasis> part can be filled by drag'n drop from the
+	<emphasis role="italics">ActiveKeystore</emphasis> column.
+	</para>
+	<para><figure xml:id="SecurityRuleEditor"><info><title>Rule Editor</title></info>
+        <mediaobject>
+          <imageobject>
+            <imagedata scale="70" fileref="images/png/security_gui_rule_editor.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+
+
+	<para>The last tab, <emphasis role="italics">Sessions browser</emphasis>, cannot be used directly. It is used to see certificate details at runtime.
+	To do this, you have to monitor your application with IC2D and then, you can click right on an active object and select <emphasis role="bold">Export SM to Security view</emphasis>.
+	You will then have access to a window looking as follows:
+	</para>
+
+	<para><figure xml:id="SecuritySessionBrowser"><info><title>Session Browser</title></info>
+        <mediaobject>
+          <imageobject>
+            <imagedata scale="70" fileref="images/png/security_gui_sessions_browser.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </figure></para>
   </section>
 
  <section xml:id="Activatingsecuritymechanism_63"><info><title>Activating security mechanism</title></info>
 
 
-    <para>Within the deployment descriptor, the tag &lt;security&gt; is used
+    <para>Within the deployment descriptor, the &lt;security&gt; tag is used
     to specify the policy for the deployed application. It will be the policy
-    by all the Nodes and the Active Objects that will be created. Below is a fragment
-    of a sample deployment descriptor:</para>
+    for all the created Nodes and Active Objects. The following example shows
+    an example of a deployment descriptor with such a &lt;security&gt; tag:</para>
 
-    <screen>
- 2:&lt;ProActiveDescriptor xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'  xsi:noNamespaceSchemaLocation='DescriptorSchema.xsd'&gt;
- 3: &lt;security&gt;
-          &lt;file uri='../../descriptors/security/applicationPolicy.xml'/&gt;
-    &lt;/security&gt;
- 4: &lt;componentDefinition&gt;
- 5:   &lt;virtualNodesDefinition&gt;
- 6:   &lt;virtualNode name='Locale' property='unique'/&gt;
- 7:   &lt;virtualNode name='vm1' property='unique'/&gt;
- 8:   &lt;virtualNode name='vm2' property='unique'/&gt;
- 9:   &lt;/virtualNodesDefinition&gt;
- 10:&lt;/componentDefinition&gt;
- 11: ....
- 50:&lt;infrastructure&gt;
- 51:  &lt;processes&gt;
- 52:    &lt;processDefinition id='linuxJVM'&gt;
- 53:      &lt;jvmProcess
-              class='org.objectweb.proactive.core.process.JVMNodeProcess'&gt;
- 54:        &lt;classpath&gt;
- ....
- 74: &lt;/classpath&gt;
- 75: &lt;jvmParameters&gt;
- &lt;parameter value='-Dproactive.runtime.security=/.../descriptors/security/jvm1-sec.xml'/&gt;
- 82: &lt;/jvmParameters&gt;
- 83: &lt;/jvmProcess&gt;
- 84: &lt;/processDefinition&gt;
- ....</screen>
-
+	<programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_XML_Descriptor.snip"/></textobject></programlisting>
 </section>
 
 
@@ -659,207 +635,112 @@
 
       <para>A policy file must begin with:</para>
 
-      <screen> 2:&lt;Policy&gt;</screen>
+	  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_1.snip"/></textobject></programlisting>
 
-      <para>next, application specific information is given.</para>
-
-      <screen> 3: &lt;ApplicationName&gt;Garden&lt;/ApplicationName&gt; </screen>
-
-      <para>&lt;ApplicationName&gt; sets the application name. This allows
+      <para>Next, application specific information is given.
+	  <emphasis role="italics">&lt;ApplicationName&gt;</emphasis> sets the application name. This allows
       easy identification of which application an entity belongs to.</para>
 
-      <screen> 4: &lt;PKCS12KeyStore&gt;/.../appli.cert&lt;/PKCS12KeyStore&gt;
-      </screen>
+	  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_2.snip"/></textobject></programlisting>
 
-      <para>&lt;PKCS12KeyStore&gt; describes the path to the keystore created
+
+      <para><emphasis role="italics">&lt;PKCS12KeyStore&gt;</emphasis> describes the path to the keystore created
       using the graphical interface. The path could be either absolute or
       relative. An absolute path contains the whole path (starting with / under
       Unix systems or a letter under Windows systems). A relative path
       describes the path to follow from the policy file in order to find the
       keystore file. For instance, setting just the name of the keystore file
-      indicates that the file is located under the same directory the policy
-      file is.</para>
+      indicates that the file is located under the same directory as the one of the policy
+      file.</para>
 
-      <screen> 6: &lt;CertificationAuthority&gt;
- 7: &lt;Certificate&gt;/.../ca.cert&lt;/Certificate&gt;
- 8: &lt;/CertificationAuthority&gt;</screen>
+	  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_3.snip"/></textobject></programlisting>
 
-      <para>&lt;CertificationAuthority&gt; contains all trusted certificate
-      authority certificates.</para>
+      <para><emphasis role="italics">&lt;CertificationAuthority&gt;</emphasis> contains all trusted certificate authority certificates.</para>
 
-      <screen> 10: &lt;Rules&gt; </screen>
+	  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_4.snip"/></textobject></programlisting>
 
       <para>Then we can define policy rules. All rules are located within the
-      &lt;Rules&gt;</para>
-
-      <para>A &lt;Rule&gt; is constructed according the following
+      <emphasis role="italics">&lt;Rules&gt;</emphasis> tag. A <emphasis role="italics">&lt;Rule&gt;</emphasis> is constructed according to the following
       syntax:</para>
 
-      <screen> 11: &lt;Rule&gt; </screen>
+	  <itemizedlist>
+		  <listitem>
+			  <para><emphasis role="italics">&lt;From&gt;</emphasis> tag contains all entities from which the interaction
+			  is made (source). It is possible to specify many entities in order to
+			  match a specific fine-grained policy.</para>
 
-      <para>&lt;From&gt; tag contains all entities from which the interaction
-      is made (source). It is possible to specify many entities in order to
-      match a specific fine-grained policy.</para>
+			  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_5.snip"/></textobject></programlisting>
 
-      <screen> 12: &lt;From&gt;
- 13: &lt;Entity type='VN' name='vm2'/&gt;
- 14: &lt;/From&gt;</screen>
+			  <para><emphasis role="italics">&lt;Entity&gt;</emphasis> is used to define an entity. the 'type' parameter
+			  can be 'VN', 'certificate', or 'DefaultVirtualNode'.</para>
 
-      <para>&lt;Entity&gt; is used to define an entity. the 'type' parameter
-      can be 'VN', 'certificate', or 'DefaultVirtualNode'.</para>
+			  <itemizedlist>
+				<listitem>
+				  <para>'VN' (Virtual Node) referrers to virtual nodes defined inside
+				  the deployment descriptor.</para>
+				</listitem>
 
-      <itemizedlist>
-        <listitem>
-          <para>'VN' (Virtual Node) referrers to virtual nodes defined inside
-          the deployment descriptor.</para>
-        </listitem>
+				<listitem>
+				  <para>'DefaultVirtualNode' is a special tag. This is taken as the
+				  default policy. The "name" attribute is ignored.</para>
+				</listitem>
 
-        <listitem>
-          <para>'DefaultVirtualNode' is a special tag. This is taken as the
-          default policy. The "name" attribute is ignored.</para>
-        </listitem>
+				<listitem>
+				  <para>'certificate' requires that the path to the certificate is set
+				  inside the 'name' parameters.</para>
+				</listitem>
+			  </itemizedlist>
+		  </listitem>
+		  <listitem>
+			  <para><emphasis role="italics">&lt;To&gt;</emphasis> tag contains all entities onto which the interaction is
+			  made (targets). As with the <emphasis role="italics">&lt;From&gt;</emphasis> tag, many entities can be
+			  specified.</para>
 
-        <listitem>
-          <para>'certificate' requires that the path to the certificate is set
-          inside the 'name' parameters.</para>
-        </listitem>
-      </itemizedlist>
+			  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_6.snip"/></textobject></programlisting>
+		  </listitem>
+		  <listitem>
+			  <para>The <emphasis role="italics">&lt;Communication&gt;</emphasis> tag defines security policies to apply
+			  to requests and replies.</para>
 
-      <para>&lt;To&gt; tag contains all entities onto which the interaction is
-      made (targets). As with the &lt;From&gt; tag, many entities can be
-      specified.</para>
+			  <para><emphasis role="italics">&lt;Request&gt;</emphasis> sets the policy associated with a request. The
+			  <emphasis role="italics">'value'</emphasis> parameter can be:</para>
 
-      <screen> 15: &lt;To&gt;
- 16: &lt;Entity type='VN' name='Locale'/&gt;
- 17: &lt;/To&gt;</screen>
+			  <itemizedlist>
+				<listitem>
+				  <para><emphasis role="italics">'authorized'</emphasis> means a request is authorized.</para>
+				</listitem>
 
-      <para>The &lt;Communication&gt; tag defines security policies to apply
-      to requests and replies.</para>
+				<listitem>
+				  <para><emphasis role="italics">'denied'</emphasis> means a request is denied.</para>
+				</listitem>
+			  </itemizedlist>
 
-      <screen> 18: &lt;Communication&gt; </screen>
+			  <para>Each attribute of the <emphasis role="italics">&lt;Attributes&gt;</emphasis> tag (<emphasis role="italics">authentication</emphasis>,
+			  <emphasis role="italics">integrity</emphasis>, <emphasis role="italics">confidentiality</emphasis>) can be set to <emphasis role="italics">'required'</emphasis>,
+			  <emphasis role="italics">'optional'</emphasis> or <emphasis role="italics">'denied'</emphasis>.</para>
 
-      <para>&lt;Request&gt; sets the policy associated with a request. The
-      'value' parameter can be:</para>
+			  <para><emphasis role="italics">&lt;Reply&gt;</emphasis> tag has the same parameters as
+			  <emphasis role="italics">&lt;Request&gt;</emphasis></para>
 
-      <itemizedlist>
-        <listitem>
-          <para>'authorized' means a request is authorized.</para>
-        </listitem>
+			  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_7.snip"/></textobject></programlisting>
+		  </listitem>
+		  <listitem>
+			  <para><emphasis role="italics">&lt;Migration&gt;</emphasis> controls migration between <emphasis role="italics">&lt;From&gt;</emphasis> and
+			  <emphasis role="italics">&lt;To&gt;</emphasis> entities. Values can be <emphasis role="italics">'denied'</emphasis> or <emphasis role="italics">'authorized'</emphasis>.</para>
 
-        <listitem>
-          <para>'denied' means a request is denied.</para>
-        </listitem>
-      </itemizedlist>
+			  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_8.snip"/></textobject></programlisting>
+		  </listitem>
+		  <listitem>
+			  <para><emphasis role="italics">&lt;OACreation&gt;</emphasis> controls creation of active objects by
+			  <emphasis role="italics">&lt;From&gt;</emphasis> entities onto <emphasis role="italics">&lt;To&gt;</emphasis> entities.</para>
 
-      <para>Each &lt;Attribute&gt; (authentication,integrity, confidentiality)
-      can be required, optional or denied.</para>
+			  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_9.snip"/></textobject></programlisting>
+		  </listitem>
+	  </itemizedlist>
 
-      <screen>  19: &lt;Request value='authorized'&gt;
-  20:   &lt;Attributes authentication='required' integrity='optional' confidentiality='optional'/&gt;
-  21: &lt;/Request&gt;</screen>
+      <para>Here is a complete security policy:</para>
+	  <programlisting language="xml"><textobject><textdata fileref="automatic_snippets/Security_Policy_0.snip"/></textobject></programlisting>
 
-      <para>&lt;Reply&gt; tag has the same parameters that
-      &lt;Request&gt;</para>
-
-      <screen> 22:&lt;Reply value='authorized'&gt;
- 23: &lt;Attributes authentication='required' integrity='required' confidentiality='required'/&gt;
- 24:&lt;/Reply&gt;
- 25:&lt;/Communication&gt;</screen>
-
-      <para>&lt;Migration&gt; controls migration between &lt;From&gt; and
-      &lt;To&gt; entities. Values can be 'denied' or 'authorized'.</para>
-
-      <screen> 26: &lt;Migration&gt;denied&lt;/Migration&gt; </screen>
-
-      <para>&lt;OACreation&gt; controls creation of active objects by
-      &lt;From&gt; entities onto &lt;To&gt; entities.</para>
-
-      <para>Values can be 'denied' or 'authorized'.</para>
-
-      <screen> 27: &lt;OACreation&gt;denied&lt;/OACreation&gt; </screen>
-
-      <para>The following shows the complete security policy.</para>
-
-      <screen> 2: &lt;Policy&gt;
- 3:   &lt;ApplicationName&gt;Garden&lt;/ApplicationName&gt;
- 4:   &lt;Certificate&gt;/net/home/acontes/certif/appli.cert&lt;/Certificate&gt;
- 5:   &lt;PrivateKey&gt;/net/home/acontes/certif/appli.key&lt;/PrivateKey&gt;
- 6:   &lt;CertificationAuthority&gt;
- 7:     &lt;Certificate&gt;...&lt;/Certificate&gt;
- 8:   &lt;/CertificationAuthority&gt;
- 9:
- 10: &lt;Rules&gt;
- 11:   &lt;Rule&gt;
- 12:     &lt;From&gt;
- 13:       &lt;Entity type='VN' name='vm2'/&gt;
- 14:     &lt;/From&gt;
- 15:     &lt;To&gt;
- 16:       &lt;Entity type='VN' name='Locale'/&gt;
- 17:     &lt;/To&gt;
- 18:     &lt;Communication&gt;
- 19:       &lt;Request value='authorized'&gt;
- 20:         &lt;Attributes authentication='required'
-                         integrity='required'
-                         confidentiality='required'/&gt;
- 21:       &lt;/Request&gt;
- 22:       &lt;Reply value='authorized'&gt;
- 23:         &lt;Attributes authentication='required'
-                         integrity='required'
-                         confidentiality='required'/&gt;
- 24:       &lt;/Reply&gt;
- 25:     &lt;/Communication&gt;
- 26:     &lt;Migration&gt;denied&lt;/Migration&gt;
- 27:     &lt;OACreation&gt;denied&lt;/OACreation&gt;
- 29:   &lt;/Rule&gt;
- 30:   &lt;Rule&gt;
- 31:     &lt;From&gt;
- 32:       &lt;Entity type='certificate' name='certificateRuntime1.cert'/&gt;
- 33:     &lt;/From&gt;
- 34:     &lt;To&gt;
- 35:       &lt;Entity type='VN' name='Locale'/&gt;
- 36:     &lt;/To&gt;
- 37:     &lt;Communication&gt;
- 38:       &lt;Request value='authorized'&gt;
- 39:         &lt;Attributes authentication='required'
-                         integrity='required'
-                         confidentiality='required'/&gt;
- 40:       &lt;/Request&gt;
- 41:       &lt;Reply value='authorized'&gt;
- 42:         &lt;Attributes authentication='required'
-                         integrity='required'
-                         confidentiality='required'/&gt;
- 43:       &lt;/Reply&gt;
- 44:     &lt;/Communication&gt;
- 45:     &lt;Migration&gt;denied&lt;/Migration&gt;
- 46:     &lt;OACreation&gt;denied&lt;/OACreation&gt;
- 48:   &lt;/Rule&gt;
- ...
- 90:   &lt;Rule&gt;
- 91:     &lt;From&gt;
- 92:       &lt;Entity type='DefaultVirtualNode' name='*'/&gt;
- 93:     &lt;/From&gt;
- 94:     &lt;To&gt;
- 95:       &lt;Entity type='DefaultVirtualNode' name='*'/&gt;
- 96:     &lt;/To&gt;
- 97:     &lt;Communication&gt;
- 98:       &lt;Request value='denied'&gt;
- 99:         &lt;Attributes authentication='optional'
-                         integrity='optional'
-                         confidentiality='optional'/&gt;
- 100:      &lt;/Request&gt;
- 101:      &lt;Reply value='denied'&gt;
- 102:        &lt;Attributes authentication='optional'
-                         integrity='optional'
-                         confidentiality='optional'/&gt;
- 103:
- 104:      &lt;/Reply&gt;
- 105:    &lt;/Communication&gt;
- 106:    &lt;Migration&gt;denied&lt;/Migration&gt;
- 107:    &lt;OACreation&gt;authorized&lt;/OACreation&gt;
- 109:  &lt;/Rule&gt;
- 110:
- 111: &lt;/Rules&gt;
- 112:&lt;/Policy&gt;</screen>
 
       <para>Note that the JVM that reads the deployment descriptor should be
       started with a security policy. In order to start a secure JVM, you need
@@ -868,8 +749,7 @@
 
       <para>Here is an example:</para>
 
-      <para>java -Dproactive.runtime.security=descriptors/security/jvmlocal.xml
-      TestSecureDeployment secureDeployment.xml</para>
+      <screen>java -Dproactive.runtime.security=descriptors/security/jvmlocal.xml TestSecureDeployment secureDeployment.xml</screen>
     </section>
   </section>
 
