@@ -288,7 +288,7 @@
     <literal>EndActive</literal> interfaces. However <literal>RunActive</literal> has a more complex structure than
     it is presented here. To understand how to use <literal>EndActive</literal>
     <literal>RunActive</literal> interface, please refer to
-	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../ReferenceManual/multiple_html/ActiveObjectCreation.html">Chapter 9. Active Objects: Creation And Advanced Concepts</link>.
+	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk/Programming/ReferenceManual/multiple_html/ActiveObjectCreation.html">Active Objects: Creation And Advanced Concepts</link>.
 	</para>
 
 	  <section xml:id="ClassesUsed_1"><info><title>Classes Used</title></info>
@@ -399,7 +399,7 @@
             ProActive to activate the nodes used and tell the active object to start on the remote node.
             This section does not aim at explaining how to write deployment files but rather at describing how to use them.
             If you want more information on GCM deployment, please refer to
-			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../ReferenceManual/multiple_html/GCMDeployment.html">Chapter 21. ProActive Grid Component Model Deployment</link>
+			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk/Programming/ReferenceManual/multiple_html/GCMDeployment.html">ProActive Grid Component Model Deployment</link>
 			Normally,
             only GCM concepts as well as the provided examples will be useful to successful achieve this tutorial.
             Anyway, launch scripts use a deployment descriptor which will use local JVMs.
@@ -669,7 +669,7 @@
 		An active object has to implement the Serializable interface (as it will be transferred
 		through the network) in order to be able to migrate.
 		For more information on the topic of object migration, check
-		<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../ReferenceManual/multiple_html/Migration.html">Chapter 11. Mobile Agents And Migration</link>.
+		<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk/Programming/ReferenceManual/multiple_html/Migration.html">Mobile Agents And Migration</link>.
 		</para>
 
 	<section xml:id="ClassesUsed_5"><info><title>Classes Used</title></info>
@@ -969,7 +969,7 @@
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/ws_call.snip"/></textobject></programlisting>
 			<para>
 				Refer to
-				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../AdvancedFeatures/multiple_html/WebServices.html#WebServices">Chapter 35. Exporting active objects and components as Web Services</link>
+				<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk/Programming/AdvancedFeatures/multiple_html/WebServices.html">Exporting active objects and components as Web Services</link>
 				to get more information about web services exposition.
 			</para>
 		</section>

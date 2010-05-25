@@ -8,9 +8,9 @@
     <para>Distribution is often used for CPU-intensive applications where
     parallelism is a key for performance. The parallelization of programs can be facilitated with
     ProActive, thanks to asynchronous method calls (see
-	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../ReferenceManual/multiple_html/ActiveObjectCreation.html#FutureObjectCreation">9.7. Asynchronous calls and futures</link>),
+	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk/Programming/ReferenceManual/multiple_html/ActiveObjectCreation.html#FutureObjectCreation">Asynchronous calls and futures</link>),
 	as well as group communications (see
-	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="../../ReferenceManual/multiple_html/TypedGroupCommunication.html">Chapter 10. Typed Group Communication</link>).</para>
+	<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://proactive.inria.fr/trunk/Programming/ReferenceManual/multiple_html/TypedGroupCommunication.html">Typed Group Communication</link>).</para>
 
     <para>To illustrate how parallelization can be used for computationally
     intensive tasks, we have built the C3D application.

@@ -6,7 +6,7 @@
 		<primary>Installation</primary>
 	</indexterm>
    <para>
-   ProActive is available for <link xlink:href="http://www.activeeon.com/downloads.html">download</link> under
+   ProActive is available for <link xlink:href="http://www.activeeon.com/community-downloads">download</link> under
    the <link xlink:href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPL 3</link>
    license. ProActive requires <link xlink:href="http://java.sun.com/j2se/1.5/">JDK 1.5</link> or later to be installed
    on your computer. Please note that ProActive will NOT run with any
@@ -105,7 +105,7 @@
 
          <para>
          You can download the archive file (a zip or a tar.gz file) containing
-         ProActive from the <link xlink:href="http://www.activeeon.com/downloads.html">
+         ProActive from the <link xlink:href="http://www.activeeon.com/community-downloads">
          download section </link> of the ProActive home page. You will be asked to accept
          the license agreement and provide a few details including your email address.
          You will be then redirected towards the download page.
