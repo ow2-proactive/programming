@@ -6,5 +6,5 @@
   <interface signature="org.objectweb.proactive.examples.c3d.RenderingEngine" cardinality="collection" role="client" name="dispatcher2engine"/>
   <content class="org.objectweb.proactive.examples.components.c3d.DispatcherImpl"/>
   <controller desc="primitive"/>
-  <virtual-node cardinality="single" name="Dispatcher"/>
+  <virtual-node name="Dispatcher"/>
 </definition>

@@ -4,6 +4,6 @@
 <definition extends="org.objectweb.proactive.examples.components.userguide.multicast.adl.SlaveType" name="org.objectweb.proactive.examples.components.userguide.multicast.adl.Slave">
   <content class="org.objectweb.proactive.examples.components.userguide.multicast.SlaveImpl"/>
   <controller desc="primitive"/>
-   <virtual-node name="composite-node" cardinality="single"/> 
-<!--   <virtual-node name="slave-node" cardinality="single"/> -->
+   <virtual-node name="composite-node"/> 
+<!--   <virtual-node name="slave-node"/> -->
 </definition>

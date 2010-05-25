@@ -6,5 +6,5 @@
 	name="org.objectweb.proactive.examples.components.userguide.adl.PrimitiveMaster">
 	<content
 		class="org.objectweb.proactive.examples.components.userguide.primitive.PrimitiveMaster" />
-	<virtual-node name="primitive-node" cardinality="single" />
+	<virtual-node name="primitive-node" />
 </definition>

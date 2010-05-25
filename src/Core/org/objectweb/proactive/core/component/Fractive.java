@@ -37,16 +37,9 @@
 package org.objectweb.proactive.core.component;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.naming.NamingException;
 
@@ -65,21 +58,17 @@ import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.component.body.ComponentBody;
-import org.objectweb.proactive.core.component.exceptions.InstantiationExceptionListException;
 import org.objectweb.proactive.core.component.factory.PAGenericFactory;
-import org.objectweb.proactive.core.component.group.PAComponentGroup;
 import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.representative.PAComponentRepresentative;
 import org.objectweb.proactive.core.component.representative.PAComponentRepresentativeFactory;
 import org.objectweb.proactive.core.component.type.Composite;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.Node;
@@ -326,54 +315,6 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newFcInstanceAsList(org.objectweb.fractal.api.Type,
-     *      org.objectweb.proactive.core.component.ControllerDescription,
-     *      org.objectweb.proactive.core.component.ContentDescription,
-     *      org.objectweb.proactive.core.node.Node[])
-     */
-    public List<Component> newFcInstanceAsList(Type type, ControllerDescription controllerDesc,
-            ContentDescription contentDesc, Node[] nodes) throws InstantiationException {
-        ContentDescription[] contentDescArray = new ContentDescription[nodes.length];
-        Arrays.fill(contentDescArray, contentDesc);
-        return newFcInstanceAsList(type, controllerDesc, contentDescArray, nodes);
-    }
-
-    /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNFcInstanceAsList(org.objectweb.fractal.api.Type,
-     *      org.objectweb.proactive.core.component.ControllerDescription,
-     *      org.objectweb.proactive.core.component.ContentDescription,
-     *      org.objectweb.proactive.core.node.Node[])
-     */
-    public List<Component> newNFcInstanceAsList(Type type, ControllerDescription controllerDesc,
-            ContentDescription contentDesc, Node[] nodes) throws InstantiationException {
-        ContentDescription[] contentDescArray = new ContentDescription[nodes.length];
-        Arrays.fill(contentDescArray, contentDesc);
-        return newNFcInstanceAsList(type, controllerDesc, contentDescArray, nodes);
-    }
-
-    /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newFcInstanceAsList(org.objectweb.fractal.api.Type,
-     *      org.objectweb.proactive.core.component.ControllerDescription,
-     *      org.objectweb.proactive.core.component.ContentDescription[],
-     *      org.objectweb.proactive.core.node.Node[])
-     */
-    public List<Component> newFcInstanceAsList(Type type, ControllerDescription controllerDesc,
-            ContentDescription[] contentDesc, Node[] nodes) throws InstantiationException {
-        return groupInstance(type, controllerDesc, contentDesc, nodes, true);
-    }
-
-    /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNFcInstanceAsList(org.objectweb.fractal.api.Type,
-     *      org.objectweb.proactive.core.component.ControllerDescription,
-     *      org.objectweb.proactive.core.component.ContentDescription[],
-     *      org.objectweb.proactive.core.node.Node[])
-     */
-    public List<Component> newNFcInstanceAsList(Type type, ControllerDescription controllerDesc,
-            ContentDescription[] contentDesc, Node[] nodes) throws InstantiationException {
-        return groupInstance(type, controllerDesc, contentDesc, nodes, false);
-    }
-
-    /*
      * @see org.objectweb.fractal.api.Component#getFcInterface(java.lang.String)
      */
     public Object getFcInterface(String itfName) throws NoSuchInterfaceException {
@@ -451,25 +392,6 @@ public class Fractive implements PAGenericFactory, Component, Factory {
         }
         PAComponent currentComponent = componentBody.getPAComponentImpl();
         return currentComponent.getRepresentativeOnThis();
-    }
-
-    /**
-     * Registers a reference on a component with an URL
-     *
-     * @param ref
-     *            a reference on a component (it should be an instance of
-     *            PAComponentRepresentative)
-     * @param url
-     *            the registration address
-     * @throws IOException
-     *             if the component cannot be registered
-     */
-    @Deprecated
-    public static void register(Component ref, String url) throws ProActiveException {
-        if (!(ref instanceof PAComponentRepresentative)) {
-            throw new IllegalArgumentException("This method can only register ProActive components");
-        }
-        PAActiveObject.register(ref, url);
     }
 
     /**
@@ -611,7 +533,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
             // PAComponentMetaObjectFactory.newInstance(componentParameters);
         }
 
-        // TODO_M : add controllers in the component metaobject factory?
+        // TODO : add controllers in the component metaobject factory?
         Object ao = null;
 
         // 3 possibilities : either the component is created on a node (or
@@ -675,7 +597,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
             // PAComponentMetaObjectFactory.newInstance(componentParameters);
         }
 
-        // TODO_M : add controllers in the component metaobject factory?
+        // TODO : add controllers in the component metaobject factory?
         Object ao = null;
 
         // 3 possibilities : either the component is created on a node (or
@@ -722,164 +644,6 @@ public class Fractive implements PAGenericFactory, Component, Factory {
                         componentParameters.getControllerDescription().getControllersConfigFileLocation());
         representative.setStubOnBaseObject(ao);
         return representative;
-    }
-
-    private List<Component> groupInstance(Type type, ControllerDescription controllerDesc,
-            ContentDescription[] contentDesc, Node[] nodes, boolean isFunctional)
-            throws InstantiationException {
-        try {
-            Component components = null;
-            if (isFunctional) { /* Functional components */
-                components = PAComponentGroup.newComponentRepresentativeGroup((ComponentType) type,
-                        controllerDesc);
-            } else { /* Non functional components */
-                components = PAComponentGroup.newNFComponentRepresentativeGroup((ComponentType) type,
-                        controllerDesc);
-            }
-            List<Component> componentsList = PAGroup.getGroup(components);
-            if (Constants.PRIMITIVE.equals(controllerDesc.getHierarchicalType())) {
-                if (contentDesc.length > 1) { // cyclic
-                    // node
-                    // + 1
-                    // instance
-                    // per
-                    // node
-                    // task = instantiate a component with a different name
-                    // on each of the node mapped to the given virtual node
-                    String original_component_name = controllerDesc.getName();
-
-                    // TODO: reuse pool for whole class ?
-                    ExecutorService threadPool = Executors.newCachedThreadPool();
-
-                    List<InstantiationException> exceptions = new Vector<InstantiationException>();
-
-                    Component c = new MockComponent();
-
-                    for (int i = 0; i < nodes.length; i++) {
-                        componentsList.add(c);
-                    }
-                    if (isFunctional) { /* Case of functional components */
-                        for (int i = 0; i < nodes.length; i++) {
-                            ComponentBuilderTask task = new ComponentBuilderTask(exceptions, componentsList,
-                                i, type, controllerDesc, original_component_name, contentDesc, nodes);
-                            threadPool.execute(task);
-                        }
-                    } else { /* Case of non functional components */
-                        for (int i = 0; i < nodes.length; i++) {
-                            NFComponentBuilderTask task = new NFComponentBuilderTask(exceptions,
-                                componentsList, i, type, controllerDesc, original_component_name,
-                                contentDesc, nodes);
-                            threadPool.execute(task);
-                        }
-                    }
-                    threadPool.shutdown();
-                    try {
-                        threadPool.awaitTermination(new Integer(
-                            CentralPAPropertyRepository.PA_COMPONENT_CREATION_TIMEOUT.getValue()),
-                                TimeUnit.SECONDS);
-                    } catch (InterruptedException e) {
-                        logger.info("Interruption when waiting for thread pool termination.", e);
-                    }
-                    if (!exceptions.isEmpty()) {
-                        InstantiationException ie = new InstantiationException(
-                            "Creation of some of the components failed");
-                        ie.initCause(new InstantiationExceptionListException(exceptions));
-                        throw ie;
-                    }
-                } else {
-                    // component is a composite : it will be
-                    // created on the first node from this virtual node
-                    if (isFunctional) { /* Functional components */
-                        componentsList.add(newFcInstance(type, controllerDesc, contentDesc[0], nodes[0]));
-                    } else { /* Non functional components */
-                        componentsList.add(newNFcInstance(type, controllerDesc, contentDesc[0], nodes[0]));
-                    }
-                }
-            }
-            return componentsList;
-        } catch (ClassNotFoundException e) {
-            InstantiationException ie = new InstantiationException(e.getMessage());
-            ie.initCause(e);
-            throw ie;
-        }
-    }
-
-    private static class ComponentBuilderTask implements Runnable {
-        List<InstantiationException> exceptions;
-        List<Component> targetList;
-        int indexInList;
-        Type type;
-        ControllerDescription controllerDesc;
-        ContentDescription[] contentDesc;
-        String originalName;
-        Node[] nodes;
-
-        public ComponentBuilderTask(List<InstantiationException> exceptions, List<Component> targetList,
-                int indexInList, Type type, ControllerDescription controllerDesc, String originalName,
-                ContentDescription[] contentDesc, Node[] nodes) {
-            this.exceptions = exceptions;
-            this.targetList = targetList;
-            this.indexInList = indexInList;
-            this.type = type;
-            this.controllerDesc = controllerDesc;
-            this.contentDesc = contentDesc;
-            this.originalName = originalName;
-            this.nodes = nodes;
-        }
-
-        public void run() {
-            controllerDesc.setName(originalName + Constants.CYCLIC_NODE_SUFFIX + indexInList);
-            Component instance;
-            try {
-                instance = Fractive.instance().newFcInstance(type, controllerDesc, contentDesc[indexInList],
-                        nodes[indexInList % nodes.length]);
-                //				System.out.println("[fractive] created component " + originalName + Constants.CYCLIC_NODE_SUFFIX + indexInList);
-                targetList.set(indexInList, instance);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                //				targetList.add(null);
-                exceptions.add(e);
-            }
-        }
-    }
-
-    private static class NFComponentBuilderTask extends ComponentBuilderTask implements Runnable {
-        public NFComponentBuilderTask(List<InstantiationException> exceptions, List<Component> targetList,
-                int indexInList, Type type, ControllerDescription controllerDesc, String originalName,
-                ContentDescription[] contentDesc, Node[] nodes) {
-            super(exceptions, targetList, indexInList, type, controllerDesc, originalName, contentDesc, nodes);
-        }
-
-        @Override
-        public void run() {
-            controllerDesc.setName(originalName + Constants.CYCLIC_NODE_SUFFIX + indexInList);
-            Component instance;
-            try {
-                instance = Fractive.instance().newNFcInstance(type, controllerDesc, contentDesc[indexInList],
-                        nodes[indexInList % nodes.length]);
-                //				System.out.println("[fractive] created component " + originalName + Constants.CYCLIC_NODE_SUFFIX + indexInList);
-                targetList.set(indexInList, instance);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                //				targetList.add(null);
-                exceptions.add(e);
-            }
-        }
-    }
-
-    // a utility class mocking a component
-    private static class MockComponent implements Component, Serializable {
-        public Object getFcInterface(String interfaceName) throws NoSuchInterfaceException {
-            return null;
-        }
-
-        public Object[] getFcInterfaces() {
-            return null;
-        }
-
-        public Type getFcType() {
-            return null;
-        }
     }
 
     private static class ActiveObjectWithComponentParameters {

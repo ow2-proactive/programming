@@ -136,8 +136,8 @@ public class ContentDescription implements Serializable {
     /**
      * Indicates that there should only be one instance of this component
      * when instantiating the component on a given multiple virtual node
-     *
      */
+    @Deprecated
     public void forceSingleInstance() {
         uniqueInstance = true;
     }
@@ -147,6 +147,7 @@ public class ContentDescription implements Serializable {
      * when instantiating the component on a given multiple virtual node
      * @return boolean
      */
+    @Deprecated
     public boolean uniqueInstance() {
         return uniqueInstance;
     }

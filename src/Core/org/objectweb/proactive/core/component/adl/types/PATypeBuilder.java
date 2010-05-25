@@ -63,7 +63,7 @@ public class PATypeBuilder extends FractalTypeBuilder {
         String checkedCardinality = (cardinality == null) ? GCMTypeFactory.SINGLETON_CARDINALITY
                 : cardinality;
 
-        // TODO_M should use bootstrap type factory with extended createFcItfType method
+        // TODO should use bootstrap type factory with extended createFcItfType method
         return PAGCMTypeFactoryImpl.instance().createGCMItfType(name, signature, client, optional,
                 checkedCardinality);
     }

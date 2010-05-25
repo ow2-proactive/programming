@@ -166,16 +166,7 @@
 							exported). If there are several nodes mapped
 							on the virtual node, the component will be
 							instantiated on one of the nodes of the
-							virtual node. The cardinality attribute is
-							useful only for primitive components. When
-							setting the cardinality to 'multiple', there
-							will be as many instances of the primitive
-							component as there are underlying nodes. Each
-							of these instances will have a suffixed name
-							looking like this:
-							<screen>primiveComponentName-cyclicInstanceNumber-n</screen>
-							where primitiveComponentName is the name
-							defined in the ADL.
+							virtual node.
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -188,17 +179,6 @@
 			</para>
 
 			<itemizedlist>
-				<listitem>
-					<para>
-						Virtual nodes have a cardinality property:
-						either 'single' or 'multiple'. When 'single', it
-						means the virtual node in the deployment
-						descriptor should contain 1 node; when
-						'multiple', it means the virtual node in the
-						deployment descriptor should contain more than 1
-						node.
-					</para>
-				</listitem>
 				<listitem>
 					<para>
 						Virtual nodes can be
@@ -337,7 +317,7 @@
 
 			<para>
 				where [-java|-fractal] comes from the Fractal ADL
-				Launcher (put -fractal for ProActive components),
+				Launcher (put -fractal for ProActive/GCM components),
 				&lt;definition&gt; is the name of the component to
 				be instantiated and started, &lt;itf&gt; is the name
 				of its Runnable interface if it has one, and
@@ -551,11 +531,6 @@
 						</para>
 					</listitem>
 				</itemizedlist>
-				It is also possible to force that there is only one
-				instance of this component when instantiating the
-				component on a given multiple virtual node by using the
-				<literal>forceSingleInstance</literal>
-				method.
 			</para>
 
 		</section>

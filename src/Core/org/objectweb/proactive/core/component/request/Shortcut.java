@@ -72,7 +72,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class Shortcut implements Serializable {
     public static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
     private transient UniversalBody sender;
-    private List<UniversalBody> steps; // the list of crossed membranes; TODO_M transient 
+    private List<UniversalBody> steps; // the list of crossed membranes; TODO transient 
 
     // FIXME replace with a custom list with custom serialization of contained bodies 
     private String fcFunctionalInterfaceName;

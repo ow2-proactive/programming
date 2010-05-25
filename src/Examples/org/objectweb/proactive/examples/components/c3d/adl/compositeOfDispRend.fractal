@@ -18,7 +18,7 @@
   <controller desc="composite"/>
 
 <!-- The composite is deployed on the same node as the Dispatcher -->
-  <virtual-node cardinality="single" name="Dispatcher"/>
+  <virtual-node name="Dispatcher"/>
   <coordinates color="-73" y0="0.48" x1="0.94" y1="0.70" name="engine2" x0="0.60"/>
   <coordinates color="-73" y0="0.13" x1="0.94" y1="0.38" name="engine1" x0="0.60"/>
   <coordinates color="-73" y0="0.10" x1="0.49" y1="0.81" name="dispatcher" x0="0.08"/>

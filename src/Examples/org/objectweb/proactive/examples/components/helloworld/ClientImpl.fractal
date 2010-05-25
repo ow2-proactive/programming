@@ -13,6 +13,6 @@
     <!-- @snippet-break exported_virtual_node_2 -->
     <content class="org.objectweb.proactive.examples.components.helloworld.ClientImpl"/>
     <!-- @snippet-resume exported_virtual_node_2 -->
-    <virtual-node name="client-node" cardinality="single"/>
+    <virtual-node name="client-node"/>
     <!-- @snippet-end exported_virtual_node_2 -->
 </definition>

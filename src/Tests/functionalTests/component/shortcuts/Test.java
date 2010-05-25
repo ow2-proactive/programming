@@ -114,7 +114,7 @@ public class Test extends ComponentTest {
         PAFuture.waitFor(result4);
         Thread.sleep(2000);
 
-        // TODO_M manage shortcuts with reconfigurations
+        // TODO manage shortcuts with reconfigurations
         // reset while shortcut exists
         //        resetComponentSystem();
         //        initializeComponentSystems();
@@ -177,7 +177,7 @@ public class Test extends ComponentTest {
     }
 
     private void resetComponentSystem() {
-        // TODO_M change the inner wrapped components and check the shortcut is aware of the reconfiguration
+        // TODO change the inner wrapped components and check the shortcut is aware of the reconfiguration
     }
 
     private Component wrapWithSynchronousCompositeOfTypeB(int index, Component wrappee) throws Exception {

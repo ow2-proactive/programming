@@ -1281,7 +1281,7 @@ public class ProxyForGroup<E> extends AbstractProxy implements Proxy, Group<E>, 
      */
     public void setRatioMemberToThread(int i) {
         // this.threadpool.ratio(i);
-        // TODO_M replace this method
+        // TODO replace this method
     }
 
     /*

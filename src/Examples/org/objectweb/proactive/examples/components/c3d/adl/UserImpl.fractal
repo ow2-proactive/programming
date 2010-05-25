@@ -13,6 +13,6 @@
   <controller desc="primitive"/>
 
 <!-- deploy this component only on 'User' VirtualNodes (which must be found in the deploy. descr.) -->
-  <virtual-node name="User" cardinality="single"/>
+  <virtual-node name="User"/>
 
 </definition>

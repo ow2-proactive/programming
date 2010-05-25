@@ -126,7 +126,7 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         PAGCMInterfaceType clientItfType = (PAGCMInterfaceType) ((ComponentType) owner.getFcType())
                 .getFcInterfaceType(clientItfName);
 
-        // TODO_M handle internal interfaces
+        // TODO handle internal interfaces
         // if (server_itf_type.isFcClientItf()) {
         // throw new IllegalBindingException("cannot bind client interface " +
         // clientItfName + " to other client interface "
@@ -209,10 +209,10 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
             }
         }
 
-        // TODO_M : check bindings between external client interfaces
+        // TODO : check bindings between external client interfaces
         // see next, but need to consider internal interfaces (i.e. valid if
         // server AND internal)
-        // TODO_M : check bindings crossing composite membranes
+        // TODO : check bindings crossing composite membranes
     }
 
     protected void checkUnbindability(String clientItfName) throws NoSuchInterfaceException,
@@ -358,7 +358,7 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
         }
 
         // if output interceptors are defined
-        // TODO_M check with groups : interception is here done at the beginning
+        // TODO check with groups : interception is here done at the beginning
         // of the group invocation,
         // not for each element of the group
         List<Interface> outputInterceptors = ((PAComponentImpl) getFcItfOwner()).getOutputInterceptors();

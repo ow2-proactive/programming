@@ -8,5 +8,5 @@
 
     <controller desc="primitive"/>
 
-    <virtual-node name="VN" cardinality="single"/>
+    <virtual-node name="VN"/>
 </definition>

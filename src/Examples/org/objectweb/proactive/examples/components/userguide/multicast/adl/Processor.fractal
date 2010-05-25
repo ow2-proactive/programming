@@ -4,6 +4,6 @@
 <definition extends="org.objectweb.proactive.examples.components.userguide.multicast.adl.ProcessorType" name="org.objectweb.proactive.examples.components.userguide.multicast.adl.Processor">
   <content class="org.objectweb.proactive.examples.components.userguide.multicast.ProcessorImpl"/>
   <controller desc="primitive"/>
-   <virtual-node name="primitive-node" cardinality="single"/> 
-<!--   <virtual-node name="master-node" cardinality="single"/> -->
+   <virtual-node name="primitive-node"/> 
+<!--   <virtual-node name="master-node"/> -->
 </definition>

@@ -4,5 +4,5 @@
 <definition name="org.objectweb.proactive.examples.pi.fractal.PiComputer" extends="org.objectweb.proactive.examples.pi.fractal.PiComputerType">    
   <content class="org.objectweb.proactive.examples.pi.PiComputer"/>
   <controller desc="primitive"/>
-  <virtual-node name="computers-vn" cardinality="single"/>
+  <virtual-node name="computers-vn"/>
 </definition>

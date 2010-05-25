@@ -5,5 +5,5 @@
   <interface signature="org.objectweb.proactive.examples.c3d.RenderingEngine" role="server" name="dispatcher2engine"/>
   <content class="org.objectweb.proactive.examples.components.c3d.EngineImpl"/>
   <controller desc="primitive"/>
-  <virtual-node cardinality="single" name="Renderer"/>
+  <virtual-node name="Renderer"/>
 </definition>

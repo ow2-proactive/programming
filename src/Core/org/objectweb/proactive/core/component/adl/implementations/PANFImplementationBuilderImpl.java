@@ -36,20 +36,17 @@
  */
 package org.objectweb.proactive.core.component.adl.implementations;
 
-import java.util.List;
 import java.util.Map;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
-import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 import org.objectweb.proactive.core.component.factory.PAGenericFactory;
-import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 
@@ -64,7 +61,7 @@ public class PANFImplementationBuilderImpl extends PAImplementationBuilderImpl {
             Map<Object, Object> context) throws Exception {
         ObjectsContainer obj = commonCreation(type, name, definition, contentDesc, adlVN, context);
 
-        return createNFComponent(type, obj.getDvn(), controllerDesc, contentDesc, adlVN, obj
+        return createNFComponent(type, obj.getVN(), controllerDesc, contentDesc, adlVN, obj
                 .getBootstrapComponent());
     }
 
@@ -72,43 +69,10 @@ public class PANFImplementationBuilderImpl extends PAImplementationBuilderImpl {
             org.objectweb.proactive.core.descriptor.data.VirtualNode deploymentVN,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
             Component bootstrap) throws Exception {
-        Component result;
-
-        // FIXME : exhaustively specify the behavior
-        if ((deploymentVN != null) && VirtualNode.MULTIPLE.equals(adlVN.getCardinality()) &&
-            controllerDesc.getHierarchicalType().equals(Constants.PRIMITIVE) && !contentDesc.uniqueInstance()) {
-
-            Object instanceList = newNFcInstanceAsList(bootstrap, (ComponentType) type, controllerDesc,
-                    contentDesc, deploymentVN);
-            result = (Component) ((Group<?>) instanceList).getGroupByType();
-        } else {
-            result = newNFcInstance(bootstrap, (ComponentType) type, controllerDesc, contentDesc,
-                    deploymentVN);
-        }
-
+        Component result = newNFcInstance(bootstrap, (ComponentType) type, controllerDesc, contentDesc,
+                deploymentVN);
         //        registry.addComponent(result); // the registry can handle groups
         return result;
-    }
-
-    private List<Component> newNFcInstanceAsList(Component bootstrap, Type type,
-            ControllerDescription controllerDesc, ContentDescription contentDesc,
-            org.objectweb.proactive.core.descriptor.data.VirtualNode virtualNode) throws Exception {
-
-        PAGenericFactory genericFactory = Utils.getPAGenericFactory(bootstrap);
-
-        if (virtualNode == null) {
-            return genericFactory.newNFcInstanceAsList(type, controllerDesc, contentDesc, (Node[]) null);
-        }
-        try {
-            virtualNode.activate();
-            return genericFactory.newNFcInstanceAsList(type, controllerDesc, contentDesc, virtualNode
-                    .getNodes());
-        } catch (NodeException e) {
-            InstantiationException ie = new InstantiationException(
-                "could not instantiate components due to a deployment problem : " + e.getMessage());
-            ie.initCause(e);
-            throw ie;
-        }
     }
 
     private Component newNFcInstance(Component bootstrap, Type type, ControllerDescription controllerDesc,

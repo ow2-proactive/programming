@@ -15,5 +15,5 @@
     <attribute name="count" value="1"/>
   </attributes>
   <controller desc="primitive"/>
-  <virtual-node name="server-node" cardinality="single"/>
+  <virtual-node name="server-node"/>
 </definition>

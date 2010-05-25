@@ -58,8 +58,7 @@ public interface PAImplementationBuilder extends ImplementationBuilder {
      * @param contentDesc the description of the content
      * @param adlVN the virtual node where the component should be deployed
      * @param context context
-     * @return an instance of the specified component (or a group of instances if the virtual node is
-     * a multiple one)
+     * @return an instance of the specified component
      * @throws Exception if the creation of the component failed
      */
     public Object createComponent(Object type, String name, String definition,

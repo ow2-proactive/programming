@@ -11,6 +11,6 @@
 	<binding client="this.run" server="PrimitiveMaster.run" />
 	<binding client="PrimitiveMaster.compute-itf"
 		server="PrimitiveComputer.compute-itf" />
-	<virtual-node name="primitive-node" cardinality="single" />
+	<virtual-node name="primitive-node" />
 <!--	composite-node-->
 </definition>

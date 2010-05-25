@@ -41,12 +41,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 
 /**
  * This interface adds a cardinality attribute to the virtual node (compared to the VirtualNode interface
- * from the standard Fractal ADL). This allows a strict definition of how to use
- * the components deployed on such a virtual node : in case of a multiple virtual node,
- * the reference that we have on a primitive component is actually a reference on a group
- * of primitive components.<br>
- * This implies that method invocations will return groups of results, and this has to be known
- * in advance.
+ * from the standard Fractal ADL).
  * The cardinality of a VirtualNode is used to know if a composition of VirtualNode is possible.
  *
  * @author The ProActive Team
@@ -60,7 +55,7 @@ public interface VirtualNode extends org.objectweb.fractal.adl.nodes.VirtualNode
     public static String SINGLE = "single";
 
     /**
-     * A virtual node with a single cardinality can contain many real node.
+     * A virtual node with a multiple cardinality can contain many real node.
      */
     public static String MULTIPLE = "multiple";
 

@@ -165,7 +165,7 @@ public class ComponentRequestImpl extends RequestImpl implements ComponentReques
                     // forward to functional interface whose name is given as a parameter in the method call
                     try {
                         if (getShortcut() != null) {
-                            // TODO_M allow stopping shortcut here
+                            // TODO allow stopping shortcut here
                         }
                         // executing on connected server interface
                         result = methodCall.execute(targetItf);

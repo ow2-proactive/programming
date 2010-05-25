@@ -44,6 +44,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
@@ -53,14 +54,57 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  * @author The ProActive Team
  */
 public class ADLNodeProvider {
-    private static final int TIMEOUT = 60000;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    private static final int TIMEOUT = 60000;
     private static Map<String, List<Node>> nodeLists = new HashMap<String, List<Node>>();
     private static Map<String, Integer> nodeIndex = new HashMap<String, Integer>();
 
-    public static Node getNode(GCMVirtualNode gcmDeploymentVN) throws Exception {
-        if (gcmDeploymentVN != null) {
-            String gcmVNName = gcmDeploymentVN.getName();
+    private static void waitReady(org.objectweb.proactive.core.descriptor.data.VirtualNode vn)
+            throws Exception {
+        vn.activate();
+        if (vn.getNodes().length == 0) {
+            throw new InstantiationException(
+                "Cannot create component on virtual node as no node is associated with this virtual node");
+        }
+    }
+
+    public static Node getNode(org.objectweb.proactive.core.descriptor.data.VirtualNode vn) throws Exception {
+        if (vn != null) {
+            try {
+                waitReady(vn);
+                return vn.getNode();
+            } catch (NodeException ne) {
+                InstantiationException ie = new InstantiationException(
+                    "Cannot instantiate component due to a deployment problem : " + ne.getMessage());
+                ie.initCause(ne);
+                throw ie;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private static void waitReady(GCMVirtualNode gcmVn) throws Exception {
+        boolean waiting = true;
+        while (waiting) {
+            try {
+                gcmVn.waitReady(TIMEOUT);
+                waiting = false;
+            } catch (ProActiveTimeoutException pate) {
+                logger.warn("The virtual node: " + gcmVn.getName() +
+                    " is still not ready after having waited " + (TIMEOUT / 1000) +
+                    " seconds. Awaiting further " + (TIMEOUT / 1000) + " seconds.");
+            }
+        }
+        if (gcmVn.getNbCurrentNodes() == 0) {
+            throw new InstantiationException("Cannot create component on virtual node " + gcmVn.getName() +
+                " as no node is associated with this virtual node");
+        }
+    }
+
+    public static Node getNode(GCMVirtualNode gcmVn) throws Exception {
+        if (gcmVn != null) {
+            String gcmVNName = gcmVn.getName();
             if (nodeLists.containsKey(gcmVNName)) {
                 List<Node> curNodeList = nodeLists.get(gcmVNName);
                 int curNodeIndex = nodeIndex.get(gcmVNName);
@@ -69,33 +113,19 @@ public class ADLNodeProvider {
                     nodeIndex.put(gcmVNName, ++curNodeIndex);
                     return result;
                 } else {
-                    List<Node> newNodeList = gcmDeploymentVN.getCurrentNodes();
+                    List<Node> newNodeList = gcmVn.getCurrentNodes();
                     if (newNodeList.size() == curNodeList.size()) {
                         nodeIndex.put(gcmVNName, 0);
                     } else {
                         nodeLists.put(gcmVNName, newNodeList);
                     }
-                    return getNode(gcmDeploymentVN);
+                    return getNode(gcmVn);
                 }
             } else {
-                boolean waiting = true;
-                while (waiting) {
-                    try {
-                        gcmDeploymentVN.waitReady(TIMEOUT);
-                        waiting = false;
-                    } catch (ProActiveTimeoutException e) {
-                        logger.warn("The virtual node: " + gcmVNName +
-                            " is still not ready after having waited " + (TIMEOUT / 1000) +
-                            " seconds. Awaiting further " + (TIMEOUT / 1000) + " seconds.");
-                    }
-                }
-                if (gcmDeploymentVN.getNbCurrentNodes() == 0) {
-                    throw new InstantiationException("Cannot create component on virtual node " + gcmVNName +
-                        " as no node is associated with this virtual node");
-                }
-                nodeLists.put(gcmVNName, gcmDeploymentVN.getCurrentNodes());
+                waitReady(gcmVn);
+                nodeLists.put(gcmVNName, gcmVn.getCurrentNodes());
                 nodeIndex.put(gcmVNName, 0);
-                return getNode(gcmDeploymentVN);
+                return getNode(gcmVn);
             }
         } else {
             return null;
