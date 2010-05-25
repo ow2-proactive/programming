@@ -46,6 +46,8 @@
 
 	<part xml:id="BackMatters"><info><title xml:id="Backmatters_2">Back matters</title></info>
 		&Appendix;
-		&Biblio;
 	</part>
+
+	&Biblio;
+	<index xml:id="keywordIndex"/>
 </book>

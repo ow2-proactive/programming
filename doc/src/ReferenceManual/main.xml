@@ -81,7 +81,8 @@
 	<part xml:id="BackMatters"><info><title xml:id="Backmatters_2">Back matters</title></info>
 		&FAQ;
 		&ReferenceCard;
-		<index xml:id="keywordIndex"/>
-		&Biblio;
 	</part>
+
+	&Biblio;
+	<index xml:id="keywordIndex"/>
 </book>

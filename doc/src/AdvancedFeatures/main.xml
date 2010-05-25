@@ -63,7 +63,10 @@
 		&MonteCarlo;
 	</part>
 
+	<!--
 	<part xml:id="BackMatters"><info><title xml:id="Backmatters_2">Back Matters</title></info>
-		&Biblio;
 	</part>
+	-->
+	&Biblio;
+	<index xml:id="keywordIndex"/>
 </book>
