@@ -2,6 +2,9 @@
 
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0" xml:id="Installation"><info><title xml:id="ProActiveInstallation_75">ProActive Installation</title></info>
 
+	<indexterm>
+		<primary>Installation</primary>
+	</indexterm>
    <para>
    ProActive is available for <link xlink:href="http://www.activeeon.com/downloads.html">download</link> under
    the <link xlink:href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GPL 3</link>
@@ -90,7 +93,15 @@
 
    <section xml:id="ProActiveDetailedInstallationSteps_75"><info><title>ProActive Detailed Installation Steps</title></info>
 
+	<indexterm>
+		<primary>Installation</primary>
+		<secondary>Steps</secondary>
+	</indexterm>
       <section xml:id="DownloadAndExpandTheArchive_75"><info><title>Download And Expand The ProActive Archive</title></info>
+		<indexterm>
+			<primary>Installation</primary>
+			<secondary>Download</secondary>
+		</indexterm>
 
          <para>
          You can download the archive file (a zip or a tar.gz file) containing
@@ -184,7 +195,7 @@
 
          <indexterm significance="preferred">
             <primary>CLASSPATH</primary>
-            <secondary>to run ProActive</secondary>
+            <secondary>Libraries</secondary>
          </indexterm>
 
          <para>
@@ -310,6 +321,11 @@
          <section xml:id="Create_Java_Policy"><info><title>Create a <literal>proactive.java.policy</literal> File To Set
          Permissions</title></info>
 
+		 <indexterm>
+			 <primary>Java Policy File</primary>
+			 <secondary>Simple example</secondary>
+		 </indexterm>
+
          <para>See <link xlink:href="http://java.sun.com/j2se/1.5/docs/guide/security/permissions.html">Permissions
          in the JavaTM 2 SDK</link> to learn more about Java permissions. The
          option <literal>-Djava.security.policy=pathToFile</literal> will specify which security policy file to
@@ -330,7 +346,7 @@
 
          <indexterm>
             <primary>Log4j</primary>
-            <secondary>configuration</secondary>
+            <secondary>Simple example</secondary>
          </indexterm>
 
          <para>
