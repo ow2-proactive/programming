@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="TroubleShooting"><info><title xml:id="ProActiveTroubleshooting_38">ProActive Troubleshooting</title></info>
+	
+	<indexterm>
+		<primary>Troubleshooting</primary>
+	</indexterm>
 
    <para>In this section, we present common problems encountered while trying to
    use ProActive. For further assistance, or if you cannot solve a problem, feel free to post your question on the
