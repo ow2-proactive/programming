@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ActiveObjectTutorial"><info><title xml:id="ActiveObjectTutorial_18">Active Object Tutorial</title></info>
 
+	<indexterm>
+		<primary>Tutorial</primary>
+	</indexterm>
+	<indexterm>
+		<primary>Active Object</primary>
+		<secondary>Tutorial</secondary>
+	</indexterm>
+
 <para>In this chapter, we present a step by step introduction to
   programming with ProActive.</para>
 
@@ -75,6 +83,10 @@
 
 	<section xml:id="SimpleCMA"><info><title>Simple Computation And Monitoring Agent</title></info>
 
+	<indexterm>
+		<primary>Tutorial</primary>
+		<secondary>Simple monitoring agent</secondary>
+	</indexterm>
 	<para>
 		Welcome to your first ProActive program! This is one of the simplest applications that can be
 		written using ProActive. We will create an active object locally and get the state of
@@ -264,6 +276,10 @@
 
   <section xml:id="Active_Object_LifeCycle"><info><title>Active Objects Lifecycle: Using InitActive, RunActive and EndActive</title></info>
 
+	<indexterm>
+		<primary>Tutorial</primary>
+		<secondary>Active Objects Lifecycle</secondary>
+	</indexterm>
 
     <para>Active objects, as their name indicates, have an activity of their
     own (an internal thread). By default, the active object steps through
@@ -386,7 +402,12 @@
 	<programlisting language="java"><textobject><textdata fileref="automatic_snippets/cma_init_full.snip"/></textobject></programlisting>
     </section>
   </section>
-		<section xml:id="RemoteMonitoringAgent_18"><info><title>Remote Monitoring Agent</title></info>
+	<section xml:id="RemoteMonitoringAgent_18"><info><title>Remote Monitoring Agent</title></info>
+
+		<indexterm>
+			<primary>Tutorial</primary>
+			<secondary>Remote Monitoring Agent</secondary>
+		</indexterm>
 
 			<para>
 				In this part of the tutorial, we will see how to start a monitoring agent using the deployment methods.
@@ -564,6 +585,10 @@
 
 	  </section>
 	<section xml:id="Agentsynchronization_18"><info><title>Agent synchronization</title></info>
+		<indexterm>
+			<primary>Tutorial</primary>
+			<secondary>Agent Synchronisation</secondary>
+		</indexterm>
 
 		<para>
 			In this example, we will use a chained call between agents deployed on several node in order to retrieve
@@ -657,6 +682,10 @@
 
   <section xml:id="MonitoringSeveralComputersUsingMigration_18"><info><title>Monitoring Several Computers Using Migration</title></info>
 
+	<indexterm>
+		<primary>Tutorial</primary>
+		<secondary>Monitoring Several Computers Using Migration</secondary>
+	</indexterm>
 
        <para>Our next example deals with migrating the Monitoring Agent between
     remote nodes. We will start the monitoring agent on one machine and then move it
@@ -780,6 +809,10 @@
 
 	<section xml:id="GroupsofMonitoringAgents_18"><info><title>Groups of Monitoring Agents</title></info>
 
+	<indexterm>
+		<primary>Tutorial</primary>
+		<secondary>Groups of Monitoring Agents</secondary>
+	</indexterm>
 
 		<para>
 		In this part of the tutorial, we will show how to use groups of active objects.
@@ -897,6 +930,10 @@
 
 	<section xml:id="MonitoringAgentAsAWebService_18"><info><title>Monitoring Agent As A Web Service</title></info>
 
+		<indexterm>
+			<primary>Tutorial</primary>
+			<secondary>Monitoring Agent As A Web Service</secondary>
+		</indexterm>
 		<para>
 		In this example, we will show how to expose an active object as a web service.
 		We will use the same monitoring agent as in the previous examples and
@@ -977,6 +1014,10 @@
 
 	<section xml:id="Primalitytesttutorial_18"><info><title>Primality test tutorial</title></info>
 
+		<indexterm>
+			<primary>Tutorial</primary>
+			<secondary>Primality test</secondary>
+		</indexterm>
 
 	<para>
 		This chapter presents a step by step tutorial whose the purpose is to develop a distributed application to test if a number is prime using a self-made master/worker.
@@ -1312,6 +1353,11 @@
 
 	<section xml:id="ADistributedVersionofthePrimalityTestUsingtheMasterWorkerAPI"><info><title>A Distributed Version of the Primality Test Using the Master-Worker API</title></info>
 
+		<indexterm>
+			<primary>Tutorial</primary>
+			<secondary>Primality test</secondary>
+			<tertiary>Using Master-Worker API</tertiary>
+		</indexterm>
 		<para>
 			In this section, we will distribute the computation using
 			the Master-Worker API.

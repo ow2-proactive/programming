@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="ExampleApplications"><info><title>ProActive Example
    Applications</title></info>
 
+	<indexterm>
+		<primary>Examples</primary>
+	</indexterm>
+	<indexterm>
+		<primary>Use cases</primary>
+	</indexterm>
+
 
   <section xml:id="C3D_example"><info><title>C3D: A distributed 3D renderer</title></info>
 
+	<indexterm>
+		<primary>Examples</primary>
+		<secondary>C3D: A distributed 3D renderer</secondary>
+	</indexterm>
 
     <para>Distribution is often used for CPU-intensive applications where
     parallelism is a key for performance. The parallelization of programs can be facilitated with
@@ -97,6 +108,11 @@
 
   <section xml:id="ReadersWritersApplication_61"><info><title>Readers/Writers Application</title></info>
 
+	<indexterm>
+		<primary>Examples</primary>
+		<secondary>Readers/Writers application</secondary>
+	</indexterm>
+
     <para>ProActive provides an advanced synchronization mechanism that allows
     an easy and safe implementation of complex synchronization
     policies.</para>
@@ -142,6 +158,10 @@
 	</section>
 	<section xml:id="Thediningphilosophers_61"><info><title>The dining philosophers</title></info>
 
+	<indexterm>
+		<primary>Examples</primary>
+		<secondary>The dining philosophers</secondary>
+	</indexterm>
 
       <para>The 'dining philosophers' problem is a classic exercise in
       concurrent programming with the goal of avoiding deadlocks. In this
@@ -235,13 +255,12 @@
 
   </section>
 
-  <section xml:id="Migrationofactiveobjects_61"><info><title>Migration of active objects</title></info>
+  <section xml:id="Migrationofactiveobjects_61"><info><title>The migratory penguins</title></info>
 
 
     <indexterm>
-      <primary>Migration</primary>
-
-      <secondary>example</secondary>
+      <primary>Examples</primary>
+      <secondary>The migratory penguins</secondary>
     </indexterm>
 
     <para>ProActive allows the transparent migration of active objects between
@@ -315,6 +334,10 @@
 
 	<section xml:id="Chatexample_61"><info><title>Chat example</title></info>
 
+    <indexterm>
+      <primary>Examples</primary>
+      <secondary>Chat application</secondary>
+    </indexterm>
 
 	<para>
 		ProActive has support for groups and migration. To show this, we
@@ -393,6 +416,11 @@
   <!-- Pi MPI -> Pi ProActive -->
 
   <section xml:id="IntegralPi_61"><info><title>Integral Pi</title></info>
+
+    <indexterm>
+      <primary>Examples</primary>
+      <secondary>Intregal Pi</secondary>
+    </indexterm>
 
     <section xml:id="Introduction_61"><info><title>Introduction</title></info>
 
@@ -610,6 +638,10 @@ Enter the number of iterations (0 to exit) :  </screen>
 
 	<section xml:id="nbody"><info><title xml:id="Thenbodyexample_61">The nbody example</title></info>
 
+    <indexterm>
+      <primary>Examples</primary>
+      <secondary>The NBody example</secondary>
+    </indexterm>
 
             <para>
                 n-body is a classic problem consisting of calculating

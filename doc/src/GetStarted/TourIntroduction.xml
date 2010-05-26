@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?><chapter xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="GuidedTour"><info><title xml:id="IntroductionToTheGuidedTourandTutorial_9">Introduction</title></info>
 
+	<indexterm>
+		<primary>Guided Tour</primary>
+	</indexterm>
+
+
    <section xml:id="guidedOverview"><info><title xml:id="Overview_9">Overview</title></info>
 
       <para>This tour is a practical introduction to ProActive giving an
@@ -51,6 +56,13 @@
    </section>
 
    <section xml:id="ProActiveandIDEsEclipse_9"><info><title>ProActive and IDEs (Eclipse, ...)</title></info>
+
+		<indexterm>
+			<primary>Eclipse</primary>
+		</indexterm>
+		<indexterm>
+			<primary>IDE</primary>
+		</indexterm>
 
       <para>We recommend you to use the Eclipse IDE to develop your ProActive
       applications. You can get this tool on the <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.eclipse.org">Eclipse website</link>. Just unzip and launch
