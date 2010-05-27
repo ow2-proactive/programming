@@ -42,6 +42,7 @@ import java.util.Map;
 
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.objectweb.fractal.adl.ADLException;
+import org.objectweb.fractal.adl.Node;
 import org.objectweb.fractal.adl.bindings.Binding;
 import org.objectweb.fractal.adl.bindings.BindingContainer;
 import org.objectweb.fractal.adl.bindings.BindingErrors;
@@ -140,6 +141,21 @@ public class PATypeBindingLoader extends TypeBindingLoader {
                         throw new ADLException(PABindingErrors.INVALID_MULTICAST_SIGNATURE, fromItf, toItf);
                     }
                 }
+            }
+        }
+    }
+
+    @Override
+    protected Interface getInterface(final String compName, final String itfName, final Node sourceNode,
+            final Map<String, Map<String, Interface>> itfMap) throws ADLException {
+        try {
+            return super.getInterface(compName, itfName, sourceNode, itfMap);
+        } catch (final ADLException ae) {
+            // The interface can't be found. Either it is a web service URL or it is really an error.
+            if (compName.contains("://")) {
+                return null;
+            } else {
+                throw ae;
             }
         }
     }
