@@ -85,7 +85,7 @@ public class ServiceMerger extends Task {
             DirectoryScanner ds = fileset.getDirectoryScanner(this.getProject());
             String[] includedFiles = ds.getIncludedFiles();
             for (String s : includedFiles) {
-                int lastIndex = s.lastIndexOf('/');
+                int lastIndex = s.lastIndexOf(File.separator);
                 String filename = s.substring(lastIndex, s.length());
 
                 List<String> list = map.get(filename);
