@@ -58,7 +58,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * It allows the exposition of the object it represents on one or multiple protocols, keeps
  * references on already activated protocols, allows to unregister and unexport one or more protocols.
  */
-public class RemoteObjectExposer<T> implements Serializable {
+public class RemoteObjectExposer<T> {
     protected Hashtable<URI, InternalRemoteRemoteObject> activeRemoteRemoteObjects;
     private String className;
     private RemoteObjectImpl<T> remoteObject;
