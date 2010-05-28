@@ -213,8 +213,8 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     }
 
     public URI getBaseURI() {
-        return URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "",
-                Constants.XMLHTTP_PROTOCOL_IDENTIFIER);
+        return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" +
+            getPort());
     }
 
 }

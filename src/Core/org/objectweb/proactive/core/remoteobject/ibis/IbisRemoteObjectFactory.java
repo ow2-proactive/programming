@@ -249,8 +249,8 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     }
 
     public URI getBaseURI() {
-        return URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "",
-                Constants.IBIS_PROTOCOL_IDENTIFIER);
+        return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" +
+            getPort());
     }
 
 }

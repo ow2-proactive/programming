@@ -49,6 +49,7 @@ import org.objectweb.proactive.core.ssh.SshConfig;
 import org.objectweb.proactive.core.ssh.SshConfigFileParser;
 import org.objectweb.proactive.core.ssh.SshRMIClientSocketFactory;
 import org.objectweb.proactive.core.ssh.proxycommand.ProxyCommandConfig;
+import org.objectweb.proactive.core.util.ProActiveInet;
 
 
 public class RmiSshRemoteObjectFactory extends AbstractRmiRemoteObjectFactory {

@@ -303,6 +303,6 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
     }
 
     public URI getBaseURI() {
-        return URI.create(this.getProtocolId() + "://" + this.agent.getAgentID() + "/");
+        return URI.create(this.getProtocolId() + "://" + this.agent.getAgentID());
     }
 }

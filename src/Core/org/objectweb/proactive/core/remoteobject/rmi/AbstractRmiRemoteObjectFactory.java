@@ -50,6 +50,7 @@ import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
@@ -295,7 +296,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
     }
 
     public URI getBaseURI() {
-        return URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), "", getProtocolId());
+        return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" +
+            getPort());
     }
-
 }

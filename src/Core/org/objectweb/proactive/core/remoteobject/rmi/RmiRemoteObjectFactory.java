@@ -42,6 +42,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.util.ProActiveInet;
 
 
 /**
@@ -57,7 +58,5 @@ public class RmiRemoteObjectFactory extends AbstractRmiRemoteObjectFactory {
     @Override
     protected Registry getRegistry(URI url) throws RemoteException {
         return LocateRegistry.getRegistry(url.getHost(), url.getPort());
-
     }
-
 }
