@@ -36,14 +36,21 @@
  */
 package org.objectweb.proactive.extra.pnp;
 
-import org.apache.log4j.Logger;
+import java.net.SocketAddress;
+
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
+import org.jboss.netty.buffer.ChannelBufferFactory;
+import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipelineCoverage;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
+import org.jboss.netty.channel.ChannelState;
+import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.ChannelUpstreamHandler;
+import org.jboss.netty.channel.Channels;
+import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.handler.codec.frame.CorruptedFrameException;
+import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 import org.jboss.netty.util.Timer;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.pnp.PNPFrame.MessageType;
 import org.objectweb.proactive.extra.pnp.PNPServerHandler.Heartbeater;
 import org.objectweb.proactive.extra.pnp.exception.PNPException;
@@ -55,83 +62,146 @@ import org.objectweb.proactive.extra.pnp.exception.PNPException;
  * It decodes the first received frame, and configure the {@link PNPServerHandler}
  * accordingly to this first frame (heartbeat period)
  *
+ * We use our custom frame decoder instead of the standard one provided by Netty
+ * to achieve zero copy. It leads to major performances improvements (both 
+ * bandwidth and throughput)
+ * 
  * @since ProActive 4.3.0
  */
-/* TODO: Implement a zero-copy frame decoder.
- *
- * The FrameDecoder provided by netty, reuse a cumulation buffer and pass a
- * copy of the ChannelBuffer to the next upstream handler. This is a
- * performance killer when big messages are exchanged. We could rewrite a simple
- * zero-copy frame decoder.
- */
 @ChannelPipelineCoverage("one")
-class PNPServerFrameDecoder extends FrameDecoder {
-    static final private Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP_CODEC);
-
+class PNPServerFrameDecoder implements ChannelUpstreamHandler {
+    boolean firstFrame;
     final private PNPServerHandler pnpServerHandler;
     final private Timer timer;
-    boolean firstFrame;
-    boolean frameInProgress;
+
+    private final int maxFrameLength = Integer.MAX_VALUE;
+    private final int lengthFieldLength = 4;
+
+    private volatile int lengthBytesToRead;
+    private volatile ChannelBuffer lengthBuffer;
+    private volatile long frameBytesToRead;
+    private volatile ChannelBuffer frameBuffer;
+    private volatile boolean skipFrame;
 
     public PNPServerFrameDecoder(PNPServerHandler pnpServerHandler, Timer timer) {
         this.pnpServerHandler = pnpServerHandler;
         this.timer = timer;
         this.firstFrame = true;
-        this.frameInProgress = false;
     }
 
-    @Override
-    protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buf) throws Exception {
-        if (buf.readableBytes() < 4) {
-            return null;
+    public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent event) throws Exception {
+        if (event instanceof MessageEvent) {
+            MessageEvent msgEvent = (MessageEvent) event;
+            Object msg = msgEvent.getMessage();
+            if (msg instanceof ChannelBuffer) {
+                callDecode(ctx, (ChannelBuffer) msg, msgEvent.getRemoteAddress());
+                return;
+            }
+        } else if (event instanceof ChannelStateEvent) {
+            ChannelStateEvent stateEvent = (ChannelStateEvent) event;
+            if (stateEvent.getState() == ChannelState.CONNECTED) {
+                if (stateEvent.getValue() != null) {
+                    lengthBytesToRead = lengthFieldLength;
+                    lengthBuffer = getBuffer(ctx.getChannel().getConfig().getBufferFactory(),
+                            lengthBytesToRead);
+                }
+            }
         }
+        ctx.sendUpstream(event);
+    }
 
-        if (!this.firstFrame && !this.frameInProgress) {
-            this.frameInProgress = true;
+    private void callDecode(ChannelHandlerContext ctx, ChannelBuffer buffer, SocketAddress remoteAddress)
+            throws Exception {
+        while (buffer.readableBytes() > 0) {
+            Object o = decode(ctx, buffer);
+            if (o != null)
+                Channels.fireMessageReceived(ctx, o, remoteAddress);
+        }
+    }
+
+    protected Object decode(ChannelHandlerContext ctx, ChannelBuffer buffer) throws Exception {
+        if (!firstFrame) {
             this.pnpServerHandler.bytesAvailable();
         }
 
-        buf.markReaderIndex();
-
-        int length = buf.readInt();
-        if (buf.readableBytes() < length) {
-            buf.resetReaderIndex();
-            return null;
-        }
-
-        PNPFrame m = null;
-        try {
-            ChannelBuffer cb = buf.readBytes(length); // FIXME: COPY !!!
-            m = PNPFrame.constructMessage(cb, 0);
-        } catch (Exception e) {
-            this.pnpServerHandler.clientLeave();
-            throw e;
-        }
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("DECODED  " + m);
-        }
-
-        // Handle the first frame in the decoder
-        // It allows us to setup the Heartbeater ASAP and trigger heartbeat from the decoder.
-        // If done in the handler, then heartbeats cannot be sent until the message if fully decoded
-        if (firstFrame) {
-            if (m.getType() == PNPFrame.MessageType.HEARTBEAT_ADV) {
-                PNPFrameHeartbeatAdvertisement ahFrame = (PNPFrameHeartbeatAdvertisement) m;
-
-                long heartbeatPeriod = ahFrame.getHeartbeatPeriod();
-                Heartbeater heartbeater = new Heartbeater(channel, timer, heartbeatPeriod);
-                this.pnpServerHandler.setHeartBeater(heartbeater);
-
-                this.firstFrame = false;
-                return null; // Do not sent the first frame to the handler
+        if (lengthBytesToRead > 0) {
+            if (lengthBytesToRead > buffer.readableBytes()) {
+                lengthBytesToRead -= buffer.readableBytes();
+                lengthBuffer.writeBytes(buffer);
+                return null;
             } else {
-                throw new PNPException("Invalid first frame type must be " + MessageType.HEARTBEAT_ADV +
-                    " but is " + m.getType());
+                lengthBuffer.writeBytes(buffer, lengthBytesToRead);
+                lengthBytesToRead = 0;
+
+                frameBytesToRead = lengthBuffer.getUnsignedInt(0);
+                if (frameBytesToRead < 0) {
+                    skipFrame = true;
+                    frameBytesToRead = 0;
+                    Channels.fireExceptionCaught(ctx, new CorruptedFrameException("negative frame length: " +
+                        frameBytesToRead));
+                } else if (frameBytesToRead > maxFrameLength) {
+                    skipFrame = true;
+                    Channels.fireExceptionCaught(ctx, new TooLongFrameException("frame length exceeds " +
+                        maxFrameLength + ": " + frameBytesToRead));
+                } else {
+                    skipFrame = false;
+                    frameBuffer = getBuffer(ctx.getChannel().getConfig().getBufferFactory(),
+                            (int) frameBytesToRead);
+                }
             }
         }
 
-        this.frameInProgress = false;
-        return m;
+        if (frameBytesToRead > buffer.readableBytes()) {
+            frameBytesToRead -= buffer.readableBytes();
+            if (skipFrame) {
+                buffer.skipBytes(buffer.readableBytes());
+            } else {
+                frameBuffer.writeBytes(buffer);
+            }
+            return null;
+        } else {
+            lengthBuffer.setIndex(0, 0);
+            lengthBytesToRead = lengthFieldLength;
+            if (skipFrame) {
+                buffer.skipBytes((int) frameBytesToRead);
+                frameBytesToRead = 0;
+                return null;
+            } else {
+                frameBuffer.writeBytes(buffer, (int) frameBytesToRead);
+                frameBytesToRead = 0;
+
+                PNPFrame m = null;
+                try {
+                    m = PNPFrame.constructMessage(frameBuffer, 0);
+                } catch (Exception e) {
+                    this.pnpServerHandler.clientLeave();
+                    throw e;
+                }
+
+                frameBuffer = null;
+
+                if (firstFrame) {
+                    if (m.getType() == PNPFrame.MessageType.HEARTBEAT_ADV) {
+                        PNPFrameHeartbeatAdvertisement ahFrame = (PNPFrameHeartbeatAdvertisement) m;
+
+                        long heartbeatPeriod = ahFrame.getHeartbeatPeriod();
+                        Heartbeater heartbeater = new Heartbeater(ctx.getChannel(), timer, heartbeatPeriod);
+                        this.pnpServerHandler.setHeartBeater(heartbeater);
+
+                        this.firstFrame = false;
+                        return null; // Do not sent the first frame to the handler
+                    } else {
+                        throw new PNPException("Invalid first frame type must be " +
+                            MessageType.HEARTBEAT_ADV + " but is " + m.getType());
+                    }
+                }
+
+                return m;
+            }
+        }
+    }
+
+    protected ChannelBuffer getBuffer(ChannelBufferFactory factory, int capacity) {
+        return factory.getBuffer(capacity);
     }
 }

@@ -42,7 +42,7 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 public class TestPNP extends AbstractPAProviderRemoteBenchmark {
 
     static {
-        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pnp");
     }
 
     public TestPNP() {

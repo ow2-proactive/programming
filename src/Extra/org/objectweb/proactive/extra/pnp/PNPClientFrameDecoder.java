@@ -36,52 +36,130 @@
  */
 package org.objectweb.proactive.extra.pnp;
 
-import org.apache.log4j.Logger;
+import java.net.SocketAddress;
+
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
+import org.jboss.netty.buffer.ChannelBufferFactory;
+import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipelineCoverage;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.jboss.netty.channel.ChannelState;
+import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.ChannelUpstreamHandler;
+import org.jboss.netty.channel.Channels;
+import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.handler.codec.frame.CorruptedFrameException;
+import org.jboss.netty.handler.codec.frame.TooLongFrameException;
 
 
 /** A PNP frame decoder
  *
+ * We use our custom frame decoder instead of the standard one provided by Netty
+ * to achieve zero copy. It leads to major performances improvements (both 
+ * bandwidth and throughput)
+ * 
  * since ProActive 4.3.0
  */
 
-/* TODO: Implement a zero-copy frame decoder.
- *
- * The FrameDecoder provided by netty, reuse a cumulation buffer and pass a
- * copy of the ChannelBuffer to the next upstream handler. This is a
- * performance killer when big messages are exchanged. We could rewrite a simple
- * zero-copy frame decoder.
- */
 @ChannelPipelineCoverage("one")
-class PNPClientFrameDecoder extends FrameDecoder {
-    static final private Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP_CODEC);
+class PNPClientFrameDecoder implements ChannelUpstreamHandler {
 
-    @Override
-    protected Object decode(ChannelHandlerContext ctx, Channel channel, ChannelBuffer buf) throws Exception {
-        if (buf.readableBytes() < 4) {
+    private final int maxFrameLength = Integer.MAX_VALUE;
+    private final int lengthFieldLength = 4;
+
+    private volatile int lengthBytesToRead;
+    private volatile ChannelBuffer lengthBuffer;
+    private volatile long frameBytesToRead;
+    private volatile ChannelBuffer frameBuffer;
+    private volatile boolean skipFrame;
+
+    public PNPClientFrameDecoder() {
+    }
+
+    public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent event) throws Exception {
+        if (event instanceof MessageEvent) {
+            MessageEvent msgEvent = (MessageEvent) event;
+            Object msg = msgEvent.getMessage();
+            if (msg instanceof ChannelBuffer) {
+                callDecode(ctx, (ChannelBuffer) msg, msgEvent.getRemoteAddress());
+                return;
+            }
+        } else if (event instanceof ChannelStateEvent) {
+            ChannelStateEvent stateEvent = (ChannelStateEvent) event;
+            if (stateEvent.getState() == ChannelState.CONNECTED) {
+                if (stateEvent.getValue() != null) {
+                    lengthBytesToRead = lengthFieldLength;
+                    lengthBuffer = getBuffer(ctx.getChannel().getConfig().getBufferFactory(),
+                            lengthBytesToRead);
+                }
+            }
+        }
+        ctx.sendUpstream(event);
+    }
+
+    private void callDecode(ChannelHandlerContext ctx, ChannelBuffer buffer, SocketAddress remoteAddress)
+            throws Exception {
+        while (buffer.readableBytes() > 0) {
+            Object o = decode(ctx, buffer);
+            if (o != null)
+                Channels.fireMessageReceived(ctx, o, remoteAddress);
+        }
+    }
+
+    protected Object decode(ChannelHandlerContext ctx, ChannelBuffer buffer) throws Exception {
+        if (lengthBytesToRead > 0) {
+            if (lengthBytesToRead > buffer.readableBytes()) {
+                lengthBytesToRead -= buffer.readableBytes();
+                lengthBuffer.writeBytes(buffer);
+                return null;
+            } else {
+                lengthBuffer.writeBytes(buffer, lengthBytesToRead);
+                lengthBytesToRead = 0;
+                frameBytesToRead = lengthBuffer.getUnsignedInt(0);
+
+                if (frameBytesToRead < 0) {
+                    skipFrame = true;
+                    frameBytesToRead = 0;
+                    Channels.fireExceptionCaught(ctx, new CorruptedFrameException("negative frame length: " +
+                        frameBytesToRead));
+                } else if (frameBytesToRead > maxFrameLength) {
+                    skipFrame = true;
+                    Channels.fireExceptionCaught(ctx, new TooLongFrameException("frame length exceeds " +
+                        maxFrameLength + ": " + frameBytesToRead));
+                } else {
+                    skipFrame = false;
+                    frameBuffer = getBuffer(ctx.getChannel().getConfig().getBufferFactory(),
+                            (int) frameBytesToRead);
+                }
+            }
+        }
+
+        if (frameBytesToRead > buffer.readableBytes()) {
+            frameBytesToRead -= buffer.readableBytes();
+            if (skipFrame) {
+                buffer.skipBytes(buffer.readableBytes());
+            } else {
+                frameBuffer.writeBytes(buffer);
+            }
             return null;
+        } else {
+            lengthBuffer.setIndex(0, 0);
+            lengthBytesToRead = lengthFieldLength;
+            if (skipFrame) {
+                buffer.skipBytes((int) frameBytesToRead);
+                frameBytesToRead = 0;
+                return null;
+            } else {
+                frameBuffer.writeBytes(buffer, (int) frameBytesToRead);
+                frameBytesToRead = 0;
+                PNPFrame m = PNPFrame.constructMessage(frameBuffer, 0);
+                frameBuffer = null;
+                return m;
+            }
         }
+    }
 
-        buf.markReaderIndex();
-
-        int length = buf.readInt();
-        if (buf.readableBytes() < length) {
-            buf.resetReaderIndex();
-            return null;
-        }
-
-        ChannelBuffer cb = buf.readBytes(length); // FIXME: COPY !!!
-        PNPFrame m = PNPFrame.constructMessage(cb, 0);
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("DECODED  " + m);
-        }
-
-        return m;
+    protected ChannelBuffer getBuffer(ChannelBufferFactory factory, int capacity) {
+        return factory.getBuffer(capacity);
     }
 }
