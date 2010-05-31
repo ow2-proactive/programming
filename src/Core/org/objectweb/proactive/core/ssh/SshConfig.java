@@ -293,17 +293,12 @@ public class SshConfig {
     /**
      * Never return null, if no information stored, return ssh default private key
      */
-    public String[] getPrivateKeyPath(String host) {
+    public String[] getPrivateKeyPath(String host) throws IOException {
         String key = getInformation(host, SshToken.PRIVATEKEY);
         if (key != null)
             return new String[] { key };
         else
-            try {
-                return new SSHKeys(getKeyDir()).getKeys();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        return new String[] { System.getProperty("user.home") + File.separator + ".ssh" + File.separator };
+            return new SSHKeys(getKeyDir()).getKeys();
     }
 
     /**
