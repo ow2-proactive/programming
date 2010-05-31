@@ -47,10 +47,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.objectweb.proactive.core.Constants;
+import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.httpserver.HTTPServer;
+import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMarshaller;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMessage;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpUtils;
@@ -67,6 +71,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class HTTPTransportServlet extends HttpServlet {
     final static public String NS = "/httpTransport";
     final static public String MAPPING = NS;
+    final static private Logger logger = ProActiveLogger.getLogger(Loggers.HTTP_TRANSPORT);
 
     static HTTPTransportServlet servlet = null;
 
@@ -114,9 +119,46 @@ public class HTTPTransportServlet extends HttpServlet {
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
             // Handle the message
-            HttpMessage message = (HttpMessage) HttpMarshaller.unmarshallObject(data);
+            HttpMessage message;
+            try {
+                message = (HttpMessage) HttpMarshaller.unmarshallObject(data);
+            } catch (Throwable t) {
+                Throwable t1 = new IOException6("Failed to unmarshall incoming message", t);
+                SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, t1));
+                byte[] buf = HttpMarshaller.marshallObject(sr);
+                DataOutputStream ouput = new DataOutputStream(resp.getOutputStream());
+                ouput.write(buf, 0, buf.length);
+                resp.setContentType(HttpUtils.SERVICE_REQUEST_CONTENT_TYPE);
+                resp.setStatus(HttpServletResponse.SC_OK);
+                return;
+            }
+
             final Object result = message.processMessage();
-            final byte[] resultBytes = HttpMarshaller.marshallObject(result);
+            final byte[] resultBytes;
+
+            try {
+                resultBytes = HttpMarshaller.marshallObject(result);
+            } catch (Throwable t) {
+                Throwable t1 = new IOException6("Failed to marshall the result bytes", t);
+                SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, t1));
+                byte[] buf = HttpMarshaller.marshallObject(sr);
+                DataOutputStream ouput = new DataOutputStream(resp.getOutputStream());
+                ouput.write(buf, 0, buf.length);
+                resp.setContentType(HttpUtils.SERVICE_REQUEST_CONTENT_TYPE);
+                resp.setStatus(HttpServletResponse.SC_OK);
+                return;
+            }
+
+            try {
+                DataOutputStream ouput = new DataOutputStream(resp.getOutputStream());
+                ouput.write(resultBytes, 0, resultBytes.length);
+                resp.setContentType(HttpUtils.SERVICE_REQUEST_CONTENT_TYPE);
+                resp.setStatus(HttpServletResponse.SC_OK);
+            } catch (Throwable t) {
+                logger.info("Failed to send the HTTP reply to " + message +
+                    ". The client side should discover the disconnection and unlock the caller", t);
+                return;
+            }
 
             // Send the response
             DataOutputStream ouput = new DataOutputStream(resp.getOutputStream());
