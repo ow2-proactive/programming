@@ -60,13 +60,13 @@ class PNPRegistry {
     public final static PNPRegistry singleton = new PNPRegistry();
 
     /** Registered Remote Objects */
-    private ConcurrentHashMap<URI, InternalRemoteRemoteObject> rRemteObjectMap;
+    private ConcurrentHashMap<String, InternalRemoteRemoteObject> rRemteObjectMap;
 
     private PNPRegistry() {
         if (logger.isTraceEnabled()) {
             logger.trace("Starting the registry for the message routing protocol");
         }
-        this.rRemteObjectMap = new ConcurrentHashMap<URI, InternalRemoteRemoteObject>();
+        this.rRemteObjectMap = new ConcurrentHashMap<String, InternalRemoteRemoteObject>();
     }
 
     /**
@@ -77,18 +77,19 @@ class PNPRegistry {
      * @param body
      *            the remote object
      */
-    public void bind(URI uri, InternalRemoteRemoteObject body, boolean rebind) throws AlreadyBoundException {
+    public void bind(String name, InternalRemoteRemoteObject body, boolean rebind)
+            throws AlreadyBoundException {
         if (rebind) {
-            rRemteObjectMap.put(uri, body);
+            rRemteObjectMap.put(name, body);
         } else {
-            InternalRemoteRemoteObject r = rRemteObjectMap.putIfAbsent(uri, body);
+            InternalRemoteRemoteObject r = rRemteObjectMap.putIfAbsent(name, body);
             if (r != null) {
-                throw new AlreadyBoundException("A remote object is already bound to " + uri);
+                throw new AlreadyBoundException("A remote object is already bound to " + name);
             }
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Added " + uri + " into the registry");
+            logger.debug("Added " + name + " into the registry");
         }
     }
 
@@ -98,17 +99,17 @@ class PNPRegistry {
      * @param uri
      *            the uri of the remote object
      */
-    public void unbind(URI uri) {
-        rRemteObjectMap.remove(uri);
+    public void unbind(String name) {
+        rRemteObjectMap.remove(name);
         if (logger.isDebugEnabled()) {
-            logger.debug("Removed " + uri + " from the registry");
+            logger.debug("Removed " + name + " from the registry");
         }
 
     }
 
     /** Gives all the URIs registered in this registry */
-    public URI[] list() {
-        URI[] list = new URI[rRemteObjectMap.size()];
+    public String[] list() {
+        String[] list = new String[rRemteObjectMap.size()];
         rRemteObjectMap.keySet().toArray(list);
         return list;
     }
@@ -120,7 +121,7 @@ class PNPRegistry {
      *            The URI of the remote object to be retrieved
      * @return the binded remote object
      */
-    public InternalRemoteRemoteObject lookup(URI uri) {
-        return rRemteObjectMap.get(uri);
+    public InternalRemoteRemoteObject lookup(String name) {
+        return rRemteObjectMap.get(name);
     }
 }

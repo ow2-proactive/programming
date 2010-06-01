@@ -48,6 +48,8 @@ import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.http.util.exceptions.HTTPRemoteException;
+import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.pnp.exception.PNPException;
 
@@ -105,7 +107,7 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
      */
     public RemoteRemoteObject register(InternalRemoteRemoteObject ro, URI uri, boolean replacePrevious)
             throws ProActiveException {
-        this.registry.bind(uri, ro, replacePrevious); // throw a ProActiveException if needed
+        this.registry.bind(URIBuilder.getNameFromURI(uri), ro, replacePrevious); // throw a ProActiveException if needed
         PNPRemoteObject rro = new PNPRemoteObject(ro, uri, agent);
         if (logger.isDebugEnabled()) {
             logger.debug("Registered remote object at endpoint " + uri);
@@ -120,7 +122,7 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
      *            the urn under which the active object has been registered
      */
     public void unregister(URI uri) throws ProActiveException {
-        registry.unbind(uri);
+        this.registry.unbind(URIBuilder.getNameFromURI(uri));
     }
 
     /**
@@ -132,7 +134,8 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
      * @return a UniversalBody
      */
     public RemoteObject lookup(URI uri) throws ProActiveException {
-        PNPROMessageLookup message = new PNPROMessageLookup(uri, agent);
+        String name = URIBuilder.getNameFromURI(uri);
+        PNPROMessageLookup message = new PNPROMessageLookup(uri, name, agent);
         try {
             message.send();
             RemoteRemoteObject result = message.getReturnedObject();
@@ -168,7 +171,14 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
         PNPROMessageListRemoteObjectsMessage message = new PNPROMessageListRemoteObjectsMessage(uri, agent);
         try {
             message.send();
-            return message.getReturnedObject();
+            String[] names = message.getReturnedObject();
+            URI[] uris = new URI[names.length];
+
+            for (int i = 0; i < names.length; i++) {
+                uris[i] = URIBuilder.buildURI(uri, names[i]);
+            }
+
+            return uris;
         } catch (PNPException e) {
             throw new ProActiveException(e);
         }
@@ -210,8 +220,8 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
     }
 
     public URI getBaseURI() {
-        return URI.create(this.getProtocolId() + "://" + this.agent.getInetAddress().getHostAddress() + ":" +
-            this.agent.getPort() + "/");
+        return URI.create(this.getProtocolId() + "://" +
+            URIBuilder.getHostNameorIP(this.agent.getInetAddress()) + ":" + this.agent.getPort() + "/");
     }
 
     public int getPort() {

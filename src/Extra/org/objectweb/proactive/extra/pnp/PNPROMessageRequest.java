@@ -45,6 +45,7 @@ import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
+import org.objectweb.proactive.core.util.URIBuilder;
 
 
 /** Represent a {@link Request} */
@@ -93,7 +94,7 @@ class PNPROMessageRequest extends PNPROMessage implements Serializable {
         try {
             InternalRemoteRemoteObject ro;
 
-            ro = PNPRegistry.singleton.lookup(uri);
+            ro = PNPRegistry.singleton.lookup(URIBuilder.getNameFromURI(uri));
             if (ro == null) {
                 return new SynchronousReplyImpl(new MethodCallResult(null, new IOException("remote object " +
                     uri + " not found. Message " + request + " cannot be processed ")));

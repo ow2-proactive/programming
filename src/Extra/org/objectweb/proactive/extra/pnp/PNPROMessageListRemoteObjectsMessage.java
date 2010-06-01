@@ -63,8 +63,8 @@ class PNPROMessageListRemoteObjectsMessage extends PNPROMessage implements Seria
     }
 
     /** Get the list of the objects registered on the remote runtime */
-    public URI[] getReturnedObject() {
-        return (URI[]) this.returnedObject;
+    public String[] getReturnedObject() {
+        return (String[]) this.returnedObject;
     }
 
     @Override

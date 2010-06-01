@@ -55,6 +55,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 
 class PNPROMessageLookup extends PNPROMessage implements Serializable {
+    final String name;
 
     /**
      * Construct a lookup message
@@ -65,8 +66,9 @@ class PNPROMessageLookup extends PNPROMessage implements Serializable {
      *            The local agent to use to send the message
      */
 
-    public PNPROMessageLookup(URI uri, PNPAgent agent) {
+    public PNPROMessageLookup(URI uri, String name, PNPAgent agent) {
         super(uri, agent);
+        this.name = name;
     }
 
     /** Get the remote object */
@@ -83,7 +85,7 @@ class PNPROMessageLookup extends PNPROMessage implements Serializable {
         }
 
         if (this.uri != null) {
-            InternalRemoteRemoteObject irro = PNPRegistry.singleton.lookup(uri);
+            InternalRemoteRemoteObject irro = PNPRegistry.singleton.lookup(name);
             if (irro != null) {
                 RemoteRemoteObject rro = null;
                 try {
