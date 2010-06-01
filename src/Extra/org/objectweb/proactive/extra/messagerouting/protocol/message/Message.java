@@ -97,7 +97,7 @@ public abstract class Message {
         /** An heartbeat send by the router to the clients to check the connection */
         HEARTBEAT_ROUTER,
         /** A message sent by the CLI tool, to ask the router to reload its configuration file*/
-        RELOAD_CONFIGURATION;
+        RELOAD_CONFIGURATION
         /* That's all*/
         ;
 
