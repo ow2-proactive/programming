@@ -65,7 +65,7 @@ class PNPServerPipelineFactory implements ChannelPipelineFactory {
 
         ChannelPipeline p = Channels.pipeline();
         p.addLast("pnpDecoder", new PNPServerFrameDecoder(pnpServerHandler, timer));
-        
+
         p.addLast("frameEncoder", new LengthFieldPrepender(4));
         p.addLast("pnpEncoder", new PNPEncoder());
         p.addLast(PNPServerHandler.NAME, pnpServerHandler);

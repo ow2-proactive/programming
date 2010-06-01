@@ -69,7 +69,7 @@ class PNPClientPipelineFactory implements ChannelPipelineFactory {
         ChannelPipeline p = Channels.pipeline();
         // Do not use FixedLengthFrameDecoder provided by netty to avoid
         // copy and an extra handler to parse the messages
-//        p.addLast("pnpDecoder", new PNPClientFrameDecoder());
+        //        p.addLast("pnpDecoder", new PNPClientFrameDecoder());
         p.addLast("pnpDecoder", new PNPClientFrameDecoder());
 
         p.addLast("frameEncoder", new LengthFieldPrepender(4));
