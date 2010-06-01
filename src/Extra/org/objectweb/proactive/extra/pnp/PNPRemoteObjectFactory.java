@@ -211,7 +211,7 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
 
     public URI getBaseURI() {
         return URI.create(this.getProtocolId() + "://" + this.agent.getInetAddress().getHostAddress() + ":" +
-            this.agent.getPort());
+            this.agent.getPort() + "/");
     }
 
     public int getPort() {

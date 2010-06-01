@@ -297,6 +297,6 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
 
     public URI getBaseURI() {
         return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" +
-            getPort());
+            getPort() + "/");
     }
 }
