@@ -98,7 +98,14 @@ class PNPClientHandler extends IdleStateAwareChannelHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-        this.pnpClientChannel.close("exception caught", e.getCause());
+        if (this.pnpClientChannel != null) {
+            this.pnpClientChannel.close("exception caught", e.getCause());
+        } else {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Connection failed (an exception will be throw to the user code by " +
+                    PNPAgent.class.getName() + " ) ", e.getCause());
+            }
+        }
     }
 
     @Override
