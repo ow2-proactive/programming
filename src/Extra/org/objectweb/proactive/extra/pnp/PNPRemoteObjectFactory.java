@@ -201,8 +201,8 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
                 name = "/" + name;
             }
 
-            URI uri = new URI(this.getProtocolId(), null, this.agent.getInetAddress().getHostAddress(),
-                this.agent.getPort(), name, null, null);
+            URI uri = new URI(this.getProtocolId(), null, URIBuilder.getHostNameorIP(this.agent
+                    .getInetAddress()), this.agent.getPort(), name, null, null);
 
             // register the object on the register
             InternalRemoteRemoteObject irro = new InternalRemoteRemoteObjectImpl(remoteObject, uri);
