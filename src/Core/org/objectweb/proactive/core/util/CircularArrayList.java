@@ -41,6 +41,7 @@ import static junit.framework.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import junit.framework.Assert;
@@ -310,14 +311,16 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
             tail = (tail + 1) % array.length;
         } else {
             if ((pos > head) && (pos > tail)) { // tail/head/pos
-                System.arraycopy(array, pos, array, head - 1, pos - head + 1);
-                head = (head - 1 + array.length) % array.length;
+                System.arraycopy(array, head, array, head - 1, pos - head);
+                array[pos - 1] = element;
+                head--;
             } else { // head/pos/tail
                 System.arraycopy(array, pos, array, pos + 1, tail - pos);
                 tail = (tail + 1) % array.length;
+                array[pos] = element;
             }
-            array[pos] = element;
         }
+
         size++;
     }
 
@@ -517,6 +520,21 @@ public class CircularArrayList<E> extends java.util.AbstractList<E> implements j
             }
 
             return cal;
+        }
+
+        @Test
+        public void testAddWithGap() {
+            final List<Character> list = new CircularArrayList<Character>(6); // [------]
+            list.add('a'); // [a-----]
+            list.add('b'); // [ab----]
+            list.add('c'); // [abc---]
+            list.add('d'); // [abcd--]
+            list.add('e'); // [abcde-]
+            list.subList(0, 4).clear(); // [----e-]
+            list.add('f'); // [----ef]
+            list.add('g'); // [g---ef]
+            list.add('h'); // [gh--ef]
+            list.add(1, 'x'); // ArrayIndexOutOfBoundsException
         }
     }
 }
