@@ -66,7 +66,7 @@ final public class PNPConfig implements PAPropertiesLoaderSPI {
      *
      */
     static final public PAPropertyInteger PA_PNP_DEFAULT_HEARTBEAT = new PAPropertyInteger(
-        "proactive.pnp.default_heartbeat", false, 0);
+        "proactive.pnp.default_heartbeat", false, 9000);
 
     /**
      * Channel garbage collection timeout (in milliseconds)
