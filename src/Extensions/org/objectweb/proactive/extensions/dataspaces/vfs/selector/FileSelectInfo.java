@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
+ * Copyright (C) 1997-2010 INRIA/University of
  * 				Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -24,15 +24,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
+ * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
  *  Initial developer(s):               The ProActive Team
  *                        http://proactive.inria.fr/team_members.htm
- *  Contributor(s):
+ *  Contributor(s): ActiveEon Team - http://www.activeeon.com
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $ACTIVEEON_INITIAL_DEV$
  */
 package org.objectweb.proactive.extensions.dataspaces.vfs.selector;
 
@@ -42,6 +42,11 @@ import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
 /**
  * Information about a file, that is used to select files during the
  * traversal of a hierarchy.
+ * 
+ * This class is duplicated from the ant.jar to avoid another runtime dependency. We just 
+ * need this class, to be able to use {@link FastFileSelector}.
+ * 
+ * @Since ProActive 4.3.0
  */
 public class FileSelectInfo {
     private DataSpacesFileObject baseFolder;
@@ -50,33 +55,36 @@ public class FileSelectInfo {
 
     /**
      * Returns the base folder of the traversal.
+     *
      * @return FileObject representing the base folder.
      */
     public DataSpacesFileObject getBaseFolder() {
         return baseFolder;
     }
 
-    void setBaseFolder(final DataSpacesFileObject baseFolder) {
+    public void setBaseFolder(final DataSpacesFileObject baseFolder) {
         this.baseFolder = baseFolder;
     }
 
     /**
      * Returns the file (or folder) to be considered.
+     *
      * @return The FileObject.
      */
     public DataSpacesFileObject getFile() {
         return file;
     }
 
-    void setFile(final DataSpacesFileObject file) {
+    public void setFile(final DataSpacesFileObject file) {
         this.file = file;
     }
 
     /**
      * Returns the depth of the file relative to the base folder.
+     *
      * @return The depth of the file relative to the base folder.
      */
-    int getDepth() {
+    public int getDepth() {
         return depth;
     }
 
