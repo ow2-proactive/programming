@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extra.messagerouting.remoteobject.util;
+package org.objectweb.proactive.core.util.converter.remote;
 
 import java.io.IOException;
 import java.util.Map;
@@ -44,24 +44,21 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
+import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 
 
 /**
  *
- * @author fabratu
- * @version %G%, %I%
- * @since ProActive 4.10
+ * @since ProActive 4.3.0
  */
-public class PamrClassLoader {
+public class ProActiveRemoteClassLoader {
 
-    final static private Logger logger = ProActiveLogger
-            .getLogger(PAMRConfig.Loggers.FORWARDING_CLASSLOADING);
+    final static private Logger logger = ProActiveLogger.getLogger(Loggers.CLASSLOADING);
 
     private final Map<String, Loader> loaderCache;
 
-    public PamrClassLoader() {
+    public ProActiveRemoteClassLoader() {
         loaderCache = new ConcurrentHashMap<String, Loader>();
     }
 
@@ -170,7 +167,6 @@ public class PamrClassLoader {
             }
 
         }
-
     }
 
 }

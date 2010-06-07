@@ -45,12 +45,12 @@ import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
 import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extra.messagerouting.remoteobject.message.MessageRoutingMessage;
-import org.objectweb.proactive.extra.messagerouting.remoteobject.util.PamrMarshaller;
 
 
 /** Executes a ProActive {@link Request} received and send the response.
@@ -99,7 +99,7 @@ public class ProActiveMessageHandler implements MessageHandler {
         /** the local agent*/
         private final Agent agent;
         /** serialization*/
-        private final PamrMarshaller marshaller;
+        private final ProActiveMarshaller marshaller;
 
         public ProActiveMessageProcessor(DataRequestMessage msg, Agent agent) {
             this._toProcess = msg;
@@ -108,7 +108,7 @@ public class ProActiveMessageHandler implements MessageHandler {
             // if the local Agent has received a DataRequestMessage,
             // means that a ProActiveRuntime exists on this machine
             String runtimeUrl = ProActiveRuntimeImpl.getProActiveRuntime().getURL();
-            this.marshaller = new PamrMarshaller(runtimeUrl);
+            this.marshaller = new ProActiveMarshaller(runtimeUrl);
         }
 
         public void run() {

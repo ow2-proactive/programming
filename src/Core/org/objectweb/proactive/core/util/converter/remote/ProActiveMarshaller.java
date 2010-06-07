@@ -34,34 +34,32 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extra.messagerouting.remoteobject.util;
+package org.objectweb.proactive.core.util.converter.remote;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
  * This class is responsible for the serialization/deserialization process
- *  for the message routing protocol
  *
- * @author fabratu
- * @version %G%, %I%
- * @since ProActive 4.10
+ * @since ProActive 4.3.0
  */
-public class PamrMarshaller {
+public class ProActiveMarshaller {
 
     private final String localRuntimeURL;
 
-    public PamrMarshaller(String localRuntimeURL) {
+    public ProActiveMarshaller(String localRuntimeURL) {
         this.localRuntimeURL = localRuntimeURL;
     }
 
     public byte[] marshallObject(Object o) throws IOException {
-        PamrMarshalOutputStream serializer = null;
+        ProActiveMarshalOutputStream serializer = null;
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            serializer = new PamrMarshalOutputStream(baos, this.localRuntimeURL);
+            serializer = new ProActiveMarshalOutputStream(baos, this.localRuntimeURL);
             serializer.writeObject(o);
             serializer.flush();
             return baos.toByteArray();
@@ -73,9 +71,21 @@ public class PamrMarshaller {
     }
 
     public Object unmarshallObject(byte[] bytes) throws IOException, ClassNotFoundException {
-        PamrMarshalInputStream deserializer = null;
+        ProActiveMarshalInputStream deserializer = null;
         try {
-            deserializer = new PamrMarshalInputStream(new ByteArrayInputStream(bytes));
+            deserializer = new ProActiveMarshalInputStream(new ByteArrayInputStream(bytes));
+            return deserializer.readObject();
+        } finally {
+            // cleanup
+            if (deserializer != null)
+                deserializer.close(); // this will also close the underlying bais
+        }
+    }
+
+    public Object unmarshallObject(InputStream is) throws IOException, ClassNotFoundException {
+        ProActiveMarshalInputStream deserializer = null;
+        try {
+            deserializer = new ProActiveMarshalInputStream(is);
             return deserializer.readObject();
         } finally {
             // cleanup

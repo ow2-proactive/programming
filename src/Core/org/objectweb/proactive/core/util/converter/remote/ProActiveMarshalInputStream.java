@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extra.messagerouting.remoteobject.util;
+package org.objectweb.proactive.core.util.converter.remote;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,18 +44,19 @@ import java.io.ObjectStreamClass;
 
 /**
  * An input stream which defines the deserialization behaviour
- *   while using the ProActive Message Routing protocol
- * @author fabratu
- * @version %G%, %I%
- * @since ProActive 4.10
+ *   
+ * If a class cannot be found locally, then it is downloaded from the remote
+ * runtime.
+ * 
+ * @since ProActive 4.3.0
  */
-public class PamrMarshalInputStream extends ObjectInputStream {
+public class ProActiveMarshalInputStream extends ObjectInputStream {
 
-    private final PamrClassLoader pamrLoader;
+    private final ProActiveRemoteClassLoader remoteLoader;
 
-    public PamrMarshalInputStream(InputStream in) throws IOException {
+    public ProActiveMarshalInputStream(InputStream in) throws IOException {
         super(in);
-        pamrLoader = new PamrClassLoader();
+        remoteLoader = new ProActiveRemoteClassLoader();
     }
 
     @Override
@@ -68,7 +69,7 @@ public class PamrMarshalInputStream extends ObjectInputStream {
             String clazzName = desc.getName();
             try {
                 String runtimeURL = readRuntimeURL();
-                return this.pamrLoader.loadClass(clazzName, runtimeURL);
+                return this.remoteLoader.loadClass(clazzName, runtimeURL);
             } catch (ClassCastException e1) {
                 throw new ClassNotFoundException("Cannot load the class " + clazzName +
                     " - violation of the pamr serialization protocol.");

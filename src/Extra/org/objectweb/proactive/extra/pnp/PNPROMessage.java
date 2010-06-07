@@ -45,6 +45,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
 import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
+import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.pnp.PNPAgent;
 import org.objectweb.proactive.extra.pnp.PNPConfig;
@@ -77,11 +78,17 @@ abstract class PNPROMessage implements Serializable {
 
     protected boolean isAsynchronous = false;
 
+    /** serialization
+     *  This field is transient - it has significance only on this host
+     * */
+    private transient final ProActiveMarshaller marshaller;
+
     public PNPROMessage(URI uri, PNPAgent agent) {
         this.uri = uri;
         this.agent = agent;
         this.returnedObject = null;
         String runtimeUrl = ProActiveRuntimeImpl.getProActiveRuntime().getURL();
+        this.marshaller = new ProActiveMarshaller(runtimeUrl);
     }
 
     /**
@@ -96,7 +103,7 @@ abstract class PNPROMessage implements Serializable {
      */
     public final void send() throws PNPException {
         try {
-            byte[] bytes = ObjectToByteConverter.ProActiveObjectStream.convert(this);
+            byte[] bytes = this.marshaller.marshallObject(this);
 
             // FIXME: Dynamic hearthbeat & service timeout
 
@@ -106,7 +113,7 @@ abstract class PNPROMessage implements Serializable {
             InputStream response = agent.sendMsg(uri, msgReq);
             if (!isAsynchronous) {
                 try {
-                    this.returnedObject = ByteToObjectConverter.ProActiveObjectStream.convert(response, null);
+                    this.returnedObject = this.marshaller.unmarshallObject(response);
                 } catch (IOException e) {
                     throw new PNPException("Failed to unmarshall the response", e);
                 } catch (ClassNotFoundException e) {

@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extra.messagerouting.remoteobject.util;
+package org.objectweb.proactive.core.util.converter.remote;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -42,18 +42,19 @@ import java.io.OutputStream;
 
 
 /**
- * An output stream which defines the serialization behaviour
- * while using the ProActive Message Routing protocol.
+ * An output stream which defines the serialization behaviour.
+ * 
+ * The URL of the local runtime is put as annotation to allows the 
+ * {@link ProActiveMarshalInputStream} to remotely download the
+ * class if neeeded.
  *
- * @author fabratu
- * @version %G%, %I%
- * @since ProActive 4.10
+ * @since ProActive 4.3.0
  */
-public class PamrMarshalOutputStream extends ObjectOutputStream {
+public class ProActiveMarshalOutputStream extends ObjectOutputStream {
 
     private final String localRuntimeUrl;
 
-    public PamrMarshalOutputStream(OutputStream out, String localRuntimeUrl) throws IOException {
+    public ProActiveMarshalOutputStream(OutputStream out, String localRuntimeUrl) throws IOException {
         super(out);
         this.localRuntimeUrl = localRuntimeUrl;
     }
@@ -63,5 +64,4 @@ public class PamrMarshalOutputStream extends ObjectOutputStream {
         // write the local runtime URL
         writeObject(this.localRuntimeUrl);
     }
-
 }

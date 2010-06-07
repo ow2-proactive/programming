@@ -54,8 +54,9 @@ import org.jboss.netty.util.Timer;
 import org.jboss.netty.util.TimerTask;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
-import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
+import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.pnp.exception.PNPException;
 
@@ -72,9 +73,13 @@ class PNPServerHandler extends SimpleChannelHandler {
     final private Executor executor;
     /** The object in charge of sending heartbeats to the client */
     private Heartbeater hearthbeater;
+    /** Serialization */
+    final private ProActiveMarshaller marshaller;
 
     public PNPServerHandler(Executor executor) {
         this.executor = executor;
+        String runtimeUrl = ProActiveRuntimeImpl.getProActiveRuntime().getURL();
+        this.marshaller = new ProActiveMarshaller(runtimeUrl);
     }
 
     @Override
@@ -85,7 +90,7 @@ class PNPServerHandler extends SimpleChannelHandler {
         }
 
         PNPFrameCall msgReq = (PNPFrameCall) message;
-        executor.execute(new RequestExecutor(msgReq, e.getChannel(), hearthbeater));
+        executor.execute(new RequestExecutor(msgReq, e.getChannel(), hearthbeater, this.marshaller));
     }
 
     @Override
@@ -228,11 +233,15 @@ class PNPServerHandler extends SimpleChannelHandler {
         final private Channel channel;
         /** The heartbeater to notify when the handling is finished */
         final private Heartbeater hearthbeater;
+        /** Serialization */
+        final private ProActiveMarshaller marshaller;
 
-        public RequestExecutor(PNPFrameCall req, Channel channel, Heartbeater hearthbeater) {
+        public RequestExecutor(PNPFrameCall req, Channel channel, Heartbeater hearthbeater,
+                ProActiveMarshaller marshaller) {
             this.req = req;
             this.channel = channel;
             this.hearthbeater = hearthbeater;
+            this.marshaller = marshaller;
         }
 
         public void run() {
@@ -249,8 +258,7 @@ class PNPServerHandler extends SimpleChannelHandler {
                 // Unmarshall the data
                 PNPROMessage pnpMessage = null;
                 try {
-                    pnpMessage = (PNPROMessage) ByteToObjectConverter.ProActiveObjectStream.convert(req
-                            .getPayload(), null);
+                    pnpMessage = (PNPROMessage) marshaller.unmarshallObject(req.getPayload());
                 } catch (Throwable t) {
                     // Sends a response call
                     PNPException e = new PNPException("Failed to unmarshall incoming message", t);
@@ -272,7 +280,7 @@ class PNPServerHandler extends SimpleChannelHandler {
 
                 byte[] resultBytes = null;
                 try {
-                    resultBytes = ObjectToByteConverter.ProActiveObjectStream.convert(result);
+                    resultBytes = this.marshaller.marshallObject(result);
                 } catch (Throwable t) {
                     // Sends a response call
                     PNPException e = new PNPException("Failed to marshall the result bytes", t);

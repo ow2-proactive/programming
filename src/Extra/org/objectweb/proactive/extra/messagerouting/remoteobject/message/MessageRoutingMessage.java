@@ -41,13 +41,12 @@ import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
 import org.objectweb.proactive.extra.messagerouting.client.Agent;
 import org.objectweb.proactive.extra.messagerouting.exceptions.MessageRoutingException;
-import org.objectweb.proactive.extra.messagerouting.remoteobject.util.PamrMarshaller;
 
 
 /** Any kind of routed message.
@@ -80,7 +79,7 @@ public abstract class MessageRoutingMessage implements Serializable {
     /** serialization
      *  This field is transient - it has significance only on this host
      * */
-    private transient final PamrMarshaller marshaller;
+    private transient final ProActiveMarshaller marshaller;
 
     protected boolean isAsynchronous = false;
 
@@ -92,7 +91,7 @@ public abstract class MessageRoutingMessage implements Serializable {
         // TODO - maybe properly synchronize, to make sure that
         // MessageRoutingROF.createRemoteObject() for a PART was called before
         String runtimeUrl = ProActiveRuntimeImpl.getProActiveRuntime().getURL();
-        this.marshaller = new PamrMarshaller(runtimeUrl);
+        this.marshaller = new ProActiveMarshaller(runtimeUrl);
     }
 
     /**
