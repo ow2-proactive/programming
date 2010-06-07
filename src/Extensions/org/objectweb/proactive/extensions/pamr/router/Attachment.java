@@ -1,0 +1,225 @@
+/*
+ * ################################################################
+ *
+ * ProActive Parallel Suite(TM): The Java(TM) library for
+ *    Parallel, Distributed, Multi-Core Computing for
+ *    Enterprise Grids & Clouds
+ *
+ * Copyright (C) 1997-2010 INRIA/University of 
+ * 				Nice-Sophia Antipolis/ActiveEon
+ * Contact: proactive@ow2.org or contact@activeeon.com
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; version 3 of
+ * the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * If needed, contact us to obtain a release under GPL Version 2 
+ * or a different license than the GPL.
+ *
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
+ *  Contributor(s):
+ *
+ * ################################################################
+ * $$ACTIVEEON_INITIAL_DEV$$
+ */
+package org.objectweb.proactive.extensions.pamr.router;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+
+
+/**
+ * An attachment belongs to a client as soon as a registration reply have been
+ * send. One and only one attachment can exist for any client at a given time.
+ * 
+ * The attachment is in charge of two thing:
+ * <ul>
+ * <li>
+ * <b>Front end</b>: it is a statefull entity which is in charge of reassembling
+ * the message from chunks of data.</li>
+ * <li>
+ * <b>Back end</b>: it holds the only reference onto the SocketChannel
+ * associated to the current tunnel.</li>
+ * </ul>
+ * 
+ * @since ProActive 4.1.0
+ */
+public class Attachment {
+
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+
+    /** The id of this attachment
+     * 
+     * Never used by any other object but can be useful when debugging
+     */
+    final private long attachmentId;
+
+    /** The client */
+    /* Not final because can't be set in the constructor. Once this field is
+     * set, it MUST NOT be updated again.
+     */
+    private Client client = null;
+
+    /** The assembler is charge of reassembling the message for this given client */
+    final private MessageAssembler assembler;
+
+    /** The socket channel where to write for this given client */
+    final private SocketChannel socketChannel;
+
+    final private AtomicBoolean dtored;
+
+    public Attachment(RouterImpl router, SocketChannel socketChannel) {
+        this.attachmentId = AttachmentIdGenerator.getId();
+        this.assembler = new MessageAssembler(router, this);
+        this.socketChannel = socketChannel;
+        this.client = null;
+        this.dtored = new AtomicBoolean(false);
+    }
+
+    /** Free the resources (sockets and file descriptor) associated to this attachment. 
+     * 
+     * Must be called before dereferencing an attachment.
+     */
+    public void dtor() {
+        this.dtored.set(true);
+
+        try {
+            this.socketChannel.socket().close();
+        } catch (IOException e) {
+            ProActiveLogger.logEatedException(logger, e);
+        } finally {
+            try {
+                this.socketChannel.close();
+            } catch (IOException e) {
+                ProActiveLogger.logEatedException(logger, e);
+            }
+        }
+    }
+
+    /* To avoid file descriptor leak, we use finalize() to close the fds 
+     * even if dtor() has not been called. 
+     * 
+     * fd are eventually closed when the GC is run
+     */
+    @Override
+    protected void finalize() throws Throwable {
+        if (this.dtored.get() == false) {
+            logger
+                    .trace("File descriptor leak detected. Attachment.dtor() must be called. Please fill a bug report");
+            this.dtor();
+            super.finalize();
+        }
+    }
+
+    public MessageAssembler getAssembler() {
+        return assembler;
+    }
+
+    public long getAttachmentId() {
+        return attachmentId;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("attachmentId= " + attachmentId + " ");
+        sb.append("socketChannel=" + socketChannel.socket() + " ");
+        sb.append("client=" + (client == null ? "unknown" : client.getAgentId()) + " ");
+        return sb.toString();
+    }
+
+    public void setClient(Client client) {
+        if (this.client == null) {
+            this.client = client;
+        } else {
+            logger.warn("Attachement.setClientId() cannot be called twice. Current client: " + this.client +
+                ", discarded: " + client);
+        }
+    }
+
+    public String getRemoteEndpointName() {
+        SocketAddress sa = getRemoteEndpoint();
+        if (sa == null)
+            return "unknown";
+        else
+            return sa.toString();
+    }
+
+    public InetSocketAddress getRemoteEndpoint() {
+        InetSocketAddress unknown = null;
+
+        if (socketChannel == null)
+            return unknown;
+
+        SocketAddress sa = socketChannel.socket().getRemoteSocketAddress();
+        if (sa == null)
+            return unknown;
+        if (sa instanceof InetSocketAddress) {
+            // InetSocketAddress is THE implementation for SocketAddress
+            return (InetSocketAddress) sa;
+        }
+
+        return unknown;
+
+    }
+
+    public void send(ByteBuffer byteBuffer) throws IOException {
+        /*
+         * SocketChannel ARE thread safe. Extra locking to ensure serialization
+         * of the calls is useless
+         */
+        byteBuffer.clear();
+        while (byteBuffer.remaining() > 0) {
+            int bytes = this.socketChannel.write(byteBuffer);
+
+            if (logger.isDebugEnabled()) {
+                String dstClient = this.client == null ? "unknown" : client.getAgentId().toString();
+                String remaining = byteBuffer.remaining() > 0 ? byteBuffer.remaining() + " remaining to send"
+                        : "";
+                logger.debug("Sent a " + bytes + " bytes message to client " + dstClient + " with " +
+                    this.socketChannel.socket() + ". " + remaining);
+            }
+        }
+    }
+
+    static abstract private class AttachmentIdGenerator {
+        static final private AtomicLong generator = new AtomicLong(0);
+
+        static public long getId() {
+            return generator.getAndIncrement();
+        }
+    }
+
+    /** Close the underlying {@link SocketChannel}
+     *
+     * @throws IOException if the connexion cannot be closed
+     */
+    public void disconnect() throws IOException {
+        this.socketChannel.close();
+    }
+}
