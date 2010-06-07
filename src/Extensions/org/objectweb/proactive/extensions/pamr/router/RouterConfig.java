@@ -76,7 +76,7 @@ public class RouterConfig {
         this.isDaemon = false;
         this.nbWorkerThreads = 4;
         this.inetAddress = null;
-        this.heartbeatTimeout = 1000;
+        this.heartbeatTimeout = 9000;
     }
 
     public void setReadOnly() {
