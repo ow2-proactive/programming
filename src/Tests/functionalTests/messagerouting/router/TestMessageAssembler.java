@@ -45,14 +45,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
-import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
-import org.objectweb.proactive.extra.messagerouting.router.Attachment;
-import org.objectweb.proactive.extra.messagerouting.router.Client;
-import org.objectweb.proactive.extra.messagerouting.router.MessageAssembler;
-import org.objectweb.proactive.extra.messagerouting.router.RouterInternal;
+import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
+import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
+import org.objectweb.proactive.extensions.pamr.protocol.message.DataReplyMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
+import org.objectweb.proactive.extensions.pamr.router.Attachment;
+import org.objectweb.proactive.extensions.pamr.router.Client;
+import org.objectweb.proactive.extensions.pamr.router.MessageAssembler;
+import org.objectweb.proactive.extensions.pamr.router.RouterInternal;
 
 import functionalTests.FunctionalTest;
 

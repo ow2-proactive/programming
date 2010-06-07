@@ -37,7 +37,7 @@
 package performanceTests.throughput;
 
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 
 
 /**

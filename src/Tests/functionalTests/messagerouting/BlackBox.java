@@ -42,9 +42,9 @@ import java.net.Socket;
 
 import org.junit.After;
 import org.junit.Before;
-import org.objectweb.proactive.extra.messagerouting.client.Tunnel;
-import org.objectweb.proactive.extra.messagerouting.router.Router;
-import org.objectweb.proactive.extra.messagerouting.router.RouterConfig;
+import org.objectweb.proactive.extensions.pamr.client.Tunnel;
+import org.objectweb.proactive.extensions.pamr.router.Router;
+import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 
 import functionalTests.FunctionalTest;
 

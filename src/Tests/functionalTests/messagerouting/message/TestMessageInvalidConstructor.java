@@ -38,12 +38,12 @@ package functionalTests.messagerouting.message;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
-import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
+import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
+import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
+import org.objectweb.proactive.extensions.pamr.protocol.message.DataReplyMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationReplyMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
 
 import functionalTests.FunctionalTest;
 

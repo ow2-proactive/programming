@@ -42,14 +42,14 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
-import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
-import org.objectweb.proactive.extra.messagerouting.router.RouterImpl;
+import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
+import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
+import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
+import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationReplyMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
+import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 
 import functionalTests.messagerouting.BlackBox;
 

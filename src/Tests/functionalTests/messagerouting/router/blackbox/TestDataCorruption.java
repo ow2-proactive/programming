@@ -42,11 +42,11 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.extra.messagerouting.protocol.AgentID;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.ErrorMessage.ErrorType;
+import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
+import org.objectweb.proactive.extensions.pamr.protocol.message.DataReplyMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
 
 import functionalTests.messagerouting.BlackBoxRegistered;
 

@@ -39,16 +39,16 @@ package functionalTests.messagerouting.message;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.extra.messagerouting.exceptions.MalformedMessageException;
-import org.objectweb.proactive.extra.messagerouting.protocol.TypeHelper;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataReplyMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.DataRequestMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationReplyMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.RegistrationRequestMessage;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.Field;
-import org.objectweb.proactive.extra.messagerouting.protocol.message.Message.MessageType;
+import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
+import org.objectweb.proactive.extensions.pamr.protocol.TypeHelper;
+import org.objectweb.proactive.extensions.pamr.protocol.message.DataMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.DataReplyMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
+import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationReplyMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.Message.Field;
+import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
 
 
 /**

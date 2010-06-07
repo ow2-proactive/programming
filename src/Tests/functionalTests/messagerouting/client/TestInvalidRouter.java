@@ -43,10 +43,10 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.extra.messagerouting.client.AgentImpl;
-import org.objectweb.proactive.extra.messagerouting.client.ProActiveMessageHandler;
-import org.objectweb.proactive.extra.messagerouting.protocol.MagicCookie;
-import org.objectweb.proactive.extra.messagerouting.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
+import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
+import org.objectweb.proactive.extensions.pamr.client.ProActiveMessageHandler;
+import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
 
 import functionalTests.FunctionalTest;
 

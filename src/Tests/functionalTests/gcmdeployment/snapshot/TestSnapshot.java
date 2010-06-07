@@ -55,7 +55,7 @@ import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationSnapshot;
 import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeSnapshot;
-import org.objectweb.proactive.extra.messagerouting.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 

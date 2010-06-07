@@ -5,4 +5,4 @@ workingDir=`dirname $0`
 
 VM_ARGS="-Xmx512m -Xms512m -server"
 
-$JAVACMD $VM_ARGS org.objectweb.proactive.extra.messagerouting.router.Main "$@"
+$JAVACMD $VM_ARGS org.objectweb.proactive.extensions.pamr.router.Main "$@"
