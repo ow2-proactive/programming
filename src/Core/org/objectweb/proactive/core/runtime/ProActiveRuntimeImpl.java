@@ -165,7 +165,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             proActiveRuntime = new ProActiveRuntimeImpl();
             proActiveRuntime.createMBean();
             System.setProperty(PALifeCycle.PA_STARTED_PROP, "true");
-            if ( ! CentralPAPropertyRepository.PA_RUNTIME_PING.isTrue()) {
+            if (!CentralPAPropertyRepository.PA_RUNTIME_PING.isTrue()) {
                 new PARTPinger().start();
             }
         } catch (UnknownProtocolException e) {

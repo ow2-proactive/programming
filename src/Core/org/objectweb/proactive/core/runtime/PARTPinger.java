@@ -62,7 +62,7 @@ public class PARTPinger extends Thread {
     @Override
     public void run() {
 
-        if ( ! CentralPAPropertyRepository.PA_RUNTIME_PING.isTrue()) {
+        if (!CentralPAPropertyRepository.PA_RUNTIME_PING.isTrue()) {
             return;
         }
 
