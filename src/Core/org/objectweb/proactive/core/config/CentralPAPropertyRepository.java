@@ -661,4 +661,17 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
       */
     static public PAPropertyString PA_MOP_GENERATEDCLASSES_DIR = new PAPropertyString(
         "proactive.mop.generatedclassesdir", false);
+
+    /**
+     * activate or not the ping feature in ProActive -- each time a runtime
+     * starts it pings a given web server.
+     */
+    static public PAPropertyBoolean PA_RUNTIME_PING = new PAPropertyBoolean(
+            "proactive.runtime.ping", false, false);
+    /**
+     * the url to ping
+     */
+    static public PAPropertyString PA_RUNTIME_PING_URL = new PAPropertyString(
+            "proactive.runtime.ping.url", false, "http://pinging.activeeon.com/ping.php");
+
 }
