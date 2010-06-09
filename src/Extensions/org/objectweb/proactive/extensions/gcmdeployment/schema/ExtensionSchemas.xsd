@@ -31,6 +31,8 @@
 	<xsd:include schemaLocation="../GCMDeployment/vm/virtualbox-ws.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/vm/libxen.xsd" />
 	<xsd:include schemaLocation="../GCMDeployment/vm/libvirt.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/vm/hyperv-wmi.xsd" />
+	<xsd:include schemaLocation="../GCMDeployment/vm/hyperv-winrm.xsd" />
 
 <!--
 	<xsd:include schemaLocation="../GCMDeployment/group/unsupported/GroupARCSchema.xsd" />

@@ -16,6 +16,9 @@ if sys.version_info[0] == 2 :
     sys.path.append(os.path.abspath(pathname + os.path.sep + "xenserver"))
     sys.path.append(os.path.abspath(pathname + os.path.sep + "xenserver" + os.path.sep + "ext"))
     import xenserver
+#updating hyperv path
+sys.path.append(os.path.abspath(pathname + os.path.sep + "hyperv"))
+import hyperv
 
 #This module is the main entry point to bootstrap
 #ProActive environment when deploying through GCM
@@ -39,6 +42,7 @@ proactivelib.Abstract_Runtime.addProvider(vmware.VMware_Runtime())
 proactivelib.Abstract_Runtime.addProvider(virtualbox.Virtualbox_Runtime())
 if sys.version_info[0] == 2 :
     proactivelib.Abstract_Runtime.addProvider(xenserver.XenServer_Runtime())
+proactivelib.Abstract_Runtime.addProvider(hyperv.HyperV_Runtime())
 
 #iterates registered Abstract_Runtime implementation to find the good
 #environment.

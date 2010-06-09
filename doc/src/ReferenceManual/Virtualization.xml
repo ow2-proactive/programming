@@ -242,6 +242,18 @@
 							<entry>Hosted</entry>
 							<entry>libvirt</entry>
 						</row>
+						<row>
+							<entry><emphasis role="bold">Microsoft</emphasis></entry>
+							<entry>Hyper-V</entry>
+							<entry>Bare Metal</entry>
+							<entry>hyper-v winrm</entry>
+						</row>
+						<row>
+							<entry><emphasis role="bold">Microsoft</emphasis></entry>
+							<entry>Hyper-V</entry>
+							<entry>Bare Metal</entry>
+							<entry>hyper-v wmi</entry>
+						</row>
 					</tbody>
 				</tgroup>
 			</informaltable>
@@ -521,6 +533,22 @@
 						</itemizedlist>
 				</para>
 			    </section>
+			</section>
+			<section>
+				<info>
+					<title>Hyper-V</title>
+				</info>
+				<para>
+					<emphasis><phrase>This software allows ProActive deployment.</phrase></emphasis>
+				</para>
+				<para>
+					Microsoft released its bare metal hypervisor, Microsoft Hyper-V, with its server operation system Windows Server 2008 and 2008 R2.
+					Microsoft is a real competitor in the Virtualization ecosystem for the well known XenServer and VMware ESX. It currently supports
+					2 different ways to be managed using <link xlink:href="http://en.wikipedia.org/wiki/Distributed_Component_Object_Model">Microsoft's DCOM protocol</link>
+					or http with the Microsoft's implementation of <link xlink:href="http://en.wikipedia.org/wiki/WS-Management">WSMAN</link> named WINRM.
+					If you decide to use DCOM, you must set the firewall rules and if you want to use http, you must setup the WINRM environment.
+					For the latter, you can refer to <link xlink:href="http://blogs.dirteam.com/blogs/sanderberkouwer/archive/2008/02/23/remotely-managing-your-server-core-using-winrm-and-winrs.aspx">this tutorial</link>
+				</para>
 			</section>
 			<section>
 				<info>
@@ -971,6 +999,65 @@
 					( which has exclusive write access on the disk ) must be powered off to allows clones to be powered on.
 				</para>
 			</section>
+		</section>
+		<section>
+			<info><title>Hyper-V</title></info>
+				<para>
+					<emphasis>
+						<phrase>This section concerns Hyper-V using either WINRM or WMI. </phrase>
+						<phrase>You need to reference every Virtualizing/src/hyperv-(winrm|wmi)/lib/ jars in the classpath. </phrase>
+					</emphasis>
+				</para>
+				<para>
+					To deploy your virtual infrastructure with Microsoft Hyper-V, you can use a &lt;hyperv-winrm&gt; or &lt;hyperv-wmi&gt; section
+					( see the associated section in the previous chapter ). Here is an example on
+					how to use it:
+					<programlisting>
+						&lt;vms&gt;
+							&lt;hyperv-winrm id="hyperv"&gt;
+								&lt;hypervisor url="http://192.168.1.166"/&gt;
+								&lt;authentication user="root" pwd="root123"/&gt;
+								&lt;image key="myUbuntu" os="unix" count="2"/&gt;
+							&lt;/hyperv-winrm&gt;
+						&lt;vms&gt;
+					</programlisting>
+					The &lt;hyperv-winrm&gt; ( or hyperv-wmi ) tag says that one want to use the module built on winrm API ( or wmi )
+					( see associated section in previous chapter ), it has the following child elements:
+					<programlisting>
+						&lt;hypervisor&gt;
+						&lt;authentication&gt;
+						&lt;image&gt;
+					</programlisting>
+					and the following attribute:
+					<programlisting>
+						id="someID"
+					</programlisting>
+					The id attribute is made to be able to reference this section from the resource part of the descriptor and is compulsory.
+					The hypervisor element, if specified, indicates the remote hypervisor to connect to. Note that the only attribute ( the url )
+					you have to supply is service dependent. If you use wmi, just provide the FQDN ( or IP ), if you use winrm, provide a URL matching
+					your winrm configuration ( https://myserver.com for instance. ). Note that in the latter case, if you decide to use https, you must setup
+					the &quot;javax.net.ssl*&quot; properties. If you provide a hypervisor without any url or no hypervisor, one tries
+					to connect locally ( but we encourage you to precise the service's url even if connecting locally, at least to specify protocol and port ).
+					You can put how many hypervisors you want.
+				</para>
+				<para>
+					The &lt;authentication&gt; tag is optional if connecting locally and is used to specify a user with sufficient permissions to manage your virtual environment.
+					If you connect locally, you may avoid this tag. The only attributes of that section are user and pwd.
+				</para>
+				<para>
+					The &lt;image&gt; tag points out which virtual machines you want to deploy. It admits the following attributes:
+					<programlisting>
+						key="someName"
+						os="windows"
+						count="3"
+					</programlisting>
+					The <quote>key</quote> attribute designates the unique name of your virtual machine. Not every software force to fix a unique name
+					per virtual machine ( because you almost always manage your virtual infrastructure thanks to an user interface and can <quote>click</quote>
+					the good one. ), we ask you to do so to ensure the good function of the deployment feature. <quote>os</quote> attribute indicates
+					the guest virtual machine's operating system. <quote>count</quote> allows you to precise the number of virtual machine of this type you want
+					to deploy. The clone feature for Microsoft Hyper-V uses Copy-On-Write, that means that the clone virtual machines use differencing hard disks
+					to store modification of the cloned disk ( work like snapshots, you cannot use the cloned disk anymore without violating the clone disk integrity. )
+				</para>
 		</section>
 		<section>
 			<info><title>XenServer</title></info>

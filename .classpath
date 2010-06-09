@@ -131,5 +131,16 @@
 	<classpathentry kind="lib" path="lib/ws-common/org.apache.servicemix.bundles.wsdl4j-1.6.1_1.jar"/>
 	<classpathentry kind="lib" path="lib/ws-common/wstx-asl-3.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/ws-common/XmlSchema-1.4.5.jar"/>
+	<classpathentry kind="lib" path="lib/j-interop.jar"/>
+	<classpathentry kind="lib" path="lib/j-interopdeps.jar"/>
+	<classpathentry kind="lib" path="lib/jcifs-1.2.19.jar"/>
+	<classpathentry kind="lib" path="lib/virtualization-hyperv-winrm.jar"/>
+	<classpathentry kind="lib" path="lib/virtualization-hyperv-wmi.jar"/>
+	<classpathentry kind="lib" path="lib/cimom.jar"/>
+	<classpathentry kind="lib" path="lib/cimrepository.jar"/>
+	<classpathentry kind="lib" path="lib/mofcomp.jar"/>
+	<classpathentry kind="lib" path="lib/saaj-impl.jar"/>
+	<classpathentry kind="lib" path="lib/wbem.jar"/>
+	<classpathentry kind="lib" path="lib/wiseman-tools.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
