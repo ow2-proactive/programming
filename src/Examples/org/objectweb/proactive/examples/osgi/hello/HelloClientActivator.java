@@ -6,7 +6,7 @@
  *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of 
- *              Nice-Sophia Antipolis/ActiveEon
+ * 				Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or

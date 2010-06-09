@@ -39,12 +39,14 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.BroadcastEntry;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.LookupEntry;
 
 
 public class GCMDeploymentAcquisition {
 
     private List<LookupEntry> lookupEntries = new ArrayList<LookupEntry>();
+    private List<BroadcastEntry> broadcastEntries = new ArrayList<BroadcastEntry>();
 
     public List<LookupEntry> getLookupEntries() {
         return lookupEntries;
@@ -53,4 +55,13 @@ public class GCMDeploymentAcquisition {
     public void setLookupEntries(List<LookupEntry> lookupEntries) {
         this.lookupEntries = lookupEntries;
     }
+
+    public List<BroadcastEntry> getBroadcastEntries() {
+        return broadcastEntries;
+    }
+
+    public void setBroadcastEntries(List<BroadcastEntry> broadcastEntries) {
+        this.broadcastEntries = broadcastEntries;
+    }
+
 }

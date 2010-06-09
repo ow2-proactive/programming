@@ -62,6 +62,7 @@ import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
+import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.acquisition.BroadcastEntry;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.AbstractBridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.Bridge;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.bridge.BridgeOARSHParser;
@@ -101,6 +102,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMVMwa
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMVirtualboxParser;
 import org.objectweb.proactive.extensions.gcmdeployment.environment.Environment;
 import org.ow2.proactive.virtualizing.core.error.VirtualServiceException;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -130,6 +132,7 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
     private static final String PA_BRIDGE = "bridge";
     private static final String PA_HYPERVISOR = "hypervisor";
     private static final String PA_LOOKUP = "lookup";
+    private static final String PA_BROADCAST = "broadcast";
     private static final String PA_NODE_ASKED = "nodesAsked";
     private static final String PA_LOCAL_CLIENT = "localClient";
     private static final String PA_PEER_SET = "peerSet";
@@ -359,10 +362,25 @@ public class GCMDeploymentParserImpl implements GCMDeploymentParser {
     private void parseAcquisitionNode(Node acquisitionNode) throws XPathExpressionException, IOException {
         if (acquisitionNode.getNodeName().equals(PA_LOOKUP)) {
             // parseLookupNode();
+        } else if (PA_BROADCAST.equals(acquisitionNode.getNodeName())) {
+            parseBroadcastNode(acquisitionNode);
         }
     }
 
-    /*
+    private void parseBroadcastNode(Node acquisitionNode) {
+        BroadcastEntry newEntry = new BroadcastEntry();
+
+        Node attr = acquisitionNode.getAttributes().getNamedItem(PA_PORT);
+
+        if (attr != null && attr.getNodeType() == Node.ATTRIBUTE_NODE) {
+            Attr attr2 = (Attr) attr;
+            newEntry.setPort(Integer.parseInt(attr2.getValue()));
+        }
+
+        this.acquisitions.getBroadcastEntries().add(newEntry);
+    }
+
+    /**
      * Parse the &lt;resources&gt; node
      * 
      * @throws XPathExpressionException

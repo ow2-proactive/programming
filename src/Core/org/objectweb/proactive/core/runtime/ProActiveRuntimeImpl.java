@@ -109,6 +109,7 @@ import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.rmi.FileProcess;
+import org.objectweb.proactive.core.runtime.broadcast.RTBroadcaster;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurity;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
@@ -160,14 +161,22 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // JMX
     private static Logger jmxLogger = ProActiveLogger.getLogger(Loggers.JMX);
     private static final Logger clLogger = ProActiveLogger.getLogger(Loggers.CLASSLOADING);
+
     static {
         try {
             proActiveRuntime = new ProActiveRuntimeImpl();
             proActiveRuntime.createMBean();
             System.setProperty(PALifeCycle.PA_STARTED_PROP, "true");
-            if (!CentralPAPropertyRepository.PA_RUNTIME_PING.isTrue()) {
+            if (CentralPAPropertyRepository.PA_RUNTIME_PING.isTrue()) {
                 new PARTPinger().start();
             }
+
+            if (CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.isTrue()) {
+                RTBroadcaster rtBrodcaster = RTBroadcaster.getInstance();
+                // notify our presence on the lan
+                rtBrodcaster.sendDiscover();
+            }
+
         } catch (UnknownProtocolException e) {
             e.printStackTrace();
         } catch (ProActiveException e) {
@@ -715,6 +724,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             }
             mbean = null;
         }
+
         // END JMX unregistration
         System.exit(0);
 

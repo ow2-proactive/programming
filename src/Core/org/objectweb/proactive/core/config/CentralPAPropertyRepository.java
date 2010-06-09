@@ -36,8 +36,11 @@
  */
 package org.objectweb.proactive.core.config;
 
+import java.net.Socket;
+
 import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
 import org.objectweb.proactive.core.filetransfer.FileTransferService;
+import org.objectweb.proactive.core.runtime.broadcast.BTCallbackDefaultImpl;
 import org.objectweb.proactive.core.util.OperatingSystem;
 
 
@@ -695,5 +698,28 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      */
     static public PAPropertyString PA_RUNTIME_PING_URL = new PAPropertyString("proactive.runtime.ping.url",
         false, "http://pinging.activeeon.com/ping.php");
+
+    /**
+     * Add Runtime the ability to broadcast their presence on the network
+     */
+    static public PAPropertyBoolean PA_RUNTIME_BROADCAST = new PAPropertyBoolean(
+        "proactive.runtime.broadcast", false, false);
+    /**
+     * the address to use by the broadcast sockets
+     */
+    static public PAPropertyString PA_RUNTIME_BROADCAST_ADDRESS = new PAPropertyString(
+        "proactive.runtime.broadcast.address", false, "230.0.1.1");
+
+    /**
+     * the port to use by the broadcast sockets
+     */
+    static public PAPropertyInteger PA_RUNTIME_BROADCAST_PORT = new PAPropertyInteger(
+        "proactive.runtime.broadcast.port", false, 4554);
+
+    /**
+     * the address to use by the broadcast sockets
+     */
+    static public PAPropertyString PA_RUNTIME_BROADCAST_CALLBACK_CLASS = new PAPropertyString(
+        "proactive.runtime.broadcast.callback.class", false, BTCallbackDefaultImpl.class.getName());
 
 }

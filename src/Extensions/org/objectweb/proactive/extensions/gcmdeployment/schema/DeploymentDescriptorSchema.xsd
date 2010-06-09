@@ -116,9 +116,14 @@
 		<xsd:attribute name="port" type="xsd:positiveInteger"></xsd:attribute>
 	</xsd:complexType>
 
+	<xsd:complexType name="broadcastType">
+		<xsd:attribute name="port" type="xsd:positiveInteger"></xsd:attribute>
+	</xsd:complexType>
+
 	<xsd:complexType name="acquisitionType">
 		<xsd:sequence>
 			<xsd:element name="lookup" type="lookupType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="broadcast" type="broadcastType" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
 

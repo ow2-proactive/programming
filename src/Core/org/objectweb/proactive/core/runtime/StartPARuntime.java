@@ -80,13 +80,18 @@ public class StartPARuntime {
             ProActiveConfiguration.load();
             StartPARuntime startRuntime = new StartPARuntime(args);
             startRuntime.start();
+
+            if (CentralPAPropertyRepository.PA_RUNTIME_STAYALIVE.isTrue()) {
+                startRuntime.waitUntilInterupted();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             abort();
         }
     }
 
-    static private void abort(String str) {
+    static protected void abort(String str) {
         if ((str != null) && (str.length() > 0)) {
             System.err.println(str);
         }
@@ -95,16 +100,16 @@ public class StartPARuntime {
         System.exit(1);
     }
 
-    static private void abort() {
+    static protected void abort() {
         abort("");
     }
 
-    protected StartPARuntime(String[] args) {
+    public StartPARuntime(String[] args) {
         this.args = args;
         parseOptions();
     }
 
-    private void parseOptions() {
+    protected void parseOptions() {
         CommandLineParser parser = new PosixParser();
 
         Options options = new Options();
@@ -155,7 +160,7 @@ public class StartPARuntime {
         }
     }
 
-    private void start() {
+    protected void start() {
         // Print some information message
         logger.info("Starting a ProActiveRuntime on " +
             URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress()));
@@ -208,7 +213,7 @@ public class StartPARuntime {
         }
     }
 
-    private void waitUntilInterupted() {
+    public void waitUntilInterupted() {
         Object o = new Object();
         synchronized (o) {
             try {

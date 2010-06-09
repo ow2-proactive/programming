@@ -5,7 +5,7 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
+ * Copyright (C) 1997-2010 INRIA/University of
  * 				Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
@@ -24,21 +24,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
+ * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.examples.osgi.hello;
+package org.objectweb.proactive.core.runtime.broadcast;
 
-public interface HelloService {
+public interface RTBroadcastAction {
+    /**
+     * a new runtime has been created on the same multicast group.
+     * @param url the url of the newly created runtime
+     */
+    public void creationHandler(String url);
 
-    public void sayHello();
+    /**
+     * the runtime designed by the url requests other runtimes
+     * to notify their presence
+     * @param url the runtime that has sent the request.
+     */
+    public void discoverHandler(String url);
 
-    public void saySomething(String something);
 }
