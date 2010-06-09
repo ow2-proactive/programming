@@ -39,8 +39,6 @@ package org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory;
 import java.io.IOException;
 import java.net.Socket;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.ssh.SshConfig;
 import org.objectweb.proactive.core.ssh.SshTunnelPool;
 import org.objectweb.proactive.core.ssh.SshConfigFileParser.SshToken;

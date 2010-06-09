@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.extensions.pnp;
 
-import java.net.URI;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;

@@ -39,9 +39,7 @@ package org.objectweb.proactive.extensions.pamr.protocol.message;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.TypeHelper;
-import org.objectweb.proactive.extensions.pamr.protocol.message.DataMessage.Field;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
-import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
 
 
 /** A {@link MessageType#HEARTBEAT} message

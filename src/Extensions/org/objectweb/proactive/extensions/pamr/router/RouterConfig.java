@@ -38,11 +38,7 @@ package org.objectweb.proactive.extensions.pamr.router;
 
 import java.io.File;
 import java.net.InetAddress;
-import java.util.Map;
-
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
-import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 
 
 /** A bean for router configuration. 

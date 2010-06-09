@@ -38,7 +38,6 @@ package org.objectweb.proactive.extensions.pamr.protocol.message;
 
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
-import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
 
 
 /**

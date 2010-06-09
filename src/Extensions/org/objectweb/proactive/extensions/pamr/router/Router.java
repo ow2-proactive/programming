@@ -36,7 +36,6 @@
  */
 package org.objectweb.proactive.extensions.pamr.router;
 
-import java.io.IOException;
 import java.net.InetAddress;
 
 import org.objectweb.proactive.annotation.PublicAPI;

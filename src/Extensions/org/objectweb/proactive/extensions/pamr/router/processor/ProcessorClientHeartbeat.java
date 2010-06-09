@@ -41,7 +41,6 @@ import java.nio.ByteBuffer;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatClientMessage;
-import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
 import org.objectweb.proactive.extensions.pamr.router.Client;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;

@@ -38,8 +38,6 @@ package org.objectweb.proactive.core.remoteobject.benchmark;
 
 import java.io.Serializable;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
 
 

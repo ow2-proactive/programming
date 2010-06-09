@@ -45,7 +45,6 @@ import org.objectweb.proactive.core.body.request.RequestImpl;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.Proxy;
-import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 
 
 /**

@@ -39,7 +39,6 @@ package org.objectweb.proactive.core.remoteobject.benchmark;
 import java.io.Serializable;
 import java.util.Random;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
 
 

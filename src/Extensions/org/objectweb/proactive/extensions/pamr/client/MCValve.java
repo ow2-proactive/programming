@@ -39,7 +39,6 @@ package org.objectweb.proactive.extensions.pamr.client;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
-import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageType;
 
 
 public class MCValve implements Valve {

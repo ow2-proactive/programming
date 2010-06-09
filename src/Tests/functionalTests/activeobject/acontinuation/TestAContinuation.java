@@ -43,8 +43,6 @@ import java.util.Vector;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.config.PAProperties;
-
 import functionalTests.FunctionalTest;
 
 
