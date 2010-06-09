@@ -128,6 +128,8 @@ public class PNPAgent {
         ssocketFactory = new NioServerSocketChannelFactory(pnpExecutor, pnpExecutor);
         ServerBootstrap sBoostrap = new ServerBootstrap(ssocketFactory);
         sBoostrap.setPipelineFactory(new PNPServerPipelineFactory(pnpExecutor));
+        sBoostrap.setOption("tcpNoDelay", true);
+        sBoostrap.setOption("child.tcpNoDelay", true);
         try {
             this.serverChannel = sBoostrap.bind(new InetSocketAddress(port));
             SocketAddress sa = this.serverChannel.getLocalAddress();
@@ -147,7 +149,8 @@ public class PNPAgent {
         csocketFactory = new NioClientSocketChannelFactory(pnpExecutor, pnpExecutor);
         ClientBootstrap cBootstrap = new ClientBootstrap(csocketFactory);
         cBootstrap.setPipelineFactory(new PNPClientPipelineFactory());
-
+        cBootstrap.setOption("tcpNoDelay", true);
+        cBootstrap.setOption("child.tcpNoDelay", true);
         this.channelCache = new PNPClientChannelCache(cBootstrap);
     }
 
