@@ -219,7 +219,8 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
      *            to
      * @return a UniversalBody
      */
-    public RemoteObject lookup(URI uri) throws ProActiveException {
+    @SuppressWarnings("unchecked")
+    public <T> RemoteObject<T> lookup(URI uri) throws ProActiveException {
         MessageRoutingRemoteObjectLookupMessage message = new MessageRoutingRemoteObjectLookupMessage(uri,
             agent);
         try {

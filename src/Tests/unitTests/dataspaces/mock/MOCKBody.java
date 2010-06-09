@@ -268,6 +268,7 @@ public class MOCKBody implements Body {
         return 0;
     }
 
+    @Deprecated
     public void register(String url) throws ProActiveException {
 
     }

@@ -140,6 +140,7 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
      *            to
      * @return a UniversalBody
      */
+    @SuppressWarnings("unchecked")
     public RemoteObject lookup(URI uri) throws ProActiveException {
         String name = URIBuilder.getNameFromURI(uri);
         PNPROMessageLookup message = new PNPROMessageLookup(uri, name, agent);

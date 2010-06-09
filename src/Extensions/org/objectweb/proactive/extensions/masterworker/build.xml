@@ -6,9 +6,6 @@
 	
 	<target name="-compile">
 		<compile_extension module="masterworker" />	
-		<java classname="${stubgenerator.class}" fork="true">
-			<classpath refid="project.classpath" />
-			<arg line="-srcDir ${cl.extensions.dir} -pkg org.objectweb.proactive.extensions.masterworker" />
-		</java>
+		<generate_stub_for_pkg srcdir="${cl.extensions.dir}" package="org.objectweb.proactive.extensions.masterworker" />
 	</target>
 </project>

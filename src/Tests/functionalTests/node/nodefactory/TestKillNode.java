@@ -52,7 +52,7 @@ public class TestKillNode extends FunctionalTest {
     /* PROACTIVE-573 reported that killNode was buggy */
     @Test
     public void test() throws NodeException, AlreadyBoundException {
-        Node node = NodeFactory.createNode("PROACTIVE-573");
+        Node node = NodeFactory.createLocalNode("PROACTIVE-573", false, null, null, null);
         node = NodeFactory.getNode(node.getNodeInformation().getURL());
         Assert.assertNotNull(node);
         NodeFactory.killNode(node.getNodeInformation().getURL());

@@ -269,6 +269,7 @@
 	<!-- ==================================================================== -->
 	<!--                            Javadoc checkstyle                        -->
 	<!-- ==================================================================== -->
+<!--
 	<taskdef resource="checkstyletask.properties" classpath="${compile.dir}/lib/checkstyle-all-5.0-beta01.jar"/>
 
 	<macrodef name="javadoc.checkstyle" description="Generate javadoc violation reports">
@@ -284,7 +285,7 @@
 			</checkstyle>
 		</sequential>
 	</macrodef>
-
+-->
 
    <taskdef name="xsddoc" classname="net.sf.xframe.xsddoc.Task">
         <classpath>

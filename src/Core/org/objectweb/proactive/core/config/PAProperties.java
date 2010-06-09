@@ -90,7 +90,7 @@ abstract public class PAProperties {
                 logger.debug("Registering ProActive properties from " + spi.getClass());
                 register(spi.getClass());
             } catch (Throwable err) {
-                logger.error("Failed to load ProActive property registry: " + err);
+                logger.warn("Failed to load ProActive property registry: " + err);
             }
         }
     }

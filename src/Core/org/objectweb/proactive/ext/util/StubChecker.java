@@ -155,7 +155,7 @@ public final class StubChecker {
         List<URL> urls = new ArrayList<URL>();
         for (File file : jars) {
             try {
-                urls.add(file.toURL());
+                urls.add(file.toURI().toURL());
             } catch (MalformedURLException e) {
                 System.err.println("/!\\ " + e.getMessage());
             }
