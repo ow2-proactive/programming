@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0"
+	xml:id="MultiProtocol">
+	<info>
+		<title xml:id="MultiProtocol_1">Multi Protocol support</title>
+	</info>
+
+
+	<section xml:id="Overview_MP">
+		<info>
+			<title>The support of the Multi Protocol in ProActive</title>
+		</info>
+
+		<para>
+			The ProActive framework contains many protocols to fit all the
+			constraints that the network topology will makes.
+		</para>
+
+		<para>
+			Therefore, it provides the support of the multi-protocol, this
+			permits to make the most of the underlying network, by using the
+			most
+			suitable protocol on each parts of the network and to
+			maintain
+			reliability between each nodes.
+		</para>
+
+		<para>
+			The support of multi-protocol aims to be totally transparent, no
+			user actions are needed, neither for exposition, nor for selection.
+			The only constraint is that the default protocol selected must be
+			able to allow communication between all nodes.
+		</para>
+	</section>
+
+	<section xml:id="Configuration_MP">
+		<info>
+			<title>The configuration properties for multi protocol.</title>
+		</info>
+
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>proactive.communication.additional_protocols</emphasis>
+					<newline />
+					The set of protocol to use separated by commas.
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					<emphasis>proactive.communication.benchmark.parameter</emphasis>
+					<newline />
+					This property is used pass parameters to the benchmark.
+					<newline />
+					This could be a duration time, a size, ...
+					<newline />
+					This property is expressed as a String.
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					<emphasis>proactive.communication.protocols.order</emphasis>
+					<newline />
+					A fixed order could be specified if protocol's performance is known
+					in advance and won't change. This property explain a prefered order
+					for a subset of protocols declared in the property
+					proactive.communication.additional_protocols.
+					If one of the specified protocol isn't exposed, it is ignored. If
+					there are protocols that are not declared in this property but which
+					are exposed, they are used in the order choose by the benchmark mechanism.
+					<newline />
+					<newline />
+
+					Example :<newline />
+
+					Exposed protocols : http,pnp,rmi<newline />
+					Benchmark Order : rmi > pnp > http<newline />
+					Order : pnp<newline />
+					This will give the order of use : pnp > rmi > http<newline />
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					<emphasis>proactive.communication.protocols.order</emphasis>
+					<newline />
+					A fixed order could be specified if protocol's performance is known
+					in advance and won't change. <newline />
+					This automatically disabled	RemoteObject's Benchmark.
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					<emphasis>proactive.communication.benchmark.class</emphasis>
+					<newline />
+					Any kind of benchmark could be implemented,
+					this property permit to
+					specify the class of Benchmark to use.<newline />
+					See the next section for further explanations.
+					<newline />
+				</para>
+			</listitem>
+		</itemizedlist>
+
+		<!-- <emphasis role="bold">Proxy</emphasis> interface and provides an implementation
+			for the given -->
+		<!-- <literal>new</literal> -->
+
+		<figure xml:id="MultiProtocolFigure_MP">
+			<info>
+				<title>An example of multi protocol use</title>
+			</info>
+			<mediaobject>
+				<imageobject>
+					<imagedata scalefit="1" width="100%" contentdepth="100%"
+						align="center" fileref="images/png/multi-protocol.png" format="PNG" />
+				</imageobject>
+			</mediaobject>
+		</figure>
+	</section>
+
+	<section xml:id="Benchmark_MP">
+		<info>
+			<title>Benchmarking possibilities</title>
+		</info>
+
+		<para>
+			By default, the benchmarking are disabled and only the selection
+			is
+			done. For enabling the benchmark, the property
+			<emphasis role="italics">proactive.communication.benchmark.class
+			</emphasis>
+			must be set to something else than
+			<emphasis role="italics">org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly.
+			</emphasis>
+		</para>
+
+
+
+		<section xml:id="CustomBenchmark_MP">
+			<info>
+				<title>Custom Benchmarks</title>
+			</info>
+
+			<para>
+				By implementing the interface
+				<emphasis role="italics">org.objectweb.proactive.core.remoteobject.benchmark.BenchmarkObject
+				</emphasis>
+				,
+				custom benchmarks could be added. Before every benchmark of a
+				RemoteRemoteObject, a new BenchmarkObject is created. This interface
+				provides these methods :
+			</para>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis>public void init();</emphasis>
+						<newline />
+						Which is launch before the benchmark.
+						<newline />
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>public int getResult();</emphasis>
+						<newline />
+						This method is called at the end and should return a higher value
+						if
+						the protocol is better.
+						<newline />
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>public void receiveResponse(Object o);</emphasis>
+						<newline />
+						If the benchmark should return a result, this method is called.
+						The
+						Object o is the response return by the RemoteObject.
+						<newline />
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>public boolean doTest();</emphasis>
+						<newline />
+						This method is the condition for the main while loop :
+						while
+						(BenchmarkObject.doTest) { ... }
+						<newline />
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>public RemoteObjectRequest getRequest();</emphasis>
+						<newline />
+						This method is the most complicated one, the benchmark is based on
+						a
+						RemoteObjectRequest, which is a request handled by the
+						RemoteObject
+						layer. This method should return an object like that.
+						Basically, a RemoteObjectBenchmark contains a method Object
+						execute()
+						which is called on the server part of the RemoteObject.
+						<newline />
+					</para>
+				</listitem>
+			</itemizedlist>
+
+		</section>
+
+		<section xml:id="CustomBenchmarkImpl_MP">
+			<info>
+				<title>Existings benchmarks</title>
+			</info>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis>
+							org.objectweb.proactive.core.remoteobject.benchmark.ThroughputBenchmark
+						</emphasis>
+						<newline />
+						The maximum number of short message send in a finite time. The
+						parameter
+						indicate the duration of the benchmark in ms.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis>
+							org.objectweb.proactive.core.remoteobject.benchmark.LargeByteArrayBenchmark
+						</emphasis>
+						<newline />
+						The time to send a fixed number of message which contains a
+						large
+						array. The parameter indicate the size of the array in kB.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis>
+							org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly
+						</emphasis>
+						<newline />
+						Only do the selection, do not perform benchmark. The parameter has
+						no impact.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</section>
+	</section>
+	<section>
+		<info>
+			<title>API for multi-protocol</title>
+		</info>
+		<para> The API for dealing with multi protocol support is placed in
+			PARemoteObject class.</para>
+
+		<itemizedlist>
+			<listitem>
+				<para>
+					<emphasis>
+						PARemoteObject.forceProtocol(Object o, String protocol)
+						</emphasis>
+					<newline />
+					This API call force the object o to use the protocol specified. If
+					this protocol
+					is unavailable (not already exposed, network problem ... ) a
+					NotYetExposedException is thrown.
+					WARNING : If the protocol wanted fail, the communication will fail even if
+					there are
+					other reliable protocols.
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					<emphasis>
+						PARemoteObject.forceToDefault(Object o)
+						</emphasis>
+					<newline />
+					Same as before but use the default protocol.
+				</para>
+			</listitem>
+
+			<listitem>
+				<para>
+					<emphasis>
+						PARemoteObject.unforceProtocol(Object o)
+						</emphasis>
+					<newline />
+					This API call disable the protocol forcing mechanism.
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					<emphasis>
+						PARemoteObject.addProtocol(RemoteObjectExposer roe, String protocol)
+						</emphasis>
+					<newline />
+					This API call permit to deploy an object to an additionnal protocol
+					not
+					specified in the property.
+					Please note that this API call could only be made on server side, i.e.
+					where
+					we can access the RemoteObjectExposer of the target object.
+				</para>
+			</listitem>
+		</itemizedlist>
+	</section>
+</chapter>
