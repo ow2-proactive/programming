@@ -55,17 +55,26 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  */
 public class ADLNodeProvider {
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    public static final String NODES_ID = "nodes";
     private static final int TIMEOUT = 60000;
     private static Map<String, List<Node>> nodeLists = new HashMap<String, List<Node>>();
     private static Map<String, Integer> nodeIndex = new HashMap<String, Integer>();
 
-    private static void waitReady(org.objectweb.proactive.core.descriptor.data.VirtualNode vn)
-            throws Exception {
-        vn.activate();
-        if (vn.getNodes().length == 0) {
-            throw new InstantiationException(
-                "Cannot create component on virtual node as no node is associated with this virtual node");
+    public static Node getNode(Object nodesContainer) throws Exception {
+        if (nodesContainer instanceof org.objectweb.proactive.core.descriptor.data.VirtualNode) {
+            return getNode((org.objectweb.proactive.core.descriptor.data.VirtualNode) nodesContainer);
+        } else if (nodesContainer instanceof GCMVirtualNode) {
+            return getNode((GCMVirtualNode) nodesContainer);
+        } else if (nodesContainer instanceof List<?>) {
+            return getNode(getNodeList(nodesContainer));
+        } else {
+            return null;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static List<Node> getNodeList(Object nodesContainer) {
+        return (List<Node>) nodesContainer;
     }
 
     public static Node getNode(org.objectweb.proactive.core.descriptor.data.VirtualNode vn) throws Exception {
@@ -84,7 +93,47 @@ public class ADLNodeProvider {
         }
     }
 
-    private static void waitReady(GCMVirtualNode gcmVn) throws Exception {
+    public static void waitReady(org.objectweb.proactive.core.descriptor.data.VirtualNode vn)
+            throws Exception {
+        vn.activate();
+        if (vn.getNodes().length == 0) {
+            throw new InstantiationException(
+                "Cannot create component on virtual node as no node is associated with this virtual node");
+        }
+    }
+
+    public static Node getNode(GCMVirtualNode gcmVn) throws Exception {
+        if (gcmVn != null) {
+            String gcmVnName = gcmVn.getName();
+            if (nodeLists.containsKey(gcmVnName)) {
+                List<Node> curNodeList = nodeLists.get(gcmVnName);
+                int curNodeIndex = nodeIndex.get(gcmVnName);
+                if (curNodeIndex < curNodeList.size()) {
+                    Node result = curNodeList.get(curNodeIndex);
+                    nodeIndex.put(gcmVnName, ++curNodeIndex);
+                    return result;
+                } else {
+                    waitReady(gcmVn);
+                    List<Node> newNodeList = gcmVn.getCurrentNodes();
+                    if (newNodeList.equals(curNodeList)) {
+                        nodeIndex.put(gcmVnName, 0);
+                    } else {
+                        nodeLists.put(gcmVnName, newNodeList);
+                    }
+                    return getNode(gcmVn);
+                }
+            } else {
+                waitReady(gcmVn);
+                nodeLists.put(gcmVnName, gcmVn.getCurrentNodes());
+                nodeIndex.put(gcmVnName, 0);
+                return getNode(gcmVn);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public static void waitReady(GCMVirtualNode gcmVn) throws Exception {
         boolean waiting = true;
         while (waiting) {
             try {
@@ -102,30 +151,34 @@ public class ADLNodeProvider {
         }
     }
 
-    public static Node getNode(GCMVirtualNode gcmVn) throws Exception {
-        if (gcmVn != null) {
-            String gcmVNName = gcmVn.getName();
-            if (nodeLists.containsKey(gcmVNName)) {
-                List<Node> curNodeList = nodeLists.get(gcmVNName);
-                int curNodeIndex = nodeIndex.get(gcmVNName);
-                if (curNodeIndex < curNodeList.size()) {
-                    Node result = curNodeList.get(curNodeIndex);
-                    nodeIndex.put(gcmVNName, ++curNodeIndex);
-                    return result;
+    public static Node getNode(List<Node> nodes) throws Exception {
+        if (nodes != null) {
+            if (nodeLists.containsKey(NODES_ID)) {
+                List<Node> curNodeList = nodeLists.get(NODES_ID);
+                if (!curNodeList.equals(nodes)) {
+                    nodeLists.remove(NODES_ID);
+                    nodeIndex.remove(NODES_ID);
+                    return getNode(nodes);
                 } else {
-                    List<Node> newNodeList = gcmVn.getCurrentNodes();
-                    if (newNodeList.size() == curNodeList.size()) {
-                        nodeIndex.put(gcmVNName, 0);
+                    int curNodeIndex = nodeIndex.get(NODES_ID);
+                    if (curNodeIndex < curNodeList.size()) {
+                        Node result = curNodeList.get(curNodeIndex);
+                        nodeIndex.put(NODES_ID, ++curNodeIndex);
+                        return result;
                     } else {
-                        nodeLists.put(gcmVNName, newNodeList);
+                        nodeIndex.put(NODES_ID, 0);
+                        return getNode(nodes);
                     }
-                    return getNode(gcmVn);
                 }
             } else {
-                waitReady(gcmVn);
-                nodeLists.put(gcmVNName, gcmVn.getCurrentNodes());
-                nodeIndex.put(gcmVNName, 0);
-                return getNode(gcmVn);
+                if (nodes.size() == 0) {
+                    logger
+                            .info("An empty list of nodes has been set in the context, component will be instantiated in the current virtual machine");
+                    return null;
+                }
+                nodeLists.put(NODES_ID, nodes);
+                nodeIndex.put(NODES_ID, 0);
+                return getNode(nodes);
             }
         } else {
             return null;

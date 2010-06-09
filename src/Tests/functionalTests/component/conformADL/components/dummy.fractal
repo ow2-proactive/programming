@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE definition PUBLIC "-//objectweb.org//DTD Fractal ADL 2.0//EN" "classpath://org/objectweb/proactive/core/component/adl/xml/proactive.dtd">
+
+<definition name="functionalTests.component.conformADL.components.dummy" arguments="message">
+	<interface signature="functionalTests.component.conformADL.components.Action" role="server" name="action"/>
+    <content class="functionalTests.component.conformADL.components.Dummy"/>
+  <attributes signature="functionalTests.component.conformADL.components.Info">
+    <attribute name="info" value="${message}"/>
+  </attributes>
+  <controller desc="primitive"/>
+</definition>

@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.descriptor.arguments;
+package functionalTests.component.conformADL;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +45,7 @@ import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 
 import functionalTests.ComponentTest;
+import functionalTests.component.conformADL.components.Action;
 
 
 /**
@@ -54,14 +55,14 @@ import functionalTests.ComponentTest;
  *
  * @author The ProActive Team
  */
-public class Test extends ComponentTest {
+public class TestArgumentsAndAttributes extends ComponentTest {
 
     /**
      *
      */
     Component dummy;
 
-    public Test() {
+    public TestArgumentsAndAttributes() {
         super("Configuration with ADL arguments and AttributeController",
                 "Configuration with ADL arguments and AttributeController");
     }
@@ -77,7 +78,7 @@ public class Test extends ComponentTest {
         Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
         Map context = new HashMap();
         context.put("message", "hello world");
-        dummy = (Component) f.newComponent("functionalTests.component.descriptor.arguments.dummy", context);
+        dummy = (Component) f.newComponent("functionalTests.component.conformADL.components.dummy", context);
         GCM.getGCMLifeCycleController(dummy).startFc();
 
         Assert.assertEquals("This component is storing the info : hello world", ((Action) dummy

@@ -58,7 +58,7 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import functionalTests.FunctionalTest;
 import functionalTests.GCMFunctionalTest;
 import functionalTests.GCMFunctionalTestDefaultNodes;
-import functionalTests.component.descriptor.fractaladl.Test;
+import functionalTests.component.deployment.Test;
 
 
 // we need this active object to perform the test, because futures updates are involved (managed by future pool)
@@ -77,7 +77,7 @@ public class DummyAO implements Serializable {
                 .getJvmParameters(), VariableContractType.ProgramVariable);
 
         ProActiveDescriptor deploymentDescriptor = PADeployment.getProactiveDescriptor(Test.class
-                .getResource("/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
+                .getResource("/functionalTests/component/deployment/deploymentDescriptor.xml").getPath(),
                 vContract);
         context.put("deployment-descriptor", deploymentDescriptor);
 
@@ -139,7 +139,7 @@ public class DummyAO implements Serializable {
         Map<String, Object> context = new HashMap<String, Object>();
 
         URL descriptorPath = Test.class
-                .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
+                .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
 
         VariableContractImpl vContract = new VariableContractImpl();
         vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()

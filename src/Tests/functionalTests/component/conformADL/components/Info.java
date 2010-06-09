@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.descriptor.arguments;
+package functionalTests.component.conformADL.components;
 
 import org.objectweb.fractal.api.control.AttributeController;
 

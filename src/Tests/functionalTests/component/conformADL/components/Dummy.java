@@ -34,12 +34,42 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.descriptor.arguments;
+package functionalTests.component.conformADL.components;
 
 /**
  * @author The ProActive Team
  *
  */
-public interface Action {
-    public String doSomething();
+public class Dummy implements Action, Info {
+    String info;
+
+    public Dummy() {
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see functionalTests.component.conformADL.components.Action#doSomething()
+     */
+    public String doSomething() {
+        return ("This component is storing the info : " + info);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see functionalTests.component.conformADL.components.Info#getInfo()
+     */
+    public String getInfo() {
+        return info;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see functionalTests.component.conformADL.components.Info#setInfo(java.lang.String)
+     */
+    public void setInfo(String info) {
+        this.info = info;
+    }
 }

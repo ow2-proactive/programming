@@ -34,9 +34,10 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.component.descriptor.fractaladl;
+package functionalTests.component.deployment;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,11 +50,13 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.component.adl.Registry;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
+import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 import functionalTests.ComponentTest;
 import functionalTests.GCMFunctionalTest;
@@ -65,66 +68,104 @@ import functionalTests.component.PrimitiveComponentB;
 
 
 /**
- * For a graphical representation, open the MessagePassingExample.fractal with the fractal defaultGui
- *
- * This test verifies the parsing and building of a component system using a customized Fractal ADL,
- * and tests new features such as exportation of virtual nodes and cardinality of virtual nodes.
- * It mixes exported and non-exported nodes to make sure these work together.
+ * This test verifies the component deployment through ADL. It also verifies the parsing and building of a component
+ * system using a customized Fractal ADL, and tests new features such as exportation of virtual nodes. It mixes
+ * exported and non-exported nodes to make sure these work together.
  *
  * @author The ProActive Team
  */
 public class Test extends ComponentTest {
-
-    /**
-     *
-     */
     public static String MESSAGE = "-->m";
     private List<Message> messages;
 
-    private GCMApplication newDeploymentDescriptor = null;
-    private ProActiveDescriptor oldDeploymentDescriptor = null;
+    private GCMApplication gcma = null;
+    private ProActiveDescriptor pad = null;
+    private Map<String, Object> context = null;
 
     public Test() {
-        super("Virtual node exportation / composition in the Fractal ADL",
-                "Virtual node exportation / composition in the Fractal ADL");
-    }
-
-    @org.junit.Test
-    public void testOldDeployment() throws Exception {
-        oldDeploymentDescriptor = PADeployment.getProactiveDescriptor(Test.class.getResource(
-                "/functionalTests/component/descriptor/deploymentDescriptor.xml").getPath(),
-                (VariableContractImpl) super.vContract.clone());
-
-        useFractalADL(oldDeploymentDescriptor);
+        super("Deployment and virtual node exportation / composition in the Fractal ADL",
+                "Deployment and virtual node exportation / composition in the Fractal ADL");
     }
 
     @org.junit.Test
     public void testGCMDeployment() throws Exception {
-        URL descriptorPath = Test.class
-                .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
+        startGCMDeployment();
+        context = new HashMap<String, Object>();
+        context.put("deployment-descriptor", gcma);
 
+        useFractalADL();
+
+        endTest();
+    }
+
+    @org.junit.Test
+    public void testProActiveDeployment() throws Exception {
+        pad = PADeployment.getProactiveDescriptor(Test.class.getResource(
+                "/functionalTests/component/deployment/deploymentDescriptor.xml").getPath(),
+                (VariableContractImpl) super.vContract.clone());
+        pad.activateMappings();
+        context = new HashMap<String, Object>();
+        context.put("deployment-descriptor", pad);
+
+        useFractalADL();
+
+        endTest();
+    }
+
+    @org.junit.Test
+    public void testVNDeployment() throws Exception {
+        startGCMDeployment();
+        context = new HashMap<String, Object>();
+        String[] vnNames = gcma.getVirtualNodeNames().toArray(new String[] {});
+        for (int i = 0; i < vnNames.length; i++) {
+            context.put(vnNames[i], gcma.getVirtualNode(vnNames[i]));
+        }
+
+        useFractalADL();
+
+        endTest();
+    }
+
+    @org.junit.Test
+    public void testNodesDeployment() throws Exception {
+        startGCMDeployment();
+        context = new HashMap<String, Object>();
+        List<Node> nodes = new ArrayList<Node>();
+        String[] vnNames = gcma.getVirtualNodeNames().toArray(new String[] {});
+        for (int i = 0; i < vnNames.length; i++) {
+            GCMVirtualNode vn = gcma.getVirtualNode(vnNames[i]);
+            vn.waitReady();
+            for (int j = 0; j < vn.getNbCurrentNodes(); j++) {
+                nodes.add(vn.getANode());
+            }
+        }
+        context.put("nodes", nodes);
+
+        useFractalADL();
+
+        endTest();
+    }
+
+    private void startGCMDeployment() throws Exception {
+        URL descriptorPath = Test.class
+                .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
         vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
                 .name(), VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
                 .toString(), VariableContractType.DescriptorDefaultVariable);
-
-        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath,
+        gcma = PAGCMDeployment.loadApplicationDescriptor(descriptorPath,
                 (VariableContractImpl) super.vContract.clone());
-
-        newDeploymentDescriptor.startDeployment();
-        useFractalADL(newDeploymentDescriptor);
+        gcma.startDeployment();
     }
 
-    private void useFractalADL(Object deploymentDesc) throws Exception {
+    private void useFractalADL() throws Exception {
         Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
-        Map<String, Object> context = new HashMap<String, Object>();
-
-        context.put("deployment-descriptor", deploymentDesc);
         Component root = (Component) f.newComponent(
-                "functionalTests.component.descriptor.fractaladl.MessagePassingExample", context);
+                "functionalTests.component.deployment.adl.MessagePassingExample", context);
         GCM.getGCMLifeCycleController(root).startFc();
+
         Component[] subComponents = GCM.getContentController(root).getFcSubComponents();
         for (Component component : subComponents) {
             if ("parallel".equals(GCM.getNameController(component).getFcName())) {
@@ -141,7 +182,6 @@ public class Test extends ComponentTest {
         }
         StringBuffer resulting_msg = new StringBuffer();
         int nb_messages = append(resulting_msg, messages);
-
         //        System.out.println("*** received " + nb_messages + "  : " +
         //            resulting_msg.toString());
         //        System.out.println("***" + resulting_msg.toString());
@@ -149,26 +189,9 @@ public class Test extends ComponentTest {
         String single_message = Test.MESSAGE + PrimitiveComponentA.MESSAGE + PrimitiveComponentB.MESSAGE +
             PrimitiveComponentA.MESSAGE + Test.MESSAGE;
 
-        // there should be 4 messages with the current configuration
+        // there should be 2 messages with the current configuration
         Assert.assertEquals(2, nb_messages);
-
         Assert.assertEquals(single_message + single_message, resulting_msg.toString());
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see testsuite.test.AbstractTest#endTest()
-     */
-    @After
-    public void endTest() throws Exception {
-        //        Launcher.killNodes(false);
-        Registry.instance().clear();
-        if (newDeploymentDescriptor != null)
-            newDeploymentDescriptor.kill();
-
-        if (oldDeploymentDescriptor != null)
-            oldDeploymentDescriptor.killall(false);
     }
 
     private int append(StringBuffer buffer, List<Message> messages) {
@@ -178,5 +201,18 @@ public class Test extends ComponentTest {
             buffer.append(message);
         }
         return nb_messages;
+    }
+
+    @After
+    public void endTest() throws Exception {
+        Registry.instance().clear();
+        if (gcma != null) {
+            gcma.kill();
+            gcma = null;
+        }
+        if (pad != null) {
+            pad.killall(false);
+            pad = null;
+        }
     }
 }

@@ -129,7 +129,7 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf, Seri
             boot = Utils.getBootstrapComponent();
 
             GCMTypeFactory tf = GCM.getGCMTypeFactory(boot);
-            PAGenericFactory cf = Utils.getPAGenericFactory(boot);
+            PAGenericFactory gf = Utils.getPAGenericFactory(boot);
 
             // type of server component
             ComponentType sType = tf
@@ -158,7 +158,7 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf, Seri
                 ControllerDescription cd = new ControllerDescription("server", Constants.PRIMITIVE,
                     controllersConfigFileLocation);
 
-                comp = cf.newFcInstance(sType, cd,
+                comp = gf.newFcInstance(sType, cd,
                         new ContentDescription(HelloWorldComponent.class.getName()), node1);
 
                 //start the component
@@ -177,7 +177,7 @@ public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf, Seri
                 ControllerDescription cd = new ControllerDescription("server", Constants.PRIMITIVE,
                     controllersConfigFileLocation);
 
-                comp = cf.newFcInstance(sType, cd,
+                comp = gf.newFcInstance(sType, cd,
                         new ContentDescription(HelloWorldComponent.class.getName()));
 
                 //start the component

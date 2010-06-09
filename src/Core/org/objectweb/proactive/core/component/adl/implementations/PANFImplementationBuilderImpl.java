@@ -40,15 +40,13 @@ import java.util.Map;
 
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Type;
-import org.objectweb.fractal.api.factory.InstantiationException;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.adl.nodes.ADLNodeProvider;
 import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 import org.objectweb.proactive.core.component.factory.PAGenericFactory;
-import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.node.NodeException;
 
 
 /**
@@ -60,43 +58,24 @@ public class PANFImplementationBuilderImpl extends PAImplementationBuilderImpl {
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
             Map<Object, Object> context) throws Exception {
         ObjectsContainer obj = commonCreation(type, name, definition, contentDesc, adlVN, context);
-
-        return createNFComponent(type, obj.getVN(), controllerDesc, contentDesc, adlVN, obj
+        return createNFComponent(type, obj.getNodesContainer(), controllerDesc, contentDesc, adlVN, obj
                 .getBootstrapComponent());
     }
 
-    private Component createNFComponent(Object type,
-            org.objectweb.proactive.core.descriptor.data.VirtualNode deploymentVN,
+    private Component createNFComponent(Object type, Object nodesContainer,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
             Component bootstrap) throws Exception {
         Component result = newNFcInstance(bootstrap, (ComponentType) type, controllerDesc, contentDesc,
-                deploymentVN);
+                nodesContainer);
         //        registry.addComponent(result); // the registry can handle groups
         return result;
     }
 
     private Component newNFcInstance(Component bootstrap, Type type, ControllerDescription controllerDesc,
-            ContentDescription contentDesc,
-            org.objectweb.proactive.core.descriptor.data.VirtualNode virtualNode) throws Exception {
-
+            ContentDescription contentDesc, Object nodesContainer) throws Exception {
         PAGenericFactory genericFactory = Utils.getPAGenericFactory(bootstrap);
-
-        if (virtualNode == null) {
-            return genericFactory.newNFcInstance(type, controllerDesc, contentDesc, (Node) null);
-        }
-        try {
-            virtualNode.activate();
-            if (virtualNode.getNodes().length == 0) {
-                throw new InstantiationException(
-                    "Cannot create component on virtual node as no node is associated with this virtual node");
-            }
-            return genericFactory.newNFcInstance(type, controllerDesc, contentDesc, virtualNode.getNode());
-        } catch (NodeException e) {
-            InstantiationException ie = new InstantiationException(
-                "could not instantiate components due to a deployment problem : " + e.getMessage());
-            ie.initCause(e);
-            throw ie;
-        }
+        return genericFactory.newNFcInstance(type, controllerDesc, contentDesc, ADLNodeProvider
+                .getNode(nodesContainer));
     }
 
 }

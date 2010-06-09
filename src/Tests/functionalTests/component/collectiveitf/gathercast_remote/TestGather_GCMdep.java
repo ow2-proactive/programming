@@ -67,7 +67,7 @@ public class TestGather_GCMdep extends ComponentTest {
     public void testRemoteGathercast() throws Exception {
 
         URL descriptorPath = TestGather_GCMdep.class
-                .getResource("/functionalTests/component/descriptor/applicationDescriptor.xml");
+                .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
 
         vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
                 .name(), VariableContractType.DescriptorDefaultVariable);

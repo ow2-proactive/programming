@@ -172,10 +172,10 @@ public class Fractive implements PAGenericFactory, Component, Factory {
                         return newFcInstance(type, new ControllerDescription(null, Constants.COMPOSITE),
                                 new ContentDescription((String) contentDesc));
                     }
-                } catch (ClassNotFoundException e2) {
+                } catch (ClassNotFoundException cnfe) {
                     InstantiationException ie = new InstantiationException("cannot find classe " +
-                        contentDesc + " : " + e2.getMessage());
-                    ie.initCause(e);
+                        contentDesc + " : " + cnfe.getMessage());
+                    ie.initCause(cnfe);
                     throw ie;
                 }
 
@@ -225,10 +225,10 @@ public class Fractive implements PAGenericFactory, Component, Factory {
                         return newFcInstance(type, new ControllerDescription(null, Constants.COMPOSITE),
                                 new ContentDescription((String) contentDesc));
                     }
-                } catch (ClassNotFoundException e2) {
+                } catch (ClassNotFoundException cnfe) {
                     InstantiationException ie = new InstantiationException("cannot find classe " +
-                        contentDesc + " : " + e2.getMessage());
-                    ie.initCause(e);
+                        contentDesc + " : " + cnfe.getMessage());
+                    ie.initCause(cnfe);
                     throw ie;
                 }
 
@@ -346,7 +346,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
                         typeFactory.createFcItfType(Constants.TYPE_FACTORY, TypeFactory.class.getName(),
                                 false, false, false) });
             } catch (InstantiationException e) {
-                ProActiveLogger.getLogger(Loggers.COMPONENTS).error(e.getMessage());
+                logger.error(e.getMessage());
                 return null;
             }
         } else {

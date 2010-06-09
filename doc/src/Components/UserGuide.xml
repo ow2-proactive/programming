@@ -1580,131 +1580,203 @@
 
 	<section xml:id="component_deployment"><info><title>Deployment</title></info>
 
-		<section xml:id="Overview_1"><info><title>Overview</title></info>
+		<section xml:id="GCMDeployment_53"><info><title>Deploying components with the GCM Deployment</title></info>
 
-			<para>
-				To create a distributed component system, a deployment
-				framework is available: the GCM Deployment.
-			</para>
+			<section xml:id="Overview_1"><info><title>Overview</title></info>
 
-			<para>
-				Distribution is achieved in a transparent manner over
-				the Java RMI protocol thanks to the use of a stub/proxy
-				pattern. Components are manipulated indifferently of
-				their location (local or on a remote JVM). A complete
-				description of the GCM Deployment can be found at
-				<link xlink:href="../../ReferenceManual/multiple_html/GCMDeployment.html#GCMDeployment">Chapter 14. ProActive Grid Component Model Deployment</link>.
-			</para>
+				<para>
+					To create a distributed component system, a deployment
+					framework is available: the GCM Deployment.
+				</para>
 
-			<para>
-				In brief, this framework:
-				<itemizedlist>
-					<listitem>
-						<para>
-							connects to remote hosts using supported
-							protocols, such as rsh, ssh, lsf, oar,
-							etc...
-						</para>
-					</listitem>
-					<listitem>
-						<para>creates JVMs on these hosts</para>
-					</listitem>
-					<listitem>
-						<para>
-							instantiates components on these newly
-							created JVMs
-						</para>
-					</listitem>
-				</itemizedlist>
-			</para>
+				<para>
+					Distribution is achieved in a transparent manner over
+					the Java RMI protocol thanks to the use of a stub/proxy
+					pattern. Components are manipulated indifferently of
+					their location (local or on a remote JVM). A complete
+					description of the GCM Deployment can be found at
+					<link xlink:href="../../ReferenceManual/multiple_html/GCMDeployment.html#GCMDeployment">Chapter 14. ProActive Grid Component Model Deployment</link>.
+				</para>
 
-		</section>
+				<para>
+					In brief, this framework:
+					<itemizedlist>
+						<listitem>
+							<para>
+								connects to remote hosts using supported
+								protocols, such as rsh, ssh, lsf, oar,
+								etc...
+							</para>
+						</listitem>
+						<listitem>
+							<para>creates JVMs on these hosts</para>
+						</listitem>
+						<listitem>
+							<para>
+								instantiates components on these newly
+								created JVMs
+							</para>
+						</listitem>
+					</itemizedlist>
+				</para>
 
-		<section xml:id="Initiatethedeployment_53"><info><title>Initiate the deployment</title></info>
+			</section>
 
-			<para>
-				The first step to distribute components is to initiate
-				the deployment by loading the Application Descriptor:
-				<programlisting language="java">GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(filePath);</programlisting>
-				Then, the deployment must be started (i.e. creation of
-				the remote JVMs):
-				<programlisting language="java">gcma.startDeployment();</programlisting>
-				The next step, distribute components, may be done
-				through the ADL or the API.
-			</para>
+			<section xml:id="Initiatethedeployment_53"><info><title>Initiate the deployment</title></info>
 
-		</section>
+				<para>
+					The first step to distribute components is to initiate
+					the deployment by loading the GCM Application
+					Descriptor:
+					<programlisting language="java">GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(filePath);</programlisting>
+					Then, the deployment must be started (i.e. creation of
+					the remote JVMs):
+					<programlisting language="java">gcma.startDeployment();</programlisting>
+					The next step, distribute components, may be done
+					through the ADL or the API.
+				</para>
 
-		<section xml:id="DistributecomponentswithADL_53"><info><title>Distribute components with ADL</title></info>
+			</section>
 
-			<para>
-				Distribute components through the ADL is quite simple:
-				<itemizedlist>
-					<listitem>
-						<para>
-							Put the GCMApplication into a
-							<emphasis role="bold">java.util.Map</emphasis>
-							with as key "deployment-descriptor":
-						</para>
-						<programlisting language="java">Map&lt;String, Object&gt; context = new HashMap&lt;String, Object&gt;();
+			<section xml:id="DistributecomponentswithADL_53"><info><title>Distribute components with ADL</title></info>
+
+				<para>
+					Distribute components with ADL is quite simple:
+					<itemizedlist>
+						<listitem>
+							<para>
+								Put the GCMApplication into a
+								<emphasis role="bold">java.util.Map</emphasis>
+								with as key "deployment-descriptor":
+							</para>
+							<programlisting language="java">Map&lt;String, Object&gt; context = new HashMap&lt;String, Object&gt;();
 context.put("deployment-descriptor", gcma);</programlisting>
-					</listitem>
-					<listitem>
-						<para>
-							Call the usual method to instantiate
-							component through ADL (method
-							<emphasis role="bold">org.objectweb.fractal.adl.Factory#newComponent()</emphasis>)
-							with the Map containing the GCM Application
-							as parameter:
-						</para>
-						<programlisting language="java">Component component = (Component) factory.newComponent("my.adl.folder.ComponentDefinition", context);</programlisting>
-					</listitem>
-				</itemizedlist>
-			</para>
+						</listitem>
+						<listitem>
+							<para>
+								Call the usual method to instantiate
+								component through ADL (method
+								<literal>org.objectweb.fractal.adl.Factory#newComponent()</literal>)
+								with the Map containing the GCM Application
+								as parameter:
+							</para>
+							<programlisting language="java">Component component = (Component) factory.newComponent("my.adl.folder.ComponentDefinition", context);</programlisting>
+						</listitem>
+					</itemizedlist>
+					Thus, the component will be instantiated in a node
+					of the virtual node specified in the ADL component
+					definition (if a virtual node of the same name has
+					also been defined in the GCM Application Descriptor).
+				</para>
 
-			<para>
-				Thus, the component will be instantiated in a node
-				of the virtual node specified in the ADL component
-				definition (if a virtual node of the same name has
-				also been defined in the GCM Application Descriptor).
-			</para>
+			</section>
 
-			<para>
-				If no virtual node has been specified in the ADL
-				component definition, the component is created in
-				the local JVM.
-			</para>
+			<section xml:id="DistributecomponentswithAPI_53"><info><title>Distribute components with API</title></info>
 
-		</section>
-
-		<section xml:id="DistributecomponentswithAPI_53"><info><title>Distribute components with API</title>
-			</info>
-
-			<para>
-				To distribute components through the API, the first
-				thing to do is to get a node from a virtual node
-				defined by the GCM Application Descriptor:
-				<programlisting language="java">Map&lt;String, GCMVirtualNode&gt; vns = gcma.getVirtualNodes();
+				<para>
+					To distribute components with the API, the first
+					thing to do is to get a node from a virtual node
+					defined by the GCM Application Descriptor:
+					<programlisting language="java">Map&lt;String, GCMVirtualNode&gt; vns = gcma.getVirtualNodes();
+vns.get("VN1").waitReady();
 Node node = vns.get("VN1").getANode();</programlisting>
-				Then, the component must be instanced thanks to one
-				of the methods provided by
-				<emphasis role="bold">org.objectweb.proactive.core.component.factory.PAGenericFactory</emphasis>,
-				taking as parameter the node obtained previously:
-				<programlisting language="java">Component component = gf.newFcInstance(componentType, controllerDescription, contentDescription, node);</programlisting>
-			</para>
+					Then, the component must be instanced thanks to one
+					of the methods provided by
+					<literal>org.objectweb.proactive.core.component.factory.PAGenericFactory</literal>,
+					taking as parameter the node obtained previously:
+					<programlisting language="java">Component component = gf.newFcInstance(componentType, controllerDescription, contentDescription, node);</programlisting>
+				</para>
+
+			</section>
 
 		</section>
 
-		<section xml:id="ProActiveDeployment_53"><info><title>ProActive Deployment</title>
-			</info>
+		<section xml:id="ProActiveDeployment_53"><info><title>Deploying components with the ProActive Deployment</title></info>
 
 			<para>
 				The distribution of components may also be made by
 				using the ProActive deployment framework. This
 				deployment framework also uses the concept of virtual
 				nodes but just needs a single configuration file.
-				More informations are available at
+				Thus it may be used in a similar way. More informations
+				are available at
 				<link xlink:href="../../ReferenceManual/multiple_html/XML_Descriptors.html#XML_Descriptors">Chapter 15. XML Deployment Descriptors</link>.
+			</para>
+
+		</section>
+
+		<section xml:id="VNDeployment_53"><info><title>Deploying components with ADL and Virtual Nodes</title></info>
+
+			<para>
+				It is also possible to deploy components with ADL without
+				using a deployment (GCM or ProActive). To do this, the
+				virtual node has to be directly set in the context using
+				as key the virtual node name:
+				<programlisting language="java">context.put(vn.getName(), vn);</programlisting>
+				Of course, it may be set in the context as many virtual
+				nodes as needed. Then the component can be instantiated
+				as usual:
+				<programlisting language="java">Component component = (Component) factory.newComponent("my.adl.folder.ComponentDefinition", context);</programlisting>
+				Thus, the component will be instantiated in a node
+				of the virtual node specified in the ADL component
+				definition (if a virtual node of the same name has
+				also been set in the context).
+			</para>
+
+		</section>
+
+		<section xml:id="NDeployment_53"><info><title>Deploying components with ADL and Nodes</title></info>
+
+			<para>
+				There is a last way to deploy components with ADL and
+				without using deployment (GCM or ProActive) nor virtual
+				node: by using a list of nodes:
+				<literal>java.util.List&lt;Node&gt;</literal>.
+				This last manner is mostly useful for tests purpose
+				since there is no control on which node each component
+				will be instantiated.
+			</para>
+
+			<para>
+				To deploy components by using a list of nodes, the first
+				step is to set the list in the context by using as key
+				"nodes" (or by using the corresponding constant
+				<literal>org.objectweb.proactive.core.component.adl.nodes.ADLNodeProvider.NODES_ID</literal>):
+				<programlisting language="java">context.put("nodes", nodes);</programlisting>
+				Then the component can be instantiated as usual:
+				<programlisting language="java">Component component = (Component) factory.newComponent("my.adl.folder.ComponentDefinition", context);</programlisting>
+				Therefore the component will be instantiated on a node
+				picked from the list. If the component is a composite
+				component and has several subcomponents, each of them
+				will be instantiated on different nodes. The node used
+				is chosen randomly, there is no way to control which
+				node to use to deploy a specific component. The only
+				guarantee is that no node will be used twice before
+				each node has been used at least one time.
+			</para>
+
+		</section>
+
+		<section xml:id="PrecisionsADL_53"><info><title>Precisions for component instantiation with ADL</title></info>
+
+			<para>
+				If no virtual node has been specified in the ADL
+				component definition, the component is created in the
+				local JVM.
+			</para>
+
+			<para>
+				If a virtual node is defined in the ADL component
+				definition and neither a deployment (GCM or ProActive)
+				nor the virtual node has been set in the context (or
+				there is no corresponding virtual node name),
+				therefore the component is also created in the local
+				JVM.
+			</para>
+
+			<para>
+				Of course, these two points do not apply if a list of
+				nodes is set in the context.
 			</para>
 
 		</section>
