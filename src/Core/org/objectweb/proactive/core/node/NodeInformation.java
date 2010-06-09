@@ -64,12 +64,6 @@ public interface NodeInformation extends Serializable, Job {
     public String getName();
 
     /**
-     * Returns the protocol of the node
-     * @return the protocol of the node
-     */
-    public String getProtocol();
-
-    /**
      * Returns the complete URL of the node in the form <code>protocol://host/nodeName</code>
      * @return the complete URL of the node
      */

@@ -32,7 +32,7 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.remoteobject;
 
@@ -45,6 +45,7 @@ import org.objectweb.proactive.core.body.request.RequestImpl;
 import org.objectweb.proactive.core.mop.ConstructorCall;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.Proxy;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 
 
 /**
@@ -157,5 +158,9 @@ public class SynchronousProxy implements Proxy, Serializable {
             return false;
         }
         return true;
+    }
+
+    public RemoteObject getRemoteObject() {
+        return this.remoteObject;
     }
 }

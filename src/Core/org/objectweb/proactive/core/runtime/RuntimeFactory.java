@@ -78,6 +78,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class RuntimeFactory {
+
     public static Logger runtimeLogger = ProActiveLogger.getLogger(Loggers.RUNTIME);
 
     // test with class loader

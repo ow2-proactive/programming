@@ -39,6 +39,12 @@ package org.objectweb.proactive.core.remoteobject.ibis;
 import ibis.rmi.RemoteException;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.rmi.NoSuchObjectException;
@@ -65,6 +71,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory implements RemoteObjectFactory {
+    private static final String IBIS_SERIALIZATION_INPUT_STREAM = "ibis.io.IbisSerializationInputStream";
+    private static final String IBIS_SERIALIZATION_OUTPUT_STREAM = "ibis.io.IbisSerializationOutputStream";
+
+    public static Logger logger = ProActiveLogger.getLogger(Loggers.RUNTIME);
+
     protected static RegistryHelper registryHelper;
     protected String protocolIdentifier = Constants.IBIS_PROTOCOL_IDENTIFIER;
     static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
@@ -253,4 +264,55 @@ public class IbisRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             getPort() + "/");
     }
 
+    public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {
+        try {
+            final Class cl_isis = Class.forName(IBIS_SERIALIZATION_INPUT_STREAM);
+            final Constructor c_isis = cl_isis.getConstructor(new Class[] { Class
+                    .forName("java.io.DataInputStream") });
+            final ObjectInputStream i_isis = (ObjectInputStream) c_isis.newInstance(new Object[] { in });
+            return i_isis;
+        } catch (ClassNotFoundException cnfe) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (IllegalArgumentException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (InstantiationException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (IllegalAccessException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (InvocationTargetException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (SecurityException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (NoSuchMethodException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        }
+        return null;
+    }
+
+    public ObjectOutputStream getProtocolObjectOutputStream(OutputStream out) throws IOException {
+        Class cl_isos;
+        try {
+            cl_isos = Class.forName(IBIS_SERIALIZATION_OUTPUT_STREAM);
+
+            final Constructor c_isos = cl_isos.getConstructor(new Class[] { Class
+                    .forName("java.io.DataOutputStream") });
+            final ObjectOutputStream i_isos = (ObjectOutputStream) c_isos.newInstance(new Object[] { out });
+            return i_isos;
+        } catch (ClassNotFoundException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (SecurityException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (NoSuchMethodException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (IllegalArgumentException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (InstantiationException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (IllegalAccessException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        } catch (InvocationTargetException e) {
+            logger.warn("Check your classpath for ibis jars ");
+        }
+        return null;
+    }
 }

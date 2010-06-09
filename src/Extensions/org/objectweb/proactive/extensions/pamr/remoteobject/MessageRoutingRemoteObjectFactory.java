@@ -36,6 +36,11 @@
  */
 package org.objectweb.proactive.extensions.pamr.remoteobject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,6 +56,9 @@ import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
+import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalInputStream;
+import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalOutputStream;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
@@ -304,5 +312,13 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
 
     public URI getBaseURI() {
         return URI.create(this.getProtocolId() + "://" + this.agent.getAgentID() + "/");
+    }
+
+    public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {
+        return new ProActiveMarshalInputStream(in);
+    }
+
+    public ObjectOutputStream getProtocolObjectOutputStream(OutputStream out) throws IOException {
+        return new ProActiveMarshalOutputStream(out, ProActiveRuntimeImpl.getProActiveRuntime().getURL());
     }
 }

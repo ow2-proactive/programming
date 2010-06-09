@@ -28,6 +28,8 @@
 	<!ENTITY MOP SYSTEM "MOP.xml">
 	<!ENTITY BnB SYSTEM "BranchAndBound.xml">
 	<!ENTITY MonteCarlo SYSTEM "MonteCarlo.xml">
+	<!ENTITY ProxyCommand SYSTEM "ProxyCommand.xml">
+	<!ENTITY MultiProtocol SYSTEM "MultiProtocol.xml">
 	<!ENTITY Biblio SYSTEM "Biblio.xml">
 ]>
 
@@ -48,6 +50,8 @@
 		&JMX;
 		&JMXMBean;
 		&TimIt;
+		&ProxyCommand;
+		&MultiProtocol;
 	</part>
 
 	<part xml:id="ExtendingProActive"><info><title xml:id="ExtendingProActive_2">Extending ProActive</title></info>

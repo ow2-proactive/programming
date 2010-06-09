@@ -42,11 +42,19 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.mop.Proxy;
+import org.objectweb.proactive.core.mop.StubObject;
+import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectImpl;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
+import org.objectweb.proactive.core.remoteobject.SynchronousProxy;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -63,9 +71,11 @@ public class PARemoteObject {
 
     /* Used to attribute an unique name to RO created by turnRemote */
     private final static String TURN_REMOTE_PREFIX;
+    private final static String ADD_PROTOCOL_PREFIX;
     static {
         String vmName = ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getName();
         TURN_REMOTE_PREFIX = "/" + vmName + "/TURN_REMOTE/";
+        ADD_PROTOCOL_PREFIX = "/" + vmName + "/ADD_PROTOCOL/";
     }
 
     /* Used to attribute an unique name to RO created by turnRemote */
@@ -128,6 +138,76 @@ public class PARemoteObject {
         RemoteObjectExposer<T> roe = newRemoteObject(object.getClass().getName(), object);
         RemoteRemoteObject rro = roe
                 .createRemoteObject(TURN_REMOTE_PREFIX + counter.incrementAndGet(), false);
-        return (T) new RemoteObjectAdapter(rro).getObjectProxy();
+        RemoteObjectAdapter roa = new RemoteObjectAdapter(rro);
+        return (T) roa.getObjectProxy();
+    }
+
+    /**
+     * Turn a POJO into a remote object.
+     *
+     * @param object the object to be exported as a remote object
+     * @return A remote object that can be called from any JVM
+     * @exception ProActiveException if the remote object cannot be created
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T turnRemote(T object, String protocol) throws ProActiveException {
+        RemoteObjectExposer<T> roe = newRemoteObject(object.getClass().getName(), object);
+        RemoteRemoteObject rro = roe.createRemoteObject(TURN_REMOTE_PREFIX + counter.incrementAndGet(),
+                false, protocol);
+        RemoteObjectAdapter roa = new RemoteObjectAdapter(rro);
+        return (T) roa.getObjectProxy();
+    }
+
+    // -----------------------
+    // = Multi-Protocol part =
+    // -----------------------
+    /**
+     * Force usage of a specific protocol to contact an active object.
+     *
+     * @param obj
+     *          Should be a RemoteObject
+     *
+     * @param protocol
+     *          Can be rmi, http, pamr, rmissh, rmissl
+     *
+     * @throws UnknownProtocolException
+     *
+     * @throws NotYetExposedException
+     *
+     * @throws IllegalArgumentException
+     *          If obj isn't an RemoteObject
+     */
+    public static void forceProtocol(Object obj, String protocol) throws UnknownProtocolException,
+            NotYetExposedException {
+        if (obj instanceof StubObject) {
+            Proxy proxy = ((StubObject) obj).getProxy();
+            if (proxy instanceof SynchronousProxy) {
+                RemoteObject<?> ro = ((SynchronousProxy) proxy).getRemoteObject();
+                // Stub side
+                if (ro instanceof RemoteObjectAdapter) {
+                    ((RemoteObjectAdapter) ro).forceProtocol(protocol);
+                    return;
+                } else {
+                    throw new IllegalArgumentException(
+                        "Method forceProtocol can only be called on stub object (client part of the RemoteObject)");
+                }
+            } else {
+                throw new IllegalArgumentException("The object " + obj + " isn't a RemoteObject");
+            }
+        } else {
+            throw new IllegalArgumentException("This method cannot be called on a POJO object");
+        }
+    }
+
+    public static void forceToDefault(Object obj) throws UnknownProtocolException, NotYetExposedException {
+        forceProtocol(obj, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+    }
+
+    public static void unforceProtocol(Object obj) throws UnknownProtocolException, NotYetExposedException {
+        forceProtocol(obj, null);
+    }
+
+    public static void addProtocol(RemoteObjectExposer<?> roe, String protocol) throws ProActiveException {
+        roe.createRemoteObject(ADD_PROTOCOL_PREFIX + counter.incrementAndGet(), false, protocol);
     }
 }

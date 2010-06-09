@@ -277,6 +277,11 @@ public class MOCKBody implements Body {
         return null;
     }
 
+    public String registerByName(String name, boolean rebind, String protocol) throws IOException {
+
+        return null;
+    }
+
     public void setRegistered(boolean registered) throws IOException {
 
     }
@@ -365,5 +370,4 @@ public class MOCKBody implements Body {
         // TODO Auto-generated method stub
 
     }
-
 }

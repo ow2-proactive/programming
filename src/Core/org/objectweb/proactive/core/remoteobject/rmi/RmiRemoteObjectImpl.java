@@ -45,6 +45,7 @@ import java.rmi.server.UnicastRemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.core.mop.SunMarshalInputStream;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 

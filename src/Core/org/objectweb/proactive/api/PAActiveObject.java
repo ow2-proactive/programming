@@ -60,10 +60,13 @@ import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.MetaObjectFactory;
 import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
 import org.objectweb.proactive.core.body.UniversalBody;
+import org.objectweb.proactive.core.body.UniversalBodyRemoteObjectAdapter;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedException;
 import org.objectweb.proactive.core.body.ft.internalmsg.Heartbeat;
 import org.objectweb.proactive.core.body.proxy.BodyProxy;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
+import org.objectweb.proactive.core.config.PAProperties;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.MOPException;
@@ -73,7 +76,11 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
+import org.objectweb.proactive.core.remoteobject.SynchronousProxy;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 import org.objectweb.proactive.core.util.NonFunctionalServices;
@@ -1135,6 +1142,27 @@ public class PAActiveObject {
         }
     }
 
+    public static String registerByName(Object obj, String name, String protocol) throws ProActiveException {
+        return registerByName(obj, name, true, protocol);
+    }
+
+    public static String registerByName(Object obj, String name, boolean rebind, String protocol)
+            throws ProActiveException {
+        try {
+            UniversalBody body = getRemoteBody(obj);
+
+            String url = body.registerByName(name, rebind, protocol);
+            body.setRegistered(true);
+            if (PAActiveObject.logger.isInfoEnabled()) {
+                PAActiveObject.logger.info("Success at binding url " + url);
+            }
+
+            return url;
+        } catch (IOException e) {
+            throw new ProActiveException("Failed to register" + obj + " with name " + name, e);
+        }
+    }
+
     /**
      * Looks-up all Active Objects registered on a host, using a registry(RMI or HTTP or IBIS) The
      * registry where to look for is fully determined with the protocol included in the url.
@@ -1696,4 +1724,53 @@ public class PAActiveObject {
         UniversalBody body = myBodyProxy.getBody().getRemoteAdapter();
         return body;
     }
+
+    // -----------------------
+    // = Multi-Protocol part =
+    // -----------------------
+
+    /**
+     * Force usage of a specific protocol to contact an active object.
+     *
+     * @param obj
+     *          Could be remote or local parts of the ActiveObject
+     *
+     * @param protocol
+     *          Can be rmi, http, pamr, rmissh, rmissl
+     *
+     * @throws UnknownProtocolException
+     *
+     * @throws NotYetExposedException
+     *
+     * @throws IllegalArgumentException
+     *          If obj isn't an ActiveObject
+     */
+    public static void forceProtocol(Object obj, String protocol) throws UnknownProtocolException,
+            NotYetExposedException {
+        if (!(obj instanceof StubObject)) {
+            throw new IllegalArgumentException("This method must be call on an ActiveObject");
+        }
+
+        UniversalBodyProxy ubp = (UniversalBodyProxy) ((StubObject) obj).getProxy();
+        UniversalBody ub = ubp.getBody();
+        // Object is a stub which point to a remote Body
+        if (ub instanceof UniversalBodyRemoteObjectAdapter) {
+            UniversalBodyRemoteObjectAdapter ubroa = (UniversalBodyRemoteObjectAdapter) ubp.getBody();
+            SynchronousProxy sp = (SynchronousProxy) ((StubObject) ubroa).getProxy();
+            RemoteObject ro = sp.getRemoteObject();
+            if (ro instanceof RemoteObjectAdapter) {
+                ((RemoteObjectAdapter) ro).forceProtocol(protocol);
+            } else {
+                throw new IllegalArgumentException(
+                    "Method forceProtocol can only be called on stub object (client part of the RemoteObject)");
+            }
+        } else {
+            throw new IllegalArgumentException("The object " + obj + " isn't an ActiveObject");
+        }
+    }
+
+    public static void forceToDefault(Object obj) throws UnknownProtocolException, NotYetExposedException {
+        forceProtocol(obj, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+    }
+
 }

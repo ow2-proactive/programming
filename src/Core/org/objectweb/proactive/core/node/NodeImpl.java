@@ -53,6 +53,7 @@ import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.VMInformation;
+import org.objectweb.proactive.core.util.URIBuilder;
 
 
 /**
@@ -86,9 +87,9 @@ public class NodeImpl implements Node, Serializable {
     public NodeImpl() {
     }
 
-    public NodeImpl(ProActiveRuntime proActiveRuntime, String nodeURL, String protocol, String jobID) {
+    public NodeImpl(ProActiveRuntime proActiveRuntime, String nodeURL, String jobID) {
         this.proActiveRuntime = proActiveRuntime;
-        this.nodeInformation = new NodeInformationImpl(nodeURL, protocol, jobID);
+        this.nodeInformation = new NodeInformationImpl(nodeURL, jobID);
     }
 
     @Override
@@ -215,7 +216,7 @@ public class NodeImpl implements Node, Serializable {
             ProActiveException {
         in.defaultReadObject();
         if (NodeFactory.isNodeLocal(this)) {
-            this.proActiveRuntime = RuntimeFactory.getProtocolSpecificRuntime(nodeInformation.getProtocol());
+            this.proActiveRuntime = RuntimeFactory.getRuntime(nodeInformation.getURL());
         }
     }
 
@@ -249,9 +250,8 @@ public class NodeImpl implements Node, Serializable {
         private String jobID;
         private VMInformation vmInformation;
 
-        public NodeInformationImpl(String url, String protocol, String jobID) {
+        public NodeInformationImpl(String url, String jobID) {
             this.nodeURL = url;
-            this.protocol = protocol;
             this.nodeName = extractNameFromUrl(url);
             this.jobID = (jobID != null) ? jobID : Job.DEFAULT_JOBID;
 
@@ -294,13 +294,6 @@ public class NodeImpl implements Node, Serializable {
          */
         public String getName() {
             return nodeName;
-        }
-
-        /**
-         * @see org.objectweb.proactive.core.node.NodeInformation#getProtocol()
-         */
-        public String getProtocol() {
-            return protocol;
         }
 
         /**

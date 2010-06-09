@@ -32,7 +32,7 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.body;
 
@@ -129,10 +129,6 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
         }
     }
 
-    public String getUrl() {
-        return this.roe.getURL();
-    }
-
     //
     // -- PUBLIC METHODS -----------------------------------------------
     //
@@ -141,6 +137,10 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     //
     public String getJobID() {
         return this.jobID;
+    }
+
+    public String getUrl() {
+        return this.roe.getURL();
     }
 
     public String getNodeURL() {
@@ -185,6 +185,7 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
             // rebind must be true: if an object migrates between two JVM on the same machine (same rmi registry)
             RemoteRemoteObject rro = this.roe.createRemoteObject(this.bodyID.toString(), true);
             this.remoteBody = (UniversalBody) new RemoteObjectAdapter(rro).getObjectProxy();
+
         } catch (ProActiveException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -212,7 +213,12 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     public String registerByName(String name, boolean rebind) throws ProActiveException {
         RemoteRemoteObject rro = this.roe.createRemoteObject(name, rebind);
         RemoteObjectAdapter roa = new RemoteObjectAdapter(rro);
+        return roa.getURI().toString();
+    }
 
+    public String registerByName(String name, boolean rebind, String protocol) throws ProActiveException {
+        RemoteRemoteObject rro = this.roe.createRemoteObject(name, rebind, protocol);
+        RemoteObjectAdapter roa = new RemoteObjectAdapter(rro);
         return roa.getURI().toString();
     }
 

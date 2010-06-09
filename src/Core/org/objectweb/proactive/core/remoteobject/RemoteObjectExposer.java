@@ -32,22 +32,27 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.remoteobject;
 
-import java.io.Serializable;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
+import org.objectweb.proactive.core.util.ProActiveInet;
+import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -59,7 +64,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * references on already activated protocols, allows to unregister and unexport one or more protocols.
  */
 public class RemoteObjectExposer<T> {
-    protected Hashtable<URI, InternalRemoteRemoteObject> activeRemoteRemoteObjects;
+    static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
+
+    // Use LinkedHashMap for keeping the insertion-order
+    protected LinkedHashMap<URI, InternalRemoteRemoteObject> activeRemoteRemoteObjects;
     private String className;
     private RemoteObjectImpl<T> remoteObject;
 
@@ -72,15 +80,20 @@ public class RemoteObjectExposer<T> {
 
     /**
      *
-     * @param className the classname of the stub for the remote object
-     * @param target the object to turn into a remote object
-     * @param targetRemoteObjectAdapter the adapter object that allows to implement specific behaviour like cache mechanism
+     * @param className
+     *            the classname of the stub for the remote object
+     * @param target
+     *            the object to turn into a remote object
+     * @param targetRemoteObjectAdapter
+     *            the adapter object that allows to implement specific behaviour
+     *            like cache mechanism
      */
     public RemoteObjectExposer(String className, Object target,
             Class<? extends Adapter<T>> targetRemoteObjectAdapter) {
         this.className = className;
         try {
             this.remoteObject = new RemoteObjectImpl(className, target, targetRemoteObjectAdapter);
+            this.remoteObject.setRemoteObjectExposer(this);
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -100,14 +113,17 @@ public class RemoteObjectExposer<T> {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        this.activeRemoteRemoteObjects = new Hashtable<URI, InternalRemoteRemoteObject>();
+        this.activeRemoteRemoteObjects = new LinkedHashMap<URI, InternalRemoteRemoteObject>();
     }
 
     /**
      * activate and register the remote object on the given url
-     * @param url The URI where to register the remote object
+     *
+     * @param url
+     *            The URI where to register the remote object
      * @return a remote reference to the remote object ie a RemoteRemoteObject
-     * @throws UnknownProtocolException thrown if the protocol specified within the url is unknow
+     * @throws UnknownProtocolException
+     *             thrown if the protocol specified within the url is unknow
      */
     public synchronized RemoteRemoteObject createRemoteObject(URI url) throws ProActiveException {
         String protocol = null;
@@ -140,24 +156,108 @@ public class RemoteObjectExposer<T> {
 
             // put the url within the list of the activated protocols
             this.activeRemoteRemoteObjects.put(url, irro);
-
             return rmo;
         } catch (Exception e) {
             throw new ProActiveException("Failed to create remote object (url=" + url + ")", e);
         }
     }
 
+    /**
+     * By default, expose remote object with all available protocols specified by the property
+     * PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+     */
     public synchronized RemoteRemoteObject createRemoteObject(String name, boolean rebind)
-            throws ProActiveException, AlreadyBoundException {
+            throws ProActiveException {
+        // Must be created before additionals one in order to avoid an AlreadyBoundException
+        RemoteRemoteObject ret = createRemoteObject(name, rebind,
+                CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
+        multiExposeRemoteObject(name, rebind);
+        return ret;
+    }
+
+    /**
+     * Only expose remote object as the specified protocol
+     *
+     * @param name
+     *           Specify a remote object name
+     *
+     * @throws ProActiveException
+     */
+    public synchronized RemoteRemoteObject createRemoteObject(String name, boolean rebind, String protocol)
+            throws ProActiveException {
         try {
             // select the factory matching the required protocol
-            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getDefaultRemoteObjectFactory();
-
-            InternalRemoteRemoteObject irro = rof.createRemoteObject(this.remoteObject, name, rebind);
-            this.activeRemoteRemoteObjects.put(irro.getURI(), irro);
+            // here is an implicit check for protocol validity
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(protocol);
+            URI uri = URIBuilder.buildURI(ProActiveInet.getInstance().getHostname(), name, rof
+                    .getProtocolId(), rof.getPort());
+            InternalRemoteRemoteObject irro = activeRemoteRemoteObjects.get(uri);
+            if (irro == null) {
+                irro = rof.createRemoteObject(this.remoteObject, name, rebind);
+                this.activeRemoteRemoteObjects.put(irro.getURI(), irro);
+                // Expose the remote object using all specified communication protocol
+            }
             return irro.getRemoteRemoteObject();
-        } catch (Exception e) {
+        } catch (ProActiveException e) {
             throw new ProActiveException("Failed to create remote object (name=" + name + ")", e);
+        } catch (IOException e) {
+            throw new ProActiveException("Failed to create remote object (name=" + name + ")", e);
+        }
+    }
+
+    /**
+     * Expose the remoteObject through all the protocol specified in PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+     *
+     * If some Exception are thrown during this additionnal exposure step, there are ignored.
+     */
+    private synchronized void multiExposeRemoteObject(String name, boolean rebind) {
+        // Expose the remote object using all specified communication protocol
+        if (CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS.isSet()) {
+            for (String protocol : CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+                    .getValue().split(",")) {
+                if (protocol.length() > 0) {
+                    try {
+                        // Create and store RRO in hashtable
+                        createRemoteObject(name, true, protocol);
+                        if (LOGGER_RO.isDebugEnabled()) {
+                            LOGGER_RO.debug("[Multi-Protocol] Object " + name +
+                                " expose with additionnal protocol : " + protocol);
+                        }
+                    } catch (ProActiveRuntimeException pare) {
+                        // Not so beautiful
+                        if (protocol.equalsIgnoreCase("pamr")) {
+                            LOGGER_RO.warn("The PAMR router seems to be down");
+                        } else {
+                            LOGGER_RO.warn("The exposition of " + name + ", through the protocol " +
+                                protocol + " doesn't succeed");
+                        }
+                    } catch (ProActiveException pae) {
+                        if (pae.getCause() instanceof AlreadyBoundException) {
+                            // Do nothing, here, we try to expose the object with extra protocol,
+                            // error here won't cause trouble
+                            continue;
+                        }
+                        // this protocol throw exception, so we remove it from the candidate list for multi exposure
+                        LOGGER_RO
+                                .warn("Protocol " +
+                                    protocol +
+                                    " seems invalid for this runtime, this is not a critical error, the protocol will be dismiss." +
+                                    pae);
+                        // First position
+                        CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+                                .setValue(CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+                                        .getValue().replace(protocol + ",", ""));
+                        // Or whatever position except first
+                        CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+                                .setValue(CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+                                        .getValue().replace(protocol, ""));
+                        // Suppress double occurence of ','
+                        CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+                                .setValue(CentralPAPropertyRepository.PA_COMMUNICATION_ADDITIONAL_PROTOCOLS
+                                        .getValue().replace(",,", ","));
+                    }
+                }
+            }
         }
     }
 
@@ -168,17 +268,24 @@ public class RemoteObjectExposer<T> {
      */
     @SuppressWarnings("unchecked")
     public RemoteObject<T> getRemoteObject(String protocol) throws ProActiveException {
-        Enumeration<URI> e = this.activeRemoteRemoteObjects.keys();
-
-        while (e.hasMoreElements()) {
-            URI url = e.nextElement();
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
+            URI url = it.next();
             if (protocol.equals(url.getScheme())) {
                 return new RemoteObjectAdapter(this.activeRemoteRemoteObjects.get(url)
                         .getRemoteRemoteObject());
             }
         }
-
         return null;
+    }
+
+    public RemoteObjectSet getRemoteObjectSet(RemoteRemoteObject ro) throws IOException {
+        ArrayList<RemoteRemoteObject> al = new ArrayList<RemoteRemoteObject>();
+        for (Iterator<InternalRemoteRemoteObject> it = activeRemoteRemoteObjects.values().iterator(); it
+                .hasNext();) {
+            RemoteRemoteObject rro = it.next().getRemoteRemoteObject();
+            al.add(rro);
+        }
+        return new RemoteObjectSet(ro, al);
     }
 
     /**
@@ -186,23 +293,17 @@ public class RemoteObjectExposer<T> {
      */
     public String[] getURLs() {
         String[] urls = new String[this.activeRemoteRemoteObjects.size()];
-
-        Enumeration<URI> e = this.activeRemoteRemoteObjects.keys();
         int i = 0;
-        while (e.hasMoreElements()) {
-            urls[i] = e.nextElement().toString();
-            i++;
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
+            urls[i++] = it.next().toString();
         }
-
         return urls;
     }
 
     public String getURL(String protocol) {
-        Enumeration<URI> e = this.activeRemoteRemoteObjects.keys();
-
-        while (e.hasMoreElements()) {
-            URI url = e.nextElement();
-            if (protocol.equals(url.getScheme())) {
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
+            URI url = it.next();
+            if (protocol.equalsIgnoreCase(url.getScheme())) {
                 return url.toString();
             }
         }
@@ -218,11 +319,11 @@ public class RemoteObjectExposer<T> {
      * unregister all the remote references on the remote object.
      */
     public void unregisterAll() throws ProActiveException {
-        Enumeration<URI> uris = this.activeRemoteRemoteObjects.keys();
+        // Keep a reference for debug
         URI uri = null;
-        while (uris.hasMoreElements()) {
-            uri = uris.nextElement();
-            //RemoteRemoteObject rro = this.activatedProtocols.get(uri);
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
+            uri = it.next();
+            // RemoteRemoteObject rro = this.activatedProtocols.get(uri);
             try {
                 PARemoteObject.unregister(uri);
             } catch (ProActiveException e) {
@@ -247,15 +348,12 @@ public class RemoteObjectExposer<T> {
     }
 
     public void unexportAll() throws ProActiveException {
-        Enumeration<URI> uris = this.activeRemoteRemoteObjects.keys();
         URI uri = null;
-        while (uris.hasMoreElements()) {
-            uri = uris.nextElement();
+        for (Iterator<URI> it = this.activeRemoteRemoteObjects.keySet().iterator(); it.hasNext();) {
+            uri = it.next();
             RemoteRemoteObject rro = this.activeRemoteRemoteObjects.get(uri).getRemoteRemoteObject();
             RemoteObjectFactory rof = RemoteObjectHelper.getRemoteObjectFactory(uri.getScheme());
             rof.unexport(rro);
         }
-
     }
-
 }

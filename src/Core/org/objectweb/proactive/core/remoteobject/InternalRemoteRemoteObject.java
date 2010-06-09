@@ -32,7 +32,7 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.remoteobject;
 
@@ -97,4 +97,14 @@ public interface InternalRemoteRemoteObject extends RemoteRemoteObject, Security
      * object that owns this internal remote remote object.
      */
     public Object getObjectProxy();
+
+    /**
+     * This method is used by the client-side RemoteObjectAdapter
+     * to get in server-side, all the RemoteRemoteObject that represent
+     * remotely the target.
+     *
+     * @return
+     *          A collection of all RemoteRemoteObject
+     */
+    public RemoteObjectSet getRemoteObjectSet() throws IOException;
 }

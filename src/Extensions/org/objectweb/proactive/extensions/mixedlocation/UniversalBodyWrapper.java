@@ -5,8 +5,8 @@
  *    Parallel, Distributed, Multi-Core Computing for
  *    Enterprise Grids & Clouds
  *
- * Copyright (C) 1997-2010 INRIA/University of 
- * 				Nice-Sophia Antipolis/ActiveEon
+ * Copyright (C) 1997-2010 INRIA/University of
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
  * USA
  *
- * If needed, contact us to obtain a release under GPL Version 2 
+ * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
  *  Initial developer(s):               The ProActive Team
@@ -32,7 +32,7 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.extensions.mixedlocation;
 
@@ -278,6 +278,11 @@ public class UniversalBodyWrapper implements UniversalBody, Runnable {
 
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException {
         return this.wrappedBody.registerByName(name, rebind);
+    }
+
+    public String registerByName(String name, boolean rebind, String protocol) throws IOException,
+            ProActiveException {
+        return this.wrappedBody.registerByName(name, rebind, protocol);
     }
 
     public ProActiveSecurityManager getProActiveSecurityManager(Entity user)

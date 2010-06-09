@@ -106,4 +106,14 @@ public interface RemoteObject<T> extends SecurityEntity {
      * @return return the <code>class</code> of the adapter of this remote object
      */
     public Adapter<T> getAdapter();
+
+    /**
+     * @return the related remoteObjectExposer for this RemoteObject
+     */
+    public RemoteObjectExposer<T> getRemoteObjectExposer();
+
+    /**
+     * Set the related remoteObjectExposer for this RemoteObject
+     */
+    public void setRemoteObjectExposer(RemoteObjectExposer<T> roe);
 }

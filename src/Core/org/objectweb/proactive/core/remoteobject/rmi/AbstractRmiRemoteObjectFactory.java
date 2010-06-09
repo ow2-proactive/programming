@@ -37,6 +37,10 @@
 package org.objectweb.proactive.core.remoteobject.rmi;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -50,10 +54,12 @@ import java.rmi.server.RMISocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.mop.SunMarshalInputStream;
+import org.objectweb.proactive.core.mop.SunMarshalOutputStream;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.AlreadyBoundException;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
@@ -202,7 +208,7 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
             LOGGER_RO.debug(" successfully bound in registry at " + url);
         } catch (java.rmi.AlreadyBoundException e) {
             LOGGER_RO.warn(url + " already bound in registry", e);
-            throw new ProActiveException(e);
+            throw new AlreadyBoundException(e);
         } catch (RemoteException e) {
             LOGGER_RO.debug(" cannot bind object at " + url);
             throw new ProActiveException(e);
@@ -298,5 +304,13 @@ public abstract class AbstractRmiRemoteObjectFactory extends AbstractRemoteObjec
     public URI getBaseURI() {
         return URI.create(this.getProtocolId() + "://" + ProActiveInet.getInstance().getHostname() + ":" +
             getPort() + "/");
+    }
+
+    public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {
+        return new SunMarshalInputStream(in);
+    }
+
+    public ObjectOutputStream getProtocolObjectOutputStream(OutputStream out) throws IOException {
+        return new SunMarshalOutputStream(out);
     }
 }

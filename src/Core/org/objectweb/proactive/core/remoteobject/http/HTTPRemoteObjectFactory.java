@@ -3,7 +3,7 @@
  *
  * ProActive Parallel Suite(TM): The Java(TM) library for
  *    Parallel, Distributed, Multi-Core Computing for
- *    Enterprise Grids & Clouds 
+ *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of 
  * 				Nice-Sophia Antipolis/ActiveEon
@@ -36,6 +36,11 @@
  */
 package org.objectweb.proactive.core.remoteobject.http;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -43,6 +48,8 @@ import java.net.URL;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.mop.PAObjectInputStream;
+import org.objectweb.proactive.core.mop.PAObjectOutputStream;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObjectImpl;
@@ -136,12 +143,16 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         HTTPRegistry.getInstance().unbind(URIBuilder.getNameFromURI(urn));
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#lookup(java.net.URI)
+    /**
+     * Looks-up a remote object previously registered in the bodies table .
+     *
+     * @param urn
+     *            the urn (in fact its url + name) the remote Body is registered to
+     * @return a UniversalBody
      */
     public RemoteObject lookup(URI url) throws ProActiveException {
-        String urn = url.getPath();
-        HttpRemoteObjectLookupMessage message = new HttpRemoteObjectLookupMessage(urn, url);
+
+        HttpRemoteObjectLookupMessage message = new HttpRemoteObjectLookupMessage(url.toString());
         try {
             message.send();
         } catch (HTTPRemoteException e) {
@@ -156,8 +167,20 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#list(java.net.URI)
+    /**
+     * List all active object previously registered in the registry
+     *
+     * @param url
+     *            the url of the host to scan, typically //machine_name
+     * @return a list of Strings, representing the registered names, and {} if no registry
+     * @exception java.io.IOException
+     *                if scanning reported some problem (registry not found, or malformed Url)
+     */
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.objectweb.proactive.core.body.BodyAdapterImpl#list(java.lang.String)
      */
     public URI[] list(URI url) throws ProActiveException {
 
@@ -217,4 +240,11 @@ public class HTTPRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             getPort() + "/");
     }
 
+    public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {
+        return new PAObjectInputStream(in);
+    }
+
+    public ObjectOutputStream getProtocolObjectOutputStream(OutputStream out) throws IOException {
+        return new PAObjectOutputStream(out);
+    }
 }

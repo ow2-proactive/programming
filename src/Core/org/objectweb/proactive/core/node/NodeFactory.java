@@ -309,13 +309,6 @@ public class NodeFactory {
             logger.debug("NodeFactory: getNode() for " + nodeURL);
         }
 
-        //do we have any association for this node?
-        String protocol = URIBuilder.getProtocol(nodeURL);
-        if (protocol == null) {
-            protocol = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue();
-        }
-
-        //String noProtocolUrl = UrlBuilder.removeProtocol(nodeURL, protocol);
         try {
             //            url = URIBuilder.checkURI(nodeURL).toString();
             url = nodeURL; // #@#@ This modification can break proactive
@@ -325,7 +318,7 @@ public class NodeFactory {
             throw new NodeException("Cannot get the node based on " + nodeURL, e);
         }
 
-        Node node = new NodeImpl(proActiveRuntime, url, protocol, jobID);
+        Node node = new NodeImpl(proActiveRuntime, url, jobID);
 
         return node;
     }

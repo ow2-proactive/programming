@@ -32,12 +32,13 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.remoteobject;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.lang.reflect.TypeVariable;
 import java.net.URI;
@@ -45,12 +46,17 @@ import java.security.AccessControlException;
 import java.security.PublicKey;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.mop.StubObject;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.adapter.Adapter;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityContext;
@@ -71,13 +77,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *         that the remote object called is distant.
  */
 public class RemoteObjectAdapter implements RemoteObject {
+    static final Logger LOGGER_RO = ProActiveLogger.getLogger(Loggers.REMOTEOBJECT);
 
-    /**
-     * the location of the remote object this remote object adapter represents
-     */
-    protected RemoteRemoteObject remoteObject;
-
-    protected RemoteObjectProperties remoteObjectProperties;
+    protected RemoteObjectSet remoteObjectSet;
 
     /**
      * a stub on the object reified by the remote object
@@ -149,7 +151,8 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new Class<?>[] {});
             internalRROMethods[2] = InternalRemoteRemoteObject.class.getDeclaredMethod("getURI",
                     new Class<?>[0]);
-
+            internalRROMethods[3] = InternalRemoteRemoteObject.class.getDeclaredMethod("getRemoteObjectSet",
+                    new Class<?>[0]);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -159,29 +162,29 @@ public class RemoteObjectAdapter implements RemoteObject {
     }
 
     public RemoteObjectAdapter(RemoteRemoteObject ro) throws ProActiveException {
-        this.remoteObject = ro;
-        // this.remoteObjectProperties = this.getRemoteObjectProperties();
-        this.uri = this.getURI();
+        // Retrieve from the RemoteRemoteObject (client-side) gave as parameter, all the exposed protocols on server-side
+        this.remoteObjectSet = this.getRemoteObjectSet(ro);
+    }
+
+    public void forceProtocol(String protocol) throws UnknownProtocolException, NotYetExposedException {
+        this.remoteObjectSet.forceProtocol(protocol);
     }
 
     public Reply receiveMessage(Request message) throws ProActiveException, RenegotiateSessionException,
             IOException {
         try {
-            return this.remoteObject.receiveMessage(message);
+            // for each RRO ordered from faster to slower
+            return remoteObjectSet.receiveMessage(message);
         } catch (EOFException e) {
-            ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).debug(
-                    "EOFException while calling method " + message.getMethodName());
+            LOGGER_RO.debug("EOFException while calling method " + message.getMethodName());
             return new SynchronousReplyImpl();
         } catch (ProActiveException e) {
             throw new IOException(e.getMessage());
         } catch (IOException e) {
-            ProActiveLogger.getLogger(Loggers.REMOTEOBJECT).warn(
-                    "unable to contact remote object at " + this.uri + " when calling " +
-                        message.getMethodName());
+            // Log for keeping a trace
+            LOGGER_RO.warn("unable to contact remote object when calling method " + message.getMethodName());
             return new SynchronousReplyImpl(new MethodCallResult(null, e));
         }
-
-        // return new SynchronousReplyImpl();
     }
 
     // Implements SecurityEntity
@@ -191,7 +194,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (TypedCertificate) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -220,7 +223,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (Entities) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -246,7 +249,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (SecurityContext) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -271,7 +274,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (PublicKey) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -297,7 +300,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new Object[] { sessionID, signature }, new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (byte[]) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -323,7 +326,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     clientRandomValue }, new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (byte[]) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -351,7 +354,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     parametersSignature }, new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (byte[][]) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -378,7 +381,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     policy, distantCertificate }, new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return ((Long) reply.getResult().getResult()).longValue();
         } catch (SecurityException e1) {
@@ -403,7 +406,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
         } catch (SecurityException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -428,9 +431,10 @@ public class RemoteObjectAdapter implements RemoteObject {
                         new HashMap<TypeVariable<?>, Class<?>>());
                 Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-                SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+                SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
                 this.stub = reply.getResult().getResult();
+                ((StubObject) this.stub).setProxy(new SynchronousProxy(null, new Object[] { this }));
             } catch (SecurityException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -461,7 +465,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new RemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (String) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -487,7 +491,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new RemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (String) reply.getResult().getResult();
         } catch (ProActiveException e) {
@@ -503,34 +507,53 @@ public class RemoteObjectAdapter implements RemoteObject {
         return null;
     }
 
+    private RemoteObjectSet getRemoteObjectSet(RemoteRemoteObject rro) {
+        try {
+            MethodCall mc = MethodCall.getMethodCall(internalRROMethods[3], new Object[0],
+                    new HashMap<TypeVariable<?>, Class<?>>());
+            Request r = new InternalRemoteRemoteObjectRequest(mc);
+
+            // Use the first created RRO for finding all possible others
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) rro.receiveMessage(r);
+
+            RemoteObjectSet ros = (RemoteObjectSet) reply.getResult().getResult();
+            return ros;
+        } catch (ProActiveException pae) {
+            // TODO Auto-generated catch block
+            pae.printStackTrace();
+        } catch (IOException ioe) {
+            // TODO Auto-generated catch block
+            ioe.printStackTrace();
+        } catch (RenegotiateSessionException rse) {
+            // TODO Auto-generated catch block
+            rse.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = (prime * result) + ((remoteObject == null) ? 0 : remoteObject.hashCode());
-        return result;
+        return this.remoteObjectSet.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
+        // Self reference
         if (this == obj) {
             return true;
         }
+        // Null reference
         if (obj == null) {
             return false;
         }
+        // Class mismatch
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final RemoteObjectAdapter other = (RemoteObjectAdapter) obj;
-        if (remoteObject == null) {
-            if (other.remoteObject != null) {
-                return false;
-            }
-        } else if (!remoteObject.equals(other.remoteObject)) {
-            return false;
-        }
-        return true;
+
+        // Check only the equality of the default RRO
+        return this.remoteObjectSet.getDefault().equals(
+                ((RemoteObjectAdapter) obj).remoteObjectSet.getDefault());
     }
 
     public Class<?> getTargetClass() {
@@ -539,7 +562,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new RemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (Class<?>) reply.getResult().getResult();
         } catch (ProActiveException e) {
@@ -561,7 +584,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new RemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (Class<?>) reply.getResult().getResult();
         } catch (ProActiveException e) {
@@ -584,7 +607,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (ProActiveSecurityManager) reply.getResult().getResult();
         } catch (SecurityException e1) {
@@ -610,7 +633,7 @@ public class RemoteObjectAdapter implements RemoteObject {
                     new Object[] { user, policyServer }, new HashMap<TypeVariable<?>, Class<?>>());
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
         } catch (SecurityException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -635,7 +658,26 @@ public class RemoteObjectAdapter implements RemoteObject {
 
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
+
+            return (URI) reply.getResult().getResult();
+        } catch (IOException e) {
+            throw new ProActiveException(e);
+        } catch (RenegotiateSessionException e) {
+            throw new ProActiveException(e);
+        } catch (SecurityException e) {
+            throw new ProActiveException(e);
+        }
+    }
+
+    protected URI getURI(RemoteRemoteObject rro) throws ProActiveException {
+        try {
+            MethodCall mc = MethodCall.getMethodCall(internalRROMethods[2], new Object[0],
+                    new HashMap<TypeVariable<?>, Class<?>>());
+
+            Request r = new InternalRemoteRemoteObjectRequest(mc);
+
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) rro.receiveMessage(r);
 
             return (URI) reply.getResult().getResult();
         } catch (IOException e) {
@@ -654,7 +696,7 @@ public class RemoteObjectAdapter implements RemoteObject {
 
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (RemoteObjectProperties) reply.getResult().getResult();
         } catch (ProActiveException e) {
@@ -678,7 +720,7 @@ public class RemoteObjectAdapter implements RemoteObject {
 
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
-            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.remoteObject.receiveMessage(r);
+            SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
             return (Adapter) reply.getResult().getResult();
         } catch (ProActiveException e) {
             // TODO Auto-generated catch block
@@ -693,4 +735,19 @@ public class RemoteObjectAdapter implements RemoteObject {
         return null;
     }
 
+    // This could lead to unwanted behaviour
+    public RemoteObjectExposer getRemoteObjectExposer() {
+        throw new ProActiveRuntimeException(
+            "There is no reason to get the RemoteObjectExposer from the client side");
+    }
+
+    // This could lead to unwanted behaviour
+    public void setRemoteObjectExposer(RemoteObjectExposer roe) {
+        throw new ProActiveRuntimeException(
+            "There is no reason to set the RemoteObjectExposer from the client side");
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }
 }

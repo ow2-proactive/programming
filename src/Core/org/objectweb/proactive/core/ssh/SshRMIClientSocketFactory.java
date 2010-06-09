@@ -44,6 +44,9 @@ import java.rmi.server.RMIClientSocketFactory;
 
 public class SshRMIClientSocketFactory implements RMIClientSocketFactory, Serializable {
     final static private Object tunnelLock = new Object();
+    static SshConfig sshConfig;
+    private String specificGatewayRule = "";
+    private transient boolean isChecked = false;
 
     static private SshTunnelPool tunnelPool;
 
@@ -54,6 +57,10 @@ public class SshRMIClientSocketFactory implements RMIClientSocketFactory, Serial
     }
 
     public Socket createSocket(String host, int port) throws IOException {
+        if (specificGatewayRule.length() == 0) {
+            //specificGatewayRule = sshConfig.getRule(host);
+        }
+
         return tunnelPool.getSocket(host, port);
     }
 

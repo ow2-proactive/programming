@@ -124,7 +124,7 @@ public class PADeployment {
             throw e;
         }
 
-        //No further modifications can be donde on the xmlproperties, thus we close the contract
+        //No further modifications can be done on the xmlproperties, thus we close the contract
         variableContractImpl.close();
 
         //Check the contract (proposed optimization: Do this when parsing </variable> tag instead of here!)

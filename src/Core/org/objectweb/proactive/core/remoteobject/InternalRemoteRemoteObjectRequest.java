@@ -32,12 +32,15 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.remoteobject;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.objectweb.proactive.core.body.request.RequestImpl;
 import org.objectweb.proactive.core.mop.MethodCall;
+import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
 
 
 /**
@@ -47,7 +50,15 @@ import org.objectweb.proactive.core.mop.MethodCall;
  * process it instead of sending it to the remote object it represents.
  */
 public class InternalRemoteRemoteObjectRequest extends RequestImpl {
+
+    public InternalRemoteRemoteObjectRequest() {
+    };
+
     public InternalRemoteRemoteObjectRequest(MethodCall methodCall) {
         super(methodCall, false);
+    }
+
+    public Object execute(Object target) throws MethodCallExecutionFailedException, InvocationTargetException {
+        return methodCall.execute(target);
     }
 }

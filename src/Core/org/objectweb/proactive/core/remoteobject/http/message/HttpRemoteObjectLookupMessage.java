@@ -55,20 +55,14 @@ import org.objectweb.proactive.core.util.URIBuilder;
  * @see HttpMessage
  */
 public class HttpRemoteObjectLookupMessage extends HttpMessage implements Serializable {
-    private String urn;
-
     //Caller Side
 
     /**
      * Constructs an HTTP Message
      * @param urn The urn of the Object (it can be an active object or a runtime).
      */
-    public HttpRemoteObjectLookupMessage(String urn, URI url) {
-        super(url.toString());
-        this.urn = urn;
-        if (!this.urn.startsWith("/")) {
-            this.urn = "/" + urn;
-        }
+    public HttpRemoteObjectLookupMessage(String url) {
+        super(url);
     }
 
     /**
@@ -83,26 +77,21 @@ public class HttpRemoteObjectLookupMessage extends HttpMessage implements Serial
 
     /**
      * Performs the lookup
-     * @return The Object associated with the urn
      */
     @Override
     public Object processMessage() {
-        if (this.urn != null) {
-            InternalRemoteRemoteObject irro = HTTPRegistry.getInstance().lookup(
-                    URIBuilder.getNameFromURI(url));
+        InternalRemoteRemoteObject irro = HTTPRegistry.getInstance().lookup(URIBuilder.getNameFromURI(url));
 
-            //            System.out.println("HttpRemoteObjectLookupMessage.processMessage() ++ ro at " + url +" : " +ro) ;
-            if (irro != null) {
-                RemoteRemoteObject rro = null;
-                try {
-                    rro = new HTTPRemoteObjectFactory().newRemoteObject(irro);
-                    ((HttpRemoteObjectImpl) rro).setURI(URI.create(url));
-                } catch (ProActiveException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                this.returnedObject = rro;
+        if (irro != null) {
+            RemoteRemoteObject rro = null;
+            try {
+                rro = new HTTPRemoteObjectFactory().newRemoteObject(irro);
+                ((HttpRemoteObjectImpl) rro).setURI(URI.create(url));
+            } catch (ProActiveException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
+            this.returnedObject = rro;
         }
         return this.returnedObject;
     }

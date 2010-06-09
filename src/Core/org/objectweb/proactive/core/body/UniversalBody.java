@@ -32,12 +32,13 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.body;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.rmi.AlreadyBoundException;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Job;
@@ -190,5 +191,7 @@ public interface UniversalBody extends Job, Serializable, SecurityEntity {
      */
     public String getUrl();
 
+    public String registerByName(String name, boolean rebind, String protocol) throws IOException,
+            ProActiveException;
 }
 //@snippet-end universalbody

@@ -50,6 +50,7 @@ import org.objectweb.proactive.core.util.OperatingSystem;
  * central repository contains all the already existing properties.
  */
 public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
+
     /**
      * Java security policy file location
      */
@@ -438,6 +439,27 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     // Not documented, temporary workaround until 4.3.0
     static public PAPropertyInteger PA_RMISSH_REMOTE_PORT = new PAPropertyInteger(
         "proactive.communication.rmissh.port", false);
+
+    /* ------------------------------------
+     *  REMOTE OBJECT - MULTI-PROTOCOL
+     */
+
+    /** Expose object using these protocols in addition to the default one (protocols separated by comma) */
+    public static PAPropertyString PA_COMMUNICATION_ADDITIONAL_PROTOCOLS = new PAPropertyString(
+        "proactive.communication.additional_protocols", false);
+
+    /** Impose a static order for protocols selection, this automatically desactivate benchmark */
+    public static PAPropertyString PA_COMMUNICATION_PROTOCOLS_ORDER = new PAPropertyString(
+        "proactive.communication.protocols.order", false);
+
+    /** Specify a parameter for benchmark */
+    public static PAPropertyString PA_BENCHMARK_PARAMETER = new PAPropertyString(
+        "proactive.communication.benchmark.parameter", false);
+
+    /** The class to use for doing remoteObject Benchmark, must implement BenchmarkObject */
+    public static PAPropertyString PA_BENCHMARK_CLASS = new PAPropertyString(
+        "proactive.communication.benchmark.class", false,
+        "org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly");
 
     /* ------------------------------------
      *  SECURITY

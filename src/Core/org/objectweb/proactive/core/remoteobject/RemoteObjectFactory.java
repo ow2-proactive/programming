@@ -36,6 +36,11 @@
  */
 package org.objectweb.proactive.core.remoteobject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.URI;
 
 import org.objectweb.proactive.core.ProActiveException;
@@ -129,4 +134,16 @@ public interface RemoteObjectFactory {
      * To lookup an object on this host, caller can use this base URI and just set the name part.
      */
     public URI getBaseURI();
+
+    /**
+     * Return an input Stream which will handle the deserialization of the RemoteRemoteObject created
+     * by this factory. By default PAObjectInputStream class could be use.
+     */
+    public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException;
+
+    /**
+     * Return an output Stream which will handle the serialization of the RemoteRemoteObject created
+     * by this factory. By default PAObjectOutputStream class could be use.
+     */
+    public ObjectOutputStream getProtocolObjectOutputStream(OutputStream out) throws IOException;
 }

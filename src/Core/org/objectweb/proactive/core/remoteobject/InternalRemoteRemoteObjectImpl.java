@@ -32,7 +32,7 @@
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_CONTRIBUTOR$$
  */
 package org.objectweb.proactive.core.remoteobject;
 
@@ -89,12 +89,12 @@ public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObjec
      */
     private transient RemoteObject<?> remoteObject;
 
-    public InternalRemoteRemoteObjectImpl() {
-    }
-
-    public InternalRemoteRemoteObjectImpl(RemoteObject<?> ro) {
-        this.remoteObject = ro;
-    }
+    //    public InternalRemoteRemoteObjectImpl() {
+    //    }
+    //
+    //    public InternalRemoteRemoteObjectImpl(RemoteObject<?> ro) {
+    //        this.remoteObject = ro;
+    //    }
 
     public InternalRemoteRemoteObjectImpl(RemoteObject<?> ro, URI uri) {
         this.remoteObject = ro;
@@ -136,7 +136,7 @@ public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObjec
         if (message instanceof InternalRemoteRemoteObjectRequest) {
             Object o;
             try {
-                o = message.getMethodCall().execute(this);
+                o = ((InternalRemoteRemoteObjectRequest) message).execute(this);
                 return new SynchronousReplyImpl(new MethodCallResult(o, null));
             } catch (MethodCallExecutionFailedException e) {
                 // TODO Auto-generated catch block
@@ -245,7 +245,7 @@ public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObjec
     /* (non-Javadoc)
      * @see org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject#setRemoteObject(org.objectweb.proactive.core.remoteobject.RemoteObject)
      */
-    public void setRemoteObject(RemoteObject remoteObject) {
+    public void setRemoteObject(RemoteObject<?> remoteObject) {
         this.remoteObject = remoteObject;
     }
 
@@ -254,7 +254,7 @@ public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObjec
      */
     public Object getObjectProxy() {
         try {
-            return this.remoteObject.getObjectProxy(this.remoteRemoteObject);
+            return this.remoteObject.getObjectProxy();
         } catch (ProActiveException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -276,5 +276,11 @@ public class InternalRemoteRemoteObjectImpl implements InternalRemoteRemoteObjec
     public void setProActiveSecurityManager(Entity user, PolicyServer policyServer)
             throws SecurityNotAvailableException, AccessControlException, IOException {
         this.remoteObject.setProActiveSecurityManager(user, policyServer);
+    }
+
+    public RemoteObjectSet getRemoteObjectSet() throws IOException {
+        RemoteObjectSet ros = this.remoteObject.getRemoteObjectExposer().getRemoteObjectSet(
+                this.remoteRemoteObject);
+        return ros;
     }
 }
