@@ -9,11 +9,10 @@ goto doit
 :usage
 echo.
 echo Start a ProActive node on a new runtime (new JVM)
-echo  using the protocol specified in the url if any
-echo    - 1 : the url of the node to create
+echo The URL of the node is printed on the standard output.
+echo    - 1 : the node name of the node to create
 echo.
-echo ex : startNode  node1 (start a node 'node1' using the default protocol)
-echo ex : startNode  ibis://localhost/node1 (start a node 'node1' using the ibis protocol)
+echo ex : startNode  node1
 echo.
 echo Node started with a random name
 echo.

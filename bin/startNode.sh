@@ -4,12 +4,12 @@ echo --- StartNode -------------------------------------------
 
 if [ $# -lt 1 ]; then
     echo "
-       Start a ProActive node on a new runtime (new JVM) using the
-       protocol specified in the url if any
-         startNode.sh <the url of the node to create>
+       Start a ProActive node on a new runtime (new JVM). The URL
+       of the node is printed on the standard output.
 
-         ex : startNode.sh  node1 (start a node 'node1' using the default protocol on $HOSTNAME)
-         ex : startNode.sh  ibis://$HOSTNAME/node1 (start a node 'node1' using the ibis protocol on $HOSTNAME)
+         startNode.sh <the node name of the node to create>
+
+         ex : startNode.sh  node1
 
     "
     exit 1

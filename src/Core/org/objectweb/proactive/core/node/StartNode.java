@@ -40,12 +40,8 @@ import java.rmi.AlreadyBoundException;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PALifeCycle;
-import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.UniqueID;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
-import org.objectweb.proactive.core.util.ProActiveInet;
-import org.objectweb.proactive.core.util.URIBuilder;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -74,14 +70,9 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class StartNode {
-    public static final int DEFAULT_CLASSFILE_SERVER_PORT = 2001;
     static Logger logger;
-    protected static final int DEFAULT_PORT = CentralPAPropertyRepository.PA_RMI_PORT.getValue();
     protected static final int MAX_RETRY = 3;
     protected static final String NO_REBIND_OPTION_NAME = "-noRebind";
-    protected static final String NO_CLASS_SERVER_OPTION_NAME = "-noClassServer";
-    protected static final String NO_REGISTRY_OPTION_NAME = "-noRegistry";
-    protected static final String MULTICAST_LOCATOR_NAME = "-multicastLocator";
 
     static {
         ProActiveConfiguration.load();
@@ -103,13 +94,8 @@ public class StartNode {
         }
     }
 
-    protected boolean noClassServer = false;
     protected boolean noRebind = false;
-    protected boolean noRegistry = false;
-    protected boolean multicastLocator = false;
-    protected int registryPortNumber = DEFAULT_PORT;
-    protected String classpath;
-    protected String nodeURL;
+    protected String nodeName;
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
@@ -119,23 +105,11 @@ public class StartNode {
 
     private StartNode(String[] args) {
         if (args.length == 0) {
-            nodeURL = null;
+            nodeName = null;
             printUsage();
         } else {
-            nodeURL = args[0];
-            int port = URIBuilder.getPortNumber(nodeURL);
-            if (port != 0) {
-                registryPortNumber = URIBuilder.getPortNumber(nodeURL);
-                String protocol = URIBuilder.getProtocol(nodeURL);
-                if (protocol.equals(Constants.RMI_PROTOCOL_IDENTIFIER)) {
-                    CentralPAPropertyRepository.PA_RMI_PORT.setValue(registryPortNumber);
-                } else if (protocol.equals(Constants.XMLHTTP_PROTOCOL_IDENTIFIER)) {
-                    CentralPAPropertyRepository.PA_XMLHTTP_PORT.setValue(registryPortNumber);
-                }
-                // We don't change anything for SSH or IBIS
-            }
+            nodeName = args[0];
             checkOptions(args, 1);
-            readClassPath(args, 1);
         }
     }
 
@@ -159,38 +133,17 @@ public class StartNode {
             checkOption(args[i]);
     }
 
-    /**
-     * <i><font size="-1" color="#FF0000">**For internal use only** </font></i>
-     * Reads the classpath from the arguments
-     */
-    protected void readClassPath(String[] args, int start) {
-        if (noClassServer) {
-            return;
-        }
-
-        // look for classpath
-        for (int i = start; i < args.length; i++) {
-            String s = args[i];
-
-            if (s.charAt(0) != '-') {
-                classpath = s;
-
-                break;
-            }
-        }
-    }
-
-    protected void createNode(String nodeURL, boolean noRebind) throws NodeException, AlreadyBoundException {
+    protected void createNode(String nodeName, boolean noRebind) throws NodeException, AlreadyBoundException {
         int exceptionCount = 0;
 
         while (true) {
             try {
                 Node node = null;
 
-                if (nodeURL == null) {
+                if (nodeName == null) {
                     node = NodeFactory.getDefaultNode();
                 } else {
-                    node = NodeFactory.createNode(nodeURL, !noRebind, null, null, null);
+                    node = NodeFactory.createLocalNode(nodeName, !noRebind, null, null, null);
                 }
 
                 logger.info("OK. Node " + node.getNodeInformation().getName() + " ( " +
@@ -228,7 +181,7 @@ public class StartNode {
      */
     protected void run() throws java.io.IOException, NodeException, AlreadyBoundException {
         // create node
-        createNode(nodeURL, noRebind);
+        createNode(nodeName, noRebind);
     }
 
     /**
@@ -238,12 +191,6 @@ public class StartNode {
     protected void checkOption(String option) {
         if (NO_REBIND_OPTION_NAME.equals(option)) {
             noRebind = true;
-        } else if (NO_CLASS_SERVER_OPTION_NAME.equals(option)) {
-            noClassServer = true;
-        } else if (NO_REGISTRY_OPTION_NAME.equals(option)) {
-            noRegistry = true;
-        } else if (MULTICAST_LOCATOR_NAME.equals(option)) {
-            multicastLocator = true;
         } else {
             printUsage();
         }
@@ -253,29 +200,16 @@ public class StartNode {
     // -- PRIVATE METHODS -----------------------------------------------
     //
     private void printUsage() {
-        String localhost = "localhost";
-
-        try {
-            localhost = URIBuilder.getHostNameorIP(ProActiveInet.getInstance().getInetAddress());
-        } catch (java.lang.SecurityException e) {
-            logger.error("InetAddress failed: " + e.getMessage());
-            e.printStackTrace();
-        }
-
-        logger.info("usage: java " + this.getClass().getName() + " <node URL> [options]");
+        logger.info("usage: java " + this.getClass().getName() + " <node name> [options]");
         logger.info(" - options");
-        logger.info("     " + NO_CLASS_SERVER_OPTION_NAME +
-            " : indicates not to create a ClassServer for RMI.");
         logger.info("                      By default a ClassServer is automatically created");
         logger.info("                      to serve class files on demand.");
         logger.info("     " + NO_REBIND_OPTION_NAME +
             "      : indicates not to use rebind when registering the");
-        logger.info("                      node to the RMIRegistry. If a node of the same name");
+        logger.info("                      node to the registry. If a node of the same name");
         logger.info("                      already exists, the creation of the new node will fail.");
-        logger.info("  for instance: java " + StartNode.class.getName() + " " +
-            Constants.RMI_PROTOCOL_IDENTIFIER + "://" + localhost + "/node1");
-        logger.info("                java " + StartNode.class.getName() + " " +
-            Constants.RMI_PROTOCOL_IDENTIFIER + "://" + localhost + "/node2  " + NO_CLASS_SERVER_OPTION_NAME +
-            " " + NO_REBIND_OPTION_NAME);
+        logger.info("  for instance: java " + StartNode.class.getName() + " myNode");
+        logger.info("                java " + StartNode.class.getName() + " myNode2  " +
+            NO_REBIND_OPTION_NAME);
     }
 }
