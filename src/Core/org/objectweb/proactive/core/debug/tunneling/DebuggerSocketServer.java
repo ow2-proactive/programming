@@ -43,7 +43,7 @@ import java.net.SocketException;
 
 
 public class DebuggerSocketServer extends AbstractDebuggerSocket {
-    private static final long serialVersionUID = 8136088432502063948L;
+    private static final long serialVersionUID = 430L;
 
     /** The socket server */
     protected ServerSocket serverSocket;

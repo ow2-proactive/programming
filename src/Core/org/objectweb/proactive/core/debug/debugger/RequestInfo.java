@@ -45,7 +45,7 @@ import org.objectweb.proactive.core.body.request.Request;
 
 public class RequestInfo implements Serializable {
 
-    private static final long serialVersionUID = -3263437546419006443L;
+    private static final long serialVersionUID = 430L;
     private String senderID;
     private long sequenceNumber;
 
