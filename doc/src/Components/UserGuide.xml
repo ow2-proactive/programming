@@ -1696,11 +1696,11 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			<para>
 				The distribution of components may also be made by
 				using the ProActive deployment framework. This
-				deployment framework also uses the concept of virtual
-				nodes but just needs a single configuration file.
+				deployment framework uses the concept of virtual
+				nodes too but it just needs a single configuration file.
 				Thus it may be used in a similar way. More informations
 				are available at
-				<link xlink:href="../../ReferenceManual/multiple_html/XML_Descriptors.html#XML_Descriptors">Chapter 15. XML Deployment Descriptors</link>.
+				<link xlink:href="http://proactive.inria.fr/trunk/Programming/ReferenceManual/multiple_html/XML_Descriptors.html">Chapter 15. XML Deployment Descriptors</link>.
 			</para>
 
 		</section>
@@ -1713,8 +1713,8 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				virtual node has to be directly set in the context using
 				as key the virtual node name:
 				<programlisting language="java">context.put(vn.getName(), vn);</programlisting>
-				Of course, it may be set in the context as many virtual
-				nodes as needed. Then the component can be instantiated
+				Of course, as many virtual
+				nodes as needed can be set in the context. Then the component can be instantiated
 				as usual:
 				<programlisting language="java">Component component = (Component) factory.newComponent("my.adl.folder.ComponentDefinition", context);</programlisting>
 				Thus, the component will be instantiated in a node
@@ -1730,55 +1730,60 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			<para>
 				There is a last way to deploy components with ADL and
 				without using deployment (GCM or ProActive) nor virtual
-				node: by using a list of nodes:
+				node, using a list of nodes:
 				<literal>java.util.List&lt;Node&gt;</literal>.
-				This last manner is mostly useful for tests purpose
+				This way is mostly useful for tests purpose
 				since there is no control on which node each component
 				will be instantiated.
 			</para>
 
 			<para>
-				To deploy components by using a list of nodes, the first
-				step is to set the list in the context by using as key
-				"nodes" (or by using the corresponding constant
+				To deploy components using a list of nodes, the first
+				step is to set this list in the context by setting the 
+				"nodes" key (or by using the corresponding constant
 				<literal>org.objectweb.proactive.core.component.adl.nodes.ADLNodeProvider.NODES_ID</literal>):
 				<programlisting language="java">context.put("nodes", nodes);</programlisting>
 				Then the component can be instantiated as usual:
 				<programlisting language="java">Component component = (Component) factory.newComponent("my.adl.folder.ComponentDefinition", context);</programlisting>
-				Therefore the component will be instantiated on a node
+				Therefore, the component will be instantiated on a node
 				picked from the list. If the component is a composite
 				component and has several subcomponents, each of them
 				will be instantiated on different nodes. The node used
-				is chosen randomly, there is no way to control which
-				node to use to deploy a specific component. The only
-				guarantee is that no node will be used twice before
-				each node has been used at least one time.
+				is chosen randomly and there is no way to control which
+				node is used to deploy a specific component. The only
+				guarantee is that no node will be used twice until
+				every node has been used at least once.
 			</para>
 
 		</section>
 
 		<section xml:id="PrecisionsADL_53"><info><title>Precisions for component instantiation with ADL</title></info>
 
-			<para>
-				If no virtual node has been specified in the ADL
-				component definition, the component is created in the
-				local JVM.
-			</para>
-
-			<para>
-				If a virtual node is defined in the ADL component
-				definition and neither a deployment (GCM or ProActive)
-				nor the virtual node has been set in the context (or
-				there is no corresponding virtual node name),
-				therefore the component is also created in the local
-				JVM.
-			</para>
-
-			<para>
-				Of course, these two points do not apply if a list of
-				nodes is set in the context.
-			</para>
-
+			<orderedlist>
+				<listitem>
+					<para>
+						If no virtual node has been specified in the ADL
+						component definition, the component is created in the
+						local JVM.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						If a virtual node is defined in the ADL component
+						definition and neither a deployment (GCM or ProActive)
+						nor the virtual node has been set in the context (or
+						there is no corresponding virtual node name),
+						then the component is also created in the local
+						JVM.
+					</para>
+				</listitem>
+			</orderedlist>
+			<note>
+				<para>
+					These two points do not apply if a list of
+					nodes is set in the context.
+				</para>
+			</note>
 		</section>
 
 	</section>
