@@ -43,6 +43,11 @@ import org.objectweb.proactive.core.mop.MethodCall;
 
 public class CustomUnicastController extends PAMulticastControllerImpl {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public CustomUnicastController(Component owner) {
         super(owner);
     }

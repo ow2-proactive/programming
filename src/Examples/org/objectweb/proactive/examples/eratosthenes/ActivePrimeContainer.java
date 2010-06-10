@@ -54,6 +54,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class ActivePrimeContainer implements PrimeNumber, java.io.Serializable, Slowable, RunActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private PrimeNumber first;
     private int size;
     private int maxSize;

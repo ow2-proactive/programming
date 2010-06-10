@@ -63,6 +63,10 @@ import org.osgi.framework.BundleException;
 
 public abstract class OSGiCommand extends NotificationBroadcasterSupport implements IJmx, CommandMBean,
         Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     public static final String INSTALL = "install ";
     public static final String UNINSTALL = "uninstall ";
     public static final String START = "start ";

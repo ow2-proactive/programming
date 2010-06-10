@@ -60,6 +60,10 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 public class NativeTask implements Task<ArrayList<String>> {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      *
      */
     private String[] commandArray = null;

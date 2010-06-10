@@ -64,6 +64,11 @@ import org.objectweb.proactive.extra.branchnbound.core.exception.NoResultsExcept
  */
 public abstract class TaskQueue implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     /** The logger. */
     public final static Logger logger = ProActiveLogger.getLogger(Loggers.BNB);
 

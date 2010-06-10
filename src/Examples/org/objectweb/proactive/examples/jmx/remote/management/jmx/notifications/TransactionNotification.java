@@ -44,6 +44,10 @@ import javax.management.Notification;
 public class TransactionNotification extends Notification {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      *
      */
     private long id;

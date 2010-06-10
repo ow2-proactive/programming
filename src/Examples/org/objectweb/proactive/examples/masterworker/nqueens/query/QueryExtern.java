@@ -44,6 +44,10 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 
 
 public class QueryExtern implements Serializable, Task<Pair<Long, Long>> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private Query query;
 
     public QueryExtern(Query query) {

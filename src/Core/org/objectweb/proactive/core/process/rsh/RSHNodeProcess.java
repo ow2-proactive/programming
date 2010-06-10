@@ -51,6 +51,11 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 public class RSHNodeProcess extends RSHJVMProcess {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      * Creates a new instance of RSHNodeProcess.
      */
     public RSHNodeProcess() {

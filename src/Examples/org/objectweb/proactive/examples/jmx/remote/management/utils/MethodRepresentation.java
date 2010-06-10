@@ -42,6 +42,10 @@ import java.io.Serializable;
 public class MethodRepresentation implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      *
      */
     private String name;

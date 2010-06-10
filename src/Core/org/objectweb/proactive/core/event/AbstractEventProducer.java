@@ -74,6 +74,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public abstract class AbstractEventProducer implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     //
     // -- PROTECTED MEMBERS -----------------------------------------------
     //
@@ -281,6 +286,10 @@ public abstract class AbstractEventProducer implements java.io.Serializable {
      *
      */
     private class PlainListenerList<E> implements java.io.Serializable, ListenerList<E> {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 430L;
         @SuppressWarnings("unchecked")
         protected List list;
 
@@ -329,6 +338,11 @@ public abstract class AbstractEventProducer implements java.io.Serializable {
      */
 
     private class WeakReferenceListenerList<E> extends PlainListenerList<E> {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 430L;
+
         public WeakReferenceListenerList() {
         }
 

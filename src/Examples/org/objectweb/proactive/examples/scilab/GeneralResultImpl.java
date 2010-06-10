@@ -43,6 +43,10 @@ import java.util.List;
 public class GeneralResultImpl implements GeneralResult {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      *
      */
     private String id;

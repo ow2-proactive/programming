@@ -100,6 +100,11 @@ public class TestInternalClassAO extends FunctionalTest {
     // Requirement for non static member class : MUST BE SERIALIZABLE
     // Note that empty constructor is not mandatory
     public class MemberClass implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 430L;
+
         public int incrementEnclosingPrivateValue() {
             return TestInternalClassAO.this.enclosingPrivate++;
         }

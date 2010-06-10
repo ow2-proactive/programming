@@ -58,6 +58,10 @@ import ptolemy.matlab.Engine;
  */
 @PublicAPI
 public class MatlabTask extends AbstractGeneralTask {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private HashMap<String, Token> listDataIn;
     private static Engine matlabEngine = null;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.SCILAB_TASK);

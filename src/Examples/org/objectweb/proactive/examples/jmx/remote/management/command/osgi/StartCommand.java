@@ -44,6 +44,10 @@ import org.osgi.framework.Bundle;
 
 
 public class StartCommand extends OSGiCommand implements StartCommandMBean {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private long idBundle;
 
     public StartCommand(Transaction t, long id) {

@@ -49,6 +49,11 @@ import java.util.Arrays;
 public class Permutation implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      * Return the next permutation. Warning, the parmeter are modified.
      *
      * @param perm the permutation we modifie to get the next

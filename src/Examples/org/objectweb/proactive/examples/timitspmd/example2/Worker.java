@@ -64,6 +64,11 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
 public class Worker extends Timed {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      *
      */
     private int rank;

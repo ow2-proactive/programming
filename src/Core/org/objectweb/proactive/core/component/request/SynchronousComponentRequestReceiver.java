@@ -59,6 +59,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class SynchronousComponentRequestReceiver extends RequestReceiverImpl {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
     public final static int SHORTCUT = 1;
 

@@ -41,6 +41,11 @@ import java.io.IOException;
 
 public class IOException6 extends IOException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public IOException6(Throwable t) {
         super("");
         this.initCause(t);

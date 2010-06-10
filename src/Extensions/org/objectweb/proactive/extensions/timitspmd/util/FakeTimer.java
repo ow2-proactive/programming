@@ -45,6 +45,10 @@ package org.objectweb.proactive.extensions.timitspmd.util;
 public class FakeTimer extends HierarchicalTimer {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      *
      */
     private static HierarchicalTimer timer = new FakeTimer();

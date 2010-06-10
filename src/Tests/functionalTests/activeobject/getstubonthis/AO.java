@@ -46,6 +46,10 @@ import org.objectweb.proactive.core.mop.StubObject;
 
 
 public class AO implements Serializable, InitActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private boolean ok = false;
 
     public AO() {

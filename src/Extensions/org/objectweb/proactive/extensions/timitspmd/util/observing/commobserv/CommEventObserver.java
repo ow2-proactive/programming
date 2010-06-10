@@ -53,6 +53,10 @@ public class CommEventObserver implements EventObserver {
      *
      */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     /** This will be the concrete StatData */
     private CommEventData commStatData;
     private String name;

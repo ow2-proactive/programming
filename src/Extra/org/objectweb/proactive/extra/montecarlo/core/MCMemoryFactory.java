@@ -54,6 +54,11 @@ import umontreal.iro.lecuyer.rng.RandomStreamFactory;
  */
 public class MCMemoryFactory implements MemoryFactory {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     private Class<?> prngClass;
 
     private RandomStreamFactory prngfactory = null;

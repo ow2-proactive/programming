@@ -65,6 +65,11 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundExc
 @ActiveObject
 public class ExampleProcessing implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     private static final String FINAL_RESULTS_FILENAME = "final_results.txt";

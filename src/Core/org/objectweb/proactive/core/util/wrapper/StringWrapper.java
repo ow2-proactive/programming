@@ -53,6 +53,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class StringWrapper implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      * The not reifiable value.
      */
     protected String value;

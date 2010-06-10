@@ -41,6 +41,11 @@ import java.io.Serializable;
 
 public class Point3D implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     /** x-coordinate of the point */
     public double x;
 

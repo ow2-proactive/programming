@@ -37,6 +37,11 @@
 package org.objectweb.proactive.core.body.exceptions;
 
 public class FutureMonitoringPingFailureException extends RuntimeException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public FutureMonitoringPingFailureException(Throwable cause) {
         super("Failure to ping creator body", cause);
     }

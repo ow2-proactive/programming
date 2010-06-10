@@ -43,6 +43,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.core.TopologyImpl;
 
 
 public class VMBean implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     String id;
     String name;
     String userName;

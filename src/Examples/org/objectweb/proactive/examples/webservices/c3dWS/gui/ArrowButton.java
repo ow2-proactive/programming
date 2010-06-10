@@ -54,6 +54,10 @@ import org.objectweb.proactive.core.util.log.Loggers;
  * See PNG files in directory org/objectweb/proactive/examples/c3d/arrows/
  */
 public class ArrowButton extends JButton {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private static Logger logger = Logger.getLogger(Loggers.EXAMPLES);
     final static String PATH = "org/objectweb/proactive/examples/c3d/arrows/";
     final static String EXTENSION = "Arrow.png";

@@ -50,6 +50,11 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class Maestro implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     /** Counts the number of Domain that have respond */
     private int nbFinished = 0;
 

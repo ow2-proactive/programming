@@ -48,6 +48,11 @@ public class ProtocolErrorException extends RuntimeException {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      *
      */
     public ProtocolErrorException() {

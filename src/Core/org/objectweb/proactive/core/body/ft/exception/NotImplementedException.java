@@ -47,6 +47,11 @@ public class NotImplementedException extends RuntimeException {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      *
      */
     public NotImplementedException() {

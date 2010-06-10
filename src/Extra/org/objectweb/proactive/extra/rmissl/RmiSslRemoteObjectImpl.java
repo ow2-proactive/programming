@@ -45,6 +45,11 @@ import org.objectweb.proactive.core.remoteobject.rmi.RmiRemoteObjectImpl;
  */
 public class RmiSslRemoteObjectImpl extends RmiRemoteObjectImpl {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public RmiSslRemoteObjectImpl(InternalRemoteRemoteObject target) throws java.rmi.RemoteException {
         super(target, new SslRmiServerSocketFactory(), new SslRmiClientSocketFactory());
     }

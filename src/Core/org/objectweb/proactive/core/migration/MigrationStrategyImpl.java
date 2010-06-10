@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * An migrationStrategy is instanciated by the user.
  */
 public class MigrationStrategyImpl implements java.io.Serializable, MigrationStrategy {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     private java.util.Vector<Destination> table;
     private int index;

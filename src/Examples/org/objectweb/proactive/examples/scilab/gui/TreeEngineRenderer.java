@@ -46,6 +46,11 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 public class TreeEngineRenderer extends DefaultTreeCellRenderer {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      *
      */
     @Override

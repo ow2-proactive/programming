@@ -55,6 +55,10 @@ import org.objectweb.proactive.core.mop.MethodCall;
  */
 public class CustomMetaObjectFactory extends ProActiveMetaObjectFactory {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private static final MetaObjectFactory instance = new CustomMetaObjectFactory();
 
     //return a new factory instance
@@ -73,6 +77,11 @@ public class CustomMetaObjectFactory extends ProActiveMetaObjectFactory {
 
     protected class CustomRequestFactory extends RequestFactoryImpl implements Serializable {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 430L;
+
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                 long sequenceID) {
             System.out.println("Received a new request...");
@@ -80,6 +89,11 @@ public class CustomMetaObjectFactory extends ProActiveMetaObjectFactory {
         }
 
         protected class CustomRequest extends RequestImpl {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 430L;
+
             public CustomRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                     long sequenceID) {
                 super(methodCall, sourceBody, isOneWay, sequenceID);

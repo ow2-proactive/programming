@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.mop.ConstructionOfReifiedObjectFailedExcepti
  */
 public class Line<E> extends TopologyGroup<E> { // implements Topology1D {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     /** size of the one-dimensional topology group */
     protected int width;
 

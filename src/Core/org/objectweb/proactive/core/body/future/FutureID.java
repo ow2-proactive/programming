@@ -44,6 +44,11 @@ import org.objectweb.proactive.core.UniqueID;
 public class FutureID implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      * The ID of the "evaluator" of the future.
      */
     private UniqueID creatorID;

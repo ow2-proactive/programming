@@ -53,6 +53,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class LongWrapper implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      * The primitive value.
      */
     protected Long value;

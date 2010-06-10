@@ -41,6 +41,10 @@ import java.net.MalformedURLException;
 
 
 public class BlastParams implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     public File formatProg;
     public File blastProg;
     public File queryFile; //query file

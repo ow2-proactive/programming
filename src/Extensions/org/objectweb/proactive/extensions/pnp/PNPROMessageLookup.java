@@ -55,6 +55,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 
 class PNPROMessageLookup extends PNPROMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     final String name;
 
     /**

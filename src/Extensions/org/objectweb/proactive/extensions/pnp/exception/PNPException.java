@@ -44,6 +44,11 @@ import org.objectweb.proactive.core.ProActiveException;
  * @since ProActive 4.3.0
  */
 public class PNPException extends ProActiveException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public PNPException() {
         super();
     }

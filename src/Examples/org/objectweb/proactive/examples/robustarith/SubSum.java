@@ -50,6 +50,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class SubSum implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private String name;
 
     public SubSum() {

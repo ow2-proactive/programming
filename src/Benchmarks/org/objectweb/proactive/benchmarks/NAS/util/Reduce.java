@@ -46,6 +46,10 @@ import org.objectweb.proactive.benchmarks.NAS.FT.WorkerFT;
 
 public class Reduce implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private Body body;
     private Complex sum_Complex, result_Complex;
     private int nbReceived;

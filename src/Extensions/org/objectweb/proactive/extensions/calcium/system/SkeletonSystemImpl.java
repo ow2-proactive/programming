@@ -62,6 +62,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class SkeletonSystemImpl implements SkeletonSystem, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_SYSTEM);
     static String DEFAULT_ROOTDIR = System.getProperty("java.io.tmpdir");
     WSpaceImpl wspace; // workspace

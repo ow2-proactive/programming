@@ -55,6 +55,10 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.MessageRoutingR
  */
 
 public class MessageRoutingRemoteObjectRequest extends MessageRoutingMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private Request request;
 
     /** Construct a request message

@@ -63,6 +63,10 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
 
 public class WorkerCG extends Timed {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     /** TimIt related variables * */
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
     private TimerCounter T_total = new TimerCounter("Total");

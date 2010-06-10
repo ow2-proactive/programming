@@ -14,6 +14,11 @@ public class Worker extends Timed {
 
     /* Declaration of all TimerCounters and EventObservers */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     /** Total time */
     public TimerCounter T_TOTAL, T_INIT, T_END;
 

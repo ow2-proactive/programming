@@ -55,6 +55,11 @@ import org.objectweb.proactive.extensions.pamr.exceptions.MessageRoutingExceptio
  */
 
 public abstract class MessageRoutingMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
 
     /** The recipient of this message */

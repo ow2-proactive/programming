@@ -60,6 +60,11 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.message.MessageRouti
  */
 
 public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     final static private Logger logger = ProActiveLogger
             .getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
 

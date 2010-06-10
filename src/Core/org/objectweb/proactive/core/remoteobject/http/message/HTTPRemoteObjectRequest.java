@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.util.URIBuilder;
 
 
 public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private Request request;
 
     public HTTPRemoteObjectRequest(Request request, String url) {

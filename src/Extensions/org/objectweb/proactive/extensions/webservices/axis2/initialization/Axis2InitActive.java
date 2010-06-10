@@ -46,6 +46,10 @@ import org.objectweb.proactive.extensions.webservices.exceptions.WebServicesExce
 
 public class Axis2InitActive extends AbstractWebServicesInitActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     static private Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
 
     public void initActivity(Body body) {

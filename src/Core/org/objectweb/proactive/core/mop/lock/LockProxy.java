@@ -48,6 +48,11 @@ import java.util.concurrent.locks.Lock;
  */
 public class LockProxy implements Lock, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     // lock id
     private int id;
 

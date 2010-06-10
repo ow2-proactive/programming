@@ -48,6 +48,10 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
 class ConquerInst<Y, R> implements Instruction<Y, R> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.SKELETONS_STRUCTURE);
     private Conquer<Y, R> conq;
 

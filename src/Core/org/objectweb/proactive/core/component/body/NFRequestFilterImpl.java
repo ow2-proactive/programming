@@ -48,6 +48,11 @@ import org.objectweb.proactive.core.component.request.ComponentRequest;
  * @author The ProActive Team
  */
 public class NFRequestFilterImpl implements RequestFilter, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public NFRequestFilterImpl() {
     }
 

@@ -43,6 +43,11 @@ package org.objectweb.proactive.extensions.dataspaces.exceptions;
 public class SpaceAlreadyRegisteredException extends ConfigurationException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      *
      */
     public SpaceAlreadyRegisteredException() {

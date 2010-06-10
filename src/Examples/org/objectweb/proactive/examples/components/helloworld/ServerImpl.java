@@ -48,6 +48,11 @@ public class ServerImpl implements Service, ServiceAttributes {
 
     public void print(final String msg) {
         new Exception() {
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 430L;
+
             @Override
             public String toString() {
                 return "Server: print method called";

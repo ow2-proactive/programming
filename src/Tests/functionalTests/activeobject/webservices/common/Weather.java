@@ -40,6 +40,10 @@ import java.io.Serializable;
 
 
 public class Weather implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private float temperature;
     private String forecast;
     private boolean rain;

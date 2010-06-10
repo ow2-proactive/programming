@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectRequest;
 
 public class SelectionOnly extends RemoteObjectRequest implements BenchmarkObject, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private int testTimes = 1;
 
     public boolean doTest() {

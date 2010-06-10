@@ -41,6 +41,11 @@ import org.objectweb.proactive.extensions.nativeinterface.application.NativeMess
 
 public class ProActiveMPIMessage implements java.io.Serializable, NativeMessage {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     private int msg_type = 0;
 
     private int srcJobId = 0;

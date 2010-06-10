@@ -49,6 +49,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 @ActiveObject
 public class HelloWorld extends HelloWorldSuperClass implements java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private LinkedList<String> textsToSay = new LinkedList<String>();
     private Couple[] couples;
 

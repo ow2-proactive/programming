@@ -65,6 +65,11 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
  */
 public class KernelMG extends Kernel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     private MGProblemClass problemClass;
 
     /** The reference for the typed group of Workers */

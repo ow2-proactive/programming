@@ -48,6 +48,11 @@ import org.objectweb.proactive.core.ProActiveException;
 
 public class MessageRoutingException extends ProActiveException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public MessageRoutingException() {
         super();
     }

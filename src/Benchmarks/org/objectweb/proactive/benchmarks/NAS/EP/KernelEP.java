@@ -60,6 +60,10 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
  */
 public class KernelEP extends Kernel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private EPProblemClass problemClass;
     private Node[] nodes;
 

@@ -137,6 +137,11 @@ import org.objectweb.proactive.core.util.profiling.TimerProvidable;
  * 
  */
 public abstract class AbstractBody extends AbstractUniversalBody implements Body, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     //
     // -- STATIC MEMBERS -----------------------------------------------
     //

@@ -53,6 +53,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class FloatMutableWrapper extends FloatWrapper implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      * The no arguments constructor for ProActive.
      */
     public FloatMutableWrapper() {

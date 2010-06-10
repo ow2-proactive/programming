@@ -150,6 +150,11 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     /**
      * 
      */
+    private static final long serialVersionUID = 430L;
+
+    /**
+     * 
+     */
 
     //
     // -- STATIC MEMBERS
@@ -1343,6 +1348,11 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // -- INNER CLASSES -----------------------------------------------
     //
     protected static class VMInformationImpl implements VMInformation, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 430L;
+
         private final java.net.InetAddress hostInetAddress;
 
         // the Unique ID of the JVM

@@ -54,6 +54,11 @@ public class MessageRoutingRegistryListRemoteObjectsMessage extends MessageRouti
         Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      * Construct a list message
      * 
      * @param uri

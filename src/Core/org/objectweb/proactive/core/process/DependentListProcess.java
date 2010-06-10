@@ -48,6 +48,11 @@ import java.io.IOException;
  *
  */
 public class DependentListProcess extends AbstractSequentialListProcessDecorator {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public DependentListProcess() {
         super();
     }

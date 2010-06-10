@@ -43,6 +43,11 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 
 
 public class A implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public A() {
         // Empty Constructor
     }

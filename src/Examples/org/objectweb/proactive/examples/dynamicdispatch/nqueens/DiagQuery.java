@@ -40,6 +40,10 @@ import java.util.Vector;
 
 
 public class DiagQuery extends Query {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     public int sym;
     public int scale;
 

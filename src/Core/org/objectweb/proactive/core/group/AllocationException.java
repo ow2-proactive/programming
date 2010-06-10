@@ -48,6 +48,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class AllocationException extends RuntimeException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public AllocationException() {
         super();
     }

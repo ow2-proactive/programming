@@ -63,6 +63,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 public class MSEngine implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      *
      */
     private MSEngineWorker mSEngineWorker;

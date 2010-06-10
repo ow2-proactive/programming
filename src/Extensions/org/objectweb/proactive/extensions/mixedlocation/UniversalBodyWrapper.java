@@ -65,6 +65,10 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 public class UniversalBodyWrapper implements UniversalBody, Runnable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      *
      */
     protected UniversalBody wrappedBody;

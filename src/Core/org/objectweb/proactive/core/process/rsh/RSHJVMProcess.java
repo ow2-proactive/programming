@@ -66,6 +66,10 @@ import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
  * @since   ProActive 0.9.4
  */
 public class RSHJVMProcess extends RSHProcess implements JVMProcess {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     protected JVMProcessImpl jvmProcess;
 
     //

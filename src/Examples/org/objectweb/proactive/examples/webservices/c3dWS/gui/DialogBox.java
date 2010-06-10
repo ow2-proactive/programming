@@ -53,6 +53,11 @@ import java.awt.event.ActionListener;
  * Nothing fancy at all. Used to display the ProActive "about" window
  */
 public class DialogBox extends Dialog implements ActionListener, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public DialogBox(Frame parent, String frametitle, String line1, String line2) {
         super(parent, frametitle, true);
 

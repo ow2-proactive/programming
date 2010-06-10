@@ -42,6 +42,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class TreeEngineNode extends DefaultMutableTreeNode {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      *
      */
     public static final int VALID = 0;

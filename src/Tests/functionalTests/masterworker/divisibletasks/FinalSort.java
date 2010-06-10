@@ -50,6 +50,10 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
  */
 public class FinalSort implements Task<ArrayList<Integer>> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private ArrayList<Integer> input;
 
     public FinalSort(ArrayList<Integer> input) {

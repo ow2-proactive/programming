@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.body.LocalBodyStore;
 
 public class A implements java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     private static ArrayList<String> clockTicks = new ArrayList<String>();
     private static ArrayList<Boolean> sterilityCheck = new ArrayList<Boolean>();
     private String name;

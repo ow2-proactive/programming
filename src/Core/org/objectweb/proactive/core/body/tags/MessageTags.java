@@ -55,6 +55,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class MessageTags implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     /** Message Tagging Logger */
     private static Logger logger = ProActiveLogger.getLogger(Loggers.MESSAGE_TAGGING);
 

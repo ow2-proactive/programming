@@ -52,6 +52,11 @@ import org.objectweb.proactive.core.UniqueID;
 public class ReceptionHistory implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      *
      */
 

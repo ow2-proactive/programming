@@ -40,6 +40,11 @@ import java.util.Vector;
 
 
 public class BaseQuery extends Query {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public BaseQuery(String[] args) {
         // unused constructor in NQueen Manager
         super(0, 0, 0, 0, 0);

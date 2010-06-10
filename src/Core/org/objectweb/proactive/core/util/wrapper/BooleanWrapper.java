@@ -53,6 +53,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class BooleanWrapper implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+    /**
      * The primitive value.
      */
     protected Boolean value;

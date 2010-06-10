@@ -48,6 +48,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.T
 
 
 public class PathElement implements Cloneable, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     protected String relPath;
 
     public enum PathBase {

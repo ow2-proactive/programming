@@ -41,6 +41,11 @@ import java.io.IOException;
 
 public class FileSystemException extends IOException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     public FileSystemException(Throwable e) {
         super("");
         this.initCause(e);

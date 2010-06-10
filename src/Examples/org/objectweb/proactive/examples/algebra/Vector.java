@@ -44,6 +44,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class Vector extends Object implements Serializable, Cloneable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     int size;
     double[] elements;

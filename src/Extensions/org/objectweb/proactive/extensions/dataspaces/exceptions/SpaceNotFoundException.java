@@ -42,6 +42,11 @@ package org.objectweb.proactive.extensions.dataspaces.exceptions;
 public class SpaceNotFoundException extends DataSpacesException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
+    /**
      *
      */
 

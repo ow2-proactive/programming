@@ -57,6 +57,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 @PublicAPI
 public class SciTask extends AbstractGeneralTask {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 430L;
+
     private static Logger logger = ProActiveLogger.getLogger(Loggers.SCILAB_TASK);
 
     /**
