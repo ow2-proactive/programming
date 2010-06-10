@@ -41,6 +41,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -173,10 +174,12 @@ public class BenchmarkMonitorThread extends Observable {
             String[] fixedOrder = CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOLS_ORDER.getValue()
                     .split(",");
             String[] ret = new String[copy.length];
+            boolean braek = false;
             // For each box to fill in the array
             for (int i = 0; i < ret.length; i++) {
                 // Try to keep the 'fixed order'
                 for (int j = 0; j < fixedOrder.length; j++) {
+                    braek = false;
                     // But check if it works
                     for (int k = 0; k < copy.length; k++) {
                         if (fixedOrder[j] != null && copy[k] != null &&
@@ -184,9 +187,12 @@ public class BenchmarkMonitorThread extends Observable {
                             ret[i] = copy[k];
                             copy[k] = null;
                             fixedOrder[j] = null;
+                            braek = true;
                             break;
                         }
                     }
+                    if (braek)
+                        break;
                 }
                 // Fill the blank boxes with protocol that works
                 // but which are not in PA_COMMUNICATION_PROTOCOLS_ORDER
@@ -256,7 +262,7 @@ public class BenchmarkMonitorThread extends Observable {
                         Integer result = (Integer) methods[1].invoke(benchmark, new Object[0]);
                         if (LOGGER_RO.isDebugEnabled()) {
                             LOGGER_RO.debug("[Multi-protocol] Benchmark result for " + uri + " is " +
-                                result.intValue());
+                                (result.intValue() == 0 ? "OK" : result.intValue()));
                         }
                         Pair pair = new Pair(uri.getScheme(), result.intValue());
                         addAndSort(pair);
