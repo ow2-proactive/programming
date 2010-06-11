@@ -38,6 +38,7 @@ package org.objectweb.proactive.core.debug.debugger;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,7 +55,6 @@ import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestImpl;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.debug.tools.ArrayListSynchronized;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.node.NodeException;
@@ -100,7 +100,7 @@ public class DebuggerImpl implements Debugger {
     @SuppressWarnings("unused")
     private String cachedCanonStringBodyID = ""; // to get this info in the eclipse debugger
     private Request currentRequest = null;
-    private ArrayListSynchronized<Request> requestQueue = new ArrayListSynchronized<Request>();
+    private List<Request> requestQueue = Collections.synchronizedList(new ArrayList<Request>());
 
     //
     // -- CONSTRUCTORS -----------------------------------------------
