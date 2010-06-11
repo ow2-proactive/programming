@@ -692,7 +692,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * starts it pings a given web server.
      */
     static public PAPropertyBoolean PA_RUNTIME_PING = new PAPropertyBoolean("proactive.runtime.ping", false,
-        false);
+        true);
     /**
      * the url to ping
      */
