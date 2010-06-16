@@ -72,7 +72,7 @@ public abstract class Task implements Serializable, Comparable<Task> {
      * Set the immediate services for this active object
      */
     public int setImmediateServices() {
-        PAActiveObject.setImmediateService("setBestKnownResult");
+        PAActiveObject.setImmediateService("setBestKnownSolution");
         PAActiveObject.setImmediateService("immediateTerminate");
         return 0; // for synchronous call
     }
