@@ -15,9 +15,10 @@ IF NOT DEFINED PROACTIVE set PROACTIVE=%CD%\..\..
 
 call "..\init.bat"
 
-set JAVA_CMD=%JAVACMD% -Dgcm.provider=org.objectweb.proactive.core.component.Fractive
+set JVMARGS=-Dgcm.provider=org.objectweb.proactive.core.component.Fractive
 
-%JAVA_CMD% org.objectweb.proactive.examples.webservices.helloWorld.HelloWorldComponentClient %*
+%JAVA_CMD% %JVMARGS% org.objectweb.proactive.examples.webservices.helloWorld.HelloWorldComponentClient %*
+
 ENDLOCAL
 
 :end
