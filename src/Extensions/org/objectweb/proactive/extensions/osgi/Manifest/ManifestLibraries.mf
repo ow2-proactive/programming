@@ -4,7 +4,7 @@ Bundle-Name: Mandatory_libraires Plug-in
 Bundle-SymbolicName: Mandatory_libraires Plug-in
 Bundle-Version: 1.0.0
 Bundle-Location: file:bundles/librariesBundle.jar
-Bundle-ClassPath: bouncycastle.jar, fractal.jar, javassist.jar,
+Bundle-ClassPath: bouncycastle.jar, fractal-api-2.0.3-SNAPSHOT.jar, fractal-gcm-api-1.1.1.jar, javassist.jar,
  log4j.jar, xercesImpl-2.8.1.jar, .
 Export-Package: com.jcraft.jsch,
  com.jcraft.jsch.jce,

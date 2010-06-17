@@ -18,4 +18,4 @@ installation. This directory contains 3 jar files :
   - librariesBundle.jar 
   - proactiveConnectorBundle.jar 
 
-When this is done, the script oscar.[bat|sh] can be run
+When this is done, the script felix.[bat|sh] can be run

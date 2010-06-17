@@ -1015,7 +1015,8 @@
 				<include name="log4j.jar" />
 				<include name="xercesImpl-2.8.1.jar" />
 				<include name="bouncycastle.jar" />
-				<include name="fractal.jar" />
+				<include name="fractal-api-2.0.3-SNAPSHOT.jar" />
+				<include name="fractal-gcm-api-1.1.1.jar" />
 			</fileset>
 		</jar>
 	</target>
