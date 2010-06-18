@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo
-echo --- Pi -----------------------
+echo --- Robust Arithmetic -----------------------
 
 if [ -z "$PROACTIVE" ]
 then
