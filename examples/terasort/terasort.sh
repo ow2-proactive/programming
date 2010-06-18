@@ -14,7 +14,7 @@ else
 	shift 
 fi
 
-$JAVACMD  -Dgcmdfile=${GCMD} -Dos=unix org.objectweb.proactive.examples.terasort.TeraSort $workingDir/GCMA.xml "$@"
+$JAVACMD -Dos=unix org.objectweb.proactive.examples.terasort.TeraSort $workingDir/GCMA.xml
 
 echo
 echo ------------------------------------------------------------
