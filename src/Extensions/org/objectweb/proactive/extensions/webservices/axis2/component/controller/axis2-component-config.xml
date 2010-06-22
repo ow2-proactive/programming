@@ -41,7 +41,7 @@
         </controller>
         <controller>
             <interface>org.objectweb.proactive.extensions.webservices.component.controller.PAWebServicesController</interface>
-            <implementation>org.objectweb.proactive.extensions.webservices.cxf.component.controller.PAWebServicesControllerImpl</implementation>
+            <implementation>org.objectweb.proactive.extensions.webservices.axis2.component.controller.PAWebServicesControllerImpl</implementation>
         </controller>
     </controllers>
 
