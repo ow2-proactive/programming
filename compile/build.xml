@@ -266,7 +266,7 @@
 			<bool>
 				<and>
 					<os family="Unix" />
-					<available file="mpicc" filepath="/bin:/usr/bin:/usr/local/bin" />
+					<available file="mpic++" filepath="/bin:/usr/bin:/usr/local/bin" />
 				</and>
 			</bool>
 			<echo>Compiling native examples</echo>
@@ -278,7 +278,9 @@
 					-I${src.mpi.dir}
 					-I${src.nativeinterface.dir}
 					-L${deploy.lib.native.dir}
-					-lProActiveNativeInterfaceIPC -lProActiveMPIComm
+					-lProActiveNativeInterfaceIPC 
+					-lProActiveNativeComm
+					-lProActiveMPIComm
 					-fPIC -g
 					hello_pampi.c -o hello_pampi " />
 			</exec>
@@ -292,7 +294,7 @@
 			</exec>
 
 			<else>
-				<echo>Native examples are only available for Unix and mpicc must be installed</echo>
+				<echo>Native examples are only available for Unix and mpic++ must be installed</echo>
 			</else>
 		</if>
 
