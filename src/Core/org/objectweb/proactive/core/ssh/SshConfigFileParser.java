@@ -51,23 +51,13 @@ public class SshConfigFileParser {
                 "IdentityFile"), PORT("Port"), UNKNOW("");
 
         private String key;
-        private boolean wanted;
 
         SshToken(String key) {
             this.key = key;
-            this.wanted = false;
         }
 
         String getValue() {
             return key;
-        }
-
-        boolean isWanted() {
-            return wanted;
-        }
-
-        void wanted() {
-            this.wanted = true;
         }
     }
 
@@ -85,11 +75,6 @@ public class SshConfigFileParser {
      */
     public void parse(SshConfig storer) {
         String path = storer.getSshDirPath() + File.separator + "config";
-
-        SshToken[] capabilities = storer.getCapabilities();
-        for (int i = 0; i < capabilities.length; i++) {
-            capabilities[i].wanted();
-        }
 
         File file = new File(path);
         FileReader fr = null;
@@ -321,7 +306,7 @@ public class SshConfigFileParser {
         SshToken[] tokens = SshToken.values();
         String firstWord = line.trim().split("[ \t]")[0];
         for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i].getValue().equalsIgnoreCase(firstWord) && tokens[i].isWanted())
+            if (firstWord.equalsIgnoreCase(tokens[i].getValue()))
                 return tokens[i];
         }
         return SshToken.UNKNOW;
