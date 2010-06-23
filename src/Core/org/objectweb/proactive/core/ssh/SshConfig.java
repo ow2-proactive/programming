@@ -120,16 +120,18 @@ public class SshConfig {
     }
 
     /**
-     * Method call by the parser to know which fields have to
-     * be processed
+     * Check if the token is supported by this SshConfig
      *
-     * @return
-     *        A table of the SshTokens which represents wanted field
-     *
-     * @see SshConfigFileParser
+     *  @param toTest
+     *          The token to test
      */
-    public SshToken[] getCapabilities() {
-        return capabilities;
+    private boolean isCapable(SshToken toTest) {
+        for (SshToken tok : capabilities) {
+            if (toTest.equals(tok)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -151,30 +153,35 @@ public class SshConfig {
      * @see SshConfigFileParser
      */
     public void addHostInformation(String hostname, SshToken request, String information) {
-        if (hostname.charAt(0) == '*') {
-            hostname = hostname.substring(1);
-        }
-        Map<SshToken, String> hostsInfos = sshInfos.get(hostname);
-
-        if (hostsInfos == null) {
-            // No information already record for the host
-            hostsInfos = new Hashtable<SshToken, String>();
-            hostsInfos.put(request, information);
-            sshInfos.put(hostname, hostsInfos);
-        } else {
-            if (hostsInfos.get(request) != null) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Ssh configuration : information " + information + " as " +
-                        request.toString().toLowerCase() + " for " + hostname +
-                        " is already declared, ignored");
-                }
-                return;
+        if (isCapable(request)) {
+            if (hostname.charAt(0) == '*') {
+                hostname = hostname.substring(1);
             }
-            hostsInfos.put(request, information);
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("Ssh configuration : " + information + " as " + request.toString().toLowerCase() +
-                " stored for " + hostname);
+            Map<SshToken, String> hostsInfos = sshInfos.get(hostname);
+
+            if (hostsInfos == null) {
+                // No information already record for the host
+                hostsInfos = new Hashtable<SshToken, String>();
+                hostsInfos.put(request, information);
+                sshInfos.put(hostname, hostsInfos);
+            } else {
+                if (hostsInfos.get(request) != null) {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Ssh configuration : information " + information + " as " +
+                            request.toString().toLowerCase() + " for " + hostname +
+                            " is already declared, ignored");
+                    }
+                    return;
+                }
+                hostsInfos.put(request, information);
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("Ssh configuration : " + information + " as " +
+                    request.toString().toLowerCase() + " stored for " + hostname);
+            }
+        } else {
+            logger.warn("Ssh configuration option \"" + request.getValue() + " = " + information +
+                "has been ignored.");
         }
     }
 
@@ -224,27 +231,26 @@ public class SshConfig {
      *
      */
     public String getInformation(String hostname, SshToken tok) {
-        if (tok.isWanted()) {
-            Map<SshToken, String> hostInfos;
-            int index;
-            while (hostname.contains(".")) {
-                hostInfos = sshInfos.get(hostname);
-                if (hostInfos != null && hostInfos.get(tok) != null) {
-                    return hostInfos.get(tok);
-                } else {
-                    // eat the first point
-                    hostname = hostname.substring(1);
-                    index = hostname.indexOf('.');
-                    if (index < 0)
-                        break;
-                    hostname = hostname.substring(hostname.indexOf('.'));
-                }
-            }
+        Map<SshToken, String> hostInfos;
+        int index;
+        while (hostname.contains(".")) {
             hostInfos = sshInfos.get(hostname);
-            if (hostInfos != null && hostInfos.get(tok) != null)
+            if (hostInfos != null && hostInfos.get(tok) != null) {
                 return hostInfos.get(tok);
+            } else {
+                // eat the first point
+                hostname = hostname.substring(1);
+                index = hostname.indexOf('.');
+                if (index < 0)
+                    break;
+                hostname = hostname.substring(hostname.indexOf('.'));
+            }
         }
-        return null;
+        hostInfos = sshInfos.get(hostname);
+        if (hostInfos != null && hostInfos.get(tok) != null)
+            return hostInfos.get(tok);
+        else
+            return null;
     }
 
     /**
