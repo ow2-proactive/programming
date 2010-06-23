@@ -87,6 +87,12 @@ public class MessageAssembler {
     }
 
     synchronized public void pushBuffer(ByteBuffer buffer) throws MalformedMessageException {
+        // PROACTIVE-869: Update last seen to avoid disconnection due to large message
+
+        Client client = this.attachment.getClient();
+        if (client != null) {
+            client.updateLastSeen();
+        }
 
         while (buffer.remaining() != 0) {
 
@@ -157,6 +163,7 @@ public class MessageAssembler {
                 this.lengthAndProto = null;
             }
         }
+
     }
 
     private static class LengthAndProto {

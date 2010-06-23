@@ -256,7 +256,7 @@ public class ProcessorRegistrationRequest extends Processor {
             client.sendMessage(reply.toByteArray());
             return true;
         } catch (IOException e) {
-            logger.info("Failed to send registration reply to " + reply.getAgentID() + ": " + e.getCause());
+            logger.info("Failed to send registration reply to " + reply.getAgentID(), e);
         }
         return false;
     }
