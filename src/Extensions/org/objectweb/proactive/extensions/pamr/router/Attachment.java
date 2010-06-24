@@ -38,6 +38,7 @@ package org.objectweb.proactive.extensions.pamr.router;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -164,10 +165,15 @@ public class Attachment {
 
     public String getRemoteEndpointName() {
         SocketAddress sa = getRemoteEndpoint();
-        if (sa == null)
-            return "unknown";
-        else
+        if (sa == null) {
+            // Troubleshooting: Unknown is sometime returned in production
+            // We are trying to understand why.
+            Socket s = socketChannel.socket();
+            return "unknown (Socket:" + s + " isClosed:" + s.isClosed() + " isConnected: " + s.isConnected() +
+                ")";
+        } else {
             return sa.toString();
+        }
     }
 
     public InetSocketAddress getRemoteEndpoint() {
