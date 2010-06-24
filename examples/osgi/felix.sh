@@ -27,6 +27,7 @@ JVM_ARGS="-Dorg.osgi.framework.storage=${FELIX_HOME}/cache/${MYHOSTNAME} \
 	-Dproactive.http.port=8081 \
 	-Dproactive.communication.protocol=http \
 	-Dcom.sun.management.jmxremote \
+	-Dproactive.hostname=localhost \
 	-Dproactive.http.jetty.xml=jetty.xml"
-${JAVA_HOME}/bin/java $JVM_ARGS -jar "${FELIX_HOME}/../../dist/lib/felix.jar"
 
+${JAVA_HOME}/bin/java $JVM_ARGS -jar "${FELIX_HOME}/../../dist/lib/felix.jar"
