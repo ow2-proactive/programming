@@ -40,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import javax.management.AttributeNotFoundException;
 import javax.management.MBeanAttributeInfo;
 import javax.management.ObjectName;
 
@@ -115,8 +116,16 @@ public class ShowOS {
             } else if (attribute.equals("quit")) {
                 return;
             } else {
-                Object att = this.connection.getAttribute(name, attribute);
-                System.out.println("==> " + att);
+                try {
+                    Object att = this.connection.getAttribute(name, attribute);
+                    System.out.println("==> " + att);
+                } catch (Exception e) {
+                    if (e.getCause().getClass().equals(AttributeNotFoundException.class)) {
+                        System.out.println("Unknown attribute name: '" + attribute + "' is not a valid name");
+                    } else {
+                        throw e;
+                    }
+                }
             }
         }
     }
