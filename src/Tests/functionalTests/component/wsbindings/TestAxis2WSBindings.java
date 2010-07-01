@@ -38,6 +38,7 @@ package functionalTests.component.wsbindings;
 
 import static org.junit.Assert.fail;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,8 +57,17 @@ import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
+import org.objectweb.proactive.core.xml.VariableContractType;
+import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
+import org.objectweb.proactive.gcmdeployment.GCMApplication;
+
+import functionalTests.FunctionalTest;
+import functionalTests.GCMFunctionalTest;
+import functionalTests.GCMFunctionalTestDefaultNodes;
 
 
 /**
@@ -73,7 +83,7 @@ public class TestAxis2WSBindings extends CommonSetup {
     }
 
     @Test
-    public void testAxis2WebServicesBindingWithPrimitiveComponent() throws Exception {
+    public void testAxis2WebServiceBindingsWithPrimitiveComponent() throws Exception {
         Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
             Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
         GCM.getBindingController(client).bindFc(Client.SERVICES_NAME,
@@ -91,7 +101,7 @@ public class TestAxis2WSBindings extends CommonSetup {
     }
 
     @Test
-    public void testAxis2WebServicesBindingWithCompositeComponent() throws Exception {
+    public void testAxis2WebServiceBindingsWithCompositeComponent() throws Exception {
         Component composite = gf.newFcInstance(componentType, new ControllerDescription("Composite",
             Constants.COMPOSITE), null);
         Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
@@ -118,7 +128,7 @@ public class TestAxis2WSBindings extends CommonSetup {
 
     @Test
     @Ignore
-    public void testAxis2WebServicesBindingWithADL() throws Exception {
+    public void testAxis2WebServiceBindingsWithADL() throws Exception {
         Factory factory = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
         Map<Object, Object> context = new HashMap<Object, Object>();
         Component composite = (Component) factory.newComponent(
@@ -130,7 +140,40 @@ public class TestAxis2WSBindings extends CommonSetup {
     }
 
     @Test
-    public void testAxis2WebServicesBindingWithWSCallerError() throws Exception {
+    public void testMigrationWithAxis2WebServiceBindings() throws Exception {
+        Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
+            Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
+        GCM.getBindingController(client).bindFc(Client.SERVICES_NAME,
+                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME);
+        for (int i = 0; i < NUMBER_SERVERS; i++) {
+            GCM.getBindingController(client).bindFc(
+                    Client.SERVICEMULTICASTREAL_NAME,
+                    url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + i + "_" +
+                        SERVER_SERVICEMULTICAST_NAME);
+        }
+        GCM.getGCMLifeCycleController(client).startFc();
+        URL descriptorPath = functionalTests.component.deployment.Test.class
+                .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
+        VariableContractImpl vContract = new VariableContractImpl();
+        vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
+                .name(), VariableContractType.DescriptorDefaultVariable);
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
+                .toString(), VariableContractType.DescriptorDefaultVariable);
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
+                .toString(), VariableContractType.DescriptorDefaultVariable);
+        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVM_PARAMETERS, FunctionalTest
+                .getJvmParameters(), VariableContractType.ProgramVariable);
+        GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
+        gcma.startDeployment();
+        GCM.getMigrationController(client).migrateGCMComponentTo(
+                gcma.getVirtualNodes().values().iterator().next().getANode());
+        Runner runner = (Runner) client.getFcInterface("Runner");
+        Assert.assertTrue("Failed to invoke web services with primitive component", runner.execute()
+                .booleanValue());
+    }
+
+    @Test
+    public void testAxis2WebServiceBindingsWithWSCallerError() throws Exception {
         Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
             Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
         try {
@@ -145,7 +188,7 @@ public class TestAxis2WSBindings extends CommonSetup {
     }
 
     @Test
-    public void testAxis2WebServicesBindingWithURLError() throws Exception {
+    public void testAxis2WebServiceBindingsWithURLError() throws Exception {
         Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
             Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
         try {
@@ -157,7 +200,7 @@ public class TestAxis2WSBindings extends CommonSetup {
     }
 
     @Test
-    public void testAxis2WebServicesBindingWithMethodError() throws Exception {
+    public void testAxis2WebServiceBindingsWithMethodError() throws Exception {
         ComponentType cType = tf.createFcType(new InterfaceType[] {
                 tf.createFcItfType("Runner", Runner.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),

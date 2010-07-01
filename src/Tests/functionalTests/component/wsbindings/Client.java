@@ -36,6 +36,8 @@
  */
 package functionalTests.component.wsbindings;
 
+import java.io.Serializable;
+
 import junit.framework.Assert;
 
 import org.objectweb.fractal.api.NoSuchInterfaceException;
@@ -45,7 +47,7 @@ import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
 
-public class Client implements BindingController, Runner {
+public class Client implements Serializable, BindingController, Runner {
     public static final String SERVICES_NAME = "Services";
     public static final String SERVICEMULTICASTREAL_NAME = "ServiceMulticastReal";
     public static final String SERVICEMULTICASTFALSE_NAME = "ServiceMulticastFalse";
