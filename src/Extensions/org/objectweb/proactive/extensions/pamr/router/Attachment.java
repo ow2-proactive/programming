@@ -90,6 +90,8 @@ public class Attachment {
 
     final private AtomicBoolean dtored;
 
+    volatile private String agentHostname;
+
     public Attachment(RouterImpl router, SocketChannel socketChannel) {
         this.attachmentId = AttachmentIdGenerator.getId();
         this.assembler = new MessageAssembler(router, this);
@@ -227,5 +229,16 @@ public class Attachment {
      */
     public void disconnect() throws IOException {
         this.socketChannel.close();
+    }
+
+    public String getAgentHostname() {
+        return this.agentHostname;
+    }
+
+    public void setAgentHostname(String agentHostname) {
+        if (this.agentHostname != null) {
+            logger.warn("setAgentHostname is already set: " + this);
+        }
+        this.agentHostname = agentHostname;
     }
 }
