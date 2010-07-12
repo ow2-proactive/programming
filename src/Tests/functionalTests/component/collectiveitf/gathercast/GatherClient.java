@@ -41,7 +41,6 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.api.control.IllegalBindingException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
-import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.exceptions.GathercastTimeoutException;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.core.util.wrapper.IntMutableWrapper;
@@ -139,8 +138,14 @@ public class GatherClient implements GatherClientAttributes, TotoItf, BindingCon
         }
     }
 
-    public void unbindFc(String arg0) throws NoSuchInterfaceException, IllegalBindingException,
+    public void unbindFc(String clientItfName) throws NoSuchInterfaceException, IllegalBindingException,
             IllegalLifeCycleException {
-        throw new ProActiveRuntimeException("not implemented!");
+        if ("client2composite".equals(clientItfName)) {
+            client2composite = null;
+        } else if ("client2primitive".equals(clientItfName)) {
+            client2primitive = null;
+        } else {
+            throw new NoSuchInterfaceException(clientItfName);
+        }
     }
 }

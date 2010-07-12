@@ -452,29 +452,33 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
     }
 
     private PAInterface getGathercastAdaptor(String clientItfName, Object serverItf, PAInterface sItf) {
-        // add an adaptor proxy for matching interface types
-        Class<?> clientItfClass = null;
-        try {
-            InterfaceType[] cItfTypes = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
-            for (int i = 0; i < cItfTypes.length; i++) {
-                if (clientItfName.equals(cItfTypes[i].getFcItfName()) ||
-                    (cItfTypes[i].isFcCollectionItf() && clientItfName
-                            .startsWith(cItfTypes[i].getFcItfName()))) {
-                    clientItfClass = Class.forName(cItfTypes[i].getFcItfSignature());
+        if (!Proxy.isProxyClass(sItf.getClass())) {
+            // add an adaptor proxy for matching interface types
+            Class<?> clientItfClass = null;
+            try {
+                InterfaceType[] cItfTypes = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
+                for (int i = 0; i < cItfTypes.length; i++) {
+                    if (clientItfName.equals(cItfTypes[i].getFcItfName()) ||
+                        (cItfTypes[i].isFcCollectionItf() && clientItfName.startsWith(cItfTypes[i]
+                                .getFcItfName()))) {
+                        clientItfClass = Class.forName(cItfTypes[i].getFcItfSignature());
+                    }
                 }
+                if (clientItfClass == null) {
+                    throw new ProActiveRuntimeException("could not find type of client interface " +
+                        clientItfName);
+                }
+            } catch (ClassNotFoundException e) {
+                throw new ProActiveRuntimeException(
+                    "cannot find client interface class for client interface : " + clientItfName);
             }
-            if (clientItfClass == null) {
-                throw new ProActiveRuntimeException("could not find type of client interface " +
-                    clientItfName);
-            }
-        } catch (ClassNotFoundException e) {
-            throw new ProActiveRuntimeException("cannot find client interface class for client interface : " +
-                clientItfName);
+            PAInterface itfProxy = (PAInterface) Proxy.newProxyInstance(Thread.currentThread()
+                    .getContextClassLoader(), new Class<?>[] { PAInterface.class, ItfStubObject.class,
+                    clientItfClass }, new GatherItfAdapterProxy(serverItf));
+            return itfProxy;
+        } else {
+            return sItf;
         }
-        PAInterface itfProxy = (PAInterface) Proxy.newProxyInstance(Thread.currentThread()
-                .getContextClassLoader(), new Class<?>[] { PAInterface.class, clientItfClass },
-                new GatherItfAdapterProxy(serverItf));
-        return itfProxy;
     }
 
     private void primitiveBindFc(String clientItfName, PAInterface serverItf)
@@ -554,7 +558,7 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
                 }
 
                 GCM.getGathercastController(sItf.getFcItfOwner()).notifyRemovedGCMBinding(
-                        sItf.getFcItfName(), sItf.getFcItfOwner(), clientItfName);
+                        sItf.getFcItfName(), owner.getRepresentativeOnThis(), clientItfName);
             }
             user_binding_controller.unbindFc(clientItfName);
         } else {
@@ -570,6 +574,7 @@ public class PABindingControllerImpl extends AbstractPAController implements PAB
      *      the collection interface itself is not returned, because it is just
      *      a typing artifact and does not exist at runtime).
      */
+    @SuppressWarnings("unchecked")
     public String[] listFc() {
         if (isPrimitive()) {
             return ((BindingController) ((PAComponent) getFcItfOwner()).getReferenceOnBaseObject()).listFc();
