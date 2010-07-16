@@ -103,7 +103,9 @@ public class PARTPinger extends Thread {
             if (wr != null) {
                 try {
                     wr.close();
-                    rd.close();
+                    if (rd != null) {
+                        rd.close();
+                    }
                 } catch (IOException e) {
                     logger.debug("unable to close the ping stream", e);
                 }
