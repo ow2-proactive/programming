@@ -274,6 +274,7 @@ class PNPServerHandler extends SimpleChannelHandler {
                             }
                         }
                     });
+                    return;
                 }
 
                 Object result = pnpMessage.processMessage();
@@ -296,6 +297,7 @@ class PNPServerHandler extends SimpleChannelHandler {
                             }
                         }
                     });
+                    return;
                 }
 
                 PNPFrameCallResponse msgResp = new PNPFrameCallResponse(req.getCallId(), resultBytes);
