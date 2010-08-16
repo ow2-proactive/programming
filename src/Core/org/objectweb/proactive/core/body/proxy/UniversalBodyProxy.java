@@ -234,25 +234,20 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             Object[] initialObject = null;
             Object stubOnActiveObject = null;
             Object[] modifiedObject = null;
-            Body body = PAActiveObject.getBodyOnThis();
-
             ObjectReplacer objectReplacer = null;
+            Body body = null;
             if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
-                body.getClass().isAssignableFrom(ActiveBody.class)) {
+                (body = PAActiveObject.getBodyOnThis()).getClass().isAssignableFrom(ActiveBody.class)) {
 
                 try {
                     BodyImpl bodyImpl = (BodyImpl) body;
                     stubOnActiveObject = (Object) MOP.createStubObject(bodyImpl.getReifiedObject().getClass()
                             .getName(), bodyImpl.getRemoteAdapter());
                     initialObject = reifiedObjectConstructorCall.getEffectiveArguments();
-                    long begin = System.currentTimeMillis();
 
                     objectReplacer = new ObjectReferenceReplacer(bodyImpl.getReifiedObject(),
                         stubOnActiveObject);
                     modifiedObject = (Object[]) objectReplacer.replaceObject(initialObject);
-
-                    //                    System.out.println("UniversalBodyProxy.createLocalBody() replaceObject took " +
-                    //                        (System.currentTimeMillis() - begin));
 
                     reifiedObjectConstructorCall.setEffectiveArguments(modifiedObject);
                 } catch (MOPException e) {
@@ -313,9 +308,9 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
             Object stubOnActiveObject = null;
             Object[] modifiedObject = null;
             ObjectReplacer objectReplacer = null;
-            Body body = PAActiveObject.getBodyOnThis();
+            Body body = null;
             if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
-                body.getClass().isAssignableFrom(ActiveBody.class)) {
+                (body = PAActiveObject.getBodyOnThis()).getClass().isAssignableFrom(ActiveBody.class)) {
                 initialObject = bodyConstructorCall.getEffectiveArguments();
                 try {
                     BodyImpl bodyImpl = (BodyImpl) body;
@@ -480,9 +475,9 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
         Object stubOnActiveObject = null;
         Object[] modifiedObject = null;
         ObjectReplacer objectReplacer = null;
-        Body body = PAActiveObject.getBodyOnThis();
+        Body body = null;
         if (CentralPAPropertyRepository.PA_IMPLICITGETSTUBONTHIS.isTrue() &&
-            body.getClass().isAssignableFrom(ActiveBody.class)) {
+            (body = PAActiveObject.getBodyOnThis()).getClass().isAssignableFrom(ActiveBody.class)) {
             initialObject = methodCall.getParameters();
             try {
                 BodyImpl bodyImpl = (BodyImpl) body;
