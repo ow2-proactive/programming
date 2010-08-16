@@ -261,10 +261,12 @@ public class Client {
             if (admin_logger.isDebugEnabled()) {
                 if (this.lastSeen.get() == 0) {
                     admin_logger.debug("AgentID " + this.getAgentId() + " connected from " +
-                        this.attachment.getRemoteEndpointName());
+                        this.attachment.getAgentHostname() + " (TCP endpoint: " +
+                        this.attachment.getRemoteEndpointName() + ")");
                 } else {
                     admin_logger.debug("AgentID " + this.getAgentId() + " reconnected from " +
-                        this.attachment.getRemoteEndpointName());
+                        this.attachment.getAgentHostname() + " (TCP endpoint: " +
+                        this.attachment.getRemoteEndpointName() + ")");
                 }
             }
 

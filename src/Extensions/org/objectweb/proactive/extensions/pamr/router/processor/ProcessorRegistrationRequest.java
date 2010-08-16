@@ -76,6 +76,7 @@ public class ProcessorRegistrationRequest extends Processor {
         try {
             RegistrationRequestMessage message = (RegistrationRequestMessage) Message.constructMessage(
                     this.rawMessage.array(), 0);
+            this.attachment.setAgentHostname(message.getAgentHostname());
             AgentID agentId = message.getAgentID();
 
             if (agentId == null) {
