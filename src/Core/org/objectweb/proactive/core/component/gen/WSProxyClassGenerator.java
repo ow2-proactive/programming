@@ -142,7 +142,7 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
                             + "org.objectweb.proactive.core.util.log.Loggers.COMPONENTS_REQUESTS)");
                 CtField wsCallerField = new CtField(pool.get(PAWSCaller.class.getName()), "wsCaller",
                     generatedCtClass);
-                wsCallerField.setModifiers(Modifier.PRIVATE);
+                wsCallerField.setModifiers(Modifier.PRIVATE + Modifier.TRANSIENT);
                 generatedCtClass.addField(wsCallerField, "new " + wsInfo.getWSCallerClassName() + "()");
                 CtField proxyField = new CtField(pool.get(Proxy.class.getName()), "proxy", generatedCtClass);
                 proxyField.setModifiers(Modifier.PRIVATE);
@@ -175,6 +175,21 @@ public class WSProxyClassGenerator extends AbstractInterfaceClassGenerator {
                 generatedCtClass.addMethod(getterProxy);
                 CtMethod setterProxy = CtNewMethod.setter("setProxy", proxyField);
                 generatedCtClass.addMethod(setterProxy);
+
+                // Add method for deserialization
+                String bodyReadObjectMethod = "{\n" +
+                    "$1.defaultReadObject();\n" +
+                    "wsCaller = new " +
+                    wsInfo.getWSCallerClassName() +
+                    "();\n" +
+                    "setFcItfImpl(((org.objectweb.proactive.core.component.type.WSComponent) getFcItfOwner()).getWSInfo().getWSUrl());\n" +
+                    "}";
+                CtMethod readObjectMethod = CtNewMethod.make(Modifier.PRIVATE, CtClass.voidType,
+                        "readObject", new CtClass[] { pool.get("java.io.ObjectInputStream") },
+                        new CtClass[] { pool.get("java.io.IOException"),
+                                pool.get("java.lang.ClassNotFoundException") }, bodyReadObjectMethod,
+                        generatedCtClass);
+                generatedCtClass.addMethod(readObjectMethod);
 
                 //  Add methods from implemented interfaces
                 for (CtClass itf : itfs) {

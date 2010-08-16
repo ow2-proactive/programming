@@ -66,7 +66,7 @@ public class TestCXFWSBindings extends CommonSetup {
     }
 
     @Test
-    public void testCXFWebServicesBindingWithPrimitiveComponent() throws Exception {
+    public void testCXFWebServiceBindingsWithPrimitiveComponent() throws Exception {
         Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
             Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
         GCM.getBindingController(client).bindFc(
@@ -86,7 +86,7 @@ public class TestCXFWSBindings extends CommonSetup {
     }
 
     @Test
-    public void testCXFWebServicesBindingWithMethodError() throws Exception {
+    public void testCXFWebServiceBindingsWithMethodError() throws Exception {
         ComponentType cType = tf.createFcType(new InterfaceType[] {
                 tf.createFcItfType("Runner", Runner.class.getName(), TypeFactory.SERVER,
                         TypeFactory.MANDATORY, TypeFactory.SINGLE),
