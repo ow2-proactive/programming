@@ -223,7 +223,14 @@ public class JavassistByteCodeStubBuilder {
 
             createReifiedMethods(generatedCtClass, validMethods, superCtClass.isInterface());
 
-            //            System.out.println("[JAVASSIST] generated class : " + generatedCtClass.getName());
+            if (logger.isTraceEnabled()) {
+                logger.debug("generated class : " + generatedCtClass.getName() + "loaded into " +
+                    generatedCtClass.getClass().getClassLoader().toString() +
+                    ", initial class' classloader " + superCtClass.getClass().getClassLoader() + ", url " +
+                    superCtClass.getURL());
+            } else if (logger.isDebugEnabled()) {
+                logger.debug("generated class : " + generatedCtClass.getName());
+            }
 
             // detach to fix  "frozen class" errors encountered in some large scale deployments
             byte[] bytecode = generatedCtClass.toBytecode();
@@ -778,13 +785,11 @@ public class JavassistByteCodeStubBuilder {
         for (int i = 0; i < lmp.size(); i++) {
             MethodParameter mp = lmp.get(i);
             List<javassist.bytecode.annotation.Annotation> la = mp.getAnnotations();
-            logger.debug(method.getCtMethod().getLongName() + " " +
-                Arrays.toString(mp.getAnnotations().toArray()));
             for (javassist.bytecode.annotation.Annotation annotation : la) {
                 if (TurnRemote.class.getName().equals(annotation.getTypeName())) {
                     body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PARemoteObject.turnRemote($" +
                         (i + 1) + "); \n");
-                    logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                    logger.trace("method " + method.getCtMethod().getLongName() + ", param " + i +
                         " has TurnRemote Annotation");
                     break;
                 }
@@ -803,7 +808,7 @@ public class JavassistByteCodeStubBuilder {
                 if (TurnActive.class.getName().equals(annotation.getTypeName())) {
                     body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAActiveObject.turnActive($" +
                         (i + 1) + "); \n");
-                    logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                    logger.trace("method " + method.getCtMethod().getLongName() + ", param " + i +
                         " has TurnActive Annotation");
                     break;
                 }
@@ -822,7 +827,7 @@ public class JavassistByteCodeStubBuilder {
                 if (UnwrapFuture.class.getName().equals(annotation.getTypeName())) {
                     body.append("$" + (i + 1) + " = org.objectweb.proactive.api.PAFuture.getFutureValue($" +
                         (i + 1) + "); \n");
-                    logger.debug("method " + method.getCtMethod().getLongName() + ", param " + i +
+                    logger.trace("method " + method.getCtMethod().getLongName() + ", param " + i +
                         " has UnwrapFuture Annotation");
                     break;
                 }
