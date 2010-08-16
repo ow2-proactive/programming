@@ -46,6 +46,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.objectweb.proactive.core.util.TimeoutAccounter;
 
 import com.trilead.ssh2.ChannelCondition;
 import com.trilead.ssh2.Connection;
@@ -63,6 +64,8 @@ import com.trilead.ssh2.Session;
  * If a password is specified then pubkey authentication is disabled
  */
 public class SSHClient {
+    static final int EXIT_ERROR = 255; // like OpenSSH
+
     static final private String OPT_PASSWORD = "p";
     static final private String OPT_USERNAME = "l";
     static final private String OPT_IDENTITY = "i";
@@ -96,7 +99,7 @@ public class SSHClient {
         System.out.println("\t-" + OPT_VERBOSE + "\tverbose mode");
 
         if (exit) {
-            System.exit(2);
+            System.exit(EXIT_ERROR);
         }
     }
 
@@ -134,15 +137,15 @@ public class SSHClient {
             identity = new File(cmd.getOptionValue(OPT_IDENTITY));
             if (!identity.exists()) {
                 System.err.println("[E] specified identity file," + identity + ", does not exist");
-                System.exit(3);
+                System.exit(EXIT_ERROR);
             }
             if (!identity.isFile()) {
                 System.err.println("[E] specified identity file" + identity + " is not a file");
-                System.exit(3);
+                System.exit(EXIT_ERROR);
             }
             if (!identity.canRead()) {
                 System.err.println("[E] specified identity file" + identity + " is not readable");
-                System.exit(3);
+                System.exit(EXIT_ERROR);
             }
         }
 
@@ -161,7 +164,7 @@ public class SSHClient {
         }
 
         hostname = remArgs.remove(0);
-        int exitCode = 0;
+        int exitCode = EXIT_ERROR;
 
         try {
             Connection conn = new Connection(hostname);
@@ -245,8 +248,20 @@ public class SSHClient {
 
                         /* The remote side won't send us further data... */
                         if ((conditions & (ChannelCondition.STDOUT_DATA | ChannelCondition.STDERR_DATA)) == 0) {
-                            exitCode = sess.getExitStatus();
-                            /* ... and we have consumed all data in the local arrival window. */
+                            // PROACTIVE-879: Ugly fix
+                            // Calling Session.getExitStatus() can throw an NPE for an unknown reason
+                            // After some investigation, I noticed that a subsequent call to this method could succeed
+                            // So we try to call session.getExitStatus() until it does not throw an NPE or the timeout expires
+                            TimeoutAccounter ta = TimeoutAccounter.getAccounter(1000);
+                            while (!ta.isTimeoutElapsed()) {
+                                try {
+                                    exitCode = sess.getExitStatus();
+                                    break;
+                                } catch (NullPointerException e) {
+                                    Thread.yield();
+                                }
+                            }
+
                             break;
                         }
                     }
@@ -282,7 +297,7 @@ public class SSHClient {
             conn.close();
         } catch (IOException e) {
             e.printStackTrace(System.err);
-            System.exit(2);
+            System.exit(EXIT_ERROR);
         }
         System.exit(exitCode);
     }
