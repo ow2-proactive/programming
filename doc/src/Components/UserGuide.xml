@@ -3211,7 +3211,15 @@ GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));
 					communications for the sole functional interface.
 				</para>
 
-				<figure xml:id="shortcuts_for_minimizing_remote_communication"><info><title>Using shortcuts for minimizing remote communications</title></info>
+				<figure condition="html" xml:id="shortcuts_for_minimizing_remote_communication_html"><info><title>Using shortcuts for minimizing remote communications</title></info>
+					<mediaobject>
+						<imageobject>
+							<imagedata scalefit="1" width="100%" contentdepth="100%" fileref="images/png/shortcuts.png" format="PNG"/>
+						</imageobject>
+					</mediaobject>
+				</figure>
+
+				<figure condition="pdf" xml:id="shortcuts_for_minimizing_remote_communication_pdf"><info><title>Using shortcuts for minimizing remote communications</title></info>
 					<mediaobject>
 						<imageobject>
 							<imagedata scalefit="1" width="700%" contentdepth="700%" fileref="images/png/shortcuts.png" format="PNG"/>
