@@ -85,9 +85,9 @@
 				<classpath refid="docs.utils.classpath" />
 			</taskdef>
 			<xml_validate file="${docs.tmp.dir}/@{docbookInputFile}"  warn="true" />
-			<!-- Profiling step: keep only the tags which have the attribute os="${docbook.profile}" or no os attribute -->
+			<!-- Profiling step: keep only the tags which have the attribute condition="${docbook.profile}" or no condition attribute -->
 			<xslt basedir="${docs.tmp.dir}"  in="${docs.tmp.dir}/@{docbookInputFile}" out="${docs.tmp.dir}/profiled.xml" style="${docs.xsl.profiling}" force="yes">
-				<param name="profile.os" expression="@{docbook.profile}" />
+				<param name="profile.condition" expression="@{docbook.profile}" />
 				<param name="tmp.dir" expression="${docs.tmp.dir}/" />
 				<param name="url.file.prefix" expression="${url.file.prefix}" />
 				<param name="docs.output.dir" expression="@{docbookOutputDir}" />
@@ -108,6 +108,7 @@
 				<arg value="TODAY=${TODAY}" />
 				<arg value="VERSION=${version}" />
 				<arg value="RELEASEDATE=${release.date.arg}" />
+				<arg value="profile.condition=@{docbook.profile}" />
 			</java>
 		</sequential>
 	</macrodef>

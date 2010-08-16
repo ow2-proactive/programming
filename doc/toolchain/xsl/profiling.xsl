@@ -21,12 +21,12 @@
 	<xsl:param name="docs.output.dir" />
 
 	<xsl:template match="/">
-			 <xsl:apply-templates/>
-	 </xsl:template>
+		<xsl:apply-templates/>
+	</xsl:template>
 
 	<xsl:template match="*">
 		<xsl:copy>
-			 <xsl:apply-templates select="@* | node()"/>
+			<xsl:apply-templates select="@* | node()[not(@condition) or (@condition = $profile.condition)]"/>
 		</xsl:copy>
 	 </xsl:template>
 
