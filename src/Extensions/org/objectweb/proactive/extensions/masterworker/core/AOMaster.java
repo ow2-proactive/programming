@@ -313,83 +313,91 @@ public class AOMaster implements Serializable, WorkerMaster, InitActive, RunActi
     @SuppressWarnings("unchecked")
     private Queue<TaskIntern<Serializable>> getTasksInternal(final Worker worker, final String workerName,
             boolean flooding) {
-        // if we don't know him, we record the worker in our system
-        if (!workersByName.containsKey(workerName)) {
-            if (debug) {
-                logger.debug("new worker " + workerName + " recorded by the master");
-            }
-            recordWorker(worker, workerName);
-            if (isClearing) {
-                // If the master is clearing we send the clearing message to this new worker
-                worker.clear();
-            }
-        }
-        Worker locWorker = workersByName.get(workerName);
-
-        if (emptyPending()) {
-            // We say that the worker is sleeping if we don't know it yet or if it's not doing a task
-            if (workersActivity.containsKey(workerName)) {
-                // If the worker requests a flooding this means that its penqing queue is empty,
-                // thus, it will sleep
-                if (flooding && !sleepingWorkersName.contains(workerName)) {
-                    sleepingGroup.add(locWorker);
-                    sleepingWorkersName.add(workerName);
-                }
-            } else {
-                if (!sleepingWorkersName.contains(workerName)) {
-                    workersActivity.put(workerName, new HashSet<Long>());
-                    sleepingGroup.add(locWorker);
-                    sleepingWorkersName.add(workerName);
-                }
-            }
-            if (debug) {
-                logger.debug("No task given to " + workerName);
-            }
-            // we return an empty queue, this will cause the worker to sleep for a while
-            return new LinkedList<TaskIntern<Serializable>>();
-        } else {
-            if (sleepingWorkersName.contains(workerName)) {
-                sleepingGroup.remove(locWorker);
-                sleepingWorkersName.remove(workerName);
-            }
-            Queue<TaskIntern<Serializable>> tasksToDo = new LinkedList<TaskIntern<Serializable>>();
-
-            // If we are in a flooding scenario, we send at most initial_task_flooding tasks
-            int flooding_value = flooding ? initial_task_flooding : 1;
-            int i = 0;
-            while (!pendingTasks.isEmpty() && i < flooding_value) {
-                TaskID taskId = pendingTasks.poll();
-
-                // We add the task inside the launched list
-                long tid = taskId.getID();
-                launchedTasks.put(tid, taskId.getOriginator());
-                // We record the worker activity
-                if (workersActivity.containsKey(workerName)) {
-                    Set<Long> wact = workersActivity.get(workerName);
-                    wact.add(tid);
-                } else {
-                    Set<Long> wact = new HashSet<Long>();
-                    wact.add(tid);
-                    workersActivity.put(workerName, wact);
-                }
-                TaskIntern<Serializable> taskfuture = (TaskIntern<Serializable>) repository.getTask(taskId
-                        .getID());
-                TaskIntern<Serializable> realTask = (TaskIntern<Serializable>) PAFuture
-                        .getFutureValue(taskfuture);
-                repository.saveTask(tid);
-                tasksToDo.offer(realTask);
+        // This test is added in case a ninja requests arrives while the master is terminating
+        if (worker != null) {
+            // if we don't know him, we record the worker in our system
+            if (!workersByName.containsKey(workerName)) {
                 if (debug) {
-                    logger.debug("Task " + tid + " given to " + workerName);
+                    logger.debug("new worker " + workerName + " recorded by the master");
                 }
-                i++;
-                // In case of a divisible task we don't want to do a flooding
-                if (taskId.isDivisible()) {
-                    break;
+                recordWorker(worker, workerName);
+                if (isClearing) {
+                    // If the master is clearing we send the clearing message to this new worker
+                    worker.clear();
                 }
             }
+            Worker locWorker = workersByName.get(workerName);
 
-            return tasksToDo;
+            // This test is added in case a ninja requests arrives while the master is terminating
+            if (locWorker != null) {
+                if (emptyPending()) {
+                    // We say that the worker is sleeping if we don't know it yet or if it's not doing a task
+                    if (workersActivity.containsKey(workerName)) {
+                        // If the worker requests a flooding this means that its pending queue is empty,
+                        // thus, it will sleep
+                        if (flooding && !sleepingWorkersName.contains(workerName)) {
+                            sleepingGroup.add(locWorker);
+                            sleepingWorkersName.add(workerName);
+                        }
+                    } else {
+                        if (!sleepingWorkersName.contains(workerName)) {
+                            workersActivity.put(workerName, new HashSet<Long>());
+                            sleepingGroup.add(locWorker);
+                            sleepingWorkersName.add(workerName);
+                        }
+                    }
+                    if (debug) {
+                        logger.debug("No task given to " + workerName);
+                    }
+                    // we return an empty queue, this will cause the worker to sleep for a while
+                    return new LinkedList<TaskIntern<Serializable>>();
+                } else {
+                    if (sleepingWorkersName.contains(workerName)) {
+                        sleepingGroup.remove(locWorker);
+                        sleepingWorkersName.remove(workerName);
+                    }
+                    Queue<TaskIntern<Serializable>> tasksToDo = new LinkedList<TaskIntern<Serializable>>();
+
+                    // If we are in a flooding scenario, we send at most initial_task_flooding tasks
+                    int flooding_value = flooding ? initial_task_flooding : 1;
+                    int i = 0;
+                    while (!pendingTasks.isEmpty() && i < flooding_value) {
+                        TaskID taskId = pendingTasks.poll();
+
+                        // We add the task inside the launched list
+                        long tid = taskId.getID();
+                        launchedTasks.put(tid, taskId.getOriginator());
+                        // We record the worker activity
+                        if (workersActivity.containsKey(workerName)) {
+                            Set<Long> wact = workersActivity.get(workerName);
+                            wact.add(tid);
+                        } else {
+                            Set<Long> wact = new HashSet<Long>();
+                            wact.add(tid);
+                            workersActivity.put(workerName, wact);
+                        }
+                        TaskIntern<Serializable> taskfuture = (TaskIntern<Serializable>) repository
+                                .getTask(taskId.getID());
+                        TaskIntern<Serializable> realTask = (TaskIntern<Serializable>) PAFuture
+                                .getFutureValue(taskfuture);
+                        repository.saveTask(tid);
+                        tasksToDo.offer(realTask);
+                        if (debug) {
+                            logger.debug("Task " + tid + " given to " + workerName);
+                        }
+                        i++;
+                        // In case of a divisible task we don't want to do a flooding
+                        if (taskId.isDivisible()) {
+                            break;
+                        }
+                    }
+
+                    return tasksToDo;
+                }
+            }
+            return new LinkedList<TaskIntern<Serializable>>();
         }
+        return new LinkedList<TaskIntern<Serializable>>();
     }
 
     /** {@inheritDoc} */

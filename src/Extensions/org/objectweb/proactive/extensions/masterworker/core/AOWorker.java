@@ -170,7 +170,9 @@ public class AOWorker implements InitActive, Serializable, Worker {
         } else {
             newTasks = provider.getTasks(stubOnThis, name, false);
         }
-        pendingTasksFutures.offer(newTasks);
+        if (newTasks != null) {
+            pendingTasksFutures.offer(newTasks);
+        }
 
     }
 
