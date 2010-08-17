@@ -56,8 +56,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderExecutable;
 import org.w3c.dom.Node;
 
+import functionalTests.FunctionalTest;
 
-public class TestApplicationDescriptorParser {
+
+public class TestApplicationDescriptorParser extends FunctionalTest {
     final static String TEST_APP_DIR = TestApplicationDescriptorParser.class.getClass().getResource(
             "/unitTests/gcmdeployment/descriptorParser/testfiles/application").getFile();
 

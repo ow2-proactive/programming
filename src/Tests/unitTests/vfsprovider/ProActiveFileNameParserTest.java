@@ -47,11 +47,13 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileName;
 import org.objectweb.proactive.extensions.vfsprovider.client.ProActiveFileNameParser;
 
+import functionalTests.FunctionalTest;
+
 
 /**
  * ProActiveFileNameParser (and somehow ProActiveFileName) basic tests.
  */
-public class ProActiveFileNameParserTest {
+public class ProActiveFileNameParserTest extends FunctionalTest {
     private static ProActiveFileName parseURI(final String uri) throws FileSystemException {
         return (ProActiveFileName) ProActiveFileNameParser.getInstance().parseUri(null, null, uri);
     }
