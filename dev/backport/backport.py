@@ -74,11 +74,11 @@ def yes_or_no(prompt):
         
         
 if __name__ == '__main__':
-    usage = "usage: %prog --branch 4.3.1"
+    usage = "usage: %prog [-d | -c config ] --version 4.3.1"
     parser = optparse.OptionParser(usage)
     parser.add_option("-c", "--config",  action="store",      dest="config",   type="string", default="backport.ini", help="Backport script config file",)
     parser.add_option("-d", "--dry-run", action="store_true", dest="dry_run",                 default=False,          help="Dry run mode")
-    parser.add_option("-b", "--version", action="store",      dest="version",  type="string", help="The version",)
+    parser.add_option("-v", "--version", action="store",      dest="version",  type="string", help="The version",)
 
     (options, args) = parser.parse_args();
 
@@ -119,7 +119,7 @@ if __name__ == '__main__':
             print"\t\t #%s:   %s " % (backendgit.get_svn_commit_id(commit), commit.message.split('\n', 1)[0])
 
         if not yes_or_no("Do you want to cherry pick these commits ? [Y/N]"):
-            print "Skipping issue %s" % issue
+            print "Skipping issue %s" % issue['key']
             continue
         
         print "Merging issue %s" % issue_key
