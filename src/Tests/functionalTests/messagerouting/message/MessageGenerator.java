@@ -45,6 +45,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.DataMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataReplyMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
+import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message.Field;
@@ -139,6 +140,9 @@ public abstract class MessageGenerator {
         int lastLen = TypeHelper.byteArrayToInt(ret, Field.LENGTH.getOffset());
         if (type.equals(MessageType.DATA_REPLY) || type.equals(MessageType.DATA_REQUEST)) {
             lastLen = Message.Field.getTotalOffset() + DataMessage.Field.getTotalOffset();
+        } else if (type.equals(MessageType.REGISTRATION_REPLY) ||
+            type.equals(MessageType.REGISTRATION_REQUEST)) {
+            lastLen = Message.Field.getTotalOffset() + RegistrationMessage.Field.getTotalOffset();
         }
         int badLen = ProActiveRandom.nextInt(lastLen);
         logger.debug("invalid length " + badLen);
