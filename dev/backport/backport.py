@@ -79,6 +79,7 @@ if __name__ == '__main__':
     parser.add_option("-c", "--config",  action="store",      dest="config",   type="string", default="backport.ini", help="Backport script config file",)
     parser.add_option("-d", "--dry-run", action="store_true", dest="dry_run",                 default=False,          help="Dry run mode")
     parser.add_option("-v", "--version", action="store",      dest="version",  type="string", help="The version",)
+    parser.add_option("-p", "--project",  action="store",     dest="project",  type="string",                         help="JIRA project",)
 
     (options, args) = parser.parse_args();
 
@@ -86,12 +87,23 @@ if __name__ == '__main__':
         parser.error("incorrect number of  arguments")
     if  options.version is None:
         parser.error("--version must be specified")
-        
+    if options.project is None:
+        parser.error("--project is mandatory")
+   
         
     config = ConfigParser.RawConfigParser()
     config.read(options.config)
 
     git = backendgit.Git(config.get('git', 'repo_path'))
+
+    try:
+        git.repo.git.checkout("master")
+        git.repo.git.svn("rebase")
+    except GitCommandError:
+        print "Failed to synchronize the master branch with the SVN repo"
+        os.exit(1)
+    
+    
     try:
         git.repo.git.checkout(backendjira.release_version_to_branch(options.version))
     except GitCommandError:
@@ -101,9 +113,8 @@ if __name__ == '__main__':
     url   = config.get('jira', 'url')
     user  = config.get('jira', 'user')
     passwd= config.get('jira', 'passwd')
-    jira = backendjira.Jira(url, user, passwd, git, options.dry_run)
+    jira = backendjira.Jira(url, user, passwd, git, options.project, options.dry_run)
    
-    
     unmerged_issues = jira.get_commit_to_merge(options.version)
     print "Hello ! %s issues need to be backported in %s: %s" % (len(unmerged_issues), options.version, unmerged_issues.keys())
     
@@ -114,9 +125,13 @@ if __name__ == '__main__':
         print "\tReporter:     %s" % (issue['reporter'])
         print "\tAssignee:     %s" % (issue['assignee'])
         print "\tFix for :     %s" % (map(lambda x: x['name'], issue['fixVersions']))
+        print "\tStatus:       %s" % (jira.statuses_by_id[issue['status']])
         print "\tSVN unmerged_issues: "
         for commit in unmerged_issues[issue_key]:
             print"\t\t #%s:   %s " % (backendgit.get_svn_commit_id(commit), commit.message.split('\n', 1)[0])
+
+        if issue['status'] == jira.statuses_by_name['Closed']:
+            print "WARNING: An unmerged commit has been found on the CLOSED issue"
 
         if not yes_or_no("Do you want to cherry pick these commits ? [Y/N]"):
             print "Skipping issue %s" % issue['key']

@@ -45,7 +45,7 @@ import os
 import re
 import tempfile
 import time
-
+import calendar
 
 BOT_PREFIX="%%&%%"
 
@@ -65,7 +65,7 @@ class Jira(object):
     '''
     A backend to manipulate and query a remote JIRA server
     '''
-    def __init__(self, baseurl, username, password, gitb, dryrun=False):
+    def __init__(self, baseurl, username, password, gitb, project, dryrun=False):
         self.baseurl = baseurl
         self.username = username
         self.password = password
@@ -73,6 +73,16 @@ class Jira(object):
         self.soap = SOAPpy.WSDL.Proxy(baseurl + "/rpc/soap/jirasoapservice-v2?wsdl")
         self.token= self.soap.login(self.username, self.password)
         self.dryrun = dryrun
+        self.project = project
+
+        self.statuses_by_id = {} 
+        self.statuses_by_name = {} 
+
+        statuses = self.soap.getStatuses(self.token)
+        for status in statuses:
+            self.statuses_by_name[status['name']] = status['id']
+            self.statuses_by_id[status['id']] = status['name']
+      
         
     def get_issue(self, issue_key):
         '''
@@ -88,7 +98,7 @@ class Jira(object):
         '''
         ret = {}
         
-        issues = self.soap.getIssuesFromJqlSearch(self.token, "project = PROACTIVE AND status = Resolved AND fixVersion='4.3.1'", 1000)
+        issues = self.soap.getIssuesFromJqlSearch(self.token, "project = %s AND (status = Resolved OR status = Closed) AND fixVersion='%s'" % (self.project, version), 1000)
         for issue in issues:
             commits = self.get_unmerged_commits_for_issue(issue.key, version)
             if len(commits) != 0:
@@ -103,14 +113,23 @@ class Jira(object):
         Each commit in this list is linked to the given issue key and has not yet been backported 
         '''
         ret = []
-        
-        # Get the timestamp of the last comment made by the merge bot
+
         comments = self.soap.getComments(self.token, issue_key)
+
+        # If the issue is untracked, return an empty list
+        patern = re.compile("%s UNTRACK_ISSUE key=%s" % (BOT_PREFIX, issue_key))
+        for comment in comments:
+            if patern.match(comment.body) is not None:
+                return []
+
+        # Get the timestamp of the last comment made by the merge bot
         patern = re.compile("%s MERGED key=%s !! branch=[\w\-.]+ !! version=%s !! revisions=(#[\d]+ )+" % (BOT_PREFIX, issue_key, version))
         last_merged = None
         for comment in comments:
             if patern.match(comment.body) is not None:
-                t = time.mktime((comment.created[0], comment.created[1], comment.created[2], comment.created[3], comment.created[4], int(comment.created[5]), -1, -1, -1))
+                # Use local time not UTC
+                t = calendar.timegm((comment.created[0], comment.created[1], comment.created[2], comment.created[3], comment.created[4], int(comment.created[5]), -1, -1, -1))
+
                 last_merged = t
 
         # Get the list of commits with a given issue key
@@ -118,6 +137,7 @@ class Jira(object):
         for commit in commits:
             if commit.committed_date > last_merged:
                 ret.append(commit)
+                
 
         # Get the list of tagged commits
         patern = re.compile("%s ADD_COMMIT key=%s !! revision=(#[\d]+ )+" % (BOT_PREFIX, issue_key))
@@ -177,3 +197,20 @@ class Jira(object):
     def add_missing_svn_commit(self, issue_key, svn_rev):
         if not self.dryrun:
             self.soap.addComment(self.token, issue_key, {'body' : "%s ADD_COMMIT key=%s !! revision=%s" % (BOT_PREFIX, issue_key, svn_rev)})
+
+    def untrack_issue(self, issue_key):
+        if not self.dryrun:
+            self.soap.addComment(self.token, issue_key, {'body' : "%s UNTRACK_ISSUE key=%s" % (BOT_PREFIX, issue_key)})
+
+    def get_untracked_issue(self, version):
+        ret = []
+
+        issues = self.soap.getIssuesFromJqlSearch(self.token, "project = %s AND (status = Resolved OR status = Closed) AND fixVersion='%s'" % (self.project, version), 1000)
+        patern = re.compile("%s UNTRACK_ISSUE key=([A-Z]+-[0-9]+)" % (BOT_PREFIX))
+        for issue in issues:
+            comments = self.soap.getComments(self.token, issue['key'])
+            for comment in comments:
+                if patern.match(comment.body) is not None:
+                    ret.append(issue)
+
+        return ret

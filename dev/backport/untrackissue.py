@@ -43,27 +43,18 @@ import ConfigParser
 import backendjira
 
 '''
-This script allows to easily to link a Subversion commit to a Jira issue if the commit
-message does not contains the JIRA key.
-
-It should never happen, but sometimes a drunk developer forgot to include the JIRA key ;)
-
-If the commit is not tagged and is not linked, then the fix cannot be backported into the
-release maintenances  
+This script allows to disable automatic backport for a given issue key
 '''
 if __name__ == '__main__':
-    usage = "usage: %prog -p PROJECT -k ISSUE-KEY svn_rev1 svn_rev2 svn_rev3 ..."
+    usage = "usage: %prog issue_key"
     parser = optparse.OptionParser(usage)
     parser.add_option("-c", "--config",  action="store",      dest="config",   type="string", default="backport.ini", help="Backport script config file",)
-    parser.add_option("-k", "--key"   ,  action="store",      dest="issue_key",type="string", help="The JIRA issue key")
     parser.add_option("-p", "--project",  action="store",     dest="project",  type="string",                         help="JIRA project",)
 
     (options, args) = parser.parse_args();
 
-    if len(args) < 1:
+    if len(args) != 1:
         parser.error("incorrect number of  arguments")
-    if  options.issue_key is None:
-        parser.error("--key must be specified")
     if options.project is None:
         parser.error("--project is mandatory")
   
@@ -75,8 +66,5 @@ if __name__ == '__main__':
     passwd= config.get('jira', 'passwd')
     jira = backendjira.Jira(url, user, passwd, None, options.project)
     
-    for svn_rev in args:
-        svn_rev = int(svn_rev)
-        assert svn_rev > 0
-        jira.add_missing_svn_commit(options.issue_key, svn_rev)
+    jira.untrack_issue(args[0])
     
