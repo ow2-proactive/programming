@@ -160,6 +160,9 @@ public class TestProActiveProvider extends FunctionalTest implements ProviderTes
 
     private void setUpTestDir() throws URISyntaxException, IOException {
         // create dir 
+        if (testDir.exists()) {
+            removeTestDir();
+        }
         Assert.assertFalse(testDir.exists());
         Assert.assertTrue(testDir.mkdirs());
 
