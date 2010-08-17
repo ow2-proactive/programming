@@ -64,6 +64,7 @@ public class SshConfig {
     private long gcIdleTime;
     private int connectTimeout;
     private String sshDirPath;
+    private String DEFAULT = "*";
 
     /**
      * A Map of String and a Map of Token,String is used to represent the ssh configuration file,
@@ -154,7 +155,7 @@ public class SshConfig {
      */
     public void addHostInformation(String hostname, SshToken request, String information) {
         if (isCapable(request)) {
-            if (hostname.charAt(0) == '*') {
+            if ((hostname.charAt(0) == '*') && (hostname.length() > 1)) {
                 hostname = hostname.substring(1);
             }
             Map<SshToken, String> hostsInfos = sshInfos.get(hostname);
@@ -168,7 +169,8 @@ public class SshConfig {
                 if (hostsInfos.get(request) != null) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Ssh configuration : information " + information + " as " +
-                            request.toString().toLowerCase() + " for " + hostname +
+                            request.toString().toLowerCase() +
+                            (hostname.equalsIgnoreCase(DEFAULT) ? " as default" : " for " + hostname) +
                             " is already declared, ignored");
                     }
                     return;
@@ -177,12 +179,17 @@ public class SshConfig {
             }
             if (logger.isDebugEnabled()) {
                 logger.debug("Ssh configuration : " + information + " as " +
-                    request.toString().toLowerCase() + " stored for " + hostname);
+                    request.toString().toLowerCase() + " stored " +
+                    (hostname.equalsIgnoreCase(DEFAULT) ? "as default." : "for " + hostname + "."));
             }
         } else {
             logger.warn("Ssh configuration option \"" + request.getValue() + " = " + information +
                 "has been ignored.");
         }
+    }
+
+    public void addDefaultHostInformation(SshToken request, String information) {
+        this.addHostInformation(DEFAULT, request, information);
     }
 
     /**
@@ -247,10 +254,18 @@ public class SshConfig {
             }
         }
         hostInfos = sshInfos.get(hostname);
-        if (hostInfos != null && hostInfos.get(tok) != null)
+        if (hostInfos != null && hostInfos.get(tok) != null) {
             return hostInfos.get(tok);
-        else
-            return null;
+        } else {
+            Map<SshToken, String> map = sshInfos.get(DEFAULT);
+            if (map != null) {
+                String defaultValue = map.get(tok);
+                if (defaultValue != null) {
+                    return defaultValue;
+                }
+            }
+        }
+        return null;
     }
 
     /**
