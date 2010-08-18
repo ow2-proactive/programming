@@ -89,15 +89,12 @@ public class MessageRoutingSshSocketFactory implements MessageRoutingSocketFacto
 
         if (PAMRConfig.PA_PAMRSSH_REMOTE_PORT.isSet()) {
             int port = PAMRConfig.PA_PAMRSSH_REMOTE_PORT.getValue();
-            this.config.addHostInformation(PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue(), SshToken.PORT, String
-                    .valueOf(port));
+            this.config.addDefaultHostInformation(SshToken.PORT, String.valueOf(port));
         }
 
         if (PAMRConfig.PA_PAMRSSH_REMOTE_USERNAME.isSet()) {
             String username = PAMRConfig.PA_PAMRSSH_REMOTE_USERNAME.getValue();
-
-            this.config.addHostInformation(PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue(), SshToken.USERNAME,
-                    username);
+            this.config.addDefaultHostInformation(SshToken.USERNAME, username);
         }
 
         this.tp = new SshTunnelPool(this.config);
