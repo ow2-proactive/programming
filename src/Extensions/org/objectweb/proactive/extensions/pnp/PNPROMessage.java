@@ -45,8 +45,6 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.pnp.PNPAgent;
-import org.objectweb.proactive.extensions.pnp.PNPConfig;
 import org.objectweb.proactive.extensions.pnp.exception.PNPException;
 
 
@@ -126,7 +124,9 @@ abstract class PNPROMessage implements Serializable {
         } catch (IOException e) {
             throw new PNPException("Failed to marshall the call", e);
         } catch (PNPException e) {
-            logger.error("Failed to send message to " + this.uri, e);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Failed to send message to " + this.uri, e);
+            }
             throw e;
         }
     }
