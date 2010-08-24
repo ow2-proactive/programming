@@ -122,7 +122,9 @@
 			<include name="*.jar" />
 		</fileset>
 		<!-- XXX ${dev.dir} is not included in the source release ! -->
-		<pathelement location="${base.dir}/compile/lib/junit-4.3.jar"/>
+		<fileset dir="${base.dir}/compile/lib">
+			<include name="*.jar"/>
+		</fileset>	
 	</path>
 
 	<path id="deploy.classpath">
