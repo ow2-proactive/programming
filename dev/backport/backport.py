@@ -44,6 +44,7 @@ import backendgit
 import optparse
 import ConfigParser
 from git.errors import GitCommandError
+import sys 
 
 '''
 This script automatically backports all the unmerged commits into a maintenance branch.
@@ -101,7 +102,7 @@ if __name__ == '__main__':
         git.repo.git.svn("rebase")
     except GitCommandError:
         print "Failed to synchronize the master branch with the SVN repo"
-        os.exit(1)
+        sys.exit(1)
     
     
     try:
