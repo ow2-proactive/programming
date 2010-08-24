@@ -79,10 +79,19 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
         try {
             agent = new PNPAgent(PNPConfig.PA_PNP_PORT.getValue());
         } catch (Exception e) {
-            logger.warn("Failed to instanciate the PNP remote object factory", e);
+            logger.error("Failed to instanciate the PNP remote object factory", e);
         }
         this.agent = agent;
         this.registry = PNPRegistry.singleton;
+    }
+
+    private void throwIfAgentIsNul(String msg) throws ProActiveException {
+        if (this.agent == null) {
+            throw new PNPException(msg +
+                ". The PNP remote object factory is not properly configured, agent is null");
+        }
+
+        return;
     }
 
     /*
@@ -92,7 +101,9 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
      * org.objectweb.proactive.core.remoteobject.RemoteObjectFactory#newRemoteObject
      * (org.objectweb .proactive.core.remoteobject.RemoteObject)
      */
-    public RemoteRemoteObject newRemoteObject(InternalRemoteRemoteObject target) {
+    public RemoteRemoteObject newRemoteObject(InternalRemoteRemoteObject target) throws ProActiveException {
+        throwIfAgentIsNul("newRemoteObject call failed");
+
         return new PNPRemoteObject(target, null, agent);
     }
 
@@ -114,6 +125,8 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
      */
     public RemoteRemoteObject register(InternalRemoteRemoteObject ro, URI uri, boolean replacePrevious)
             throws ProActiveException {
+        throwIfAgentIsNul("register call failed");
+
         this.registry.bind(URIBuilder.getNameFromURI(uri), ro, replacePrevious); // throw a ProActiveException if needed
         PNPRemoteObject rro = new PNPRemoteObject(ro, uri, agent);
         if (logger.isDebugEnabled()) {
@@ -142,6 +155,8 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
      */
     @SuppressWarnings("unchecked")
     public RemoteObject lookup(URI uri) throws ProActiveException {
+        throwIfAgentIsNul("lookup call failed");
+
         String name = URIBuilder.getNameFromURI(uri);
         PNPROMessageLookup message = new PNPROMessageLookup(uri, name, agent);
         try {
@@ -176,6 +191,8 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
      * org.objectweb.proactive.core.body.BodyAdapterImpl#list(java.lang.String)
      */
     public URI[] list(URI uri) throws ProActiveException {
+        throwIfAgentIsNul("list call failed");
+
         PNPROMessageListRemoteObjectsMessage message = new PNPROMessageListRemoteObjectsMessage(uri, agent);
         try {
             message.send();
@@ -202,6 +219,7 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
 
     public InternalRemoteRemoteObject createRemoteObject(RemoteObject<?> remoteObject, String name,
             boolean rebind) throws ProActiveException {
+        throwIfAgentIsNul("createRemoteObject call failed");
 
         try {
             // Must be a fixed path
@@ -228,12 +246,19 @@ public class PNPRemoteObjectFactory extends AbstractRemoteObjectFactory implemen
     }
 
     public URI getBaseURI() {
-        return URI.create(this.getProtocolId() + "://" +
-            URIBuilder.getHostNameorIP(this.agent.getInetAddress()) + ":" + this.agent.getPort() + "/");
+        final URI uri;
+        if (this.agent == null) {
+            uri = URI.create(this.getProtocolId() + "://pnp-failed-to-initialize-invalid-url/");
+        } else {
+            uri = URI.create(this.getProtocolId() + "://" +
+                URIBuilder.getHostNameorIP(this.agent.getInetAddress()) + ":" + this.agent.getPort() + "/");
+        }
+
+        return uri;
     }
 
     public int getPort() {
-        return this.agent.getPort();
+        return this.agent == null ? -1 : this.agent.getPort();
     }
 
     public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {

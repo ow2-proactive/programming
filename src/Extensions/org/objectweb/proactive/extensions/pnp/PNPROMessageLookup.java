@@ -39,6 +39,7 @@ package org.objectweb.proactive.extensions.pnp;
 import java.io.Serializable;
 import java.net.URI;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
@@ -101,6 +102,10 @@ class PNPROMessageLookup extends PNPROMessage implements Serializable {
                 } catch (UnknownProtocolException e) {
                     // Impossible because that class has been created by the factory
                     ProActiveLogger.logImpossibleException(logger, e);
+                } catch (ProActiveException e) {
+                    // newRemoteObject failed (rof failed to initialize ?)
+                    logger.info("PNP failed to create the remote object after lookup: " + uri, e);
+                    return null;
                 }
             } else {
                 logger.info("Someone performed a lookup on " + uri + " but this remote object is not known");
