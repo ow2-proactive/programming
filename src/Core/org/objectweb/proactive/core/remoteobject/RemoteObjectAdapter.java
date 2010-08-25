@@ -198,17 +198,13 @@ public class RemoteObjectAdapter implements RemoteObject {
 
             return (TypedCertificate) reply.getResult().getResult();
         } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e1);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -226,18 +222,14 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (Entities) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -252,18 +244,14 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (SecurityContext) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -277,18 +265,14 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (PublicKey) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -303,18 +287,12 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (byte[]) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -329,18 +307,12 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (byte[]) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -357,18 +329,12 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (byte[][]) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -384,19 +350,14 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return ((Long) reply.getResult().getResult()).longValue();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
+
         return 0;
     }
 
@@ -407,18 +368,12 @@ public class RemoteObjectAdapter implements RemoteObject {
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
     }
 
@@ -435,18 +390,12 @@ public class RemoteObjectAdapter implements RemoteObject {
 
                 this.stub = reply.getResult().getResult();
                 ((StubObject) this.stub).setProxy(new SynchronousProxy(null, new Object[] { this }));
-            } catch (SecurityException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (ProActiveException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (SecurityException e) {
+                LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
             } catch (RenegotiateSessionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
             }
         }
         return this.stub;
@@ -468,18 +417,14 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (String) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
 
         return null;
@@ -495,14 +440,11 @@ public class RemoteObjectAdapter implements RemoteObject {
 
             return (String) reply.getResult().getResult();
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -519,14 +461,11 @@ public class RemoteObjectAdapter implements RemoteObject {
             RemoteObjectSet ros = (RemoteObjectSet) reply.getResult().getResult();
             return ros;
         } catch (ProActiveException pae) {
-            // TODO Auto-generated catch block
-            pae.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", pae);
         } catch (IOException ioe) {
-            // TODO Auto-generated catch block
-            ioe.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", ioe);
         } catch (RenegotiateSessionException rse) {
-            // TODO Auto-generated catch block
-            rse.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", rse);
         }
         return null;
     }
@@ -566,14 +505,11 @@ public class RemoteObjectAdapter implements RemoteObject {
 
             return (Class<?>) reply.getResult().getResult();
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -587,15 +523,8 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (Class<?>) reply.getResult().getResult();
-        } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -610,18 +539,12 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
 
             return (ProActiveSecurityManager) reply.getResult().getResult();
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -634,18 +557,12 @@ public class RemoteObjectAdapter implements RemoteObject {
             Request r = new InternalRemoteRemoteObjectRequest(mc);
 
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
-        } catch (SecurityException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SecurityException e) {
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return;
     }
@@ -700,14 +617,11 @@ public class RemoteObjectAdapter implements RemoteObject {
 
             return (RemoteObjectProperties) reply.getResult().getResult();
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
@@ -723,14 +637,11 @@ public class RemoteObjectAdapter implements RemoteObject {
             SynchronousReplyImpl reply = (SynchronousReplyImpl) this.receiveMessage(r);
             return (Adapter) reply.getResult().getResult();
         } catch (ProActiveException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         } catch (RenegotiateSessionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER_RO.info("exception in remote object adapter while forwarding the method call", e);
         }
         return null;
     }
