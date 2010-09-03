@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/env bash
 
 workingDir=`dirname $0`
 . $workingDir/env.sh
