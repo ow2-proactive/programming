@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 # This script starts the default fault tolerance server. See org.objectweb.proactive.core.body.ft.servers.StartFTServer
 # Usage : startGlobalFTServer [-proto cic|pml] [-name name] [-port portnumber] [-fdperiod faultDetectionPeriod (sec)] 
 workingDir=`dirname $0`

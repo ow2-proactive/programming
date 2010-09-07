@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # This script may be used to launch a Fractal/GCM component application 
 # describe with an ADL.
 # Usage:  

@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/usr/bin/env bash
 #
 # This script kills all the ProActive Runtimes running on this machines
 
