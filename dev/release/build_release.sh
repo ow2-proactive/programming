@@ -48,13 +48,13 @@ fi
 export JAVA_HOME=${JAVA_HOME}
 
 
-TMP_DIR="${TMP}/ProActive-${VERSION}"
-output=$(mkdir ${TMP_DIR} 2>&1)
+TMP_DIR="${TMP}/ProActiveProgramming-${VERSION}_core"
+output=$(mkdir "${TMP_DIR}" 2>&1)
 if [ "$?" -ne 0 ] ; then
 	if [ -e ${TMP_DIR} ] ; then
 		echo " [w] ${TMP_DIR} already exists. Delete it !"
 		rm -Rf ${TMP_DIR}
-		mkdir ${TMP_DIR}
+		mkdir "${TMP_DIR}"
 		if [ "$?" -ne 0 ] ; then
 			warn_and_exit "Cannot create ${TMP_DIR}: $output"
 		fi
@@ -66,7 +66,7 @@ fi
 cp -Rf ${PROACTIVE_DIR} ${TMP_DIR}
 
 cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
-if [ "$(find src/ -name "*.java" | xargs grep serialVersionUID | grep -v `echo $VERSION | sed 's@\(.\)\.\(.\)\..@\1\2@'` | wc -l)" -gt 0 ] ; then
+if [ "$(find src/ -name "*.java" | xargs grep serialVersionUID | grep -v 430 | wc -l)" -gt 0 ] ; then
 	if [ -z "${RELAX}" ] ; then
 		warn_and_exit " [E] serialVersionUID are NOT defined"
 	fi
@@ -103,5 +103,5 @@ rm -Rf doc/ic2d
 sed -i "s/{version}/$VERSION/" README.txt
 
 cd ${TMP}
-tar cvfz ProActive-${VERSION}.tar.gz ProActive-${VERSION}
-zip -r   ProActive-${VERSION}.zip    ProActive-${VERSION}
+tar cvfz ProActiveProgramming-${VERSION}_core.tar.gz ProActiveProgramming-${VERSION}_core
+zip -r   ProActiveProgramming-${VERSION}_core.zip    ProActiveProgramming-${VERSION}_core
