@@ -220,14 +220,7 @@ class Main {
                 }
 
                 arg = line.getOptionValue("i");
-                if (arg == null) {
-                    try {
-                        InetAddress addr = InetAddress.getLocalHost();
-                        config.setInetAddress(addr);
-                    } catch (UnknownHostException e) {
-                        printHelpAndExit(e);
-                    }
-                } else {
+                if (arg != null) { // null by defaul is ok -> wildcard !
                     try {
                         InetAddress addr = InetAddress.getByName(arg);
                         config.setInetAddress(addr);
