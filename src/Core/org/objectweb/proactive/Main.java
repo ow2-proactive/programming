@@ -54,7 +54,7 @@ public class Main {
      * @return String
      */
     public static String getProActiveVersion() {
-        return "4.3.0"; // Because much higher is much more better
+        return "4.3.2"; // Because much higher is much more better
     }
 
     public static void main(String[] args) {
