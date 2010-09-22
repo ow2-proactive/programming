@@ -42,6 +42,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.security.AccessControlException;
@@ -1587,5 +1588,62 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
     public void setVMName(String vmName) {
         vmInformation.vmName = vmName;
+    }
+
+    public static void main(String[] args) throws ProActiveException {
+        System.out.println(getProActiveRuntime().getProActiveHome());
+    }
+
+    /**
+     * Returns the path to the proactive home
+     * 
+     * This method is quite expensive if {@link CentralPAPropertyRepository#PA_HOME} is not set.
+     * If called often, the value returned by this method should be set as value of PA_HOME. 
+     * This method has no side effect.
+     * 
+     * 
+     * 
+     * @since ProActive 4.4.0
+     * 
+     * @return The value of {@link CentralPAPropertyRepository#PA_HOME} if it is set. Otherwise
+     * the path is computed according to the class or jar location. 
+     * 
+     * @throws ProActiveException If the path of the ProActive home cannot be computed or if 
+     * the home is remote (only file and jar protocols are supported)
+     */
+    public String getProActiveHome() throws ProActiveException {
+        if (CentralPAPropertyRepository.PA_HOME.isSet()) {
+            return CentralPAPropertyRepository.PA_HOME.getValue();
+        } else {
+            // Guess the location by using the classloader
+            final URL url = this.getClass().getResource(this.getClass().getSimpleName() + ".class");
+            final String path = url.getPath();
+
+            if ("jar".equals(url.getProtocol())) {
+                int begin = path.indexOf("file:");
+                int end = path.indexOf(".jar!");
+                if (begin != 0 || end < 0) {
+                    throw new ProActiveException("Unable to find ProActive home. Bad jar url: " + url);
+                }
+
+                end = path.indexOf("dist/lib/ProActive.jar!");
+                if (end < 0) {
+                    throw new ProActiveException("Unable to find ProActive home. Unexpected jar name: " + url);
+                }
+
+                return path.substring(5, end);
+            } else if ("file".equals(url.getProtocol())) {
+                int index = path.indexOf("classes/Core/" + this.getClass().getName().replace('.', '/') +
+                    ".class");
+                if (index > 0) {
+                    return path.substring(0, index);
+                } else {
+                    throw new ProActiveException(
+                        "Unable to find ProActive home. Running from class files but non standard repository layout");
+                }
+            } else {
+                throw new ProActiveException("Unable to find ProActive home. Unspported protocol: " + url);
+            }
+        }
     }
 }
