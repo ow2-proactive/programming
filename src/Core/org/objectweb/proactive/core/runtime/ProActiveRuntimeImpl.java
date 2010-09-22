@@ -1590,10 +1590,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         vmInformation.vmName = vmName;
     }
 
-    public static void main(String[] args) throws ProActiveException {
-        System.out.println(getProActiveRuntime().getProActiveHome());
-    }
-
     /**
      * Returns the path to the proactive home
      * 
