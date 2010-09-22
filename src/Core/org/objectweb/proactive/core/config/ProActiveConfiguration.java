@@ -291,4 +291,8 @@ public class ProActiveConfiguration {
     private Properties getsystemProperties() {
         return System.getProperties();
     }
+
+    public void unsetProperty(String name) {
+        this.properties.remove(name);
+    }
 }

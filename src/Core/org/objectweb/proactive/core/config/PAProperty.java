@@ -118,6 +118,15 @@ abstract public class PAProperty {
     }
 
     /**
+     * Unset the property 
+     * 
+     * @since ProActive 4.4.0
+     */
+    public void unset() {
+        ProActiveConfiguration.getInstance().unsetProperty(this.name);
+    }
+
+    /**
      * Returns the string to be passed on the command line
      *
      * The property surrounded by '-D' and '='
