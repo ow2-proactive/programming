@@ -402,17 +402,20 @@ public class PNPAgent {
                 if (cf.isSuccess()) {
                     logger.trace("Successfully advertised the heartbeat period to the server");
                 } else {
-                    throw new PNPIOException("Failed to advertise the heartbeat period to the server");
+                    throw new PNPIOException("Failed to advertise the heartbeat period to the server", cf
+                            .getCause());
                 }
             } else {
                 if (cf.cancel()) {
                     throw new PNPIOException(
-                        "Failed to advertise the heartbeat period to the server (timeout reached)");
+                        "Failed to advertise the heartbeat period to the server (timeout reached)", cf
+                                .getCause());
                 } else {
                     if (cf.isSuccess()) {
                         logger.trace("Successfully advertised the heartbeat period to the server");
                     } else {
-                        throw new PNPIOException("Failed to advertise the heartbeat period to the server");
+                        throw new PNPIOException("Failed to advertise the heartbeat period to the server", cf
+                                .getCause());
                     }
                 }
             }
