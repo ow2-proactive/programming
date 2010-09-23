@@ -63,7 +63,7 @@ class PNPRegistry {
 
     private PNPRegistry() {
         if (logger.isTraceEnabled()) {
-            logger.trace("Starting the registry for the message routing protocol");
+            logger.trace("Starting the registry for the PNP protocol");
         }
         this.rRemteObjectMap = new ConcurrentHashMap<String, InternalRemoteRemoteObject>();
     }
