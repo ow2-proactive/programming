@@ -135,6 +135,7 @@ public class PNPAgent {
             SocketAddress sa = this.serverChannel.getLocalAddress();
             if (sa instanceof InetSocketAddress) {
                 port = ((InetSocketAddress) sa).getPort();
+                logger.debug("PNP is listening on " + sa);
             } else {
                 throw new PNPException(
                     "Failed to setup the server side of PNP. The SocketAddress is not an InetSocketAddress");
