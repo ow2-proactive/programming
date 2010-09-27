@@ -340,10 +340,11 @@ public class RemoteObjectSet implements Serializable, Observer {
                     ois.close();
             }
         }
-        
+
         try {
             this.defaultURI = (URI) in.readObject();
-            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI.getScheme());
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI
+                    .getScheme());
             buf = (byte[]) in.readObject();
             ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
             RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
@@ -354,7 +355,7 @@ public class RemoteObjectSet implements Serializable, Observer {
             if (ois != null)
                 ois.close();
         }
-        
+
         VMID testLocal = ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getVMID();
         if (!vmid.equals(testLocal)) {
             this.vmid = testLocal;
@@ -409,10 +410,11 @@ public class RemoteObjectSet implements Serializable, Observer {
                     oos.close();
             }
         }
-        
+
         try {
             out.writeObject(this.defaultURI);
-            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI.getScheme());
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI
+                    .getScheme());
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             oos = rof.getProtocolObjectOutputStream(baos);
             oos.writeObject(this.defaultRO);
@@ -424,7 +426,7 @@ public class RemoteObjectSet implements Serializable, Observer {
             if (oos != null)
                 oos.close();
         }
-        
+
     }
 
     /**
