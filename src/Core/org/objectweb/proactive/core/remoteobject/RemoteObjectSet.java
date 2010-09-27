@@ -78,13 +78,13 @@ public class RemoteObjectSet implements Serializable, Observer {
     // * Use LinkedHashMap for keeping the insertion-order
     private transient LinkedHashMap<URI, RemoteRemoteObject> rros;
     private HashSet<RemoteRemoteObject> unreliables;
-    private RemoteRemoteObject defaultRO;
+    private transient RemoteRemoteObject defaultRO;
     private static Method getURI;
     private String[] order = new String[] {};
     private String remoteRuntimeName;
     private RemoteRemoteObject forcedProtocol = null;
     private VMID vmid = null;
-    private URI defaultURI = null;
+    private transient URI defaultURI = null;
 
     static {
         try {
@@ -340,6 +340,21 @@ public class RemoteObjectSet implements Serializable, Observer {
                     ois.close();
             }
         }
+        
+        try {
+            this.defaultURI = (URI) in.readObject();
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI.getScheme());
+            buf = (byte[]) in.readObject();
+            ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
+            RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
+            this.defaultRO = rro;
+        } catch (UnknownProtocolException e) {
+            ProActiveLogger.logImpossibleException(LOGGER_RO, e);
+        } finally {
+            if (ois != null)
+                ois.close();
+        }
+        
         VMID testLocal = ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getVMID();
         if (!vmid.equals(testLocal)) {
             this.vmid = testLocal;
@@ -394,6 +409,22 @@ public class RemoteObjectSet implements Serializable, Observer {
                     oos.close();
             }
         }
+        
+        try {
+            out.writeObject(this.defaultURI);
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI.getScheme());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            oos = rof.getProtocolObjectOutputStream(baos);
+            oos.writeObject(this.defaultRO);
+            oos.flush();
+            out.writeObject(baos.toByteArray());
+        } catch (UnknownProtocolException e) {
+            ProActiveLogger.logImpossibleException(LOGGER_RO, e);
+        } finally {
+            if (oos != null)
+                oos.close();
+        }
+        
     }
 
     /**
