@@ -6,7 +6,7 @@
 
 CLASSPATH=.
 
-# User envrionment variable
+# User environment variable
 if [ ! -z "$PROACTIVE_HOME" ] ; then
 	PROACTIVE=$PROACTIVE_HOME
 fi
@@ -27,7 +27,7 @@ JAVA_HOME=${JAVA_HOME-NULL};
 if [ "$JAVA_HOME" = "NULL" ]
 then
 echo
-echo "The enviroment variable JAVA_HOME must be set the current jdk distribution"
+echo "The environment variable JAVA_HOME must be set the current jdk distribution"
 echo "installed on your computer."
 echo "Use "
 echo "    export JAVA_HOME=<the directory where is the JDK>"
