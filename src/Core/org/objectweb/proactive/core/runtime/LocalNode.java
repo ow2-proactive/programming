@@ -104,8 +104,8 @@ public class LocalNode implements SecurityEntity {
      * @param replacePreviousBinding if a node existing with the same name in the registry, replace it
      * @throws ProActiveException
      */
-    public LocalNode(String nodeName, ProActiveSecurityManager securityManager,
-            String virtualNodeName, boolean replacePreviousBinding) throws ProActiveException {
+    public LocalNode(String nodeName, ProActiveSecurityManager securityManager, String virtualNodeName,
+            boolean replacePreviousBinding) throws ProActiveException {
         this.name = nodeName;
         this.securityManager = securityManager;
         this.virtualNodeName = virtualNodeName;
