@@ -37,7 +37,6 @@
 package org.objectweb.proactive.core.body;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
-import org.objectweb.proactive.Job;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.exceptions.HalfBodyException;
@@ -93,7 +92,7 @@ public class HalfBody extends AbstractBody {
     // -- CONSTRUCTORS -----------------------------------------------
     //
     private HalfBody(MetaObjectFactory factory) throws ActiveObjectCreationException, NodeException {
-        super(null, NodeFactory.getHalfBodiesNode().getNodeInformation().getURL(), factory, Job.DEFAULT_JOBID);
+        super(null, NodeFactory.getHalfBodiesNode().getNodeInformation().getURL(), factory);
 
         //SECURITY
         if (this.securityManager == null) {
@@ -203,14 +202,6 @@ public class HalfBody extends AbstractBody {
     @Override
     public boolean isInImmediateService() {
         throw new HalfBodyException();
-    }
-
-    /**
-     *  @see org.objectweb.proactive.Job#getJobID()
-     */
-    @Override
-    public String getJobID() {
-        return jobID;
     }
 
     public void updateNodeURL(String newNodeURL) {

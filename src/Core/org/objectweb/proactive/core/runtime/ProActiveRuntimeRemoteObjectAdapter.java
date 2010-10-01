@@ -121,9 +121,9 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
     }
 
     public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
-            ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId) throws NodeException,
+            ProActiveSecurityManager nodeSecurityManager, String vnName) throws NodeException,
             AlreadyBoundException {
-        return target.createLocalNode(nodeName, replacePreviousBinding, nodeSecurityManager, vnName, jobId);
+        return target.createLocalNode(nodeName, replacePreviousBinding, nodeSecurityManager, vnName);
     }
 
     public void createVM(UniversalProcess remoteProcess) throws IOException, ProActiveException {
@@ -149,10 +149,6 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
 
     public ServerConnector getJMXServerConnector() {
         return target.getJMXServerConnector();
-    }
-
-    public String getJobID(String nodeUrl) throws ProActiveException {
-        return target.getJobID(nodeUrl);
     }
 
     public String[] getLocalNodeNames() throws ProActiveException {
@@ -314,9 +310,9 @@ public class ProActiveRuntimeRemoteObjectAdapter extends Adapter<ProActiveRuntim
         target.terminateSession(sessionID);
     }
 
-    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId,
+    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName,
             List<TechnicalService> tsList) throws NodeException, AlreadyBoundException {
-        return target.createGCMNode(nodeSecurityManager, vnName, jobId, tsList);
+        return target.createGCMNode(nodeSecurityManager, vnName, tsList);
     }
 
     public byte[] getClassData(String className) {

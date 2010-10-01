@@ -54,8 +54,8 @@ public class TestEquals extends FunctionalTest {
 
     @Test
     public void test() throws NodeException, AlreadyBoundException {
-        Node node1 = NodeFactory.createLocalNode("node1", false, null, null, null);
-        Node node2 = NodeFactory.createLocalNode("node2", false, null, null, null);
+        Node node1 = NodeFactory.createLocalNode("node1", false, null, null);
+        Node node2 = NodeFactory.createLocalNode("node2", false, null, null);
 
         VMInformation localVM1 = node1.getVMInformation();
         VMInformation localVM2 = node2.getVMInformation();

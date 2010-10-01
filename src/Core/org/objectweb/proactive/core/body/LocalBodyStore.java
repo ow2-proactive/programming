@@ -314,7 +314,7 @@ public class LocalBodyStore {
             ProActiveRuntimeWrapperMBean mbean = ProActiveRuntimeImpl.getProActiveRuntime().getMBean();
             if (mbean != null) {
                 mbean.sendNotification(NotificationType.bodyCreated, new BodyNotificationData(body.getID(),
-                    body.getJobID(), body.getNodeURL(), body.getName()));
+                    body.getNodeURL(), body.getName()));
             }
         }
 
@@ -329,7 +329,7 @@ public class LocalBodyStore {
             ProActiveRuntimeWrapperMBean mbean = ProActiveRuntimeImpl.getProActiveRuntime().getMBean();
             if (mbean != null) {
                 mbean.sendNotification(NotificationType.bodyDestroyed, new BodyNotificationData(body.getID(),
-                    body.getJobID(), body.getNodeURL(), body.getName()));
+                    body.getNodeURL(), body.getName()));
             }
         }
 

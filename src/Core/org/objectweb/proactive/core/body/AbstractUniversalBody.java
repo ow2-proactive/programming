@@ -86,7 +86,6 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     /** A remote version of this body that is used to send to remote peer */
     protected transient UniversalBody remoteBody;
 
-    protected String jobID;
     protected Map<ItfID, Shortcut> shortcuts = null; // key = functionalItfID, value=shortcut
 
     protected transient RemoteObjectExposer<UniversalBody> roe;
@@ -108,14 +107,11 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     /**
      * Creates a new AbstractBody for an active object attached to a given node.
      * @param nodeURL the URL of the node that body is attached to
-     * @param remoteBodyFactory the factory able to construct new factories for each type of meta objects
-     *                needed by this body
      */
-    public AbstractUniversalBody(String nodeURL, String jobID) throws ActiveObjectCreationException {
+    public AbstractUniversalBody(String nodeURL) throws ActiveObjectCreationException {
         this.nodeURL = nodeURL;
         this.bodyID = new UniqueID();
         this.location = new BodyMap();
-        this.jobID = jobID;
 
         this.roe = new RemoteObjectExposer<UniversalBody>(UniversalBody.class.getName(), this,
             UniversalBodyRemoteObjectAdapter.class);
@@ -135,9 +131,6 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
     //
     // -- implements UniversalBody -----------------------------------------------
     //
-    public String getJobID() {
-        return this.jobID;
-    }
 
     public String getUrl() {
         return this.roe.getURL();

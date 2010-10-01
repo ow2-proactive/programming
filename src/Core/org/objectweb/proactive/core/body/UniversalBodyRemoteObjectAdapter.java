@@ -70,10 +70,6 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
      */
     protected UniqueID bodyID;
 
-    /**
-     * Cache the jobID locally for speed
-     */
-    protected String jobID;
     protected int hashcode;
 
     public UniversalBodyRemoteObjectAdapter() {
@@ -90,7 +86,6 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
     @Override
     protected void construct() {
         this.bodyID = target.getID();
-        this.jobID = target.getJobID();
         this.hashcode = target.hashCode();
     }
 
@@ -136,13 +131,6 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
     @Override
     public int hashCode() {
         return hashcode;
-    }
-
-    /**
-     * @see org.objectweb.proactive.Job#getJobID()
-     */
-    public String getJobID() {
-        return jobID;
     }
 
     public void disableAC() throws IOException {

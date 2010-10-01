@@ -38,7 +38,6 @@ package org.objectweb.proactive.core.descriptor.data;
 
 import java.io.Serializable;
 
-import org.objectweb.proactive.Job;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
@@ -56,7 +55,7 @@ import org.objectweb.proactive.core.node.NodeException;
  * @see VirtualMachine
  */
 @PublicAPI
-public interface VirtualNode extends Job, Serializable {
+public interface VirtualNode extends Serializable {
     /**
      * This method can be used to access to the internal view of this VirtualNode.
      * 

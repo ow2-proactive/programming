@@ -38,7 +38,6 @@ package org.objectweb.proactive.core.node;
 
 import java.io.Serializable;
 
-import org.objectweb.proactive.Job;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.runtime.VMInformation;
 
@@ -55,7 +54,7 @@ import org.objectweb.proactive.core.runtime.VMInformation;
  * @see VMInformation
  */
 @PublicAPI
-public interface NodeInformation extends Serializable, Job {
+public interface NodeInformation extends Serializable {
 
     /**
      * Returns the name of the node
@@ -68,14 +67,6 @@ public interface NodeInformation extends Serializable, Job {
      * @return the complete URL of the node
      */
     public String getURL();
-
-    /**
-     * Change the Job ID of this node.
-     * @param jobId The new JobID
-     *
-     * TODO: Describe what Job ID is !
-     */
-    public void setJobID(String jobId);
 
     /**
      * Returns informations about the Runtime running this node

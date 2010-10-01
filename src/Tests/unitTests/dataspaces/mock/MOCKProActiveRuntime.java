@@ -90,13 +90,13 @@ public class MOCKProActiveRuntime implements ProActiveRuntime {
         return null;
     }
 
-    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId,
+    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName,
             List<TechnicalService> tsList) throws NodeException, AlreadyBoundException {
         return null;
     }
 
     public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
-            ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId) throws NodeException,
+            ProActiveSecurityManager nodeSecurityManager, String vnName) throws NodeException,
             AlreadyBoundException {
 
         return null;

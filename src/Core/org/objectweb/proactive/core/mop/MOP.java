@@ -1164,7 +1164,7 @@ public abstract class MOP {
             Object[] constructorParameters, Node node, Active activity, MetaObjectFactory factory)
             throws MOPException {
         return createStubObject(className, genericParameters, constructorParameters, new Object[] { node,
-                activity, factory, PAActiveObject.getJobId() });
+                activity, factory });
     }
 
     private static Object createStubObject(String className, Class<?>[] genericParameters,
@@ -1180,8 +1180,8 @@ public abstract class MOP {
     public static Object createStubObject(Object target, String nameOfTargetType,
             Class<?>[] genericParameters, Node node, Active activity, MetaObjectFactory factory)
             throws MOPException {
-        return createStubObject(target, new Object[] { node, activity, factory, PAActiveObject.getJobId() },
-                nameOfTargetType, genericParameters);
+        return createStubObject(target, new Object[] { node, activity, factory }, nameOfTargetType,
+                genericParameters);
     }
 
     public static StubObject createStubObject(Object object, Object[] proxyParameters,

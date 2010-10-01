@@ -75,7 +75,7 @@ public class FakeNode {
 
         Node node = null;
         if (!created) {
-            String jobIb = new Long(gcma.getDeploymentId()).toString();
+            //            String jobIb = new Long(gcma.getDeploymentId()).toString();
 
             try {
 
@@ -86,7 +86,7 @@ public class FakeNode {
                             .generateSiblingCertificate(EntityType.NODE, vn.getName());
                 }
 
-                node = part.createGCMNode(siblingPSM, vn.getName(), jobIb, tsList);
+                node = part.createGCMNode(siblingPSM, vn.getName(), tsList);
                 if (node == null) {
                     // Remote Object failed to contact the Runtime and returned null
                     // instead of throwing an exception

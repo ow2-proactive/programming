@@ -38,8 +38,8 @@ package org.objectweb.proactive.core.body;
 
 import java.io.IOException;
 import java.io.Serializable;
+
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.Job;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.ft.internalmsg.FTMessage;
@@ -67,7 +67,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @see org.objectweb.proactive.core.body.rmi.RmiBodyAdapter
  */
 //@snippet-start universalbody
-public interface UniversalBody extends Job, Serializable, SecurityEntity {
+public interface UniversalBody extends Serializable, SecurityEntity {
     public static Logger bodyLogger = ProActiveLogger.getLogger(Loggers.BODY);
     public static Logger sendReplyExceptionsLogger = ProActiveLogger.getLogger(Loggers.EXCEPTIONS_SEND_REPLY);
 

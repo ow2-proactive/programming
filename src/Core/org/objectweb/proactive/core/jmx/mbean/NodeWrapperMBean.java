@@ -92,18 +92,6 @@ public interface NodeWrapperMBean extends Serializable {
     public String getVirtualNodeName();
 
     /**
-     * Returns the jobId.
-     * @return The jobId.
-     */
-    public String getJobId();
-
-    /**
-     * Returns an array of 2 strings: the jobId and the virtualNodeName.
-     * @return An array of 2 strings: the jobId and the virtualNodeName
-     */
-    public String[] getJobIdAndVirtualNodeName();
-
-    /**
      * Returns the security manager.
      * @param user
      * @return the security manager

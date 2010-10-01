@@ -176,7 +176,7 @@ public class PADeployment {
             if (!hierarchicalSearch) {
                 //if not hierarchical search, we assume that the descriptor might has been
                 //register with the default jobID
-                pad = part.getDescriptor(xmlDescriptorUrl + PAActiveObject.getJobId(), hierarchicalSearch);
+                pad = part.getDescriptor(xmlDescriptorUrl, hierarchicalSearch);
             } else {
                 pad = part.getDescriptor(xmlDescriptorUrl, hierarchicalSearch);
             }
@@ -238,7 +238,7 @@ public class PADeployment {
             if (!hierarchicalSearch) {
                 //if not hierarchical search, we assume that the descriptor might has been
                 //register with the default jobID
-                pad = part.getDescriptor(xmlDescriptorUrl + PAActiveObject.getJobId(), hierarchicalSearch);
+                pad = part.getDescriptor(xmlDescriptorUrl, hierarchicalSearch);
             } else {
                 pad = part.getDescriptor(xmlDescriptorUrl, hierarchicalSearch);
             }

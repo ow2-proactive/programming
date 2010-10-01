@@ -224,9 +224,9 @@ public abstract class AbstractBody extends AbstractUniversalBody implements Body
      *            the factory able to construct new factories for each type of meta objects needed
      *            by this body
      */
-    public AbstractBody(Object reifiedObject, String nodeURL, MetaObjectFactory factory, String jobId)
+    public AbstractBody(Object reifiedObject, String nodeURL, MetaObjectFactory factory)
             throws ActiveObjectCreationException {
-        super(nodeURL, jobId);
+        super(nodeURL);
 
         this.threadStore = factory.newThreadStoreFactory().newThreadStore();
 

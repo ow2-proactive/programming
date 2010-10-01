@@ -151,11 +151,10 @@ public class UniversalBodyProxy extends AbstractBodyProxy implements java.io.Ser
                 // added lines----------------------------
                 Active activity = (Active) parameters[1];
                 MetaObjectFactory factory = (MetaObjectFactory) parameters[2];
-                String jobID = (String) parameters[3];
                 Class<?>[] argsClass = new Class<?>[] { ConstructorCall.class, String.class, Active.class,
-                        MetaObjectFactory.class, String.class };
+                        MetaObjectFactory.class };
                 Object[] args = new Object[] { constructorCall, node.getNodeInformation().getURL(), activity,
-                        factory, jobID };
+                        factory };
 
                 // added lines--------------------------
                 // Object[] args = new Object[] { constructorCall,

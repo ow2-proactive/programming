@@ -136,17 +136,6 @@ public class NodeWrapper extends NotificationBroadcasterSupport implements Seria
         return localNode.getVirtualNodeName();
     }
 
-    public String getJobId() {
-        return localNode.getJobId();
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.jmx.mbean.NodeWrapperMBean#getJobIdAndVirtualNodeName()
-     */
-    public String[] getJobIdAndVirtualNodeName() {
-        return new String[] { this.localNode.getJobId(), this.localNode.getVirtualNodeName() };
-    }
-
     public void sendNotification(String type) {
         sendNotification(type, null);
     }

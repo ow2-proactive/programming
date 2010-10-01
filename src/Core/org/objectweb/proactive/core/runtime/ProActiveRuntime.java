@@ -41,8 +41,8 @@ import java.rmi.AlreadyBoundException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.globus.ogce.broker.util.jobset.Job;
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.Job;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.ft.checkpointing.Checkpoint;
@@ -95,17 +95,15 @@ public interface ProActiveRuntime extends SecurityEntity {
      * Creates a new Node in the same VM as this ProActiveRuntime
      * @param nodeName the name of the node to create localy
      * @param replacePreviousBinding
-     * @param jobId the jobId of this node. If null the node will belong to
-     *         the default jobID
      * @return the url of the newly created node in the target VM
      * @exception NodeException if the new node cannot be created
      * @see Job
      */
     public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
-            ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId) throws NodeException,
+            ProActiveSecurityManager nodeSecurityManager, String vnName) throws NodeException,
             AlreadyBoundException;
 
-    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId,
+    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName,
             List<TechnicalService> tsList) throws NodeException, AlreadyBoundException;
 
     /**
@@ -248,13 +246,6 @@ public interface ProActiveRuntime extends SecurityEntity {
      * @exception ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
      */
     public void unregisterAllVirtualNodes() throws ProActiveException;
-
-    /**
-     * @param nodeUrl
-     * @return the jobId of the node with the given name
-     * @exception ProActiveException if a problem occurs due to the remote nature of this ProActiveRuntime
-     */
-    public String getJobID(String nodeUrl) throws ProActiveException;
 
     /**
      * <p>

@@ -102,11 +102,11 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
     /**
      * Builds the body object, then fires its service thread
      */
-    public ActiveBody(ConstructorCall c, String nodeURL, Active activity, MetaObjectFactory factory,
-            String jobID) throws java.lang.reflect.InvocationTargetException,
-            ConstructorCallExecutionFailedException, ActiveObjectCreationException {
+    public ActiveBody(ConstructorCall c, String nodeURL, Active activity, MetaObjectFactory factory)
+            throws java.lang.reflect.InvocationTargetException, ConstructorCallExecutionFailedException,
+            ActiveObjectCreationException {
         // Creates the reified object
-        super(c.execute(), nodeURL, activity, factory, jobID);
+        super(c.execute(), nodeURL, activity, factory);
 
         Object reifiedObject = this.localBodyStrategy.getReifiedObject();
 

@@ -479,7 +479,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      *      ProActiveSecurityManager, String, String)
      */
     public Node createLocalNode(String nodeName, boolean replacePreviousBinding,
-            ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId) throws NodeException,
+            ProActiveSecurityManager nodeSecurityManager, String vnName) throws NodeException,
             AlreadyBoundException {
 
         if (!replacePreviousBinding && (this.nodeMap.get(nodeName) != null)) {
@@ -493,7 +493,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         }
 
         try {
-            LocalNode localNode = new LocalNode(nodeName, jobId, nodeSecurityManager, vnName,
+            LocalNode localNode = new LocalNode(nodeName, nodeSecurityManager, vnName,
                 replacePreviousBinding);
             if (replacePreviousBinding && (this.nodeMap.get(nodeName) != null)) {
                 localNode.setActiveObjects(this.nodeMap.get(nodeName).getActiveObjectsId());
@@ -505,7 +505,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             Node node = null;
             try {
                 node = new NodeImpl((ProActiveRuntime) PARemoteObject.lookup(URI.create(localNode.getURL())),
-                    localNode.getURL(), jobId);
+                    localNode.getURL());
             } catch (ProActiveException e) {
                 throw new NodeException("Failed to created NodeImpl", e);
             }
@@ -516,7 +516,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
     }
 
-    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName, String jobId,
+    public Node createGCMNode(ProActiveSecurityManager nodeSecurityManager, String vnName,
             List<TechnicalService> tsList) throws NodeException, AlreadyBoundException {
 
         if (gcmNodes >= vmInformation.capacity) {
@@ -526,7 +526,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         String nodeName = this.vmInformation.getName() + "_" + Constants.GCM_NODE_NAME + gcmNodes;
         Node node = null;
         try {
-            node = createLocalNode(nodeName, false, nodeSecurityManager, vnName, jobId);
+            node = createLocalNode(nodeName, false, nodeSecurityManager, vnName);
             for (TechnicalService ts : tsList) {
                 ts.apply(node);
             }
@@ -538,7 +538,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             // Should not happen, log it and delete the old node
             logger.warn(nodeName + "is already registered... replacing it !");
             try {
-                createLocalNode(nodeName, true, null, vnName, null);
+                createLocalNode(nodeName, true, null, vnName);
             } catch (NodeException e1) {
                 logger.warn("Failed to create a capacity node", e1);
             } catch (AlreadyBoundException e1) {
@@ -794,18 +794,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
     public void unregisterAllVirtualNodes() {
         this.virtualNodesMap.clear();
-    }
-
-    /**
-     * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#getJobID(java.lang.String)
-     */
-    public String getJobID(String nodeUrl) throws ProActiveException {
-        String name = URIBuilder.getNameFromURI(nodeUrl);
-        LocalNode localNode = this.nodeMap.get(name);
-        if (localNode == null) {
-            throw new ProActiveException("Node " + nodeUrl + " does not exist on the local runtime");
-        }
-        return localNode.getJobId();
     }
 
     public List<UniversalBody> getActiveObjects(String nodeName, String className) {

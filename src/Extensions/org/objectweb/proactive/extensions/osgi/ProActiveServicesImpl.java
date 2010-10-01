@@ -146,7 +146,7 @@ public class ProActiveServicesImpl implements ProActiveService {
      */
     private void createNode() {
         try {
-            this.node = NodeFactory.createLocalNode(OSGI_NODE_NAME, true, null, null, null);
+            this.node = NodeFactory.createLocalNode(OSGI_NODE_NAME, true, null, null);
         } catch (NodeException e) {
             e.printStackTrace();
         } catch (AlreadyBoundException e) {

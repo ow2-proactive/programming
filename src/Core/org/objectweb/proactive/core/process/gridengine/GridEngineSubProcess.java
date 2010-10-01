@@ -82,7 +82,6 @@ public class GridEngineSubProcess extends AbstractExternalProcessDecorator {
     protected String interactive = "false";
     protected String outputFile;
     protected String errorFile;
-    protected int jobID;
     protected String queueName;
     protected String hostList;
 

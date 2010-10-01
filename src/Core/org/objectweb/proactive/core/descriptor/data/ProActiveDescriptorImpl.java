@@ -43,7 +43,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.ProActiveMetaObjectFactory;
 import org.objectweb.proactive.core.descriptor.services.ServiceUser;
@@ -124,7 +123,6 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
 
     /** Location of the xml file */
     private String url;
-    private String jobID;
     private String descriptorURL;
     private boolean mainDefined;
 
@@ -347,26 +345,11 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
     public VirtualNodeInternal createVirtualNode(String vnName, boolean lookup, boolean isMainNode) {
         VirtualNodeInternal vn = getVirtualNode(vnName);
 
-        if (jobID == null) {
-            if (isMainDefined()) {
-                this.jobID = generateNewJobID();
-
-                //System.out.println("new id generated : " + jobID);
-            } else {
-                this.jobID = PAActiveObject.getJobId();
-
-                //System.out.println("using runtime id : " + jobID);
-            }
-
-            this.url = url + this.jobID;
-        }
-
         if (vn == null) {
             if (lookup) {
                 vn = new VirtualNodeLookup(vnName);
             } else {
                 vn = new VirtualNodeImpl(vnName, proactiveSecurityManager, this.url, isMainNode, this);
-                ((VirtualNodeImpl) vn).jobID = this.jobID;
 
                 //System.out.println("vn created with url: " + padURL + " and jobid : " + ((VirtualNodeImpl) vn).jobID);
             }
@@ -703,15 +686,6 @@ public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
         }
 
         compositeServiceUpdater.addServiceUpdater(serviceUpdater);
-    }
-
-    /**
-     * generate a new jobId based on the current time.
-     *
-     * @return a new jobId
-     */
-    private String generateNewJobID() {
-        return "JOB-" + System.currentTimeMillis();
     }
 
     //

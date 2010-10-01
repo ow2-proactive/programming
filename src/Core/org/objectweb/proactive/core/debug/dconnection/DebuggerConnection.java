@@ -251,7 +251,7 @@ public class DebuggerConnection implements Serializable, NotificationListener {
                 }
 
                 tunnelRuntime = data.getChildRuntime();
-                debugNode = tunnelRuntime.createLocalNode(nodeName, false, null, "PA_DebugVN", null);
+                debugNode = tunnelRuntime.createLocalNode(nodeName, false, null, "PA_DebugVN");
                 created = true;
                 creating = false;
             }

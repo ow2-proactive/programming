@@ -1483,13 +1483,6 @@ public class PAActiveObject {
     }
 
     /**
-     * @return the jobId associated with the object calling this method
-     */
-    public static String getJobId() {
-        return PAActiveObject.getBodyOnThis().getJobID();
-    }
-
-    /**
      * @return The node of the current active object.
      * @throws NodeException
      *             problem with the node.

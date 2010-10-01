@@ -42,7 +42,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.objectweb.proactive.ActiveObjectCreationException;
-import org.objectweb.proactive.Job;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.ProActiveException;
@@ -86,9 +85,9 @@ public class NodeImpl implements Node, Serializable {
     public NodeImpl() {
     }
 
-    public NodeImpl(ProActiveRuntime proActiveRuntime, String nodeURL, String jobID) {
+    public NodeImpl(ProActiveRuntime proActiveRuntime, String nodeURL) {
         this.proActiveRuntime = proActiveRuntime;
-        this.nodeInformation = new NodeInformationImpl(nodeURL, jobID);
+        this.nodeInformation = new NodeInformationImpl(nodeURL);
     }
 
     @Override
@@ -243,16 +242,13 @@ public class NodeImpl implements Node, Serializable {
     //
     protected class NodeInformationImpl implements NodeInformation {
 
-        private String nodeName;
-        private String nodeURL;
-        private String protocol;
-        private String jobID;
-        private VMInformation vmInformation;
+        final private String nodeName;
+        final private String nodeURL;
+        final private VMInformation vmInformation;
 
-        public NodeInformationImpl(String url, String jobID) {
+        public NodeInformationImpl(String url) {
             this.nodeURL = url;
             this.nodeName = extractNameFromUrl(url);
-            this.jobID = (jobID != null) ? jobID : Job.DEFAULT_JOBID;
 
             this.vmInformation = proActiveRuntime.getVMInformation();
         }
@@ -311,22 +307,6 @@ public class NodeImpl implements Node, Serializable {
             int n = url.lastIndexOf("/");
             String name = url.substring(n + 1);
             return name;
-        }
-
-        /**
-         * @see org.objectweb.proactive.Job#getJobID()
-         */
-        public String getJobID() {
-            return jobID;
-        }
-
-        /**
-         * Change the Job ID of this node. 
-         * @see org.objectweb.proactive.Job
-         * @param jobId The new JobID
-         */
-        public void setJobID(String jobId) {
-            this.jobID = jobId;
         }
 
         public VMInformation getVMInformation() {

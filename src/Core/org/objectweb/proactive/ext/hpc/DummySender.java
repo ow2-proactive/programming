@@ -147,11 +147,6 @@ public class DummySender implements UniversalBody {
 
     }
 
-    public String getJobID() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public TypedCertificate getCertificate() throws SecurityNotAvailableException, IOException {
         // TODO Auto-generated method stub
         return null;

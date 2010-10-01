@@ -62,13 +62,4 @@ public class NodeInformationMockUp implements NodeInformation {
     public VMInformation getVMInformation() {
         return null;
     }
-
-    public void setJobID(String jobId) {
-
-    }
-
-    public String getJobID() {
-        return null;
-    }
-
 }

@@ -82,9 +82,9 @@ public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
      * @param nodeURL node url
      * @param factory factory for the corresponding metaobjects
      */
-    public ComponentBodyImpl(Object reifiedObject, String nodeURL, Active activity,
-            MetaObjectFactory factory, String jobID) throws ActiveObjectCreationException {
-        super(reifiedObject, nodeURL, factory, jobID);
+    public ComponentBodyImpl(Object reifiedObject, String nodeURL, Active activity, MetaObjectFactory factory)
+            throws ActiveObjectCreationException {
+        super(reifiedObject, nodeURL, factory);
         //        filterOnNFRequests = new RequestFilterOnPrioritizedNFRequests();
         // create the component metaobject if necessary
         // --> check the value of the "parameters" field

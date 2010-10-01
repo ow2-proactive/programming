@@ -172,9 +172,9 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
      * @param factory the factory able to construct new factories for each type of meta objects
      * needed by this body
      */
-    public BodyImpl(Object reifiedObject, String nodeURL, MetaObjectFactory factory, String jobId)
+    public BodyImpl(Object reifiedObject, String nodeURL, MetaObjectFactory factory)
             throws ActiveObjectCreationException {
-        super(reifiedObject, nodeURL, factory, jobId);
+        super(reifiedObject, nodeURL, factory);
 
         super.isProActiveInternalObject = reifiedObject instanceof ProActiveInternalObject;
 

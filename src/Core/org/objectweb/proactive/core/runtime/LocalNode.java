@@ -52,7 +52,6 @@ import javax.management.ObjectName;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.Job;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.LocalBodyStore;
@@ -90,7 +89,6 @@ public class LocalNode implements SecurityEntity {
     private static Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);
     private String name;
     private List<UniqueID> activeObjectsId;
-    private String jobId;
     private ProActiveSecurityManager securityManager;
     private String virtualNodeName;
     private Properties localProperties;
@@ -101,16 +99,14 @@ public class LocalNode implements SecurityEntity {
 
     /**
      * @param nodeName the node's name
-     * @param jobId the jobid of the node
      * @param securityManager the security manager 
      * @param virtualNodeName the name of the virtual node this node belongs to
      * @param replacePreviousBinding if a node existing with the same name in the registry, replace it
      * @throws ProActiveException
      */
-    public LocalNode(String nodeName, String jobId, ProActiveSecurityManager securityManager,
+    public LocalNode(String nodeName, ProActiveSecurityManager securityManager,
             String virtualNodeName, boolean replacePreviousBinding) throws ProActiveException {
         this.name = nodeName;
-        this.jobId = ((jobId != null) ? jobId : Job.DEFAULT_JOBID);
         this.securityManager = securityManager;
         this.virtualNodeName = virtualNodeName;
         this.activeObjectsId = new ArrayList<UniqueID>();
@@ -167,20 +163,6 @@ public class LocalNode implements SecurityEntity {
      */
     public void setActiveObjects(List<UniqueID> activeObjects) {
         this.activeObjectsId = activeObjects;
-    }
-
-    /**
-     * @return Returns the jobId.
-     */
-    public String getJobId() {
-        return this.jobId;
-    }
-
-    /**
-     * @param jobId The jobId to set.
-     */
-    public void setJobId(String jobId) {
-        this.jobId = jobId;
     }
 
     /**

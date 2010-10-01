@@ -51,7 +51,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.management.Notification;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.api.PAFileTransfer;
 import org.objectweb.proactive.core.ProActiveException;
@@ -195,7 +194,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
 
     // Security
     private ProActiveSecurityManager proactiveSecurityManager;
-    protected String jobID = PAActiveObject.getJobId();
 
     // FAULT TOLERANCE
     private FaultToleranceService ftService;
@@ -940,13 +938,6 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
     //-------------------IMPLEMENTS Job-----------------------------------
     //
 
-    /**
-     * @see org.objectweb.proactive.Job#getJobID()
-     */
-    public String getJobID() {
-        return this.jobID;
-    }
-
     public void handleNotification(Notification notification, Object handback) {
         String type = notification.getType();
         if (logger.isTraceEnabled()) {
@@ -1028,7 +1019,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                     // in the jvm.
                     try {
                         Node node = proActiveRuntimeRegistered.createLocalNode(nodeName, false, siblingPSM,
-                                this.getName(), this.jobID);
+                                this.getName());
 
                         // JMX Notification
                         ProActiveRuntimeWrapperMBean mbean = ProActiveRuntimeImpl.getProActiveRuntime()
@@ -1151,8 +1142,7 @@ public class VirtualNodeImpl extends NodeCreationEventProducerImpl implements Vi
                 String nodeName = this.name + Integer.toString(ProActiveRandom.nextPosInt());
 
                 try {
-                    node = defaultRuntime.createLocalNode(nodeName, false, siblingPSM, this.getName(),
-                            PAActiveObject.getJobId());
+                    node = defaultRuntime.createLocalNode(nodeName, false, siblingPSM, this.getName());
                     registrationAttempts = 0;
                 } catch (AlreadyBoundException e) {
                     registrationAttempts--;

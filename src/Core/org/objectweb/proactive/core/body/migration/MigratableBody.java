@@ -84,9 +84,9 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
     public MigratableBody() {
     }
 
-    public MigratableBody(Object reifiedObject, String nodeURL, MetaObjectFactory factory, String jobID)
+    public MigratableBody(Object reifiedObject, String nodeURL, MetaObjectFactory factory)
             throws ActiveObjectCreationException {
-        super(reifiedObject, nodeURL, factory, jobID);
+        super(reifiedObject, nodeURL, factory);
         this.migrationManager = factory.newMigrationManagerFactory().newMigrationManager();
     }
 

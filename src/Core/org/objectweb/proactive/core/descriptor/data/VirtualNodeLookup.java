@@ -306,20 +306,6 @@ public class VirtualNodeLookup extends RuntimeDeploymentProperties implements Vi
         return true;
     }
 
-    //
-    //-------------------IMPLEMENTS Job-----------------------------------
-    //
-
-    /**
-     * @see org.objectweb.proactive.Job#getJobID()
-     */
-    public String getJobID() {
-        if (!isActivated) {
-            vnLogger.error(notActivatedMessage);
-        }
-        return virtualNode.getJobID();
-    }
-
     /**
      * @see org.objectweb.proactive.core.descriptor.data.VirtualNodeInternal#setRuntimeInformations(String,String)
      * At the moment the only property that can be set at runtime is LOOKUP_HOST.

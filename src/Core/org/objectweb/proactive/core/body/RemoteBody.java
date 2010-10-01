@@ -85,12 +85,6 @@ package org.objectweb.proactive.core.body;
 //    public UniqueID getID() throws java.io.IOException;
 //
 //    /**
-//     * @return the JobID of the remote body
-//     * @exception java.io.IOException if an exception occured during the remote communication
-//     */
-//    public String getJobID() throws java.io.IOException;
-//
-//    /**
 //     * Signals to this body that the body identified by id is now to a new
 //     * remote location. The body given in parameter is a new stub pointing
 //     * to this new location. This call is a way for a body to signal to his
