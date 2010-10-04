@@ -34,24 +34,24 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pnp;
+package org.objectweb.proactive.extensions.pnpssl;
 
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
 
 
 /**
- * The SPI providing plain PNP communication protocol
  *
- * @since ProActive 4.3.0
+ * @since ProActive 4.4.0
  */
-public class PNPRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
+public class PNPSslRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
 
     public Class<? extends RemoteObjectFactory> getFactoryClass() {
-        return PNPRemoteObjectFactory.class;
+        return PNPSslRemoteObjectFactory.class;
     }
 
     public String getProtocolId() {
-        return PNPRemoteObjectFactory.PROTO_ID;
+        return PNPSslRemoteObjectFactory.PROTO_ID;
     }
+
 }

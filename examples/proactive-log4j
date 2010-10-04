@@ -12,6 +12,7 @@ log4j.logger.org.mortbay = WARN
 
 ########### The following are existing categories in ProActive
 #log4j.logger.proactive = INFO
+#log4j.logger.proactive.pnp = TRACE
 #log4j.logger.proactive.classloader = DEBUG
 #log4j.logger.proactive.events = DEBUG
 #log4j.logger.proactive.runtime = DEBUG

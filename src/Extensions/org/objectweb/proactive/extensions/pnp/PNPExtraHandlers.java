@@ -6,7 +6,7 @@
  *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -27,8 +27,8 @@
  * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
  * ################################################################
@@ -36,22 +36,33 @@
  */
 package org.objectweb.proactive.extensions.pnp;
 
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
+import java.util.List;
+
+import org.jboss.netty.channel.ChannelHandler;
 
 
 /**
- * The SPI providing plain PNP communication protocol
+ * Define extra handlers to be injected into client and server pipelines
  *
- * @since ProActive 4.3.0
+ * It is possible to extends the {@link PNPRemoteObjectFactoryBackend} by providing
+ * an implementation of {@link PNPExtraHandlers}. The channels defined by {@link #getClientHandlers()}
+ * and {@link #getServertHandlers()} are automatically injected into the PNP pipeline
+ *
+ * @since ProActive 4.4.0
  */
-public class PNPRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
+public interface PNPExtraHandlers {
+    /**
+     *
+     * @return a list of {@link ChannelHandler} to be injected into the client
+     *      pipeline.
+     */
+    public List<ChannelHandler> getClientHandlers();
 
-    public Class<? extends RemoteObjectFactory> getFactoryClass() {
-        return PNPRemoteObjectFactory.class;
-    }
+    /**
+     *
+     * @return a list of {@link ChannelHandler} to be injected into the server
+     *      pipeline
+     */
+    public List<ChannelHandler> getServertHandlers();
 
-    public String getProtocolId() {
-        return PNPRemoteObjectFactory.PROTO_ID;
-    }
 }

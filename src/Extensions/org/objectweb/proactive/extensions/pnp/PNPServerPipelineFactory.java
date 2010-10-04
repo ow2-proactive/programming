@@ -39,6 +39,7 @@ package org.objectweb.proactive.extensions.pnp;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
+import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
@@ -53,7 +54,11 @@ class PNPServerPipelineFactory implements ChannelPipelineFactory {
 
     final private Timer timer;
 
-    public PNPServerPipelineFactory(Executor executor) {
+    final private PNPExtraHandlers extraHandlers;
+
+    public PNPServerPipelineFactory(PNPExtraHandlers extraHandlers, Executor executor) {
+        this.extraHandlers = extraHandlers;
+
         this.executor = executor;
         PNPThreadFactory tf = new PNPThreadFactory("PNP server handler timer (shared)", true,
             Thread.MAX_PRIORITY);
@@ -62,10 +67,15 @@ class PNPServerPipelineFactory implements ChannelPipelineFactory {
 
     public ChannelPipeline getPipeline() throws Exception {
         PNPServerHandler pnpServerHandler = new PNPServerHandler(this.executor);
-
         ChannelPipeline p = Channels.pipeline();
-        p.addLast("pnpDecoder", new PNPServerFrameDecoder(pnpServerHandler, timer));
 
+        if (extraHandlers != null) {
+            for (final ChannelHandler handler : extraHandlers.getServertHandlers()) {
+                p.addLast("" + handler.hashCode(), handler);
+            }
+        }
+
+        p.addLast("pnpDecoder", new PNPServerFrameDecoder(pnpServerHandler, timer));
         p.addLast("frameEncoder", new LengthFieldPrepender(4));
         p.addLast("pnpEncoder", new PNPEncoder());
         p.addLast(PNPServerHandler.NAME, pnpServerHandler);

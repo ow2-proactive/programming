@@ -38,6 +38,7 @@ package org.objectweb.proactive.extensions.pnp;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
@@ -62,11 +63,21 @@ import org.jboss.netty.util.Timer;
 class PNPClientPipelineFactory implements ChannelPipelineFactory {
     Timer timer = new HashedWheelTimer();
 
-    public PNPClientPipelineFactory() {
+    final private PNPExtraHandlers extraHandlers;
+
+    public PNPClientPipelineFactory(PNPExtraHandlers extraHandlers) {
+        this.extraHandlers = extraHandlers;
     }
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = Channels.pipeline();
+
+        if (extraHandlers != null) {
+            for (final ChannelHandler handler : this.extraHandlers.getClientHandlers()) {
+                p.addLast("" + handler.hashCode(), handler);
+            }
+        }
+
         // Do not use FixedLengthFrameDecoder provided by netty to avoid
         // copy and an extra handler to parse the messages
         //        p.addLast("pnpDecoder", new PNPClientFrameDecoder());

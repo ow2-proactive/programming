@@ -34,25 +34,45 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pnp;
+package org.objectweb.proactive.extensions.ssl;
+
+import java.security.Security;
+
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
 
 /**
- * The plain PNP remote object factory
+ * A set of utily method to work with SSL and Bouncy Castle
  *
- * @since ProActive 4.3.0
+ * @since ProActive 4.4.0
  */
-public class PNPRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
-    static final public String PROTO_ID = "pnp";
+public class SslHelpers {
+    /** The name of the bouncy castle security provider
+     *
+     * Shorter than {@link BouncyCastleProvider#PROVIDER_NAME}
+     */
+    static public String BC_NAME = BouncyCastleProvider.PROVIDER_NAME;
 
-    public PNPRemoteObjectFactory() {
+    /**
+     * The default subject domain name of used/issued certificate
+     */
+    static public String DEFAULT_SUBJET_DN = "O=ProActive Parallel Suite, OU=Automatic certificate generator, CN=Certificate for ProActive";
 
-        PNPConfig config = new PNPConfig();
-        config.setPort(PNPConfig.PA_PNP_PORT.getValue());
-        config.setIdleTimeout(PNPConfig.PA_PNP_IDLE_TIMEOUT.getValue());
-        config.setDefaultHeartbeat(PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getValue());
+    static public String DEFAULT_ALIAS_PATTERN = ".*";
+    /**
+     * The default keystore password
+     */
+    static public String DEFAULT_KS_PASSWD = "pkpass";
 
-        final PNPRemoteObjectFactoryBackend rof;
-        rof = new PNPRemoteObjectFactoryBackend(PROTO_ID, config, null);
-        this.setBackendRemoteObjectFactory(rof);
+    static public String DEFAULT_PROTOCOL = "TLSv1";
+
+    /**
+     * Insert Bouncy castle as a security provider if needed
+     */
+    static public void insertBouncyCastle() {
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleProvider());
+        }
     }
+
 }

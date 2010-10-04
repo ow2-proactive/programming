@@ -96,9 +96,9 @@ class PNPRemoteObject implements RemoteRemoteObject, Serializable {
         if (this.agent == null) {
             try {
                 // FIXME: The factory cast is a hack but there is no clean way to do it
-                PNPRemoteObjectFactory f;
-                f = (PNPRemoteObjectFactory) AbstractRemoteObjectFactory
-                        .getRemoteObjectFactory(PNPRemoteObjectFactory.PROTOCOL_ID);
+                PNPRemoteObjectFactoryAbstract f;
+                f = (PNPRemoteObjectFactoryAbstract) AbstractRemoteObjectFactory
+                        .getRemoteObjectFactory(this.remoteObjectURL.getScheme());
                 this.agent = f.getAgent();
             } catch (UnknownProtocolException e) {
                 logger.fatal("Failed to get the local message routing agent", e);

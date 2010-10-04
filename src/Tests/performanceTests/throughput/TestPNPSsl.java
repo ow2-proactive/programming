@@ -27,31 +27,24 @@
  * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
  * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
+ * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pnp;
+package performanceTests.throughput;
 
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
-/**
- * The SPI providing plain PNP communication protocol
- *
- * @since ProActive 4.3.0
- */
-public class PNPRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
-
-    public Class<? extends RemoteObjectFactory> getFactoryClass() {
-        return PNPRemoteObjectFactory.class;
+public class TestPNPSsl extends Throughput {
+    static {
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pnps");
     }
 
-    public String getProtocolId() {
-        return PNPRemoteObjectFactory.PROTO_ID;
+    public TestPNPSsl() {
+        super(TestPNPSsl.class);
     }
 }

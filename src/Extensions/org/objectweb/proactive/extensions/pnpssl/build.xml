@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PNP over SSL" basedir="../../../../../../../compile/">
+
+	<import file="${basedir}/build.xml" />
+	<target name="compile" depends="core,-compile"/>
+
+	<target name="-compile">
+		<compile_extension module="pnpssl" />
+	</target>
+</project>

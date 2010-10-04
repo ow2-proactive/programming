@@ -132,7 +132,8 @@ public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory
                 }
             }
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            throw new UnknownProtocolException("Failed to instanciate remote object factory for " + protocol,
+                e);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

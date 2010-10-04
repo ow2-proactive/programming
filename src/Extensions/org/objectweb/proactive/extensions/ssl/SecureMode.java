@@ -6,7 +6,7 @@
  *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -27,31 +27,15 @@
  * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pnp;
+package org.objectweb.proactive.extensions.ssl;
 
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
-
-
-/**
- * The SPI providing plain PNP communication protocol
- *
- * @since ProActive 4.3.0
- */
-public class PNPRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
-
-    public Class<? extends RemoteObjectFactory> getFactoryClass() {
-        return PNPRemoteObjectFactory.class;
-    }
-
-    public String getProtocolId() {
-        return PNPRemoteObjectFactory.PROTO_ID;
-    }
+public enum SecureMode {
+    CIPHERED_ONLY, AUTH_AND_CIPHERED
 }

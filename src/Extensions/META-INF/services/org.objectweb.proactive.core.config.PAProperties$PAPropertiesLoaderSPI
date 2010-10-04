@@ -1,2 +1,3 @@
 org.objectweb.proactive.extensions.pamr.PAMRConfig
 org.objectweb.proactive.extensions.pnp.PNPConfig
+org.objectweb.proactive.extensions.pnpssl.PNPSslConfig

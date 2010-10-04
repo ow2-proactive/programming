@@ -90,8 +90,8 @@ class PNPROMessageLookup extends PNPROMessage implements Serializable {
             if (irro != null) {
                 RemoteRemoteObject rro = null;
                 try {
-                    PNPRemoteObjectFactory f = (PNPRemoteObjectFactory) AbstractRemoteObjectFactory
-                            .getRemoteObjectFactory(PNPRemoteObjectFactory.PROTOCOL_ID);
+                    PNPRemoteObjectFactoryAbstract f = (PNPRemoteObjectFactoryAbstract) AbstractRemoteObjectFactory
+                            .getRemoteObjectFactory(this.uri.getScheme());
                     rro = f.newRemoteObject(irro);
                     ((PNPRemoteObject) rro).setURI(uri);
                     return rro;

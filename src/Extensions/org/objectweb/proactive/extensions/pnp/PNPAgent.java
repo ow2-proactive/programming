@@ -116,7 +116,7 @@ public class PNPAgent {
      * @param port the TCP port to bind to
      * @throws PNPException if the agent cannot be created (ex: port already in use)
      */
-    public PNPAgent(int port) throws PNPException {
+    public PNPAgent(PNPConfig config, PNPExtraHandlers extraHandlers) throws PNPException {
         this.cCallId = new AtomicLong(0);
 
         // Configure Netty
@@ -127,29 +127,29 @@ public class PNPAgent {
         ServerSocketChannelFactory ssocketFactory;
         ssocketFactory = new NioServerSocketChannelFactory(pnpExecutor, pnpExecutor);
         ServerBootstrap sBoostrap = new ServerBootstrap(ssocketFactory);
-        sBoostrap.setPipelineFactory(new PNPServerPipelineFactory(pnpExecutor));
+        sBoostrap.setPipelineFactory(new PNPServerPipelineFactory(extraHandlers, pnpExecutor));
         sBoostrap.setOption("tcpNoDelay", true);
         sBoostrap.setOption("child.tcpNoDelay", true);
         try {
-            this.serverChannel = sBoostrap.bind(new InetSocketAddress(port));
+            this.serverChannel = sBoostrap.bind(new InetSocketAddress(config.getPort()));
             SocketAddress sa = this.serverChannel.getLocalAddress();
             if (sa instanceof InetSocketAddress) {
-                port = ((InetSocketAddress) sa).getPort();
+                this.port = ((InetSocketAddress) sa).getPort();
                 logger.debug("PNP is listening on " + sa);
             } else {
+                this.port = -1;
                 throw new PNPException(
                     "Failed to setup the server side of PNP. The SocketAddress is not an InetSocketAddress");
             }
         } catch (ChannelException e) {
             throw new PNPException("Failed to setup the server side of PNP", e);
         }
-        this.port = port;
 
         // Client side
         ClientSocketChannelFactory csocketFactory;
         csocketFactory = new NioClientSocketChannelFactory(pnpExecutor, pnpExecutor);
         ClientBootstrap cBootstrap = new ClientBootstrap(csocketFactory);
-        cBootstrap.setPipelineFactory(new PNPClientPipelineFactory());
+        cBootstrap.setPipelineFactory(new PNPClientPipelineFactory(extraHandlers));
         cBootstrap.setOption("tcpNoDelay", true);
         cBootstrap.setOption("child.tcpNoDelay", true);
         this.channelCache = new PNPClientChannelCache(cBootstrap);

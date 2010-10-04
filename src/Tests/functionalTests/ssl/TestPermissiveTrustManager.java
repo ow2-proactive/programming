@@ -6,7 +6,7 @@
  *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -27,31 +27,37 @@
  * If needed, contact us to obtain a release under GPL Version 2
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pnp;
+package functionalTests.ssl;
 
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
+import org.junit.Before;
+import org.junit.Test;
+import org.objectweb.proactive.extensions.ssl.PermissiveTrustManager;
 
 
 /**
- * The SPI providing plain PNP communication protocol
  *
- * @since ProActive 4.3.0
+ *
+ * @since ProActive 4.4.0
  */
-public class PNPRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
+public class TestPermissiveTrustManager extends SSLTest {
+    public PermissiveTrustManager pm;
 
-    public Class<? extends RemoteObjectFactory> getFactoryClass() {
-        return PNPRemoteObjectFactory.class;
+    @Before
+    public void before() {
+        this.pm = new PermissiveTrustManager();
     }
 
-    public String getProtocolId() {
-        return PNPRemoteObjectFactory.PROTO_ID;
+    @Test
+    public void testSimpleOk() throws Exception {
+        KeyPairAndCert[] certs = generateCertificates(1);
+        this.pm.checkClientTrusted(certs[0].getCertAsCertArray(), "");
+        this.pm.checkServerTrusted(certs[0].getCertAsCertArray(), "");
     }
 }

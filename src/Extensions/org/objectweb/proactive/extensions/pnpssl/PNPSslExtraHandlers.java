@@ -6,7 +6,7 @@
  *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -34,24 +34,42 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pnp;
+package org.objectweb.proactive.extensions.pnpssl;
 
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
+import java.security.KeyStore;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.net.ssl.TrustManager;
+
+import org.jboss.netty.channel.ChannelHandler;
+import org.jboss.netty.handler.ssl.SslHandler;
+import org.objectweb.proactive.extensions.pnp.PNPExtraHandlers;
+import org.objectweb.proactive.extensions.ssl.SecureMode;
 
 
 /**
- * The SPI providing plain PNP communication protocol
+ * Add {@link SslHandler} as extra channel to the default PNP pipeline
  *
- * @since ProActive 4.3.0
+ * @since ProActive 4.4.0
  */
-public class PNPRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
+public class PNPSslExtraHandlers implements PNPExtraHandlers {
 
-    public Class<? extends RemoteObjectFactory> getFactoryClass() {
-        return PNPRemoteObjectFactory.class;
+    final PNPSslEngineFactory sslEngineFactory;
+
+    public PNPSslExtraHandlers(SecureMode sm, KeyStore ks, TrustManager tm) {
+        sslEngineFactory = new PNPSslEngineFactory(sm, ks, tm);
     }
 
-    public String getProtocolId() {
-        return PNPRemoteObjectFactory.PROTO_ID;
+    public List<ChannelHandler> getClientHandlers() {
+        final LinkedList<ChannelHandler> handlers = new LinkedList<ChannelHandler>();
+        handlers.add(new SslHandler(sslEngineFactory.getClientSSLEngine()));
+        return handlers;
+    }
+
+    public List<ChannelHandler> getServertHandlers() {
+        final LinkedList<ChannelHandler> handlers = new LinkedList<ChannelHandler>();
+        handlers.add(new SslHandler(sslEngineFactory.getServerSSLEngine()));
+        return handlers;
     }
 }

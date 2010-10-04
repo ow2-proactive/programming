@@ -22,6 +22,7 @@
 				<jvmarg value="${jvmargDefinedByTest}"/>
 				<jvmarg value="-Dclover.initstring=${proactive.home}/compile/ProActiveCoverage.db"/>
 				<jvmarg value="-Dproactive.home=${proactive.home}"/>
+                <jvmarg value="-Djava.security.egd=file:/dev/urandom"/>
 				<proactiveClasspath type="append">
 					<pathElement base="proactive" relpath="classes/Tests"/>
 					<pathElement base="proactive" relpath="dist/lib/clover.jar"/>

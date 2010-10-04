@@ -6,7 +6,7 @@
  *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -34,24 +34,30 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pnp;
+package org.objectweb.proactive.extensions.pnpssl;
 
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
+import org.objectweb.proactive.core.ProActiveException;
 
 
 /**
- * The SPI providing plain PNP communication protocol
+ * The generic PNP over SSL exception
  *
- * @since ProActive 4.3.0
+ * @since ProActive 4.4.0
  */
-public class PNPRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
+public class PNPSslException extends ProActiveException {
 
-    public Class<? extends RemoteObjectFactory> getFactoryClass() {
-        return PNPRemoteObjectFactory.class;
+    public PNPSslException() {
     }
 
-    public String getProtocolId() {
-        return PNPRemoteObjectFactory.PROTO_ID;
+    public PNPSslException(String message) {
+        super(message);
+    }
+
+    public PNPSslException(Throwable cause) {
+        super(cause);
+    }
+
+    public PNPSslException(String message, Throwable cause) {
+        super(message, cause);
     }
 }
