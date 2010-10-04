@@ -52,7 +52,7 @@ import functionalTests.FunctionalTest;
  *
  * @since ProActive 4.4.0
  */
-public class SSLTest extends FunctionalTest {
+public abstract class AbstractSSL extends FunctionalTest {
 
     @BeforeClass
     static public void beforeClass() {

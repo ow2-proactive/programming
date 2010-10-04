@@ -46,7 +46,7 @@ import org.objectweb.proactive.extensions.ssl.PermissiveTrustManager;
  *
  * @since ProActive 4.4.0
  */
-public class TestPermissiveTrustManager extends SSLTest {
+public class TestPermissiveTrustManager extends AbstractSSL {
     public PermissiveTrustManager pm;
 
     @Before

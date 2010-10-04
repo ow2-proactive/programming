@@ -49,7 +49,7 @@ import org.objectweb.proactive.extensions.ssl.SameCertTrustManager;
  *
  * @since ProActive 4.4.0
  */
-public class TestSameCertTrustManager extends SSLTest {
+public class TestSameCertTrustManager extends AbstractSSL {
 
     // Generating certificate is an expensive process, so precompute some
     static KeyPairAndCert[] chain;
