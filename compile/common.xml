@@ -174,13 +174,15 @@
 
 	<macrodef name="compile_extension">
 		<attribute name="module" />
+		<attribute name="dontcopyfiles" default="" />
 		<element name="additionalclasspath" optional="yes" />
 		<sequential>
 			<compile_module
 				module="@{module}"
 				sourcepath="${src.extensions.dir}"
 				package="${extensions.path}"
-				dest="${cl.extensions.dir}">
+				dest="${cl.extensions.dir}"
+				dontcopyfiles="@{dontcopyfiles}">
 				<appendclasspath>
 					<additionalclasspath />
 				</appendclasspath>
@@ -193,6 +195,7 @@
 		<attribute name="sourcepath"/>
 		<attribute name="package"/>
 		<attribute name="dest"/>
+		<attribute name="dontcopyfiles" default=""/>
 		<element name="appendclasspath" optional="yes"/>
 		<sequential>
 			<mkdir dir="${cl.extensions.dir}"/>
@@ -233,7 +236,9 @@
 
 			<copy todir="@{dest}" includeEmptyDirs="no">
 				<fileset dir="@{sourcepath}">
+					<include name="@{package}/@{module}/**/*.*" />
 					<exclude name="**/*.java" />
+					<exclude name="@{dontcopyfiles}" />
 				</fileset>
 			</copy>
 

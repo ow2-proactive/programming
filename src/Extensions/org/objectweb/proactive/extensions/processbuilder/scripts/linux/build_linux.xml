@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<target name="-pb.linux.scripts" >
+		<property name="pb.dist" value="../dist"/>
+		<property name="pb.linux"  value="${src.extensions.dir}/${extensions.path}/processbuilder/scripts/linux" /> 
+
+		<mkdir dir="${pb.dist}/scripts/processbuilder"/>
+		<mkdir dir="${pb.dist}/scripts/processbuilder/linux"/>
+		
+		<!-- compile c code -->
+		<exec dir="${pb.linux}" executable="gcc" os="Linux" logError="true">
+			<arg line="-m64 -o suer64 -lutil -lpthread suer.c" />
+		</exec>
+		<exec dir="${pb.linux}/" executable="gcc" os="Linux" logError="true">
+			<arg line="-m32 -o suer32 -lutil -lpthread suer.c" />
+		</exec>
+		
+		<copy todir="${pb.dist}/scripts/processbuilder/linux" file="${pb.linux}/CONTENTS.txt" />
+		
+		<!-- copy files -->
+		
+		<if>
+			<bool>
+				<os family="Unix" />
+			</bool>
+			<!-- In case of linux since the permissions are not preserved by <copy>, we use the cp command -->
+			<exec executable="cp" os="Linux">
+				<arg line="${pb.linux}/launch.sh ${pb.linux}/command_step.sh ${pb.linux}/user_step.sh ${pb.linux}/check_sudo.sh ${pb.dist}/scripts/processbuilder/linux" />
+			</exec>
+			<exec executable="cp" os="Linux" failonerror="false">
+				<arg line="${pb.linux}/suer32 ${pb.dist}/scripts/processbuilder/linux" />
+			</exec>
+			<exec executable="cp" os="Linux" failonerror="false">
+				<arg line="${pb.linux}/suer64 ${pb.dist}/scripts/processbuilder/linux" />
+			</exec>
+			
+			<else>
+				<copy todir="${pb.dist}/scripts/processbuilder/linux" file="${pb.linux}/launch.sh" />
+				<copy todir="${pb.dist}/scripts/processbuilder/linux" file="${pb.linux}/command_step.sh" />
+				<copy todir="${pb.dist}/scripts/processbuilder/linux" file="${pb.linux}/user_step.sh" />
+				<copy todir="${pb.dist}/scripts/processbuilder/linux" file="${pb.linux}/check_sudo.sh" />
+				<copy todir="${pb.dist}/scripts/processbuilder/linux" file="${pb.linux}/suer32" failonerror="false" />
+				<copy todir="${pb.dist}/scripts/processbuilder/linux" file="${pb.linux}/suer64" failonerror="false" />
+			</else>
+			
+		</if>
+		
+		<!-- housekeeping -->
+		<delete file="${pb.linux}/suer32" />
+		<delete file="${pb.linux}/suer64" />
+	</target>
+	
+	<target name="test">
+		<echo>${os.name}</echo>
+	</target>
+</project>

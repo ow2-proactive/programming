@@ -1,0 +1,130 @@
+<html>
+	<head>
+		<title>OSProcessBuilder - Quickstart for Developers</title>
+		<STYLE TYPE="text/css">
+			p {
+   		padding-left: 20pt;
+	   	}
+		</STYLE>
+	</head>
+   <body>
+   	<h1>OSProcessBuilder - Quickstart for Developers</h1>
+   	
+   	<p>
+   	This document serves as a crash-course on the basics of the process builder.
+   	For further information please refer to:
+   		<ul>
+   			<li>the JavaDoc - on Java classes and the Script-to-Java API</li>
+   			<li>the CONTENTS.txt in the scripts folder - about files needed on the script side</li>
+   			<li>the build.xml - for other building-related details</li>
+   		</ul>
+   	</p>
+   	
+   	<h2>1. Building</h2>
+   	<p>
+   	To build the OSProcessBuilder, you can use the build mechanism of 
+   	ProActvie, as it is fully compilant with it (extension targets).
+   	The main side-effect of building is that the script files will be
+   	copied into the <i>proactive.home/dist/scripts/processbuilder/</i> folder.
+   	However, not all files which can be seen in the scripts folder among the sources
+   	will be copied (please refer to <i>scripts/[os_name]/CONTENTS.txt</i> for more information).
+   	</p>
+   	
+   	<p>
+		<b>Windows particularities</b><br/>
+		<ul>
+			<li>
+			Among the scripts there is a file <i>PipeBridge.cpp</i> which has to be compiled.
+		The compilation has to work with a VisualStudio 20xx as there are no extra dependencies.
+		Just create a project and copy this file as main source.
+			</li>
+			<li>
+			For correct functioning you will need PsExec.exe in the scripts folder (http://technet.microsoft.com/en-us/sysinternals/bb897553.aspx)
+			</li>
+		</ul>
+   	</p>
+   	
+   	<p>
+		<b>Linux particularities</b><br/>
+		The executable <i>suer32</i>, respectively <i>suer64</i> are obtained from <i>suer.c</i>.
+		The compilation is done inside the build scripts with gcc.
+		However, if you plan to export a PA distribution, make sure you have both 32 and 64 bit version
+		of the gcc libraries on your machine, as it will try to compile in both modes.
+   	</p>
+   	
+   	<h2>2. Testing</h2>
+   	<p>
+   	The test files for the OSProcessBuilder can be found in the <i>proactive/src/Tests/functionalTests/processbuilder</i> 
+   	folder. To run them you will most probably have to set three environment variables:
+   	<ul>
+   		<li>OSPB_TEST_USER - username of the user used for testing</li>
+   		<li>OSPB_TEST_PASS - password of the user used for testing</li>
+   		<li>OSPB_TEST_TEMP - folder visible (and writable) by both the user currently executing the tests, and
+   		the one that is specified by the above two variables</li>
+   	</ul> 
+   	</p>
+   	
+   	<h2>3. Setting up machines to be used with the lib</h2>
+   	<p>
+   		<b>All OSes</b><br/>
+   		Make sure that the <i>proactive.home/dist/scripts/processbuilder</i> folder is readable (and contents are executable) by all users that can be used as targets for launching.
+   	</p>
+   	<p>
+   		<b>Windows</b><br/>
+   		<ul>
+   			<li>
+   			No password - for this to work, the target user's password has to be saved already in the windows
+   			keystore. This can be done by running <i>runas&nbsp;/user:TARGET_USER&nbsp;/savecred&nbsp;cmd.exe</i>. It will prompt
+   			for the password for the first time, but any subsequent run will use the saved password.
+   			<br>
+   			Make sure that the launching user has write rights to the scripts folder (see section 4).
+   			</li>
+   			<li>
+   			With password - no special setup needed (just be sure the PsExec.exe is either in the scripts folder, or 
+   			on the PATH).
+   			</li>
+   		</ul> 
+   	</p>
+   	<p>	
+   		<b>Linux</b><br/>
+   		<ul>
+   			<li>
+   			No password (SUDO) - the sudoers file has to contain the rights for the given user-change.
+   			</li>
+   			<li>
+   			With password (SU) - no special setup needed (just be sure the suer32/suer64 is in the scripts folder).
+   			</li>
+   			<li>
+   			With private key (SSH) - no special setup is needed - however, see Security Threats below.
+   			</li>
+   		</ul>  		
+   	</p>
+   	
+   	<h2>4. Security Threats and Other Issues</h2>
+   	<p>
+   		<b>Windows</b><br/>
+   		The main security issue is that since <i>runas</i> will not propagate the environent correctly (fully) we use a hack.
+   		This hack is writing the contents of the environment to a temp folder.
+   		At the moment, this folder is the scripts folder! <u>Do not put sensitive information into the environment</u> as 
+   		it may be read by anyone.
+   	</p>
+   	
+
+		<p>
+   		<b>Linux (general)</b><br/>
+   		Since we use scripts to start the executable in case there is a target user, be aware that all paramters
+   		are visible to all users! <u>Do not leave sensitive information in the arguments for the command</u>.
+   		Use the environment instead - also, read below.
+   	</p>   	
+   	
+   	<p>
+   		<b>Linux (the SSH option)</b><br/>
+   		The main security issue is that since <i>ssh</i> will not propagate the environent at all, we use the same hack as in windows.
+   		We write the contents of the environment to the temp folder (this is done in the scripts, and we create this 
+   		file with <i>mktemp</i>).
+   		<u>Do not put sensitive information into the environment</u> as it may be read by anyone.
+   	</p>
+   	
+   	
+   </body>
+</html>
