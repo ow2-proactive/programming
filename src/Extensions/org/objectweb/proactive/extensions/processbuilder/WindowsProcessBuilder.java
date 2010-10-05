@@ -12,9 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
-import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 
 
 /**
@@ -29,7 +27,7 @@ public class WindowsProcessBuilder extends OSProcessBuilder {
     private Map<String, String> environmentMap = new HashMap<String, String>();
 
     // path to scripts
-    private static final String SCRIPTS_LOCATION = HOME_FOLDER + "\\dist\\scripts\\processbuilder\\win\\";
+    private final String SCRIPTS_LOCATION;
     private static final String CHECK_RUNAS = "check_runas.bat";
     private static final String LAUNCH_SCRIPT = "launch.bat";
     private static final String LAUNCH_EXE = "PipeBridge.exe";
@@ -37,6 +35,10 @@ public class WindowsProcessBuilder extends OSProcessBuilder {
     private static final String ENV_VAR_USER_PASSWORD = "PA_OSPB_USER_PASSWORD";
 
     private String envFile = "_";
+
+    public WindowsProcessBuilder(String paHome) {
+        SCRIPTS_LOCATION = paHome + "\\dist\\scripts\\processbuilder\\win\\";
+    }
 
     @Override
     public Map<String, String> environment() {

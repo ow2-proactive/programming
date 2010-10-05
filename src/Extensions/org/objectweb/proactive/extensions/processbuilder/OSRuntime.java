@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
@@ -17,6 +18,28 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * 
  */
 public class OSRuntime {
+    final private OSProcessBuilderFactory pbFactory;
+
+    /**
+     * Create an {@link OSRuntime} with the default ProActive configuration.
+     * 
+     * A {@link PAOSProcessBuilderFactory} is used to create {@link OSProcessBuilder}
+     * 
+     * @throws ProActiveException If configuration fails 
+     */
+    public OSRuntime() throws ProActiveException {
+        this(new PAOSProcessBuilderFactory());
+    }
+
+    /**
+     * Create an {@link OSRuntime} with a custom {@link OSProcessBuilderFactory}
+     * 
+     * A custom {@link OSProcessBuilderFactory} can be used to extend or modify the default behavior 
+     * @param pbFactory
+     */
+    public OSRuntime(OSProcessBuilderFactory pbFactory) {
+        this.pbFactory = pbFactory;
+    }
 
     /**
      * Method for executing an operating system command under a specific user
@@ -54,10 +77,9 @@ public class OSRuntime {
      *             process - this could be due to missing dependencies of
      *             {@link ProcessBuilder}
      */
-    public static Process exec(OSUser user, CoreBindingDescriptor cores, String[] command,
-            Map<String, String> envp, File dir) throws IOException, OSUserException, CoreBindingException,
-            FatalProcessBuilderException {
-        OSProcessBuilder ospb = OSProcessBuilderFactory.getBuilder();
+    public Process exec(OSUser user, CoreBindingDescriptor cores, String[] command, Map<String, String> envp,
+            File dir) throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
+        OSProcessBuilder ospb = this.pbFactory.getBuilder();
 
         if (command.length == 0)
             throw new IndexOutOfBoundsException();
@@ -118,9 +140,9 @@ public class OSRuntime {
      *             process - this could be due to missing dependencies of
      *             {@link ProcessBuilder}
      */
-    public static Process exec(CoreBindingDescriptor cores, String[] command, Map<String, String> envp,
-            File dir) throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
-        OSProcessBuilder ospb = OSProcessBuilderFactory.getBuilder();
+    public Process exec(CoreBindingDescriptor cores, String[] command, Map<String, String> envp, File dir)
+            throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
+        OSProcessBuilder ospb = this.pbFactory.getBuilder();
 
         if (command.length == 0)
             throw new IndexOutOfBoundsException();
@@ -172,10 +194,10 @@ public class OSRuntime {
      *             process - this could be due to missing dependencies of
      *             {@link ProcessBuilder}
      */
-    public static Process exec(OSUser user, String[] command, Map<String, String> envp, File dir)
+    public Process exec(OSUser user, String[] command, Map<String, String> envp, File dir)
             throws IOException, OSUserException, FatalProcessBuilderException {
 
-        OSProcessBuilder ospb = OSProcessBuilderFactory.getBuilder();
+        OSProcessBuilder ospb = this.pbFactory.getBuilder();
 
         if (command.length == 0)
             throw new IndexOutOfBoundsException();
@@ -229,10 +251,10 @@ public class OSRuntime {
      *             process - this could be due to missing dependencies of
      *             {@link ProcessBuilder}
      */
-    public static Process exec(String[] command, Map<String, String> envp, File dir) throws IOException,
+    public Process exec(String[] command, Map<String, String> envp, File dir) throws IOException,
             FatalProcessBuilderException {
 
-        OSProcessBuilder ospb = OSProcessBuilderFactory.getBuilder();
+        OSProcessBuilder ospb = this.pbFactory.getBuilder();
 
         if (command.length == 0)
             throw new IndexOutOfBoundsException();
@@ -269,8 +291,8 @@ public class OSRuntime {
      * 
      * @return
      */
-    public static CoreBindingDescriptor getAvaliableCoresDescriptor() {
-        return OSProcessBuilderFactory.getBuilder().getAvaliableCoresDescriptor();
+    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
+        return this.pbFactory.getBuilder().getAvaliableCoresDescriptor();
     }
 
 }

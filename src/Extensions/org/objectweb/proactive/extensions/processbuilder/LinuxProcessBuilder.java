@@ -1,20 +1,12 @@
 package org.objectweb.proactive.extensions.processbuilder;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.UUID;
 
-import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
-import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
-
-import sun.misc.Cleaner;
 
 
 /**
@@ -27,12 +19,16 @@ import sun.misc.Cleaner;
 public class LinuxProcessBuilder extends OSProcessBuilder {
 
     // path to scripts
-    private static final String SCRIPTS_LOCATION = HOME_FOLDER + "/dist/scripts/processbuilder/linux/";
+    private final String SCRIPTS_LOCATION;
     private static final String CHECK_SUDO = "check_sudo.sh";
     private static final String LAUNCH_SCRIPT = "launch.sh";
     //other constants
     private static final String ENV_VAR_USER_PASSWORD = "PA_OSPB_USER_PASSWORD";
     private static final String ENV_VAR_USER_KEY_CONTENT = "PA_OSPB_USER_KEY_CONTENT";
+
+    public LinuxProcessBuilder(String paHome) {
+        SCRIPTS_LOCATION = paHome + "/dist/scripts/processbuilder/linux/";
+    }
 
     @Override
     public Boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {

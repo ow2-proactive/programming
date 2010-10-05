@@ -5,22 +5,23 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder;
-import org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderFactory;
 import org.objectweb.proactive.extensions.processbuilder.OSRuntime;
 import org.objectweb.proactive.extensions.processbuilder.OSUser;
+import org.objectweb.proactive.extensions.processbuilder.PAOSProcessBuilderFactory;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
 
@@ -34,6 +35,8 @@ public class WindowsAndLinuxTester extends FunctionalTest {
     OSUser user;
     OSUser userWPass;
     String tempPath;
+
+    static OSRuntime osRuntime;
 
     /*
      * It is assumed that the user given for testing purposes can both sudo and su into an other
@@ -61,6 +64,11 @@ public class WindowsAndLinuxTester extends FunctionalTest {
             File s64 = new File(paHome, "dist/scripts/processbuilder/linux/suer64");
             Assume.assumeTrue(s32.exists() || s64.exists());
         }
+    }
+
+    @BeforeClass
+    static public void setOSRuntime() throws ProActiveException {
+        osRuntime = new OSRuntime();
     }
 
     @Test
@@ -133,8 +141,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
     @Test
     public void checkCanExecuteAsUser() throws Exception {
-        OSProcessBuilder ospb = OSProcessBuilderFactory.getBuilder();
-
+        OSProcessBuilder ospb = new PAOSProcessBuilderFactory().getBuilder();
         assertTrue(ospb.canExecuteAsUser(user));
         assertTrue(ospb.canExecuteAsUser(userWPass));
         assertFalse(ospb.canExecuteAsUser(new OSUser(user.getUserName(), "jibberish")));
@@ -429,7 +436,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
     public static void runAndMatch(String[] cmd, OSUser user, File dir, Map<String, String> env,
             String[] expectedOut, String[] expectedError, Integer expectedRet) throws Exception {
-        Process p = (user != null) ? OSRuntime.exec(user, cmd, env, dir) : OSRuntime.exec(cmd, env, dir);
+        Process p = (user != null) ? osRuntime.exec(user, cmd, env, dir) : osRuntime.exec(cmd, env, dir);
         String[] out = getOutput(p);
         String[] err = getError(p);
         String errors = "";

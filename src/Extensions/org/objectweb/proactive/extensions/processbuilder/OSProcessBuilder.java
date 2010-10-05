@@ -41,8 +41,6 @@ import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
  * 
  */
 public abstract class OSProcessBuilder {
-    protected static final String HOME_FOLDER = (System.getProperty("proactive.home") != null) ? System
-            .getProperty("proactive.home") : "";
 
     // the underlying ProcessBuilder to whom all work will be delegated
     protected ProcessBuilder delegatedPB;
