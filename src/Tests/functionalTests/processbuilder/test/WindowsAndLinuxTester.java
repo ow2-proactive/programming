@@ -1,17 +1,22 @@
 package functionalTests.processbuilder.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder;
 import org.objectweb.proactive.extensions.processbuilder.OSProcessBuilderFactory;
 import org.objectweb.proactive.extensions.processbuilder.OSRuntime;
@@ -19,14 +24,16 @@ import org.objectweb.proactive.extensions.processbuilder.OSUser;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
 
+import functionalTests.FunctionalTest;
 
-public class WindowsAndLinuxTester {
+
+public class WindowsAndLinuxTester extends FunctionalTest {
     final static boolean isLinux = System.getProperty("os.name").toLowerCase().startsWith("linux");
 
     // Modify these to fit your environment
-    OSUser user = new OSUser(System.getenv("OSPB_TEST_USER"));
-    OSUser userWPass = new OSUser(System.getenv("OSPB_TEST_USER"), System.getenv("OSPB_TEST_PASS"));
-    String tempPath = (System.getenv("OSPB_TEST_TEMP"));
+    OSUser user;
+    OSUser userWPass;
+    String tempPath;
 
     /*
      * It is assumed that the user given for testing purposes can both sudo and su into an other
@@ -34,6 +41,28 @@ public class WindowsAndLinuxTester {
      */
 
     // ------------------------------------ 
+    @Before
+    public void shouldRun() throws ProActiveException {
+
+        String suser = System.getenv("OSPB_TEST_USER");
+        Assume.assumeNotNull(suser, "process builder not tested because OSPB_TEST_USER is not set");
+        user = new OSUser(System.getenv("OSPB_TEST_USER"));
+
+        String pass = System.getenv("OSPB_TEST_PASS");
+        Assume.assumeNotNull(pass, "process builder not tested because OSPB_TEST_PASS is not set");
+        userWPass = new OSUser(suser, pass);
+
+        tempPath = System.getenv("OSPB_TEST_TEMP");
+        Assume.assumeNotNull(tempPath, "process builder not tested because OSPB_TEST_TEMP is not set");
+
+        if (isLinux) {
+            String paHome = ProActiveRuntimeImpl.getProActiveRuntime().getProActiveHome();
+            File s32 = new File(paHome, "dist/scripts/processbuilder/linux/suer32");
+            File s64 = new File(paHome, "dist/scripts/processbuilder/linux/suer64");
+            Assume.assumeTrue(s32.exists() || s64.exists());
+        }
+    }
+
     @Test
     public void fallTroughIfNoUser() {
         String[] lc = { "/bin/sh", "-c", "echo 111 && (echo 222 >&2)" };
