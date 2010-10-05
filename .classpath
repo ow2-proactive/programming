@@ -9,7 +9,7 @@
 	<classpathentry excluding="doc/PublishedAPIDoclet.java" kind="src" output="classes/Utils" path="src/Utils"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
-	<classpathentry kind="lib" path="compile/lib/junit-4.3.jar"/>
+	<classpathentry kind="lib" path="compile/lib/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/asm-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/ast-core-2.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/axis.jar"/>
