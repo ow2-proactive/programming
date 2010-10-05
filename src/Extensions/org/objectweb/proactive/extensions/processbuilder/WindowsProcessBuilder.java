@@ -56,7 +56,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessB
  * It relies on scritps for custom launching of the user command.
  * 
  * @author Zsolt Istvan
- * 
+ * @since ProActive 4.4.0
  */
 public class WindowsProcessBuilder extends OSProcessBuilder {
 

@@ -52,7 +52,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * launching
  * 
  * @author Zsolt Istvan
- * 
+ * @since ProActive 4.4.0
  */
 @PublicAPI
 public class OSRuntime {

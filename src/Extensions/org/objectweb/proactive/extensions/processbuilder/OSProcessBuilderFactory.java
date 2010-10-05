@@ -44,7 +44,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * builder that is compatible with the underlying operating system.
  * 
  * @author Zsolt Istvan
- * 
+ * @since ProActive 4.4.0
  */
 @PublicAPI
 public interface OSProcessBuilderFactory {

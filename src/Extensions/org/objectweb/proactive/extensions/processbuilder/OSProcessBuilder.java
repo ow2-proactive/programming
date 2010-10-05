@@ -75,7 +75,7 @@ import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
  * @see ProcessBuilder
  * 
  * @author Zsolt Istvan
- * 
+ * @since ProActive 4.4.0
  */
 @PublicAPI
 public abstract class OSProcessBuilder {
