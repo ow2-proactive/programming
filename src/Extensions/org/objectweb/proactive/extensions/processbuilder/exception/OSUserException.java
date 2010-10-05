@@ -38,6 +38,8 @@ package org.objectweb.proactive.extensions.processbuilder.exception;
 
 import java.io.Serializable;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
 
 /**
  * If this exception is throwed by the OSProcessBuilder, 
@@ -51,6 +53,7 @@ import java.io.Serializable;
  * @author Zsolt Istvan
  * 
  */
+@PublicAPI
 public class OSUserException extends Exception implements Serializable {
 
     public OSUserException(String message) {

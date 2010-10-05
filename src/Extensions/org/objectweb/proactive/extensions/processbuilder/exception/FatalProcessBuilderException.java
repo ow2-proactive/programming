@@ -38,6 +38,8 @@ package org.objectweb.proactive.extensions.processbuilder.exception;
 
 import java.io.Serializable;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
 
 /**
  * This exception is used to signal an internal error encountered by the OSProcessBuilder while
@@ -59,6 +61,7 @@ import java.io.Serializable;
  * @author Zsolt Istvan
  * 
  */
+@PublicAPI
 public class FatalProcessBuilderException extends Exception implements Serializable {
 
     public FatalProcessBuilderException(String descr) {

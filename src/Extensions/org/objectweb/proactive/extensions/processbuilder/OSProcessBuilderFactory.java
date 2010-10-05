@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
+
 /**
  * Factory class for {@link OSProcessBuilder} which will produce a process
  * builder that is compatible with the underlying operating system.
@@ -43,6 +46,7 @@ package org.objectweb.proactive.extensions.processbuilder;
  * @author Zsolt Istvan
  * 
  */
+@PublicAPI
 public interface OSProcessBuilderFactory {
     /**
      * Creates a new instance of {@link OSProcessBuilder}

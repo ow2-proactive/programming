@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
@@ -53,6 +54,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * @author Zsolt Istvan
  * 
  */
+@PublicAPI
 public class OSRuntime {
     final private OSProcessBuilderFactory pbFactory;
 

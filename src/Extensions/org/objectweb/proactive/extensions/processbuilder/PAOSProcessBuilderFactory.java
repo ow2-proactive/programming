@@ -44,7 +44,7 @@ import org.objectweb.proactive.core.util.OperatingSystem;
 /**
  * An {@link OSProcessBuilderFactory} integrated with ProActive. 
  */
-public class PAOSProcessBuilderFactory implements OSProcessBuilderFactory {
+final public class PAOSProcessBuilderFactory implements OSProcessBuilderFactory {
     final private OperatingSystem os;
     final private String paHome;
 

@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
+
 /**
  * This class represents a user of the operating system, that is identified by one
  * of the following options:
@@ -48,6 +51,7 @@ package org.objectweb.proactive.extensions.processbuilder;
  * @author zistan
  * 
  */
+@PublicAPI
 public class OSUser {
     private final String userName;
     private final String password;

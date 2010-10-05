@@ -38,6 +38,8 @@ package org.objectweb.proactive.extensions.processbuilder.exception;
 
 import java.io.Serializable;
 
+import org.objectweb.proactive.annotation.PublicAPI;
+
 
 /**
  * This exception is thrown if the process builder's scripts were not able to bind the 
@@ -45,6 +47,7 @@ import java.io.Serializable;
  * @author Zsolt Istvan
  * 
  */
+@PublicAPI
 public class CoreBindingException extends Exception implements Serializable {
 
     public CoreBindingException(String descr) {

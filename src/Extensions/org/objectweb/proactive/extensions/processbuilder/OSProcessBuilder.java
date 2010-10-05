@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
@@ -76,6 +77,7 @@ import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
  * @author Zsolt Istvan
  * 
  */
+@PublicAPI
 public abstract class OSProcessBuilder {
 
     // the underlying ProcessBuilder to whom all work will be delegated
