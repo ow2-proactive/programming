@@ -57,10 +57,6 @@ public class TestISUniqueThread extends GCMFunctionalTestDefaultNodes {
     private final static int NB_CALL = 100;
     private final static int NB_CALLER = 10;
 
-    public TestISUniqueThread(int hostCapacity, int vmCapacity) {
-        super(hostCapacity, vmCapacity);
-    }
-
     public TestISUniqueThread() {
         super(2, 1);
     }
