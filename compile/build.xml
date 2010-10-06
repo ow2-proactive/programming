@@ -204,6 +204,9 @@
 
 
 	<target name="compile.extensions" depends="compile.core, -deploy.mkdir" description="Compile ProActive Extensions classes">
+		<copy todir="${cl.extensions.dir}">
+			<fileset dir="${src.extensions.dir}" includes="META-INF/**"/>
+		</copy>
 		<subant target="-compile" inheritall="yes" failonerror="true">
 			<fileset dir="${src.extensions.dir}" includes="**/build.xml" />
 		</subant>
@@ -211,6 +214,9 @@
 
 
 	<target name="compile.extra" depends="compile.core" description="Compile ProActive Extensions classes">
+		<copy todir="${cl.extra.dir}">
+			<fileset dir="${src.extra.dir}" includes="META-INF/**"/>
+		</copy>
 		<subant target="-compile" inheritall="yes" failonerror="true">
 			<fileset dir="${src.extra.dir}" includes="**/build.xml" />
 		</subant>
