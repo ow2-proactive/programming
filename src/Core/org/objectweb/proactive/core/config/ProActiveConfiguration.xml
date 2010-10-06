@@ -28,7 +28,6 @@
         <prop key="proactive.communication.rmissh.try_normal_first" value="false" />
 		<!-- <prop key="proactive.communication.benchmark.class" value="org.objectweb.proactive.core.remoteobject.benchmark.LargeByteArrayBenchmark"/> -->
         <prop key="proactive.classloading.useHTTP" value="true"/>
-		<prop key="proactive.classloading.useHTTP" value="true"/>
 
 		<!-- SSL cipher suites used for RMISSL communications.
 	List of cipher suites used for RMISSL, separated by commas.
