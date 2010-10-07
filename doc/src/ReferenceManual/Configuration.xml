@@ -193,21 +193,21 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
 
     <para><itemizedlist>
         <listitem>
-          <para><emphasis role="bold">proactive.ssh.port</emphasis>: Port
+          <para><emphasis role="bold">proactive.communication.rmissh.port</emphasis>: Port
           number on which all the ssh daemons to which this JVM has to connect
           to are expected to listen. The default value
           is <emphasis role="bold">22</emphasis>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.ssh.username</emphasis>:
+          <para><emphasis role="bold">proactive.communication.rmissh.username</emphasis>:
           Username which will be used during authentication with all the ssh
           daemons to which this JVM will need to connect to.
           The default is the <emphasis role="bold">user.name</emphasis> java property.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.ssh.known_hosts</emphasis>:
+          <para><emphasis role="bold">proactive.communication.rmissh.known_hosts</emphasis>:
           Filename which identifies the file which contains the traditional
           ssh known_hosts list. This list of hosts is used during
           authentication with each ssh daemon to which this JVM will need to
@@ -218,7 +218,7 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.ssh.key_directory</emphasis>:
+          <para><emphasis role="bold">proactive.communication.rmissh.key_directory</emphasis>:
           Directory which is expected to contain the pairs of public/private
           keys used during authentication. The private keys must not be
           encrypted. The public keys filenames has to be suffixed by '.pub'. Private
@@ -227,7 +227,7 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.tunneling.try_normal_first</emphasis>: If this
+          <para><emphasis role="bold">proactive.communication.rmissh.try_normal_first</emphasis>: If this
           property is set to 'yes', the tunneling code always attempts to make
           a direct rmi connection to the remote object before tunneling. If
           The default is <emphasis role="bold">no</emphasis> meaning these
@@ -240,7 +240,7 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.tunneling.connect_timeout</emphasis>: This
+          <para><emphasis role="bold">proactive.communication.rmissh.connect_timeout</emphasis>: This
           property specifies how long the tunneling code will wait while
           trying to establish a connection to a remote host before declaring
           that the connection failed. The default
@@ -248,16 +248,12 @@ for windows users: $HOME\.proactive\ProActiveConfiguration.xml</screen>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.tunneling.use_gc</emphasis>:
-          If this property is set to 'yes', the client JVM does not destroy
-          the ssh tunnels are soon as they are not used anymore. They are
-          queued into a list of unused tunnels which can be reused. If this
-          property is not set or is set to another value, the tunnels are
-          destroyed as soon as they are not needed anymore by the JVM.</para>
+          <para><emphasis role="bold">proactive.communication.rmissh.gc_idletime</emphasis>:
+		  This property identifies the maximum idle time before a SSH tunnel or a connection is garbage collected.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis role="bold">proactive.tunneling.gc_period</emphasis>: This property
+          <para><emphasis role="bold">proactive.communication.rmissh.gc_period</emphasis>: This property
           specifies how long the tunnel garbage collector will wait before
           destroying an unused tunnel. If a tunnel is older than this value, it
           is automatically destroyed. The default

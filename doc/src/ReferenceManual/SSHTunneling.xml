@@ -206,87 +206,83 @@ A    | &lt;----                    ----&gt;  |    B
     <para>The properties you can set to configure the behavior of the ssh
     tunneling code are listed below. All these properties are client-side
     properties:</para>
+   	
+	<itemizedlist>
+        <listitem>
+          <para><emphasis role="bold">proactive.communication.rmissh.port</emphasis>: Port
+          number on which all the ssh daemons to which this JVM has to connect
+          to are expected to listen. The default value
+          is <emphasis role="bold">22</emphasis>.</para>
+        </listitem>
 
-    <itemizedlist>
-      <listitem>
-        <para><emphasis role="bold">proactive.ssh.port</emphasis>: the port
-        number on which all the ssh daemons to which this JVM must connect to
-        are expected to listen. If this property is not set, the default is
-        22.</para>
-      </listitem>
+        <listitem>
+          <para><emphasis role="bold">proactive.communication.rmissh.username</emphasis>: 
+		  	Two possible syntaxes: username alone e.g. <emphasis role="bold">proactive.ssh.username=jsmith</emphasis>, it represents
+        	the username which will be used during authentication with all the ssh
+        	daemons to which this JVM will need to connect to.</para>
 
-      <listitem>
-        <para><emphasis role="bold">proactive.ssh.username</emphasis>: Two
-        possible syntaxes: username alone .e.g. <emphasis role="bold">proactive.ssh.username=jsmith</emphasis>, it represents
-        the username which will be used during authentication with all the ssh
-        daemons to which this JVM will need to connect to.</para>
+			<para>Or you can use the form <emphasis role="bold">proactive.ssh.username=username1@machine1;username2@machine2;...;usernameN@machineN</emphasis>.
+			Note that several usernames without machine's names is not allowed and
+			will not be parsed properly.</para>
 
-        <para>Or you can use the form <emphasis role="bold">proactive.ssh.username=username1@machine1;username2@machine2;...;usernameN@machineN</emphasis>.
-        Note that several usernames without machine's names is not allowed and
-        will not be parsed properly.</para>
+			<para>If this property is not set, the default is the <emphasis role="bold">user.name</emphasis> Java
+			property.</para>
+        </listitem>
 
-        <para>If this property is not set, the default is the user.name Java
-        property.</para>
-      </listitem>
+        <listitem>
+          <para><emphasis role="bold">proactive.communication.rmissh.known_hosts</emphasis>:
+          Filename which identifies the file which contains the traditional
+          ssh known_hosts list. This list of hosts is used during
+          authentication with each ssh daemon to which this JVM will need to
+          connect to. If the host key does not match the one stored in this
+          file, the authentication will fail. The
+          default is <emphasis role="bold">System.getProperty('user.home') +
+          '/.ssh/known_hosts'</emphasis></para>
+        </listitem>
 
-      <listitem>
-        <para><emphasis role="bold">proactive.ssh.known_hosts</emphasis>: a
-        filename which identifies the file which contains the traditional ssh
-        known_hosts list. This list of hosts is used during authentication
-        with each ssh daemon to which this JVM will need to connect to. If the
-        host key does not match the one stored in this file, the
-        authentication will fail. If this property is not set, the default is
-        <emphasis role="bold">System.getProperty('user.home') + '/.ssh/known_hosts'</emphasis></para>
-      </listitem>
+        <listitem>
+          <para><emphasis role="bold">proactive.communication.rmissh.key_directory</emphasis>:
+          Directory which is expected to contain the pairs of public/private
+          keys used during authentication. The private keys must not be
+          encrypted. The public keys filenames has to be suffixed by '.pub'. Private
+          keys are ignored if their associated public key is not present.
+          The default is <emphasis role="bold">System.getProperty('user.home') + '/.ssh/'</emphasis>.</para>
+        </listitem>
 
-      <listitem>
-        <para><emphasis role="bold">proactive.ssh.key_directory</emphasis>: a
-        directory which is expected to contain the pairs of public/private
-        keys used during authentication. The private keys must not be
-        encrypted. The public keys filenames must be suffixed by '*.pub'. Private keys
-        are ignored if their associated public key is not present. If this
-        property is not set, the default is <emphasis role="bold">System.getProperty ('user.home') +
-        '/.ssh/'</emphasis></para>
-      </listitem>
+        <listitem>
+          <para><emphasis role="bold">proactive.communication.rmissh.try_normal_first</emphasis>: If this
+          property is set to 'yes', the tunneling code always attempts to make
+          a direct rmi connection to the remote object before tunneling. If
+          The default is <emphasis role="bold">no</emphasis>, meaning these
+          direct-connection will not be attempted. This property is especially useful if
+          you want to deploy a number of objects on a LAN where only one of
+          the hosts needs to run with the rmissh protocol to allow hosts
+          outside the LAN to connect to this front-end host. The other hosts
+          located on the LAN can use the try_normal_first property to avoid
+          using tunneling to make requests to the LAN front-end.</para>
+        </listitem>
 
-      <listitem>
-        <para><emphasis role="bold">proactive.tunneling.try_normal_first</emphasis>: if this
-        property is set to 'yes', the tunneling code always attempts to make a
-        direct rmi connection to the remote object before tunneling. If this
-        property is not set, the default is not to make these
-        direct-connection attempts. This property is especially useful if you
-        want to deploy a number of objects on a LAN where only one of the
-        hosts needs to run with the rmissh protocol to allow hosts outside the
-        LAN to connect to this front-end host. The other hosts located on the
-        LAN can use the try_normal_first property to avoid using tunneling to
-        make requests to the LAN front-end.</para>
-      </listitem>
+        <listitem>
+          <para><emphasis role="bold">proactive.communication.rmissh.connect_timeout</emphasis>: This
+          property specifies how long the tunneling code will wait while
+          trying to establish a connection to a remote host before declaring
+          that the connection failed. The default
+          value is <emphasis role="bold">2000 ms</emphasis>.</para>
+        </listitem>
 
-      <listitem>
-        <para><emphasis role="bold">proactive.tunneling.connect_timeout</emphasis>: this
-        property specifies how long the tunneling code will wait while trying
-        to establish a connection to a remote host before declaring that the
-        connection failed. If this property is not set, the default value is
-        <emphasis role="bold">2000 ms</emphasis>.</para>
-      </listitem>
+        <listitem>
+          <para><emphasis role="bold">proactive.communication.rmissh.gc_idletime</emphasis>:
+		  This property identifies the maximum idle time before a SSH tunnel or a connection is garbage collected.</para>
+        </listitem>
 
-      <listitem>
-        <para><emphasis role="bold">proactive.tunneling.use_gc</emphasis>: if
-        this property is set to 'yes', the client JVM does not destroy the ssh
-        tunnels as soon as they are not used anymore. They are queued into a
-        list of unused tunnels which can be reused. If this property is not
-        set or is set to another value, the tunnels are destroyed as soon as
-        they are not needed anymore by the JVM.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis role="bold">proactive.tunneling.gc_period</emphasis>:
-        this property specifies how long the tunnel garbage collector will
-        wait before destroying an unused tunnel. If a tunnel is older than this
-        value, it is automatically destroyed. If this property is not set, the
-        default value is <emphasis role="bold">10000 ms</emphasis>.</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para><emphasis role="bold">proactive.communication.rmissh.gc_period</emphasis>: This property
+          specifies how long the tunnel garbage collector will wait before
+          destroying an unused tunnel. If a tunnel is older than this value, it
+          is automatically destroyed. The default
+          value is <emphasis role="bold">10000 ms</emphasis>.</para>
+        </listitem>
+      </itemizedlist>
 
     <para>Note that the use of SSH tunneling over RMI still allows dynamic
     class loading through HTTP. For the dynamic class loading, our protocol
