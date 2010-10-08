@@ -78,7 +78,7 @@ public class LinuxProcessBuilder extends OSProcessBuilder {
                 String[] environment = {
                         ENV_VAR_USER_PASSWORD + "=" + ((user.hasPassword()) ? user.getPassword() : ""),
                         ENV_VAR_USER_KEY_CONTENT + "=" +
-                            ((user.hasPrivateKey()) ? String.copyValueOf(user.getPrivateKey()) : "") };
+                            ((user.hasPrivateKey()) ? new String(user.getPrivateKey()) : "") };
                 p = Runtime.getRuntime().exec(args, environment);
             } catch (IOException e) {
                 additionalCleanup();
@@ -165,8 +165,7 @@ public class LinuxProcessBuilder extends OSProcessBuilder {
          */
         if (user() != null) {
             if (user().hasPrivateKey()) {
-                delegatedPB.environment().put(ENV_VAR_USER_KEY_CONTENT,
-                        String.copyValueOf(user().getPrivateKey()));
+                delegatedPB.environment().put(ENV_VAR_USER_KEY_CONTENT, new String(user().getPrivateKey()));
             }
 
             if (user().hasPassword()) {

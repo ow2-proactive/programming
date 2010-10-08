@@ -55,7 +55,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class OSUser {
     private final String userName;
     private final String password;
-    private final char[] privateKey;
+    private final byte[] privateKey;
 
     /**
      * Constructor for a user which has no password specified. (This does not
@@ -92,14 +92,14 @@ public class OSUser {
      * Constructor for a user with private key;
      * 
      * @param userName
-     * @param password
+     * @param privateKey a SSH private key as byte array (String encoded with the default charset)
      */
-    public OSUser(String userName, char[] keyContent) {
+    public OSUser(String userName, byte[] privateKey) {
         this.userName = userName;
 
         // empty key is still no key
-        if (!keyContent.equals("")) {
-            this.privateKey = keyContent;
+        if (!privateKey.equals("")) {
+            this.privateKey = privateKey;
         } else {
             this.privateKey = null;
         }
@@ -147,7 +147,7 @@ public class OSUser {
     /*
      * This method is protected as no external classes should be able to have access to it.
      */
-    protected char[] getPrivateKey() {
+    protected byte[] getPrivateKey() {
         return privateKey;
     }
 
