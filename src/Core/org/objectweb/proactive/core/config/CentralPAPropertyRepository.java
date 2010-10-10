@@ -148,7 +148,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      * By default a random name is assigned to a ProActive Runtime. This property allows
      * to choose the name of the Runtime to be able to perform lookups.
      *
-     * <strong>The name must start with PA_JVM</strong>
+     * By default, the name of a runtime starts with PA_JVM</strong>
      */
     static public PAPropertyString PA_RUNTIME_NAME = new PAPropertyString("proactive.runtime.name", false);
 

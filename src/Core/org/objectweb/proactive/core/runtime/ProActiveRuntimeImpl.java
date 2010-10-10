@@ -1350,12 +1350,6 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
             if (CentralPAPropertyRepository.PA_RUNTIME_NAME.isSet()) {
                 this.name = CentralPAPropertyRepository.PA_RUNTIME_NAME.getValue();
-
-                if (this.name.indexOf("PA_JVM") < 0) {
-                    runtimeLogger
-                            .warn("WARNING !!! The name of a ProActiveRuntime MUST contain PA_JVM string \n"
-                                + "WARNING !!! Property proactive.runtime.name does not contain PA_JVM. This name is not adapted to IC2D tool");
-                }
             } else {
                 this.name = "PA_JVM" + random; //+ "_" + this.hostName;
             }
