@@ -82,7 +82,7 @@ public class TestCXFWSBindings extends CommonSetup {
         GCM.getGCMLifeCycleController(client).startFc();
         Runner runner = (Runner) client.getFcInterface("Runner");
         Assert.assertTrue("Failed to invoke web services with primitive component", runner.execute()
-                .booleanValue());
+                .getBooleanValue());
     }
 
     @Test
@@ -100,6 +100,6 @@ public class TestCXFWSBindings extends CommonSetup {
                     WSInfo.CXFWSCALLER_ID + ")");
         GCM.getGCMLifeCycleController(client).startFc();
         Runner runner = (Runner) client.getFcInterface("Runner");
-        Assert.assertFalse("Successful access to a non existing method", runner.execute().booleanValue());
+        Assert.assertFalse("Successful access to a non existing method", runner.execute().getBooleanValue());
     }
 }

@@ -94,22 +94,22 @@ public class PAInOutMessageReceiver extends AbstractInOutMessageReceiver {
      */
     private Object getPrimitiveType(Object o) {
         if (o instanceof BooleanWrapper) {
-            return ((BooleanWrapper) o).booleanValue();
+            return ((BooleanWrapper) o).getBooleanValue();
         }
         if (o instanceof FloatWrapper) {
-            return ((FloatWrapper) o).floatValue();
+            return ((FloatWrapper) o).getFloatValue();
         }
         if (o instanceof IntWrapper) {
-            return ((IntWrapper) o).intValue();
+            return ((IntWrapper) o).getIntValue();
         }
         if (o instanceof DoubleWrapper) {
-            return ((DoubleWrapper) o).doubleValue();
+            return ((DoubleWrapper) o).getDoubleValue();
         }
         if (o instanceof LongWrapper) {
-            return ((LongWrapper) o).longValue();
+            return ((LongWrapper) o).getLongValue();
         }
         if (o instanceof StringWrapper) {
-            return ((StringWrapper) o).stringValue();
+            return ((StringWrapper) o).getStringValue();
         }
         return o;
     }

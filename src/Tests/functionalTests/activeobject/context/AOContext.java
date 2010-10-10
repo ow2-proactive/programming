@@ -72,8 +72,8 @@ public class AOContext implements java.io.Serializable {
     }
 
     public BooleanWrapper test(AOContext a) {
-        return new BooleanWrapper((a.standardService(this.myID).booleanValue()) &&
-            (a.immediateService(this.myID)).booleanValue());
+        return new BooleanWrapper((a.standardService(this.myID).getBooleanValue()) &&
+            (a.immediateService(this.myID)).getBooleanValue());
     }
 
     // test stub on caller

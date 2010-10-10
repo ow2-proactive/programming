@@ -133,7 +133,7 @@ public class CMAgentPrimeManager {
             //@snippet-resume primes_distributed_manager_skeleton
 
             // Check the answer
-            prime = answers.get(intervalNumber).booleanValue();
+            prime = answers.get(intervalNumber).getBooleanValue();
 
             // Remove the actualized future			
             answers.remove(intervalNumber);

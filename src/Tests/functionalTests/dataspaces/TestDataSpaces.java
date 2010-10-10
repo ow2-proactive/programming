@@ -304,10 +304,10 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
             Thread.sleep(1000);
             ao1.addInputSpace(ADDED_INPUT_NAME, getRootSubdirURL(inputWithDirLocalHandle));
 
-            assertEquals(INPUT_FILE_CONTENT, contentWrapper1B.stringValue());
-            assertEquals(INPUT_FILE_CONTENT, contentWrapper2.stringValue());
-            assertEquals(INPUT_FILE_CONTENT, contentWrapper4.stringValue());
-            assertEquals(INPUT_FILE_CONTENT, contentWrapperLocal.stringValue());
+            assertEquals(INPUT_FILE_CONTENT, contentWrapper1B.getStringValue());
+            assertEquals(INPUT_FILE_CONTENT, contentWrapper2.getStringValue());
+            assertEquals(INPUT_FILE_CONTENT, contentWrapper4.getStringValue());
+            assertEquals(INPUT_FILE_CONTENT, contentWrapperLocal.getStringValue());
             synchronized (contentWrapperFake) {
                 if (contentWrapperFake.length() == 0) {
                     contentWrapperFake.wait(29000);

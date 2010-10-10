@@ -67,7 +67,7 @@ public class SciTest1 {
         MSEngine engine = MSDeployEngine.deploy("ScilabEngine");
         BooleanWrapper isActivate = engine.activate();
 
-        if (isActivate.booleanValue()) {
+        if (isActivate.getBooleanValue()) {
             System.out.println("->Scilab engine is not activate");
         }
 

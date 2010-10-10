@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.util.wrapper;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -50,12 +52,13 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Created on Jul 28, 2005
  */
 @PublicAPI
+@XmlRootElement
 public class BooleanWrapper implements Serializable {
 
     /**
      * The primitive value.
      */
-    protected Boolean value;
+    protected Boolean booleanValue;
 
     /**
      * The no arguments constructor for ProActive.
@@ -69,15 +72,25 @@ public class BooleanWrapper implements Serializable {
      * @param value the primitive <code>boolean</code> value.
      */
     public BooleanWrapper(boolean value) {
-        this.value = value;
+        this.booleanValue = value;
     }
 
     /**
      * Return the value of the <code>boolean</code>.
      * @return the primitive value.
      */
+    public boolean getBooleanValue() {
+        return booleanValue;
+    }
+
+    /**
+     * @deprecated use {@link BooleanWrapper#getBooleanValue()}
+     * Return the value of the <code>boolean</code>.
+     * @return the primitive value.
+     */
+    @Deprecated
     public boolean booleanValue() {
-        return value;
+        return booleanValue;
     }
 
     /**
@@ -85,19 +98,19 @@ public class BooleanWrapper implements Serializable {
      */
     @Override
     public String toString() {
-        return this.value + "";
+        return this.booleanValue + "";
     }
 
     @Override
     public boolean equals(Object arg0) {
         if (arg0 instanceof BooleanWrapper) {
-            return ((BooleanWrapper) arg0).booleanValue() == this.value;
+            return ((BooleanWrapper) arg0).getBooleanValue() == this.booleanValue;
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return this.value.hashCode();
+        return this.booleanValue.hashCode();
     }
 }

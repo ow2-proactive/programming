@@ -154,7 +154,7 @@ public class TestMulticast extends Conformtest {
             ArrayList<String> resultsAL = new ArrayList<String>();
             for (StringWrapper sw : results) {
                 Assert.assertNotNull("One result is null", sw);
-                resultsAL.add(sw.stringValue());
+                resultsAL.add(sw.getStringValue());
             }
             checkResult(stringList, "Asynchronous call", resultsAL);
             System.err.println("TM: async call" + results);
@@ -205,7 +205,7 @@ public class TestMulticast extends Conformtest {
             ArrayList<String> resultsAL = new ArrayList<String>();
             for (StringWrapper sw : results) {
                 Assert.assertNotNull("One result is null", sw);
-                resultsAL.add(sw.stringValue());
+                resultsAL.add(sw.getStringValue());
             }
             checkResult(stringList, broadcastArgs, resultsAL);
             System.err.println("TM: async call" + results);

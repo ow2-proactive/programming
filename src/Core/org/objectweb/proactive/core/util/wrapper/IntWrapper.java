@@ -38,6 +38,9 @@ package org.objectweb.proactive.core.util.wrapper;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -50,12 +53,14 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Created on Jul 28, 2005
  */
 @PublicAPI
+@XmlRootElement
 public class IntWrapper implements Serializable {
 
     /**
      * The primitive value.
      */
-    protected Integer value;
+    @XmlElement
+    protected Integer intValue;
 
     /**
      * The no arguments constructor for ProActive.
@@ -69,15 +74,25 @@ public class IntWrapper implements Serializable {
      * @param value the primitive <code>int</code> value.
      */
     public IntWrapper(int value) {
-        this.value = value;
+        this.intValue = value;
+    }
+
+    /**
+     * @deprecated use {@link IntWrapper#getIntValue()}
+     * Return the value of the <code>int</code>.
+     * @return the primitive value.
+     */
+    @Deprecated
+    public int intValue() {
+        return this.intValue;
     }
 
     /**
      * Return the value of the <code>int</code>.
      * @return the primitive value.
      */
-    public int intValue() {
-        return this.value;
+    public int getIntValue() {
+        return this.intValue;
     }
 
     /**
@@ -85,19 +100,19 @@ public class IntWrapper implements Serializable {
      */
     @Override
     public String toString() {
-        return this.value + "";
+        return this.intValue + "";
     }
 
     @Override
     public boolean equals(Object arg0) {
         if (arg0 instanceof IntWrapper) {
-            return ((IntWrapper) arg0).intValue() == this.value;
+            return ((IntWrapper) arg0).getIntValue() == this.intValue;
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return this.value.hashCode();
+        return this.intValue.hashCode();
     }
 }

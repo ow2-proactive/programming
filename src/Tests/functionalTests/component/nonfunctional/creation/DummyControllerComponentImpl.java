@@ -55,6 +55,6 @@ public class DummyControllerComponentImpl implements DummyControllerItf {
     }
 
     public IntWrapper result(IntWrapper param) {
-        return new IntWrapper(param.intValue() * 2);
+        return new IntWrapper(param.getIntValue() * 2);
     }
 }

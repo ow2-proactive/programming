@@ -57,7 +57,7 @@ public class CMAgentService extends CMAgentInitialized {
     // directly since LongWrapper is not recognize
     // TODO: See why
     public long waitLastRequestServeTime() {
-        return this.getLastRequestServeTime().longValue();
+        return this.getLastRequestServeTime().getLongValue();
     }
 
     public static void main(String[] args) {

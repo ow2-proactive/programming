@@ -203,7 +203,7 @@ public class Test extends ComponentTest {
         DummyControllerItf dummyControl = (DummyControllerItf) componentA.getFcInterface("dummy-controller");
         System.out.println("Dummy void method : " + dummyControl.dummyMethodWithResult());
         IntWrapper res = dummyControl.result(new IntWrapper(4));
-        System.out.println(" Message with return value : " + res.intValue());
+        System.out.println(" Message with return value : " + res.getIntValue());
 
     }
 

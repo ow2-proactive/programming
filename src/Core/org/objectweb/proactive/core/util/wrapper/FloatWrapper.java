@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.util.wrapper;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -50,12 +52,13 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Created on Jul 28, 2005
  */
 @PublicAPI
+@XmlRootElement
 public class FloatWrapper implements Serializable {
 
     /**
      * The primitive value.
      */
-    protected Float value;
+    protected Float floatValue;
 
     /**
      * The no arguments constructor for ProActive.
@@ -69,15 +72,25 @@ public class FloatWrapper implements Serializable {
      * @param value the primitive <code>float</code> value.
      */
     public FloatWrapper(float value) {
-        this.value = value;
+        this.floatValue = value;
     }
 
     /**
      * Return the value of the <code>float</code>.
      * @return the primitive value.
      */
+    public float getFloatValue() {
+        return this.floatValue;
+    }
+
+    /**
+     * @deprecated use {@link FloatWrapper#getFloatValue()}
+     * Return the value of the <code>float</code>.
+     * @return the primitive value.
+     */
+    @Deprecated
     public float floatValue() {
-        return this.value;
+        return this.floatValue;
     }
 
     /**
@@ -85,19 +98,19 @@ public class FloatWrapper implements Serializable {
      */
     @Override
     public String toString() {
-        return this.value + "";
+        return this.floatValue + "";
     }
 
     @Override
     public boolean equals(Object arg0) {
         if (arg0 instanceof FloatWrapper) {
-            return ((FloatWrapper) arg0).floatValue() == this.value;
+            return ((FloatWrapper) arg0).getFloatValue() == this.floatValue;
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return this.value.hashCode();
+        return this.floatValue.hashCode();
     }
 }

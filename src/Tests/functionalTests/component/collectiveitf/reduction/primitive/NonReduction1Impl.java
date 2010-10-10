@@ -50,8 +50,8 @@ public class NonReduction1Impl implements NonReduction1, Identifiable {
     }
 
     public IntWrapper doItInt(IntWrapper val) {
-        System.out.println(" Server received " + val.intValue());
-        return new IntWrapper(id + val.intValue());
+        System.out.println(" Server received " + val.getIntValue());
+        return new IntWrapper(id + val.getIntValue());
     }
 
     public void voidDoIt() {

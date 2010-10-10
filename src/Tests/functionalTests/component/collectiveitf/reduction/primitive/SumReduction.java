@@ -58,7 +58,7 @@ public class SumReduction implements ReduceBehavior {
                     " but received " + value.getClass().getName());
             }
             IntWrapper intWrapperValue = (IntWrapper) value;
-            sum += intWrapperValue.intValue();
+            sum += intWrapperValue.getIntValue();
         }
         System.out.println("--------------");
         return new IntWrapper(sum);

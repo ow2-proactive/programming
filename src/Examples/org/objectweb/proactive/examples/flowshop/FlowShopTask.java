@@ -292,7 +292,7 @@ public class FlowShopTask extends Task {
                     //					cutbacks[-currentMakespan - 1]++;
                     if (nbLoop > 100000000) { // TODO verify
                         if (((System.currentTimeMillis() - time) > MAX_TIME_TO_SPLIT) &&
-                            worker.isHungry().booleanValue()) { // avoid too tasks
+                            worker.isHungry().getBooleanValue()) { // avoid too tasks
                             mustSplit = true;
                             nbPerm++;
                             break;

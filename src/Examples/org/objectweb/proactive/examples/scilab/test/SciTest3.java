@@ -72,7 +72,7 @@ public class SciTest3 {
         PAFuture.waitForAll(listStateEngine);
 
         for (int i = 0; i < mapEngine.size(); i++) {
-            if (!listStateEngine.get(i).booleanValue()) {
+            if (!listStateEngine.get(i).getBooleanValue()) {
                 System.out.println("->Activation Error");
                 return;
             }

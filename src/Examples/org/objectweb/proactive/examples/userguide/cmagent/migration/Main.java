@@ -131,7 +131,7 @@ public class Main {
                 //@snippet-break migrate_main_cma_skeleton
                 //@tutorial-break
                 System.out.println("Calculating the statistics took " +
-                    ao.getLastRequestServeTime().longValue() + "ms \n");
+                    ao.getLastRequestServeTime().getLongValue() + "ms \n");
                 //@tutorial-resume
                 //@snippet-resume migrate_main_cma_skeleton
             }

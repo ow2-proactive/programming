@@ -275,7 +275,7 @@ public class Manager implements Serializable, InitActive {
 
         // Serving requests and waiting for results
         boolean hasNext;
-        while ((hasNext = this.taskProviderQueue.hasNext().booleanValue()) ||
+        while ((hasNext = this.taskProviderQueue.hasNext().getBooleanValue()) ||
             (this.pendingTaskList.size() != 0) || (!this.toReallocTaskList.isEmpty())) {
             boolean hasAddedTask = false;
             if (!this.toReallocTaskList.isEmpty() && !this.freeWorkerList.isEmpty()) {
@@ -322,7 +322,7 @@ public class Manager implements Serializable, InitActive {
                     this.taskProviderQueue.addResult(currentResult);
                     this.pendingTaskList.remove(index);
                     Worker freeWorker = this.workingWorkerList.remove(index);
-                    if (this.taskProviderQueue.hasNext().booleanValue()) {
+                    if (this.taskProviderQueue.hasNext().getBooleanValue()) {
                         Task t1 = this.taskProviderQueue.next();
                         try {
                             this.assignTaskToWorker(freeWorker, t1);
@@ -376,7 +376,7 @@ public class Manager implements Serializable, InitActive {
         Collection<Result> resultsFuture = this.taskProviderQueue.getAllResults();
         PAFuture.waitFor(resultsFuture);
         Result[] results = resultsFuture.toArray(new Result[this.taskProviderQueue.howManyResults()
-                .intValue()]);
+                .getIntValue()]);
         return this.rootTask.gather(results);
     }
 

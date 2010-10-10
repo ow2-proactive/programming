@@ -237,7 +237,7 @@ public class Test extends ComponentTest {
         DummyControllerItf dummyControl = (DummyControllerItf) componentA.getFcInterface("dummy-controller");
         //System.out.println("Dummy void method : " + dummyControl.dummyMethodWithResult()); ATTENTION!! This method generates a deadlock!!
         IntWrapper res = dummyControl.result(new IntWrapper(4));//This works because the call is ASYNCHRONOUS
-        System.out.println(" Message with return value : " + res.intValue());
+        System.out.println(" Message with return value : " + res.getIntValue());
 
     }
 

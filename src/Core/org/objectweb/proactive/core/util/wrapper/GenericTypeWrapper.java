@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.util.wrapper;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -48,12 +50,13 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * @author The ProActive Team
  */
 @PublicAPI
+@XmlRootElement
 public class GenericTypeWrapper<T extends Object> implements Serializable {
 
     /**
      *
      */
-    private T o;
+    private T object;
 
     /**
      * Empty no args Constructor
@@ -64,10 +67,10 @@ public class GenericTypeWrapper<T extends Object> implements Serializable {
 
     /**
      * Constructor for  the wrapper
-     * @param o the object to wrap
+     * @param object the object to wrap
      */
     public GenericTypeWrapper(T o) {
-        this.o = o;
+        this.object = o;
     }
 
     /**
@@ -75,7 +78,7 @@ public class GenericTypeWrapper<T extends Object> implements Serializable {
      * @return the wrapped object
      */
     public T getObject() {
-        return this.o;
+        return this.object;
     }
 
     /**
@@ -84,7 +87,7 @@ public class GenericTypeWrapper<T extends Object> implements Serializable {
     @Override
     public boolean equals(Object arg) {
         if (arg instanceof GenericTypeWrapper) {
-            return ((GenericTypeWrapper) arg).getObject().equals(this.o);
+            return ((GenericTypeWrapper) arg).getObject().equals(this.object);
         }
         return false;
     }
@@ -94,6 +97,6 @@ public class GenericTypeWrapper<T extends Object> implements Serializable {
      */
     @Override
     public int hashCode() {
-        return this.o.hashCode();
+        return this.object.hashCode();
     }
 }

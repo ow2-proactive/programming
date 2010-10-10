@@ -101,7 +101,7 @@ public class Manager implements Serializable, InitActive, RunActive {
             firstNodeCreatedTime = System.currentTimeMillis();
         }
 
-        slaves.put(slaveID.intValue(), slave);
+        slaves.put(slaveID.getIntValue(), slave);
 
         /* Deployment statistics */
         if ((slaves.size() % 50) == 0) {

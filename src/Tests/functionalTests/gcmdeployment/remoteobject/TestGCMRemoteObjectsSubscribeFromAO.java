@@ -65,7 +65,7 @@ public class TestGCMRemoteObjectsSubscribeFromAO extends GCMFunctionalTestDefaul
         Node node = super.getANode();
         RemoteAO rao = PAActiveObject.newActive(RemoteAO.class, new Object[] { super.gcmad }, node);
 
-        Assert.assertTrue(rao.isSuccess().booleanValue());
+        Assert.assertTrue(rao.isSuccess().getBooleanValue());
     }
 
     static public class RemoteAO implements Serializable, RunActive {

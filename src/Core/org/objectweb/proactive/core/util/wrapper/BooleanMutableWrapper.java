@@ -71,7 +71,7 @@ public class BooleanMutableWrapper extends BooleanWrapper {
      * @param value the new value.
      */
     public void setBooleanValue(boolean value) {
-        this.value = value;
+        this.booleanValue = value;
     }
 
 }

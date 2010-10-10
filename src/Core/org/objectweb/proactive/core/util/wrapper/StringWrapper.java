@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.util.wrapper;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -50,12 +52,13 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Created on Jul 28, 2005
  */
 @PublicAPI
+@XmlRootElement
 public class StringWrapper implements Serializable {
 
     /**
      * The not reifiable value.
      */
-    protected String value;
+    protected String stringValue;
 
     /**
      * The no arguments constructor for ProActive.
@@ -69,15 +72,25 @@ public class StringWrapper implements Serializable {
      * @param value the class <code>String</code> value.
      */
     public StringWrapper(String value) {
-        this.value = value;
+        this.stringValue = value;
+    }
+
+    /**
+     * @deprecated use {@link StringWrapper#getStringValue()}
+     * Return the value of the <code>String</code>.
+     * @return the none reifiable value.
+     */
+    @Deprecated
+    public String stringValue() {
+        return this.stringValue;
     }
 
     /**
      * Return the value of the <code>String</code>.
      * @return the none reifiable value.
      */
-    public String stringValue() {
-        return this.value;
+    public String getStringValue() {
+        return this.stringValue;
     }
 
     /**
@@ -85,16 +98,16 @@ public class StringWrapper implements Serializable {
      */
     @Override
     public String toString() {
-        return this.value;
+        return this.stringValue;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return ((obj instanceof StringWrapper) && ((StringWrapper) obj).stringValue().equals(value));
+        return ((obj instanceof StringWrapper) && ((StringWrapper) obj).getStringValue().equals(stringValue));
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return stringValue.hashCode();
     }
 }

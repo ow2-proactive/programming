@@ -70,7 +70,7 @@ public class Test extends FunctionalTest {
 
     @org.junit.Test
     public void postConditions() {
-        assertTrue(returnedValue.stringValue().equals("Returned value"));
+        assertTrue(returnedValue.getStringValue().equals("Returned value"));
         int exceptionCounter = 0;
         try {
             a1.method1();

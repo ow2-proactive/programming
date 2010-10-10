@@ -238,7 +238,7 @@ public class ExampleProcessing implements Serializable {
             BufferedReader reader = null;
             try {
                 // ... resolve file pointed by that URI and open a reader, as it contains partial result
-                partialResultsFile = PADataSpaces.resolveFile(uriWrapped.stringValue());
+                partialResultsFile = PADataSpaces.resolveFile(uriWrapped.getStringValue());
                 reader = getReader(partialResultsFile);
 
                 // ... and gather partial results in a list

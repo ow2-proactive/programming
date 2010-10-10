@@ -477,7 +477,7 @@ public class MSService implements Serializable {
                 }
 
                 this.listIdEngineFree.add(idEngine);
-            } else if (isActivate.booleanValue()) {
+            } else if (isActivate.getBooleanValue()) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("->MSService test2:getNextEngine:" + idEngine);
                 }

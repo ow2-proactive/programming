@@ -89,20 +89,20 @@ public class TestContext extends GCMFunctionalTestDefaultNodes {
 
         // test between two active objects
         BooleanWrapper res1 = a1.test(a2);
-        boolean b = res1.booleanValue();
+        boolean b = res1.getBooleanValue();
         assertTrue(b);
 
         // test from a halfBody
         BooleanWrapper res21 = a1.standardService(myId);
         BooleanWrapper res22 = a1.immediateService(myId);
-        assertTrue(res21.booleanValue());
-        assertTrue(res22.booleanValue());
+        assertTrue(res21.getBooleanValue());
+        assertTrue(res22.getBooleanValue());
 
         // test stub on caller
         a1.initTestStubOnCaller(a2);
         assertTrue(a2.getCallerName().equals(a1.getName()));
 
         // test exception for halfbody caller
-        assertTrue(a1.testHalfBodyCaller().booleanValue());
+        assertTrue(a1.testHalfBodyCaller().getBooleanValue());
     }
 }

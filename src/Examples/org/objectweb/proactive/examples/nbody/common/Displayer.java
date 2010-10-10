@@ -58,7 +58,7 @@ public class Displayer implements Serializable {
     public Displayer(Integer nbBodies, Boolean displayft, Deployer deployer, BooleanWrapper enable3D) {
         this.nbBodies = nbBodies.intValue();
         this.displayft = displayft.booleanValue();
-        if (!enable3D.booleanValue()) {
+        if (!enable3D.getBooleanValue()) {
             nbf = new NBody2DFrame("ProActive N-Body", this.nbBodies, this.displayft, deployer);
         } else {
             ddd = true;

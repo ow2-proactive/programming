@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.util.wrapper;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -50,12 +52,13 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Created on Jul 28, 2005
  */
 @PublicAPI
+@XmlRootElement
 public class LongWrapper implements Serializable {
 
     /**
      * The primitive value.
      */
-    protected Long value;
+    protected Long longValue;
 
     /**
      * The no arguments constructor for ProActive.
@@ -69,15 +72,25 @@ public class LongWrapper implements Serializable {
      * @param value the primitive <code>long</code> value.
      */
     public LongWrapper(long value) {
-        this.value = value;
+        this.longValue = value;
+    }
+
+    /**
+     * @deprecated see {@link LongWrapper#getLongValue()}
+     * Return the value of the <code>long</code>.
+     * @return the primitive value.
+     */
+    @Deprecated
+    public long longValue() {
+        return this.longValue;
     }
 
     /**
      * Return the value of the <code>long</code>.
      * @return the primitive value.
      */
-    public long longValue() {
-        return this.value;
+    public long getLongValue() {
+        return this.longValue;
     }
 
     /**
@@ -85,19 +98,19 @@ public class LongWrapper implements Serializable {
      */
     @Override
     public String toString() {
-        return this.value + "";
+        return this.longValue + "";
     }
 
     @Override
     public boolean equals(Object arg0) {
         if (arg0 instanceof LongWrapper) {
-            return ((LongWrapper) arg0).longValue() == this.value;
+            return ((LongWrapper) arg0).getLongValue() == this.longValue;
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return this.value.hashCode();
+        return this.longValue.hashCode();
     }
 }

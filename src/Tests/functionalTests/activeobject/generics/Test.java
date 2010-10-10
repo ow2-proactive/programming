@@ -72,7 +72,7 @@ public class Test extends FunctionalTest {
         assertTrue(My_DType.class.isAssignableFrom(p_.getFirst().getClass()));
         assertTrue(IntWrapper.class.isAssignableFrom(p_.getSecond().getClass()));
         assertEquals("toto", p_.getFirst().toString());
-        assertEquals(12, p_.getSecond().intValue());
+        assertEquals(12, p_.getSecond().getIntValue());
 
         // new active with reifiable parameter types
         // test before non reifiable return types to verify caching of synchronous/asynchrous method calls 
@@ -83,8 +83,8 @@ public class Test extends FunctionalTest {
                 new IntWrapper(12) });
         assertTrue(StringWrapper.class.isAssignableFrom(b.getFirst().getClass()));
         assertTrue(IntWrapper.class.isAssignableFrom(b.getSecond().getClass()));
-        assertEquals("toto", b.getFirst().stringValue());
-        assertEquals(12, b.getSecond().intValue());
+        assertEquals("toto", b.getFirst().getStringValue());
+        assertEquals(12, b.getSecond().getIntValue());
 
         // new active with non reifiable parameter types
         @SuppressWarnings("unchecked")

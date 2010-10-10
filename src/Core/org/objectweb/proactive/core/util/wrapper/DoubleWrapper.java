@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.util.wrapper;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -50,12 +52,13 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Created on Jul 28, 2005
  */
 @PublicAPI
+@XmlRootElement
 public class DoubleWrapper implements Serializable {
 
     /**
      * The primitive value.
      */
-    protected Double value;
+    protected Double doubleValue;
 
     /**
      * The no arguments constructor for ProActive.
@@ -69,15 +72,25 @@ public class DoubleWrapper implements Serializable {
      * @param value the primitive <code>double</code> value.
      */
     public DoubleWrapper(double value) {
-        this.value = value;
+        this.doubleValue = value;
     }
 
     /**
      * Return the value of the <code>double</code>.
      * @return the primitive value.
      */
+    public double getDoubleValue() {
+        return this.doubleValue;
+    }
+
+    /**
+     * @deprecated use {@link DoubleWrapper#getDoubleValue()}
+     * Return the value of the <code>double</code>.
+     * @return the primitive value.
+     */
+    @Deprecated
     public double doubleValue() {
-        return this.value;
+        return this.doubleValue;
     }
 
     /**
@@ -85,19 +98,19 @@ public class DoubleWrapper implements Serializable {
      */
     @Override
     public String toString() {
-        return this.value + "";
+        return this.doubleValue + "";
     }
 
     @Override
     public boolean equals(Object arg0) {
         if (arg0 instanceof DoubleWrapper) {
-            return ((DoubleWrapper) arg0).doubleValue() == this.value;
+            return ((DoubleWrapper) arg0).getDoubleValue() == this.doubleValue;
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return this.value.hashCode();
+        return this.doubleValue.hashCode();
     }
 }

@@ -38,6 +38,8 @@ package org.objectweb.proactive.core.util.wrapper;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -50,6 +52,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Created on Jul 28, 2005
  */
 @PublicAPI
+@XmlRootElement
 public class IntMutableWrapper extends IntWrapper implements Serializable {
 
     /**
@@ -72,7 +75,6 @@ public class IntMutableWrapper extends IntWrapper implements Serializable {
      * @param value the new value.
      */
     public void setIntValue(int value) {
-        this.value = value;
+        this.intValue = value;
     }
-
 }

@@ -65,7 +65,7 @@ public class AODeadlock1 implements Serializable, InitActive, RunActive {
     }
 
     public int foo() {
-        return ao2.answer().intValue();
+        return ao2.answer().getIntValue();
     }
 
     public void runActivity(Body body) {

@@ -93,12 +93,12 @@ public class Test extends ComponentTest {
             BooleanWrapper result1 = ((TotoItf) testcase.getFcInterface("testA")).test();
             BooleanWrapper result2 = ((TotoItf) testcase.getFcInterface("testB")).test();
 
-            Assert.assertTrue(result1.booleanValue());
-            Assert.assertTrue(result2.booleanValue());
+            Assert.assertTrue(result1.getBooleanValue());
+            Assert.assertTrue(result2.getBooleanValue());
         }
 
-        String result1 = ((TotoItf) testcase.getFcInterface("testA")).testWaitForAll().stringValue();
-        String result2 = ((TotoItf) testcase.getFcInterface("testB")).testWaitForAll().stringValue();
+        String result1 = ((TotoItf) testcase.getFcInterface("testA")).testWaitForAll().getStringValue();
+        String result2 = ((TotoItf) testcase.getFcInterface("testB")).testWaitForAll().getStringValue();
         Assert.assertNotSame(result1, result2);
     }
 
@@ -162,7 +162,7 @@ public class Test extends ComponentTest {
 
         BooleanWrapper result1 = ((TotoItf) testcase.getFcInterface("testA")).test();
         BooleanWrapper result2 = ((TotoItf) testcase.getFcInterface("testB")).test();
-        Assert.assertTrue(result1.booleanValue());
-        Assert.assertTrue(result2.booleanValue());
+        Assert.assertTrue(result1.getBooleanValue());
+        Assert.assertTrue(result2.getBooleanValue());
     }
 }

@@ -70,6 +70,6 @@ public class DoubleMutableWrapper extends DoubleWrapper {
      * @param value the new value.
      */
     public void setDoubleValue(double value) {
-        this.value = value;
+        this.doubleValue = value;
     }
 }

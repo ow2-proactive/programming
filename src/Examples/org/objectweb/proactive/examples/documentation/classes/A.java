@@ -73,7 +73,7 @@ public class A implements Serializable {
      * @return this
      */
     public A setStrWrapper(StringWrapper strWrapper) {
-        this.str = strWrapper.stringValue();
+        this.str = strWrapper.getStringValue();
         return this;
     }
 

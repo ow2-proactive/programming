@@ -87,7 +87,7 @@ public class DummyAO implements Serializable {
         GCM.getMigrationController(x).migrateGCMComponentTo(
                 deploymentDescriptor.getVirtualNode("VN3").getNode());
         Assert.assertEquals("hello", ((E) x.getFcInterface("e")).gee(new StringWrapper("hello"))
-                .stringValue());
+                .getStringValue());
 
         Component y = (Component) f.newComponent("functionalTests.component.migration.y", context);
         GCM.getMigrationController(y).migrateGCMComponentTo(
@@ -99,7 +99,7 @@ public class DummyAO implements Serializable {
                 deploymentDescriptor.getVirtualNode("VN2").getNode());
         GCM.getGCMLifeCycleController(toto).startFc();
         Assert.assertEquals("toto", ((E) toto.getFcInterface("e01")).gee(new StringWrapper("toto"))
-                .stringValue());
+                .getStringValue());
         //        
         Component test = (Component) f.newComponent("functionalTests.component.migration.test", context);
 
@@ -127,7 +127,7 @@ public class DummyAO implements Serializable {
 
         // check collection interfaces
         result = ((E) test.getFcInterface("e01")).gee(new StringWrapper("hello world !"));
-        Assert.assertEquals("hello world !", result.stringValue());
+        Assert.assertEquals("hello world !", result.getStringValue());
 
         deploymentDescriptor.killall(false);
 
@@ -163,7 +163,7 @@ public class DummyAO implements Serializable {
         GCM.getMigrationController(x).migrateGCMComponentTo(
                 newDeploymentDescriptor.getVirtualNode("VN3").getANode());
         Assert.assertEquals("hello", ((E) x.getFcInterface("e")).gee(new StringWrapper("hello"))
-                .stringValue());
+                .getStringValue());
 
         Component y = (Component) f.newComponent("functionalTests.component.migration.y", context);
         GCM.getMigrationController(y).migrateGCMComponentTo(
@@ -175,7 +175,7 @@ public class DummyAO implements Serializable {
                 newDeploymentDescriptor.getVirtualNode("VN2").getANode());
         GCM.getGCMLifeCycleController(toto).startFc();
         Assert.assertEquals("toto", ((E) toto.getFcInterface("e01")).gee(new StringWrapper("toto"))
-                .stringValue());
+                .getStringValue());
         //        
         Component test = (Component) f.newComponent("functionalTests.component.migration.test", context);
 
@@ -203,7 +203,7 @@ public class DummyAO implements Serializable {
 
         // check collection interfaces
         result = ((E) test.getFcInterface("e01")).gee(new StringWrapper("hello world !"));
-        Assert.assertEquals("hello world !", result.stringValue());
+        Assert.assertEquals("hello world !", result.getStringValue());
 
         newDeploymentDescriptor.kill();
 

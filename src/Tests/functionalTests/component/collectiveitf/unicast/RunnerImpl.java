@@ -62,13 +62,13 @@ public class RunnerImpl implements RunnerItf, org.objectweb.fractal.api.control.
 
         // first dispatch
         Assert.assertEquals("server " + 1 + " received parameter 1", services.method1(parameters)
-                .stringValue());
+                .getStringValue());
 
         parameters.clear();
         parameters.add(RunnerImpl.PARAMETER_2);
 
         // second dispatch
-        Assert.assertEquals("server 2 received parameter 2", services.method1(parameters).stringValue());
+        Assert.assertEquals("server 2 received parameter 2", services.method1(parameters).getStringValue());
 
         // has been executed
         return true;

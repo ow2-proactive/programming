@@ -694,7 +694,7 @@ public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispa
     }
 
     public String wsGetUserList() {
-        return getUserList().stringValue();
+        return getUserList().getStringValue();
     }
 
     public void addSphere(Sphere s) {

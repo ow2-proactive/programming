@@ -70,7 +70,7 @@ public class Test extends FunctionalTest {
     @org.junit.Test
     public void postConditions() throws Exception {
         assertTrue(!PAFuture.isAwaited(asynchCall));
-        assertTrue(asynchCall.booleanValue());
+        assertTrue(asynchCall.getBooleanValue());
         assertTrue(synchroCall);
         assertTrue(raisedExceptionArgs);
         assertTrue(raisedExceptionName);

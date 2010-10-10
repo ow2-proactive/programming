@@ -65,7 +65,7 @@ public class Value implements Serializable {
 
     //@snippet-start Continuation_3
     public Value bar(Value v, int nbYears) {
-        v.setAge(new IntWrapper(v.getAge().intValue() + nbYears));
+        v.setAge(new IntWrapper(v.getAge().getIntValue() + nbYears));
         return this;
     }
 

@@ -46,7 +46,7 @@ public class NonReductionImpl implements NonReduction {
     }
 
     public IntWrapper doItInt(IntWrapper val) {
-        System.out.println(" Server received " + val.intValue());
+        System.out.println(" Server received " + val.getIntValue());
         return new IntWrapper(123);
     }
 

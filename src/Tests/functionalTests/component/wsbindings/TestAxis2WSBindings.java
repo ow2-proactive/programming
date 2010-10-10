@@ -97,7 +97,7 @@ public class TestAxis2WSBindings extends CommonSetup {
         GCM.getGCMLifeCycleController(client).startFc();
         Runner runner = (Runner) client.getFcInterface("Runner");
         Assert.assertTrue("Failed to invoke web services with primitive component", runner.execute()
-                .booleanValue());
+                .getBooleanValue());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class TestAxis2WSBindings extends CommonSetup {
         GCM.getGCMLifeCycleController(composite).startFc();
         Runner runner = (Runner) composite.getFcInterface("Runner");
         Assert.assertTrue("Failed to invoke web services with composite component", runner.execute()
-                .booleanValue());
+                .getBooleanValue());
     }
 
     @Test
@@ -136,7 +136,7 @@ public class TestAxis2WSBindings extends CommonSetup {
         GCM.getGCMLifeCycleController(composite).startFc();
         Runner runner = (Runner) composite.getFcInterface("Runner");
         Assert.assertTrue("Failed to invoke web services with composite component", runner.execute()
-                .booleanValue());
+                .getBooleanValue());
     }
 
     @Test
@@ -169,7 +169,7 @@ public class TestAxis2WSBindings extends CommonSetup {
                 gcma.getVirtualNodes().values().iterator().next().getANode());
         Runner runner = (Runner) client.getFcInterface("Runner");
         Assert.assertTrue("Failed to invoke web services with primitive component", runner.execute()
-                .booleanValue());
+                .getBooleanValue());
     }
 
     @Test
@@ -212,6 +212,6 @@ public class TestAxis2WSBindings extends CommonSetup {
                 url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME);
         GCM.getGCMLifeCycleController(client).startFc();
         Runner runner = (Runner) client.getFcInterface("Runner");
-        Assert.assertFalse("Successful access to a non existing method", runner.execute().booleanValue());
+        Assert.assertFalse("Successful access to a non existing method", runner.execute().getBooleanValue());
     }
 }

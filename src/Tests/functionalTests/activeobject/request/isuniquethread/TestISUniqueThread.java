@@ -144,9 +144,9 @@ public class TestISUniqueThread extends GCMFunctionalTestDefaultNodes {
         //checks services
         for (int i = 0; i < NB_CALLER; i++) {
             for (int j = 0; j < NB_CALL; j++) {
-                Assert.assertTrue(foo_void[i].get(j).booleanValue());
-                Assert.assertTrue(foo_int[i].get(j).booleanValue());
-                Assert.assertTrue(foo_long_int[i].get(j).booleanValue());
+                Assert.assertTrue(foo_void[i].get(j).getBooleanValue());
+                Assert.assertTrue(foo_int[i].get(j).getBooleanValue());
+                Assert.assertTrue(foo_long_int[i].get(j).getBooleanValue());
             }
         }
 

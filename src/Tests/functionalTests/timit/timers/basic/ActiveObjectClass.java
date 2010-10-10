@@ -310,7 +310,7 @@ public class ActiveObjectClass implements java.io.Serializable {
         // This call is blocking until the futur becomes available
         // we need to measure the wbn time that will be approx equal customWaitTimeInMillis
         long realWbnStartTime = System.nanoTime();
-        wrapper.intValue();
+        wrapper.getIntValue();
         long realWbnTime = (System.nanoTime() - realWbnStartTime);
 
         ///////////////////////////////////////////////////

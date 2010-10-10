@@ -36,6 +36,8 @@
  */
 package org.objectweb.proactive.core.util.wrapper;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.objectweb.proactive.annotation.PublicAPI;
 
 
@@ -48,6 +50,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * Created on Jul 28, 2005
  */
 @PublicAPI
+@XmlRootElement
 public class LongMutableWrapper extends LongWrapper {
 
     /**
@@ -70,6 +73,7 @@ public class LongMutableWrapper extends LongWrapper {
      * @param value the new value.
      */
     public void setLongValue(long value) {
-        this.value = value;
+        this.longValue = value;
     }
+
 }

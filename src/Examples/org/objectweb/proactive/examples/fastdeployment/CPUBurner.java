@@ -57,12 +57,12 @@ public class CPUBurner implements Serializable, InitActive {
     }
 
     public CPUBurner(IntWrapper id, Manager manager) {
-        this.id = id.intValue();
+        this.id = id.getIntValue();
         this.manager = manager;
     }
 
     public void compute(LongWrapper l) {
-        long val = l.longValue();
+        long val = l.getLongValue();
         for (long i = 0; i < val; i++) {
             // Does nothing but eats some CPU time
         }

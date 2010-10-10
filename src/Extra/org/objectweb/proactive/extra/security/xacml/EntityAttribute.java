@@ -85,7 +85,7 @@ public class EntityAttribute extends AttributeValue {
      * Creates a new <code>StringAttribute</code> that represents the String
      * value supplied.
      *
-     * @param value
+     * @param booleanValue
      *            the <code>String</code> value to be represented
      */
     public EntityAttribute(Entity entity) {
@@ -135,7 +135,7 @@ public class EntityAttribute extends AttributeValue {
      * Returns a new <code>StringAttribute</code> that represents the
      * xs:string value indicated by the <code>String</code> provided.
      *
-     * @param value
+     * @param booleanValue
      *            a string representing the desired value
      * @return a new <code>StringAttribute</code> representing the appropriate
      *         value

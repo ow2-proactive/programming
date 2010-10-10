@@ -129,7 +129,7 @@ public class Launcher {
                 wrappedResult = firstWorker.start(numOfIterations);
                 //@snippet-break integralPi_2
 
-                result = wrappedResult.doubleValue();
+                result = wrappedResult.getDoubleValue();
                 error = result - Math.PI;
                 System.out.println("\nCalculated PI is " + result + " error is " + error);
                 //@snippet-resume integralPi_2
