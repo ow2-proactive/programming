@@ -1,4 +1,4 @@
-/*
+1;2591;0c/*
  * ################################################################
  *
  * ProActive Parallel Suite(TM): The Java(TM) library for
@@ -156,9 +156,11 @@ public class PARemoteObject {
     }
 
     /**
-     * generate a unique name on the current host. Should work fine even
-     * with several jvm on the sane host.
-     * @return
+     * generate a unique name (that contains '/') on the current host. Should work fine even
+     * with several jvm on the same host.
+     * This algorithm simply uses the field 'name' from the VMinformation class and 
+     * postfixes it with a counter incremented each time
+     * @return a unique name (that contains '/') to serve as unique identifier
      */
     public static String getUniqueName() {
         return TURN_REMOTE_PREFIX + counter.incrementAndGet();
