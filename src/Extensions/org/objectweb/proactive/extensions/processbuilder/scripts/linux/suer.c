@@ -11,6 +11,7 @@
 int err_pipe[2];
 int stayAlive = 1;
 
+#define PASSWD_SIZE 512
 /**
   This thread will read the error pipe and write it to 
   standard error.
@@ -82,10 +83,27 @@ int main(int argc, char** argv) {
   }
   
   if (argc < 3 ) {
-    fprintf( stderr, "usage: <username> <password> <command> [<arg> ...]\n" );
+    fprintf( stderr, "usage: <username> <command> [<arg> ...]\n" );
     return 1;
   }
   
+  // Read password from stdin
+  char passwd[PASSWD_SIZE];
+  int index = 0;
+  while (index < PASSWD_SIZE) {
+  	passwd[index] = fgetc(stdin);
+  	if (passwd[index] == '\n') {
+  		passwd[index] = '\0';
+  		break;
+  	}
+  	if (passwd[index] == EOF) {
+  		passwd[index] = '\0';
+  		break;
+  	}
+  	index++;
+  }
+  passwd[PASSWD_SIZE-1] = '\0';
+
   //get a process with terminal
   pid = forkpty( &master_tty, NULL, NULL, NULL );
   
@@ -108,7 +126,7 @@ int main(int argc, char** argv) {
       if ( amount > 0 ) break;
     }
     //write password to the terminal
-    write( master_tty, argv[2], strlen(argv[2]) );
+    write( master_tty, passwd, strlen(passwd) );
     write( master_tty, "\n", sizeof "\n" );
     
     //wait until we get an ACK
@@ -118,7 +136,7 @@ int main(int argc, char** argv) {
     //proceed with writing the command to the terminal
     write( master_tty, "(", 1 );
     int i;
-    for ( i = 3; i < argc; i++ ) {
+    for ( i = 2; i < argc; i++ ) {
       write( master_tty, argv[i], strlen(argv[i]) );
       if ( i < argc-1 ) write( master_tty, " ", 1 );
     }

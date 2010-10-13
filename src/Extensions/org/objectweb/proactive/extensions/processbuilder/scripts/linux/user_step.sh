@@ -78,10 +78,10 @@ else
   # target architecture used at compilation time.
   if [[ `uname -i` == *64* ]];
   then
-    ./suer64 $usr "$passw" ./command_step.sh $tmp "$workdir" $args;
+    echo "$passw" | ./suer64 $usr ./command_step.sh $tmp "$workdir" $args;
     exitc=$?
   else
-    ./suer32 $usr "$passw" ./command_step.sh $tmp "$workdir" $args;
+    echo "$passw" | ./suer32 $usr ./command_step.sh $tmp "$workdir" $args;
     exitc=$?
   fi  
   ###### DEVELOPER NOTE:
