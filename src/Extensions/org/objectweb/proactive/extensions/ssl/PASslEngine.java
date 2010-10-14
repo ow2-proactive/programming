@@ -49,7 +49,6 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 
-import org.jinterop.dcom.test.SysInfoEvents;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 
 
@@ -66,7 +65,7 @@ public class PASslEngine extends SSLEngine {
 
     public PASslEngine(boolean client, SecureMode secureMode, KeyStore keystore, TrustManager trustManager) {
         try {
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(keystore, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
 
             // Initialize the SSLContext to work with our key managers.

@@ -80,7 +80,7 @@ public class PASslServerSocketFactory extends SSLServerSocketFactory {
         //            ks.setKeyEntry(cert.getSubjectDN().toString(), cert.getPublicKey().getEncoded(), new X509Certificate[] {cert});
         //        }
 
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         kmf.init(clientKs, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
 
         // Our custom trust managers are used to authenticate remote peers

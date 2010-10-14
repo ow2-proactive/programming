@@ -54,8 +54,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 
 /**
  *
@@ -72,7 +70,7 @@ public class PASslSocketFactory extends SSLSocketFactory {
             throws KeyStoreException, NoSuchProviderException, NoSuchAlgorithmException,
             CertificateException, IOException, KeyManagementException, UnrecoverableKeyException {
 
-        KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+        KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
         kmf.init(clientKs, SslHelpers.DEFAULT_KS_PASSWD.toCharArray());
 
         // Our custom trust managers are used to authenticate remote peers
