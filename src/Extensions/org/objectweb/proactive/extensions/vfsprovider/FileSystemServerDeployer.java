@@ -120,7 +120,7 @@ public final class FileSystemServerDeployer {
         fileSystemServer = new FileSystemServerImpl(rootPath);
         try {
             roe = PARemoteObject.newRemoteObject(FileSystemServer.class.getName(), this.fileSystemServer);
-            roe.createRemoteObject(name, true);
+            roe.createRemoteObject(name, rebind);
             url = roe.getURL();
         } catch (ProActiveException e) {
             // Ugly but createRemoteObject interface changed
