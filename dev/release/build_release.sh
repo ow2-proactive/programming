@@ -78,6 +78,12 @@ cd compile || warn_and_exit "Cannot move in compile"
 ./build -Dversion="${VERSION}" deploy.all
 ./build -Dversion="${VERSION}" doc.ProActive.manualPdf
 
+# Check release number
+OUTPUT=$(${JAVA_HOME}/bin/java -cp dist/lib/ProActive.jar org.objectweb.proactive.api.PAVersion)
+if [ "${OUTPUT}" != "${VERSION}" ] ; then
+	warn_and_exit " [E] bad release version number: $OUTPUT"
+fi
+
 cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
 echo " [i] Clean"
 

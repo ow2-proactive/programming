@@ -55,4 +55,9 @@ public class PAVersion {
     public static String getProActiveVersion() {
         return Main.getProActiveVersion();
     }
+
+    // Used by some scripts to check that the release version has been updated
+    public static void main(String[] args) {
+        System.out.println(getProActiveVersion());
+    }
 }
