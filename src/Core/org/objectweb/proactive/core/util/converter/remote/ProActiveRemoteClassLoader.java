@@ -36,12 +36,12 @@
  */
 package org.objectweb.proactive.core.util.converter.remote;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -143,27 +143,31 @@ public class ProActiveRemoteClassLoader {
                         logger.trace("Succeffully downloaded " + clazzName + " class definition ");
                     }
                     return defineClass(clazzName, clazzData, 0, clazzData.length);
-                } catch (IOException ioEx) {
+                } catch (ClassNotFoundException e2) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Cannot load class from the remote ProActive runtime:" + e.getMessage(),
                                 e);
                     }
-                    throw new ClassNotFoundException(clazzName, ioEx);
+                    throw new ClassNotFoundException(clazzName + " (both locally and from " + clazzLocation +
+                        ")", e2);
                 }
             }
         }
 
-        private byte[] readClassData(String clazzName) throws IOException {
+        private byte[] readClassData(String clazzName) throws ClassNotFoundException {
 
             if (logger.isTraceEnabled())
                 logger.trace("Attempt to download class " + clazzName + " from the remote runtime");
+            try {
+                byte[] b = this.clazzLocation.getClassData(clazzName);
+                if (b == null || b.length == 0) {
+                    throw new ClassNotFoundException("Class not found on " + clazzLocation + ": " + clazzName);
+                }
 
-            byte[] b = this.clazzLocation.getClassData(clazzName);
-
-            if (b != null && b.length != 0) {
                 return b;
-            } else {
-                throw new IOException("Failed to download " + clazzName + " class definition");
+            } catch (ProActiveRuntimeException e) {
+                throw new ClassNotFoundException("Communication error occured while trying to download " +
+                    clazzName + " from" + clazzLocation);
             }
 
         }
