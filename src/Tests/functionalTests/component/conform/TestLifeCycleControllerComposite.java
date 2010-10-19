@@ -37,7 +37,6 @@
 package functionalTests.component.conform;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.etsi.uri.gcm.util.GCM;
@@ -81,15 +80,8 @@ public class TestLifeCycleControllerComposite extends TestLifeCycleController {
         assertEquals("STARTED", GCM.getGCMLifeCycleController(r).getFcState());
         assertEquals("STARTED", GCM.getGCMLifeCycleController(c).getFcState());
         assertEquals("STARTED", GCM.getGCMLifeCycleController(d).getFcState());
-        final I i = (I) r.getFcInterface("server");
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                i.m(true);
-            }
-        });
-        t.start();
-        t.join(50);
-        assertTrue(!t.isAlive());
+
+        ((I) r.getFcInterface("server")).m(true);
 
         GCM.getGCMLifeCycleController(r).stopFc();
         assertEquals("STOPPED", GCM.getGCMLifeCycleController(r).getFcState());
