@@ -1115,7 +1115,7 @@
 				<include name="**" />
 			</lib>
 			<lib dir="${deploy.dir}/lib">
-				<include name="ProActive.jar" />
+				<include name="*.jar" />
 			</lib>
 			<webinf dir="${temp.class.dir}/WEB-INF" />
 			<fileset dir="${temp.class.dir}">
@@ -1131,7 +1131,7 @@
 				<include name="cxf-servlet.xml" />
 			</webinf>
 			<lib dir="${deploy.dir}/lib">
-				<include name="ProActive.jar" />
+				<include name="*.jar" />
 			</lib>
 			<lib dir="${cxf.lib.dir}">
 				<include name="*.jar" />
