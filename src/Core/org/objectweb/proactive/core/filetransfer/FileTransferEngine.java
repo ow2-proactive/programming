@@ -67,7 +67,7 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.FILETRANSFER);
     static public final int DEFAULT_MAX_FILE_TRANSFER_SERVICES = CentralPAPropertyRepository.PA_FILETRANSFER_MAX_SERVICES
             .getValue();
-    static FileTransferEngine singletonFTE = getFileTransferEngine();
+    static FileTransferEngine singletonFTE;
     Vector<FileTransferService> ftsPool;
     int maxFTS;
 
@@ -124,7 +124,7 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
                 singletonFTE = PAActiveObject.newActive(FileTransferEngine.class,
                         new Object[] { DEFAULT_MAX_FILE_TRANSFER_SERVICES });
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info("the file transfer engine was not correctly initialized",e);
             }
         }
         return singletonFTE;

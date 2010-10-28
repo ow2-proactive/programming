@@ -243,7 +243,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     // -- ISALIVE GETTER -----------------------------------------------
     //
     public synchronized boolean getIsAlive() {
-        return isAlive;
+        return isAlive && (rtBroadcaster != null);
     }
 
     //
