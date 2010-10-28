@@ -86,7 +86,7 @@ public class AbstractProtoInterop extends GCMFunctionalTestDefaultNodes {
         }
 
         public BooleanWrapper checkReverse() {
-            return new BooleanWrapper(this.remote.check().booleanValue()); // Disable AC
+            return new BooleanWrapper(this.remote.check().getBooleanValue()); // Disable AC
         }
     }
 }

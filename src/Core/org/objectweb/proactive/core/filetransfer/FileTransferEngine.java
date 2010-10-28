@@ -124,7 +124,7 @@ public class FileTransferEngine implements ProActiveInternalObject, InitActive, 
                 singletonFTE = PAActiveObject.newActive(FileTransferEngine.class,
                         new Object[] { DEFAULT_MAX_FILE_TRANSFER_SERVICES });
             } catch (Exception e) {
-                logger.info("the file transfer engine was not correctly initialized",e);
+                logger.info("the file transfer engine was not correctly initialized", e);
             }
         }
         return singletonFTE;
