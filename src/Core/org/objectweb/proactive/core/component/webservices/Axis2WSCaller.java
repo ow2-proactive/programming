@@ -86,12 +86,11 @@ public class Axis2WSCaller implements PAWSCaller {
             } catch (AxisFault af) {
                 logger.error(
                         "[Axis2] Failed to invoke web service: " + rsc.getOptions().getTo().getAddress(), af);
-                return null;
             }
         } else {
             logger
                     .error("[Axis2] Cannot invoke web service since the set up has not been done or has failed");
-            return null;
         }
+        return null;
     }
 }

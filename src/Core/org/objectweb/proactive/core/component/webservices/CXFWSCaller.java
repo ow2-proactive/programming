@@ -79,11 +79,10 @@ public class CXFWSCaller implements PAWSCaller {
             } catch (Exception e) {
                 logger.error("[CXF] Failed to invoke web service: " +
                     client.getEndpoint().getEndpointInfo().getAddress(), e);
-                return null;
             }
         } else {
             logger.error("[CXF] Cannot invoke web service since the set up has not been done");
-            return null;
         }
+        return null;
     }
 }

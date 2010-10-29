@@ -77,11 +77,10 @@ public class DynamicCXFWSCaller implements PAWSCaller {
             } catch (Exception e) {
                 logger.error("[DynamicCXFWSCaller] Failed to invoke web service: " +
                     client.getEndpoint().getEndpointInfo().getAddress(), e);
-                return null;
             }
         } else {
             logger.error("[DynamicCXFWSCaller] Cannot invoke web service since the set up has not been done");
-            return null;
         }
+        return null;
     }
 }
