@@ -103,6 +103,16 @@ public class WSInfo implements Serializable {
     public static final String DYNAMICCXFWSCALLER_CLASSNAME = DynamicCXFWSCaller.class.getName();
 
     /**
+     * Shortcut ID to specify that CXF must be used to call the RESTful service.
+     */
+    public static final String CXFRESTFULSERVICECALLER_ID = "CXFRESTful";
+
+    /**
+     * Full name of the class calling RESTful services using CXF.
+     */
+    public static final String CXFRESTFULSERVICECALLER_CLASSNAME = CXFRESTfulServiceCaller.class.getName();
+
+    /**
      * URL of the web service.
      */
     private String wsUrl;
