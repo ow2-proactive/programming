@@ -159,7 +159,14 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     private static Logger jmxLogger = ProActiveLogger.getLogger(Loggers.JMX);
     private static final Logger clLogger = ProActiveLogger.getLogger(Loggers.CLASSLOADING);
 
-    static {
+    /**
+     *
+     * @return the proactive runtime associated to this jvm according to
+     * the current classloader
+     */
+    private static ProActiveRuntimeImpl getProActiveRuntimeImpl() {
+
+        if (proActiveRuntime == null) {
         try {
             proActiveRuntime = new ProActiveRuntimeImpl();
             proActiveRuntime.createMBean();
@@ -174,10 +181,15 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                 rtBrodcaster.sendDiscover();
             }
 
+
         } catch (UnknownProtocolException e) {
             e.printStackTrace();
         } catch (ProActiveException e) {
             e.printStackTrace();
+        }
+        return proActiveRuntime;
+        } else {
+            return proActiveRuntime;
         }
     }
 
@@ -312,7 +324,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // -----------------------------------------------------------
     //
     public static ProActiveRuntimeImpl getProActiveRuntime() {
-        return proActiveRuntime;
+        return getProActiveRuntimeImpl();
     }
 
     /**
@@ -340,7 +352,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#getMBeanServerName()
      */
     public String getMBeanServerName() {
-        return URIBuilder.getNameFromURI(proActiveRuntime.getURL());
+        return URIBuilder.getNameFromURI(getProActiveRuntimeImpl().getURL());
     }
 
     /**
@@ -415,7 +427,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     private void createServerConnector() {
         // One the Serverconnector is launched any ProActive JMX Connector
         // client can connect to it remotely and manage the MBeans.
-        serverConnector = new ServerConnector(URIBuilder.getNameFromURI(proActiveRuntime.getURL()));
+        serverConnector = new ServerConnector(URIBuilder.getNameFromURI(getProActiveRuntimeImpl().getURL()));
         try {
             serverConnector.start();
         } catch (IOException e) {
@@ -449,10 +461,10 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             jmxLogger.error("The MBean of the JMX ClassLoader is not JMX compliant", e);
         }
 
-        String runtimeUrl = proActiveRuntime.getURL();
+        String runtimeUrl = getProActiveRuntimeImpl().getURL();
         objectName = FactoryName.createRuntimeObjectName(runtimeUrl);
         if (!mbs.isRegistered(objectName)) {
-            mbean = new ProActiveRuntimeWrapper(proActiveRuntime);
+            mbean = new ProActiveRuntimeWrapper(getProActiveRuntimeImpl());
             try {
                 mbs.registerMBean(mbean, objectName);
             } catch (InstanceAlreadyExistsException e) {
