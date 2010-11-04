@@ -140,7 +140,8 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     //
     public static synchronized RTBroadcaster getInstance() {
 
-        if (rtBroadcaster == null) {
+        if (CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.isTrue()
+                && rtBroadcaster == null) {
 
             rtBroadcaster = new RTBroadcaster();
             // wrap into a thread and start it
