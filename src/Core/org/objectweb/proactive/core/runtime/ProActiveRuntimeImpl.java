@@ -148,10 +148,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl implements ProActiveRuntime,
         LocalProActiveRuntime {
 
-    /**
-     * 
-     */
-
     //
     // -- STATIC MEMBERS
     // -----------------------------------------------------------
@@ -698,12 +694,21 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      */
     public void killRT(boolean softly) {
 
+        cleanJvmFromPA();
+
+        // END JMX unregistration
+        System.exit(0);
+
+    }
+
+    public void cleanJvmFromPA() {
         // JMX Notification
         if (getMBean() != null) {
             getMBean().sendNotification(NotificationType.runtimeDestroyed);
         }
-
         // END JMX Notification
+
+        //terminates the nodes and their active objects
         killAllNodes();
 
         logger.info("terminating Runtime " + vmInformation.getName());
@@ -725,8 +730,18 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             mbean = null;
         }
 
-        // END JMX unregistration
-        System.exit(0);
+        //  terminate the broadcast thread
+        RTBroadcaster.getInstance().kill();
+
+        // unexport the runtime
+        try {
+            this.roe.unexportAll();
+        } catch (ProActiveException e) {
+            logger.warn("unable to unexport the runtime", e);
+        }
+        this.roe = null;
+
+        proActiveRuntime = null;
 
     }
 

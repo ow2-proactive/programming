@@ -167,6 +167,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     public void run() {
 
         // --Initialize
+
         try {
 
             MulticastSocket socket = new MulticastSocket(
@@ -177,6 +178,7 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
 
             while (getIsAlive()) // add a isAlive variable (kill() must be synchronized !!)
             {
+
                 try {
                     /***************************************************************
                      * Receive *
@@ -225,7 +227,6 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
             // --Close connection
             socket.leaveGroup(address);
             socket.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }

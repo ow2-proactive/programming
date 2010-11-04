@@ -291,6 +291,7 @@ public class LocalNode implements SecurityEntity {
 
         try {
             this.runtimeRoe.unregisterAll();
+            this.runtimeRoe.unexportAll();
         } catch (Exception e) {
             logger.info(e.toString());
         }
