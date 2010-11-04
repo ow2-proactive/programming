@@ -167,27 +167,26 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     private static ProActiveRuntimeImpl getProActiveRuntimeImpl() {
 
         if (proActiveRuntime == null) {
-        try {
-            proActiveRuntime = new ProActiveRuntimeImpl();
-            proActiveRuntime.createMBean();
-            System.setProperty(PALifeCycle.PA_STARTED_PROP, "true");
-            if (CentralPAPropertyRepository.PA_RUNTIME_PING.isTrue()) {
-                new PARTPinger().start();
+            try {
+                proActiveRuntime = new ProActiveRuntimeImpl();
+                proActiveRuntime.createMBean();
+                System.setProperty(PALifeCycle.PA_STARTED_PROP, "true");
+                if (CentralPAPropertyRepository.PA_RUNTIME_PING.isTrue()) {
+                    new PARTPinger().start();
+                }
+
+                if (CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.isTrue()) {
+                    RTBroadcaster rtBrodcaster = RTBroadcaster.getInstance();
+                    // notify our presence on the lan
+                    rtBrodcaster.sendDiscover();
+                }
+
+            } catch (UnknownProtocolException e) {
+                e.printStackTrace();
+            } catch (ProActiveException e) {
+                e.printStackTrace();
             }
-
-            if (CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.isTrue()) {
-                RTBroadcaster rtBrodcaster = RTBroadcaster.getInstance();
-                // notify our presence on the lan
-                rtBrodcaster.sendDiscover();
-            }
-
-
-        } catch (UnknownProtocolException e) {
-            e.printStackTrace();
-        } catch (ProActiveException e) {
-            e.printStackTrace();
-        }
-        return proActiveRuntime;
+            return proActiveRuntime;
         } else {
             return proActiveRuntime;
         }
