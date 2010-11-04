@@ -454,7 +454,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         try {
             mbs.registerMBean(jmxClassLoader, objectName);
         } catch (InstanceAlreadyExistsException e) {
-            jmxLogger.error("A MBean with the object name " + objectName + " already exists", e);
+            jmxLogger.debug("A MBean with the object name " + objectName + " already exists", e);
         } catch (MBeanRegistrationException e) {
             jmxLogger.error("Can't register the MBean of the JMX ClassLoader", e);
         } catch (NotCompliantMBeanException e) {
