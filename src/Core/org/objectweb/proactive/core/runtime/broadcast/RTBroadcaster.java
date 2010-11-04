@@ -112,7 +112,6 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
             e.printStackTrace();
         }
 
-        rtAction.add(new RTBroadcastActionDefaultImpl());
         isAlive = true;
         issetCallback = false;
 
