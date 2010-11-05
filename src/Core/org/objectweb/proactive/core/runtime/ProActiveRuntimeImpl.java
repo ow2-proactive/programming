@@ -164,7 +164,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * @return the proactive runtime associated to this jvm according to
      * the current classloader
      */
-    private static ProActiveRuntimeImpl getProActiveRuntimeImpl() {
+    private static synchronized ProActiveRuntimeImpl getProActiveRuntimeImpl() {
 
         if (proActiveRuntime == null) {
             try {
@@ -703,7 +703,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     /**
      * @see org.objectweb.proactive.core.runtime.ProActiveRuntime#killRT(boolean)
      */
-    public void killRT(boolean softly) {
+    public synchronized void killRT(boolean softly) {
 
         cleanJvmFromPA();
 
@@ -712,7 +712,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
 
     }
 
-    public void cleanJvmFromPA() {
+    public synchronized void cleanJvmFromPA() {
         // JMX Notification
         if (getMBean() != null) {
             getMBean().sendNotification(NotificationType.runtimeDestroyed);
@@ -750,6 +750,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         } catch (ProActiveException e) {
             logger.warn("unable to unexport the runtime", e);
         }
+
         this.roe = null;
 
         proActiveRuntime = null;
