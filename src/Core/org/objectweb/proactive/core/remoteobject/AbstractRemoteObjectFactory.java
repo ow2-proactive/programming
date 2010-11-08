@@ -92,7 +92,12 @@ public abstract class AbstractRemoteObjectFactory implements RemoteObjectFactory
                 newCodebase = servletCodebase;
             }
             CentralPAPropertyRepository.JAVA_RMI_SERVER_CODEBASE.setValue(newCodebase);
-            ProActiveRuntimeImpl.getProActiveRuntime();
+
+            // next line is commented out for PROACTIVE-928
+            // we should *not* have to initialize a runtime when creating
+            // the class server. Tests have shown that it is not
+            // needed to far.
+            //ProActiveRuntimeImpl.getProActiveRuntime();
         }
     }
 
