@@ -50,7 +50,7 @@ public class A {
     public A() {
     }
 
-    public void myCallback(Future<MutableInteger> f) throws Exception {
+    protected void myCallback(Future<MutableInteger> f) throws Exception {
         MutableInteger i = f.get();
         i.getValue();
         synchronized (A.class) {
@@ -59,7 +59,7 @@ public class A {
         }
     }
 
-    public void start() {
+    public void start() throws NoSuchMethodException {
         MutableInteger slow = this.brother.slow();
         PAEventProgramming.addActionOnFuture(slow, "myCallback");
         MutableInteger fast = this.brother.fast();

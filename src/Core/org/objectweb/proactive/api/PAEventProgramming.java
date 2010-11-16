@@ -56,12 +56,14 @@ public class PAEventProgramming {
      *            the future to watch
      * @param methodName
      *            the name of the method to call on the current active object
+     * @throws NoSuchMethodException
+     *              if the method could not be found
      * @throws IllegalArgumentException
-     *             if the first argument is not a future or if the method could not be found
+     *             if the first argument is not a future
      * @throws IllegalStateException
      *             if the caller is not a Body
      */
-    public static void addActionOnFuture(Object future, String methodName) {
+    public static void addActionOnFuture(Object future, String methodName) throws NoSuchMethodException {
         FutureProxy f;
         try {
             f = (FutureProxy) ((StubObject) future).getProxy();

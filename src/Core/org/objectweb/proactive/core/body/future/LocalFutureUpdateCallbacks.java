@@ -106,7 +106,7 @@ public class LocalFutureUpdateCallbacks {
         this.future = future;
     }
 
-    void add(String methodName) {
+    void add(String methodName) throws NoSuchMethodException {
         if (PAActiveObject.getBodyOnThis() != this.body) {
             throw new IllegalStateException("Callbacks added by different "
                 + "bodies on the same future, this cannot be possible"
@@ -115,12 +115,7 @@ public class LocalFutureUpdateCallbacks {
         Object target = this.body.getReifiedObject();
         Class<?> c = target.getClass();
         Method m;
-        try {
-            m = c.getMethod(methodName, java.util.concurrent.Future.class);
-        } catch (NoSuchMethodException e) {
-            throw new IllegalArgumentException("Cannot find method: " + c.getName() + "." + methodName +
-                "(Future)", e);
-        }
+        m = c.getMethod(methodName, java.util.concurrent.Future.class);
         this.methods.add(m);
     }
 
