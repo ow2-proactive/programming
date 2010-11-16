@@ -48,9 +48,12 @@ import org.objectweb.proactive.core.mop.StubObject;
 public class PAEventProgramming {
     /**
      * Register a method in the calling active object to be called when the specified future is
-     * updated. The registered method takes a java.util.concurrent.Future as parameter.
+     * updated. The registered method must be public and take a java.util.concurrent.Future as parameter. 
+     * The method can be inherited.
      * 
-     * This method must be called from a Body.
+     * This method must be called from a Body. The call back method is invoked in the current thread 
+     * if the future is already available or as a standard active object method if the future is not yet
+     * available.  
      * 
      * @param future
      *            the future to watch
