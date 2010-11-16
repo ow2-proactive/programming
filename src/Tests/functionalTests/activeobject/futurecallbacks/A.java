@@ -50,7 +50,7 @@ public class A {
     public A() {
     }
 
-    protected void myCallback(Future<MutableInteger> f) throws Exception {
+    public void myCallback(Future<MutableInteger> f) throws Exception {
         MutableInteger i = f.get();
         i.getValue();
         synchronized (A.class) {
