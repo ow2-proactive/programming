@@ -17,7 +17,7 @@
     In case of ProActive, Data Spaces API layers the file systems, that can be accessed through variety of access protocols, creating one virtual file system with uniform access among all Active Objects. This is achieved by ensuring that every Active Object has the same view of VFS tree, an URI used for accessing data in one Active Object is correct just after passing it to the others. Therefore sharing data becomes comfortable, as standard ProActive communication mechanism can be used for announcing actual URIs.
     </para>
     <para>
-    As already mentioned, the Data Spaces API can be run against variety of data transfer protocols that are provided by the infrastructure, or even against a standard ProActive-compliant communication protocols. This is achieved through <literal>PAProviderServer</literal> that is to be used wherever no supported data transfer protocol is available, but still the ProActive deployment can take place successfully. Hence, Data Spaces API can be used on almost every infrastructure.
+    As already mentioned, the Data Spaces API can be run against variety of data transfer protocols that are provided by the infrastructure, or even against a standard ProActive-compliant communication protocols. This is achieved through <literal>pa-dataserver</literal> that is to be used wherever no supported data transfer protocol is available, but still the ProActive deployment can take place successfully. Hence, Data Spaces API can be used on almost every infrastructure.
     </para>
     <para>
     The programmer can use ProActive's Data Spaces API to read application's input data, write and share temporary results and finally gather outputs in uniform manner among all these operations. Hence there are three types of data space abstraction: input, output and scratch. Data Spaces API provides way to access existing data spaces and files within these data spaces, it also gives the ability to define new data spaces. All operations performed through this API concern data spaces owned by one application.
@@ -203,12 +203,12 @@ Naming Service successfully started on: rmi://branch.inria.fr:1099/defaultNaming
             </para>
         </section>
         <section xml:id="ds_configuration_script_proactive_provider">
-            <info><title><literal>PAProviderServer</literal> script</title></info>
+            <info><title><literal>pa-dataserver</literal> script</title></info>
             <para>
                 Using this script you can <emphasis>start ProActive provider server</emphasis>, exposing specified local directory for a remote access. ProActive provider bases on ProActive protocol to create remote file system protocol. Performance of such a protocol may be worse than performance of dedicated protocols like FTP, but it can act as an easy to setup protocol, without lot of configuration nor requirements. To start ProActive provider server, simply use script with <literal>start</literal> command:
-                <screen>linux &gt; ./PAProviderServer.sh start /home/bob/input_data/
+                <screen>linux &gt; ./pa-dataserver.sh start /home/bob/input_data/
 70833@branch - [INFO    communication.rmi] Created a new registry on port 1099
-PAProvider successfully started.
+ProActive dataserver successfully started.
 VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?proactive_vfs_provider_path=/
 </screen>
                 Displayed URL of started server can be used as a remote access URL of data spaces in GCM Application descriptor, <literal>PADataSpaces</literal> API or for manual configuration, to easily set up remote access for some data. See <xref linkend="ds_gcma"/> and <xref linkend="ds_configuration_manual"/> for configuration details and <xref linkend="ds_snippet2"/> or javadoc for API details.
@@ -353,7 +353,7 @@ VFS URL of this provider: paprmi://branch.inria.fr:1099/defaultFileSystemServer?
         <section xml:id="ds_section_example_gcmd">
             <info><title>GCM Deployment Descriptor</title></info>
             <para>
-            The GCM-D is very simple, as the example is to be run on every infrastructure. In this case, a <emphasis><literal>&lt;scratch&gt;</literal></emphasis> tag is used to enable data spaces on nodes described by the <literal>id="host"</literal> host id. A <emphasis><literal>path</literal></emphasis> element defines a location of a scratch data space, as a sub directory of the system's temporary directory. As there is no <emphasis><literal>&lt;remoteAccess&gt;</literal></emphasis> element, the scratch data space is to be exposed through PAProviderServer that is started automatically.
+            The GCM-D is very simple, as the example is to be run on every infrastructure. In this case, a <emphasis><literal>&lt;scratch&gt;</literal></emphasis> tag is used to enable data spaces on nodes described by the <literal>id="host"</literal> host id. A <emphasis><literal>path</literal></emphasis> element defines a location of a scratch data space, as a sub directory of the system's temporary directory. As there is no <emphasis><literal>&lt;remoteAccess&gt;</literal></emphasis> element, the scratch data space is to be exposed through ProActive dataserver that is started automatically.
             </para>
             <example xml:id="ds_example_gcmd">
                 <info><title>Part of the GCM-D Descriptor: helloDeploymentRemote.xml</title></info>

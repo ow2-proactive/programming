@@ -45,9 +45,9 @@ import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 
 
 /**
- * Class for starting PA Provider server manually.
+ * Class for starting PAdataserver manually.
  */
-public class PAProviderServerStarter {
+public class PADataserverStarter {
 
     private static String rootDirectory;
 
@@ -61,15 +61,15 @@ public class PAProviderServerStarter {
      * @throws URISyntaxException
      */
     public static void main(String[] args) throws IOException {
-        final String name = PAProviderServerStarter.class.getName();
+        final String name = PADataserverStarter.class.getName();
 
         try {
             parseArgs(args);
         } catch (IllegalArgumentException e) {
-            System.out.println("Usage: java " + name + " <root directory> [PAProvider name]");
+            System.out.println("Usage: java " + name + " <root directory> [PAdataserver name]");
             System.out.println("       java " + name + " --help");
             System.out
-                    .println("Starts the PA Provider server for <root directory> with default or specified name.");
+                    .println("Starts the ProActive dataserver for <root directory> with default or specified name.");
             System.out.println("\t--help\tprints this screen");
             return;
         }
@@ -109,7 +109,7 @@ public class PAProviderServerStarter {
             deployer = new FileSystemServerDeployer(providerName, rootDirectory, true);
 
         final String url = deployer.getVFSRootURL();
-        System.out.println("PAProvider successfully started.\nVFS URL of this provider: " + url);
+        System.out.println("ProActive dataserver successfully started.\nVFS URL of this provider: " + url);
     }
 
     private static void stopServer() throws ProActiveException {
