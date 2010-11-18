@@ -138,18 +138,22 @@ public class RTBroadcaster implements Runnable, RTBroadcasterAction, RTBroadcast
     //
     // -- GETTER SINGLETON -----------------------------------------------
     //
+
+    /**
+     * Returns the instance of {@link RTBroadcaster} is enabled or null is disabled.
+     */
     public static synchronized RTBroadcaster getInstance() {
+        if (CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.getValue() == false) {
+            return null;
+        }
 
-        if (CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.isTrue() && rtBroadcaster == null) {
-
+        if (rtBroadcaster == null) {
             rtBroadcaster = new RTBroadcaster();
             // wrap into a thread and start it
             new Thread(rtBroadcaster, "Thread for RTBroadcast").start(); // ref on the thread ??,
-
         }
 
         return rtBroadcaster;
-
     }
 
     public URI getCallbackUri() {

@@ -1,14 +1,11 @@
 package org.objectweb.proactive.api;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.broadcast.LocalBTCallback;
 import org.objectweb.proactive.core.runtime.broadcast.RTBroadcaster;
@@ -23,24 +20,26 @@ public class PARuntime {
      * A multicast group is defined using the
      * {@link CentralPAPropertyRepository#PA_RUNTIME_BROADCAST_ADDRESS} and
      * {@link CentralPAPropertyRepository#PA_RUNTIME_BROADCAST_PORT}.
-     * @return an array of uris of the ProActive Runtimes discovered locally (via broadcast)
+     * @return an array of uris of the ProActive Runtimes discovered locally (via broadcast). If broadcaster is not enabled an empty array is returned.
      *
     */
     protected synchronized static URI[] findRuntimesURI() {
-
         RTBroadcaster rtBroadcaster = RTBroadcaster.getInstance();
+        if (rtBroadcaster != null) {
+            LocalBTCallback lbtc = rtBroadcaster.getLocalBTCallback();
 
-        LocalBTCallback lbtc = rtBroadcaster.getLocalBTCallback();
+            lbtc.clear();
 
-        lbtc.clear();
+            rtBroadcaster.sendDiscover();
 
-        rtBroadcaster.sendDiscover();
+            new Sleeper(1500).sleep();
 
-        new Sleeper(1500).sleep();
+            URI[] uris = (URI[]) lbtc.getKnowRuntimes().toArray(new URI[] {}).clone();
 
-        URI[] uris = (URI[]) lbtc.getKnowRuntimes().toArray(new URI[] {}).clone();
-
-        return uris;
+            return uris;
+        } else {
+            return new URI[0];
+        }
     }
 
     /**
@@ -68,10 +67,5 @@ public class PARuntime {
         }
 
         return paRTs;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(Arrays.toString(findRuntimes().toArray()));
-        System.exit(0);
     }
 }

@@ -175,9 +175,8 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                     new PARTPinger().start();
                 }
 
-                if (CentralPAPropertyRepository.PA_RUNTIME_BROADCAST.isTrue()) {
-                    RTBroadcaster rtBrodcaster = RTBroadcaster.getInstance();
-                    // notify our presence on the lan
+                RTBroadcaster rtBrodcaster = RTBroadcaster.getInstance();
+                if (rtBrodcaster != null) {
                     rtBrodcaster.sendDiscover();
                 }
 
@@ -742,7 +741,10 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
         }
 
         //  terminate the broadcast thread
-        RTBroadcaster.getInstance().kill();
+        RTBroadcaster rtBroadcaster = RTBroadcaster.getInstance();
+        if (rtBroadcaster != null) {
+            rtBroadcaster.kill();
+        }
 
         // unexport the runtime
         try {
