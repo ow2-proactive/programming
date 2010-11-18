@@ -162,7 +162,7 @@ public class PARemoteObject {
      * postfixes it with a counter incremented each time
      * @return a unique name (that contains '/') to serve as unique identifier
      */
-    public static String getUniqueName() {
+    private static String getUniqueName() {
         return TURN_REMOTE_PREFIX + counter.incrementAndGet();
     }
 
