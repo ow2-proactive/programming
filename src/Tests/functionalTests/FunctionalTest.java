@@ -186,30 +186,36 @@ public class FunctionalTest {
 
                     // 2- Display jstack output
                     // It can be useful to debug (live|dead)lock
-                    Map<String, String> pids = getPids();
+                    try {
+                        Map<String, String> pids = getPids();
 
-                    for (String pid : pids.keySet()) {
-                        System.err.println("PID: " + pid + " Command: " + pids.get(pid));
-                        System.err.println();
+                        for (String pid : pids.keySet()) {
+                            System.err.println("PID: " + pid + " Command: " + pids.get(pid));
+                            System.err.println();
 
-                        try {
-                            Process p = Runtime.getRuntime().exec(getJSTACKCommand() + " " + pid);
-                            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                            try {
+                                Process p = Runtime.getRuntime().exec(getJSTACKCommand() + " " + pid);
+                                BufferedReader br = new BufferedReader(new InputStreamReader(p
+                                        .getInputStream()));
 
-                            for (String line = br.readLine(); line != null; line = br.readLine()) {
-                                System.err.println("\t" + line);
+                                for (String line = br.readLine(); line != null; line = br.readLine()) {
+                                    System.err.println("\t" + line);
+                                }
+
+                                System.err.println();
+                                System.err
+                                        .println("---------------------------------------------------------------");
+                                System.err.println();
+                                System.err.println();
+                                System.err.flush();
+                            } catch (IOException e) {
+                                // Should not happen
+                                e.printStackTrace();
                             }
-
-                            System.err.println();
-                            System.err
-                                    .println("---------------------------------------------------------------");
-                            System.err.println();
-                            System.err.println();
-                            System.err.flush();
-                        } catch (IOException e) {
-                            // Should not happen
-                            e.printStackTrace();
                         }
+                    } catch (IOException e) {
+                        System.err.println("Failed to get thread dump of running JVM because of " +
+                            e.getMessage());
                     }
 
                     // 3- That's all
@@ -356,24 +362,19 @@ public class FunctionalTest {
      * 
      * @return
      */
-    static public Map<String, String> getPids() {
+    static public Map<String, String> getPids() throws IOException {
         HashMap<String, String> pids = new HashMap<String, String>();
 
-        try {
-            // Run JPS to list all JVMs on this machine
-            Process p = Runtime.getRuntime().exec(getJPSCommand() + " -ml");
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        // Run JPS to list all JVMs on this machine
+        Process p = Runtime.getRuntime().exec(getJPSCommand() + " -ml");
+        BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-            for (String line = br.readLine(); line != null; line = br.readLine()) {
-                // Discard all non ProActive JVM
-                if (line.contains("org.objectweb.proactive")) {
-                    String[] fields = line.split(" ", 2);
-                    pids.put(fields[0], fields[1]);
-                }
+        for (String line = br.readLine(); line != null; line = br.readLine()) {
+            // Discard all non ProActive JVM
+            if (line.contains("org.objectweb.proactive")) {
+                String[] fields = line.split(" ", 2);
+                pids.put(fields[0], fields[1]);
             }
-        } catch (IOException e) {
-            // Should not happen
-            e.printStackTrace();
         }
         return pids;
     }
