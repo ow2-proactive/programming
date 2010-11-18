@@ -129,7 +129,6 @@ public abstract class AbstractUniversalBody implements UniversalBody, Serializab
             RemoteRemoteObject rro = this.roe.createRemoteObject(this.bodyID.toString(), false);
             this.remoteBody = (UniversalBody) new RemoteObjectAdapter(rro).getObjectProxy();
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ActiveObjectCreationException(e);
         }
     }
