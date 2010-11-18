@@ -36,92 +36,53 @@
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.OutputStream;
+import java.util.List;
 
+import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
+import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
+import org.rzo.yajsw.os.ms.win.w32.WindowsProcess;
 
 
 /**
- * Class that extends the {@link OSProcessBuilder} for machines running Linux.<br>
- * It relies on scritps for custom launching of the user command.
+ * Class that extends the {@link OSProcessBuilder} for machines running Windows.<br>
+ * It relies on yajsw API (see http://yajsw.sourceforge.net) that exposes the Windows native
+ * API calls to create process under a specific user.
+ * <p>
+ * This builder does not accept OSUser with a private key, only username and password
+ * authentication is possible.
  * 
- * @author Zsolt Istvan
  * @since ProActive 4.4.0
  */
-public class WindowsProcessBuilder extends OSProcessBuilder {
+public final class WindowsProcessBuilder extends OSProcessBuilder {
 
-    private Map<String, String> environmentMap = new HashMap<String, String>();
+    /**
+     * Windows error codes.
+     */
+    private static final int ERROR_FILE_NOT_FOUND = 2;
+    private static final int ERROR_LOGON_FAILURE = 1326;
 
-    // path to scripts
-    private final String SCRIPTS_LOCATION;
-    private static final String CHECK_RUNAS = "check_runas.bat";
-    private static final String LAUNCH_SCRIPT = "launch.bat";
-    private static final String LAUNCH_EXE = "PipeBridge.exe";
-    // other constants
-    private static final String ENV_VAR_USER_PASSWORD = "PA_OSPB_USER_PASSWORD";
-
-    private String envFile = "_";
-
-    public WindowsProcessBuilder(String paHome) {
-        SCRIPTS_LOCATION = paHome + "\\dist\\scripts\\processbuilder\\win\\";
-    }
-
-    @Override
-    public Map<String, String> environment() {
-        // TODO Auto-generated method stub
-        return this.environmentMap;
+    /**
+     * Creates a new instance of this class.
+     * @param paHome the parameter is kept for compatibility with WindowsProcessBuilder
+     */
+    public WindowsProcessBuilder(final String paHome) {
     }
 
     @Override
     public Boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
         if (user.hasPrivateKey()) {
-            //remove this when SSH support has been added to the product ;)
+            // remove this when SSH support has been added to the product ;)
             throw new FatalProcessBuilderException("SSH support is not implemented!");
         }
-        try {
-            String[] args = { SCRIPTS_LOCATION + CHECK_RUNAS, user.getUserName(),
-                    (user.hasPassword()) ? user.getPassword() : "",
-                    (user.hasPassword()) ? SCRIPTS_LOCATION : "" };
-            Process p;
-
-            try {
-                // running a script that sudo-s into user and runs whoami
-                p = Runtime.getRuntime().exec(args);
-            } catch (IOException e) {
-                throw new FatalProcessBuilderException("Cannot launch because scripts are missing!", e);
-            }
-
-            InputStream inputstream = p.getInputStream();
-            InputStreamReader isr = new InputStreamReader(inputstream);
-            BufferedReader bufferedreader = new BufferedReader(isr);
-            String line;
-
-            while ((line = bufferedreader.readLine()) != null) {
-                // if whoami returns the same user name as user(), we are ok to
-                // go
-                if (line.equals(user.getUserName())) {
-                    bufferedreader.close();
-                    return true;
-                }
-            }
-
-            bufferedreader.close();
-            return false;
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!user.hasPassword()) {
             return false;
         }
+        return true;
     }
 
     @Override
@@ -136,106 +97,106 @@ public class WindowsProcessBuilder extends OSProcessBuilder {
 
     @Override
     protected String[] wrapCommand() {
-        String uname = (user() == null) ? "_" : user().getUserName();
-        String passwSwitch = (user() != null && user().hasPassword()) ? "p" : "_";
-        String cpart = (cores() == null) ? "_" : cores().toString();
-        String wpath = (directory() == null) ? "_" : directory().getAbsolutePath();
-        ArrayList<String> icmd = new ArrayList<String>();
-        // under windows the launcher needs:
-        // [exe_to_read_pipes] [launch_script] [pipename_for_script (added by
-        // pipereader exe)]
-        // [script_loc] [workspace] [username] [cores] [command...
-        icmd.add(SCRIPTS_LOCATION + LAUNCH_EXE);
-        icmd.add(SCRIPTS_LOCATION + LAUNCH_SCRIPT);
-        icmd.add(SCRIPTS_LOCATION);
-        icmd.add(wpath);
-        icmd.add(envFile);
-        icmd.add(cpart);
-        icmd.add(uname);
-        icmd.add(passwSwitch);
-
-        // do this god-awful hack to work around the limitations of batch
-        // scripts...
-        // when using the paths be sure to switch back to space.
-        int size = icmd.size();
-        for (int i = 2; i < size; i++) {
-            icmd.set(i, icmd.get(i).replace(" ", "?"));
-        }
-
-        return icmd.toArray(new String[0]);
-    }
-
-    /**
-     * This method will create a file which will contain all variables from the
-     * {@link #environment()}, and return the path to it. <br>
-     * In case the environment is empty, it will return "_" which is the
-     * "argument not set" value for the windows scripts. <br>
-     * <br>
-     * ATTENTION: "Environment" here means only variables explicitly set by the
-     * user.
-     * 
-     * @return Path to a bat file or "_" in case there is no file.
-     */
-    protected String writeAndGetEnvironmentFile() throws FatalProcessBuilderException {
-        if (environment().size() > 0 || command().size() > 0) {
-            try {
-                File temp = new File(SCRIPTS_LOCATION + "userenv" + UUID.randomUUID() + ".env");
-                temp.createNewFile();
-                temp.deleteOnExit();
-
-                BufferedWriter out;
-
-                out = new BufferedWriter(new FileWriter(temp));
-                // this file will have the environment variables and their
-                // values listed in the following way:
-                // env_var1=value1
-                // env_var2=value2
-                // ...
-                for (String i : environment().keySet()) {
-                    out.write("" + i + "=" + environment().get(i) + "\n");
-                }
-
-                //if (user()!=null && user().hasPassword()) {
-                out.write("cmd_coded=" + command().get(0).replace("%", "^%") + "\n");
-                out.write("therest=");
-                int limit = command().size();
-                for (int i = 1; i < limit; i++) {
-                    out.write(command().get(i).replace("%", "^%") + ((i < limit - 1) ? " " : ""));
-                }
-                out.write("\n");
-                //}
-
-                out.close();
-                return temp.getCanonicalPath();
-            } catch (IOException e) {
-                throw new FatalProcessBuilderException("Could not write environment to temporary file!", e);
-            }
-        }
-        return "_";
+        return new String[0];
     }
 
     @Override
     protected void prepareEnvironment() throws FatalProcessBuilderException {
-        /*
-         * Before running the actual setupAndStart method, we write out the variables to a temp
-         * file, and store its value in {@link #envFile}. Then we include this path in the wrapper
-         * for the user's command.
-         */
-        envFile = writeAndGetEnvironmentFile();
-
-        //do this AFTER writing the environment, because otherwise you dump the password to a file :D
-        if (user() != null && user().hasPassword()) {
-            delegatedPB.environment().put(ENV_VAR_USER_PASSWORD, user().getPassword());
-        }
-
-        if (user() != null && user().hasPrivateKey()) {
-            throw new FatalProcessBuilderException("SSH support is not implemented!");
-        }
     }
 
     @Override
     protected void additionalCleanup() {
-        delegatedPB.environment().remove(ENV_VAR_USER_PASSWORD);
     }
 
+    @Override
+    protected Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
+            FatalProcessBuilderException {
+        // Create the windows process from yajsw lib 
+        final WindowsProcess p = new WindowsProcess();
+        p.setUser(super.user().getUserName());
+        p.setPassword(super.user().getPassword());
+
+        // Inherit the command from the original process builder
+        final StringBuilder commandBuilder = new StringBuilder();
+        List<String> command = super.delegatedPB.command();
+        for (int i = 0; i < command.size(); i++) {
+            commandBuilder.append(command.get(i));
+            if (i + 1 < command.size()) {
+                commandBuilder.append(' ');
+            }
+        }
+        p.setCommand(commandBuilder.toString());
+
+        // Inherit the working dir from the original process builder
+        final File wdir = super.delegatedPB.directory();
+        if (wdir != null) {
+            p.setWorkingDir(wdir.getCanonicalPath());
+        }
+
+        // Inherit environment (Currently not work ... must be defined later)
+        //p.setEnvironment(super.delegatedPB.environment());
+
+        // This will force CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT;
+        p.setVisible(false);
+
+        // Makes the stdin, stdout and stderr available
+        p.setPipeStreams(true, false);
+
+        if (!p.start()) {
+            // Get the last error and depending on the error code
+            // throw the correct exception            
+            final int err = WindowsProcess.getLastError();
+            final String localizedMessage = WindowsProcess.formatMessageFromLastErrorCode(err);
+            switch (err) {
+                case ERROR_FILE_NOT_FOUND:
+                    throw new IOException("[" + err + "] " + localizedMessage);
+                case ERROR_LOGON_FAILURE:
+                    throw new OSUserException("[" + err + "] " + localizedMessage);
+                default:
+                    throw new FatalProcessBuilderException("[" + err + "] " + localizedMessage);
+            }
+        }
+        return new ProcessWrapper(p);
+    }
+
+    /**
+     * Wraps a WindowsProcess and exposes it as a java.lang.Process 
+     */
+    private final class ProcessWrapper extends Process {
+        private final WindowsProcess wp;
+
+        public ProcessWrapper(final WindowsProcess wp) {
+            this.wp = wp;
+        }
+
+        @Override
+        public void destroy() {
+            this.wp.destroy();
+        }
+
+        @Override
+        public int exitValue() {
+            return this.wp.getExitCode();
+        }
+
+        @Override
+        public InputStream getErrorStream() {
+            return this.wp.getErrorStream();
+        }
+
+        @Override
+        public InputStream getInputStream() {
+            return this.wp.getInputStream();
+        }
+
+        @Override
+        public OutputStream getOutputStream() {
+            return this.wp.getOutputStream();
+        }
+
+        @Override
+        public int waitFor() throws InterruptedException {
+            return (this.wp.waitFor() ? 0 : -1);
+        }
+    }
 }
