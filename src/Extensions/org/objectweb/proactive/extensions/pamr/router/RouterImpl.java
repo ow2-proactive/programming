@@ -44,6 +44,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.nio.ByteBuffer;
+import java.nio.channels.CancelledKeyException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -283,18 +284,23 @@ public class RouterImpl extends RouterInternal implements Runnable {
                 while (it.hasNext()) {
                     key = (SelectionKey) it.next();
                     it.remove();
-                    if ((key.readyOps() & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT) {
-                        this.handleAccept(key);
-                    } else if ((key.readyOps() & SelectionKey.OP_READ) == SelectionKey.OP_READ) {
-                        this.handleRead(key);
-                    } else {
-                        logger.warn("Unhandled SelectionKey operation");
+                    try {
+                        if ((key.readyOps() & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT) {
+                            this.handleAccept(key);
+                        } else if ((key.readyOps() & SelectionKey.OP_READ) == SelectionKey.OP_READ) {
+                            this.handleRead(key);
+                        } else {
+                            logger.warn("Unhandled SelectionKey operation");
+                        }
+                    } catch (CancelledKeyException e) {
+                        clientDisconnected(key);
                     }
                 }
 
             } catch (IOException e) {
                 logger.warn("Select failed", e);
             }
+
         }
 
         this.cleanup();
