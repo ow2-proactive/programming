@@ -74,7 +74,7 @@ For HTTP Binding support:
 For JAX-RS support:
 - abdera* (removed)
 - axiom* (removed but keep axiom-api and axiom-impl)
-- jsr311-api.jar (removed)
+- jsr311-api.jar (replaced by jaxrs-api.jar)
 - jettison.jar (Needed for JSON services only) (removed)
 
 For JMS transport
