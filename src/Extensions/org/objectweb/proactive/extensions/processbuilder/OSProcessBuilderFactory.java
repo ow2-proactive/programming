@@ -50,6 +50,33 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public interface OSProcessBuilderFactory {
     /**
      * Creates a new instance of {@link OSProcessBuilder}
+     * @return the os specific process builder
      */
     public OSProcessBuilder getBuilder();
+
+    /**
+     * Creates a new instance of {@link OSProcessBuilder} for
+     * processes that runs under the specified user.
+     * @param user the process user
+     * @return the os specific process builder 
+     */
+    public OSProcessBuilder getBuilder(OSUser user);
+
+    /**
+     * Creates a new instance of {@link OSProcessBuilder} for
+     * processes that runs with the specified cores mapping.
+     * @param cores the cores mapping
+     * @return the os specific process builder 
+     */
+    public OSProcessBuilder getBuilder(CoreBindingDescriptor cores);
+
+    /**
+     * Creates a new instance of {@link OSProcessBuilder} for
+     * processes that runs under the specified user and cores mapping.
+     * @param user the process user
+     * @param cores the cores mapping
+     * @return the os specific process builder 
+     */
+    public OSProcessBuilder getBuilder(OSUser user, CoreBindingDescriptor cores);
+
 }

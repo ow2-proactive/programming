@@ -39,12 +39,13 @@ package org.objectweb.proactive.extensions.processbuilder;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.extensions.processbuilder.exception.NotImplementedException;
 
 
 /**
  * An {@link OSProcessBuilderFactory} integrated with ProActive.
  * 
- * @since ProActive 4.4.0 
+ * @since ProActive 4.4.0
  */
 final public class PAOSProcessBuilderFactory implements OSProcessBuilderFactory {
     final private OperatingSystem os;
@@ -56,13 +57,28 @@ final public class PAOSProcessBuilderFactory implements OSProcessBuilderFactory 
     }
 
     public OSProcessBuilder getBuilder() {
+        return this.getBuilder(null, null);
+    }
+
+    public OSProcessBuilder getBuilder(final OSUser user) {
+        return this.getBuilder(user, null);
+    }
+
+    public OSProcessBuilder getBuilder(final CoreBindingDescriptor cores) {
+        return this.getBuilder(null, cores);
+    }
+
+    public OSProcessBuilder getBuilder(final OSUser user, final CoreBindingDescriptor cores) {
+        if (user == null) {
+            return new BasicProcessBuilder();
+        }
         switch (os) {
             case unix:
-                return new LinuxProcessBuilder(paHome);
+                return new LinuxProcessBuilder(user, cores, this.paHome);
             case windows:
-                return new WindowsProcessBuilder(paHome);
+                return new WindowsProcessBuilder(user, cores);
             default:
-                return new BasicProcessBuilder();
+                throw new NotImplementedException("The process builder is not yet implemented on " + os);
         }
     }
 }

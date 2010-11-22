@@ -62,7 +62,8 @@ public class LinuxProcessBuilder extends OSProcessBuilder {
     private static final String ENV_VAR_USER_PASSWORD = "PA_OSPB_USER_PASSWORD";
     private static final String ENV_VAR_USER_KEY_CONTENT = "PA_OSPB_USER_KEY_CONTENT";
 
-    public LinuxProcessBuilder(String paHome) {
+    public LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores, final String paHome) {
+        super(user, cores);
         SCRIPTS_LOCATION = paHome + "/dist/scripts/processbuilder/linux/";
     }
 
@@ -122,11 +123,6 @@ public class LinuxProcessBuilder extends OSProcessBuilder {
     @Override
     public Boolean isCoreBindingSupported() {
         return false;
-    }
-
-    @Override
-    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
-        return null;
     }
 
     @Override

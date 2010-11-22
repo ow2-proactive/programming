@@ -147,14 +147,15 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
     @Test
     public void checkCanExecuteAsUser() throws Exception {
-        OSProcessBuilder ospb = new PAOSProcessBuilderFactory().getBuilder();
+        OSProcessBuilder ospbUser = new PAOSProcessBuilderFactory().getBuilder(user);
+        OSProcessBuilder ospbUserWPass = new PAOSProcessBuilderFactory().getBuilder(userWPass);
         if (!isWindows) {
-            assertTrue(ospb.canExecuteAsUser(user));
+            assertTrue(ospbUser.canExecuteAsUser(user));
         }
-        assertTrue(ospb.canExecuteAsUser(userWPass));
+        assertTrue(ospbUserWPass.canExecuteAsUser(userWPass));
         if (!isWindows) {
-            assertFalse(ospb.canExecuteAsUser(new OSUser(user.getUserName(), "jibberish")));
-            assertFalse(ospb.canExecuteAsUser(new OSUser("jibberish")));
+            assertFalse(ospbUser.canExecuteAsUser(new OSUser(user.getUserName(), "jibberish")));
+            assertFalse(ospbUser.canExecuteAsUser(new OSUser("jibberish")));
         }
     }
 

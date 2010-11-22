@@ -68,9 +68,9 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
 
     /**
      * Creates a new instance of this class.
-     * @param paHome the parameter is kept for compatibility with WindowsProcessBuilder
      */
-    public WindowsProcessBuilder(final String paHome) {
+    public WindowsProcessBuilder(final OSUser user, final CoreBindingDescriptor cores) {
+        super(user, cores);
     }
 
     @Override
@@ -88,11 +88,6 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
     @Override
     public Boolean isCoreBindingSupported() {
         return false;
-    }
-
-    @Override
-    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
-        return null;
     }
 
     @Override

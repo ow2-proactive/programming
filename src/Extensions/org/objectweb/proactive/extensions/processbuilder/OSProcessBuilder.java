@@ -47,6 +47,7 @@ import java.util.Set;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
+import org.objectweb.proactive.extensions.processbuilder.exception.NotImplementedException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
 
@@ -81,17 +82,79 @@ import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
 public abstract class OSProcessBuilder {
 
     // the underlying ProcessBuilder to whom all work will be delegated
-    protected ProcessBuilder delegatedPB;
+    // if no specified user
+    protected final ProcessBuilder delegatedPB;
 
     // user - this should be a valid OS user entity (username and maybe a
-    // password)
-    private OSUser user = null;
+    // password). The launched process will be run under this user's environment and rights.
+    private final OSUser user;
 
     // descriptor of the core-binding (subset of cores on which the user's
     // process can execute)
-    private CoreBindingDescriptor cores = null;
+    private final CoreBindingDescriptor cores;
 
-    private ProcessOutputInterpreter outputInterpreter = new ProcessOutputInterpreter();
+    // The output interpreter
+    private final ProcessOutputInterpreter outputInterpreter;
+
+    // Creates a new instance of this class based on a user and a process builder
+    protected OSProcessBuilder(final ProcessBuilder delegatedPB, final OSUser user,
+            final CoreBindingDescriptor cores) {
+        this.delegatedPB = delegatedPB;
+        this.user = user;
+        this.cores = cores;
+        this.outputInterpreter = new ProcessOutputInterpreter();
+    }
+
+    // Creates a new instance of this class based on user and core descriptor
+    protected OSProcessBuilder(final OSUser user, final CoreBindingDescriptor cores) {
+        this(new ProcessBuilder(), user, cores);
+    }
+
+    /**
+     * Constructs a process builder with a core mapping and the specified operating system program
+     * and arguments. This is a convenience constructor that sets the process
+     * builder's command to a string list containing the same strings as the
+     * command array, in the same order. It is not checked whether command
+     * corresponds to a valid operating system command.
+     * 
+     * @param cores the description of cores mapping
+     * @param command
+     *            A string array containing the program and its arguments
+     */
+    public OSProcessBuilder(CoreBindingDescriptor cores, String... command) {
+        this(new ProcessBuilder(command), null, cores);
+    }
+
+    /**
+     * Constructs a process builder with a user and the specified operating system program
+     * and arguments. This is a convenience constructor that sets the process
+     * builder's command to a string list containing the same strings as the
+     * command array, in the same order. It is not checked whether command
+     * corresponds to a valid operating system command.
+     * 
+     * @param user launched process will be run under this user's environment and rights
+     * @param command
+     *            A string array containing the program and its arguments
+     */
+    public OSProcessBuilder(OSUser user, String... command) {
+        this(new ProcessBuilder(command), user, null);
+    }
+
+    /**
+     * Constructs a process builder with a user and the specified operating system program
+     * and arguments. This is a convenience constructor that sets the process
+     * builder's command to a string list containing the same strings as the
+     * command array, in the same order. It is not checked whether command
+     * corresponds to a valid operating system command.
+     * 
+     * @param user launched process will be run under this user's environment and rights
+     * @param cores the description of the cores binding 
+     * @param command
+     *            A string array containing the program and its arguments
+     */
+    public OSProcessBuilder(OSUser user, CoreBindingDescriptor cores, String... command) {
+        this(new ProcessBuilder(command), user, cores);
+    }
 
     /**
      * Constructs a process builder with the specified operating system program
@@ -104,7 +167,7 @@ public abstract class OSProcessBuilder {
      *            A string array containing the program and its arguments
      */
     public OSProcessBuilder(String... command) {
-        delegatedPB = new ProcessBuilder(command);
+        this(new ProcessBuilder(command), null, null);
     }
 
     /**
@@ -117,10 +180,10 @@ public abstract class OSProcessBuilder {
      * @param command
      *            The list containing the program and its arguments
      * @throws NullPointerException
-     *             If the argument is null
+     *             If the command argument is null
      */
     public OSProcessBuilder(List<String> command) throws NullPointerException {
-        delegatedPB = new ProcessBuilder(command);
+        this(new ProcessBuilder(command), null, null);
     }
 
     /**
@@ -128,10 +191,10 @@ public abstract class OSProcessBuilder {
      * The returned list is not a copy. Subsequent updates to the list will be
      * reflected in the state of this process builder.
      * 
-     * @return
+     * @return command as a list of strings
      */
     public List<String> command() {
-        return delegatedPB.command();
+        return this.delegatedPB.command();
     }
 
     /**
@@ -139,7 +202,7 @@ public abstract class OSProcessBuilder {
      * with added wrapping scripts/programs for user and core binding. This will
      * be used in the internal start method.
      * 
-     * @return
+     * @return an array of string that represents the command
      */
     protected abstract String[] wrapCommand();
 
@@ -154,7 +217,7 @@ public abstract class OSProcessBuilder {
      * @return this OSProcessBuilder
      */
     public OSProcessBuilder command(String... command) {
-        delegatedPB.command(command);
+        this.delegatedPB.command(command);
         return this;
     }
 
@@ -162,20 +225,10 @@ public abstract class OSProcessBuilder {
      * Returns this process builder's associated user. The launched process will
      * be run under this user's environment and rights.
      * 
-     * @return
+     * @return the user of this process builder
      */
     public OSUser user() {
-        return user;
-    }
-
-    /**
-     * Sets this process builder's associated user. The launched process will be
-     * run under this user's environment and rights.
-     * 
-     * @param userName
-     */
-    public void user(OSUser user) {
-        this.user = user;
+        return this.user;
     }
 
     /**
@@ -192,31 +245,20 @@ public abstract class OSProcessBuilder {
     public abstract Boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException;
 
     /**
-     * Returns this process builder's associated corebinding. The launched
+     * Returns this process builder's associated core binding. The launched
      * process will execute only on these cores.
      * 
-     * @return
+     * @return the description of core binding
      */
     public CoreBindingDescriptor cores() {
         return cores;
     }
 
     /**
-     * Sets this process builder's associated corebinding. The launched process
-     * will execute only on these cores.
-     * 
-     * @param cores
-     *            descriptor representing the core-binding
-     */
-    public void cores(CoreBindingDescriptor cores) {
-        this.cores = cores;
-    }
-
-    /**
      * Helper method for checking the possibility of binding the to-be-created
      * process to a subset of the machine's cores.
      * 
-     * @return
+     * @return true if the binding is supported and false otherwise
      */
     public abstract Boolean isCoreBindingSupported();
 
@@ -225,7 +267,7 @@ public abstract class OSProcessBuilder {
      * {@link CoreBindingDescriptor} interface, and is initialized with the
      * number of cores that can be used by the OSProcessbuilder.
      * 
-     * @return
+     * @return the cores mapping
      */
     /*
      * Implementation advice:
@@ -236,7 +278,12 @@ public abstract class OSProcessBuilder {
      * to which binding would surely fail should not be even shown to the user, as they are not
      * relevant.
      */
-    public abstract CoreBindingDescriptor getAvaliableCoresDescriptor();
+    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
+        if (this.cores != null) {
+            throw new NotImplementedException("The cores mapping is not yet implemented");
+        }
+        return this.cores;
+    }
 
     /**
      * Returns this process builder's working directory. Subprocesses
@@ -342,7 +389,11 @@ public abstract class OSProcessBuilder {
      * @see System#getenv()
      */
     public Map<String, String> environment() {
-        return delegatedPB.environment();
+        if (this.user != null) {
+            throw new NotImplementedException(
+                "The environment modification of a user process is not implemented");
+        }
+        return this.delegatedPB.environment();
     }
 
     protected OSProcessBuilder environment(Map<String, String> env) {

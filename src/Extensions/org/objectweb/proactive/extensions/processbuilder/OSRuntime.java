@@ -79,6 +79,25 @@ public class OSRuntime {
         this.pbFactory = pbFactory;
     }
 
+    protected OSProcessBuilder configure(final OSProcessBuilder ospb, final String[] command,
+            final Map<String, String> envp, final File dir) {
+
+        if (command.length == 0)
+            throw new IndexOutOfBoundsException();
+        else
+            ospb.command(command);
+
+        if (dir != null)
+            ospb.directory(dir);
+
+        if (envp != null) {
+            Map<String, String> envm = ospb.environment();
+            envm.putAll(envp);
+        }
+
+        return ospb;
+    }
+
     /**
      * Method for executing an operating system command under a specific user
      * and bound to several cores of the CPU.
@@ -117,33 +136,16 @@ public class OSRuntime {
      */
     public Process exec(OSUser user, CoreBindingDescriptor cores, String[] command, Map<String, String> envp,
             File dir) throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
-        OSProcessBuilder ospb = this.pbFactory.getBuilder();
-
-        if (command.length == 0)
-            throw new IndexOutOfBoundsException();
-        else
-            ospb.command(command);
-
-        if (dir != null)
-            ospb.directory(dir);
-
-        if (envp != null) {
-            Map<String, String> envm = ospb.environment();
-            envm.putAll(envp);
+        if (user == null) {
+            throw new NullPointerException("User name must be specified");
+        }
+        if (cores == null) {
+            throw new NullPointerException("Descriptor for cores is not specified!");
         }
 
-        if (user == null || user.equals(""))
-            throw new NullPointerException("User name must be specified!");
-        else
-            ospb.user(user);
+        OSProcessBuilder ospb = this.pbFactory.getBuilder(user, cores);
 
-        if (cores == null)
-            throw new NullPointerException("Descriptor for cores is not specified!");
-        else
-            ospb.cores(cores);
-
-        return ospb.start();
-
+        return this.configure(ospb, command, envp, dir).start();
     }
 
     /**
@@ -167,9 +169,6 @@ public class OSRuntime {
      * @throws IOException
      *             This exception is thrown in case the executable does not
      *             exist or is not accessible
-     * @throws OSUserException
-     *             This exception is thrown whenever it is impossible to start
-     *             the command under the specified user
      * @throws CoreBindingException
      *             This exception is thrown when it is impossible to bind to the
      *             specific subset of cores
@@ -179,29 +178,22 @@ public class OSRuntime {
      *             {@link ProcessBuilder}
      */
     public Process exec(CoreBindingDescriptor cores, String[] command, Map<String, String> envp, File dir)
-            throws IOException, OSUserException, CoreBindingException, FatalProcessBuilderException {
-        OSProcessBuilder ospb = this.pbFactory.getBuilder();
-
-        if (command.length == 0)
-            throw new IndexOutOfBoundsException();
-        else
-            ospb.command(command);
-
-        if (dir != null)
-            ospb.directory(dir);
-
-        if (envp != null) {
-            Map<String, String> envm = ospb.environment();
-            envm.putAll(envp);
+            throws IOException, CoreBindingException, FatalProcessBuilderException {
+        if (cores == null) {
+            throw new NullPointerException("Descriptor for cores is not specified!");
         }
 
-        if (cores == null)
-            throw new NullPointerException("Descriptor for cores is not specified!");
-        else
-            ospb.cores(cores);
+        OSProcessBuilder ospb = this.pbFactory.getBuilder(cores);
+        ospb = this.configure(ospb, command, envp, dir);
 
-        return ospb.start();
-
+        Process p = null;
+        try {
+            p = ospb.start();
+        } catch (OSUserException e) {
+            // this can not happen - because it was not set;
+            e.printStackTrace();
+        }
+        return p;
     }
 
     /**
@@ -234,26 +226,12 @@ public class OSRuntime {
      */
     public Process exec(OSUser user, String[] command, Map<String, String> envp, File dir)
             throws IOException, OSUserException, FatalProcessBuilderException {
-
-        OSProcessBuilder ospb = this.pbFactory.getBuilder();
-
-        if (command.length == 0)
-            throw new IndexOutOfBoundsException();
-        else
-            ospb.command(command);
-
-        if (dir != null)
-            ospb.directory(dir);
-
-        if (envp != null) {
-            Map<String, String> envm = ospb.environment();
-            envm.putAll(envp);
+        if (user == null) {
+            throw new NullPointerException("User name must be specified");
         }
 
-        if (user == null || user.equals(""))
-            throw new NullPointerException("User name must be specified!");
-        else
-            ospb.user(user);
+        OSProcessBuilder ospb = this.pbFactory.getBuilder(user);
+        ospb = this.configure(ospb, command, envp, dir);
 
         Process p = null;
         try {
@@ -293,19 +271,7 @@ public class OSRuntime {
             FatalProcessBuilderException {
 
         OSProcessBuilder ospb = this.pbFactory.getBuilder();
-
-        if (command.length == 0)
-            throw new IndexOutOfBoundsException();
-        else
-            ospb.command(command);
-
-        if (dir != null)
-            ospb.directory(dir);
-
-        if (envp != null) {
-            Map<String, String> envm = ospb.environment();
-            envm.putAll(envp);
-        }
+        ospb = this.configure(ospb, command, envp, dir);
 
         Process p = null;
         try {

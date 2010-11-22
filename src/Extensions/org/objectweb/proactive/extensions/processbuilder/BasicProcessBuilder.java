@@ -79,10 +79,4 @@ public class BasicProcessBuilder extends OSProcessBuilder {
 
         return super.start();
     }
-
-    @Override
-    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
-        return null;
-    }
-
 }
