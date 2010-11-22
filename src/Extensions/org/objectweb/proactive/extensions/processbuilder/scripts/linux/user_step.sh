@@ -52,10 +52,10 @@ if [ "$passw" == "" ]; then
     chmod 400 $keyfile
 
     for i in "$@" 
-      do 
+      do
       args="${args} ""'"${i//\'/\'\"\'\"\'}"'"
     done
-    ssh -n -i $keyfile $usr@localhost `pwd`/command_step.sh $tmp "$workdir" $args
+    ssh -n -o PasswordAuthentication=no -i $keyfile $usr@localhost `pwd`/command_step.sh $tmp "$workdir" $args
     exitc=$?
     rm $keyfile
   fi;
