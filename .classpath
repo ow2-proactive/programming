@@ -143,5 +143,7 @@
 	<classpathentry kind="lib" path="lib/saaj-impl.jar"/>
 	<classpathentry kind="lib" path="lib/wbem.jar"/>
 	<classpathentry kind="lib" path="lib/wiseman-tools.jar"/>
+	<classpathentry kind="lib" path="lib/jna-platform-3.2.7.jar"/>
+	<classpathentry kind="lib" path="lib/yajsw-os.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
