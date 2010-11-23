@@ -46,6 +46,7 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.handler.codec.frame.LengthFieldPrepender;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
+import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
 class PNPServerPipelineFactory implements ChannelPipelineFactory {
@@ -60,7 +61,7 @@ class PNPServerPipelineFactory implements ChannelPipelineFactory {
         this.extraHandlers = extraHandlers;
 
         this.executor = executor;
-        PNPThreadFactory tf = new PNPThreadFactory("PNP server handler timer (shared)", true,
+        NamedThreadFactory tf = new NamedThreadFactory("PNP server handler timer (shared)", true,
             Thread.MAX_PRIORITY);
         this.timer = new HashedWheelTimer(tf, 10, TimeUnit.MILLISECONDS);
     }

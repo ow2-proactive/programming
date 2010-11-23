@@ -51,12 +51,12 @@ import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.component.adl.Registry;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.ComponentTest;
 import functionalTests.GCMFunctionalTest;

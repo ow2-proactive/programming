@@ -49,7 +49,6 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
-import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
@@ -58,6 +57,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeSnaps
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+import org.objectweb.proactive.utils.Sleeper;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
 

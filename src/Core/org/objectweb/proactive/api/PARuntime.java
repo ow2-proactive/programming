@@ -9,9 +9,9 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
 import org.objectweb.proactive.core.runtime.broadcast.LocalBTCallback;
 import org.objectweb.proactive.core.runtime.broadcast.RTBroadcaster;
-import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.Sleeper;
 
 
 public class PARuntime {

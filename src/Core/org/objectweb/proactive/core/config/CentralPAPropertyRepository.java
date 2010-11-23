@@ -41,7 +41,7 @@ import java.net.Socket;
 import org.objectweb.proactive.core.config.PAProperties.PAPropertiesLoaderSPI;
 import org.objectweb.proactive.core.filetransfer.FileTransferService;
 import org.objectweb.proactive.core.runtime.broadcast.BTCallbackDefaultImpl;
-import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**

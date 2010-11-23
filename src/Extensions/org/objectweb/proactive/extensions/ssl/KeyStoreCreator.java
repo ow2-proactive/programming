@@ -59,7 +59,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.objectweb.proactive.core.util.passwordhandler.PasswordField;
+import org.objectweb.proactive.utils.PasswordField;
 
 
 /**

@@ -51,9 +51,9 @@ import org.objectweb.proactive.core.group.spmd.ProActiveSPMDGroupManager;
 import org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
 import org.objectweb.proactive.core.mop.MethodCall;
-import org.objectweb.proactive.core.util.TimeoutAccounter;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
+import org.objectweb.proactive.utils.TimeoutAccounter;
 
 
 public class BlockingRequestQueueImpl extends RequestQueueImpl implements java.io.Serializable,

@@ -46,7 +46,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.objectweb.proactive.core.util.TimeoutAccounter;
+import org.objectweb.proactive.utils.TimeoutAccounter;
 
 import com.trilead.ssh2.ChannelCondition;
 import com.trilead.ssh2.Connection;

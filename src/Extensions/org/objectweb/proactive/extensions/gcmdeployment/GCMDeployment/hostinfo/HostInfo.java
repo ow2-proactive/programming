@@ -39,8 +39,8 @@ package org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**

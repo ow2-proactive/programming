@@ -40,11 +40,11 @@ import static org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLogg
 
 import java.io.Serializable;
 
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilder;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfo;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tool;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.Tools;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 public class PathElement implements Cloneable, Serializable {

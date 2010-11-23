@@ -64,7 +64,6 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.core.util.TimeoutAccounter;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.log.remote.ProActiveLogCollectorDeployer;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
@@ -93,6 +92,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.core.TopologyRootImpl;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.gcmdeployment.Topology;
+import org.objectweb.proactive.utils.TimeoutAccounter;
 
 
 public class GCMApplicationImpl implements GCMApplicationInternal {

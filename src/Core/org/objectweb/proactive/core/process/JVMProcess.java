@@ -36,7 +36,7 @@
  */
 package org.objectweb.proactive.core.process;
 
-import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**

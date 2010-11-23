@@ -42,10 +42,10 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**

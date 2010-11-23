@@ -43,9 +43,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import ptolemy.data.Token;
 import ptolemy.matlab.Engine;

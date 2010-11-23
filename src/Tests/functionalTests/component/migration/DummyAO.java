@@ -48,12 +48,12 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.FunctionalTest;
 import functionalTests.GCMFunctionalTest;

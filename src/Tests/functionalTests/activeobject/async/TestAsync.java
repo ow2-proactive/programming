@@ -47,7 +47,7 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.NodeException;
-import org.objectweb.proactive.core.util.TimeoutAccounter;
+import org.objectweb.proactive.utils.TimeoutAccounter;
 
 import functionalTests.FunctionalTest;
 

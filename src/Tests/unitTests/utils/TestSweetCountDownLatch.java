@@ -42,8 +42,8 @@ import java.util.concurrent.TimeUnit;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.objectweb.proactive.core.util.Sleeper;
-import org.objectweb.proactive.core.util.SweetCountDownLatch;
+import org.objectweb.proactive.utils.Sleeper;
+import org.objectweb.proactive.utils.SweetCountDownLatch;
 
 import unitTests.UnitTests;
 

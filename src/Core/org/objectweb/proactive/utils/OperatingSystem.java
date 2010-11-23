@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core.util;
+package org.objectweb.proactive.utils;
 
 import java.io.Serializable;
 

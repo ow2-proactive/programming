@@ -68,12 +68,13 @@ import org.jboss.netty.util.Timer;
 import org.jboss.netty.util.TimerTask;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.util.ProActiveInet;
-import org.objectweb.proactive.core.util.SweetCountDownLatch;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pnp.exception.PNPException;
 import org.objectweb.proactive.extensions.pnp.exception.PNPHeartbeatTimeoutException;
 import org.objectweb.proactive.extensions.pnp.exception.PNPIOException;
 import org.objectweb.proactive.extensions.pnp.exception.PNPTimeoutException;
+import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.SweetCountDownLatch;
 
 
 /**
@@ -121,7 +122,7 @@ public class PNPAgent {
 
         // Configure Netty
         Executor pnpExecutor;
-        pnpExecutor = Executors.newCachedThreadPool(new PNPThreadFactory("PNP shared thread pool", false));
+        pnpExecutor = Executors.newCachedThreadPool(new NamedThreadFactory("PNP shared thread pool"));
 
         // Server side
         ServerSocketChannelFactory ssocketFactory;

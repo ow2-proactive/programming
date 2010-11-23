@@ -45,8 +45,8 @@ import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.core.remoteobject.http.util.HTTPRegistry;
 import org.objectweb.proactive.core.remoteobject.http.util.HttpMessage;
-import org.objectweb.proactive.core.util.Sleeper;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.utils.Sleeper;
 
 
 public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable {

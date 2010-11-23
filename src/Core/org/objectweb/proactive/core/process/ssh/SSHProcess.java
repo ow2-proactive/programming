@@ -40,7 +40,7 @@ import org.objectweb.proactive.core.process.AbstractExternalProcessDecorator;
 import org.objectweb.proactive.core.process.ExternalProcess;
 import org.objectweb.proactive.core.process.SimpleExternalProcess;
 import org.objectweb.proactive.core.process.UniversalProcess;
-import org.objectweb.proactive.core.util.OperatingSystem;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**

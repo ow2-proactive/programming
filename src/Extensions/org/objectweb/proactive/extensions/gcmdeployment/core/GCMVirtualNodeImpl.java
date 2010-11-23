@@ -55,12 +55,12 @@ import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.descriptor.services.TechnicalService;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
-import org.objectweb.proactive.core.util.TimeoutAccounter;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.FakeNode;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeProvider;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.TechnicalServicesFactory;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.TechnicalServicesProperties;
 import org.objectweb.proactive.gcmdeployment.Topology;
+import org.objectweb.proactive.utils.TimeoutAccounter;
 
 
 public class GCMVirtualNodeImpl implements GCMVirtualNodeInternal {

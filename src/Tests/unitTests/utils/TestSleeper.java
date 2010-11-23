@@ -39,7 +39,7 @@ package unitTests.utils;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.objectweb.proactive.core.util.Sleeper;
+import org.objectweb.proactive.utils.Sleeper;
 
 import unitTests.UnitTests;
 

@@ -44,8 +44,8 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.extensions.gcmdeployment.PathElement;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 public class HostInfoImpl implements HostInfo {

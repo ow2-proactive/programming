@@ -57,7 +57,7 @@ import org.objectweb.proactive.core.ssh.proxycommand.SshProxyConnection;
 import org.objectweb.proactive.core.ssh.proxycommand.SshProxySession;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.core.util.Sleeper;
+import org.objectweb.proactive.utils.Sleeper;
 
 
 public class SshTunnelPool {

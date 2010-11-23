@@ -355,7 +355,7 @@ public class Worker extends Timed implements java.io.Serializable {
     /**
      * virtual accessor for neighbour values x an y in the global matrix
      *
-     * @param i
+     * @param ThreadCustomizer
      *            The line
      * @param j
      *            The column
@@ -374,7 +374,7 @@ public class Worker extends Timed implements java.io.Serializable {
     /**
      * virtual accessor for neighbour values
      *
-     * @param i
+     * @param ThreadCustomizer
      *            The line
      * @param j
      *            The column

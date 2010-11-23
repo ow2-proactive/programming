@@ -66,17 +66,17 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.core.util.Sleeper;
-import org.objectweb.proactive.core.util.SweetCountDownLatch;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage;
+import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatRouterMessage;
-import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
+import org.objectweb.proactive.utils.Sleeper;
+import org.objectweb.proactive.utils.SweetCountDownLatch;
 
 
 /**

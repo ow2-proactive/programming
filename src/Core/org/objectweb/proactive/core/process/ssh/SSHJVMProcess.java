@@ -38,8 +38,8 @@ package org.objectweb.proactive.core.process.ssh;
 
 import org.objectweb.proactive.core.process.JVMProcess;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.RemoteProcessMessageLogger;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**

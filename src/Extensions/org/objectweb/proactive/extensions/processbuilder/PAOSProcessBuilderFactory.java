@@ -38,8 +38,8 @@ package org.objectweb.proactive.extensions.processbuilder;
 
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.extensions.processbuilder.exception.NotImplementedException;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 
 /**

@@ -58,7 +58,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMParserHelper;
@@ -101,6 +100,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMVMwa
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMVMwareVixParser;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.vm.VMMVirtualboxParser;
 import org.objectweb.proactive.extensions.gcmdeployment.environment.Environment;
+import org.objectweb.proactive.utils.OperatingSystem;
 import org.ow2.proactive.virtualizing.core.error.VirtualServiceException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;

@@ -50,7 +50,6 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.util.TimeoutAccounter;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.dataspaces.api.DataSpacesFileObject;
 import org.objectweb.proactive.extensions.dataspaces.api.PADataSpaces;
@@ -60,6 +59,7 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
 import org.objectweb.proactive.extensions.dataspaces.exceptions.NotConfiguredException;
 import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundException;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
+import org.objectweb.proactive.utils.TimeoutAccounter;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
 

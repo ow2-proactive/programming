@@ -42,13 +42,13 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Random;
 
-import org.objectweb.proactive.core.util.OperatingSystem;
 import org.objectweb.proactive.core.util.ProActiveCounter;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeploymentLoggers;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationInternal;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderProActive;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMDeployment.hostinfo.HostInfoImpl;
 import org.objectweb.proactive.extensions.gcmdeployment.core.TopologyImpl;
+import org.objectweb.proactive.utils.OperatingSystem;
 import org.ow2.proactive.virtualizing.core.VirtualMachine;
 import org.ow2.proactive.virtualizing.core.VirtualMachine2;
 import org.ow2.proactive.virtualizing.core.VirtualMachineManager;
