@@ -169,7 +169,7 @@ public class WSInfo implements Serializable {
     }
 
     /*
-     * Check if the given URL is valid.
+     * Checks if the given URL is valid.
      */
     private String checkWSURL(String wsUrl) throws IllegalBindingException {
         try {
@@ -184,7 +184,7 @@ public class WSInfo implements Serializable {
     }
 
     /*
-     * Check if the given class exists and implements the PROACTIVEWSCALLER_ITF_NAME interface.
+     * Checks if the given class exists and implements the PROACTIVEWSCALLER_ITF_NAME interface.
      */
     private String checkClassName(String className) throws IllegalBindingException {
         try {
@@ -203,7 +203,7 @@ public class WSInfo implements Serializable {
     }
 
     /*
-     * Select the appropriate name of the class to use to call the web service.
+     * Selects the appropriate name of the class to use to call the web service.
      */
     private String selectWSCallerClassName(String[] wsInfo) throws IllegalBindingException {
         if (wsInfo.length == 2) {
@@ -215,6 +215,8 @@ public class WSInfo implements Serializable {
                 return CXFAEGISWSCALLER_CLASSNAME;
             } else if (wsInfo[1].equalsIgnoreCase(DYNAMICCXFWSCALLER_ID)) {
                 return DYNAMICCXFWSCALLER_CLASSNAME;
+            } else if (wsInfo[1].equalsIgnoreCase(CXFRESTFULSERVICECALLER_ID)) {
+                return CXFRESTFULSERVICECALLER_CLASSNAME;
             } else {
                 return checkClassName(wsInfo[1]);
             }
