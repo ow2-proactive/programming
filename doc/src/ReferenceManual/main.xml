@@ -24,7 +24,7 @@
 	<!ENTITY MPI SYSTEM "MPI.xml">
 	<!ENTITY DataSpaces SYSTEM "DataSpaces.xml">
 	<!ENTITY PAConfiguration SYSTEM "Configuration.xml">
-	<!ENTITY MessageRouting SYSTEM "MessageRouting.xml">
+	<!ENTITY PAMR SYSTEM "PAMR.xml">
 	<!ENTITY SSHTunneling SYSTEM "SSHTunneling.xml">
 	<!ENTITY GCMDeployment SYSTEM "GCMDeployment.xml">
 	<!ENTITY XMLDescriptor SYSTEM "XMLDescriptor.xml">
@@ -64,7 +64,7 @@
 
 	<part xml:id="ProActiveConfiguration"><info><title xml:id="ProActiveConfiguration_2">ProActive Configuration</title></info>
 		&PAConfiguration;
-		&MessageRouting;
+		&PAMR;
 		&SSHTunneling;
 	</part>
 
