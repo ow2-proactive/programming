@@ -34,30 +34,36 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.client;
+package functionalTests.pamr;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.Socket;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
-import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
-import org.objectweb.proactive.extensions.pamr.client.ProActiveMessageHandler;
-import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
+import org.junit.After;
+import org.junit.Before;
+import org.objectweb.proactive.extensions.pamr.client.Tunnel;
+import org.objectweb.proactive.extensions.pamr.router.Router;
+import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 
 import functionalTests.FunctionalTest;
 
 
-public class TestInvalidRouter extends FunctionalTest {
+public class BlackBox extends FunctionalTest {
+    protected Router router;
+    protected Tunnel tunnel;
 
-    @Test
-    public void test() throws ProActiveException, UnknownHostException {
-        InetAddress localhost = InetAddress.getLocalHost();
-        AgentImpl agt = new AgentImpl(localhost, 12423, null, new MagicCookie(),
-            ProActiveMessageHandler.class, new MessageRoutingPlainSocketFactory());
-        Assert.assertNull(agt.getAgentID());
+    @Before
+    public void beforeBlackbox() throws Exception {
+        RouterConfig config = new RouterConfig();
+        this.router = Router.createAndStart(config);
+
+        Socket s = new Socket(InetAddress.getLocalHost(), this.router.getPort());
+        this.tunnel = new Tunnel(s);
+    }
+
+    @After
+    public void afterBlackBox() {
+        this.tunnel.shutdown();
+        this.router.stop();
     }
 }

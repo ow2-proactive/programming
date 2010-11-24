@@ -34,7 +34,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.client;
+package functionalTests.pamr.client;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -55,7 +55,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
 import org.objectweb.proactive.utils.Sleeper;
 
-import functionalTests.messagerouting.BlackBox;
+import functionalTests.pamr.BlackBox;
 
 
 public class ClientIOException extends BlackBox {

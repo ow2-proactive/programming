@@ -34,7 +34,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting;
+package functionalTests.pamr;
 
 import java.util.Random;
 

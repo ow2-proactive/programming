@@ -34,36 +34,19 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting;
+package functionalTests.pamr.message;
 
-import java.net.InetAddress;
-import java.net.Socket;
-
-import org.junit.After;
-import org.junit.Before;
-import org.objectweb.proactive.extensions.pamr.client.Tunnel;
-import org.objectweb.proactive.extensions.pamr.router.Router;
-import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
+import org.junit.Ignore;
 
 import functionalTests.FunctionalTest;
 
 
-public class BlackBox extends FunctionalTest {
-    protected Router router;
-    protected Tunnel tunnel;
+/**
+ * Common superclass of all message routing protocol messages functional tests
+ */
+@Ignore
+public class MessageFunctionalTest extends FunctionalTest {
 
-    @Before
-    public void beforeBlackbox() throws Exception {
-        RouterConfig config = new RouterConfig();
-        this.router = Router.createAndStart(config);
+    protected static final int NB_CHECK = 100;
 
-        Socket s = new Socket(InetAddress.getLocalHost(), this.router.getPort());
-        this.tunnel = new Tunnel(s);
-    }
-
-    @After
-    public void afterBlackBox() {
-        this.tunnel.shutdown();
-        this.router.stop();
-    }
 }

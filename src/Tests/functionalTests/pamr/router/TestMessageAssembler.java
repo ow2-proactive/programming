@@ -34,7 +34,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.router;
+package functionalTests.pamr.router;
 
 import java.net.InetAddress;
 import java.nio.ByteBuffer;

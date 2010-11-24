@@ -34,7 +34,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.message;
+package functionalTests.pamr.message;
 
 import org.junit.Assert;
 import org.junit.Test;

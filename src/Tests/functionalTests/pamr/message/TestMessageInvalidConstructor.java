@@ -34,7 +34,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.message;
+package functionalTests.pamr.message;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.util.ProActiveRandom;

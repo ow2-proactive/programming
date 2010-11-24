@@ -34,7 +34,7 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.router.blackbox;
+package functionalTests.pamr.router.blackbox;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -53,7 +53,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRepl
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 
-import functionalTests.messagerouting.BlackBox;
+import functionalTests.pamr.BlackBox;
 
 
 public class TestReconnection extends BlackBox {

@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.message;
+package functionalTests.pamr.message;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;

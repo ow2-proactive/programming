@@ -27,68 +27,45 @@
  * If needed, contact us to obtain a release under GPL Version 2 
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
  * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
+ * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.router.blackbox;
+package functionalTests.pamr;
 
 import java.io.IOException;
 
-import junit.framework.Assert;
-
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.Before;
 import org.objectweb.proactive.core.util.ProActiveRandom;
-import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
+import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 
-import functionalTests.messagerouting.BlackBox;
 
+/**
+ * A Blackbox with the Agent registered to the router
+ *
+ */
+public class BlackBoxRegistered extends BlackBox {
 
-public class TestConnection extends BlackBox {
+    protected AgentID agentId;
 
-    /*
-     * Send a valid Registration Request without agent ID
-     *
-     * A registration reply is expected with the same AgentID is expected
-     */
-    @Test
-    public void testConnection() throws IOException, MalformedMessageException {
-        MagicCookie magicCookie = new MagicCookie();
+    @Before
+    public void registerAgent() throws IOException {
+        // Connect
         Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(),
-            RouterImpl.DEFAULT_ROUTER_ID, magicCookie);
+            RouterImpl.DEFAULT_ROUTER_ID, new MagicCookie());
         tunnel.write(message.toByteArray());
 
         byte[] resp = tunnel.readMessage();
-        RegistrationReplyMessage reply = (RegistrationReplyMessage) Message.constructMessage(resp, 0);
-
-        Assert.assertEquals(message.getMessageID(), reply.getMessageID());
-        Assert.assertNotNull(reply.getAgentID());
-        Assert.assertTrue(reply.getAgentID().getId() >= 0);
-        Assert.assertEquals(magicCookie, reply.getMagicCookie());
-    }
-
-    /*
-     * Send a valid Registration Request without agent ID and with a bad router ID
-     *
-     * A registration reply is expected with the same AgentID is expected
-     */
-    @Ignore
-    @Test(expected = IOException.class)
-    public void testInvalidConnection() throws IOException {
-        Message message = new RegistrationRequestMessage(null, ProActiveRandom.nextPosLong(), 0xbadbad,
-            new MagicCookie());
-        tunnel.write(message.toByteArray());
-
-        byte[] resp = tunnel.readMessage();
+        RegistrationReplyMessage reply = new RegistrationReplyMessage(resp, 0);
+        agentId = reply.getAgentID();
     }
 
 }

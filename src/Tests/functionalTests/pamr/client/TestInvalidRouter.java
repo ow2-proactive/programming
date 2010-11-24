@@ -34,19 +34,30 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.message;
+package functionalTests.pamr.client;
 
-import org.junit.Ignore;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
+import org.objectweb.proactive.extensions.pamr.client.ProActiveMessageHandler;
+import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
 
 import functionalTests.FunctionalTest;
 
 
-/**
- * Common superclass of all message routing protocol messages functional tests
- */
-@Ignore
-public class MessageFunctionalTest extends FunctionalTest {
+public class TestInvalidRouter extends FunctionalTest {
 
-    protected static final int NB_CHECK = 100;
-
+    @Test
+    public void test() throws ProActiveException, UnknownHostException {
+        InetAddress localhost = InetAddress.getLocalHost();
+        AgentImpl agt = new AgentImpl(localhost, 12423, null, new MagicCookie(),
+            ProActiveMessageHandler.class, new MessageRoutingPlainSocketFactory());
+        Assert.assertNull(agt.getAgentID());
+    }
 }

@@ -34,7 +34,7 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package functionalTests.messagerouting.router.blackbox;
+package functionalTests.pamr.router.blackbox;
 
 import java.io.IOException;
 
@@ -48,7 +48,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessa
 import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
 
-import functionalTests.messagerouting.BlackBoxRegistered;
+import functionalTests.pamr.BlackBoxRegistered;
 
 
 /**
