@@ -59,7 +59,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
  * @since ProActive 4.1.0
  */
 public class MessageAssembler {
-    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
 
     final private RouterInternal router;
 

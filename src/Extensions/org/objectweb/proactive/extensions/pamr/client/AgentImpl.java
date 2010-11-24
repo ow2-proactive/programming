@@ -61,7 +61,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
-import org.objectweb.proactive.extensions.pamr.exceptions.MessageRoutingException;
+import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataReplyMessage;
@@ -75,7 +75,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.Message.MessageT
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationReplyMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequestMessage;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingSocketFactorySPI;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySPI;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 import org.objectweb.proactive.utils.Sleeper;
@@ -92,7 +92,7 @@ import org.objectweb.proactive.utils.SweetCountDownLatch;
  * @since ProActive 4.1.0
  */
 public class AgentImpl implements Agent, AgentImplMBean {
-    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_CLIENT);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_CLIENT);
 
     /** Address of the router */
     final private InetAddress routerAddr;
@@ -124,7 +124,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
     final private List<Valve> valves;
 
     /** The socket factory to use to create the Tunnel */
-    final private MessageRoutingSocketFactorySPI socketFactory;
+    final private PAMRSocketFactorySPI socketFactory;
 
     final private Timer timer;
 
@@ -149,7 +149,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
      *             If the router cannot be contacted.
      */
     public AgentImpl(InetAddress routerAddr, int routerPort, AgentID agentId, MagicCookie magicCookie,
-            Class<? extends MessageHandler> messageHandlerClass, MessageRoutingSocketFactorySPI socketFactory)
+            Class<? extends MessageHandler> messageHandlerClass, PAMRSocketFactorySPI socketFactory)
             throws ProActiveException {
         this(routerAddr, routerPort, agentId, magicCookie, messageHandlerClass, new ArrayList<Valve>(),
                 socketFactory);
@@ -178,7 +178,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
      */
     public AgentImpl(InetAddress routerAddr, int routerPort, AgentID agentId, MagicCookie magicCookie,
             Class<? extends MessageHandler> messageHandlerClass, List<Valve> valves,
-            MessageRoutingSocketFactorySPI socketFactory) throws ProActiveException {
+            PAMRSocketFactorySPI socketFactory) throws ProActiveException {
         this.routerAddr = routerAddr;
         this.routerPort = routerPort;
         this.valves = valves;
@@ -444,14 +444,14 @@ public class AgentImpl implements Agent, AgentImplMBean {
         return agentID;
     }
 
-    public byte[] sendMsg(URI targetURI, byte[] data, boolean oneWay) throws MessageRoutingException {
+    public byte[] sendMsg(URI targetURI, byte[] data, boolean oneWay) throws PAMRException {
         String remoteAgentId = targetURI.getHost();
         AgentID agentID = new AgentID(Long.parseLong(remoteAgentId));
 
         return sendMsg(agentID, data, oneWay);
     }
 
-    public byte[] sendMsg(AgentID targetID, byte[] data, boolean oneWay) throws MessageRoutingException {
+    public byte[] sendMsg(AgentID targetID, byte[] data, boolean oneWay) throws PAMRException {
         if (logger.isDebugEnabled()) {
             logger.debug("Sending a message to agentId=" + targetID);
         }
@@ -472,14 +472,14 @@ public class AgentImpl implements Agent, AgentImplMBean {
             try {
                 response = mb.waitForResponse(0);
             } catch (TimeoutException e) {
-                throw new MessageRoutingException("Timeout reached ", e);
+                throw new PAMRException("Timeout reached ", e);
             }
         }
 
         return response;
     }
 
-    public void sendReply(DataRequestMessage request, byte[] data) throws MessageRoutingException {
+    public void sendReply(DataRequestMessage request, byte[] data) throws PAMRException {
         DataReplyMessage reply = new DataReplyMessage(this.getAgentID(), request.getSender(), request
                 .getMessageID(), data);
 
@@ -489,7 +489,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
     /**
      * Apply each valve to the message and write it into the tunnel
      * 
-     * This method throws a {@link MessageRoutingException} if:
+     * This method throws a {@link PAMRException} if:
      * <ol>
      * <li>The tunnel fails and cannot be recreated</li>
      * <li>The tunnel fails, can be recreated but the second tunnel fails too</li>
@@ -497,10 +497,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
      * 
      * @param msg
      *            The message to be sent
-     * @exception MessageRoutingException
+     * @exception PAMRException
      *                if the message cannot be sent
      */
-    protected void internalSendMsg(Message msg) throws MessageRoutingException {
+    protected void internalSendMsg(Message msg) throws PAMRException {
         for (Valve valve : this.valves) {
             msg = valve.invokeOutgoing(msg);
             if (logger.isTraceEnabled()) {
@@ -524,11 +524,11 @@ public class AgentImpl implements Agent, AgentImplMBean {
             } catch (IOException e) {
                 // Fail fast
                 this.reportTunnelFailure(tunnel);
-                throw new MessageRoutingException("Failed to send a message using the tunnel " + tunnel, e);
+                throw new PAMRException("Failed to send a message using the tunnel " + tunnel, e);
 
             }
         } else {
-            throw new MessageRoutingException("Agent is not connected to the router");
+            throw new PAMRException("Agent is not connected to the router");
         }
     }
 
@@ -587,7 +587,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
          */
         private void unlockDueToRemoteAgentDisconnection(AgentID agentID) {
             synchronized (this.lock) {
-                MessageRoutingException e = new MessageRoutingException("Remote agent disconnected");
+                PAMRException e = new PAMRException("Remote agent disconnected");
 
                 Map<Long, Patient> map = this.byRemoteAgent.get(agentID);
                 if (map != null) {
@@ -607,7 +607,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
          */
         private void unlockDueToTunnelFailure() {
             synchronized (this.lock) {
-                MessageRoutingException e = new MessageRoutingException("Tunnel failure");
+                PAMRException e = new PAMRException("Tunnel failure");
 
                 for (Map<Long, Patient> m : this.byRemoteAgent.values()) {
                     for (Patient p : m.values()) {
@@ -671,7 +671,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         /** The response */
         volatile private byte[] response = null;
         /** Received exception */
-        volatile private MessageRoutingException exception = null;
+        volatile private PAMRException exception = null;
 
         /** message ID of the request */
         final private long requestID;
@@ -692,13 +692,13 @@ public class AgentImpl implements Agent, AgentImplMBean {
          *            Maximum amount of time to wait before throwing an
          *            exception in milliseconds. 0 means no timeout
          * @return the response
-         * @throws MessageRoutingException
+         * @throws PAMRException
          *             If the request failed to be send or if the recipient
          *             disconnected before sending the response.
          * @throws TimeoutException
          *             If the timeout is reached
          */
-        private byte[] waitForResponse(long timeout) throws MessageRoutingException, TimeoutException {
+        private byte[] waitForResponse(long timeout) throws PAMRException, TimeoutException {
 
             if (timeout == 0) {
                 this.latch.await();
@@ -734,7 +734,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
          * @param exception
          *            received error
          */
-        public void setAndUnlock(MessageRoutingException exception) {
+        public void setAndUnlock(PAMRException exception) {
             this.exception = exception;
             latch.countDown();
         }
@@ -874,7 +874,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                         }
 
                         // this is a reply containing data
-                        mbox.setAndUnlock(new MessageRoutingException("Recipient not connected " + sender));
+                        mbox.setAndUnlock(new PAMRException("Recipient not connected " + sender));
                     }
                 }
                     break;
@@ -895,7 +895,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                         }
 
                         // this is a reply containing data
-                        mbox.setAndUnlock(new MessageRoutingException("Recipient unknown & not connected " +
+                        mbox.setAndUnlock(new PAMRException("Recipient unknown & not connected " +
                             sender));
                     }
                 }
@@ -923,7 +923,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                         }
 
                         patient
-                                .setAndUnlock(new MessageRoutingException("Message corruption on router side"));
+                                .setAndUnlock(new PAMRException("Message corruption on router side"));
                     }
                     break;
                 default:

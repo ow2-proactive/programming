@@ -51,7 +51,7 @@ import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolExcept
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
-import org.objectweb.proactive.extensions.pamr.remoteobject.message.MessageRoutingRemoteObjectRequest;
+import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRemoteObjectRequest;
 
 
 /**
@@ -59,9 +59,9 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.message.MessageRouti
  * @since ProActive 4.1.0
  */
 
-public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializable {
+public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
     final static private Logger logger = ProActiveLogger
-            .getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
+            .getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
 
     /** The URL of the RemoteObject */
     private URI remoteObjectURL;
@@ -76,7 +76,7 @@ public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializa
 
     protected transient InternalRemoteRemoteObject remoteObject;
 
-    public MessageRoutingRemoteObject(InternalRemoteRemoteObject remoteObject, URI remoteObjectURL,
+    public PAMRRemoteObject(InternalRemoteRemoteObject remoteObject, URI remoteObjectURL,
             Agent agent) {
         this.remoteObject = remoteObject;
         this.remoteObjectURL = remoteObjectURL;
@@ -85,7 +85,7 @@ public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializa
 
     public Reply receiveMessage(Request message) throws ProActiveException {
 
-        MessageRoutingRemoteObjectRequest req = new MessageRoutingRemoteObjectRequest(message,
+        PAMRRemoteObjectRequest req = new PAMRRemoteObjectRequest(message,
             this.remoteObjectURL, getAgent());
         req.send();
         SynchronousReplyImpl rep = (SynchronousReplyImpl) req.getReturnedObject();
@@ -104,8 +104,8 @@ public class MessageRoutingRemoteObject implements RemoteRemoteObject, Serializa
         if (this.agent == null) {
             try {
                 // FIXME: The factory cast is a hack but there is no clean way to do it
-                MessageRoutingRemoteObjectFactory f;
-                f = (MessageRoutingRemoteObjectFactory) AbstractRemoteObjectFactory
+                PAMRRemoteObjectFactory f;
+                f = (PAMRRemoteObjectFactory) AbstractRemoteObjectFactory
                         .getRemoteObjectFactory("pamr");
                 this.agent = f.getAgent();
             } catch (UnknownProtocolException e) {

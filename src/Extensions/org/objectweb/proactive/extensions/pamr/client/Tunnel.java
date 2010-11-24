@@ -60,7 +60,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.TypeHelper;
  * @since ProActive 4.1.0
  */
 public class Tunnel {
-    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_CLIENT_TUNNEL);
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_CLIENT_TUNNEL);
 
     final private Socket socket;
     final private BufferedInputStream bis;

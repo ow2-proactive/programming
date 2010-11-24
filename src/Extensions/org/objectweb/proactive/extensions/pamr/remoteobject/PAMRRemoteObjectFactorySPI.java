@@ -27,40 +27,31 @@
  * If needed, contact us to obtain a release under GPL Version 2 
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory;
+package org.objectweb.proactive.extensions.pamr.remoteobject;
 
-import java.io.IOException;
-import java.net.Socket;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
 
 
-/**
- * Interface for pluggable socket factories
- * The loaded implementation will be used to provide the socket
- * that is used by the agent to communicate with the router
+/** 
  *
- * @since ProActive 4.2.0
+ * @since ProActive 4.1.0
  */
-public interface MessageRoutingSocketFactorySPI {
+public class PAMRRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
 
-    /**
-     * Create a client socket connected to the specified host and port.
-     * @param  host   the host name
-     * @param  port   the port number
-     * @return a socket connected to the specified host and port.
-     * @exception IOException if an I/O error occurs during socket creation
-     * @since 1.2
-     */
-    public Socket createSocket(String host, int port) throws IOException;
+    public Class<? extends RemoteObjectFactory> getFactoryClass() {
+        return PAMRRemoteObjectFactory.class;
+    }
 
-    /**
-     * @return The alias name of this service provider
-     */
-    public String getAlias();
+    public String getProtocolId() {
+        return "pamr";
+    }
+
 }

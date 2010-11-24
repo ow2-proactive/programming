@@ -34,24 +34,35 @@
  * ################################################################
  * $$ACTIVEEON_INITIAL_DEV$$
  */
-package performanceTests.throughput;
+package org.objectweb.proactive.extensions.pamr.exceptions;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.core.ProActiveException;
 
 
-/**
- * Perfomance Test using MessageRouting protocol
+/** Signals that an error of some sort has occurred.
  *
+ * This class is the general class of exceptions produced by failed message sending.
+ * 
+ * @since ProActive 4.1.0
  */
-public class TestMessageRouting extends Throughput {
 
-    static {
-        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
-        PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
+public class PAMRException extends ProActiveException {
+
+    public PAMRException() {
+        super();
     }
 
-    public TestMessageRouting() {
-        super(TestMessageRouting.class);
+    public PAMRException(String message) {
+        super(message);
     }
+
+    public PAMRException(Throwable cause) {
+        super(cause);
+    }
+
+    public PAMRException(String msg, Throwable cause) {
+        super(msg);
+        this.initCause(cause);
+    }
+
 }

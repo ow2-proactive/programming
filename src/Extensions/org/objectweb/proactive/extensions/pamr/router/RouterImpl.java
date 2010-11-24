@@ -84,9 +84,9 @@ import org.objectweb.proactive.utils.SweetCountDownLatch;
  * @since ProActive 4.1.0
  */
 public class RouterImpl extends RouterInternal implements Runnable {
-    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
     public static final Logger admin_logger = ProActiveLogger
-            .getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
+            .getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
 
     static final public int DEFAULT_PORT = 33647;
 

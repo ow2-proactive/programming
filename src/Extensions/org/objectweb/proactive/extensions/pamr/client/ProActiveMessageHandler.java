@@ -48,9 +48,9 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
-import org.objectweb.proactive.extensions.pamr.exceptions.MessageRoutingException;
+import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
-import org.objectweb.proactive.extensions.pamr.remoteobject.message.MessageRoutingMessage;
+import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRMessage;
 
 
 /** Executes a ProActive {@link Request} received and send the response.
@@ -59,7 +59,7 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.message.MessageRouti
  */
 public class ProActiveMessageHandler implements MessageHandler {
 
-    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_CLIENT);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_CLIENT);
 
     /** {@link Request} are handled by a threadpool */
     final private ExecutorService tpe;
@@ -118,11 +118,11 @@ public class ProActiveMessageHandler implements MessageHandler {
                 // Handle the message
                 Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
-                MessageRoutingMessage message;
+                PAMRMessage message;
                 try {
-                    message = (MessageRoutingMessage) this.marshaller.unmarshallObject(_toProcess.getData());
+                    message = (PAMRMessage) this.marshaller.unmarshallObject(_toProcess.getData());
                 } catch (Throwable t) {
-                    new MessageRoutingException("Failed to unmarshall incoming message", t);
+                    new PAMRException("Failed to unmarshall incoming message", t);
                     SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, t));
                     agent.sendReply(_toProcess, this.marshaller.marshallObject(sr));
                     return;
@@ -137,7 +137,7 @@ public class ProActiveMessageHandler implements MessageHandler {
                 try {
                     resultBytes = this.marshaller.marshallObject(result);
                 } catch (Throwable t) {
-                    new MessageRoutingException("Failed to marshall the result bytes", t);
+                    new PAMRException("Failed to marshall the result bytes", t);
                     SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, t));
                     agent.sendReply(_toProcess, this.marshaller.marshallObject(sr));
                     return;
@@ -150,7 +150,7 @@ public class ProActiveMessageHandler implements MessageHandler {
                         ". The router should discover the disconnection and unlock the caller", t);
                     return;
                 }
-            } catch (MessageRoutingException e) {
+            } catch (PAMRException e) {
                 logger.info("Failed to send the PAMR error reply to " + this._toProcess +
                     ". The router should discover the disconnection and unlock the caller", e);
             } catch (IOException e) {

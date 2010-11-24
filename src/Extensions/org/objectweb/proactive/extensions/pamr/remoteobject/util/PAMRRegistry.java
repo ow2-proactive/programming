@@ -54,15 +54,15 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
  * 
  * @since ProActive 4.1.0
  */
-public class MessageRoutingRegistry {
-    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
+public class PAMRRegistry {
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
 
-    public final static MessageRoutingRegistry singleton = new MessageRoutingRegistry();
+    public final static PAMRRegistry singleton = new PAMRRegistry();
 
     /** Registered Remote Objects */
     private ConcurrentHashMap<URI, InternalRemoteRemoteObject> rRemteObjectMap;
 
-    private MessageRoutingRegistry() {
+    private PAMRRegistry() {
         if (logger.isTraceEnabled()) {
             logger.trace("Starting the registry for the message routing protocol");
         }

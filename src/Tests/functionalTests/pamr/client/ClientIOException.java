@@ -45,14 +45,14 @@ import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
 import org.objectweb.proactive.extensions.pamr.client.MessageHandler;
-import org.objectweb.proactive.extensions.pamr.exceptions.MessageRoutingException;
+import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DebugMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DebugMessage.DebugType;
 import org.objectweb.proactive.extensions.pamr.protocol.message.Message;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRPlainSocketFactory;
 import org.objectweb.proactive.utils.Sleeper;
 
 import functionalTests.pamr.BlackBox;
@@ -66,7 +66,7 @@ public class ClientIOException extends BlackBox {
     }
 
     @Test
-    public void test() throws UnknownHostException, ProActiveException, MessageRoutingException {
+    public void test() throws UnknownHostException, ProActiveException, PAMRException {
         InetAddress localhost = InetAddress.getLocalHost();
         Agent agent = new Agent(localhost, super.router.getPort(), FakeMessageHandler.class);
         AgentID agentId = agent.getAgentID();
@@ -101,10 +101,10 @@ public class ClientIOException extends BlackBox {
         public Agent(InetAddress routerAddr, int routerPort,
                 Class<? extends MessageHandler> messageHandlerClass) throws ProActiveException {
             super(routerAddr, routerPort, null, new MagicCookie(), messageHandlerClass,
-                    new MessageRoutingPlainSocketFactory());
+                    new PAMRPlainSocketFactory());
         }
 
-        public void sendMsg(Message message) throws MessageRoutingException {
+        public void sendMsg(Message message) throws PAMRException {
             super.internalSendMsg(message);
         }
 

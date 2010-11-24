@@ -40,7 +40,7 @@ import java.io.Serializable;
 import java.net.URI;
 
 import org.objectweb.proactive.extensions.pamr.client.Agent;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.MessageRoutingRegistry;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
 
 
 /** Represents a MessageRoutingMessage. 
@@ -50,7 +50,7 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.MessageRoutingR
  * @since ProActive 4.1.0
  */
 
-public class MessageRoutingRegistryListRemoteObjectsMessage extends MessageRoutingMessage implements
+public class PAMRRegistryListRemoteObjectsMessage extends PAMRMessage implements
         Serializable {
 
     /**
@@ -62,7 +62,7 @@ public class MessageRoutingRegistryListRemoteObjectsMessage extends MessageRouti
      * @param agent
      *            the local agent to use to send the message
      */
-    public MessageRoutingRegistryListRemoteObjectsMessage(URI uri, Agent agent) {
+    public PAMRRegistryListRemoteObjectsMessage(URI uri, Agent agent) {
         super(uri, agent);
     }
 
@@ -77,6 +77,6 @@ public class MessageRoutingRegistryListRemoteObjectsMessage extends MessageRouti
             logger.trace("Executing a list message");
         }
 
-        return MessageRoutingRegistry.singleton.list();
+        return PAMRRegistry.singleton.list();
     }
 }

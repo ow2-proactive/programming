@@ -103,14 +103,14 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
     public interface Loggers {
 
         // Forwarding
-        static final public String FORWARDING = org.objectweb.proactive.core.util.log.Loggers.CORE +
-            ".forwarding";
-        static final public String FORWARDING_MESSAGE = FORWARDING + ".message";
-        static final public String FORWARDING_ROUTER = FORWARDING + ".router";
-        static final public String FORWARDING_CLIENT = FORWARDING + ".client";
-        static final public String FORWARDING_CLIENT_TUNNEL = FORWARDING_CLIENT + ".tunnel";
-        static final public String FORWARDING_REMOTE_OBJECT = FORWARDING + ".remoteobject";
-        static final public String FORWARDING_ROUTER_ADMIN = FORWARDING_ROUTER + ".admin";
-        static final public String FORWARDING_CLASSLOADING = FORWARDING + ".classloading";
+        static final public String PAMR = org.objectweb.proactive.core.util.log.Loggers.CORE +
+            ".pamr";
+        static final public String PAMR_MESSAGE = PAMR + ".message";
+        static final public String PAMR_ROUTER = PAMR + ".router";
+        static final public String PAMR_CLIENT = PAMR + ".client";
+        static final public String PAMR_CLIENT_TUNNEL = PAMR_CLIENT + ".tunnel";
+        static final public String PAMR_REMOTE_OBJECT = PAMR + ".remoteobject";
+        static final public String PAMR_ROUTER_ADMIN = PAMR_ROUTER + ".admin";
+        static final public String PAMR_CLASSLOADING = PAMR + ".classloading";
     }
 }

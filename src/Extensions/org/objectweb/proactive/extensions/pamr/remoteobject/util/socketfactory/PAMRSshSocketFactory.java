@@ -49,12 +49,12 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
  * This implementation for message routing socket factory
  * offers secure SSH sockets
  */
-public class MessageRoutingSshSocketFactory implements MessageRoutingSocketFactorySPI {
+public class PAMRSshSocketFactory implements PAMRSocketFactorySPI {
 
     final private SshConfig config;
     final private SshTunnelPool tp;
 
-    public MessageRoutingSshSocketFactory() {
+    public PAMRSshSocketFactory() {
         this.config = new SshConfig();
 
         // No plain socket, we want to use SSH !

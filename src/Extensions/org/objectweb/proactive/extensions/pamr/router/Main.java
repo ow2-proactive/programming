@@ -63,7 +63,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurat
  * @since ProActive 4.1.0
  */
 class Main {
-    static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
 
     private Options options;
 
@@ -164,7 +164,7 @@ class Main {
                 }
 
                 if (line.hasOption("v")) {
-                    Logger l = Logger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
+                    Logger l = Logger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
                     l.setLevel(Level.DEBUG);
                 }
 
@@ -262,7 +262,7 @@ class Main {
                 }
 
                 if (line.hasOption("v")) {
-                    Logger l = Logger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER_ADMIN);
+                    Logger l = Logger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
                     l.setLevel(Level.DEBUG);
                 }
 

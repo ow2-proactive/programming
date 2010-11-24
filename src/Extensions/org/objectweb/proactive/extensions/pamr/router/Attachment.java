@@ -68,7 +68,7 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
  */
 public class Attachment {
 
-    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
 
     /** The id of this attachment
      * 

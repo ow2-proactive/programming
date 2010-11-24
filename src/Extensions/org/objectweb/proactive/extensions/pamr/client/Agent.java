@@ -39,7 +39,7 @@ package org.objectweb.proactive.extensions.pamr.client;
 import java.net.URI;
 
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
-import org.objectweb.proactive.extensions.pamr.exceptions.MessageRoutingException;
+import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
 
@@ -67,10 +67,10 @@ public interface Agent {
      * @param oneWay
      * 			  if a response is expected or not.
      * @return the data response.
-     * @throws MessageRoutingException
+     * @throws PAMRException
      *             if the message cannot be send to the recipient
      */
-    public byte[] sendMsg(AgentID targetID, byte[] data, boolean oneWay) throws MessageRoutingException;
+    public byte[] sendMsg(AgentID targetID, byte[] data, boolean oneWay) throws PAMRException;
 
     /** Send a message to a remote {@link Agent}.
      * 
@@ -86,7 +86,7 @@ public interface Agent {
      * @throws ForwardingException
      *             if the timeout is reached.
      */
-    public byte[] sendMsg(URI targetURI, byte[] data, boolean oneWay) throws MessageRoutingException;
+    public byte[] sendMsg(URI targetURI, byte[] data, boolean oneWay) throws PAMRException;
 
     /** Send the reply to a message
      * 
@@ -94,10 +94,10 @@ public interface Agent {
      * 			The request correlated to this response
      * @param data
      * 			The response
-     * @throws MessageRoutingException
+     * @throws PAMRException
      * 			If the response cannot be sent
      */
-    public void sendReply(DataRequestMessage request, byte[] data) throws MessageRoutingException;
+    public void sendReply(DataRequestMessage request, byte[] data) throws PAMRException;
 
     /** Return the local Agent ID */
     public AgentID getAgentID();

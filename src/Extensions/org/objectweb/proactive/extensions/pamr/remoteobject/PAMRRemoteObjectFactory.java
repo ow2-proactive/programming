@@ -64,13 +64,13 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
 import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
 import org.objectweb.proactive.extensions.pamr.client.ProActiveMessageHandler;
-import org.objectweb.proactive.extensions.pamr.exceptions.MessageRoutingException;
+import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
-import org.objectweb.proactive.extensions.pamr.remoteobject.message.MessageRoutingRegistryListRemoteObjectsMessage;
-import org.objectweb.proactive.extensions.pamr.remoteobject.message.MessageRoutingRemoteObjectLookupMessage;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.MessageRoutingRegistry;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingSocketFactorySelector;
+import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRegistryListRemoteObjectsMessage;
+import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRemoteObjectLookupMessage;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySelector;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 
 
@@ -78,17 +78,18 @@ import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
  * 
  * @since ProActive 4.1.0
  */
-public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFactory implements
+public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory implements
         RemoteObjectFactory {
-    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
 
     /** The protocol id of the facotry */
     static final public String PROTOCOL_ID = "pamr";
 
     final private Agent agent;
-    final private MessageRoutingRegistry registry;
+    final private PAMRRegistry registry;
 
-    public MessageRoutingRemoteObjectFactory() {
+    public PAMRRemoteObjectFactory() {
+                
         // Start the agent and contact the router
         // Since there is no initialization phase in ProActive, if the router cannot be contacted
         // we log the error and throw a runtime exception. We cannot do better here
@@ -138,13 +139,13 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
         AgentImpl agent = null;
         try {
             agent = new AgentImpl(routerAddress, routerPort, agentId, magicCookie,
-                ProActiveMessageHandler.class, MessageRoutingSocketFactorySelector.get());
+                ProActiveMessageHandler.class, PAMRSocketFactorySelector.get());
         } catch (ProActiveException e) {
             logAndThrowException("Failed to create the local agent", e);
         }
 
         this.agent = agent;
-        this.registry = MessageRoutingRegistry.singleton;
+        this.registry = PAMRRegistry.singleton;
     }
 
     private void logAndThrowException(String message) {
@@ -171,7 +172,7 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
      * (org.objectweb .proactive.core.remoteobject.RemoteObject)
      */
     public RemoteRemoteObject newRemoteObject(InternalRemoteRemoteObject target) {
-        return new MessageRoutingRemoteObject(target, null, agent);
+        return new PAMRRemoteObject(target, null, agent);
     }
 
     /**
@@ -194,7 +195,7 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
     public RemoteRemoteObject register(InternalRemoteRemoteObject ro, URI uri, boolean replacePrevious)
             throws ProActiveException {
         this.registry.bind(uri, ro, replacePrevious); // throw a ProActiveException if needed
-        MessageRoutingRemoteObject rro = new MessageRoutingRemoteObject(ro, uri, agent);
+        PAMRRemoteObject rro = new PAMRRemoteObject(ro, uri, agent);
         if (logger.isDebugEnabled()) {
             logger.debug("Registered remote object at endpoint " + uri);
         }
@@ -221,7 +222,7 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
      */
     @SuppressWarnings("unchecked")
     public <T> RemoteObject<T> lookup(URI uri) throws ProActiveException {
-        MessageRoutingRemoteObjectLookupMessage message = new MessageRoutingRemoteObjectLookupMessage(uri,
+        PAMRRemoteObjectLookupMessage message = new PAMRRemoteObjectLookupMessage(uri,
             agent);
         try {
             message.send();
@@ -231,7 +232,7 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
             } else {
                 return new RemoteObjectAdapter(result);
             }
-        } catch (MessageRoutingException e) {
+        } catch (PAMRException e) {
             throw new ProActiveException(e);
         }
     }
@@ -255,12 +256,12 @@ public class MessageRoutingRemoteObjectFactory extends AbstractRemoteObjectFacto
      * org.objectweb.proactive.core.body.BodyAdapterImpl#list(java.lang.String)
      */
     public URI[] list(URI uri) throws ProActiveException {
-        MessageRoutingRegistryListRemoteObjectsMessage message = new MessageRoutingRegistryListRemoteObjectsMessage(
+        PAMRRegistryListRemoteObjectsMessage message = new PAMRRegistryListRemoteObjectsMessage(
             uri, agent);
         try {
             message.send();
             return message.getReturnedObject();
-        } catch (MessageRoutingException e) {
+        } catch (PAMRException e) {
             throw new ProActiveException(e);
         }
     }

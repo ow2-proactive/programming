@@ -34,48 +34,33 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pamr.remoteobject.util;
+package org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory;
 
 import java.io.IOException;
-
-import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.util.converter.ByteToObjectConverter;
-import org.objectweb.proactive.core.util.converter.ObjectToByteConverter;
-import org.objectweb.proactive.core.util.log.ProActiveLogger;
-import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import java.net.Socket;
 
 
-// FIXME: This is exactly the same marshaller than HTTPMarshaller
-// They should be factorized somewhere else
-/** Object marshaller and unmarshaller
- * 
- *  @since ProActive 4.1.0
+/**
+ * Interface for pluggable socket factories
+ * The loaded implementation will be used to provide the socket
+ * that is used by the agent to communicate with the router
+ *
+ * @since ProActive 4.2.0
  */
-public class MessageRoutingMarshaller {
-    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_REMOTE_OBJECT);
+public interface PAMRSocketFactorySPI {
 
-    public static byte[] marshallObject(Object o) {
-        byte[] buffer = null;
+    /**
+     * Create a client socket connected to the specified host and port.
+     * @param  host   the host name
+     * @param  port   the port number
+     * @return a socket connected to the specified host and port.
+     * @exception IOException if an I/O error occurs during socket creation
+     * @since 1.2
+     */
+    public Socket createSocket(String host, int port) throws IOException;
 
-        try {
-            buffer = ObjectToByteConverter.MarshallStream.convert(o);
-        } catch (IOException e) {
-            ProActiveLogger.logImpossibleException(logger, e);
-        }
-
-        return buffer;
-    }
-
-    public static Object unmarshallObject(byte[] bytes) {
-        Object o = null;
-        try {
-            o = ByteToObjectConverter.MarshallStream.convert(bytes);
-        } catch (IOException e) {
-            ProActiveLogger.logImpossibleException(logger, e);
-        } catch (ClassNotFoundException e) {
-            ProActiveLogger.logImpossibleException(logger, e);
-        }
-
-        return o;
-    }
+    /**
+     * @return The alias name of this service provider
+     */
+    public String getAlias();
 }

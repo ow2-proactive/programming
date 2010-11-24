@@ -66,7 +66,7 @@ import org.objectweb.proactive.extensions.pamr.router.processor.ProcessorReloadC
  * @since ProActive 4.1.0
  */
 class TopLevelProcessor implements Runnable {
-    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_ROUTER);
+    public static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
 
     /** The message to process */
     final private ByteBuffer message;

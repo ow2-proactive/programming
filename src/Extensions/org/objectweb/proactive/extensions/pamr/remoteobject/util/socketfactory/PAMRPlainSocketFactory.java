@@ -34,19 +34,31 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package performanceTests.bandwidth;
+package org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory;
 
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 
 
-public class TestMessageRouting extends Bandwidth {
-    static {
-        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
-        PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
+/**
+ * The default implementation for message routing socket factory
+ * It offers plain(simple), unsecured sockets
+ *
+ * @since ProActive 4.2.0
+ */
+public class PAMRPlainSocketFactory implements PAMRSocketFactorySPI {
+
+    public Socket createSocket(String host, int port) throws IOException {
+        Socket socket = new Socket();
+        int timeout = PAMRConfig.PA_PAMR_CONNECT_TIMEOUT.getValue();
+        socket.connect(new InetSocketAddress(host, port), timeout);
+        return socket;
     }
 
-    public TestMessageRouting() {
-        super(TestMessageRouting.class);
+    public String getAlias() {
+        return "plain";
     }
 }

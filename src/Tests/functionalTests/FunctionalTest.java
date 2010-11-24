@@ -55,7 +55,7 @@ import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
-import org.objectweb.proactive.extensions.pamr.remoteobject.MessageRoutingRemoteObjectFactory;
+import org.objectweb.proactive.extensions.pamr.remoteobject.PAMRRemoteObjectFactory;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterConfig;
 import org.objectweb.proactive.utils.OperatingSystem;
@@ -72,7 +72,7 @@ public class FunctionalTest {
     static public void configureMessageRouting() {
         try {
             // Configure the Message routing
-            if (MessageRoutingRemoteObjectFactory.PROTOCOL_ID
+            if (PAMRRemoteObjectFactory.PROTOCOL_ID
                     .equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
                 RouterConfig config = new RouterConfig();
 
@@ -112,7 +112,7 @@ public class FunctionalTest {
         jvmParameters.append(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
         jvmParameters.append(" ");
 
-        if (MessageRoutingRemoteObjectFactory.PROTOCOL_ID
+        if (PAMRRemoteObjectFactory.PROTOCOL_ID
                 .equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
             jvmParameters.append(PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine());
             jvmParameters.append(PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue());

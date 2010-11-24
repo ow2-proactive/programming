@@ -45,9 +45,9 @@ import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
-import org.objectweb.proactive.extensions.pamr.remoteobject.MessageRoutingRemoteObject;
-import org.objectweb.proactive.extensions.pamr.remoteobject.MessageRoutingRemoteObjectFactory;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.MessageRoutingRegistry;
+import org.objectweb.proactive.extensions.pamr.remoteobject.PAMRRemoteObject;
+import org.objectweb.proactive.extensions.pamr.remoteobject.PAMRRemoteObjectFactory;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
 
 
 /** Represents a lookup message
@@ -58,7 +58,7 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.MessageRoutingR
  * @since ProActive 4.1.0
  */
 
-public class MessageRoutingRemoteObjectLookupMessage extends MessageRoutingMessage implements Serializable {
+public class PAMRRemoteObjectLookupMessage extends PAMRMessage implements Serializable {
 
     /**
      * Construct a lookup message
@@ -69,7 +69,7 @@ public class MessageRoutingRemoteObjectLookupMessage extends MessageRoutingMessa
      *            The local agent to use to send the message
      */
 
-    public MessageRoutingRemoteObjectLookupMessage(URI uri, Agent agent) {
+    public PAMRRemoteObjectLookupMessage(URI uri, Agent agent) {
         super(uri, agent);
     }
 
@@ -87,14 +87,14 @@ public class MessageRoutingRemoteObjectLookupMessage extends MessageRoutingMessa
         }
 
         if (this.uri != null) {
-            InternalRemoteRemoteObject irro = MessageRoutingRegistry.singleton.lookup(uri);
+            InternalRemoteRemoteObject irro = PAMRRegistry.singleton.lookup(uri);
             if (irro != null) {
                 RemoteRemoteObject rro = null;
                 try {
-                    MessageRoutingRemoteObjectFactory f = (MessageRoutingRemoteObjectFactory) AbstractRemoteObjectFactory
-                            .getRemoteObjectFactory(MessageRoutingRemoteObjectFactory.PROTOCOL_ID);
+                    PAMRRemoteObjectFactory f = (PAMRRemoteObjectFactory) AbstractRemoteObjectFactory
+                            .getRemoteObjectFactory(PAMRRemoteObjectFactory.PROTOCOL_ID);
                     rro = f.newRemoteObject(irro);
-                    ((MessageRoutingRemoteObject) rro).setURI(uri);
+                    ((PAMRRemoteObject) rro).setURI(uri);
                     return rro;
                 } catch (UnknownProtocolException e) {
                     // Impossible because that class has been created by the factory

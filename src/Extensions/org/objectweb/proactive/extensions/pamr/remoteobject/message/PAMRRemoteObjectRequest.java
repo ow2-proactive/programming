@@ -46,7 +46,7 @@ import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.SynchronousReplyImpl;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.MessageRoutingRegistry;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
 
 
 /** Represent a {@link Request}
@@ -54,7 +54,7 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.MessageRoutingR
  * @since ProActive 4.1.0
  */
 
-public class MessageRoutingRemoteObjectRequest extends MessageRoutingMessage implements Serializable {
+public class PAMRRemoteObjectRequest extends PAMRMessage implements Serializable {
     private Request request;
 
     /** Construct a request message
@@ -63,7 +63,7 @@ public class MessageRoutingRemoteObjectRequest extends MessageRoutingMessage imp
      * @param uri the recipient (aka the remote object) of the request
      * @param agent the local agent to use to send this message
      */
-    public MessageRoutingRemoteObjectRequest(Request request, URI uri, Agent agent) {
+    public PAMRRemoteObjectRequest(Request request, URI uri, Agent agent) {
         super(uri, agent);
         this.request = request;
 
@@ -98,7 +98,7 @@ public class MessageRoutingRemoteObjectRequest extends MessageRoutingMessage imp
         try {
             InternalRemoteRemoteObject ro;
 
-            ro = MessageRoutingRegistry.singleton.lookup(uri);
+            ro = PAMRRegistry.singleton.lookup(uri);
             if (ro == null) {
                 return new SynchronousReplyImpl(new MethodCallResult(null, new IOException("remote object " +
                     uri + " not found. Message " + request + " cannot be processed ")));

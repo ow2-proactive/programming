@@ -27,31 +27,26 @@
  * If needed, contact us to obtain a release under GPL Version 2 
  * or a different license than the GPL.
  *
- *  Initial developer(s):               The ActiveEon Team
- *                        http://www.activeeon.com/
+ *  Initial developer(s):               The ProActive Team
+ *                        http://proactive.inria.fr/team_members.htm
  *  Contributor(s):
  *
  * ################################################################
- * $$ACTIVEEON_INITIAL_DEV$$
+ * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.extensions.pamr.remoteobject;
+package performanceTests.bandwidth;
 
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactory;
-import org.objectweb.proactive.core.remoteobject.RemoteObjectFactorySPI;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 
 
-/** 
- *
- * @since ProActive 4.1.0
- */
-public class MessageRoutingRemoteObjectFactorySPI implements RemoteObjectFactorySPI {
-
-    public Class<? extends RemoteObjectFactory> getFactoryClass() {
-        return MessageRoutingRemoteObjectFactory.class;
+public class TestPAMR extends Bandwidth {
+    static {
+        CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
+        PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
     }
 
-    public String getProtocolId() {
-        return "pamr";
+    public TestPAMR() {
+        super(TestPAMR.class);
     }
-
 }

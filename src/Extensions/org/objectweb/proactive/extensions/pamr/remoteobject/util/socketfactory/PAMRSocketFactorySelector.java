@@ -51,14 +51,14 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
  *
  * @since ProActive 4.2.0
  */
-public class MessageRoutingSocketFactorySelector {
+public class PAMRSocketFactorySelector {
 
-    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.FORWARDING_CLIENT_TUNNEL);
+    static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_CLIENT_TUNNEL);
 
     /**
      * aliases for the Socket Factories provided with ProActive
      */
-    public static MessageRoutingSocketFactorySPI get() {
+    public static PAMRSocketFactorySPI get() {
 
         if (!PAMRConfig.PA_PAMR_SOCKET_FACTORY.isSet()) {
             // the user wants the default
@@ -67,11 +67,11 @@ public class MessageRoutingSocketFactorySelector {
 
         String socketFactory = PAMRConfig.PA_PAMR_SOCKET_FACTORY.getValue();
 
-        Iterator<MessageRoutingSocketFactorySPI> socketFactories = ServiceRegistry
-                .lookupProviders(MessageRoutingSocketFactorySPI.class);
+        Iterator<PAMRSocketFactorySPI> socketFactories = ServiceRegistry
+                .lookupProviders(PAMRSocketFactorySPI.class);
         try {
             while (socketFactories.hasNext()) {
-                MessageRoutingSocketFactorySPI factory = socketFactories.next();
+                PAMRSocketFactorySPI factory = socketFactories.next();
                 if (socketFactory.equals(factory.getAlias()) ||
                     socketFactories.equals(factory.getClass().getName())) {
                     if (logger.isDebugEnabled()) {
@@ -83,7 +83,7 @@ public class MessageRoutingSocketFactorySelector {
             }
         } catch (Error e) {
             logger.warn("Failed to load a service provider for " +
-                MessageRoutingSocketFactorySPI.class.getName(), e);
+                PAMRSocketFactorySPI.class.getName(), e);
         }
 
         logger
@@ -95,7 +95,7 @@ public class MessageRoutingSocketFactorySelector {
         return getDefaultSocketFactory();
     }
 
-    private static MessageRoutingSocketFactorySPI getDefaultSocketFactory() {
-        return new MessageRoutingPlainSocketFactory();
+    private static PAMRSocketFactorySPI getDefaultSocketFactory() {
+        return new PAMRPlainSocketFactory();
     }
 }

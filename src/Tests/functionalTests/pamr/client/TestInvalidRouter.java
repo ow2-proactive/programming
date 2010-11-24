@@ -46,7 +46,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
 import org.objectweb.proactive.extensions.pamr.client.ProActiveMessageHandler;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
-import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRPlainSocketFactory;
 
 import functionalTests.FunctionalTest;
 
@@ -57,7 +57,7 @@ public class TestInvalidRouter extends FunctionalTest {
     public void test() throws ProActiveException, UnknownHostException {
         InetAddress localhost = InetAddress.getLocalHost();
         AgentImpl agt = new AgentImpl(localhost, 12423, null, new MagicCookie(),
-            ProActiveMessageHandler.class, new MessageRoutingPlainSocketFactory());
+            ProActiveMessageHandler.class, new PAMRPlainSocketFactory());
         Assert.assertNull(agt.getAgentID());
     }
 }
