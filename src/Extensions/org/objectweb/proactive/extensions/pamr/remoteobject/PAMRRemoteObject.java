@@ -60,8 +60,7 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRemoteOb
  */
 
 public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
-    final static private Logger logger = ProActiveLogger
-            .getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
+    final static private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
 
     /** The URL of the RemoteObject */
     private URI remoteObjectURL;
@@ -76,8 +75,7 @@ public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
 
     protected transient InternalRemoteRemoteObject remoteObject;
 
-    public PAMRRemoteObject(InternalRemoteRemoteObject remoteObject, URI remoteObjectURL,
-            Agent agent) {
+    public PAMRRemoteObject(InternalRemoteRemoteObject remoteObject, URI remoteObjectURL, Agent agent) {
         this.remoteObject = remoteObject;
         this.remoteObjectURL = remoteObjectURL;
         this.agent = agent;
@@ -85,8 +83,7 @@ public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
 
     public Reply receiveMessage(Request message) throws ProActiveException {
 
-        PAMRRemoteObjectRequest req = new PAMRRemoteObjectRequest(message,
-            this.remoteObjectURL, getAgent());
+        PAMRRemoteObjectRequest req = new PAMRRemoteObjectRequest(message, this.remoteObjectURL, getAgent());
         req.send();
         SynchronousReplyImpl rep = (SynchronousReplyImpl) req.getReturnedObject();
         return rep;
@@ -105,8 +102,7 @@ public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
             try {
                 // FIXME: The factory cast is a hack but there is no clean way to do it
                 PAMRRemoteObjectFactory f;
-                f = (PAMRRemoteObjectFactory) AbstractRemoteObjectFactory
-                        .getRemoteObjectFactory("pamr");
+                f = (PAMRRemoteObjectFactory) AbstractRemoteObjectFactory.getRemoteObjectFactory("pamr");
                 this.agent = f.getAgent();
             } catch (UnknownProtocolException e) {
                 logger.fatal("Failed to get the local message routing agent", e);

@@ -895,8 +895,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                         }
 
                         // this is a reply containing data
-                        mbox.setAndUnlock(new PAMRException("Recipient unknown & not connected " +
-                            sender));
+                        mbox.setAndUnlock(new PAMRException("Recipient unknown & not connected " + sender));
                     }
                 }
                     break;
@@ -922,8 +921,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                                 messageId + " on the router side");
                         }
 
-                        patient
-                                .setAndUnlock(new PAMRException("Message corruption on router side"));
+                        patient.setAndUnlock(new PAMRException("Message corruption on router side"));
                     }
                     break;
                 default:

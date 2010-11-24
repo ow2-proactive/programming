@@ -50,8 +50,7 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
  * @since ProActive 4.1.0
  */
 
-public class PAMRRegistryListRemoteObjectsMessage extends PAMRMessage implements
-        Serializable {
+public class PAMRRegistryListRemoteObjectsMessage extends PAMRMessage implements Serializable {
 
     /**
      * Construct a list message

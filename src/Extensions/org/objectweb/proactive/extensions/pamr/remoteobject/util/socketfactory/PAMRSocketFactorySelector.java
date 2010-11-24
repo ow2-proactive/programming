@@ -82,8 +82,7 @@ public class PAMRSocketFactorySelector {
                 }
             }
         } catch (Error e) {
-            logger.warn("Failed to load a service provider for " +
-                PAMRSocketFactorySPI.class.getName(), e);
+            logger.warn("Failed to load a service provider for " + PAMRSocketFactorySPI.class.getName(), e);
         }
 
         logger

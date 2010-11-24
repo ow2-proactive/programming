@@ -54,6 +54,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.PAMRLog4jCompat;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ReloadConfigurationMessage;
 
@@ -68,6 +69,7 @@ class Main {
     private Options options;
 
     public static void main(String[] args) throws IOException {
+        new PAMRLog4jCompat().ensureCompat();
         new Main(args);
     }
 

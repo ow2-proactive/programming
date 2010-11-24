@@ -68,8 +68,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
  */
 public class Client {
     static final private Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER);
-    public static final Logger admin_logger = ProActiveLogger
-            .getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
+    public static final Logger admin_logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_ROUTER_ADMIN);
 
     /** This client represents one remote Agent. */
     final private AgentID agentId;

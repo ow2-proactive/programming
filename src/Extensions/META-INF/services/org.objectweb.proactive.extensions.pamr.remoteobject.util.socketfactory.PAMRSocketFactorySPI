@@ -1,2 +1,2 @@
-org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingPlainSocketFactory
-org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.MessageRoutingSshSocketFactory
+org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRPlainSocketFactory
+org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSshSocketFactory

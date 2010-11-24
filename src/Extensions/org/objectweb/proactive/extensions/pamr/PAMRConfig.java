@@ -103,8 +103,7 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
     public interface Loggers {
 
         // Forwarding
-        static final public String PAMR = org.objectweb.proactive.core.util.log.Loggers.CORE +
-            ".pamr";
+        static final public String PAMR = org.objectweb.proactive.core.util.log.Loggers.CORE + ".pamr";
         static final public String PAMR_MESSAGE = PAMR + ".message";
         static final public String PAMR_ROUTER = PAMR + ".router";
         static final public String PAMR_CLIENT = PAMR + ".client";

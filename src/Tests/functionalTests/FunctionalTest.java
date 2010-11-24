@@ -112,8 +112,8 @@ public class FunctionalTest {
         jvmParameters.append(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue());
         jvmParameters.append(" ");
 
-        if (PAMRRemoteObjectFactory.PROTOCOL_ID
-                .equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
+        if (PAMRRemoteObjectFactory.PROTOCOL_ID.equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
+                .getValue())) {
             jvmParameters.append(PAMRConfig.PA_NET_ROUTER_ADDRESS.getCmdLine());
             jvmParameters.append(PAMRConfig.PA_NET_ROUTER_ADDRESS.getValue());
             jvmParameters.append(" ");

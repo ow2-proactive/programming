@@ -59,8 +59,10 @@ import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalInputStream;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalOutputStream;
+import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
+import org.objectweb.proactive.extensions.pamr.PAMRLog4jCompat;
 import org.objectweb.proactive.extensions.pamr.client.Agent;
 import org.objectweb.proactive.extensions.pamr.client.AgentImpl;
 import org.objectweb.proactive.extensions.pamr.client.ProActiveMessageHandler;
@@ -78,8 +80,7 @@ import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
  * 
  * @since ProActive 4.1.0
  */
-public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory implements
-        RemoteObjectFactory {
+public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory implements RemoteObjectFactory {
     static final Logger logger = ProActiveLogger.getLogger(PAMRConfig.Loggers.PAMR_REMOTE_OBJECT);
 
     /** The protocol id of the facotry */
@@ -89,7 +90,8 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     final private PAMRRegistry registry;
 
     public PAMRRemoteObjectFactory() {
-                
+        new PAMRLog4jCompat().ensureCompat();
+
         // Start the agent and contact the router
         // Since there is no initialization phase in ProActive, if the router cannot be contacted
         // we log the error and throw a runtime exception. We cannot do better here
@@ -222,8 +224,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      */
     @SuppressWarnings("unchecked")
     public <T> RemoteObject<T> lookup(URI uri) throws ProActiveException {
-        PAMRRemoteObjectLookupMessage message = new PAMRRemoteObjectLookupMessage(uri,
-            agent);
+        PAMRRemoteObjectLookupMessage message = new PAMRRemoteObjectLookupMessage(uri, agent);
         try {
             message.send();
             RemoteRemoteObject result = message.getReturnedObject();
@@ -256,8 +257,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
      * org.objectweb.proactive.core.body.BodyAdapterImpl#list(java.lang.String)
      */
     public URI[] list(URI uri) throws ProActiveException {
-        PAMRRegistryListRemoteObjectsMessage message = new PAMRRegistryListRemoteObjectsMessage(
-            uri, agent);
+        PAMRRegistryListRemoteObjectsMessage message = new PAMRRegistryListRemoteObjectsMessage(uri, agent);
         try {
             message.send();
             return message.getReturnedObject();
