@@ -42,8 +42,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Enumeration;
 import java.util.Properties;
 
+import org.apache.log4j.Appender;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.objectweb.proactive.core.Constants;
@@ -158,15 +161,57 @@ public class ProActiveLogger extends Logger {
     }
 
     /**
-       This method overrides {@link Logger#getLogger} by supplying
-       its own factory type as a parameter.
+     * This method overrides {@link Logger#getLogger} by supplying
+     * its own factory type as a parameter.
      */
     synchronized public static Logger getLogger(String name) {
+        return getLogger(name, (String) null);
+    }
+
+    /**
+     * Same as {@link #getLogger(String)} but ensure backward compatibility with an old logger name.
+     * 
+     * When a Logger is renamed, we don't want to force the user to update their configuration. If 
+     * the user configured the old logger then we automatically apply this configuration to the new 
+     * logger. If the new logger has already been loaded then no changes are applied to it and it is
+     * returned. So this method should be called at early stage.
+     * 
+     * @param name The current name of the logger
+     * @param oldName The old name of the logger
+     * @return The logger
+     */
+    synchronized public static Logger getLogger(String name, String oldName) {
         if (!loaded) {
             load();
         }
 
-        return Logger.getLogger(name, myFactory);
+        Logger logger = null;
+
+        if (oldName == null) {
+            logger = Logger.getLogger(name, myFactory);
+        } else {
+            // Ensure backward compatibility. 
+            // If user configured log4j for an old name, applies it's configuration to the new name.
+            // If the new logger already exists, it is not modified. 
+            Logger oldLogger = LogManager.exists(oldName);
+            if (oldLogger != null) {
+                logger = LogManager.exists(name);
+                if (logger == null) {
+                    // Apply the oldLogger configuration to the new Logger
+                    logger = Logger.getLogger(name, myFactory);
+                    logger.setAdditivity(oldLogger.getAdditivity());
+                    logger.setLevel(oldLogger.getLevel());
+
+                    Enumeration<Appender> appenders = oldLogger.getAllAppenders();
+                    while (appenders.hasMoreElements()) {
+                        Appender appender = appenders.nextElement();
+                        logger.addAppender(appender);
+                    }
+                }
+            }
+        }
+
+        return logger;
     }
 
     /**
