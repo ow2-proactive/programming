@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
@@ -103,6 +104,10 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
     protected void additionalCleanup() {
     }
 
+    /**
+     * If the command length is longer than 1024 chars the process is wrapped  
+     * in a CMD shell and the command is passed to the shell through stdin 
+     */
     @Override
     protected Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException {
@@ -110,23 +115,6 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
         final WindowsProcess p = new WindowsProcess();
         p.setUser(super.user().getUserName());
         p.setPassword(super.user().getPassword());
-
-        // Inherit the command from the original process builder
-        final StringBuilder commandBuilder = new StringBuilder();
-        List<String> command = super.delegatedPB.command();
-        for (int i = 0; i < command.size(); i++) {
-            commandBuilder.append(command.get(i));
-            if (i + 1 < command.size()) {
-                commandBuilder.append(' ');
-            }
-        }
-        p.setCommand(commandBuilder.toString());
-
-        // Inherit the working dir from the original process builder
-        final File wdir = super.delegatedPB.directory();
-        if (wdir != null) {
-            p.setWorkingDir(wdir.getCanonicalPath());
-        }
 
         // Inherit environment (Currently not work ... must be defined later)
         //p.setEnvironment(super.delegatedPB.environment());
@@ -137,18 +125,60 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
         // Makes the stdin, stdout and stderr available
         p.setPipeStreams(true, false);
 
-        if (!p.start()) {
-            // Get the last error and depending on the error code
-            // throw the correct exception            
-            final int err = WindowsProcess.getLastError();
-            final String localizedMessage = WindowsProcess.formatMessageFromLastErrorCode(err);
-            switch (err) {
-                case ERROR_FILE_NOT_FOUND:
-                    throw new IOException("[" + err + "] " + localizedMessage);
-                case ERROR_LOGON_FAILURE:
-                    throw new OSUserException("[" + err + "] " + localizedMessage);
-                default:
-                    throw new FatalProcessBuilderException("[" + err + "] " + localizedMessage);
+        // Inherit the working dir from the original process builder
+        final File wdir = super.delegatedPB.directory();
+        if (wdir != null) {
+            p.setWorkingDir(wdir.getCanonicalPath());
+        }
+
+        // Inherit the command from the original process builder
+        final StringBuilder commandBuilder = new StringBuilder();
+        final List<String> command = super.delegatedPB.command();
+        // Merge into a single string to get the length
+        for (int i = 0; i < command.size(); i++) {
+            commandBuilder.append(command.get(i));
+            if (i + 1 < command.size()) {
+                commandBuilder.append(' ');
+            }
+        }
+        final String str = commandBuilder.toString();
+        if (str.length() > 1024) {
+            // Invoke a CMD shell and feed stdin with the command that will be stored 
+            // in an env variable then launch the command	
+            p.setCommand("cmd.exe /V:ON /c \"SET /p OSPB_COMMAND=&CALL !OSPB_COMMAND!\"");
+            if (p.start()) {
+                // Write the command into process stdin      		 	
+                final PrintWriter out = new PrintWriter(p.getOutputStream(), true);
+                out.println(str);
+                out.close();
+                // The CMD process has launched the command and we have no way to    
+                // get the error code of the launched command        		
+            } else {
+                final int err = WindowsProcess.getLastError();
+                if (err == ERROR_FILE_NOT_FOUND) {
+                    // This can happen if cmd.exe is not in the path
+                    throw new IOException("Unable to find cmd.exe make sure it is in the path errno=" + err);
+                }
+                // This can happen if cmd.exe is not in the path
+                throw new FatalProcessBuilderException("Unable to run command wrapper errno=" +
+                    WindowsProcess.getLastError());
+            }
+        } else {
+            p.setCommand(str);
+            if (!p.start()) {
+                // Get the last error and depending on the error code
+                // throw the correct exception            
+                final int err = WindowsProcess.getLastError();
+                final String localizedMessage = WindowsProcess.formatMessageFromLastErrorCode(err);
+                final String message = localizedMessage + " error=" + err;
+                switch (err) {
+                    case ERROR_FILE_NOT_FOUND:
+                        throw new IOException(message);
+                    case ERROR_LOGON_FAILURE:
+                        throw new OSUserException(message);
+                    default:
+                        throw new FatalProcessBuilderException(message);
+                }
             }
         }
         return new ProcessWrapper(p);
