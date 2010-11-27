@@ -1,17 +1,16 @@
 package org.objectweb.proactive;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
+import org.objectweb.proactive.annotation.multiactivity.Modifies;
+import org.objectweb.proactive.annotation.multiactivity.Reads;
 import org.objectweb.proactive.core.body.request.Request;
 
 /**
@@ -50,7 +49,7 @@ public class MultiActiveService extends Service {
      * possible.
      */
 	public void multiActiveServing(){
-		fillMethodInfo();
+		populateMethodInfo();
 		initCompatibilityGraph();
 		
 		boolean success;
@@ -111,22 +110,48 @@ public class MultiActiveService extends Service {
 	}
 	
 	/**
+	 * Method called from the {@link ParallelServe} to signal the end of a serving.
+	 * State is updated here, and also a new request will be attempted to be started.
+	 * @param r
+	 * @param asserve
+	 */
+	protected void asynchronousServeFinished(Request r, ParallelServe asserve) {
+		synchronized (runningServes) {
+			runningServes.get(r.getMethodName()).remove(asserve);
+			if (runningServes.get(r.getMethodName()).size()==0) {
+				runningServes.remove(r.getMethodName());
+			}
+		}
+		parallelServeOldest();
+	}
+
+	/**
 	 * This method will iterate through all methods from the underlying class, and
 	 * create a descriptor object containing all annotations extracted. This object
 	 * is put into the {@link #methodInfo} structure.
 	 */
-	protected void fillMethodInfo() {
+	protected void populateMethodInfo() {
 		try {
 			for (Method d : (Class.forName(body.getReifiedClassName())).getMethods()) {
+				if (methodInfo.get(d.getName())==null) {
+					methodInfo.put(d.getName(), new MultiActiveAnnotations());
+				}
+				
 				CompatibleWith cw = d.getAnnotation(CompatibleWith.class);
 				if (cw!=null) {
-					if (methodInfo.get(d.getName())==null) {
-						methodInfo.put(d.getName(), new MultiActiveAnnotations());
-					}
-					
 					methodInfo.get(d.getName()).setCompatibleWith(cw);
-					//TODO add other types
 				}
+				
+				Modifies mo = d.getAnnotation(Modifies.class);
+				if (mo!=null) {
+					methodInfo.get(d.getName()).setModifies(mo);
+				}
+				
+				Reads re = d.getAnnotation(Reads.class);
+				if (re!=null) {
+					methodInfo.get(d.getName()).setReads(re);
+				}
+				System.out.println(d.getName()+" "+cw+" "+mo+" "+re);
 			}
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -134,59 +159,66 @@ public class MultiActiveService extends Service {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Generate the compatibility graphs based on various annotations, than generate
-	 * the final graph from these.
-	 */
-	protected void initCompatibilityGraph() {
-		Map<String, List<String>> compWith = getGraphForCompatibleWith();
-		//take other annotations also
-		compatibilityGraph = compWith;
-	}
 	
 	/**
-	 * Creates the compatibility graph based on the {@link CompatibleWith} annotations.
+	 * Creates the compatibility graph based on the annotations.
 	 * @return
 	 */
-	private Map<String, List<String>> getGraphForCompatibleWith() {
-		Map<String, List<String>> compWith  = new HashMap<String, List<String>>();
+	private void initCompatibilityGraph() {
+		Map<String, List<String>> graph  = new HashMap<String, List<String>>();
 		//for all methods
 		for (String method : methodInfo.keySet()) {
-			compWith.put(method, new ArrayList<String>());
+			graph.put(method, new ArrayList<String>());
+			
 			String[] compList = methodInfo.get(method).getCompatibleWith();
-			//if the user set some methods, put them into the neighbour list
+			//if the user set some methods as compatible, put them into the neighbor list
 			if (compList!=null) {
 				for (String cm : compList) {
 					if (!cm.equals(MultiActiveAnnotations.ALL)) {
-						compWith.get(method).add(cm);
+						graph.get(method).add(cm);
 					} else {
-						compWith.get(method).addAll(compWith.keySet());
+						graph.get(method).addAll(graph.keySet());
 					}
 				}
 			}
 		}
+		
 		//check for bidirectionality of relations. if a compatibleWith is only
 		// expressed in one direction, it is deleted
-		for (String method : compWith.keySet()) {
-			Iterator<String> sit = compWith.get(method).iterator();
+		for (String method : graph.keySet()) {
+			Iterator<String> sit = graph.get(method).iterator();
 			while (sit.hasNext()) {
 				String other = sit.next();
-				if (!compWith.get(other).contains(method)) {
+				if (!graph.get(other).contains(method)) {
 					sit.remove();
 				}
 			}
 		}
 		
+		//process the read-write stuff
+		for (String method : methodInfo.keySet()){
+			for (String other : methodInfo.keySet()) {				
+				Boolean areOk = areDisjoint(method, other);
+				if (Boolean.TRUE.equals(areOk)) {
+					graph.get(method).add(other);
+					graph.get(other).add(method);
+				} else if (Boolean.FALSE.equals(areOk)) {
+					graph.get(method).remove(other);
+					graph.get(other).remove(method);
+				} // else - if null - leave like it is
+				//System.out.println("Testing-["+method+"]-["+other+"]->"+areOk);
+			}
+		}
+		
 		//to save space, all no-neighbour methods are removed from the graph
-		Iterator<String> sit = compWith.keySet().iterator();
+		Iterator<String> sit = graph.keySet().iterator();
 		while (sit.hasNext()) {
-			if (compWith.get(sit.next()).size()==0) {
+			if (graph.get(sit.next()).size()==0) {
 				sit.remove();
 			}
 		}
 		
-		return compWith;
+		compatibilityGraph = graph;
 	}
 	
 	/**
@@ -205,21 +237,103 @@ public class MultiActiveService extends Service {
 	}
 	
 	/**
-	 * Method called from the {@link ParallelServe} to signal the end of a serving.
-	 * State is updated here, and also a new request will be attempted to be started.
-	 * @param r
-	 * @param asserve
+	 * Checks whether the modified/read resources are disjoint between two methods.
+	 * @param m1 first method
+	 * @param m2 second method
+	 * @return 
+	 * <ul>
+	 *  <li>true - the two methods are compatible</li>
+	 *  <li>false - the two methods concurrently access resources</li>
+	 *  <li>null - impossible to decide (one of the methods lacks annotations about resources)</li>
+	 * </ul>
 	 */
-	protected void asynchronousServeFinished(Request r, ParallelServe asserve) {
-		synchronized (runningServes) {
-			runningServes.get(r.getMethodName()).remove(asserve);
-			if (runningServes.get(r.getMethodName()).size()==0) {
-				runningServes.remove(r.getMethodName());
+	protected Boolean areDisjoint(String m1, String m2) {
+		MultiActiveAnnotations maa1 = methodInfo.get(m1);
+		MultiActiveAnnotations maa2 = methodInfo.get(m2);
+		
+		if ((maa1==null || maa2==null) || 
+				(maa1.getModifies()==null && maa1.getReads()==null) || 
+				(maa2.getModifies()==null && maa2.getReads()==null)) {
+			return null;
+		}
+		
+		if (maa1.getModifies()!=null) {
+			for (String w1 : maa1.getModifies()) {
+				if (maa2.getModifies()!=null) {
+					for (String w2 : maa2.getModifies()) {
+						if (w1.equals(w2) || w2.equals(MultiActiveAnnotations.ALL)) return false;
+					}
+				}
+				if (maa2.getReads()!=null) {
+					for (String w2 : maa2.getReads()) {
+						if (w1.equals(w2) || w2.equals(MultiActiveAnnotations.ALL)) return false;
+					}
+				}
 			}
 		}
-		parallelServeOldest();
+		
+		if (maa2.getModifies()!=null) {
+			for (String w2 : maa2.getModifies()) {
+				if (maa1.getModifies()!=null) {
+					for (String w1 : maa1.getModifies()) {
+						if (w1.equals(w2) || w1.equals(MultiActiveAnnotations.ALL)) return false;
+					}
+				}
+				if (maa1.getReads()!=null) {
+					for (String w1 : maa1.getReads()) {
+						if (w1.equals(w2)|| w1.equals(MultiActiveAnnotations.ALL)) return false;
+					}
+				}
+			}
+		}
+		
+		return true;
+		
 	}
 	
+	/**
+	 * Container for annotations of methods.
+	 * The getter methods are simplified to return arrays of
+	 * strings, thus we don't have to couple the methods in the 
+	 * multi-active-service to the actual annotation classes.
+	 * @author Izso
+	 *
+	 */
+	protected class MultiActiveAnnotations {
+		public static final String ALL = "*";
+		private CompatibleWith compatibleWith;
+		private Reads readVars;
+		private Modifies modifiesVars;
+		
+		public MultiActiveAnnotations(){
+			
+		}
+		
+		public void setCompatibleWith(CompatibleWith annotation) {
+			compatibleWith = annotation;
+		}
+		
+		public String[] getCompatibleWith(){
+			return compatibleWith!=null ? compatibleWith.value() : null;
+		}
+		
+		public void setReads(Reads reads) {
+			readVars = reads;
+		}
+		
+		public String[] getReads(){
+			return readVars!=null ? readVars.value() : null; 
+		}
+		
+		public void setModifies(Modifies modifs) {
+			modifiesVars = modifs;
+		}
+		
+		public String[] getModifies(){
+			return modifiesVars!=null ? modifiesVars.value() : null; 
+		}
+	}
+
 	/**
 	 * Runnable class that will serve a request on the body, than call
 	 * back to the multi-active-service.
@@ -237,32 +351,6 @@ public class MultiActiveService extends Service {
 		public void run() {
 			body.serve(r);
 			asynchronousServeFinished(r, this);
-		}
-	}
-	
-	/**
-	 * Container for annotations of methods.
-	 * The getter methods are simplified to return arrays of
-	 * strings, thus we don't have to couple the methods in the 
-	 * multi-active-service to the actual annotation classes.
-	 * @author Izso
-	 *
-	 */
-	protected class MultiActiveAnnotations {
-		public static final String ALL = "*";
-		private CompatibleWith compatibleWith;
-		//TODO add other types
-		
-		public MultiActiveAnnotations(){
-			
-		}
-		
-		public void setCompatibleWith(CompatibleWith annotation) {
-			compatibleWith = annotation;
-		}
-		
-		public String[] getCompatibleWith(){
-			return compatibleWith!=null ? compatibleWith.value() : null;
 		}
 	}
 

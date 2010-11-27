@@ -5,6 +5,8 @@ import org.objectweb.proactive.MultiActiveService;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
+import org.objectweb.proactive.annotation.multiactivity.Modifies;
+import org.objectweb.proactive.annotation.multiactivity.Reads;
 
 public class InfiniteCounter implements RunActive {
 	private Long value = new Long(0);
@@ -39,6 +41,7 @@ public class InfiniteCounter implements RunActive {
 	}
 	
 	@CompatibleWith({"*"})
+	@Reads({"value"})
 	public Long pollValue(){
 		synchronized (value) {
 			System.out.println("Polling value...");
