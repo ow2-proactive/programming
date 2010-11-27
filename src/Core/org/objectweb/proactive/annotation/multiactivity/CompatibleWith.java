@@ -22,7 +22,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 public @interface CompatibleWith {
 	/**
-	 * Marks the fact that this method is compatible with all other methods
+	 * Marks the fact that this method is compatible with all other methods, including itself
 	 */
 	public static final String ALL = "*";
 	
