@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="classes/Core" path="src/Core"/>
-	<classpathentry excluding="doc/PublishedAPIDoclet.java" kind="src" output="classes/Utils" path="src/Utils"/>
+	<classpathentry kind="src" path="src/Core"/>
+	<classpathentry excluding="functionalTests/.svn/|functionalTests/ComponentTest.java|functionalTests/ComponentTestDefaultNodes.java|functionalTests/FunctionalTest.java|functionalTests/GCMFunctionalTest.java|functionalTests/GCMFunctionalTestDefaultNodes.java|functionalTests/_CONFIG/|functionalTests/activeobject/|functionalTests/annotations/|functionalTests/component/|functionalTests/configuration/|functionalTests/dataspaces/|functionalTests/descriptor/|functionalTests/exception/|functionalTests/filetransfer/|functionalTests/ft/|functionalTests/gcmdeployment/|functionalTests/group/|functionalTests/hpc/|functionalTests/jetty.xml|functionalTests/jmx/|functionalTests/log/|functionalTests/masterworker/|functionalTests/messagerouting/|functionalTests/mop/|functionalTests/node/|functionalTests/processbuilder/|functionalTests/protointerop/|functionalTests/remoteobject/|functionalTests/runtime/|functionalTests/security/|functionalTests/ssl/|functionalTests/stub/|functionalTests/timit/|functionalTests/vfsprovider/|functionalTests/vm/|performanceTests/|unitTests/" including="functionalTests/multiactivities/" kind="src" path="src/Tests"/>
+	<classpathentry excluding="doc/PublishedAPIDoclet.java" kind="src" path="src/Utils"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="compile/lib/ant.jar"/>
 	<classpathentry kind="lib" path="compile/lib/junit-4.8.2.jar"/>

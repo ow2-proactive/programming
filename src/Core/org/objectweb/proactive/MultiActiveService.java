@@ -104,7 +104,11 @@ public class MultiActiveService extends Service {
 			String[] compList = cwAnn!=null ? cwAnn.value() : null;
 			if (compList!=null) {
 				for (String cm : compList) {
-					compWith.get(method).add(cm);
+					if (!cm.equals(CompatibleWith.ALL)) {
+						compWith.get(method).add(cm);
+					} else {
+						compWith.get(method).addAll(compWith.keySet());
+					}
 				}
 			}
 		}
