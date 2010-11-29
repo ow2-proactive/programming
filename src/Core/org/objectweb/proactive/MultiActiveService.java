@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
 import org.objectweb.proactive.annotation.multiactivity.Modifies;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
@@ -23,6 +24,8 @@ import org.objectweb.proactive.core.body.request.Request;
  *
  */
 public class MultiActiveService extends Service {
+	Logger logger = Logger.getLogger(this.getClass());
+	
 	/**
 	 * This maps associates to each method a list of active servings
 	 */
@@ -40,6 +43,9 @@ public class MultiActiveService extends Service {
 	
 	public MultiActiveService(Body body) {
 		super(body);
+		
+		populateMethodInfo();
+		initCompatibilityGraph();
 	}
 	
 	/**
@@ -49,9 +55,6 @@ public class MultiActiveService extends Service {
      * possible.
      */
 	public void multiActiveServing(){
-		populateMethodInfo();
-		initCompatibilityGraph();
-		
 		boolean success;
 		while (body.isAlive()) {
 			// try to launch next request -- synchrnoized inside
@@ -72,6 +75,57 @@ public class MultiActiveService extends Service {
 	}
 	
 	/**
+	 * In this policy the scheduler will always schedule the oldest request in case the object is 
+	 * free, and in case methods are already running, it will schedule compatible methods from the
+	 * queue.
+	 * <br>
+	 * <b>ATTENTION:</b> Starvation may be possible.
+	 */
+	//TODO: maybe add a rejection counter to methods inside, so in case a method was postponed for
+	//more than X scheduling cycles, it would need to be chosen, or something like this
+	public void greedyMultiActiveServing(){
+		boolean success;
+		while (body.isAlive()) {
+			// try to launch nextc ompatible request -- synchrnoized inside
+			success = parallelServeFirstCompatible();
+			
+			//if we were not successful, let's wait until a new request arrives
+			synchronized (requestQueue) {
+				if (!success) {
+					try {
+						requestQueue.wait();
+						//logger.info(this.body.getID()+" Greedy scheduler - wake up");
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * This method will find the first method in the request queue that is compatible
+	 * with the currently running methods. In case nothing is executing, it will take the 
+	 * first, thus acting like the default strategy.
+	 * @return
+	 */
+	public boolean parallelServeFirstCompatible(){
+		synchronized (requestQueue) {
+			synchronized (runningServes) {
+				List<Request> reqs = requestQueue.getInternalQueue();
+				for (int i=0; i<reqs.size(); i++) {
+					if (canRun(reqs.get(i))){
+						internalParallelServe(reqs.remove(i));
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * This method will try to start the oldest waiting method in parallel
 	 * with the currently running ones. The decision is made based on the 
 	 * information extracted from annotations.
@@ -87,15 +141,7 @@ public class MultiActiveService extends Service {
 				if (r!=null) {
 					
 					if (canRun(r)){
-						//if there is no conflict, prepare launch
-						asserve = new ParallelServe(r);
-						
-						List<ParallelServe> aslist = runningServes.get(r.getMethodName());
-						if (aslist==null) {
-							runningServes.put(r.getMethodName(), new LinkedList<ParallelServe>());
-							aslist = runningServes.get(r.getMethodName());
-						}
-						aslist.add(asserve);
+						asserve = internalParallelServe(r);
 					} else {
 						//otherwise put it back
 						requestQueue.addToFront(r);
@@ -103,10 +149,27 @@ public class MultiActiveService extends Service {
 				}
 			}
 		}
+		return asserve != null;
+	}
+
+	private ParallelServe internalParallelServe(Request r) {
+		ParallelServe asserve;
+		//if there is no conflict, prepare launch
+		asserve = new ParallelServe(r);
+		
+		List<ParallelServe> aslist = runningServes.get(r.getMethodName());
+		if (aslist==null) {
+			runningServes.put(r.getMethodName(), new LinkedList<ParallelServe>());
+			aslist = runningServes.get(r.getMethodName());
+		}
+		aslist.add(asserve);
+		
 		if (asserve!=null) {
+			//logger.info(this.body.getID()+" Parallel serving '"+asserve.r.getMethodName()+"'");
 			(new Thread(asserve)).start();
 		}
-		return asserve != null;
+		
+		return asserve;
 	}
 	
 	/**
@@ -122,7 +185,10 @@ public class MultiActiveService extends Service {
 				runningServes.remove(r.getMethodName());
 			}
 		}
-		parallelServeOldest();
+		synchronized (requestQueue) {
+			//logger.info("Asynchrnous serve finished");
+			requestQueue.notifyAll();	
+		}
 	}
 
 	/**
@@ -151,7 +217,7 @@ public class MultiActiveService extends Service {
 				if (re!=null) {
 					methodInfo.get(d.getName()).setReads(re);
 				}
-				System.out.println(d.getName()+" "+cw+" "+mo+" "+re);
+				//System.out.println(d.getName()+" "+cw+" "+mo+" "+re);
 			}
 		} catch (SecurityException e) {
 			e.printStackTrace();
@@ -227,6 +293,7 @@ public class MultiActiveService extends Service {
 	 * @return true if there are no conflicts
 	 */
 	protected boolean canRun(Request r) {
+		
 		if (runningServes.keySet().size()==0) return true;
 		
 		String request = r.getMethodName();

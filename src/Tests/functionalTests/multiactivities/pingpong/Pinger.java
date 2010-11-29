@@ -31,7 +31,7 @@ public class Pinger implements RunActive {
 	@Override
 	public void runActivity(Body body) {
 		if (this.multiActive) {
-			(new MultiActiveService(body)).multiActiveServing();
+			(new MultiActiveService(body)).greedyMultiActiveServing();
 		} else {
 			(new Service(body)).fifoServing();
 		}
@@ -41,7 +41,7 @@ public class Pinger implements RunActive {
 	@CompatibleWith({"pong", "startWithPing"})
 	public Integer pong(){
 		count--;
-		System.out.print("Pong!");
+		System.out.print("Pong"+count+"!");
 		if (count>0) other.ping();
 		return count;
 	}
@@ -49,7 +49,7 @@ public class Pinger implements RunActive {
 	@CompatibleWith({"ping", "startWithPing"})
 	public Integer ping(){
 		count--;
-		System.out.print("Ping!");
+		System.out.print("Ping"+count+"!");
 		if (count>0) other.pong();
 		return count;
 	}
