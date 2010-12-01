@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 
+import org.objectweb.proactive.annotation.ImmediateService;
 import org.objectweb.proactive.api.PAActiveObject;
 
 
@@ -177,6 +178,7 @@ public abstract class AbstractDebuggerSocket {
      * @param id
      *            The id of the connection.
      */
+    @ImmediateService
     public void activate() {
         if (connection != null) {
             connection.activate();
@@ -209,6 +211,7 @@ public abstract class AbstractDebuggerSocket {
      *
      * @return The port
      */
+    @ImmediateService
     public int getPort() {
         return port;
     }
@@ -219,6 +222,7 @@ public abstract class AbstractDebuggerSocket {
      * @param port
      *            The port
      */
+    @ImmediateService
     public void setPort(int port) {
         this.port = port;
     }

@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.request.Request;
@@ -131,7 +132,7 @@ public interface Debugger extends Serializable {
     /**
      * return the state of the ActivableObject
      */
-    public DebugInfo getDebugInfo();
+    public DebugInfo getDebugInfo() throws ProActiveException;
 
     public Map<Long, BreakpointInfo> getBreakpoints();
 

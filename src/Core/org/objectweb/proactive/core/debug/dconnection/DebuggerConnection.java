@@ -112,7 +112,7 @@ public class DebuggerConnection implements Serializable, NotificationListener {
         return result;
     }
 
-    private int findDebuggerPort() throws ProActiveException {
+    private int findDebuggerPort() throws DebuggerException {
         RuntimeMXBean rtb = ManagementFactory.getRuntimeMXBean();
         String processName = rtb.getName();
         Integer pid = tryPattern1(processName);
@@ -129,7 +129,7 @@ public class DebuggerConnection implements Serializable, NotificationListener {
                     vm = attachMethod.invoke(null, pid.toString());
                 } catch (Exception e) {
                     // Failed to attach 
-                    throw new ProActiveException("Failed to attach to the current JVM", e);
+                    throw new DebuggerException("Failed to attach to the current JVM", e);
                 }
 
                 Method getAgentPropertiesMethod = vm.getClass().getMethod("getAgentProperties");
@@ -144,29 +144,29 @@ public class DebuggerConnection implements Serializable, NotificationListener {
 
                 } catch (Exception e) {
                     // Probably an IOException
-                    throw new ProActiveException("Failed to get the sun.jdwp.listenerAddress property", e);
+                    throw new DebuggerException("Failed to get the sun.jdwp.listenerAddress property", e);
                 } finally {
                     Method detachMethod = vm.getClass().getMethod("detach");
                     detachMethod.invoke(vm);
                 }
             } catch (Exception e) {
                 // Java 6 but something gone wrong
-                throw new ProActiveException("Failed to attach to the current VM", e);
+                throw new DebuggerException("Failed to attach to the current VM", e);
             }
 
         } catch (ClassNotFoundException e) {
             String version = System.getProperty("java.specification.version");
             if ("1.5".equals(version)) { // Java 4 and older are not supported
-                throw new ProActiveException(
+                throw new DebuggerException(
                     "Remote debugging not yet available with Java 5. Please use a JDK 6");
             } else {
-                throw new ProActiveException(
+                throw new DebuggerException(
                     "Remote debbuging not available. Attach API not found in the classpath. $JDK6/lib/tools.jar must be in the classpath",
                     e);
             }
         }
 
-        System.out.println("DebuggerConnection.findDebuggerPort() >>>>>>" + address);
+        System.out.println("DebuggerConnection.findDebuggerPort() >>>>>>'" + address + "'");
         listeningPort = Integer.parseInt(address.split(":")[1]);
 
         if (listeningPort < 1) {
@@ -184,7 +184,7 @@ public class DebuggerConnection implements Serializable, NotificationListener {
      * @return DebuggerInformation
      * @throws ProActiveException 
      */
-    public synchronized DebuggerInformation getDebugInfo() throws ProActiveException {
+    public synchronized DebuggerInformation getDebugInformation() throws DebuggerException {
         int port = -3;
 
         port = findDebuggerPort();

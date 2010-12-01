@@ -51,6 +51,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.debug.dconnection.DebuggerConnection;
+import org.objectweb.proactive.core.debug.dconnection.DebuggerException;
 import org.objectweb.proactive.core.debug.dconnection.DebuggerInformation;
 import org.objectweb.proactive.core.jmx.naming.FactoryName;
 import org.objectweb.proactive.core.jmx.notification.NotificationType;
@@ -235,14 +236,14 @@ public class ProActiveRuntimeWrapper extends NotificationBroadcasterSupport impl
     // -- DEBUGGERCONNECTION METHODS -----------------------------------------------
     //
     /**
-     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#getDebugInfo()
+     * @see org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean#getDebugInformation()
      */
-    public DebuggerInformation getDebugInfo() {
+    public DebuggerInformation getDebugInformation() throws DebuggerException {
         try {
-            return DebuggerConnection.getDebuggerConnection().getDebugInfo();
-        } catch (ProActiveException e) {
+            return DebuggerConnection.getDebuggerConnection().getDebugInformation();
+        } catch (DebuggerException e) {
             ProActiveLogger.logEatedException(ProActiveLogger.getLogger(Loggers.DEBUGGER), e);
-            return null;
+            throw e;
         }
     }
 

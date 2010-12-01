@@ -48,6 +48,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.ObjectForSynchro;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.BodyImpl;
 import org.objectweb.proactive.core.body.UniversalBody;
@@ -443,7 +444,7 @@ public class DebuggerImpl implements Debugger {
         return breakpoints;
     }
 
-    public DebugInfo getDebugInfo() {
+    public DebugInfo getDebugInfo() throws ProActiveException {
         return debugInfo;
     }
 

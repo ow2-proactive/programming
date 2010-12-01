@@ -42,6 +42,7 @@ import java.util.Map;
 
 import javax.management.ObjectName;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.migration.MigrationException;
 import org.objectweb.proactive.core.debug.debugger.DebugInfo;
@@ -187,7 +188,7 @@ public interface BodyWrapperMBean extends Serializable {
     /**
      * return the state of the ActivableObject
      */
-    public DebugInfo getDebugInfo();
+    public DebugInfo getDebugInfo() throws ProActiveException;
 
     /**
      * set the time between every breakpoint

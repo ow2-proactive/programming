@@ -55,6 +55,7 @@ import javax.management.ObjectName;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.api.PAMobileAgent;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.AbstractBody;
 import org.objectweb.proactive.core.body.migration.Migratable;
@@ -444,9 +445,10 @@ public class BodyWrapper extends NotificationBroadcasterSupport implements Seria
     }
 
     /**
+     * @throws ProActiveException
      * @see org.objectweb.proactive.core.jmx.mbean.BodyWrapperMBean#getState()
      */
-    public DebugInfo getDebugInfo() {
+    public DebugInfo getDebugInfo() throws ProActiveException {
         return body.getDebugger().getDebugInfo();
     }
 
