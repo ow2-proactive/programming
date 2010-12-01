@@ -1,4 +1,4 @@
-package org.objectweb.proactive;
+package org.objectweb.proactive.multiactivity;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.Body;
+import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
 import org.objectweb.proactive.annotation.multiactivity.Modifies;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
@@ -23,7 +25,11 @@ import org.objectweb.proactive.core.body.request.Request;
  * @author Izso
  *
  */
-public class MultiActiveService extends Service {
+/*
+ * TODO: Most probably will have to remove the two interfaces from here, so ppl will not be able
+ * to mess around with internals (syncros) 
+ */
+public class MultiActiveService extends Service implements SchedulerState, CompatibilityGraph {
 	Logger logger = Logger.getLogger(this.getClass());
 	
 	/**
@@ -100,6 +106,44 @@ public class MultiActiveService extends Service {
 						e.printStackTrace();
 					}
 				}
+			}
+		}
+	}
+	
+	public void policyServing(ServingPolicy policy) {
+		List<MethodFacade> chosen;
+		RequestWrapper rw;
+		int launched;;
+		while (body.isAlive()) {
+			synchronized (requestQueue) {
+				synchronized (runningServes) {
+					launched = 0;
+					chosen = policy.selectToRun(this, this);
+					
+					for (MethodFacade mf : chosen) {
+						try {
+							rw = (RequestWrapper) mf;
+							internalParallelServe(rw.r);
+							requestQueue.getInternalQueue().remove(rw.r);
+							launched++;
+						}
+						catch (ClassCastException e) {
+							// WTF?
+						}
+						
+					}
+					
+					if (launched==0) {
+						try {
+							requestQueue.wait();
+							//logger.info(this.body.getID()+" Greedy scheduler - wake up");
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				
 			}
 		}
 	}
@@ -407,18 +451,92 @@ public class MultiActiveService extends Service {
 	 * @author Izso
 	 *
 	 */
-	protected class ParallelServe implements Runnable {
-		private Request r;
+	protected class ParallelServe extends RequestWrapper implements Runnable {
 		
-		public ParallelServe(Request r){
-			this.r = r;
+		public ParallelServe(Request r) {
+			super(r);
 		}
-		
+
 		@Override
 		public void run() {
 			body.serve(r);
 			asynchronousServeFinished(r, this);
 		}
+		
+	}
+	
+	protected class RequestWrapper implements MethodFacade {
+		protected final Request r;
+		
+		public RequestWrapper(Request r){
+			this.r = r;
+		}
+		
+		@Override
+		public String getName() {
+			return r.getMethodName();
+		}
+		
+	}
+
+	@Override
+	public List<MethodFacade> getExecutingMethods() {
+		List<MethodFacade> mlist = new LinkedList<MethodFacade>();
+		for (List<ParallelServe> lps : runningServes.values()) {
+			mlist.addAll(lps);
+		}
+		return mlist;
+	}
+	
+	@Override
+	public List<MethodFacade> getExecutingMethods(String name) {
+		List<MethodFacade> mlist = new LinkedList<MethodFacade>();
+		if (runningServes.get(name)==null) return mlist;
+		
+		for (ParallelServe lps : runningServes.get(name)) {
+			mlist.add(lps);
+		}
+		return mlist;
+	}
+
+	@Override
+	public MethodFacade getOldestInTheQueue() {
+		Request r = requestQueue.getOldest();
+		return (r==null) ? null : new RequestWrapper(r);
+	}
+
+	@Override
+	public List<MethodFacade> getQueueContents() {
+		List<MethodFacade> mlist = new LinkedList<MethodFacade>();
+		List<Request> rlist = requestQueue.getInternalQueue();
+		for (int i=0; i<rlist.size(); i++){
+			mlist.add(new RequestWrapper(rlist.get(i)));
+		}
+		return mlist;
+	}
+
+	@Override
+	public Integer getRejectionCount(MethodFacade m) {
+		//TODO ?
+		return 0;
+	}
+
+	@Override
+	public boolean areConnex(List<MethodFacade> methodList) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<MethodFacade> getMaximumConnex(List<MethodFacade> methodList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MethodFacade> getNeighbours(MethodFacade method) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

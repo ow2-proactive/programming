@@ -3,11 +3,11 @@ package functionalTests.multiactivities.pingpong;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.MultiActiveService;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 public class PingPongTest {
 	

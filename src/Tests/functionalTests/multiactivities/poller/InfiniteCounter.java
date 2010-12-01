@@ -1,12 +1,12 @@
 package functionalTests.multiactivities.poller;
 
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.MultiActiveService;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
 import org.objectweb.proactive.annotation.multiactivity.Modifies;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
+import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 public class InfiniteCounter implements RunActive {
 	private Long value = new Long(0);

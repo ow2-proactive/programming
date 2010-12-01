@@ -1,10 +1,10 @@
 package functionalTests.multiactivities.pingpong;
 
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.MultiActiveService;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
+import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 public class Pinger implements RunActive {
 	private Integer count = 5;

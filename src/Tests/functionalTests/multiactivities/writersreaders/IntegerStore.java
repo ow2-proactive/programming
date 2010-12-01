@@ -1,11 +1,11 @@
 package functionalTests.multiactivities.writersreaders;
 
 import org.objectweb.proactive.Body;
-import org.objectweb.proactive.MultiActiveService;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.multiactivity.Modifies;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
+import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 public class IntegerStore implements RunActive {
 	
