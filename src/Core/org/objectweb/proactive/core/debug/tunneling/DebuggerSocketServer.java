@@ -82,27 +82,23 @@ public class DebuggerSocketServer extends AbstractDebuggerSocket {
      * Connect the server socket and wait for an external debugger connection
      */
     public void connect() {
-        new Thread() {
-            public void run() {
-                try {
-                    DebuggerSocketClient client = (DebuggerSocketClient) target;
-                    Socket socket;
-                    serverSocket = new ServerSocket(0);
+        try {
+            DebuggerSocketClient client = (DebuggerSocketClient) target;
+            Socket socket;
+            serverSocket = new ServerSocket(0);
 
-                    port = serverSocket.getLocalPort();
+            port = serverSocket.getLocalPort();
 
-                    if ((socket = serverSocket.accept()) != null) {
-                        addConnection(socket);
-                        client.connect();
-                    }
-
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            if ((socket = serverSocket.accept()) != null) {
+                addConnection(socket);
+                client.connect();
             }
-        }.start();
+
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
