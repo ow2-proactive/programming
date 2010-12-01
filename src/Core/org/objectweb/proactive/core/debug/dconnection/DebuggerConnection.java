@@ -136,6 +136,12 @@ public class DebuggerConnection implements Serializable, NotificationListener {
                 try {
                     Properties props = (Properties) getAgentPropertiesMethod.invoke(vm);
                     address = props.getProperty("sun.jdwp.listenerAddress");
+
+                    if ((address == null) || address.trim().isEmpty()) {
+                        throw new DebuggerException(
+                            "The JVM is either not in debug mode or is not listening for a debugger to attach (probably one is already attached)");
+                    }
+
                 } catch (Exception e) {
                     // Probably an IOException
                     throw new ProActiveException("Failed to get the sun.jdwp.listenerAddress property", e);
@@ -162,6 +168,12 @@ public class DebuggerConnection implements Serializable, NotificationListener {
 
         System.out.println("DebuggerConnection.findDebuggerPort() >>>>>>" + address);
         listeningPort = Integer.parseInt(address.split(":")[1]);
+
+        if (listeningPort < 1) {
+            throw new DebuggerException("cannot determine the port to attach to, answer was '" +
+                listeningPort + "'");
+        }
+
         return listeningPort;
     }
 
