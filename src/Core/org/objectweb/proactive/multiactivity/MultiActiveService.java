@@ -110,29 +110,40 @@ public class MultiActiveService extends Service implements SchedulerState, Compa
 		}
 	}
 	
+	/**
+	 * Scheduling based on a user-defined policy
+	 * @param policy
+	 */
 	public void policyServing(ServingPolicy policy) {
 		List<MethodFacade> chosen;
 		RequestWrapper rw;
 		int launched;;
+		
 		while (body.isAlive()) {
 			synchronized (requestQueue) {
 				synchronized (runningServes) {
 					launched = 0;
+					//get the list of requests to run -- as calculated by the policy
 					chosen = policy.selectToRun(this, this);
 					
 					for (MethodFacade mf : chosen) {
 						try {
+							//for the outside world these are method facades, 
+							//but we know they have a request inside
 							rw = (RequestWrapper) mf;
 							internalParallelServe(rw.r);
 							requestQueue.getInternalQueue().remove(rw.r);
 							launched++;
 						}
 						catch (ClassCastException e) {
-							// WTF?
+							// somebody implemented the MethodFacade and passed an instance to us
+							// this is not good...
 						}
 						
 					}
 					
+					//if we could not launch anything, that we wait until
+					// either a running serve finishes or a new req. arrives
 					if (launched==0) {
 						try {
 							requestQueue.wait();
@@ -465,6 +476,12 @@ public class MultiActiveService extends Service implements SchedulerState, Compa
 		
 	}
 	
+	/**
+	 * By wrapping the request, we can pass the 'method' to the 
+	 * outside world without actually exposing internal information. 
+	 * @author Izso
+	 *
+	 */
 	protected class RequestWrapper implements MethodFacade {
 		protected final Request r;
 		
