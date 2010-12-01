@@ -137,7 +137,7 @@ public class DebuggerConnection implements Serializable, NotificationListener {
                     Properties props = (Properties) getAgentPropertiesMethod.invoke(vm);
                     address = props.getProperty("sun.jdwp.listenerAddress");
 
-                    if ((address == null) || address.trim().isEmpty()) {
+                    if ((address == null) || address.isEmpty()) {
                         throw new DebuggerException(
                             "The JVM is either not in debug mode or is not listening for a debugger to attach (probably one is already attached)");
                     }
