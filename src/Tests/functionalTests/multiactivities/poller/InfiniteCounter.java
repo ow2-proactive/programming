@@ -7,6 +7,7 @@ import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
 import org.objectweb.proactive.annotation.multiactivity.Modifies;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
+import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
 public class InfiniteCounter implements RunActive {
 	private Long value = new Long(0);
@@ -25,7 +26,7 @@ public class InfiniteCounter implements RunActive {
 		if (multiActive) {
 			(new MultiActiveService(body)).multiActiveServing();
 		} else {
-			(new Service(body)).fifoServing();
+			(new MultiActiveService(body)).policyServing(ServingPolicyFactory.getSingleActivityPolicy());
 		}
 		
 	}
@@ -41,7 +42,6 @@ public class InfiniteCounter implements RunActive {
 	}
 	
 	@CompatibleWith({"*"})
-	@Reads({"value"})
 	public Long pollValue(){
 		synchronized (value) {
 			System.out.println("Polling value...");

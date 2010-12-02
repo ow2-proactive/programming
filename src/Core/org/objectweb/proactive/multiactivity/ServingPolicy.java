@@ -11,6 +11,6 @@ public interface ServingPolicy {
 	 * @param graph
 	 * @return a sublist of the methods returned by the scheduler state as being queued
 	 */
-	public List<MethodFacade> selectToRun(SchedulerState state, CompatibilityGraph graph);
+	public List<MethodFacade> selectToRun(SchedulerState state);
 	
 }

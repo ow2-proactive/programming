@@ -25,11 +25,7 @@ import org.objectweb.proactive.core.body.request.Request;
  * @author Izso
  *
  */
-/*
- * TODO: Most probably will have to remove the two interfaces from here, so ppl will not be able
- * to mess around with internals (syncros) 
- */
-public class MultiActiveService extends Service implements SchedulerState, CompatibilityGraph {
+public class MultiActiveService extends Service {
 	Logger logger = Logger.getLogger(this.getClass());
 	
 	/**
@@ -46,6 +42,9 @@ public class MultiActiveService extends Service implements SchedulerState, Compa
 	 * Information contained in the annotations is read and stored in this structure.
 	 */
 	public Map<String, MultiActiveAnnotations> methodInfo = new HashMap<String, MultiActiveAnnotations>();
+	
+	// stuff for the Policy API
+	SchedulerState schedStateExposer = new SchedulerStateImpl();
 	
 	public MultiActiveService(Body body) {
 		super(body);
@@ -124,7 +123,7 @@ public class MultiActiveService extends Service implements SchedulerState, Compa
 				synchronized (runningServes) {
 					launched = 0;
 					//get the list of requests to run -- as calculated by the policy
-					chosen = policy.selectToRun(this, this);
+					chosen = policy.selectToRun(schedStateExposer);
 					
 					for (MethodFacade mf : chosen) {
 						try {
@@ -493,67 +492,86 @@ public class MultiActiveService extends Service implements SchedulerState, Compa
 		public String getName() {
 			return r.getMethodName();
 		}
-		
-	}
 
-	@Override
-	public List<MethodFacade> getExecutingMethods() {
-		List<MethodFacade> mlist = new LinkedList<MethodFacade>();
-		for (List<ParallelServe> lps : runningServes.values()) {
-			mlist.addAll(lps);
+		@Override
+		public boolean areAllCompatible(List<MethodFacade> methodList) {
+			// TODO Auto-generated method stub
+			return false;
 		}
-		return mlist;
+
+		@Override
+		public boolean areAllCompatibleNames(List<String> methodList) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public List<String> getCompatibleNames() {
+			List<String> ret = new LinkedList<String>();
+			ret.addAll(compatibilityGraph.get(this.getName()));
+			return ret;
+		}
+
+		@Override
+		public boolean isCompatibleWith(MethodFacade method) {
+			return isCompatibleWithName(method.getName());
+		}
+
+		@Override
+		public boolean isCompatibleWithName(String methodName) {
+			List<String> ret = compatibilityGraph.get(this.getName());
+			if (ret==null) return false;
+			
+			return ret.contains(methodName);
+		}
+		
+		
+		
 	}
 	
-	@Override
-	public List<MethodFacade> getExecutingMethods(String name) {
-		List<MethodFacade> mlist = new LinkedList<MethodFacade>();
-		if (runningServes.get(name)==null) return mlist;
+	private class SchedulerStateImpl implements SchedulerState {
+		@Override
+		public List<MethodFacade> getExecutingMethods() {
+			List<MethodFacade> mlist = new LinkedList<MethodFacade>();
+			for (List<ParallelServe> lps : runningServes.values()) {
+				mlist.addAll(lps);
+			}
+			return mlist;
+		}
 		
-		for (ParallelServe lps : runningServes.get(name)) {
-			mlist.add(lps);
+		@Override
+		public List<MethodFacade> getExecutingMethods(String name) {
+			List<MethodFacade> mlist = new LinkedList<MethodFacade>();
+			if (runningServes.get(name)==null) return mlist;
+			
+			for (ParallelServe lps : runningServes.get(name)) {
+				mlist.add(lps);
+			}
+			return mlist;
 		}
-		return mlist;
-	}
 
-	@Override
-	public MethodFacade getOldestInTheQueue() {
-		Request r = requestQueue.getOldest();
-		return (r==null) ? null : new RequestWrapper(r);
-	}
-
-	@Override
-	public List<MethodFacade> getQueueContents() {
-		List<MethodFacade> mlist = new LinkedList<MethodFacade>();
-		List<Request> rlist = requestQueue.getInternalQueue();
-		for (int i=0; i<rlist.size(); i++){
-			mlist.add(new RequestWrapper(rlist.get(i)));
+		@Override
+		public MethodFacade getOldestInTheQueue() {
+			Request r = requestQueue.getOldest();
+			return (r==null) ? null : new RequestWrapper(r);
 		}
-		return mlist;
-	}
 
-	@Override
-	public Integer getRejectionCount(MethodFacade m) {
-		//TODO ?
-		return 0;
-	}
+		@Override
+		public List<MethodFacade> getQueueContents() {
+			List<MethodFacade> mlist = new LinkedList<MethodFacade>();
+			List<Request> rlist = requestQueue.getInternalQueue();
+			for (int i=0; i<rlist.size(); i++){
+				mlist.add(new RequestWrapper(rlist.get(i)));
+			}
+			return mlist;
+		}
 
-	@Override
-	public boolean areConnex(List<MethodFacade> methodList) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public List<MethodFacade> getMaximumConnex(List<MethodFacade> methodList) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<MethodFacade> getNeighbours(MethodFacade method) {
-		// TODO Auto-generated method stub
-		return null;
+		@Override
+		public Integer getRejectionCount(MethodFacade m) {
+			//TODO ?
+			return 0;
+		}
+		
 	}
 
 }

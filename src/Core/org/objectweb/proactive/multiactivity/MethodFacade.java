@@ -1,17 +1,23 @@
 package org.objectweb.proactive.multiactivity;
 
+import java.util.List;
+
 /**
- * This interface represents a method call.
+ * This interface represents a method call, with possibilities to query the compatibility 
+ * relationships with other methods.
  * @author Izso
  *
- */
-/*
- * The reason we need a wrapper for the name of the method is that the scheduler
- * will most probably have some extra information hidden in this object (like the
- * request behind the method call). 
  */
 public interface MethodFacade {
 	
 	public String getName();
+	
+	public List<String> getCompatibleNames();
+	
+	public boolean areAllCompatibleNames(List<String> methodList);
+	public boolean areAllCompatible(List<MethodFacade> methodList);
+	
+	public boolean isCompatibleWithName(String methodName);
+	public boolean isCompatibleWith(MethodFacade method);
 
 }
