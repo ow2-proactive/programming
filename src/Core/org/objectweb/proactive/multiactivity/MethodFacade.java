@@ -14,8 +14,8 @@ public interface MethodFacade {
 	
 	public List<String> getCompatibleNames();
 	
-	public boolean areAllCompatibleNames(List<String> methodList);
-	public boolean areAllCompatible(List<MethodFacade> methodList);
+	public boolean isCompatibleWithName(List<String> methodList);
+	public boolean isCompatibleWith(List<MethodFacade> methodList);
 	
 	public boolean isCompatibleWithName(String methodName);
 	public boolean isCompatibleWith(MethodFacade method);
