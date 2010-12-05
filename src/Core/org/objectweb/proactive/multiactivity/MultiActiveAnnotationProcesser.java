@@ -24,14 +24,14 @@ public class MultiActiveAnnotationProcesser {
 	
 	private Map<String, List<String>> invalidReferences;
 	
-	private Class thisClass;
+	private Class<?> thisClass;
 	
-	public MultiActiveAnnotationProcesser(Class toWorkWith){
+	public MultiActiveAnnotationProcesser(Class<?> toWorkWith){
 		thisClass = toWorkWith;
 		readMethodInfos();
 		generateCompatibilityGraph();
 	}
-	
+
 	/**
 	 * This method will iterate through all methods from the underlying class, and
 	 * create a descriptor object containing all annotations extracted. This object

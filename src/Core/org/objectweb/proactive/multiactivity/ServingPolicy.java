@@ -1,7 +1,5 @@
 package org.objectweb.proactive.multiactivity;
 
-import java.util.List;
-
 public interface ServingPolicy {	
 	
 	/**
@@ -11,6 +9,6 @@ public interface ServingPolicy {
 	 * @param graph
 	 * @return a sublist of the methods returned by the scheduler state as being queued
 	 */
-	public List<MethodFacade> selectToRun(SchedulerState state);
+	public void runPolicy(SchedulerState state);
 	
 }

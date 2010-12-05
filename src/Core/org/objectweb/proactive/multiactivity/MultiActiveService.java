@@ -1,9 +1,6 @@
 package org.objectweb.proactive.multiactivity;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +8,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.Service;
-import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
-import org.objectweb.proactive.annotation.multiactivity.Modifies;
-import org.objectweb.proactive.annotation.multiactivity.Reads;
 import org.objectweb.proactive.core.body.request.Request;
 
 /**
@@ -31,7 +25,7 @@ public class MultiActiveService extends Service {
 	/**
 	 * This maps associates to each method a list of active servings
 	 */
-	private Map<String, List<RunnableRequestWrapper>> runningServes = new HashMap<String, List<RunnableRequestWrapper>>();
+	private Map<String, List<RequestWrapper>> runningServes = new HashMap<String, List<RequestWrapper>>();
 	/**
 	 * This is an undirected graph that expresses which methods are compatible.
 	 * The information is calculated when the multi-active serving is requested, and to save memory, only
@@ -40,12 +34,13 @@ public class MultiActiveService extends Service {
 	private Map<String, List<String>> compatibilityGraph = new HashMap<String, List<String>>();
 	
 	// stuff for the Policy API
-	SchedulerState schedStateExposer = new SchedulerStateImpl();
+	SchedulerStateImpl schedStateExposer = new SchedulerStateImpl();
 	
 	public MultiActiveService(Body body) {
 		super(body);
 		
-		compatibilityGraph = (new MultiActiveAnnotationProcesser(body.getClass())).getCompatibilityGraph();
+		MultiActiveAnnotationProcesser maap = new MultiActiveAnnotationProcesser(body.getReifiedObject().getClass());
+		compatibilityGraph = maap.getCompatibilityGraph();
 	}
 	
 	/**
@@ -58,7 +53,7 @@ public class MultiActiveService extends Service {
 		boolean success;
 		while (body.isAlive()) {
 			// try to launch next request -- synchrnoized inside
-			success = parallelServeOldest();
+			success = parallelServeOldestOptimal();
 			
 			//if we were not successful, let's wait until a new request arrives
 			synchronized (requestQueue) {
@@ -109,8 +104,7 @@ public class MultiActiveService extends Service {
 	 * @param policy
 	 */
 	public void policyServing(ServingPolicy policy) {
-		List<MethodFacade> chosen;
-		RequestWrapper rw;
+		List<RequestWrapper> chosen;
 		int launched;;
 		
 		while (body.isAlive()) {
@@ -118,19 +112,18 @@ public class MultiActiveService extends Service {
 				synchronized (runningServes) {
 					launched = 0;
 					//get the list of requests to run -- as calculated by the policy
-					chosen = policy.selectToRun(schedStateExposer);
+					schedStateExposer.clearSelectedToStart();
+					policy.runPolicy(schedStateExposer);
+					chosen = schedStateExposer.getSelectedToStart();
 					
-					for (MethodFacade mf : chosen) {
+					for (RequestWrapper mf : chosen) {
 						try {
-							//for the outside world these are method facades, 
-							//but we know they have a request inside
-							rw = (RequestWrapper) mf;
-							internalParallelServe(rw.r);
-							requestQueue.getInternalQueue().remove(rw.r);
+							internalParallelServe(mf.r);
+							requestQueue.getInternalQueue().remove(mf.r);
 							launched++;
 						}
 						catch (ClassCastException e) {
-							// somebody implemented the MethodFacade and passed an instance to us
+							// somebody implemented the RequestWrapper and passed an instance to us
 							// this is not good...
 						}
 						
@@ -175,20 +168,43 @@ public class MultiActiveService extends Service {
 	}
 	
 	/**
+	 * This method will find the first method in the request queue that is compatible
+	 * with the currently running methods. In case nothing is executing, it will take the 
+	 * first, thus acting like the default strategy.
+	 * @return
+	 */
+	public boolean parallelServeOldestOptimal(){
+		synchronized (requestQueue) {
+			synchronized (runningServes) {
+				List<Request> reqs = requestQueue.getInternalQueue();
+				if (reqs.size()==0) return false;
+				
+				if (canRun(reqs.get(0))){
+					internalParallelServe(reqs.remove(0));
+					return true;
+				} else if (reqs.size()>1 && areCompatible(reqs.get(0), reqs.get(1)) && canRun(reqs.get(1))){
+					internalParallelServe(reqs.remove(1));
+					return true;
+				} 
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * This method will try to start the oldest waiting method in parallel
 	 * with the currently running ones. The decision is made based on the 
 	 * information extracted from annotations.
 	 * @return whether the oldest request could be started or not
 	 */
 	public boolean parallelServeOldest(){
-		RunnableRequestWrapper asserve = null;
+		RequestWrapper asserve = null;
 		//synchronize both the queue and the running status to be safe from any angle
 		synchronized (requestQueue) {
 			synchronized (runningServes) {
 				
 				Request r = requestQueue.removeOldest();
 				if (r!=null) {
-					
 					if (canRun(r)){
 						asserve = internalParallelServe(r);
 					} else {
@@ -201,14 +217,14 @@ public class MultiActiveService extends Service {
 		return asserve != null;
 	}
 
-	private RunnableRequestWrapper internalParallelServe(Request r) {
-		RunnableRequestWrapper asserve;
+	private RequestWrapper internalParallelServe(Request r) {
+		RequestWrapper asserve;
 		//if there is no conflict, prepare launch
-		asserve = new RunnableRequestWrapper(r);
+		asserve = new RequestWrapper(r);
 		
-		List<RunnableRequestWrapper> aslist = runningServes.get(r.getMethodName());
+		List<RequestWrapper> aslist = runningServes.get(r.getMethodName());
 		if (aslist==null) {
-			runningServes.put(r.getMethodName(), new LinkedList<RunnableRequestWrapper>());
+			runningServes.put(r.getMethodName(), new LinkedList<RequestWrapper>());
 			aslist = runningServes.get(r.getMethodName());
 		}
 		aslist.add(asserve);
@@ -222,12 +238,12 @@ public class MultiActiveService extends Service {
 	}
 	
 	/**
-	 * Method called from the {@link RunnableRequestWrapper} to signal the end of a serving.
+	 * Method called from the {@link RequestWrapper} to signal the end of a serving.
 	 * State is updated here, and also a new request will be attempted to be started.
 	 * @param r
 	 * @param asserve
 	 */
-	protected void asynchronousServeFinished(Request r, RunnableRequestWrapper asserve) {
+	protected void asynchronousServeFinished(Request r, RequestWrapper asserve) {
 		synchronized (runningServes) {
 			runningServes.get(r.getMethodName()).remove(asserve);
 			if (runningServes.get(r.getMethodName()).size()==0) {
@@ -257,27 +273,15 @@ public class MultiActiveService extends Service {
 		return true;
 	}
 	
-	
-	
-
-	/**
-	 * Runnable class that will serve a request on the body, than call
-	 * back to the multi-active-service.
-	 * @author Izso
-	 *
-	 */
-	protected class RunnableRequestWrapper extends RequestWrapper implements Runnable {
+	protected boolean areCompatible(String m1, String m2) {
+		List<String> ret = compatibilityGraph.get(m1);
+		if (ret==null) return false;
 		
-		public RunnableRequestWrapper(Request r) {
-			super(r);
-		}
-
-		@Override
-		public void run() {
-			body.serve(r);
-			asynchronousServeFinished(r, this);
-		}
-		
+		return ret.contains(m2);
+	}
+	
+	protected boolean areCompatible(Request r1, Request r2) {
+		return areCompatible(r1.getMethodName(), r2.getMethodName());
 	}
 	
 	/**
@@ -286,48 +290,46 @@ public class MultiActiveService extends Service {
 	 * @author Izso
 	 *
 	 */
-	protected class RequestWrapper implements MethodFacade {
-		protected final Request r;
+	protected class RequestWrapper implements Runnable {
+		private final Request r;
 		
-		public RequestWrapper(Request r){
+		private RequestWrapper(){
+			r = null;
+		}
+		
+		private RequestWrapper(Request r){
 			this.r = r;
 		}
 		
-		@Override
+		private Request getRequest(){
+			return r;
+		}
+		
 		public String getName() {
 			return r.getMethodName();
 		}
 
-		
-		@Override
 		public List<String> getCompatibleNames() {
 			List<String> ret = new LinkedList<String>();
 			ret.addAll(compatibilityGraph.get(this.getName()));
 			return ret;
 		}
 
-		@Override
-		public boolean isCompatibleWith(MethodFacade method) {
+		public boolean isCompatibleWith(RequestWrapper method) {
 			return isCompatibleWithName(method.getName());
 		}
 
-		@Override
 		public boolean isCompatibleWithName(String methodName) {
-			List<String> ret = compatibilityGraph.get(this.getName());
-			if (ret==null) return false;
-			
-			return ret.contains(methodName);
+			return areCompatible(this.getName(), methodName);
 		}
 
-		@Override
-		public boolean isCompatibleWith(List<MethodFacade> methodList) {
-			for (MethodFacade mf : methodList) {
+		public boolean isCompatibleWith(List<RequestWrapper> methodList) {
+			for (RequestWrapper mf : methodList) {
 				if (!isCompatibleWith(mf)) return false;
 			}
 			return true;
 		}
 
-		@Override
 		public boolean isCompatibleWithName(List<String> methodList) {
 			for (String mname : methodList) {
 				if (!isCompatibleWithName(mname)) return false;
@@ -335,51 +337,91 @@ public class MultiActiveService extends Service {
 			return true;
 		}
 		
-		
+		@Override
+		public void run() {
+			body.serve(getRequest());
+			asynchronousServeFinished(getRequest(), this);
+		}
 		
 	}
 	
 	private class SchedulerStateImpl implements SchedulerState {
+		private List<RequestWrapper> queueCache;
+		private List<RequestWrapper> selectedToStart;
+		private boolean userRemovedFromQueue = false; 
+		
 		@Override
-		public List<MethodFacade> getExecutingMethods() {
-			List<MethodFacade> mlist = new LinkedList<MethodFacade>();
-			for (List<RunnableRequestWrapper> lps : runningServes.values()) {
+		public List<RequestWrapper> getExecutingMethods() {
+			List<RequestWrapper> mlist = new LinkedList<RequestWrapper>();
+			for (List<RequestWrapper> lps : runningServes.values()) {
 				mlist.addAll(lps);
 			}
 			return mlist;
 		}
 		
 		@Override
-		public List<MethodFacade> getExecutingMethods(String name) {
-			List<MethodFacade> mlist = new LinkedList<MethodFacade>();
+		public List<RequestWrapper> getExecutingMethods(String name) {
+			List<RequestWrapper> mlist = new LinkedList<RequestWrapper>();
 			if (runningServes.get(name)==null) return mlist;
 			
-			for (RunnableRequestWrapper lps : runningServes.get(name)) {
+			for (RequestWrapper lps : runningServes.get(name)) {
 				mlist.add(lps);
 			}
 			return mlist;
 		}
 
 		@Override
-		public MethodFacade getOldestInTheQueue() {
+		public RequestWrapper getOldestInTheQueue() {
 			Request r = requestQueue.getOldest();
 			return (r==null) ? null : new RequestWrapper(r);
 		}
 
+		/*
+		 * We're doing this magic here because the user *under no circumstances* can change
+		 * directly the contents of the queue
+		 */
 		@Override
-		public List<MethodFacade> getQueueContents() {
-			List<MethodFacade> mlist = new LinkedList<MethodFacade>();
+		public List<RequestWrapper> getQueueContents() {
 			List<Request> rlist = requestQueue.getInternalQueue();
-			for (int i=0; i<rlist.size(); i++){
-				mlist.add(new RequestWrapper(rlist.get(i)));
+			if (queueCache!=null) {
+				int i= userRemovedFromQueue ? 0 : queueCache.size();
+				while (i<rlist.size()) {
+					if (queueCache.size()>0 && i<queueCache.size()) {
+						if ((queueCache.get(i)).getRequest()==rlist.get(i)) {
+							i++;
+						} else {
+							queueCache.remove(i);
+						}
+					} else {
+						queueCache.add(i, new RequestWrapper(rlist.get(i)));
+						i++;
+					}
+				}
+				return queueCache;
+			} else {
+				List<RequestWrapper> mlist = new LinkedList<RequestWrapper>();
+				for (int i=0; i<rlist.size(); i++){
+					mlist.add(new RequestWrapper(rlist.get(i)));
+				}
+				queueCache = mlist;
+				return queueCache;
 			}
-			return mlist;
+		}
+
+		public void clearSelectedToStart() {
+			selectedToStart = new LinkedList<RequestWrapper>();
+			userRemovedFromQueue = false;
+		}
+
+		public List<RequestWrapper> getSelectedToStart() {
+			return selectedToStart;
 		}
 
 		@Override
-		public Integer getRejectionCount(MethodFacade m) {
-			//TODO ?
-			return 0;
+		public boolean selectForExecution(List<RequestWrapper> requests) {
+			selectedToStart = (requests != null) ? requests : new LinkedList<RequestWrapper>();
+			userRemovedFromQueue = selectedToStart.size()>0;
+			return true;
 		}
 		
 	}
