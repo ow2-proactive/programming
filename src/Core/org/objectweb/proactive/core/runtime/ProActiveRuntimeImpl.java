@@ -110,6 +110,7 @@ import org.objectweb.proactive.core.process.UniversalProcess;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.rmi.FileProcess;
+import org.objectweb.proactive.core.runtime.broadcast.BroadcastDisabledException;
 import org.objectweb.proactive.core.runtime.broadcast.RTBroadcaster;
 import org.objectweb.proactive.core.security.PolicyServer;
 import org.objectweb.proactive.core.security.ProActiveSecurity;
@@ -175,9 +176,15 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                     new PARTPinger().start();
                 }
 
-                RTBroadcaster rtBrodcaster = RTBroadcaster.getInstance();
-                if (rtBrodcaster != null) {
-                    rtBrodcaster.sendDiscover();
+                RTBroadcaster rtBrodcaster;
+                try {
+                    rtBrodcaster = RTBroadcaster.getInstance();
+                    // notify our presence on the lan
+                    rtBrodcaster.sendCreation();
+                } catch (Exception e) {
+                    // just keep it the feature is disabled
+                    logger.info("unable to activate RTBroadcast, reason is " + e.getMessage());
+                    ProActiveLogger.logEatedException(logger, e);
                 }
 
             } catch (UnknownProtocolException e) {
@@ -740,10 +747,14 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             mbean = null;
         }
 
-        //  terminate the broadcast thread
-        RTBroadcaster rtBroadcaster = RTBroadcaster.getInstance();
-        if (rtBroadcaster != null) {
-            rtBroadcaster.kill();
+        //  terminate the broadcast thread if exist
+        RTBroadcaster broadcaster;
+        try {
+            broadcaster = RTBroadcaster.getInstance();
+            broadcaster.kill();
+        } catch (BroadcastDisabledException e1) {
+            // just display the message
+            logger.debug(e1.getMessage());
         }
 
         // unexport the runtime

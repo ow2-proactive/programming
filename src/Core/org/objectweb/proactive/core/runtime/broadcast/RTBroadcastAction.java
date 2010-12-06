@@ -41,13 +41,13 @@ public interface RTBroadcastAction {
      * a new runtime has been created on the same multicast group.
      * @param url the url of the newly created runtime
      */
-    public void creationHandler(String url);
+    public void creationHandler(String url) throws BroadcastDisabledException;
 
     /**
      * the runtime designed by the url requests other runtimes
      * to notify their presence
      * @param url the runtime that has sent the request.
      */
-    public void discoverHandler(String url);
+    public void discoverHandler(String url) throws BroadcastDisabledException;
 
 }

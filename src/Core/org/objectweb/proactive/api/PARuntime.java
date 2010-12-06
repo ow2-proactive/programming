@@ -1,5 +1,42 @@
+/*
+ * ################################################################
+ *
+ * ProActive Parallel Suite(TM): The Java(TM) library for
+ *    Parallel, Distributed, Multi-Core Computing for
+ *    Enterprise Grids & Clouds
+ *
+ * Copyright (C) 1997-2010 INRIA/University of
+ *              Nice-Sophia Antipolis/ActiveEon
+ * Contact: proactive@ow2.org or contact@activeeon.com
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; version 3 of
+ * the License.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
+ * USA
+ *
+ * If needed, contact us to obtain a release under GPL Version 2
+ * or a different license than the GPL.
+ *
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
+ *  Contributor(s):
+ *
+ * ################################################################
+ * $$ACTIVEEON_INITIAL_DEV$$
+ */
 package org.objectweb.proactive.api;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,6 +44,7 @@ import java.util.Set;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.runtime.ProActiveRuntime;
 import org.objectweb.proactive.core.runtime.RuntimeFactory;
+import org.objectweb.proactive.core.runtime.broadcast.BroadcastDisabledException;
 import org.objectweb.proactive.core.runtime.broadcast.LocalBTCallback;
 import org.objectweb.proactive.core.runtime.broadcast.RTBroadcaster;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -20,10 +58,13 @@ public class PARuntime {
      * A multicast group is defined using the
      * {@link CentralPAPropertyRepository#PA_RUNTIME_BROADCAST_ADDRESS} and
      * {@link CentralPAPropertyRepository#PA_RUNTIME_BROADCAST_PORT}.
-     * @return an array of uris of the ProActive Runtimes discovered locally (via broadcast). If broadcaster is not enabled an empty array is returned.
+     * @return an array of uris of the ProActive Runtimes discovered locally (via broadcast)
+     * @throws BroadcastDisabledException thrown if the broadcast feature is disabled
+     * @throws IOException thrown when the sending of the discovery request has failed
      *
     */
-    protected synchronized static URI[] findRuntimesURI() {
+    protected synchronized static URI[] findRuntimesURI() throws BroadcastDisabledException, IOException {
+
         RTBroadcaster rtBroadcaster = RTBroadcaster.getInstance();
         if (rtBroadcaster != null) {
             LocalBTCallback lbtc = rtBroadcaster.getLocalBTCallback();
@@ -48,15 +89,18 @@ public class PARuntime {
      * {@link CentralPAPropertyRepository#PA_RUNTIME_BROADCAST_ADDRESS} and
      * {@link CentralPAPropertyRepository#PA_RUNTIME_BROADCAST_PORT}.
      * @return a set contains ProActive Runtimes discovered locally (via broadcast)
+     * @throws BroadcastDisabledException  thrown if the broadcast feature is disabled
+     * @throws IOException thrown when the sending of the discovery request has failed
      *
      */
-    public static Set<ProActiveRuntime> findRuntimes() {
+    public static Set<ProActiveRuntime> findRuntimes() throws BroadcastDisabledException, IOException {
 
         URI[] uris = findRuntimesURI();
 
         Set<ProActiveRuntime> paRTs = new HashSet<ProActiveRuntime>(uris.length);
 
-        // Search all ProActive Runtimes and ignore failing ones
+        // add the ProActive Runtimes received from the findRuntimesURI() 
+        // to the set while ignoring the failing ones
         for (URI url : uris) {
             try {
                 ProActiveRuntime pa = RuntimeFactory.getRuntime(url.toString());
@@ -68,4 +112,5 @@ public class PARuntime {
 
         return paRTs;
     }
+
 }

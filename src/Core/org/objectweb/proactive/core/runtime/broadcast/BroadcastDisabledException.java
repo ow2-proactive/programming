@@ -6,7 +6,7 @@
  *    Enterprise Grids & Clouds
  *
  * Copyright (C) 1997-2010 INRIA/University of
- * 				Nice-Sophia Antipolis/ActiveEon
+ *              Nice-Sophia Antipolis/ActiveEon
  * Contact: proactive@ow2.org or contact@activeeon.com
  *
  * This library is free software; you can redistribute it and/or
@@ -36,16 +36,18 @@
  */
 package org.objectweb.proactive.core.runtime.broadcast;
 
-import java.io.IOException;
+public class BroadcastDisabledException extends Exception {
 
+    public BroadcastDisabledException() {
+        super();
+    }
 
-public interface RTBroadcasterMessage {
-    //
-    public void sendCreation() throws IOException;
+    public BroadcastDisabledException(String message) {
+        super(message);
+    }
 
-    //
-    // -- On veut savoir quels sont les runtimes sur le r�seau
-    // -----------------------------------------------
-    //
-    public void sendDiscover() throws IOException;
+    public BroadcastDisabledException(String message, Exception cause) {
+        super(message, cause);
+    }
+
 }

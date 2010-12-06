@@ -55,14 +55,14 @@ class RTBroadcastActionDefaultImpl implements RTBroadcastAction {
     //
     // -- NEW JVM -----------------------------------------------
     //
-    public void creationHandler(String url) {
+    public void creationHandler(String url) throws BroadcastDisabledException {
         //  just do nothing by default
     }
 
     //
     // -- DISCOVER -----------------------------------------------
     //
-    public void discoverHandler(String url) {
+    public void discoverHandler(String url) throws BroadcastDisabledException {
         //--Check if the message is coming from me. in this case -> no action
         if (url.equals(RTBroadcaster.getInstance().getCallbackUri().toString())) {
             // we are the sender of the notification

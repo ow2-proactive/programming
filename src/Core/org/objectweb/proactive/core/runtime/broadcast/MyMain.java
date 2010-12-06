@@ -48,7 +48,7 @@ import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 public class MyMain {
     private static RTBroadcaster rtBrodcaster;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, BroadcastDisabledException {
         System.out.println("runtime : " + ProActiveRuntimeImpl.getProActiveRuntime().getURL());
 
         //--Running the listening thread
