@@ -9,7 +9,7 @@
 		<compile_extension module="calcium" />
 		
 		<echo>Compiling stubs for Calcium</echo>
-		<generate_stub_for_class srcdir="${cl.extensions.dir}"  class="org.objectweb.proactive.extensions.calcium.task.Task" />
+		<generate_stub_for_class srcdir="${cl.extensions.dir}"  class="org/objectweb/proactive/extensions/calcium/task/Task" />
 		<generate_stub_for_pkg   srcdir="${cl.extensions.dir}"  package="org.objectweb.proactive.extensions.calcium.environment.proactive" />
 	</target>
 </project>
