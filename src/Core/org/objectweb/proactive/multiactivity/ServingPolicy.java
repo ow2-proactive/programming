@@ -13,6 +13,6 @@ public interface ServingPolicy {
 	 * @param graph
 	 * @return a sublist of the methods returned by the scheduler state as being queued
 	 */
-	public List<Request> runPolicy(SchedulerState state);
+	public List<Request> runPolicy(SchedulerState state, MultiActiveCompatibilityMap compatibilityMap);
 	
 }

@@ -67,36 +67,6 @@ public class MultiActiveService extends Service {
 	}
 	
 	/**
-	 * In this policy the scheduler will always schedule the oldest request in case the object is 
-	 * free, and in case methods are already running, it will schedule compatible methods from the
-	 * queue.
-	 * <br>
-	 * <b>ATTENTION:</b> Starvation may be possible.
-	 */
-	//TODO: maybe add a rejection counter to methods inside, so in case a method was postponed for
-	//more than X scheduling cycles, it would need to be chosen, or something like this
-	public void greedyMultiActiveServing(){
-		boolean success;
-		while (body.isAlive()) {
-			// try to launch nextc ompatible request -- synchrnoized inside
-			success = parallelServeFirstCompatible();
-			
-			//if we were not successful, let's wait until a new request arrives
-			synchronized (requestQueue) {
-				if (!success) {
-					try {
-						requestQueue.wait();
-						//logger.info(this.body.getID()+" Greedy scheduler - wake up");
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-	}
-	
-	/**
 	 * Scheduling based on a user-defined policy
 	 * @param policy
 	 */
@@ -109,21 +79,21 @@ public class MultiActiveService extends Service {
 				launched = 0;
 				// get the list of requests to run -- as calculated by the
 				// policy
-				chosen = policy.runPolicy(schedStateExposer);
-
-				for (Request mf : chosen) {
-					try {
-						internalParallelServe(mf);
-						requestQueue.getInternalQueue().remove(mf);
-						launched++;
-					} catch (ClassCastException e) {
-						// somebody implemented the RequestWrapper and passed an
-						// instance to us
-						// this is not good...
+				chosen = policy.runPolicy(schedStateExposer, compatibilityMap);
+				if (chosen!=null) {
+					for (Request mf : chosen) {
+						try {
+							internalParallelServe(mf);
+							requestQueue.getInternalQueue().remove(mf);
+							launched++;
+						} catch (ClassCastException e) {
+							// somebody implemented the RequestWrapper and passed an
+							// instance to us
+							// this is not good...
+						}
+	
 					}
-
 				}
-
 				// if we could not launch anything, that we wait until
 				// either a running serve finishes or a new req. arrives
 				if (launched == 0) {

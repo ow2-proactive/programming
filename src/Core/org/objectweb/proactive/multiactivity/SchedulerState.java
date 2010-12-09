@@ -1,6 +1,7 @@
 package org.objectweb.proactive.multiactivity;
 
 import java.util.List;
+import java.util.Set;
 
 import org.objectweb.proactive.core.body.request.Request;
 
@@ -10,6 +11,8 @@ import org.objectweb.proactive.core.body.request.Request;
  *
  */
 public interface SchedulerState {
+	
+	public Set<String> getExecutingMethodNameSet();
 	
 	/**
 	 * Returns the list of methods which are currently executing
