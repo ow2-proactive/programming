@@ -2,7 +2,7 @@ package org.objectweb.proactive.multiactivity;
 
 import java.util.List;
 
-import org.objectweb.proactive.multiactivity.MultiActiveService.RequestWrapper;
+import org.objectweb.proactive.core.body.request.Request;
 
 /**
  * Objects implementing this interface can be used to interrogate the scheduler's state.
@@ -15,7 +15,9 @@ public interface SchedulerState {
 	 * Returns the list of methods which are currently executing
 	 * @return
 	 */
-	public List<RequestWrapper> getExecutingMethods();
+	public List<String> getExecutingMethodNames();
+	
+	public List<Request> getExecutingRequests();
 	
 	/**
 	 * Returns only the instances of a given method which are
@@ -23,23 +25,20 @@ public interface SchedulerState {
 	 * @param name
 	 * @return
 	 */
-	public List<RequestWrapper> getExecutingMethods(String name);
+	public List<Request> getExecutingRequestsFor(String method);
 	
 	/**
 	 * Gives the content of the request queue of the scheduler.
 	 * Elements are sorted in descending order of their age
 	 * @return
 	 */
-	public List<RequestWrapper> getQueueContents();
+	public List<Request> getQueueContents();
 	
 	/**
 	 * Returns the first element of the queue, or null in case
 	 * the queue is empty 
 	 * @return
 	 */
-	public RequestWrapper getOldestInTheQueue();
-	
-	
-	public boolean selectForExecution(List<RequestWrapper> requests);
+	public Request getOldestInTheQueue();
 
 }

@@ -13,23 +13,23 @@ import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
 import org.objectweb.proactive.annotation.multiactivity.Modifies;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
 
-public class MultiActiveAnnotationProcesser {
+public class MultiActiveAnnotationProcessor {
 
 	/**
 	 * Information contained in the annotations is read and stored in this structure.
 	 */
 	private Map<String, MultiActiveAnnotations> methodInfo = new HashMap<String, MultiActiveAnnotations>();
 	
-	private Map<String, List<String>> compatibilityGraph;
+	private Map<String, List<String>> compatibilityMap;
 	
 	private Map<String, List<String>> invalidReferences;
 	
 	private Class<?> thisClass;
 	
-	public MultiActiveAnnotationProcesser(Class<?> toWorkWith){
+	public MultiActiveAnnotationProcessor(Class<?> toWorkWith){
 		thisClass = toWorkWith;
 		readMethodInfos();
-		generateCompatibilityGraph();
+		generateCompatibilityMap();
 	}
 
 	/**
@@ -38,8 +38,8 @@ public class MultiActiveAnnotationProcesser {
 	 * is put into the {@link #methodInfo} structure.
 	 */
 	private void readMethodInfos() {
-		try {
-			for (Method d : thisClass.getMethods()) {
+		for (Method d : thisClass.getMethods()) {
+			try {
 				if (methodInfo.get(d.getName())==null) {
 					methodInfo.put(d.getName(), new MultiActiveAnnotations());
 				}
@@ -58,18 +58,26 @@ public class MultiActiveAnnotationProcesser {
 				if (re!=null) {
 					methodInfo.get(d.getName()).setReads(re);
 				}
-				//System.out.println(d.getName()+" "+cw+" "+mo+" "+re);
+
+			} catch (SecurityException e) {
+				e.printStackTrace();
 			}
-		} catch (SecurityException e) {
-			e.printStackTrace();
 		}
+		
+		Iterator<String> i = methodInfo.keySet().iterator();
+		while (i.hasNext()) {
+			if (methodInfo.get(i.next()).isEmpty()) {
+				i.remove();
+			}
+		}
+		
 	}
 	
 	/**
 	 * Creates the compatibility graph based on the annotations.
 	 * @return
 	 */
-	private void generateCompatibilityGraph() {
+	private void generateCompatibilityMap() {
 		Map<String, List<String>> graph  = new HashMap<String, List<String>>();
 		//for all methods
 		for (String method : methodInfo.keySet()) {
@@ -103,7 +111,7 @@ public class MultiActiveAnnotationProcesser {
 		//process the read-write stuff
 		for (String method : methodInfo.keySet()){
 			for (String other : methodInfo.keySet()) {				
-				Boolean areOk = areDisjoint(method, other);
+				Boolean areOk = doNotInterfere(method, other);
 				if (Boolean.TRUE.equals(areOk)) {
 					graph.get(method).add(other);
 					graph.get(other).add(method);
@@ -123,11 +131,11 @@ public class MultiActiveAnnotationProcesser {
 			}
 		}
 		
-		compatibilityGraph = graph;
+		compatibilityMap = graph;
 	}
 	
-	public Map<String, List<String>> getCompatibilityGraph(){
-		return compatibilityGraph;
+	public MultiActiveCompatibilityMap getCompatibilityMap(){
+		return new MultiActiveCompatibilityMap(compatibilityMap);
 	} 
 	
 	public Map<String, List<String>> getInvalidReferences(){
@@ -189,14 +197,14 @@ public class MultiActiveAnnotationProcesser {
 	 * <ul>
 	 *  <li>true - the two methods are compatible</li>
 	 *  <li>false - the two methods concurrently access resources</li>
-	 *  <li>null - impossible to decide (one of the methods lacks annotations about resources)</li>
+	 *  <li>null - the two methods concurrently access resources (one of the methods lacks annotations about resources)</li>
 	 * </ul>
 	 */
-	private Boolean areDisjoint(String m1, String m2) {
+	private Boolean doNotInterfere(String m1, String m2) {
 		MultiActiveAnnotations maa1 = methodInfo.get(m1);
 		MultiActiveAnnotations maa2 = methodInfo.get(m2);
 		
-		if ((maa1==null || maa2==null) || 
+		if ((maa1==null || maa2==null) || (maa1.isEmpty() || maa2.isEmpty()) ||
 				(maa1.getModifies()==null && maa1.getReads()==null) || 
 				(maa2.getModifies()==null && maa2.getReads()==null)) {
 			return null;
@@ -277,6 +285,10 @@ public class MultiActiveAnnotationProcesser {
 		
 		public String[] getModifies(){
 			return modifiesVars!=null ? modifiesVars.value() : new String[0]; 
+		}
+		
+		public boolean isEmpty(){
+			return (modifiesVars==null && readVars==null && compatibleWith==null);
 		}
 	}
 	
