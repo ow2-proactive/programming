@@ -12,18 +12,30 @@ import org.objectweb.proactive.core.body.request.Request;
  */
 public interface SchedulerState {
 	
+	/**
+	 * Returns the set of methods which are currently executing. Even if 
+	 * a method is executing in multiple instances, it will appear only 
+	 * once in this set.
+	 * @return
+	 */
 	public Set<String> getExecutingMethodNameSet();
 	
 	/**
-	 * Returns the list of methods which are currently executing
+	 * Returns the list of methods which are currently executing. If a method
+	 * is executing in multiple instances, it will appear multiple times in
+	 * this list.
 	 * @return
 	 */
 	public List<String> getExecutingMethodNames();
 	
+	/**
+	 * Returns the list of requests which are currently executing.
+	 * @return
+	 */
 	public List<Request> getExecutingRequests();
 	
 	/**
-	 * Returns only the instances of a given method which are
+	 * Returns only the instances of a given method name which are
 	 * executing
 	 * @param name
 	 * @return
