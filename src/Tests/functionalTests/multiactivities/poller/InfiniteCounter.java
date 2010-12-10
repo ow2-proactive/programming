@@ -24,7 +24,7 @@ public class InfiniteCounter implements RunActive {
 	@Override
 	public void runActivity(Body body) {
 		if (multiActive) {
-			(new MultiActiveService(body)).multiActiveServing();
+			(new MultiActiveService(body)).policyServing(ServingPolicyFactory.getMaxThreadMultiActivityPolicy(2));
 		} else {
 			(new MultiActiveService(body)).policyServing(ServingPolicyFactory.getSingleActivityPolicy());
 		}

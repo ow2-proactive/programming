@@ -6,7 +6,14 @@ import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
+import org.objectweb.proactive.multiactivity.ServingPolicy;
+import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
+/**
+ * Class to test ping-pong-like interactions
+ * @author Izso
+ *
+ */
 public class Pinger implements RunActive {
 	private Integer count = 5;
 	private Pinger other;
@@ -25,6 +32,10 @@ public class Pinger implements RunActive {
 		this.other = other;
 	}
 	
+	/**
+	 * Set the pair of this object
+	 * @return
+	 */
 	public Pinger getOther() {
 		return this.other;
 	}
@@ -32,13 +43,18 @@ public class Pinger implements RunActive {
 	@Override
 	public void runActivity(Body body) {
 		if (this.multiActive) {
-			(new MultiActiveService(body)).greedyMultiActiveServing();
+			ServingPolicy greedy = ServingPolicyFactory.getGreedyMultiActivityPolicy();
+			(new MultiActiveService(body)).policyServing(greedy);
 		} else {
 			(new Service(body)).fifoServing();
 		}
 		
 	}
 	
+	/**
+	 * Call the pair's ping method
+	 * @return
+	 */
 	@CompatibleWith({"pong", "startWithPing"})
 	public Integer pong(){
 		count--;
@@ -47,6 +63,10 @@ public class Pinger implements RunActive {
 		return count;
 	}
 	
+	/**
+	 * Call the pair's pong method
+	 * @return
+	 */
 	@CompatibleWith({"ping", "startWithPing"})
 	public Integer ping(){
 		count--;
@@ -55,11 +75,19 @@ public class Pinger implements RunActive {
 		return count;
 	}
 	
+	/**
+	 * Method to start off -- it will call the pair's ping method 
+	 * @return
+	 */
 	@CompatibleWith({"ping", "pong"})
 	public Integer startWithPing(){
 		return other.ping();
 	}
 	
+	/**
+	 * Method to start off -- that will deadblock
+	 * @return
+	 */
 	public Integer startWithPong(){
 		return other.pong();
 	}
