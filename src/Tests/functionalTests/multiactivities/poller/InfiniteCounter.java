@@ -31,7 +31,7 @@ public class InfiniteCounter implements RunActive {
 		
 	}
 	
-	@CompatibleWith({"pollValue"})
+	@CompatibleWith({"pollValue", "noReturnPollValue"})
 	public void countToInfinity(){
 		System.out.println("Counting to infinity!");
 		while (value!=null) {
@@ -39,6 +39,14 @@ public class InfiniteCounter implements RunActive {
 				value++;
 			}
 		}
+	}
+	
+	@CompatibleWith({"countToInfinity"})
+	public Long noReturnPollValue(){
+		while (value!=-1) {
+			// ...
+		}
+		return value;
 	}
 	
 	@CompatibleWith({"*"})

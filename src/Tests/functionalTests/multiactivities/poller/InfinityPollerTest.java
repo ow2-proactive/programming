@@ -34,4 +34,18 @@ public class InfinityPollerTest {
 		}
 	}
 	
+	@Test(timeout=8000)
+	public void blockingMultiActiveTest() throws ActiveObjectCreationException, NodeException, InterruptedException{
+		Object[] constrPrm = { true };
+		InfiniteCounter cti = PAActiveObject.newActive(InfiniteCounter.class, constrPrm);
+		
+		System.out.println("TEST: will block, because of bads annotations");
+		cti.countToInfinity();
+		
+		System.out.println("Infinite method which does not let others poll the value: "+cti.noReturnPollValue());
+		for (int i=0; i<4; i++) {
+			System.out.println(cti.pollValue());			
+		}
+	}
+	
 }
