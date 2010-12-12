@@ -48,7 +48,7 @@ public class MultiActiveService extends Service {
      */
 	public void multiActiveServing(){
 		boolean success;
-		while (body.isAlive()) {
+		while (body.isActive()) {
 			// try to launch next request -- synchrnoized inside
 			success = parallelServeOldestOptimal();
 			
@@ -74,7 +74,7 @@ public class MultiActiveService extends Service {
 		List<Request> chosen;
 		int launched;;
 		
-		while (body.isAlive()) {
+		while (body.isActive()) {
 			synchronized (requestQueue) {
 				launched = 0;
 				// get the list of requests to run -- as calculated by the

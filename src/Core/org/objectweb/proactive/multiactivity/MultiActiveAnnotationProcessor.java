@@ -244,6 +244,17 @@ public class MultiActiveAnnotationProcessor {
 		
 	}
 	
+	public static Boolean areAnnotationsCorrect(Class c) {
+		return (new MultiActiveAnnotationProcessor(c)).areAnnotationsCorrect();
+	}
+	
+	public static Map<String, List<String>> getInvalidReferences(Class c) {
+		return (new MultiActiveAnnotationProcessor(c)).getInvalidReferences();
+	}
+	
+	public static MultiActiveCompatibilityMap getCompatibilityMap(Class c) {
+		return (new MultiActiveAnnotationProcessor(c)).getCompatibilityMap();
+	}
 	
 	/**
 	 * Container for annotations of methods.
