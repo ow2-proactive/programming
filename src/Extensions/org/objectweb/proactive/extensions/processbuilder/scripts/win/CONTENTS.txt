@@ -1,0 +1,16 @@
+This folder is the scripts folder of OSProcessBuilder for Windows machines.
+
+For normal functioning, please verify:
+
+PERMISSIONS:
+  The process that calls parunas.exe requires the SE_INCREASE_QUOTA_NAME privilege and may require the SE_ASSIGNPRIMARYTOKEN_NAME.
+  The user profile of the client process will be loaded if and only if the process that calls parunas.exe
+  is part of Administrators group.       
+  
+CONTENTS:
+  This folder has to contain the following files:
+  * parunas.exe - tool that creates a process under a specific user
+  * parunas.cpp - the sources of the tool
+  
+  
+

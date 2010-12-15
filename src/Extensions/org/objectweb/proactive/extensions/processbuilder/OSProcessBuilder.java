@@ -165,6 +165,7 @@ public abstract class OSProcessBuilder {
      * 
      * @param command
      *            A string array containing the program and its arguments
+     *            
      */
     public OSProcessBuilder(String... command) {
         this(new ProcessBuilder(command), null, null);
@@ -180,7 +181,7 @@ public abstract class OSProcessBuilder {
      * @param command
      *            The list containing the program and its arguments
      * @throws NullPointerException
-     *             If the command argument is null
+     *             If the command argument is null       
      */
     public OSProcessBuilder(List<String> command) throws NullPointerException {
         this(new ProcessBuilder(command), null, null);

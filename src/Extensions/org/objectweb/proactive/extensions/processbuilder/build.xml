@@ -5,8 +5,9 @@
 	
 	<!-- script files --> 
 	<import file="scripts/linux/build_linux.xml" />	
+	<import file="scripts/win/build_win.xml" />	
 	
-	<target name="-compile" depends="-pb.linux.scripts">
+	<target name="-compile" depends="-pb.windows.scripts, -pb.linux.scripts">
 		<compile_extension module="processbuilder" dontcopyfiles="**/scripts/**" />
 	</target>
 	
