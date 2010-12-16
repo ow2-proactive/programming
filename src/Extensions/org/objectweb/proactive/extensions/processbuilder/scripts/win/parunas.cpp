@@ -48,8 +48,7 @@ static BOOL bVerbose = false;
 BOOL GetLogonSID(HANDLE hToken, PSID *ppsid);
 VOID FreeLogonSID (PSID *ppsid);
 int StartInteractiveClientProcess (
-	WCHAR* username,       // client to log on
-	WCHAR* domain,         // domain of client's account
+	WCHAR* username,       // client to log on	
 	WCHAR* password,       // client's password
 	WCHAR* commandLine,      // command line to execute
 	WCHAR* workingDirectory  // working dir of the process
@@ -75,11 +74,10 @@ void echo( bool on = true )
 int wmain(int argc, WCHAR **argv)
 {	
 	// The user is a valid account on the local computer
-	WCHAR username[32] = L"";         // = L"tutu"; // Valid username
-	WCHAR domain[32] = L"";           // = L".";    // Using local user account database
-	WCHAR password[32] = L"";         // = L"tutu"; // Johnny's password
-	WCHAR commandLine[32000] = L"";     // = L"C:\\Windows\\System32\\cmd.exe /c \"set & pause\"";
-	WCHAR* workingDirectory = NULL;     // [1024] = L"C:\\Temp";
+	WCHAR username[32] = L"";            // = L"tutu"; // Valid username	
+	WCHAR password[32] = L"";            // = L"tutu"; // Johnny's password
+	WCHAR commandLine[32000] = L"";      // = L"C:\\Windows\\System32\\cmd.exe /c \"set & pause\"";
+	WCHAR workingDirectory[32000] = L""; // [1024] = L"C:\\Temp";
 	BOOL bShowHelp = FALSE;	
 
 	int arg;
@@ -117,19 +115,12 @@ int wmain(int argc, WCHAR **argv)
 			}
 			swprintf_s(username, L"%ws", argp);
 			break;
-		case 'd': // Domain
-			if (len == 0) {				
-				bShowHelp = TRUE;
-			}
-			swprintf_s(domain, L"%ws", argp);
-			break;
 		case 'w': // Working directory
 			if (len == 0) {
 				printf("Please specify a value for the working directory option!");
 				bShowHelp = TRUE;
 			}
-			workingDirectory = (wchar_t *) malloc(len);
-			swprintf_s(workingDirectory, len, L"%ws", argp);
+			swprintf_s(workingDirectory, L"%ws", argp);
 			break;
 		case 'v': // Enable verbose mode
 			bVerbose = true;
@@ -148,11 +139,6 @@ int wmain(int argc, WCHAR **argv)
 	if (wcslen(username) == 0) {
 		printf("No username!\n");
 		bShowHelp = TRUE;
-	} else {
-		if (wcslen(domain) == 0) {
-			printf("No domain!\n");
-			bShowHelp = TRUE;
-		}
 	}
 
 	if (bShowHelp) {
@@ -162,8 +148,7 @@ int wmain(int argc, WCHAR **argv)
 			"Usage:\n"
 			"    parunas [options] <program>\n"
 			"Options:\n"
-			"    /u:<username>     -- The name of the user account under which to run the program. The password is read from stdin.\n"
-			"    /d:<domain>       -- User domain of the account.\n"	
+			"    /u:<username>     -- The name of the user account under which to run the program. The password is read from stdin.\n"			
 			"    /w:<dir>          -- The working directory.\n"
 			"    /v                -- Enable verbose mode.\n" 
 			"    /?                -- Display this help screen.\n"
@@ -186,8 +171,7 @@ int wmain(int argc, WCHAR **argv)
 
 	// Call StartInteractiveClientProcess()
 	int exitCode = StartInteractiveClientProcess (
-		username,      // client to log on
-		domain,        // domain of client's account
+		username,      // client to log on		
 		password,      // client's password
 		commandLine,     // command line to execute
 		workingDirectory // working directory
@@ -289,8 +273,7 @@ VOID FreeLogonSID (PSID *ppsid)
 }
 
 int StartInteractiveClientProcess(
-	WCHAR* username,        // client to log on
-	WCHAR* domain,          // domain of client's account
+	WCHAR* username,        // client to log on	
 	WCHAR* password,        // client's password
 	WCHAR* commandLine,       // command line to execute
 	WCHAR* workingDirectory   // working directory
@@ -310,7 +293,7 @@ int StartInteractiveClientProcess(
 	// Log the client on to the local computer.
 	if (!LogonUser(
 		username,
-		domain,
+		L".", // always local domain (local computer)
 		password,
 		LOGON32_LOGON_INTERACTIVE,
 		LOGON32_PROVIDER_DEFAULT,&hToken)) {
@@ -453,7 +436,7 @@ int StartInteractiveClientProcess(
 		TRUE,              // inherit system handles
 		NORMAL_PRIORITY_CLASS | CREATE_UNICODE_ENVIRONMENT, //| CREATE_NO_WINDOW // creation flags
 		environment,       // pointer to new environment block
-		workingDirectory,// name of current directory
+		(wcslen(workingDirectory) == 0 ? NULL : workingDirectory),// name of current directory
 		&si,               // pointer to STARTUPINFO structure
 		&pi                // receives information about new process
 		);
