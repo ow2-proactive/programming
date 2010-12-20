@@ -40,11 +40,10 @@ public class GraphTest {
 		
 		//System.out.println("Going deeper into the rabbit hole..."+remaining.size());
 		
-		if (pivot.equals(7896)) {
-			System.out.println("Bingo!");
-		}
+		Set<Integer> f = pivotOwner.makeForwardMaster(pivot);
+		pivotOwner.markForward(pivotOwner, pivot, null);
 		
-		Set<Integer> f = pivotOwner.markForward(pivot, null);
+		
 		Set<Integer> b = pivotOwner.markBackward(pivot, null);
 		
 		f.retainAll(remaining);

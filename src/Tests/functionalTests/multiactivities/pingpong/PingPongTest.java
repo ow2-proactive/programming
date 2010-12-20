@@ -34,7 +34,7 @@ public class PingPongTest {
 	 * @throws ActiveObjectCreationException
 	 * @throws NodeException
 	 */
-	@Test(timeout=8000)
+	@Test
 	public void testMultiActive() throws ActiveObjectCreationException, NodeException{
 		Object[] constrPrm = { true };
 		Pinger a = PAActiveObject.newActive(Pinger.class, constrPrm);

@@ -1,5 +1,8 @@
 package functionalTests.multiactivities.graph;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,13 +12,22 @@ import java.util.Set;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.RunActive;
-import org.objectweb.proactive.Service;
+import org.objectweb.proactive.annotation.multiactivity.Compatible;
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
-import org.objectweb.proactive.annotation.multiactivity.Reads;
+import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
+import org.objectweb.proactive.annotation.multiactivity.DefineRules;
+import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
 import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
-public class VertexGroup implements RunActive {
+@DefineGroups({
+	@Group(name = "", selfCompatible = false),
+	@Group(name = "", selfCompatible = false)
+})
+@DefineRules({
+	@Compatible({"a","a"})
+})
+public class VertexGroup implements RunActive, Serializable {
 	
 	private Map<Integer, Set<Integer>> vertices;
 	
@@ -27,7 +39,11 @@ public class VertexGroup implements RunActive {
 	
 	private Map<Integer, List<Integer>> forwardMarked = new HashMap<Integer, List<Integer>>();
 	
+	private Map<Integer, Map<VertexGroup, Integer>> forwardWorking = new HashMap<Integer, Map<VertexGroup, Integer>>();
+	
 	private Map<Integer, List<Integer>> backwardMarked = new HashMap<Integer, List<Integer>>();
+	
+	private Map<Integer, Map<VertexGroup, Integer>> backwardWorking = new HashMap<Integer, Map<VertexGroup, Integer>>();
 
 	private String name;
 	
@@ -52,7 +68,12 @@ public class VertexGroup implements RunActive {
 		this.name = name;
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter"})
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	public String getName() {
+		return name;
+	}
+	
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public void cleanupAfter(Integer pivot) {
 		synchronized (forwardMarked) {
 			forwardMarked.remove(pivot);
@@ -62,19 +83,17 @@ public class VertexGroup implements RunActive {
 		}
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter"})
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public void addToScc(Set<Integer> verts){
 		synchronized (sccMarked) {
 			sccMarked.addAll(verts);
 		}
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter"})
-	public Set<Integer> markForward(Integer pivot, Set<Integer> from) {
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	public void markForward(VertexGroup master, Integer pivot, Set<Integer> from) {
 		//System.out.println("I'm "+name+" doing "+from);
 		Map<VertexGroup, Set<Integer>> buffer = new HashMap<VertexGroup, Set<Integer>>();
-		Map<VertexGroup, Set<Integer>> result = new HashMap<VertexGroup, Set<Integer>>();
-		Set<Integer> resultSet = new HashSet<Integer>();
 		List<Integer> myForwardMarked = new LinkedList<Integer>();
 		
 
@@ -103,7 +122,8 @@ public class VertexGroup implements RunActive {
 		}
 		
 		if (added==0) {
-			return new HashSet<Integer>();
+			master.finishedWork(pivot, this, 0);
+			return;
 		}
 		
 		synchronized (sccMarked) {
@@ -137,18 +157,22 @@ public class VertexGroup implements RunActive {
 			forwardMarked.get(pivot).addAll(myForwardMarked);
 		}
 		
-		resultSet.addAll(myForwardMarked);
-		
 		for (VertexGroup vg : buffer.keySet()) {
-			result.put(vg, vg.markForward(pivot, buffer.get(vg)));
-			resultSet.addAll(result.get(vg));
+			master.addedWorker(pivot, vg, 0);
+			vg.markForward(master, pivot, buffer.get(vg));
 		}
 		
-		return resultSet;
+		synchronized (forwardMarked) {
+			try {
+				master.finishedWork(pivot, this, 0);
+			} catch (ConcurrentModificationException ccme) {
+				master.finishedWork(pivot, this, 0);
+			}
+		}		
 		
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter"})
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public Set<Integer> markBackward(Integer pivot, Set<Integer> from) {
 		//System.out.println("I'm "+name+" doing bacward "+from);
 		Map<VertexGroup, Set<Integer>> buffer = new HashMap<VertexGroup, Set<Integer>>();
@@ -225,7 +249,7 @@ public class VertexGroup implements RunActive {
 		
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter"})
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public Set<Integer> getVertices(){
 		HashSet<Integer> ret = new HashSet<Integer>();
 		for (Set<Integer> setI : vertices.values()) {
@@ -243,7 +267,101 @@ public class VertexGroup implements RunActive {
 		return ret;
 	}
 	
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	public Boolean addedWorker(int pivot, VertexGroup who, int seqNumber){
+		synchronized (forwardWorking) {
+			//System.out.println("adding "+who.getName()+" -- "+pivot);
+			if (forwardWorking.get(pivot)==null) {
+				forwardWorking.put(pivot, new HashMap<VertexGroup, Integer>());
+			}
+			
+			for (VertexGroup vg : forwardWorking.get(pivot).keySet()) {
+				if (vg.getName().equals(who.getName())) {
+					Integer old = forwardWorking.get(pivot).get(who);
+					forwardWorking.get(pivot).put(vg, old==null ? 1 : old+1);
+					
+					forwardWorking.notify();
+					return true;
+				}
+			}
+			
+			forwardWorking.get(pivot).put(who, 1);
+			
+		}
+		return true;
+	}
 	
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	public Boolean finishedWork(int pivot, VertexGroup who, int seqNumber){
+		synchronized (forwardWorking) {
+			//System.out.println("finished "+who.getName()+" -- "+pivot);
+			if (forwardWorking.get(pivot)==null) {
+				forwardWorking.put(pivot, new HashMap<VertexGroup, Integer>());
+			}
+			
+			for (VertexGroup vg : forwardWorking.get(pivot).keySet()) {
+				if (vg.getName().equals(who.getName())) {
+					Integer old = forwardWorking.get(pivot).get(vg);
+					
+					forwardWorking.get(pivot).put(vg, old==null ? -1 : old-1);
+					forwardWorking.notify();
+					
+					return true;
+				}
+			}
+			
+			forwardWorking.get(pivot).put(who, -1);
+			forwardWorking.notify();
+		}
+		return true;
+	}
+	
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	public Set<Integer> makeForwardMaster(final Integer pivot) {
+		addedWorker(pivot, this, 0);
+		boolean ok = false;
+		
+		synchronized (forwardWorking) {
+			while (!ok){
+				Map<VertexGroup, Integer> fw = forwardWorking.get(pivot);
+				ok = true;
+				
+				for (VertexGroup dvg : fw.keySet()){
+					if (fw.get(dvg)!=0){
+						ok = false;
+						break;
+					}
+				}
+				
+				if (!ok) {
+					try {
+						//System.out.println("Sleeping...");
+						forwardWorking.wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		//System.out.println("Finished pivot "+pivot);
+		Set<Integer> result = new HashSet<Integer>();
+		
+		Map<VertexGroup, Integer> fw = forwardWorking.get(pivot);
+		for (VertexGroup dvg : fw.keySet()){
+			result.addAll(dvg.getForwardMarked(pivot));
+		}
+		
+		return result;
+	}
+	
+	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	public Collection<Integer> getForwardMarked(Integer pivot) {
+		synchronized (forwardMarked) {
+			return forwardMarked.get(pivot)==null ? new HashSet<Integer>() : forwardMarked.get(pivot); 
+		}
+	}
+
 	@Override
 	public void runActivity(Body body) {
 		MultiActiveService mas = (new MultiActiveService(body));

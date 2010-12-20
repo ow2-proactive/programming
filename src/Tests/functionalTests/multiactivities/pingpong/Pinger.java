@@ -1,9 +1,15 @@
 package functionalTests.multiactivities.pingpong;
 
+import org.junit.Rule;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
+import org.objectweb.proactive.annotation.multiactivity.Compatible;
 import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
+import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
+import org.objectweb.proactive.annotation.multiactivity.DefineRules;
+import org.objectweb.proactive.annotation.multiactivity.Group;
+import org.objectweb.proactive.annotation.multiactivity.MemberOf;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
 import org.objectweb.proactive.multiactivity.ServingPolicy;
@@ -14,6 +20,12 @@ import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
  * @author Izso
  *
  */
+@DefineGroups(
+		{
+			@Group(name = "gPing", selfCompatible = true),
+			@Group(name = "gPong", selfCompatible = true)
+		}
+)
 public class Pinger implements RunActive {
 	private Integer count = 5;
 	private Pinger other;
@@ -55,7 +67,7 @@ public class Pinger implements RunActive {
 	 * Call the pair's ping method
 	 * @return
 	 */
-	@CompatibleWith({"pong", "startWithPing"})
+	@MemberOf({"gPong"})
 	public Integer pong(){
 		count--;
 		System.out.print("Pong"+count+"!");
@@ -67,7 +79,7 @@ public class Pinger implements RunActive {
 	 * Call the pair's pong method
 	 * @return
 	 */
-	@CompatibleWith({"ping", "startWithPing"})
+	@MemberOf({"gPing"})
 	public Integer ping(){
 		count--;
 		System.out.print("Ping"+count+"!");
@@ -79,7 +91,7 @@ public class Pinger implements RunActive {
 	 * Method to start off -- it will call the pair's ping method 
 	 * @return
 	 */
-	@CompatibleWith({"ping", "pong"})
+	@MemberOf({"gPong","gPing"})
 	public Integer startWithPing(){
 		return other.ping();
 	}
