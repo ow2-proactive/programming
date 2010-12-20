@@ -18,7 +18,7 @@ import org.objectweb.proactive.core.body.request.Request;
  * <br>The decision of which methods can run in parallel is made
  * based on annotations set by the user. These annotations are to be found in the <i>
  * org.objectweb.proactive.annotation.multiactivity</i> package.
- * @author Izso
+ * @author Zsolt István
  *
  */
 public class MultiActiveService extends Service {
@@ -221,7 +221,7 @@ public class MultiActiveService extends Service {
 	/**
 	 * By wrapping the request, we can pass the 'method' to the 
 	 * outside world without actually exposing internal information. 
-	 * @author Izso
+	 * @author Zsolt István
 	 *
 	 */
 	private class RunnableRequest implements Runnable {

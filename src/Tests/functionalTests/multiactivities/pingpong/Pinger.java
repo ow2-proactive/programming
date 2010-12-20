@@ -16,7 +16,7 @@ import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
 /**
  * Class to test ping-pong-like interactions
- * @author Izso
+ * @author Zsolt István
  *
  */
 @DefineGroups(

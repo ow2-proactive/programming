@@ -7,7 +7,7 @@ import org.objectweb.proactive.core.body.request.Request;
 
 /**
  * Objects implementing this interface can be used to interrogate the scheduler's state.
- * @author Izso
+ * @author Zsolt István
  *
  */
 public interface SchedulerState {

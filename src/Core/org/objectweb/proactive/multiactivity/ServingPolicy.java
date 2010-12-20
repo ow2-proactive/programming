@@ -6,7 +6,7 @@ import org.objectweb.proactive.core.body.request.Request;
 
 /**
  * Interface for describing the inner policy of the MultiActiveService
- * @author Izso
+ * @author Zsolt István
  *
  */
 public interface ServingPolicy {	

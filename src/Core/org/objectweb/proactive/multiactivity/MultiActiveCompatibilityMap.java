@@ -13,7 +13,7 @@ import org.objectweb.proactive.core.body.request.Request;
 /**
  * This class represents a static compatibility map built based on the annotations found in 
  * the underlying class. It has methods for querying these relations.
- * @author Izso
+ * @author Zsolt István
  *
  */
 public class MultiActiveCompatibilityMap {

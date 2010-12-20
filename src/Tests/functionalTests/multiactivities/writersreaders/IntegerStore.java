@@ -11,7 +11,7 @@ import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 /**
  * This class simply wraps around an integer value and exposes a few methods for interacting with
  * this value.
- * @author Izso
+ * @author Zsolt István
  *
  */
 public class IntegerStore implements RunActive {

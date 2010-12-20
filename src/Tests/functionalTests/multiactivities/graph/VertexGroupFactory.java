@@ -21,7 +21,7 @@ public class VertexGroupFactory {
 	 * @param numGroups number of vertex groups to create
 	 * @return
 	 */
-	static VertexGroup[] getVertexGroupsFor(String[] edges, int numhosts) {
+	static VertexGroup[] getVertexGroupsFor(String[] edges, int numhosts, boolean fromNodes, String[] nodes) {
 		int numGroups = numhosts;
 		Map<Integer, Set<Integer>> graph = new HashMap<Integer, Set<Integer>>();
 		Map<Integer, Integer> location = new HashMap<Integer, Integer>();
@@ -42,7 +42,7 @@ public class VertexGroupFactory {
 		for (int i=0 ; i<numGroups; i++) {
 			VertexGroup toAdd;
 			try {
-				toAdd = (PAActiveObject.newActive(VertexGroup.class, null, NodeFactory.getDefaultNode().getNodeInformation().getURL()));
+				toAdd = (PAActiveObject.newActive(VertexGroup.class, null, fromNodes ? nodes[i] : null));
 			} catch (ActiveObjectCreationException e) {
 				e.printStackTrace();
 				return null;

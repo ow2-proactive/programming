@@ -44,7 +44,7 @@ public class MultiActiveAnnotationProcessor {
 	/**
 	 * This method will iterate through all methods from the underlying class, and
 	 * create a descriptor object containing all annotations extracted. This object
-	 * is put into the {@link #methodInfo} structure.
+	 * is put into the {@link #methodInfos} structure.
 	 */
 	private void readMethodInfos() {
 		for (Method d : thisClass.getMethods()) {
@@ -91,25 +91,40 @@ public class MultiActiveAnnotationProcessor {
 		
 	}
 	
+	/**
+	 * This method will process the defined groups and compatibility rules.
+	 * These are to be found at the class definition, and their processed versions
+	 * are put into the {@link #methodGroups} structure.
+	 */
 	private void readGroupInfos(){
+		//if there are any groups defined
 		if (thisClass.getAnnotation(DefineGroups.class)!=null){
 			DefineGroups defg = thisClass.getAnnotation(DefineGroups.class);
 			
+			//create the descriptor
 			for (Group g : defg.value()) {
 				MethodGroup mg = new MethodGroup();
 				mg.setSelfCompatible(g.selfCompatible());
 				methodGroups.put(g.name(), mg);
 			}
 			
+			//if there are rules defined
 			if (thisClass.getAnnotation(DefineRules.class)!=null) {
 				DefineRules defr = thisClass.getAnnotation(DefineRules.class);
 				
+				//iterate through the rules and
+				//add the compatible groups to each other's compatibility list
 				for (Compatible c : defr.value()) {
 					for (String name1 : c.value()) {
 						for (String name2 : c.value()) {
 							if (name1!=name2) {
-								methodGroups.get(name1).addCompatibleGroup(name2);
-								methodGroups.get(name2).addCompatibleGroup(name1);
+								//if one of the method names is wrong, we fail silently
+								//otherwise a wrongly written annotation would not make
+								//execution possible... :(
+								if (methodGroups.get(name1)!=null && methodGroups.get(name2)!=null) {
+									methodGroups.get(name1).addCompatibleGroup(name2);
+									methodGroups.get(name2).addCompatibleGroup(name1);
+								}
 							}
 						}
 					}
@@ -149,7 +164,10 @@ public class MultiActiveAnnotationProcessor {
 			}
 		}
 		
+		//go through the groups
 		for (String group : methodGroups.keySet()) {
+			
+			//if a group is self-compatible, add the members to each other's list
 			if (methodGroups.get(group).isSelfCompatible()) {
 				for (String method : methodGroups.get(group).getMembers()) {
 					if (graph.get(method)==null) {
@@ -159,6 +177,7 @@ public class MultiActiveAnnotationProcessor {
 				}
 			}
 			
+			//now add the members of compatible groups to each other's member's groups
 			for (String compGroup : methodGroups.get(group).getCompatibleGroups()) {
 				for (String method : methodGroups.get(group).getMembers()) {
 					if (graph.get(method)==null) {
@@ -170,8 +189,8 @@ public class MultiActiveAnnotationProcessor {
 		}
 		
 		
-		//check for bidirectionality of relations. if a compatibleWith is only
-		// expressed in one direction, it is deleted
+		//check for bidirectionality of relations. if a compatibility
+		//appears to be defined only in one direction, it is deleted
 		for (String method : graph.keySet()) {
 			Iterator<String> sit = graph.get(method).iterator();
 			while (sit.hasNext()) {
@@ -197,7 +216,7 @@ public class MultiActiveAnnotationProcessor {
 			}
 		}
 		
-		//to save space, all no-neighbour methods are removed from the graph
+		//to save space, all no-neighbor methods are removed from the graph
 		Iterator<String> sit = graph.keySet().iterator();
 		while (sit.hasNext()) {
 			if (graph.get(sit.next()).size()==0) {
@@ -226,13 +245,27 @@ public class MultiActiveAnnotationProcessor {
 				for (String ref : ann.getReads()) {
 					checkReferenceCorrectness(m, ref);
 				}
+				for (String group : ann.getGroups()) {
+					checkReferenceCorrectness(m, group);
+				}
+			}
+			
+			for (String group : methodGroups.keySet()) {
+				for (String compG : methodGroups.get(group).getCompatibleGroups()) {
+					checkReferenceCorrectness("", compG);
+				}
+				
+				for (String compM : methodGroups.get(group).getMembers()) {
+					checkReferenceCorrectness("", compM);
+				}
 			}
 		}
 		return invalidReferences;
 	}
 
 	private void checkReferenceCorrectness(String sourceMethod, String reference) {
-		if (!reference.startsWith("#") && !classHasPublicMethod(reference) && !classHasVariable(reference)) {
+		if (!reference.startsWith("#") && !classHasPublicMethod(reference) 
+				&& !classHasVariable(reference) && !methodGroups.keySet().contains(reference)) {
 			if (invalidReferences.get(sourceMethod)==null) {
 				invalidReferences.put(sourceMethod, new LinkedList<String>());
 			}
@@ -318,24 +351,59 @@ public class MultiActiveAnnotationProcessor {
 		
 	}
 	
+	/**
+	 * Checks if a class is annotated correctly. This means that all annotations contain only names
+	 * that are either variable names or method names. Groups have to define compatibility with other groups.
+	 * @param c Class to be verified
+	 * @return true if everything is ok
+	 */
 	public static Boolean areAnnotationsCorrect(Class c) {
 		return (new MultiActiveAnnotationProcessor(c)).areAnnotationsCorrect();
 	}
 	
+	/**
+	 * Checks if a class is annotated correctly, and returns a map of incorrect annotation elements.
+	 * The keys are the method names where the annotations are to be found, and the value is a list
+	 * of incorrect values.
+	 * <br>
+	 * NOTE: if the method name is empty, then the annotation is at the class level
+	 * @param c
+	 * @return
+	 */
 	public static Map<String, List<String>> getInvalidReferences(Class c) {
 		return (new MultiActiveAnnotationProcessor(c)).getInvalidReferences();
 	}
 	
+	/**
+	 * Checks if a class is annotated correctly, and if not, will print a message listing the location
+	 * of incorrectly written annotations.
+	 * @param c
+	 */
+	public static void printInvalidReferences(Class c) {
+		Map<String, List<String>> invalid = (new MultiActiveAnnotationProcessor(c)).getInvalidReferences();
+		for (String source : invalid.keySet()) {
+			System.out.println("At "+((source.length()>0)? "method " : "the definitions ")+source+":");
+			for (String ref : invalid.get(source)) {
+				System.out.println(" '"+ref+"'");
+			}
+		}
+	}
+	
+	/**
+	 * Returns the compatibility map of a class. 
+	 * <br>
+	 * NOTE: the annotations are not checked for correctness, and any incorrect annotation is ignored.
+	 * Use the checking methods to make sure everything will work as expected.
+	 * @param c
+	 * @return
+	 */
 	public static MultiActiveCompatibilityMap getCompatibilityMap(Class c) {
 		return (new MultiActiveAnnotationProcessor(c)).getCompatibilityMap();
 	}
 	
 	/**
-	 * Container for annotations of methods.
-	 * The getter methods are simplified to return arrays of
-	 * strings, thus we don't have to couple the methods in the 
-	 * multi-active-service to the actual annotation classes.
-	 * @author Izso
+	 * Descriptor for annotated methods
+	 * @author Zsolt István
 	 *
 	 */
 	protected class AnnotatedMethod {
@@ -383,6 +451,11 @@ public class MultiActiveAnnotationProcessor {
 		}
 	}
 	
+	/**
+	 * Descriptor for a group defined at the top of the class
+	 * @author Zsolt István
+	 *
+	 */
 	protected class MethodGroup {
 		private List<String> compatibleWith = new LinkedList<String>();
 		private List<String> members = new LinkedList<String>();
