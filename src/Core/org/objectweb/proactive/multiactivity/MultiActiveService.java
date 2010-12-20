@@ -1,5 +1,6 @@
 package org.objectweb.proactive.multiactivity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -195,7 +196,7 @@ public class MultiActiveService extends Service {
 		
 		if (asserve!=null) {
 			//logger.info(this.body.getID()+" Parallel serving '"+asserve.r.getMethodName()+"'");
-			(new Thread(asserve)).start();
+			(new Thread(asserve, body.getID()+" -> "+r.getMethodName())).start();
 		}
 		
 		return asserve;

@@ -13,7 +13,6 @@ import java.util.Set;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.annotation.multiactivity.Compatible;
-import org.objectweb.proactive.annotation.multiactivity.CompatibleWith;
 import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
 import org.objectweb.proactive.annotation.multiactivity.DefineRules;
 import org.objectweb.proactive.annotation.multiactivity.Group;
@@ -68,12 +67,12 @@ public class VertexGroup implements RunActive, Serializable {
 		this.name = name;
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public String getName() {
 		return name;
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public void cleanupAfter(Integer pivot) {
 		synchronized (forwardMarked) {
 			forwardMarked.remove(pivot);
@@ -83,14 +82,14 @@ public class VertexGroup implements RunActive, Serializable {
 		}
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public void addToScc(Set<Integer> verts){
 		synchronized (sccMarked) {
 			sccMarked.addAll(verts);
 		}
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public void markForward(VertexGroup master, Integer pivot, Set<Integer> from) {
 		//System.out.println("I'm "+name+" doing "+from);
 		Map<VertexGroup, Set<Integer>> buffer = new HashMap<VertexGroup, Set<Integer>>();
@@ -172,7 +171,7 @@ public class VertexGroup implements RunActive, Serializable {
 		
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public Set<Integer> markBackward(Integer pivot, Set<Integer> from) {
 		//System.out.println("I'm "+name+" doing bacward "+from);
 		Map<VertexGroup, Set<Integer>> buffer = new HashMap<VertexGroup, Set<Integer>>();
@@ -249,7 +248,7 @@ public class VertexGroup implements RunActive, Serializable {
 		
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public Set<Integer> getVertices(){
 		HashSet<Integer> ret = new HashSet<Integer>();
 		for (Set<Integer> setI : vertices.values()) {
@@ -267,7 +266,7 @@ public class VertexGroup implements RunActive, Serializable {
 		return ret;
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public Boolean addedWorker(int pivot, VertexGroup who, int seqNumber){
 		synchronized (forwardWorking) {
 			//System.out.println("adding "+who.getName()+" -- "+pivot);
@@ -291,7 +290,7 @@ public class VertexGroup implements RunActive, Serializable {
 		return true;
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public Boolean finishedWork(int pivot, VertexGroup who, int seqNumber){
 		synchronized (forwardWorking) {
 			//System.out.println("finished "+who.getName()+" -- "+pivot);
@@ -316,7 +315,7 @@ public class VertexGroup implements RunActive, Serializable {
 		return true;
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public Set<Integer> makeForwardMaster(final Integer pivot) {
 		addedWorker(pivot, this, 0);
 		boolean ok = false;
@@ -355,7 +354,7 @@ public class VertexGroup implements RunActive, Serializable {
 		return result;
 	}
 	
-	@CompatibleWith({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
+	@Compatible({"addToScc", "getVertices", "markForward", "markBackward", "cleanupAfter", "finishedWork", "addedWorker", "makeForwardMaster", "getForwardMarked", "getName"})
 	public Collection<Integer> getForwardMarked(Integer pivot) {
 		synchronized (forwardMarked) {
 			return forwardMarked.get(pivot)==null ? new HashSet<Integer>() : forwardMarked.get(pivot); 

@@ -1,10 +1,13 @@
 package org.objectweb.proactive.multiactivity;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.soap.encoding.soapenc.HashtableSerializer;
 import org.objectweb.proactive.core.body.request.Request;
 
 /**
@@ -14,13 +17,13 @@ import org.objectweb.proactive.core.body.request.Request;
  *
  */
 public class MultiActiveCompatibilityMap {
-	private final Map<String, List<String>> map;
+	private final Map<String, Set<String>> map;
 	
 	/**
 	 * Create the map from a data structure
 	 * @param map
 	 */
-	public MultiActiveCompatibilityMap(Map<String, List<String>> map) {
+	public MultiActiveCompatibilityMap(Map<String, Set<String>> map) {
 		this.map = map;
 	}
 	
@@ -40,8 +43,8 @@ public class MultiActiveCompatibilityMap {
 	 * @param method
 	 * @return
 	 */
-	public List<String> getCompatibilityListOf(String method) {
-		return (map.containsKey(method)) ? map.get(method) : new LinkedList<String>();
+	public Set<String> getCompatibilityOf(String method) {
+		return (map.containsKey(method)) ? map.get(method) : new HashSet<String>();
 	}
 	
 	/**
@@ -50,8 +53,8 @@ public class MultiActiveCompatibilityMap {
 	 * @param request
 	 * @return
 	 */
-	public List<String> getCompatibilityListOf(Request request) {
-		return getCompatibilityListOf(request.getMethodName());
+	public Set<String> getCompatibilityOf(Request request) {
+		return getCompatibilityOf(request.getMethodName());
 	}
 	
 	/**
