@@ -10,6 +10,8 @@ import java.util.Set;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.node.NodeFactory;
+import org.objectweb.proactive.core.node.StartNode;
 
 public class VertexGroupFactory {
 	
@@ -19,7 +21,8 @@ public class VertexGroupFactory {
 	 * @param numGroups number of vertex groups to create
 	 * @return
 	 */
-	static VertexGroup[] getVertexGroupsFor(String[] edges, int numGroups) {
+	static VertexGroup[] getVertexGroupsFor(String[] edges, int numhosts) {
+		int numGroups = numhosts;
 		Map<Integer, Set<Integer>> graph = new HashMap<Integer, Set<Integer>>();
 		Map<Integer, Integer> location = new HashMap<Integer, Integer>();
 		//add edges
@@ -31,13 +34,15 @@ public class VertexGroupFactory {
 			if (graph.get(from)==null) {
 				graph.put(from, new HashSet<Integer>());
 			}
-			graph.get(from).add(to);
+			if (!from.equals(to)) {
+				graph.get(from).add(to);
+			}
 		}
 		VertexGroup[] vertexGroups = new VertexGroup[numGroups];
 		for (int i=0 ; i<numGroups; i++) {
 			VertexGroup toAdd;
 			try {
-				toAdd = (PAActiveObject.newActive(VertexGroup.class, null));
+				toAdd = (PAActiveObject.newActive(VertexGroup.class, null, NodeFactory.getDefaultNode().getNodeInformation().getURL()));
 			} catch (ActiveObjectCreationException e) {
 				e.printStackTrace();
 				return null;

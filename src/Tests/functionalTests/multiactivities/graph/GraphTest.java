@@ -1,8 +1,17 @@
 package functionalTests.multiactivities.graph;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +19,8 @@ import org.apache.cxf.wsdl.TMessage;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.multiactivity.MultiActiveAnnotationProcessor;
+
+import com.sun.imageio.plugins.common.InputStreamAdapter;
 
 public class GraphTest {
 	private static VertexGroup[] vg;
@@ -19,36 +30,41 @@ public class GraphTest {
 	private static void fB(final Set<Integer> remaining) {
 		if (remaining.size() == 0)
 			return;
+		
+		
 
 		// pick pivot v
 		Integer[] all = remaining.toArray(new Integer[0]);
 		Integer pivot = all[0];
 		VertexGroup pivotOwner = vg[vertices.get(pivot)];
 		
-		BooleanWrapper mf = pivotOwner.markForward(pivot);
-		BooleanWrapper mb = pivotOwner.markBackward(pivot);
+		//System.out.println("Going deeper into the rabbit hole..."+remaining.size());
 		
-		// f := fwd(v)
-		Set<Integer> f = new HashSet<Integer>();
-		if (mf.getBooleanValue()) {
-			f = pivotOwner.getAllForwardMarked();
-			f.retainAll(remaining);
+		if (pivot.equals(7896)) {
+			System.out.println("Bingo!");
 		}
-
-		// b := bwd(v)
-		Set<Integer> b = new HashSet<Integer>();
-		if (mb.getBooleanValue()) {
-			b = pivotOwner.getAllBackwardMarked();
-			b.retainAll(remaining);
-		}
+		
+		Set<Integer> f = pivotOwner.markForward(pivot, null);
+		Set<Integer> b = pivotOwner.markBackward(pivot, null);
+		
+		f.retainAll(remaining);
+		b.retainAll(remaining);
+		
+		pivotOwner.cleanupAfter(pivot);
 
 		// report F/\B
 		Set<Integer> common = new HashSet<Integer>();
 		common.addAll(b);
 		common.retainAll(f);
 		if (common.size() > 1) {
-			System.out.println("Reporting " + common + " (from " + remaining
-					+ ") @ " + new Date().getTime());
+			
+			System.out.println("Reporting " + common.size() + " (from " + remaining.size() + ") \n@ " + new Date().getTime());
+			
+			for (VertexGroup group : vg) {
+				group.addToScc(common);
+			}
+			
+			//System.out.println("Found "+common.size()+" out of "+remaining.size());
 		}
 		
 		final Set<Integer> ff = f;
@@ -104,31 +120,47 @@ public class GraphTest {
 
 	public static void main(String[] args) {
 		if (MultiActiveAnnotationProcessor
-				.areAnnotationsCorrect(VertexGroup.class)) {
-			String[] edges = { 
-					"1-2",
-					"2-3",
-					"3-4",
-					"4-1",
-					"2-5",
-					"5-6",
-					"6-7",
-					"7-5",
-					"8-9",
-					"9-8"
-					};
-			vg = VertexGroupFactory.getVertexGroupsFor(edges, 4);
-			vertices = new HashMap<Integer, Integer>();
-
-			for (int i = 0; i < vg.length; i++) {
-				for (Integer v : vg[i].getVertices()) {
-					vertices.put(v, i);
+				.areAnnotationsCorrect(VertexGroup.class) &&
+				args.length>1) {
+			
+			
+			try {
+				File f = new File(args[0]);
+				FileInputStream fis;
+				fis = new FileInputStream(f);
+				InputStreamReader isr = new InputStreamReader(fis);
+				BufferedReader br = new BufferedReader(isr);
+				
+				List<String> graph = new LinkedList<String>();
+				String line = br.readLine(); 
+				while (line!=null) {
+					graph.add(line);
+					line = br.readLine();
 				}
-			}
-			System.out.println("Starting @ " + new Date().getTime());
-			fB(vertices.keySet());
+				
+				vg = VertexGroupFactory.getVertexGroupsFor(graph.toArray(new String[0]), new Integer(args[1]));
+				vertices = new HashMap<Integer, Integer>();
 
-			System.exit(0);
+				for (int i = 0; i < vg.length; i++) {
+					for (Integer v : vg[i].getVertices()) {
+						vertices.put(v, i);
+					}
+				}
+				Date t = new Date();
+				System.out.println("Starting @ " + t.getTime());
+				fB(vertices.keySet());
+				System.out.println("Duration was " + (new Date().getTime()-t.getTime())+ " ms");
+				
+				System.exit(0);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Usage -- Parameter: path to graph file");
 		}
 	}
 
