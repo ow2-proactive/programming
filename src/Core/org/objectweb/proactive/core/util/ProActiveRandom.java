@@ -48,6 +48,7 @@ import java.security.SecureRandom;
  */
 public class ProActiveRandom {
     static private SecureRandom prng = new SecureRandom();
+    static private char[] symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
 
     /** Returns the next pseudorandom, uniformly distributed boolean value from this random number generator's sequence. */
     synchronized static public boolean nextBoolean() {
@@ -91,5 +92,23 @@ public class ProActiveRandom {
 
     synchronized static public long nextPosLong() {
         return Math.abs(nextLong());
+    }
+
+    /**
+     * Returns a random string of fixed length
+     * 
+     * The string will only characters from {@link ProActiveRandom#symbols} 
+     * (upper case alphanumeric ASCII symbols). 
+     * 
+     * @param size the length of the random string 
+     * @return A random string
+     */
+    synchronized static public String nextString(int size) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            sb.append(symbols[nextInt(symbols.length)]);
+        }
+
+        return sb.toString();
     }
 }
