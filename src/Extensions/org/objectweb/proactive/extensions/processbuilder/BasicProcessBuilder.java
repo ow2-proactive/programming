@@ -36,7 +36,10 @@
  */
 package org.objectweb.proactive.extensions.processbuilder;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
@@ -50,33 +53,67 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * @author Zsolt Istvan
  * @since ProActive 4.4.0
  */
-public class BasicProcessBuilder extends OSProcessBuilder {
+public class BasicProcessBuilder implements OSProcessBuilder {
 
-    @Override
-    public Boolean canExecuteAsUser(OSUser user) {
+    final private ProcessBuilder pb;
+
+    public BasicProcessBuilder() {
+        this.pb = new ProcessBuilder();
+    }
+
+    public List<String> command() {
+        return this.pb.command();
+    }
+
+    public OSProcessBuilder command(String... command) {
+        this.pb.command(command);
+        return this;
+    }
+
+    public OSUser user() {
+        return null;
+    }
+
+    public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
         return false;
     }
 
-    @Override
-    public Boolean isCoreBindingSupported() {
+    public CoreBindingDescriptor cores() {
+        return null;
+    }
+
+    public boolean isCoreBindingSupported() {
         return false;
     }
 
-    @Override
-    protected String[] wrapCommand() {
-        return command().toArray(new String[0]);
+    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
+        return null;
     }
 
-    @Override
-    protected Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
+    public File directory() {
+        return this.pb.directory();
+    }
+
+    public OSProcessBuilder directory(File directory) {
+        this.pb.directory(directory);
+        return this;
+    }
+
+    public Map<String, String> environment() {
+        return this.pb.environment();
+    }
+
+    public boolean redirectErrorStream() {
+        return this.pb.redirectErrorStream();
+    }
+
+    public OSProcessBuilder redirectErrorStream(boolean redirectErrorStream) {
+        this.pb.redirectErrorStream(redirectErrorStream);
+        return this;
+    }
+
+    public Process start() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException {
-        if (user() != null) {
-            throw new OSUserException("Executing as given user is not supported for this operating system!");
-        }
-        if (cores() != null) {
-            throw new CoreBindingException("Core binding is not supported for this operating system!");
-        }
-
-        return super.start();
+        return this.pb.start();
     }
 }

@@ -61,7 +61,7 @@ public class OSRuntime {
     /**
      * Create an {@link OSRuntime} with the default ProActive configuration.
      * 
-     * A {@link PAOSProcessBuilderFactory} is used to create {@link OSProcessBuilder}
+     * A {@link PAOSProcessBuilderIFactory} is used to create {@link OSProcessBuilder}
      * 
      * @throws ProActiveException If configuration fails 
      */
@@ -70,9 +70,9 @@ public class OSRuntime {
     }
 
     /**
-     * Create an {@link OSRuntime} with a custom {@link OSProcessBuilderFactory}
+     * Create an {@link OSRuntime} with a custom {@link OSProcessBuilderIFactory}
      * 
-     * A custom {@link OSProcessBuilderFactory} can be used to extend or modify the default behavior 
+     * A custom {@link OSProcessBuilderIFactory} can be used to extend or modify the default behavior 
      * @param pbFactory
      */
     public OSRuntime(OSProcessBuilderFactory pbFactory) {

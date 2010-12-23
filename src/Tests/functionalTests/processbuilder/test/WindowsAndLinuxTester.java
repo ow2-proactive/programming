@@ -21,6 +21,7 @@ import org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder;
 import org.objectweb.proactive.extensions.processbuilder.OSRuntime;
 import org.objectweb.proactive.extensions.processbuilder.OSUser;
 import org.objectweb.proactive.extensions.processbuilder.PAOSProcessBuilderFactory;
+import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
 
@@ -32,8 +33,9 @@ public class WindowsAndLinuxTester extends FunctionalTest {
     final static boolean isWindows = System.getProperty("os.name").toLowerCase().contains("windows");
 
     // Modify these to fit your environment
-    OSUser user;
-    OSUser userWPass;
+    OSUser userPasswd;
+    OSUser userSsh;
+
     String tempPath;
 
     static OSRuntime osRuntime;
@@ -48,11 +50,14 @@ public class WindowsAndLinuxTester extends FunctionalTest {
     public void shouldRun() throws ProActiveException {
         String suser = System.getenv("OSPB_TEST_USER");
         Assume.assumeNotNull(suser, "process builder not tested because OSPB_TEST_USER is not set");
-        user = new OSUser(System.getenv("OSPB_TEST_USER"));
 
         String pass = System.getenv("OSPB_TEST_PASS");
         Assume.assumeNotNull(pass, "process builder not tested because OSPB_TEST_PASS is not set");
-        userWPass = new OSUser(suser, pass);
+        userPasswd = new OSUser(suser, pass);
+
+        //        String pass = System.getenv("OSPB_TEST_SSHKEY");
+        //        Assume.assumeNotNull(pass, "process builder not tested because OSPB_TEST_ is not set");
+        //        userPasswd = new OSUser(suser, null);
 
         tempPath = System.getenv("OSPB_TEST_TEMP");
         Assume.assumeNotNull(tempPath, "process builder not tested because OSPB_TEST_TEMP is not set");
@@ -101,14 +106,14 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, 0);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, 0);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, 0);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, 0);
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
@@ -123,23 +128,23 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         File dir = null;
         HashMap<String, String> env = null;
 
-        String[] expectedOut = { user.getUserName() };
+        String[] expectedOut = { userPasswd.getUserName() };
         if (isWindows) {
-            expectedOut[0] = System.getenv().get("USERDOMAIN") + "\\" + user.getUserName();
+            expectedOut[0] = System.getenv().get("USERDOMAIN") + "\\" + userPasswd.getUserName();
         }
 
         String[] expectedErr = {};
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, 0);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, 0);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, 0);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, 0);
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
@@ -147,14 +152,14 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
     @Test
     public void checkCanExecuteAsUser() throws Exception {
-        OSProcessBuilder ospbUser = new PAOSProcessBuilderFactory().getBuilder(user);
-        OSProcessBuilder ospbUserWPass = new PAOSProcessBuilderFactory().getBuilder(userWPass);
+        OSProcessBuilder ospbUser = new PAOSProcessBuilderFactory().getBuilder(userPasswd);
+        OSProcessBuilder ospbUserWPass = new PAOSProcessBuilderFactory().getBuilder(userPasswd);
         if (!isWindows) {
-            assertTrue(ospbUser.canExecuteAsUser(user));
+            assertTrue(ospbUser.canExecuteAsUser(userPasswd));
         }
-        assertTrue(ospbUserWPass.canExecuteAsUser(userWPass));
+        assertTrue(ospbUserWPass.canExecuteAsUser(userPasswd));
         if (!isWindows) {
-            assertFalse(ospbUser.canExecuteAsUser(new OSUser(user.getUserName(), "jibberish")));
+            assertFalse(ospbUser.canExecuteAsUser(new OSUser(userPasswd.getUserName(), "jibberish")));
             assertFalse(ospbUser.canExecuteAsUser(new OSUser("jibberish")));
         }
     }
@@ -214,7 +219,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, null);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, null);
             } catch (IOException e) {
                 // expected
             } catch (Exception e) {
@@ -223,7 +228,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, null);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, null);
         } catch (IOException e) {
             // expected
         } catch (Exception e) {
@@ -249,7 +254,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, null);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, null);
             } catch (IOException e) {
                 // expected
             } catch (Exception e) {
@@ -258,7 +263,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, null);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, null);
         } catch (IOException e) {
             // expected
         } catch (Exception e) {
@@ -302,14 +307,14 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, exitValue);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
@@ -321,14 +326,14 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, exitValue);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
@@ -340,14 +345,14 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, exitValue);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
@@ -368,7 +373,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
@@ -377,7 +382,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         // the default behavior (with Runtime.exec) is not accepted by this test
         if (!isWindows) {
             try {
-                runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
@@ -399,14 +404,14 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, exitValue);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
@@ -417,7 +422,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 dir.delete();
                 assertNull(e.getMessage(), e);
@@ -425,7 +430,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         }
 
         try {
-            runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, exitValue);
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
         } catch (Exception e) {
             dir.delete();
             assertNull(e.getMessage(), e);
@@ -450,7 +455,7 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         if (!isWindows) {
             try {
-                runAndMatch(cmd, user, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
@@ -461,12 +466,20 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         // can represent a security issue ..
         if (!isWindows) {
             try {
-                runAndMatch(cmd, userWPass, dir, env, expectedOut, expectedErr, exitValue);
+                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
             } catch (Exception e) {
                 assertNull(e.getMessage(), e);
             }
         }
 
+    }
+
+    @Test
+    public void testDestroy() throws IOException, OSUserException, FatalProcessBuilderException {
+
+        Process p = osRuntime.exec(this.userPasswd, new String[] { "/bin/sleep", "5555" }, null,
+                new File("."));
+        p.destroy();
     }
 
     public static void runAndMatch(String[] cmd, OSUser user, File dir, Map<String, String> env,

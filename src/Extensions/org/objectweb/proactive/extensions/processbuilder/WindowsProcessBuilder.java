@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
@@ -62,25 +63,38 @@ import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
  * 
  * @since ProActive 4.4.0
  */
-public final class WindowsProcessBuilder extends OSProcessBuilder {
+public final class WindowsProcessBuilder implements OSProcessBuilder {
+    private static final String PARUNAS = "parunas.exe";
 
     /** Logon failure: unknown user name or bad password */
     public static final int ERROR_LOGON_FAILURE = 1326;
 
     // path to tool
     private final String SCRIPTS_LOCATION;
-    private static final String PARUNAS = "parunas.exe";
+
+    // the underlying ProcessBuilder to whom all work will be delegated
+    // if no specified user
+    protected final ProcessBuilder delegatedPB;
+
+    // user - this should be a valid OS user entity (username and maybe a
+    // password). The launched process will be run under this user's environment and rights.
+    private final OSUser user;
+
+    // descriptor of the core-binding (subset of cores on which the user's
+    // process can execute)
+    private final CoreBindingDescriptor cores;
 
     /**
      * Creates a new instance of this class.
      */
     protected WindowsProcessBuilder(final OSUser user, final CoreBindingDescriptor cores, final String paHome) {
-        super(user, cores);
+        this.delegatedPB = new ProcessBuilder();
+        this.user = user;
+        this.cores = cores;
         SCRIPTS_LOCATION = paHome + "\\dist\\scripts\\processbuilder\\win\\";
     }
 
-    @Override
-    public Boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
+    public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
         if (user.hasPrivateKey()) {
             // remove this when SSH support has been added to the product ;)
             throw new FatalProcessBuilderException("SSH support is not implemented!");
@@ -91,29 +105,31 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
         return true;
     }
 
-    @Override
-    protected void prepareEnvironment() throws FatalProcessBuilderException {
-    }
-
-    @Override
-    protected void additionalCleanup() {
-    }
-
-    @Override
-    public Boolean isCoreBindingSupported() {
+    public boolean isCoreBindingSupported() {
         return false;
     }
 
-    @Override
-    protected String[] wrapCommand() {
-        return new String[] {};
+    public Process start() throws IOException, OSUserException, CoreBindingException,
+            FatalProcessBuilderException {
+        Process p = null;
+
+        if (user() != null || cores() != null) {
+            // user or core binding is specified - do the fancy stuff
+            p = setupAndStart();
+
+        } else {
+            // no extra service needed, just fall through to the delegated pb
+            delegatedPB.environment().putAll(environment());
+            p = delegatedPB.start();
+        }
+
+        return p;
     }
 
     /**
      * The client process is created by the parunas.exe tool
      */
-    @Override
-    protected Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
+    private Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException {
 
         // The user unwrapped command
@@ -126,7 +142,7 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
         final File wdir = this.delegatedPB.directory();
 
         // Check rights, exists and permission under the specified user
-        internalCheck(super.user().getUserName(), super.user().getPassword(), userCmdArr[0], wdir);
+        internalCheck(this.user().getUserName(), this.user().getPassword(), userCmdArr[0], wdir);
 
         // Merge the user command into a single string according to same rules as in ProcessImpl
         final String mergedUserCmd = internalMergeCommand(userCmdArr);
@@ -134,7 +150,7 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
         // Wrap the user command into a call to parunas.exe    	
         List<String> wrappedCommand = new ArrayList<String>();
         wrappedCommand.add(SCRIPTS_LOCATION + PARUNAS);
-        wrappedCommand.add("/u:" + super.user().getUserName());
+        wrappedCommand.add("/u:" + this.user().getUserName());
         // Inherit the working dir from the original process builder
         if (wdir != null) {
             try {
@@ -165,7 +181,7 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
 
         // Feed the stdin with the password                      
         final OutputStream stdin = p.getOutputStream();
-        stdin.write((super.user().getPassword() + "\n").getBytes());
+        stdin.write((this.user().getPassword() + "\n").getBytes());
         stdin.flush();
 
         return p;
@@ -280,5 +296,48 @@ public final class WindowsProcessBuilder extends OSProcessBuilder {
             // Close handle
             Kernel32.INSTANCE.CloseHandle(phUser.getValue());
         }
+    }
+
+    public List<String> command() {
+        return this.delegatedPB.command();
+    }
+
+    public OSProcessBuilder command(String... command) {
+        this.command(command);
+        return this;
+    }
+
+    public OSUser user() {
+        return this.user;
+    }
+
+    public CoreBindingDescriptor cores() {
+        return this.cores;
+    }
+
+    public CoreBindingDescriptor getAvaliableCoresDescriptor() {
+        return this.cores;
+    }
+
+    public File directory() {
+        return this.delegatedPB.directory();
+    }
+
+    public OSProcessBuilder directory(File directory) {
+        this.delegatedPB.directory(directory);
+        return this;
+    }
+
+    public Map<String, String> environment() {
+        return this.delegatedPB.environment();
+    }
+
+    public boolean redirectErrorStream() {
+        return this.delegatedPB.redirectErrorStream();
+    }
+
+    public OSProcessBuilder redirectErrorStream(boolean redirectErrorStream) {
+        this.delegatedPB.redirectErrorStream(redirectErrorStream);
+        return this;
     }
 }

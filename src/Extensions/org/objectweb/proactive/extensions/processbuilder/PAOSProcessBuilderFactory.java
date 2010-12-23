@@ -76,7 +76,7 @@ final public class PAOSProcessBuilderFactory implements OSProcessBuilderFactory 
             case unix:
                 return new LinuxProcessBuilder(user, cores, this.paHome);
             case windows:
-                return new WindowsProcessBuilder(user, cores, this.paHome);
+                //                return new WindowsProcessBuilder(user, cores, this.paHome);
             default:
                 throw new NotImplementedException("The process builder is not yet implemented on " + os);
         }

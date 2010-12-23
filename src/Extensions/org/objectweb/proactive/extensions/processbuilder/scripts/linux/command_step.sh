@@ -4,9 +4,10 @@
 # stderr that it will proceed with executing the user command
 
 # parameters:
-#	$1 - temp file to save exit value
-# 	$2 - absolute path to the working dir of user command
-#	$3... - command to execute
+#	$1 - the token
+#	$2 - temp file to save exit value
+# 	$3 - absolute path to the working dir of user command
+#	$4... - command to execute
 
 # IMPORTANT: On error messages refer to the JavaDoc of OSProcessBuilder
 
@@ -16,8 +17,10 @@ OSPL_E_CAUSE="CAUSE";
 OSLP_PACKAGE="org.objectweb.proactive.extensions.processbuilder.exception."
 #---------------
 
+token=$1
+
 # temp file
-tmp=$1
+tmp=$2
 
 if [ ! -e $tmp ]; then
   # if the temp file is not OK 
@@ -32,10 +35,10 @@ if [ -s $tmp ]; then
 fi;
 
 # working directory for the user command 
-workdir="$2"
+workdir="$3"
 
 # losing the first two arguments, all that remains is the user command
-shift;shift
+shift;shift;shift;
 
 # check if the workdir is OK
 if [ -d "${workdir}" ]; then
@@ -65,7 +68,9 @@ if [ -e "$cmd_path" ]; then
     echo $confirm 1>&2;
 
     # execute it!
-    "$@"
+    (exec -a "Kill me $token" "$@")
+	
+	
     # write return value to the temp file
     error=$?
     echo $error > $tmp;
