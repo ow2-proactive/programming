@@ -38,25 +38,21 @@ package org.objectweb.proactive.extensions.processbuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
-
-import com.sun.jna.platform.win32.Advapi32;
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.WinBase;
-import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
+import org.rzo.yajsw.os.ms.win.w32.WindowsProcess;
 
 
 /**
  * Class that extends the {@link OSProcessBuilder} for machines running Windows.<br>
- * It relies on a parunas.exe native tool that creates a process under a specific user.
+ * It relies on yajsw API (see http://yajsw.sourceforge.net) that exposes the Windows native
+ * API calls to create process under a specific user.
  * <p>
  * This builder does not accept OSUser with a private key, only username and password
  * authentication is possible.
@@ -64,13 +60,11 @@ import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
  * @since ProActive 4.4.0
  */
 public final class WindowsProcessBuilder implements OSProcessBuilder {
-    private static final String PARUNAS = "parunas.exe";
-
-    /** Logon failure: unknown user name or bad password */
-    public static final int ERROR_LOGON_FAILURE = 1326;
-
-    // path to tool
-    private final String SCRIPTS_LOCATION;
+    /**
+     * Windows error codes.
+     */
+    private static final int ERROR_FILE_NOT_FOUND = 2;
+    private static final int ERROR_LOGON_FAILURE = 1326;
 
     // the underlying ProcessBuilder to whom all work will be delegated
     // if no specified user
@@ -91,18 +85,6 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         this.delegatedPB = new ProcessBuilder();
         this.user = user;
         this.cores = cores;
-        SCRIPTS_LOCATION = paHome + "\\dist\\scripts\\processbuilder\\win\\";
-    }
-
-    public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
-        if (user.hasPrivateKey()) {
-            // remove this when SSH support has been added to the product ;)
-            throw new FatalProcessBuilderException("SSH support is not implemented!");
-        }
-        if (!user.hasPassword()) {
-            return false;
-        }
-        return true;
     }
 
     public boolean isCoreBindingSupported() {
@@ -126,184 +108,12 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         return p;
     }
 
-    /**
-     * The client process is created by the parunas.exe tool
-     */
-    private Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
-            FatalProcessBuilderException {
-
-        // The user unwrapped command
-        final List<String> userCmdList = this.delegatedPB.command();
-
-        // Prepares the command as in ProcessImpl
-        final String[] userCmdArr = internalPrepareCommandList(userCmdList);
-
-        // Inherit working directory
-        final File wdir = this.delegatedPB.directory();
-
-        // Check rights, exists and permission under the specified user
-        internalCheck(this.user().getUserName(), this.user().getPassword(), userCmdArr[0], wdir);
-
-        // Merge the user command into a single string according to same rules as in ProcessImpl
-        final String mergedUserCmd = internalMergeCommand(userCmdArr);
-
-        // Wrap the user command into a call to parunas.exe    	
-        List<String> wrappedCommand = new ArrayList<String>();
-        wrappedCommand.add(SCRIPTS_LOCATION + PARUNAS);
-        wrappedCommand.add("/u:" + this.user().getUserName());
-        // Inherit the working dir from the original process builder
-        if (wdir != null) {
-            try {
-                wrappedCommand.add("/w:" + wdir.getCanonicalPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        // The wrapped command is an argument of the parunas tool
-        wrappedCommand.add(mergedUserCmd);
-
-        // wrap user code in pretty wrapper scripts
-        this.delegatedPB.command(wrappedCommand);
-
-        // The parunas tool itself is executed in the same directory as the current process
-        this.delegatedPB.directory(null);
-
-        Process p;
-        try {
-            p = this.delegatedPB.start();
-        } catch (IOException e) {
-            throw new FatalProcessBuilderException("Cannot launch because parunas.exe tool is missing!", e);
-        } finally {
-            // set the command back as we found it :)
-            this.delegatedPB.command(userCmdList);
-            this.delegatedPB.directory(wdir);
-        }
-
-        // Feed the stdin with the password                      
-        final OutputStream stdin = p.getOutputStream();
-        stdin.write((this.user().getPassword() + "\n").getBytes());
-        stdin.flush();
-
-        return p;
-    }
-
-    private String[] internalPrepareCommandList(final List<String> commandList) {
-        final int nbCommands = commandList.size();
-
-        String[] cmd;
-
-        // If no commands throw an exception
-        if (nbCommands == 0) {
-            throw new IllegalArgumentException("Empty command");
-            // If only one command parse and fill an array of commands
-        } else if (nbCommands == 1) {
-            // Default tokens are " \t\n\r\f"
-            StringTokenizer st = new StringTokenizer(commandList.get(0));
-            cmd = new String[st.countTokens()];
-            for (int i = 0; st.hasMoreTokens(); i++) {
-                cmd[i] = st.nextToken();
-            }
-            // If more than one command just fill the cmd array as it is
-        } else {
-            cmd = commandList.toArray(new String[nbCommands]);
-        }
-
-        // Check for null elements
-        for (String arg : cmd) {
-            if (arg == null) {
-                throw new NullPointerException();
-            }
-        }
-
-        // Win32 CreateProcess requires cmd[0] to be normalized
-        cmd[0] = new File(cmd[0]).getPath();
-
-        return cmd;
-    }
-
-    // This method merges a command into a single string
-    private String internalMergeCommand(final String[] cmd) {
-        StringBuilder cmdbuf = new StringBuilder(80);
-        for (int i = 0; i < cmd.length; i++) {
-            if (i > 0) {
-                cmdbuf.append(' ');
-            }
-            String s = cmd[i];
-            cmdbuf.append(s);
-        }
-        return cmdbuf.toString();
-    }
-
-    // Performs various checks: 
-    // - username/password are correct
-    // - program filepath exists and can be executed under the specific user
-    // - working dir exists 
-    private void internalCheck(final String username, final String password, final String filepath,
-            final File wdir) throws OSUserException, IOException, FatalProcessBuilderException {
-
-        final HANDLEByReference phUser = new HANDLEByReference();
-
-        try {
-            if (!Advapi32.INSTANCE.LogonUser(username, ".", // The domain is the local machine
-                    password, WinBase.LOGON32_LOGON_INTERACTIVE, WinBase.LOGON32_PROVIDER_DEFAULT, phUser)) {
-                int lastError = Kernel32.INSTANCE.GetLastError();
-                // Check last error
-                if (lastError == ERROR_LOGON_FAILURE) {
-                    throw new OSUserException("Unknown user name or bad password! errno=" + lastError);
-                }
-                throw new FatalProcessBuilderException("Unable to logon as user! errno=" + lastError);
-            }
-
-            // If the file specified is not absolute we cannot check
-            // if it exists or if its readable
-            final File fileToCheck = new File(filepath);
-            if (!fileToCheck.isAbsolute()) {
-                return;
-            }
-
-            try {
-                if (!Advapi32.INSTANCE.ImpersonateLoggedOnUser(phUser.getValue())) {
-                    int lastError = Kernel32.INSTANCE.GetLastError();
-                    throw new FatalProcessBuilderException("Unable to impersonate as user! errno=" +
-                        lastError);
-                }
-
-                // Check if file exists
-                if (!fileToCheck.exists()) {
-                    throw new IOException("Cannot run program \"" + fileToCheck +
-                        "\": The system cannot find the file specified");
-                }
-
-                // Check if file can be r
-                if (!fileToCheck.canRead()) {
-                    throw new IOException("Cannot run program \"" + fileToCheck + "\": Access denied");
-                }
-
-                // Check if working directory exists
-                if (wdir != null && wdir.exists()) {
-                    throw new IOException("Cannot run program \"" + fileToCheck +
-                        "\": The working directory " + wdir + " does not exists");
-                }
-            } finally {
-                // Revert to self
-                if (!Advapi32.INSTANCE.RevertToSelf()) {
-                    int lastError = Kernel32.INSTANCE.GetLastError();
-                    throw new FatalProcessBuilderException("Unable to revert impersonated user! errno=" +
-                        lastError);
-                }
-            }
-        } finally {
-            // Close handle
-            Kernel32.INSTANCE.CloseHandle(phUser.getValue());
-        }
-    }
-
     public List<String> command() {
         return this.delegatedPB.command();
     }
 
     public OSProcessBuilder command(String... command) {
-        this.command(command);
+        this.delegatedPB.command(command);
         return this;
     }
 
@@ -339,5 +149,127 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
     public OSProcessBuilder redirectErrorStream(boolean redirectErrorStream) {
         this.delegatedPB.redirectErrorStream(redirectErrorStream);
         return this;
+    }
+
+    public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
+        if (user.hasPrivateKey()) {
+            // remove this when SSH support has been added to the product ;)
+            throw new FatalProcessBuilderException("SSH support is not implemented!");
+        }
+        if (!user.hasPassword()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Create a native representation of a process that will run in background
+     * that emans no interaction with the desktop 
+     */
+    protected Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
+            FatalProcessBuilderException {
+        // Create the windows process from yajsw lib 
+        final WindowsProcess p = new WindowsProcess();
+        p.setUser(this.user().getUserName());
+        p.setPassword(this.user().getPassword());
+
+        // Inherit environment (Currently not work ... must be defined later)
+        //p.setEnvironment(super.delegatedPB.environment());
+
+        // This will force CREATE_NO_WINDOW | CREATE_UNICODE_ENVIRONMENT;
+        p.setVisible(false);
+
+        // Makes the stdin, stdout and stderr available
+        p.setPipeStreams(true, false);
+
+        // Inherit the working dir from the original process builder
+        final File wdir = this.delegatedPB.directory();
+        if (wdir != null) {
+            p.setWorkingDir(wdir.getCanonicalPath());
+        }
+
+        // Inherit the command from the original process builder
+        final StringBuilder commandBuilder = new StringBuilder();
+        final List<String> command = this.delegatedPB.command();
+        // Merge into a single string to get the length
+        for (int i = 0; i < command.size(); i++) {
+            commandBuilder.append(command.get(i));
+            if (i + 1 < command.size()) {
+                commandBuilder.append(' ');
+            }
+        }
+        final String str = commandBuilder.toString();
+
+        p.setCommand(str);
+        if (!p.start()) {
+            // Get the last error and depending on the error code
+            // throw the correct exception
+            final int err = WindowsProcess.getLastError();
+            final String localizedMessage = WindowsProcess.formatMessageFromLastErrorCode(err);
+            final String message = localizedMessage + " error=" + err;
+            switch (err) {
+                case ERROR_FILE_NOT_FOUND:
+                    throw new IOException(message);
+                case ERROR_LOGON_FAILURE:
+                    throw new OSUserException(message);
+                default:
+                    throw new FatalProcessBuilderException(message);
+            }
+        }
+        return new ProcessWrapper(p);
+    }
+
+    /**
+     * Wraps a WindowsProcess and exposes it as a java.lang.Process 
+     */
+    private final class ProcessWrapper extends Process {
+        private final WindowsProcess wp;
+
+        public ProcessWrapper(final WindowsProcess wp) {
+            this.wp = wp;
+        }
+
+        @Override
+        public void destroy() {
+            this.wp.destroy();
+        }
+
+        @Override
+        public int exitValue() {
+            return this.wp.getExitCode();
+        }
+
+        @Override
+        public InputStream getErrorStream() {
+            return this.wp.getErrorStream();
+        }
+
+        @Override
+        public InputStream getInputStream() {
+            return this.wp.getInputStream();
+        }
+
+        @Override
+        public OutputStream getOutputStream() {
+            return this.wp.getOutputStream();
+        }
+
+        @Override
+        public int waitFor() throws InterruptedException {
+            return (this.wp.waitFor() ? 0 : -1);
+        }
+    }
+
+    public static void main(String[] args) {
+        WindowsProcessBuilder b = new WindowsProcessBuilder(new OSUser("tutu", "tutu"), null, null);
+        b.command("cmd.exe /c notepad.exe");
+        try {
+            Process p = b.start();
+            Thread.sleep(5000);
+
+            p.destroy();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
