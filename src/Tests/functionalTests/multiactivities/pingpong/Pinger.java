@@ -11,6 +11,7 @@ import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.annotation.multiactivity.MemberOf;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
+import org.objectweb.proactive.multiactivity.MultiActiveService;
 import org.objectweb.proactive.multiactivity.ServingPolicy;
 import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
@@ -22,7 +23,14 @@ import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 @DefineGroups(
 		{
 			@Group(name = "gPing", selfCompatible = true),
-			@Group(name = "gPong", selfCompatible = true)
+			@Group(name = "gPong", selfCompatible = true),
+			@Group(name = "gStarter", selfCompatible = false)
+		}
+)
+@DefineRules(
+		{
+			@Compatible({ "gStarter", "gPing" }),
+			@Compatible({ "gStarter", "gPong" }),
 		}
 )
 public class Pinger implements RunActive {
@@ -54,8 +62,7 @@ public class Pinger implements RunActive {
 	@Override
 	public void runActivity(Body body) {
 		if (this.multiActive) {
-			ServingPolicy greedy = ServingPolicyFactory.getGreedyMultiActivityPolicy();
-			(new MultiActiveService(body)).policyServing(greedy);
+			(new MultiActiveService(body)).multiActiveServing();
 		} else {
 			(new Service(body)).fifoServing();
 		}
@@ -66,7 +73,7 @@ public class Pinger implements RunActive {
 	 * Call the pair's ping method
 	 * @return
 	 */
-	@MemberOf({"gPong"})
+	@MemberOf("gPong")
 	public Integer pong(){
 		count--;
 		System.out.print("Pong"+count+"!");
@@ -78,7 +85,7 @@ public class Pinger implements RunActive {
 	 * Call the pair's pong method
 	 * @return
 	 */
-	@MemberOf({"gPing"})
+	@MemberOf("gPing")
 	public Integer ping(){
 		count--;
 		System.out.print("Ping"+count+"!");
@@ -90,7 +97,7 @@ public class Pinger implements RunActive {
 	 * Method to start off -- it will call the pair's ping method 
 	 * @return
 	 */
-	@MemberOf({"gPong","gPing"})
+	@MemberOf("gStarter")
 	public Integer startWithPing(){
 		return other.ping();
 	}

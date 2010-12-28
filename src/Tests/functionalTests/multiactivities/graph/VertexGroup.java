@@ -2,6 +2,7 @@ package functionalTests.multiactivities.graph;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +10,18 @@ import java.util.Set;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.RunActive;
+import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.multiactivity.Compatible;
 import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
 import org.objectweb.proactive.annotation.multiactivity.DefineRules;
 import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.annotation.multiactivity.MemberOf;
+import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.multiactivity.CompatibilityMap;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
+import org.objectweb.proactive.multiactivity.MultiActiveService;
+import org.objectweb.proactive.multiactivity.SchedulerState;
+import org.objectweb.proactive.multiactivity.ServingPolicy;
 import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
 @DefineGroups(
@@ -22,12 +29,14 @@ import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 		@Group(name = "gProperties", selfCompatible = true),
 		@Group(name = "gMarkForward", selfCompatible = true),
 		@Group(name = "gMarkBackward", selfCompatible = true),
-		@Group(name = "gMaintenance", selfCompatible = false)
+		@Group(name = "gMaintenance", selfCompatible = true),
+		@Group(name = "gSetup", selfCompatible = true)
 		}
 )
 @DefineRules(
 		{
-		@Compatible({"gProperties", "gMarkforward", "gMarkBackward", "gMaintenance"})
+		@Compatible({"gProperties", "gMarkForward", "gMarkBackward"}),
+		@Compatible({"gMaintenance", "gMarkForward", "gMarkBackward"})
 		}
 )
 public class VertexGroup implements RunActive {
@@ -46,9 +55,11 @@ public class VertexGroup implements RunActive {
 
 	private String name;
 	
-	public void setupVertices(Map<Integer, Set<Integer>> data) {
+	@MemberOf("gSetup")
+	public boolean setupVertices(Map<Integer, Set<Integer>> data) {
 		vertices = data;
 		invertedVertices = new HashMap<Integer, Set<Integer>>();
+
 		for (Integer to : vertices.keySet()) {
 			for (Integer from : vertices.get(to)) {
 				if (invertedVertices.get(from)==null) {
@@ -57,14 +68,22 @@ public class VertexGroup implements RunActive {
 				invertedVertices.get(from).add(to);
 			}
 		}
+		System.out.println("done setup");
+		return true;
 	}
 	
-	public void setupExternal(Map<Integer, VertexGroup> data) {
+	@MemberOf("gSetup")
+	public boolean setupExternal(Map<Integer, VertexGroup> data) {
 		externalVert = data;
+		return true;
 	}
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void foo(){
+		
 	}
 	
 	@MemberOf("gProperties")
@@ -134,8 +153,9 @@ public class VertexGroup implements RunActive {
 					for (Integer to : vertices.get(cur)) {
 						if (!myForwardMarked.contains(to)
 								&& !sccMarked.contains(to)) {
-							myForwardMarked.add(0, to);
-							added++;
+							
+								myForwardMarked.add(0, to);
+								added++;
 						}
 					}
 				} else {
@@ -212,8 +232,9 @@ public class VertexGroup implements RunActive {
 					for (Integer to : invertedVertices.get(cur)) {
 						if (!myBackwardMarked.contains(to)
 								&& !sccMarked.contains(to)) {
-							myBackwardMarked.add(0, to);
-							added++;
+						
+								myBackwardMarked.add(0, to);
+								added++;
 						}
 					}
 				} else {
@@ -266,12 +287,64 @@ public class VertexGroup implements RunActive {
 	
 	@Override
 	public void runActivity(Body body) {
-		MultiActiveService mas = (new MultiActiveService(body));
-		//mas.multiActiveServing();
+		new MultiActiveService(body).multiActiveServing();
 		
-		mas.policyServing(ServingPolicyFactory.getMultiActivityPolicy());
-		
+		//new MultiActiveService(body).multiActiveServing();
+		//MultiActiveService mas;
+		//mas.policyServing(ServingPolicyFactory.getSingleActivityPolicy());
+		//mas.policyServing(ServingPolicyFactory.getMultiActivityPolicy());
+
+/*		
+		mas.policyServing(new ServingPolicy() {
+			final ServingPolicy map = ServingPolicyFactory.getMultiActivityPolicy();
+			
+			@Override
+			public List<Request> runPolicy(SchedulerState state,
+					MultiActiveCompatibilityMap compatibilityMap) {
+					List<Request> r = map.runPolicy(state, compatibilityMap);
+					
+					Integer fwdPivot = null;
+					Integer bwdPivot = null;
+					for (Request cand : r) {
+						if (cand.getMethodName().equals("markForward")) {
+							Integer pivot = (Integer) cand.getMethodCall().getParameter(0);
+							if (fwdPivot==null || fwdPivot>pivot){
+								fwdPivot=pivot;
+							}
+						} else if (cand.getMethodName().equals("marBackward")) {
+							Integer pivot = (Integer) cand.getMethodCall().getParameter(0);
+							if (bwdPivot==null || bwdPivot>pivot){
+								bwdPivot=pivot;
+							}
+						}
+					}
+					//System.out.println("Pivots "+fwdPivot+" "+bwdPivot+" in "+name);
+					Iterator<Request> reqi = r.iterator();
+					while (reqi.hasNext()){
+						Request candidate = reqi.next();
+						if (candidate.getMethodName().equals("markForward")) {
+							Integer pivot = (Integer) candidate.getMethodCall().getParameter(0);
+							if (fwdPivot!=null && fwdPivot!=pivot){
+								System.out.println("R-F");
+								reqi.remove();
+							}
+						} else if (candidate.getMethodName().equals("marBackward")) {
+							Integer pivot = (Integer) candidate.getMethodCall().getParameter(0);
+							if (bwdPivot!=null && bwdPivot!=pivot){
+								System.out.println("R-B");
+								reqi.remove();
+							}
+							
+						}
+					}
+
+					return r;
+				
+			}
+		});
+*/	
 		//(new Service(body)).fifoServing();
 		
 	}
+
 }

@@ -48,7 +48,7 @@ public class InfiniteCounter implements RunActive {
 		
 	}
 	
-	@MemberOf({"gCounter"})
+	@MemberOf("gCounter")
 	public void countToInfinity(){
 		System.out.println("Counting to infinity!");
 		while (value!=null) {
@@ -58,7 +58,7 @@ public class InfiniteCounter implements RunActive {
 		}
 	}
 	
-	@MemberOf({"gPoller"})
+	@MemberOf("gPoller")
 	public Long noReturnPollValue(){
 		while (value!=-1) {
 			// ...
@@ -66,7 +66,7 @@ public class InfiniteCounter implements RunActive {
 		return value;
 	}
 	
-	@MemberOf({"gPoller"})
+	@MemberOf("gPoller")
 	public Long pollValue(){
 		synchronized (value) {
 			System.out.println("Polling value...");

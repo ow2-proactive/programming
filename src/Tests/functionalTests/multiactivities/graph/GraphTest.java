@@ -1,6 +1,5 @@
 package functionalTests.multiactivities.graph;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,29 +13,31 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-import org.apache.cxf.wsdl.TMessage;
-import org.objectweb.proactive.api.PAActiveObject;
-import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
-import org.objectweb.proactive.multiactivity.MultiActiveAnnotationProcessor;
-
-import com.sun.imageio.plugins.common.InputStreamAdapter;
+import org.objectweb.proactive.multiactivity.AnnotationProcessor;
 
 public class GraphTest {
 	private static VertexGroup[] vg;
 	private static Map<Integer, Integer> vertices;
+	private static ExecutorService execs = Executors.newCachedThreadPool();
+	private static Date startTime;
 
 	// FB
 	private static void fB(final Set<Integer> remaining) {
-		if (remaining.size() == 0)
+		if (remaining.size() == 0) {
 			return;
+		}
+			
 
 		// pick pivot v
 		Integer[] all = remaining.toArray(new Integer[0]);
 		Integer pivot = all[0];
 		VertexGroup pivotOwner = vg[vertices.get(pivot)];
 
-		// System.out.println("Going deeper into the rabbit hole..."+remaining.size());
+		//System.out.println("Going deeper into the rabbit hole..."+remaining.size());
 
 		Set<Integer> f = pivotOwner.markForward(pivot, null);
 		Set<Integer> b = pivotOwner.markBackward(pivot, null);
@@ -51,10 +52,13 @@ public class GraphTest {
 		common.addAll(b);
 		common.retainAll(f);
 		if (common.size() > 1) {
-
+			//if (remaining.size()==1000){
 			System.out.println("Reporting " + common.size() + " (from "
 					+ remaining.size() + ") \n@ " + new Date().getTime());
-
+			
+			//System.out.println("Duration was " + (new Date().getTime() - startTime.getTime()) + " ms");
+			
+			//}
 			for (VertexGroup group : vg) {
 				group.addToScc(common);
 			}
@@ -69,55 +73,53 @@ public class GraphTest {
 		fminb.addAll(ff);
 		fminb.removeAll(fb);
 
-		Thread tBranchA = new Thread(new Runnable() {
+		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				// fb(f\b)
+				//System.out.println("started");
 				fB(fminb);
 			}
-		});
-		tBranchA.start();
+		}).start();
 
 		final Set<Integer> bminf;
 		bminf = new HashSet<Integer>();
 		bminf.addAll(fb);
 		bminf.removeAll(ff);
 
-		Thread tBranchB = new Thread(new Runnable() {
+		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				// fb(f\b)
+				//System.out.println("started");
 				fB(bminf);
 			}
-		});
-		tBranchB.start();
+		}).start();
 
 		// fb(v\(f u b))
 		final Set<Integer> aux = new HashSet<Integer>();
 		aux.addAll(remaining);
 		aux.removeAll(fb);
 		aux.removeAll(ff);
-		fB(aux);
+		new Thread(new Runnable() {
 
-		try {
-			tBranchB.join();
-			tBranchA.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+			@Override
+			public void run() {
+				// fb(f\b)
+				//System.out.println("started");
+				fB(aux);
+			}
+		}).start();
+		//System.out.println("exited");
 		return;
 
 	}
 
-	public static void main(String[] args) {
-		if (MultiActiveAnnotationProcessor
-				.areAnnotationsCorrect(VertexGroup.class)) {
+	public static void main(String[] args) throws InterruptedException {
 			if (args.length > 1) {
-
+				System.out.println("* parsing input");
 				try {
 					File f = new File(args[0]);
 					FileInputStream fis;
@@ -141,12 +143,13 @@ public class GraphTest {
 								fisNodes);
 						BufferedReader brNodes = new BufferedReader(isrNodes);
 
-						String node = br.readLine();
+						String node = brNodes.readLine();
 						while (node != null) {
 							nodes.add(node);
 							node = brNodes.readLine();
 						}
 					}
+					Date total = new Date();
 					vg = VertexGroupFactory.getVertexGroupsFor(graph.toArray(new String[0]), 
 							new Integer(args[1]), args.length > 2, nodes.toArray(new String[0]));
 					
@@ -157,12 +160,18 @@ public class GraphTest {
 							vertices.put(v, i);
 						}
 					}
-					Date t = new Date();
-					System.out.println("Starting @ " + t.getTime());
+					startTime = new Date();
+					System.out.println("Starting @ " + startTime.getTime());
 					fB(vertices.keySet());
+					
+					execs.awaitTermination(30, TimeUnit.SECONDS);
 					System.out.println("Duration was "
-							+ (new Date().getTime() - t.getTime()) + " ms");
-
+							+ (new Date().getTime() - startTime.getTime()) + " ms");
+					System.out.println("Duration (all) was "
+							+ (new Date().getTime() - total.getTime()) + " ms");
+					
+					
+					
 					System.exit(0);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -174,11 +183,11 @@ public class GraphTest {
 			} else {
 				System.out.println("Usage -- Parameter: path to graph file");
 			}
-		} else {
+		/*} else {
 			System.out.println("Vertex Group is not annotated correctly: ");
-			MultiActiveAnnotationProcessor
+			AnnotationProcessor
 					.printInvalidReferences(VertexGroup.class);
-		}
+		}*/ 
 	}
 
 }

@@ -50,11 +50,10 @@ public class VertexGroupFactory {
 				e.printStackTrace();
 				return null;
 			}
-			toAdd.setName("Group "+i);
 			vertexGroups[i]=toAdd;
 			
 		}
-		
+		System.out.println("* Created nodes");
 		List<Map<Integer, Set<Integer>>> connections = new LinkedList<Map<Integer,Set<Integer>>>();
 		
 		int count = 0;
@@ -69,7 +68,7 @@ public class VertexGroupFactory {
 			location.put(k, addTo);
 			count++;
 		}
-		
+		System.out.println("* distributed vertexes");
 		List<Map<Integer, VertexGroup>> external = new LinkedList<Map<Integer,VertexGroup>>();
 		for (int i=0; i<numGroups; i++) {
 			external.add(new HashMap<Integer, VertexGroup>());
@@ -90,12 +89,13 @@ public class VertexGroupFactory {
 				}
 			}
 		}
-		
+		System.out.println("* copy data to AOs");
 		for (int i=0; i<numGroups; i++) {
-			vertexGroups[i].setupExternal(external.get(i));
+			vertexGroups[i].setName("Group "+i);
 			vertexGroups[i].setupVertices(connections.get(i));
+			vertexGroups[i].setupExternal(external.get(i));
 		}
-		
+		System.out.println("* DONE copy data to AOs");
 		return vertexGroups;
 		
 	}
