@@ -216,17 +216,19 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
                     throw new FatalProcessBuilderException(message);
             }
         }
-        return new ProcessWrapper(p);
+        return new ProcessWrapper(p, command.get(0));
     }
 
     /**
      * Wraps a WindowsProcess and exposes it as a java.lang.Process 
      */
-    private final class ProcessWrapper extends Process {
+    private static final class ProcessWrapper extends Process {
+        private final String name;
         private final WindowsProcess wp;
 
-        public ProcessWrapper(final WindowsProcess wp) {
+        public ProcessWrapper(final WindowsProcess wp, final String name) {
             this.wp = wp;
+            this.name = name;
         }
 
         @Override
@@ -236,7 +238,14 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
 
         @Override
         public int exitValue() {
-            return this.wp.getExitCode();
+            int ec = this.wp.getExitCode();
+            // -2 is returned by WindowsProcess if the process is still active
+            // in order to mimic the behavior of java.lang.Process.exitValue()
+            if (ec == -2) {
+                throw new IllegalThreadStateException("Process " + this.name + " is not terminated");
+            } else {
+                return ec;
+            }
         }
 
         @Override
@@ -262,14 +271,18 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
 
     public static void main(String[] args) {
         WindowsProcessBuilder b = new WindowsProcessBuilder(new OSUser("tutu", "tutu"), null, null);
-        b.command("cmd.exe /c notepad.exe");
+        String s = "C:\\Program Files\\Java\\jdk1.6.0_21\\\\jre\\bin\\java -Dproactive.scheduler.logs.maxsize=0 -Dproactive.configuration=file:C:\\vbodnart\\workspace12\\scheduling\\config\\scheduler\\forkedJavaTask\\forkedTask-paconf.xml -Djava.security.policy=file:C:\\vbodnart\\workspace12\\scheduling\\bin\\windows\\..\\../config/security.java.policy-client -Dlog4j.configuration=file:///C:\\vbodnart\\workspace12\\scheduling\\config\\scheduler\\forkedJavaTask\\forkedTask-log4j -D32 -cp .;.;C:\\vbodnart\\workspace12\\scheduling\\classes\\common;C:\\vbodnart\\workspace12\\scheduling\\classes\\resource-manager;C:\\vbodnart\\workspace12\\scheduling\\classes\\scheduler;;C:\\vbodnart\\workspace12\\scheduling\\lib\\ProActive\\ProActive.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\c-java-mysql-enterprise-plugin-1.0.0.42.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\commons-codec-1.3.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\commons-collections-3.2.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\derby.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\derbytools.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\isorelax.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\msv.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\mysql-connector-java-5.1.12-bin.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\mysql-connector-java-5.1.7-bin.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\relaxngDatatype.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\rngpack-1.1a.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\wstx-lgpl-3.9.2.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\xsdlib.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\script\\jruby-engine.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\script\\jruby.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\script\\js.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\script\\jsch-0.1.38.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\script\\jython-engine.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\script\\jython.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\script\\script-api.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\common\\script\\script-js.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\annotation\\ejb3-persistence.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\annotation\\hibernate-annotations.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\annotation\\hibernate-commons-annotations.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\core\\antlr-2.7.6.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\core\\dom4j-1.6.1.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\core\\geronimo-spec-jta-1.0.1B-rc4.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\core\\hibernate-core.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\core\\slf4j-api-1.5.6.jar;C:\\vbodnart\\workspace12\\scheduling\\lib\\hibernate\\core\\slf4j-log4j12-1.5.6.jar;C:\\vbodnart\\workspace12\\scheduling\\addons org.objectweb.proactive.core.runtime.StartPARuntime -p rmi://optimus.activeeon.com:1100/PA_JVM1151458586 -c 1 -d 679109";
+        b.command(s);//"cmd.exe /c notepad.exe");
         try {
             Process p = b.start();
-            Thread.sleep(5000);
+            Thread.sleep(35000);
 
             p.destroy();
+
+            System.out.println("enclosing_type.enclosing_method() ----> exitValue " + p.exitValue());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }
