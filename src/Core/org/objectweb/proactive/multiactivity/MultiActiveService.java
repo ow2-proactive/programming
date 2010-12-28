@@ -252,7 +252,13 @@ public class MultiActiveService extends Service {
 			}
 		}
 		
-		public void addRunning(Request request) {
+		/*adds the request to the running set
+		* adds one to the compatibility count of all groups this request's group is
+		* compatible with
+		* 
+		* Time: O(g) -- g is the number of groups
+		*/
+		protected void addRunning(Request request) {
 			String method = request.getMethodName();
 			if (methods.containsKey(method)) {
 				for (MethodGroup mg : methods.get(method).getCompatibleWith()) {
@@ -266,7 +272,13 @@ public class MultiActiveService extends Service {
 			runningCount++;
 		}
 		
-		public void removeRunning(Request request) {
+		/*removes the request from the running set
+		* removes one from the compatibility count of all groups this request's group is
+		* compatible with
+		* 
+		* Time: O(g) -- g is the number of groups
+		*/
+		protected void removeRunning(Request request) {
 			String method = request.getMethodName();
 			if (methods.containsKey(method)) {
 				for (MethodGroup mg : methods.get(method).getCompatibleWith()) {
@@ -282,6 +294,15 @@ public class MultiActiveService extends Service {
 			return isCompatibleWithExecuting(r.getMethodName());
 		}
 		
+		/*Alternative for the isCompatibleWithRequests in case we check with the running ones.
+		* This will return the answer in O(1) time, as opposed to O(n) worst-case time of the other.
+		* Thsi works by checking if the count of compatible methods is equal to the number 
+		* of running methods.
+		* The count is stored for each group and updated upon addition/removal of requests 
+		* to/from the running set. 
+		* 
+		* Time: O(1)
+		*/
 		public boolean isCompatibleWithExecuting(String method) {
 			if (runningCount==0) return true;
 			if (runningCount>maxCount) {

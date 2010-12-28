@@ -3,6 +3,8 @@ package org.objectweb.proactive.multiactivity;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.proactive.annotation.multiactivity.Compatible;
@@ -12,11 +14,13 @@ import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.annotation.multiactivity.MemberOf;
 
 public class AnnotationProcessor {
+	private static final String CLASS_LEVEL="CLASS";
 	
 	protected Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();
 	protected Map<String, MethodGroup> methods = new HashMap<String, MethodGroup>();
 	private Class<?> myClass;
 	
+	protected Map<String, List<String>> errors = new HashMap<String, List<String>>();
 	
 	public AnnotationProcessor(Class<?> c) {
 		myClass = c;
@@ -46,6 +50,13 @@ public class AnnotationProcessor {
 							if (groups.containsKey(group) && groups.containsKey(other)) {
 								groups.get(group).addCompatibleWith(groups.get(other));
 								groups.get(other).addCompatibleWith(groups.get(group));
+							} else {
+								if (!groups.containsKey(group)) {
+									addError(CLASS_LEVEL, group);
+								}
+								if (!groups.containsKey(other)) {
+									addError(CLASS_LEVEL, other);
+								}
 							}
 						}	
 					}
@@ -101,9 +112,19 @@ public class AnnotationProcessor {
 				if (compMap.containsKey(other) && compMap.get(other).contains(method)) {
 					methods.get(method).addCompatibleWith(methods.get(other));
 					methods.get(other).addCompatibleWith(methods.get(method));
+				} else {
+					addError(method, other);
 				}
 			}
 		}
+	}
+
+	private void addError(String where, String what) {
+		if (!errors.containsKey(where)) {
+			errors.put(where, new LinkedList<String>());
+		}
+		
+		errors.get(where).add(what);		
 	}
 	
 	/*
