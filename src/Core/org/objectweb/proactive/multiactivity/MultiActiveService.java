@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
@@ -22,23 +24,21 @@ import org.objectweb.proactive.core.body.request.Request;
  *
  */
 public class MultiActiveService extends Service {
+	
+	public int numServes = 0;
+	
 	Logger logger = Logger.getLogger(this.getClass());
 	
-	/**
-	 * This maps associates to each method a list of active servings
-	 */
-	private Map<String, List<Request>> runningServes = new HashMap<String, List<Request>>();
-
-	//TODO: comment
-	private MultiActiveCompatibilityMap compatibilityMap;
+	private ExecutorService executorService;
 	
-	// stuff for the Policy API
-	SchedulerStateImpl schedStateExposer = new SchedulerStateImpl();
+	CompatibilityTracker compatibility;
 	
 	public MultiActiveService(Body body) {
 		super(body);
 		
-		compatibilityMap = MultiActiveCompatibilityMap.getFor(body.getReifiedObject().getClass());
+		compatibility = new CompatibilityTracker(new AnnotationProcessor(body.getReifiedObject().getClass()));
+		
+		executorService = Executors.newCachedThreadPool();
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class MultiActiveService extends Service {
 		boolean success;
 		while (body.isActive()) {
 			// try to launch next request -- synchrnoized inside
-			success = parallelServeOldestOptimal();
+			success = parallelServeOldest();
 			
 			//if we were not successful, let's wait until a new request arrives
 			synchronized (requestQueue) {
@@ -80,7 +80,7 @@ public class MultiActiveService extends Service {
 				launched = 0;
 				// get the list of requests to run -- as calculated by the
 				// policy
-				chosen = policy.runPolicy(schedStateExposer, compatibilityMap);
+				chosen = policy.runPolicy(compatibility);
 				if (chosen!=null) {
 					for (Request mf : chosen) {
 						try {
@@ -120,7 +120,7 @@ public class MultiActiveService extends Service {
 		synchronized (requestQueue) {
 			List<Request> reqs = requestQueue.getInternalQueue();
 			for (int i = 0; i < reqs.size(); i++) {
-				if (compatibilityMap.isCompatibleWithAllNames(reqs.get(i).getMethodName(), runningServes.keySet())) {
+				if (compatibility.isCompatibleWithExecuting(reqs.get(i))) {
 					internalParallelServe(reqs.remove(i));
 					return true;
 				}
@@ -136,6 +136,7 @@ public class MultiActiveService extends Service {
 	 * @return
 	 */
 	public boolean parallelServeOldestOptimal(){
+/*
 		synchronized (requestQueue) {
 			List<Request> reqs = requestQueue.getInternalQueue();
 			if (reqs.size() == 0)
@@ -150,7 +151,7 @@ public class MultiActiveService extends Service {
 				internalParallelServe(reqs.remove(1));
 				return true;
 			}
-		}
+		}*/
 		return false;
 	}
 	
@@ -167,7 +168,7 @@ public class MultiActiveService extends Service {
 
 			Request r = requestQueue.removeOldest();
 			if (r != null) {
-				if (compatibilityMap.isCompatibleWithAllNames(r.getMethodName(), runningServes.keySet())) {
+				if (compatibility.isCompatibleWithExecuting(r)) {
 					asserve = internalParallelServe(r);
 				} else {
 					// otherwise put it back
@@ -183,20 +184,17 @@ public class MultiActiveService extends Service {
 	}
 
 	protected RunnableRequest internalParallelServe(Request r) {
+		
 		RunnableRequest asserve;
 		//if there is no conflict, prepare launch
 		asserve = new RunnableRequest(r);
-		
-		List<Request> aslist = runningServes.get(r.getMethodName());
-		if (aslist==null) {
-			runningServes.put(r.getMethodName(), new LinkedList<Request>());
-			aslist = runningServes.get(r.getMethodName());
-		}
-		aslist.add(r);
-		
+
 		if (asserve!=null) {
 			//logger.info(this.body.getID()+" Parallel serving '"+asserve.r.getMethodName()+"'");
-			(new Thread(asserve, body.getID()+" -> "+r.getMethodName())).start();
+			//(new Thread(asserve, body.getID()+" -> "+r.getMethodName())).start();
+			executorService.execute(asserve);
+			
+			compatibility.addRunning(r);
 		}
 		
 		return asserve;
@@ -210,10 +208,7 @@ public class MultiActiveService extends Service {
 	 */
 	protected void asynchronousServeFinished(Request r) {
 		synchronized (requestQueue) {
-			runningServes.get(r.getMethodName()).remove(r);
-			if (runningServes.get(r.getMethodName()).size()==0) {
-				runningServes.remove(r.getMethodName());
-			}
+			compatibility.removeRunning(r);
 			requestQueue.notifyAll();	
 		}
 	}
@@ -224,7 +219,7 @@ public class MultiActiveService extends Service {
 	 * @author Zsolt István
 	 *
 	 */
-	private class RunnableRequest implements Runnable {
+	protected class RunnableRequest implements Runnable {
 		private final Request r;
 		
 		public RunnableRequest(Request r){
@@ -243,17 +238,73 @@ public class MultiActiveService extends Service {
 		
 	}
 	
-	private class SchedulerStateImpl implements SchedulerState {
+	protected class CompatibilityTracker extends SchedulerCompatibilityMap {
+		private Map<MethodGroup, Integer> compats = new HashMap<MethodGroup, Integer>();
+		private Map<String, List<Request>> runningMethods = new HashMap<String, List<Request>>();
+		private int runningCount = 0;
+		private int maxCount = 0;
 		
+		public CompatibilityTracker(AnnotationProcessor annotProc) {
+			super(annotProc);
+
+			for (MethodGroup groupName : groups.values()) {
+				compats.put(groupName, 0);
+			}
+		}
+		
+		public void addRunning(Request request) {
+			String method = request.getMethodName();
+			if (methods.containsKey(method)) {
+				for (MethodGroup mg : methods.get(method).getCompatibleWith()) {
+					compats.put(mg, compats.get(mg)+1);
+				}
+			}
+			if (!runningMethods.containsKey(method)) {
+				runningMethods.put(method, new LinkedList<Request>());
+			}
+			runningMethods.get(method).add(request);
+			runningCount++;
+		}
+		
+		public void removeRunning(Request request) {
+			String method = request.getMethodName();
+			if (methods.containsKey(method)) {
+				for (MethodGroup mg : methods.get(method).getCompatibleWith()) {
+					compats.put(mg, compats.get(mg)-1);
+				}
+			}
+			runningMethods.get(method).remove(request);
+			runningCount--;
+		}
+		
+		@Override
+		public boolean isCompatibleWithExecuting(Request r) {
+			return isCompatibleWithExecuting(r.getMethodName());
+		}
+		
+		public boolean isCompatibleWithExecuting(String method) {
+			if (runningCount==0) return true;
+			if (runningCount>maxCount) {
+				maxCount=runningCount;
+			}
+
+			MethodGroup mg = methods.get(method);
+			return (mg!=null && compats.containsKey(mg)) && (
+					(runningMethods.containsKey(method) && 
+						runningMethods.get(method).size()>0 &&
+						mg.selfCompatible) 
+					|| (compats.get(mg)==runningCount));
+		}
+
 		public Set<String> getExecutingMethodNameSet(){
-			return runningServes.keySet();
+			return runningMethods.keySet();
 		}
 
 		@Override
 		public List<String> getExecutingMethodNames() {
 			List<String> names = new LinkedList<String>();
-			for (String m : runningServes.keySet()) {
-				for (int i=0; i<runningServes.get(m).size(); i++) {
+			for (String m : runningMethods.keySet()) {
+				for (int i=0; i<runningMethods.get(m).size(); i++) {
 					names.add(m);
 				}
 			}
@@ -264,7 +315,7 @@ public class MultiActiveService extends Service {
 		@Override
 		public List<Request> getExecutingRequests() {
 			List<Request> reqs = new LinkedList<Request>();
-			for (List<Request> lrr : runningServes.values()) {
+			for (List<Request> lrr : runningMethods.values()) {
 				reqs.addAll(lrr);
 			}
 			
@@ -273,7 +324,7 @@ public class MultiActiveService extends Service {
 
 		@Override
 		public List<Request> getExecutingRequestsFor(String method) {
-			return (runningServes.containsKey(method)) ? runningServes.get(method) : new LinkedList<Request>();
+			return (runningMethods.containsKey(method)) ? runningMethods.get(method) : new LinkedList<Request>();
 		}
 
 		@Override
@@ -284,6 +335,11 @@ public class MultiActiveService extends Service {
 		@Override
 		public List<Request> getQueueContents() {
 			return requestQueue.getInternalQueue();
+		}
+		
+		@Override
+		public int getNumberOfExecutingRequests() {
+			return runningCount;
 		}
 		
 	}

@@ -25,6 +25,6 @@ public interface ServingPolicy {
 	 * @param compatibilityMap
 	 * @return a sublist of the requests that can be started in parallel
 	 */
-	public List<Request> runPolicy(SchedulerState state, MultiActiveCompatibilityMap compatibilityMap);
+	public List<Request> runPolicy(SchedulerCompatibilityMap compatibility);
 	
 }

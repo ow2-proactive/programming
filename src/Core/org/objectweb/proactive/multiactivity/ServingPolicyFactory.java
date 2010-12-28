@@ -11,11 +11,11 @@ public class ServingPolicyFactory {
 		return new ServingPolicy() {
 			
 			@Override
-			public List<Request> runPolicy(SchedulerState state, MultiActiveCompatibilityMap compatibilityMap) {
+			public List<Request> runPolicy(SchedulerCompatibilityMap compatibility) {
 				List<Request> ret = new LinkedList<Request>();
 				
-				if (state.getExecutingMethodNames().size()==0 && state.getQueueContents().size()>0) {
-					ret.add(state.getOldestInTheQueue());
+				if (compatibility.getNumberOfExecutingRequests()==0 && compatibility.getQueueContents().size()>0) {
+					ret.add(compatibility.getOldestInTheQueue());
 				}
 				
 				return ret;
@@ -27,21 +27,21 @@ public class ServingPolicyFactory {
 		return new ServingPolicy() {
 			
 			@Override
-			public List<Request> runPolicy(SchedulerState state, MultiActiveCompatibilityMap compatibilityMap) {
+			public List<Request> runPolicy(SchedulerCompatibilityMap compatibility) {
 				List<Request> ret = new LinkedList<Request>();
-				Request oldest = state.getOldestInTheQueue();
+				Request oldest = compatibility.getOldestInTheQueue();
 				
 				if (oldest==null) return ret;
 				
-				if (state.getExecutingMethodNames().size()==0) {
+				if (compatibility.getExecutingMethodNames().size()==0) {
 					ret.add(oldest);
 				} else {
-					if (compatibilityMap.isCompatibleWithAllRequests(oldest, state.getExecutingRequests())){
+					if (compatibility.isCompatibleWithRequests(oldest, compatibility.getExecutingRequests())){
 						ret.add(oldest);
-					} else if (state.getQueueContents().size()>1) {
-						Request secondOldest = state.getQueueContents().get(1);
-						if (secondOldest!=null && compatibilityMap.areCompatible(oldest, secondOldest)
-								&& compatibilityMap.isCompatibleWithAllRequests(secondOldest, state.getExecutingRequests())) {
+					} else if (compatibility.getQueueContents().size()>1) {
+						Request secondOldest = compatibility.getQueueContents().get(1);
+						if (secondOldest!=null && compatibility.areCompatible(oldest, secondOldest)
+								&& compatibility.isCompatibleWithRequests(secondOldest, compatibility.getExecutingRequests())) {
 							ret.add(secondOldest);
 						}
 					}
@@ -56,12 +56,11 @@ public class ServingPolicyFactory {
 		return new ServingPolicy() {
 			
 			@Override
-			public List<Request> runPolicy(SchedulerState state,
-					MultiActiveCompatibilityMap compatibilityMap) {
+			public List<Request> runPolicy(SchedulerCompatibilityMap compatibility) {
 				
-				if (state.getExecutingMethodNames().size()<maxThreads) {
+				if (compatibility.getExecutingRequests().size()<maxThreads) {
 					ServingPolicy maPolicy = getMultiActivityPolicy();
-					return maPolicy.runPolicy(state, compatibilityMap);
+					return maPolicy.runPolicy(compatibility);
 				}
 				
 				return null;
@@ -73,14 +72,13 @@ public class ServingPolicyFactory {
 		return new ServingPolicy() {
 			
 			@Override
-			public List<Request> runPolicy(SchedulerState state,
-					MultiActiveCompatibilityMap compatibilityMap) {
+			public List<Request> runPolicy(SchedulerCompatibilityMap compatibility) {
 				
 				List<Request> ret = new LinkedList<Request>();
-				List<Request> queue = state.getQueueContents();
+				List<Request> queue = compatibility.getQueueContents();
 				
 				for (int i=0; i<queue.size(); i++) {
-					if (compatibilityMap.isCompatibleWithAllRequests(queue.get(i),state.getExecutingRequests())){
+					if (compatibility.isCompatibleWithRequests(queue.get(i),compatibility.getExecutingRequests())){
 						ret.add(queue.get(i));
 						return ret;
 					}

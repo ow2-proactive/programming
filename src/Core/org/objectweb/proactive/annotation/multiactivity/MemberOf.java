@@ -14,6 +14,6 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public @interface MemberOf {
 	
-	public String[] value();
+	public String value();
 
 }
