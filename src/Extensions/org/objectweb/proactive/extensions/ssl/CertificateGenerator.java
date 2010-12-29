@@ -125,7 +125,8 @@ public class CertificateGenerator {
     public KeyPair generateRSAKeyPair() throws SslException {
         final String ALGORITHM = "RSA";
         try {
-            SecureRandom sr = new SecureRandom();
+            // Don't use NativePRNG since it will drain the system entropy pool
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
             KeyPairGenerator kpGen = KeyPairGenerator.getInstance(ALGORITHM, SslHelpers.BC_NAME);
             kpGen.initialize(2048, sr);
             KeyPair kp = kpGen.generateKeyPair();
