@@ -161,11 +161,6 @@ public class UniversalBodyRemoteObjectAdapter extends Adapter<UniversalBody> imp
         return target.receiveRequest(request);
     }
 
-    @Deprecated
-    public void register(String url) throws ProActiveException {
-        target.register(url);
-    }
-
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException {
         return target.registerByName(name, rebind);
     }

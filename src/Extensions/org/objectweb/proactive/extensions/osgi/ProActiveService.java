@@ -67,7 +67,7 @@ public interface ProActiveService {
      * @param url
      * @throws java.io.IOException
      */
-    public void register(Object obj, String url) throws ProActiveException;
+    public String register(Object obj, String name) throws ProActiveException;
 
     public void terminate();
 

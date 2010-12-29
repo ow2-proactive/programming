@@ -238,52 +238,6 @@ public class NodeFactory {
         }
     }
 
-    /** Creates a new node on the local ProActive runtime
-     * 
-     * The node URL can be in the form:
-     * <ul>
-     *  <li>nodeName</li>
-     *  <li>//localhost/nodeName</li>
-     *  <li>//<hostname>/nodeName</li>
-     *  <li>protocol://hostname[:port]/nodeName</li>
-     * </ul>
-     * 
-     * @param nodeURL the URL of the node to create
-     * @return the newly created node on the local JVM
-     * @exception NodeException if the node cannot be created
-     * 
-     * @deprecated replaced by {@link #createLocalNode(String, boolean, ProActiveSecurityManager, String, String)}
-     */
-    @Deprecated
-    public static Node createNode(String nodeURL) throws NodeException, AlreadyBoundException {
-        String nodeName = URIBuilder.getNameFromURI(nodeURL);
-        return createLocalNode(nodeName, false, null, null);
-    }
-
-    /** Creates a new node on the local ProActive runtime
-     * 
-     * The node URL can be in the form:
-     * <ul>
-     *  <li>nodeName</li>
-     *  <li>//localhost/nodeName</li>
-     *  <li>//<hostname>/nodeName</li>
-     *  <li>protocol://hostname[:port]/nodeName</li>
-     * </ul>
-     * 
-     * @param nodeURL the URL of the node to create
-     * @param replacePreviousBinding
-     * @return the newly created node on the local JVM
-     * @exception NodeException if the node cannot be created
-     * 
-     * @deprecated replaced by {@link #createLocalNode(String, boolean, ProActiveSecurityManager, String, String)}
-     */
-    @Deprecated
-    public static Node createNode(String nodeURL, boolean replacePreviousBinding,
-            ProActiveSecurityManager psm, String vnname) throws NodeException, AlreadyBoundException {
-        String nodeName = URIBuilder.getNameFromURI(nodeURL);
-        return createLocalNode(nodeName, replacePreviousBinding, psm, vnname);
-    }
-
     /**
      * Returns the reference to the node located at the given url.
      * This url can be either local or remote.

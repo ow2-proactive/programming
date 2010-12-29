@@ -174,14 +174,6 @@ public interface UniversalBody extends Serializable, SecurityEntity {
      */
     public void setRegistered(boolean registered) throws IOException;
 
-    /**
-     * Allow to specify an url where to register the active object.
-     * @param url the url where to bind the active object
-     * @throws ProActiveException if the active object cannot be registered at the given URL
-     */
-    @Deprecated
-    public void register(String url) throws ProActiveException;
-
     public String registerByName(String name, boolean rebind) throws IOException, ProActiveException;
 
     /**

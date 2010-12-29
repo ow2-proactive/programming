@@ -1087,40 +1087,6 @@ public class PAActiveObject {
         }
     }
 
-    /**
-     * Registers an active object into a registry(RMI or IBIS or HTTP, default is RMI). In fact it
-     * is the remote version of the body of the active object that is registered into the registry
-     * under the given URL. According to the type of the associated body(default is Rmi), the
-     * registry in which to register is automatically found.
-     * 
-     * @param obj
-     *            the active object to register.
-     * @param url
-     *            the url under which the remote body is registered. The url must point to the
-     *            localhost since registering is always a local action. The url can take the
-     *            form:protocol://localhost:port/nam or //localhost:port/name if protocol is RMI or
-     *            //localhost/name if port is 1099 or only the name. The registered object will be
-     *            reachable with the following url: protocol://machine_name:port/name using
-     *            lookupActive method. Protocol and port can be removed if default
-     * @exception ProActiveException
-     *                if the remote body cannot be registered
-     */
-    @Deprecated
-    public static void register(Object obj, String url) throws ProActiveException {
-        UniversalBody body = getRemoteBody(obj);
-
-        try {
-            body.register(url);
-            body.setRegistered(true);
-            if (PAActiveObject.logger.isInfoEnabled()) {
-                PAActiveObject.logger.info("Success at binding url " + url);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ProActiveException("Failed to register active object " + obj + "at " + url, e);
-        }
-    }
-
     public static String registerByName(Object obj, String name) throws ProActiveException {
         return registerByName(obj, name, true);
     }
