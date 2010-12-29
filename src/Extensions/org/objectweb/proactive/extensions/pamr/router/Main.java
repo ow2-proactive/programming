@@ -129,7 +129,7 @@ class Main {
                     port = RouterImpl.DEFAULT_PORT;
                 } else {
                     try {
-                        port = new Short(arg);
+                        port = Integer.parseInt(arg);
                     } catch (NumberFormatException e) {
                         printHelpAndExit("Invalid port number: " + arg);
                     } catch (IllegalArgumentException e) {
@@ -202,7 +202,7 @@ class Main {
                     config.setPort(RouterImpl.DEFAULT_PORT);
                 } else {
                     try {
-                        short i = new Short(arg);
+                        int i = Integer.parseInt(arg);
                         config.setPort(i);
                     } catch (NumberFormatException e) {
                         printHelpAndExit("Invalid port number: " + arg);
