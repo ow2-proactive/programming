@@ -48,7 +48,7 @@ import java.security.SecureRandom;
  */
 public class ProActiveRandom {
     final static private SecureRandom prng = new SecureRandom();
-    
+
     static private char[] symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
 
     /** Returns the next pseudorandom, uniformly distributed boolean value from this random number generator's sequence. */
