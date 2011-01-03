@@ -12,14 +12,14 @@ public class CompatibilityMap {
 	protected Map<String, MethodGroup> methods = new HashMap<String, MethodGroup>();
 	
 	public CompatibilityMap(AnnotationProcessor annotProc) {
-		this.groups = annotProc.groups;
-		this.methods = annotProc.methods;
+		this.groups = annotProc.getGroupNameMap();
+		this.methods = annotProc.getMethodNameMap();
 	}
 	
 	public CompatibilityMap(Class<?> clazz) {
 		AnnotationProcessor annotProc = new AnnotationProcessor(clazz);
-		this.groups = annotProc.groups;
-		this.methods = annotProc.methods;
+		this.groups = annotProc.getGroupNameMap();
+		this.methods = annotProc.getMethodNameMap();
 	}
 	
 	public MethodGroup getGroupOf(String methodName) {
@@ -34,8 +34,7 @@ public class CompatibilityMap {
 		MethodGroup mg1 = getGroupOf(method1);
 		MethodGroup mg2 = getGroupOf(method2);
 		if (mg1!=null && mg2!=null) {
-			return (mg1.getCompatibleWith().contains(mg2)) 
-				|| (method1.equals(method2) && mg1.selfCompatible);
+			return mg1.getCompatibleWith().contains(mg2) || mg2.getCompatibleWith().contains(mg1);
 		} else {
 			return false;
 		}

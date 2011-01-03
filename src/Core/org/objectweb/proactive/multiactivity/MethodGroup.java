@@ -24,30 +24,38 @@ import java.util.Set;
 public class MethodGroup {
 	
 	private final int hashCode;
-	protected final MethodGroup parent;
+	private final boolean selfCompatible;
 	public final String  name;
-	public final boolean selfCompatible;
 	private Set<MethodGroup> compatibleWith = new HashSet<MethodGroup>();
 	
 	public MethodGroup(String name, boolean selfCompatible) {
-		this.name = name;
 		this.selfCompatible = selfCompatible;
-		this.parent = null;
+		this.name = name;
 		this.hashCode = name.hashCode();
+		
+		if (selfCompatible) {
+			this.compatibleWith.add(this);
+		}
+		
 	}
 	
 	public MethodGroup(MethodGroup from, String name, boolean selfCompatible) {
+		this.selfCompatible = selfCompatible;
 		this.name = from.name+"_"+name;
-		this.selfCompatible = from.selfCompatible || selfCompatible;
-
+		this.hashCode = name.hashCode();
+		
+		if (selfCompatible) {
+			this.compatibleWith.add(this);
+		}
 		this.compatibleWith.addAll(from.getCompatibleWith());
 		
-		this.parent = from;
-		this.hashCode = from.hashCode();
+		for (MethodGroup mg : this.compatibleWith) {
+			mg.addCompatibleWith(this);
+		}
 	}
 
-	public void addCompatibleWith(Set<MethodGroup> compatibleWith) {
-		this.compatibleWith.addAll(compatibleWith);
+	public void setCompatibleWith(Set<MethodGroup> compatibleWith) {
+		this.compatibleWith = compatibleWith;
 	}
 	
 	public void addCompatibleWith(MethodGroup compatibleWith) {
@@ -67,7 +75,7 @@ public class MethodGroup {
 	public boolean equals(Object obj) {
 		if (obj instanceof MethodGroup) {
 			MethodGroup other = (MethodGroup) obj;
-			return (this.name.equals(other.name)) || (this.parent!=null && this.parent.equals(other));
+			return (this.name.equals(other.name));
 		} 
 		return false;
 	}

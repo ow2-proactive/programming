@@ -310,11 +310,7 @@ public class MultiActiveService extends Service {
 			}
 
 			MethodGroup mg = methods.get(method);
-			return (mg!=null && compats.containsKey(mg)) && (
-					(runningMethods.containsKey(method) && 
-						runningMethods.get(method).size()>0 &&
-						mg.selfCompatible) 
-					|| (compats.get(mg)==runningCount));
+			return (mg!=null && compats.containsKey(mg)) && (compats.get(mg)==runningCount);
 		}
 
 		public Set<String> getExecutingMethodNameSet(){

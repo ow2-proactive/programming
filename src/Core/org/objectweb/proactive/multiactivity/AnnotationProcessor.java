@@ -1,5 +1,6 @@
 package org.objectweb.proactive.multiactivity;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,8 +17,8 @@ import org.objectweb.proactive.annotation.multiactivity.MemberOf;
 public class AnnotationProcessor {
 	private static final String CLASS_LEVEL="CLASS";
 	
-	protected Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();
-	protected Map<String, MethodGroup> methods = new HashMap<String, MethodGroup>();
+	private Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();
+	private Map<String, MethodGroup> methods = new HashMap<String, MethodGroup>();
 	private Class<?> myClass;
 	
 	protected Map<String, List<String>> errors = new HashMap<String, List<String>>();
@@ -80,33 +81,41 @@ public class AnnotationProcessor {
 	protected void processCompatible() {
 		HashMap<String, HashSet<String>> compMap = new HashMap<String, HashSet<String>>();
 		
+		//go through each public method of a class
 		for (Method method : myClass.getMethods()) {
+			//check what group is it part of
 			MemberOf group = method.getAnnotation(MemberOf.class);
 			if (group!=null) {
-				methods.put(method.getName(), groups.get(group.value()));
+				MethodGroup mg = groups.get(group.value());
+				methods.put(method.getName(), mg);
 			}
 			
+			//other compatible declarations -- put them into a map
 			Compatible comp = method.getAnnotation(Compatible.class);
 			if (comp!=null) {
 				HashSet<String> comps = new HashSet<String>();
 				for (String other : comp.value()) {
 					comps.add(other);
+
 				}
 				compMap.put(method.getName(), comps);
 			}
 		}
 		
+		//go through methods that declared compatibilities
 		for (String method : compMap.keySet()) {
 			boolean selfCompatible = compMap.get(method).contains(method);
 			
+			//create a group for this method -- maybe extend its already existing group
 			MethodGroup newGroup = (groups.containsKey(method)) ? 
 					new MethodGroup(groups.get(method), method, selfCompatible) : 
 						new MethodGroup(method, selfCompatible);
-					
+			
 			methods.put(method, newGroup);
 			groups.put(newGroup.name, newGroup);
 		}
 		
+		//set compatibilities between groups, based on the method-level compatible annotations
 		for (String method : compMap.keySet()) {
 			for (String other : compMap.get(method)) {
 				if (compMap.containsKey(other) && compMap.get(other).contains(method)) {
@@ -127,6 +136,22 @@ public class AnnotationProcessor {
 		errors.get(where).add(what);		
 	}
 	
+	public Map<String, List<String>> getInvalidReferences(){
+		return errors;
+	}
+	
+	public boolean hasInvalidReferences(){
+		return errors.keySet().size()>0;
+	}
+	
+	public Map<String, MethodGroup> getGroupNameMap() {
+		return groups;
+	}
+
+	public Map<String, MethodGroup> getMethodNameMap() {
+		return methods;
+	}
+
 	/*
 	 * public Map<String, List<String>> getInvalidReferences(){
 		if (invalidReferences==null) {
@@ -170,22 +195,6 @@ public class AnnotationProcessor {
 		}
 	}
 	
-	private boolean classHasVariable(String ref) {
-		Field[] meths = thisClass.getDeclaredFields();
-		for (int i=0; i<meths.length; i++) {
-			if (meths[i].getName().equals(ref)) return true;
-		}
-		return false;
-	}
-
-	private boolean classHasPublicMethod(String ref) {
-		Method[] meths = thisClass.getMethods();
-		for (int i=0; i<meths.length; i++) {
-			if (meths[i].getName().equals(ref)) return true;
-		}
-		return false;
-	}
-
 	public boolean areAnnotationsCorrect(){
 		if (invalidReferences==null) {
 			invalidReferences = getInvalidReferences();
@@ -193,4 +202,12 @@ public class AnnotationProcessor {
 		return invalidReferences.keySet().size()==0;
 	}
 	*/
+	private boolean classHasVariable(String ref) {
+		Field[] meths = myClass.getDeclaredFields();
+		for (int i=0; i<meths.length; i++) {
+			if (meths[i].getName().equals(ref)) return true;
+		}
+		return false;
+	}
+
 }
