@@ -7,18 +7,26 @@ import java.lang.annotation.Target;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 
+/**
+ * This annotation can be used to express parallel compatibility.
+ * It can be used on the level of 
+ * <ul>
+ * 		<li>a method -- and it will then represent the compatibility of that method
+ * with a list of other methods. <br>ATTENTION: The relationship has to be defined bidirectional,
+ * so all referenced methods have to declare the first one as compatible also.</li>
+ * 		<li>the class, inside a group definition block (DefineGroup) -- when it will 
+ * list the groups whose methods can run in parallel.</li>
+ * </ul>
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @PublicAPI
-
-/**
- * This annotation is used to express the fact that a method can run in parallel 
- * with a set of other methods of the object.
- * <br/>ATTENTION: This relationship is not bidirectional. For full compatibility 
- * the other method has also to declare this one as compatible.
- */
 public @interface Compatible {
 	
+	/**
+	 * List of method names or group names, depending on the annotation location.
+	 * @return
+	 */
 	public String[] value();
 
 }

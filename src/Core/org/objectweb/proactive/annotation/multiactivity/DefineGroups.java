@@ -8,6 +8,11 @@ import java.lang.annotation.Target;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 
+/**
+ * This annotation is used to define a list of {@link Group}s at the top of a class.
+ * @author Zsolt Istvan
+ *
+ */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

@@ -4,20 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class represents a group of methods. A group can be compatible with other groups, meaning that
- * methods belonging to these two groups can run in parallel.
- * <br/>
- * Groups can extend an other group, meaning that it will inherit all compatibilities of the parent, and 
- * add its own ones too.
- * <br/>
- * A group has the following properties:
- * <ul>
- *  <li>self compatible -- if this flag is false only one instance of one method of this group 
- *  can run at any time</li>
- *  <li>compatibility list -- list of groups it can run in parallel with</li>
- * 	<li>parent group --  the group this one extends</li>
- *  <li>name -- this usually describes the role of the methods in the group </li>
- * </ul>
+ * This class represents a group of methods. A group is compatible with other groups, meaning that
+ * methods belonging to these groups can run in parallel.
  * @author Zsolt Istvan
  *
  */
@@ -28,6 +16,11 @@ public class MethodGroup {
 	public final String  name;
 	private Set<MethodGroup> compatibleWith = new HashSet<MethodGroup>();
 	
+	/**
+	 * Standard constructor of a named group.
+	 * @param name A descriptive name for the group -- all group names have to be unique
+	 * @param selfCompatible if the methods that are members of the group can run in parallel
+	 */
 	public MethodGroup(String name, boolean selfCompatible) {
 		this.selfCompatible = selfCompatible;
 		this.name = name;
@@ -39,29 +32,33 @@ public class MethodGroup {
 		
 	}
 	
-	public MethodGroup(MethodGroup from, String name, boolean selfCompatible) {
-		this.selfCompatible = selfCompatible;
-		this.name = from.name+"_"+name;
-		this.hashCode = name.hashCode();
-		
-		if (selfCompatible) {
-			this.compatibleWith.add(this);
-		}
-		this.compatibleWith.addAll(from.getCompatibleWith());
-		
-		for (MethodGroup mg : this.compatibleWith) {
-			mg.addCompatibleWith(this);
-		}
-	}
-
+	/**
+	 * Set the set of compatible groups
+	 * @param compatibleWith
+	 */
 	public void setCompatibleWith(Set<MethodGroup> compatibleWith) {
 		this.compatibleWith = compatibleWith;
 	}
 	
+	/**
+	 * Add a group whose methods will be runnable in parallel with the methods
+	 * belonging to this one
+	 * @param compatibleWith the other group
+	 */
 	public void addCompatibleWith(MethodGroup compatibleWith) {
 		this.compatibleWith.add(compatibleWith);
 	}
 
+	public void addCompatibleWith(Set<MethodGroup> compatibleSet) {
+		this.compatibleWith.addAll(compatibleSet);
+		
+	}
+
+	/**
+	 * Returns the set of the groups whose member methods can run in parallel with the
+	 * methods belonging to this group
+	 * @return
+	 */
 	public Set<MethodGroup> getCompatibleWith() {
 		return compatibleWith;
 	}

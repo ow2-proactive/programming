@@ -13,7 +13,27 @@ import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
 import org.objectweb.proactive.annotation.multiactivity.DefineRules;
 import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.annotation.multiactivity.MemberOf;
+import org.objectweb.proactive.annotation.multiactivity.Modifies;
+import org.objectweb.proactive.annotation.multiactivity.Reads;
 
+/**
+ * Reads and processes the multi-activity related annotations of a class and produces 
+ * two data structures that describe the compatibility of the methods of this class.
+ * <br>
+ * These data structures are:
+ * <ul>
+ * 	<li>group map -- this is a map that associates the names of the groups with the actual 
+ * {@link MethodGroup}s. It can be retrieved through the {@link #getGroupNameMap()} method.</li>
+ *  <li>method map -- this is a map that holds the group that each method belongs to. It can be 
+ *  accessed through the {@link #getMethodNameMap()} method.</li> 
+ * </ul>
+ * 
+ * <br>
+ * For information on the multi-active annotations, please refer to the 
+ * <code>org.objectweb.proactive.annotations.multiactivity</code> package.
+ * @author Zsolt Istvan
+ *
+ */
 public class AnnotationProcessor {
 	private static final String CLASS_LEVEL="CLASS";
 	
@@ -30,6 +50,13 @@ public class AnnotationProcessor {
 		processMethodAnnotations();
 	}
 	
+	/**
+	 * Reads and processes the following types of class-level annotations:
+	 * <ul>
+	 *  <li>{@link DefineGroups} and {@link Group} -- these define the groups</li>
+	 *  <li>{@link DefineRules} and {@link Compatible} -- these define the rules that apply between them</li>
+	 * </ul>
+	 */
 	protected void processClassAnnotations(){
 		//if there are any groups defined
 		if (myClass.getAnnotation(DefineGroups.class)!=null){
@@ -68,16 +95,35 @@ public class AnnotationProcessor {
 		}
 	}
 	
+	/**
+	 * Processes method-level annotations.
+	 * First it deals with group membership and method-to-method compatibility, then 
+	 * with variable accesses.
+	 */
 	protected void processMethodAnnotations(){
 		
 		processCompatible();
 		processReadModify();
 	}
 	
+	/**
+	 * Reads and processes the following method-level annotations:
+	 * <ul>
+	 *  <li>{@link Reads} -- the variables that are just read by the method</li>
+	 *  <li>{@link Modifies} -- the variables that are written by the method</li>
+	 * </ul>
+	 */
 	protected void processReadModify() {
 		//TODO :D
 	}
 
+	/**
+	 * Reads and processes the following method-level annotations:
+	 * <ul>
+	 *  <li>{@link MemberOf} -- the group the method belongs to</li>
+	 *  <li>{@link Compatible} -- the additional methods it is compatible with</li>
+	 * </ul>
+	 */
 	protected void processCompatible() {
 		HashMap<String, HashSet<String>> compMap = new HashMap<String, HashSet<String>>();
 		
@@ -107,9 +153,10 @@ public class AnnotationProcessor {
 			boolean selfCompatible = compMap.get(method).contains(method);
 			
 			//create a group for this method -- maybe extend its already existing group
-			MethodGroup newGroup = (groups.containsKey(method)) ? 
-					new MethodGroup(groups.get(method), method, selfCompatible) : 
-						new MethodGroup(method, selfCompatible);
+			MethodGroup newGroup = new MethodGroup(method, selfCompatible);
+			if (groups.containsKey(method)) { 
+				newGroup.addCompatibleWith(groups.get(method).getCompatibleWith());
+			}
 			
 			methods.put(method, newGroup);
 			groups.put(newGroup.name, newGroup);
@@ -136,76 +183,50 @@ public class AnnotationProcessor {
 		errors.get(where).add(what);		
 	}
 	
+	/**
+	 * Returns the invalid references (group names, method names, variable names that are not defined 
+	 * in the class but appear in the annotations).
+	 * @return a map that holds locations and the related lists of the invalid references. A location 
+	 * can be a method name or "CLASS" in case the error is in the class level annotations.
+	 */
 	public Map<String, List<String>> getInvalidReferences(){
 		return errors;
 	}
 	
+	/**
+	 * Returns true if the annotations contain references (group names, method names, variable names)
+	 * that are not defined in the class.
+	 * @return
+	 */
 	public boolean hasInvalidReferences(){
 		return errors.keySet().size()>0;
 	}
 	
+	/**
+	 * Returns a map that maps the group names to the method groups.
+	 * @return
+	 */
 	public Map<String, MethodGroup> getGroupNameMap() {
 		return groups;
 	}
 
+	/**
+	 * Returns a map that pairs each method name with a method group.
+	 * @return
+	 */
 	public Map<String, MethodGroup> getMethodNameMap() {
 		return methods;
 	}
-
-	/*
-	 * public Map<String, List<String>> getInvalidReferences(){
-		if (invalidReferences==null) {
-			invalidReferences = new HashMap<String, List<String>>();
-			for (String m : methodInfos.keySet()){
-				AnnotatedMethod ann = methodInfos.get(m);
-				for (String ref : ann.getCompatibleWith()) {
-					checkReferenceCorrectness(m, ref);
-				}
-				for (String ref : ann.getModifies()) {
-					checkReferenceCorrectness(m, ref);
-				}
-				for (String ref : ann.getReads()) {
-					checkReferenceCorrectness(m, ref);
-				}
-				for (String group : ann.getGroups()) {
-					checkReferenceCorrectness(m, group);
-				}
-			}
-			
-			for (String group : methodGroups.keySet()) {
-				for (String compG : methodGroups.get(group).getCompatibleGroups()) {
-					checkReferenceCorrectness("", compG);
-				}
-				
-				for (String compM : methodGroups.get(group).getMembers()) {
-					checkReferenceCorrectness("", compM);
-				}
-			}
-		}
-		return invalidReferences;
-	}
-
-	private void checkReferenceCorrectness(String sourceMethod, String reference) {
-		if (!reference.startsWith("#") && !classHasPublicMethod(reference) 
-				&& !classHasVariable(reference) && !methodGroups.keySet().contains(reference)) {
-			if (invalidReferences.get(sourceMethod)==null) {
-				invalidReferences.put(sourceMethod, new LinkedList<String>());
-			}
-			invalidReferences.get(sourceMethod).add(reference);
-		}
-	}
 	
-	public boolean areAnnotationsCorrect(){
-		if (invalidReferences==null) {
-			invalidReferences = getInvalidReferences();
-		}
-		return invalidReferences.keySet().size()==0;
-	}
-	*/
-	private boolean classHasVariable(String ref) {
+	/**
+	 * Returns true if the processed class has a variable named like the parameter.
+	 * @param ref variable name
+	 * @return
+	 */
+	private boolean classHasVariable(String what) {
 		Field[] meths = myClass.getDeclaredFields();
 		for (int i=0; i<meths.length; i++) {
-			if (meths[i].getName().equals(ref)) return true;
+			if (meths[i].getName().equals(what)) return true;
 		}
 		return false;
 	}
