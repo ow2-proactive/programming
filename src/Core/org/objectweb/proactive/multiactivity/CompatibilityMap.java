@@ -6,6 +6,16 @@ import java.util.Map;
 
 import org.objectweb.proactive.core.body.request.Request;
 
+/**
+ * This class can be used to access information about groups and compatibility relation
+ * between methods in a class. It has an underlying {@link AnnotationProcessor} to extract 
+ * this information.
+ * <br>
+ * The methods of this class are defined both for parameters of type String
+ * (for method names) and of type {@link Request} 
+ * @author Zsolt Istvan
+ *
+ */
 public class CompatibilityMap {
 	
 	protected Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();

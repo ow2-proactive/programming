@@ -1,6 +1,5 @@
 package functionalTests.multiactivities.pingpong;
 
-import org.junit.Rule;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
@@ -9,11 +8,7 @@ import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
 import org.objectweb.proactive.annotation.multiactivity.DefineRules;
 import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.annotation.multiactivity.MemberOf;
-import org.objectweb.proactive.annotation.multiactivity.Reads;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
-import org.objectweb.proactive.multiactivity.MultiActiveService;
-import org.objectweb.proactive.multiactivity.ServingPolicy;
-import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
 /**
  * Class to test ping-pong-like interactions
@@ -74,6 +69,7 @@ public class Pinger implements RunActive {
 	 * @return
 	 */
 	@MemberOf("gPong")
+	/*@Reads("pong")*/
 	public Integer pong(){
 		count--;
 		System.out.print("Pong"+count+"!");
@@ -86,6 +82,7 @@ public class Pinger implements RunActive {
 	 * @return
 	 */
 	@MemberOf("gPing")
+	/*@Reads("ping")*/
 	public Integer ping(){
 		count--;
 		System.out.print("Ping"+count+"!");
@@ -98,6 +95,8 @@ public class Pinger implements RunActive {
 	 * @return
 	 */
 	@MemberOf("gStarter")
+	/*@Modifies("count")
+	@Reads({"ping","pong"})*/
 	public Integer startWithPing(){
 		return other.ping();
 	}

@@ -5,6 +5,13 @@ import java.util.Set;
 
 import org.objectweb.proactive.core.body.request.Request;
 
+/**
+ * This is an extension to the {@link CompatibilityMap}, and it incorporates information
+ * about the state of the scheduler. It facilitates checking compatibility of methods with
+ * the ones in the waiting queue, or the ones that are currently executing.
+ * @author Zsolt Istvan
+ *
+ */
 public abstract class SchedulerCompatibilityMap extends CompatibilityMap {
 	
 	public SchedulerCompatibilityMap(AnnotationProcessor annotProc) {
@@ -65,7 +72,20 @@ public abstract class SchedulerCompatibilityMap extends CompatibilityMap {
 	 */
 	public abstract Request getOldestInTheQueue();
 	
+	/**
+	 * Returns true if the given request can be run in parallel with all 
+	 * methods that are currently executing. 
+	 * @param request
+	 * @return
+	 */
 	public abstract boolean isCompatibleWithExecuting(Request request);
+	
+	/**
+	 * Returns true if the given method can be run in parallel with all 
+	 * methods that are currently executing. 
+	 * @param method
+	 * @return
+	 */
 	public abstract boolean isCompatibleWithExecuting(String method);
 
 }

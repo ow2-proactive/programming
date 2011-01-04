@@ -10,11 +10,13 @@ import java.util.Set;
  *
  */
 public class MethodGroup {
+
+	public final String name;
+	private final boolean selfCompatible;
+	
+	private Set<MethodGroup> compatibleWith = new HashSet<MethodGroup>();
 	
 	private final int hashCode;
-	private final boolean selfCompatible;
-	public final String  name;
-	private Set<MethodGroup> compatibleWith = new HashSet<MethodGroup>();
 	
 	/**
 	 * Standard constructor of a named group.
@@ -28,6 +30,29 @@ public class MethodGroup {
 		
 		if (selfCompatible) {
 			this.compatibleWith.add(this);
+		}
+		
+	}
+	
+	/**
+	 * Standard constructor of a named group.
+	 * @param name A descriptive name for the group -- all group names have to be unique
+	 * @param selfCompatible if the methods that are members of the group can run in parallel
+	 */
+	public MethodGroup(MethodGroup from, String name, boolean selfCompatible) {
+		this.selfCompatible = selfCompatible;
+		this.name = name;
+		this.hashCode = name.hashCode();
+		
+		if (selfCompatible) {
+			this.compatibleWith.add(this);
+		}
+		
+		if (from!=null) {
+			this.addCompatibleWith(from.compatibleWith);
+			if (from.selfCompatible) {
+				from.addCompatibleWith(this);
+			}
 		}
 		
 	}
@@ -61,6 +86,10 @@ public class MethodGroup {
 	 */
 	public Set<MethodGroup> getCompatibleWith() {
 		return compatibleWith;
+	}
+
+	public boolean isSelfCompatible() {
+		return selfCompatible;
 	}
 
 	@Override
