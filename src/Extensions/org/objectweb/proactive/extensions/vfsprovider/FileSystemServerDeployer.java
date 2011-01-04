@@ -42,6 +42,7 @@ import java.net.URISyntaxException;
 import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
@@ -117,11 +118,27 @@ public final class FileSystemServerDeployer {
      */
     public FileSystemServerDeployer(String name, String rootPath, boolean autoclosing, boolean rebind)
             throws IOException {
+        this(name, rootPath, autoclosing, rebind, CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL
+                .getValue());
+    }
+
+    /**
+     * Deploys locally a FileSystemServer as a RemoteObject with a given name.
+     *
+     * @param name of deployed RemoteObject
+     * @param rootPath the real path on which to bind the server
+     * @param autoclosing
+     * @param rebind true if the service must rebind an existing one, false otherwise.
+     * @param protocol RemoteObjectFactory protocol
+     * @throws IOException
+     */
+    public FileSystemServerDeployer(String name, String rootPath, boolean autoclosing, boolean rebind,
+            String protocol) throws IOException {
         fileSystemServer = new FileSystemServerImpl(rootPath);
         try {
             roe = PARemoteObject.newRemoteObject(FileSystemServer.class.getName(), this.fileSystemServer);
-            roe.createRemoteObject(name, rebind);
-            url = roe.getURL();
+            roe.createRemoteObject(name, rebind, protocol);
+            url = roe.getURL(protocol);
         } catch (ProActiveException e) {
             // Ugly but createRemoteObject interface changed
             throw new IOException6("", e);
