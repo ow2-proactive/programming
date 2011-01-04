@@ -1012,19 +1012,6 @@
 
 
 	<!-- ================================================================ -->
-	<!--                      Create Scilab javasci.jar                   -->
-	<!--  =============================================================== -->
-	<target name="scilabJar">
-		<delete dir="${dev.dir}/scilab/classes" />
-		<mkdir dir="${dev.dir}/scilab/classes" />
-		<javac srcdir="${dev.dir}/scilab/src" destdir="${dev.dir}/scilab/classes" deprecation="on" source="${source}" debug="${debug}">
-			<include name="**/*.java" />
-		</javac>
-		<jar jarfile="${lib.dir}/javasci.jar" basedir="${dev.dir}/scilab/classes" />
-	</target>
-
-
-	<!-- ================================================================ -->
 	<!--                    Create OSGi Library Bundle                    -->
 	<!--  =============================================================== -->
 	<target name="librariesBundle">

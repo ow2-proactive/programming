@@ -211,13 +211,6 @@ then
 fi
 
 #--------------------------------------------------------
-# jars to set when using Scilab
-if [ -f $PROACTIVE/lib/scilab/javasci.jar ]
-then
-    CLASSPATH=$CLASSPATH:$PROACTIVE/lib/scilab/javasci.jar
-fi 
-
-#--------------------------------------------------------
 # when using TimIt
 if [ -f $PROACTIVE/lib/timit/batik-awt-util.jar ]
 then

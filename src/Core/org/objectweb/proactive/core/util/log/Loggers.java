@@ -111,13 +111,6 @@ public interface Loggers {
     public static final String FAULT_TOLERANCE_CIC = FAULT_TOLERANCE + ".cic";
     public static final String FAULT_TOLERANCE_PML = FAULT_TOLERANCE + ".pml";
 
-    // Scilab loggers
-    public static final String SCILAB = CORE + ".scilab";
-    public static final String SCILAB_DEPLOY = SCILAB + ".deploy";
-    public static final String SCILAB_SERVICE = SCILAB + ".service";
-    public static final String SCILAB_WORKER = SCILAB + ".worker";
-    public static final String SCILAB_TASK = SCILAB + ".task";
-
     // Skeleton loggers
     static final public String SKELETONS = CORE + ".skeletons";
     static final public String SKELETONS_STRUCTURE = SKELETONS + ".structure";
