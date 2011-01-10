@@ -66,8 +66,6 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class DebuggerImpl implements Debugger {
 
-    private static final long serialVersionUID = -356291945757423147L;
-
     private static Logger logger = ProActiveLogger.getLogger(Loggers.DEBUGGER);
 
     /** internal use only : for wait/notify */
