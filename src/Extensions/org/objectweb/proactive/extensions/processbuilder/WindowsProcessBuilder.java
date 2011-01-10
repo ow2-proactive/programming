@@ -45,6 +45,7 @@ import java.util.Map;
 
 import org.objectweb.proactive.extensions.processbuilder.exception.CoreBindingException;
 import org.objectweb.proactive.extensions.processbuilder.exception.FatalProcessBuilderException;
+import org.objectweb.proactive.extensions.processbuilder.exception.NotImplementedException;
 import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 import org.rzo.yajsw.os.ms.win.w32.WindowsProcess;
 
@@ -87,10 +88,16 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         this.cores = cores;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#isCoreBindingSupported()
+     */
     public boolean isCoreBindingSupported() {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#start()
+     */
     public Process start() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException {
         Process p = null;
@@ -108,49 +115,86 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
         return p;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#command()
+     */
     public List<String> command() {
         return this.delegatedPB.command();
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#command(java.lang.String[])
+     */
     public OSProcessBuilder command(String... command) {
         this.delegatedPB.command(command);
         return this;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#user()
+     */
     public OSUser user() {
         return this.user;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#cores()
+     */
     public CoreBindingDescriptor cores() {
         return this.cores;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#getAvaliableCoresDescriptor()
+     */
     public CoreBindingDescriptor getAvaliableCoresDescriptor() {
         return this.cores;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#directory()
+     */
     public File directory() {
         return this.delegatedPB.directory();
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#directory(java.io.File)
+     */
     public OSProcessBuilder directory(File directory) {
         this.delegatedPB.directory(directory);
         return this;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#environment()
+     */
     public Map<String, String> environment() {
+        if (this.user != null) {
+            throw new NotImplementedException(
+                "The environment modification of a user process is not implemented");
+        }
         return this.delegatedPB.environment();
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#redirectErrorStream()
+     */
     public boolean redirectErrorStream() {
         return this.delegatedPB.redirectErrorStream();
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#redirectErrorStream(boolean)
+     */
     public OSProcessBuilder redirectErrorStream(boolean redirectErrorStream) {
         this.delegatedPB.redirectErrorStream(redirectErrorStream);
         return this;
     }
 
+    /* (non-Javadoc)
+     * @see org.objectweb.proactive.extensions.processbuilder.OSProcessBuilder#canExecuteAsUser(org.objectweb.proactive.extensions.processbuilder.OSUser)
+     */
     public boolean canExecuteAsUser(OSUser user) throws FatalProcessBuilderException {
         if (user.hasPrivateKey()) {
             // remove this when SSH support has been added to the product ;)
@@ -164,7 +208,7 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
 
     /**
      * Create a native representation of a process that will run in background
-     * that emans no interaction with the desktop 
+     * that means no interaction with the desktop 
      */
     protected Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException {

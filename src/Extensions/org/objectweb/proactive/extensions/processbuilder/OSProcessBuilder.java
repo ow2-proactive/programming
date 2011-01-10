@@ -200,7 +200,7 @@ public interface OSProcessBuilder {
      * The behavior of the returned map is system-dependent. A system may not
      * allow modifications to environment variables or may forbid certain
      * variable names or values. For this reason, attempts to modify the map may
-     * fail with {@link UnsupportedOperationException} or
+     * fail with {@link NotImplementedException} or
      * {@link IllegalArgumentException} if the modification is not permitted by
      * the operating system.
      * 
