@@ -59,7 +59,6 @@ import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalInputStream;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshalOutputStream;
-import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.PAMRLog4jCompat;

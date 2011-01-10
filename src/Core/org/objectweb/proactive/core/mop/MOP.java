@@ -54,7 +54,6 @@ import javassist.NotFoundException;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Active;
-import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
 import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.body.ActiveBody;

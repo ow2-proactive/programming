@@ -36,15 +36,10 @@
  */
 package functionalTests.configuration;
 
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.config.PAProperties;
-import org.objectweb.proactive.core.config.PAProperty;
 import org.objectweb.proactive.core.config.PAPropertyBoolean;
 import org.objectweb.proactive.core.config.PAPropertyInteger;
 import org.objectweb.proactive.core.config.PAPropertyString;

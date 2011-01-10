@@ -42,7 +42,6 @@ import java.util.Hashtable;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.httpserver.ClassServerServlet;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
-import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.URIBuilder;
 
 
