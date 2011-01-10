@@ -56,7 +56,7 @@ import org.bouncycastle.util.Arrays;
  *   - Its pubkey is the same than the master certificate's pubkey
  *   - It  has been signed by the master certificate's pubkey
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class SameCertTrustManager implements X509TrustManager {
     /** Authorized certificates  */

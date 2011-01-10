@@ -142,7 +142,7 @@ public class NamedThreadFactory implements ThreadFactory {
      * all the changes he wanted to the thread before it is being returned to the caller. 
      * 
      * @author ProActive team
-     * @since  ProActive 4.4.0
+     * @since  ProActive 5.0.0
      */
     public interface ThreadCustomizer {
         /**

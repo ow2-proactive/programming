@@ -59,7 +59,7 @@ import org.objectweb.proactive.extensions.ssl.SslHelpers;
 /**
  *
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class TestPASslSocketFactory extends AbstractSSL {
     static String PAYLOAD = "Chuck Norris can touch MC Hammer";

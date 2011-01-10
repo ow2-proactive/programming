@@ -70,7 +70,7 @@ import org.objectweb.proactive.extensions.ssl.SslException;
 /**
  * The PNP over SSL remote object factory
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class PNPSslRemoteObjectFactory extends PNPRemoteObjectFactoryAbstract {
     static final Logger logger = ProActiveLogger.getLogger(PNPSslConfig.Loggers.PNPSSL);

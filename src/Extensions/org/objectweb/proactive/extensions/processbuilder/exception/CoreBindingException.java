@@ -46,7 +46,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * to-be-launched process to the given subset of the cores.
  * @author Zsolt Istvan
  * 
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 @PublicAPI
 public class CoreBindingException extends Exception implements Serializable {

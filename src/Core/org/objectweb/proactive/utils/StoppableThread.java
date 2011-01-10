@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
  * is invoked. If {@link #action()} throws an exception, the while loop exits and the exception is stored.
  * 
  * @author ProActive team
- * @since  ProActive 4.4.0
+ * @since  ProActive 5.0.0
  */
 public abstract class StoppableThread extends Thread {
     /** Flag: set to true when {@link #terminate(int, TimeUnit)} is invoked */
@@ -128,7 +128,7 @@ public abstract class StoppableThread extends Thread {
      * The stack trace of the still running thread in embedded as <i>cause by</i> to help troubleshooting.
      * 
      * @author ProActive team
-     * @since  ProActive 4.4.0
+     * @since  ProActive 5.0.0
      */
     final public static class NotStoppedException extends Exception {
         /**
@@ -145,7 +145,7 @@ public abstract class StoppableThread extends Thread {
      * Dumps the stack trace of the unresponsive thread. 
      * 
      * @author ProActive team
-     * @since  ProActive 4.4.0
+     * @since  ProActive 5.0.0
      */
     final public static class ThreadIsBlockedOnException extends Exception {
 

@@ -41,15 +41,15 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
- * Before ProActive 4.4.0 PAMR loggers were exported into a wrong namespace 
- * {@link Loggers#CORE}.forwarding. ProActive 4.4.0 fixed this issue and moved all 
+ * Before ProActive 5.0.0 PAMR loggers were exported into a wrong namespace 
+ * {@link Loggers#CORE}.forwarding. ProActive 5.0.0 fixed this issue and moved all 
  * the PAMR loggers into the {@link PAMRConfig.Loggers#PAMR} namespaces. 
  * 
  * This class ensure backward compatibility. If user configured the logger in the old
  * namespace then their configuration is automatically applied to the new namespace.
  * 
  * @author ProActive team
- * @since  ProActive 4.4.0
+ * @since  ProActive 5.0.0
  */
 public class PAMRLog4jCompat {
 

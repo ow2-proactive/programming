@@ -42,7 +42,7 @@ import org.objectweb.proactive.core.ProActiveException;
 /**
  * The generic PNP over SSL exception
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class PNPSslException extends ProActiveException {
 

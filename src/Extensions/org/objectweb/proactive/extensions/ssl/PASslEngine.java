@@ -58,7 +58,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
  * is not designed to support class injection. It is easier to replace this PASslEngine by
  * another SSLEngine by using inheritance than using an hard coded factory class.
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class PASslEngine extends SSLEngine {
     final private SSLEngine sslEngine;

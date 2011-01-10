@@ -50,7 +50,7 @@ import functionalTests.FunctionalTest;
 /**
  *
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public abstract class AbstractSSL extends FunctionalTest {
 

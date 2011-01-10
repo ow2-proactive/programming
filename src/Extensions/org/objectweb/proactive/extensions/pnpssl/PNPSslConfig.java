@@ -50,7 +50,7 @@ import org.objectweb.proactive.extensions.ssl.SslHelpers;
  *  Properties all the same than the one known by the standard PNP remote object factory plus
  *  some extra ones.
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 @PublicAPI
 final public class PNPSslConfig implements PAPropertiesLoaderSPI {

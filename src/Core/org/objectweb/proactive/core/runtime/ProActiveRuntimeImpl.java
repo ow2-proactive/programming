@@ -1620,7 +1620,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
      * 
      * 
      * 
-     * @since ProActive 4.4.0
+     * @since ProActive 5.0.0
      * 
      * @return The value of {@link CentralPAPropertyRepository#PA_HOME} if it is set. Otherwise
      * the path is computed according to the class or jar location. 

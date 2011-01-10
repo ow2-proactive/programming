@@ -65,7 +65,7 @@ import org.objectweb.proactive.utils.PasswordField;
 /**
  * Create a keystore to be used by SSL enabled communication protocols
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class KeyStoreCreator {
     private final String OPT_HELP[] = new String[] { "h", "help", "Show help" };

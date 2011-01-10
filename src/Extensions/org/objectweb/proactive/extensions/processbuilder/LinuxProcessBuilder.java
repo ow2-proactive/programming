@@ -64,7 +64,7 @@ import org.objectweb.proactive.extensions.processbuilder.stream.LineReader;
  * It relies on scritps for custom launching of the user command.
  * 
  * @author Zsolt Istvan
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class LinuxProcessBuilder implements OSProcessBuilder {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.OSPB);

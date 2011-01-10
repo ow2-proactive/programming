@@ -45,7 +45,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * If this exception is throwed by the OSProcessBuilderFactory or by a OSProcessBuilder if a
  * in case of a not yet implemented feature for a specific os.
  *  
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 @PublicAPI
 public class NotImplementedException extends RuntimeException implements Serializable {

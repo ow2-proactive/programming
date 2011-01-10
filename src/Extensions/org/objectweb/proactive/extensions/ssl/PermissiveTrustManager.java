@@ -49,7 +49,7 @@ import javax.net.ssl.X509TrustManager;
  * about the remote runtime identity. We just want to encrypt communication to avoid
  * sniffers on the wire.
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class PermissiveTrustManager implements X509TrustManager {
 

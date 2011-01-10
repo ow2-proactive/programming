@@ -49,7 +49,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * </ol>
  * 
  * @author zistan
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 @PublicAPI
 public class OSUser {

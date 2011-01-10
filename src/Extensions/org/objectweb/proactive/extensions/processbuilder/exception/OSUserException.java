@@ -51,7 +51,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  *  under the specific user ID - access rights to scripts folder</li>
  * </ul>
  * @author Zsolt Istvan
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 @PublicAPI
 public class OSUserException extends Exception implements Serializable {

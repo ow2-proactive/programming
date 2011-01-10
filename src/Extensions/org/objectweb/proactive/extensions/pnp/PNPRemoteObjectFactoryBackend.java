@@ -65,7 +65,7 @@ import org.objectweb.proactive.extensions.pnp.exception.PNPException;
  * The real PNP remote object factory
  *
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory implements RemoteObjectFactory {
     static final Logger logger = ProActiveLogger.getLogger(PNPConfig.Loggers.PNP);

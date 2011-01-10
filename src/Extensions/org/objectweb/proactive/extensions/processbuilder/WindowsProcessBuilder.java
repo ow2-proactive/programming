@@ -57,7 +57,7 @@ import org.rzo.yajsw.os.ms.win.w32.WindowsProcess;
  * This builder does not accept OSUser with a private key, only username and password
  * authentication is possible.
  * 
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public final class WindowsProcessBuilder implements OSProcessBuilder {
     /**

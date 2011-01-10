@@ -51,7 +51,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * It has no additional capabilities.
  * 
  * @author Zsolt Istvan
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class BasicProcessBuilder implements OSProcessBuilder {
 

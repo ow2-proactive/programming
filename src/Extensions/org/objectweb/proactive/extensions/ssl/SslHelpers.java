@@ -44,7 +44,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 /**
  * A set of utily method to work with SSL and Bouncy Castle
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class SslHelpers {
     /** The name of the bouncy castle security provider

@@ -60,7 +60,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
  * </p>
  * @author Zsolt Istvan
  * 
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 @PublicAPI
 public class FatalProcessBuilderException extends Exception implements Serializable {

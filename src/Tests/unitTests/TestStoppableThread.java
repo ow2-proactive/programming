@@ -48,7 +48,7 @@ import org.objectweb.proactive.utils.StoppableThread.NotStoppedException;
 
 /**
  * @author ProActive team
- * @since  ProActive 4.4.0
+ * @since  ProActive 5.0.0
  */
 public class TestStoppableThread {
 

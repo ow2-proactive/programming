@@ -68,7 +68,7 @@ import java.nio.charset.IllegalCharsetNameException;
  * Remark: Most modern programs will use UTF-8 encoding on output, which means that characters are
  * encoded on a variable number of bytes (one for plain English characters).
  * @author Zsolt Istvan
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class ByteStepStreamReader {
     //TODO guess the correct size :)

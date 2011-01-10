@@ -62,7 +62,7 @@ import org.bouncycastle.x509.X509V3CertificateGenerator;
 /**
  *
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class CertificateGenerator {
 

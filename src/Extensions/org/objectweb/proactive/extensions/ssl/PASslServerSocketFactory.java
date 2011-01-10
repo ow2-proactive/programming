@@ -60,7 +60,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 /**
  *
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class PASslServerSocketFactory extends SSLServerSocketFactory {
 

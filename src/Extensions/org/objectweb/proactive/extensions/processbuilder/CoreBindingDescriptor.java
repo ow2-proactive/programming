@@ -47,7 +47,7 @@ import java.util.List;
  * </p>
  * 
  * @author Zsolt Istvan
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public interface CoreBindingDescriptor {
 

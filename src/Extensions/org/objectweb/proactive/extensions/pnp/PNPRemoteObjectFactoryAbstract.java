@@ -64,7 +64,7 @@ import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
  * object factory. This design is imposed by how remote object factory works and are initialized.
  *
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public abstract class PNPRemoteObjectFactoryAbstract implements RemoteObjectFactory {
 

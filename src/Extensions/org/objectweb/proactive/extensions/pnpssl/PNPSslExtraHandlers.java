@@ -51,7 +51,7 @@ import org.objectweb.proactive.extensions.ssl.SecureMode;
 /**
  * Add {@link SslHandler} as extra channel to the default PNP pipeline
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class PNPSslExtraHandlers implements PNPExtraHandlers {
 

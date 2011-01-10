@@ -48,7 +48,7 @@ import org.jboss.netty.channel.ChannelHandler;
  * an implementation of {@link PNPExtraHandlers}. The channels defined by {@link #getClientHandlers()}
  * and {@link #getServertHandlers()} are automatically injected into the PNP pipeline
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public interface PNPExtraHandlers {
     /**

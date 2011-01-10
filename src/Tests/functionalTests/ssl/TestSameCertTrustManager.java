@@ -47,7 +47,7 @@ import org.objectweb.proactive.extensions.ssl.SameCertTrustManager;
 /**
  *
  *
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class TestSameCertTrustManager extends AbstractSSL {
 

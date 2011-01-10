@@ -47,7 +47,7 @@ import java.io.UnsupportedEncodingException;
  * can be sure that no output remains in the buffer when we exit the method using the 
  * reader.
  * @author Zsolt Istvan
- * @since ProActive 4.4.0
+ * @since ProActive 5.0.0
  */
 public class LineReader {
     private String NEWLINE = (System.getProperty("line.separator") != null) ? System
