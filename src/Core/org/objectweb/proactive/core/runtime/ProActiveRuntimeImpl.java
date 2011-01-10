@@ -183,7 +183,7 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                     rtBrodcaster.sendCreation();
                 } catch (Exception e) {
                     // just keep it the feature is disabled
-                    logger.info("unable to activate RTBroadcast, reason is " + e.getMessage());
+                    logger.debug("unable to activate RTBroadcast, reason is " + e.getMessage());
                     ProActiveLogger.logEatedException(logger, e);
                 }
 
