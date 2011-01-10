@@ -54,7 +54,7 @@ public class Main {
      * @return String
      */
     public static String getProActiveVersion() {
-        return "5.0.0-dev";
+        return "5.0.0";
     }
 
     public static void main(String[] args) {
