@@ -1,3 +1,4 @@
 org.objectweb.proactive.extensions.pamr.remoteobject.PAMRRemoteObjectFactorySPI
 org.objectweb.proactive.extensions.pnp.PNPRemoteObjectFactorySPI
 org.objectweb.proactive.extensions.pnpssl.PNPSslRemoteObjectFactorySPI
+org.objectweb.proactive.extensions.pamrd.PAMRDRemoteObjectFactorySPI
