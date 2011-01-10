@@ -94,7 +94,7 @@ public class LinuxProcessBuilder implements OSProcessBuilder {
 
     protected final String token;
 
-    public LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores, final String paHome) {
+    protected LinuxProcessBuilder(final OSUser user, final CoreBindingDescriptor cores, final String paHome) {
         this.scriptLocation = paHome + "/dist/scripts/processbuilder/linux/";
         this.delegatedPB = new ProcessBuilder();
         this.user = user;
