@@ -48,6 +48,10 @@ import org.objectweb.proactive.utils.OperatingSystem;
 
 
 public class PathElement implements Cloneable, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     protected String relPath;
 
     public enum PathBase {

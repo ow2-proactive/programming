@@ -43,6 +43,11 @@ package org.objectweb.proactive.extensions.dataspaces.exceptions;
 public class NotConfiguredException extends ConfigurationException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      *
      */
     public NotConfiguredException() {

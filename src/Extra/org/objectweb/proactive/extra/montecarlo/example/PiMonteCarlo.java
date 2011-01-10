@@ -63,6 +63,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 
 public class PiMonteCarlo implements EngineTask<Double> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     public static final String DEFAULT_DESCRIPTOR = "WorkersApplication.xml";
     public static final String DEFAULT_WORKERS_NAME = "Workers";
     public static final int DEFAULT_NITER = 1000;
@@ -86,6 +90,10 @@ public class PiMonteCarlo implements EngineTask<Double> {
      * Definition of Monte-Carlo simulations to compute pi
      */
     public class MCPi implements SimulationSet<double[]> {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
         int N;
 
         MCPi(final int n) {
@@ -219,6 +227,11 @@ public class PiMonteCarlo implements EngineTask<Double> {
         List<SimulationSet<Long>> sets = new ArrayList<SimulationSet<Long>>();
         for (int i = 0; i < t; i++) {
             sets.add(new AbstractSimulationSetPostProcess<double[], Long>(new MCPi(ni)) {
+                /**
+                 * 
+                 */
+                private static final long serialVersionUID = 500L;
+
                 public Long postprocess(double[] experiencesResults) {
                     long counter = 0;
                     double[] simulatedCounts = experiencesResults;

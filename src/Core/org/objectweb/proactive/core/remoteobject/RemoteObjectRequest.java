@@ -45,6 +45,11 @@ import org.objectweb.proactive.core.mop.MethodCallExecutionFailedException;
 
 public class RemoteObjectRequest extends RequestImpl {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public RemoteObjectRequest() {
     };
 

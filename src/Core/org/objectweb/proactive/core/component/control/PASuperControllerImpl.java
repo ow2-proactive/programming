@@ -54,6 +54,11 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
  */
 public class PASuperControllerImpl extends AbstractPAController implements Serializable, PASuperController,
         ControllerStateDuplication {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public PASuperControllerImpl(Component owner) {
         super(owner);
     }
@@ -121,6 +126,10 @@ public class PASuperControllerImpl extends AbstractPAController implements Seria
     }
 
     class SuperControllerState implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
         private Component[] parents;
 
         public SuperControllerState(Component[] parents) {

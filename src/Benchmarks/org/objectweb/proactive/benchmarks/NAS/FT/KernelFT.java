@@ -63,6 +63,10 @@ import org.objectweb.proactive.gcmdeployment.GCMApplication;
  */
 public class KernelFT extends Kernel {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private FTProblemClass problemClass;
     private WorkerFT workers;
 

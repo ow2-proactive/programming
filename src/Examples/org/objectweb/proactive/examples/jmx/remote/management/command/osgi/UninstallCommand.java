@@ -43,6 +43,10 @@ import org.objectweb.proactive.examples.jmx.remote.management.transactions.Trans
 
 
 public class UninstallCommand extends OSGiCommand implements UninstallCommandMBean {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private long idBundle;
 
     public UninstallCommand(Transaction t, long id) {

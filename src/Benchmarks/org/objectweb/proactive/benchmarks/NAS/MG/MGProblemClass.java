@@ -49,6 +49,10 @@ import org.objectweb.proactive.benchmarks.NAS.NASProblemClass;
  */
 public class MGProblemClass extends NASProblemClass {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     public int np;
     public int maxLevel;
     public int nm2;

@@ -47,6 +47,11 @@ import java.io.Serializable;
  *
  */
 public class AverageMicroTimer implements Timer, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     protected String name;
 
     //the number of values in tis timer so far

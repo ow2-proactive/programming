@@ -45,6 +45,10 @@ import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 
 public class Entity implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private final TypedCertificateList certChain;
 
     public Entity(TypedCertificateList certChain) {

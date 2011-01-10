@@ -47,6 +47,11 @@ import org.objectweb.proactive.core.node.Node;
 public class A implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      * generated serialUID
      */
     public A() {

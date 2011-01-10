@@ -42,6 +42,11 @@ import org.objectweb.proactive.core.ProActiveException;
 
 @PublicAPI
 public class MigrationException extends ProActiveException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public MigrationException() {
         super();
     }

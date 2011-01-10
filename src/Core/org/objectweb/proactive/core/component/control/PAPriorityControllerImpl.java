@@ -53,6 +53,10 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
  * @author The ProActive Team
  */
 public class PAPriorityControllerImpl extends AbstractPAController implements PriorityController {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private static final String ANY_PARAMETERS = "any-parameters";
     private Map<String, Object> nf2s;
     private Map<String, Object> nf3s;

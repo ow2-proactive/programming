@@ -58,6 +58,11 @@ public class HttpRemoteObjectLookupMessage extends HttpMessage implements Serial
     //Caller Side
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      * Constructs an HTTP Message
      * @param urn The urn of the Object (it can be an active object or a runtime).
      */

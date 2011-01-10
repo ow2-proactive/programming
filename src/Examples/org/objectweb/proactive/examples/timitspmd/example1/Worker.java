@@ -73,6 +73,11 @@ public class Worker extends Timed {
      *
      */
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     /** The number that identifies the worker in a group */
     private int rank;
 

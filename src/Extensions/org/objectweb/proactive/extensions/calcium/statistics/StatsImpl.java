@@ -40,6 +40,10 @@ import org.objectweb.proactive.extensions.calcium.muscle.Muscle;
 
 
 public class StatsImpl implements Stats {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private long computationTime;
     private long waitingTime;
     private long processingTime;

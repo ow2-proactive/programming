@@ -43,4 +43,9 @@ package org.objectweb.proactive.core.group;
  */
 
 public class UnreachableGroupException extends RuntimeException implements java.io.Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
 }

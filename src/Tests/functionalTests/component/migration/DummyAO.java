@@ -66,6 +66,10 @@ import functionalTests.component.deployment.Test;
 // solution : we run the test from an active object (no HalfBody involved)
 public class DummyAO implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private GCMApplication newDeploymentDescriptor = null;
 
     public boolean goOldDeployment() throws Exception {

@@ -48,6 +48,11 @@ import org.objectweb.fractal.api.Component;
 public class PANFBindingControllerImpl extends PABindingControllerImpl {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      * Constructor for PANFBindingController.
      *
      * @param owner The owner component.

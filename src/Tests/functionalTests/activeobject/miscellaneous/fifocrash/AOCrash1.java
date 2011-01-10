@@ -46,6 +46,11 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 public class AOCrash1 implements Serializable, EndActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     private AOCrash2 ao2;
 
     private StringWrapper future;

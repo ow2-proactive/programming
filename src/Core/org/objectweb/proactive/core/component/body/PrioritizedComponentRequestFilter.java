@@ -48,6 +48,11 @@ import org.objectweb.proactive.core.component.request.ComponentRequest;
  *
  */
 public class PrioritizedComponentRequestFilter extends NFRequestFilterImpl {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     @Override
     public boolean acceptRequest(Request request) {
         // standard requests cannot be component controller requests

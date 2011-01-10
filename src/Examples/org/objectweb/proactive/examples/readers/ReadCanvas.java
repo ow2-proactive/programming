@@ -41,6 +41,10 @@ import java.awt.Dimension;
 
 
 public class ReadCanvas extends javax.swing.JPanel {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private int[] readers;
     private int[] writers;
 

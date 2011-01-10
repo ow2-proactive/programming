@@ -49,6 +49,10 @@ import org.objectweb.proactive.utils.OperatingSystem;
 
 
 public class HostInfoImpl implements HostInfo {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private String username;
     private String homeDirectory;
     private String id;

@@ -66,6 +66,11 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 @ActiveObject
 public class HelloWorld implements Serializable { //, InitActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     private LinkedList<String> textsToSay = new LinkedList<String>();

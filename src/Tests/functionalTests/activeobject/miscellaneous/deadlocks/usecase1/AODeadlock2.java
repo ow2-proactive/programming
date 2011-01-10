@@ -43,6 +43,10 @@ import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 
 public class AODeadlock2 implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private AODeadlock1 ao1;
 
     public AODeadlock2() {

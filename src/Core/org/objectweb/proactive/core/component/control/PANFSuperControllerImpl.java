@@ -48,6 +48,11 @@ import org.objectweb.fractal.api.Component;
 public class PANFSuperControllerImpl extends PASuperControllerImpl {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      * Constructor for PANFSuperController.
      *
      * @param owner The owner component.

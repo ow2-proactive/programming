@@ -37,6 +37,10 @@
 package org.objectweb.proactive.examples.binarytree;
 
 public class ObjectWrapper implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private Object value;
 
     public ObjectWrapper() {

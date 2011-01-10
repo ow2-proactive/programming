@@ -61,6 +61,10 @@ import org.objectweb.proactive.utils.OperatingSystem;
  * @since   ProActive 0.9.4
  */
 public class SSHProcess extends AbstractExternalProcessDecorator {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     public final static String DEFAULT_SSHPATH = "ssh";
     public final static String DEFAULT_SSH_COPYPROTOCOL = "scp";
 

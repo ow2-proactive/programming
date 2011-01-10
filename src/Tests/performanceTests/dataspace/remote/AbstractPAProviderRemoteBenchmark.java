@@ -95,6 +95,10 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
     }
 
     public static class AO implements Serializable, InitActive {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
         String vfsRootUrl;
         String namingServiceUrl;
         long appId;

@@ -52,6 +52,11 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class C3DRenderingEngine implements java.io.Serializable, RenderingEngine {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     private static final double INFINITE = 1e6;
 
     // Alpha channel

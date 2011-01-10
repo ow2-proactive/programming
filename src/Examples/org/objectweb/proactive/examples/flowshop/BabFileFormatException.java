@@ -44,6 +44,11 @@ import java.io.Serializable;
  *
  */
 public class BabFileFormatException extends Exception implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public BabFileFormatException(String message) {
         super(message);
     }

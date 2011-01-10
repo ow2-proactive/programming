@@ -48,6 +48,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class MethodStatisticsCompositeImpl extends MethodStatisticsAbstract implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_CONTROLLERS);
     private List<MonitorController> subcomponentMonitors;
 

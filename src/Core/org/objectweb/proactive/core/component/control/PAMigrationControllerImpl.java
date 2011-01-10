@@ -53,6 +53,11 @@ import org.objectweb.proactive.core.node.NodeFactory;
 
 
 public class PAMigrationControllerImpl extends AbstractPAController implements PAMigrationController {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public PAMigrationControllerImpl(Component owner) {
         super(owner);
     }

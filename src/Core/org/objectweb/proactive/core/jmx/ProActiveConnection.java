@@ -82,6 +82,11 @@ import org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper;
 public class ProActiveConnection implements Serializable, MBeanServerConnection, ProActiveInternalObject {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
 
      */
     private transient MBeanServer mbs;

@@ -70,6 +70,10 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 //@snippet-start helloworldcomponent
 public class HelloWorldComponent implements HelloWorldItf, GoodByeWorldItf, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private String text;
 
     public String sayText() {

@@ -49,6 +49,11 @@ public class SecurityNotAvailableException extends Exception {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      *
      */
     public SecurityNotAvailableException() {

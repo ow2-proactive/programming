@@ -45,6 +45,10 @@ import org.objectweb.proactive.examples.webservices.c3dWS.geom.Vec;
  * As it is now, it only is a container for the surface.
  */
 public abstract class Primitive implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private Surface surf;
 
     /**

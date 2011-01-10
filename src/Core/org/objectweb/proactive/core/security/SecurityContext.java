@@ -49,6 +49,10 @@ import org.objectweb.proactive.core.security.securityentity.Entities;
 public class SecurityContext implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
     private final Entities entitiesLocal;

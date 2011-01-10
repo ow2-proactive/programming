@@ -42,6 +42,10 @@ import java.io.Serializable;
 public class WrappedInteger implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
     private Integer intValue;

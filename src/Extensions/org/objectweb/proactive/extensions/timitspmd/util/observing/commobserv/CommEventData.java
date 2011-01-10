@@ -48,6 +48,10 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventData;
 public class CommEventData implements EventData {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
     private String name;

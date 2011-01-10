@@ -55,6 +55,11 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
  */
 public class DaCSort implements DivisibleTask<ArrayList<Integer>> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public static final int MIN_LIST_TO_SPLIT = 1000;
 
     private ArrayList<Integer> input;

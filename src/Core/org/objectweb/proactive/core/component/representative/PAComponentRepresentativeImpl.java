@@ -102,6 +102,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class PAComponentRepresentativeImpl implements PAComponentRepresentative, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
     private ComponentParameters componentParameters;
     protected Map<String, Interface> fcInterfaceReferences;

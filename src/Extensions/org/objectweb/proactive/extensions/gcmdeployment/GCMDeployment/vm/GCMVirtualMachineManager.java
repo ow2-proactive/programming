@@ -64,6 +64,10 @@ import org.ow2.proactive.virtualizing.core.error.VirtualServiceException;
  */
 public class GCMVirtualMachineManager implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     /** user's info & id (infrastructure & resources identification) */
     private String pwd, user, id;
     /** to keep all hypervisor's uri */
@@ -306,6 +310,10 @@ public class GCMVirtualMachineManager implements Serializable {
      ---------------------*/
 
     class VirtualMachineManagerHolder implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
         private final VMMBean vmmbean;
         private transient VirtualMachineManager vmm;
         private transient Hashtable<String, VirtualMachine> vms;

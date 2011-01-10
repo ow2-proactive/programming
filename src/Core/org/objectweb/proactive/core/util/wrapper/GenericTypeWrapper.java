@@ -54,6 +54,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public class GenericTypeWrapper<T extends Object> implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
     private T object;

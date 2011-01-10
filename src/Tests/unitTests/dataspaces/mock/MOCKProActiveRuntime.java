@@ -75,6 +75,10 @@ import org.objectweb.proactive.core.security.securityentity.Entity;
 
 public class MOCKProActiveRuntime implements ProActiveRuntime {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     final private MOCKVMInformation info;
 
     public MOCKProActiveRuntime(String runtimeId) {

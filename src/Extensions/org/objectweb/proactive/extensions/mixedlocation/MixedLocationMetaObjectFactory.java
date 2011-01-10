@@ -60,6 +60,10 @@ import org.objectweb.proactive.ext.locationserver.LocationServerFactory;
  * @since   ProActive 0.9.2
  */
 public class MixedLocationMetaObjectFactory extends ProActiveMetaObjectFactory {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
@@ -103,6 +107,10 @@ public class MixedLocationMetaObjectFactory extends ProActiveMetaObjectFactory {
     // -- INNER CLASSES -----------------------------------------------
     //
     protected class RequestWithMixedLocationFactory implements RequestFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
         transient private LocationServer server = LocationServerFactory.getLocationServer();
 
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
@@ -113,6 +121,11 @@ public class MixedLocationMetaObjectFactory extends ProActiveMetaObjectFactory {
 
     protected static class MigrationManagerFactoryImpl implements MigrationManagerFactory,
             java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public MigrationManager newMigrationManager() {
             //System.out.println("BodyWithMixedLocation.createMigrationManager");
             return new MigrationManagerWithMixedLocation(LocationServerFactory.getLocationServer());

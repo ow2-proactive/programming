@@ -53,6 +53,11 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.ConfigurationExc
 public final class SpaceInstanceInfo implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      *
      */
 

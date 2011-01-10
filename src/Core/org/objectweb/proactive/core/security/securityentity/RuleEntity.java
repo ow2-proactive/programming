@@ -42,6 +42,11 @@ import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 
 
 public abstract class RuleEntity implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public enum Match {
         OK, DEFAULT, FAILED;
     }

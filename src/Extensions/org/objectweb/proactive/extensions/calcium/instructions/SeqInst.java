@@ -47,6 +47,10 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
 public class SeqInst<P, R> implements Instruction<P, R> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     Execute<P, R> secCode;
 
     public SeqInst(Execute<P, R> secCode) {

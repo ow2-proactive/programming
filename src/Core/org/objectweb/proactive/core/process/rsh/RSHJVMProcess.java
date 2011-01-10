@@ -66,6 +66,10 @@ import org.objectweb.proactive.utils.OperatingSystem;
  * @since   ProActive 0.9.4
  */
 public class RSHJVMProcess extends RSHProcess implements JVMProcess {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     protected JVMProcessImpl jvmProcess;
 
     //

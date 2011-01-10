@@ -52,6 +52,10 @@ import org.objectweb.proactive.extensions.calcium.muscle.Muscle;
 
 
 public class Workout implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     public HashMap<Class<?>, Exercise> muscleWorkout;
     public static ClassSorterByName classSorterByName = new ClassSorterByName();
 

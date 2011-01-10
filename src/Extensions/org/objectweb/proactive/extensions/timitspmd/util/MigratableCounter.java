@@ -49,6 +49,10 @@ package org.objectweb.proactive.extensions.timitspmd.util;
 public class MigratableCounter extends TimerCounter {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
     private TimItReductor netclock;

@@ -67,6 +67,11 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
  */
 @ActiveObject
 public class VNActivator implements Serializable, RunActive, NodeCreationEventListener, InitActive {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     /** Created slave are returned to this manager */

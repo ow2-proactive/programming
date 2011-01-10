@@ -63,6 +63,10 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Resul
 public class ResultQueue<R extends Serializable> implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      * log4j logger of the master
      */
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER);

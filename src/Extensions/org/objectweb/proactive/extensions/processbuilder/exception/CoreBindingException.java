@@ -51,6 +51,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class CoreBindingException extends Exception implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public CoreBindingException(String descr) {
         super(descr);
     }

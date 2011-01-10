@@ -92,6 +92,11 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 @PublicAPI
 public class ProActiveMaster<T extends Task<R>, R extends Serializable> implements Master<T, R>, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     protected ProActiveMaster<T, R> activeThis = null;
 
     protected AOMaster aomaster = null;

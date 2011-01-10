@@ -47,6 +47,10 @@ import java.util.Date;
 
 //TODO 4. remove Serializable and run the agent
 public class State implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private long commitedMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getCommitted();
     private long initMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getInit();
     private long maxMemory = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax();

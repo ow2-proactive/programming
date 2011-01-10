@@ -48,6 +48,11 @@ import org.objectweb.fractal.api.Component;
 public class PANFContentControllerImpl extends PAContentControllerImpl {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      * Constructor for PANFContentController.
      *
      * @param owner The owner component.

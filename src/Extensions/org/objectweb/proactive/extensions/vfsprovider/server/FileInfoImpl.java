@@ -46,6 +46,11 @@ import org.objectweb.proactive.extensions.vfsprovider.protocol.FileType;
 
 public class FileInfoImpl implements FileInfo {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     private final long lastModifiedTime;
 
     private final long size;

@@ -77,6 +77,10 @@ public class OSGiFramework extends NotificationBroadcasterSupport implements OSG
         FrameworkListener, BundleListener, IJmx, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
     private String path;

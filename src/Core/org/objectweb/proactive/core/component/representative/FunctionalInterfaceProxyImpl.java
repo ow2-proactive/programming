@@ -74,6 +74,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class FunctionalInterfaceProxyImpl implements FunctionalInterfaceProxy, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     protected transient final static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
     private static Field universalBodyField;
     private static Field bodyIDField;

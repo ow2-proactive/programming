@@ -37,6 +37,10 @@
 package org.objectweb.proactive.core.security.crypto;
 
 public class SessionException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     String type;
 
     public SessionException() {

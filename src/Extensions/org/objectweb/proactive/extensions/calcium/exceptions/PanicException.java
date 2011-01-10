@@ -47,6 +47,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class PanicException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public PanicException(String msg) {
         super(msg);
     }

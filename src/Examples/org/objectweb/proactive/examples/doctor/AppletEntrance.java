@@ -53,6 +53,11 @@ import org.objectweb.proactive.core.config.ProActiveConfiguration;
  *
  */
 public class AppletEntrance extends org.objectweb.proactive.examples.StandardFrame {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public AppletEntrance(String name, int width, int height) {
         super(name, width, height);
     }

@@ -55,6 +55,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 @PublicAPI
 public class VasisekModelInterestRates implements SimulationSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private double a, b, t;
     private int N;
 

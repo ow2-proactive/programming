@@ -46,6 +46,10 @@ import java.awt.event.ActionListener;
 
 
 public class MsgDialog extends Dialog implements ActionListener {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private Button bOk = new Button("OK");
 
     public MsgDialog(Frame frame, String title, String content) {

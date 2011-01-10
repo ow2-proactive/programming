@@ -71,6 +71,10 @@ import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
 
 
 public class RequestImpl extends MessageImpl implements Request, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     public static Logger logger = ProActiveLogger.getLogger(Loggers.REQUESTS);
     private static final Logger oneWayExceptionsLogger = ProActiveLogger
             .getLogger(Loggers.EXCEPTIONS_ONE_WAY);

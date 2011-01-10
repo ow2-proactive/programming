@@ -49,6 +49,10 @@ import org.objectweb.proactive.core.body.reply.Reply;
 public class ReplyLog implements MessageLog {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
 

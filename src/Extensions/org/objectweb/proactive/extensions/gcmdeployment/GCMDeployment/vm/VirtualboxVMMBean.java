@@ -45,6 +45,10 @@ import org.ow2.proactive.virtualizing.virtualbox.VirtualboxVMM;
  *
  */
 public class VirtualboxVMMBean implements VMMBean {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private String uri, user, pwd;
 
     public VirtualboxVMMBean(String uri, String user, String pwd) {

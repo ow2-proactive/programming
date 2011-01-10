@@ -42,6 +42,11 @@ import java.io.IOException;
 public class ObjectHasMigratedException extends IOException {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
+    /**
      *
      */
     public ObjectHasMigratedException(String message) {

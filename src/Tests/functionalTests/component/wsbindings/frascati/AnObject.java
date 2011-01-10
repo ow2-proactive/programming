@@ -40,6 +40,10 @@ import java.io.Serializable;
 
 
 public class AnObject implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private String id;
     private int intField;
 

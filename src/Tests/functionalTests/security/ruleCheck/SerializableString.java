@@ -42,6 +42,10 @@ import java.io.Serializable;
 public class SerializableString implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
     private String v;

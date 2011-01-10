@@ -53,6 +53,11 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
  */
 public class HostComponentSetterImpl extends AbstractPAController implements HostComponentSetter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+
     public HostComponentSetterImpl(Component owner) {
         super(owner);
 

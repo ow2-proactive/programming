@@ -75,6 +75,10 @@ import org.objectweb.proactive.core.runtime.VMInformation;
 
 public class NodeImpl implements Node, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     protected NodeInformation nodeInformation;
     protected ProActiveRuntime proActiveRuntime;
     protected String vnName;
@@ -242,6 +246,10 @@ public class NodeImpl implements Node, Serializable {
     //
     protected class NodeInformationImpl implements NodeInformation {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
         final private String nodeName;
         final private String nodeURL;
         final private VMInformation vmInformation;

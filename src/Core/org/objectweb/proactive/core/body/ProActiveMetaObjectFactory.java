@@ -123,6 +123,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 @PublicAPI
 //@snippet-start proactivemetaobjectfactory
 public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Serializable, Cloneable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     public static final String COMPONENT_PARAMETERS_KEY = "component-parameters";
     public static final String SYNCHRONOUS_COMPOSITE_COMPONENT_KEY = "synchronous-composite";
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.MOP);
@@ -318,6 +322,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     //  // -- INNER CLASSES -----------------------------------------------
     //  //
     protected static class RequestFactoryImpl implements RequestFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
                 long sequenceID, MessageTags tags) {
             //########### exemple de code pour les nouvelles factories
@@ -333,6 +342,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class RequestFactoryImpl
     protected static class ReplyReceiverFactoryImpl implements ReplyReceiverFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public ReplyReceiver newReplyReceiver() {
             return new org.objectweb.proactive.core.body.reply.ReplyReceiverImpl();
         }
@@ -340,6 +354,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class ReplyReceiverFactoryImpl
     protected class RequestReceiverFactoryImpl implements RequestReceiverFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public RequestReceiver newRequestReceiver() {
             if (ProActiveMetaObjectFactory.this.parameters.containsKey(SYNCHRONOUS_COMPOSITE_COMPONENT_KEY) &&
                 ((Boolean) ProActiveMetaObjectFactory.this.parameters
@@ -352,6 +371,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class RequestReceiverFactoryImpl
     protected class RequestQueueFactoryImpl implements RequestQueueFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public BlockingRequestQueue newRequestQueue(UniqueID ownerID) {
             if ("true".equals(ProActiveMetaObjectFactory.this.parameters
                     .get(SYNCHRONOUS_COMPOSITE_COMPONENT_KEY))) {
@@ -371,6 +395,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     // end inner class RequestQueueFactoryImpl
     protected static class MigrationManagerFactoryImpl implements MigrationManagerFactory,
             java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public MigrationManager newMigrationManager() {
             //########### example de code pour les nouvelles factories
             //			if(System.getProperty("migration.stategy").equals("locationserver")){
@@ -429,6 +458,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class RemoteBodyFactoryImpl
     protected static class ThreadStoreFactoryImpl implements ThreadStoreFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public ThreadStore newThreadStore() {
             return new org.objectweb.proactive.core.util.ThreadStoreImpl();
         }
@@ -437,6 +471,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     // end inner class ThreadStoreFactoryImpl
     protected static class ProActiveSPMDGroupManagerFactoryImpl implements ProActiveSPMDGroupManagerFactory,
             java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public ProActiveSPMDGroupManager newProActiveSPMDGroupManager() {
             return new ProActiveSPMDGroupManager();
         }
@@ -444,6 +483,10 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // end inner class ProActiveGroupManagerFactoryImpl
     protected class ProActiveComponentFactoryImpl implements PAComponentFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
         // COMPONENTS
         private ComponentParameters componentParameters;
 
@@ -458,6 +501,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // FAULT-TOLERANCE
     protected class FTManagerFactoryImpl implements FTManagerFactory, Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public FTManager newFTManager(int protocolSelector) {
             switch (protocolSelector) {
                 case FTManagerFactory.PROTO_CIC_ID:
@@ -486,6 +534,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
     }
 
     protected static class DebuggerFactoryImpl implements DebuggerFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
+
         public Debugger newDebugger() {
             return new DebuggerImpl();
         }
@@ -493,6 +546,11 @@ public class ProActiveMetaObjectFactory implements MetaObjectFactory, java.io.Se
 
     // REQUEST-TAGS
     protected static class MessageTagsFactoryImpl implements MessageTagsFactory, Serializable {
+
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
 
         /**
          * @see MessageTagsFactory#newMessageTags()

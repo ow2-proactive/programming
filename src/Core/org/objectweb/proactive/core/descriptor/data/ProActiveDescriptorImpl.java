@@ -83,6 +83,10 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 public class ProActiveDescriptorImpl implements ProActiveDescriptorInternal {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      *
      */
 

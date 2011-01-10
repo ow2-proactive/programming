@@ -38,6 +38,10 @@ package org.objectweb.proactive.benchmarks.NAS.FT;
 
 public class RandomFT implements java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     public double tran = 314159265.0; // First 9 digits of PI
     public double amult = 1220703125.0; // 5.0^13
     public int KS = 0;

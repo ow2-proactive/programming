@@ -53,6 +53,10 @@ import umontreal.iro.lecuyer.rng.RandomStream;
 @PublicAPI
 public class GeometricBrownianMotion implements SimulationSet<double[]> {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private double s0, mu, sigma, t;
     private int N;
 

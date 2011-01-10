@@ -46,6 +46,10 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
 public class MapInst<P, R> implements Instruction<P, P> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     ConquerInst<?, R> conquerInst;
     DivideSIMD<P, ?> divideInst;
 

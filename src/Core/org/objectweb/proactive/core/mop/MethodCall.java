@@ -72,6 +72,10 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     //
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
+    /**
      * The hashtable that caches Method/isAsynchronousCall
      * This dramatically improves performances, since we do not have to call
      * isAsynchronousCall for every call, but only once for a given method
@@ -737,6 +741,10 @@ public class MethodCall implements java.io.Serializable, Cloneable {
     // --- INNER CLASSES -----------------------------------------------------------------------
     //
     public class FixWrapper implements java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 500L;
         public boolean isPrimitive;
         public Class<?> encapsulated;
 

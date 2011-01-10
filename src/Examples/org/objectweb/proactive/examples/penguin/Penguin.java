@@ -50,6 +50,10 @@ import org.objectweb.proactive.extensions.annotation.MigrationSignal;
 
 @ActiveObject
 public class Penguin implements org.objectweb.proactive.RunActive, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 500L;
     private boolean onItinerary;
     private boolean initialized;
     private transient PenguinFrame myFrame;
