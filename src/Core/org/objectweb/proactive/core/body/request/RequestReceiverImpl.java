@@ -207,7 +207,8 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
                 return queue.add(request);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("Error while receiving request " +
+                (request == null ? "null" : request.getMethodName()), e);
             return 0;
         }
     }
