@@ -327,14 +327,16 @@ public class RemoteObjectSet implements Serializable, Observer {
 
         for (int i = 0; i < size; i++) {
             try {
+                // Read the data before calling any method throwing an exception to avoid stream corruption
                 URI uri = (URI) in.readObject();
-                RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(uri.getScheme());
                 buf = (byte[]) in.readObject();
+
+                RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(uri.getScheme());
                 ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
                 RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
                 this.rros.put(uri, rro);
             } catch (UnknownProtocolException e) {
-                ProActiveLogger.logImpossibleException(LOGGER_RO, e);
+                LOGGER_RO.debug("Failed to instanciate a ROF when receiving a RemoteObjectset", e);
             } finally {
                 if (ois != null)
                     ois.close();
@@ -342,15 +344,17 @@ public class RemoteObjectSet implements Serializable, Observer {
         }
 
         try {
+            // Read the data before calling any method throwing an exception to avoid stream corruption
             this.defaultURI = (URI) in.readObject();
+            buf = (byte[]) in.readObject();
+
             RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI
                     .getScheme());
-            buf = (byte[]) in.readObject();
             ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
             RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
             this.defaultRO = rro;
         } catch (UnknownProtocolException e) {
-            ProActiveLogger.logImpossibleException(LOGGER_RO, e);
+            LOGGER_RO.debug("Failed to instanciate a ROF when receiving a RemoteObjectset", e);
         } finally {
             if (ois != null)
                 ois.close();
