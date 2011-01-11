@@ -39,6 +39,7 @@ package org.objectweb.proactive.extensions.pamr.remoteobject.message;
 import java.io.Serializable;
 import java.net.URI;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
 import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteRemoteObject;
@@ -101,7 +102,7 @@ public class PAMRRemoteObjectLookupMessage extends PAMRMessage implements Serial
                     rro = f.newRemoteObject(irro);
                     ((PAMRRemoteObject) rro).setURI(uri);
                     return rro;
-                } catch (UnknownProtocolException e) {
+                } catch (ProActiveException e) {
                     // Impossible because that class has been created by the factory
                     ProActiveLogger.logImpossibleException(logger, e);
                 }
