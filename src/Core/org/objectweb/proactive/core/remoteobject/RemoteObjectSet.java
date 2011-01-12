@@ -331,10 +331,15 @@ public class RemoteObjectSet implements Serializable, Observer {
                 URI uri = (URI) in.readObject();
                 buf = (byte[]) in.readObject();
 
-                RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(uri.getScheme());
-                ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
-                RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
-                this.rros.put(uri, rro);
+                if (buf != null) {
+                    RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(uri
+                            .getScheme());
+                    ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
+                    RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
+                    this.rros.put(uri, rro);
+                } else {
+                    LOGGER_RO.debug("Sender was unable to serialize RemoteRemoteObject for " + uri);
+                }
             } catch (UnknownProtocolException e) {
                 LOGGER_RO.debug("Failed to instanciate a ROF when receiving a RemoteObjectset", e);
             } finally {
@@ -348,11 +353,15 @@ public class RemoteObjectSet implements Serializable, Observer {
             this.defaultURI = (URI) in.readObject();
             buf = (byte[]) in.readObject();
 
-            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI
-                    .getScheme());
-            ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
-            RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
-            this.defaultRO = rro;
+            if (buf != null) {
+                RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI
+                        .getScheme());
+                ois = rof.getProtocolObjectInputStream(new ByteArrayInputStream(buf));
+                RemoteRemoteObject rro = (RemoteRemoteObject) ois.readObject();
+                this.defaultRO = rro;
+            } else {
+                LOGGER_RO.debug("Sender was unable to serialize RemoteRemoteObject for " + this.defaultURI);
+            }
         } catch (UnknownProtocolException e) {
             LOGGER_RO.debug("Failed to instanciate a ROF when receiving a RemoteObjectset", e);
         } finally {
@@ -397,40 +406,48 @@ public class RemoteObjectSet implements Serializable, Observer {
         this.vmid = ProActiveRuntimeImpl.getProActiveRuntime().getVMInformation().getVMID();
         out.defaultWriteObject();
         out.writeInt(rros.size());
-        ObjectOutputStream oos = null;
+
         for (URI uri : rros.keySet()) {
+            byte[] buf = null;
+
+            ObjectOutputStream oos = null;
             try {
-                out.writeObject(uri);
                 RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(uri.getScheme());
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 oos = rof.getProtocolObjectOutputStream(baos);
                 oos.writeObject(rros.get(uri));
                 oos.flush();
-                out.writeObject(baos.toByteArray());
+                buf = baos.toByteArray();
             } catch (UnknownProtocolException e) {
-                ProActiveLogger.logImpossibleException(LOGGER_RO, e);
+                LOGGER_RO.debug("Failed to serialize additional RemoteRemoteObject for " + uri);
             } finally {
                 if (oos != null)
                     oos.close();
             }
+
+            out.writeObject(uri);
+            out.writeObject(buf); // null if serialization failed
         }
 
+        byte[] buf = null;
+        ObjectOutputStream oos = null;
         try {
-            out.writeObject(this.defaultURI);
-            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(this.defaultURI
-                    .getScheme());
+            String scheme = this.defaultURI.getScheme();
+            RemoteObjectFactory rof = AbstractRemoteObjectFactory.getRemoteObjectFactory(scheme);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             oos = rof.getProtocolObjectOutputStream(baos);
             oos.writeObject(this.defaultRO);
             oos.flush();
-            out.writeObject(baos.toByteArray());
+            buf = baos.toByteArray();
         } catch (UnknownProtocolException e) {
-            ProActiveLogger.logImpossibleException(LOGGER_RO, e);
+            LOGGER_RO.debug("Failed to serialize the default RemoteRemoteObject for " + this.defaultURI);
         } finally {
             if (oos != null)
                 oos.close();
         }
 
+        out.writeObject(this.defaultURI);
+        out.writeObject(buf); // null if serialization failed
     }
 
     /**
