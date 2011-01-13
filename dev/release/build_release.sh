@@ -48,8 +48,8 @@ fi
 export JAVA_HOME=${JAVA_HOME}
 
 
-TMP_DIR="${TMP}/ProActive-${VERSION}"
-output=$(mkdir ${TMP_DIR} 2>&1)
+TMP_DIR="${TMP}/ProActiveProgramming-${VERSION}_core"
+output=$(mkdir "${TMP_DIR}" 2>&1)
 if [ "$?" -ne 0 ] ; then
 	if [ -e ${TMP_DIR} ] ; then
 		echo " [w] ${TMP_DIR} already exists. Delete it !"
@@ -77,6 +77,7 @@ cd compile || warn_and_exit "Cannot move in compile"
 ./build clean
 ./build -Dversion="${VERSION}" deploy.all
 ./build -Dversion="${VERSION}" doc.ProActive.manualPdf
+cd ..
 
 # Check release number
 OUTPUT=$(${JAVA_HOME}/bin/java -cp dist/lib/ProActive.jar org.objectweb.proactive.api.PAVersion)
@@ -109,5 +110,6 @@ rm -Rf doc/ic2d
 sed -i "s/{version}/$VERSION/" README.txt
 
 cd ${TMP}
-tar cvfz ProActive-${VERSION}.tar.gz ProActive-${VERSION}
-zip -r   ProActive-${VERSION}.zip    ProActive-${VERSION}
+tar cvfz ProActiveProgramming-${VERSION}_core.tar.gz ProActiveProgramming-${VERSION}_core
+zip -r   ProActiveProgramming-${VERSION}_core.zip    ProActiveProgramming-${VERSION}_core
+
