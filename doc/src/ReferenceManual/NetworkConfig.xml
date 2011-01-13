@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V5.0//EN" "../../toolchain/docbook.dtd"> -->
+<chapter version="5.0" xml:id="netconfig">
+  <info>
+    <title>Network configuration</title>
+  </info>
+
+  <para>
+    ProActive offers several communication protocols. It is up to the user to decide which
+    protocol to use according to its needs. Each protocol provides
+    different features: speed, security,
+    fast error detection, firewall or NAT friendness, etc. None of the protocols can offer all these features,
+    so they have
+    to be chosen carefully. To take benefit from each communication protocol, a ProActive runtime
+    can use several communication protocols concurrently.
+  </para>
+
+  <section xml:id="netconfig-protocols">
+    <info>
+      <title>Available communication protocols</title>
+    </info>
+
+    <para>
+      This section enumerates all the available communication protocols and describes their
+      benefits and drawbacks. Their configuration and options are
+      also explained.
+    </para>
+
+    <section xml:id="netconfig-protocols-pnp">
+      <info>
+        <title>ProActive Network Protocol (PNP, pnp://)</title>
+      </info>
+
+      <section xml:id="netconfig-protocols-pnp-desc">
+        <info>
+          <title>Description</title>
+        </info>
+
+        <para>
+          PNP is the general purpose communication protocol. Its performances are quite similar to RMI, but
+          it is much more robust and network friendly: only
+          one TCP
+          port for each runtime, no shared
+          registry, fast network failure discovery, better scalability. 
+        </para>
+
+        <para>
+          A runtime using PNP binds to a given TCP port at startup. All incoming communications use this
+          TCP ports. So deploying an application with PNP
+          requires to open one and only one incoming TCP
+          port. Two runtimes cannot share the same TCP port.  
+        </para>
+      </section>
+
+      <section xml:id="netconfig-protocols-pnp-config">
+        <info>
+          <title>Configuration</title>
+        </info>
+
+        <para>
+          To use PNP
+          <emphasis>proactive.communication.protocol</emphasis>
+          must be set to
+          <emphasis>pnp</emphasis>
+          . PNP behavior can be customized by setting these properties:
+
+          <itemizedlist>
+            <listitem>
+              <para>
+                <emphasis>proactive.pnp.port</emphasis>
+                The TCP port to bind to. If not set PNP uses a random free port. If the specified TCP
+                port is already used PNP will not start and an error message
+                is displayed.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.pnp.default_heartbeat</emphasis>
+                PNP uses heartbeat messages to monitor TCP socket and discover network failures.
+                This value determines how long PNP will wait before the
+                connection is considered 
+                broken. Heartbeat messages are usually sent every
+                <emphasis>default_heartbeat/2</emphasis>
+                ms. This value is in milliseconds. This value is a trade-off between fast error
+                discovery and network overhead. The default value is 9000 ms.
+                Setting this value to 0
+                disable the heartbeat mechanism and client will not be advertised of network failure
+                before the TCP timeout (which can be
+                really long).
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.pnp.idle_timeout</emphasis>
+                PNP channels are closed when unused to free system resources. Establishing a TCP
+                connection is costly (at least 3 RTT) so PNP connections are
+                not closed immediatly
+                but after a grace time. By default the grace time is 60 000 ms. Setting this value to 0
+                disable the autoclosing mecanism,
+                connections are kept open forever.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </section>
+
+    </section>
+
+    <section xml:id="netconfig-protocols-pnps">
+      <info>
+        <title>ProActive Network Protocol over SSL (PNPS, pnps://)</title>
+      </info>
+
+
+      <section xml:id="netconfig-protocols-pnps-desc">
+        <info>
+          <title>Description</title>
+        </info>
+
+        <para>
+          PNPS is the PNP protocol wrapped inside an SSL tunnel. It provides the same features as PNP
+          plus ciphering and optionally authentication. Using
+          SSL implies some CPU overhead and PNPS is
+          slower than PNP.
+        </para>
+      </section>
+
+      <section xml:id="netconfig-protocols-pnps-usecases">
+        <info>
+          <title>Use cases</title>
+        </info>
+
+        <para>
+          There are two uses for PNPS. The first one is to secure communication with ciphering when
+          the messages can be sent over an untrusted network. Please
+          note that PNPS in ciphering mode
+          only prevent messages from being sniffed on the network. Any
+          malicious user able to establish a TCP connection to the
+          runtime can connect to it and
+          execute any arbitrary code. In ciphering only mode the runtime must be configured as follows:
+          <screen>
+<![CDATA[
+-Dproactive.communication.protocol=pnps [-Dproactive.pnps.keystore=file:///path/to/keystore.p12]
+]]>
+          </screen>
+
+        </para>
+
+
+        <para>
+          The second use case is ciphering and authentication. In addition to message ciphering this
+          mode authenticate both the client and the server. To
+          establish a PNPS connection to a runtime,
+          both the client and the server must send a trusted certificate. This mode allows to secure
+          a ProActive runtime
+          from a malicious user and prevent sniffing. In authentication and ciphering
+          mode the runtime must be configured as follows:
+          <screen>
+<![CDATA[
+-Dproactive.communication.protocol=pnps -Dproactive.pnps.authenticate=true -Dproactive.pnps.keystore=file:///path/to/keystore.p12
+]]>
+          </screen>
+        </para>
+
+      </section>
+
+      <section xml:id="netconfig-protocols-pnps-config">
+        <info>
+          <title>Configuration</title>
+        </info>
+
+        <para>
+          PNPS support the same options as PNP (in its own option name space) plus
+          some SSL specific options:
+
+          <itemizedlist>
+            <listitem>
+              <para>
+                <emphasis>proactive.pnps.port</emphasis>
+                : same as
+                <emphasis>proactive.pnp.port</emphasis>
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.pnps.default_heartbeat</emphasis>
+                : same as
+                <emphasis>proactive.pnp.default_heartbeat</emphasis>
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.pnps.idle_timeout</emphasis>
+                : same as
+                <emphasis>proactive.pnp.idle_timeout</emphasis>
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.pnps.authenticate</emphasis>
+                : By default, PNPS only ciphers the communication but does not authenticate
+                nor the client nor the server. Setting this option to true enable client
+                and
+                server authentication. If set to true the option
+                <emphasis>proactive.pnps.keystore</emphasis>
+                must also be set.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.pnps.keystore</emphasis>
+                : Specify the keystore (containing the SSL private key) to use. If not set a private
+                key is dynamically generated for this execution. The keystore
+                must be created with
+                the
+                <emphasis>ssl-keystore</emphasis>
+                script.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+
+        <para>
+          When using the authentication and ciphering mode (or the speed up the initialization in
+          ciphering only mode) the option
+          <emphasis>proactive.pnps.keystore</emphasis>
+          must be set
+          and a keystore embedding the private SSL key must be generated by using the
+          <emphasis>ssl-keystore</emphasis>
+          script.
+        </para>
+
+        <para>
+          To create the keystore, use the following command:
+
+          <screen>
+<![CDATA[
+$ $PA_HOME/bin/ssl-keystore.sh --create --keystore mykeystore.p12
+]]>
+          </screen>
+
+          This keystore must be accessible to the runtimes and kept secret.
+        </para>
+      </section>
+
+      <section xml:id="netconfig-protocols-pnps-troubleshooting">
+        <info>
+          <title>Troubleshouting</title>
+        </info>
+
+        <qandaset>
+          <qandaentry>
+            <question>
+              <para>Runtimes hang when initializing</para>
+            </question>
+            <answer>
+              <para>
+                Using SSL consume require some available entropy to initialize the SSL engine. When
+                the certificates are created at runtime (ciphering only mode without a keystore speicified)
+                SSL consumes even more entropy bytes. Most likely the runtime is
+                waiting for more random
+                bytes being available in the system entropy pool (
+                <filename>/dev/random</filename>
+                on UNIX).
+                The most secure way to address this issue is to... way. If you don't want to wait until new
+                bytes are available you can configure Java to use
+                <filename>/dev/urandom</filename>
+                instead
+                of
+                <filename>/dev/random</filename>
+                .
+                <filename>/dev/urandom</filename>
+                is a little bit less
+                secure than
+                <filename>/dev/random</filename>,
+                but it is non blocking.
+              </para>
+            </answer>
+          </qandaentry>
+        </qandaset>
+      </section>
+    </section>
+
+    <section xml:id="netconfig-protocols-pamr">
+      <info>
+        <title>ProActive Message Routing (PAMR, pamr://)</title>
+      </info>
+
+      <section xml:id="netconfig-protocols-pamr-desc">
+        <info>
+          <title>Description</title>
+        </info>
+
+        <para>
+          The goal of PAMR is to allow the deployment of ProActive Programming when the configuration
+          of the network is unfriendly. PAMR has the weakest
+          expections on how the network is configured.
+          Unlike all the other communication protocols, PAMR does not expect bidirectional TCP connections.
+          It has
+          been designed to work when only outgoing TCP connections are available.
+          Such environments can be encountered due to:
+          <itemizedlist>
+            <listitem>
+              <para>Network address translation devices </para>
+            </listitem>
+            <listitem>
+              <para>Firewalls allowing only outgoing connection (this is the default setup of many personal firewall)</para>
+            </listitem>
+            <listitem>
+              <para>Virtual Machines with a virtualized network stack</para>
+            </listitem>
+          </itemizedlist>
+        </para>
+
+        <para>
+          When PAMR is activated, each ProActive Programming runtime connect to a PAMR router.
+          This connection is kept open, and used as a tunnel to receive
+          incoming messages. If the tunnel
+          goes down, it is automatically reopened by the ProActive runtime.
+        </para>
+
+        <para>
+          The biggest drawback of PAMR is that a centralized PAMR router is in charge of routing message
+          between all the PAMR clients. To soften this limitation
+          PAMR can be used with other communication
+          protocol. This way, PAMR is used only when needed. See
+          <link linkend="netconfig-multiprotocol" endterm="netconfig-multiprotocol.title" />
+          .
+        </para>
+
+      </section>
+
+      <section xml:id="netconfig-protocols-pamr-usecases">
+        <info>
+          <title>Use cases</title>
+        </info>
+
+        <para>
+          Few use cases of PARM follows.
+        </para>
+
+        <para>
+          The first use case is two laptops connected by WIFI, each of them using a personal
+          firewall. As shown on the
+          <link linkend="netconfig-protocols-pamr-desc-usecase-laptop">picture</link>
+          hereafter, there is no way to establish a connection
+          between these two laptops. To solve this issue, a message router can be deployed on an external
+          machine. Most of the desktop machines and laptop have a personal firewall enabled. If it is
+          possible, it is better to open on TCP port on each machine
+          and use the HTTP transport. If not,
+          then message routing can be used.
+
+          <mediaobject xml:id="netconfig-protocols-pamr-desc-usecase-laptop">
+            <imageobject>
+              <imagedata format="PNG" width="80%" align="center" fileref="images/png/laptop_nok.png" scalefit="1" />
+            </imageobject>
+            <caption>
+              <para>
+                Laptops with personal firewalls denying incoming connection.
+          </para>
+            </caption>
+          </mediaobject>
+        </para>
+
+        <para>
+          The second use case is similar to the first one. When a virtual machine is deployed with a virtual
+          network stack, it is not possible to contact the
+          virtual machines from the LAN. VMs are behind
+          a software NAT performed by the hypervisor.
+
+          <mediaobject xml:id="netconfig-protocols-pamr-desc-usecase-virtualization">
+            <imageobject>
+              <imagedata format="PNG" width="80%" align="center" fileref="images/png/virtualization_nok.png" />
+            </imageobject>
+            <caption>
+              <para>
+                Servers with few virtual machines deployed with a virtualized network stack.
+          </para>
+            </caption>
+          </mediaobject>
+
+          The solution is to place a message router on a physical machine on the LAN. All the virtual machines will
+          connect to this router. For production usage,
+          it is better to configure your VM to get real IP addresses
+          on the LAN. But with message routing you can develop and test your application on virtual
+          machines
+          without any configuration.
+        </para>
+      </section>
+
+      <section xml:id="netconfig-protocols-pamr-config">
+        <info>
+          <title>Configuration</title>
+        </info>
+
+        <para>
+          The configuration of PAMR is a two step process.
+          The first step is to configure and start the message router. The second step
+          is to configure every
+          ProActive runtime to use PAMR with the started message router.
+        </para>
+
+        <section xml:id="netconfig-protocols-pamr-config-router">
+          <info>
+            <title>Router configuration</title>
+          </info>
+
+          <para>
+            The message router has to be started on a machine which is TCP reachable by all the
+            ProActive runtimes involved in the computation. The
+            localization of the message
+            router is critical: the machine has to be TCP reachable, have a good network connection
+            (bandwidth and latency) and be
+            stable. If the message router crashes, the whole application
+            must be restarted.
+          </para>
+
+          <para>
+            To start a message router, use the
+            <emphasis role="bold">bin/startRouter.sh</emphasis>
+            or
+            <emphasis role="bold">bin/startRouter.bat</emphasis>
+            script:
+
+            <screen>
+              [cmathieu@britany:programming-git]$ bin/startRouter.sh
+              34980@britany.activeeon.com - [INFO forwarding.router] Message router listening on
+              ServerSocket[addr=/192.168.1.22,localport=33647]</screen>
+
+            The IP address and TCP port on which the message router is bound is printed on the standard output.
+          </para>
+
+          <para>
+            By default, the message router binds to the
+            <emphasis>wildcard</emphasis>
+            address on the
+            <emphasis>33647</emphasis>
+            TCP port. This behavior can be configuration by using the
+            following parameters:
+
+            <itemizedlist>
+              <listitem>
+                <para>
+                  <emphasis>--port</emphasis>
+                  : The TCP port to bind to.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis>--ip</emphasis>
+                  : The IP address to bind to.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis>--ipv4</emphasis>
+                  : The message router will only use IPv4 sockets
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis>--ipv6</emphasis>
+                  : Prefer IPv6 addresses over IPv4 addresses (and IPv4 addresses
+                  mapped over IPv6),
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis>--nbWorkers</emphasis>
+                  : The number of worker threads to use. The only serial
+                  operation in the message router is reading bits from the tunnels. All other operations
+                  can be performed in parallel with the help of a thread pool. This parameter defines how
+                  many workers are in the thread pool.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis>--configFile</emphasis>
+                  : The configuration file to use to declare reserved clients.
+                  This file is a Java property file. Keys must be integers between 0 and 4095, value
+                  must be Unicode
+                  strings shorter than 64 characters. If a invalid value is found, the router will not start.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis>--timeout</emphasis>
+                  : PAMR uses an heartbeat mecanism to detect network failures.
+                  As soon as an agent detects that the tunnel is broken, it will try to reconnect
+                  to the router.
+                  If the router detects a broken tunnel it sends a notification to every clients to unlock blocked
+                  thread waiting for a response
+                  from the disconnected client. This option sets the hearbeat timeout
+                  in milliseconds. It means that if the router or a client does not receive
+                  an heartbeat before the
+                  timeout, then the tunnel is closed and the client is disconnected. An heartbeat is sent every at an
+                  timeout/3 frequency.
+                </para>
+
+                <para>
+                  This value should not be set to a too low value. Value lower than 600ms on a LAN are unreliable (lot
+                  of false positive due to
+                  scheduling/network latency). 
+                </para>
+              </listitem>
+            </itemizedlist>
+          </para>
+        </section>
+
+
+        <section xml:id="netconfig-protocols-pamr-config-urls">
+          <info>
+            <title>Well known urls</title>
+          </info>
+
+          <para>
+            By default the router assigns an unique and random Agent ID to each agent. This random ID in
+            the URL can make PAMR quite hard to use to deploy daemons and services. Indeed each time the
+            services is restarted, a new URL is created.
+          </para>
+
+          <para>
+            To address this issue, PAMR provides reserved agent ID. This feature allows a runtime to ask for
+            a specific agent ID. If an agent is already connected then it is disconnected and the slot is
+            given to the new agent. Reserved agent ID must be declared in the router configuration file and
+            a magic cookie must be specified for each reserved agent ID. This cookie is used to secure the slot,
+            a client must provide the right magic cookie to be allowed to use the slot.
+          </para>
+
+          <para>
+            All reserved agent ID must be declared in a configuration file, and the router must be started
+            with the
+            <emphasis role="bold">--configFile</emphasis>
+            option. The configuration file is a standard
+            Java property file. Keys must be an integer between 0 and 4095 (the agent ID) and values are Unicode
+            strings up to 64 characters.
+          </para>
+
+          <para>
+            A magic cookie for the key
+            <emphasis role="bold">configuration</emphasis>
+            must be set. It allows the administrator
+            to reload the router configuration at runtime. See the
+            <emphasis role="bold">--reload</emphasis>
+            option.
+          </para>
+
+          <screen>
+<![CDATA[
+$ cat services.txt
+# Admin cookie
+configuration=mySecretPassword
+# Application 1
+0=magicCookie1
+# Application 2
+2000=toor
+2001=admin
+
+$ ./bin/startRouter.sh --configFile services.txt
+]]></screen>
+
+          <para>
+            The
+            <emphasis role="bold">proactive.communication.pamr.agent.id</emphasis>
+            and
+            <emphasis role="bold">proactive.communication.pamr.agent.magic_cookie</emphasis>
+            ProActive properties must be used on the client runtime to configure the PAMR agent.
+          </para>
+        </section>
+      </section>
+
+      <section xml:id="netconfig-protocols-pamr-troubleshooting">
+        <info>
+          <title>Troubleshooting</title>
+        </info>
+
+        <para>
+          If the router cannot be contacted, an error message is printed with an exception like this one:
+          <screen>
+<![CDATA[
+6743@britany.activeeon.com - [INFO oactive.remoteobject] Loading <pamr, class org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory>
+6743@britany.activeeon.com - [FATAL warding.remoteobject] Failed to initializeorg.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory
+org.objectweb.proactive.core.ProActiveRuntimeException: Failed to create the local agent
+  at org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory.logAndThrowException(MessageRoutingRemoteObjectFactory.java:119)
+  at org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory.<init>(MessageRoutingRemoteObjectFactory.java:101)
+  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+  at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+  at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+  at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+  at java.lang.Class.newInstance0(Class.java:355)
+  at java.lang.Class.newInstance(Class.java:308)
+  at org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory.getRemoteObjectFactory(AbstractRemoteObjectFactory.java:100)
+  at org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory.getDefaultRemoteObjectFactory(AbstractRemoteObjectFactory.java:126)
+  at org.objectweb.proactive.core.remoteobject.RemoteObjectExposer.createRemoteObject(RemoteObjectExposer.java:153)
+  at org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl.<init>(ProActiveRuntimeImpl.java:267)
+  at org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl.<clinit>(ProActiveRuntimeImpl.java:158)
+  at org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeMapper.subscribeJMXRuntimeEvent(NodeMapper.java:102)
+  at org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.NodeMapper.<init>(NodeMapper.java:97)
+  at org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.GCMApplicationImpl.<init>(GCMApplicationImpl.java:176)
+  at org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.loadApplicationDescriptor(PAGCMDeployment.java:104)
+  at org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment.loadApplicationDescriptor(PAGCMDeployment.java:86)
+  at org.objectweb.proactive.examples.hello.Hello.main(Hello.java:87)
+Caused by: org.objectweb.proactive.core.ProActiveException: Failed to create the tunnel to britany.activeeon.com/192.168.1.22:33647
+  at org.objectweb.proactive.extra.messagerouting.client.AgentImpl.<init>(AgentImpl.java:128)
+  at org.objectweb.proactive.extra.messagerouting.client.AgentImpl.<init>(AgentImpl.java:88)
+  at org.objectweb.proactive.extra.messagerouting.remoteobject.MessageRoutingRemoteObjectFactory.<init>(MessageRoutingRemoteObjectFactory.java:99)
+  ... 17 more
+]]></screen>
+          The nested exception shows that the ProActive runtime failed to contact the message router.
+        </para>
+      </section>
+    </section>
+
+    <section xml:id="netconfig-protocols-rmi">
+      <info>
+        <title>Java RMI</title>
+      </info>
+
+      <section xml:id="netconfig-protocols-rmi-desc">
+        <info>
+          <title>Description</title>
+        </info>
+
+        <para>
+          RMI is the default communication protocol. It combines good performances with remote class
+          loading. Drawbacks of RMI are that by default all the runtimes on a same machine share the same
+          RMI registry, there is no network failure detection mechanism other than the TCP timeout,
+          poor scalability due to a huge number of threads being created, and not firewall friendly.
+      </para>
+
+        <para>
+          RMI is the protocol to use if you deploy your application on an unfirewalled LAN, don't need
+          high scalability, and want best point to point  performance (both bandwidth and throughput).
+      </para>
+      </section>
+
+      <section xml:id="netconfig-protocols-rmi-config">
+        <info>
+          <title>Configuration</title>
+        </info>
+
+        <itemizedlist>
+          <listitem>
+            <para>
+              <emphasis>proactive.rmi.port</emphasis>
+              :
+              The TCP port to use for the RMI registry. Cannot be 0 for dynamic port selection.
+              RMI uses other random TCP ports for the communication, this port
+              is only used by the RMI registry.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <emphasis>proactive.rmi.connect_timeout</emphasis>
+              :
+              The amount of time in millisecond to way wait while establishing a TCP connection
+              before reporting it as failed. This option allows to not wait the TCP timeout when
+              a machine is firewalled and drop the packets (default Windows firewall behavior).
+            </para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+    </section>
+
+    <section xml:id="netconfig-protocols-http">
+      <info>
+        <title>HTTP</title>
+      </info>
+
+      <section xml:id="netconfig-protocols-http-desc">
+        <info>
+          <title>Description</title>
+        </info>
+
+        <para>
+          This communication protocol allows to use an embedded Jetty server to communicate by using HTTP message.
+          HTTP is more firewall friendly than RMI since it only uses one TCP port. 
+      </para>
+
+        <para>
+          When possible, it is better to use PNP than HTTP since PNP provides more features like fast network
+          failure discovery or SSL encryption. In addition PNP is usually faster than HTTP. Nevertheless
+          HTTP is useful to pass through layer 7 filtering since the HTTP protocol will be most likely be allowed.  
+      </para>
+      </section>
+
+      <section xml:id="netconfig-protocols-http-config">
+        <info>
+          <title>Description</title>
+        </info>
+
+        <para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                <emphasis>proactive.http.port</emphasis>
+                : The TCP port to bind to. If not set HTTP uses a random free port. If the specified 
+                TCP port is already used HHTP will not start and an error message is displayed. 
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.http.jetty.connector</emphasis>
+                : The Connector to be used by Jetty (full class name). By default a SelectChannelConnector is used.
+                It is well suited to handle a lot of mainly idle clients workload (like coarse grained
+                master worker). It can be replaced by a Socketconnecter to achieve better performances
+                for an application with a few very busy client. SocketConnect, BlockingChannelConnector 
+                and SelectChannelConnector can be used. See 
+                <link xlink:href="http://docs.codehaus.org/display/JETTY/Architecture">Jetty documentation</link> 
+                for more information.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.http.jetty.xml</emphasis>
+                : File path to Jetty configuration to use. See 
+                <link xlink:href="http://docs.codehaus.org/display/JETTY/Syntax+Reference">Jetty documentation</link>
+                for more information
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <emphasis>proactive.http.connect_timeout</emphasis>
+                : The HTTP socket timeout in milliseconds. A timeout of zero is interpreted 
+                as an infinite timeout.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </section>
+
+    </section>
+  </section>
+
+  <section xml:id="netconfig-tcpip">
+    <info>
+      <title>TCP/IP configuration</title>
+    </info>
+
+    <para>
+      ProActive programming is only able to bind to one and only one InetAddress.
+      Usually, this limitation is not seen by the user and no special configuration
+      is required. ProActive tries to use the most suitable network address available.
+      But sometimes, ProActive fails to elect the right IP address or the user
+      wants to
+      use a given IP address. In such case, you can specify the IP address to use by using
+      theses properties:
+      <emphasis role="bold">proactive.hostname</emphasis>
+      ,
+      <emphasis role="bold">proactive.net.interface</emphasis>
+      ,
+      <emphasis role="bold">proactive.net.netmask</emphasis>
+      ,
+      <emphasis role="bold">proactive.net.nolocal</emphasis>
+      ,
+      <emphasis role="bold">proactive.net.noprivate</emphasis>
+      .
+    </para>
+
+    <para>
+      IPv6 can be enabled by setting the
+      <emphasis>proactive.net.disableIPv6</emphasis>
+      property to
+      <emphasis role="bold">false</emphasis>
+      . By default, ProActive does not use IPv6 addresses.
+    </para>
+
+    <para>
+      If none of the
+      <emphasis>proactive.hostname</emphasis>
+      ,
+      <emphasis>proactive.net.interface</emphasis>
+      ,
+      <emphasis>proactive.net.netmask</emphasis>
+      ,
+      <emphasis>proactive.net.nolocal</emphasis>
+      ,
+      <emphasis>proactive.net.noprivate</emphasis>
+      properties is defined, then the following algorithm is used to elect an IP address:
+      <itemizedlist>
+        <listitem>
+          <para>
+            If a public IP address is available, then use it. If several ones are
+            available, one is randomly chosen.
+        </para>
+        </listitem>
+        <listitem>
+          <para>
+            If a private IP address is available, then use it. If several ones are
+            available, one is randomly chosen.
+        </para>
+        </listitem>
+        <listitem>
+          <para>
+            If a loopback IP address is available, then use it. If several ones are
+            available, one is randomly chosen.
+        </para>
+        </listitem>
+        <listitem>
+          <para>
+            If no IP address is available at all, then the runtime exits with an
+            error message.
+        </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      If
+      <emphasis role="bold">proactive.hostname</emphasis>
+      is set, then the value returned by
+      <emphasis role="bold">InetAddress.getByName(proactive.hostname)</emphasis>
+      is elected. If no
+      IP address is found, then the runtime exits with an error message.
+    </para>
+
+    <para>
+      If
+      <emphasis role="bold">proactive.hostname</emphasis>
+      is not set, and at least one of the
+      <emphasis role="bold">proactive.net.interface</emphasis>
+      ,
+      <emphasis role="bold">proactive.net.netmask</emphasis>
+      ,
+      <emphasis role="bold">proactive.net.nolocal</emphasis>
+      ,
+      <emphasis role="bold">proactive.net.noprivate</emphasis>
+      is set, then one of the addresses matching all the requirements is elected. Requirements are:
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            If
+            <emphasis>proactive.net.interface</emphasis>
+            is set, then the IP address
+            must be bound to the given network interface.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If
+            <emphasis>proactive.net.netmask</emphasis>
+            is set, then the IP address
+            must match the given netmask.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If
+            <emphasis>proactive.net.nolocal</emphasis>
+            is set, then the IP address
+            must not be a loopback address.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If
+            <emphasis>proactive.net.noprivate</emphasis>
+            is set, then the IP address
+            must not be a private address.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+
+    <para>
+      If no address matches theses criteria, the runtime exits with an error message.
+  </para>
+
+    <para>
+      The easiest way to check if ProActive elect the address you want is to run the following command:
+      <screen>java -jar dist/lib/ProActive.jar</screen>
+
+      It shows the elected IP address and all the network interfaces and IP addresses available. It also
+      displays all the configuration properties and their value.
+
+      <screen>
+        --------------------
+        ProActive 2008-07-10 11:59:18
+        --------------------
+
+
+        Local IP Address: 192.168.1.22
+        Config dir: /user/cmathieu/home/.proactive
+
+        Network setup:
+        eth0 MAC n/a fe80:0:0:0:222:19ff:fe1d:ad34%2 192.168.1.22
+        lo MAC n/a 0:0:0:0:0:0:0:1%1 127.0.0.1
+
+        Available properties:
+        String java.security.policy [null]
+        Boolean java.net.preferIPv6Addresses [null]
+    </screen>
+    </para>
+
+    <para>
+      Here are some examples you can adapt to your situation:
+
+      <screen>
+        $ # Use the default algorithm, since no public IP address is available, 192.168.1.22 is elected.
+        $ java -jar dist/lib/ProActive.jar
+
+        $ # Use the IP address returned by name resolution system for "britany.activeeon.com"
+        $ java -Dproactive.hostname=britany.activeeon.com -jar dist/lib/ProActive.jar
+
+        $ # Use only a public IP address bound to eth1
+        $ java -Dproactive.net.interface=eth1 -Dproactive.net.nolocal=true -Dproactive.net.noprivate=true -jar dist/lib/ProActive.jar
+
+        $ # Use an IP address matching 192.168.2.0/24
+        $ java -Dproactive.net.netmask="192.168.2.0/24" -Dproactive.net.noprivate=true -jar dist/lib/ProActive.jar
+    </screen>
+    </para>
+
+    <para>
+      The log4j logger
+      <emphasis role="bold">proactive.configuration.network</emphasis>
+      can be used to diagnosis why
+      an IP address is elected or rejected.
+    </para>
+  </section>
+
+
+
+
+  <section xml:id="netconfig-multiprotocol">
+    <info>
+      <title xml:id="netconfig-multiprotocol.title">Enabling several communication protocols</title>
+    </info>
+
+    <para></para>
+  </section>
+
+</chapter>
