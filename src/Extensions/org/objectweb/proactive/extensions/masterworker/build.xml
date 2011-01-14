@@ -6,6 +6,17 @@
 	
 	<target name="-compile">
 		<compile_extension module="masterworker" />	
-		<generate_stub_for_pkg srcdir="${cl.extensions.dir}" package="org.objectweb.proactive.extensions.masterworker" />
+		<generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.AODivisibleTaskWorker" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.AOMaster" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.AOPinger" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.AOTaskRepository" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.AOWorker" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.AOWorkerManager" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.ResultInternImpl" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.TaskWrapperImpl" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.MWFTError" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.core.IsClearingError" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.util.TaskID" />
+        <generate_stub_for_class srcdir="${cl.extensions.dir}" class="org.objectweb.proactive.extensions.masterworker.TaskException" />
 	</target>
 </project>
