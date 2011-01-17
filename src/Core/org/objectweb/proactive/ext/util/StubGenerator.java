@@ -52,7 +52,7 @@ import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
 import org.objectweb.proactive.core.mop.Utils;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
-
+@Deprecated
 public class StubGenerator {
     public static void main(String[] args) throws InterruptedException {
         StubGenerator sg = new StubGenerator(args);

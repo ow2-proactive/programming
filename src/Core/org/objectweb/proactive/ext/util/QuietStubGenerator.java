@@ -48,6 +48,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  * When used from ant it is normal to have some warning about undeclared {@link PAProperty}.
  */
+@Deprecated
 public class QuietStubGenerator {
     public static void main(String[] args) throws InterruptedException {
         Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
