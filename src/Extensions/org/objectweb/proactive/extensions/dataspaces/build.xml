@@ -2,10 +2,12 @@
 <project name="DataSpaces for ProActive" basedir="../../../../../../../compile/">
 
 	<import file="${basedir}/build.xml" />
-	<target name="compile" depends="core, stubGenerator, extra, -compile"/>
+	<target name="compile" depends="core, extra, -compile"/>
 
 	<target name="-compile">
 		<compile_extension module="dataspaces" />
-		<generate_stub_for_class srcDir="${cl.extensions.dir}" class="org/objectweb/proactive/extensions/dataspaces/core/naming/NamingService" />
+		<stubGenerator srcDir="${cl.extensions.dir}" refclasspath="project.classpath">
+			<class name="org.objectweb.proactive.extensions.dataspaces.core.naming.NamingService"/>
+		</stubGenerator>
 	</target>
 </project>

@@ -214,3 +214,4 @@ class Jira(object):
                     ret.append(issue)
 
         return ret
+

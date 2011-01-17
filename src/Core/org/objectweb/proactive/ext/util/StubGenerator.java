@@ -50,6 +50,7 @@ import javassist.ClassPool;
 
 import org.objectweb.proactive.core.mop.JavassistByteCodeStubBuilder;
 import org.objectweb.proactive.core.mop.Utils;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 public class StubGenerator {
@@ -169,6 +170,10 @@ public class StubGenerator {
             if (success) {
                 System.out.println("Generated stub: " +
                     Utils.convertClassNameToStubClassName(processClassName(str), null));
+            } else {
+                System.out.println("Failed to generate stub: " +
+                    Utils.convertClassNameToStubClassName(processClassName(str), null));
+                System.exit(1);
             }
         }
 
