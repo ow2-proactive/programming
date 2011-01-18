@@ -12,6 +12,7 @@
 
 	<taskdef name="if" classname="ise.antelope.tasks.IfTask" />
 
+
 	<!-- emma -->
 	<path id="emma.lib">
 		<pathelement location="${base.dir}/compile/lib/emma_ant.jar" />
@@ -132,38 +133,6 @@
 	<!-- <target name="all" depends="compile,docs" description="build the class files and the documentation" />-->
 
 
-	<macrodef name="generate_stub_for_pkg">
-		<attribute name="srcDir" />
-		<attribute name="package" />
-		<element name="extra.exclusion.pattern" optional="yes" />
-		<sequential>
-			<java classname="org.objectweb.proactive.ext.util.QuietStubGenerator" fork="true" >
-				<classpath refid="project.classpath" />
-				<arg value="-srcDir" />
-				<arg value="@{srcDir}" />
-				<arg value="-pkg" />
-				<arg value="@{package}" />
-			</java>
-		</sequential>
-	</macrodef>
-
-	<macrodef name="generate_stub_for_class">
-		<attribute name="srcDir" />
-		<attribute name="class" />
-		<element name="extra.exclusion.pattern" optional="yes" />
-		<sequential>
-			<java classname="org.objectweb.proactive.ext.util.QuietStubGenerator" fork="true">
-				<classpath refid="project.classpath" />
-				<arg value="-srcDir" />
-				<arg value="@{srcDir}" />
-				<arg value="-class" />
-				<arg value="@{class}" />
-			</java>
-		</sequential>
-	</macrodef>
-
-
-
 
 	<!-- ************
 		Compilation
@@ -172,7 +141,7 @@
 	<target name="compile.all" depends="compile.core, compile.extensions, compile.extra, compile.util, compile.examples, compile.tests, compile.benchmarks" description="Build class files (ProActive + Extensions + Extra + Examples + Utils + Tests)" />
 
 
-	<target name="compile.core" depends="-configurationCopy" description="Compile ProActive core classes">
+	<target name="compile.core" depends="-configurationCopy, compile.util" description="Compile ProActive core classes">
 		<!-- update ProActive.getVersion(). If -Dversion is not set, then ${version} is a timestamp for this build -->
 		<replaceregexp file="${src.proactive.dir}/${proactive.path}/Main.java" match="\$Id.*\$" replace="${version}" byline="true" />
 		<replaceregexp file="${base.dir}/README.txt" match="\$Id.*\$" replace="${version}" byline="true" />
@@ -191,24 +160,39 @@
 			<include name="org/objectweb/proactive/core/remoteobject/rmi/RmiRemoteObjectImpl.class" />
 		</rmic>
 
-		<echo message="Java primitive type wrapper stubs generating..." />
-		<generate_stub_for_pkg srcDir="${cl.proactive.dir}" package="org.objectweb.proactive.core.util.wrapper" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/runtime/ProActiveRuntime" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/body/UniversalBody" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/component/type/Composite" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/jmx/util/JMXNotificationListener" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/util/log/remote/ProActiveLogCollector" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/jmx/ProActiveConnection" />
-		<generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/jmx/server/ProActiveServerImpl" />
-                <generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/debug/tunneling/DebuggerSocketServer" />
-                <generate_stub_for_class srcDir="${cl.proactive.dir}" class="org/objectweb/proactive/core/debug/tunneling/DebuggerSocketClient" />
+		<stubGenerator srcDir="${cl.proactive.dir}" refclasspath="project.classpath">
+			<class name="org.objectweb.proactive.core.util.wrapper.BooleanMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.BooleanWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.DoubleMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.DoubleWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.FloatMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.FloatWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.GenericTypeWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.IntMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.IntWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.LongMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.LongWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.StringMutableWrapper" />
+			<class name="org.objectweb.proactive.core.util.wrapper.StringWrapper" />
+
+			<class name="org.objectweb.proactive.core.runtime.ProActiveRuntime" />
+			<class name="org.objectweb.proactive.core.body.UniversalBody" />
+			<class name="org.objectweb.proactive.core.component.type.Composite" />
+			<class name="org.objectweb.proactive.core.jmx.util.JMXNotificationListener" />
+			<class name="org.objectweb.proactive.core.util.log.remote.ProActiveLogCollector" />
+			<class name="org.objectweb.proactive.core.jmx.ProActiveConnection" />
+			<class name="org.objectweb.proactive.core.jmx.server.ProActiveServerImpl" />
+			<class name="org.objectweb.proactive.core.debug.tunneling.DebuggerSocketServer" />
+			<class name="org.objectweb.proactive.core.debug.tunneling.DebuggerSocketClient" />
+		</stubGenerator>
+
 		<antcall target="ibis" />
 	</target>
 
 
 	<target name="compile.extensions" depends="compile.core, -deploy.mkdir" description="Compile ProActive Extensions classes">
 		<copy todir="${cl.extensions.dir}">
-			<fileset dir="${src.extensions.dir}" includes="META-INF/**"/>
+			<fileset dir="${src.extensions.dir}" includes="META-INF/**" />
 		</copy>
 		<subant target="-compile" inheritall="yes" failonerror="true">
 			<fileset dir="${src.extensions.dir}" includes="**/build.xml" />
@@ -218,7 +202,7 @@
 
 	<target name="compile.extra" depends="compile.core" description="Compile ProActive Extensions classes">
 		<copy todir="${cl.extra.dir}">
-			<fileset dir="${src.extra.dir}" includes="META-INF/**"/>
+			<fileset dir="${src.extra.dir}" includes="META-INF/**" />
 		</copy>
 		<subant target="-compile" inheritall="yes" failonerror="true">
 			<fileset dir="${src.extra.dir}" includes="**/build.xml" />
@@ -326,6 +310,9 @@
 		<javac srcdir="${src.utils.dir}" destdir="${cl.utils.dir}" includes="**" deprecation="on" source="${source}" debug="${debug}">
 			<classpath refid="project.classpath" />
 		</javac>
+
+		<taskdef name="stubGenerator" classname="ant.AntStubGenerator" classpath="${cl.utils.dir}" />
+		<typedef name="class" classname="ant.AntStubGeneratorClass" classpath="${cl.utils.dir}" />
 	</target>
 
 
@@ -370,8 +357,8 @@
 
 
 		<taskdef name="smerger" classname="ant.ServiceMerger" classpath="${cl.utils.dir}" />
-		
-		<mkdir dir="${classes.dir}/META-INF/services"/>
+
+		<mkdir dir="${classes.dir}/META-INF/services" />
 		<smerger destdir="${classes.dir}/META-INF/services">
 			<fileset dir="${cl.extensions.dir}" includes="META-INF/services/**" />
 			<fileset dir="${cl.extra.dir}" includes="META-INF/services/**" />
@@ -379,19 +366,19 @@
 		</smerger>
 
 		<jar manifest="${compile.dir}/Manifest.mf" destfile="${deploy.lib.dir}/ProActive.jar" index="true">
-			<fileset dir="${classes.dir}" includes="META-INF/**"/>
-			<fileset dir="${cl.proactive.dir}" >
-				<include name="**"/>
-				<exclude name="META-INF/**"/>	
+			<fileset dir="${classes.dir}" includes="META-INF/**" />
+			<fileset dir="${cl.proactive.dir}">
+				<include name="**" />
+				<exclude name="META-INF/**" />
 			</fileset>
 			<fileset dir="${cl.extensions.dir}">
 				<include name="**" />
-				<exclude name="META-INF/**"/>	
+				<exclude name="META-INF/**" />
 				<exclude name="org/objectweb/proactive/extensions/annotation/**/*CTree*" />
 			</fileset>
 			<fileset dir="${cl.extra.dir}">
-				<include name="**"/>
-				<exclude name="META-INF/**"/>	
+				<include name="**" />
+				<exclude name="META-INF/**" />
 			</fileset>
 			<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
 			<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
@@ -672,7 +659,7 @@
 
 
 	<target name="junit.pnps" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
-		<junitMacro communication.protocol="pnps" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" >
+		<junitMacro communication.protocol="pnps" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite">
 			<jvmargs>
 				<jvmarg value="-Djava.security.egd=file:/dev/urandom" />
 			</jvmargs>
@@ -703,7 +690,7 @@
 	</target>
 
 	<target name="junit.pnp" depends="compile.tests, deploy.all" description="Run all non regression tests on the current host only">
-		<junitMacro communication.protocol="pnp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite"/>
+		<junitMacro communication.protocol="pnp" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocal.xml" testsuite="testsuite" />
 	</target>
 
 	<target name="with.clover">
@@ -950,7 +937,7 @@
 				<include name="org/**/*.png" />
 				<include name="org/objectweb/proactive/core/component/adl/xml/proactive.dtd" />
 				<include name="org/**/jaas.config" />
-				<include name="META-INF/**"/>
+				<include name="META-INF/**" />
 			</fileset>
 		</copy>
 		<copy toDir="${cl.utils.dir}">
@@ -958,13 +945,6 @@
 				<include name="sources/*.txt" />
 			</fileset>
 		</copy>
-	</target>
-
-
-	<target name="stub" depends="compile.stubGenerator, compile.core">
-		<property name="stub.classdir" value="${cl.proactive.dir}" />
-
-		<generate_stub_for_pkg srcDir="${cl.proactive.dir}" package="org.objectweb.proactive" />
 	</target>
 
 
