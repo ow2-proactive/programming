@@ -56,6 +56,8 @@ public class OSUser {
     private final String userName;
     private final String password;
     private final byte[] privateKey;
+    // Windows domain name, optional
+    private String domain;
 
     /**
      * Constructor for a user which has no password specified. (This does not
@@ -149,6 +151,29 @@ public class OSUser {
      */
     protected byte[] getPrivateKey() {
         return privateKey;
+    }
+
+    /**
+     * Returns the Windows domain name associated to this user, null if any
+     * @return the Windows domain name associated to this user, null if any
+     */
+    public String getDomain() {
+        return domain;
+    }
+
+    /**
+     * Set a Windows domain name for the user.
+     * @param domain the domain to set
+     */
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    /** Returns true if a Windows domain is specified for this user.
+     * @return true if a Windows domain is specified for this user.
+     */
+    public boolean hasDomain() {
+        return (this.domain != null);
     }
 
     /**
