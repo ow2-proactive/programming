@@ -156,6 +156,7 @@ public class OSUser {
     /**
      * Returns the Windows domain name associated to this user, null if any
      * @return the Windows domain name associated to this user, null if any
+     * @since ProActive 5.0.1
      */
     public String getDomain() {
         return domain;
@@ -164,6 +165,7 @@ public class OSUser {
     /**
      * Set a Windows domain name for the user.
      * @param domain the domain to set
+     * @since ProActive 5.0.1
      */
     public void setDomain(String domain) {
         this.domain = domain;
@@ -171,6 +173,7 @@ public class OSUser {
 
     /** Returns true if a Windows domain is specified for this user.
      * @return true if a Windows domain is specified for this user.
+     * @since ProActive 5.0.1
      */
     public boolean hasDomain() {
         return (this.domain != null);
