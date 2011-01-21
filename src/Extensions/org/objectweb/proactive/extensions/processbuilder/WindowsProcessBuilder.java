@@ -212,9 +212,18 @@ public final class WindowsProcessBuilder implements OSProcessBuilder {
      */
     protected Process setupAndStart() throws IOException, OSUserException, CoreBindingException,
             FatalProcessBuilderException {
+
+        // If the user doesn't have any domain use the local one
+        String domain = ".";
+
+        if (this.user().hasDomain()) {
+            domain = this.user().getDomain();
+        }
+
         // Create the windows process from yajsw lib 
         final WindowsProcess p = new WindowsProcess();
         p.setUser(this.user().getUserName());
+        p.setDomain(domain);
         p.setPassword(this.user().getPassword());
 
         // Inherit environment (Currently not work ... must be defined later)
