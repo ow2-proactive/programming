@@ -25,7 +25,7 @@ import org.objectweb.proactive.core.body.request.Request;
  */
 public class MultiActiveService extends Service {
 	
-	public int numServes = 0;
+	public int activeServes = 0;
 	
 	Logger logger = Logger.getLogger(this.getClass());
 	
@@ -55,7 +55,7 @@ public class MultiActiveService extends Service {
 			
 			//if we were not successful, let's wait until a new request arrives
 			synchronized (requestQueue) {
-				if (!success) {
+				if (!success && activeServes>0) {
 					try {
 						requestQueue.wait();
 					} catch (InterruptedException e) {
@@ -97,7 +97,7 @@ public class MultiActiveService extends Service {
 				}
 				// if we could not launch anything, that we wait until
 				// either a running serve finishes or a new req. arrives
-				if (launched == 0) {
+				if (launched == 0 && activeServes>0) {
 					try {
 						requestQueue.wait();
 						// logger.info(this.body.getID()+" Greedy scheduler - wake up");
@@ -192,9 +192,12 @@ public class MultiActiveService extends Service {
 		if (asserve!=null) {
 			//logger.info(this.body.getID()+" Parallel serving '"+asserve.r.getMethodName()+"'");
 			//(new Thread(asserve, body.getID()+" -> "+r.getMethodName())).start();
+			
 			executorService.execute(asserve);
 			
 			compatibility.addRunning(r);
+			
+			activeServes++;
 		}
 		
 		return asserve;
@@ -208,8 +211,12 @@ public class MultiActiveService extends Service {
 	 */
 	protected void asynchronousServeFinished(Request r) {
 		synchronized (requestQueue) {
+			
 			compatibility.removeRunning(r);
-			requestQueue.notifyAll();	
+			
+			requestQueue.notifyAll();
+			
+			activeServes--;
 		}
 	}
 
