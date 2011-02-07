@@ -1,0 +1,68 @@
+package functionalTests.multiactivities.scc2;
+
+import org.objectweb.proactive.ActiveObjectCreationException;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.node.NodeException;
+
+/**
+ * Create a given number of workers and place them on a given set of nodes, or locally.
+ * @author Izso
+ *
+ */
+public class Deployer {
+	
+	private GraphWorker[] workers;
+	
+	public GraphWorker[] createAndDeploy(int cnt, String[] hosts, boolean multiActive) {
+		workers = new GraphWorker[cnt];
+		boolean ok = true;
+		
+		for (int i=0; i<cnt; i++) {
+			Object[] params = new Object[2];
+			params[0] = "Node"+i+"";
+			params[1] = multiActive;
+			try {
+				if (hosts.length > 0) {
+
+					workers[i] = PAActiveObject.newActive(GraphWorker.class,
+							params, hosts[i % hosts.length]);
+				} else {
+					workers[i] = PAActiveObject.newActive(GraphWorker.class,
+							params);
+				}
+				workers[i].init();
+			} catch (ActiveObjectCreationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				ok = false;
+			} catch (NodeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				ok = false;
+			}
+		}
+		
+		return ok ? workers : null;
+	}
+	
+	public GraphWorker[] createAndDeploy(int cnt, boolean multiActive) {
+		return createAndDeploy(cnt, new String[0], multiActive);
+	}
+	
+	public GraphWorker[] getWorkers() {
+		return workers;
+	}
+	
+	public void kill(GraphWorker[] w) {
+		for (GraphWorker gw : w) {
+			PAActiveObject.terminateActiveObject(gw, true);
+		}
+	}
+	
+	public void killAll(){
+		kill(workers);
+	}
+	
+	
+
+}

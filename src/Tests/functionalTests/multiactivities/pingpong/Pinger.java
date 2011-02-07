@@ -25,7 +25,7 @@ import org.objectweb.proactive.multiactivity.MultiActiveService;
 @DefineRules(
 		{
 			@Compatible({ "gStarter", "gPing" }),
-			@Compatible({ "gStarter", "gPong" }),
+			@Compatible({ "gStarter", "gPong" })
 		}
 )
 public class Pinger implements RunActive {
