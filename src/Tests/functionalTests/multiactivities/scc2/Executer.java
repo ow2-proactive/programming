@@ -73,6 +73,7 @@ public class Executer {
 
 	public class FBThread implements Runnable {
 		Set<Integer> alive;
+		Set<Integer> toSend = new HashSet<Integer>();
 		Integer tx;
 
 		public FBThread(Set<Integer> alive, Integer tx) {
@@ -90,9 +91,10 @@ public class Executer {
 				Integer pivot = alive.iterator().next();
 				//find location of pivot
 				int owner = pivot / (nodeNum / workers.length);
-				
-				Set<Integer> fm = workers[owner].markForward(tx, pivot);
-				Set<Integer> bm = workers[owner].markBackward(tx, pivot);
+				toSend.clear(); 
+				toSend.add(pivot);
+				Set<Integer> fm = workers[owner].markForward(tx, toSend);
+				Set<Integer> bm = workers[owner].markBackward(tx, toSend);
 
 				//System.out.println(fm.size()+" "+bm.size()+" | "+alive.size()+" pivot "+pivot);
 

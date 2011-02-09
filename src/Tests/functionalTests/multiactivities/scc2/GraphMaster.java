@@ -1,5 +1,7 @@
 package functionalTests.multiactivities.scc2;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,6 +37,7 @@ public class GraphMaster {
 		/*DataManager data = new DataManager(workers);
 		data.loadAndDistribute(args[1]);
 		logger.info("Loaded graph from "+args[1]);*/
+		Date before = new Date();
 		int x = 0;
 		for (GraphWorker gw : workers) {
 		    gw.loadEdges(workers, args[1], x);
@@ -45,7 +48,7 @@ public class GraphMaster {
 		for (GraphWorker gw : workers) {
 		    numNodes += gw.getOwnedNodesCount();
 		}
-	
+		System.out.println(new Date().getTime()-before.getTime());
 		Executer executer = new Executer(workers);
 		logger.info("Starting executer.");
 		//-1 == infinite branches
