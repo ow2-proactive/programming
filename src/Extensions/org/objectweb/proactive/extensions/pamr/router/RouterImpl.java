@@ -245,9 +245,11 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
                     for (Client client : clients) {
                         if (client.isConnected()) {
-                            if ((currentTime - client.getLastSeen()) > heartbeatTimeout) {
+                            final long diff = currentTime - client.getLastSeen();
+                            if (diff > heartbeatTimeout) {
                                 // Disconnect
-                                logger.info("Client " + client + " disconnected due to late heartbeat");
+                                logger.info("Client " + client + " disconnected due to late heartbeat (" +
+                                    diff + " ms)");
                                 try {
                                     client.disconnect();
                                 } catch (IOException e) {
