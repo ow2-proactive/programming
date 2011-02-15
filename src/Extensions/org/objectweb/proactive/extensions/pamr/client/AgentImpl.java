@@ -592,7 +592,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
          */
         private void unlockDueToRemoteAgentDisconnection(AgentID agentID) {
             synchronized (this.lock) {
-                PAMRException e = new PAMRException("Remote agent disconnected");
+                PAMRException e = new PAMRException("Remote agent " + agentID + " disconnected");
 
                 Map<Long, Patient> map = this.byRemoteAgent.get(agentID);
                 if (map != null) {
