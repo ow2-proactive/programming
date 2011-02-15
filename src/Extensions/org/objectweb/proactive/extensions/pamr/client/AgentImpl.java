@@ -427,15 +427,17 @@ public class AgentImpl implements Agent, AgentImplMBean {
      * 
      * @param brokenTunnel
      *            the tunnel that threw an IOException
+     * @param cause
+     *            cause of the failure or null if unknown
      */
-    synchronized private void reportTunnelFailure(Tunnel brokenTunnel) {
+    synchronized private void reportTunnelFailure(Tunnel brokenTunnel, PAMRException cause) {
         if (brokenTunnel == null)
             return;
 
         if (!this.failedTunnels.contains(brokenTunnel)) {
             this.failedTunnels.add(brokenTunnel);
 
-            this.mailboxes.unlockDueToTunnelFailure();
+            this.mailboxes.unlockDueToTunnelFailure(cause);
             this.t.shutdown();
             this.t = null;
         }
@@ -528,8 +530,10 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 }
             } catch (IOException e) {
                 // Fail fast
-                this.reportTunnelFailure(tunnel);
-                throw new PAMRException("Failed to send a message using the tunnel " + tunnel, e);
+                PAMRException cause = new PAMRException("Failed to send message:" + msg + " using tunnel " +
+                    tunnel, e);
+                this.reportTunnelFailure(tunnel, cause);
+                throw cause;
 
             }
         } else {
@@ -610,9 +614,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
         /**
          * Unblock all the thread waiting for a response.
          */
-        private void unlockDueToTunnelFailure() {
+        private void unlockDueToTunnelFailure(PAMRException cause) {
             synchronized (this.lock) {
-                PAMRException e = new PAMRException("Tunnel failure");
+                PAMRException e = new PAMRException("PAMR tunnel failure while waiting for reply", cause);
 
                 for (Map<Long, Patient> m : this.byRemoteAgent.values()) {
                     for (Patient p : m.values()) {
@@ -765,7 +769,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
                 }
             } catch (Throwable e) {
                 logger.debug("Failed to send heartbeat to the router", e);
-                reportTunnelFailure(t);
+                reportTunnelFailure(t, new PAMRException("Failed to send heartbeat to the router", e));
             }
         }
 
@@ -819,7 +823,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
                             .debug(
                                     "PAMR Connection lost (while waiting for a message). A new connection will be established shortly",
                                     e);
-                    reportTunnelFailure(tunnel);
+                    PAMRException cause = new PAMRException(
+                        "PAMR connection lost (while waiting for a message)", e);
+                    reportTunnelFailure(tunnel, cause);
                 }
             }
         }
