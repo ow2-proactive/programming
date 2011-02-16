@@ -171,7 +171,7 @@ public class Server {
             }
 
             double throughput = ((1.0 * totalBytes) / (System.currentTimeMillis() - start));
-            System.out.printf("[INFO]: Thread for %s exiting. Throughput: %.2f KiB/s\n", this.remote,
+            System.out.printf("[INFO] Thread for %s exiting. Throughput: %.2f KiB/s\n", this.remote,
                     throughput);
 
         }

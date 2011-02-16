@@ -51,9 +51,6 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.objectweb.proactive.utils.Sleeper;
-import org.objectweb.proactive.utils.StoppableThread;
-import org.objectweb.proactive.utils.StoppableThread.NotStoppedException;
 
 
 /**
@@ -186,7 +183,7 @@ public class Client {
     final int port;
     final Worker[] workers;
     final byte[] packet;
-    final Sleeper sleeper;
+    final long sleepTime;
     final long duration;
 
     public Client(InetAddress ia, int port, int psize, double freq, int workers, long duration) {
@@ -197,7 +194,7 @@ public class Client {
         for (int i = 0; i < psize; i++) {
             this.packet[i] = (byte) i;
         }
-        this.sleeper = new Sleeper((long) (1000.0 / freq));
+        this.sleepTime = (long) (1000.0 / freq);
         this.duration = duration;
     }
 
@@ -221,20 +218,22 @@ public class Client {
             }
         }
 
-        new Sleeper(duration).sleep();
+        try {
+            Thread.sleep(this.duration);
+        } catch (InterruptedException e) {
+            // Ok
+        }
 
         for (int i = 0; i < this.workers.length; i++) {
-            try {
-                workers[i].terminate(1, TimeUnit.MILLISECONDS);
-            } catch (NotStoppedException e) {
-                // Ok
-            }
+            workers[i].terminate();
         }
 
         System.out.println("Exiting");
     }
 
-    private class Worker extends StoppableThread {
+    private class Worker extends Thread {
+        volatile boolean terminate;
+
         final int index;
         final Socket s;
         final InputStream in;
@@ -246,36 +245,48 @@ public class Client {
             this.s = new Socket(ia, port);
             this.in = this.s.getInputStream();
             this.out = this.s.getOutputStream();
+
+            this.terminate = false;
         }
 
         @Override
-        public void action() {
-            try {
-                this.out.write(packet);
-            } catch (IOException e) {
-                reportError("Failed to send packet to the server");
-            }
+        public void run() {
+            while (!terminate) {
+                try {
+                    this.out.write(packet);
+                } catch (IOException e) {
+                    reportError("Failed to send packet to the server");
+                    break;
+                }
 
-            try {
-                byte[] buf = new byte[packet.length];
-                int read = 0;
-                while (read < buf.length) {
-                    int retVal = in.read(buf, read, buf.length - read);
-                    if (retVal == -1) {
-                        reportError("Failed to read full response from the server " + (buf.length - read) +
-                            " bytes miss");
+                try {
+                    byte[] buf = new byte[packet.length];
+                    int read = 0;
+                    while (read < buf.length) {
+                        int retVal = in.read(buf, read, buf.length - read);
+                        if (retVal == -1) {
+                            reportError("Failed to read full response from the server " +
+                                (buf.length - read) + " bytes miss");
+                            break;
+                        }
+                        read += retVal;
                     }
-                    read += retVal;
+
+                    if (!Arrays.equals(packet, buf)) {
+                        reportError("Received corrupted packet");
+                        break;
+                    }
+                } catch (IOException e) {
+                    reportError("Read failed", e);
+                    break;
                 }
 
-                if (!Arrays.equals(packet, buf)) {
-                    reportError("Received corrupted packet");
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    // Ok
                 }
-            } catch (IOException e) {
-                reportError("Read failed", e);
             }
-
-            sleeper.sleep();
         }
 
         private void reportError(String msg) {
@@ -291,11 +302,11 @@ public class Client {
             }
             System.out.println(sb.toString());
 
-            try {
-                this.terminate(1, TimeUnit.MILLISECONDS);
-            } catch (NotStoppedException e1) {
-                // Ok
-            }
+            this.terminate();
+        }
+
+        private void terminate() {
+            this.terminate = true;
         }
     }
 }
