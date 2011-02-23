@@ -2,6 +2,7 @@ package functionalTests.multiactivities.scc2;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,9 +11,28 @@ import java.util.Set;
  * @author Izso
  *
  */
-public class GraphGenerator {
+public class GraphGenerator implements Runnable {
 	
-	public Graph generateDirectedBA(int nodes) {
+    int from;
+    int to;
+    int cnt;
+    int groups;
+    double groupD;
+    double interD;
+    
+    
+    
+	public GraphGenerator(int from, int to, int cnt, int groups, double groupD, double interD) {
+        super();
+        this.from = from;
+        this.to = to;
+        this.cnt = cnt;
+        this.groups = groups;
+        this.groupD = groupD;
+        this.interD = interD;
+    }
+
+    public Graph generateDirectedBA(int nodes) {
 		Graph g = new Graph();
 		
 		int totalLinks = 0;
@@ -61,65 +81,50 @@ public class GraphGenerator {
 		System.out.println(i+">"+j);
 	}
 	
-	private void generateDensityBasedGraph(final int cnt, final int groups, final double groupD, final double interD) throws InterruptedException {
-		System.out.println(cnt);
-		Thread t1 = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				for (int x=0; x<cnt/2; x++) {
-					for (int y=0; y<cnt; y++) {
-						double random = Math.random();
-						//if same group
-						if (x/(cnt/groups) == y/(cnt/groups)) {
-							if (random<groupD) {
-								System.out.println(x+">"+y);
-							}
-						} else {
-							if (random<interD) {
-								System.out.println(x+">"+y);
-							}
-						}
-					}
-				}
-				
-			}
-		});
+	public static void generateDensityBasedGraph(final int threads, final int piece, final int numPieces, final int cnt, final int groups, final double groupD, final double interD) throws InterruptedException {
+		//System.out.println(cnt);		
+		LinkedList<Thread> waitFor = new LinkedList();
+		final int perPiece = cnt/numPieces;
+		final int perThread = perPiece/threads;
+		for (int t=0; t<threads; t++) { 
+		    waitFor.add(new Thread(new GraphGenerator(piece*perPiece + (t*perThread), piece*perPiece + (t+1)*perThread, cnt, groups, groupD, interD)));
+		}
 		
-		Thread t2 = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				for (int x=cnt/2; x<cnt; x++) {
-					for (int y=0; y<cnt; y++) {
-						double random = Math.random();
-						//if same group
-						if (x/(cnt/groups) == y/(cnt/groups)) {
-							if (random<groupD) {
-								System.out.println(x+">"+y);
-							}
-						} else {
-							if (random<interD) {
-								System.out.println(x+">"+y);
-							}
-						}
-					}
-				}
-				
-			}
-		});
+		for (Thread t : waitFor) {
+		    t.start();
+		}
 		
-		t1.start();
-		t2.start();
+		for (Thread t : waitFor) {
+		    t.join();
+		}
 		
-		t1.join();
-		t2.join();
-		
+	}
+	
+	public void run() {
+	    for (int x=from; x<to; x++) {
+            for (int y=0; y<cnt; y++) {
+                if (x!=y) {
+                    double random = Math.random();
+                //  if same group
+                    if (x/(cnt/groups) == y/(cnt/groups)) {
+                        if (random<groupD) {
+                            System.out.println(x+">"+y);
+                        }
+                    } else {
+                        if (random<interD) {
+                            System.out.println(x+">"+y);
+                        }
+                    }
+                }
+            }
+        }
 	}
 
 	public static void main(String[] args) throws InterruptedException {
-	    if (args.length!=4) {
-	        System.out.println("Usage:\n<Number of nodes> <Number of groups> <Edge probability inside a group> <Edge prob. between group>");
+	    if (args.length!=7) {
+	        System.out.println("Usage:\n<Number of nodes> <Number of groups> " +
+	        		"<Edge probability inside a group> <Edge prob. between group> " +
+	        		"<Number of threads> <worker id> <total workers>");
 	        return;
 	    }
 	    
@@ -127,7 +132,10 @@ public class GraphGenerator {
 		Integer groups = Integer.parseInt(args[1]);
 		double gd = Double.parseDouble(args[2]);
 		double id = Double.parseDouble(args[3]);
-		new GraphGenerator().generateDensityBasedGraph(cnt, groups, gd, id);
+		int threads = Integer.parseInt(args[4]);
+		int worker_id = Integer.parseInt(args[5]);
+		int worker_count = Integer.parseInt(args[6]);
+		generateDensityBasedGraph(threads, worker_id, worker_count, cnt, groups, gd, id);
 	}
 	
 	public class Graph {

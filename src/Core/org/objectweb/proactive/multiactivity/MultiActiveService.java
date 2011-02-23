@@ -28,6 +28,8 @@ import org.objectweb.proactive.core.body.request.Request;
 public class MultiActiveService extends Service {
 
     public int activeServes = 0;
+    public LinkedList<Integer> serveHistory = new LinkedList<Integer>();
+    public LinkedList<Integer> serveTsts = new LinkedList<Integer>();
 
     Logger logger = Logger.getLogger(this.getClass());
 
@@ -54,7 +56,7 @@ public class MultiActiveService extends Service {
 
         while (body.isActive()) {
             // try to launch next request -- synchronized inside
-            success = parallelServeOldest();
+            success = parallelServeMaxParallel();
 
             // if we were not successful, let's wait until a new request arrives
             synchronized (requestQueue) {
@@ -134,21 +136,35 @@ public class MultiActiveService extends Service {
      * 
      * @return
      */
-    public boolean parallelServeOldestOptimal() {
+    public boolean parallelServeMaxParallel() {
 
         synchronized (requestQueue) {
             List<Request> reqs = requestQueue.getInternalQueue();
+            List<Integer> served = new LinkedList<Integer>();
             if (reqs.size() == 0)
                 return false;
 
-            if (compatibility.isCompatibleWithExecuting(reqs.get(0))) {
+            for (int i=0; i<reqs.size(); i++) {
+                if (compatibility.isCompatibleWithExecuting(reqs.get(i))
+                        && compatibility.isCompatibleWithRequests(reqs.get(i), reqs.subList(0, i)))
+                        {
+                            served.add(i);
+                            internalParallelServe(reqs.get(i));
+                        }
+            }
+            
+            for (int i=0; i<served.size(); i++) {
+                reqs.remove(served.get(i)-i);
+            }
+            
+            /*if (compatibility.isCompatibleWithExecuting(reqs.get(0))) {
                 internalParallelServe(reqs.remove(0));
                 return true;
             } else if (reqs.size() > 1 && compatibility.areCompatible(reqs.get(0), reqs.get(1)) &&
                 compatibility.isCompatibleWithExecuting(reqs.get(1))) {
                 internalParallelServe(reqs.remove(1));
                 return true;
-            }
+            }*/
         }
         return false;
     }
@@ -192,6 +208,8 @@ public class MultiActiveService extends Service {
             executorService.execute(asserve);
             compatibility.addRunning(r);
             activeServes++;
+            serveTsts.add((int) (new Date().getTime()));
+            serveHistory.add(activeServes);
         }
 
         return asserve;
@@ -210,6 +228,8 @@ public class MultiActiveService extends Service {
             compatibility.removeRunning(r);
             requestQueue.notifyAll();
             activeServes--;
+            serveTsts.add((int) (new Date().getTime()));
+            serveHistory.add(activeServes);
         }
     }
 

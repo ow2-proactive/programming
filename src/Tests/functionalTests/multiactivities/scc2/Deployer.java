@@ -1,5 +1,6 @@
 package functionalTests.multiactivities.scc2;
 
+import org.apache.tools.ant.types.CommandlineJava.SysProperties;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.NodeException;
@@ -55,6 +56,9 @@ public class Deployer {
 	
 	public void kill(GraphWorker[] w) {
 		for (GraphWorker gw : w) {
+		    System.out.println("\n");
+		    System.out.println(gw.getActiveServeCount());
+		    System.out.println(gw.getActiveServeTsts());
 			PAActiveObject.terminateActiveObject(gw, true);
 		}
 	}

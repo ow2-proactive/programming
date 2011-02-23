@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.objectweb.proactive.Body;
@@ -22,12 +23,22 @@ import org.objectweb.proactive.annotation.multiactivity.MemberOf;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
+import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
 
-@DefineGroups( { @Group(name = "Forward", selfCompatible = true),
-        @Group(name = "Backward", selfCompatible = true), @Group(name = "Info", selfCompatible = true),
-        @Group(name = "Transaction", selfCompatible = true) })
-@DefineRules( { @Compatible( { "Backward", "Info", "Forward", "Transaction" }) })
+@DefineGroups( 
+        { 
+        @Group(name = "Forward", selfCompatible = true),
+        @Group(name = "Backward", selfCompatible = true), 
+        @Group(name = "Info", selfCompatible = true),
+        @Group(name = "Transaction", selfCompatible = true) 
+        }
+)
+@DefineRules( 
+        { 
+        @Compatible( { "Backward", "Info", "Forward", "Transaction" }) 
+        }
+)
 public class GraphWorker implements RunActive {
 
     private String name;
@@ -43,17 +54,20 @@ public class GraphWorker implements RunActive {
     // edges leaving this worker
     private HashMap<Integer, HashSet<Integer>> outgoingEdges;
 
-    // map of IDs to workers
-    private HashMap<Integer, GraphWorker> neighbors;
-    // map of referenced external nodes and their location ID
-    private HashMap<Integer, Integer> nodeLocation;
-
     // hashmap of visited set for each transaction
     private HashMap<Integer, HashSet<Integer>> visitedF;
     private HashMap<Integer, HashSet<Integer>> visitedB;
 
     //the body is multiactive or not
     private boolean multiActive;
+
+    private GraphWorker[] workers;
+
+    private MultiActiveService service;
+
+    private int total;
+
+    private Integer nodeNumber;
 
     public GraphWorker(String name, boolean multiActive) {
         this.name = name;
@@ -72,8 +86,6 @@ public class GraphWorker implements RunActive {
         invertedEdges = new HashMap<Integer, HashSet<Integer>>();
         incomingEdges = new HashMap<Integer, HashSet<Integer>>();
         outgoingEdges = new HashMap<Integer, HashSet<Integer>>();
-        nodeLocation = new HashMap<Integer, Integer>();
-        neighbors = new HashMap<Integer, GraphWorker>();
         visitedF = new HashMap<Integer, HashSet<Integer>>();
         visitedB = new HashMap<Integer, HashSet<Integer>>();
     }
@@ -85,7 +97,7 @@ public class GraphWorker implements RunActive {
      * @param seqNum this worker's ID -- used for node location decision
      */
     public BooleanWrapper loadEdges(GraphWorker[] workers, String path, int seqNum) {
-        new DataManager(workers, seqNum).loadAndDistribute(path+".copy"+(seqNum%4));
+        new DataManager(workers, seqNum).loadAndDistribute(path);//+".c"+(seqNum%2));
         return new BooleanWrapper();
     }
 
@@ -98,18 +110,6 @@ public class GraphWorker implements RunActive {
     public Integer addNode(Integer id) {
         // System.out.println("Add node "+id+" to "+name);
         ownedNodes.add(id);
-        return 0;
-    }
-
-    public Integer addNeighbor(GraphWorker worker, Integer name) {
-        // System.out.println("Add neigh. "+name+" to "+this.name);
-        neighbors.put(name, worker);
-        return 0;
-    }
-
-    public Integer addNodeToNeighbor(Integer id, Integer name) {
-        // System.out.println("Add node "+id+" to neigh "+name+" in "+this.name);
-        nodeLocation.put(id, name);
         return 0;
     }
 
@@ -226,7 +226,7 @@ public class GraphWorker implements RunActive {
     			// follow external links, save ref for further collection;
     			if (border.get(current) != null) {
     				for (Integer out : border.get(current)) {
-    					int loc = nodeLocation.get(out);
+    					int loc = hashLocation(out);
     					if (!toVisit.containsKey(loc)) {
     					    toVisit.put(loc, new LinkedHashSet<Integer>());
     					}
@@ -254,7 +254,7 @@ public class GraphWorker implements RunActive {
 	}
 
     private Set<Integer> propagateMark(Integer transaction, Integer node, Set<Integer> what, boolean forward) {
-        GraphWorker other = (neighbors.get(node));
+        GraphWorker other = (workers[node]);
         if (other == null) {
             System.out.println("WTF?");
         }
@@ -363,23 +363,21 @@ public class GraphWorker implements RunActive {
         return transaction;
     }
 
+    private int hashLocation(Integer id) {
+        return id / (nodeNumber / total);
+    }
+
     /**
      * Loads a graph's relevant edges for this worker from a file.
      * @author Izso
      *
      */
     public class DataManager {
-        private GraphWorker[] workers;
-        private int total;
         private int thisNum;
-        private Integer nodeNumber;
 
-        private HashMap<Integer, HashSet<Integer>> knows;
-
-        public DataManager(GraphWorker[] workers, int seqNum) {
-            this.workers = workers;
+        public DataManager(GraphWorker[] workerArr, int seqNum) {
+            workers = workerArr;
             total = workers.length;
-            knows = new HashMap<Integer, HashSet<Integer>>();
             thisNum = seqNum;
         }
 
@@ -401,14 +399,14 @@ public class GraphWorker implements RunActive {
                 for (Integer i = lowerBound; i < upperBound; i++) {
                     addNode(i);
                 }
-                System.out.print("Loading links");
+                System.out.print("Loading links...");
                 String[] edge;
                 int cnt = 0;
                 while (br.ready()) {
                     edge = br.readLine().split(">");
                     createEdge(Integer.parseInt(edge[0]), Integer.parseInt(edge[1]));
                 }
-                System.out.println(" Done.");
+                System.out.print(" Done.");
 
                 fis.close();
                 isr.close();
@@ -426,37 +424,30 @@ public class GraphWorker implements RunActive {
             return nodeNumber;
         }
 
-        private int hashLocation(Integer id) {
-            return id / (nodeNumber / total);
-        }
-
         private void createEdge(Integer from, Integer to) {
-            int fromWorker = hashLocation(from);
-            int toWorker = hashLocation(to);
-
-            if (fromWorker != thisNum && toWorker != thisNum)
+            if (hashLocation(from) != thisNum && hashLocation(to) != thisNum)
                 return;
 
             addEdge(from, to);
-            if (fromWorker != toWorker) {
-                if (fromWorker != thisNum) {
-                    addNeighbor(workers[fromWorker], fromWorker);
-                    addNodeToNeighbor(from, fromWorker);
-                } else {
-                    addNeighbor(workers[toWorker], toWorker);
-                    addNodeToNeighbor(to, toWorker);
-                }
-            }
         }
     }
 
     @Override
     public void runActivity(Body body) {
         if (multiActive) {
-            (new MultiActiveService(body)).multiActiveServing();
+            service = (new MultiActiveService(body));
+            service.multiActiveServing();
         } else {
-            (new MultiActiveService(body)).fifoServing();
+            (service = new MultiActiveService(body)).policyServing(ServingPolicyFactory.getMultiActivityPolicy());
         }
+    }
+    
+    public List<Integer> getActiveServeCount() {
+        return (service!=null) ? service.serveHistory : null;
+    }
+    
+    public List<Integer> getActiveServeTsts() {
+        return (service!=null) ? service.serveTsts : null;
     }
 
 }

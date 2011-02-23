@@ -98,10 +98,6 @@ public class Executer {
 
 				//System.out.println(fm.size()+" "+bm.size()+" | "+alive.size()+" pivot "+pivot);
 
-				Integer newForward = null;
-				Integer newBackward = null;
-				Integer newOther = null;
-
 				// System.out.print(">");
 
 				Set<Integer> common = new HashSet<Integer>();
@@ -118,6 +114,7 @@ public class Executer {
 				Thread t = null;
 				if (b_f.size() > 1) {
 				    //new thread.
+				    Integer newBackward = null;
 					newBackward = inheritTransaction(txId.getAndIncrement(),
 							tx, -1);
 					t = new Thread(new FBThread(b_f, newBackward));
@@ -134,6 +131,7 @@ public class Executer {
 				Thread t2 = null;
 				if (f_b.size() > 1) {
 				    //new thread
+				    Integer newForward = null;
 					newForward = inheritTransaction(txId.getAndIncrement(), tx,
 							1);
 					t2 = new Thread(new FBThread(f_b, newForward));
