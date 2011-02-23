@@ -51,15 +51,24 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -69,6 +78,7 @@ import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.exceptions.MalformedMessageException;
+import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
 import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
 import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage;
@@ -184,6 +194,156 @@ public class RouterImpl extends RouterInternal implements Runnable {
         ssc.register(selector, SelectionKey.OP_ACCEPT);
     }
 
+    /**
+     * This timer task checks and sends heartbeats periodically at fixed rate
+     *
+     * In steady state, the run method and all submitted tasks should complete before
+     * the next invocation of the timer task. If overlapping is detected then a warning
+     * is printed since it could lead to big troubles.
+     */
+
+    private class HeartbeatTimerTask extends TimerTask {
+        /** Maximum execution time (ms) */
+        final private long maxTime;
+        /** Unique id for each heartbeat */
+        private long heartbeatId = 0;
+        /** Used to send the heartbeat asynchrnously */
+        final private ThreadPoolExecutor tpe;
+
+        public HeartbeatTimerTask(long maxTime) {
+            this.maxTime = maxTime;
+            this.heartbeatId = 0;
+
+            int minThreads = 4;
+            int maxThreads = 128;
+            long keepalive = maxTime * 10;
+            ThreadFactory tf = new NamedThreadFactory("Hearbeat sender", false, Thread.MAX_PRIORITY);
+
+            this.tpe = new ThreadPoolExecutor(minThreads, maxThreads, keepalive, TimeUnit.MILLISECONDS,
+                new SynchronousQueue<Runnable>(), tf);
+        }
+
+        @Override
+        public void run() {
+            final long begin = System.currentTimeMillis();
+
+            // In steading state tpe should be empty. Busy workers means blocked SendTask
+            final int busyWorkers = this.tpe.getActiveCount();
+            if (busyWorkers > 0) {
+                admin_logger.warn(busyWorkers + " workers [cur:" + this.tpe.getPoolSize() + ",lar:" +
+                    this.tpe.getLargestPoolSize() + ",max:" + this.tpe.getMaximumPoolSize() +
+                    "] still busy before heartbeats #" + this.heartbeatId + " being send");
+            }
+
+            // Snapshot all the client
+            final List<Client> clients;
+            synchronized (clientMap) {
+                clients = new ArrayList<Client>(clientMap.values());
+            }
+
+            // The heartbeat to send
+            final HeartbeatMessage hbMessage = new HeartbeatRouterMessage(heartbeatId);
+            final byte[] bytes = hbMessage.toByteArray();
+
+            // Send asynchronously the heartbeats
+            final ArrayList<SendTask> sendTasks = new ArrayList<SendTask>(clients.size());
+            final ArrayList<Future<Boolean>> futures = new ArrayList<Future<Boolean>>(sendTasks.size());
+            for (Client client : clients) {
+                if (client.isConnected()) {
+                    final SendTask st = new SendTask(client, bytes, this.heartbeatId);
+                    sendTasks.add(st);
+                    futures.add(tpe.submit(st));
+                }
+            }
+
+            this.heartbeatId++;
+
+            // Check received heartbeats while the sendTasks are executed
+            this.checkHeartbeat(clients);
+
+            // Waiting until maxTime (we could be more aggressive)
+            long rtime = (this.maxTime) - (System.currentTimeMillis() - begin);
+            if (rtime > 0) {
+                new Sleeper(rtime).sleep();
+            } else {
+                admin_logger.warn("Tooks more than " + this.maxTime +
+                    " ms to submit send tasks and check received heartbeats (" + (this.maxTime - rtime) +
+                    "ms)");
+            }
+
+            // Check all submitted tasks completed
+            // We cannot preemptively interrupt tasks but at least the user can be warned that something is wrong
+            for (int i = 0; i < futures.size(); i++) {
+                final Future<Boolean> f = futures.get(i);
+                if (f.isDone()) {
+                    try { // Detect failures while sending heartbeat
+                        f.get();
+                    } catch (Throwable e) {
+                        admin_logger
+                                .info("Exception occured while sending heartbeat to " + clients.get(i), e);
+                    }
+                } else {
+                    admin_logger.info("Sending heartbeat to " + clients.get(i) + " took longer than " +
+                        this.maxTime + "ms.");
+
+                }
+            }
+
+        }
+
+        private void checkHeartbeat(Collection<Client> clients) {
+            long currentTime = System.currentTimeMillis();
+
+            for (Client client : clients) {
+                if (client.isConnected()) {
+                    final long diff = currentTime - client.getLastSeen();
+                    if (diff > heartbeatTimeout) {
+                        // Disconnect
+                        try {
+                            logger.info("Client " + client + " disconnected due to late heartbeat (" + diff +
+                                " ms)");
+                            client.disconnect();
+                        } catch (IOException e) {
+                            logger.info("Failed to disconnected client " + client, e);
+                        }
+
+                        // Broadcast the disconnection to every client
+                        // If client is null, then the handshake has not completed and we
+                        // don't need to broadcast the disconnection
+                        AgentID disconnectedAgent = client.getAgentId();
+                        tpe.submit(new DisconnectionBroadcaster(clients, disconnectedAgent));
+                    }
+                }
+            }
+        }
+
+        private class SendTask implements Callable<Boolean> {
+            final Client client;
+            final byte[] msg;
+            final long heartbeatId;
+
+            public SendTask(Client client, byte[] msg, long heartbeatId) {
+                this.client = client;
+                this.msg = msg;
+                this.heartbeatId = heartbeatId;
+            }
+
+            public Boolean call() throws Exception {
+                try {
+                    if (client.isConnected()) {
+                        client.sendMessage(msg);
+                    }
+                } catch (IOException e) {
+                    throw new PAMRException(
+                        "Failed to send heartbeat #" + this.heartbeatId + " to " + client, e);
+                }
+
+                return true;
+            }
+
+        }
+    }
+
     public void run() {
         boolean r = this.selectThread.compareAndSet(null, Thread.currentThread());
         if (r == false) {
@@ -192,86 +352,10 @@ public class RouterImpl extends RouterInternal implements Runnable {
             return;
         }
 
-        // Start the thread in charge of sending the heartbeat
-        final int period = this.heartbeatTimeout / 3;
-        if (period > 0) {
-            Thread t = new Thread() {
-                public void run() {
-                    long heartbeatId = 0;
-
-                    while (!stopped.get()) {
-                        try { // preventive try/catch. This thread MUST NOT stop or exit
-                            long startTime = System.currentTimeMillis();
-
-                            Collection<Client> clients;
-                            synchronized (clientMap) {
-                                clients = clientMap.values();
-                            }
-
-                            sendHeartbeat(clients, heartbeatId);
-                            checkHeartbeat(clients);
-
-                            long willSleep = period - (System.currentTimeMillis() - startTime);
-                            if (willSleep > 0) {
-                                new Sleeper(willSleep).sleep();
-                            } else {
-                                logger
-                                        .info("Router is late. Sending heartbeat to every clients took more than " +
-                                            period + "ms");
-                            }
-                        } catch (Throwable t) {
-                            logger.warn("Failed to send heartbeat #" + heartbeatId, t);
-                        } finally {
-                            heartbeatId++;
-                        }
-                    }
-                }
-
-                public void sendHeartbeat(final Collection<Client> clients, long heartbeatId) {
-                    HeartbeatMessage hbMessage = new HeartbeatRouterMessage(heartbeatId);
-                    byte[] msg = hbMessage.toByteArray();
-                    for (Client client : clients) {
-                        try {
-                            if (client.isConnected()) {
-                                client.sendMessage(msg);
-                            }
-                        } catch (IOException e) {
-                            admin_logger.debug("Failed to send heartbeat #" + heartbeatId + " to " + client);
-                        }
-                    }
-                }
-
-                public void checkHeartbeat(final Collection<Client> clients) {
-                    long currentTime = System.currentTimeMillis();
-
-                    for (Client client : clients) {
-                        if (client.isConnected()) {
-                            final long diff = currentTime - client.getLastSeen();
-                            if (diff > heartbeatTimeout) {
-                                // Disconnect
-                                logger.info("Client " + client + " disconnected due to late heartbeat (" +
-                                    diff + " ms)");
-                                try {
-                                    client.disconnect();
-                                } catch (IOException e) {
-                                    logger.info("Failed to disconnected client " + client, e);
-                                }
-
-                                // Broadcast the disconnection to every client
-                                // If client is null, then the handshake has not completed and we
-                                // don't need to broadcast the disconnection
-                                AgentID disconnectedAgent = client.getAgentId();
-                                tpe.submit(new DisconnectionBroadcaster(clients, disconnectedAgent));
-                            }
-                        }
-                    }
-                }
-            };
-            t.setDaemon(true);
-            t.setPriority(Thread.MAX_PRIORITY);
-            t.setName("PAMR: heartbeat sender");
-            t.start();
-        }
+        Timer timer = new Timer("Heartbeat timer", true);
+        long delay = this.heartbeatTimeout / 3;
+        HeartbeatTimerTask hbtt = new HeartbeatTimerTask(delay);
+        timer.scheduleAtFixedRate(hbtt, new Date(), delay);
 
         Set<SelectionKey> selectedKeys = null;
         Iterator<SelectionKey> it;
