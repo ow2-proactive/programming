@@ -166,7 +166,7 @@ public class Client {
                 // The tunnel just failed. Discard the current attachment and
                 // wait
                 // for client reconnection
-                this.discardAttachment();
+                this.discardAttachment("Exception caught while sending a message: " + e.getMessage());
                 throw e;
             }
         }
@@ -193,7 +193,7 @@ public class Client {
                 // The tunnel just failed. Discard the current attachment and
                 // wait
                 // for client reconnection
-                this.discardAttachment();
+                this.discardAttachment("Exception caught while sending a message: " + e.getMessage());
                 this.pendingMessage.add(message);
             }
         }
@@ -228,10 +228,10 @@ public class Client {
      * Must be called when an IOException is raised by a read or write operation on the 
      * socket. It indicates the tunnel failed and the client must reconnect.
      */
-    public void discardAttachment() {
+    public void discardAttachment(String cause) {
         synchronized (this.attachment_lock) {
             if (admin_logger.isDebugEnabled() && this.attachment != null) {
-                admin_logger.debug("AgentID " + this.getAgentId() + " disconnected");
+                admin_logger.debug("AgentID " + this.getAgentId() + " disconnected: " + cause);
             }
 
             logger.debug("Discarded attachment for " + this.agentId);
@@ -343,7 +343,7 @@ public class Client {
                 try {
                     this.attachment.disconnect();
                 } finally {
-                    discardAttachment();
+                    discardAttachment("disconnect called");
                 }
             }
         }
