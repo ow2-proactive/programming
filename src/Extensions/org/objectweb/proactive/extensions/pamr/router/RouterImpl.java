@@ -75,6 +75,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.ErrorType;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatRouterMessage;
+import org.objectweb.proactive.utils.NamedThreadFactory;
 import org.objectweb.proactive.utils.Sleeper;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
 
@@ -294,7 +295,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
                             logger.warn("Unhandled SelectionKey operation");
                         }
                     } catch (CancelledKeyException e) {
-                        clientDisconnected(key);
+                        clientDisconnected(key, e.getMessage());
                     }
                 }
 
@@ -312,7 +313,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
         tpe.shutdown();
 
         for (Client client : clientMap.values()) {
-            client.discardAttachment();
+            client.discardAttachment("Shutting down the router");
         }
 
         try {
@@ -370,18 +371,18 @@ public class RouterImpl extends RouterInternal implements Runnable {
             } while (byteRead > 0);
 
             if (byteRead == -1) {
-                clientDisconnected(key);
+                clientDisconnected(key, "end of stream");
             }
         } catch (MalformedMessageException e) {
             // Disconnect the client to avoid a disaster
-            clientDisconnected(key);
+            clientDisconnected(key, e.getMessage());
         } catch (IOException e) {
-            clientDisconnected(key);
+            clientDisconnected(key, e.getMessage());
         }
     }
 
     /** clean everything when a client disconnect */
-    private void clientDisconnected(SelectionKey key) {
+    private void clientDisconnected(SelectionKey key, String cause) {
         Attachment attachment = (Attachment) key.attachment();
 
         key.cancel();
@@ -402,7 +403,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
         }
         Client client = attachment.getClient();
         if (client != null) {
-            client.discardAttachment();
+            client.discardAttachment(cause);
 
             // Broadcast the disconnection to every client
             // If client is null, then the handshake has not completed and we
@@ -411,7 +412,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
             Collection<Client> clients = clientMap.values();
             tpe.submit(new DisconnectionBroadcaster(clients, disconnectedAgent));
         }
-        logger.debug("Client " + attachment.getRemoteEndpoint() + " disconnected");
+        logger.debug("Client " + attachment.getRemoteEndpoint() + " disconnected: " + cause);
 
     }
 
@@ -581,7 +582,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
                 Client client = this.clientMap.get(agentID);
                 if (client != null) {
                     // Disconnect the client and change the id
-                    client.discardAttachment();
+                    client.discardAttachment("Configuration file reloaded");
                 }
                 client = new Client(agentID, map.get(agentID));
                 this.clientMap.put(agentID, client);
