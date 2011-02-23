@@ -197,20 +197,18 @@ public class Attachment {
     }
 
     public void send(ByteBuffer byteBuffer) throws IOException {
-        /*
-         * SocketChannel ARE thread safe. Extra locking to ensure serialization
-         * of the calls is useless
-         */
-        byteBuffer.clear();
-        while (byteBuffer.remaining() > 0) {
-            int bytes = this.socketChannel.write(byteBuffer);
+        synchronized (this.socketChannel) {
+            byteBuffer.clear();
+            while (byteBuffer.remaining() > 0) {
+                int bytes = this.socketChannel.write(byteBuffer);
 
-            if (logger.isDebugEnabled()) {
-                String dstClient = this.client == null ? "unknown" : client.getAgentId().toString();
-                String remaining = byteBuffer.remaining() > 0 ? byteBuffer.remaining() + " remaining to send"
-                        : "";
-                logger.debug("Sent a " + bytes + " bytes message to client " + dstClient + " with " +
-                    this.socketChannel.socket() + ". " + remaining);
+                if (logger.isDebugEnabled()) {
+                    String dstClient = this.client == null ? "unknown" : client.getAgentId().toString();
+                    String remaining = byteBuffer.remaining() > 0 ? byteBuffer.remaining() +
+                        " remaining to send" : "";
+                    logger.debug("Sent a " + bytes + " bytes message to client " + dstClient + " with " +
+                        this.socketChannel.socket() + ". " + remaining);
+                }
             }
         }
     }
