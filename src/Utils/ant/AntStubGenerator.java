@@ -189,7 +189,7 @@ public class AntStubGenerator extends Java {
                     fos.write(data);
                     fos.flush();
                     fos.close();
-                    System.out.println("Written " + fileName);
+                    System.out.println("Wrote " + fileName);
                 } catch (IOException e) {
                     throw new BuildException("Failed to write stub for " + className + " in " + fileName, e);
                 }
