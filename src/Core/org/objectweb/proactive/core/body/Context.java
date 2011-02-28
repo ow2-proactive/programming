@@ -44,6 +44,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.MOPException;
+import org.objectweb.proactive.multiactivity.FutureListener;
 
 
 /**
@@ -61,6 +62,8 @@ public class Context implements Serializable {
 
     /** The currently served request */
     private final Request currentRequest;
+    
+    private final FutureListener futureListener;
 
     /**
      * Create a new context.
@@ -70,6 +73,17 @@ public class Context implements Serializable {
     public Context(Body owner, Request currentRequest) {
         this.body = owner;
         this.currentRequest = currentRequest;
+        this.futureListener = null;
+    }
+    
+    public Context(Body owner, Request currentRequest, FutureListener fl) {
+        this.body = owner;
+        this.currentRequest = currentRequest;
+        this.futureListener = fl;
+    }
+    
+    public FutureListener getFutureListener(){
+        return futureListener;
     }
 
     /**

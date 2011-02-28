@@ -48,6 +48,7 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.UniqueID;
+import org.objectweb.proactive.core.body.Context;
 import org.objectweb.proactive.core.body.LocalBodyStore;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.proxy.AbstractProxy;
@@ -69,6 +70,7 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
+import org.objectweb.proactive.multiactivity.FutureListener;
 
 
 /**
@@ -137,10 +139,6 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
 
     // returns future update info used during dynamic dispatch for groups
     private transient DispatchMonitor dispatchMonitor;
-
-    //
-    // -- CONSTRUCTORS -----------------------------------------------
-    //
 
     /**
      * As this proxy does not create a reified object (as opposed to
@@ -227,8 +225,14 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
             this.callbacks.run();
             this.callbacks = null;
         }
-
-        this.notifyAll();
+        
+        //IZSO
+        //Context context = PAActiveObject.getContext();
+        if (toNotify!=null) {
+            toNotify.arrived(this);
+        } else {        
+            this.notifyAll();
+        }
     }
 
     /**
@@ -285,6 +289,8 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         return !isAvailable();
     }
 
+    private FutureListener toNotify;
+
     /**
      * Blocks the calling thread until the future object is available.
      */
@@ -333,11 +339,20 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
             if (time.isTimeoutElapsed()) {
                 throw new ProActiveTimeoutException("Timeout expired while waiting for the future update");
             }
-            try {
-                this.wait(time.getRemainingTimeout());
-            } catch (InterruptedException e) {
-                logger.debug(e);
-            }
+            //try {
+                //IZSO
+                Context context = PAActiveObject.getContext();
+                if (context.getFutureListener()!=null) {
+                    toNotify = context.getFutureListener();
+                    context.getFutureListener().waitingFor(this);
+                } else {
+                    toNotify = null;
+                    try {
+                        this.wait(time.getRemainingTimeout());
+                    } catch (InterruptedException e) {
+                        logger.debug(e);
+                    }
+                }
         }
 
         // JMX Notification
