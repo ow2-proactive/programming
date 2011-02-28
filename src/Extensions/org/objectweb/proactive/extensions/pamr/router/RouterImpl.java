@@ -215,8 +215,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
             this.heartbeatId = 0;
 
             int minThreads = 4;
-            int maxThreads = 128;
-            long keepalive = maxTime * 10;
+            int maxThreads = 32;
+            long keepalive = maxTime * 5 ;
             ThreadFactory tf = new NamedThreadFactory("Hearbeat sender", false, Thread.MAX_PRIORITY);
 
             this.tpe = new ThreadPoolExecutor(minThreads, maxThreads, keepalive, TimeUnit.MILLISECONDS,
