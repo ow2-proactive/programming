@@ -7,8 +7,6 @@ public interface ThreadManager {
     
     public void submit(Request r);
     
-    
-    
     public int getNumberOfReady();
     public int getNumberOfActive();
     public int getNumberOfWaiting();

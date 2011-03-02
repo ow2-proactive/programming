@@ -248,7 +248,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
     /**
      * @return true iff the future has arrived.
      */
-    public boolean isAvailable() {
+    public synchronized boolean isAvailable() {
         return target != null;
     }
 
@@ -294,7 +294,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
     /**
      * Blocks the calling thread until the future object is available.
      */
-    public synchronized void waitFor() {
+    public void waitFor() {
         try {
             waitFor(0);
         } catch (ProActiveTimeoutException e) {
@@ -307,7 +307,16 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      * @param timeout
      * @throws ProActiveException if the timeout expires
      */
-    public synchronized void waitFor(long timeout) throws ProActiveTimeoutException {
+    public void waitFor(long timeout) throws ProActiveTimeoutException {
+        Context context = PAActiveObject.getContext();
+        if (context.getFutureListener()==null) {
+            waitForInternal(timeout);
+        } else {
+            waitForDelegated(timeout, context.getFutureListener());
+        }
+    }
+    
+    private synchronized void waitForInternal(long timeout) throws ProActiveTimeoutException {
         if (isAvailable()) {
             return;
         }
@@ -339,20 +348,12 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
             if (time.isTimeoutElapsed()) {
                 throw new ProActiveTimeoutException("Timeout expired while waiting for the future update");
             }
-            //try {
-                //IZSO
-                Context context = PAActiveObject.getContext();
-                if (context.getFutureListener()!=null) {
-                    toNotify = context.getFutureListener();
-                    context.getFutureListener().waitingFor(this);
-                } else {
-                    toNotify = null;
-                    try {
-                        this.wait(time.getRemainingTimeout());
-                    } catch (InterruptedException e) {
-                        logger.debug(e);
-                    }
-                }
+            toNotify = null;
+            try {
+                this.wait(time.getRemainingTimeout());
+            } catch (InterruptedException e) {
+                logger.debug(e);
+            }
         }
 
         // JMX Notification
@@ -367,6 +368,64 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
                     .stopTimer(PAActiveObject.getBodyOnThis().getID(), TimerWarehouse.WAIT_BY_NECESSITY);
         }
     }
+    
+    private void waitForDelegated(long timeout, FutureListener waiter) throws ProActiveTimeoutException {
+        
+        // JMX Notification    
+        BodyWrapperMBean mbean = null;
+        UniqueID bodyId = PAActiveObject.getBodyOnThis().getID();
+        Body body = LocalBodyStore.getInstance().getLocalBody(bodyId);
+        
+        //synchronized (this) {
+
+            if (isAvailable()) {
+                return;
+            }
+
+            if (Profiling.TIMERS_COMPILED) {
+                TimerWarehouse.startTimer(PAActiveObject.getBodyOnThis().getID(),
+                        TimerWarehouse.WAIT_BY_NECESSITY);
+            }
+
+            FutureMonitoring.monitorFutureProxy(this);
+
+            // Send notification only if ActiveObject, not for HalfBodies
+            if (body != null) {
+                mbean = body.getMBean();
+                if (mbean != null) {
+                    mbean.sendNotification(NotificationType.waitByNecessity, new FutureNotificationData(
+                        bodyId, getCreatorID()));
+                }
+            }
+        //}
+        
+        // END JMX Notification
+        TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
+
+       // while (!isAvailable()) {
+            /*if (time.isTimeoutElapsed()) {
+                throw new ProActiveTimeoutException("Timeout expired while waiting for the future update");
+            }*/
+            //try {
+                //IZSO
+                toNotify = waiter;
+                waiter.waitingFor(this);
+        //}
+        
+        //synchronized (this) {           
+            // JMX Notification
+            if (mbean != null) {
+                mbean.sendNotification(NotificationType.receivedFutureResult, new FutureNotificationData(bodyId,
+                    getCreatorID()));
+            }
+    
+            // END JMX Notification
+            if (Profiling.TIMERS_COMPILED) {
+                TimerWarehouse
+                        .stopTimer(PAActiveObject.getBodyOnThis().getID(), TimerWarehouse.WAIT_BY_NECESSITY);
+            } 
+        //}
+    }    
 
     public long getID() {
         return id.getID();

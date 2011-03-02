@@ -3,6 +3,7 @@ package org.objectweb.proactive.multiactivity;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.body.future.Future;
+import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.request.Request;
 
 import sun.security.action.GetBooleanAction;
@@ -361,71 +363,64 @@ public class MultiActiveService extends Service {
     }
 
     public class LimitActiveTM implements ThreadManager, FutureListener {
-        private int MAX_ACTIVE = 1;
+        protected int MAX_ACTIVE = 1;
         private ExecutorService executorService = Executors.newCachedThreadPool();
 
-        private HashSet<RunnableRequest> ready = new HashSet<RunnableRequest>();
-        private HashSet<RunnableRequest> active = new HashSet<RunnableRequest>();
-        private HashSet<RunnableRequest> waiting = new HashSet<RunnableRequest>();
+        protected HashSet<RunnableRequest> ready = new HashSet<RunnableRequest>();
+        protected HashSet<RunnableRequest> active = new HashSet<RunnableRequest>();
+        protected HashSet<RunnableRequest> waiting = new HashSet<RunnableRequest>();
 
-        private HashMap<Long, RunnableRequest> threads = new HashMap<Long, RunnableRequest>();
-        private HashMap<Future, Integer> missedNotifs = new HashMap<Future, Integer>();
+        protected HashMap<Long, RunnableRequest> threads = new HashMap<Long, RunnableRequest>();
+        protected HashMap<Future, Integer> missedNotifs = new HashMap<Future, Integer>();
 
         public LimitActiveTM() {
         }
         
         public LimitActiveTM(int maxActiveThreads) {
-            
+            MAX_ACTIVE = maxActiveThreads;
         }
 
-        private boolean canServeOther() {
-            return (getNumberOfActive() < MAX_ACTIVE || MAX_ACTIVE == -1);
-        }
-
-        @Override
-        public void submit(Request request) {
-            ///* */System.out.println("submit "+request.getMethodName()+" in "+body.getID().hashCode());
-            RunnableRequest r = wrapRequest(request);
-            if (canServeOther()) {
-                activate(r);
-            } else {
-                ready.add(r);
+        /*
+        private boolean activateOtherInline(RunnableRequest r) {
+            //return false;
+            RunnableRequest toRun = null;
+            synchronized (this) {
+                if (ready.size() > 0) {
+                    toRun = findInlineFor(r);
+                    if (toRun!=null) {
+                        ready.remove(toRun);
+                        active.add(toRun);
+                    }
+                }
             }
-        }
-
-        private boolean cleanupAfter(RunnableRequest r) {
-            boolean result = active.remove(r) || waiting.remove(r) || ready.remove(r);
-            activateOther();
-            return result;
-        }
-
-        private boolean activateOther() {
-            if (canServeOther() && ready.size() > 0) {
-                activate(ready.iterator().next());
+            
+            if (toRun!=null) {
+                //System.out.println("                                    INLINE");
+                toRun.run();
                 return true;
-            } else if (canServeOther() && ready.size()==0){
+            }
+            
+            //if (canServeOther() && ready.size()==0){
                 //System.out.println("no-one else to activate");\
                 wakeMissedNotifs();
                 return false;
-            } 
-            return false;
+            //}
+            
+            //return false;
         }
-
-        private void activate(RunnableRequest r) {
-            ready.remove(r);
-            active.add(r);
-            //System.out.println("found to activate "+r.getRequest().getMethodName()+" in "+body.getID().hashCode());
-            executorService.submit(r);
-        }
-
-        public void registerThread(RunnableRequest runnableRequest) {
-            threads.put(Thread.currentThread().getId(), runnableRequest);
-        }
-
-        private RunnableRequest wrapRequest(Request request) {
-            return new RunnableRequest(request);
-        }
-
+        
+        private RunnableRequest findInlineFor(RunnableRequest r) {
+            Iterator<RunnableRequest> i = ready.iterator();
+            while (i.hasNext()) {
+                RunnableRequest candidate = i.next();
+                //if (candidate.getRequest().getMethodName().equals(r.getRequest().getMethodName())) {
+                    return candidate;
+                //}
+            }
+            
+            return null;
+        }*/
+        
         @Override
         public int getNumberOfReady() {
             return ready.size();
@@ -441,6 +436,73 @@ public class MultiActiveService extends Service {
             return waiting.size();
         }
 
+        protected boolean canServeOther() {
+            return (getNumberOfActive() < MAX_ACTIVE || MAX_ACTIVE == -1);
+        }
+
+        @Override
+        public void submit(Request request) {
+            ///* */System.out.println("submit "+request.getMethodName()+" in "+body.getID().hashCode());
+            RunnableRequest r = wrapRequest(request);
+            synchronized (this) {
+                if (canServeOther()) {
+                    serve(r);
+                    return;
+                } else {
+                    wakeMissedNotifs();
+                    ready.add(r);
+                }
+            }
+        }
+
+        protected void serve(RunnableRequest r) {
+            ready.remove(r);
+            active.add(r);
+            //System.out.println("found to activate "+r.getRequest().getMethodName()+" in "+body.getID().hashCode());
+            executorService.submit(r);
+        }
+
+        protected boolean serveOneOnNewThread() {
+            if (ready.size() > 0) {
+                serve(ready.iterator().next());
+                return true;
+            }
+
+            return false;
+        }
+        
+        protected boolean cleanupAfter(RunnableRequest r) {
+            boolean result;
+            synchronized (this) {
+                result = active.remove(r) || waiting.remove(r) || ready.remove(r);
+                if (canServeOther()) {
+                    if (!wakeMissedNotifs()) {
+                        serveOneOnNewThread();
+                    }
+                    return true;
+                }
+            }
+            return result;
+        }
+
+        protected boolean yield() {
+            synchronized (this) {
+                if (canServeOther()) {
+                    if (!serveOneOnNewThread()) {
+                        wakeMissedNotifs();
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void arrived(Future future) {
+            ///* */System.out.println("arrived result for "+future+" in "+body.getID().hashCode());
+            //futureState.put(future, true);
+            future.notifyAll();
+        }
+
         @Override
         public void waitingFor(Future future) {
             //find out who I am
@@ -449,33 +511,46 @@ public class MultiActiveService extends Service {
             active.remove(r);
             waiting.add(r);
 
+            //activateOther();
             //give the opportunity to others
-            activateOther();
 
             boolean canRun = false;
             boolean firstWake = true;
 
+            if (((FutureProxy) future).isAvailable()) {
+                return;
+            }
+
             while (!canRun) {
 
-                try {
-                    ///* */System.out.println("sleeping "+r.r.getMethodName()+" in "+body.getID().hashCode());
-                    future.wait();
-                    ///* */System.out.println("woke up "+r.r.getMethodName()+" in "+body.getID().hashCode());
-                } catch (InterruptedException e) {
-                    System.out.println("Interrupted");
+                yield();
+                
+                synchronized (this) {
+                    if (canServeOther() && ((FutureProxy) future).isAvailable()) {
+                        waiting.remove(r);
+                        active.add(r);
+                        canRun = true;
+                        continue;
+                    }
+                }
+                
+                if (firstWake) {
+                    addMissedNotify(future);
                 }
 
-                //check if I can come back
-                if (!canServeOther()) {
-                    if (firstWake) {
-                        addMissedNotify(future);
+                synchronized (future) {
+                    //TODO -- check can serve other                    
+                    
+                    try {
+                        ///* */System.out.println("sleeping "+r.r.getMethodName()+" in "+body.getID().hashCode());
+                        future.wait();
+                        ///* */System.out.println("woke up "+r.r.getMethodName()+" in "+body.getID().hashCode());
+                    } catch (InterruptedException e) {
+                        System.out.println("Interrupted");
                     }
 
+                    //check if I can come back
                     firstWake = false;
-                } else {
-                    waiting.remove(r);
-                    active.add(r);
-                    canRun = true;
                 }
 
             }
@@ -486,7 +561,7 @@ public class MultiActiveService extends Service {
 
         }
 
-        private void wakeMissedNotifs() {
+        protected boolean wakeMissedNotifs() {
             List<Future> copy = new LinkedList<Future>();
             synchronized (missedNotifs) {
                 for (Future f : missedNotifs.keySet()) {
@@ -498,9 +573,11 @@ public class MultiActiveService extends Service {
                     f.notifyAll();
                 }
             }
+            
+            return copy.size()>0;
         }
 
-        private void addMissedNotify(Future future) {
+        protected void addMissedNotify(Future future) {
             synchronized (missedNotifs) {
                 if (!missedNotifs.containsKey(future)) {
                     missedNotifs.put(future, 0);
@@ -509,7 +586,7 @@ public class MultiActiveService extends Service {
             }
         }
 
-        private void removeMissedNotify(Future future) {
+        protected void removeMissedNotify(Future future) {
             synchronized (missedNotifs) {
                 Integer cnt = missedNotifs.get(future);
                 if (cnt != null && cnt > 1) {
@@ -520,11 +597,12 @@ public class MultiActiveService extends Service {
             }
         }
 
-        public void arrived(Future future) {
-            ///* */System.out.println("arrived result for "+future+" in "+body.getID().hashCode());
-            //futureState.put(future, true);
-
-            future.notifyAll();
+        public void registerThread(RunnableRequest runnableRequest) {
+            threads.put(Thread.currentThread().getId(), runnableRequest);
+        }
+        
+        protected RunnableRequest wrapRequest(Request request) {
+            return new RunnableRequest(request);
         }
 
         /**
@@ -534,7 +612,7 @@ public class MultiActiveService extends Service {
          * @author Zsolt István
          * 
          */
-        private class RunnableRequest implements Runnable {
+        protected class RunnableRequest implements Runnable {
             private Request r;
 
             public RunnableRequest(Request r) {
@@ -547,11 +625,12 @@ public class MultiActiveService extends Service {
 
             @Override
             public void run() {
-                ///* */System.out.println("serving "+r.getMethodName()+" --- "+getNumberOfActive()+" in "+body.getID().hashCode());
+                ///* */System.out.println("serving "+r.getMethodName()+" --- a"+getNumberOfActive()+"/w"+getNumberOfWaiting()+"/r"+getNumberOfReady()+" in "+body.getID().hashCode());
                 registerThread(this);
                 body.serve(r);
                 cleanupAfter(this);
                 asynchronousServeFinished(r);
+                //activateOtherInline();
                 //System.out.println("finished "+r.getMethodName()+" --- a"+getNumberOfActive()+"/w"+getNumberOfWaiting()+"/r"+getNumberOfReady()+" in "+body.getID().hashCode());
             }
 
