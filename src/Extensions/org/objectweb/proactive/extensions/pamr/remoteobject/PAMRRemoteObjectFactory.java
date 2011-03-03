@@ -239,8 +239,8 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             } else {
                 return new RemoteObjectAdapter(result);
             }
-        } catch (PAMRException e) {
-            throw new ProActiveException(e);
+        } catch (IOException e) {
+            throw new ProActiveException("Lookup of " + uri + "failed due to network error", e);
         }
     }
 
@@ -269,8 +269,9 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         try {
             message.send();
             return message.getReturnedObject();
-        } catch (PAMRException e) {
-            throw new ProActiveException(e);
+        } catch (IOException e) {
+            throw new ProActiveException("Listing registered remote objects on " + uri +
+                " failed due to network error", e);
         }
     }
 

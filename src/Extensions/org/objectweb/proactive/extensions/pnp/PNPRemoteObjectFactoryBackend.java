@@ -168,8 +168,8 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
             } else {
                 return new RemoteObjectAdapter(result);
             }
-        } catch (PNPException e) {
-            throw new ProActiveException(e);
+        } catch (IOException e) {
+            throw new ProActiveException("Lookup of " + uri + "failed due to network error", e);
         }
     }
 
@@ -205,8 +205,9 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
             }
 
             return uris;
-        } catch (PNPException e) {
-            throw new ProActiveException(e);
+        } catch (IOException e) {
+            throw new ProActiveException("Listing registered remote objects on " + uri +
+                " failed due to network error", e);
         }
     }
 

@@ -36,6 +36,7 @@
  */
 package org.objectweb.proactive.extensions.pamr.remoteobject;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 
@@ -86,7 +87,7 @@ public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
         this.agent = agent;
     }
 
-    public Reply receiveMessage(Request message) throws ProActiveException {
+    public Reply receiveMessage(Request message) throws IOException {
 
         PAMRRemoteObjectRequest req = new PAMRRemoteObjectRequest(message, this.remoteObjectURL, getAgent());
         req.send();

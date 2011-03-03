@@ -42,6 +42,7 @@ import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -102,32 +103,33 @@ abstract class PNPROMessage implements Serializable {
      *
      * @throws PNPException if something bad happened when sending this message
      */
-    public final void send() throws PNPException {
+    public final void send() throws IOException {
+        final byte[] bytes;
         try {
-            byte[] bytes = this.marshaller.marshallObject(this);
-
-            // FIXME: Dynamic hearthbeat & service timeout
-
-            long heartbeatPeriod = PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getValue();
-            PNPFrameCall msgReq = new PNPFrameCall(agent.getCallId(), isAsynchronous, heartbeatPeriod, 0L,
-                bytes);
-            InputStream response = agent.sendMsg(uri, msgReq);
-            if (!isAsynchronous) {
-                try {
-                    this.returnedObject = this.marshaller.unmarshallObject(response);
-                } catch (IOException e) {
-                    throw new PNPException("Failed to unmarshall the response", e);
-                } catch (ClassNotFoundException e) {
-                    throw new PNPException("Failed to unmarshall the response", e);
-                }
-            }
+            bytes = this.marshaller.marshallObject(this);
         } catch (IOException e) {
-            throw new PNPException("Failed to marshall the call", e);
+            throw new IOException6("Failed to marshall PNP message (dest=" + this.uri + ")", e);
+        }
+
+        // FIXME: Dynamic hearthbeat & service timeout
+        long heartbeatPeriod = PNPConfig.PA_PNP_DEFAULT_HEARTBEAT.getValue();
+        PNPFrameCall msgReq = new PNPFrameCall(agent.getCallId(), isAsynchronous, heartbeatPeriod, 0L, bytes);
+
+        final InputStream response;
+        try {
+            response = agent.sendMsg(uri, msgReq);
         } catch (PNPException e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Failed to send message to " + this.uri, e);
+            throw new IOException6("Failed to send PNP message to " + this.uri, e);
+        }
+
+        if (!isAsynchronous) {
+            try {
+                this.returnedObject = this.marshaller.unmarshallObject(response);
+            } catch (IOException e) {
+                throw new IOException6("Failed to unmarshall PNP response from " + this.uri, e);
+            } catch (ClassNotFoundException e) {
+                throw new IOException6("Failed to unmarshall PNP response from " + this.uri, e);
             }
-            throw e;
         }
     }
 }

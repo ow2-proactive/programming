@@ -41,6 +41,7 @@ import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.runtime.ProActiveRuntimeImpl;
 import org.objectweb.proactive.core.util.converter.remote.ProActiveMarshaller;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
@@ -109,7 +110,7 @@ public abstract class PAMRMessage implements Serializable {
      * 
      * @throws PAMRException if something bad happened when sending this message
      */
-    public final void send() throws PAMRException {
+    public final void send() throws IOException {
         try {
             byte[] bytes = this.marshaller.marshallObject(this);
             byte[] response = agent.sendMsg(this.uri, bytes, isAsynchronous);
@@ -120,17 +121,17 @@ public abstract class PAMRMessage implements Serializable {
             if (logger.isDebugEnabled()) {
                 logger.debug("Failed to send message to " + this.uri, e);
             }
-            throw e;
+            throw new IOException6("Failed to send messsage to " + this.uri, e);
         } catch (IOException e) {
             if (logger.isDebugEnabled()) {
-                logger.error("Failed to serialize this message, reason:" + e.getMessage(), e);
+                logger.debug("Failed to serialize this message, reason:" + e.getMessage(), e);
             }
-            throw new PAMRException(e);
+            throw new IOException6("Failed to serialize PAMR message (dest=" + this.uri + ")", e);
         } catch (ClassNotFoundException e) {
             if (logger.isDebugEnabled()) {
-                logger.error("Failed to deserialize the reply for this message, reason:" + e.getMessage(), e);
+                logger.debug("Failed to deserialize PAMR reply (dest=" + this.uri + ")", e);
             }
-            throw new PAMRException(e);
+            throw new IOException6("Failed to deserialize PAMR reply (dest=" + this.uri + ")", e);
         }
     }
 }
