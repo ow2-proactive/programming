@@ -715,14 +715,14 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                         this.retrySendReplyWithException(reply, e1, request.getSender());
                     } catch (Exception retryException1) {
                         // the stacktraced exception must be the first one
-                        sendReplyExceptionsLogger.error(e1.getMessage(), e1);
+                        sendReplyExceptionsLogger.error("Failed to send reply to " + request, e1);
                     }
                 } catch (ProActiveRuntimeException e2) {
                     try {
                         this.retrySendReplyWithException(reply, e2, request.getSender());
                     } catch (Exception retryException2) {
                         // the stacktraced exception must be the first one
-                        sendReplyExceptionsLogger.error(e2.getMessage(), e2);
+                        sendReplyExceptionsLogger.error("Failted to send reply to " + request, e2);
                     }
                 }
             }
