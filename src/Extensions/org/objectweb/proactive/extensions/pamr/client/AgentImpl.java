@@ -242,20 +242,28 @@ public class AgentImpl implements Agent, AgentImplMBean {
         int subtry = 0;
 
         while (this.t == null && nbTry > 0) {
-
-            this.t = this.__reconnectToRouter();
             nbTry--;
 
-            if (this.t == null) {
-                subtry = ++subtry % 3;
-                if (subtry == 0) {
-                    if (delay < 1000 * 60) {
-                        delay *= 2;
-                    }
+            // Compute next sleep duration
+            subtry = ++subtry % 3;
+            if (subtry == 0) {
+                if (delay < 1000 * 60) {
+                    delay *= 2;
                 }
+            }
 
-                logger.warn("PAMR Router is unreachable. Will try to estalish a new tunnel in " +
-                    (delay / 1000) + " seconds");
+            // Connect to the router
+            try {
+                this.t = this.__reconnectToRouter();
+            } catch (Exception e) {
+                logger
+                        .warn("PAMR Router " + this.routerAddr + ":" + this.routerPort + " is unreachable (" +
+                            e.getMessage() + "). Will try to estalish a new tunnel in " + (delay / 1000) +
+                            " seconds");
+
+                // To have the full stack trace in case something goes really wrong
+                logger.debug("Failed to connect to the PAMR router", e);
+
                 new Sleeper(delay).sleep();
             }
         }
@@ -264,32 +272,26 @@ public class AgentImpl implements Agent, AgentImplMBean {
     }
 
     /**
-     * Returns a new tunnel to the router
-     * 
-     * The tunnel instance field is updated. The agentID instance field is set
-     * on the first call. If the agent cannot reconnect to the router, this.t is
-     * set to null.
+     * Returns a new tunnel to the router or throws an exception
      * 
      * <b>This method must only be called by getTunnel</b>
+     * 
+     * @return the new tunnel
+     * @throws Exception if the tunnel cannot be established. It is important that the message is self explainatory.
      */
-    private Tunnel __reconnectToRouter() {
+    private Tunnel __reconnectToRouter() throws Exception {
         Tunnel t = null;
-        try {
-            Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
-            Tunnel tunnel = new Tunnel(s);
 
-            // start router handshake
-            try {
-                routerHandshake(tunnel);
-                t = tunnel;
-            } catch (RouterHandshakeException e) {
-                logger.warn(
-                        "Failed to reconnect to the router: the router handshake procedure failed. Reason: " +
-                            e.getMessage(), e);
-                tunnel.shutdown();
-            }
-        } catch (IOException exception) {
-            logger.debug("Failed to reconnect to the router", exception);
+        Socket s = socketFactory.createSocket(this.routerAddr.getHostAddress(), this.routerPort);
+        Tunnel tunnel = new Tunnel(s);
+
+        // start router handshake
+        try {
+            routerHandshake(tunnel);
+            t = tunnel;
+        } catch (RouterHandshakeException e) {
+            tunnel.shutdown();
+            throw e;
         }
 
         return t;
