@@ -52,6 +52,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.mop.MethodCall;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
@@ -179,7 +180,7 @@ public class RemoteObjectAdapter implements RemoteObject {
             LOGGER_RO.debug("EOFException while calling method " + message.getMethodName());
             return new SynchronousReplyImpl();
         } catch (ProActiveException e) {
-            throw new IOException(e.getMessage());
+            throw new IOException6(e);
         } catch (IOException e) {
             // Log for keeping a trace
             LOGGER_RO.warn("unable to contact remote object when calling method " + message.getMethodName());
