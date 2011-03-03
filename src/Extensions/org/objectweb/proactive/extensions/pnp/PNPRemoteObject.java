@@ -36,6 +36,7 @@
  */
 package org.objectweb.proactive.extensions.pnp;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 
@@ -77,7 +78,7 @@ class PNPRemoteObject implements RemoteRemoteObject, Serializable {
         this.agent = agent;
     }
 
-    public Reply receiveMessage(Request message) throws ProActiveException {
+    public Reply receiveMessage(Request message) throws IOException {
         PNPROMessageRequest req = new PNPROMessageRequest(message, this.remoteObjectURL, getAgent());
         req.send();
         SynchronousReplyImpl rep = (SynchronousReplyImpl) req.getReturnedObject();
