@@ -114,6 +114,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
     /** Current tunnel, can be null */
     volatile private Tunnel t = null;
+    /** Current tunnel failure cause */
+    volatile private Exception te = new PAMRException("Not yet connected");
+
     /** List of tunnel reported as failed */
     final private List<Tunnel> failedTunnels;
 
@@ -185,6 +188,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         this.mailboxes = new WaitingRoom();
         this.requestIDGenerator = new AtomicLong(0);
         this.failedTunnels = new LinkedList<Tunnel>();
+
         this.socketFactory = socketFactory;
         this.timer = new Timer("PAMR: Heartbeat timer");
         this.agentID = agentId; // Check the agentId number
@@ -255,6 +259,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
             // Connect to the router
             try {
                 this.t = this.__reconnectToRouter();
+                this.te = null;
             } catch (Exception e) {
                 logger
                         .warn("PAMR Router " + this.routerAddr + ":" + this.routerPort + " is unreachable (" +
@@ -446,6 +451,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
             this.mailboxes.unlockDueToTunnelFailure(cause);
             this.t.shutdown();
             this.t = null;
+            this.te = cause;
         }
 
     }
@@ -543,7 +549,9 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
             }
         } else {
-            throw new PAMRException("Agent is not connected to the router");
+            throw new PAMRException(
+                "PAMR Agent is not currently connected to the router (the cause describes why the tunnel broke)",
+                this.te);
         }
     }
 
