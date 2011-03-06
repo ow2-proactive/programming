@@ -101,7 +101,7 @@ import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenEx
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
-import org.objectweb.proactive.multiactivity.FutureListenerRegistry;
+import org.objectweb.proactive.multiactivity.FutureWaiterRegistry;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 
@@ -573,7 +573,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
             }
 
             // push the new context
-            LocalBodyStore.getInstance().pushContext(new Context(BodyImpl.this, request, FutureListenerRegistry.get(BodyImpl.this.getID())));
+            LocalBodyStore.getInstance().pushContext(new Context(BodyImpl.this, request, FutureWaiterRegistry.getForBody(BodyImpl.this.getID())));
 
             try {
                 serveInternal(request);

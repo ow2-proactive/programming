@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.core.body.future.Future;
+import org.objectweb.proactive.core.body.future.FuturePool;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.request.Request;
 
@@ -42,23 +43,51 @@ public class MultiActiveService extends Service {
     Logger logger = Logger.getLogger(this.getClass());
 
     CompatibilityTracker compatibility;
-    ThreadManager threadManager;
+    RequestExecutor threadManager;
 
+    /**
+     * MultiActiveService that will be able to optionally use a policy, and will deploy each serving request on a 
+     * separate physical thread.
+     * @param body
+     */
     public MultiActiveService(Body body) {
         super(body);
 
         compatibility = new CompatibilityTracker(new AnnotationProcessor(body.getReifiedObject().getClass()));
-        threadManager = new NoLimitTM();
+        threadManager = new RequestExecutorMock();
 
     }
     
+    /**
+     * MultiActiveService that will be able to optionally use a policy, and will control the deployment of requests on  
+     * physical threads. The maximum number of concurrently active servings is limited. The total
+     * number of started threads is unbounded.
+     * @param body
+     * @param maxActiveThreads maximum number of active serves
+     */
     public MultiActiveService(Body body, int maxActiveThreads) {
-        super(body);
+        this(body);
+        
+        threadManager = new RequestExecutorImpl(maxActiveThreads, false);
 
-        compatibility = new CompatibilityTracker(new AnnotationProcessor(body.getReifiedObject().getClass()));
-        threadManager = new LimitActiveTM(maxActiveThreads);
+        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
 
-        FutureListenerRegistry.put(body.getID(), (FutureListener) threadManager);
+    }
+    
+    /**
+     * MultiActiveService that will be able to optionally use a policy, and will control the deployment of requests on  
+     * physical threads. The maximum number of concurrently active servings or physical threads 
+     * is limited -- depending on the value of a flag.
+     * @param body
+     * @param maxActiveThreads number of maximum active serves (hardLimit is false), or maximum number of threads (hardLimit is true)
+     * @param hardLimit flag for limiting the number of physical threads or only of those which are active.
+     */
+    public MultiActiveService(Body body, int maxActiveThreads, boolean hardLimit) {
+        this(body);
+        
+        threadManager = new RequestExecutorImpl(maxActiveThreads, hardLimit);
+
+        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
 
     }
 
@@ -213,20 +242,20 @@ public class MultiActiveService extends Service {
     }
 
     protected boolean internalParallelServe(Request r) {
-
-        threadManager.submit(r);
-        compatibility.addRunning(r);
-        activeServes++;
-        serveTsts.add((int) (new Date().getTime()));
-        serveHistory.add(activeServes);
-
+        synchronized (requestQueue) {
+            compatibility.addRunning(r);
+            activeServes++;
+            serveTsts.add((int) (new Date().getTime()));
+            serveHistory.add(activeServes);
+            threadManager.submit(r);
+        }
         return true;
     }
 
     /**
-     * Method called from the {@link RunnableRequest} to signal the end of a
-     * serving. State is updated here, and also a new request will be attempted
-     * to be started.
+     * Method called from a request wrapper to signal the end of a
+     * serving. State is updated here, and the scheduler is announced, so
+     * a new request can be scheduled.
      * 
      * @param r
      * @param asserve
@@ -234,10 +263,11 @@ public class MultiActiveService extends Service {
     protected void asynchronousServeFinished(Request r) {
         synchronized (requestQueue) {
             compatibility.removeRunning(r);
-            requestQueue.notifyAll();
             activeServes--;
             serveTsts.add((int) (new Date().getTime()));
             serveHistory.add(activeServes);
+            
+            requestQueue.notifyAll();
         }
     }
 
@@ -362,258 +392,330 @@ public class MultiActiveService extends Service {
 
     }
 
-    public class LimitActiveTM implements ThreadManager, FutureListener {
-        protected int MAX_ACTIVE = 1;
-        private ExecutorService executorService = Executors.newCachedThreadPool();
+    
+    /**
+     * Implementation of the {@link RequestExecutor} interface that is also a {@link FutureWaiter} so it can use the 
+     * time spent on wait-by-necessity in one thread to execute something else.
+     * @author Izso
+     *
+     */
+    public class RequestExecutorImpl implements RequestExecutor, FutureWaiter, Runnable {
+        
+        protected int ACTIVE_LIMIT = 1;
+        protected boolean HARD_LIMIT_ENABLED = true;
+        
+        protected ExecutorService executorService;
+        
+        /**
+         * Requests submitted but not started yet
+         */
+        protected HashSet<RunnableRequest> ready;
+        
+        /**
+         * Requests currently being executed.
+         */
+        protected HashSet<RunnableRequest> active;
+        
+        /**
+         * Requests blocked on some event.
+         */
+        protected HashSet<RunnableRequest> waiting;
+        
+        /**
+         * Set of futures whose values have already arrived
+         */
+        protected HashSet<Future> hasArrived;
+        
+        /**
+         * Associates with each thread a list of requests which represents the
+         * stack of execution inside the thread. Only the top level request can be
+         * active.
+         */
+        protected HashMap<Long, List<RunnableRequest>> threadUsage;
+        
+        /**
+         * List of requests waiting for the value of a future
+         */
+        protected HashMap<Future, List<RunnableRequest>> waitingList;
+        
+        /**
+         * Pairs of requests meaning which is hosting which inside it. Hosting means
+         * that when a wait by necessity occurs the first request will perform a serving of
+         * the second request instead of waiting for the future. It will 'resume' the waiting when
+         * the second request finishes execution
+         */
+        protected HashMap<RunnableRequest, RunnableRequest> hostMap;
+        
+        /**
+         * 
+         * @param activeLimit Limit of active serves
+         * @param hardLimit If true, the limit will also apply to the number of threads
+         */
+        public RequestExecutorImpl(int activeLimit, boolean hardLimit) {
+            ACTIVE_LIMIT = activeLimit;
+            HARD_LIMIT_ENABLED = hardLimit;
+            
+            executorService = hardLimit ? Executors.newFixedThreadPool(activeLimit) : Executors.newCachedThreadPool();
+            ready = new HashSet<RunnableRequest>();
+            active = new HashSet<RunnableRequest>();
+            waiting = new HashSet<RunnableRequest>();
+            hasArrived = new HashSet<Future>();
+            threadUsage = new HashMap<Long, List<RunnableRequest>>();
+            waitingList = new HashMap<Future, List<RunnableRequest>>();
+            hostMap = new HashMap<RunnableRequest, RunnableRequest>();
+            
+            (new Thread((Runnable) this, "ThreadManager of "+body)).start();
+        }
 
-        protected HashSet<RunnableRequest> ready = new HashSet<RunnableRequest>();
-        protected HashSet<RunnableRequest> active = new HashSet<RunnableRequest>();
-        protected HashSet<RunnableRequest> waiting = new HashSet<RunnableRequest>();
-
-        protected HashMap<Long, RunnableRequest> threads = new HashMap<Long, RunnableRequest>();
-        protected HashMap<Future, Integer> missedNotifs = new HashMap<Future, Integer>();
-
-        public LimitActiveTM() {
+        @Override
+        public synchronized void submit(Request r) {
+            ///*DEGUB*/System.out.println("submitted one"+ " in "+body.getID().hashCode()+ "("+body+")");
+            ready.add(wrapRequest(r));
+            this.notify();
         }
         
-        public LimitActiveTM(int maxActiveThreads) {
-            MAX_ACTIVE = maxActiveThreads;
-        }
-
-        /*
-        private boolean activateOtherInline(RunnableRequest r) {
-            //return false;
-            RunnableRequest toRun = null;
-            synchronized (this) {
-                if (ready.size() > 0) {
-                    toRun = findInlineFor(r);
-                    if (toRun!=null) {
-                        ready.remove(toRun);
-                        active.add(toRun);
+        /**
+         * This is the heart of the executor. It is an internal scheduling thread that coordinates wake-ups, and waits and future value arrivals.
+         */
+        public synchronized void run() {
+            //TODO replace for a better one
+            while (body.isActive()) {
+                ///*DEGUB*/System.out.println("r"+ready.size() + " a"+active.size() +" w"+waiting.size() + " f"+hasArrived.size() +" in "+body.getID().hashCode()+ "("+body+")");
+                
+                //WAKE any waiting thread that could resume execution and there are free resources for it
+                Iterator<RunnableRequest> i = waiting.iterator();
+                while (canResumeOne() && i.hasNext()) {
+                    RunnableRequest cont = i.next();
+                    // check if the future has arrived + the request is not already engaged in a hosted serving
+                    if (hasArrived.contains(cont.getWaitingOn()) &&
+                        (!hostMap.keySet().contains(cont) || (!active.contains(hostMap.get(cont)) && !waiting.contains(hostMap.get(cont))))) {
+                        synchronized (cont) {
+                            i.remove();
+                            resumeServing(cont, cont.getWaitingOn());
+                            cont.notify();
+                        }
+                        ///*DEGUB*/System.out.println("resumed one"+ " in "+body.getID().hashCode()+ "("+body+")");
                     }
                 }
+
+                //SERVE anyone who is ready and there are resources available
+                i = ready.iterator();
+                while (canServeOne() && i.hasNext()) {
+                    RunnableRequest next = i.next();
+                    i.remove();
+                    active.add(next);
+                    executorService.submit(next);
+                    ///*DEGUB*/System.out.println("activate one"+ " in "+body.getID().hashCode()+ "("+body+")");
+                }
+
+                if (HARD_LIMIT_ENABLED) {
+                    //HOST a request inside a blocked one's thread
+                    i = waiting.iterator();
+                    while (canServeOneHosted() && i.hasNext()) {
+                        RunnableRequest host = i.next();
+                        //look for requests whose future did not arrive and are not already hosting
+                        if (!hasArrived.contains(host.getWaitingOn()) &&
+                            (!hostMap.keySet().contains(host) || (!active.contains(hostMap.get(host)) && !waiting.contains(hostMap.get(host))))) {
+                            //find a request suitable for serving inside the host
+                            RunnableRequest parasite = findParasiteRequest(host);
+                            
+                            if (parasite != null) {
+                                synchronized (host) {
+                                    ready.remove(parasite);
+                                    active.add(parasite);
+                                    hostMap.put(host, parasite);
+                                    host.notify();
+                                    ///*DEGUB*/System.out.println("hosted one"+ " in "+body.getID().hashCode()+ "("+body+")");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //SLEEP if nothing else to do
+                //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            
-            if (toRun!=null) {
-                //System.out.println("                                    INLINE");
-                toRun.run();
-                return true;
-            }
-            
-            //if (canServeOther() && ready.size()==0){
-                //System.out.println("no-one else to activate");\
-                wakeMissedNotifs();
-                return false;
-            //}
-            
-            //return false;
+        }
+
+        /**
+         * Find a request that can be safely executed on the thread of the host request.
+         * @param host The request who ran on the thread until it got blocked.
+         * @return
+         */
+        private RunnableRequest findParasiteRequest(RunnableRequest host) {
+            return ready.iterator().next();            
         }
         
-        private RunnableRequest findInlineFor(RunnableRequest r) {
-            Iterator<RunnableRequest> i = ready.iterator();
-            while (i.hasNext()) {
-                RunnableRequest candidate = i.next();
-                //if (candidate.getRequest().getMethodName().equals(r.getRequest().getMethodName())) {
-                    return candidate;
-                //}
-            }
-            
-            return null;
-        }*/
+        /**
+         * Returns true if it may be possible to find a request to be hosted inside an other
+         * @return
+         */
+        private boolean canServeOneHosted() {
+            return ready.size()>0 && waiting.size()>0 && active.size()<ACTIVE_LIMIT;
+        }
+
+        /**
+         * Returns true if it may be possible to resume a previously blocked request
+         * @return
+         */
+        private boolean canResumeOne() {
+           return HARD_LIMIT_ENABLED ? (waiting.size()>0 && hasArrived.size()>0) : (waiting.size()>0 && hasArrived.size()>0 && active.size()<ACTIVE_LIMIT);
+        }
         
+        /**
+         * Returns true if there are ready requests and free resources hat permit the serving of at least one additional one.
+         * @return
+         */
+        private boolean canServeOne() {
+            return HARD_LIMIT_ENABLED ? (ready.size()>0 && threadUsage.keySet().size()<ACTIVE_LIMIT && active.size()<ACTIVE_LIMIT) : (ready.size()>0 && active.size()<ACTIVE_LIMIT); 
+        }
+        
+        
+        /**
+         * Called from the {@link #waitForFuture(Future)} method to signal the blocking of a request.
+         * @param r wrapper of the request that starts waiting
+         * @param f the future for whose value the wait occured
+         */
+        private synchronized void pauseServing(RunnableRequest r, Future f) {
+            ///**/System.out.println("blocked "+r.getRequest().getMethodName()+ " in "+body.getID().hashCode()+ "("+body+")");
+            active.remove(r);
+            waiting.add(r);
+            if (!waitingList.containsKey(f)) {
+                waitingList.put(f, new LinkedList<RunnableRequest>());
+                //TOOD -- check if future has arrived -- useful in cases somebody comes after the first wave of waiters has all finished
+            }
+            waitingList.get(f).add(r);
+            
+            r.setCanRun(false);
+            r.setWaitingOn(f);
+            this.notify();
+        }
+        
+        /**
+         * Called from the executor's thread to signal a waiting request that it can resume execution.
+         * @param r the request's wrapper
+         * @param f the future it was waiting for
+         */
+        private synchronized void resumeServing(RunnableRequest r, Future f) {
+            active.add(r);
+            
+            r.setCanRun(true);
+            r.setWaitingOn(null);
+            
+            waitingList.get(f).remove(r);
+            if (waitingList.get(f).size()==0) {
+                waitingList.remove(f);
+                //TODO -- should clean up the future from the arrived set
+            }
+        }
+        
+        /**
+         * Tell the executor about the creation of a new thread, of the current usage of
+         * an already existing thread.
+         * @param r
+         */
+        private synchronized void registerServerThread(RunnableRequest r) {
+            ///**/System.out.println("serving "+r+ " in "+body.getID().hashCode()+ "("+body+")");
+            Long tId = Thread.currentThread().getId();
+            if (!threadUsage.containsKey(tId)) {
+                threadUsage.put(tId, new LinkedList<RunnableRequest>());
+            }
+            threadUsage.get(tId).add(0, r);
+        }
+        
+        /**
+         * Tell the executor about the termination, or updated usage stack of a thread.
+         * @param r
+         */
+        private synchronized void unregisterServerThread(RunnableRequest r) {
+            ///**/System.out.println("finished "+r+ " in "+body.getID().hashCode()+ "("+body+")");
+            active.remove(r);
+            
+            Long tId = Thread.currentThread().getId();
+            if (!r.equals(threadUsage.get(tId).remove(0))) {
+                System.err.println("Thread inconsistency -- Request is not found in the stack.");
+            }
+            if (threadUsage.get(tId).size()==0) {
+                threadUsage.remove(tId);
+            }
+            this.notify();
+        }
+
         @Override
-        public int getNumberOfReady() {
+        public void waitForFuture(Future future) {
+            RunnableRequest me = threadUsage.get(Thread.currentThread().getId()).get(0);
+            synchronized (me) {
+                if (((FutureProxy) future).isAvailable()) {
+                    //value already arrived
+                    return;
+                }
+
+                pauseServing(me, future);
+
+                while (!me.canRun()) {
+
+                    try {
+                        me.wait();
+                    } catch (InterruptedException e) {
+                        //  TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    if (hostMap.containsKey(me) && hostMap.get(me) != null) {
+                        hostMap.get(me).run();
+                    }
+
+                }
+            }
+
+        }
+
+        @Override
+        public synchronized void futureArrived(Future future) {
+            ///*DEBUG*/ System.out.println("future arrived"+ " in "+body.getID().hashCode()+ "("+body+")");
+            hasArrived.add(future);
+            this.notify();
+        }
+
+        @Override
+        public synchronized int getNumberOfReady() {
             return ready.size();
         }
 
         @Override
-        public int getNumberOfActive() {
+        public synchronized int getNumberOfActive() {
             return active.size();
         }
 
         @Override
-        public int getNumberOfWaiting() {
+        public synchronized int getNumberOfWaiting() {
             return waiting.size();
         }
-
-        protected boolean canServeOther() {
-            return (getNumberOfActive() < MAX_ACTIVE || MAX_ACTIVE == -1);
-        }
-
-        @Override
-        public void submit(Request request) {
-            ///* */System.out.println("submit "+request.getMethodName()+" in "+body.getID().hashCode());
-            RunnableRequest r = wrapRequest(request);
-            synchronized (this) {
-                if (canServeOther()) {
-                    serve(r);
-                    return;
-                } else {
-                    wakeMissedNotifs();
-                    ready.add(r);
-                }
-            }
-        }
-
-        protected void serve(RunnableRequest r) {
-            ready.remove(r);
-            active.add(r);
-            //System.out.println("found to activate "+r.getRequest().getMethodName()+" in "+body.getID().hashCode());
-            executorService.submit(r);
-        }
-
-        protected boolean serveOneOnNewThread() {
-            if (ready.size() > 0) {
-                serve(ready.iterator().next());
-                return true;
-            }
-
-            return false;
-        }
         
-        protected boolean cleanupAfter(RunnableRequest r) {
-            boolean result;
-            synchronized (this) {
-                result = active.remove(r) || waiting.remove(r) || ready.remove(r);
-                if (canServeOther()) {
-                    if (!wakeMissedNotifs()) {
-                        serveOneOnNewThread();
-                    }
-                    return true;
-                }
-            }
-            return result;
-        }
-
-        protected boolean yield() {
-            synchronized (this) {
-                if (canServeOther()) {
-                    if (!serveOneOnNewThread()) {
-                        wakeMissedNotifs();
-                    }
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void arrived(Future future) {
-            ///* */System.out.println("arrived result for "+future+" in "+body.getID().hashCode());
-            //futureState.put(future, true);
-            future.notifyAll();
-        }
-
-        @Override
-        public void waitingFor(Future future) {
-            //find out who I am
-            RunnableRequest r = threads.get(Thread.currentThread().getId());
-
-            active.remove(r);
-            waiting.add(r);
-
-            //activateOther();
-            //give the opportunity to others
-
-            boolean canRun = false;
-            boolean firstWake = true;
-
-            if (((FutureProxy) future).isAvailable()) {
-                return;
-            }
-
-            while (!canRun) {
-
-                yield();
-                
-                synchronized (this) {
-                    if (canServeOther() && ((FutureProxy) future).isAvailable()) {
-                        waiting.remove(r);
-                        active.add(r);
-                        canRun = true;
-                        continue;
-                    }
-                }
-                
-                if (firstWake) {
-                    addMissedNotify(future);
-                }
-
-                synchronized (future) {
-                    //TODO -- check can serve other                    
-                    
-                    try {
-                        ///* */System.out.println("sleeping "+r.r.getMethodName()+" in "+body.getID().hashCode());
-                        future.wait();
-                        ///* */System.out.println("woke up "+r.r.getMethodName()+" in "+body.getID().hashCode());
-                    } catch (InterruptedException e) {
-                        System.out.println("Interrupted");
-                    }
-
-                    //check if I can come back
-                    firstWake = false;
-                }
-
-            }
-
-            if (!firstWake) {
-                removeMissedNotify(future);
-            }
-
-        }
-
-        protected boolean wakeMissedNotifs() {
-            List<Future> copy = new LinkedList<Future>();
-            synchronized (missedNotifs) {
-                for (Future f : missedNotifs.keySet()) {
-                    copy.add(f);
-                }
-            }
-            for (Future f : copy) {
-                synchronized (f) {
-                    f.notifyAll();
-                }
-            }
-            
-            return copy.size()>0;
-        }
-
-        protected void addMissedNotify(Future future) {
-            synchronized (missedNotifs) {
-                if (!missedNotifs.containsKey(future)) {
-                    missedNotifs.put(future, 0);
-                }
-                missedNotifs.put(future, missedNotifs.get(future) + 1);
-            }
-        }
-
-        protected void removeMissedNotify(Future future) {
-            synchronized (missedNotifs) {
-                Integer cnt = missedNotifs.get(future);
-                if (cnt != null && cnt > 1) {
-                    missedNotifs.put(future, cnt - 1);
-                } else {
-                    missedNotifs.remove(future);
-                }
-            }
-        }
-
-        public void registerThread(RunnableRequest runnableRequest) {
-            threads.put(Thread.currentThread().getId(), runnableRequest);
-        }
-        
+        /**
+         * Makes a request runnable on a separate thread, by wrapping it in an instance of {@link RunnableRequest}.
+         * @param request
+         * @return
+         */
         protected RunnableRequest wrapRequest(Request request) {
             return new RunnableRequest(request);
         }
-
+        
         /**
-         * By wrapping the request, we can pass the 'method' to the outside world
-         * without actually exposing internal information.
-         * 
-         * @author Zsolt István
-         * 
+         * Wrapper class for a request. Apart from the actual serving it also performs calls
+         * for thread registering and unregistering inside the executor and callback after termination
+         * in the wrapping service. 
+         * @author Izso
+         *
          */
-        protected class RunnableRequest implements Runnable {
+        protected class RunnableRequest implements Runnable {            
             private Request r;
+            private boolean canRun = true;
+            private Future waitingOn;
 
             public RunnableRequest(Request r) {
                 this.r = r;
@@ -625,20 +727,62 @@ public class MultiActiveService extends Service {
 
             @Override
             public void run() {
-                ///* */System.out.println("serving "+r.getMethodName()+" --- a"+getNumberOfActive()+"/w"+getNumberOfWaiting()+"/r"+getNumberOfReady()+" in "+body.getID().hashCode());
-                registerThread(this);
+                registerServerThread(this);
                 body.serve(r);
-                cleanupAfter(this);
                 asynchronousServeFinished(r);
-                //activateOtherInline();
-                //System.out.println("finished "+r.getMethodName()+" --- a"+getNumberOfActive()+"/w"+getNumberOfWaiting()+"/r"+getNumberOfReady()+" in "+body.getID().hashCode());
+                unregisterServerThread(this);
+            }
+            
+            @Override
+            public String toString() {
+                return "Wrapper for "+r.toString();
+            }
+
+            /**
+             * Tell this request that is can carry on executing, because the event it has been
+             * waiting for has arrived.
+             * @param canRun
+             */
+            public void setCanRun(boolean canRun) {
+                this.canRun = canRun;
+            }
+
+            /**
+             * Check whether the inner request can carry on the execution.
+             * @return
+             */
+            public boolean canRun() {
+                return canRun;
+            }
+
+            /**
+             * Tell the outer world on what future's value is this request performing
+             * a wait-by-necessity.
+             * @param waitingOn
+             */
+            public void setWaitingOn(Future waitingOn) {
+                this.waitingOn = waitingOn;
+            }
+
+            /**
+             * Find out on what future's value is this request performing
+             * a wait-by-necessity.
+             * @return
+             */
+            public Future getWaitingOn() {
+                return waitingOn;
             }
 
         }
-
     }
     
-    public class NoLimitTM implements ThreadManager {
+    /**
+     * Basic {@link RequestExecutor} that will start every submitted request on a new 
+     * thread. Upon completion a callback method is called inside the service.
+     * @author Izso
+     *
+     */
+    public class RequestExecutorMock implements RequestExecutor {
         private ExecutorService executorService = Executors.newCachedThreadPool();
         private AtomicInteger active = new AtomicInteger(0);
 
@@ -666,6 +810,11 @@ public class MultiActiveService extends Service {
             return 0;
         }
         
+        /**
+         * Wrapper that is used for the parallel serving of requests
+         * @author Izso
+         *
+         */
         private class RunnableRequest implements Runnable {
             private Request r;
 

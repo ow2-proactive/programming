@@ -70,7 +70,7 @@ import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
-import org.objectweb.proactive.multiactivity.FutureListener;
+import org.objectweb.proactive.multiactivity.FutureWaiter;
 
 
 /**
@@ -229,7 +229,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         //IZSO
         //Context context = PAActiveObject.getContext();
         if (toNotify!=null) {
-            toNotify.arrived(this);
+            toNotify.futureArrived(this);
         } else {        
             this.notifyAll();
         }
@@ -289,7 +289,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         return !isAvailable();
     }
 
-    private FutureListener toNotify;
+    private FutureWaiter toNotify;
 
     /**
      * Blocks the calling thread until the future object is available.
@@ -369,7 +369,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
         }
     }
     
-    private void waitForDelegated(long timeout, FutureListener waiter) throws ProActiveTimeoutException {
+    private void waitForDelegated(long timeout, FutureWaiter waiter) throws ProActiveTimeoutException {
         
         // JMX Notification    
         BodyWrapperMBean mbean = null;
@@ -409,7 +409,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
             //try {
                 //IZSO
                 toNotify = waiter;
-                waiter.waitingFor(this);
+                waiter.waitForFuture(this);
         //}
         
         //synchronized (this) {           
