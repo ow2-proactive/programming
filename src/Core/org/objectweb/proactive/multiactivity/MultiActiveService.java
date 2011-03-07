@@ -478,6 +478,7 @@ public class MultiActiveService extends Service {
          * This is the heart of the executor. It is an internal scheduling thread that coordinates wake-ups, and waits and future value arrivals.
          */
         public synchronized void run() {
+            int dlc = 0;
             //TODO replace for a better one
             while (body.isActive()) {
                 ///*DEGUB*/System.out.println("r"+ready.size() + " a"+active.size() +" w"+waiting.size() + " f"+hasArrived.size() +" in "+body.getID().hashCode()+ "("+body+")");
@@ -504,7 +505,8 @@ public class MultiActiveService extends Service {
                     RunnableRequest next = i.next();
                     i.remove();
                     active.add(next);
-                    executorService.submit(next);
+                    //executorService.submit(next);
+                    (new Thread(next, "Serving thread for "+body)).start();
                     ///*DEGUB*/System.out.println("activate one"+ " in "+body.getID().hashCode()+ "("+body+")");
                 }
 
@@ -532,6 +534,11 @@ public class MultiActiveService extends Service {
                     }
                 }
 
+                /*int ac = active.size();
+                int wc = waiting.size();
+                int rc = ready.size();
+                int fc = hasArrived.size();*/
+                
                 //SLEEP if nothing else to do
                 //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
                 try {
@@ -539,6 +546,31 @@ public class MultiActiveService extends Service {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                /*
+                if (ac == active.size() && wc == waiting.size() && rc == ready.size() && fc == hasArrived.size()) {
+                    dlc++;
+                    if (dlc>3) {
+                        System.err.println("Nothing happened!!! Possibly I have deadlocked. I am "+body.getID().hashCode());
+                        
+                        System.out.println("Body "+body.getID().hashCode());
+                        for (long th : threadUsage.keySet()) {
+                            System.out.println("Thread "+th);
+                            for (int a=0; a<threadUsage.get(th).size(); a++) {
+                                System.out.println("Level "+a+" - "+threadUsage.get(th).get(a).getRequest().getMethodName()+" waiting on "+threadUsage.get(th).get(a).getWaitingOn().getUpdater().getID().hashCode());
+                            }
+                        }
+                        
+                        try {
+                            this.wait();
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        } 
+                    }
+                } else {
+                    dlc = 0;
+                }
+                */
             }
         }
 
@@ -611,6 +643,7 @@ public class MultiActiveService extends Service {
             if (waitingList.get(f).size()==0) {
                 waitingList.remove(f);
                 //TODO -- should clean up the future from the arrived set
+                hasArrived.remove(f);
             }
         }
         
