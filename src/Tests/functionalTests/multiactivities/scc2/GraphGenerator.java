@@ -82,7 +82,8 @@ public class GraphGenerator implements Runnable {
 	}
 	
 	public static void generateDensityBasedGraph(final int threads, final int piece, final int numPieces, final int cnt, final int groups, final double groupD, final double interD) throws InterruptedException {
-		//System.out.println(cnt);		
+		if (threads==1) System.out.println(cnt);
+		
 		LinkedList<Thread> waitFor = new LinkedList();
 		final int perPiece = cnt/numPieces;
 		final int perThread = perPiece/threads;

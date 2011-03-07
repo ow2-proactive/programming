@@ -56,9 +56,11 @@ public class Deployer {
 	
 	public void kill(GraphWorker[] w) {
 		for (GraphWorker gw : w) {
+		    /*
 		    System.out.println("\n");
 		    System.out.println(gw.getActiveServeCount());
 		    System.out.println(gw.getActiveServeTsts());
+		    */
 			PAActiveObject.terminateActiveObject(gw, true);
 		}
 	}

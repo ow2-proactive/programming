@@ -435,7 +435,7 @@ public class GraphWorker implements RunActive {
     @Override
     public void runActivity(Body body) {
         if (multiActive) {
-            service = (new MultiActiveService(body));
+            service = (new MultiActiveService(body, 1, true));
             service.multiActiveServing();
         } else {
             (service = new MultiActiveService(body)).policyServing(ServingPolicyFactory.getMultiActivityPolicy());
