@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -65,7 +66,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      * the second request instead of waiting for the future. It will 'resume' the waiting when
      * the second request finishes execution
      */
-    protected HashMap<RunnableRequest, RunnableRequest> hostMap;
+    protected ConcurrentHashMap<RunnableRequest, RunnableRequest> hostMap;
     
     /**
      * 
@@ -83,7 +84,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         hasArrived = new HashSet<Future>();
         threadUsage = new HashMap<Long, List<RunnableRequest>>();
         waitingList = new HashMap<Future, List<RunnableRequest>>();
-        hostMap = new HashMap<RunnableRequest, RunnableRequest>();
+        hostMap = new ConcurrentHashMap<RunnableRequest, RunnableRequest>();
         
         this.listener = listener;
         
@@ -104,15 +105,18 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         int dlc = 0;
         //TODO replace for a better one
         while (listener.getServingBody().isActive()) {
+
             ///*DEGUB*/System.out.println("r"+ready.size() + " a"+active.size() +" w"+waiting.size() + " f"+hasArrived.size() +" in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
-            
+
             //WAKE any waiting thread that could resume execution and there are free resources for it
             Iterator<RunnableRequest> i = waiting.iterator();
+
             while (canResumeOne() && i.hasNext()) {
+
                 RunnableRequest cont = i.next();
                 // check if the future has arrived + the request is not already engaged in a hosted serving
-                if (hasArrived.contains(cont.getWaitingOn()) &&
-                    (!hostMap.keySet().contains(cont) || (!active.contains(hostMap.get(cont)) && !waiting.contains(hostMap.get(cont))))) {
+                if (hasArrived.contains(cont.getWaitingOn()) && isNotAHost(cont)) {
+
                     synchronized (cont) {
                         i.remove();
                         resumeServing(cont, cont.getWaitingOn());
@@ -124,39 +128,41 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
 
             //SERVE anyone who is ready and there are resources available
             i = ready.iterator();
+
             while (canServeOne() && i.hasNext()) {
+
                 RunnableRequest next = i.next();
                 i.remove();
                 active.add(next);
                 //executorService.submit(next);
-                (new Thread(next, "Serving thread for "+listener.getServingBody())).start();
+                (new Thread(next, "Serving thread for " + listener.getServingBody())).start();
                 ///*DEGUB*/System.out.println("activate one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
             }
 
             if (HARD_LIMIT_ENABLED) {
+
                 //HOST a request inside a blocked one's thread
-                i = waiting.iterator();
-                while (canServeOneHosted() && i.hasNext()) {
-                    RunnableRequest host = i.next();
-                    //look for requests whose future did not arrive and are not already hosting
-                    if (!hasArrived.contains(host.getWaitingOn()) &&
-                        (!hostMap.keySet().contains(host) || (!active.contains(hostMap.get(host)) && !waiting.contains(hostMap.get(host))))) {
-                        //find a request suitable for serving inside the host
-                        RunnableRequest parasite = findParasiteRequest(host);
-                        
-                        if (parasite != null) {
-                            synchronized (host) {
-                                ready.remove(parasite);
-                                active.add(parasite);
-                                hostMap.put(host, parasite);
-                                host.notify();
-                                ///*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
-                            }
+                RunnableRequest parasite;
+                
+                //find a request suitable for serving (preferably a recursion)
+                while (canServeOneHosted() && (parasite=findParasiteRequest())!=null) {
+                     
+                    //find a host for the parasite
+                    RunnableRequest host = findHostRequest(parasite);
+
+                    if (host != null) {
+
+                        synchronized (host) {
+                            ready.remove(parasite);
+                            active.add(parasite);
+                            hostMap.put(host, parasite);
+                            host.notify();
+                            ///*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
                         }
                     }
                 }
             }
-            
+
             //SLEEP if nothing else to do
             //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
             try {
@@ -167,13 +173,39 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
 
         }
     }
+    
+    private boolean isNotAHost(RunnableRequest r) {
+        return !hostMap.keySet().contains(r) || (!active.contains(hostMap.get(r)) && !waiting.contains(hostMap.get(r)));
+    }
+
+    private RunnableRequest findHostRequest(RunnableRequest parasite) {
+        long min = 0;
+        boolean found = false;
+        RunnableRequest candidate;
+        
+        for (long tid : threadUsage.keySet()) {
+            
+            candidate = threadUsage.get(tid).get(0);
+            
+            if (waiting.contains(candidate) && isNotAHost(candidate) && (found == false || (threadUsage.get(tid).size()<threadUsage.get(min).size()))) {
+                min = tid;
+                found = true; 
+            }
+        }
+        
+        if (found) {
+            return threadUsage.get(min).get(0);
+        } else {
+            return null;
+        }
+    }
 
     /**
-     * Find a request that can be safely executed on the thread of the host request.
-     * @param host The request who ran on the thread until it got blocked.
+     * Find a request that can be safely executed on the thread of a host request.
+     * This request should be the result of a re-entrant call.
      * @return
      */
-    private RunnableRequest findParasiteRequest(RunnableRequest host) {
+    private RunnableRequest findParasiteRequest() {
         return ready.iterator().next();            
     }
     
@@ -207,7 +239,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      * @param r wrapper of the request that starts waiting
      * @param f the future for whose value the wait occured
      */
-    private synchronized void pauseServing(RunnableRequest r, Future f) {
+    private synchronized void signalWaitFor(RunnableRequest r, Future f) {
         ///**/System.out.println("blocked "+r.getRequest().getMethodName()+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
         active.remove(r);
         waiting.add(r);
@@ -228,6 +260,8 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      */
     private synchronized void resumeServing(RunnableRequest r, Future f) {
         active.add(r);
+        
+        hostMap.remove(r);
         
         r.setCanRun(true);
         r.setWaitingOn(null);
@@ -274,26 +308,26 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
 
     @Override
     public void waitForFuture(Future future) {
-        RunnableRequest me = threadUsage.get(Thread.currentThread().getId()).get(0);
-        synchronized (me) {
+        RunnableRequest thisRequest = threadUsage.get(Thread.currentThread().getId()).get(0);
+        synchronized (thisRequest) {
             synchronized (future) {
                 if (((FutureProxy) future).isAvailable()) {
                     return;
                 }
                 
-                pauseServing(me, future);
+                signalWaitFor(thisRequest, future);
             }
 
-            while (!me.canRun()) {
+            while (!thisRequest.canRun()) {
 
                 try {
-                    me.wait();
+                    thisRequest.wait();
                 } catch (InterruptedException e) {
                     //  TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                if (hostMap.containsKey(me) && hostMap.get(me) != null) {
-                    hostMap.get(me).run();
+                if (hostMap.containsKey(thisRequest) && hostMap.get(thisRequest) != null) {
+                    hostMap.get(thisRequest).run();
                 }
 
             }

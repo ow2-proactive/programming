@@ -14,7 +14,7 @@ public class GraphMaster {
 	public static void main(String[] args) {
 		Logger logger = Logger.getLogger("SCC");
 		
-		if (args.length<3) {
+		if (args.length<4) {
 			printUsage(); 
 			return;
 		}
@@ -23,10 +23,10 @@ public class GraphMaster {
 		
 		Deployer deployer = new Deployer();
 		GraphWorker[] workers;
-		if (args.length==4) {
-		    workers = deployer.createAndDeploy(workerCount, args[3].split(";"), args[2].startsWith("MA"));
+		if (args.length==5) {
+		    workers = deployer.createAndDeploy(workerCount, args[4].split(";"), Integer.parseInt(args[2]), args[3].startsWith("true"));
 		} else {
-		    workers = deployer.createAndDeploy(workerCount, args[2].startsWith("MA"));
+		    workers = deployer.createAndDeploy(workerCount, Integer.parseInt(args[2]), args[3].startsWith("true"));
 		}
 		if (workers==null) {
 			logger.error("Failed to create workers!");
@@ -61,7 +61,7 @@ public class GraphMaster {
 
 	private static void printUsage() {
 		System.out.println("Usage:");
-		System.out.println("<Number of workers> <Path to graph> <Mode for workers: 'MA' or 'SA'>");
+		System.out.println("<Number of workers> <Path to graph> <nb. of threads (0 for legacy mode)> <hard limit flag>");
 	}
 	
 	

@@ -14,14 +14,15 @@ public class Deployer {
 	
 	private GraphWorker[] workers;
 	
-	public GraphWorker[] createAndDeploy(int cnt, String[] hosts, boolean multiActive) {
+	public GraphWorker[] createAndDeploy(int cnt, String[] hosts, int threads, boolean hardLimited) {
 		workers = new GraphWorker[cnt];
 		boolean ok = true;
 		
 		for (int i=0; i<cnt; i++) {
-			Object[] params = new Object[2];
+			Object[] params = new Object[3];
 			params[0] = "Node"+i+"";
-			params[1] = multiActive;
+			params[1] = threads;
+			params[2] = hardLimited;
 			try {
 				if (hosts.length > 0) {
 
@@ -46,8 +47,8 @@ public class Deployer {
 		return ok ? workers : null;
 	}
 	
-	public GraphWorker[] createAndDeploy(int cnt, boolean multiActive) {
-		return createAndDeploy(cnt, new String[0], multiActive);
+	public GraphWorker[] createAndDeploy(int cnt, int threads, boolean hardLimited) {
+		return createAndDeploy(cnt, new String[0], threads, hardLimited);
 	}
 	
 	public GraphWorker[] getWorkers() {

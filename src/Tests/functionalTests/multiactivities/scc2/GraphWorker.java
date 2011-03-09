@@ -59,7 +59,7 @@ public class GraphWorker implements RunActive {
     private HashMap<Integer, HashSet<Integer>> visitedB;
 
     //the body is multiactive or not
-    private boolean multiActive;
+    private boolean hardLimited;
 
     private GraphWorker[] workers;
 
@@ -69,9 +69,12 @@ public class GraphWorker implements RunActive {
 
     private Integer nodeNumber;
 
-    public GraphWorker(String name, boolean multiActive) {
+    private int threadCount;
+
+    public GraphWorker(String name, int threadCount, boolean hardLimit) {
         this.name = name;
-        this.multiActive = multiActive;
+        this.hardLimited = hardLimit;
+        this.threadCount = threadCount;
     }
 
     public GraphWorker() {
@@ -434,11 +437,12 @@ public class GraphWorker implements RunActive {
 
     @Override
     public void runActivity(Body body) {
-        if (multiActive) {
-            service = (new MultiActiveService(body, 20, true));
+        if (threadCount>0) {
+            service = (new MultiActiveService(body, threadCount, hardLimited));
             service.multiActiveServing();
         } else {
-            (service = new MultiActiveService(body)).policyServing(ServingPolicyFactory.getMultiActivityPolicy());
+            service = (new MultiActiveService(body));
+            service.multiActiveServing();
         }
     }
     
