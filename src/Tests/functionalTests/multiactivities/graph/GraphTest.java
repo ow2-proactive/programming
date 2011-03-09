@@ -17,8 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.objectweb.proactive.multiactivity.AnnotationProcessor;
-
 public class GraphTest {
 	private static VertexGroup[] vg;
 	private static Map<Integer, Integer> vertices;

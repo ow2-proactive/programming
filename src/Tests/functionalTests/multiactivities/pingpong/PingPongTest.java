@@ -44,7 +44,7 @@ public class PingPongTest {
 		
 		System.out.println();
 		System.out.println("Test: should see ping-pongs");
-		System.out.println(a.startWithPing());
+		System.out.println(a.ping());
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class PingPongTest {
 	 * @throws ActiveObjectCreationException
 	 * @throws NodeException
 	 */
-	@Test(timeout=8000)
+	@Test //(timeout=8000)
 	public void testMultiActiveBadAnnotation() throws ActiveObjectCreationException, NodeException{
 		Object[] constrPrm = { true };
 		Pinger a = PAActiveObject.newActive(Pinger.class, constrPrm);

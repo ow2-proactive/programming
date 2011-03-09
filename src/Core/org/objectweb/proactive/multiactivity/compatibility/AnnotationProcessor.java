@@ -1,4 +1,4 @@
-package org.objectweb.proactive.multiactivity;
+package org.objectweb.proactive.multiactivity.compatibility;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

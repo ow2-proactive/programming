@@ -1,4 +1,4 @@
-package org.objectweb.proactive.multiactivity;
+package org.objectweb.proactive.multiactivity.compatibility;
 
 import java.util.List;
 import java.util.Set;
@@ -12,13 +12,13 @@ import org.objectweb.proactive.core.body.request.Request;
  * @author Zsolt Istvan
  *
  */
-public abstract class SchedulerCompatibilityMap extends CompatibilityMap {
+public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	
-	public SchedulerCompatibilityMap(AnnotationProcessor annotProc) {
+	public StatefulCompatibilityMap(AnnotationProcessor annotProc) {
 		super(annotProc);
 	}
 	
-	public SchedulerCompatibilityMap(Class<?> clazz) {
+	public StatefulCompatibilityMap(Class<?> clazz) {
 		super(clazz);
 	}
 	

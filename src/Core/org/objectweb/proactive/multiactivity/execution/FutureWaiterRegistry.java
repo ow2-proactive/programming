@@ -1,4 +1,4 @@
-package org.objectweb.proactive.multiactivity;
+package org.objectweb.proactive.multiactivity.execution;
 
 import java.util.HashMap;
 
@@ -19,7 +19,7 @@ public class FutureWaiterRegistry {
      * @param id the ID of the body
      * @param fl the future waiter implementation
      */
-    protected static void putForBody(UniqueID id, FutureWaiter fl) {
+    public static void putForBody(UniqueID id, FutureWaiter fl) {
         registry.put(id, fl);
     }
     

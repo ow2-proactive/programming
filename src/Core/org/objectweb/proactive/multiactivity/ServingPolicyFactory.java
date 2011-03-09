@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.multiactivity.compatibility.StatefulCompatibilityMap;
 
 public class ServingPolicyFactory {
 	
@@ -11,7 +12,7 @@ public class ServingPolicyFactory {
 		return new ServingPolicy() {
 			
 			@Override
-			public List<Request> runPolicy(SchedulerCompatibilityMap compatibility) {
+			public List<Request> runPolicy(StatefulCompatibilityMap compatibility) {
 				List<Request> ret = new LinkedList<Request>();
 				
 				if (compatibility.getNumberOfExecutingRequests()==0 && compatibility.getQueueContents().size()>0) {
@@ -27,7 +28,7 @@ public class ServingPolicyFactory {
 		return new ServingPolicy() {
 			
 			@Override
-			public List<Request> runPolicy(SchedulerCompatibilityMap compatibility) {
+			public List<Request> runPolicy(StatefulCompatibilityMap compatibility) {
 				List<Request> ret = new LinkedList<Request>();
 				Request oldest = compatibility.getOldestInTheQueue();
 				
@@ -56,7 +57,7 @@ public class ServingPolicyFactory {
 		return new ServingPolicy() {
 			
 			@Override
-			public List<Request> runPolicy(SchedulerCompatibilityMap compatibility) {
+			public List<Request> runPolicy(StatefulCompatibilityMap compatibility) {
 				
 				if (compatibility.getExecutingRequests().size()<maxThreads) {
 					ServingPolicy maPolicy = getMultiActivityPolicy();
@@ -72,7 +73,7 @@ public class ServingPolicyFactory {
 		return new ServingPolicy() {
 			
 			@Override
-			public List<Request> runPolicy(SchedulerCompatibilityMap compatibility) {
+			public List<Request> runPolicy(StatefulCompatibilityMap compatibility) {
 				
 				List<Request> ret = new LinkedList<Request>();
 				List<Request> queue = compatibility.getQueueContents();

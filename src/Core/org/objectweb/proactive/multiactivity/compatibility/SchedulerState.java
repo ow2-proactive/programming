@@ -1,4 +1,4 @@
-package org.objectweb.proactive.multiactivity;
+package org.objectweb.proactive.multiactivity.compatibility;
 
 import java.util.List;
 import java.util.Set;

@@ -17,12 +17,9 @@ import org.objectweb.proactive.annotation.multiactivity.DefineRules;
 import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.annotation.multiactivity.MemberOf;
 import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.multiactivity.CompatibilityMap;
+
 import org.objectweb.proactive.multiactivity.MultiActiveService;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
-import org.objectweb.proactive.multiactivity.SchedulerState;
-import org.objectweb.proactive.multiactivity.ServingPolicy;
-import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
 
 @DefineGroups(
 		{

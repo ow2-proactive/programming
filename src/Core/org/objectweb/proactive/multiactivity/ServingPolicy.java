@@ -3,6 +3,7 @@ package org.objectweb.proactive.multiactivity;
 import java.util.List;
 
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.multiactivity.compatibility.StatefulCompatibilityMap;
 
 /**
  * Interface for describing the inner policy of the MultiActiveService
@@ -25,6 +26,6 @@ public interface ServingPolicy {
 	 * @param compatibilityMap
 	 * @return a sublist of the requests that can be started in parallel
 	 */
-	public List<Request> runPolicy(SchedulerCompatibilityMap compatibility);
+	public List<Request> runPolicy(StatefulCompatibilityMap compatibility);
 	
 }

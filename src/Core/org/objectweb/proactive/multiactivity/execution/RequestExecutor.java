@@ -1,6 +1,7 @@
-package org.objectweb.proactive.multiactivity;
+package org.objectweb.proactive.multiactivity.execution;
 
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 //TODO -- should define a pair interface for RequestSubmitter with finishedRequest callback functions, to
 //        remove the awful coupling inside MultiActiveService

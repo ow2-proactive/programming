@@ -101,8 +101,8 @@ import org.objectweb.proactive.core.security.exceptions.CommunicationForbiddenEx
 import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.core.util.profiling.TimerWarehouse;
-import org.objectweb.proactive.multiactivity.FutureWaiterRegistry;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
+import org.objectweb.proactive.multiactivity.execution.FutureWaiterRegistry;
 
 
 /**

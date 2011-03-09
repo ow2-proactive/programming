@@ -44,7 +44,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.MOPException;
-import org.objectweb.proactive.multiactivity.FutureWaiter;
+import org.objectweb.proactive.multiactivity.execution.FutureWaiter;
 
 
 /**

@@ -1,4 +1,4 @@
-package org.objectweb.proactive.multiactivity;
+package org.objectweb.proactive.multiactivity.execution;
 
 import org.objectweb.proactive.core.body.future.Future;
 

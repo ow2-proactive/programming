@@ -8,6 +8,7 @@ import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
 import org.objectweb.proactive.annotation.multiactivity.DefineRules;
 import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.annotation.multiactivity.MemberOf;
+import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 /**
@@ -29,7 +30,7 @@ import org.objectweb.proactive.multiactivity.MultiActiveService;
 		}
 )
 public class Pinger implements RunActive {
-	private Integer count = 5;
+	private Integer count = 3;
 	private Pinger other;
 	private Boolean multiActive;
 	
@@ -70,11 +71,15 @@ public class Pinger implements RunActive {
 	 */
 	@MemberOf("gPong")
 	/*@Reads("pong")*/
-	public Integer pong(){
+	public IntWrapper pong(){
 		count--;
-		System.out.print("Pong"+count+"!");
-		if (count>0) other.ping();
-		return count;
+		System.out.println("* Pong"+count+"!");
+		if (count>0) {
+            other.ping().getIntValue(); 
+        } else {
+            System.out.println("* Done in pong");
+        }
+		return new IntWrapper(count);
 	}
 	
 	/**
@@ -83,11 +88,15 @@ public class Pinger implements RunActive {
 	 */
 	@MemberOf("gPing")
 	/*@Reads("ping")*/
-	public Integer ping(){
+	public IntWrapper ping(){
 		count--;
-		System.out.print("Ping"+count+"!");
-		if (count>0) other.pong();
-		return count;
+		System.out.println("* Ping"+count+"!");
+		if (count>0) {
+		    other.pong().getIntValue(); 
+		} else {
+		    System.out.println("* Done in ping");
+		}
+		return new IntWrapper(count);
 	}
 	
 	/**
@@ -97,16 +106,16 @@ public class Pinger implements RunActive {
 	@MemberOf("gStarter")
 	/*@Modifies("count")
 	@Reads({"ping","pong"})*/
-	public Integer startWithPing(){
-		return other.ping();
+	public IntWrapper startWithPing(){
+		return new IntWrapper(other.ping().getIntValue());
 	}
 	
 	/**
 	 * Method to start off -- that will deadblock
 	 * @return
 	 */
-	public Integer startWithPong(){
-		return other.pong();
+	public IntWrapper startWithPong(){
+		return new IntWrapper(other.pong().getIntValue());
 	}
 }
 	
