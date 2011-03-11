@@ -109,14 +109,14 @@ public class MultiActiveService extends Service implements RequestSupplier {
      */
     public void multiActiveServing() {
         boolean success;
+        synchronized (requestQueue) {
+            while (body.isActive()) {
+                // try to launch next request -- synchronized inside
+                success = parallelServeMaxParallel();
 
-        while (body.isActive()) {
-            // try to launch next request -- synchronized inside
-            success = parallelServeMaxParallel();
+                // if we were not successful, let's wait until a new request arrives
 
-            // if we were not successful, let's wait until a new request arrives
-            synchronized (requestQueue) {
-                if (!success && (activeServes > 0 || requestQueue.size() == 0)) {
+                if (!success) {// && (activeServes > 0 || requestQueue.size() == 0)) {
                     try {
                         requestQueue.wait();
                     } catch (InterruptedException e) {
@@ -136,11 +136,12 @@ public class MultiActiveService extends Service implements RequestSupplier {
         List<Request> chosen;
         int launched;
 
-        while (body.isActive()) {
+        synchronized (requestQueue) {
+            while (body.isActive()) {
 
-            launched = 0;
-            // get the list of requests to run -- as given by the policy
-            synchronized (requestQueue) {
+                launched = 0;
+                // get the list of requests to run -- as given by the policy
+
                 chosen = policy.runPolicy(compatibility);
 
                 if (chosen != null) {
@@ -154,7 +155,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
                 // if we could not launch anything, than we wait until
                 // either a running serve finishes or a new req. arrives
 
-                if (launched == 0 && (activeServes > 0 || requestQueue.size() == 0)) {
+                if (launched == 0) { // && (activeServes > 0 || requestQueue.size() == 0)) {
                     try {
                         requestQueue.wait();
                     } catch (InterruptedException e) {
@@ -194,31 +195,21 @@ public class MultiActiveService extends Service implements RequestSupplier {
      */
     public boolean parallelServeMaxParallel() {
 
-        synchronized (requestQueue) {
-            List<Request> reqs = requestQueue.getInternalQueue();
-            List<Integer> served = new LinkedList<Integer>();
-            if (reqs.size() == 0)
-                return false;
+        List<Request> reqs = requestQueue.getInternalQueue();
+        List<Integer> served = new LinkedList<Integer>();
+        if (reqs.size() == 0)
+            return false;
 
-            for (int i = 0; i < reqs.size(); i++) {
-                if (compatibility.isCompatibleWithExecuting(reqs.get(i)) &&
-                    compatibility.isCompatibleWithRequests(reqs.get(i), reqs.subList(0, i))) {
-                    served.add(i);
-                    internalParallelServe(reqs.get(i));
-                }
+        for (int i = 0; i < reqs.size(); i++) {
+            if (compatibility.isCompatibleWithExecuting(reqs.get(i)) &&
+                compatibility.isCompatibleWithRequests(reqs.get(i), reqs.subList(0, i))) {
+                served.add(i);
+                internalParallelServe(reqs.get(i));
             }
+        }
 
-            for (int i = 0; i < served.size(); i++) {
-                reqs.remove(served.get(i) - i);
-            }
-
-            /*
-             * if (compatibility.isCompatibleWithExecuting(reqs.get(0))) {
-             * internalParallelServe(reqs.remove(0)); return true; } else if (reqs.size() > 1 &&
-             * compatibility.areCompatible(reqs.get(0), reqs.get(1)) &&
-             * compatibility.isCompatibleWithExecuting(reqs.get(1))) {
-             * internalParallelServe(reqs.remove(1)); return true; }
-             */
+        for (int i = 0; i < served.size(); i++) {
+            reqs.remove(served.get(i) - i);
         }
         return false;
     }
@@ -232,16 +223,13 @@ public class MultiActiveService extends Service implements RequestSupplier {
      */
     public boolean parallelServeOldest() {
 
-        synchronized (requestQueue) {
-
-            Request r = requestQueue.removeOldest();
-            if (r != null) {
-                if (compatibility.isCompatibleWithExecuting(r)) {
-                    return internalParallelServe(r);
-                } else {
-                    // otherwise put it back
-                    requestQueue.addToFront(r);
-                }
+        Request r = requestQueue.removeOldest();
+        if (r != null) {
+            if (compatibility.isCompatibleWithExecuting(r)) {
+                return internalParallelServe(r);
+            } else {
+                // otherwise put it back
+                requestQueue.addToFront(r);
             }
         }
         return false;
@@ -252,13 +240,11 @@ public class MultiActiveService extends Service implements RequestSupplier {
     }
 
     protected boolean internalParallelServe(Request r) {
-        synchronized (requestQueue) {
-            compatibility.addRunning(r);
-            activeServes++;
-            serveTsts.add((int) (new Date().getTime()));
-            serveHistory.add(activeServes);
-            threadManager.submit(r);
-        }
+        compatibility.addRunning(r);
+        activeServes++;
+        serveTsts.add((int) (new Date().getTime()));
+        serveHistory.add(activeServes);
+        threadManager.submit(r);
         return true;
     }
 
@@ -276,7 +262,6 @@ public class MultiActiveService extends Service implements RequestSupplier {
             activeServes--;
             serveTsts.add((int) (new Date().getTime()));
             serveHistory.add(activeServes);
-            
             requestQueue.notifyAll();
         }
     }
