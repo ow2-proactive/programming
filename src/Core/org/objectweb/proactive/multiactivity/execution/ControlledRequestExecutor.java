@@ -77,7 +77,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         ACTIVE_LIMIT = activeLimit;
         HARD_LIMIT_ENABLED = hardLimit;
         
-        executorService = hardLimit ? Executors.newFixedThreadPool(activeLimit) : Executors.newCachedThreadPool();
+        executorService = Executors.newCachedThreadPool();
         ready = new HashSet<RunnableRequest>();
         active = new HashSet<RunnableRequest>();
         waiting = new HashSet<RunnableRequest>();
@@ -134,8 +134,9 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                 RunnableRequest next = i.next();
                 i.remove();
                 active.add(next);
-                //executorService.submit(next);
-                (new Thread(next, "Serving thread for " + listener.getServingBody())).start();
+                
+                executorService.execute(next);
+                //(new Thread(next, "Serving thread for " + listener.getServingBody())).start();
                 ///*DEGUB*/System.out.println("activate one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
             }
 
@@ -144,20 +145,23 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                 //HOST a request inside a blocked one's thread
                 RunnableRequest parasite;
                 
+                i = ready.iterator();
+                
                 //find a request suitable for serving (preferably a recursion)
-                while (canServeOneHosted() && (parasite=findParasiteRequest())!=null) {
-                     
+                while (canServeOneHosted() && i.hasNext()) {
+                    parasite = i.next(); 
+                    
                     //find a host for the parasite
                     RunnableRequest host = findHostRequest(parasite);
 
                     if (host != null) {
 
                         synchronized (host) {
-                            ready.remove(parasite);
+                            i.remove();
                             active.add(parasite);
                             hostMap.put(host, parasite);
                             host.notify();
-                            ///*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
+                            // /*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
                         }
                     }
                 }
@@ -198,15 +202,6 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         } else {
             return null;
         }
-    }
-
-    /**
-     * Find a request that can be safely executed on the thread of a host request.
-     * This request should be the result of a re-entrant call.
-     * @return
-     */
-    private RunnableRequest findParasiteRequest() {
-        return ready.iterator().next();            
     }
     
     /**
