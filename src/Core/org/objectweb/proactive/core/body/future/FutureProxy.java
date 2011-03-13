@@ -370,13 +370,12 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
     }
     
     private void waitForDelegated(long timeout, FutureWaiter waiter) throws ProActiveTimeoutException {
-        
         // JMX Notification    
         BodyWrapperMBean mbean = null;
         UniqueID bodyId = PAActiveObject.getBodyOnThis().getID();
         Body body = LocalBodyStore.getInstance().getLocalBody(bodyId);
-        
-        //synchronized (this) {
+
+        synchronized (this) {
 
             if (isAvailable()) {
                 return;
@@ -397,35 +396,27 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
                         bodyId, getCreatorID()));
                 }
             }
-        //}
-        
+        }
+
         // END JMX Notification
         TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
 
-       // while (!isAvailable()) {
-            /*if (time.isTimeoutElapsed()) {
-                throw new ProActiveTimeoutException("Timeout expired while waiting for the future update");
-            }*/
-            //try {
-                //IZSO
-                toNotify = waiter;
-                waiter.waitForFuture(this);
-        //}
-        
-        //synchronized (this) {           
-            // JMX Notification
-            if (mbean != null) {
-                mbean.sendNotification(NotificationType.receivedFutureResult, new FutureNotificationData(bodyId,
-                    getCreatorID()));
-            }
-    
-            // END JMX Notification
-            if (Profiling.TIMERS_COMPILED) {
-                TimerWarehouse
-                        .stopTimer(PAActiveObject.getBodyOnThis().getID(), TimerWarehouse.WAIT_BY_NECESSITY);
-            } 
-        //}
-    }    
+        //delegate waiting to the service of the body
+        toNotify = waiter;
+        waiter.waitForFuture(this);
+
+        // JMX Notification
+        if (mbean != null) {
+            mbean.sendNotification(NotificationType.receivedFutureResult, new FutureNotificationData(bodyId,
+                getCreatorID()));
+        }
+
+        // END JMX Notification
+        if (Profiling.TIMERS_COMPILED) {
+            TimerWarehouse
+                    .stopTimer(PAActiveObject.getBodyOnThis().getID(), TimerWarehouse.WAIT_BY_NECESSITY);
+        }
+    }  
 
     public long getID() {
         return id.getID();
