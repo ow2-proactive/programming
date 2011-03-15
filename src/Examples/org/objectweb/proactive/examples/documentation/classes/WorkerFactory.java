@@ -49,7 +49,7 @@ import org.objectweb.proactive.core.util.wrapper.IntWrapper;
  *
  * Factory used to instantiate Worker active objects
  */
-public class WorkerFactory extends Worker {
+public class WorkerFactory {
 
     /**
      * Create a new Worker active object
