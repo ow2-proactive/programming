@@ -151,13 +151,12 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                 
                 //find a request suitable for serving (preferably a recursion)
                 while (canServeOneHosted() && couldStart) {
-                    parasite = findParasiteRequest();
+                    host = findHostRequest();
                     
-                    if (parasite!=null) { 
-                        //find a host for the parasite
-                        host = findHostRequest(parasite);
+                    if (host!=null) { 
+                        parasite = findParasiteRequest(host);
     
-                        if (host != null) {
+                        if (parasite != null) {
     
                             synchronized (host) {
                                 //i.remove();
@@ -187,7 +186,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         }
     }
     
-    private RunnableRequest findParasiteRequest() {
+    private RunnableRequest findParasiteRequest(RunnableRequest host) {
         Tag tag;
         
         for (RunnableRequest r : ready) {
@@ -195,15 +194,14 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
             
             tag = r.getRequest().getTags().getTag(DsiTag.IDENTIFIER);
             
-            for (RunnableRequest w : waiting) {
-                if (w.getRequest().getTags().getTag(DsiTag.IDENTIFIER)==null) continue;
+            
+            if (host.getRequest().getTags().getTag(DsiTag.IDENTIFIER)==null) continue;
                 
-                String[] hostData = ((String) (w.getRequest().getTags().getTag(DsiTag.IDENTIFIER).getData())).split("::"); 
-                String[] parasiteData = ((String) (tag.getData())).split("::");
+            String[] hostData = ((String) (host.getRequest().getTags().getTag(DsiTag.IDENTIFIER).getData())).split("::"); 
+            String[] parasiteData = ((String) (tag.getData())).split("::");
                 
-                if (hostData[0].equals(parasiteData[0]) && hostData[1].equals(parasiteData[1])) {
-                    return r;
-                }
+            if (hostData[0].equals(parasiteData[0]) && hostData[1].equals(parasiteData[1])) {
+                 return r;
             }
         }
         
@@ -214,26 +212,15 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         return !hostMap.keySet().contains(r) || (!active.contains(hostMap.get(r)) && !waiting.contains(hostMap.get(r)));
     }
 
-    private RunnableRequest findHostRequest(RunnableRequest parasite) {
-        long min = 0;
-        boolean found = false;
-        RunnableRequest candidate;
+    private RunnableRequest findHostRequest() {
         
-        for (long tid : threadUsage.keySet()) {
-            
-            candidate = threadUsage.get(tid).get(0);
-            
-            if (waiting.contains(candidate) && isNotAHost(candidate) && (found == false || (threadUsage.get(tid).size()<threadUsage.get(min).size()))) {
-                min = tid;
-                found = true; 
+        for (RunnableRequest candidate : waiting) {
+            if (isNotAHost(candidate)) {
+                return candidate; 
             }
         }
-        
-        if (found) {
-            return threadUsage.get(min).get(0);
-        } else {
-            return null;
-        }
+
+        return null;
     }
     
     /**
