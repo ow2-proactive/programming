@@ -18,8 +18,8 @@ import org.objectweb.proactive.core.body.request.Request;
  */
 public class CompatibilityMap {
 	
-	protected Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();
-	protected Map<String, MethodGroup> methods = new HashMap<String, MethodGroup>();
+	private Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();
+	private Map<String, MethodGroup> methods = new HashMap<String, MethodGroup>();
 	
 	public CompatibilityMap(AnnotationProcessor annotProc) {
 		this.groups = annotProc.getGroupNameMap();
@@ -38,6 +38,10 @@ public class CompatibilityMap {
 	
 	public MethodGroup getGroupOf(Request method){
 		return getGroupOf(method.getMethodName());
+	}
+	
+	public Collection<MethodGroup> getGroups() {
+	    return groups.values();
 	}
 	
 	public boolean areCompatible(String method1, String method2){

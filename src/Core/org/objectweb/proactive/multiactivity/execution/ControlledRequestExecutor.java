@@ -12,6 +12,8 @@ import java.util.concurrent.Executors;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.request.Request;
+import org.objectweb.proactive.core.body.tags.Tag;
+import org.objectweb.proactive.core.body.tags.tag.DsiTag;
 
 /**
  * Implementation of the {@link RequestExecutor} interface that is also a {@link FutureWaiter} so it can use the 
@@ -144,25 +146,32 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
 
                 //HOST a request inside a blocked one's thread
                 RunnableRequest parasite;
-                
-                i = ready.iterator();
+                RunnableRequest host;
+                boolean couldStart = true;
                 
                 //find a request suitable for serving (preferably a recursion)
-                while (canServeOneHosted() && i.hasNext()) {
-                    parasite = i.next(); 
+                while (canServeOneHosted() && couldStart) {
+                    parasite = findParasiteRequest();
                     
-                    //find a host for the parasite
-                    RunnableRequest host = findHostRequest(parasite);
-
-                    if (host != null) {
-
-                        synchronized (host) {
-                            i.remove();
-                            active.add(parasite);
-                            hostMap.put(host, parasite);
-                            host.notify();
-                            // /*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
+                    if (parasite!=null) { 
+                        //find a host for the parasite
+                        host = findHostRequest(parasite);
+    
+                        if (host != null) {
+    
+                            synchronized (host) {
+                                //i.remove();
+                                ready.remove(parasite);
+                                active.add(parasite);
+                                hostMap.put(host, parasite);
+                                host.notify();
+                                // /*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
+                            }
+                        } else {
+                           couldStart = false; 
                         }
+                    } else {
+                        couldStart = false; 
                     }
                 }
             }
@@ -170,7 +179,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
             //SLEEP if nothing else to do
             //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
             try {
-                this.wait();
+                this.wait(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -178,6 +187,29 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         }
     }
     
+    private RunnableRequest findParasiteRequest() {
+        Tag tag;
+        
+        for (RunnableRequest r : ready) {
+            if (r.getRequest().getTags().getTag(DsiTag.IDENTIFIER)==null) continue;
+            
+            tag = r.getRequest().getTags().getTag(DsiTag.IDENTIFIER);
+            
+            for (RunnableRequest w : waiting) {
+                if (w.getRequest().getTags().getTag(DsiTag.IDENTIFIER)==null) continue;
+                
+                String[] hostData = ((String) (w.getRequest().getTags().getTag(DsiTag.IDENTIFIER).getData())).split("::"); 
+                String[] parasiteData = ((String) (tag.getData())).split("::");
+                
+                if (hostData[0].equals(parasiteData[0]) && hostData[1].equals(parasiteData[1])) {
+                    return r;
+                }
+            }
+        }
+        
+        return null;
+    }
+
     private boolean isNotAHost(RunnableRequest r) {
         return !hostMap.keySet().contains(r) || (!active.contains(hostMap.get(r)) && !waiting.contains(hostMap.get(r)));
     }

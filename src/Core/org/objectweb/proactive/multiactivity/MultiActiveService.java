@@ -199,7 +199,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
         List<Integer> served = new LinkedList<Integer>();
         if (reqs.size() == 0)
             return false;
-
+        
         for (int i = 0; i < reqs.size(); i++) {
             if (compatibility.isCompatibleWithExecuting(reqs.get(i)) &&
                 compatibility.isCompatibleWithRequests(reqs.get(i), reqs.subList(0, i))) {

@@ -18,7 +18,7 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
     public CompatibilityTracker(AnnotationProcessor annotProc, BlockingRequestQueue queue) {
         super(annotProc);
 
-        for (MethodGroup groupName : groups.values()) {
+        for (MethodGroup groupName : getGroups()) {
             compats.put(groupName, 0);
         }
         
@@ -33,8 +33,8 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
      */
     public void addRunning(Request request) {
         String method = request.getMethodName();
-        if (methods.containsKey(method)) {
-            for (MethodGroup mg : methods.get(method).getCompatibleWith()) {
+        if (getGroupOf(method)!=null) {
+            for (MethodGroup mg : getGroupOf(method).getCompatibleWith()) {
                 compats.put(mg, compats.get(mg) + 1);
             }
         }
@@ -53,8 +53,8 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
      */
     public void removeRunning(Request request) {
         String method = request.getMethodName();
-        if (methods.containsKey(method)) {
-            for (MethodGroup mg : methods.get(method).getCompatibleWith()) {
+        if (getGroupOf(method)!=null) {
+            for (MethodGroup mg : getGroupOf(method).getCompatibleWith()) {
                 compats.put(mg, compats.get(mg) - 1);
             }
         }
@@ -80,7 +80,7 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
         if (runningCount == 0)
             return true;
 
-        MethodGroup mg = methods.get(method);
+        MethodGroup mg = getGroupOf(method);
         return (mg != null && compats.containsKey(mg)) && (compats.get(mg) == runningCount);
     }
 
