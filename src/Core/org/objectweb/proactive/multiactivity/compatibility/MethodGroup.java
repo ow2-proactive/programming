@@ -1,5 +1,7 @@
 package org.objectweb.proactive.multiactivity.compatibility;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,8 +27,7 @@ public class MethodGroup {
 	
 	private Class parameter = null;
 	private HashMap<String, Integer> methodParamPos = new HashMap<String, Integer>();
-	private String internalComparator = "";
-	private String externalComparator = "";
+	private HashMap<String, String> comparators = new HashMap<String, String>();
 	
 	/**
 	 * Standard constructor of a named group.
@@ -59,7 +60,7 @@ public class MethodGroup {
     public MethodGroup(String name, boolean selfCompatible, String parameter, String comparator) {
         this(name, selfCompatible, parameter);
         
-        this.internalComparator = comparator;
+        this.comparators.put(name, comparator);
     }
 	
 	/**
@@ -149,15 +150,7 @@ public class MethodGroup {
 	    
 	    Object param1 = mapMethodParameters(request1.getMethodName(), request1.getMethodCall().getParameters());
         Object param2 = mapMethodParameters(request2.getMethodName(), request2.getMethodCall().getParameters());
-        if (param1==null || param2==null) {
-            return true;
-        } else if (internalComparator.equals("equals") && !param1.equals(param2)) {
-            return true;
-        } else if (internalComparator.equals("")) {
-            return true;
-        }
-        
-        return false;
+        return applyComparator(param1, param2, comparators.get(name));
 	}
 	
 	public boolean isCompatible(Request r1, MethodGroup other, Request r2) {
@@ -170,13 +163,73 @@ public class MethodGroup {
             if (rules == true) {
                 Object param1 = mapMethodParameters(r1.getMethodName(), r1.getMethodCall().getParameters());
                 Object param2 = other.mapMethodParameters(r2.getMethodName(), r2.getMethodCall().getParameters());
-                if ((param1==null || param2==null) || (externalComparator.equals("equals") && !param1.equals(param2))) {
-                    return true;
-                } else if (externalComparator.equals("")) {
-                    return true;
-                }
+                return applyComparator(param1, param2, comparators.get(other.name));
             }
         } 
+        return false;
+    }
+
+	/**
+	 * Performs the comparison between two parameters. 
+	 * The comparison is done by running a given method of either of the parameters, and
+	 * negating the result.
+	 * @param param1 
+	 * @param param2
+	 * @param comparator name of the method to run (this can be in either one of the parameters -- if their classes differ)
+	 * @return True if the parameters are different and false if they are the same based on the method given as argument
+	 */
+    private Boolean applyComparator(Object param1, Object param2, String comparator) {
+        
+        if (param1==null || param2==null) {
+            //if either is null, they can not be the same
+            return true;
+            
+        } else if (comparator==null || comparator.equals("")) {
+            //if we use no comparator at all, we are not interested if they are the same or not
+            return true;
+            
+        } else if (comparator.equals("equals") && !param1.equals(param2)) {
+            //most common comparator: equals
+            //return true if parameters are different
+            return true;
+            
+        } else {
+            //execute an abritrary comparator method
+            //this can be defined in either of the parameter's classes, but
+            //has to return a boolean or integer as a result.
+            //the final result is negated.
+            for (Method m : param1.getClass().getMethods()){
+                if (m.getName().equals(comparator)) {
+                    try {
+                        Object res = m.invoke(param1, param2);
+                        if (res instanceof Boolean) {
+                            return !((Boolean) res);
+                        } else {
+                            return ((Integer) res)!=0;
+                        }
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }
+            }
+            
+            for (Method m : param2.getClass().getMethods()){
+                if (m.getName().equals(comparator)) {
+                    try {
+                        Object res = m.invoke(param2, param1);
+                        if (res instanceof Boolean) {
+                            return !((Boolean) res);
+                        } else {
+                            return ((Integer) res)!=0;
+                        }
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }
+            }
+            
+        }
+        
         return false;
     }
 
@@ -194,8 +247,8 @@ public class MethodGroup {
 		return false;
 	}
 
-    public void setExternalComparator(String externalComparator) {
-        this.externalComparator = externalComparator;
+    public void setExternalComparator(String group, String externalComparator) {
+        this.comparators.put(group, externalComparator);
     }
 	
 }

@@ -88,11 +88,11 @@ public class AnnotationProcessor {
 					String comparator = c.comparator();
 					for (String group : c.value()) {
 						for (String other : c.value()) {
-							if (groups.containsKey(group) && groups.containsKey(other)) {
+							if (groups.containsKey(group) && groups.containsKey(other) && !other.equals(group)) {
 								groups.get(group).addCompatibleWith(groups.get(other));
-								groups.get(group).setExternalComparator(comparator);
+								groups.get(group).setExternalComparator(other, comparator);
 								groups.get(other).addCompatibleWith(groups.get(group));
-								groups.get(other).setExternalComparator(comparator);
+								groups.get(other).setExternalComparator(group, comparator);
 								
 							} else {
 								if (!groups.containsKey(group)) {
