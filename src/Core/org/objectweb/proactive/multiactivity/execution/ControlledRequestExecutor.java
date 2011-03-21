@@ -25,6 +25,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
     
     protected int ACTIVE_LIMIT = 1;
     protected boolean HARD_LIMIT_ENABLED = true;
+    protected boolean HOST_REENTRANT = true;
     
     protected RequestSupplier listener; 
     
@@ -75,9 +76,10 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      * @param activeLimit Limit of active serves
      * @param hardLimit If true, the limit will also apply to the number of threads
      */
-    public ControlledRequestExecutor(RequestSupplier listener, int activeLimit, boolean hardLimit) {
+    public ControlledRequestExecutor(RequestSupplier listener, int activeLimit, boolean hardLimit, boolean hostReentrant) {
         ACTIVE_LIMIT = activeLimit;
         HARD_LIMIT_ENABLED = hardLimit;
+        HOST_REENTRANT = hostReentrant;
         
         executorService = Executors.newCachedThreadPool();
         ready = new HashSet<RunnableRequest>();
@@ -142,7 +144,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                 ///*DEGUB*/System.out.println("activate one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
             }
 
-            if (HARD_LIMIT_ENABLED) {
+            if (HOST_REENTRANT) {
 
                 //HOST a request inside a blocked one's thread
                 RunnableRequest parasite;

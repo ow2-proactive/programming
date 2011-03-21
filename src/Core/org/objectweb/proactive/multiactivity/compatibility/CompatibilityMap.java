@@ -32,7 +32,7 @@ public class CompatibilityMap {
 		this.methods = annotProc.getMethodNameMap();
 	}
 	
-	public MethodGroup getGroupOf(String methodName) {
+	private MethodGroup getGroupOf(String methodName) {
 		return methods.get(methodName);
 	}
 	
@@ -44,32 +44,41 @@ public class CompatibilityMap {
 	    return groups.values();
 	}
 	
-	public boolean areCompatible(String method1, String method2){
-		MethodGroup mg1 = getGroupOf(method1);
-		MethodGroup mg2 = getGroupOf(method2);
-		if (mg1!=null && mg2!=null) {
-			return mg1.getCompatibleWith().contains(mg2) || mg2.getCompatibleWith().contains(mg1);
-		} else {
-			return false;
-		}
-	}
+//	private boolean areCompatible(String method1, String method2){
+//		MethodGroup mg1 = getGroupOf(method1);
+//		MethodGroup mg2 = getGroupOf(method2);
+//		if (mg1!=null && mg2!=null) {
+//			return (mg1.getCompatibleWith().contains(mg2) || mg2.getCompatibleWith().contains(mg1));
+//		} else {
+//			return false;
+//		}
+//	}
 	
 	public boolean areCompatible(Request request1, Request request2){
-		return areCompatible(request1.getMethodName(), request2.getMethodName());
+		String method1 = request1.getMethodName();
+		String method2 = request2.getMethodName();
+		MethodGroup mg1 = getGroupOf(method1);
+        MethodGroup mg2 = getGroupOf(method2);
+
+        if (mg1!=null && mg2!=null) {
+            return mg1.isCompatible(request1, mg2, request2);
+        } else {
+            return false;
+        }
 	}
 	
-	public boolean areCompatibleMethods(Collection<String> methods){
-		for (String method : methods) {
-			for (String other : methods) {
-				if (method!=other) {
-					if (!areCompatible(method, other)) {
-						return false;
-					}
-				}
-			}
-		}
-		return true;
-	}
+//	private boolean areCompatibleMethods(Collection<String> methods){
+//		for (String method : methods) {
+//			for (String other : methods) {
+//				if (method!=other) {
+//					if (!areCompatible(method, other)) {
+//						return false;
+//					}
+//				}
+//			}
+//		}
+//		return true;
+//	}
 	
 	public boolean areCompatibleRequests(Collection<Request> requests){
 		for (Request request : requests) {
@@ -84,14 +93,14 @@ public class CompatibilityMap {
 		return true;
 	}
 	
-	public boolean isCompatibleWithMethods(String method, Collection<String> others){
-		for (String other : others) {
-			if (!areCompatible(method, other)) {
-				return false;
-			}
-		}
-		return true;
-	}
+//	private boolean isCompatibleWithMethods(String method, Collection<String> others){
+//		for (String other : others) {
+//			if (!areCompatible(method, other)) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
 	
 	public boolean isCompatibleWithRequests(Request request, Collection<Request> others){
 		for (Request other : others) {

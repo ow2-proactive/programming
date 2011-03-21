@@ -33,8 +33,8 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
      */
     public void addRunning(Request request) {
         String method = request.getMethodName();
-        if (getGroupOf(method)!=null) {
-            for (MethodGroup mg : getGroupOf(method).getCompatibleWith()) {
+        if (getGroupOf(request)!=null) {
+            for (MethodGroup mg : getGroupOf(request).getCompatibleWith()) {
                 compats.put(mg, compats.get(mg) + 1);
             }
         }
@@ -53,8 +53,8 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
      */
     public void removeRunning(Request request) {
         String method = request.getMethodName();
-        if (getGroupOf(method)!=null) {
-            for (MethodGroup mg : getGroupOf(method).getCompatibleWith()) {
+        if (getGroupOf(request)!=null) {
+            for (MethodGroup mg : getGroupOf(request).getCompatibleWith()) {
                 compats.put(mg, compats.get(mg) - 1);
             }
         }
@@ -64,7 +64,16 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
 
     @Override
     public boolean isCompatibleWithExecuting(Request r) {
-        return isCompatibleWithExecuting(r.getMethodName());
+      if (runningCount == 0)
+          return true;
+
+      for (Request other : getExecutingRequests()) {
+          if (!areCompatible(other, r)) {
+              return false;
+          }
+      }
+          
+      return true;
     }
 
     /*
@@ -76,29 +85,29 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
      * 
      * Time: O(1)
      */
-    public boolean isCompatibleWithExecuting(String method) {
-        if (runningCount == 0)
-            return true;
+//    private boolean isCompatibleWithExecuting(String method) {
+//        if (runningCount == 0)
+//            return true;
+//
+//        MethodGroup mg = getGroupOf(method);
+//        return (mg != null && compats.containsKey(mg)) && (compats.get(mg) == runningCount);
+//    }
 
-        MethodGroup mg = getGroupOf(method);
-        return (mg != null && compats.containsKey(mg)) && (compats.get(mg) == runningCount);
-    }
+//    public Set<String> getExecutingMethodNameSet() {
+//        return runningMethods.keySet();
+//    }
 
-    public Set<String> getExecutingMethodNameSet() {
-        return runningMethods.keySet();
-    }
-
-    @Override
-    public List<String> getExecutingMethodNames() {
-        List<String> names = new LinkedList<String>();
-        for (String m : runningMethods.keySet()) {
-            for (int i = 0; i < runningMethods.get(m).size(); i++) {
-                names.add(m);
-            }
-        }
-
-        return names;
-    }
+//    @Override
+//    public List<String> getExecutingMethodNames() {
+//        List<String> names = new LinkedList<String>();
+//        for (String m : runningMethods.keySet()) {
+//            for (int i = 0; i < runningMethods.get(m).size(); i++) {
+//                names.add(m);
+//            }
+//        }
+//
+//        return names;
+//    }
 
     @Override
     public List<Request> getExecutingRequests() {
@@ -110,11 +119,11 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
         return reqs;
     }
 
-    @Override
-    public List<Request> getExecutingRequestsFor(String method) {
-        return (runningMethods.containsKey(method)) ? runningMethods.get(method)
-                : new LinkedList<Request>();
-    }
+//    @Override
+//    public List<Request> getExecutingRequestsFor(String method) {
+//        return (runningMethods.containsKey(method)) ? runningMethods.get(method)
+//                : new LinkedList<Request>();
+//    }
 
     @Override
     public Request getOldestInTheQueue() {

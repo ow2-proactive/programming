@@ -28,7 +28,7 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	 * once in this set.
 	 * @return
 	 */
-	public abstract Set<String> getExecutingMethodNameSet();
+//	public abstract Set<String> getExecutingMethodNameSet();
 	
 	/**
 	 * Returns the list of methods which are currently executing. If a method
@@ -36,7 +36,7 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	 * this list.
 	 * @return
 	 */
-	public abstract List<String> getExecutingMethodNames();
+//	public abstract List<String> getExecutingMethodNames();
 	
 	/**
 	 * Returns the list of requests which are currently executing.
@@ -56,7 +56,7 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	 * @param name
 	 * @return
 	 */
-	public abstract List<Request> getExecutingRequestsFor(String method);
+//	public abstract List<Request> getExecutingRequestsFor(String method);
 	
 	/**
 	 * Gives the content of the request queue of the scheduler.
@@ -86,6 +86,6 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	 * @param method
 	 * @return
 	 */
-	public abstract boolean isCompatibleWithExecuting(String method);
+//	public abstract boolean isCompatibleWithExecuting(String method);
 
 }

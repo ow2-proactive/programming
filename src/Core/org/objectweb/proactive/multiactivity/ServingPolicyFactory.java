@@ -34,7 +34,7 @@ public class ServingPolicyFactory {
 				
 				if (oldest==null) return ret;
 				
-				if (compatibility.getExecutingMethodNames().size()==0) {
+				if (compatibility.getExecutingRequests().size()==0) {
 					ret.add(oldest);
 				} else {
 					if (compatibility.isCompatibleWithRequests(oldest, compatibility.getExecutingRequests())){

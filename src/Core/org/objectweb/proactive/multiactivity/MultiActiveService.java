@@ -72,13 +72,15 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * MultiActiveService that will be able to optionally use a policy, and will control the deployment of requests on  
      * physical threads. The maximum number of concurrently active servings is limited. The total
      * number of started threads is unbounded.
+     * <br>
+     * Re-entrant calls will be handled on separate threads. 
      * @param body
      * @param maxActiveThreads maximum number of active serves
      */
     public MultiActiveService(Body body, int maxActiveThreads) {
         this(body);
         
-        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, false);
+        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, false, false);
 
         FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
 
@@ -88,6 +90,8 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * MultiActiveService that will be able to optionally use a policy, and will control the deployment of requests on  
      * physical threads. The maximum number of concurrently active servings or physical threads 
      * is limited -- depending on the value of a flag.
+     * * <br>
+     * Re-entrant calls will be handled on the thread of the "initiator" if the hard limit is enabled. 
      * @param body
      * @param maxActiveThreads number of maximum active serves (hardLimit is false), or maximum number of threads (hardLimit is true)
      * @param hardLimit flag for limiting the number of physical threads or only of those which are active.
@@ -95,7 +99,27 @@ public class MultiActiveService extends Service implements RequestSupplier {
     public MultiActiveService(Body body, int maxActiveThreads, boolean hardLimit) {
         this(body);
         
-        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit);
+        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit, hardLimit);
+
+        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
+
+    }
+    
+    /**
+     * MultiActiveService that will be able to optionally use a policy, and will control the deployment of requests on  
+     * physical threads. The maximum number of concurrently active servings or physical threads 
+     * is limited -- depending on the value of a flag.
+     * * <br>
+     * Re-entrant calls will be handled on the thread of the "initiator" if the re-entrant flag is set to true.
+     * @param body
+     * @param maxActiveThreads number of maximum active serves (hardLimit is false), or maximum number of threads (hardLimit is true)
+     * @param hardLimit flag for limiting the number of physical threads or only of those which are active.
+     * @param hostReentrant flag for choosing if re-entrant calls should be hosted int he thread of the "initiator" or on a separate thread.
+     */
+    public MultiActiveService(Body body, int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
+        this(body);
+        
+        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit, hostReentrant);
 
         FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
 

@@ -77,7 +77,7 @@ public class AnnotationProcessor {
 			
 			//create the descriptor
 			for (Group g : defg.value()) {
-				MethodGroup mg = new MethodGroup(g.name(), g.selfCompatible());
+				MethodGroup mg = new MethodGroup(g.name(), g.selfCompatible(), g.parameter(), g.comparator());
 				groups.put(g.name(), mg);
 			}
 			
@@ -85,12 +85,15 @@ public class AnnotationProcessor {
 			if (processedClass.getAnnotation(DefineRules.class)!=null) {
 				DefineRules defr = processedClass.getAnnotation(DefineRules.class);
 				for (Compatible c : defr.value()) {
-					
+					String comparator = c.comparator();
 					for (String group : c.value()) {
 						for (String other : c.value()) {
 							if (groups.containsKey(group) && groups.containsKey(other)) {
 								groups.get(group).addCompatibleWith(groups.get(other));
+								groups.get(group).setExternalComparator(comparator);
 								groups.get(other).addCompatibleWith(groups.get(group));
+								groups.get(other).setExternalComparator(comparator);
+								
 							} else {
 								if (!groups.containsKey(group)) {
 									addError(LOC_CLASS, "", REF_GROUP, group);
