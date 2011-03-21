@@ -28,5 +28,7 @@ public @interface Compatible {
 	 * @return
 	 */
 	public String[] value();
+	
+	public String comparator() default "";
 
 }

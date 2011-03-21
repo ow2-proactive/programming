@@ -3,7 +3,6 @@ package org.objectweb.proactive.annotation.multiactivity;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 import org.objectweb.proactive.annotation.PublicAPI;
 
@@ -30,5 +29,9 @@ public @interface Group {
 	 * @return
 	 */
 	public boolean selfCompatible();
+	
+	public String parameter() default "";
+	
+	public String comparator() default "";
 
 }
