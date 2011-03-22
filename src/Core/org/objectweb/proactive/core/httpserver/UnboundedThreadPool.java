@@ -41,6 +41,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.mortbay.thread.ThreadPool;
+import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
 /** An unbounded ThreadPool using Java 5 ThreadPoolExecutor
@@ -64,7 +65,7 @@ class UnboundedThreadPool implements ThreadPool {
 
     public UnboundedThreadPool() {
         this.exec = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 1L, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>(), new UnboundedThreadPoolThreadFactory());
+            new SynchronousQueue<Runnable>(), new NamedThreadFactory("ProActive Http Server Thread",false));
     }
 
     public boolean dispatch(Runnable job) {
