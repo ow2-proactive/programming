@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.request.Request;
@@ -107,8 +108,9 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      */
     public synchronized void run() {
         int dlc = 0;
+        Body body = listener.getServingBody();
         //TODO replace for a better one
-        while (listener.getServingBody().isActive()) {
+        while (body.isActive()) {
 
             ///*DEGUB*/System.out.println("r"+ready.size() + " a"+active.size() +" w"+waiting.size() + " f"+hasArrived.size() +" in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
 

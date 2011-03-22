@@ -60,7 +60,9 @@ public class MethodGroup {
     public MethodGroup(String name, boolean selfCompatible, String parameter, String comparator) {
         this(name, selfCompatible, parameter);
         
-        this.comparators.put(name, comparator);
+        if (!comparator.equals("")) {
+            this.comparators.put(name, comparator);
+        }
     }
 	
 	/**
@@ -129,30 +131,46 @@ public class MethodGroup {
 	    if (parameter==null) {
 	        return null;
 	    }
-	    if (methodParamPos.get(name)==null) {
-    	    for (int i=0; i<params.length; i++) {
-    	        if (params[i].getClass().equals(parameter)) {
-    	            methodParamPos.put(name, i);
-    	            return params[i];
-    	        }
-    	    }
-	    } else {
+	    if (methodParamPos.get(name)!=null) {
 	        return params[methodParamPos.get(name)];
+	    } else {
+	        for (int i=0; i<params.length; i++) {
+                if (params[i].getClass().equals(parameter)) {
+                    methodParamPos.put(name, i);
+                    return params[i];
+                }
+            }
 	    }
 	    
 	    return null;
 	}
 	
+	/**
+	 * Checks if two requests belonging to this group are compatible or not
+	 * @param request1
+	 * @param request2
+	 * @return
+	 */
 	public boolean isCompatible(Request request1, Request request2) {
 	    if (!isSelfCompatible()) {
 	        return false;
 	    }
-	    
-	    Object param1 = mapMethodParameters(request1.getMethodName(), request1.getMethodCall().getParameters());
-        Object param2 = mapMethodParameters(request2.getMethodName(), request2.getMethodCall().getParameters());
-        return applyComparator(param1, param2, comparators.get(name));
+	    if (comparators.get(name)!=null) {
+	        Object param1 = mapMethodParameters(request1.getMethodName(), request1.getMethodCall().getParameters());
+	        Object param2 = (param1!=null) ? mapMethodParameters(request2.getMethodName(), request2.getMethodCall().getParameters()) : null;
+	        return applyComparator(param1, param2, comparators.get(name));
+	    } else {
+	        return true;
+	    }
 	}
 	
+	/**
+	 * Compares a request from this group and a request from an other group.
+	 * @param r1 Request belonging to this group
+	 * @param other Other group
+	 * @param r2 Request belonging to the other group
+	 * @return
+	 */
 	public boolean isCompatible(Request r1, MethodGroup other, Request r2) {
 	    if (this.equals(other)) {
 	        return isCompatible(r1, r2);
@@ -160,10 +178,12 @@ public class MethodGroup {
 	    
         if (other!=null) {
             boolean rules =  (getCompatibleWith().contains(other) || other.getCompatibleWith().contains(this));
-            if (rules == true) {
+            if (rules == true && comparators.containsKey(other.name) && other.comparators.containsKey(name)) {
                 Object param1 = mapMethodParameters(r1.getMethodName(), r1.getMethodCall().getParameters());
-                Object param2 = other.mapMethodParameters(r2.getMethodName(), r2.getMethodCall().getParameters());
+                Object param2 = (param1!=null) ? mapMethodParameters(r2.getMethodName(), r2.getMethodCall().getParameters()) : null;
                 return applyComparator(param1, param2, comparators.get(other.name));
+            } else {
+                return rules;
             }
         } 
         return false;
@@ -248,7 +268,9 @@ public class MethodGroup {
 	}
 
     public void setExternalComparator(String group, String externalComparator) {
-        this.comparators.put(group, externalComparator);
+        if (!externalComparator.equals("")) {
+            this.comparators.put(group, externalComparator);
+        }
     }
 	
 }

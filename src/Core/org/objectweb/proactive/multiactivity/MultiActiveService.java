@@ -46,6 +46,11 @@ import sun.security.action.GetBooleanAction;
  */
 public class MultiActiveService extends Service implements RequestSupplier {
 
+    public static final boolean LIMIT_ALL_THREADS = true;
+    public static final boolean LIMIT_ACTIVE_THREADS = false;
+    public static final boolean REENTRANT_SAME_THREAD = true;
+    public static final boolean REENTRANT_SEPARATE_THREAD = true;
+    
     public int activeServes = 0;
     public LinkedList<Integer> serveHistory = new LinkedList<Integer>();
     public LinkedList<Integer> serveTsts = new LinkedList<Integer>();
@@ -64,65 +69,6 @@ public class MultiActiveService extends Service implements RequestSupplier {
         super(body);
 
         compatibility = new CompatibilityTracker(new AnnotationProcessor(body.getReifiedObject().getClass()), requestQueue);
-        threadManager = new MinimalRequestExecutor(this);
-
-    }
-    
-    /**
-     * MultiActiveService that will be able to optionally use a policy, and will control the deployment of requests on  
-     * physical threads. The maximum number of concurrently active servings is limited. The total
-     * number of started threads is unbounded.
-     * <br>
-     * Re-entrant calls will be handled on separate threads. 
-     * @param body
-     * @param maxActiveThreads maximum number of active serves
-     */
-    public MultiActiveService(Body body, int maxActiveThreads) {
-        this(body);
-        
-        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, false, false);
-
-        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
-
-    }
-    
-    /**
-     * MultiActiveService that will be able to optionally use a policy, and will control the deployment of requests on  
-     * physical threads. The maximum number of concurrently active servings or physical threads 
-     * is limited -- depending on the value of a flag.
-     * * <br>
-     * Re-entrant calls will be handled on the thread of the "initiator" if the hard limit is enabled. 
-     * @param body
-     * @param maxActiveThreads number of maximum active serves (hardLimit is false), or maximum number of threads (hardLimit is true)
-     * @param hardLimit flag for limiting the number of physical threads or only of those which are active.
-     */
-    public MultiActiveService(Body body, int maxActiveThreads, boolean hardLimit) {
-        this(body);
-        
-        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit, hardLimit);
-
-        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
-
-    }
-    
-    /**
-     * MultiActiveService that will be able to optionally use a policy, and will control the deployment of requests on  
-     * physical threads. The maximum number of concurrently active servings or physical threads 
-     * is limited -- depending on the value of a flag.
-     * * <br>
-     * Re-entrant calls will be handled on the thread of the "initiator" if the re-entrant flag is set to true.
-     * @param body
-     * @param maxActiveThreads number of maximum active serves (hardLimit is false), or maximum number of threads (hardLimit is true)
-     * @param hardLimit flag for limiting the number of physical threads or only of those which are active.
-     * @param hostReentrant flag for choosing if re-entrant calls should be hosted int he thread of the "initiator" or on a separate thread.
-     */
-    public MultiActiveService(Body body, int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
-        this(body);
-        
-        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit, hostReentrant);
-
-        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
-
     }
 
     /**
@@ -131,7 +77,20 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * active thread enters in an infinite loop for processing the request in
      * the FIFO order, and parallelizing where possible.
      */
+    public void multiActiveServing(int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
+        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit, hostReentrant);
+        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
+        
+        internalMultiactiveServing();
+    }
+    
     public void multiActiveServing() {
+        threadManager = new MinimalRequestExecutor(this);
+        
+        internalMultiactiveServing();
+    }
+    
+    private void internalMultiactiveServing() {
         boolean success;
         synchronized (requestQueue) {
             while (body.isActive()) {
@@ -156,7 +115,20 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * 
      * @param policy
      */
+    public void policyServing(ServingPolicy policy, int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
+        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit, hostReentrant);
+        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
+        
+        internalPolicyServing(policy);
+    }
+    
     public void policyServing(ServingPolicy policy) {
+        threadManager = new MinimalRequestExecutor(this);
+        
+        internalPolicyServing(policy);
+    }
+    
+    private void internalPolicyServing(ServingPolicy policy) {
         List<Request> chosen;
         int launched;
 
@@ -170,7 +142,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
 
                 if (chosen != null) {
                     for (Request mf : chosen) {
-                        internalParallelServe(mf);
+                        startServe(mf);
                         requestQueue.getInternalQueue().remove(mf);
                         launched++;
                     }
@@ -202,7 +174,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
             List<Request> reqs = requestQueue.getInternalQueue();
             for (int i = 0; i < reqs.size(); i++) {
                 if (compatibility.isCompatibleWithExecuting(reqs.get(i))) {
-                    internalParallelServe(reqs.remove(i));
+                    startServe(reqs.remove(i));
                     return true;
                 }
             }
@@ -228,7 +200,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
             if (compatibility.isCompatibleWithExecuting(reqs.get(i)) &&
                 compatibility.isCompatibleWithRequests(reqs.get(i), reqs.subList(0, i))) {
                 served.add(i);
-                internalParallelServe(reqs.get(i));
+                startServe(reqs.get(i));
             }
         }
 
@@ -250,7 +222,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
         Request r = requestQueue.removeOldest();
         if (r != null) {
             if (compatibility.isCompatibleWithExecuting(r)) {
-                return internalParallelServe(r);
+                return startServe(r);
             } else {
                 // otherwise put it back
                 requestQueue.addToFront(r);
@@ -259,11 +231,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
         return false;
     }
 
-    public void startServe(Request r) {
-        internalParallelServe(r);
-    }
-
-    protected boolean internalParallelServe(Request r) {
+    protected boolean startServe(Request r) {
         compatibility.addRunning(r);
         activeServes++;
         serveTsts.add((int) (new Date().getTime()));
