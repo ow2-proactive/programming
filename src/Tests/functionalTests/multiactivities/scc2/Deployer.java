@@ -57,11 +57,13 @@ public class Deployer {
 	
 	public void kill(GraphWorker[] w) {
 		for (GraphWorker gw : w) {
-		    /*
-		    System.out.println("\n");
-		    System.out.println(gw.getActiveServeCount());
-		    System.out.println(gw.getActiveServeTsts());
-		    */
+		    int max = 0;
+		    for (Integer i : gw.getActiveServeCount()) {
+		        if (i>max) {
+		            max = i;
+		        }
+		    }
+		    System.out.println("Max number of threads = "+max);
 			PAActiveObject.terminateActiveObject(gw, true);
 		}
 	}

@@ -58,7 +58,7 @@ public class Pinger implements RunActive {
 	@Override
 	public void runActivity(Body body) {
 		if (this.multiActive) {
-			(new MultiActiveService(body)).multiActiveServing();
+			(new MultiActiveService(body)).multiActiveServing(1, true, true);
 		} else {
 			(new Service(body)).fifoServing();
 		}

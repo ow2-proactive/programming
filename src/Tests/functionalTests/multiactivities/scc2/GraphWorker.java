@@ -23,20 +23,18 @@ import org.objectweb.proactive.annotation.multiactivity.MemberOf;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
-import org.objectweb.proactive.multiactivity.ServingPolicyFactory;
-
 
 @DefineGroups( 
         { 
-        @Group(name = "Forward", selfCompatible = true),
-        @Group(name = "Backward", selfCompatible = true), 
+        @Group(name = "Forward", selfCompatible = true, parameter = "java.lang.Integer"),
+        @Group(name = "Backward", selfCompatible = true, parameter = "java.lang.Integer"), 
         @Group(name = "Info", selfCompatible = true),
-        @Group(name = "Transaction", selfCompatible = true) 
+        @Group(name = "Transaction", selfCompatible = true, parameter = "java.lang.Integer") 
         }
 )
 @DefineRules( 
         { 
-        @Compatible( { "Backward", "Info", "Forward", "Transaction" }) 
+        @Compatible( value={ "Backward", "Info", "Forward", "Transaction" }, comparator="equals") 
         }
 )
 public class GraphWorker implements RunActive {
@@ -158,7 +156,7 @@ public class GraphWorker implements RunActive {
     // GROUP
     // BACKWARD##############################################################################
 
-    @MemberOf("Backward")
+    @MemberOf("Forward")
     public Set<Integer> markBackward(Integer transaction, Set<Integer> id) {
         return mark(transaction, id, invertedEdges, incomingEdges, false);
     }
@@ -203,7 +201,7 @@ public class GraphWorker implements RunActive {
 		Set<Integer> visitedNow = new HashSet<Integer>();
 		HashMap<Integer, Set<Integer>> toVisit = new HashMap<Integer, Set<Integer>>();
 
-		synchronized (visited) {
+		//synchronized (visited) {
     		LinkedList<Integer> q = new LinkedList<Integer>();
     		id.removeAll(visited);
     		if (id.size()==0) {
@@ -238,7 +236,7 @@ public class GraphWorker implements RunActive {
     			}
     
     		}
-		}
+		//}
 		
 		for (Integer loc : toVisit.keySet()) {
 		    results.add(propagateMark(transaction, loc, toVisit.get(loc), forward));
@@ -273,12 +271,12 @@ public class GraphWorker implements RunActive {
     private Set<Integer> checkGetTransaction(Integer transaction, boolean forward) {
         HashMap<Integer, HashSet<Integer>> visitedGlobal = forward ? visitedF : visitedB;
         HashSet<Integer> visited;
-        synchronized (visitedGlobal) {
+        //synchronized (visitedGlobal) {
             if (!visitedGlobal.containsKey(transaction)) {
                 visitedGlobal.put(transaction, new HashSet<Integer>());
             }
             visited = visitedGlobal.get(transaction);
-        }
+        //}
         return visited;
     }
 
@@ -298,8 +296,8 @@ public class GraphWorker implements RunActive {
         HashSet<Integer> setNewF;
         HashSet<Integer> setNewB;
 
-        synchronized (visitedF) {
-            synchronized (visitedB) {
+        //synchronized (visitedF) {
+            //synchronized (visitedB) {
                 Set<Integer> setOldF = visitedF.get(parent);
                 Set<Integer> setOldB = visitedB.get(parent);
                 if (parent != transaction) {
@@ -342,8 +340,8 @@ public class GraphWorker implements RunActive {
                 }
 
                 //System.out.println("TX created " + transaction + "@" + name + " p=" + parent + " m=" + mode + " v=" + setNew);
-            }
-        }
+            //}
+        //}
         return transaction;
     }
 
@@ -353,16 +351,16 @@ public class GraphWorker implements RunActive {
      * @return
      */
     private Integer checkRemoveTransaction(Integer transaction) {
-        synchronized (visitedF) {
-            synchronized (visitedB) {
+        //synchronized (visitedF) {
+            //synchronized (visitedB) {
                 if (visitedF.containsKey(transaction)) {
                     visitedF.remove(transaction);
                 }
                 if (visitedB.containsKey(transaction)) {
                     visitedB.remove(transaction);
                 }
-            }
-        }
+            //}
+        //}
         return transaction;
     }
 
@@ -438,8 +436,8 @@ public class GraphWorker implements RunActive {
     @Override
     public void runActivity(Body body) {
         if (threadCount>0) {
-            service = (new MultiActiveService(body, threadCount, hardLimited));
-            service.multiActiveServing();
+            service = (new MultiActiveService(body));
+            service.multiActiveServing(threadCount, hardLimited, hardLimited);
         } else {
             service = (new MultiActiveService(body));
             service.multiActiveServing();
