@@ -153,6 +153,14 @@ public class HTTPServer {
         this.server.stop();
     }
 
+    /** destroy the HTTP server, terminates the http server thread 
+     * 
+     * @throws Exception If the HTTP server fails to stop
+     */
+    public void destroy() throws Exception {
+        this.server.destroy();
+    }
+
     public boolean isMapped(String mapping) {
         ServletMapping[] servletMapping = this.context.getServletHandler().getServletMappings();
         if (servletMapping == null)

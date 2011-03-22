@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -89,6 +90,7 @@ import org.objectweb.proactive.core.event.RuntimeRegistrationEventProducerImpl;
 import org.objectweb.proactive.core.filetransfer.FileTransferEngine;
 import org.objectweb.proactive.core.gc.GarbageCollector;
 import org.objectweb.proactive.core.httpserver.ClassServerServlet;
+import org.objectweb.proactive.core.httpserver.HTTPServer;
 import org.objectweb.proactive.core.jmx.mbean.JMXClassLoader;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapper;
 import org.objectweb.proactive.core.jmx.mbean.ProActiveRuntimeWrapperMBean;
@@ -757,11 +759,44 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
             logger.debug(e1.getMessage());
         }
 
+        Iterator<UniversalBody> bodies = LocalBodyStore.getInstance().getLocalBodies().bodiesIterator();
+        UniversalBody body;
+
+        while (bodies.hasNext()) {
+            try {
+                body = bodies.next();
+                ((Body) body).terminate();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+
+        Iterator<UniversalBody> halfBodies = LocalBodyStore.getInstance().getLocalHalfBodies()
+                .bodiesIterator();
+        UniversalBody halfBody;
+
+        while (halfBodies.hasNext()) {
+            try {
+                halfBody = halfBodies.next();
+                ((Body) halfBody).terminate();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+
         // unexport the runtime
         try {
             this.roe.unexportAll();
         } catch (ProActiveException e) {
             logger.warn("unable to unexport the runtime", e);
+        }
+
+        try {
+            HTTPServer.get().stop();
+            HTTPServer.get().destroy();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         this.roe = null;
