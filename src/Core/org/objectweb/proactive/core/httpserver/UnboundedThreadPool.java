@@ -65,7 +65,7 @@ class UnboundedThreadPool implements ThreadPool {
 
     public UnboundedThreadPool() {
         this.exec = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 1L, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>(), new NamedThreadFactory("ProActive Http Server Thread",false));
+            new SynchronousQueue<Runnable>(), new NamedThreadFactory("ProActive Http Server Thread", false));
     }
 
     public boolean dispatch(Runnable job) {
