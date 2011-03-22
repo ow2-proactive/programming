@@ -1,5 +1,7 @@
 package org.objectweb.proactive.multiactivity.execution;
 
+import java.util.Collection;
+
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
 
@@ -19,6 +21,7 @@ public interface RequestExecutor {
      * @param r
      */
     public void submit(Request r);
+    public void submit(Collection<Request> r);
     
     /**
      * Returns the number of ready request. These are the ones that have been submitted, but not 

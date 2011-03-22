@@ -1,5 +1,6 @@
 package org.objectweb.proactive.multiactivity.compatibility;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +43,7 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	 * Returns the list of requests which are currently executing.
 	 * @return
 	 */
-	public abstract List<Request> getExecutingRequests();
+	public abstract Collection<Request> getExecutingRequests();
 	
 	/**
 	 * Returns the number of executing requests in the service.

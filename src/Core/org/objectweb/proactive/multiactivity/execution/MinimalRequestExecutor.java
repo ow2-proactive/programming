@@ -1,5 +1,6 @@
 package org.objectweb.proactive.multiactivity.execution;
 
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,6 +26,13 @@ public class MinimalRequestExecutor implements RequestExecutor {
     public void submit(Request r) {
         active.incrementAndGet();
         executorService.submit(new RunnableRequest(r));
+    }
+
+    @Override
+    public void submit(Collection<Request> r) {
+        for (Request one : r) {
+            submit(one);
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.objectweb.proactive.multiactivity.execution;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -103,11 +104,22 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         this.notify();
     }
     
+    @Override
+    public  void submit(Collection<Request> reqs) {
+        List<RunnableRequest> wraps = new LinkedList<ControlledRequestExecutor.RunnableRequest>();
+        for (Request r : reqs) {
+            wraps.add(wrapRequest(r));
+        }
+        
+        synchronized (this) {
+            ready.addAll(wraps);
+            this.notify();
+        }
+    }
     /**
      * This is the heart of the executor. It is an internal scheduling thread that coordinates wake-ups, and waits and future value arrivals.
      */
     public synchronized void run() {
-        int dlc = 0;
         Body body = listener.getServingBody();
         //TODO replace for a better one
         while (body.isActive()) {
@@ -115,8 +127,8 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
             ///*DEGUB*/System.out.println("r"+ready.size() + " a"+active.size() +" w"+waiting.size() + " f"+hasArrived.size() +" in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
 
             //WAKE any waiting thread that could resume execution and there are free resources for it
-            Iterator<RunnableRequest> i = waiting.iterator();
 
+            Iterator<RunnableRequest> i = waiting.iterator();
             while (canResumeOne() && i.hasNext()) {
 
                 RunnableRequest cont = i.next();
@@ -140,7 +152,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                 RunnableRequest next = i.next();
                 i.remove();
                 active.add(next);
-                
+
                 executorService.execute(next);
                 //(new Thread(next, "Serving thread for " + listener.getServingBody())).start();
                 ///*DEGUB*/System.out.println("activate one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
@@ -152,16 +164,16 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                 RunnableRequest parasite;
                 RunnableRequest host;
                 boolean couldStart = true;
-                
+
                 //find a request suitable for serving (preferably a recursion)
                 while (canServeOneHosted() && couldStart) {
                     host = findHostRequest();
-                    
-                    if (host!=null) { 
+
+                    if (host != null) {
                         parasite = findParasiteRequest(host);
-    
+
                         if (parasite != null) {
-    
+
                             synchronized (host) {
                                 //i.remove();
                                 ready.remove(parasite);
@@ -171,10 +183,10 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                                 // /*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
                             }
                         } else {
-                           couldStart = false; 
+                            couldStart = false;
                         }
                     } else {
-                        couldStart = false; 
+                        couldStart = false;
                     }
                 }
             }
@@ -182,7 +194,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
             //SLEEP if nothing else to do
             //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
             try {
-                this.wait(1000);
+                this.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

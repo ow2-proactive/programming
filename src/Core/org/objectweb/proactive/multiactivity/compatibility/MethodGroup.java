@@ -119,7 +119,11 @@ public class MethodGroup {
 		return compatibleWith;
 	}
 
-	public boolean isSelfCompatible() {
+	public boolean isCompatibleWith(MethodGroup otherGroup) {
+        return compatibleWith.contains(otherGroup);
+    }
+
+    public boolean isSelfCompatible() {
 		return selfCompatible;
 	}
 	
@@ -213,7 +217,7 @@ public class MethodGroup {
             //return true if parameters are different
             return true;
             
-        } else {
+        } else if (!comparator.contains(".")) {
             //execute an abritrary comparator method
             //this can be defined in either of the parameter's classes, but
             //has to return a boolean or integer as a result.
@@ -228,6 +232,7 @@ public class MethodGroup {
                             return ((Integer) res)!=0;
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
                         return false;
                     }
                 }
@@ -243,11 +248,32 @@ public class MethodGroup {
                             return ((Integer) res)!=0;
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
                         return false;
                     }
                 }
             }
             
+        } else {
+            try {
+                String clazzName = comparator.substring(0, comparator.lastIndexOf('.'));
+                Class<?> clazz = Class.forName(clazzName);
+                String methodName = comparator.substring(comparator.lastIndexOf('.')+1, comparator.length());
+                
+                for (Method m : clazz.getMethods()) {
+                      if (m.getName().equals(methodName)) {
+                          Object res = m.invoke(null, param1, param2);
+                          if (res instanceof Boolean) {
+                              return !((Boolean) res);
+                          } else {
+                              return ((Integer) res)!=0;
+                          }
+                      }
+                }
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         
         return false;
@@ -271,6 +297,10 @@ public class MethodGroup {
         if (!externalComparator.equals("")) {
             this.comparators.put(group, externalComparator);
         }
+    }
+    
+    public boolean canCompareWith(MethodGroup other) {
+        return comparators.containsKey(other);
     }
 	
 }

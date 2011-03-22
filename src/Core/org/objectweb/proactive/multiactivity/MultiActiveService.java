@@ -1,5 +1,6 @@
 package org.objectweb.proactive.multiactivity;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -141,11 +142,9 @@ public class MultiActiveService extends Service implements RequestSupplier {
                 chosen = policy.runPolicy(compatibility);
 
                 if (chosen != null) {
-                    for (Request mf : chosen) {
-                        startServe(mf);
-                        requestQueue.getInternalQueue().remove(mf);
-                        launched++;
-                    }
+                    launched = chosen.size();
+                    requestQueue.getInternalQueue().removeAll(chosen);
+                    startServe(chosen);
                 }
 
                 // if we could not launch anything, than we wait until
@@ -169,7 +168,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * 
      * @return
      */
-    public boolean parallelServeFirstCompatible() {
+    private boolean parallelServeFirstCompatible() {
         synchronized (requestQueue) {
             List<Request> reqs = requestQueue.getInternalQueue();
             for (int i = 0; i < reqs.size(); i++) {
@@ -189,9 +188,14 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * 
      * @return
      */
-    public boolean parallelServeMaxParallel() {
+    private boolean parallelServeMaxParallel() {
 
         List<Request> reqs = requestQueue.getInternalQueue();
+        
+        if (reqs.size()==0) {
+            return false;
+        }
+        
         List<Integer> served = new LinkedList<Integer>();
         if (reqs.size() == 0)
             return false;
@@ -207,6 +211,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
         for (int i = 0; i < served.size(); i++) {
             reqs.remove(served.get(i) - i);
         }
+        
         return false;
     }
 
@@ -217,7 +222,7 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * 
      * @return whether the oldest request could be started or not
      */
-    public boolean parallelServeOldest() {
+    private boolean parallelServeOldest() {
 
         Request r = requestQueue.removeOldest();
         if (r != null) {
@@ -233,10 +238,19 @@ public class MultiActiveService extends Service implements RequestSupplier {
 
     protected boolean startServe(Request r) {
         compatibility.addRunning(r);
-        activeServes++;
-        serveTsts.add((int) (new Date().getTime()));
-        serveHistory.add(activeServes);
+        //activeServes++;
+        //serveTsts.add((int) (new Date().getTime()));
+        //serveHistory.add(activeServes);
         threadManager.submit(r);
+        return true;
+    }
+    
+    protected boolean startServe(Collection<Request> reqs) {
+        for (Request r : reqs) {
+            compatibility.addRunning(r);
+        }
+        
+        threadManager.submit(reqs);
         return true;
     }
 
@@ -251,9 +265,9 @@ public class MultiActiveService extends Service implements RequestSupplier {
     public void finished(Request r) {
         synchronized (requestQueue) {
             compatibility.removeRunning(r);
-            activeServes--;
-            serveTsts.add((int) (new Date().getTime()));
-            serveHistory.add(activeServes);
+            //activeServes--;
+           // serveTsts.add((int) (new Date().getTime()));
+            //serveHistory.add(activeServes);
             requestQueue.notifyAll();
         }
     }

@@ -1,6 +1,8 @@
 package org.objectweb.proactive.multiactivity.compatibility;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,17 +12,20 @@ import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 
 public class CompatibilityTracker extends StatefulCompatibilityMap {
-    private Map<MethodGroup, Integer> compats = new HashMap<MethodGroup, Integer>();
-    private Map<String, List<Request>> runningMethods = new HashMap<String, List<Request>>();
+    
+    private HashMap<MethodGroup, Set<Request>> runningGroups = new HashMap<MethodGroup, Set<Request>>();
+    private Set<Request> running = new HashSet<Request>();
     private BlockingRequestQueue queue;
     private int runningCount = 0;
 
     public CompatibilityTracker(AnnotationProcessor annotProc, BlockingRequestQueue queue) {
         super(annotProc);
 
-        for (MethodGroup groupName : getGroups()) {
-            compats.put(groupName, 0);
+        for (MethodGroup group : getGroups()) {
+            runningGroups.put(group, new HashSet<Request>());
         }
+        //methods without a group
+        runningGroups.put(null, new HashSet<Request>());
         
         this.queue = queue;
     }
@@ -32,17 +37,9 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
      * Time: O(g) -- g is the number of groups
      */
     public void addRunning(Request request) {
-        String method = request.getMethodName();
-        if (getGroupOf(request)!=null) {
-            for (MethodGroup mg : getGroupOf(request).getCompatibleWith()) {
-                compats.put(mg, compats.get(mg) + 1);
-            }
-        }
-        if (!runningMethods.containsKey(method)) {
-            runningMethods.put(method, new LinkedList<Request>());
-        }
-        runningMethods.get(method).add(request);
         runningCount++;
+        running.add(request);
+        runningGroups.get(getGroupOf(request)).add(request);
     }
 
     /*
@@ -52,14 +49,9 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
      * Time: O(g) -- g is the number of groups
      */
     public void removeRunning(Request request) {
-        String method = request.getMethodName();
-        if (getGroupOf(request)!=null) {
-            for (MethodGroup mg : getGroupOf(request).getCompatibleWith()) {
-                compats.put(mg, compats.get(mg) - 1);
-            }
-        }
-        runningMethods.get(method).remove(request);
         runningCount--;
+        running.remove(request);
+        runningGroups.get(getGroupOf(request)).remove(request);
     }
 
     @Override
@@ -67,9 +59,21 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
       if (runningCount == 0)
           return true;
 
-      for (Request other : getExecutingRequests()) {
-          if (!areCompatible(other, r)) {
-              return false;
+      MethodGroup reqGroup = getGroupOf(r);
+      for (MethodGroup otherGroup : runningGroups.keySet()) {
+          if (runningGroups.get(otherGroup).size()>0) {
+              
+              if (reqGroup.canCompareWith(otherGroup)) {
+                  
+                  for (Request other : runningGroups.get(otherGroup)) {
+                      if (!reqGroup.isCompatible(r, otherGroup, other)) {
+                          return false;
+                      }
+                  }
+                      
+              } else if (!reqGroup.isCompatibleWith(otherGroup)) { 
+                  return false;
+              }
           }
       }
           
@@ -110,13 +114,14 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
 //    }
 
     @Override
-    public List<Request> getExecutingRequests() {
-        List<Request> reqs = new LinkedList<Request>();
+    public Collection<Request> getExecutingRequests() {
+        /*List<Request> reqs = new LinkedList<Request>();
         for (List<Request> lrr : runningMethods.values()) {
             reqs.addAll(lrr);
         }
 
-        return reqs;
+        return reqs;*/
+        return running;
     }
 
 //    @Override
