@@ -28,6 +28,7 @@ public class MethodGroup {
 	private Class parameter = null;
 	private HashMap<String, Integer> methodParamPos = new HashMap<String, Integer>();
 	private HashMap<String, String> comparators = new HashMap<String, String>();
+	private HashMap<String, Method> externalCompCache = new HashMap<String, Method>();
 	
 	/**
 	 * Standard constructor of a named group.
@@ -222,60 +223,80 @@ public class MethodGroup {
             //this can be defined in either of the parameter's classes, but
             //has to return a boolean or integer as a result.
             //the final result is negated.
-            for (Method m : param1.getClass().getMethods()){
-                if (m.getName().equals(comparator)) {
-                    try {
-                        Object res = m.invoke(param1, param2);
-                        if (res instanceof Boolean) {
-                            return !((Boolean) res);
-                        } else {
-                            return ((Integer) res)!=0;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }
-            }
-            
-            for (Method m : param2.getClass().getMethods()){
-                if (m.getName().equals(comparator)) {
-                    try {
-                        Object res = m.invoke(param2, param1);
-                        if (res instanceof Boolean) {
-                            return !((Boolean) res);
-                        } else {
-                            return ((Integer) res)!=0;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return false;
-                    }
-                }
-            }
+
+            return applyInternalComparator(param1, param2, comparator);
             
         } else {
-            try {
+            
+            return applyExternalComparator(param1, param2, comparator);
+        }
+    }
+
+    private boolean applyExternalComparator(Object param1, Object param2, String comparator) {
+        try {
+            Method m = null;
+            
+            if (!externalCompCache.containsKey(comparator)) {
+                
                 String clazzName = comparator.substring(0, comparator.lastIndexOf('.'));
                 Class<?> clazz = Class.forName(clazzName);
-                String methodName = comparator.substring(comparator.lastIndexOf('.')+1, comparator.length());
-                
-                for (Method m : clazz.getMethods()) {
-                      if (m.getName().equals(methodName)) {
-                          Object res = m.invoke(null, param1, param2);
-                          if (res instanceof Boolean) {
-                              return !((Boolean) res);
-                          } else {
-                              return ((Integer) res)!=0;
-                          }
-                      }
+                String methodName = comparator.substring(comparator.lastIndexOf('.') + 1, comparator.length());
+                for (Method cmp : clazz.getMethods()) {
+                    if (cmp.getName().equals(methodName)) {
+                        m = cmp;
+                        externalCompCache.put(comparator, m);
+                        break;
+                    }
                 }
-                
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+            
+            if (m==null) {
+                return false;
+            }
+            
+            Object res = m.invoke(null, param1, param2);
+
+            if (res instanceof Boolean) {
+                return !((Boolean) res);
+            } else {
+                return ((Integer) res) != 0;
+            }
+
+        } catch (Exception e) {
+            externalCompCache.put(comparator, null);
+            e.printStackTrace();
         }
-        
+
+        return false;
+    }
+
+    private boolean applyInternalComparator(Object param1, Object param2, String comparator) {
+        try {
+            Method m = param1.getClass().getMethod(comparator, param2.getClass());
+
+            Object res = m.invoke(param1, param2);
+            if (res instanceof Boolean) {
+                return !((Boolean) res);
+            } else {
+                return ((Integer) res) != 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Method m = param2.getClass().getMethod(comparator, param1.getClass());
+
+            Object res = m.invoke(param2, param1);
+            if (res instanceof Boolean) {
+                return !((Boolean) res);
+            } else {
+                return ((Integer) res) != 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 

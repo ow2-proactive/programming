@@ -12,7 +12,7 @@ import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 
 public class CompatibilityTracker extends StatefulCompatibilityMap {
-    
+
     private HashMap<MethodGroup, Set<Request>> runningGroups = new HashMap<MethodGroup, Set<Request>>();
     private Set<Request> running = new HashSet<Request>();
     private BlockingRequestQueue queue;

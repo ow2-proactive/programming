@@ -45,12 +45,12 @@ import sun.security.action.GetBooleanAction;
  * @author Zsolt István
  * 
  */
-public class MultiActiveService extends Service implements RequestSupplier {
+public class MultiActiveService extends Service {
 
     public static final boolean LIMIT_ALL_THREADS = true;
     public static final boolean LIMIT_ACTIVE_THREADS = false;
     public static final boolean REENTRANT_SAME_THREAD = true;
-    public static final boolean REENTRANT_SEPARATE_THREAD = true;
+    public static final boolean REENTRANT_SEPARATE_THREAD = false;
     
     public int activeServes = 0;
     public LinkedList<Integer> serveHistory = new LinkedList<Integer>();
@@ -59,7 +59,6 @@ public class MultiActiveService extends Service implements RequestSupplier {
     Logger logger = Logger.getLogger(this.getClass());
 
     CompatibilityTracker compatibility;
-    RequestExecutor threadManager;
 
     /**
      * MultiActiveService that will be able to optionally use a policy, and will deploy each serving request on a 
@@ -78,27 +77,21 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * active thread enters in an infinite loop for processing the request in
      * the FIFO order, and parallelizing where possible.
      */
-    public void multiActiveServing(int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
-        threadManager = new ControlledRequestExecutor(body, this, maxActiveThreads, hardLimit, hostReentrant);
-        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
-        
-        internalMultiactiveServing();
+    public void multiActiveServing(int maxActiveThreads, boolean hardLimit, boolean hostReentrant) { 
+        new ControlledRequestExecutor(body, compatibility, maxActiveThreads, hardLimit, hostReentrant).execute();
+
     }
     
-    public void multiActiveServing(int maxActiveThreads){
-        threadManager = new ControlledRequestExecutor(body, this, maxActiveThreads, false, false);
-        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
+    public void multiActiveServing(int maxActiveThreads){ 
+        new ControlledRequestExecutor(body, compatibility, maxActiveThreads, false, false).execute();
         
-        internalMultiactiveServing();
     }
     
     public void multiActiveServing() {
-        threadManager = new MinimalRequestExecutor(body, this);
-        
-        internalMultiactiveServing();
+        new ControlledRequestExecutor(body, compatibility, Runtime.getRuntime().availableProcessors(), false, false).execute();
     }
     
-    private void internalMultiactiveServing() {
+/*    private void internalMultiactiveServing() {
         boolean success;
         synchronized (requestQueue) {
             while (body.isActive()) {
@@ -117,26 +110,25 @@ public class MultiActiveService extends Service implements RequestSupplier {
             }
         }
     }
-
+*/
     /**
      * Scheduling based on a user-defined policy
      * 
      * @param policy
      */
     public void policyServing(ServingPolicy policy, int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
-        threadManager = new ControlledRequestExecutor(body, this, maxActiveThreads, hardLimit, hostReentrant);
-        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
-        
-        internalPolicyServing(policy);
+        new ControlledRequestExecutor(body, compatibility, maxActiveThreads, hardLimit, hostReentrant).execute(policy);
+    }
+    
+    public void policyServing(ServingPolicy policy, int maxActiveThreads) {
+        new ControlledRequestExecutor(body, compatibility, maxActiveThreads, false, false).execute(policy);
     }
     
     public void policyServing(ServingPolicy policy) {
-        threadManager = new MinimalRequestExecutor(body, this);
-        
-        internalPolicyServing(policy);
+        new ControlledRequestExecutor(body, compatibility, Runtime.getRuntime().availableProcessors(), false, false).execute(policy);
     }
     
-    private void internalPolicyServing(ServingPolicy policy) {
+  /*  private void internalPolicyServing(ServingPolicy policy) {
         List<Request> chosen;
         int launched;
 
@@ -168,13 +160,13 @@ public class MultiActiveService extends Service implements RequestSupplier {
         }
     }
 
-    /**
+    *//**
      * This method will find the first method in the request queue that is
      * compatible with the currently running methods. In case nothing is
      * executing, it will take the first, thus acting like the default strategy.
      * 
      * @return
-     */
+     *//*
     private boolean parallelServeFirstCompatible() {
         synchronized (requestQueue) {
             List<Request> reqs = requestQueue.getInternalQueue();
@@ -188,13 +180,13 @@ public class MultiActiveService extends Service implements RequestSupplier {
         return false;
     }
 
-    /**
+    *//**
      * This method will find the first method in the request queue that is
      * compatible with the currently running methods. In case nothing is
      * executing, it will take the first, thus acting like the default strategy.
      * 
      * @return
-     */
+     *//*
     private boolean parallelServeMaxParallel() {
 
         List<Request> reqs = requestQueue.getInternalQueue();
@@ -222,13 +214,13 @@ public class MultiActiveService extends Service implements RequestSupplier {
         return false;
     }
 
-    /**
+    *//**
      * This method will try to start the oldest waiting method in parallel with
      * the currently running ones. The decision is made based on the information
      * extracted from annotations.
      * 
      * @return whether the oldest request could be started or not
-     */
+     *//*
     private boolean parallelServeOldest() {
 
         Request r = requestQueue.removeOldest();
@@ -261,14 +253,14 @@ public class MultiActiveService extends Service implements RequestSupplier {
         return true;
     }
 
-    /**
+    *//**
      * Method called from a request wrapper to signal the end of a
      * serving. State is updated here, and the scheduler is announced, so
      * a new request can be scheduled.
      * 
      * @param r
      * @param asserve
-     */
+     *//*
     public void finished(Request r) {
         synchronized (requestQueue) {
             compatibility.removeRunning(r);
@@ -277,6 +269,6 @@ public class MultiActiveService extends Service implements RequestSupplier {
             //serveHistory.add(activeServes);
             requestQueue.notifyAll();
         }
-    }
+    }*/
 
 }
