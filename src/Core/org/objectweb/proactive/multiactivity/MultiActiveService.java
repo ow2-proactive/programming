@@ -79,14 +79,21 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * the FIFO order, and parallelizing where possible.
      */
     public void multiActiveServing(int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
-        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit, hostReentrant);
+        threadManager = new ControlledRequestExecutor(body, this, maxActiveThreads, hardLimit, hostReentrant);
+        FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
+        
+        internalMultiactiveServing();
+    }
+    
+    public void multiActiveServing(int maxActiveThreads){
+        threadManager = new ControlledRequestExecutor(body, this, maxActiveThreads, false, false);
         FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
         
         internalMultiactiveServing();
     }
     
     public void multiActiveServing() {
-        threadManager = new MinimalRequestExecutor(this);
+        threadManager = new MinimalRequestExecutor(body, this);
         
         internalMultiactiveServing();
     }
@@ -117,14 +124,14 @@ public class MultiActiveService extends Service implements RequestSupplier {
      * @param policy
      */
     public void policyServing(ServingPolicy policy, int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
-        threadManager = new ControlledRequestExecutor(this, maxActiveThreads, hardLimit, hostReentrant);
+        threadManager = new ControlledRequestExecutor(body, this, maxActiveThreads, hardLimit, hostReentrant);
         FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) threadManager);
         
         internalPolicyServing(policy);
     }
     
     public void policyServing(ServingPolicy policy) {
-        threadManager = new MinimalRequestExecutor(this);
+        threadManager = new MinimalRequestExecutor(body, this);
         
         internalPolicyServing(policy);
     }
@@ -270,11 +277,6 @@ public class MultiActiveService extends Service implements RequestSupplier {
             //serveHistory.add(activeServes);
             requestQueue.notifyAll();
         }
-    }
-    
-    @Override
-    public Body getServingBody() {
-        return body;
     }
 
 }

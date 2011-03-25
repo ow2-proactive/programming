@@ -16,6 +16,7 @@ import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.tags.Tag;
 import org.objectweb.proactive.core.body.tags.tag.DsiTag;
+import org.objectweb.proactive.multiactivity.execution.ControlledRequestExecutor.RunnableRequest;
 
 /**
  * Implementation of the {@link RequestExecutor} interface that is also a {@link FutureWaiter} so it can use the 
@@ -30,7 +31,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
     protected boolean HOST_REENTRANT = true;
     
     protected RequestSupplier listener; 
-    
+    protected Body body;
     protected ExecutorService executorService;
     
     /**
@@ -60,6 +61,8 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      */
     protected HashMap<Long, List<RunnableRequest>> threadUsage;
     
+    protected HashMap<String, RunnableRequest> threadTag;
+    
     /**
      * List of requests waiting for the value of a future
      */
@@ -78,7 +81,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      * @param activeLimit Limit of active serves
      * @param hardLimit If true, the limit will also apply to the number of threads
      */
-    public ControlledRequestExecutor(RequestSupplier listener, int activeLimit, boolean hardLimit, boolean hostReentrant) {
+    public ControlledRequestExecutor(Body body, RequestSupplier listener, int activeLimit, boolean hardLimit, boolean hostReentrant) {
         ACTIVE_LIMIT = activeLimit;
         HARD_LIMIT_ENABLED = hardLimit;
         HOST_REENTRANT = hostReentrant;
@@ -89,23 +92,31 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         waiting = new HashSet<RunnableRequest>();
         hasArrived = new HashSet<Future>();
         threadUsage = new HashMap<Long, List<RunnableRequest>>();
+        if (HOST_REENTRANT) {
+            threadTag = new HashMap<String, ControlledRequestExecutor.RunnableRequest>();
+        }
         waitingList = new HashMap<Future, List<RunnableRequest>>();
         hostMap = new ConcurrentHashMap<RunnableRequest, RunnableRequest>();
         
         this.listener = listener;
+        this.body = body;
         
-        (new Thread((Runnable) this, "ThreadManager of "+listener.getServingBody())).start();
+        (new Thread((Runnable) this, "ThreadManager of "+body)).start();
     }
 
     @Override
-    public synchronized void submit(Request r) {
+    public void submit(Request r) {
         ///*DEGUB*/System.out.println("submitted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
-        ready.add(wrapRequest(r));
-        this.notify();
+        RunnableRequest wr = wrapRequest(r);
+        
+        synchronized (this) {
+            ready.add(wr);
+            this.notify();
+        }
     }
     
     @Override
-    public  void submit(Collection<Request> reqs) {
+    public void submit(Collection<Request> reqs) {
         List<RunnableRequest> wraps = new LinkedList<ControlledRequestExecutor.RunnableRequest>();
         for (Request r : reqs) {
             wraps.add(wrapRequest(r));
@@ -120,15 +131,43 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      * This is the heart of the executor. It is an internal scheduling thread that coordinates wake-ups, and waits and future value arrivals.
      */
     public synchronized void run() {
-        Body body = listener.getServingBody();
         //TODO replace for a better one
         while (body.isActive()) {
+            boolean noChange = true;
 
             ///*DEGUB*/System.out.println("r"+ready.size() + " a"+active.size() +" w"+waiting.size() + " f"+hasArrived.size() +" in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
 
             //WAKE any waiting thread that could resume execution and there are free resources for it
 
-            Iterator<RunnableRequest> i = waiting.iterator();
+            Iterator<RunnableRequest> i;
+            
+            if (HOST_REENTRANT) {
+                
+                i = ready.iterator();
+                
+                while (canServeOneHosted() && i.hasNext()) {
+                    RunnableRequest parasite = i.next();
+                    Object tagObject = parasite.getRequest().getTags().getTag(DsiTag.IDENTIFIER).getData();
+                    if (tagObject!=null) {
+                        String[] tagData = ((String) (tagObject)).split("::");
+                        String tag = tagData[0]+":"+tagData[1];
+                        RunnableRequest host = threadTag.get(tag);
+                        
+                        synchronized (host) {
+                            noChange = false;
+                            i.remove();
+                            //ready.remove(parasite);
+                            active.add(parasite);
+                            hostMap.put(host, parasite);
+                            host.notify();
+                            // /*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
+                        }
+                    }
+                }
+                
+            }
+            
+            i = waiting.iterator();
             while (canResumeOne() && i.hasNext()) {
 
                 RunnableRequest cont = i.next();
@@ -136,6 +175,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                 if (hasArrived.contains(cont.getWaitingOn()) && isNotAHost(cont)) {
 
                     synchronized (cont) {
+                        noChange = false;
                         i.remove();
                         resumeServing(cont, cont.getWaitingOn());
                         cont.notify();
@@ -153,42 +193,10 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
                 i.remove();
                 active.add(next);
 
+                noChange = false;
                 executorService.execute(next);
                 //(new Thread(next, "Serving thread for " + listener.getServingBody())).start();
                 ///*DEGUB*/System.out.println("activate one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
-            }
-
-            if (HOST_REENTRANT) {
-
-                //HOST a request inside a blocked one's thread
-                RunnableRequest parasite;
-                RunnableRequest host;
-                boolean couldStart = true;
-
-                //find a request suitable for serving (preferably a recursion)
-                while (canServeOneHosted() && couldStart) {
-                    host = findHostRequest();
-
-                    if (host != null) {
-                        parasite = findParasiteRequest(host);
-
-                        if (parasite != null) {
-
-                            synchronized (host) {
-                                //i.remove();
-                                ready.remove(parasite);
-                                active.add(parasite);
-                                hostMap.put(host, parasite);
-                                host.notify();
-                                // /*DEGUB*/System.out.println("hosted one"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
-                            }
-                        } else {
-                            couldStart = false;
-                        }
-                    } else {
-                        couldStart = false;
-                    }
-                }
             }
 
             //SLEEP if nothing else to do
@@ -244,7 +252,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      * @return
      */
     private boolean canServeOneHosted() {
-        return ready.size()>0 && waiting.size()>0 && active.size()<ACTIVE_LIMIT;
+        return ready.size()>0 && threadTag.size()>0 && active.size()<ACTIVE_LIMIT;
     }
 
     /**
@@ -277,6 +285,15 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
             waitingList.put(f, new LinkedList<RunnableRequest>());
         }
         waitingList.get(f).add(r);
+        
+        if (HOST_REENTRANT) {
+            Object tagObject = r.getRequest().getTags().getTag(DsiTag.IDENTIFIER).getData();
+            if (tagObject!=null) {
+                String[] tagData = ((String) (tagObject)).split("::");
+                r.setSessionTag(tagData[0]+":"+tagData[1]);
+                threadTag.put(r.getSessionTag(), r);
+            }
+        }
 
         r.setCanRun(false);
         r.setWaitingOn(f);
@@ -290,17 +307,24 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
      */
     private synchronized void resumeServing(RunnableRequest r, Future f) {
         active.add(r);
-        
+
         hostMap.remove(r);
-        
+
         r.setCanRun(true);
         r.setWaitingOn(null);
-        
+
         waitingList.get(f).remove(r);
-        if (waitingList.get(f).size()==0) {
+        if (waitingList.get(f).size() == 0) {
             waitingList.remove(f);
             //TODO -- should clean up the future from the arrived set
             hasArrived.remove(f);
+        }
+
+        if (HOST_REENTRANT) {
+            String sessionTag = r.getSessionTag();
+            if (sessionTag != null) {
+                threadTag.remove(sessionTag);
+            }
         }
     }
     
@@ -316,6 +340,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
             threadUsage.put(tId, new LinkedList<RunnableRequest>());
         }
         threadUsage.get(tId).add(0, r);
+        
     }
     
     /**
@@ -325,14 +350,16 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
     private synchronized void unregisterServerThread(RunnableRequest r) {
         ///**/System.out.println("finished "+r+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
         active.remove(r);
-        
+
         Long tId = Thread.currentThread().getId();
         if (!r.equals(threadUsage.get(tId).remove(0))) {
             System.err.println("Thread inconsistency -- Request is not found in the stack.");
         }
-        if (threadUsage.get(tId).size()==0) {
+
+        if (threadUsage.get(tId).size() == 0) {
             threadUsage.remove(tId);
         }
+
         this.notify();
     }
 
@@ -407,6 +434,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         private Request r;
         private boolean canRun = true;
         private Future waitingOn;
+        private String sessionTag;
 
         public RunnableRequest(Request r) {
             this.r = r;
@@ -419,7 +447,7 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
         @Override
         public void run() {
             registerServerThread(this);
-            listener.getServingBody().serve(r);
+            body.serve(r);
             listener.finished(r);
             unregisterServerThread(this);
         }
@@ -462,6 +490,14 @@ public class ControlledRequestExecutor implements RequestExecutor, FutureWaiter,
          */
         public Future getWaitingOn() {
             return waitingOn;
+        }
+
+        public void setSessionTag(String sessionTag) {
+            this.sessionTag = sessionTag;
+        }
+
+        public String getSessionTag() {
+            return sessionTag;
         }
 
     }

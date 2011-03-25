@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.request.Request;
 
 /**
@@ -17,9 +18,11 @@ public class MinimalRequestExecutor implements RequestExecutor {
     private ExecutorService executorService = Executors.newCachedThreadPool();
     private AtomicInteger active = new AtomicInteger(0);
     private RequestSupplier listener;
+    private Body body;
     
-    public MinimalRequestExecutor(RequestSupplier listener) {
+    public MinimalRequestExecutor(Body body, RequestSupplier listener) {
         this.listener = listener;
+        this.body = body;
     }
 
     @Override
@@ -71,7 +74,7 @@ public class MinimalRequestExecutor implements RequestExecutor {
 
         @Override
         public void run() {
-            listener.getServingBody().serve(r);
+            body.serve(r);
             listener.finished(r);
         }
 

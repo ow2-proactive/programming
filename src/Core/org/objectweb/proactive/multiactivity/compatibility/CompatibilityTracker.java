@@ -60,6 +60,10 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
           return true;
 
       MethodGroup reqGroup = getGroupOf(r);
+      if (reqGroup==null) {
+          return false;
+      }
+      
       for (MethodGroup otherGroup : runningGroups.keySet()) {
           if (runningGroups.get(otherGroup).size()>0) {
               

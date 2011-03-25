@@ -184,7 +184,7 @@ public class MethodGroup {
             boolean rules =  (getCompatibleWith().contains(other) || other.getCompatibleWith().contains(this));
             if (rules == true && comparators.containsKey(other.name) && other.comparators.containsKey(name)) {
                 Object param1 = mapMethodParameters(r1.getMethodName(), r1.getMethodCall().getParameters());
-                Object param2 = (param1!=null) ? mapMethodParameters(r2.getMethodName(), r2.getMethodCall().getParameters()) : null;
+                Object param2 = (param1!=null) ? other.mapMethodParameters(r2.getMethodName(), r2.getMethodCall().getParameters()) : null;
                 return applyComparator(param1, param2, comparators.get(other.name));
             } else {
                 return rules;
@@ -300,7 +300,12 @@ public class MethodGroup {
     }
     
     public boolean canCompareWith(MethodGroup other) {
-        return comparators.containsKey(other);
+        return (other!=null) ? comparators.containsKey(other.name) : false;
+    }
+    
+    @Override
+    public String toString() {
+        return "Group " + this.name+" (compatible with "+compatibleWith+")";
     }
 	
 }
