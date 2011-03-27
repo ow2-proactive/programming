@@ -1,38 +1,13 @@
 package org.objectweb.proactive.multiactivity;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.Service;
-import org.objectweb.proactive.core.body.future.Future;
-import org.objectweb.proactive.core.body.future.FuturePool;
-import org.objectweb.proactive.core.body.future.FutureProxy;
-import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.multiactivity.compatibility.AnnotationProcessor;
 import org.objectweb.proactive.multiactivity.compatibility.CompatibilityTracker;
-import org.objectweb.proactive.multiactivity.compatibility.MethodGroup;
-import org.objectweb.proactive.multiactivity.compatibility.StatefulCompatibilityMap;
-import org.objectweb.proactive.multiactivity.execution.FutureWaiter;
-import org.objectweb.proactive.multiactivity.execution.FutureWaiterRegistry;
 import org.objectweb.proactive.multiactivity.execution.RequestExecutor;
-import org.objectweb.proactive.multiactivity.execution.ControlledRequestExecutor;
-import org.objectweb.proactive.multiactivity.execution.MinimalRequestExecutor;
-import org.objectweb.proactive.multiactivity.execution.RequestSupplier;
-
-import sun.security.action.GetBooleanAction;
 
 
 /**
@@ -59,6 +34,7 @@ public class MultiActiveService extends Service {
     Logger logger = Logger.getLogger(this.getClass());
 
     CompatibilityTracker compatibility;
+    RequestExecutor executor;
 
     /**
      * MultiActiveService that will be able to optionally use a policy, and will deploy each serving request on a 
@@ -69,6 +45,7 @@ public class MultiActiveService extends Service {
         super(body);
 
         compatibility = new CompatibilityTracker(new AnnotationProcessor(body.getReifiedObject().getClass()), requestQueue);
+        executor = new RequestExecutor(body, compatibility);
     }
 
     /**
@@ -78,17 +55,19 @@ public class MultiActiveService extends Service {
      * the FIFO order, and parallelizing where possible.
      */
     public void multiActiveServing(int maxActiveThreads, boolean hardLimit, boolean hostReentrant) { 
-        new ControlledRequestExecutor(body, compatibility, maxActiveThreads, hardLimit, hostReentrant).execute();
-
+        executor.configure(maxActiveThreads, hardLimit, hostReentrant);
+        executor.execute();
     }
     
     public void multiActiveServing(int maxActiveThreads){ 
-        new ControlledRequestExecutor(body, compatibility, maxActiveThreads, false, false).execute();
+        executor.configure(maxActiveThreads, false, false);
+        executor.execute();
         
     }
     
     public void multiActiveServing() {
-        new ControlledRequestExecutor(body, compatibility, Runtime.getRuntime().availableProcessors(), false, false).execute();
+        executor.configure(Runtime.getRuntime().availableProcessors(), false, false);
+        executor.execute();
     }
     
 /*    private void internalMultiactiveServing() {
@@ -117,15 +96,22 @@ public class MultiActiveService extends Service {
      * @param policy
      */
     public void policyServing(ServingPolicy policy, int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
-        new ControlledRequestExecutor(body, compatibility, maxActiveThreads, hardLimit, hostReentrant).execute(policy);
+        executor.configure(maxActiveThreads, hardLimit, hostReentrant);
+        executor.execute(policy);
     }
     
     public void policyServing(ServingPolicy policy, int maxActiveThreads) {
-        new ControlledRequestExecutor(body, compatibility, maxActiveThreads, false, false).execute(policy);
+        executor.configure(maxActiveThreads, false, false);
+        executor.execute(policy);
     }
     
     public void policyServing(ServingPolicy policy) {
-        new ControlledRequestExecutor(body, compatibility, Runtime.getRuntime().availableProcessors(), false, false).execute(policy);
+        executor.configure(Runtime.getRuntime().availableProcessors(), false, false);
+        executor.execute(policy);
+    }
+    
+    public ServingController getServingController() {
+        return executor;
     }
     
   /*  private void internalPolicyServing(ServingPolicy policy) {

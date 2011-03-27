@@ -272,7 +272,14 @@ public class MethodGroup {
 
     private boolean applyInternalComparator(Object param1, Object param2, String comparator) {
         try {
-            Method m = param1.getClass().getMethod(comparator, param2.getClass());
+            Method m = null;
+            Class clazz = param1.getClass();
+            for (Method cmp : clazz.getMethods()) {
+                if (cmp.getName().equals(comparator)) {
+                    m = cmp;
+                    break;
+                }
+            }
 
             Object res = m.invoke(param1, param2);
             if (res instanceof Boolean) {
@@ -285,7 +292,14 @@ public class MethodGroup {
         }
 
         try {
-            Method m = param2.getClass().getMethod(comparator, param1.getClass());
+            Method m = null;
+            Class clazz = param2.getClass();
+            for (Method cmp : clazz.getMethods()) {
+                if (cmp.getName().equals(comparator)) {
+                    m = cmp;
+                    break;
+                }
+            }
 
             Object res = m.invoke(param2, param1);
             if (res instanceof Boolean) {
