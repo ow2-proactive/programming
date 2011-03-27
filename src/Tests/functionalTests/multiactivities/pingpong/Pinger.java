@@ -55,16 +55,6 @@ public class Pinger implements RunActive {
 		return this.other;
 	}
 	
-	@Override
-	public void runActivity(Body body) {
-		if (this.multiActive) {
-			(new MultiActiveService(body)).multiActiveServing(1, true, true);
-		} else {
-			(new Service(body)).fifoServing();
-		}
-		
-	}
-	
 	/**
 	 * Call the pair's ping method
 	 * @return
@@ -117,5 +107,15 @@ public class Pinger implements RunActive {
 	public IntWrapper startWithPong(){
 		return new IntWrapper(other.pong().getIntValue());
 	}
+
+    @Override
+    public void runActivity(Body body) {
+    	if (this.multiActive) {
+    		(new MultiActiveService(body)).multiActiveServing(1, true, true);
+    	} else {
+    		(new Service(body)).fifoServing();
+    	}
+    	
+    }
 }
 	
