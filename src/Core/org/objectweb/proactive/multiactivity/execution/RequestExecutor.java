@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.future.Future;
@@ -20,8 +21,6 @@ import org.objectweb.proactive.core.body.tags.tag.DsiTag;
 import org.objectweb.proactive.multiactivity.ServingController;
 import org.objectweb.proactive.multiactivity.ServingPolicy;
 import org.objectweb.proactive.multiactivity.compatibility.CompatibilityTracker;
-import org.objectweb.proactive.multiactivity.execution.RequestExecutor.RunnableRequest;
-
 /**
  * TODO
  * @author Izso
@@ -99,6 +98,15 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         waitingList = new HashMap<Future, List<RunnableRequest>>();
         hostMap = new ConcurrentHashMap<RunnableRequest, RunnableRequest>();
         
+        new Thread(new Runnable() {
+            
+            @Override
+            public void run() {
+                listenForRequests();
+                
+            }
+        }).start();
+        
         FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) this);
         
     }
@@ -117,7 +125,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     }
     
     public void configure(int activeLimit, boolean hardLimit, boolean hostReentrant) {
-        synchronized (requestQueue) {
+        synchronized (this) {
             
             ACTIVE_THREAD_LIMIT = activeLimit;
             LIMIT_TOTAL_THREADS = hardLimit;
@@ -136,7 +144,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 }
             }
             
-            requestQueue.notify();
+            this.notify();
         }
     }
 
@@ -144,39 +152,69 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      * This is the heart of the executor. It is an internal scheduling thread that coordinates wake-ups, and waits and future value arrivals.
      */
     public void execute() {
-        synchronized (requestQueue) {
+        synchronized (this) {
+            
             while (body.isActive()) {
-                
-                int canGet = getEmptySlotCount()-ready.size();
-                if (canGet>0) {
-                    Request r; 
-                    for (int x=0; x<canGet; x++) {
-                        r = getOneFromQueue();
-                        if (r!=null) {
-                            ready.add(wrapRequest(r));
-                            compatibility.addRunning(r);
-                        } else {
-                            break;
-                        }
+                //-ready.size();
+                /*if (active.size()==0) {
+                    synchronized (requestQueue) {
+                        //if (canGet > 0 && requestQueue.size()==0) {
+                            waitForReq = true;
+                            requestQueue.notify();
+                        //}
                     }
-                }
+                }*/
                 
                 internalExecute();
-
+                
                 //SLEEP if nothing else to do
                 //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
                 try {
-                    requestQueue.wait();
+                    this.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+    
+            }
+        }
+    }
 
+    private void listenForRequests() {
+        synchronized (requestQueue) {
+            while (body.isActive()) {
+                
+                //if (dirty.get()==0) {
+                    
+                    List<Integer> rc;
+                    rc = getFromQueue(0, 99999);
+                    
+                    
+                        for (int i = 0; i < rc.size(); i++) {
+                            Request r = requestQueue.getInternalQueue().remove(rc.get(i)-i);
+                            compatibility.addRunning(r);
+                            
+                            synchronized (this) {                                
+                                ready.add(wrapRequest(r));
+                                this.notify();
+                            }
+                        //System.out.println(rc.size());
+                    }
+                    
+                //}
+                
+                try {
+                    requestQueue.wait();
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                //System.out.println("q size = "+requestQueue.size() + " canGet = " + canGet);
             }
         }
     }
     
     public void execute(ServingPolicy policy) {
-        synchronized (requestQueue) {
+        synchronized (this) {
             while (body.isActive()) {
                 
                 int canGet = getEmptySlotCount()-ready.size();
@@ -201,7 +239,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 //SLEEP if nothing else to do
                 //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
                 try {
-                    requestQueue.wait();
+                    this.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -267,22 +305,26 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         }
     }
     
-    private Request getOneFromQueue() {
+    private List<Integer> getFromQueue(int from, int cnt) {
 
         List<Request> reqs = requestQueue.getInternalQueue();
+        List<Integer> ret = new LinkedList<Integer>();
         
-        if (reqs.size()==0) {
-            return null;
-        }
-
-        for (int i = 0; i < reqs.size(); i++) {
+        int found = 0;
+        int i;
+        for (i = 0; i < reqs.size() && found<cnt; i++) {
             if (compatibility.isCompatibleWithExecuting(reqs.get(i)) &&
                 compatibility.isCompatibleWithRequests(reqs.get(i), reqs.subList(0, i))) {
-                return reqs.remove(i);
+                //Request r = reqs.remove(i);
+                ret.add(i);
+                //compatibility.addRunning(r);
+                //i--;
+                found++;
             }
+            //lastIndex=i;
         }
 
-        return null;
+        return ret;
     }
 
     private RunnableRequest findParasiteRequest(RunnableRequest host) {
@@ -356,7 +398,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      * @param f the future for whose value the wait occured
      */
     private void signalWaitFor(RunnableRequest r, Future f) {
-        synchronized (requestQueue) {
+        synchronized (this) {
             ///**/System.out.println("blocked "+r.getRequest().getMethodName()+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
             active.remove(r);
             waiting.add(r);
@@ -371,7 +413,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
 
             r.setCanRun(false);
             r.setWaitingOn(f);
-            requestQueue.notify();
+            this.notify();
         }
     }
 
@@ -381,7 +423,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      * @param f the future it was waiting for
      */
     private void resumeServing(RunnableRequest r, Future f) {
-        synchronized (requestQueue) {
+        synchronized (this) {
             active.add(r);
     
             hostMap.remove(r);
@@ -410,8 +452,8 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      * an already existing thread.
      * @param r
      */
-    private void registerServerThread(RunnableRequest r) {
-        synchronized (requestQueue) {
+    private void serveStarted(RunnableRequest r) {
+        synchronized (this) {
             ///**/System.out.println("serving "+r+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
             Long tId = Thread.currentThread().getId();
             if (!threadUsage.containsKey(tId)) {
@@ -425,8 +467,8 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      * Tell the executor about the termination, or updated usage stack of a thread.
      * @param r
      */
-    private void unregisterServerThread(RunnableRequest r) {
-        synchronized (requestQueue) {
+    private void serveStopped(RunnableRequest r) {
+        synchronized (this) {
             ///**/System.out.println("finished "+r+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
             active.remove(r);
 
@@ -439,9 +481,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 threadUsage.remove(tId);
             }
             
-            compatibility.removeRunning(r.getRequest());
-            
-            requestQueue.notify();
+            this.notify();
         }
     }
 
@@ -476,10 +516,10 @@ public class RequestExecutor implements FutureWaiter, ServingController {
 
     @Override
     public void futureArrived(Future future) {
-        synchronized (requestQueue) {
+        synchronized (this) {
             ///*DEBUG*/ System.out.println("future arrived"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
             hasArrived.add(future);
-            requestQueue.notify();
+            this.notify();
         }
     }
 
@@ -515,9 +555,13 @@ public class RequestExecutor implements FutureWaiter, ServingController {
 
         @Override
         public void run() {
-            registerServerThread(this);
+            serveStarted(this);
             body.serve(r);
-            unregisterServerThread(this);
+            serveStopped(this);
+            synchronized (requestQueue) {
+                compatibility.removeRunning(r);
+                requestQueue.notify();
+            }
         }
         
         @Override
@@ -581,14 +625,14 @@ public class RequestExecutor implements FutureWaiter, ServingController {
 
     @Override
     public int getNumberOfConcurrent() {
-        synchronized (requestQueue) {
+        synchronized (this) {
             return ACTIVE_THREAD_LIMIT;
         }
     }
 
     @Override
     public int decrementNumberOfConcurrent(int cnt) {
-        synchronized (requestQueue) {
+        synchronized (this) {
             if (cnt > 0) {
 
                 ACTIVE_THREAD_LIMIT = (ACTIVE_THREAD_LIMIT > cnt) ? ACTIVE_THREAD_LIMIT - cnt : ACTIVE_THREAD_LIMIT;
@@ -605,10 +649,10 @@ public class RequestExecutor implements FutureWaiter, ServingController {
 
     @Override
     public int incrementNumberOfConcurrent(int cnt) {
-        synchronized (requestQueue) {
+        synchronized (this) {
             if (cnt > 0) {
                 ACTIVE_THREAD_LIMIT = ACTIVE_THREAD_LIMIT + cnt;
-                requestQueue.notify();
+                this.notify();
                 return ACTIVE_THREAD_LIMIT;
             } else {
                 return ACTIVE_THREAD_LIMIT;
@@ -623,10 +667,10 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     
     @Override
     public void setNumberOfConcurrent(int numActive) {
-        synchronized (requestQueue) {
+        synchronized (this) {
             if (numActive>0) {
                 ACTIVE_THREAD_LIMIT = numActive;
-                requestQueue.notify();
+                this.notify();
             }
         }
     }
