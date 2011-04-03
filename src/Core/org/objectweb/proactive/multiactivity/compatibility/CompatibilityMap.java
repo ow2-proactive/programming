@@ -2,6 +2,7 @@ package org.objectweb.proactive.multiactivity.compatibility;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.objectweb.proactive.core.body.request.Request;
@@ -110,4 +111,14 @@ public class CompatibilityMap {
 		}
 		return true;
 	}
+	
+	public int getIndexOfLastCompatibleWith(Request request, List<Request> others){
+	    int ret = -1;
+        for (int i=0; i<others.size(); i++) {
+            if (!areCompatible(request, others.get(i))) {
+                return i-1;
+            }
+        }
+        return others.size()-1;
+    }
 }
