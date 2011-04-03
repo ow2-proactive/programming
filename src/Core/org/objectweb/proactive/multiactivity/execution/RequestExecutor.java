@@ -1,11 +1,13 @@
 package org.objectweb.proactive.multiactivity.execution;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -64,7 +66,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      */
     protected HashMap<Long, List<RunnableRequest>> threadUsage;
     
-    protected HashMap<String, RunnableRequest> requestTags;
+    protected HashMap<String, Set<RunnableRequest>> requestTags;
     
     /**
      * List of requests waiting for the value of a future
@@ -78,6 +80,12 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      * the second request finishes execution
      */
     protected ConcurrentHashMap<RunnableRequest, RunnableRequest> hostMap;
+    
+    
+    protected HashSet<Request> invalid = new HashSet<Request>();
+    
+    protected HashMap<Request, Set<Request>> invalidates = new HashMap<Request, Set<Request>>();
+    
     /**
      * 
      * @param activeLimit Limit of active serves
@@ -98,15 +106,6 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         waitingList = new HashMap<Future, List<RunnableRequest>>();
         hostMap = new ConcurrentHashMap<RunnableRequest, RunnableRequest>();
         
-        new Thread(new Runnable() {
-            
-            @Override
-            public void run() {
-                listenForRequests();
-                
-            }
-        }).start();
-        
         FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) this);
         
     }
@@ -119,7 +118,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         SAME_THREAD_REENTRANT = hostReentrant;
         
         if (SAME_THREAD_REENTRANT) {
-            requestTags = new HashMap<String, RequestExecutor.RunnableRequest>();
+            requestTags = new HashMap<String, Set<RunnableRequest>>();
         }
 
     }
@@ -134,9 +133,12 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 if (hostReentrant==true) {
                     SAME_THREAD_REENTRANT = hostReentrant;
                     //'create the map and populate it with tags
-                    requestTags = new HashMap<String, RequestExecutor.RunnableRequest>();
+                    requestTags = new HashMap<String, Set<RunnableRequest>>();
                     for (RunnableRequest r : waiting) {
-                        requestTags.put(r.getSessionTag(), r);
+                        if (!requestTags.containsKey(r.getSessionTag())) {
+                            requestTags.put(r.getSessionTag(), new HashSet<RequestExecutor.RunnableRequest>());
+                        }
+                        requestTags.get(r.getSessionTag()).add(r);
                     }
                 } else {
                     //clean up
@@ -152,55 +154,52 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      * This is the heart of the executor. It is an internal scheduling thread that coordinates wake-ups, and waits and future value arrivals.
      */
     public void execute() {
-        synchronized (this) {
+        
+        new Thread(new Runnable() {
             
-            while (body.isActive()) {
-                //-ready.size();
-                /*if (active.size()==0) {
-                    synchronized (requestQueue) {
-                        //if (canGet > 0 && requestQueue.size()==0) {
-                            waitForReq = true;
-                            requestQueue.notify();
-                        //}
-                    }
-                }*/
+            @Override
+            public void run() {
+                requestQueueHandler();
                 
-                internalExecute();
-                
-                //SLEEP if nothing else to do
-                //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-    
             }
-        }
+        },"Request listener for "+body).start();
+        
+        internalExecute();
     }
 
-    private void listenForRequests() {
+    public void execute(final ServingPolicy policy) {
+        
+        new Thread(new Runnable() {
+            
+            @Override
+            public void run() {
+                requestQueueHandler(policy);
+                
+            }
+        },"Request listener for "+body).start();
+        
+        internalExecute();
+        
+    }
+
+    
+    private void requestQueueHandler() {
         synchronized (requestQueue) {
             while (body.isActive()) {
-                
-                //if (dirty.get()==0) {
-                    
-                    List<Integer> rc;
-                    rc = getFromQueue(0, 99999);
-                    
-                    
+                List<Request> rc;
+                rc = getMaxFromQueue();
+
+                if (rc.size() >= 0) {
+                    synchronized (this) {
                         for (int i = 0; i < rc.size(); i++) {
-                            Request r = requestQueue.getInternalQueue().remove(rc.get(i)-i);
-                            compatibility.addRunning(r);
-                            
-                            synchronized (this) {                                
-                                ready.add(wrapRequest(r));
-                                this.notify();
-                            }
-                        //System.out.println(rc.size());
+
+                            ready.add(wrapRequest(rc.get(i)));
+                        }
+                        if (active.size()<ACTIVE_THREAD_LIMIT) {
+                            this.notify();
+                        }
                     }
-                    
-                //}
+                }
                 
                 try {
                     requestQueue.wait();
@@ -208,34 +207,155 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                //System.out.println("q size = "+requestQueue.size() + " canGet = " + canGet);
+                
+                
             }
         }
     }
     
-    public void execute(ServingPolicy policy) {
-        synchronized (this) {
+    private void requestQueueHandler(ServingPolicy policy) {
+        synchronized (requestQueue) {
             while (body.isActive()) {
-                
-                int canGet = getEmptySlotCount()-ready.size();
-                if (canGet>0) {
-                    List<Request> rList; 
-                    for (int x=0; x<canGet; ) {
-                        rList = policy.runPolicy(compatibility);
-                        if (rList!=null && rList.size()>0) {
-                            for (Request r : rList) {
-                                ready.add(wrapRequest(r));
-                                compatibility.addRunning(r);
-                                x++;
-                            }
-                        } else {
-                            break;
+
+                List<Request> rc;
+                rc = policy.runPolicy(compatibility);
+
+                if (rc.size() >= 0) {
+                    synchronized (this) {
+                        for (int i = 0; i < rc.size(); i++) {
+
+                            ready.add(wrapRequest(rc.get(i)));
+                        }
+                        if (active.size()<ACTIVE_THREAD_LIMIT) {
+                            this.notify();
                         }
                     }
                 }
-                
-                internalExecute();
 
+                try {
+                    requestQueue.wait();
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private List<Request> getMaxFromQueue() {
+    
+        List<Request> reqs = requestQueue.getInternalQueue();
+        List<Request> ret = new ArrayList<Request>();
+        
+        int i, lastIndex;
+        for (i = 0; i < reqs.size(); i++) {
+            lastIndex = -2;
+            if (!invalid.contains(reqs.get(i)) && compatibility.isCompatibleWithExecuting(reqs.get(i)) &&
+                (lastIndex = compatibility.getIndexOfLastCompatibleWith(reqs.get(i), reqs.subList(0, i)))==i-1) {
+                Request r = reqs.get(i);
+                ret.add(r);
+                
+/*                synchronized (this) {
+                    ready.add(wrapRequest(r));
+                    this.notify();
+                }*/
+                
+                compatibility.addRunning(r);
+                
+                if (invalidates.containsKey(reqs.get(i))){
+                    for (Request ok: invalidates.get(reqs.get(i))) {
+                        invalid.remove(ok);
+                    }
+                    invalidates.remove(reqs.get(i));
+                }
+                
+                reqs.remove(i);
+                i--;
+                
+            } else if (lastIndex>-2 && lastIndex<i){
+                lastIndex++;
+                if (!invalidates.containsKey(reqs.get(lastIndex))){
+                    invalidates.put(reqs.get(lastIndex), new HashSet<Request>());
+                }
+                
+                invalidates.get(reqs.get(lastIndex)).add(reqs.get(i));
+                invalid.add(reqs.get(i));
+            }
+        }
+        
+        return ret;
+    }
+
+    private void internalExecute() {
+
+        synchronized (this) {
+            
+            while (body.isActive()) {
+                
+                Iterator<RunnableRequest> i;
+
+                if (SAME_THREAD_REENTRANT) {
+
+                    i = ready.iterator();
+/*                    if (!canServeOneHosted()) {
+                        System.out.println("cc");
+                    }*/
+                    
+                    while (canServeOneHosted() && i.hasNext()) {
+                        RunnableRequest parasite = i.next();
+                        Object tagObject = parasite.getRequest().getTags().getTag(DsiTag.IDENTIFIER)
+                                .getData();
+                        if (tagObject != null) {
+                            String[] tagData = ((String) (tagObject)).split("::");
+                            String tag = tagData[0] + "::" + tagData[1];
+                            if (requestTags.containsKey(tag)) {
+                                for (RunnableRequest host : requestTags.get(tag)) {
+                                    if (host != null && isNotAHost(host)) {
+                                        synchronized (host) {
+                                            i.remove();
+                                            active.add(parasite);
+                                            hostMap.put(host, parasite);
+                                            host.notify();
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                //WAKE any waiting thread that could resume execution and there are free resources for it
+                i = waiting.iterator();
+                while (canResumeOne() && i.hasNext()) {
+
+                    RunnableRequest cont = i.next();
+                    // check if the future has arrived + the request is not already engaged in a hosted serving
+                    if (hasArrived.contains(cont.getWaitingOn()) && isNotAHost(cont)) {
+
+                        synchronized (cont) {
+                            i.remove();
+                            resumeServing(cont, cont.getWaitingOn());
+                            cont.notify();
+                        }
+                    }
+                }
+
+                //SERVE anyone who is ready and there are resources available
+                i = ready.iterator();
+
+                while (canServeOne() && i.hasNext()) {
+
+                    RunnableRequest next = i.next();
+                    i.remove();
+                    active.add(next);
+                    executorService.execute(next);
+                }
+                
+                
+                //System.out.println("r" + ready.size());
+                
                 //SLEEP if nothing else to do
                 //      will wake up on 1) new submit, 2) finish of a request, 3) arrival of a future, 4) wait of a request
                 try {
@@ -246,87 +366,9 @@ public class RequestExecutor implements FutureWaiter, ServingController {
 
             }
         }
+
     }
     
-    private void internalExecute(){
-        Iterator<RunnableRequest> i;
-        
-        if (SAME_THREAD_REENTRANT) {
-
-            i = ready.iterator();
-
-            while (canServeOneHosted() && i.hasNext()) {
-                RunnableRequest parasite = i.next();
-                Object tagObject = parasite.getRequest().getTags().getTag(DsiTag.IDENTIFIER)
-                        .getData();
-                if (tagObject != null) {
-                    String[] tagData = ((String) (tagObject)).split("::");
-                    String tag = tagData[0] + ":" + tagData[1];
-                    RunnableRequest host = requestTags.get(tag);
-                    if (host!=null && isNotAHost(host)) {
-                        synchronized (host) {
-                            i.remove();
-                            active.add(parasite);
-                            hostMap.put(host, parasite);
-                            host.notify();
-                        }
-                    }
-                }
-            }
-
-        }
-
-
-        //WAKE any waiting thread that could resume execution and there are free resources for it
-        i = waiting.iterator();
-        while (canResumeOne() && i.hasNext()) {
-
-            RunnableRequest cont = i.next();
-            // check if the future has arrived + the request is not already engaged in a hosted serving
-            if (hasArrived.contains(cont.getWaitingOn()) && isNotAHost(cont)) {
-
-                synchronized (cont) {
-                    i.remove();
-                    resumeServing(cont, cont.getWaitingOn());
-                    cont.notify();
-                }
-            }
-        }
-
-        //SERVE anyone who is ready and there are resources available
-        i = ready.iterator();
-
-        while (canServeOne() && i.hasNext()) {
-
-            RunnableRequest next = i.next();
-            i.remove();
-            active.add(next);
-            executorService.execute(next);
-        }
-    }
-    
-    private List<Integer> getFromQueue(int from, int cnt) {
-
-        List<Request> reqs = requestQueue.getInternalQueue();
-        List<Integer> ret = new LinkedList<Integer>();
-        
-        int found = 0;
-        int i;
-        for (i = 0; i < reqs.size() && found<cnt; i++) {
-            if (compatibility.isCompatibleWithExecuting(reqs.get(i)) &&
-                compatibility.isCompatibleWithRequests(reqs.get(i), reqs.subList(0, i))) {
-                //Request r = reqs.remove(i);
-                ret.add(i);
-                //compatibility.addRunning(r);
-                //i--;
-                found++;
-            }
-            //lastIndex=i;
-        }
-
-        return ret;
-    }
-
     private RunnableRequest findParasiteRequest(RunnableRequest host) {
         Tag tag;
         
@@ -408,9 +450,15 @@ public class RequestExecutor implements FutureWaiter, ServingController {
             waitingList.get(f).add(r);
 
             if (SAME_THREAD_REENTRANT) {
-                requestTags.put(r.getSessionTag(), r);
+                if (!requestTags.containsKey(r.getSessionTag())) {
+                    requestTags.put(r.getSessionTag(), new HashSet<RequestExecutor.RunnableRequest>());
+                }
+                requestTags.get(r.getSessionTag()).add(r);
             }
-
+            
+            
+ //           System.out.println("wait" +r.getSessionTag()+ " @ "+Thread.currentThread().getId());
+            
             r.setCanRun(false);
             r.setWaitingOn(f);
             this.notify();
@@ -441,7 +489,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
             if (SAME_THREAD_REENTRANT) {
                 String sessionTag = r.getSessionTag();
                 if (sessionTag != null) {
-                    requestTags.remove(sessionTag);
+                    requestTags.get(sessionTag).remove(r);
                 }
             }
         }
@@ -557,8 +605,8 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         public void run() {
             serveStarted(this);
             body.serve(r);
-            serveStopped(this);
             synchronized (requestQueue) {
+                serveStopped(this);
                 compatibility.removeRunning(r);
                 requestQueue.notify();
             }
@@ -615,7 +663,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 Object tagObject = getRequest().getTags().getTag(DsiTag.IDENTIFIER).getData();
                 if (tagObject != null) {
                     String[] tagData = ((String) (tagObject)).split("::");
-                    setSessionTag(tagData[0] + ":" + tagData[1]);
+                    setSessionTag(tagData[0] + "::" + tagData[1]);
                 }
                 return sessionTag;
             }
