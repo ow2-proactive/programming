@@ -23,6 +23,7 @@ import org.objectweb.proactive.core.body.tags.tag.DsiTag;
 import org.objectweb.proactive.multiactivity.ServingController;
 import org.objectweb.proactive.multiactivity.ServingPolicy;
 import org.objectweb.proactive.multiactivity.compatibility.CompatibilityTracker;
+import org.objectweb.proactive.multiactivity.execution.RequestExecutor.RunnableRequest;
 /**
  * TODO
  * @author Izso
@@ -135,10 +136,12 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                     //'create the map and populate it with tags
                     requestTags = new HashMap<String, Set<RunnableRequest>>();
                     for (RunnableRequest r : waiting) {
-                        if (!requestTags.containsKey(r.getSessionTag())) {
-                            requestTags.put(r.getSessionTag(), new HashSet<RequestExecutor.RunnableRequest>());
+                        if (isNotAHost(r)) {
+                            if (!requestTags.containsKey(r.getSessionTag())) {
+                                requestTags.put(r.getSessionTag(), new HashSet<RequestExecutor.RunnableRequest>());
+                            }
+                            requestTags.get(r.getSessionTag()).add(r);
                         }
-                        requestTags.get(r.getSessionTag()).add(r);
                     }
                 } else {
                     //clean up
@@ -297,9 +300,6 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 if (SAME_THREAD_REENTRANT) {
 
                     i = ready.iterator();
-/*                    if (!canServeOneHosted()) {
-                        System.out.println("cc");
-                    }*/
                     
                     while (canServeOneHosted() && i.hasNext()) {
                         RunnableRequest parasite = i.next();
@@ -315,6 +315,8 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                                             i.remove();
                                             active.add(parasite);
                                             hostMap.put(host, parasite);
+                                            requestTags.get(tag).remove(host);
+                                            parasite.setHostedOn(host);
                                             host.notify();
                                             break;
                                         }
@@ -327,15 +329,19 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 }
 
                 //WAKE any waiting thread that could resume execution and there are free resources for it
-                i = waiting.iterator();
-                while (canResumeOne() && i.hasNext()) {
+                //i = waiting.iterator();
+                Iterator<List<RunnableRequest>> it = threadUsage.values().iterator();
+                
+                while (canResumeOne() && it.hasNext()) {
 
-                    RunnableRequest cont = i.next();
+                    List<RunnableRequest> list = it.next();
+                    RunnableRequest cont = list.get(0);
                     // check if the future has arrived + the request is not already engaged in a hosted serving
                     if (hasArrived.contains(cont.getWaitingOn()) && isNotAHost(cont)) {
 
                         synchronized (cont) {
-                            i.remove();
+                            //i.remove();
+                            waiting.remove(cont);
                             resumeServing(cont, cont.getWaitingOn());
                             cont.notify();
                         }
@@ -490,6 +496,9 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 String sessionTag = r.getSessionTag();
                 if (sessionTag != null) {
                     requestTags.get(sessionTag).remove(r);
+                    if (requestTags.get(sessionTag).size()==0) {
+                        requestTags.remove(sessionTag);
+                    }
                 }
             }
         }
@@ -529,6 +538,14 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 threadUsage.remove(tId);
             }
             
+            if (SAME_THREAD_REENTRANT) {
+                if (r.getHostedOn()!=null) {
+                    if (!requestTags.containsKey(r.getHostedOn().getSessionTag())) {
+                        requestTags.put(r.getHostedOn().getSessionTag(), new HashSet<RequestExecutor.RunnableRequest>());
+                    }
+                    requestTags.get(r.getSessionTag()).add(r.getHostedOn());
+                }
+            }
             this.notify();
         }
     }
@@ -591,6 +608,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         private Request r;
         private boolean canRun = true;
         private Future waitingOn;
+        private RunnableRequest hostedOn;
         private String sessionTag;
 
         public RunnableRequest(Request r) {
@@ -667,6 +685,14 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 }
                 return sessionTag;
             }
+        }
+
+        public void setHostedOn(RunnableRequest hostedOn) {
+            this.hostedOn = hostedOn;
+        }
+
+        public RunnableRequest getHostedOn() {
+            return hostedOn;
         }
 
     }
