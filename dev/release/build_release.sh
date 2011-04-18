@@ -16,6 +16,7 @@ fi
 
 
 TMP_DIR=""
+DIR_NAME="ProActiveProgramming-${VERSION}_core"
 
 echo " [i] PROACTIVE_DIR: $PROACTIVE_DIR"
 echo " [i] VERSION:       $VERSION"
@@ -29,7 +30,7 @@ function warn_and_exit {
 function warn_print_usage_and_exit {
 	echo "$1" 1>&2
 	echo "" 1>&2
-	echo "Usage: $0 PROACTIVE_DIR VERSION JAVA_HOME" 1>&2
+	echo "Usage: $0 PROACTIVE_DIR VERSION JAVA_HOME [TMP]" 1>&2
 	exit 1
 }
 
@@ -48,7 +49,7 @@ fi
 export JAVA_HOME=${JAVA_HOME}
 
 
-TMP_DIR="${TMP}/ProActive-${VERSION}"
+TMP_DIR="${TMP}/${DIR_NAME}"
 output=$(mkdir ${TMP_DIR} 2>&1)
 if [ "$?" -ne 0 ] ; then
 	if [ -e ${TMP_DIR} ] ; then
@@ -72,13 +73,23 @@ if [ "$(find src/ -name "*.java" | xargs grep serialVersionUID | grep -v `echo $
 	fi
 fi
 
+# Check Main.PA_VERSION
+echo ${VERSION} | grep -q $(cat src/Core/org/objectweb/proactive/Main.java | grep 'static final private String PA_VERSION =' | cut -d '"' -f2)
+if [ "$?" != 0 ] ; then
+	warn_and_exit " [E] Bad version in Main.PA_VERSION should match ${VERSION}"
+fi
+
+# Update Main.PA_VERSION if needed
+sed -i  "s%\(static final private String PA_VERSION = \"\).\+\"%\1${VERSION}\"%" src/Core/org/objectweb/proactive/Main.java
+
 
 cd compile || warn_and_exit "Cannot move in compile"
 ./build clean
-./build -Dversion="${VERSION}" deploy.all
-./build -Dversion="${VERSION}" doc.ProActive.manualPdf
+./build -Dversion="${VERSION}" deploy.all || warn_and_exit " [E] build failed (code) "
+./build -Dversion="${VERSION}" doc.ProActive.manualPdf || warn_and_exit " [E] build failed (documentation)"
+cd ..
 
-# Check release number
+
 OUTPUT=$(${JAVA_HOME}/bin/java -cp dist/lib/ProActive.jar org.objectweb.proactive.api.PAVersion)
 if [ "${OUTPUT}" != "${VERSION}" ] ; then
 	warn_and_exit " [E] bad release version number: $OUTPUT"
@@ -109,5 +120,5 @@ rm -Rf doc/ic2d
 sed -i "s/{version}/$VERSION/" README.txt
 
 cd ${TMP}
-tar cvfz ProActive-${VERSION}.tar.gz ProActive-${VERSION}
-zip -r   ProActive-${VERSION}.zip    ProActive-${VERSION}
+tar cvfz ${DIR_NAME}.tar.gz ${DIR_NAME}
+zip -r   ${DIR_NAME}.zip    ${DIR_NAME}
