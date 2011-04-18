@@ -100,8 +100,9 @@ public class Utils {
      * @return an identifier of a Body
      */
     public static String getActiveObjectId(Body body) {
-        UniqueID uid = body.getID();
-        return uid.toString();
+        // shorten the oaid for path length reduction
+        // TODO Handle properly collisions (PROACTIVE-1021)
+        return String.valueOf(body.getID().hashCode());
     }
 
     /**
