@@ -40,6 +40,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.etsi.uri.gcm.api.control.GCMLifeCycleController;
 import org.etsi.uri.gcm.api.type.GCMInterfaceType;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
@@ -96,8 +97,6 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
      */
     public String getFcState() {
         return fcState;
-        //        return getRequestQueue().isStarted() ? LifeCycleController.STARTED
-        //                                             : LifeCycleController.STOPPED;
     }
 
     /**
@@ -277,6 +276,11 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                         (GCM.getGCMLifeCycleController(inner_components[i])).startFc();
                     }
                 }
+            } else {
+                // primitive component: check if the implementation class implements LifeCycleController
+                if (owner.getReferenceOnBaseObject() instanceof LifeCycleController) {
+                    ((LifeCycleController) owner.getReferenceOnBaseObject()).startFc();
+                }
             }
 
             //getRequestQueue().start();
@@ -314,6 +318,11 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                         (GCM.getGCMLifeCycleController(inner_components[i])).stopFc();
                     }
                 }
+            } else {
+                // primitive component: check if the implementation class implements LifeCycleController
+                if (owner.getReferenceOnBaseObject() instanceof LifeCycleController) {
+                    ((LifeCycleController) owner.getReferenceOnBaseObject()).stopFc();
+                }
             }
 
             //getRequestQueue().stop();
@@ -330,6 +339,13 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
 
     public void terminateGCMComponent() throws IllegalLifeCycleException {
         if (fcState.equals(LifeCycleController.STOPPED)) {
+            String hierarchical_type = owner.getComponentParameters().getHierarchicalType();
+            if (hierarchical_type.equals(Constants.PRIMITIVE)) {
+                // primitive component: check if the implementation class implements GCMLifeCycleController
+                if (owner.getReferenceOnBaseObject() instanceof GCMLifeCycleController) {
+                    ((GCMLifeCycleController) owner.getReferenceOnBaseObject()).terminateGCMComponent();
+                }
+            }
             PAActiveObject.terminateActiveObject(true);
         } else {
             throw new IllegalLifeCycleException(

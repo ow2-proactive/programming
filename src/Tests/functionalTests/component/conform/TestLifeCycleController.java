@@ -39,6 +39,7 @@ package functionalTests.component.conform;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import org.etsi.uri.gcm.api.control.GCMLifeCycleController;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
@@ -52,7 +53,9 @@ import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.component.Utils;
 
 import functionalTests.component.conform.components.C;
+import functionalTests.component.conform.components.CLifeCycleController;
 import functionalTests.component.conform.components.I;
+import functionalTests.component.conform.components.StateAccessor;
 
 
 public class TestLifeCycleController extends Conformtest {
@@ -95,11 +98,39 @@ public class TestLifeCycleController extends Conformtest {
     public void testStarted() throws Exception {
         // assumes that a method call on a stopped interface hangs
         GCM.getBindingController(c).bindFc("client", d.getFcInterface("server"));
-        assertEquals("STOPPED", GCM.getGCMLifeCycleController(c).getFcState());
+        assertEquals(GCMLifeCycleController.STOPPED, GCM.getGCMLifeCycleController(c).getFcState());
         GCM.getGCMLifeCycleController(c).startFc();
-        assertEquals("STARTED", GCM.getGCMLifeCycleController(c).getFcState());
+        assertEquals(GCMLifeCycleController.STARTED, GCM.getGCMLifeCycleController(c).getFcState());
         final I i = (I) c.getFcInterface("server");
         i.m(true);
+    }
+
+    @Test
+    public void testCustomLifeCycleController() throws Exception {
+        t = tf.createFcType(new InterfaceType[] {
+                tf.createFcItfType("state-accessor", StateAccessor.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                tf.createFcItfType("server", I.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                        TypeFactory.SINGLE),
+                tf.createFcItfType("servers", I.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                        TypeFactory.COLLECTION),
+                tf.createFcItfType("client", I.class.getName(), TypeFactory.CLIENT, TypeFactory.MANDATORY,
+                        TypeFactory.SINGLE),
+                tf.createFcItfType("clients", I.class.getName(), TypeFactory.CLIENT, TypeFactory.MANDATORY,
+                        TypeFactory.COLLECTION) });
+        c = gf.newFcInstance(t, flatPrimitive, CLifeCycleController.class.getName());
+        GCM.getBindingController(c).bindFc("client", d.getFcInterface("server"));
+        StateAccessor stateAccessor = (StateAccessor) c.getFcInterface("state-accessor");
+        assertEquals(GCMLifeCycleController.STOPPED, GCM.getGCMLifeCycleController(c).getFcState());
+        assertEquals(CLifeCycleController.CUSTOM_STOPPED, stateAccessor.getFcCustomState());
+        GCM.getGCMLifeCycleController(c).startFc();
+        assertEquals(GCMLifeCycleController.STARTED, GCM.getGCMLifeCycleController(c).getFcState());
+        assertEquals(CLifeCycleController.CUSTOM_STARTED, stateAccessor.getFcCustomState());
+        final I i = (I) c.getFcInterface("server");
+        i.m(true);
+        GCM.getGCMLifeCycleController(c).stopFc();
+        assertEquals(GCMLifeCycleController.STOPPED, GCM.getGCMLifeCycleController(c).getFcState());
+        assertEquals(CLifeCycleController.CUSTOM_STOPPED, stateAccessor.getFcCustomState());
     }
 
     // TODO test issue: this test assumes that a call on a stopped interface hangs
@@ -126,7 +157,7 @@ public class TestLifeCycleController extends Conformtest {
             GCM.getGCMLifeCycleController(c).startFc();
             fail();
         } catch (IllegalLifeCycleException ilce) {
-            assertEquals("STOPPED", GCM.getGCMLifeCycleController(c).getFcState());
+            assertEquals(GCMLifeCycleController.STOPPED, GCM.getGCMLifeCycleController(c).getFcState());
         }
     }
 
