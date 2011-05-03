@@ -669,13 +669,8 @@
 	<target name="junit.ibis" depends="deploy.all">
 		<junitMacro communication.protocol="ibis" nodedescriptor="/functionalTests/descriptor/defaultnodes/NodesLocalIbis.xml" testsuite="testsuite">
 			<jvmargs>
-				<jvmarg value="-Dproactive.rmi=ibis" />
-				<jvmarg value="-Dibis.serialization=sun" />
-				<jvmarg value="-Dibis.name_server.host=localhost" />
-				<jvmarg value="-Dibis.name_server.pool=rutget" />
-				<jvmarg value="-Dibis.pool.host_number=1" />
-				<jvmarg value="-Dibis.name_server.key=12" />
-				<jvmarg value="-Dibis.property.file=/home1/fabrice/workIbis/Ibis/properties" />
+				<jvmarg value="-Dproactive.communication.protocol=ibis" />
+				<jvmarg value="-Dibis.serialization=ibis" />
 			</jvmargs>
 		</junitMacro>
 	</target>

@@ -424,7 +424,6 @@ public class RemoteObjectSet implements Serializable, Observer {
                 if (oos != null)
                     oos.close();
             }
-
             out.writeObject(uri);
             out.writeObject(buf); // null if serialization failed
         }
@@ -439,15 +438,16 @@ public class RemoteObjectSet implements Serializable, Observer {
             oos.writeObject(this.defaultRO);
             oos.flush();
             buf = baos.toByteArray();
+
         } catch (UnknownProtocolException e) {
             LOGGER_RO.debug("Failed to serialize the default RemoteRemoteObject for " + this.defaultURI);
         } finally {
             if (oos != null)
                 oos.close();
         }
-
         out.writeObject(this.defaultURI);
         out.writeObject(buf); // null if serialization failed
+
     }
 
     /**

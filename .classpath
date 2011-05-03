@@ -29,8 +29,6 @@
 	<classpathentry kind="lib" path="lib/commons-discovery-0.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr13526-tests.jar"/>
-	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr13526.jar"/>
 	<classpathentry kind="lib" path="lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/configadmin-1.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/cryptix-asn1.jar"/>
@@ -143,5 +141,7 @@
 	<classpathentry kind="lib" path="lib/wiseman-tools.jar"/>
 	<classpathentry kind="lib" path="lib/jna-platform-3.2.7.jar"/>
 	<classpathentry kind="lib" path="lib/yajsw-os.jar"/>
+	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199-tests.jar"/>
+	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

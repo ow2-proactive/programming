@@ -27,43 +27,39 @@
  * If needed, contact us to obtain a release under GPL Version 2 or 3
  * or a different license than the AGPL.
  *
- *  Initial developer(s):               The ProActive Team
- *                        http://proactive.inria.fr/team_members.htm
+ *  Initial developer(s):               The ActiveEon Team
+ *                        http://www.activeeon.com/
  *  Contributor(s):
  *
  * ################################################################
- * $$PROACTIVE_INITIAL_DEV$$
+ * $$ACTIVEEON_INITIAL_DEV$$
  */
 package org.objectweb.proactive.core.remoteobject.ibis;
 
-import java.io.IOException;
-import java.rmi.RemoteException;
-
-import org.objectweb.proactive.core.ProActiveException;
-import org.objectweb.proactive.core.body.reply.Reply;
-import org.objectweb.proactive.core.body.request.Request;
-import org.objectweb.proactive.core.remoteobject.InternalRemoteRemoteObject;
-import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionException;
+import ibis.io.Replacer;
+import ibis.rmi.Remote;
+import ibis.rmi.impl.RTS;
+import ibis.rmi.server.RemoteStub;
 
 
 /**
- * Ibis Transport Layer for the remote object
- * @author The ProActive Team
+ * Replace an ibis remote object by its reference. 
  *
  */
-public class IbisRemoteObjectImpl extends ibis.rmi.server.UnicastRemoteObject implements IbisRemoteObject {
-    private InternalRemoteRemoteObject remoteObject;
 
-    public IbisRemoteObjectImpl() throws ibis.rmi.RemoteException {
+public class IbisRMIReplacer implements Replacer {
+
+    public Object replace(Object o) {
+
+        if (o instanceof RemoteStub) {
+            return o;
+        }
+        if (o instanceof Remote) {
+            Object r = RTS.getStub(o);
+            if (r != null) {
+                return r;
+            }
+        }
+        return o;
     }
-
-    public IbisRemoteObjectImpl(InternalRemoteRemoteObject target) throws ibis.rmi.RemoteException {
-        this.remoteObject = target;
-    }
-
-    public Reply receiveMessage(Request message) throws RemoteException, RenegotiateSessionException,
-            ProActiveException, IOException {
-        return this.remoteObject.receiveMessage(message);
-    }
-
 }
