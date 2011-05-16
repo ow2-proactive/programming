@@ -39,6 +39,8 @@ package org.objectweb.proactive.extensions.ssl;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -61,6 +63,14 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
  * @since ProActive 5.0.0
  */
 public class PASslEngine extends SSLEngine {
+    static final private String[] STRONG_CIPHERS = { "SSL_RSA_WITH_RC4_128_MD5", "SSL_RSA_WITH_RC4_128_SHA",
+            "SSL_RSA_WITH_3DES_EDE_CBC_SHA", "SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA",
+            "SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
+            "TLS_DHE_DSS_WITH_AES_128_CBC_SHA", "TLS_KRB5_WITH_RC4_128_MD5", "TLS_KRB5_WITH_RC4_128_SHA",
+            "TLS_RSA_WITH_AES_128_CBC_SHA", "TLS_KRB5_WITH_3DES_EDE_CBC_MD5",
+            "TLS_KRB5_WITH_3DES_EDE_CBC_SHA", "TLS_DHE_RSA_WITH_AES_256_CBC_SHA",
+            "TLS_DHE_DSS_WITH_AES_256_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA" };
+
     final private SSLEngine sslEngine;
 
     public PASslEngine(boolean client, SecureMode secureMode, KeyStore keystore, TrustManager trustManager) {
@@ -75,7 +85,8 @@ public class PASslEngine extends SSLEngine {
             this.sslEngine = ctxt.createSSLEngine();
             this.sslEngine.setEnabledProtocols(new String[] { SslHelpers.DEFAULT_PROTOCOL });
             this.sslEngine.setEnableSessionCreation(true);
-            this.sslEngine.setEnabledCipherSuites(new String[] { "SSL_DH_anon_WITH_RC4_128_MD5" });
+            String[] supportedCiphers = this.sslEngine.getSupportedCipherSuites();
+            this.sslEngine.setEnabledCipherSuites(this.getEnabledCiphers(supportedCiphers, STRONG_CIPHERS));
             if (client) {
                 this.sslEngine.setUseClientMode(true);
             } else {
@@ -94,6 +105,30 @@ public class PASslEngine extends SSLEngine {
         } catch (GeneralSecurityException e) {
             throw new ProActiveRuntimeException("failed to initialize " + this.getClass().getName(), e);
         }
+    }
+
+    /**
+     * Filter out the list of supported cipher to retain only the strong ones.
+     * 
+     * @param supportedCiphers 
+     *    List of ciphers supported by the ssl engine
+     * @param wantedCiphers
+     *    List of cipher considered as strong enough to be used
+     * @return
+     *    List of supported and strong enough ciphers
+     */
+    private String[] getEnabledCiphers(String[] supportedCiphers, String[] wantedCiphers) {
+        Set<String> enabled = new HashSet<String>(wantedCiphers.length);
+
+        for (String wanted : wantedCiphers) {
+            for (String supported : supportedCiphers) {
+                if (wanted.equals(supported)) {
+                    enabled.add(wanted);
+                }
+            }
+        }
+
+        return enabled.toArray(new String[enabled.size()]);
     }
 
     @Override
@@ -217,4 +252,5 @@ public class PASslEngine extends SSLEngine {
     public boolean getEnableSessionCreation() {
         return this.sslEngine.getEnableSessionCreation();
     }
+
 }
