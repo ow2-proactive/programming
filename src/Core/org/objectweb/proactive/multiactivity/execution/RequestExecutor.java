@@ -26,8 +26,7 @@ import org.objectweb.proactive.multiactivity.compatibility.CompatibilityTracker;
 import org.objectweb.proactive.multiactivity.execution.RequestExecutor.RunnableRequest;
 /**
  * TODO
- * @author Izso
- *
+ * @author  Izso
  */
 public class RequestExecutor implements FutureWaiter, ServingController {
     
@@ -598,12 +597,9 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     }
     
     /**
-     * Wrapper class for a request. Apart from the actual serving it also performs calls
-     * for thread registering and unregistering inside the executor and callback after termination
-     * in the wrapping service. 
-     * @author Izso
-     *
-     */
+	 * Wrapper class for a request. Apart from the actual serving it also performs calls for thread registering and unregistering inside the executor and callback after termination in the wrapping service. 
+	 * @author  Izso
+	 */
     protected class RunnableRequest implements Runnable {            
         private Request r;
         private boolean canRun = true;

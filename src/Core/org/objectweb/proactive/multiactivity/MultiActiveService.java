@@ -11,14 +11,8 @@ import org.objectweb.proactive.multiactivity.execution.RequestExecutor;
 
 
 /**
- * This class extends the {@link Service} class and adds the capability of
- * serving more methods in parallel. <br>
- * The decision of which methods can run in parallel is made based on
- * annotations set by the user. These annotations are to be found in the <i>
- * org.objectweb.proactive.annotation.multiactivity</i> package.
- * 
- * @author Zsolt István
- * 
+ * This class extends the  {@link Service}  class and adds the capability of serving more methods in parallel. <br> The decision of which methods can run in parallel is made based on annotations set by the user. These annotations are to be found in the <i> org.objectweb.proactive.annotation.multiactivity</i> package.
+ * @author  Zsolt István
  */
 public class MultiActiveService extends Service {
 
@@ -49,10 +43,10 @@ public class MultiActiveService extends Service {
     }
 
     /**
-     * Invoke the default parallel policy to pick up the requests from the
-     * request queue. This does not return until the body terminate, as the
-     * active thread enters in an infinite loop for processing the request in
-     * the FIFO order, and parallelizing where possible.
+     * Service that relies on the default parallel policy to extract requests from the queue.
+     * @param maxActiveThreads maximum number of allowed threads inside the multi-active object
+     * @param hardLimit false if the above limit is applicable only to active (running) threads, but not the waiting ones
+     * @param hostReentrant true if re-entrant calls should be hosted on the issuer's thread
      */
     public void multiActiveServing(int maxActiveThreads, boolean hardLimit, boolean hostReentrant) { 
         executor.configure(maxActiveThreads, hardLimit, hostReentrant);

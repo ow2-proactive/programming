@@ -11,10 +11,8 @@ import org.objectweb.proactive.core.body.request.Request;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.Parameter;
 
 /**
- * This class represents a group of methods. A group is compatible with other groups, meaning that
- * methods belonging to these groups can run in parallel.
- * @author Zsolt Istvan
- *
+ * This class represents a group of methods. A group is compatible with other groups, meaning that methods belonging to these groups can run in parallel.
+ * @author  Zsolt Istvan
  */
 public class MethodGroup {
 
@@ -91,7 +89,7 @@ public class MethodGroup {
 	
 	/**
 	 * Set the set of compatible groups
-	 * @param compatibleWith
+	 * @param  compatibleWith
 	 */
 	public void setCompatibleWith(Set<MethodGroup> compatibleWith) {
 		this.compatibleWith = compatibleWith;
@@ -112,8 +110,7 @@ public class MethodGroup {
 	}
 
 	/**
-	 * Returns the set of the groups whose member methods can run in parallel with the
-	 * methods belonging to this group
+	 * Returns the set of the groups whose member methods can run in parallel with the methods belonging to this group
 	 * @return
 	 */
 	public Set<MethodGroup> getCompatibleWith() {
@@ -249,6 +246,8 @@ public class MethodGroup {
                     }
                 }
             }
+            
+            m = externalCompCache.get(comparator);
             
             if (m==null) {
                 return false;

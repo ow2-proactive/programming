@@ -8,14 +8,8 @@ import java.util.Map;
 import org.objectweb.proactive.core.body.request.Request;
 
 /**
- * This class can be used to access information about groups and compatibility relation
- * between methods in a class. It has an underlying {@link AnnotationProcessor} to extract 
- * this information.
- * <br>
- * The methods of this class are defined both for parameters of type String
- * (for method names) and of type {@link Request} 
- * @author Zsolt Istvan
- *
+ * This class can be used to access information about groups and compatibility relation between methods in a class. It has an underlying  {@link AnnotationProcessor}  to extract  this information. <br> The methods of this class are defined both for parameters of type String (for method names) and of type  {@link Request}  
+ * @author  Zsolt Istvan
  */
 public class CompatibilityMap {
 	
@@ -38,7 +32,7 @@ public class CompatibilityMap {
 	}
 	
 	public MethodGroup getGroupOf(Request method){
-		return getGroupOf(method.getMethodName());
+		return methods.get(method.getMethodName());
 	}
 	
 	public Collection<MethodGroup> getGroups() {
@@ -113,8 +107,7 @@ public class CompatibilityMap {
 	}
 	
 	public int getIndexOfLastCompatibleWith(Request request, List<Request> others){
-	    int ret = -1;
-        for (int i=0; i<others.size(); i++) {
+	    for (int i=0; i<others.size(); i++) {
             if (!areCompatible(request, others.get(i))) {
                 return i-1;
             }

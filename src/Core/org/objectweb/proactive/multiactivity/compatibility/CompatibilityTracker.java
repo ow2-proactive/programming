@@ -11,6 +11,9 @@ import java.util.Set;
 import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 
+/**
+ * @author  Izso
+ */
 public class CompatibilityTracker extends StatefulCompatibilityMap {
 
     private HashMap<MethodGroup, Set<Request>> runningGroups = new HashMap<MethodGroup, Set<Request>>();
