@@ -1,5 +1,6 @@
 package functionalTests.multiactivities.patterns;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,19 +15,21 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 @DefineGroups({
-    @Group(name="iteration", selfCompatible=true)
+    @Group(name="iteration", selfCompatible=true, parameter="java.lang.Integer", comparator="equals")
 })
 public class ParallelFor implements RunActive {
+    private static int MAX_THREADS;
+    private static int OUTER_LOOP;
     AtomicInteger cnt;
     ParallelFor me;
     
     public ParallelFor() {
-        cnt = new AtomicInteger();
-        cnt.set(0);
+        /*cnt = new AtomicInteger();
+        cnt.set(0);*/
     }
     
     private void parallelFor(int from, int to){
-        
+        System.out.println("Starting...");
         Date t1 = new Date();
         for (int i=from; i<to; i++) {
             me.forIteration(i);
@@ -37,25 +40,29 @@ public class ParallelFor implements RunActive {
     }
             
     @MemberOf("iteration")
-    public void forIteration(int i) {
-        cnt.incrementAndGet();
+    public void forIteration(Integer i) {
+        //cnt.incrementAndGet();
         //do something
-        Date t1 = new Date();
-        long d;
-        for (int x=0; x<2000; x++) {
-            for (int y=0; y<1000; y++) {
-                d = (long) Math.random()/1000;
-                d = d*10;
-                if (cnt.get()>2) {
-                    System.err.println("XXXXXXXXXXXXXXXXXXXXXX");
-                }
-            }
+        //Date t1 = new Date();
+        try {
+            Thread.sleep(OUTER_LOOP);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+      /*  ArrayList<Integer> list = new ArrayList<Integer>();
         
-        Date t2 = new Date();
+        for (int x=0; x<OUTER_LOOP; x++) {
+            list.add(x);
+            for (int y=0; y<x; y++) {
+                list.set(y, list.get(y)+list.get(x));
+            }
+        }*/
         
-        System.out.println(i+" time="+(t2.getTime()-t1.getTime()));
-        cnt.decrementAndGet();
+        //Date t2 = new Date();
+        
+        //System.out.println(i+" time="+(t2.getTime()-t1.getTime()));
+        //cnt.decrementAndGet();
     }
     
     public boolean forBarrier() {
@@ -69,14 +76,16 @@ public class ParallelFor implements RunActive {
     }
     
     public static void main(String[] args) throws ActiveObjectCreationException, NodeException {
+        MAX_THREADS = Integer.parseInt(args[1]);
+        OUTER_LOOP = Integer.parseInt(args[2]);
         ParallelFor pf = getInstance();
-        pf.parallelFor(0, 50);
+        pf.parallelFor(0, Integer.parseInt(args[0]));
         System.exit(0);
     }
 
     @Override
     public void runActivity(Body body) {
-        new MultiActiveService(body).multiActiveServing();
+        new MultiActiveService(body).multiActiveServing(MAX_THREADS, true, false);
         
     }
 

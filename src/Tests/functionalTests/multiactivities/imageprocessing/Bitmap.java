@@ -3,34 +3,40 @@ package functionalTests.multiactivities.imageprocessing;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 public class Bitmap implements java.io.Serializable{
     
-    private byte[][] red;
-    private byte[][] blue;
-    private byte[][] green;
+    private ArrayList<Integer> red;
+    private ArrayList<Integer> blue;
+    private ArrayList<Integer> green;
     private int width;
     private int height;
     
     public Bitmap(int width, int height) {
-        red = new byte[width][height];
-        blue = new byte[width][height];
-        green = new byte[width][height];
+        red = new ArrayList<Integer>(width*height);
+        blue = new ArrayList<Integer>(width*height);
+        green = new ArrayList<Integer>(width*height);
+        for (int x =0; x<width*height; x++) {
+            red.add(x, x);
+            green.add(x, x);
+            blue.add(x, x);
+        }
         this.width = width;
         this.height = height;
     }
     
-    public byte[] getRGB(int x, int y) {
-        byte[] res = {red[x][y], green[x][y], blue[x][y]};
+    public int[] getRGB(int x, int y) {
+        int[] res = {red.get(y*width+x), green.get(y*width+x), blue.get(y*width+x)};
         return res;
     }
     
-    public void setRGB(int x, int y, byte[] pixel) {
-        red[x][y] = pixel[0];
-        green[x][y] = pixel[1];
-        blue[x][y] = pixel[2];
+    public void setRGB(int x, int y, int[] pixel) {
+        red.set(y*width+x, pixel[0]);
+        green.set(y*width+x, pixel[1]);
+        blue.set(y*width+x, pixel[2]);
     }
 
     public int getWidth() {

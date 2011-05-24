@@ -2,6 +2,7 @@ package functionalTests.multiactivities.imageprocessing;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.RunActive;
+import org.objectweb.proactive.Service;
 import org.objectweb.proactive.annotation.multiactivity.Compatible;
 import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
 import org.objectweb.proactive.annotation.multiactivity.DefineRules;
@@ -46,13 +48,13 @@ public class BitmapProcessor implements RunActive, Serializable {
     
     @MemberOf("add_remove")
     public void add(String name, Bitmap data){
-        System.out.println("added "+name);
+      //  System.out.println("added "+name);
         bitmaps.put(name, data);
     }
     
     @MemberOf("add_remove")
     public Boolean remove(String name) {
-        System.out.println("removed "+name);
+       // System.out.println("removed "+name);
         bitmaps.remove(name);
         return true;
     }
@@ -89,24 +91,27 @@ public class BitmapProcessor implements RunActive, Serializable {
         }
     }
 
+    @Override
+    public void runActivity(Body body) {
+        new MultiActiveService(body).multiActiveServing(1, false, true);
+        //new Service(body).fifoServing();
+    }
+    
     private void internalGrayscale(BitmapRegion region, Bitmap data) {
+        for (int x = 0; x<4000; x++ ) {
         for (int i = region.getX(); i<region.getX()+region.getWidth(); i++) {
             for (int j = region.getY(); j<region.getY()+region.getHeight(); j++) {
-                byte[] pixel = data.getRGB(i, j);
-                byte avg = (byte) (((int) (pixel[0]+pixel[1]+pixel[2]))/3);
+                int[] pixel = data.getRGB(i, j);
+                int avg = (int) (((int) (pixel[0]+pixel[1]+pixel[2]))/3);
                 pixel[0] = avg;
                 pixel[1] = avg;
                 pixel[2] = avg;
                 data.setRGB(i, j, pixel);
             }
         }
+        }
     }
 
-    @Override
-    public void runActivity(Body body) {
-        new MultiActiveService(body).multiActiveServing(2, MultiActiveService.LIMIT_ALL_THREADS, MultiActiveService.REENTRANT_SEPARATE_THREAD);
-    }
-    
     public static BitmapProcessor newBitmapProcessorAO(){
         try {
             return PAActiveObject.newActive(BitmapProcessor.class, null);
@@ -124,21 +129,21 @@ public class BitmapProcessor implements RunActive, Serializable {
         final BitmapProcessor bmp = BitmapProcessor.newBitmapProcessorAO();
         final AtomicInteger cnt = new AtomicInteger();
         cnt.set(0);
-        
+        Date s = new Date();
         Runnable r = new Runnable() {
             
             @Override
             public void run() {
-                int SIZE = 50;
+                int SIZE = 200;
                 Bitmap data = new Bitmap(SIZE, SIZE);
                 String name = "Bitmap"+Math.random();
                 bmp.add(name, data);
 
                 for (int i=0; i<1000; i++) {
-                    int x = (int) (Math.random()*SIZE);
-                    int y = (int) (Math.random()*SIZE);
-                    int w = (int) (Math.random()*(SIZE-x));
-                    int h = (int) (Math.random()*(SIZE-y));
+                    int x = (int) (Math.random()*(SIZE-5));
+                    int y = (int) (Math.random()*(SIZE-5));
+                    int w = 5;
+                    int h = 5;
                     bmp.applyOperation(new BitmapRegion(name, x, y, w, h), BitmapProcessor.OP_GRAYSCALE);
                 }
                 bmp.remove(name);
@@ -146,15 +151,16 @@ public class BitmapProcessor implements RunActive, Serializable {
             }
         };
         
-        for (int i=0; i<10; i++) {
+        System.out.println("started.");
+        for (int i=0; i<1; i++) {
             cnt.getAndIncrement();
             (new Thread(r)).start();
         }
         
         while (cnt.get()>0) {
-            Thread.sleep(500);
+            Thread.sleep(100);
         }
-        
+        System.out.println("time = "+(new Date().getTime()-s.getTime()));
         System.exit(0);
     }
 }
