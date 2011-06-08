@@ -87,6 +87,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.Err
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatRouterMessage;
 import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.RefactorWhenDroppingJava5;
 import org.objectweb.proactive.utils.Sleeper;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
 
@@ -226,6 +227,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
             // will always have maxThreads threads. When using Java 6 the thread will dynamically adapt 
             // its size between 0 and maxThreads threads.
             try {
+                @RefactorWhenDroppingJava5
                 Method m = this.tpe.getClass().getDeclaredMethod("allowCoreThreadTimeOut", boolean.class);
                 m.invoke(this.tpe, true);
             } catch (Throwable t) {
