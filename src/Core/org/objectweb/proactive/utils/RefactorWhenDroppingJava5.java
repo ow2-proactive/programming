@@ -57,7 +57,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target( { ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.LOCAL_VARIABLE, ElementType.METHOD,
-        ElementType.PARAMETER })
+        ElementType.PARAMETER, ElementType.TYPE })
 public @interface RefactorWhenDroppingJava5 {
 
 }
