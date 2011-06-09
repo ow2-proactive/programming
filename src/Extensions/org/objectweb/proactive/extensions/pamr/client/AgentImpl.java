@@ -443,8 +443,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
 
         if (!this.failedTunnels.contains(brokenTunnel)) {
             this.failedTunnels.add(brokenTunnel);
-            // Avoid memory leak. (100 broken tunnels should be enough for anybody)
-            for (int i = this.failedTunnels.size(); i > 100; i++) {
+            // Avoid memory leak. (25 broken tunnels should be enough for anybody)
+            for (int i = this.failedTunnels.size(); i > 25; i--) {
                 this.failedTunnels.remove(0);
             }
 
