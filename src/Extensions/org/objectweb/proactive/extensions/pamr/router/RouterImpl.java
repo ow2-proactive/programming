@@ -160,7 +160,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
         this.heartbeatTimeout = config.getHeartbeatTimeout();
 
         init(config);
-        tpe = Executors.newFixedThreadPool(config.getNbWorkerThreads());
+        ThreadFactory tf = new NamedThreadFactory("Proactive PAMR router worker");
+        tpe = Executors.newFixedThreadPool(config.getNbWorkerThreads(), tf);
 
         long rand = 0;
         while (rand == 0) {
