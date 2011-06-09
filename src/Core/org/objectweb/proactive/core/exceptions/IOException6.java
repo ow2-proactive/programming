@@ -38,7 +38,12 @@ package org.objectweb.proactive.core.exceptions;
 
 import java.io.IOException;
 
+import org.objectweb.proactive.utils.RefactorWhenDroppingJava5;
 
+
+// Java 6 adds IOException(String, Throwable)
+// The only purpose of this class is to allow to build an IOException with a cause
+@RefactorWhenDroppingJava5
 public class IOException6 extends IOException {
 
     public IOException6(Throwable t) {
