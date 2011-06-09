@@ -117,8 +117,8 @@ public class SshTunnel {
         this.remoteHost = remoteHost;
         this.remotePort = remotePort;
         this.localPort = localport;
-        this.lpf = connection.getTrileadConnection().createLocalPortForwarder(localPort, remoteHost,
-                remotePort);
+        InetSocketAddress isa = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(), localport);
+        this.lpf = connection.getTrileadConnection().createLocalPortForwarder(isa, remoteHost, remotePort);
 
         if (logger.isDebugEnabled()) {
             logger.debug("Opened SSH tunnel localport=" + localPort + " distantHost=" + remoteHost +
@@ -173,7 +173,8 @@ public class SshTunnel {
      * @throws IOException if the socket cannot be opened (should never happen)
      */
     public Socket getSocket() throws IOException {
-        InetSocketAddress address = new InetSocketAddress(this.getPort());
+        InetSocketAddress address = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(), this
+                .getPort());
         Socket socket = new Socket();
         socket.connect(address);
         return socket;
