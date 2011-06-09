@@ -40,6 +40,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -79,8 +80,10 @@ final public class ThreadPools {
      *    the maximum number of thread to create
      * @return
      *    the newly created thread pool
+     * @throws IllegalArgumentException 
+     *    if <tt>nThreads &lt;= 0</tt>
      */
-    public static ExecutorService newBoundedThreadPool(int maxThreads) {
+    public static ThreadPoolExecutor newBoundedThreadPool(int maxThreads) {
         return newBoundedThreadPool(maxThreads, Executors.defaultThreadFactory());
     }
 
@@ -109,8 +112,12 @@ final public class ThreadPools {
      *    the factory to use when creating new threads
      * @return
      *    the newly created thread pool
+     * @throws NullPointerException 
+     *    if threadFactory is null
+     * @throws IllegalArgumentException 
+     *    if <tt>nThreads &lt;= 0</tt>
      */
-    public static ExecutorService newBoundedThreadPool(int maxThreads, ThreadFactory threadFactory) {
+    public static ThreadPoolExecutor newBoundedThreadPool(int maxThreads, ThreadFactory threadFactory) {
         return newBoundedThreadPool(maxThreads, 60L, TimeUnit.SECONDS, threadFactory);
     }
 
@@ -144,9 +151,18 @@ final public class ThreadPools {
      *    the time unit for the {@code keepAliveTime} argument
      * @return
      *    the newly created thread pool
+     * @throws NullPointerException 
+     *    if threadFactory or unit is null
+     * @throws IllegalArgumentException 
+     *    if <tt>nThreads &lt;= 0</tt> or <tt>keepAlivetime &lt; 0</tt>
      */
-    public static ExecutorService newBoundedThreadPool(int maxThreads, long keepAliveTime, TimeUnit unit,
+    public static ThreadPoolExecutor newBoundedThreadPool(int maxThreads, long keepAliveTime, TimeUnit unit,
             ThreadFactory threadFactory) {
+        ArgCheck.requireStrictlyPostive(maxThreads);
+        ArgCheck.requirePostive(keepAliveTime);
+        ArgCheck.requireNonNull(unit);
+        ArgCheck.requireNonNull(threadFactory);
+
         final ThreadPoolExecutor tpe;
         tpe = new ThreadPoolExecutor(maxThreads, maxThreads, keepAliveTime, unit,
             new LinkedBlockingQueue<Runnable>());
@@ -165,7 +181,69 @@ final public class ThreadPools {
         return tpe;
     }
 
-    private ThreadPools() {
+    /**
+     * Creates a thread pool that reuses a fixed number of threads
+     * operating off a shared unbounded queue, using the provided
+     * ThreadFactory to create new threads when needed.  At any point,
+     * at most <tt>nThreads</tt> threads will be active processing
+     * tasks.  If additional tasks are submitted when all threads are
+     * active, they will wait in the queue until a thread is
+     * available.  If any thread terminates due to a failure during
+     * execution prior to shutdown, a new one will take its place if
+     * needed to execute subsequent tasks.  The threads in the pool will
+     * exist until it is explicitly {@link ExecutorService#shutdown
+     * shutdown}.
+     * 
+     * <p>This method is the same than {@link Executors#newFixedThreadPool(int, ThreadFactory)}
+     * but returns a {@link ThreadPoolExecutor} instead of an {@link ExecutorService}.</p>
+     *
+     * @param nThreads 
+     *    the number of threads in the pool
+     * @param threadFactory 
+     *    the factory to use when creating new threads
+     * @return 
+     *    the newly created thread pool
+     * @throws NullPointerException 
+     *    if threadFactory is null
+     * @throws IllegalArgumentException 
+     *    if <tt>nThreads &lt;= 0</tt>
+     */
+    public static ThreadPoolExecutor newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
+        ArgCheck.requireNonNull(threadFactory);
+        ArgCheck.requireStrictlyPostive(nThreads);
 
+        return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<Runnable>(), threadFactory);
+    }
+
+    /**
+     * Creates a thread pool that creates new threads as needed, but
+     * will reuse previously constructed threads when they are
+     * available, and uses the provided
+     * ThreadFactory to create new threads when needed. Unused threads terminate
+     * after the specified amount of time
+     * 
+     * @param keepAliveTime 
+     *    this is the maximum time that idle threads
+     *    will wait for new tasks before terminating.
+     * @param unit 
+     *    the time unit for the {@code keepAliveTime} argument
+     * @param threadFactory 
+     *    the factory to use when creating new threads
+     * @return 
+     *    the newly created thread pool
+     * @throws NullPointerException 
+     *    if threadFactory or unit is null
+     * @throws IllegalArgumentException
+     *    if keepAliveTime < 0
+     */
+    public static ThreadPoolExecutor newCachedThreadPool(long keepAliveTime, TimeUnit unit,
+            ThreadFactory threadFactory) {
+        ArgCheck.requireNonNull(unit);
+        ArgCheck.requireNonNull(threadFactory);
+        ArgCheck.requirePostive(keepAliveTime);
+
+        return new ThreadPoolExecutor(0, Integer.MAX_VALUE, keepAliveTime, unit,
+            new SynchronousQueue<Runnable>(), threadFactory);
     }
 }
