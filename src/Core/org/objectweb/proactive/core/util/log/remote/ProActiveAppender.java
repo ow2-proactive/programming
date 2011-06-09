@@ -93,7 +93,7 @@ public final class ProActiveAppender extends AppenderSkeleton {
         startFlushingThread();
 
         this.timer = new Timer();
-        this.timer.schedule(new ConsolePinter(), GRACE_TIME);
+        this.timer.schedule(new ConsolePrinter(), GRACE_TIME);
     }
 
     public ProActiveAppender(LoggingEventSenderSPI spi, ProActiveLogCollector collector) {
@@ -219,7 +219,7 @@ public final class ProActiveAppender extends AppenderSkeleton {
         }
     }
 
-    class ConsolePinter extends SafeTimerTask {
+    class ConsolePrinter extends SafeTimerTask {
         @Override
         public void safeRun() {
             if (collectorKnow.get()) {
@@ -240,7 +240,7 @@ public final class ProActiveAppender extends AppenderSkeleton {
                 }
             }
 
-            timer.schedule(new ConsolePinter(), GRACE_TIME);
+            timer.schedule(new ConsolePrinter(), GRACE_TIME);
         }
     }
 
