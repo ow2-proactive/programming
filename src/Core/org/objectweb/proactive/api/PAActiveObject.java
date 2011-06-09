@@ -43,6 +43,7 @@ import java.net.URI;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -89,6 +90,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 import org.objectweb.proactive.core.util.profiling.Profiling;
 import org.objectweb.proactive.ext.hpc.exchange.ExchangeManager;
 import org.objectweb.proactive.ext.hpc.exchange.ExchangeableDouble;
+import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
 /**
@@ -609,7 +611,8 @@ public class PAActiveObject {
                 + " be equal to the total of nodes");
         }
 
-        ExecutorService threadPool = Executors.newCachedThreadPool();
+        ThreadFactory tf = new NamedThreadFactory("ProActive newActive in //");
+        ExecutorService threadPool = Executors.newCachedThreadPool(tf);
 
         Vector<Object> result = new Vector<Object>();
 

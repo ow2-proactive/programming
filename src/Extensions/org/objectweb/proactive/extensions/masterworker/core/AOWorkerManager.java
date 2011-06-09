@@ -42,11 +42,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -74,6 +75,7 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.Worke
 import org.objectweb.proactive.extensions.masterworker.interfaces.internal.WorkerMaster;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
 /**
@@ -343,7 +345,8 @@ public class AOWorkerManager implements WorkerManager, InitActive, Serializable 
             logger.debug("Resource Manager Initialized");
         }
 
-        threadPool = Executors.newCachedThreadPool();
+        ThreadFactory tf = new NamedThreadFactory("ProActive M/W worker creator");
+        threadPool = Executors.newCachedThreadPool(tf);
     }
 
     /**
