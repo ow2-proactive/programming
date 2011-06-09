@@ -64,9 +64,10 @@ import org.objectweb.proactive.core.body.UniversalBodyRemoteObjectAdapter;
 import org.objectweb.proactive.core.body.exceptions.BodyTerminatedException;
 import org.objectweb.proactive.core.body.ft.internalmsg.Heartbeat;
 import org.objectweb.proactive.core.body.proxy.BodyProxy;
-import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
+import org.objectweb.proactive.core.exceptions.IOException6;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.MOPException;
 import org.objectweb.proactive.core.mop.Proxy;
@@ -77,8 +78,8 @@ import org.objectweb.proactive.core.node.NodeFactory;
 import org.objectweb.proactive.core.remoteobject.RemoteObject;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectAdapter;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
-import org.objectweb.proactive.core.remoteobject.SynchronousProxy;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
+import org.objectweb.proactive.core.remoteobject.SynchronousProxy;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.security.ProActiveSecurityManager;
 import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
@@ -1521,7 +1522,7 @@ public class PAActiveObject {
                     " is not an Active Object. class=" + o.getClass().getName());
             }
         } catch (ProActiveException e) {
-            throw new IOException(e.getMessage());
+            throw new IOException6("Lookup of " + classname + " at " + url + " failed", e);
         } catch (MOPException e) {
             Throwable t = e;
 
