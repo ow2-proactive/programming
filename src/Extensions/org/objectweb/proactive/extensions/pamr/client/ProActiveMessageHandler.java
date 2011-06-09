@@ -39,6 +39,7 @@ package org.objectweb.proactive.extensions.pamr.client;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.body.future.MethodCallResult;
@@ -51,6 +52,7 @@ import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.extensions.pamr.exceptions.PAMRException;
 import org.objectweb.proactive.extensions.pamr.protocol.message.DataRequestMessage;
 import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRMessage;
+import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
 /** Executes a ProActive {@link Request} received and send the response.
@@ -79,7 +81,8 @@ public class ProActiveMessageHandler implements MessageHandler {
          * Reentrant calls is the most obvious case of deadlock. But the same 
          * issue can occur with remote calls. 
          */
-        tpe = Executors.newCachedThreadPool();
+        ThreadFactory tf = new NamedThreadFactory("ProActive PAMR message handler");
+        tpe = Executors.newCachedThreadPool(tf);
 
     }
 
