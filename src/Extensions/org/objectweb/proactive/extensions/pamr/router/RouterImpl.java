@@ -88,6 +88,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatMessage
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatRouterMessage;
 import org.objectweb.proactive.utils.NamedThreadFactory;
 import org.objectweb.proactive.utils.RefactorWhenDroppingJava5;
+import org.objectweb.proactive.utils.SafeTimerTask;
 import org.objectweb.proactive.utils.Sleeper;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
 
@@ -204,7 +205,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
      * is printed since it could lead to big troubles.
      */
 
-    private class HeartbeatTimerTask extends TimerTask {
+    private class HeartbeatTimerTask extends SafeTimerTask {
         /** Maximum execution time (ms) */
         final private long maxTime;
         /** Unique id for each heartbeat */
@@ -237,7 +238,7 @@ public class RouterImpl extends RouterInternal implements Runnable {
         }
 
         @Override
-        public void run() {
+        public void safeRun() {
             final long begin = System.currentTimeMillis();
 
             // In steading state tpe should be empty. Busy workers means blocked SendTask
