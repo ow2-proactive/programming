@@ -325,7 +325,8 @@ public class SshTunnelPool {
         public Socket getSocket() throws IOException {
             this.users.incrementAndGet();
 
-            InetSocketAddress address = new InetSocketAddress(this.getPort());
+            InetSocketAddress address = new InetSocketAddress(ProActiveInet.getInstance().getInetAddress(),
+                this.getPort());
             Socket socket = new Socket() {
                 public synchronized void close() throws IOException {
                     synchronized (SshTunnelPool.this.cache) {
