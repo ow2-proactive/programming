@@ -43,7 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
@@ -58,6 +57,7 @@ import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.SerializableMethod;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.SafeTimerTask;
 
 
 /**
@@ -281,7 +281,7 @@ public class GatherRequestsQueue implements Serializable {
         return connectedClientItfs;
     }
 
-    private class TimeoutTask extends TimerTask {
+    private class TimeoutTask extends SafeTimerTask {
         GatherRequestsQueue requestsQueue;
 
         public TimeoutTask(GatherRequestsQueue requestsQueue) {
@@ -289,7 +289,7 @@ public class GatherRequestsQueue implements Serializable {
         }
 
         @Override
-        public void run() {
+        public void safeRun() {
             requestsQueue.timedout = true;
             if (!resultsReturned) {
                 if (!thrownTimeoutException) {

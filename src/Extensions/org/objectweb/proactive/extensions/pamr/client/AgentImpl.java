@@ -48,7 +48,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicLong;
@@ -78,6 +77,7 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.RegistrationRequ
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySPI;
 import org.objectweb.proactive.extensions.pamr.router.Router;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
+import org.objectweb.proactive.utils.SafeTimerTask;
 import org.objectweb.proactive.utils.Sleeper;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
 
@@ -758,7 +758,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
         }
     }
 
-    class HeartbeatTask extends TimerTask {
+    class HeartbeatTask extends SafeTimerTask {
         long heartbeatId;
         volatile boolean stop;
 
@@ -767,7 +767,7 @@ public class AgentImpl implements Agent, AgentImplMBean {
             this.heartbeatId = 0;
         }
 
-        public void run() {
+        public void safeRun() {
             try {
                 Tunnel t = getTunnel();
                 if (t != null) {

@@ -41,7 +41,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -53,6 +52,8 @@ import org.objectweb.proactive.api.PARemoteObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.config.PAProperties;
+import org.objectweb.proactive.utils.SafeTimerTask;
 
 
 /**
@@ -218,9 +219,9 @@ public final class ProActiveAppender extends AppenderSkeleton {
         }
     }
 
-    class ConsolePinter extends TimerTask {
+    class ConsolePinter extends SafeTimerTask {
         @Override
-        public void run() {
+        public void safeRun() {
             if (collectorKnow.get()) {
                 // The collector has been retrieved
                 // The buffered log event can safely be discarded
