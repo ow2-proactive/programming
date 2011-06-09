@@ -237,6 +237,14 @@ public class RouterImpl extends RouterInternal implements Runnable {
 
         @Override
         public void run() {
+            try {
+                this.safeRun();
+            } catch (Throwable t) {
+                admin_logger.info("Execption caught in HeartbeatTimeTask: ", t);
+            }
+        } 
+
+        private void safeRun() {
             final long begin = System.currentTimeMillis();
 
             // In steading state tpe should be empty. Busy workers means blocked SendTask
