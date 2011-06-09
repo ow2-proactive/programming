@@ -36,12 +36,13 @@
  */
 package org.objectweb.proactive.core.body;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.objectweb.proactive.core.body.proxy.RequestToSend;
+import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.ThreadPools;
 
 
 /**
@@ -51,11 +52,7 @@ import org.objectweb.proactive.core.body.proxy.RequestToSend;
 public class SendingThreadPool implements Runnable {
 
     private static final int MAX_THREAD_POOL_CORE_SIZE = 10;
-    private static final int THREAD_POOL_CORE_SIZE = 10;
     private static final int THREAD_KEEP_ALIVE_TIME = 10; // In Seconds
-
-    /* Needed by the ThreadPoolExecutor */
-    private BlockingQueue<Runnable> threadQueue;
 
     /* The ThreadPoolExecutor which handles the RTS */
     private ThreadPoolExecutor threadPool;
@@ -76,9 +73,9 @@ public class SendingThreadPool implements Runnable {
      * @param sendingQueue
      */
     public SendingThreadPool(SendingQueue sendingQueue) {
-        this.threadQueue = new SynchronousQueue<Runnable>();
-        this.threadPool = new ThreadPoolExecutor(THREAD_POOL_CORE_SIZE, MAX_THREAD_POOL_CORE_SIZE,
-            THREAD_KEEP_ALIVE_TIME, TimeUnit.SECONDS, threadQueue);
+        ThreadFactory tf = new NamedThreadFactory("ProActive sending");
+        this.threadPool = ThreadPools.newBoundedThreadPool(MAX_THREAD_POOL_CORE_SIZE, THREAD_KEEP_ALIVE_TIME,
+                TimeUnit.SECONDS, tf);
         this.sendingQueue = sendingQueue;
         this.continueRunning = true;
     }

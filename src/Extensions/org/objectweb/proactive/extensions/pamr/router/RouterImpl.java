@@ -40,7 +40,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -60,16 +59,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -87,10 +83,10 @@ import org.objectweb.proactive.extensions.pamr.protocol.message.ErrorMessage.Err
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatMessage;
 import org.objectweb.proactive.extensions.pamr.protocol.message.HeartbeatRouterMessage;
 import org.objectweb.proactive.utils.NamedThreadFactory;
-import org.objectweb.proactive.utils.RefactorWhenDroppingJava5;
 import org.objectweb.proactive.utils.SafeTimerTask;
 import org.objectweb.proactive.utils.Sleeper;
 import org.objectweb.proactive.utils.SweetCountDownLatch;
+import org.objectweb.proactive.utils.ThreadPools;
 
 
 /**
@@ -218,23 +214,8 @@ public class RouterImpl extends RouterInternal implements Runnable {
             this.heartbeatId = 0;
 
             int maxThreads = 32;
-            long keepalive = maxTime * 5;
             ThreadFactory tf = new NamedThreadFactory("Hearbeat sender", false, Thread.MAX_PRIORITY);
-
-            this.tpe = new ThreadPoolExecutor(maxThreads, maxThreads, keepalive, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(), tf);
-
-            // Java 5 does not allow dynamic and bounded thread pools. When using Java 5 the thread pool
-            // will always have maxThreads threads. When using Java 6 the thread will dynamically adapt 
-            // its size between 0 and maxThreads threads.
-            try {
-                @RefactorWhenDroppingJava5
-                Method m = this.tpe.getClass().getDeclaredMethod("allowCoreThreadTimeOut", boolean.class);
-                m.invoke(this.tpe, true);
-            } catch (Throwable t) {
-                admin_logger
-                        .debug("allowCoreThreadTimeOut not available. Hearbeat timer will use a fixed size threadpool");
-            }
+            this.tpe = ThreadPools.newBoundedThreadPool(maxThreads, tf);
         }
 
         @Override

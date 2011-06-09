@@ -40,14 +40,15 @@ import java.util.Queue;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.ThreadPools;
 
 
 /**
@@ -88,9 +89,8 @@ public class Dispatcher {
 
         body = PAActiveObject.getBodyOnThis();
         // thread pool is configurable
-        threadPool = new ThreadPoolExecutor(1, 1, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
-            GroupThreadFactory.instance());
-
+        ThreadFactory tf = new NamedThreadFactory("PAGroup", true);
+        threadPool = ThreadPools.newFixedThreadPool(1, tf);
     }
 
     protected int getOptimalPoolSize(int nbMembers) {
@@ -183,45 +183,6 @@ public class Dispatcher {
             doneSignal.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-
-    }
-
-    /**
-     * Currently just for naming thread created by group communications. <br>
-     * It may be extended by customizing the group threads in order to add other
-     * features, such as logging, checkpointing, communication error management
-     * etc...
-     * 
-     * @author The ProActive Team
-     * 
-     */
-    protected static class GroupThreadFactory implements java.util.concurrent.ThreadFactory {
-
-        private static GroupThreadFactory instance = null;
-
-        private static final String genericPoolName = "PAGroup pool ";
-        private static int poolIndex = 0;
-        private final String poolName;
-
-        private int threadIndex = 0;
-
-        private GroupThreadFactory() {
-            this.poolName = genericPoolName + poolIndex++;
-        }
-
-        public static GroupThreadFactory instance() {
-            if (instance == null) {
-                return instance = new GroupThreadFactory();
-            } else {
-                return instance;
-            }
-        }
-
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(r, poolName + " - thread " + threadIndex++);
-            t.setDaemon(true);
-            return t;
         }
 
     }

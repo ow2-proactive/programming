@@ -36,12 +36,13 @@
  */
 package org.objectweb.proactive.core.httpserver;
 
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.mortbay.thread.ThreadPool;
 import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.ThreadPools;
 
 
 /** An unbounded ThreadPool using Java 5 ThreadPoolExecutor
@@ -64,8 +65,8 @@ class UnboundedThreadPool implements ThreadPool {
     private final ThreadPoolExecutor exec;
 
     public UnboundedThreadPool() {
-        this.exec = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 1L, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>(), new NamedThreadFactory("ProActive Http Server Thread", false));
+        ThreadFactory tf = new NamedThreadFactory("ProActive Http Server Thread", false);
+        exec = ThreadPools.newCachedThreadPool(1L, TimeUnit.SECONDS, tf);
     }
 
     public boolean dispatch(Runnable job) {

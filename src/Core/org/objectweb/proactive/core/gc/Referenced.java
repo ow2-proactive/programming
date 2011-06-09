@@ -38,36 +38,26 @@ package org.objectweb.proactive.core.gc;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Level;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.UniversalBody;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
+import org.objectweb.proactive.utils.NamedThreadFactory;
+import org.objectweb.proactive.utils.ThreadPools;
 
-
-/**
- * Just to give a name to our threads
- */
-class GCThreadPool implements ThreadFactory {
-    static int id;
-
-    public Thread newThread(Runnable r) {
-        return new Thread(r, "ProActive GC Broadcasting Thread " + (id++));
-    }
-}
 
 public class Referenced implements Comparable<Referenced> {
 
     /**
      * The threaded broadcaster
      */
-    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(2, Integer.MAX_VALUE,
-        GarbageCollector.TTA * 2, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(),
-        new GCThreadPool());
+    // Initial code expected to create a dynamic thread pool but a wrong usage of the ThreadPoolExecutor 
+    // API resulted of only 2 threads being created.
+    // Since this code is working (or broken) since years we stick to this behavior even if it was a bug
+    private static final ThreadPoolExecutor executor = ThreadPools.newFixedThreadPool(2,
+            new NamedThreadFactory("ProActive GC Broadcasting Thread "));
 
     /**
      * The body we use to communicate with the proxy
