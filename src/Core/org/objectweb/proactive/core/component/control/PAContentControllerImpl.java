@@ -42,6 +42,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.util.GCM;
@@ -64,6 +66,7 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
+import org.objectweb.proactive.utils.NamedThreadFactory;
 
 
 /**
@@ -296,7 +299,8 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
 
     public void addFcSubComponent(List<Component> subComponents)
             throws ContentControllerExceptionListException {
-        ExecutorService threadPool = Executors.newCachedThreadPool();
+        ThreadFactory tf = new NamedThreadFactory("ProActive/GCM add subcomponents");
+        ExecutorService threadPool = Executors.newCachedThreadPool(tf);
         ContentControllerExceptionListException e = new ContentControllerExceptionListException();
         for (Iterator<Component> iter = subComponents.iterator(); iter.hasNext();) {
             Component element = iter.next();
@@ -304,6 +308,14 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
             threadPool.execute(task);
         }
         threadPool.shutdown();
+        try {
+            boolean terminated = threadPool.awaitTermination(120, TimeUnit.SECONDS);
+            if (!terminated) {
+                logger.error("Threadpool cannot be properly terminated: termination timeout reached");
+            }
+        } catch (InterruptedException ie) {
+            logger.error("Threadpool cannot be properly terminated: " + ie.getMessage(), ie);
+        }
         if (!e.isEmpty()) {
             throw e;
         }
@@ -311,7 +323,8 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
 
     public void removeFcSubComponent(List<Component> subComponents)
             throws ContentControllerExceptionListException {
-        ExecutorService threadPool = Executors.newCachedThreadPool();
+        ThreadFactory tf = new NamedThreadFactory("ProActive/GCM remove subcomponents");
+        ExecutorService threadPool = Executors.newCachedThreadPool(tf);
         ContentControllerExceptionListException e = new ContentControllerExceptionListException();
         for (Iterator<Component> iter = subComponents.iterator(); iter.hasNext();) {
             Component element = iter.next();
@@ -319,6 +332,14 @@ public class PAContentControllerImpl extends AbstractPAController implements PAC
             threadPool.execute(task);
         }
         threadPool.shutdown();
+        try {
+            boolean terminated = threadPool.awaitTermination(120, TimeUnit.SECONDS);
+            if (!terminated) {
+                logger.error("Threadpool cannot be properly terminated: termination timeout reached");
+            }
+        } catch (InterruptedException ie) {
+            logger.error("Threadpool cannot be properly terminated: " + ie.getMessage(), ie);
+        }
         if (!e.isEmpty()) {
             throw e;
         }
