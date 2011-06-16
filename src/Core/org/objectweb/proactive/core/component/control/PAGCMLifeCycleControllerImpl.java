@@ -198,23 +198,18 @@ public class PAGCMLifeCycleControllerImpl extends AbstractPAController implement
                                         if (((GCMInterfaceType) ((Interface) subComponents[j]
                                                 .getFcInterface(subComponentItfs[k])).getFcItfType())
                                                 .isGCMMulticastItf()) {
-                                            isBound = true;
-                                            break;
-                                            //                                            ProxyForComponentInterfaceGroup<?> delegatee = Fractive
-                                            //                                                    .getMulticastController(subComponents[j])
-                                            //                                                    .lookupFcMulticast(subComponentItfs[k])
-                                            //                                                    .getDelegatee();
-                                            //                                            if ((delegatee != null) && !delegatee.isEmpty()) {
-                                            //                                                PAInterface[] delegatees = delegatee
-                                            //                                                        .toArray(new PAInterface[] {});
-                                            //                                                for (int l = 0; l < delegatees.length; l++) {
-                                            //                                                    if (((PAComponent) delegatees[l].getFcItfOwner())
-                                            //                                                            .getID().equals(owner.getID())) {
-                                            //                                                        isBound = true;
-                                            //                                                        break;
-                                            //                                                    }
-                                            //                                                }
-                                            //                                            }
+                                            Object[] serverItfs = GCM
+                                                    .getMulticastController(subComponents[j])
+                                                    .lookupGCMMulticast(subComponentItfs[k]);
+                                            if ((serverItfs != null) && (serverItfs.length != 0)) {
+                                                for (int l = 0; l < serverItfs.length; l++) {
+                                                    if (((PAComponent) ((Interface) serverItfs[l])
+                                                            .getFcItfOwner()).getID().equals(owner.getID())) {
+                                                        isBound = true;
+                                                        break;
+                                                    }
+                                                }
+                                            }
                                         } else {
                                             Object subComponentItfImpl = null;
                                             try {

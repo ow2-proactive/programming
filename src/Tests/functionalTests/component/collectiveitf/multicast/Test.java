@@ -107,7 +107,6 @@ public class Test extends ComponentTest {
     }
 
     @org.junit.Test
-    @Ignore
     public void testStartCompositeWithInternalClientItfBoundOnMulticast() throws Exception {
         Component boot = Utils.getBootstrapComponent();
         GCMTypeFactory ptf = GCM.getGCMTypeFactory(boot);
