@@ -109,7 +109,7 @@ class PNPServerHandler extends SimpleChannelHandler {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-        logger.warn("Exception caught in PNP server handler on: " + e.getChannel() + ". Closing connection",
+        logger.debug("Exception caught in PNP server handler on: " + e.getChannel() + ". Closing connection",
                 e.getCause());
         e.getChannel().close();
     }
@@ -212,9 +212,9 @@ class PNPServerHandler extends SimpleChannelHandler {
             ChannelFuture cf = channel.write(hearthbeat); // FIXME check return value
             cf.addListener(new ChannelFutureListener() {
                 public void operationComplete(ChannelFuture future) throws Exception {
-                    if (!future.isSuccess()) {
-                        logger.info("Failed to send heartbeat " + heartbeatId + " on " + channel, future
-                                .getCause());
+                    if (!future.isSuccess() && !canceled) {
+                        logger.info("Failed to send heartbeat " + heartbeatId + " on " + channel,
+                                future.getCause());
                     }
                 }
             });
@@ -269,7 +269,7 @@ class PNPServerHandler extends SimpleChannelHandler {
                     cf.addListener(new ChannelFutureListener() {
                         public void operationComplete(ChannelFuture future) throws Exception {
                             if (!future.isSuccess()) {
-                                logger.info("Failed to send response to call  #" + req.callId + " on " +
+                                logger.warn("Failed to send response to call  #" + req.callId + " on " +
                                     channel, future.getCause());
                             }
                         }
