@@ -351,13 +351,8 @@ public class AgentImpl implements Agent, AgentImplMBean {
                             throw new RouterHandshakeException(
                                 "Cannot register to the router, invalid magic cookie");
                         default:
-                            break;
-                    }
-                    if (em.getErrorType() == ErrorType.ERR_INVALID_ROUTER_ID) {
-                        throw new RouterHandshakeException("The router has been restarted. Disconnecting...");
-                    } else if (em.getErrorType() == ErrorType.ERR_MALFORMED_MESSAGE) {
-                        throw new RouterHandshakeException(
-                            "The router received a corrupted version of the original message.");
+                            throw new RouterHandshakeException("Received unexpected error message: " +
+                                em.getErrorType());
                     }
                 } else {
                     throw new RouterHandshakeException("Invalid router response: expected a " +
