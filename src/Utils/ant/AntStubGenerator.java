@@ -93,9 +93,9 @@ public class AntStubGenerator extends Java {
 
         // Generate the arguments
         StringBuilder sb = new StringBuilder();
-        sb.append(this.srcDir);
+        sb.append(protectWithQuote(this.srcDir));
         sb.append(" ");
-        sb.append(this.dstDir);
+        sb.append(protectWithQuote(this.dstDir));
         sb.append(" ");
         for (String className : classNames) {
             sb.append(className);
@@ -103,6 +103,10 @@ public class AntStubGenerator extends Java {
         }
         this.setArgs(sb.toString());
         super.execute();
+    }
+
+    static private String protectWithQuote(String str) {
+        return "\"" + str + "\"";
     }
 
     /**
