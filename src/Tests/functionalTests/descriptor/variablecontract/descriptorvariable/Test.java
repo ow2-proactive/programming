@@ -38,7 +38,7 @@ package functionalTests.descriptor.variablecontract.descriptorvariable;
 
 import static junit.framework.Assert.assertTrue;
 
-import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 
 import org.junit.Assert;
@@ -56,8 +56,8 @@ import functionalTests.FunctionalTest;
  * Tests conditions for variables of type DescriptorVariable
  */
 public class Test extends FunctionalTest {
-    private static String XML_LOCATION = Test.class.getResource(
-            "/functionalTests/descriptor/variablecontract/descriptorvariable/Test.xml").getPath();
+    private static URL XML_LOCATION = Test.class
+            .getResource("/functionalTests/descriptor/variablecontract/descriptorvariable/Test.xml");
     GCMApplication gcma;
     boolean bogusFromDescriptor;
     boolean bogusFromProgram;
@@ -105,7 +105,7 @@ public class Test extends FunctionalTest {
         }
 
         //test_var3=value3
-        gcma = PAGCMDeployment.loadApplicationDescriptor(new File(XML_LOCATION), variableContract);
+        gcma = PAGCMDeployment.loadApplicationDescriptor(XML_LOCATION, variableContract);
         variableContract = (VariableContractImpl) gcma.getVariableContract();
 
         //System.out.println(variableContract);

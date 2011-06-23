@@ -38,7 +38,7 @@ package functionalTests.descriptor.variablecontract.externalfiles;
 
 import static junit.framework.Assert.assertTrue;
 
-import java.io.File;
+import java.net.URL;
 
 import org.junit.Before;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
@@ -53,8 +53,8 @@ import functionalTests.FunctionalTest;
  * Tests conditions for external files
  */
 public class Test extends FunctionalTest {
-    private static String XML_LOCATION = Test.class.getResource(
-            "/functionalTests/descriptor/variablecontract/externalfiles/Test.xml").getPath();
+    private static URL XML_LOCATION = Test.class
+            .getResource("/functionalTests/descriptor/variablecontract/externalfiles/Test.xml");
     GCMApplication gcma;
     boolean bogusFromDescriptor;
     boolean bogusFromProgram;
@@ -95,7 +95,7 @@ public class Test extends FunctionalTest {
          * 
          * //test_var3=value3
          */
-        gcma = PAGCMDeployment.loadApplicationDescriptor(new File(XML_LOCATION), variableContract);
+        gcma = PAGCMDeployment.loadApplicationDescriptor(XML_LOCATION, variableContract);
         variableContract = (VariableContractImpl) gcma.getVariableContract();
 
         //System.out.println(variableContract);
