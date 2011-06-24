@@ -46,6 +46,7 @@ import java.io.FileWriter;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -58,6 +59,7 @@ import functionalTests.FunctionalTest;
 /**
  * Jvm extension in deployment descriptor
  */
+@Ignore
 public class Test extends FunctionalTest {
     ProActiveDescriptor descriptor;
     A a1;
