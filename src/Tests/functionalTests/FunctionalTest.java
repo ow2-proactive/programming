@@ -104,7 +104,7 @@ public class FunctionalTest {
 
         // Jetty: avoid to use SecureRandom for session tracking
         jvmParameters.append(CentralPAPropertyRepository.PA_HTTP_JETTY_XML.getCmdLine());
-        jvmParameters.append(CentralPAPropertyRepository.PA_HTTP_JETTY_XML.getValue());
+        jvmParameters.append("\"" + CentralPAPropertyRepository.PA_HTTP_JETTY_XML.getValue() + "\"");
 
         jvmParameters.append(" -Dproactive.test=true ");
 
