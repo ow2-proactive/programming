@@ -36,6 +36,9 @@
  */
 package functionalTests.descriptor.defaultnodes;
 
+import java.io.File;
+import java.net.URL;
+
 import org.junit.Test;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -52,19 +55,19 @@ import functionalTests.FunctionalTest;
  *
  */
 public class TestNodes extends FunctionalTest {
-    private static String XML_LOCATION;
+    private static URL XML_LOCATION;
 
     static {
         String value = System.getProperty("functionalTests.descriptor.defaultnodes.file");
         if (value != null) {
-            XML_LOCATION = TestNodes.class.getResource(value).getPath();
+            XML_LOCATION = TestNodes.class.getResource(value);
         } else {
             if ("ibis".equals(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getValue())) {
-                XML_LOCATION = TestNodes.class.getResource(
-                        "/functionalTests/descriptor/defaultnodes/NodesIbis.xml").getPath();
+                XML_LOCATION = TestNodes.class
+                        .getResource("/functionalTests/descriptor/defaultnodes/NodesIbis.xml");
             } else {
-                XML_LOCATION = TestNodes.class.getResource(
-                        "/functionalTests/descriptor/defaultnodes/Nodes.xml").getPath();
+                XML_LOCATION = TestNodes.class
+                        .getResource("/functionalTests/descriptor/defaultnodes/Nodes.xml");
             }
         }
     }
@@ -79,7 +82,8 @@ public class TestNodes extends FunctionalTest {
 
     @Test
     public void action() throws Exception {
-        proActiveDescriptor = PADeployment.getProactiveDescriptor("file:" + XML_LOCATION, super.vContract);
+        proActiveDescriptor = PADeployment.getProactiveDescriptor(new File(XML_LOCATION.toURI())
+                .getAbsolutePath(), super.vContract);
         proActiveDescriptor.activateMappings();
         TestNodes.virtualNodes = proActiveDescriptor.getVirtualNodes();
         for (int i = 0; i < virtualNodes.length; i++) {
