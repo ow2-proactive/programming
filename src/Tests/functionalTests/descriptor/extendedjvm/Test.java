@@ -43,6 +43,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.net.URI;
+import java.net.URL;
 
 import org.junit.After;
 import org.junit.Before;
@@ -93,8 +95,8 @@ public class Test extends FunctionalTest {
         } else {
             fileName = "JVMExtension";
         }
-        String oldFilePath = getClass().getResource(
-                "/functionalTests/descriptor/extendedjvm/" + fileName + ".xml").getPath();
+        URL url = getClass().getResource("/functionalTests/descriptor/extendedjvm/" + fileName + ".xml");
+        String oldFilePath = new File(url.toURI()).getAbsolutePath();
         String newFilePath = oldFilePath.replaceFirst(fileName + ".xml", fileName + "-tmp.xml");
 
         // if tests are run from the /compile directory : getParent for root directory 
