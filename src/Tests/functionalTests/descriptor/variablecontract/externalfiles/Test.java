@@ -38,6 +38,7 @@ package functionalTests.descriptor.variablecontract.externalfiles;
 
 import static junit.framework.Assert.assertTrue;
 
+import java.io.File;
 import java.net.URL;
 
 import org.junit.Before;
@@ -68,9 +69,9 @@ public class Test extends FunctionalTest {
     @org.junit.Test
     public void action() throws Exception {
         VariableContractImpl variableContract = new VariableContractImpl();
-        variableContract.setVariableFromProgram("RPATH", Test.class.getResource(
-                "/functionalTests/descriptor/variablecontract/externalfiles/").getPath(),
-                VariableContractType.ProgramVariable);
+        URL url = Test.class.getResource("/functionalTests/descriptor/variablecontract/externalfiles/");
+        String path = new File(url.toURI()).getAbsolutePath();
+        variableContract.setVariableFromProgram("RPATH", path, VariableContractType.ProgramVariable);
 
         /*
          * //Setting from Program HashMap map = new HashMap(); map.put("test_var1", "value1");
