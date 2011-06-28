@@ -37,6 +37,7 @@
 package functionalTests.gcmdeployment.snapshot;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -57,6 +58,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.core.GCMVirtualNodeSnaps
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+import org.objectweb.proactive.utils.OperatingSystem;
 import org.objectweb.proactive.utils.Sleeper;
 
 import functionalTests.GCMFunctionalTestDefaultNodes;
@@ -125,6 +127,10 @@ public class TestSnapshot extends GCMFunctionalTestDefaultNodes {
 
         public GCMApplicationSnapshot deploy() throws ProActiveException {
             VariableContractImpl vc = new VariableContractImpl();
+
+            vc.setVariableFromProgram(VAR_OS, OperatingSystem.getOperatingSystem().name(),
+                    VariableContractType.DescriptorDefaultVariable);
+
             vc.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(NB_VMS)
                     .toString(), VariableContractType.DescriptorDefaultVariable);
             String value = "";
@@ -137,7 +143,13 @@ public class TestSnapshot extends GCMFunctionalTestDefaultNodes {
             }
             vc.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVMARG, value,
                     VariableContractType.DescriptorDefaultVariable);
-            File f = new File(this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml").getFile());
+            File f = null;
+            try {
+                f = new File(this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml").toURI());
+            } catch (URISyntaxException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             GCMApplication app = PAGCMDeployment.loadApplicationDescriptor(f, vc);
             app.startDeployment();
             GCMVirtualNode vn = app.getVirtualNode(VN_NAME);
