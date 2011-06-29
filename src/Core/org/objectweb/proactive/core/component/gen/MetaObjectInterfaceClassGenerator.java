@@ -113,124 +113,131 @@ public class MetaObjectInterfaceClassGenerator extends AbstractInterfaceClassGen
             try {
                 generated_class = loadClass(generatedClassFullName);
             } catch (ClassNotFoundException cnfe) {
-                CtMethod[] reifiedMethods;
-                CtClass generatedCtClass = pool.makeClass(generatedClassFullName);
+                try {
+                    CtClass generatedCtClass = pool.get(generatedClassFullName);
+                    byte[] bytecode = generatedCtClass.toBytecode();
+                    generated_class = Utils.defineClass(generatedClassFullName, bytecode);
+                } catch (NotFoundException nfe) {
+                    CtMethod[] reifiedMethods;
+                    CtClass generatedCtClass = pool.makeClass(generatedClassFullName);
 
-                List<CtClass> interfacesToImplement = new ArrayList<CtClass>();
+                    List<CtClass> interfacesToImplement = new ArrayList<CtClass>();
 
-                // add interface to reify
-                CtClass functional_itf = pool.get(interfaceType.getFcItfSignature());
-                generatedCtClass.addInterface(functional_itf);
+                    // add interface to reify
+                    CtClass functional_itf = pool.get(interfaceType.getFcItfSignature());
+                    generatedCtClass.addInterface(functional_itf);
 
-                interfacesToImplement.add(functional_itf);
+                    interfacesToImplement.add(functional_itf);
 
-                // add Serializable interface
-                interfacesToImplement.add(pool.get(Serializable.class.getName()));
-                generatedCtClass.addInterface(pool.get(Serializable.class.getName()));
+                    // add Serializable interface
+                    interfacesToImplement.add(pool.get(Serializable.class.getName()));
+                    generatedCtClass.addInterface(pool.get(Serializable.class.getName()));
 
-                // add StubObject, so we can set the proxy
-                generatedCtClass.addInterface(pool.get(StubObject.class.getName()));
+                    // add StubObject, so we can set the proxy
+                    generatedCtClass.addInterface(pool.get(StubObject.class.getName()));
 
-                //interfacesToImplement.add(pool.get(StubObject.class.getName()));
-                List<CtClass> interfacesToImplementAndSuperInterfaces = new ArrayList<CtClass>(
-                    interfacesToImplement);
-                addSuperInterfaces(interfacesToImplementAndSuperInterfaces);
+                    //interfacesToImplement.add(pool.get(StubObject.class.getName()));
+                    List<CtClass> interfacesToImplementAndSuperInterfaces = new ArrayList<CtClass>(
+                        interfacesToImplement);
+                    addSuperInterfaces(interfacesToImplementAndSuperInterfaces);
 
-                generatedCtClass.setSuperclass(pool.get(PAInterfaceImpl.class.getName()));
-                JavassistByteCodeStubBuilder.createStubObjectMethods(generatedCtClass);
+                    generatedCtClass.setSuperclass(pool.get(PAInterfaceImpl.class.getName()));
+                    JavassistByteCodeStubBuilder.createStubObjectMethods(generatedCtClass);
 
-                CtField implField = new CtField(pool.get(Object.class.getName()), IMPL_FIELD_NAME,
-                    generatedCtClass);
-                generatedCtClass.addField(implField);
-                CtMethod implGetter = CtNewMethod.getter("getFcItfImpl", implField);
-                generatedCtClass.addMethod(implGetter);
-                CtMethod implSetter = CtNewMethod.setter("setFcItfImpl", implField);
-                generatedCtClass.addMethod(implSetter);
+                    CtField implField = new CtField(pool.get(Object.class.getName()), IMPL_FIELD_NAME,
+                        generatedCtClass);
+                    generatedCtClass.addField(implField);
+                    CtMethod implGetter = CtNewMethod.getter("getFcItfImpl", implField);
+                    generatedCtClass.addMethod(implGetter);
+                    CtMethod implSetter = CtNewMethod.setter("setFcItfImpl", implField);
+                    generatedCtClass.addMethod(implSetter);
 
-                // field for overridden methods
-                CtField methodsField = new CtField(pool.get("java.lang.reflect.Method[]"),
-                    "overridenMethods", generatedCtClass);
-                methodsField.setModifiers(Modifier.STATIC);
-                generatedCtClass.addField(methodsField);
+                    // field for overridden methods
+                    CtField methodsField = new CtField(pool.get("java.lang.reflect.Method[]"),
+                        "overridenMethods", generatedCtClass);
+                    methodsField.setModifiers(Modifier.STATIC);
+                    generatedCtClass.addField(methodsField);
 
-                // field for generic parameters
-                CtField genericTypesMappingField = new CtField(pool.get("java.util.Map"),
-                    "genericTypesMapping", generatedCtClass);
+                    // field for generic parameters
+                    CtField genericTypesMappingField = new CtField(pool.get("java.util.Map"),
+                        "genericTypesMapping", generatedCtClass);
 
-                genericTypesMappingField.setModifiers(Modifier.STATIC);
-                generatedCtClass.addField(genericTypesMappingField);
+                    genericTypesMappingField.setModifiers(Modifier.STATIC);
+                    generatedCtClass.addField(genericTypesMappingField);
 
-                // list all methods to implement
-                Map<String, CtMethod> methodsToImplement = new HashMap<String, CtMethod>();
-                List<String> classesIndexer = new Vector<String>();
+                    // list all methods to implement
+                    Map<String, CtMethod> methodsToImplement = new HashMap<String, CtMethod>();
+                    List<String> classesIndexer = new Vector<String>();
 
-                CtClass[] params;
-                CtClass itf;
+                    CtClass[] params;
+                    CtClass itf;
 
-                // now get the methods from implemented interfaces
-                Iterator<CtClass> it = interfacesToImplementAndSuperInterfaces.iterator();
-                while (it.hasNext()) {
-                    itf = it.next();
-                    if (!classesIndexer.contains(itf.getName())) {
-                        classesIndexer.add(itf.getName());
-                    }
-
-                    CtMethod[] declaredMethods = itf.getDeclaredMethods();
-
-                    for (int i = 0; i < declaredMethods.length; i++) {
-                        CtMethod currentMethod = declaredMethods[i];
-
-                        // Build a key with the simple name of the method
-                        // and the names of its parameters in the right order
-                        String key = "";
-                        key = key + currentMethod.getName();
-                        params = currentMethod.getParameterTypes();
-                        for (int k = 0; k < params.length; k++) {
-                            key = key + params[k].getName();
+                    // now get the methods from implemented interfaces
+                    Iterator<CtClass> it = interfacesToImplementAndSuperInterfaces.iterator();
+                    while (it.hasNext()) {
+                        itf = it.next();
+                        if (!classesIndexer.contains(itf.getName())) {
+                            classesIndexer.add(itf.getName());
                         }
 
-                        // this gives the actual declaring Class<?> of this method
-                        methodsToImplement.put(key, currentMethod);
+                        CtMethod[] declaredMethods = itf.getDeclaredMethods();
+
+                        for (int i = 0; i < declaredMethods.length; i++) {
+                            CtMethod currentMethod = declaredMethods[i];
+
+                            // Build a key with the simple name of the method
+                            // and the names of its parameters in the right order
+                            String key = "";
+                            key = key + currentMethod.getName();
+                            params = currentMethod.getParameterTypes();
+                            for (int k = 0; k < params.length; k++) {
+                                key = key + params[k].getName();
+                            }
+
+                            // this gives the actual declaring Class<?> of this method
+                            methodsToImplement.put(key, currentMethod);
+                        }
                     }
-                }
 
-                reifiedMethods = methodsToImplement.values().toArray(new CtMethod[methodsToImplement.size()]);
+                    reifiedMethods = methodsToImplement.values().toArray(
+                            new CtMethod[methodsToImplement.size()]);
 
-                // Determines which reifiedMethods are valid for reification
-                // It is the responsibility of method checkMethod in class Utils
-                // to decide if a method is valid for reification or not
-                Vector<CtMethod> v = new Vector<CtMethod>();
-                int initialNumberOfMethods = reifiedMethods.length;
+                    // Determines which reifiedMethods are valid for reification
+                    // It is the responsibility of method checkMethod in class Utils
+                    // to decide if a method is valid for reification or not
+                    Vector<CtMethod> v = new Vector<CtMethod>();
+                    int initialNumberOfMethods = reifiedMethods.length;
 
-                for (int i = 0; i < initialNumberOfMethods; i++) {
-                    if (JavassistByteCodeStubBuilder.checkMethod(reifiedMethods[i])) {
-                        v.addElement(reifiedMethods[i]);
+                    for (int i = 0; i < initialNumberOfMethods; i++) {
+                        if (JavassistByteCodeStubBuilder.checkMethod(reifiedMethods[i])) {
+                            v.addElement(reifiedMethods[i]);
+                        }
                     }
+                    CtMethod[] validMethods = new CtMethod[v.size()];
+                    v.copyInto(validMethods);
+
+                    reifiedMethods = validMethods;
+
+                    JavassistByteCodeStubBuilder.createStaticInitializer(generatedCtClass, reifiedMethods,
+                            classesIndexer, interfaceType.getFcItfSignature(), null);
+
+                    createMethods(generatedCtClass, reifiedMethods, interfaceType);
+                    //                                generatedCtClass.stopPruning(true);
+                    //                                generatedCtClass.writeFile("generated/");
+                    //                                System.out.println("[JAVASSIST] generated class : " +
+                    //                                    generatedClassFullName);
+                    byte[] bytecode = generatedCtClass.toBytecode();
+                    ClassDataCache.instance().addClassData(generatedClassFullName, bytecode);
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("added " + generatedClassFullName + " to cache");
+                    }
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("generated classes cache is : " + ClassDataCache.instance().toString());
+                    }
+
+                    // convert the bytes into a Class<?>
+                    generated_class = Utils.defineClass(generatedClassFullName, bytecode);
                 }
-                CtMethod[] validMethods = new CtMethod[v.size()];
-                v.copyInto(validMethods);
-
-                reifiedMethods = validMethods;
-
-                JavassistByteCodeStubBuilder.createStaticInitializer(generatedCtClass, reifiedMethods,
-                        classesIndexer, interfaceType.getFcItfSignature(), null);
-
-                createMethods(generatedCtClass, reifiedMethods, interfaceType);
-                //                                generatedCtClass.stopPruning(true);
-                //                                generatedCtClass.writeFile("generated/");
-                //                                System.out.println("[JAVASSIST] generated class : " +
-                //                                    generatedClassFullName);
-                byte[] bytecode = generatedCtClass.toBytecode();
-                ClassDataCache.instance().addClassData(generatedClassFullName, bytecode);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("added " + generatedClassFullName + " to cache");
-                }
-                if (logger.isDebugEnabled()) {
-                    logger.debug("generated classes cache is : " + ClassDataCache.instance().toString());
-                }
-
-                // convert the bytes into a Class<?>
-                generated_class = Utils.defineClass(generatedClassFullName, bytecode);
             }
 
             PAInterfaceImpl reference = (PAInterfaceImpl) generated_class.newInstance();
