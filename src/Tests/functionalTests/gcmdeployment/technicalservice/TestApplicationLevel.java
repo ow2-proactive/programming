@@ -47,6 +47,7 @@ import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.FunctionalTest;
 
@@ -57,6 +58,8 @@ import functionalTests.FunctionalTest;
 public class TestApplicationLevel extends FunctionalTest {
     private Node node;
 
+    static public final String VAR_OS = "os";
+
     @Before
     public void before() throws ProActiveException {
         URL desc = this.getClass().getResource("TestApplicationLevelApplication.xml");
@@ -64,6 +67,8 @@ public class TestApplicationLevel extends FunctionalTest {
         VariableContractImpl vc = new VariableContractImpl();
         vc.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, FunctionalTest.getJvmParameters()
                 .toString(), VariableContractType.ProgramVariable);
+        vc.setVariableFromProgram(VAR_OS, OperatingSystem.getOperatingSystem().name(),
+                VariableContractType.DescriptorDefaultVariable);
         GCMApplication app = PAGCMDeployment.loadApplicationDescriptor(desc, vc);
         app.startDeployment();
         GCMVirtualNode vn = app.getVirtualNode("nodes");
