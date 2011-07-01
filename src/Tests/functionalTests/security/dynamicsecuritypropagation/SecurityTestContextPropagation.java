@@ -38,6 +38,8 @@ package functionalTests.security.dynamicsecuritypropagation;
 
 import static junit.framework.Assert.assertTrue;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
@@ -73,9 +75,9 @@ public class SecurityTestContextPropagation extends FunctionalTest {
 
     @Before
     public void initTest() throws Exception {
-        PolicyServer ps = ProActiveSecurityDescriptorHandler
-                .createPolicyServer(SecurityTestContextPropagation.class.getResource(
-                        "/functionalTests/security/applicationPolicy.xml").getPath());
+        String path = new File(SecurityTestContextPropagation.class.getResource(
+                "/functionalTests/security/applicationPolicy.xml").toURI()).getAbsolutePath();
+        PolicyServer ps = ProActiveSecurityDescriptorHandler.createPolicyServer(path);
         psm = new ProActiveSecurityManager(EntityType.OBJECT, ps);
 
         // set the default security manager

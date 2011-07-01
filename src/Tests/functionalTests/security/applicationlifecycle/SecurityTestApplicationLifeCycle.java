@@ -38,6 +38,8 @@ package functionalTests.security.applicationlifecycle;
 
 import static junit.framework.Assert.assertNotNull;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -67,9 +69,9 @@ public class SecurityTestApplicationLifeCycle extends FunctionalTest {
 
     @Before
     public void initTest() throws Exception {
-        PolicyServer ps = ProActiveSecurityDescriptorHandler
-                .createPolicyServer(SecurityTestApplicationLifeCycle.class.getResource(
-                        "/functionalTests/security/applicationPolicy.xml").getPath());
+        String path = new File(SecurityTestApplicationLifeCycle.class.getResource(
+                "/functionalTests/security/applicationPolicy.xml").toURI()).getAbsolutePath();
+        PolicyServer ps = ProActiveSecurityDescriptorHandler.createPolicyServer(path);
         psm = new ProActiveSecurityManager(EntityType.UNKNOWN, ps);
     }
 }
