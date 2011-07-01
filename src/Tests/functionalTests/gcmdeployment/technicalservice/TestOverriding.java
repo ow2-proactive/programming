@@ -47,6 +47,7 @@ import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.FunctionalTest;
 import functionalTests.GCMFunctionalTestDefaultNodes;
@@ -57,6 +58,7 @@ import functionalTests.GCMFunctionalTestDefaultNodes;
  */
 public class TestOverriding extends FunctionalTest {
     private GCMApplication app;
+    static public final String VAR_OS = "os";
 
     @Before
     public void before() throws ProActiveException {
@@ -67,6 +69,8 @@ public class TestOverriding extends FunctionalTest {
                 VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, FunctionalTest.getJvmParameters()
                 .toString(), VariableContractType.ProgramVariable);
+        vContract.setVariableFromProgram(VAR_OS, OperatingSystem.getOperatingSystem().name(),
+                VariableContractType.DescriptorDefaultVariable);
         URL desc = this.getClass().getResource("TestOverridingApplication.xml");
         app = PAGCMDeployment.loadApplicationDescriptor(desc, vContract);
         app.startDeployment();
