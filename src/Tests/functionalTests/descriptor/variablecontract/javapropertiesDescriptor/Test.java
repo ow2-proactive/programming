@@ -38,7 +38,7 @@ package functionalTests.descriptor.variablecontract.javapropertiesDescriptor;
 
 import static junit.framework.Assert.assertTrue;
 
-import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 
 import org.junit.Assert;
@@ -56,8 +56,8 @@ import functionalTests.FunctionalTest;
  * Tests conditions for variables of type JavaPropertiesDescriptor
  */
 public class Test extends FunctionalTest {
-    private static String XML_LOCATION = Test.class.getResource(
-            "/functionalTests/descriptor/variablecontract/javapropertiesDescriptor/Test.xml").getPath();
+    private static URL XML_LOCATION = Test.class
+            .getResource("/functionalTests/descriptor/variablecontract/javapropertiesDescriptor/Test.xml");
     GCMApplication gcma;
     boolean bogusFromProgram;
     boolean bogusFromDescriptor;
@@ -97,7 +97,7 @@ public class Test extends FunctionalTest {
         }
         assertTrue(!bogus);
 
-        gcma = PAGCMDeployment.loadApplicationDescriptor(new File(XML_LOCATION), variableContract);
+        gcma = PAGCMDeployment.loadApplicationDescriptor(XML_LOCATION, variableContract);
         variableContract = (VariableContractImpl) gcma.getVariableContract();
         Assert.assertEquals(System.getProperty("user.home"), variableContract.getValue("user.home"));
 
