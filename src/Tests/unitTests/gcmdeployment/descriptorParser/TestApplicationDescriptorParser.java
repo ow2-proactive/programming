@@ -38,6 +38,7 @@ package unitTests.gcmdeployment.descriptorParser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +61,8 @@ import functionalTests.FunctionalTest;
 
 
 public class TestApplicationDescriptorParser extends FunctionalTest {
-    final static String TEST_APP_DIR = TestApplicationDescriptorParser.class.getClass().getResource(
-            "/unitTests/gcmdeployment/descriptorParser/testfiles/application").getFile();
+    final static URL TEST_APP_DIR = TestApplicationDescriptorParser.class.getClass().getResource(
+            "/unitTests/gcmdeployment/descriptorParser/testfiles/application");
 
     final static String[] skipDescriptors = { "script_ext.xml", "oldDescriptor.xml", "scriptInvalid.xml",
             "script6.xml" };
@@ -141,7 +142,7 @@ public class TestApplicationDescriptorParser extends FunctionalTest {
     }
 
     //    @Test
-    public void doit() throws ProActiveException, FileNotFoundException {
+    public void doit() throws ProActiveException, FileNotFoundException, URISyntaxException {
         for (File file : getApplicationDescriptors()) {
             if (!file.toString().contains("scriptHostname") || file.toString().contains("Invalid") ||
                 file.toString().contains("oldDesc")) {
@@ -153,9 +154,10 @@ public class TestApplicationDescriptorParser extends FunctionalTest {
         }
     }
 
-    private List<File> getApplicationDescriptors() {
+    private List<File> getApplicationDescriptors() throws URISyntaxException {
         List<File> ret = new ArrayList<File>();
-        File dir = new File(TEST_APP_DIR);
+        File dir = null;
+        dir = new File(TEST_APP_DIR.toURI());
 
         for (String file : dir.list()) {
             if (file.endsWith(".xml")) {
