@@ -281,7 +281,7 @@ public class FunctionalTest {
                         kill = Runtime.getRuntime().exec(new String[] { "kill", "-9", pid });
                         break;
                     case windows:
-                        kill = Runtime.getRuntime().exec(new String[] { "taskkill", "/PID", pid });
+                        kill = Runtime.getRuntime().exec(new String[] { "taskkill", "/F", "/PID", pid });
                         // If the the exit value is incorrect try tskill command
                         int exitValue = -1;
                         try {
