@@ -357,7 +357,12 @@ public class VariableContractImpl implements VariableContract, Serializable, Clo
                 logger.debug("Matched:" + name + " = " + value);
                 //logger.debug(m);
             }
-            m.appendReplacement(sb, value);
+
+            // \ and $ must be protected in value since appendReplacement interprets them
+            String protectedValue = value;
+            protectedValue = protectedValue.replace("\\", "\\\\");
+            protectedValue = protectedValue.replace("$", "\\$");
+            m.appendReplacement(sb, protectedValue);
         }
         m.appendTail(sb);
 
