@@ -47,6 +47,7 @@ import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.FunctionalTest;
 import functionalTests.GCMFunctionalTestDefaultNodes;
@@ -94,6 +95,8 @@ public class AbstractFTTezt extends FunctionalTest {
         GCMVirtualNode vnode;
 
         //	create nodes
+        super.vContract.setVariableFromProgram("os", OperatingSystem.getOperatingSystem().name(),
+                VariableContractType.DescriptorDefaultVariable);
         super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
                 VariableContractType.DescriptorDefaultVariable);
         super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
