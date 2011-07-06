@@ -63,6 +63,7 @@ import org.objectweb.proactive.utils.OperatingSystem;
 
 @Ignore
 public class FunctionalTest {
+    static public final String VAR_OS = "os";
     static final protected Logger logger = Logger.getLogger("testsuite");
 
     static final public String VAR_JVM_PARAMETERS = "JVM_PARAMETERS";
@@ -147,6 +148,8 @@ public class FunctionalTest {
 
     public FunctionalTest() {
         vContract = new VariableContractImpl();
+        vContract.setVariableFromProgram(VAR_OS, OperatingSystem.getOperatingSystem().name(),
+                VariableContractType.DescriptorDefaultVariable);
         vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, getJvmParameters(),
                 VariableContractType.ProgramVariable);
     }
