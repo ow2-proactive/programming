@@ -36,6 +36,8 @@
  */
 package functionalTests.security.sessionkeyexchange;
 
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.security.PolicyServer;
@@ -72,9 +74,9 @@ public class SecurityTestSessionKeyExchange extends FunctionalTest {
 
     @Before
     public void initTest() throws Exception {
-        PolicyServer ps = ProActiveSecurityDescriptorHandler
-                .createPolicyServer(SecurityTestSessionKeyExchange.class.getResource(
-                        "../applicationPolicy.xml").getPath());
+        String path = new File(SecurityTestSessionKeyExchange.class.getResource("../applicationPolicy.xml")
+                .toURI()).getAbsolutePath();
+        PolicyServer ps = ProActiveSecurityDescriptorHandler.createPolicyServer(path);
         psm = new ProActiveSecurityManager(EntityType.APPLICATION, ps);
     }
 }
