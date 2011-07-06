@@ -37,6 +37,7 @@
 package unitTests.gcmdeployment.variablecontract;
 
 import java.io.File;
+import java.net.URISyntaxException;
 
 import junit.framework.Assert;
 
@@ -56,8 +57,9 @@ public class TestVariableContract extends FunctionalTest {
     static final String VAR_DEFAULTVALUE = "plop";
 
     @Test
-    public void test() throws ProActiveException {
-        File desc = new File(this.getClass().getResource("TestVariableContractApplication.xml").getFile());
+    public void test() throws ProActiveException, URISyntaxException {
+        File desc = null;
+        desc = new File(this.getClass().getResource("TestVariableContractApplication.xml").toURI());
 
         VariableContractImpl vContractRes;
         GCMApplicationImpl gcmad;
