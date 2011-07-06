@@ -37,7 +37,9 @@
 package unitTests.gcmdeployment.listGenerator;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.net.URL;
 import java.util.List;
 
 import org.junit.Assert;
@@ -46,17 +48,15 @@ import org.objectweb.proactive.extensions.gcmdeployment.ListGenerator;
 
 
 public class TestListGenerator {
-    final static private String validResource = TestListGenerator.class.getResource("data.valid.txt")
-            .getFile();
-    final static private String invalidResource = TestListGenerator.class.getResource("data.invalid.txt")
-            .getFile();
+    final static private URL validResource = TestListGenerator.class.getResource("data.valid.txt");
+    final static private URL invalidResource = TestListGenerator.class.getResource("data.invalid.txt");
 
     /*
      * @Test public void singleTest() { ListGenerator.generateNames(""); }
      */
     @Test
     public void testValid() throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(validResource));
+        BufferedReader br = new BufferedReader(new FileReader(new File(validResource.toURI())));
 
         while (true) {
             String question = br.readLine();
@@ -78,7 +78,7 @@ public class TestListGenerator {
 
     @Test
     public void testInvalid() throws Exception {
-        BufferedReader br = new BufferedReader(new FileReader(invalidResource));
+        BufferedReader br = new BufferedReader(new FileReader(new File(invalidResource.toURI())));
 
         while (true) {
             String question = br.readLine();
