@@ -67,7 +67,7 @@ public class TestDeploymentDescriptorParser {
 
     @Test
     public void test() throws Exception {
-        File descriptor = new File(this.getClass().getResource("testfiles/deployment.xml").getFile());
+        File descriptor = new File(this.getClass().getResource("testfiles/deployment.xml").toURI());
 
         System.out.println("Parsing " + descriptor.getAbsolutePath());
         GCMDeploymentParserImpl parser = new GCMDeploymentParserImpl(Helpers.fileToURL(descriptor), null);
@@ -79,7 +79,7 @@ public class TestDeploymentDescriptorParser {
     @Test
     public void allGroupsTest() throws Exception {
         File descriptor = new File(this.getClass().getResource("testfiles/deployment/allGroupsExample.xml")
-                .getFile());
+                .toURI());
 
         System.out.println("Parsing " + descriptor.getAbsolutePath());
         GCMDeploymentParserImpl parser = new GCMDeploymentParserImpl(Helpers.fileToURL(descriptor), null);
@@ -161,7 +161,7 @@ public class TestDeploymentDescriptorParser {
     @Test
     public void userSchemaTest() throws Exception {
         File descriptor = new File(getClass().getResource("testfiles/deployment/group_bridge_ext.xml")
-                .getFile());
+                .toURI());
 
         URL userSchema = getClass().getResource("testfiles/deployment/SampleDeploymentExtension.xsd");
 
@@ -180,7 +180,7 @@ public class TestDeploymentDescriptorParser {
     }
 
     protected void idConstraintTest(String descriptorLocation) throws Exception {
-        File descriptor = new File(this.getClass().getResource(descriptorLocation).getFile());
+        File descriptor = new File(this.getClass().getResource(descriptorLocation).toURI());
 
         System.out.println("Parsing " + descriptor.getAbsolutePath());
         boolean gotException = false;
@@ -215,7 +215,7 @@ public class TestDeploymentDescriptorParser {
     }
 
     protected void refConstraintTest(String descriptorLocation) throws Exception {
-        File descriptor = new File(this.getClass().getResource(descriptorLocation).getFile());
+        File descriptor = new File(this.getClass().getResource(descriptorLocation).toURI());
 
         System.out.println("Parsing " + descriptor.getAbsolutePath());
         boolean gotException = false;
