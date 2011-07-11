@@ -47,6 +47,10 @@ import org.objectweb.proactive.extensions.calcium.task.Task;
 
 
 public class ForkInst<P, R> implements Instruction<P, P> {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     Divide<P, ?> div;
     Conquer<?, R> conq;
     Vector<Stack<Instruction>> instList;

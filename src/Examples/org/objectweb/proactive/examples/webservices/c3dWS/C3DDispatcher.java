@@ -87,6 +87,10 @@ import timer.AverageMicroTimer;
  */
 @ActiveObject
 public class C3DDispatcher implements InitActive, RunActive, Serializable, Dispatcher, DispatcherLogic {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private static int IMAGE_HEIGHT = 500;
     private static int IMAGE_WIDTH = 500;

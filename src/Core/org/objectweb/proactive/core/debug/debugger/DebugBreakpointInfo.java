@@ -41,6 +41,10 @@ import java.io.Serializable;
 
 public class DebugBreakpointInfo implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private BreakpointType breakpointType;
     private String threadName;
     private String methodName;

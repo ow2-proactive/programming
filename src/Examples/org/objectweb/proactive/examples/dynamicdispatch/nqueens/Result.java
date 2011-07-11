@@ -41,6 +41,10 @@ import java.io.Serializable;
 
 public class Result implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     long computationTime;
     long computedValue;
 

@@ -40,6 +40,11 @@ import org.objectweb.proactive.core.ProActiveException;
 
 
 public class AlreadyBoundException extends ProActiveException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public AlreadyBoundException() {
         super();
     }

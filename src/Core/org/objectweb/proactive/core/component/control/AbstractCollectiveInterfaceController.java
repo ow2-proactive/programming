@@ -49,6 +49,11 @@ import org.objectweb.proactive.core.component.PAInterface;
  */
 public abstract class AbstractCollectiveInterfaceController extends AbstractPAController {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public AbstractCollectiveInterfaceController(Component owner) {
         super(owner);
     }

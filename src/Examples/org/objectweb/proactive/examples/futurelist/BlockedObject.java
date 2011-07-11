@@ -44,6 +44,10 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 @ActiveObject
 public class BlockedObject implements org.objectweb.proactive.RunActive, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
 
     public BlockedObject() {

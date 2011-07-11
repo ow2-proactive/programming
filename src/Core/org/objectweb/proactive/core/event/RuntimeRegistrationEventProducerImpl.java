@@ -46,6 +46,11 @@ public class RuntimeRegistrationEventProducerImpl extends AbstractEventProducer 
     //
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      * @see org.objectweb.proactive.core.event.RuntimeRegistrationEventProducer#addRuntimeRegistrationEventListener(RuntimeRegistrationEventListener)
      */
     public void addRuntimeRegistrationEventListener(RuntimeRegistrationEventListener listener) {

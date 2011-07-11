@@ -46,6 +46,11 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 
 public class ControllerImplementation extends AbstractPAController implements ControllerItf {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     //@snippet-start component_userguide_11
     public ControllerImplementation(Component owner) {
         super(owner);

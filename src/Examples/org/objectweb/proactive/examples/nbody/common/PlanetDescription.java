@@ -55,6 +55,11 @@ import org.xml.sax.Attributes;
  *
  */
 public class PlanetDescription implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     // Fields
     private double x;
 

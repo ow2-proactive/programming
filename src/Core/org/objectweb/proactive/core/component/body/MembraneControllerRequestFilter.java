@@ -50,6 +50,11 @@ import org.objectweb.proactive.core.mop.MethodCall;
  */
 public class MembraneControllerRequestFilter implements RequestFilter {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public boolean acceptRequest(Request request) {
         if (request instanceof ComponentRequest) {
             MethodCall mc = ((ComponentRequest) request).getMethodCall();

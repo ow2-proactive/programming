@@ -96,6 +96,10 @@ public class TestProActive359 extends FunctionalTest {
     }
 
     static public class AO implements InitActive, RunActive, Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
         private BlockingRequestQueue rqueue;
 
         public AO() {

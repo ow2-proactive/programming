@@ -130,6 +130,10 @@ public class ProActiveConfiguration {
     }
 
     class CustomProperties extends Properties {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
         HashMap<String, String> exportedKeys = new HashMap<String, String>();
 
         public synchronized void putAllFromSystem(Map<? extends Object, ? extends Object> t) {

@@ -42,6 +42,11 @@ import org.objectweb.proactive.core.exceptions.ExceptionHandler;
 
 
 class ThisIsNotAnException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public ThisIsNotAnException() {
         super("This is the call in the proxy");
     }
@@ -52,6 +57,11 @@ class ThisIsNotAnException extends Exception {
  * it can be an Object or a thrown Exception.
  */
 public class MethodCallResult implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
 
     /** The object to be returned */
     private Object result;

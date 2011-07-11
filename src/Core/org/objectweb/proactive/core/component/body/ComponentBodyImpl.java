@@ -61,6 +61,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * component metaobject {@link PAComponent}.
  */
 public class ComponentBodyImpl extends MigratableBody implements ComponentBody {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private PAComponent componentIdentity = null;
     private Map<String, Shortcut> shortcutsOnThis = null; // key = functionalItfName, value = shortcut
     private static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);

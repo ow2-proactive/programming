@@ -42,6 +42,10 @@ package org.objectweb.proactive.examples.webservices.c3dWS;
  * array are to be set/read.
  */
 public class Interval implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     public int number; // each interval has a number (nice to see the progression - no use in the code)
     public int totalImageWidth; // width of total image
     public int totalImageHeight; // height of total image

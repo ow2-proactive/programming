@@ -60,6 +60,11 @@ import org.objectweb.fractal.api.type.ComponentType;
  */
 public class PANFComponentRepresentativeImpl extends PAComponentRepresentativeImpl implements
         PANFComponentRepresentative {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public PANFComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {
         super(componentType, hierarchicalType, controllersConfigFileLocation);

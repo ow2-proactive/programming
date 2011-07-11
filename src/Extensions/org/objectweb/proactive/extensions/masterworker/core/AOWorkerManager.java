@@ -93,6 +93,10 @@ import org.objectweb.proactive.utils.NamedThreadFactory;
 public class AOWorkerManager implements WorkerManager, InitActive, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      * log4j logger for the worker manager
      */
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER_WORKERMANAGER);

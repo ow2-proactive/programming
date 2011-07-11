@@ -56,6 +56,10 @@ import org.objectweb.proactive.InitActive;
  */
 public class Worker implements Serializable, InitActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private IntWrapper age = new IntWrapper(0);
     private String name = "Anonymous";
 

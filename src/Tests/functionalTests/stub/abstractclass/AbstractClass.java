@@ -37,6 +37,11 @@
 package functionalTests.stub.abstractclass;
 
 public abstract class AbstractClass implements Interface {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public AbstractClass() {
     }
 

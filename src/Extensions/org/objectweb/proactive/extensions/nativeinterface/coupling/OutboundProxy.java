@@ -52,6 +52,10 @@ import org.objectweb.proactive.extensions.nativeinterface.application.NativeMess
  */
 public class OutboundProxy implements Serializable, InitActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     Map<Integer, InboundProxy[]> inboundProxyMap;
     private InboundProxy groupComm;
 

@@ -49,6 +49,10 @@ import org.objectweb.proactive.extensions.timitspmd.TimIt;
 public class HierarchicalTimerStatistics implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     private String[] timerName;

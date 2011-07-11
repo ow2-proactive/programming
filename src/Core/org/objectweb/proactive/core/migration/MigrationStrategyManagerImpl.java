@@ -51,6 +51,11 @@ public class MigrationStrategyManagerImpl implements MigrationStrategyManager, M
         java.io.Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      * Name of the method to be called when the agent reaches a new site
      */
     private String methodOnArrival = null;

@@ -50,6 +50,10 @@ import org.objectweb.proactive.utils.Sleeper;
 
 
 public class HTTPRemoteObjectRequest extends HttpMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private Request request;
 
     public HTTPRemoteObjectRequest(Request request, String url) {

@@ -54,6 +54,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class SslRmiClientSocketFactory implements RMIClientSocketFactory, java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     static final public Logger logger = ProActiveLogger.getLogger(Loggers.SSH);
 
     public Socket createSocket(String host, int port) throws IOException {

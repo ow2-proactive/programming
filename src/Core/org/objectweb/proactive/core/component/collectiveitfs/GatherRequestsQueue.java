@@ -72,6 +72,10 @@ import org.objectweb.proactive.utils.SafeTimerTask;
  *
  */
 public class GatherRequestsQueue implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private GatherFuturesHandler futuresHandler; // primitive pooling
     private List<Object> connectedClientItfs; // consistency?
     private Map<ItfID, ComponentRequest> requests;

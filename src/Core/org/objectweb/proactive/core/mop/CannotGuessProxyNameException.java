@@ -37,6 +37,11 @@
 package org.objectweb.proactive.core.mop;
 
 public class CannotGuessProxyNameException extends StructuralException {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public CannotGuessProxyNameException() {
     }
 

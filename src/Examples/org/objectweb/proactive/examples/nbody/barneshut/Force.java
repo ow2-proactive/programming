@@ -46,6 +46,11 @@ import java.io.Serializable;
 
 public class Force implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     /** Vector of the force */
     public double x = 0;
 

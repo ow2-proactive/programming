@@ -49,6 +49,11 @@ import org.objectweb.proactive.extensions.calcium.task.TaskPool;
 
 @ActiveObject
 public class AOTaskPool extends TaskPool implements RunActive, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public AOTaskPool() {
         super();
     }
@@ -73,6 +78,10 @@ public class AOTaskPool extends TaskPool implements RunActive, Serializable {
     }
 
     protected class RequestFilterOnAllowedMethods implements RequestFilter, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
         private String allowedMethodNames;
 
         public RequestFilterOnAllowedMethods(String allowedMethodNames) {

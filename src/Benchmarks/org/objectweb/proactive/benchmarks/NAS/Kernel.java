@@ -56,6 +56,10 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
  * 
  */
 public abstract class Kernel implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     protected GCMApplication gcma;
 
     public abstract void runKernel() throws ProActiveException;

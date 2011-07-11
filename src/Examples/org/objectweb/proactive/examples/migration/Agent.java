@@ -57,6 +57,10 @@ import org.objectweb.proactive.extensions.annotation.MigrationSignal;
  */
 @ActiveObject
 public class Agent implements InitActive, RunActive, EndActive, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private final static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private String name;
     private String nodename;

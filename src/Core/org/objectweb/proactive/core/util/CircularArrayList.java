@@ -70,6 +70,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class CircularArrayList<E> extends java.util.AbstractList<E> implements java.util.List<E>,
         java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.UTIL);
     private static final int DEFAULT_SIZE = 5;
     protected E[] array;

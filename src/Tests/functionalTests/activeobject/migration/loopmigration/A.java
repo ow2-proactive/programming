@@ -48,6 +48,10 @@ import org.objectweb.proactive.core.body.migration.MigrationException;
 public class A implements Serializable, RunActive {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     public static final int MAX_MIG = 20;

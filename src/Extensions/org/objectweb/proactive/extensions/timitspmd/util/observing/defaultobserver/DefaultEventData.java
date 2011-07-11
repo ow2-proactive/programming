@@ -48,6 +48,10 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.EventData;
 public class DefaultEventData implements EventData {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     public static final int MIN = 0;

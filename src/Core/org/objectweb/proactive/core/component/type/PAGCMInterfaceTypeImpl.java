@@ -56,6 +56,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class PAGCMInterfaceTypeImpl implements PAGCMInterfaceType, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
 
     /**

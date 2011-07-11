@@ -43,6 +43,11 @@ import org.objectweb.proactive.core.body.request.Request;
 
 public class BreakpointInfo implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     private BreakpointType type;
 
     private Thread thread;

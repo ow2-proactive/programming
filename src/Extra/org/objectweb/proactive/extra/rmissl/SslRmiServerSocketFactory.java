@@ -52,6 +52,10 @@ import javax.net.ssl.SSLServerSocketFactory;
  */
 public class SslRmiServerSocketFactory implements RMIServerSocketFactory, java.io.Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private static SSLServerSocketFactory sslServerSocketFactory = null;
 
     static {

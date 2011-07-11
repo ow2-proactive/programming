@@ -42,6 +42,10 @@ import org.objectweb.proactive.examples.jmx.remote.management.mbean.BundleInfo;
 
 
 public class BundleStartedNotification extends BundleNotification {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private BundleInfo bundleInfo;
     private String url;
     private String message;

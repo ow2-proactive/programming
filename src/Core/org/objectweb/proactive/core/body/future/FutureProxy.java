@@ -79,6 +79,11 @@ import org.objectweb.proactive.utils.TimeoutAccounter;
  *
  */
 public class FutureProxy implements Future, Proxy, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     //
     // -- STATIC MEMBERS -----------------------------------------------
     //

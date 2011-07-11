@@ -151,6 +151,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl implements ProActiveRuntime,
         LocalProActiveRuntime {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     //
     // -- STATIC MEMBERS
     // -----------------------------------------------------------
@@ -1406,6 +1411,11 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
     // -- INNER CLASSES -----------------------------------------------
     //
     protected static class VMInformationImpl implements VMInformation, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
+
         private final java.net.InetAddress hostInetAddress;
 
         // the Unique ID of the JVM

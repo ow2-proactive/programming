@@ -65,6 +65,10 @@ import org.objectweb.proactive.ext.locationserver.LocationServerFactory;
 
 public class MigrationManagerImpl extends AbstractEventProducer implements MigrationManager,
         java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.MIGRATION);
     transient protected LocationServer locationServer;
     protected int nbOfMigrationWithoutUpdate; // used to compare with maxMigrationNb

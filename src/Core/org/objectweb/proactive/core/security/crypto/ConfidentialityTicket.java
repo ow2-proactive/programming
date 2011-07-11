@@ -40,6 +40,10 @@ import java.io.Serializable;
 
 
 public class ConfidentialityTicket implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     public long timestamp;
     public long random1;
     public long random2;

@@ -67,6 +67,11 @@ import org.objectweb.proactive.extensions.timitspmd.util.observing.defaultobserv
 
 public class WorkerIS extends Timed {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public static final boolean COMMUNICATION_PATTERN_OBSERVING_MODE = false;
 
     /* Timer counters */

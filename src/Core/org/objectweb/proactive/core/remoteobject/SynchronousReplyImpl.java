@@ -51,6 +51,10 @@ import org.objectweb.proactive.core.security.exceptions.RenegotiateSessionExcept
 
 
 public class SynchronousReplyImpl implements Reply, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     protected MethodCallResult reply;
 
     public SynchronousReplyImpl() {

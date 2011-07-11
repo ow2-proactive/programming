@@ -42,6 +42,11 @@ import java.util.Vector;
 
 public class MethodStatisticsPrimitiveImpl extends MethodStatisticsAbstract implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public MethodStatisticsPrimitiveImpl(String itfName, String methodName, Class<?>[] parametersTypes) {
         this.itfName = itfName;
         this.methodName = methodName;

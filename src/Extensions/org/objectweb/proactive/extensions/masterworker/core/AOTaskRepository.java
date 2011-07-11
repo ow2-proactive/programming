@@ -71,6 +71,10 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.internal.TaskR
 public class AOTaskRepository implements TaskRepository, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      * logger of the task repository
      */
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.MASTERWORKER_REPOSITORY);

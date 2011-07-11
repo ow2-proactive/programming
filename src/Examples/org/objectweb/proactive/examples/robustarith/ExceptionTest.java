@@ -44,6 +44,11 @@ import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
 
 class DangerousException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     DangerousException(String str) {
         super(str);
     }
@@ -51,6 +56,11 @@ class DangerousException extends Exception {
 
 @ActiveObject
 public class ExceptionTest implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
 
     /* Empty constructor for ProActive */
     public ExceptionTest() {

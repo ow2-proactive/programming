@@ -62,6 +62,10 @@ import org.objectweb.proactive.extensions.webservices.exceptions.WebServicesExce
 public abstract class AbstractPAWebServicesControllerImpl extends AbstractPAController implements
         PAWebServicesController {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private final String framework;
     private String url;
 

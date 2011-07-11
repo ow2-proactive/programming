@@ -42,6 +42,11 @@ import org.objectweb.proactive.extensions.webservices.component.controller.Abstr
 
 public class PAWebServicesControllerImpl extends AbstractPAWebServicesControllerImpl {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public PAWebServicesControllerImpl(Component owner) {
         super(owner);
     }

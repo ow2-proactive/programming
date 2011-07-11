@@ -44,6 +44,10 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 public class Z implements D, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     int barCounter = 0;

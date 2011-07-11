@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.process.UniversalProcess;
  * @since   ProActive 3.0
  */
 public class GlobusProcess extends AbstractExternalProcessDecorator {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     protected JVMProcessImpl jvmProcess;
     protected String count = "1";
     protected String stderr = null;

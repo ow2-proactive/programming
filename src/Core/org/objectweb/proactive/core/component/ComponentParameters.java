@@ -57,6 +57,10 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class ComponentParameters implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private ComponentType componentType;
     private ComponentType componentNFType;
     private ControllerDescription controllerDesc;

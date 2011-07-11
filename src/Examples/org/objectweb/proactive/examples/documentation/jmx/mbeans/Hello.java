@@ -43,6 +43,10 @@ import javax.management.NotificationBroadcasterSupport;
 
 
 public class Hello extends NotificationBroadcasterSupport implements HelloMBean, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     public static final String NOTIFICATION_NAME = "HelloNotification";
     public long counter = 0;
 

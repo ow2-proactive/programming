@@ -48,6 +48,10 @@ import org.objectweb.proactive.core.security.exceptions.IncompatiblePolicyExcept
 public class Communication implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     private final Authorization authentication;

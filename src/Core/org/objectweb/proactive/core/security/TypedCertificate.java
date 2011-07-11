@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.security.SecurityConstants.EntityType;
 public class TypedCertificate implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     private transient X509Certificate cert;

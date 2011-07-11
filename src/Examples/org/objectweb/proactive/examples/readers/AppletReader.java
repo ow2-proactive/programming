@@ -40,6 +40,10 @@ import org.objectweb.proactive.core.config.ProActiveConfiguration;
 
 
 public class AppletReader extends org.objectweb.proactive.examples.StandardFrame {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     public ReadCanvas readerPanel;
     private ReaderDisplay display;
     private javax.swing.JComboBox policy;

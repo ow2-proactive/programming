@@ -89,6 +89,10 @@ import org.osgi.framework.ServiceReference;
 
 public class BundleInfo extends NotificationBroadcasterSupport implements BundleListener, DynamicMBean,
         Serializable, IJmx {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     public static final int INSTALLED = Bundle.INSTALLED;
     public static final int ACTIVE = Bundle.ACTIVE;
     public static final int RESOLVED = Bundle.RESOLVED;

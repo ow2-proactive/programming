@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
  *
  */
 public class NF3ItfImpl extends AbstractPAController implements NF3Itf {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     FItf me = null;
 
     public NF3ItfImpl(Component owner) {

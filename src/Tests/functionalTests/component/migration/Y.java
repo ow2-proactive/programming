@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 public class Y implements B, BindingController, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     int fooCounter = 0;

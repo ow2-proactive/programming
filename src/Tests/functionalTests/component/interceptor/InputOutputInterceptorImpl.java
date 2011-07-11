@@ -59,6 +59,11 @@ public class InputOutputInterceptorImpl extends AbstractPAController implements 
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      * @param owner
      */
     public InputOutputInterceptorImpl(Component owner) {

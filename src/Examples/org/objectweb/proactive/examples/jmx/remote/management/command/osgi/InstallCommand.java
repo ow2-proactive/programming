@@ -48,6 +48,10 @@ import org.objectweb.proactive.examples.jmx.remote.management.transactions.Trans
 public class InstallCommand extends OSGiCommand implements InstallCommandMBean, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     private String location;

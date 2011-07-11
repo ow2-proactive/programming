@@ -50,6 +50,10 @@ import org.objectweb.proactive.core.component.control.ControllerStateDuplication
 public class NameControllerComponent extends AbstractPAComponentController implements NameController,
         ControllerStateDuplication {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private String name;
 
     public String getFcName() {

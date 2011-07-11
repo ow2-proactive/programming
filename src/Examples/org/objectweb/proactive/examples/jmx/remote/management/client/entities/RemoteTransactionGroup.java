@@ -50,6 +50,10 @@ import org.objectweb.proactive.examples.jmx.remote.management.events.EntitiesEve
 public class RemoteTransactionGroup extends ManageableEntity implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     private String name;

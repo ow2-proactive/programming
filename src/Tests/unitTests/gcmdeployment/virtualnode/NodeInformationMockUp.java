@@ -41,6 +41,10 @@ import org.objectweb.proactive.core.runtime.VMInformation;
 
 
 public class NodeInformationMockUp implements NodeInformation {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     String name;
 
     public NodeInformationMockUp(String name) {

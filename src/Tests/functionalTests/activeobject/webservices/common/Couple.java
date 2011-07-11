@@ -40,6 +40,10 @@ import java.io.Serializable;
 
 
 public class Couple implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private String str1;
     private int myInt;
 

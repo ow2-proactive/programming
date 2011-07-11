@@ -47,6 +47,11 @@ import org.objectweb.proactive.annotation.PublicAPI;
  */
 @PublicAPI
 public class ParameterDispatchException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public ParameterDispatchException() {
         super();
     }

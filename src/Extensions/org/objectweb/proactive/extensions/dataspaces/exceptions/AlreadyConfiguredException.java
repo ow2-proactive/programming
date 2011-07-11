@@ -38,6 +38,11 @@ package org.objectweb.proactive.extensions.dataspaces.exceptions;
 
 public class AlreadyConfiguredException extends DataSpacesException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public AlreadyConfiguredException() {
     }
 

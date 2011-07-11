@@ -49,6 +49,11 @@ import java.lang.reflect.Modifier;
 public class ConstructorCallImpl implements ConstructorCall, Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      * The array holding the arguments of the constructor
      */
     protected Object[] effectiveArguments;

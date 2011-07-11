@@ -54,6 +54,10 @@ import org.bouncycastle.crypto.engines.RSAEngine;
 
 
 public class EncryptionEngine implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private SecureRandom rand = new FixedSecureRandom();
     private transient Cipher symmetricCipher;
     private transient Cipher asymmetricCipher;

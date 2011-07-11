@@ -43,6 +43,10 @@ import org.objectweb.proactive.extensions.masterworker.interfaces.WorkerMemory;
 public class A implements Task<Integer> {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     private int taskcounter;

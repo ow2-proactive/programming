@@ -53,6 +53,11 @@ public class OutputInterceptor1Impl extends AbstractPAController implements Outp
         OutputInterceptor {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      *
      */
     public OutputInterceptor1Impl(Component owner) {

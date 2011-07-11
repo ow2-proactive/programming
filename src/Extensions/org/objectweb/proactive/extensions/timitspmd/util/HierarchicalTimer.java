@@ -60,6 +60,10 @@ import java.util.Iterator;
 public class HierarchicalTimer implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     public static final int MAX_ENABLED_COUNTERS = 20;

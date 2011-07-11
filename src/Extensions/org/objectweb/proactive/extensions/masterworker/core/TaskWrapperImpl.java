@@ -59,6 +59,11 @@ public class TaskWrapperImpl implements TaskIntern<Serializable> {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      * The id of the task
      */
     private long id = NULL_TASK_ID;

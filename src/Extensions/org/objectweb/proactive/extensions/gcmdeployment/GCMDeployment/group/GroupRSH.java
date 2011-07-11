@@ -44,6 +44,10 @@ import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbu
 
 
 public class GroupRSH extends AbstractGroup {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     public final static String DEFAULT_RSHPATH = "rsh";
     private String hostList;
     private String domain;

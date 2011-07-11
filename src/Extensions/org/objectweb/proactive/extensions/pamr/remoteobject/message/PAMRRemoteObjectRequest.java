@@ -55,6 +55,10 @@ import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
  */
 
 public class PAMRRemoteObjectRequest extends PAMRMessage implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private Request request;
 
     /** Construct a request message

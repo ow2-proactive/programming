@@ -53,6 +53,10 @@ import org.objectweb.proactive.core.body.request.Request;
 public class CheckpointInfoPMLRB implements CheckpointInfo {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
 

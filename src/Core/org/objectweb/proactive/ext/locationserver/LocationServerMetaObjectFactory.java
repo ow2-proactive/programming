@@ -58,6 +58,10 @@ import org.objectweb.proactive.core.mop.MethodCall;
  * @since   ProActive 0.9.2
  */
 public class LocationServerMetaObjectFactory extends ProActiveMetaObjectFactory {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     //
     // -- PRIVATE MEMBERS -----------------------------------------------
     //
@@ -101,6 +105,10 @@ public class LocationServerMetaObjectFactory extends ProActiveMetaObjectFactory 
     // -- INNER CLASSES -----------------------------------------------
     //
     protected class RequestWithLocationServerFactory implements RequestFactory, java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
         transient private LocationServer server = LocationServerFactory.getLocationServer();
 
         public Request newRequest(MethodCall methodCall, UniversalBody sourceBody, boolean isOneWay,
@@ -111,6 +119,11 @@ public class LocationServerMetaObjectFactory extends ProActiveMetaObjectFactory 
 
     protected static class MigrationManagerFactoryImpl implements MigrationManagerFactory,
             java.io.Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
+
         public MigrationManager newMigrationManager() {
             return new MigrationManagerWithLocationServer(LocationServerFactory.getLocationServer());
         }

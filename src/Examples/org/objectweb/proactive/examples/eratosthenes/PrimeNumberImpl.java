@@ -47,6 +47,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * One prime number. This object is owned by an ActivePrimeContainer.
  */
 public class PrimeNumberImpl implements PrimeNumber, java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     static Logger logger = ProActiveLogger.getLogger(Loggers.EXAMPLES);
     private long value;
     private PrimeNumber next;

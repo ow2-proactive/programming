@@ -67,6 +67,10 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
     }
 
     static public class Server implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
         boolean firstRequest = true;
         long count = 0;
         long startTime;
@@ -96,6 +100,10 @@ public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
     }
 
     static public class Client implements Serializable {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
         private Server server;
 
         public Client() {

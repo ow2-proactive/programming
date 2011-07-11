@@ -40,6 +40,10 @@ package org.objectweb.proactive.examples.c3d.geom;
  * A class for making rays (lines in 3D), which have a start point, and a direction.
  */
 final public class Ray implements java.io.Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     public Vec P;
     public Vec D;
 

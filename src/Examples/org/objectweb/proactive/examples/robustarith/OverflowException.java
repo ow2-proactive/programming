@@ -46,6 +46,10 @@ import java.math.BigInteger;
  * Window - Preferences - Java - Code Style - Code Templates
  */
 public class OverflowException extends Exception {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private String op;
     private BigInteger a;
     private BigInteger b;

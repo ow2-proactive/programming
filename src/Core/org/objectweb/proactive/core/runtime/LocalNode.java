@@ -86,6 +86,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 
 public class LocalNode implements SecurityEntity {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private static Logger logger = ProActiveLogger.getLogger(Loggers.JMX_MBEAN);
     private String name;
     private List<UniqueID> activeObjectsId;

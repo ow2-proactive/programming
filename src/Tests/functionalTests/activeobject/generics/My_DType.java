@@ -48,6 +48,10 @@ import java.io.Serializable;
 public class My_DType implements Serializable {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     private String str = null;

@@ -43,6 +43,11 @@ package org.objectweb.proactive.examples.documentation.classes;
 //@snippet-start class_B
 public class B extends A {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      * Empty no-arg constructor
      */
     public B() {

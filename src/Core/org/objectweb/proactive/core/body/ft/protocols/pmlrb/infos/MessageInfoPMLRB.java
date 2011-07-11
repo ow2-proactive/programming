@@ -49,6 +49,10 @@ import org.objectweb.proactive.core.body.ft.protocols.FTManagerFactory;
 public class MessageInfoPMLRB implements MessageInfo {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+    /**
      *
      */
     public long sentSequenceNumber;

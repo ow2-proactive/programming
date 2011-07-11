@@ -65,6 +65,10 @@ public class MigratableBody extends BodyImpl implements Migratable, java.io.Seri
     /**
      * 
      */
+    private static final long serialVersionUID = 51L;
+    /**
+     * 
+     */
     protected static Logger bodyLogger = ProActiveLogger.getLogger(Loggers.BODY);
     protected static Logger migrationLogger = ProActiveLogger.getLogger(Loggers.MIGRATION);
 

@@ -61,6 +61,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public abstract class AbstractPAController implements PAController, Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private boolean isInternal = true;
     private InterfaceType interfaceType;
     final protected static Logger controllerLogger = ProActiveLogger

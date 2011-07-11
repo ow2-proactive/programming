@@ -52,6 +52,11 @@ public class SecurityMigrationException extends MigrationException {
      */
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      *
      */
     public SecurityMigrationException() {

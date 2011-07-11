@@ -198,6 +198,10 @@ public class BasicPrimeExample extends AbstractExample {
     public static class FindPrimeTask implements Task<Boolean> {
 
         /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
+        /**
          *
          */
         private long begin;

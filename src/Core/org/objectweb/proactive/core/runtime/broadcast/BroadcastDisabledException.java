@@ -38,6 +38,11 @@ package org.objectweb.proactive.core.runtime.broadcast;
 
 public class BroadcastDisabledException extends Exception {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     public BroadcastDisabledException() {
         super();
     }

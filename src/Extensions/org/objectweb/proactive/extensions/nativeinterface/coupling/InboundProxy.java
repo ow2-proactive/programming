@@ -56,6 +56,11 @@ import org.objectweb.proactive.extensions.nativeinterface.application.NativeMess
  */
 public class InboundProxy implements Serializable, InitActive {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     /** global Manager*/
     private ProActiveNativeManager manager;
 

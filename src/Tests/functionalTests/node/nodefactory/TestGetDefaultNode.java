@@ -77,6 +77,11 @@ public class TestGetDefaultNode extends GCMFunctionalTestDefaultNodes {
 
     static public class AO implements Serializable {
 
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 51L;
+
         public AO() {
         }
 

@@ -52,6 +52,10 @@ import org.objectweb.proactive.extensions.pamr.protocol.AgentID;
  */
 public class MalformedMessageException extends IOException {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
     private final boolean notifySender;
     private final AgentID recipient;
     private final AgentID faulty;

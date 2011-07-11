@@ -53,6 +53,11 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class FaultToleranceTechnicalService implements TechnicalService {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
     // logger
     final protected static Logger logger = ProActiveLogger.getLogger(Loggers.FAULT_TOLERANCE);
 

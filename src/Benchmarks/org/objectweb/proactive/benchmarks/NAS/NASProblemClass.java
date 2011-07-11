@@ -41,6 +41,11 @@ import java.io.Serializable;
 
 public abstract class NASProblemClass implements Serializable {
     /**
+     * 
+     */
+    private static final long serialVersionUID = 51L;
+
+    /**
      * Benchmark name
      */
     public String KERNEL_NAME;
