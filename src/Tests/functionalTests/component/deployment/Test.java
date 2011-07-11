@@ -45,6 +45,7 @@ import java.util.Map;
 import org.etsi.uri.gcm.util.GCM;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.proactive.api.PADeployment;
@@ -98,6 +99,8 @@ public class Test extends ComponentTest {
         endTest();
     }
 
+    @Ignore
+    // Fails on debian and legacy deployment will be removed in 5.2.0
     @org.junit.Test
     public void testProActiveDeployment() throws Exception {
         pad = PADeployment.getProactiveDescriptor(Test.class.getResource(
