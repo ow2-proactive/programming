@@ -50,7 +50,7 @@ export JAVA_HOME=${JAVA_HOME}
 
 
 TMP_DIR="${TMP}/${DIR_NAME}"
-output=$(mkdir ${TMP_DIR} 2>&1)
+output=$(mkdir "${TMP_DIR}" 2>&1)
 if [ "$?" -ne 0 ] ; then
 	if [ -e ${TMP_DIR} ] ; then
 		echo " [w] ${TMP_DIR} already exists. Delete it !"
@@ -67,7 +67,7 @@ fi
 cp -Rf ${PROACTIVE_DIR} ${TMP_DIR}
 
 cd ${TMP_DIR} || warn_and_exit "Cannot move in ${TMP_DIR}"
-if [ "$(find src/ -name "*.java" | xargs grep serialVersionUID | grep -v `echo $VERSION | sed 's@\(.\)\.\(.\)\..@\1\2@'` | wc -l)" -gt 0 ] ; then
+if [ "$(find src/ -name "*.java" | xargs grep serialVersionUID | grep -v `echo $VERSION | cut -d'.' -f1,2 --output-delimiter ""` | wc -l)" -gt 0 ] ; then
 	if [ -z "${RELAX}" ] ; then
 		warn_and_exit " [E] serialVersionUID are NOT defined"
 	fi
@@ -122,3 +122,4 @@ sed -i "s/{version}/$VERSION/" README.txt
 cd ${TMP}
 tar cvfz ${DIR_NAME}.tar.gz ${DIR_NAME}
 zip -r   ${DIR_NAME}.zip    ${DIR_NAME}
+
