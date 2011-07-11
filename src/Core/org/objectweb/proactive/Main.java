@@ -47,7 +47,7 @@ import org.objectweb.proactive.core.util.ProActiveInet;
 
 
 public class Main {
-    static final private String PA_VERSION = "5.0.0-dev";
+    static final private String PA_VERSION = "5.1.0";
 
     /**
      * Returns the version number
