@@ -39,6 +39,7 @@ package functionalTests.descriptor.defaultnodes;
 import java.io.File;
 import java.net.URL;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -80,6 +81,7 @@ public class TestNodes extends FunctionalTest {
     private static Node remoteACVMNode = null;
     private static String remoteHostname = "localhost";
 
+    @Ignore
     @Test
     public void action() throws Exception {
         proActiveDescriptor = PADeployment.getProactiveDescriptor(new File(XML_LOCATION.toURI())
