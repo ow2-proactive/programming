@@ -39,6 +39,8 @@ package functionalTests.gcmdeployment.topology;
 import java.io.FileNotFoundException;
 
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
@@ -46,6 +48,7 @@ import org.objectweb.proactive.gcmdeployment.GCMHost;
 import org.objectweb.proactive.gcmdeployment.GCMRuntime;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.gcmdeployment.Topology;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.GCMFunctionalTest;
 import functionalTests.gcmdeployment.LocalHelpers;
@@ -55,6 +58,12 @@ public class TestTopology extends GCMFunctionalTest {
 
     public TestTopology() throws FileNotFoundException {
         super(LocalHelpers.getDescriptor(TestTopology.class));
+    }
+
+    @BeforeClass
+    public static void beforeClass() {
+        // This test hangs on Windows because SSH processes are not killed
+        Assume.assumeTrue(OperatingSystem.getOperatingSystem() != OperatingSystem.windows);
     }
 
     @Test
