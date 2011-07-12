@@ -24,12 +24,10 @@
 	<classpathentry kind="lib" path="lib/cog-jglobus-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/cog-ogce.jar"/>
 	<classpathentry kind="lib" path="lib/colobus-0.1.jar"/>
-	<classpathentry kind="lib" path="lib/colt.jar"/>
 	<classpathentry kind="lib" path="lib/commons-cli-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-discovery-0.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-net-1.4.1.jar"/>
-	<classpathentry kind="lib" path="lib/concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/configadmin-1.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/cryptix-asn1.jar"/>
 	<classpathentry kind="lib" path="lib/cryptix.jar"/>
@@ -59,7 +57,6 @@
 	<classpathentry kind="lib" path="lib/julia-asm-2.5.3-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/julia-mixins-2.5.3-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/julia-runtime-2.5.3-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="lib/jung-1.7.4.jar"/>
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
 	<classpathentry kind="lib" path="lib/moduleloader.jar"/>
