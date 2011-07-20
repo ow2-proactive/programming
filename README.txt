@@ -7,16 +7,14 @@ You can find the documentation of ProActive in the docs directory:
 	* Documentation in PDF format
 	* Documentation in HTML format 
 
-Javadoc and updated documentation are available online:
+Javadoc and updated documentation are available online: 
 
-	* Public API Javadoc   http://proactive.inria.fr/{version}/javadoc
-	* Full API Javadoc     http://proactive.inria.fr/{version}/javadoc.full
-	* HTML documentation   htpp://proactive.inria.fr/{version}/html
-
+	http://proactive.inria.fr/index.php?page=documentation
 
 In order to start experimenting with ProActive:
 
-	* Set JAVA_HOME environment variable to the directory where 1.5 or greater JDK is installed
+	* Set JAVA_HOME environment variable to the directory where 1.6 or greater JDK is installed 
+	  (if you need a java 1.5 version, please contact ActiveEon at contact@activeeon.com)
 
 	Run the examples by going in the examples directory and launching the suitable scripts for your platform.
 	
