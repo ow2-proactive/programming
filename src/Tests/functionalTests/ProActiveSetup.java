@@ -127,10 +127,6 @@ public class ProActiveSetup {
         jvmParameters.append(CentralPAPropertyRepository.PA_TEST.getCmdLine());
         jvmParameters.append("true ");
 
-        // Jetty: avoid to use SecureRandom for session tracking
-        jvmParameters.append(CentralPAPropertyRepository.PA_HTTP_JETTY_XML.getCmdLine());
-        jvmParameters.append("\"" + CentralPAPropertyRepository.PA_HTTP_JETTY_XML.getValue() + "\"");
-
         jvmParameters.append(" -Dproactive.test=true ");
 
         jvmParameters.append(CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.getCmdLine());
