@@ -36,6 +36,7 @@
  */
 package performanceTests.throughput;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -45,7 +46,7 @@ public class TestRMISSL extends Throughput {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("rmissl");
     }
 
-    public TestRMISSL() {
+    public TestRMISSL() throws ProActiveException {
         super(TestRMISSL.class);
     }
 }

@@ -36,6 +36,7 @@
  */
 package performanceTests.throughput;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -44,7 +45,7 @@ public class TestPNPSsl extends Throughput {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pnps");
     }
 
-    public TestPNPSsl() {
+    public TestPNPSsl() throws ProActiveException {
         super(TestPNPSsl.class);
     }
 }

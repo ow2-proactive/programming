@@ -43,22 +43,24 @@ import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAFuture;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.request.RequestReceiverImpl;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestISUniqueThread extends GCMFunctionalTestDefaultNodes {
+public class TestISUniqueThread extends GCMFunctionalTest {
 
     private final static int NB_CALL = 100;
     private final static int NB_CALLER = 10;
 
-    public TestISUniqueThread() {
+    public TestISUniqueThread() throws ProActiveException {
         super(2, 1);
+        super.startDeployment();
     }
 
     public static class Caller {

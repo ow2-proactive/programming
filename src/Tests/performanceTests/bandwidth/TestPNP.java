@@ -36,6 +36,7 @@
  */
 package performanceTests.bandwidth;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -44,7 +45,7 @@ public class TestPNP extends Bandwidth {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pnp");
     }
 
-    public TestPNP() {
+    public TestPNP() throws ProActiveException {
         super(TestPNP.class);
     }
 }

@@ -36,6 +36,7 @@
  */
 package performanceTests.throughput;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 
@@ -51,7 +52,7 @@ public class TestPAMR extends Throughput {
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
     }
 
-    public TestPAMR() {
+    public TestPAMR() throws ProActiveException {
         super(TestPAMR.class);
     }
 }

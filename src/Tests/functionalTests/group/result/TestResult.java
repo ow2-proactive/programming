@@ -42,11 +42,12 @@ import java.util.Iterator;
 
 import org.junit.Before;
 import org.objectweb.proactive.api.PAGroup;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 import functionalTests.group.A;
 
 
@@ -56,12 +57,13 @@ import functionalTests.group.A;
  * @author The ProActive Team
  */
 
-public class TestResult extends GCMFunctionalTestDefaultNodes {
+public class TestResult extends GCMFunctionalTest {
     private A resultTypedGroup = null;
     private A resultResultTypedGroup = null;
 
-    public TestResult() {
+    public TestResult() throws ProActiveException {
         super(2, 1);
+        super.startDeployment();
     }
 
     @org.junit.Test

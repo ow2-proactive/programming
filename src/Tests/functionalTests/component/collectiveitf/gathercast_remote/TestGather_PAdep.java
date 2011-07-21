@@ -50,7 +50,7 @@ public class TestGather_PAdep extends TestGather_GCMdep {
     public void testRemoteGathercast() throws Exception {
         oldDeploymentDescriptor = PADeployment.getProactiveDescriptor(TestGather_PAdep.class.getResource(
                 "/functionalTests/component/deployment/deploymentDescriptor.xml").getPath(),
-                (VariableContractImpl) super.vContract.clone());
+                (VariableContractImpl) super.getVariableContract().clone());
 
         useRemoteGathercastItf(oldDeploymentDescriptor);
     }

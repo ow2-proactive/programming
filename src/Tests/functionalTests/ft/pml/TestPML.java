@@ -46,11 +46,14 @@ import functionalTests.ft.AbstractFTTezt;
  */
 public class TestPML extends AbstractFTTezt {
 
+    public TestPML() {
+        super(TestPML.class.getResource("/functionalTests/ft/pml/testFT_PML.xml"), 4, 1);
+    }
+
     @org.junit.Test
     public void action() throws Exception {
         this.startFTServer("pml");
-        int res = this.deployAndStartAgents(TestPML.class
-                .getResource("/functionalTests/ft/pml/testFT_PML.xml"));
+        int res = this.deployAndStartAgents();
         this.stopFTServer();
         assertTrue(res == AbstractFTTezt.AWAITED_RESULT);
     }

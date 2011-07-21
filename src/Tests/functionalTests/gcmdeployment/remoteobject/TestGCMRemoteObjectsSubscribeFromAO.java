@@ -45,18 +45,20 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.RunActive;
 import org.objectweb.proactive.Service;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestGCMRemoteObjectsSubscribeFromAO extends GCMFunctionalTestDefaultNodes {
-    public TestGCMRemoteObjectsSubscribeFromAO() {
+public class TestGCMRemoteObjectsSubscribeFromAO extends GCMFunctionalTest {
+    public TestGCMRemoteObjectsSubscribeFromAO() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @Test
@@ -89,7 +91,7 @@ public class TestGCMRemoteObjectsSubscribeFromAO extends GCMFunctionalTestDefaul
             Service service = new Service(body);
 
             try {
-                GCMVirtualNode vn1 = gcma.getVirtualNode(GCMFunctionalTestDefaultNodes.VN_NAME);
+                GCMVirtualNode vn1 = gcma.getVirtualNode(DEFAULT_VN_NAME);
                 vn1.subscribeNodeAttachment(PAActiveObject.getStubOnThis(), "callback", true);
 
                 service.blockingServeOldest("callback");

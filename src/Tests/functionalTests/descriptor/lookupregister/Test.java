@@ -72,7 +72,7 @@ public class Test extends FunctionalTest {
     @org.junit.Test
     public void action() throws Exception {
         proActiveDescriptorAgent = PADeployment.getProactiveDescriptor("file:" + AGENT_XML_LOCATION_UNIX,
-                super.vContract);
+                super.getVariableContract());
         proActiveDescriptorAgent.activateMappings();
         VirtualNode vnAgent = proActiveDescriptorAgent.getVirtualNode("Agent");
         PAActiveObject.newActive(A.class, new Object[] { "local" }, vnAgent.getNode());

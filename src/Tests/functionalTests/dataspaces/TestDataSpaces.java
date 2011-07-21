@@ -56,6 +56,7 @@ import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAException;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveTimeoutException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
@@ -90,8 +91,9 @@ public class TestDataSpaces extends GCMFunctionalDataSpacesBase {
     private TestActiveObject aoLocal;
     private TestActiveObject aoFake;
 
-    public TestDataSpaces() throws URISyntaxException, IOException {
+    public TestDataSpaces() throws URISyntaxException, IOException, ProActiveException {
         super(2, 2);
+        super.startDeployment();
     }
 
     @Before

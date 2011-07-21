@@ -39,16 +39,18 @@ package functionalTests.activeobject.migration.loopmigration;
 import static junit.framework.Assert.assertFalse;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Test AO loop migration
  */
-public class TestLoopMigration extends GCMFunctionalTestDefaultNodes {
-    public TestLoopMigration() {
+public class TestLoopMigration extends GCMFunctionalTest {
+    public TestLoopMigration() throws ProActiveException {
         super(2, 1);
+        super.startDeployment();
     }
 
     @org.junit.Test

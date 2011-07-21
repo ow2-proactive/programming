@@ -41,21 +41,23 @@ import java.io.Serializable;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
 
 import performanceTests.HudsonReport;
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestForgetOnSend extends GCMFunctionalTestDefaultNodes {
+public class TestForgetOnSend extends GCMFunctionalTest {
 
     static {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("rmi");
     }
 
-    public TestForgetOnSend() {
+    public TestForgetOnSend() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @Test

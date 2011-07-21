@@ -50,18 +50,19 @@ import org.objectweb.proactive.core.remoteobject.RemoteObjectExposer;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectHelper;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctionalTestDefaultNodes {
-    public TestGCMRemoteObjectsSubscribeFromRemoteObject() {
+public class TestGCMRemoteObjectsSubscribeFromRemoteObject extends GCMFunctionalTest {
+    public TestGCMRemoteObjectsSubscribeFromRemoteObject() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @Test
     public void testRemote() throws InterruptedException, ProActiveException, URISyntaxException {
 
-        GCMVirtualNode vn1 = super.gcmad.getVirtualNode(GCMFunctionalTestDefaultNodes.VN_NAME);
+        GCMVirtualNode vn1 = super.gcmad.getVirtualNode(DEFAULT_VN_NAME);
 
         Node node = super.getANode();
 

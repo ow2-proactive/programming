@@ -48,8 +48,9 @@ import functionalTests.gcmdeployment.LocalHelpers;
 
 
 public class TestVirtualNode6 extends GCMFunctionalTest {
-    public TestVirtualNode6() throws FileNotFoundException {
+    public TestVirtualNode6() throws FileNotFoundException, ProActiveException {
         super(LocalHelpers.getDescriptor(TestVirtualNode6.class));
+        super.startDeployment();
     }
 
     @Test

@@ -40,41 +40,38 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.gcmdeployment.core.TopologyImpl;
-import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.gcmdeployment.Topology;
 
-import functionalTests.FunctionalTest;
+import functionalTests.GCMFunctionalTest;
 import functionalTests.gcmdeployment.LocalHelpers;
 
 
-public class TestGCMApplicationDescriptorAPI extends FunctionalTest {
-    static GCMApplication gcma;
-
-    @Before
-    public void before() throws FileNotFoundException, ProActiveException {
-        gcma = PAGCMDeployment.loadApplicationDescriptor(LocalHelpers.getDescriptor(this));
+public class TestGCMApplicationDescriptorAPI extends GCMFunctionalTest {
+    public TestGCMApplicationDescriptorAPI() throws ProActiveException, FileNotFoundException {
+        super(LocalHelpers.getDescriptor(TestGCMApplicationDescriptorAPI.class));
+        super.startDeployment();
     }
 
     @Test
     public void test() throws ProActiveException, FileNotFoundException {
+        super.gcmad = PAGCMDeployment.loadApplicationDescriptor(super.applicationDescriptor, super
+                .getFinalVariableContract());
+        Assert.assertFalse(super.gcmad.isStarted());
+        Assert.assertEquals(2, super.gcmad.getVirtualNodes().size());
 
-        Assert.assertFalse(gcma.isStarted());
-        Assert.assertEquals(2, gcma.getVirtualNodes().size());
-
-        gcma.startDeployment();
+        super.gcmad.startDeployment();
         LocalHelpers.waitAllocation();
 
-        Assert.assertTrue(gcma.isStarted());
-        Assert.assertEquals(2, gcma.getVirtualNodes().size());
+        Assert.assertTrue(super.gcmad.isStarted());
+        Assert.assertEquals(2, super.gcmad.getVirtualNodes().size());
 
-        GCMVirtualNode vn1 = gcma.getVirtualNode("vn1");
+        GCMVirtualNode vn1 = super.gcmad.getVirtualNode("vn1");
         Assert.assertNotNull(vn1);
         List<Node> nodes = vn1.getCurrentNodes();
 
@@ -83,7 +80,7 @@ public class TestGCMApplicationDescriptorAPI extends FunctionalTest {
             node.getActiveObjects();
         }
 
-        gcma.kill();
+        super.gcmad.kill();
 
         // Check unreachable
         for (Node node : nodes) {
@@ -99,23 +96,23 @@ public class TestGCMApplicationDescriptorAPI extends FunctionalTest {
 
     @Test(expected = IllegalStateException.class)
     public void testExceptionGetAllNode() {
-        gcma.getAllNodes();
+        super.gcmad.getAllNodes();
     }
 
     @Test(expected = ProActiveException.class)
     public void testExceptionGetTopology() throws ProActiveException {
-        gcma.getTopology();
+        super.gcmad.getTopology();
     }
 
     @Test(expected = ProActiveException.class)
     public void testExceptionUpdateTopology() throws ProActiveException {
         Topology t = new TopologyImpl();
-        gcma.updateTopology(t);
+        super.gcmad.updateTopology(t);
     }
 
     @Test
     public void testGetVirtualNode() {
-        GCMVirtualNode vn = gcma.getVirtualNode("IDontExist");
+        GCMVirtualNode vn = super.gcmad.getVirtualNode("IDontExist");
         Assert.assertNull(vn);
     }
 

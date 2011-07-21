@@ -87,7 +87,7 @@ public class TestDivisibleTasks extends FunctionalTest {
     public void initTest() throws Exception {
 
         master = new ProActiveMaster<DaCSort, ArrayList<Integer>>();
-        master.addResources(descriptor, super.vContract);
+        master.addResources(descriptor, super.getVariableContract());
         master.setResultReceptionOrder(Master.SUBMISSION_ORDER);
 
         tasks = new ArrayList<DaCSort>();

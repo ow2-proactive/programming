@@ -56,8 +56,9 @@ import functionalTests.gcmdeployment.LocalHelpers;
 
 public class TestTopology extends GCMFunctionalTest {
 
-    public TestTopology() throws FileNotFoundException {
+    public TestTopology() throws FileNotFoundException, ProActiveException {
         super(LocalHelpers.getDescriptor(TestTopology.class));
+        super.startDeployment();
     }
 
     @BeforeClass

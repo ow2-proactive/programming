@@ -45,6 +45,7 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
@@ -66,7 +67,7 @@ public class TestComponentRemote extends ComponentTestDefaultNodes {
     private static Component c1;
     private static Component c2;
 
-    public TestComponentRemote() {
+    public TestComponentRemote() throws ProActiveException {
         super(2, 1);
     }
 

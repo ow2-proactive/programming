@@ -36,47 +36,26 @@
  */
 package functionalTests.gcmdeployment.technicalservice;
 
-import java.net.URL;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
-import org.objectweb.proactive.gcmdeployment.GCMApplication;
-import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
-import org.objectweb.proactive.utils.OperatingSystem;
 
-import functionalTests.FunctionalTest;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Deployment descriptor technical services.
  */
-public class TestApplicationLevel extends FunctionalTest {
-    private Node node;
+public class TestApplicationLevel extends GCMFunctionalTest {
 
-    static public final String VAR_OS = "os";
-
-    @Before
-    public void before() throws ProActiveException {
-        URL desc = this.getClass().getResource("TestApplicationLevelApplication.xml");
-
-        VariableContractImpl vc = new VariableContractImpl();
-        vc.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, FunctionalTest.getJvmParameters()
-                .toString(), VariableContractType.ProgramVariable);
-        vc.setVariableFromProgram(VAR_OS, OperatingSystem.getOperatingSystem().name(),
-                VariableContractType.DescriptorDefaultVariable);
-        GCMApplication app = PAGCMDeployment.loadApplicationDescriptor(desc, vc);
-        app.startDeployment();
-        GCMVirtualNode vn = app.getVirtualNode("nodes");
-        node = vn.getANode();
+    public TestApplicationLevel() throws ProActiveException {
+        super(TestApplicationLevel.class.getResource("TestApplicationLevelApplication.xml"));
+        super.startDeployment();
     }
 
     @org.junit.Test
     public void action() throws Exception {
+        Node node = super.getANode();
         Assert.assertEquals("aaa", node.getProperty("arg1"));
         Assert.assertNull(node.getProperty("arg2"));
     }

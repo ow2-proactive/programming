@@ -41,21 +41,23 @@ import java.io.Serializable;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
 
 import performanceTests.HudsonReport;
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public abstract class Bandwidth extends GCMFunctionalTestDefaultNodes {
+public abstract class Bandwidth extends GCMFunctionalTest {
     /** The buffer included in each message */
     static final public byte buf[] = new byte[10 * 1024 * 1024]; // 10Mo
 
     private Class<?> cl;
 
-    public Bandwidth(Class<?> cl) {
+    public Bandwidth(Class<?> cl) throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
         this.cl = cl;
     }
 

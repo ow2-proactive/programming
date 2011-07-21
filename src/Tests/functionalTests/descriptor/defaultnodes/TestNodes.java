@@ -85,7 +85,7 @@ public class TestNodes extends FunctionalTest {
     @Test
     public void action() throws Exception {
         proActiveDescriptor = PADeployment.getProactiveDescriptor(new File(XML_LOCATION.toURI())
-                .getAbsolutePath(), super.vContract);
+                .getAbsolutePath(), super.getVariableContract());
         proActiveDescriptor.activateMappings();
         TestNodes.virtualNodes = proActiveDescriptor.getVirtualNodes();
         for (int i = 0; i < virtualNodes.length; i++) {

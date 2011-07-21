@@ -43,10 +43,11 @@ import java.util.Iterator;
 import org.junit.Before;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.api.PASPMD;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
@@ -55,11 +56,12 @@ import functionalTests.GCMFunctionalTestDefaultNodes;
  * @author The ProActive Team
  */
 
-public class TestBarrier extends GCMFunctionalTestDefaultNodes {
+public class TestBarrier extends GCMFunctionalTest {
     private A spmdgroup = null;
 
-    public TestBarrier() {
+    public TestBarrier() throws ProActiveException {
         super(2, 1);
+        super.startDeployment();
     }
 
     @Before

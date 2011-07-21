@@ -39,23 +39,23 @@ package functionalTests.protointerop;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.remoteobject.RemoteObjectSet.NotYetExposedException;
 import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
-import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.annotation.ActiveObject;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class AbstractProtoInterop extends GCMFunctionalTestDefaultNodes {
+public class AbstractProtoInterop extends GCMFunctionalTest {
 
-    public AbstractProtoInterop(String protocol) {
+    public AbstractProtoInterop(String protocol) throws ProActiveException {
         super(1, 1);
-        super.vContract.setVariableFromProgram("jvmargDefinedByTest", "-Dproactive.communication.protocol=" +
-            protocol, VariableContractType.DescriptorDefaultVariable);
+        super.setOptionalJvmParamters("-Dproactive.communication.protocol=" + protocol);
+        super.startDeployment();
     }
 
     @Test(timeout = 10000)

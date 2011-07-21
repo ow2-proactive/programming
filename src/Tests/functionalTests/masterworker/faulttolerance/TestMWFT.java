@@ -99,14 +99,14 @@ public class TestMWFT extends FunctionalTest {
             tasks.add(t);
         }
 
-        this.pad = PAGCMDeployment.loadApplicationDescriptor(descriptor,
-                (VariableContractImpl) super.vContract.clone());
+        this.pad = PAGCMDeployment.loadApplicationDescriptor(descriptor, (VariableContractImpl) super
+                .getVariableContract().clone());
         this.pad.startDeployment();
         this.vn1 = this.pad.getVirtualNode("VN1");
         this.vn1.waitReady();
         System.out.println("VN1 is ready");
-        this.pad2 = PAGCMDeployment.loadApplicationDescriptor(descriptor2,
-                (VariableContractImpl) super.vContract.clone());
+        this.pad2 = PAGCMDeployment.loadApplicationDescriptor(descriptor2, (VariableContractImpl) super
+                .getVariableContract().clone());
         this.pad2.startDeployment();
         this.vn2 = this.pad2.getVirtualNode("VN2");
         this.vn2.waitReady();

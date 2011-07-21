@@ -43,24 +43,26 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.api.PASPMD;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.mop.ClassNotReifiableException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Test ForgetOnSend strategies on SPMD groups
  */
 
-public class TestGroup extends GCMFunctionalTestDefaultNodes {
+public class TestGroup extends GCMFunctionalTest {
 
     private boolean result;
     private B b, b1, b2, b3, b4;
 
-    public TestGroup() {
+    public TestGroup() throws ProActiveException {
         super(4, 1);
+        super.startDeployment();
     }
 
     /**

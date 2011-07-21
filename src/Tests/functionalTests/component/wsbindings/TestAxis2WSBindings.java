@@ -63,11 +63,8 @@ import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.webservices.AbstractWebServicesFactory;
 import org.objectweb.proactive.extensions.webservices.WSConstants;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
-import org.objectweb.proactive.utils.OperatingSystem;
 
-import functionalTests.FunctionalTest;
 import functionalTests.GCMFunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
 
 
 /**
@@ -154,16 +151,12 @@ public class TestAxis2WSBindings extends CommonSetup {
         GCM.getGCMLifeCycleController(client).startFc();
         URL descriptorPath = functionalTests.component.deployment.Test.class
                 .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
-        VariableContractImpl vContract = new VariableContractImpl();
-        vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
-                .name(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
-                .toString(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
-                .toString(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVM_PARAMETERS, FunctionalTest
-                .getJvmParameters(), VariableContractType.ProgramVariable);
-        GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
+        VariableContractImpl vc = super.getVariableContract();
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_HOSTCAPACITY, Integer.valueOf(4).toString(),
+                VariableContractType.DescriptorDefaultVariable);
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_VMCAPACITY, Integer.valueOf(1).toString(),
+                VariableContractType.DescriptorDefaultVariable);
+        GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vc);
         gcma.startDeployment();
         GCM.getMigrationController(client).migrateGCMComponentTo(
                 gcma.getVirtualNodes().values().iterator().next().getANode());

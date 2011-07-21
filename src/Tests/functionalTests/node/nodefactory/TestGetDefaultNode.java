@@ -43,20 +43,22 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.node.NodeFactory;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestGetDefaultNode extends GCMFunctionalTestDefaultNodes {
+public class TestGetDefaultNode extends GCMFunctionalTest {
 
     /* Checks that two runtime don't have the same default node URI.
      *
      */
-    public TestGetDefaultNode() {
+    public TestGetDefaultNode() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @Test

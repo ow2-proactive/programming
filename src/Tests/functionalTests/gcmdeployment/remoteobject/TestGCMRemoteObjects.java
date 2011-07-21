@@ -44,17 +44,19 @@ import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.InitActive;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestGCMRemoteObjects extends GCMFunctionalTestDefaultNodes {
-    public TestGCMRemoteObjects() {
+public class TestGCMRemoteObjects extends GCMFunctionalTest {
+    public TestGCMRemoteObjects() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @Test
@@ -78,7 +80,7 @@ public class TestGCMRemoteObjects extends GCMFunctionalTestDefaultNodes {
 
         public void initActivity(Body body) {
             try {
-                GCMVirtualNode vn1 = gcma.getVirtualNode(GCMFunctionalTestDefaultNodes.VN_NAME);
+                GCMVirtualNode vn1 = gcma.getVirtualNode(DEFAULT_VN_NAME);
                 if (vn1 == null)
                     success = false;
 

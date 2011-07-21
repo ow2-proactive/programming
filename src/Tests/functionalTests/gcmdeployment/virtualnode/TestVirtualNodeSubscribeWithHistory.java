@@ -44,16 +44,17 @@ import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestVirtualNodeSubscribeWithHistory extends GCMFunctionalTestDefaultNodes {
+public class TestVirtualNodeSubscribeWithHistory extends GCMFunctionalTest {
 
     int counter = 0;
     Semaphore sem = new Semaphore(4);
 
-    public TestVirtualNodeSubscribeWithHistory() {
+    public TestVirtualNodeSubscribeWithHistory() throws ProActiveException {
         super(2, 2);
+        super.startDeployment();
     }
 
     @Test
@@ -61,7 +62,7 @@ public class TestVirtualNodeSubscribeWithHistory extends GCMFunctionalTestDefaul
         // Block until a node register, so history will be used at least for one node
         super.getANode();
 
-        GCMVirtualNode vn = super.gcmad.getVirtualNode(super.VN_NAME);
+        GCMVirtualNode vn = super.gcmad.getVirtualNode(super.DEFAULT_VN_NAME);
         Assert.assertNotNull(vn);
         vn.subscribeNodeAttachment(this, "callback", true);
 

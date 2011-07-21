@@ -40,24 +40,25 @@ import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.Context;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestContext extends GCMFunctionalTestDefaultNodes {
+public class TestContext extends GCMFunctionalTest {
 
-    public TestContext() {
+    public TestContext() throws ProActiveException {
         super(2, 1);
+        super.startDeployment();
     }
 
     @org.junit.Test
     public void action() throws Exception {
-
         Node node1 = getANode();
         Node node2 = getANode();
 

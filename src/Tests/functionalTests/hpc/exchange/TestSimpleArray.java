@@ -42,16 +42,18 @@ import java.util.Arrays;
 
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.api.PASPMD;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestSimpleArray extends GCMFunctionalTestDefaultNodes {
+public class TestSimpleArray extends GCMFunctionalTest {
     private A spmdgroup;
 
-    public TestSimpleArray() {
+    public TestSimpleArray() throws ProActiveException {
         super(2, 2);
+        super.startDeployment();
     }
 
     @org.junit.Test

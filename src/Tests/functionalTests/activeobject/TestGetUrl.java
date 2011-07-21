@@ -41,17 +41,19 @@ import java.io.IOException;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestGetUrl extends GCMFunctionalTestDefaultNodes {
+public class TestGetUrl extends GCMFunctionalTest {
 
-    public TestGetUrl() {
+    public TestGetUrl() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @Test(expected = ProActiveRuntimeException.class)

@@ -44,22 +44,24 @@ import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * This test check that final fields are correctly handled by ProActive
  */
-public class TestFinal extends GCMFunctionalTestDefaultNodes {
+public class TestFinal extends GCMFunctionalTest {
     Node node;
     Receiver receiver;
 
-    public TestFinal() {
+    public TestFinal() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @Before

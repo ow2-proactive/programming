@@ -46,12 +46,15 @@ import functionalTests.ft.AbstractFTTezt;
  */
 public class TestCIC extends AbstractFTTezt {
 
+    public TestCIC() {
+        super(TestCIC.class.getResource("/functionalTests/ft/cic/testFT_CIC.xml"), 4, 1);
+    }
+
     @org.junit.Test
     public void action() throws Exception {
 
         this.startFTServer("cic");
-        int res = this.deployAndStartAgents(TestCIC.class
-                .getResource("/functionalTests/ft/cic/testFT_CIC.xml"));
+        int res = this.deployAndStartAgents();
         this.stopFTServer();
         assertTrue(res == AbstractFTTezt.AWAITED_RESULT);
     }

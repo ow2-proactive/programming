@@ -46,6 +46,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Ignore;
 import org.objectweb.proactive.extensions.annotation.common.ProActiveAnnotationProcessorFactory;
+import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.FunctionalTest;
 
@@ -84,7 +85,18 @@ public abstract class AptTest extends AnnotationTest {
     }
 
     public String getAptCommand() {
-        return FunctionalTest.getJavaBinDir() + "apt";
+        String relPath = null;
+        switch (OperatingSystem.getOperatingSystem()) {
+            case unix:
+                relPath = "../bin/apt";
+                break;
+            case windows:
+                relPath = "../bin/apt.exe";
+                break;
+            default:
+                throw new IllegalStateException("Unsupported operating system");
+        }
+        return new File(System.getProperty("java.home"), relPath).getAbsolutePath();
     }
 
     @Override

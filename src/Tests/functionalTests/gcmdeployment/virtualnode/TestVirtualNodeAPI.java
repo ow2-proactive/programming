@@ -41,6 +41,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
@@ -49,8 +50,9 @@ import functionalTests.gcmdeployment.LocalHelpers;
 
 
 public class TestVirtualNodeAPI extends GCMFunctionalTest {
-    public TestVirtualNodeAPI() throws FileNotFoundException {
+    public TestVirtualNodeAPI() throws FileNotFoundException, ProActiveException {
         super(LocalHelpers.getDescriptor(TestVirtualNodeAPI.class));
+        super.startDeployment();
     }
 
     @Test

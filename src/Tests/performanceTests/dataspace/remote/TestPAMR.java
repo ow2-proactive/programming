@@ -36,6 +36,7 @@
  */
 package performanceTests.dataspace.remote;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -45,7 +46,7 @@ public class TestPAMR extends AbstractPAProviderRemoteBenchmark {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pamr");
     }
 
-    public TestPAMR() {
+    public TestPAMR() throws ProActiveException {
         super(TestPAMR.class);
     }
 }

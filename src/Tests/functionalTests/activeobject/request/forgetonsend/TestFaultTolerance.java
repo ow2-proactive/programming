@@ -43,13 +43,8 @@ import java.net.URL;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
-import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
-import org.objectweb.proactive.utils.OperatingSystem;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
 import functionalTests.ft.AbstractFTTezt;
 import functionalTests.ft.cic.TestCIC;
 
@@ -59,6 +54,10 @@ public class TestFaultTolerance extends AbstractFTTezt {
     private JVMProcessImpl server;
     private static URL FT_XML_LOCATION_UNIX = TestCIC.class
             .getResource("/functionalTests/ft/cic/testFT_CIC.xml");
+
+    public TestFaultTolerance() {
+        super(FT_XML_LOCATION_UNIX, 4, 1);
+    }
 
     /**
      * We will try to perform a failure during a sending, and then verify that the sending restart
@@ -71,21 +70,11 @@ public class TestFaultTolerance extends AbstractFTTezt {
 
         this.startFTServer("cic");
 
-        GCMApplication gcma;
         GCMVirtualNode vnode;
 
-        vContract.setVariableFromProgram("os", OperatingSystem.getOperatingSystem().name(),
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
-                VariableContractType.DescriptorDefaultVariable);
-
         //	create nodes
-
-        gcma = PAGCMDeployment.loadApplicationDescriptor(FT_XML_LOCATION_UNIX, vContract);
-        gcma.startDeployment();
-        vnode = gcma.getVirtualNode("Workers");
+        super.startDeployment();
+        vnode = super.gcmad.getVirtualNode("Workers");
         Node[] nodes = new Node[2];
         nodes[0] = vnode.getANode();
         nodes[1] = vnode.getANode();

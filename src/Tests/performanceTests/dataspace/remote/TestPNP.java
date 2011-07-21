@@ -36,6 +36,7 @@
  */
 package performanceTests.dataspace.remote;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -45,7 +46,7 @@ public class TestPNP extends AbstractPAProviderRemoteBenchmark {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pnp");
     }
 
-    public TestPNP() {
+    public TestPNP() throws ProActiveException {
         super(TestPNP.class);
     }
 }

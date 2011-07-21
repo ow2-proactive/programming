@@ -73,10 +73,10 @@ public class TestRemoteMaster extends FunctionalTest {
             tasks.add(t);
         }
 
-        master = new ProActiveMaster<A, Integer>(descriptor, (VariableContractImpl) super.vContract.clone(),
-            "Master");
+        master = new ProActiveMaster<A, Integer>(descriptor, (VariableContractImpl) super
+                .getVariableContract().clone(), "Master");
         // We use the same descriptor as resource, the Master VN should be ignored
-        master.addResources(descriptor, (VariableContractImpl) super.vContract.clone());
+        master.addResources(descriptor, (VariableContractImpl) super.getVariableContract().clone());
         master.setResultReceptionOrder(Master.SUBMISSION_ORDER);
 
         master.solve(tasks);

@@ -43,6 +43,7 @@ import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
 
 import functionalTests.FunctionalTest;
 
@@ -69,10 +70,12 @@ public class Test extends FunctionalTest {
 
     @org.junit.Test
     public void action() throws Exception {
-        pad = PADeployment.getProactiveDescriptor(ONEVM_XML_LOCATION_UNIX, super.vContract);
+        pad = PADeployment.getProactiveDescriptor(ONEVM_XML_LOCATION_UNIX, (VariableContractImpl) super
+                .getVariableContract().clone());
         pad.activateMappings();
         Thread.sleep(5000);
-        pad1 = PADeployment.getProactiveDescriptor(LOOK_XML_LOCATION_UNIX, super.vContract);
+        pad1 = PADeployment.getProactiveDescriptor(LOOK_XML_LOCATION_UNIX, (VariableContractImpl) super
+                .getVariableContract().clone());
         pad1.activateMappings();
         VirtualNode vn = pad1.getVirtualNode("VnTest");
         node = vn.getNode();

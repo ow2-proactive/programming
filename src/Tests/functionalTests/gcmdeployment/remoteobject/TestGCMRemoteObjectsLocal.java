@@ -38,20 +38,22 @@ package functionalTests.gcmdeployment.remoteobject;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestGCMRemoteObjectsLocal extends GCMFunctionalTestDefaultNodes {
-    public TestGCMRemoteObjectsLocal() {
+public class TestGCMRemoteObjectsLocal extends GCMFunctionalTest {
+    public TestGCMRemoteObjectsLocal() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @Test
     public void testLocal() {
-        GCMVirtualNode vn1 = super.gcmad.getVirtualNode(GCMFunctionalTestDefaultNodes.VN_NAME);
+        GCMVirtualNode vn1 = super.gcmad.getVirtualNode(DEFAULT_VN_NAME);
         Assert.assertNotNull(vn1);
 
         boolean atLeastOne = false;

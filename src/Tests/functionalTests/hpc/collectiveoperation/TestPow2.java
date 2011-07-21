@@ -40,17 +40,19 @@ import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PAGroup;
 import org.objectweb.proactive.api.PASPMD;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestPow2 extends GCMFunctionalTestDefaultNodes {
+public class TestPow2 extends GCMFunctionalTest {
     private A spmdgroup;
     private int groupSize;
 
-    public TestPow2() {
+    public TestPow2() throws ProActiveException {
         super(2, 2);
+        super.startDeployment();
     }
 
     @org.junit.Before

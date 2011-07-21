@@ -61,10 +61,10 @@ import org.objectweb.proactive.extensions.dataspaces.exceptions.SpaceNotFoundExc
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
 import org.objectweb.proactive.utils.TimeoutAccounter;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTestDefaultNodes {
+public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTest {
     final Class<? extends AbstractPAProviderRemoteBenchmark> cl;
 
     static {
@@ -75,9 +75,11 @@ public abstract class AbstractPAProviderRemoteBenchmark extends GCMFunctionalTes
     NamingServiceDeployer namingServiceDeployer;
     AO ao;
 
-    public AbstractPAProviderRemoteBenchmark(Class<? extends AbstractPAProviderRemoteBenchmark> cl) {
+    public AbstractPAProviderRemoteBenchmark(Class<? extends AbstractPAProviderRemoteBenchmark> cl)
+            throws ProActiveException {
         super(1, 1);
         this.cl = cl;
+        super.startDeployment();
     }
 
     @Before

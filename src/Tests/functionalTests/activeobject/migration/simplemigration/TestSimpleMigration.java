@@ -39,19 +39,21 @@ package functionalTests.activeobject.migration.simplemigration;
 import junit.framework.Assert;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Test AO simple migration
  */
 
-public class TestSimpleMigration extends GCMFunctionalTestDefaultNodes {
+public class TestSimpleMigration extends GCMFunctionalTest {
 
-    public TestSimpleMigration() {
+    public TestSimpleMigration() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @org.junit.Test

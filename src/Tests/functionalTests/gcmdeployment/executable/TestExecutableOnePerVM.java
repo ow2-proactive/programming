@@ -37,12 +37,13 @@
 package functionalTests.gcmdeployment.executable;
 
 import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderExecutable.Instances;
 
 
 public class TestExecutableOnePerVM extends AbstractTExecutable {
 
-    public TestExecutableOnePerVM() {
+    public TestExecutableOnePerVM() throws ProActiveException {
         super(Instances.onePerVM);
     }
 

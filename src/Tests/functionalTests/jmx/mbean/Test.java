@@ -40,10 +40,10 @@ import static junit.framework.Assert.assertTrue;
 
 import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.xml.VariableContractType;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
@@ -52,16 +52,14 @@ import functionalTests.GCMFunctionalTestDefaultNodes;
  * @author The ProActive Team
  */
 
-public class Test extends GCMFunctionalTestDefaultNodes {
+public class Test extends GCMFunctionalTest {
     private A ao;
 
-    public Test() {
+    public Test() throws ProActiveException {
         super(1, 1);
-        super.vContract
-                .setVariableFromProgram(
-                        "jvmargDefinedByTest",
-                        "-Dcom.sun.management.jmxremote -Dproactive.jmx.mbean=true -Dproactive.jmx.notification=true",
-                        VariableContractType.DescriptorDefaultVariable);
+        super
+                .setOptionalJvmParamters("-Dcom.sun.management.jmxremote -Dproactive.jmx.mbean=true -Dproactive.jmx.notification=true");
+        super.startDeployment();
     }
 
     @Before

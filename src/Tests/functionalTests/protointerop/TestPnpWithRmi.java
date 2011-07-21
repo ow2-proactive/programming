@@ -36,6 +36,7 @@
  */
 package functionalTests.protointerop;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -45,7 +46,7 @@ public class TestPnpWithRmi extends AbstractProtoInterop {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("pnp");
     }
 
-    public TestPnpWithRmi() {
+    public TestPnpWithRmi() throws ProActiveException {
         super("rmi");
     }
 

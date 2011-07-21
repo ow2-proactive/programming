@@ -39,19 +39,21 @@ package functionalTests.activeobject.node.getactiveobject;
 import junit.framework.Assert;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Test getActiveObjects method on a node
  */
 
-public class TestGetActiveObject extends GCMFunctionalTestDefaultNodes {
+public class TestGetActiveObject extends GCMFunctionalTest {
 
-    public TestGetActiveObject() {
+    public TestGetActiveObject() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @org.junit.Test

@@ -42,12 +42,12 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Test;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.xml.VariableContractType;
 
 import functionalTests.GCMFunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
 
 
 public class TestOptionalNodeProvider extends GCMFunctionalTest {
@@ -56,17 +56,16 @@ public class TestOptionalNodeProvider extends GCMFunctionalTest {
     File tmpDir = new File(ProActiveConfiguration.getInstance().getProperty("java.io.tmpdir") +
         File.separator + this.getClass().getName() + cookie + File.separator);
 
-    public TestOptionalNodeProvider() {
+    public TestOptionalNodeProvider() throws ProActiveException {
         super(AbstractTExecutable.class.getResource("TestOptionalNodeProvider.xml"));
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "1",
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram("tmpDir", tmpDir.toString(),
-                VariableContractType.DescriptorDefaultVariable);
+        super.setHostCapacity(1);
+        super.setVmCapacity(1);
+        super.setVariable("tmpDir", tmpDir.toString(), VariableContractType.DescriptorDefaultVariable);
 
         System.out.println("Temporary directory is: " + tmpDir.toString());
         Assert.assertTrue(tmpDir.mkdir());
+
+        super.startDeployment();
     }
 
     @Test(timeout = 10000)

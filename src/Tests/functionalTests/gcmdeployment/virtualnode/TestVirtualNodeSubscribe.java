@@ -44,15 +44,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
-import functionalTests.FunctionalTest;
+import functionalTests.GCMFunctionalTest;
 import functionalTests.gcmdeployment.LocalHelpers;
 
 
-public class TestVirtualNodeSubscribe extends FunctionalTest {
+public class TestVirtualNodeSubscribe extends GCMFunctionalTest {
     static GCMApplication gcma;
     GCMVirtualNode vnGreedy;
     GCMVirtualNode vnMaster;
@@ -63,9 +62,14 @@ public class TestVirtualNodeSubscribe extends FunctionalTest {
     boolean isReady = false;
     long nodes = 0;
 
+    public TestVirtualNodeSubscribe() throws FileNotFoundException, ProActiveException {
+        super(LocalHelpers.getDescriptor(TestVirtualNodeSubscribe.class));
+        super.startDeployment();
+        gcma = super.gcmad;
+    }
+
     @Before
     public void before() throws ProActiveException, FileNotFoundException {
-        gcma = PAGCMDeployment.loadApplicationDescriptor(LocalHelpers.getDescriptor(this), vContract);
         vnGreedy = gcma.getVirtualNode("greedy");
         vnMaster = gcma.getVirtualNode("master");
     }

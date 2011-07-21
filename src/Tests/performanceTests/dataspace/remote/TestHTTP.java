@@ -36,6 +36,7 @@
  */
 package performanceTests.dataspace.remote;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -45,7 +46,7 @@ public class TestHTTP extends AbstractPAProviderRemoteBenchmark {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("http");
     }
 
-    public TestHTTP() {
+    public TestHTTP() throws ProActiveException {
         super(TestHTTP.class);
     }
 }

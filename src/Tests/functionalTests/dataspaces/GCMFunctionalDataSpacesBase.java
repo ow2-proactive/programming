@@ -50,10 +50,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
-import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.vfsprovider.FileSystemServerDeployer;
-import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 import unitTests.vfsprovider.AbstractIOOperationsBase;
 import functionalTests.FunctionalTest;
@@ -144,9 +143,10 @@ public class GCMFunctionalDataSpacesBase extends GCMFunctionalTest {
         super(dataSpacesApplicationDescriptor);
         this.hostCapacity = hostCapacity;
         this.vmCapacity = vmCapacity;
-        vContract.setVariableFromProgram(VAR_HOSTCAPACITY, Integer.valueOf(hostCapacity).toString(),
+        VariableContractImpl vc = super.getFinalVariableContract();
+        vc.setVariableFromProgram(VAR_HOSTCAPACITY, Integer.valueOf(hostCapacity).toString(),
                 VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(VAR_VMCAPACITY, Integer.valueOf(vmCapacity).toString(),
+        vc.setVariableFromProgram(VAR_VMCAPACITY, Integer.valueOf(vmCapacity).toString(),
                 VariableContractType.DescriptorDefaultVariable);
 
         rootTmpDir = new File(System.getProperty("java.io.tmpdir"), "ProActive-GCMFunctionalDataSpacesBase");
@@ -163,21 +163,21 @@ public class GCMFunctionalDataSpacesBase extends GCMFunctionalTest {
         outputWithNothing1LocalHandle = new File(rootTmpDir, "outputWithNothing1");
         outputWithNothing2LocalHandle = new File(rootTmpDir, "outputWithNothing2");
 
-        vContract.setVariableFromProgram(VAR_INPUT_DEFAULT_WITH_DIR_URL,
+        vc.setVariableFromProgram(VAR_INPUT_DEFAULT_WITH_DIR_URL,
                 getRootSubdirURL(inputDefaultWithDirLocalHandle), VariableContractType.ProgramVariable);
-        vContract.setVariableFromProgram(VAR_INPUT_WITH_DIR_URL, getRootSubdirURL(inputWithDirLocalHandle),
+        vc.setVariableFromProgram(VAR_INPUT_WITH_DIR_URL, getRootSubdirURL(inputWithDirLocalHandle),
                 VariableContractType.ProgramVariable);
-        vContract.setVariableFromProgram(VAR_INPUT_WITH_FILE_URL, getRootSubdirURL(inputWithFileLocalHandle),
+        vc.setVariableFromProgram(VAR_INPUT_WITH_FILE_URL, getRootSubdirURL(inputWithFileLocalHandle),
                 VariableContractType.ProgramVariable);
-        vContract.setVariableFromProgram(VAR_OUTPUT_DEFAULT_WITH_DIR_URL,
+        vc.setVariableFromProgram(VAR_OUTPUT_DEFAULT_WITH_DIR_URL,
                 getRootSubdirURL(outputDefaultWithDirLocalHandle), VariableContractType.ProgramVariable);
-        vContract.setVariableFromProgram(VAR_OUTPUT_WITH_DIR_URL, getRootSubdirURL(outputWithDirLocalHandle),
+        vc.setVariableFromProgram(VAR_OUTPUT_WITH_DIR_URL, getRootSubdirURL(outputWithDirLocalHandle),
                 VariableContractType.ProgramVariable);
-        vContract.setVariableFromProgram(VAR_OUTPUT_WITH_FILE_URL,
-                getRootSubdirURL(outputWithFileLocalHandle), VariableContractType.ProgramVariable);
-        vContract.setVariableFromProgram(VAR_OUTPUT_WITH_NOTHING1_URL,
+        vc.setVariableFromProgram(VAR_OUTPUT_WITH_FILE_URL, getRootSubdirURL(outputWithFileLocalHandle),
+                VariableContractType.ProgramVariable);
+        vc.setVariableFromProgram(VAR_OUTPUT_WITH_NOTHING1_URL,
                 getRootSubdirURL(outputWithNothing1LocalHandle), VariableContractType.ProgramVariable);
-        vContract.setVariableFromProgram(VAR_OUTPUT_WITH_NOTHING2_URL,
+        vc.setVariableFromProgram(VAR_OUTPUT_WITH_NOTHING2_URL,
                 getRootSubdirURL(outputWithNothing2LocalHandle), VariableContractType.ProgramVariable);
 
         // set scratch configuration for local node
@@ -221,19 +221,6 @@ public class GCMFunctionalDataSpacesBase extends GCMFunctionalTest {
         if (fileSystemServerDeployer != null) {
             fileSystemServerDeployer.terminate();
             fileSystemServerDeployer = null;
-        }
-    }
-
-    protected Node getANode() {
-        checkDeploymentState();
-
-        GCMVirtualNode vn = gcmad.getVirtualNode(VN_NAME);
-        return vn.getANode();
-    }
-
-    private void checkDeploymentState() {
-        if (gcmad == null || !gcmad.isStarted()) {
-            throw new IllegalStateException("deployment is not started");
         }
     }
 

@@ -36,6 +36,7 @@
  */
 package performanceTests.throughput;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -44,7 +45,7 @@ public class TestHTTP extends Throughput {
         CentralPAPropertyRepository.PA_COMMUNICATION_PROTOCOL.setValue("http");
     }
 
-    public TestHTTP() {
+    public TestHTTP() throws ProActiveException {
         super(TestHTTP.class);
     }
 }

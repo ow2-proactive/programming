@@ -57,11 +57,9 @@ import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
-import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.ComponentTest;
 import functionalTests.GCMFunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
 import functionalTests.component.I1Multicast;
 import functionalTests.component.Message;
 import functionalTests.component.PrimitiveComponentA;
@@ -105,7 +103,7 @@ public class Test extends ComponentTest {
     public void testProActiveDeployment() throws Exception {
         pad = PADeployment.getProactiveDescriptor(Test.class.getResource(
                 "/functionalTests/component/deployment/deploymentDescriptor.xml").getPath(),
-                (VariableContractImpl) super.vContract.clone());
+                (VariableContractImpl) super.getVariableContract().clone());
         pad.activateMappings();
         context = new HashMap<String, Object>();
         context.put("deployment-descriptor", pad);
@@ -152,14 +150,12 @@ public class Test extends ComponentTest {
     private void startGCMDeployment() throws Exception {
         URL descriptorPath = Test.class
                 .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
-        vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
-                .name(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
-                .toString(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
-                .toString(), VariableContractType.DescriptorDefaultVariable);
-        gcma = PAGCMDeployment.loadApplicationDescriptor(descriptorPath,
-                (VariableContractImpl) super.vContract.clone());
+        VariableContractImpl vc = super.getVariableContract();
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_HOSTCAPACITY, Integer.valueOf(4).toString(),
+                VariableContractType.DescriptorDefaultVariable);
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_VMCAPACITY, Integer.valueOf(1).toString(),
+                VariableContractType.DescriptorDefaultVariable);
+        gcma = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, (VariableContractImpl) vc.clone());
         gcma.startDeployment();
     }
 

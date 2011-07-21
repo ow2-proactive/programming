@@ -36,6 +36,7 @@
  */
 package performanceTests.bandwidth;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
@@ -45,7 +46,7 @@ public class TestRMISSH extends Bandwidth {
         CentralPAPropertyRepository.PA_RMISSH_TRY_NORMAL_FIRST.setValue(false);
     }
 
-    public TestRMISSH() {
+    public TestRMISSH() throws ProActiveException {
         super(TestRMISSH.class);
     }
 }

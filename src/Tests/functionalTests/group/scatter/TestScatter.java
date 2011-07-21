@@ -40,11 +40,12 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PAGroup;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.group.Group;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 import functionalTests.group.A;
 
 
@@ -54,13 +55,14 @@ import functionalTests.group.A;
  * @author The ProActive Team
  */
 
-public class TestScatter extends GCMFunctionalTestDefaultNodes {
+public class TestScatter extends GCMFunctionalTest {
     private A typedGroup = null;
     private A parameterGroup = null;
     private A resultTypedGroup = null;
 
-    public TestScatter() {
+    public TestScatter() throws ProActiveException {
         super(4, 1);
+        super.startDeployment();
     }
 
     @org.junit.Test

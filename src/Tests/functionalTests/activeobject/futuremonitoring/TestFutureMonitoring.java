@@ -40,20 +40,22 @@ import static junit.framework.Assert.assertTrue;
 
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.exceptions.FutureMonitoringPingFailureException;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Test monitoring the futures
  */
 
-public class TestFutureMonitoring extends GCMFunctionalTestDefaultNodes {
+public class TestFutureMonitoring extends GCMFunctionalTest {
 
-    public TestFutureMonitoring() {
+    public TestFutureMonitoring() throws ProActiveException {
         super(4, 1);
+        super.startDeployment();
     }
 
     @Test

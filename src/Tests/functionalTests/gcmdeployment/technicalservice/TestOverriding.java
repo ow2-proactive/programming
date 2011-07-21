@@ -36,53 +36,34 @@
  */
 package functionalTests.gcmdeployment.technicalservice;
 
-import java.net.URL;
-
 import org.junit.Assert;
-import org.junit.Before;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
-import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
-import org.objectweb.proactive.utils.OperatingSystem;
 
-import functionalTests.FunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Deployment descriptor technical services.
  */
-public class TestOverriding extends FunctionalTest {
-    private GCMApplication app;
+public class TestOverriding extends GCMFunctionalTest {
     static public final String VAR_OS = "os";
 
-    @Before
-    public void before() throws ProActiveException {
-        VariableContractImpl vContract = new VariableContractImpl();
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, FunctionalTest.getJvmParameters()
-                .toString(), VariableContractType.ProgramVariable);
-        vContract.setVariableFromProgram(VAR_OS, OperatingSystem.getOperatingSystem().name(),
-                VariableContractType.DescriptorDefaultVariable);
-        URL desc = this.getClass().getResource("TestOverridingApplication.xml");
-        app = PAGCMDeployment.loadApplicationDescriptor(desc, vContract);
-        app.startDeployment();
-        app.waitReady();
+    public TestOverriding() throws ProActiveException {
+        super(TestOverriding.class.getResource("TestOverridingApplication.xml"));
+        super.setHostCapacity(4);
+        super.setVmCapacity(1);
+        super.startDeployment();
     }
 
     @org.junit.Test
     public void action() throws Exception {
-        GCMVirtualNode vn1 = app.getVirtualNode("VN1");
-        GCMVirtualNode vn2 = app.getVirtualNode("VN2");
-        GCMVirtualNode vn3 = app.getVirtualNode("VN3");
-        GCMVirtualNode vn4 = app.getVirtualNode("VN4");
+        GCMVirtualNode vn1 = super.gcmad.getVirtualNode("VN1");
+        GCMVirtualNode vn2 = super.gcmad.getVirtualNode("VN2");
+        GCMVirtualNode vn3 = super.gcmad.getVirtualNode("VN3");
+        GCMVirtualNode vn4 = super.gcmad.getVirtualNode("VN4");
 
         Node node;
 

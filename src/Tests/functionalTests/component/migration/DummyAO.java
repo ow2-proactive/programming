@@ -53,11 +53,8 @@ import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
-import org.objectweb.proactive.utils.OperatingSystem;
 
-import functionalTests.FunctionalTest;
 import functionalTests.GCMFunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
 import functionalTests.component.deployment.Test;
 
 
@@ -65,20 +62,22 @@ import functionalTests.component.deployment.Test;
 // therefore, future pool must be serialized, which poses a problem if there is a reference on a HalfBody (from main)
 // solution : we run the test from an active object (no HalfBody involved)
 public class DummyAO implements Serializable {
-
+    private VariableContractImpl vc;
     private GCMApplication newDeploymentDescriptor = null;
+
+    public DummyAO() {
+    }
+
+    public DummyAO(VariableContractImpl vc) {
+        this.vc = vc;
+    }
 
     public boolean goOldDeployment() throws Exception {
         Factory f = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
         Map<String, ProActiveDescriptor> context = new HashMap<String, ProActiveDescriptor>();
 
-        VariableContractImpl vContract = new VariableContractImpl();
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVM_PARAMETERS, FunctionalTest
-                .getJvmParameters(), VariableContractType.ProgramVariable);
-
         ProActiveDescriptor deploymentDescriptor = PADeployment.getProactiveDescriptor(Test.class
-                .getResource("/functionalTests/component/deployment/deploymentDescriptor.xml").getPath(),
-                vContract);
+                .getResource("/functionalTests/component/deployment/deploymentDescriptor.xml").getPath(), vc);
         context.put("deployment-descriptor", deploymentDescriptor);
 
         Component x = (Component) f.newComponent("functionalTests.component.migration.x", context);
@@ -141,17 +140,12 @@ public class DummyAO implements Serializable {
         URL descriptorPath = Test.class
                 .getResource("/functionalTests/component/deployment/applicationDescriptor.xml");
 
-        VariableContractImpl vContract = new VariableContractImpl();
-        vContract.setVariableFromProgram(GCMFunctionalTest.VAR_OS, OperatingSystem.getOperatingSystem()
-                .name(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, Integer.valueOf(4)
-                .toString(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, Integer.valueOf(1)
-                .toString(), VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_JVM_PARAMETERS, FunctionalTest
-                .getJvmParameters(), VariableContractType.ProgramVariable);
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_HOSTCAPACITY, Integer.valueOf(4).toString(),
+                VariableContractType.DescriptorDefaultVariable);
+        vc.setVariableFromProgram(GCMFunctionalTest.VC_VMCAPACITY, Integer.valueOf(1).toString(),
+                VariableContractType.DescriptorDefaultVariable);
 
-        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vContract);
+        newDeploymentDescriptor = PAGCMDeployment.loadApplicationDescriptor(descriptorPath, vc);
 
         newDeploymentDescriptor.startDeployment();
 

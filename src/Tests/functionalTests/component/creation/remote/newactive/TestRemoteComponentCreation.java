@@ -43,6 +43,7 @@ import org.junit.Ignore;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
@@ -62,7 +63,7 @@ import functionalTests.component.creation.ComponentInfo;
  */
 public class TestRemoteComponentCreation extends ComponentTestDefaultNodes {
 
-    public TestRemoteComponentCreation() {
+    public TestRemoteComponentCreation() throws ProActiveException {
 
         super(1, 1);
         //        super("Creation of a primitive component on a remote node",

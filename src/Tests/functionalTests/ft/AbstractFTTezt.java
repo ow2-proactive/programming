@@ -43,23 +43,24 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
-import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
-import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
-import org.objectweb.proactive.utils.OperatingSystem;
 
-import functionalTests.FunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Common methods for FT non functional tests
  */
-public class AbstractFTTezt extends FunctionalTest {
+public class AbstractFTTezt extends GCMFunctionalTest {
 
     protected JVMProcessImpl server;
     public static int AWAITED_RESULT = 1771014405;
+
+    public AbstractFTTezt(URL gcma, int hostCapacity, int vmCapacity) {
+        super(gcma);
+        super.setHostCapacity(hostCapacity);
+        super.setVmCapacity(vmCapacity);
+    }
 
     /**
      * Create a FT server on localhost:1100
@@ -90,21 +91,11 @@ public class AbstractFTTezt extends FunctionalTest {
      * @param gcmApplicationFile the deployment file  
      * @return the result of the computation
      */
-    protected int deployAndStartAgents(URL gcmApplicationFile) throws ProActiveException {
-        GCMApplication gcma;
+    protected int deployAndStartAgents() throws ProActiveException {
         GCMVirtualNode vnode;
 
-        //	create nodes
-        super.vContract.setVariableFromProgram("os", OperatingSystem.getOperatingSystem().name(),
-                VariableContractType.DescriptorDefaultVariable);
-        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "4",
-                VariableContractType.DescriptorDefaultVariable);
-        super.vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "1",
-                VariableContractType.DescriptorDefaultVariable);
-
-        gcma = PAGCMDeployment.loadApplicationDescriptor(gcmApplicationFile, vContract);
-        gcma.startDeployment();
-        vnode = gcma.getVirtualNode("Workers");
+        super.startDeployment();
+        vnode = super.gcmad.getVirtualNode("Workers");
         Node[] nodes = new Node[2];
         nodes[0] = vnode.getANode();
         nodes[1] = vnode.getANode();

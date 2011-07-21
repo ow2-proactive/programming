@@ -38,14 +38,16 @@ package functionalTests;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 
 
 @Ignore
-public class ComponentTestDefaultNodes extends GCMFunctionalTestDefaultNodes {
+public class ComponentTestDefaultNodes extends GCMFunctionalTest {
 
-    public ComponentTestDefaultNodes(int hostCapacity, int vmCapacity) {
+    public ComponentTestDefaultNodes(int hostCapacity, int vmCapacity) throws ProActiveException {
         super(hostCapacity, vmCapacity);
+        super.startDeployment();
     }
 
     @BeforeClass

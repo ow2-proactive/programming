@@ -41,34 +41,36 @@ import java.io.File;
 import junit.framework.Assert;
 
 import org.junit.After;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.ProActiveConfiguration;
 import org.objectweb.proactive.core.util.ProActiveRandom;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.GCMApplication.commandbuilder.CommandBuilderExecutable.Instances;
 
 import functionalTests.GCMFunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
 
 
 public class AbstractTExecutable extends GCMFunctionalTest {
 
-    String cookie = Long.valueOf(ProActiveRandom.nextLong()).toString();
-    File tmpDir = new File(ProActiveConfiguration.getInstance().getProperty("java.io.tmpdir") +
-        File.separator + this.getClass().getName() + cookie + File.separator);
+    final String cookie;
+    final File tmpDir;
 
-    public AbstractTExecutable(Instances instances) {
+    public AbstractTExecutable(Instances instances) throws ProActiveException {
         super(AbstractTExecutable.class.getResource("TestExecutable.xml"));
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_HOSTCAPACITY, "2",
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_VMCAPACITY, "2",
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram("tmpDir", tmpDir.toString(),
-                VariableContractType.DescriptorDefaultVariable);
-        vContract.setVariableFromProgram("instances", instances.toString(),
-                VariableContractType.DescriptorDefaultVariable);
+        super.setHostCapacity(2);
+        super.setVmCapacity(2);
+
+        cookie = Long.valueOf(ProActiveRandom.nextLong()).toString();
+        tmpDir = new File(ProActiveConfiguration.getInstance().getProperty("java.io.tmpdir") +
+            File.separator + this.getClass().getName() + cookie + File.separator);
+
+        super.setVariable("tmpDir", tmpDir.toString(), VariableContractType.DescriptorDefaultVariable);
+        super.setVariable("instances", instances.toString(), VariableContractType.DescriptorDefaultVariable);
 
         System.out.println("Temporary directory is: " + tmpDir.toString());
         Assert.assertTrue(tmpDir.mkdir());
+
+        super.startDeployment();
     }
 
     @After

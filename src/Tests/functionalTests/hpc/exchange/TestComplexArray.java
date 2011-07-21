@@ -39,15 +39,17 @@ package functionalTests.hpc.exchange;
 import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestComplexArray extends GCMFunctionalTestDefaultNodes {
+public class TestComplexArray extends GCMFunctionalTest {
     private B b1, b2, b3;
 
-    public TestComplexArray() {
+    public TestComplexArray() throws ProActiveException {
         super(2, 2);
+        super.startDeployment();
     }
 
     @org.junit.Test

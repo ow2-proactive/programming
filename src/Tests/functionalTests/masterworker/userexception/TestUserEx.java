@@ -91,7 +91,7 @@ public class TestUserEx extends FunctionalTest {
         //@snippet-start master_creation        
         master = new ProActiveMaster<A, Integer>();
         //@snippet-end master_creation   
-        master.addResources(descriptor, super.vContract);
+        master.addResources(descriptor, super.getVariableContract());
     }
 
     @After

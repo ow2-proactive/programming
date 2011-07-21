@@ -49,26 +49,28 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.api.PAFileTransfer;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.filetransfer.RemoteFile;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.extensions.calcium.system.SkeletonSystemImpl;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Tests the two main methods of the File Transfer API
  */
 
-public class TestAPI extends GCMFunctionalTestDefaultNodes {
+public class TestAPI extends GCMFunctionalTest {
 
     private static int FILE_SIZE = 16; //MB
     Node testnode;
     Node testnodePush;
     File dirTest = new File(System.getProperty("java.io.tmpdir"), "ProActive-TestAPI");
 
-    public TestAPI() {
+    public TestAPI() throws ProActiveException {
         super(2, 1);
+        super.startDeployment();
     }
 
     @Before

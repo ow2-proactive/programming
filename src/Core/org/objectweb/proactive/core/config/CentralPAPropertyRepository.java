@@ -633,7 +633,8 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
      *
      * If 0 no timeout.
      */
-    static public PAPropertyInteger PA_TEST_TIMEOUT = new PAPropertyInteger("proactive.test.timeout", false);
+    static public PAPropertyInteger PA_TEST_TIMEOUT = new PAPropertyInteger("proactive.test.timeout", false,
+        300000);
 
     /**
      * TODO vlegrand Describe this property

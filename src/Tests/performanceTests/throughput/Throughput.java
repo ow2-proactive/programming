@@ -41,19 +41,21 @@ import java.io.Serializable;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.node.NodeException;
 
 import performanceTests.HudsonReport;
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public abstract class Throughput extends GCMFunctionalTestDefaultNodes {
+public abstract class Throughput extends GCMFunctionalTest {
 
     private Class<?> cl;
 
-    public Throughput(Class<?> cl) {
+    public Throughput(Class<?> cl) throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
         this.cl = cl;
     }
 

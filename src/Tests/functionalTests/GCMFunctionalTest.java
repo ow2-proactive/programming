@@ -38,48 +38,99 @@ package functionalTests;
 
 import java.net.URL;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.objectweb.proactive.core.ProActiveException;
+import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
-import org.objectweb.proactive.utils.OperatingSystem;
+import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
+import org.objectweb.proactive.utils.ArgCheck;
 
 
 @Ignore
 public class GCMFunctionalTest extends FunctionalTest {
+    static final private URL DEFAULT_APP_DESC = GCMFunctionalTest.class
+            .getResource("/functionalTests/_CONFIG/JunitApp.xml");
+    static public final String DEFAULT_VN_NAME = "nodes";
+    static public final String VC_VMCAPACITY = "vmCapacity";
+    static public final String VC_HOSTCAPACITY = "hostCapacity";
+    static public final String VAR_GCMD = "deploymentDescriptor";
+    static public final String VAR_JVMARG = "JVM_PARAMETERS";
+    static public final String VAR_OPTJVMARG = "jvmargDefinedByTest";
 
-    static public final String VAR_OS = "os";
+    final private VariableContractImpl vc;
+    final public URL applicationDescriptor;
+    volatile public GCMApplication gcmad;
 
-    public URL applicationDescriptor;
-    public GCMApplication gcmad;
-
-    public GCMFunctionalTest() {
-        super.vContract.setVariableFromProgram(VAR_OS, OperatingSystem.getOperatingSystem().name(),
-                VariableContractType.DescriptorDefaultVariable);
-
+    public GCMFunctionalTest(int hostCapacity, int vmCapacity) {
+        this.applicationDescriptor = DEFAULT_APP_DESC;
+        this.vc = clone(super.getVariableContract());
+        this.setHostCapacity(hostCapacity);
+        this.setVmCapacity(vmCapacity);
     }
 
     public GCMFunctionalTest(URL applicationDescriptor) {
-        this();
+        ArgCheck.requireNonNull(applicationDescriptor);
         this.applicationDescriptor = applicationDescriptor;
+        this.vc = clone(super.getVariableContract());
     }
 
-    @Before
-    public void startDeployment() throws ProActiveException {
+    final public void setHostCapacity(int hostCapacity) {
+        this.vc.setVariableFromProgram(VC_HOSTCAPACITY, Integer.toString(hostCapacity),
+                VariableContractType.DescriptorDefaultVariable);
+    }
+
+    final public void setVmCapacity(int vmCapacity) {
+        this.vc.setVariableFromProgram(VC_VMCAPACITY, Integer.toString(vmCapacity),
+                VariableContractType.DescriptorDefaultVariable);
+    }
+
+    final public void setVariable(String name, String value, VariableContractType type) {
+        this.vc.setVariableFromProgram(name, value, type);
+    }
+
+    final public void setOptionalJvmParamters(String value) {
+        this.vc.setVariableFromProgram(VAR_OPTJVMARG, value, VariableContractType.DescriptorDefaultVariable);
+    }
+
+    final public VariableContractImpl getFinalVariableContract() {
+        return this.clone(this.vc);
+    }
+
+    final public Node getANode() {
+        return getANodeFrom(DEFAULT_VN_NAME);
+    }
+
+    final public Node getANodeFrom(String vnName) {
+        if (gcmad == null || !gcmad.isStarted()) {
+            throw new IllegalStateException("deployment is not started");
+        }
+
+        GCMVirtualNode vn = gcmad.getVirtualNode(vnName);
+        return vn.getANode();
+    }
+
+    private VariableContractImpl clone(VariableContractImpl vc) {
+        try {
+            return (VariableContractImpl) vc.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    final public void startDeployment() throws ProActiveException {
         logger.info(GCMFunctionalTest.class.getName() + " @Before: startDeployment");
         if (gcmad != null) {
             throw new IllegalStateException("deployment already started");
         }
 
-        gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor, super.vContract);
+        gcmad = PAGCMDeployment.loadApplicationDescriptor(applicationDescriptor, this.clone(this.vc));
         gcmad.startDeployment();
     }
 
-    @After
-    public void killDeployment() throws Throwable {
+    final public void killDeployment() throws Throwable {
         logger.info(GCMFunctionalTest.class.getName() + " @After: killDeployment");
         if (gcmad != null) {
             gcmad.kill();

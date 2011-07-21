@@ -69,7 +69,8 @@ public class Test extends ComponentTest {
      */
     @org.junit.Test
     public void GCMDeployment() throws Exception {
-        DummyAO testAO = PAActiveObject.newActive(DummyAO.class, new Object[] {});
+        DummyAO testAO = PAActiveObject
+                .newActive(DummyAO.class, new Object[] { super.getVariableContract() });
         assertEquals(true, testAO.goGCMDeployment());
     }
 
@@ -77,7 +78,8 @@ public class Test extends ComponentTest {
     // Fails on debian
     @org.junit.Test
     public void OldDeployment() throws Exception {
-        DummyAO testAO = PAActiveObject.newActive(DummyAO.class, new Object[] {});
+        DummyAO testAO = PAActiveObject
+                .newActive(DummyAO.class, new Object[] { super.getVariableContract() });
         assertEquals(true, testAO.goOldDeployment());
     }
 }

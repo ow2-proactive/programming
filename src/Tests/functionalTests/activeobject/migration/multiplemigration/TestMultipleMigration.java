@@ -37,19 +37,21 @@
 package functionalTests.activeobject.migration.multiplemigration;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeFactory;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
  * Test multiple migration with method call
  */
-public class TestMultipleMigration extends GCMFunctionalTestDefaultNodes {
+public class TestMultipleMigration extends GCMFunctionalTest {
 
-    public TestMultipleMigration() {
+    public TestMultipleMigration() throws ProActiveException {
         super(2, 1);
+        super.startDeployment();
     }
 
     @org.junit.Test

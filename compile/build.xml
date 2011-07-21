@@ -594,7 +594,7 @@
 
 			<delete dir="${junit.dir}" />
 			<mkdir dir="${junit.dir}" />
-			<junit printsummary="yes" forkmode="perTest" showoutput="${junit.showoutput}">
+			<junit printsummary="yes" forkmode="perTest" showoutput="${junit.showoutput}" timeout="300000">
 				<jvmarg value="-Dproactive.home=${base.dir}" />
 
 				<classpath>

@@ -45,6 +45,7 @@ import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
@@ -74,7 +75,7 @@ public class Test extends ComponentTestDefaultNodes {
     Component pB2;
     Message message;
 
-    public Test() {
+    public Test() throws ProActiveException {
         super(2, 1);
         //        super("Communication between remote primitive components through client collective interface",
         //                "Communication between remote primitive components through client collective interface ");

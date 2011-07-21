@@ -39,9 +39,10 @@ package functionalTests.activeobject.creation.remote.newactive;
 import static junit.framework.Assert.assertTrue;
 
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 import functionalTests.activeobject.creation.A;
 
 
@@ -49,14 +50,15 @@ import functionalTests.activeobject.creation.A;
  * Test newActive method on a remote node
  */
 
-public class Test extends GCMFunctionalTestDefaultNodes {
+public class Test extends GCMFunctionalTest {
     A a;
     String name;
     String nodeUrl;
     String remoteHost;
 
-    public Test() {
+    public Test() throws ProActiveException {
         super(1, 1);
+        super.startDeployment();
     }
 
     @org.junit.Test

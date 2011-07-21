@@ -48,36 +48,40 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
-import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.gcmdeployment.GCMApplication;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
-import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.FunctionalTest;
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
-public class TestSubscribeAttachmentFromAO extends FunctionalTest {
+public class TestSubscribeAttachmentFromAO extends GCMFunctionalTest {
+
+    public TestSubscribeAttachmentFromAO() {
+        super(1, 1);
+    }
 
     @Test
     public void test() throws ActiveObjectCreationException, NodeException, InterruptedException {
         TestSubscribeAttachmentFromAODeployer ao = (TestSubscribeAttachmentFromAODeployer) PAActiveObject
-                .newActive(TestSubscribeAttachmentFromAODeployer.class.getName(), new Object[] {});
+                .newActive(TestSubscribeAttachmentFromAODeployer.class.getName(), new Object[] { super
+                        .getFinalVariableContract() });
         ao.deploy();
         Assert.assertTrue(ao.waitUntilCallbackOccur());
     }
 
     static public class TestSubscribeAttachmentFromAODeployer implements Serializable, InitActive {
         GCMApplication gcma;
+        VariableContractImpl vc;
         boolean notified = false;
 
         public TestSubscribeAttachmentFromAODeployer() {
 
         }
 
-        public TestSubscribeAttachmentFromAODeployer(GCMApplication gcma) {
-            this.gcma = gcma;
+        public TestSubscribeAttachmentFromAODeployer(VariableContractImpl vc) {
+            this.vc = vc;
         }
 
         public void initActivity(Body body) {
@@ -87,14 +91,8 @@ public class TestSubscribeAttachmentFromAO extends FunctionalTest {
         public void deploy() {
             try {
                 URL appDesc = this.getClass().getResource("/functionalTests/_CONFIG/JunitApp.xml");
-
-                VariableContractImpl vContract = new VariableContractImpl();
-                vContract.setVariableFromProgram(GCMFunctionalTestDefaultNodes.VAR_OS, OperatingSystem
-                        .getOperatingSystem().name(), VariableContractType.DescriptorDefaultVariable);
-
-                vContract.setVariableFromProgram(FunctionalTest.VAR_JVM_PARAMETERS, FunctionalTest
-                        .getJvmParameters(), VariableContractType.ProgramVariable);
-                GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(appDesc, vContract);
+                GCMApplication gcma = PAGCMDeployment.loadApplicationDescriptor(appDesc,
+                        (VariableContractImpl) vc);
 
                 GCMVirtualNode vn = gcma.getVirtualNode("nodes");
                 vn.subscribeNodeAttachment(PAActiveObject.getStubOnThis(), "callback", true);

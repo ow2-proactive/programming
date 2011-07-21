@@ -36,6 +36,7 @@
  */
 package functionalTests.protointerop;
 
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.extensions.pamr.PAMRConfig;
 
@@ -47,7 +48,7 @@ public class TestPamrWithRmi extends AbstractProtoInterop {
         PAMRConfig.PA_NET_ROUTER_ADDRESS.setValue("localhost");
     }
 
-    public TestPamrWithRmi() {
+    public TestPamrWithRmi() throws ProActiveException {
         super("rmi");
     }
 }

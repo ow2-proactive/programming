@@ -40,9 +40,10 @@ import static junit.framework.Assert.assertTrue;
 
 import org.junit.Test;
 import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.node.Node;
 
-import functionalTests.GCMFunctionalTestDefaultNodes;
+import functionalTests.GCMFunctionalTest;
 
 
 /**
@@ -50,12 +51,13 @@ import functionalTests.GCMFunctionalTestDefaultNodes;
  * avoid multiple and un-useful serializations. 
  */
 
-public class TestMigration extends GCMFunctionalTestDefaultNodes {
+public class TestMigration extends GCMFunctionalTest {
 
     private C c1, c2, c3, c4;
 
-    public TestMigration() {
+    public TestMigration() throws ProActiveException {
         super(4, 1);
+        super.startDeployment();
     }
 
     @Test
