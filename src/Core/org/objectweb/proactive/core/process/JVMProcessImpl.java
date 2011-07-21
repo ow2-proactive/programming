@@ -95,7 +95,8 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
         }
     }
 
-    public final static String DEFAULT_CLASSNAME = "org.objectweb.proactive.core.node.StartNode";
+    public final static String DEFAULT_CLASSNAME = org.objectweb.proactive.core.node.StartNode.class
+            .getName();
     public final static String DEFAULT_JVMPARAMETERS = "";
     protected String classpath = DEFAULT_CLASSPATH;
     protected String bootClasspath;
@@ -163,7 +164,7 @@ public class JVMProcessImpl extends AbstractExternalProcess implements JVMProces
     public static void main(String[] args) {
         try {
             JVMProcessImpl rsh = new JVMProcessImpl(new StandardOutputMessageLogger());
-            rsh.setClassname("org.objectweb.proactive.core.node.StartNode");
+            rsh.setClassname(org.objectweb.proactive.core.node.StartNode.class.getName());
             rsh.setParameters(args[0]);
             rsh.startProcess();
         } catch (Exception e) {
