@@ -37,6 +37,10 @@
 package functionalTests.ft.pml;
 
 import static junit.framework.Assert.assertTrue;
+
+import org.junit.Before;
+
+import functionalTests.TestDisabler;
 import functionalTests.ft.AbstractFTTezt;
 
 
@@ -48,6 +52,11 @@ public class TestPML extends AbstractFTTezt {
 
     public TestPML() {
         super(TestPML.class.getResource("/functionalTests/ft/pml/testFT_PML.xml"), 4, 1);
+    }
+
+    @Before
+    public void before() {
+        TestDisabler.waitingFeatureFix();
     }
 
     @org.junit.Test

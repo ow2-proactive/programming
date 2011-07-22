@@ -37,6 +37,10 @@
 package functionalTests.ft.cic;
 
 import static junit.framework.Assert.assertTrue;
+
+import org.junit.Before;
+
+import functionalTests.TestDisabler;
 import functionalTests.ft.AbstractFTTezt;
 
 
@@ -48,6 +52,11 @@ public class TestCIC extends AbstractFTTezt {
 
     public TestCIC() {
         super(TestCIC.class.getResource("/functionalTests/ft/cic/testFT_CIC.xml"), 4, 1);
+    }
+
+    @Before
+    public void before() {
+        TestDisabler.waitingFeatureFix();
     }
 
     @org.junit.Test

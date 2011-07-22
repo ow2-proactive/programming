@@ -43,6 +43,7 @@ import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 import functionalTests.FunctionalTest;
+import functionalTests.TestDisabler;
 import functionalTests.activeobject.request.A;
 
 
@@ -54,6 +55,11 @@ public class Test extends FunctionalTest {
     A a1;
     A a2;
     StringWrapper returnedValue;
+
+    @Before
+    final public void disable() {
+        TestDisabler.unstable();
+    }
 
     @Before
     public void action() throws Exception {

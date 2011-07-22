@@ -40,6 +40,7 @@ import java.io.Serializable;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.objectweb.proactive.ActiveObjectCreationException;
 import org.objectweb.proactive.Body;
@@ -49,6 +50,7 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.utils.Sleeper;
 
 import functionalTests.FunctionalTest;
+import functionalTests.TestDisabler;
 
 
 /**
@@ -57,6 +59,11 @@ import functionalTests.FunctionalTest;
 public class TestDelayedInitActive extends FunctionalTest {
     static final long SLEEP = 200;
     static final long EPSYLON = (long) (SLEEP / 10);
+
+    @Before
+    final public void before() {
+        TestDisabler.waitingFeatureFix();
+    }
 
     @Test
     public void test() throws ActiveObjectCreationException, NodeException, InterruptedException {

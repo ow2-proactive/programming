@@ -66,7 +66,7 @@ public class TestDisabler {
      * @param oses
      *    An array of operating system
      */
-    static public void supportedOs(OperatingSystem[] oses) {
+    static public void supportedOs(OperatingSystem... oses) {
         OperatingSystem localOs = OperatingSystem.getOperatingSystem();
         for (OperatingSystem os : oses) {
             if (localOs == os) {
@@ -74,6 +74,7 @@ public class TestDisabler {
             }
         }
 
+        log("Test do not support " + localOs);
         Assume.assumeTrue(false);
     }
 
@@ -83,10 +84,11 @@ public class TestDisabler {
      * @param oses
      *    An array of operating system
      */
-    static public void unsupportedOs(OperatingSystem[] oses) {
+    static public void unsupportedOs(OperatingSystem... oses) {
         OperatingSystem localOs = OperatingSystem.getOperatingSystem();
         for (OperatingSystem os : oses) {
             if (localOs == os) {
+                log("Test must not be run on " + localOs);
                 Assume.assumeTrue(false);
             }
         }
@@ -94,11 +96,38 @@ public class TestDisabler {
     }
 
     /**
-     * Indicates that the test is unstable and should not be run.
+     * Indicates that the test is unstable for an unknown reason and should not be run.
+     * 
+     * The feature, the test or both can be broken.
      */
     static public void unstable() {
         // Disable unstable tests
+        log("Test is unstable for an unknown reason");
         Assume.assumeTrue(false);
+    }
+
+    /**
+     * Indicate that the tested feature is broken and the should not be run.
+     * 
+     * The test is supposed to be correct. 
+     */
+    static public void waitingFeatureFix() {
+        log("Feautre must be fixed");
+        Assume.assumeTrue(false);
+    }
+
+    /**
+     * Indicate that the test is broken and should not be run.
+     * 
+     * The feature is supposed to be working correctly.
+     */
+    static public void waitingTestFix() {
+        log("Test must be fixed");
+        Assume.assumeTrue(false);
+    }
+
+    private static void log(String cause) {
+        FunctionalTest.logger.info("Disabled test: " + cause);
     }
 
 }

@@ -51,6 +51,7 @@ import org.objectweb.proactive.gcmdeployment.Topology;
 import org.objectweb.proactive.utils.OperatingSystem;
 
 import functionalTests.GCMFunctionalTest;
+import functionalTests.TestDisabler;
 import functionalTests.gcmdeployment.LocalHelpers;
 
 
@@ -64,7 +65,7 @@ public class TestTopology extends GCMFunctionalTest {
     @BeforeClass
     public static void beforeClass() {
         // This test hangs on Windows because SSH processes are not killed
-        Assume.assumeTrue(OperatingSystem.getOperatingSystem() != OperatingSystem.windows);
+        TestDisabler.unsupportedOs(OperatingSystem.windows);
     }
 
     @Test
