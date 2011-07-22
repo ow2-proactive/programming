@@ -83,15 +83,11 @@ public class ProcessCleaner {
      */
     final public int[] getAliveProcesses() throws IOException {
         ProcessBuilder pb = new ProcessBuilder(getJps().getAbsolutePath(), "-mlv");
+        pb.redirectErrorStream(true);
         Process p = pb.start();
 
         ArrayList<String> pids = new ArrayList<String>(10);
 
-        try {
-            p.waitFor();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
         Reader r = new InputStreamReader(p.getInputStream());
         BufferedReader br = new BufferedReader(r);
 
@@ -161,13 +157,8 @@ public class ProcessCleaner {
      */
     final public String getThreadDump(int pid) throws IOException {
         ProcessBuilder pb = new ProcessBuilder(getJstack().getAbsolutePath(), Integer.toString(pid));
+        pb.redirectErrorStream(true);
         Process p = pb.start();
-
-        try {
-            p.waitFor();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
 
         Reader r = new InputStreamReader(p.getInputStream());
         BufferedReader br = new BufferedReader(r);

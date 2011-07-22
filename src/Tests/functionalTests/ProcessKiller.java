@@ -36,7 +36,10 @@
  */
 package functionalTests;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import org.objectweb.proactive.utils.OperatingSystem;
 
@@ -117,7 +120,15 @@ public abstract class ProcessKiller {
         @Override
         public void kill(int pid) throws IOException, InterruptedException {
             ProcessBuilder pb = new ProcessBuilder("taskkill", "/F", "/PID", Integer.toString(pid));
+            pb.redirectErrorStream(true);
             Process p = pb.start();
+
+            // Read output to avoid deadlock
+            Reader r = new InputStreamReader(p.getInputStream());
+            BufferedReader br = new BufferedReader(r);
+            for (String line = br.readLine(); line != null; line = br.readLine()) {
+            }
+
             p.waitFor();
         }
     }
