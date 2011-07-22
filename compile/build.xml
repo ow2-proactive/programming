@@ -609,7 +609,6 @@
 				</classpath>
 
 				<jvmarg value="-Dproactive.communication.protocol=@{communication.protocol}" />
-				<jvmarg value="-Dproactive.http.jetty.xml=${base.dir}/src/Tests/functionalTests/jetty.xml" />
 				<jvmarg value="-Djava.security.policy=${base.dir}/compile/proactive.java.policy" />
 				<jvmarg value="-Dlog4j.configuration=file:${base.dir}/compile/proactive-log4j" />
 				<jvmarg value="-DfunctionalTests.descriptor.defaultnodes.file=@{nodeDescriptor}" />
