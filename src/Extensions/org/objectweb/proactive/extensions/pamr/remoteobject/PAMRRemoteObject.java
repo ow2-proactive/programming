@@ -41,7 +41,6 @@ import java.io.Serializable;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
-import org.objectweb.proactive.core.ProActiveException;
 import org.objectweb.proactive.core.body.reply.Reply;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
@@ -77,19 +76,23 @@ public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
      * object is sent on a remote runtime, the local agent needs to be retrieved. Custom readObject()
      * is avoid by the use of a transient field and the getAgent() method.
      */
-    private transient Agent agent;
+    private transient Agent cachedAgent;
 
     protected transient InternalRemoteRemoteObject remoteObject;
 
     public PAMRRemoteObject(InternalRemoteRemoteObject remoteObject, URI remoteObjectURL, Agent agent) {
         this.remoteObject = remoteObject;
         this.remoteObjectURL = remoteObjectURL;
-        this.agent = agent;
+        this.cachedAgent = agent;
     }
 
     public Reply receiveMessage(Request message) throws IOException {
+        Agent agent = getAgent();
+        if (agent == null) {
+            throw new IOException("Failed to retrieve local PAMR agent (bad configuration ?)");
+        }
 
-        PAMRRemoteObjectRequest req = new PAMRRemoteObjectRequest(message, this.remoteObjectURL, getAgent());
+        PAMRRemoteObjectRequest req = new PAMRRemoteObjectRequest(message, this.remoteObjectURL, agent);
         req.send();
         SynchronousReplyImpl rep = (SynchronousReplyImpl) req.getReturnedObject();
         return rep;
@@ -104,17 +107,17 @@ public class PAMRRemoteObject implements RemoteRemoteObject, Serializable {
     }
 
     private Agent getAgent() {
-        if (this.agent == null) {
+        if (this.cachedAgent == null) {
             try {
                 // FIXME: The factory cast is a hack but there is no clean way to do it
                 PAMRRemoteObjectFactory f;
                 f = (PAMRRemoteObjectFactory) AbstractRemoteObjectFactory.getRemoteObjectFactory("pamr");
-                this.agent = f.getAgent();
+                this.cachedAgent = f.getAgent();
             } catch (UnknownProtocolException e) {
                 logger.fatal("Failed to get the local message routing agent", e);
             }
         }
-        return this.agent;
+        return this.cachedAgent;
     }
 
 }
