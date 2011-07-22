@@ -462,7 +462,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     /** The class to use for doing remoteObject Benchmark, must implement BenchmarkObject */
     public static PAPropertyString PA_BENCHMARK_CLASS = new PAPropertyString(
         "proactive.communication.benchmark.class", false,
-        "org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly");
+        org.objectweb.proactive.core.remoteobject.benchmark.SelectionOnly.class.getName());
 
     /* ------------------------------------
      *  SECURITY
