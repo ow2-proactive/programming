@@ -66,7 +66,7 @@ public class TestUnlimitedCrypto {
     static private final int KSIZE = 4096;
 
     @BeforeClass
-    public static void checkUnlimitedCryptoIsAvailable() throws Exception {
+    final public static void checkUnlimitedCryptoIsAvailable() throws Exception {
         java.security.Security.addProvider(new BouncyCastleProvider());
 
         try {

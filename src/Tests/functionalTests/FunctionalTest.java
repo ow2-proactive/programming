@@ -37,6 +37,8 @@
 package functionalTests;
 
 import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
@@ -54,6 +56,7 @@ public class FunctionalTest {
     static final private long timeout = CentralPAPropertyRepository.PA_TEST_TIMEOUT.getValue();
     /** Timer to kill the test after the timeout. */
     static final private Timer timer = new Timer("functional test timer", true);
+    static final private AtomicReference<TimerTask> timerTask = new AtomicReference<TimerTask>();
     /** Shutdown hook to ensure that process are killed even if afterClass is not run. */
     static final private MyShutdownHook shutdownHook = new MyShutdownHook();
     /** ProActive related stuff */
@@ -77,7 +80,12 @@ public class FunctionalTest {
 
         // Ensure that the host will eventually be cleaned
         System.err.println("Arming timer " + timeout);
-        timer.schedule(new MyTimerTask(), timeout);
+        TimerTask tt = new MyTimerTask();
+        if (timerTask.compareAndSet(null, tt)) {
+            timer.schedule(new MyTimerTask(), timeout);
+        } else {
+            throw new IllegalStateException("timer task should be null");
+        }
         Runtime.getRuntime().addShutdownHook(shutdownHook);
 
         // Should be final and initialized in a static block but we can't since
@@ -102,7 +110,10 @@ public class FunctionalTest {
     @AfterClass
     final static public void afterClass() throws Exception {
         // Disable timer and shutdown hook
-        timer.cancel();
+        TimerTask tt = timerTask.getAndSet(null);
+        if (tt != null) {
+            tt.cancel();
+        }
         Runtime.getRuntime().removeShutdownHook(shutdownHook);
 
         // Cleanup proactive
