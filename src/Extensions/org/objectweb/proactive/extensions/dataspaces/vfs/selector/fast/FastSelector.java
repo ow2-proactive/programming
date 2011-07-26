@@ -256,6 +256,9 @@ public class FastSelector {
          * @return the selected tree if found, null if not.
          */
         private Tree search(String name) {
+            if (type.equals(LeafType.ENDPOINT)) {
+                return null;
+            }
             for (Tree tree : leaves) {
                 if (tree.name.equals(name)) {
                     return tree;
@@ -291,6 +294,9 @@ public class FastSelector {
          * @return the selected tree if found, null if not.
          */
         Tree matches(String name, boolean caseSensitive) {
+            if (type.equals(LeafType.ENDPOINT)) {
+                return null;
+            }
             for (Tree tree : leaves) {
                 if (caseSensitive && name.matches(tree.name)) {
                     return tree;
