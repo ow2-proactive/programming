@@ -86,7 +86,7 @@ fi
 	find . -type d -a -name ".svn" -exec rm -Rf {} \;
 	# Git
 	rm -Rf .git
-	# Remove non GPL stuff
+	# Remove non G/P/L stuff
 	rm -Rf ./compile/lib/clover.*
 	# Remove useless parts of ProActive
 	rm ./doc/src/ProActiveRefBook.doc
