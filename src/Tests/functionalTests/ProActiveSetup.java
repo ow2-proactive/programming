@@ -101,16 +101,6 @@ public class ProActiveSetup {
         this.pamrSetup.stop();
     }
 
-    /**
-     * Get the JVM parameters.
-     *
-     * @return
-     *    The parameters to pass to the JVM
-     */
-    final public String getJvmParamters() {
-        return buildJvmParameters();
-    }
-
     private VariableContractImpl buildVariableContract(String jvmParameters) {
         VariableContractImpl vContract;
         vContract = new VariableContractImpl();
