@@ -38,6 +38,7 @@ package functionalTests;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -45,6 +46,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jinterop.dcom.test.SysInfoEvents;
 import org.objectweb.proactive.utils.OperatingSystem;
 
 
@@ -82,6 +84,17 @@ public class ProcessCleaner {
      *    If PIDs cannot be retrieved
      */
     final public int[] getAliveProcesses() throws IOException {
+        // JPS is only available on some JDK
+        // We need a fall back in case jps does not exist.
+        try {
+            File jpsFile = getJps();
+            return getAliveWithJps();
+        } catch (FileNotFoundException e) {
+            return getAliveWithNative();
+        }
+    }
+
+    private int[] getAliveWithJps() throws IOException {
         ProcessBuilder pb = new ProcessBuilder(getJps().getAbsolutePath(), "-mlv");
         pb.redirectErrorStream(true);
         Process p = pb.start();
@@ -105,6 +118,35 @@ public class ProcessCleaner {
             ret[i] = Integer.parseInt(pids.get(i));
         }
         return ret;
+    }
+
+    private int[] getAliveWithNative() throws IOException {
+        switch (OperatingSystem.getOperatingSystem()) {
+            case unix:
+                ProcessBuilder pb = new ProcessBuilder("/bin/sh", "-c",
+                    "for PID in $(pidof java) ; do grep -q -- '" + this.pattern.toString() +
+                        "' /proc/$PID/cmdline && echo $PID ; done");
+                pb.redirectErrorStream(true);
+                Process p = pb.start();
+
+                ArrayList<String> pids = new ArrayList<String>(10);
+
+                Reader r = new InputStreamReader(p.getInputStream());
+                BufferedReader br = new BufferedReader(r);
+
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    pids.add(line);
+                }
+
+                int[] ret = new int[pids.size()];
+                for (int i = 0; i < ret.length; i++) {
+                    ret[i] = Integer.parseInt(pids.get(i));
+                }
+                return ret;
+            default:
+                throw new IllegalStateException("Unsupported operating system");
+        }
     }
 
     /**
@@ -176,7 +218,7 @@ public class ProcessCleaner {
      *
      * @return command to start jps
      */
-    static private File getJps() {
+    static private File getJps() throws FileNotFoundException {
         final String jpsName;
         switch (OperatingSystem.getOperatingSystem()) {
             case unix:
@@ -189,7 +231,12 @@ public class ProcessCleaner {
                 throw new IllegalStateException("Unsupported operating system");
         }
 
-        return new File(getJavaBinDir(), jpsName);
+        File ret = new File(getJavaBinDir(), jpsName);
+        if (!ret.exists()) {
+            throw new FileNotFoundException("JPS not found: " + ret + " does not exist");
+        }
+
+        return ret;
     }
 
     /**
