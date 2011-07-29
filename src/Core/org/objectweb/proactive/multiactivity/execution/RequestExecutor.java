@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.future.Future;
 import org.objectweb.proactive.core.body.future.FutureProxy;
@@ -20,6 +21,8 @@ import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestQueue;
 import org.objectweb.proactive.core.body.tags.Tag;
 import org.objectweb.proactive.core.body.tags.tag.DsiTag;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.multiactivity.ServingController;
 import org.objectweb.proactive.multiactivity.ServingPolicy;
 import org.objectweb.proactive.multiactivity.compatibility.CompatibilityTracker;
@@ -130,18 +133,24 @@ public class RequestExecutor implements FutureWaiter, ServingController {
             LIMIT_TOTAL_THREADS = hardLimit;
             
             if (SAME_THREAD_REENTRANT!=hostReentrant) {
+            	//must check if the tagging mechanism is activated in PA. if it has not been started, we are enable to do same thread re-entrance
                 if (hostReentrant==true) {
-                    SAME_THREAD_REENTRANT = hostReentrant;
-                    //'create the map and populate it with tags
-                    requestTags = new HashMap<String, Set<RunnableRequest>>();
-                    for (RunnableRequest r : waiting) {
-                        if (isNotAHost(r)) {
-                            if (!requestTags.containsKey(r.getSessionTag())) {
-                                requestTags.put(r.getSessionTag(), new HashSet<RequestExecutor.RunnableRequest>());
+                	if (CentralPAPropertyRepository.PA_TAG_DSF.isTrue()) {
+                		SAME_THREAD_REENTRANT = hostReentrant;
+                        //'create the map and populate it with tags
+                        requestTags = new HashMap<String, Set<RunnableRequest>>();
+                        for (RunnableRequest r : waiting) {
+                            if (isNotAHost(r)) {
+                                if (!requestTags.containsKey(r.getSessionTag())) {
+                                    requestTags.put(r.getSessionTag(), new HashSet<RequestExecutor.RunnableRequest>());
+                                }
+                                requestTags.get(r.getSessionTag()).add(r);
                             }
-                            requestTags.get(r.getSessionTag()).add(r);
                         }
-                    }
+                	} else {
+                		requestTags = null;
+                		Logger.getLogger(Loggers.MAO).error("Same thread re-entrance was requested, but property 'PA_TAG_DSF' is set to false");
+                	}
                 } else {
                     //clean up
                     requestTags = null;
@@ -191,10 +200,9 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 List<Request> rc;
                 rc = getMaxFromQueue();
 
-                if (rc.size() >= 0) {
+                if (rc.size() > 0) {
                     synchronized (this) {
                         for (int i = 0; i < rc.size(); i++) {
-
                             ready.add(wrapRequest(rc.get(i)));
                         }
                         if (active.size()<ACTIVE_THREAD_LIMIT) {
@@ -222,7 +230,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 List<Request> rc;
                 rc = policy.runPolicy(compatibility);
 
-                if (rc.size() >= 0) {
+                if (rc.size() > 0) {
                     synchronized (this) {
                         for (int i = 0; i < rc.size(); i++) {
 
@@ -302,11 +310,8 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                     
                     while (canServeOneHosted() && i.hasNext()) {
                         RunnableRequest parasite = i.next();
-                        Object tagObject = parasite.getRequest().getTags().getTag(DsiTag.IDENTIFIER)
-                                .getData();
-                        if (tagObject != null) {
-                            String[] tagData = ((String) (tagObject)).split("::");
-                            String tag = tagData[0] + "::" + tagData[1];
+                        String tag = parasite.getSessionTag();
+                    	if (tag!=null) {
                             if (requestTags.containsKey(tag)) {
                                 for (RunnableRequest host : requestTags.get(tag)) {
                                     if (host != null && isNotAHost(host)) {
@@ -373,31 +378,17 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         }
 
     }
-    
+/*    
     private RunnableRequest findParasiteRequest(RunnableRequest host) {
-        Tag tag;
-        
         for (RunnableRequest r : ready) {
-            if (r.getRequest().getTags().getTag(DsiTag.IDENTIFIER)==null) continue;
+            if (r.getSessionTag()==null || host.getSessionTag()==null) continue;
             
-            tag = r.getRequest().getTags().getTag(DsiTag.IDENTIFIER);
-            
-            
-            if (host.getRequest().getTags().getTag(DsiTag.IDENTIFIER)==null) continue;
                 
-            String[] hostData = ((String) (host.getRequest().getTags().getTag(DsiTag.IDENTIFIER).getData())).split("::"); 
-            String[] parasiteData = ((String) (tag.getData())).split("::");
-                
-            if (hostData[0].equals(parasiteData[0]) && hostData[1].equals(parasiteData[1])) {
+            if (r.getSessionTag().equals(host.getSessionTag())) {
                  return r;
             }
         }
-        
         return null;
-    }
-
-    private boolean isNotAHost(RunnableRequest r) {
-        return !hostMap.keySet().contains(r) || (!active.contains(hostMap.get(r)) && !waiting.contains(hostMap.get(r)));
     }
 
     private RunnableRequest findHostRequest() {
@@ -409,6 +400,10 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         }
 
         return null;
+    }*/
+    
+    private boolean isNotAHost(RunnableRequest r) {
+        return !hostMap.keySet().contains(r) || (!active.contains(hostMap.get(r)) && !waiting.contains(hostMap.get(r)));
     }
     
     /**
@@ -435,9 +430,9 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         return LIMIT_TOTAL_THREADS ? (ready.size()>0 && threadUsage.keySet().size()<ACTIVE_THREAD_LIMIT && active.size()<ACTIVE_THREAD_LIMIT) : (ready.size()>0 && active.size()<ACTIVE_THREAD_LIMIT); 
     }
     
-    private int getEmptySlotCount() {
+/*    private int getEmptySlotCount() {
         return (ACTIVE_THREAD_LIMIT-active.size());
-    }
+    }*/
 
     /**
      * Called from the {@link #waitForFuture(Future)} method to signal the blocking of a request.
@@ -674,11 +669,14 @@ public class RequestExecutor implements FutureWaiter, ServingController {
             if (sessionTag!=null) {
                 return sessionTag;
             } else {
-                Object tagObject = getRequest().getTags().getTag(DsiTag.IDENTIFIER).getData();
-                if (tagObject != null) {
-                    String[] tagData = ((String) (tagObject)).split("::");
-                    setSessionTag(tagData[0] + "::" + tagData[1]);
-                }
+            	Tag tag = getRequest().getTags().getTag(DsiTag.IDENTIFIER);
+            	if (tag!=null) {
+            		Object tagObject = tag.getData();
+            		if (tagObject != null) {
+            			String[] tagData = ((String) (tagObject)).split("::");
+            			setSessionTag(tagData[0] + "::" + tagData[1]);
+            		}
+            	}
                 return sessionTag;
             }
         }

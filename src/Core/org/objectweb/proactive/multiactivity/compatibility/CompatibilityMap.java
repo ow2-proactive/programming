@@ -27,12 +27,8 @@ public class CompatibilityMap {
 		this.methods = annotProc.getMethodNameMap();
 	}
 	
-	private MethodGroup getGroupOf(String methodName) {
-		return methods.get(methodName);
-	}
-	
 	public MethodGroup getGroupOf(Request method){
-		return methods.get(method.getMethodName());
+		return methods.get(method.getMethodCall().getReifiedMethod().toString());
 	}
 	
 	public Collection<MethodGroup> getGroups() {
@@ -50,10 +46,8 @@ public class CompatibilityMap {
 //	}
 	
 	public boolean areCompatible(Request request1, Request request2){
-		String method1 = request1.getMethodName();
-		String method2 = request2.getMethodName();
-		MethodGroup mg1 = getGroupOf(method1);
-        MethodGroup mg2 = getGroupOf(method2);
+		MethodGroup mg1 = getGroupOf(request1);
+        MethodGroup mg2 = getGroupOf(request2);
 
         if (mg1!=null && mg2!=null) {
             return mg1.isCompatible(request1, mg2, request2);

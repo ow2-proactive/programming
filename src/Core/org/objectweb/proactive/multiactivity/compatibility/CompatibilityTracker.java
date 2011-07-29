@@ -70,7 +70,7 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
       for (MethodGroup otherGroup : runningGroups.keySet()) {
           if (runningGroups.get(otherGroup).size()>0) {
               
-              if (reqGroup.canCompareWith(otherGroup)) {
+              if (reqGroup.isComparatorDefinedFor(otherGroup)) {
                   
                   for (Request other : runningGroups.get(otherGroup)) {
                       if (!reqGroup.isCompatible(r, otherGroup, other)) {

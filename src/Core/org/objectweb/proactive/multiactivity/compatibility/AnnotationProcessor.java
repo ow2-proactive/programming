@@ -1,13 +1,16 @@
 package org.objectweb.proactive.multiactivity.compatibility;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.multiactivity.Compatible;
 import org.objectweb.proactive.annotation.multiactivity.DefineGroups;
 import org.objectweb.proactive.annotation.multiactivity.DefineRules;
@@ -15,6 +18,7 @@ import org.objectweb.proactive.annotation.multiactivity.Group;
 import org.objectweb.proactive.annotation.multiactivity.MemberOf;
 import org.objectweb.proactive.annotation.multiactivity.Modifies;
 import org.objectweb.proactive.annotation.multiactivity.Reads;
+import org.objectweb.proactive.core.util.log.Loggers;
 
 /**
  * Reads and processes the multi-activity related annotations of a class and produces 
@@ -36,12 +40,15 @@ import org.objectweb.proactive.annotation.multiactivity.Reads;
  */
 public class AnnotationProcessor {
 	//text used to define the place and type of an error in the annotations
-	protected static final String LOC_CLASS="class";
-	protected static final String LOC_METHOD="method: ";
-	protected static final String REF_GROUP="group: ";
-	protected static final String REF_VARIABLE="var: ";
-	protected static final String REF_METHOD="method: ";
+	protected static final String LOC_CLASS="at class";
+	protected static final String LOC_METHOD="at method";
+	protected static final String REF_GROUP="undefined group";
+	protected static final String DUP_GROUP="duplicate group definition";
+	//protected static final String REF_VARIABLE="unresolvable variable name";
+	protected static final String REF_METHOD="unresolvable method name";
 	protected static final String AD_HOC_GROUP="AD_HOC_";
+	
+	protected Logger logger = Logger.getLogger(Loggers.MAO);
 	
 	//data about groups
 	private Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();
@@ -51,7 +58,8 @@ public class AnnotationProcessor {
 	private Class<?> processedClass;
 	
 	//set of class variables used for error checking -- populated only on need
-	private HashSet<String> classVariables;
+	//private HashSet<String> classVariables;
+	private HashSet<String> classMethods;
 	
 	//map of errors
 	protected Map<String, List<String>> errors = new HashMap<String, List<String>>();
@@ -59,7 +67,20 @@ public class AnnotationProcessor {
 	public AnnotationProcessor(Class<?> c) {
 		processedClass = c;
 		
-		processClassAnnotations();
+		//create the list of inheritance of the class we chose (in descending order of "age")
+		List<Class> parents = new LinkedList<Class>();
+		parents.add(c);
+		Class<?> p;
+		while ((p = parents.get(0).getSuperclass())!=null) {
+			parents.add(0, p);
+		}
+		
+		Iterator<Class> i = parents.iterator();
+		
+		while(i.hasNext()) {
+			processClassAnnotations(i.next());
+		}
+		
 		processMethodAnnotations();
 	}
 	
@@ -70,45 +91,61 @@ public class AnnotationProcessor {
 	 *  <li>{@link DefineRules} and {@link Compatible} -- these define the rules that apply between them</li>
 	 * </ul>
 	 */
-	protected void processClassAnnotations(){
+	protected void processClassAnnotations(Class<?> processedClass){
 		//if there are any groups defined
-		if (processedClass.getAnnotation(DefineGroups.class)!=null){
-			DefineGroups defg = processedClass.getAnnotation(DefineGroups.class);
+		Annotation[] declaredAnns = processedClass.getDeclaredAnnotations();
+		Annotation groupDefAnn = null;
+		Annotation compDefAnn = null;
+		
+		for (Annotation a : declaredAnns) {
+			if (groupDefAnn==null && a.annotationType().equals(DefineGroups.class)) {
+				groupDefAnn = a;
+			}			
+			if (compDefAnn==null && a.annotationType().equals(DefineRules.class)) {
+				compDefAnn = a;
+			}
+		}
+		
+		if (groupDefAnn!=null){
+			DefineGroups defg = (DefineGroups) groupDefAnn;
 			
 			//create the descriptor
 			for (Group g : defg.value()) {
-				MethodGroup mg = new MethodGroup(g.name(), g.selfCompatible(), g.parameter(), g.comparator());
-				groups.put(g.name(), mg);
-			}
-			
-			//if there are rules defined
-			if (processedClass.getAnnotation(DefineRules.class)!=null) {
-				DefineRules defr = processedClass.getAnnotation(DefineRules.class);
-				for (Compatible c : defr.value()) {
-					String comparator = c.comparator();
-					for (String group : c.value()) {
-						for (String other : c.value()) {
-							if (groups.containsKey(group) && groups.containsKey(other) && !other.equals(group)) {
-								groups.get(group).addCompatibleWith(groups.get(other));
-								groups.get(group).setExternalComparator(other, comparator);
-								groups.get(other).addCompatibleWith(groups.get(group));
-								groups.get(other).setExternalComparator(group, comparator);
-								
-							} else {
-								if (!groups.containsKey(group)) {
-									addError(LOC_CLASS, "", REF_GROUP, group);
-								}
-								if (!groups.containsKey(other)) {
-									addError(LOC_CLASS, "", REF_GROUP, other);
-								}
-							}
-						}	
-					}
-
+				if (!groups.containsKey(g.name())) {
+					MethodGroup mg = new MethodGroup(g.name(), g.selfCompatible(), g.parameter(), g.comparator());
+					groups.put(g.name(), mg);
+				} else {
+					addError(LOC_CLASS, processedClass.getCanonicalName(), DUP_GROUP, g.name());
 				}
 			}
-			
+		}	
+		// if there are rules defined
+		if (compDefAnn!=null) {
+			DefineRules defr = (DefineRules) compDefAnn;
+			for (Compatible c : defr.value()) {
+				String comparator = c.comparator();
+				for (String group : c.value()) {
+					for (String other : c.value()) {
+						if (groups.containsKey(group) && groups.containsKey(other) && !other.equals(group)) {
+							groups.get(group).addCompatibleWith(groups.get(other));
+							groups.get(group).setComparatorFor(other, comparator);
+							groups.get(other).addCompatibleWith(groups.get(group));
+							groups.get(other).setComparatorFor(group, comparator);
+
+						} else {
+							if (!groups.containsKey(group)) {
+								addError(LOC_CLASS, processedClass.getCanonicalName(), REF_GROUP, group);
+							}
+							if (!groups.containsKey(other)) {
+								addError(LOC_CLASS, processedClass.getCanonicalName(), REF_GROUP, other);
+							}
+						}
+					}
+				}
+
+			}
 		}
+
 	}
 	
 	/**
@@ -119,7 +156,9 @@ public class AnnotationProcessor {
 	protected void processMethodAnnotations(){
 		
 		processCompatible();
-		processReadModify();
+		
+		//read modify is kind of deprecated. it is functional though... just uncomment everything ;)
+		//processReadModify();
 	}
 	
 	/**
@@ -129,7 +168,7 @@ public class AnnotationProcessor {
 	 *  <li>{@link Modifies} -- the variables that are written by the method</li>
 	 * </ul>
 	 */
-	protected void processReadModify() {
+	/*protected void processReadModify() {
 		//map method names to variables
 		HashMap<String, HashSet<String>> reads = new HashMap<String, HashSet<String>>();
 		HashMap<String, HashSet<String>> modifs = new HashMap<String, HashSet<String>>();
@@ -243,7 +282,7 @@ public class AnnotationProcessor {
 				}
 			}
 		}
-	}
+	}*/
 
 	/**
 	 * Reads and processes the following method-level annotations:
@@ -261,7 +300,12 @@ public class AnnotationProcessor {
 			MemberOf group = method.getAnnotation(MemberOf.class);
 			if (group!=null) {
 				MethodGroup mg = groups.get(group.value());
-				methods.put(method.getName(), mg);
+				System.out.println(method.toString());
+				methods.put(method.toString(), mg);
+				
+				if (mg==null) {
+					addError(LOC_METHOD, method.toString(), REF_GROUP, group.value());
+				}
 			}
 			
 			//other compatible declarations -- put them into a map
@@ -270,9 +314,12 @@ public class AnnotationProcessor {
 				HashSet<String> comps = new HashSet<String>();
 				for (String other : comp.value()) {
 					comps.add(other);
-
+					
+					if (!classHasMethod(other)) {
+						addError(LOC_METHOD, method.toString(), REF_GROUP, other);
+					}
 				}
-				compMap.put(method.getName(), comps);
+				compMap.put(method.toString(), comps);
 			}
 		}
 		
@@ -311,7 +358,13 @@ public class AnnotationProcessor {
 			errors.put(where, new LinkedList<String>());
 		}
 		
-		errors.get(where).add(what);		
+		errors.get(where).add(what);	
+		
+		if (!locationType.equals(LOC_CLASS)) {
+			logger.error("In '"+processedClass.getName()+"' "+locationType+" '"+location+"' "+refType+" '"+reference+"'");
+		} else {
+			logger.error("In '"+location+"' "+refType+" '"+reference+"'");
+		}
 	}
 	
 	/**
@@ -354,15 +407,26 @@ public class AnnotationProcessor {
 	 * @param ref variable name
 	 * @return
 	 */
-	private boolean classHasVariable(String what) {
+	/*private boolean classHasVariable(String what) {
 		if (classVariables==null) {
 			classVariables = new HashSet<String>();
-			Field[] meths = processedClass.getDeclaredFields();
-			for (int i=0; i<meths.length; i++) {
-				classVariables.add(meths[i].getName());
+			Field[] vars = processedClass.getDeclaredFields();
+			for (int i=0; i<vars.length; i++) {
+				classVariables.add(vars[i].getName());
 			}
 		}
 		return classVariables.contains(what); 
+	}*/
+	
+	private boolean classHasMethod(String what) {
+		if (classMethods==null) {
+			classMethods = new HashSet<String>();
+			Method[] meths = processedClass.getMethods();
+			for (int i=0; i<meths.length; i++) {
+				classMethods.add(meths[i].getName());
+			}
+		}
+		return classMethods.contains(what); 
 	}
 
 }

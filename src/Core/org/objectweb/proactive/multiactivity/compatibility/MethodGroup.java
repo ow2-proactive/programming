@@ -24,9 +24,15 @@ public class MethodGroup {
 	private final int hashCode;
 	
 	private Class parameter = null;
-	private HashMap<String, Integer> methodParamPos = new HashMap<String, Integer>();
+	private HashMap<String, Integer> methodParamPosition = new HashMap<String, Integer>();
+	/**
+	 * Hashmap that contains the name of an other group and the comparator name that has to be used
+	 * when comparing methods fromt his group with that other group.
+	 * A comparator can be either like "equals" (member function of parameter) or like
+	 * "org.foo.someclass.someFunction" that is a static method in a class.
+	 */
 	private HashMap<String, String> comparators = new HashMap<String, String>();
-	private HashMap<String, Method> externalCompCache = new HashMap<String, Method>();
+	private HashMap<String, Method> outsideComparatorCache = new HashMap<String, Method>();
 	
 	/**
 	 * Standard constructor of a named group.
@@ -133,12 +139,12 @@ public class MethodGroup {
 	    if (parameter==null) {
 	        return null;
 	    }
-	    if (methodParamPos.get(name)!=null) {
-	        return params[methodParamPos.get(name)];
+	    if (methodParamPosition.get(name)!=null) {
+	        return params[methodParamPosition.get(name)];
 	    } else {
 	        for (int i=0; i<params.length; i++) {
                 if (params[i].getClass().equals(parameter)) {
-                    methodParamPos.put(name, i);
+                    methodParamPosition.put(name, i);
                     return params[i];
                 }
             }
@@ -221,19 +227,28 @@ public class MethodGroup {
             //has to return a boolean or integer as a result.
             //the final result is negated.
 
-            return applyInternalComparator(param1, param2, comparator);
+            return applyMemberComparator(param1, param2, comparator);
             
         } else {
             
-            return applyExternalComparator(param1, param2, comparator);
+            return applyOutsideComparator(param1, param2, comparator);
         }
     }
 
-    private boolean applyExternalComparator(Object param1, Object param2, String comparator) {
+    /**
+     * Compares the two objects given as parameters with a comparator function which is not a member
+     * function of either objects. To speed up comparison, a cache is used for holding the Method
+     * object of the canonical-name-identified comparator function.
+     * @param param1
+     * @param param2
+     * @param comparator
+     * @return
+     */
+    private boolean applyOutsideComparator(Object param1, Object param2, String comparator) {
         try {
             Method m = null;
             
-            if (!externalCompCache.containsKey(comparator)) {
+            if (!outsideComparatorCache.containsKey(comparator)) {
                 
                 String clazzName = comparator.substring(0, comparator.lastIndexOf('.'));
                 Class<?> clazz = Class.forName(clazzName);
@@ -241,13 +256,13 @@ public class MethodGroup {
                 for (Method cmp : clazz.getMethods()) {
                     if (cmp.getName().equals(methodName)) {
                         m = cmp;
-                        externalCompCache.put(comparator, m);
+                        outsideComparatorCache.put(comparator, m);
                         break;
                     }
                 }
             }
             
-            m = externalCompCache.get(comparator);
+            m = outsideComparatorCache.get(comparator);
             
             if (m==null) {
                 return false;
@@ -262,14 +277,22 @@ public class MethodGroup {
             }
 
         } catch (Exception e) {
-            externalCompCache.put(comparator, null);
+            outsideComparatorCache.put(comparator, null);
             e.printStackTrace();
         }
 
         return false;
     }
 
-    private boolean applyInternalComparator(Object param1, Object param2, String comparator) {
+    /**
+     * Compares the two objects with a comparator that is a member function of one of these objects.
+     * The function is given by its simple name.
+     * @param param1
+     * @param param2
+     * @param comparator
+     * @return
+     */
+    private boolean applyMemberComparator(Object param1, Object param2, String comparator) {
         try {
             Method m = null;
             Class clazz = param1.getClass();
@@ -327,13 +350,13 @@ public class MethodGroup {
 		return false;
 	}
 
-    public void setExternalComparator(String group, String externalComparator) {
-        if (!externalComparator.equals("")) {
-            this.comparators.put(group, externalComparator);
+    public void setComparatorFor(String group, String comp) {
+        if (!comp.equals("")) {
+            this.comparators.put(group, comp);
         }
     }
     
-    public boolean canCompareWith(MethodGroup other) {
+    public boolean isComparatorDefinedFor(MethodGroup other) {
         return (other!=null) ? comparators.containsKey(other.name) : false;
     }
     
