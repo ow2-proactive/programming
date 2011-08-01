@@ -73,23 +73,32 @@ public class PNPRemoteObjectFactoryBackend extends AbstractRemoteObjectFactory i
     final private String protoId;
     final private PNPAgent agent;
     final private PNPRegistry registry;
+    /** Exception that should have been thrown by ctor.
+     *
+     * ROF ctor are not allowed to throw exception. To ease troubleshooting, we keep a
+     * reference on the exception.
+     */
+    final private Exception ctorException;
 
     public PNPRemoteObjectFactoryBackend(String proto, PNPConfig config, PNPExtraHandlers extraHandlers) {
         PNPAgent agent = null;
+        Exception exception = null;
         try {
             agent = new PNPAgent(config, extraHandlers);
         } catch (Exception e) {
+            exception = e;
             logger.error("Failed to instanciate the PNP remote object factory", e);
         }
         this.agent = agent;
+        this.ctorException = exception;
         this.registry = PNPRegistry.singleton;
         this.protoId = proto;
     }
 
     private void throwIfAgentIsNul(String msg) throws ProActiveException {
         if (this.agent == null) {
-            throw new PNPException(msg +
-                ". The PNP remote object factory is not properly configured, agent is null");
+            throw new PNPException(msg + ". PNP not properly configured, agent is null (cause follows)",
+                this.ctorException);
         }
 
         return;
