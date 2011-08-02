@@ -47,6 +47,7 @@ import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
 import org.objectweb.proactive.extensions.gcmdeployment.core.TopologyImpl;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import org.objectweb.proactive.gcmdeployment.Topology;
+import org.objectweb.proactive.utils.Sleeper;
 
 import functionalTests.GCMFunctionalTest;
 import functionalTests.gcmdeployment.LocalHelpers;
@@ -66,13 +67,15 @@ public class TestGCMApplicationDescriptorAPI extends GCMFunctionalTest {
         Assert.assertEquals(2, super.gcmad.getVirtualNodes().size());
 
         super.gcmad.startDeployment();
-        LocalHelpers.waitAllocation();
 
         Assert.assertTrue(super.gcmad.isStarted());
         Assert.assertEquals(2, super.gcmad.getVirtualNodes().size());
 
         GCMVirtualNode vn1 = super.gcmad.getVirtualNode("vn1");
         Assert.assertNotNull(vn1);
+        while (vn1.getNbCurrentNodes() != 5) {
+            new Sleeper(500).sleep();
+        }
         List<Node> nodes = vn1.getCurrentNodes();
 
         // Check reachable
