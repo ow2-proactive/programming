@@ -41,8 +41,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -66,7 +66,7 @@ public class Environment {
      */
     synchronized public static InputSource replaceVariables(URL descriptor, VariableContractImpl vContract,
             XPath xpath, String namespace) throws IOException, SAXException, XPathExpressionException,
-            TransformerException {
+            TransformerException, URISyntaxException {
 
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setNamespaceAware(true);
@@ -74,9 +74,7 @@ public class Environment {
 
         // Get the variable map
         EnvironmentParser environmentParser;
-        Map<String, String> variableMap;
         environmentParser = new EnvironmentParser(descriptor, vContract, domFactory, xpath, namespace);
-        variableMap = environmentParser.getVariableMap();
 
         DocumentBuilder newDocumentBuilder = GCMParserHelper.getNewDocumentBuilder(domFactory);
 
@@ -104,7 +102,8 @@ public class Environment {
         }
 
         EnvironmentTransformer environmentTransformer;
-        environmentTransformer = new EnvironmentTransformer(variableMap, baseDocument);
+        environmentTransformer = new EnvironmentTransformer(environmentParser.getVariableContract(),
+            descriptor);
 
         // We get the file name from the url
         // TODO test it on linux / windows

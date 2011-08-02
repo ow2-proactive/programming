@@ -36,75 +36,193 @@
  */
 package org.objectweb.proactive.extensions.gcmdeployment.environment;
 
-import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.xml.transform.Source;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.w3c.dom.Document;
+import org.objectweb.proactive.core.xml.VariableContract;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.AttributesImpl;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLFilterImpl;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 
-class EnvironmentTransformer {
-    Map<String, String> vmap;
-    protected Document document;
+/**
+ * 
+ * 
+ * @author ProActive team
+ * @since  ProActive 5.2.0
+ */
+public class EnvironmentTransformer {
+    protected URL source;
+    final private VariableContract vc;
+    final private VariableReplacer replacer;
 
-    public EnvironmentTransformer(Map<String, String> vmap, Document document) {
-        this.vmap = vmap;
-        this.document = document;
+    public EnvironmentTransformer(VariableContract vc, URL source) {
+        this.vc = vc;
+        this.replacer = new VariableReplacer();
+        this.source = source;
     }
 
     public void transform(OutputStream output) throws XPathExpressionException, SAXException,
-            TransformerException {
-        String[] nameList = vmap.keySet().toArray(new String[0]);
+            TransformerException, URISyntaxException, IOException {
+        InputSource is = new InputSource(source.openStream());
 
-        String[] valueList = new String[nameList.length];
-        for (int i = 0; i < nameList.length; i++) {
-            valueList[i] = vmap.get(nameList[i]);
+        XMLReader parser = XMLReaderFactory.createXMLReader();
+        CustomFilter filter = new CustomFilter();
+        filter.setParent(parser);
+        filter.setContentHandler(new DefaultHandler());
+        SAXSource source = new SAXSource(filter, is);
+
+        StreamResult result = new StreamResult(output);
+
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Transformer transformer = factory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.transform(source, result);
+    }
+
+    private class CustomFilter extends XMLFilterImpl {
+        public void setContentHandler(ContentHandler handler) {
+            super.setContentHandler(new CustomContentHandler(handler));
+        }
+    }
+
+    private class CustomContentHandler implements ContentHandler {
+        private ContentHandler parent;
+
+        public CustomContentHandler(ContentHandler parent) {
+            this.parent = parent;
         }
 
-        // Escape \ and $
-        for (int i = 0; i < valueList.length; i++) {
-            valueList[i] = valueList[i].replaceAll("\\\\", "\\\\\\\\");
-            valueList[i] = valueList[i].replaceAll("\\$", "\\\\\\$");
-        }
-
-        String nameListStr = "";
-        String valueListStr = "";
-        String sep = "" + ((char) 5);
-        if (nameList.length > 0) {
-            for (int i = 0; i < nameList.length - 1; i++) {
-                nameListStr += nameList[i] + sep;
-                valueListStr += valueList[i] + sep;
+        public void startElement(String namespaceURI, String localName, String qualifiedName, Attributes attrs)
+                throws SAXException {
+            AttributesImpl a = new AttributesImpl(attrs);
+            for (int i = 0; i < a.getLength(); i++) {
+                String value = a.getValue(i);
+                a.setValue(i, replacer.replaceAll(value));
             }
-            nameListStr += nameList[nameList.length - 1];
-            valueListStr += valueList[nameList.length - 1];
+
+            parent.startElement(namespaceURI, localName, qualifiedName, a);
         }
 
-        //PAProperties.JAVAX_XML_TRANSFORM_TRANSFORMERFACTORY.setValue("net.sf.saxon.TransformerFactoryImpl");
-        DOMSource domSource = new DOMSource(document);
-        TransformerFactory tfactory = TransformerFactory.newInstance();
+        public void endElement(String namespaceURI, String localName, String qualifiedName)
+                throws SAXException {
+            parent.endElement(namespaceURI, localName, qualifiedName);
+        }
 
-        InputStream variablesIS = this.getClass().getResourceAsStream("variables.xsl");
-        Source stylesheetSource = new StreamSource(variablesIS);
+        public void startDocument() throws SAXException {
+            parent.startDocument();
+        }
 
-        Transformer transformer = null;
-        try {
-            transformer = tfactory.newTransformer(stylesheetSource);
-            transformer.setParameter("nameList", nameListStr);
-            transformer.setParameter("valueList", valueListStr);
-            StreamResult result = new StreamResult(output);
-            transformer.transform(domSource, result);
-        } catch (TransformerException e) {
-            throw e;
+        public void endDocument() throws SAXException {
+            parent.endDocument();
+        }
+
+        public void startPrefixMapping(String prefix, String uri) throws SAXException {
+            parent.startPrefixMapping(prefix, uri);
+        }
+
+        public void endPrefixMapping(String prefix) throws SAXException {
+            parent.endPrefixMapping(prefix);
+        }
+
+        public void characters(char[] text, int start, int length) throws SAXException {
+            char[] newChars = replacer.replaceAll(new String(text, start, length)).toCharArray();
+            parent.characters(newChars, 0, newChars.length);
+        }
+
+        public void ignorableWhitespace(char[] text, int start, int length) throws SAXException {
+            parent.ignorableWhitespace(text, start, length);
+        }
+
+        public void processingInstruction(String target, String data) throws SAXException {
+            parent.processingInstruction(target, data);
+        }
+
+        public void skippedEntity(String name) throws SAXException {
+            parent.skippedEntity(name);
+        }
+
+        public void setDocumentLocator(Locator locator) {
+            parent.setDocumentLocator(locator);
+        }
+    }
+
+    /**
+     * Replace variables by their value.
+     * 
+     */
+    private class VariableReplacer {
+
+        public VariableReplacer() {
+        }
+
+        /**
+         * Replace all variables in input by their value.
+         * 
+         * @param input
+         *    The string to be modified
+         * @return
+         *    input with variable 
+         */
+        public String replaceAll(String input) {
+            StringBuilder sb = new StringBuilder();
+
+            Pattern pattern = Pattern.compile("\\$\\{[A-Za-z_0-9.]+\\}");
+            Matcher matcher = pattern.matcher(input);
+
+            int start = 0;
+            int end = 0;
+
+            while (matcher.find()) {
+                final int old_start = start;
+                final int old_end = end;
+                start = matcher.start();
+                end = matcher.end();
+
+                // copy before the variable
+                sb.append(input.substring(old_end, start));
+
+                //replace the variable by its value
+                String varName = input.substring(start + 2, end - 1);
+                String varValue = vc.getValue(varName);
+                if (varValue != null) {
+                    sb.append(vc.getValue(varName));
+                } else {
+                    throw new IllegalStateException("Unknown variable: " + varName);
+                }
+            }
+
+            // copy remaining
+            sb.append(input.substring(end, input.length()));
+
+            if (start == 0) {
+                return sb.toString();
+            } else {
+                return this.replaceAll(sb.toString());
+            }
         }
     }
 }
