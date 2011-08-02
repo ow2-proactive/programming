@@ -75,49 +75,39 @@ public class Executor {
         try {
             logger.info("executing command=" + command);
 
-            Process p = null;
+            ProcessBuilder pb = null;
             switch (OperatingSystem.getOperatingSystem()) {
                 case unix:
-                    p = Runtime.getRuntime().exec(
-                            new String[] { CentralPAPropertyRepository.PA_GCMD_UNIX_SHELL.getValue(), "-c",
-                                    command });
+                    pb = new ProcessBuilder(CentralPAPropertyRepository.PA_GCMD_UNIX_SHELL.getValue(), "-c",
+                        command);
                     break;
                 case windows:
-                    p = Runtime.getRuntime().exec(command);
+                    pb = new ProcessBuilder(command);
                     break;
             }
 
-            InputStreamMonitor stdoutM = new InputStreamMonitor(MonitorType.STDOUT, p.getInputStream(),
-                command, logger);
-            InputStreamMonitor stderrM = new InputStreamMonitor(MonitorType.STDERR, p.getErrorStream(),
-                command, logger);
-            stderrM.start();
-            stdoutM.start();
-            threads.add(stdoutM);
-            threads.add(stderrM);
+            pb.redirectErrorStream(true);
+            Process p = pb.start();
+            InputStreamMonitor streamMonitor = new InputStreamMonitor(p.getInputStream(), command, logger);
+            streamMonitor.start();
+            threads.add(streamMonitor);
         } catch (IOException e) {
             logger.warn("Cannot execute: " + command, e);
         }
     }
 
-    private enum MonitorType {
-        STDOUT, STDERR;
-    }
-
     static private class InputStreamMonitor extends Thread {
-        MonitorType type;
         InputStream stream;
         String cmd;
         Logger logger;
 
-        public InputStreamMonitor(MonitorType type, InputStream stream, String cmd, Logger logger) {
+        public InputStreamMonitor(InputStream stream, String cmd, Logger logger) {
             this.logger = logger;
-            logger.trace("Monitor started: " + type.name() + " " + cmd);
-            this.type = type;
+            logger.trace("Monitor started: " + cmd);
             this.stream = stream;
             this.cmd = cmd;
             setDaemon(true);
-            setName("GCM Deployment" + type.toString() + " Monitor for " + cmd.subSequence(0, 100));
+            setName("GCM Deployment Monitor for " + cmd.subSequence(0, 100));
         }
 
         @Override
@@ -130,7 +120,7 @@ public class Executor {
                 while ((line = br.readLine()) != null) {
                     logger.info(line);
                 }
-                logger.trace("Monitor exited: " + type.name() + " " + cmd);
+                logger.trace("Monitor exited: " + cmd);
             } catch (IOException e) {
                 // TODO: handle exception
                 e.printStackTrace();
