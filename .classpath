@@ -139,5 +139,16 @@
 	<classpathentry kind="lib" path="lib/saaj-impl.jar"/>
 	<classpathentry kind="lib" path="lib/wbem.jar"/>
 	<classpathentry kind="lib" path="lib/wiseman-tools.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-javah.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-jdepend.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-junit.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-replaceregexp.jar"/>
+	<classpathentry kind="lib" path="compile/lib/ant-trax.jar"/>
+	<classpathentry kind="lib" path="compile/lib/AntelopeTasks_3.2.19.jar"/>
+	<classpathentry kind="lib" path="compile/lib/clover.jar"/>
+	<classpathentry kind="lib" path="compile/lib/emma_ant.jar"/>
+	<classpathentry kind="lib" path="compile/lib/emma.jar"/>
+	<classpathentry kind="lib" path="compile/lib/jdepend.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

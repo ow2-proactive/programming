@@ -300,7 +300,6 @@ public class AnnotationProcessor {
 			MemberOf group = method.getAnnotation(MemberOf.class);
 			if (group!=null) {
 				MethodGroup mg = groups.get(group.value());
-				System.out.println(method.toString());
 				methods.put(method.toString(), mg);
 				
 				if (mg==null) {
