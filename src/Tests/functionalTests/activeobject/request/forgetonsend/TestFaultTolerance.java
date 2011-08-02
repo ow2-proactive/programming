@@ -40,11 +40,13 @@ import static junit.framework.Assert.assertTrue;
 
 import java.net.URL;
 
+import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.process.JVMProcessImpl;
 import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
+import functionalTests.TestDisabler;
 import functionalTests.ft.AbstractFTTezt;
 import functionalTests.ft.cic.TestCIC;
 
@@ -57,6 +59,11 @@ public class TestFaultTolerance extends AbstractFTTezt {
 
     public TestFaultTolerance() {
         super(FT_XML_LOCATION_UNIX, 4, 1);
+    }
+
+    @Before
+    final public void disable() {
+        TestDisabler.unstable();
     }
 
     /**

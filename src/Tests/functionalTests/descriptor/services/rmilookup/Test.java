@@ -39,13 +39,16 @@ package functionalTests.descriptor.services.rmilookup;
 import static junit.framework.Assert.assertTrue;
 
 import org.junit.After;
+import org.junit.Before;
 import org.objectweb.proactive.api.PADeployment;
+import org.objectweb.proactive.core.Constants;
 import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.node.Node;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 
 import functionalTests.FunctionalTest;
+import functionalTests.TestDisabler;
 
 
 /**
@@ -67,6 +70,12 @@ public class Test extends FunctionalTest {
     Node node;
     ProActiveDescriptor pad;
     ProActiveDescriptor pad1;
+
+    @Before
+    final public void disable() {
+        TestDisabler.supportedProtocols(Constants.RMI_PROTOCOL_IDENTIFIER,
+                Constants.RMISSH_PROTOCOL_IDENTIFIER);
+    }
 
     @org.junit.Test
     public void action() throws Exception {

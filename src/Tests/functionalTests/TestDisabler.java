@@ -39,6 +39,8 @@ package functionalTests;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.objectweb.proactive.core.remoteobject.AbstractRemoteObjectFactory;
+import org.objectweb.proactive.core.remoteobject.exception.UnknownProtocolException;
 import org.objectweb.proactive.utils.OperatingSystem;
 
 
@@ -93,6 +95,50 @@ public class TestDisabler {
             }
         }
 
+    }
+
+    /**
+     * Indicates with which protocols the test must be enabled
+     * 
+     * @param protocols
+     *    An array of communication protocols
+     */
+    static public void supportedProtocols(String... protocols) {
+        String localProtocol;
+        try {
+            localProtocol = AbstractRemoteObjectFactory.getDefaultRemoteObjectFactory().getProtocolId();
+            for (String protocol : protocols) {
+                if (localProtocol.equals(protocol)) {
+                    return;
+                }
+            }
+
+            log("Test do not support " + localProtocol);
+            Assume.assumeTrue(false);
+        } catch (UnknownProtocolException e) {
+            // run it
+        }
+    }
+
+    /**
+     * Indicates with which protocols the test must be disabled
+     * 
+     * @param protocols
+     *    An array of communication protocols
+     */
+    static public void unsupportedProtocols(String... protocols) {
+        String localProtocol;
+        try {
+            localProtocol = AbstractRemoteObjectFactory.getDefaultRemoteObjectFactory().getProtocolId();
+            for (String protocol : protocols) {
+                if (localProtocol.equals(protocol)) {
+                    log("Test must not be run with " + localProtocol);
+                    Assume.assumeTrue(false);
+                }
+            }
+        } catch (UnknownProtocolException e) {
+            // run it
+        }
     }
 
     /**

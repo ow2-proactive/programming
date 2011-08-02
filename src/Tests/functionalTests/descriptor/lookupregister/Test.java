@@ -38,6 +38,7 @@ package functionalTests.descriptor.lookupregister;
 
 import static junit.framework.Assert.assertTrue;
 
+import org.junit.Before;
 import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.api.PADeployment;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -45,8 +46,10 @@ import org.objectweb.proactive.core.descriptor.data.ProActiveDescriptor;
 import org.objectweb.proactive.core.descriptor.data.VirtualNode;
 import org.objectweb.proactive.core.util.ProActiveInet;
 import org.objectweb.proactive.core.util.URIBuilder;
+import org.objectweb.proactive.extensions.pamr.remoteobject.PAMRRemoteObjectFactory;
 
 import functionalTests.FunctionalTest;
+import functionalTests.TestDisabler;
 
 
 /**
@@ -68,6 +71,11 @@ public class Test extends FunctionalTest {
 
     ProActiveDescriptor proActiveDescriptorAgent;
     A a;
+
+    @Before
+    final public void disable() {
+        TestDisabler.unsupportedProtocols(PAMRRemoteObjectFactory.PROTOCOL_ID);
+    }
 
     @org.junit.Test
     public void action() throws Exception {
