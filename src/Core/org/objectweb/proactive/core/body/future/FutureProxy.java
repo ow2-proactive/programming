@@ -226,8 +226,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
             this.callbacks = null;
         }
         
-        //IZSO
-        //Context context = PAActiveObject.getContext();
+        toNotify = PAActiveObject.getContext().getFutureListener();
         if (toNotify!=null) {
             toNotify.futureArrived(this);
         } else {        

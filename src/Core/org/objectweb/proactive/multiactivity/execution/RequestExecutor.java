@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.body.future.Future;
+import org.objectweb.proactive.core.body.future.FutureID;
 import org.objectweb.proactive.core.body.future.FutureProxy;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.core.body.request.RequestQueue;
@@ -60,7 +61,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     /**
      * Set of futures whose values have already arrived
      */
-    protected HashSet<Future> hasArrived;
+    protected HashSet<FutureID> hasArrived;
     
     /**
      * Associates with each thread a list of requests which represents the
@@ -74,7 +75,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     /**
      * List of requests waiting for the value of a future
      */
-    protected HashMap<Future, List<RunnableRequest>> waitingList;
+    protected HashMap<FutureID, List<RunnableRequest>> waitingList;
     
     /**
      * Pairs of requests meaning which is hosting which inside it. Hosting means
@@ -104,9 +105,9 @@ public class RequestExecutor implements FutureWaiter, ServingController {
         ready = new HashSet<RunnableRequest>();
         active = new HashSet<RunnableRequest>();
         waiting = new HashSet<RunnableRequest>();
-        hasArrived = new HashSet<Future>();
+        hasArrived = new HashSet<FutureID>();
         threadUsage = new HashMap<Long, List<RunnableRequest>>();
-        waitingList = new HashMap<Future, List<RunnableRequest>>();
+        waitingList = new HashMap<FutureID, List<RunnableRequest>>();
         hostMap = new ConcurrentHashMap<RunnableRequest, RunnableRequest>();
         
         FutureWaiterRegistry.putForBody(body.getID(), (FutureWaiter) this);
@@ -200,7 +201,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 List<Request> rc;
                 rc = getMaxFromQueue();
 
-                if (rc.size() > 0) {
+                if (rc.size() >= 0) {
                     synchronized (this) {
                         for (int i = 0; i < rc.size(); i++) {
                             ready.add(wrapRequest(rc.get(i)));
@@ -230,7 +231,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                 List<Request> rc;
                 rc = policy.runPolicy(compatibility);
 
-                if (rc.size() > 0) {
+                if (rc.size() >= 0) {
                     synchronized (this) {
                         for (int i = 0; i < rc.size(); i++) {
 
@@ -445,7 +446,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
             active.remove(r);
             waiting.add(r);
             if (!waitingList.containsKey(f)) {
-                waitingList.put(f, new LinkedList<RunnableRequest>());
+                waitingList.put(f.getFutureID(), new LinkedList<RunnableRequest>());
             }
             waitingList.get(f).add(r);
 
@@ -577,7 +578,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     public void futureArrived(Future future) {
         synchronized (this) {
             ///*DEBUG*/ System.out.println("future arrived"+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
-            hasArrived.add(future);
+            hasArrived.add(future.getFutureID());
             this.notify();
         }
     }

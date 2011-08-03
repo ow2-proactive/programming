@@ -12,7 +12,7 @@ import org.objectweb.proactive.multiactivity.execution.RequestExecutor;
 
 /**
  * This class extends the  {@link Service}  class and adds the capability of serving more methods in parallel. <br> The decision of which methods can run in parallel is made based on annotations set by the user. These annotations are to be found in the <i> org.objectweb.proactive.annotation.multiactivity</i> package.
- * @author  Zsolt István
+ * @author  Zsolt Istvï¿½n
  */
 public class MultiActiveService extends Service {
 
@@ -28,7 +28,7 @@ public class MultiActiveService extends Service {
     Logger logger = Logger.getLogger(this.getClass());
 
     CompatibilityTracker compatibility;
-    RequestExecutor executor;
+    RequestExecutor executor = null;
 
     /**
      * MultiActiveService that will be able to optionally use a policy, and will deploy each serving request on a 
@@ -37,8 +37,16 @@ public class MultiActiveService extends Service {
      */
     public MultiActiveService(Body body) {
         super(body);
-
-        compatibility = new CompatibilityTracker(new AnnotationProcessor(body.getReifiedObject().getClass()), requestQueue);
+        
+        //not doing the initialization here because after creating the request executor
+        //we are not compatible with 'fifoServing' any more.
+        
+    }
+    
+    private void init(){
+    	if (executor!=null) return;
+    	
+    	compatibility = new CompatibilityTracker(new AnnotationProcessor(body.getReifiedObject().getClass()), requestQueue);
         executor = new RequestExecutor(body, compatibility);
     }
 
@@ -48,18 +56,21 @@ public class MultiActiveService extends Service {
      * @param hardLimit false if the above limit is applicable only to active (running) threads, but not the waiting ones
      * @param hostReentrant true if re-entrant calls should be hosted on the issuer's thread
      */
-    public void multiActiveServing(int maxActiveThreads, boolean hardLimit, boolean hostReentrant) { 
+    public void multiActiveServing(int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
+    	init();
         executor.configure(maxActiveThreads, hardLimit, hostReentrant);
         executor.execute();
     }
     
-    public void multiActiveServing(int maxActiveThreads){ 
+    public void multiActiveServing(int maxActiveThreads){
+    	init();
         executor.configure(maxActiveThreads, false, false);
         executor.execute();
         
     }
     
     public void multiActiveServing() {
+    	init();
         executor.configure(Runtime.getRuntime().availableProcessors(), false, false);
         executor.execute();
     }
@@ -90,21 +101,27 @@ public class MultiActiveService extends Service {
      * @param policy
      */
     public void policyServing(ServingPolicy policy, int maxActiveThreads, boolean hardLimit, boolean hostReentrant) {
+    	init();
         executor.configure(maxActiveThreads, hardLimit, hostReentrant);
         executor.execute(policy);
     }
     
     public void policyServing(ServingPolicy policy, int maxActiveThreads) {
+    	init();
         executor.configure(maxActiveThreads, false, false);
         executor.execute(policy);
     }
     
     public void policyServing(ServingPolicy policy) {
+    	init();
         executor.configure(Runtime.getRuntime().availableProcessors(), false, false);
         executor.execute(policy);
     }
     
     public ServingController getServingController() {
+    	//this init runs only once even if invoked many times
+    	init(); 
+    	
         return executor;
     }
     
