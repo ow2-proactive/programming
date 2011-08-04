@@ -158,27 +158,33 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
     // Not documented, temporary workaround until 4.3.0
     static public PAPropertyInteger PA_PAMRSSH_REMOTE_PORT = new PAPropertyInteger("proactive.pamrssh.port",
         false);
-    
-    
+
     /*
      * PAMRSSH properties were in the proactive.communication.pamrssh namespace in earlier releases
      * 
      * To avoid compatibility break, we define some aliases to map old name to the new one.
      */
     @SuppressWarnings("unused")
-    static private PAPropertyAlias PA_PAMRSSH_KEY_DIR_LEGACY = new PAPropertyAlias(PA_PAMRSSH_KEY_DIR, "proactive.communication.pamrssh.key_directory");
+    static private PAPropertyAlias PA_PAMRSSH_KEY_DIR_LEGACY = new PAPropertyAlias(PA_PAMRSSH_KEY_DIR,
+        "proactive.communication.pamrssh.key_directory");
     @SuppressWarnings("unused")
-    static private PAPropertyAlias PA_PAMRSSH_GC_PERIOD_LEGACY = new PAPropertyAlias(PA_PAMRSSH_GC_PERIOD, "proactive.communication.pamrssh.gc_period");
+    static private PAPropertyAlias PA_PAMRSSH_GC_PERIOD_LEGACY = new PAPropertyAlias(PA_PAMRSSH_GC_PERIOD,
+        "proactive.communication.pamrssh.gc_period");
     @SuppressWarnings("unused")
-    static private PAPropertyAlias PA_PAMRSSH_GC_IDLETIME_LEGACY = new PAPropertyAlias(PA_PAMRSSH_GC_IDLETIME, "proactive.communication.pamrssh.gc_idletime");
+    static private PAPropertyAlias PA_PAMRSSH_GC_IDLETIME_LEGACY = new PAPropertyAlias(
+        PA_PAMRSSH_GC_IDLETIME, "proactive.communication.pamrssh.gc_idletime");
     @SuppressWarnings("unused")
-    static private PAPropertyAlias PA_PAMRSSH_KNOWN_HOSTS_LEGACY = new PAPropertyAlias(PA_PAMRSSH_KNOWN_HOSTS, "proactive.communication.pamrssh.known_hosts");
+    static private PAPropertyAlias PA_PAMRSSH_KNOWN_HOSTS_LEGACY = new PAPropertyAlias(
+        PA_PAMRSSH_KNOWN_HOSTS, "proactive.communication.pamrssh.known_hosts");
     @SuppressWarnings("unused")
-    static private PAPropertyAlias PA_PAMRSSH_CONNECT_TIMEOUT_LEGACY = new PAPropertyAlias(PA_PAMRSSH_CONNECT_TIMEOUT, "proactive.communication.pamrssh.connect_timeout");
+    static private PAPropertyAlias PA_PAMRSSH_CONNECT_TIMEOUT_LEGACY = new PAPropertyAlias(
+        PA_PAMRSSH_CONNECT_TIMEOUT, "proactive.communication.pamrssh.connect_timeout");
     @SuppressWarnings("unused")
-    static private PAPropertyAlias PA_PAMRSSH_REMOTE_USERNAME_LEGACY = new PAPropertyAlias(PA_PAMRSSH_REMOTE_USERNAME, "proactive.communication.pamrssh.username");
+    static private PAPropertyAlias PA_PAMRSSH_REMOTE_USERNAME_LEGACY = new PAPropertyAlias(
+        PA_PAMRSSH_REMOTE_USERNAME, "proactive.communication.pamrssh.username");
     @SuppressWarnings("unused")
-    static private PAPropertyAlias PA_PAMRSSH_REMOTE_PORT_LEGACY = new PAPropertyAlias(PA_PAMRSSH_REMOTE_PORT, "proactive.communication.pamrssh.port");
+    static private PAPropertyAlias PA_PAMRSSH_REMOTE_PORT_LEGACY = new PAPropertyAlias(
+        PA_PAMRSSH_REMOTE_PORT, "proactive.communication.pamrssh.port");
 
     public interface Loggers {
 

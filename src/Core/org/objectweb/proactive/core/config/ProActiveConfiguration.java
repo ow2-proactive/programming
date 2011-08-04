@@ -126,8 +126,8 @@ public class ProActiveConfiguration {
         this.properties.putAllFromSystem(sysProperties);
 
         // Can't use setValue in this constructor
-        System.setProperty(CentralPAPropertyRepository.PA_OS.getName(), OperatingSystem
-                .getOperatingSystem().toString());
+        System.setProperty(CentralPAPropertyRepository.PA_OS.getName(), OperatingSystem.getOperatingSystem()
+                .toString());
     }
 
     class CustomProperties extends Properties {
