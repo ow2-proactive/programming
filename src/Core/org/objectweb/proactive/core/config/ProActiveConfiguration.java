@@ -100,6 +100,7 @@ public class ProActiveConfiguration {
     }
 
     private ProActiveConfiguration() {
+        PAProperties.getAllProperties();
         this.properties = new CustomProperties();
 
         /* Properties are set from the lower priority to the higher priority sources. */
@@ -108,8 +109,8 @@ public class ProActiveConfiguration {
         Map<Class<?>, List<PAProperty>> allProperties = PAProperties.getAllProperties();
         for (List<PAProperty> list : allProperties.values()) {
             for (PAProperty prop : list) {
-                if (prop.defaultValue != null) {
-                    setProperty(prop.getName(), prop.defaultValue, prop.isSystemProperty);
+                if (prop.getDefaultValue() != null) {
+                    setProperty(prop.getName(), prop.getDefaultValue(), prop.isSystemProperty());
                 }
             }
         }
@@ -125,8 +126,8 @@ public class ProActiveConfiguration {
         this.properties.putAllFromSystem(sysProperties);
 
         // Can't use setValue in this constructor
-        System.setProperty(CentralPAPropertyRepository.PA_OS.getName(), OperatingSystem.getOperatingSystem()
-                .toString());
+        System.setProperty(CentralPAPropertyRepository.PA_OS.getName(), OperatingSystem
+                .getOperatingSystem().toString());
     }
 
     class CustomProperties extends Properties {

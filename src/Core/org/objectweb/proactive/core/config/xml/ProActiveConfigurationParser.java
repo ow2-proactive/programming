@@ -135,8 +135,13 @@ public class ProActiveConfigurationParser {
 
                 PAProperty prop = PAProperties.getProperty(key);
                 if (prop != null) {
+                    if (prop.isAlias()) {
+                        logger.info("Property " + prop.getName() + " is deprecated, please use " +
+                            prop.getAliasedName());
+                    }
+
                     if (prop.isValid(value)) {
-                        properties.setProperty(key, value);
+                        properties.setProperty(prop.getAliasedName(), value);
                     } else {
                         logger.warn("Invalid value, " + value + " for key " + key + ". Must be a " +
                             prop.getType().toString());

@@ -41,34 +41,25 @@ package org.objectweb.proactive.core.config;
  *
  * @since ProActive 4.3.0
  */
-public class PAPropertyString extends PAProperty {
+public class PAPropertyString extends PAPropertyImpl {
     public PAPropertyString(String name, boolean isSystemProp) {
-        super(name, PropertyType.STRING, isSystemProp);
+        super(name, PropertyType.STRING, isSystemProp, null);
     }
 
     public PAPropertyString(String name, boolean isSystemProp, String defaultValue) {
-        this(name, isSystemProp);
-        this.setDefaultValue(defaultValue);
+        super(name, PropertyType.STRING, isSystemProp, defaultValue);
     }
 
-    /**
-     *
-     * @return The value of this ProActive property
-     */
-    public String getValue() {
+    final public String getValue() {
         return super.getValueAsString();
     }
 
-    /**
-     * Update the value of this ProActive property
-     * @param value the new value
-     */
-    public void setValue(String value) {
-        super.setValue(value);
+    final public void setValue(String value) {
+        super.internalSetValue(value);
     }
 
     @Override
-    public boolean isValid(String value) {
+    final public boolean isValid(String value) {
         return value != null;
     }
 }

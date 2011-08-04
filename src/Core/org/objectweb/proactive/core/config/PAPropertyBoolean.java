@@ -48,70 +48,32 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @since ProActive 4.3.0
  */
 @PublicAPI
-public class PAPropertyBoolean extends PAProperty {
-    static final private Logger logger = ProActiveLogger.getLogger(Loggers.CONFIGURATION);
-
-    public static final String TRUE = "true";
-    public static final String FALSE = "false";
+public class PAPropertyBoolean extends PAPropertyImpl {
 
     public PAPropertyBoolean(String name, boolean isSystemProp) {
-        super(name, PropertyType.BOOLEAN, isSystemProp);
+        super(name, PropertyType.BOOLEAN, isSystemProp, null);
     }
 
     public PAPropertyBoolean(String name, boolean isSystemProp, boolean defaultValue) {
-        this(name, isSystemProp);
-        this.setDefaultValue(new Boolean(defaultValue).toString());
+        super(name, PropertyType.BOOLEAN, isSystemProp, Boolean.toString(defaultValue));
     }
 
-    /**
-     *
-     * @return the value of this property
-     */
-    public boolean getValue() {
+    final public boolean getValue() {
         String str = super.getValueAsString();
         return Boolean.parseBoolean(str);
     }
 
-    /**
-     * Update the value of this property
-     * @param value the new value
-     */
-    public void setValue(boolean value) {
-        super.setValue(new Boolean(value).toString());
+    final public boolean isTrue() {
+        return this.getValue();
     }
 
-    /**
-     * Indicates if this property is true.
-     *
-     * This method can only be called with boolean property. Otherwise an {@link IllegalArgumentException}
-     * is thrown.
-     *
-     * If the value is illegal for a boolean property, then false is returned and a warning is
-     * printed.
-     *
-     * @return true if the property is set to true.
-     */
-    public boolean isTrue() {
-        if (!isSet()) {
-            return false;
-        }
-
-        String val = super.getValueAsString();
-        if (TRUE.equals(val)) {
-            return true;
-        }
-        if (FALSE.equals(val)) {
-            return false;
-        }
-
-        logger.warn(this.name + " is a boolean property but its value is nor " + TRUE + " nor " + FALSE +
-            " " + "(" + val + "). ");
-        return false;
+    final public void setValue(boolean value) {
+        super.internalSetValue(Boolean.toString(value));
     }
 
     @Override
     public boolean isValid(String value) {
-        if (TRUE.equals(value) || FALSE.equals(value))
+        if ("true".equals(value) || "false".equals(value))
             return true;
 
         return false;

@@ -36,6 +36,9 @@
  */
 package org.objectweb.proactive;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -84,10 +87,28 @@ public class Main {
         Map<Class<?>, List<PAProperty>> allProperties = PAProperties.getAllProperties();
         for (Class<?> cl : allProperties.keySet()) {
             System.out.println("From class " + cl.getCanonicalName());
-            for (PAProperty prop : allProperties.get(cl)) {
-                System.out.println("\t" + prop.getType() + "\t" + prop.getName() + " [" +
-                    prop.getValueAsString() + "]");
+            printProperties(allProperties.get(cl));
+        }
+    }
+
+    private static void printProperties(List<PAProperty> props) {
+        ArrayList<PAProperty> reals = new ArrayList<PAProperty>(props.size());
+        for (PAProperty prop : props) {
+            if (!prop.isAlias()) {
+                reals.add(prop);
             }
+        }
+
+        Collections.sort(reals, new Comparator<PAProperty>() {
+            @Override
+            public int compare(PAProperty o1, PAProperty o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        for (PAProperty prop : reals) {
+            System.out.println("\t" + prop.getType() + "\t" + prop.getName() + " [" +
+                prop.getValueAsString() + "]");
         }
     }
 }

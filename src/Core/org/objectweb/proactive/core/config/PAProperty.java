@@ -37,94 +37,89 @@
 package org.objectweb.proactive.core.config;
 
 /**
- * A ProActive property
- *
- * A ProActive property is a typed Java property. This abstraction must be used
- * instead of {@link System#getProperty(String)} and
- * {@link System#setProperty(String, String)} in ProActive
- *
- * @since ProActive 4.3.0
+ * A ProActive property.
+ * 
+ * A property is a way for the user to configure the behavior of ProActive. Properties
+ * can be initialized from the command line (Java property), from configurations files 
+ * or programmatically. Once loaded a property this API <b>must</b> be used. Any change 
+ * to a Java property will not be reflected. 
+ *  
+ * @author ProActive team
+ * @since  ProActive 5.2.0
  */
-abstract public class PAProperty {
-    public enum PropertyType {
+public interface PAProperty {
+    static public enum PropertyType {
         STRING, INTEGER, BOOLEAN;
     }
 
-    final String name;
-    final PropertyType type;
-    final boolean isSystemProperty;
-    volatile String defaultValue;
-
-    PAProperty(String name, PropertyType type, boolean isSystemProp) {
-        this.name = name;
-        this.type = type;
-        this.isSystemProperty = isSystemProp;
-    }
+    /**
+     * Indicate if this property is an alias or not.
+     * 
+     * @return
+     *    true if an alias, false otherwise 
+     */
+    public boolean isAlias();
 
     /**
-     * Returns the key associated to this property
-     * @return the key associated to this property
+     * The name of this property.
+     * 
+     * @return
+     *    the real name of this property
      */
-    public String getName() {
-        return this.name;
-    }
+    public String getName();
 
     /**
-     * Returns this property type
-     * @return The type of this property
+     * The name of the aliased property.
+     * 
+     * A property can be an alias for another. In this case the alias
+     * name is the name of the targeted property. Otherwise it returns the 
+     * same value than {@link #getName()}
+     * 
+     * @return
+     *   the name of the aliased property
      */
-    public PropertyType getType() {
-        return this.type;
-    }
+    public String getAliasedName();
 
     /**
-     * Returns the value of this property
-     * @return the value of this property
+     * Return the type of this property.
+     * 
+     * @return 
+     *    the type of this property
      */
-    public String getValueAsString() {
-        return ProActiveConfiguration.getInstance().getProperty(this.name);
-    }
+    public PropertyType getType();
 
     /**
-     * Set the value of this property
-     * @param value new value of the property
+     * Return the value of this property.
+     * 
+     * @return 
+     *    A string representation of the value,
      */
-    public void setValue(String value) {
-        ProActiveConfiguration.getInstance().setProperty(this.name, value, this.isSystemProperty);
-    }
+    public String getValueAsString();
 
     /**
-     * Set the default value of this property
-     * @param value new value of the property
+     * Return the default value of this property.
+     * 
+     * If no default value has been specified then null is returned.
+     * 
+     * @return
+     *    the default value or null.
      */
-    protected void setDefaultValue(String value) {
-        this.defaultValue = value;
-    }
-
-    /**
-     * Set the default value of this property
-     * @param booleanValue new value of the property
-     */
-    protected String getDefaultValue() {
-        return this.defaultValue;
-    }
+    public String getDefaultValue();
 
     /**
      * Indicates if the property is set.
-     * @return true if and only if the property has been set.
+     * 
+     * @return 
+     *    true if and only if the property has been set.
      */
-    public boolean isSet() {
-        return ProActiveConfiguration.getInstance().getProperty(this.name) != null;
-    }
+    public boolean isSet();
 
     /**
-     * Unset the property 
+     * Unset the property.
      * 
-     * @since ProActive 5.0.0
+     * Subsequent calls to getValueAsString will return null.
      */
-    public void unset() {
-        ProActiveConfiguration.getInstance().unsetProperty(this.name);
-    }
+    public void unset();
 
     /**
      * Returns the string to be passed on the command line
@@ -133,27 +128,24 @@ abstract public class PAProperty {
      *
      * @return the string to be passed on the command line
      */
-    public String getCmdLine() {
-        return "-D" + this.name + '=';
-    }
+    public String getCmdLine();
 
     /**
      * Check if the value is valid for this property
-     * @param value a property value
-     * @return true if and only if the value is valid for this property type
+     * 
+     * @param value 
+     *    the value to be testes
+     * @return 
+     *    true if and only if the value is valid for this property type
      */
-    public abstract boolean isValid(String value);
+    boolean isValid(String value);
 
     /**
-     *
-     * @return true is this property must be exported in the VM
+     * Indicates if this property must be exported in the VM
+     * 
+     * @return 
+     *    true it is a system property, false otherwise
      */
-    public boolean isSystemProperty() {
-        return this.isSystemProperty;
-    }
+    public boolean isSystemProperty();
 
-    @Override
-    public String toString() {
-        return this.name + "=" + getValueAsString();
-    }
 }

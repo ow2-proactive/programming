@@ -44,40 +44,32 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
  *
  * @since ProActive 4.3.0
  */
-public class PAPropertyInteger extends PAProperty {
+public class PAPropertyInteger extends PAPropertyImpl {
+
     public PAPropertyInteger(String name, boolean isSystemProp) {
-        super(name, PropertyType.INTEGER, isSystemProp);
+        super(name, PropertyType.INTEGER, isSystemProp, null);
     }
 
     public PAPropertyInteger(String name, boolean isSystemProp, int defaultValue) {
-        this(name, isSystemProp);
-        this.setDefaultValue(new Integer(defaultValue).toString());
+        super(name, PropertyType.INTEGER, isSystemProp, Integer.toString(defaultValue));
     }
 
-    /**
-     *
-     * @return the value of this proactive property
-     */
-    public int getValue() {
+    final public int getValue() {
         String str = super.getValueAsString();
         try {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
-            throw new ProActiveRuntimeException("Invalid value for ProActive property " + this.name +
-                " must be an integer", e);
+            throw new ProActiveRuntimeException("Invalid value for ProActive property " +
+                super.getAliasedName() + " must be an integer", e);
         }
     }
 
-    /**
-     * Update the value of this proactive property
-     * @param value the new value
-     */
-    public void setValue(int value) {
-        super.setValue(new Integer(value).toString());
+    final public void setValue(int value) {
+        super.internalSetValue(new Integer(value).toString());
     }
 
     @Override
-    public boolean isValid(String value) {
+    final public boolean isValid(String value) {
         try {
             Integer.parseInt(value);
             return true;
