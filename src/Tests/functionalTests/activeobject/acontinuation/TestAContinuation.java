@@ -62,7 +62,7 @@ public class TestAContinuation extends FunctionalTest {
 
     @org.junit.Test
     public void action() throws Exception {
-        String initial_ca_setting = CentralPAPropertyRepository.PA_FUTURE_AC.getValueAsString();
+        boolean initial_ca_setting = CentralPAPropertyRepository.PA_FUTURE_AC.getValue();
         if (!CentralPAPropertyRepository.PA_FUTURE_AC.isTrue()) {
             CentralPAPropertyRepository.PA_FUTURE_AC.setValue(true);
         }

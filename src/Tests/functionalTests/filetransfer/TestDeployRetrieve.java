@@ -118,7 +118,7 @@ public class TestDeployRetrieve extends FunctionalTest {
         }
 
         // We save the current state of the schema validation and set it to false for this example
-        String validatingProperyOld = CentralPAPropertyRepository.SCHEMA_VALIDATION.getValueAsString();
+        boolean validatingProperyOld = CentralPAPropertyRepository.SCHEMA_VALIDATION.getValue();
         CentralPAPropertyRepository.SCHEMA_VALIDATION.setValue(false);
 
         VariableContractImpl vc = new VariableContractImpl();

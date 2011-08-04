@@ -212,11 +212,11 @@ public class Test extends ComponentTest {
 
     @Before
     public void initTest() throws Exception {
-        CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.setValue("true");
+        CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.setValue(true);
     }
 
     @After
     public void endTest() throws Exception {
-        CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.setValue("false");
+        CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.setValue(false);
     }
 }
