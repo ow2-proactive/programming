@@ -198,6 +198,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     private void requestQueueHandler() {
         synchronized (requestQueue) {
             while (body.isActive()) {
+            	
                 List<Request> rc;
                 rc = getMaxFromQueue();
 
@@ -440,15 +441,15 @@ public class RequestExecutor implements FutureWaiter, ServingController {
      * @param r wrapper of the request that starts waiting
      * @param f the future for whose value the wait occured
      */
-    private void signalWaitFor(RunnableRequest r, Future f) {
+    private void signalWaitFor(RunnableRequest r, FutureID fId) {
         synchronized (this) {
             ///**/System.out.println("blocked "+r.getRequest().getMethodName()+ " in "+listener.getServingBody().getID().hashCode()+ "("+listener.getServingBody()+")");
             active.remove(r);
             waiting.add(r);
-            if (!waitingList.containsKey(f)) {
-                waitingList.put(f.getFutureID(), new LinkedList<RunnableRequest>());
+            if (!waitingList.containsKey(fId)) {
+                waitingList.put(fId, new LinkedList<RunnableRequest>());
             }
-            waitingList.get(f).add(r);
+            waitingList.get(fId).add(r);
 
             if (SAME_THREAD_REENTRANT) {
                 if (!requestTags.containsKey(r.getSessionTag())) {
@@ -461,7 +462,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
  //           System.out.println("wait" +r.getSessionTag()+ " @ "+Thread.currentThread().getId());
             
             r.setCanRun(false);
-            r.setWaitingOn(f);
+            r.setWaitingOn(fId);
             this.notify();
         }
     }
@@ -469,9 +470,9 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     /**
      * Called from the executor's thread to signal a waiting request that it can resume execution.
      * @param r the request's wrapper
-     * @param f the future it was waiting for
+     * @param fId the future it was waiting for
      */
-    private void resumeServing(RunnableRequest r, Future f) {
+    private void resumeServing(RunnableRequest r, FutureID fId) {
         synchronized (this) {
             active.add(r);
     
@@ -480,11 +481,11 @@ public class RequestExecutor implements FutureWaiter, ServingController {
             r.setCanRun(true);
             r.setWaitingOn(null);
     
-            waitingList.get(f).remove(r);
-            if (waitingList.get(f).size() == 0) {
-                waitingList.remove(f);
+            waitingList.get(fId).remove(r);
+            if (waitingList.get(fId).size() == 0) {
+                waitingList.remove(fId);
                 //TODO -- should clean up the future from the arrived set
-                hasArrived.remove(f);
+                hasArrived.remove(fId);
             }
     
             if (SAME_THREAD_REENTRANT) {
@@ -554,7 +555,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
                     return;
                 }
                 
-                signalWaitFor(thisRequest, future);
+                signalWaitFor(thisRequest, future.getFutureID());
             }
 
             while (!thisRequest.canRun()) {
@@ -599,7 +600,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
     protected class RunnableRequest implements Runnable {            
         private Request r;
         private boolean canRun = true;
-        private Future waitingOn;
+        private FutureID waitingOn;
         private RunnableRequest hostedOn;
         private String sessionTag;
 
@@ -649,7 +650,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
          * a wait-by-necessity.
          * @param waitingOn
          */
-        public void setWaitingOn(Future waitingOn) {
+        public void setWaitingOn(FutureID waitingOn) {
             this.waitingOn = waitingOn;
         }
 
@@ -658,7 +659,7 @@ public class RequestExecutor implements FutureWaiter, ServingController {
          * a wait-by-necessity.
          * @return
          */
-        public Future getWaitingOn() {
+        public FutureID getWaitingOn() {
             return waitingOn;
         }
 

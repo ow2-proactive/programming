@@ -226,7 +226,6 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
             this.callbacks = null;
         }
         
-        toNotify = PAActiveObject.getContext().getFutureListener();
         if (toNotify!=null) {
             toNotify.futureArrived(this);
         } else {        
@@ -239,7 +238,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      * or null if the result is not an exception. The method blocks until the result is available.
      * @return the exception raised once available or null if no exception.
      */
-    public synchronized Throwable getRaisedException() {
+    public /*synchronized*/ Throwable getRaisedException() {
         waitFor();
         return target.getException();
     }
@@ -256,7 +255,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      * The method blocks until the future is available
      * @return the result of this future object once available.
      */
-    public synchronized MethodCallResult getMethodCallResult() {
+    public /*synchronized*/ MethodCallResult getMethodCallResult() {
         waitFor();
         return target;
     }
@@ -265,7 +264,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      * Returns the result this future is for. The method blocks until the future is available
      * @return the result of this future object once available.
      */
-    public synchronized Object getResult() {
+    public /*synchronized*/ Object getResult() {
         waitFor();
         return target.getResult();
     }
@@ -275,7 +274,7 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
      * @return the result of this future object once available.
      * @throws ProActiveException if the timeout expires
      */
-    public synchronized Object getResult(long timeout) throws ProActiveTimeoutException {
+    public /*synchronized*/ Object getResult(long timeout) throws ProActiveTimeoutException {
         waitFor(timeout);
         return target.getResult();
     }
@@ -395,13 +394,14 @@ public class FutureProxy implements Future, Proxy, java.io.Serializable {
                         bodyId, getCreatorID()));
                 }
             }
+            
+            //delegate waiting to the service of the body
+            toNotify = waiter;
         }
 
         // END JMX Notification
         TimeoutAccounter time = TimeoutAccounter.getAccounter(timeout);
 
-        //delegate waiting to the service of the body
-        toNotify = waiter;
         waiter.waitForFuture(this);
 
         // JMX Notification

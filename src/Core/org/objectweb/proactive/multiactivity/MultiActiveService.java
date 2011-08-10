@@ -71,7 +71,7 @@ public class MultiActiveService extends Service {
     
     public void multiActiveServing() {
     	init();
-        executor.configure(Runtime.getRuntime().availableProcessors(), false, false);
+        executor.configure(Integer.MAX_VALUE, false, false);
         executor.execute();
     }
     
@@ -114,7 +114,7 @@ public class MultiActiveService extends Service {
     
     public void policyServing(ServingPolicy policy) {
     	init();
-        executor.configure(Runtime.getRuntime().availableProcessors(), false, false);
+        executor.configure(Integer.MAX_VALUE, false, false);
         executor.execute(policy);
     }
     
