@@ -10,6 +10,9 @@ import org.objectweb.proactive.core.body.request.Request;
  * This is an extension to the {@link CompatibilityMap}, and it incorporates information
  * about the state of the scheduler. It facilitates checking compatibility of methods with
  * the ones in the waiting queue, or the ones that are currently executing.
+ * <br>
+ * This is an abstract class and it should be implemented for each service in part, so it knows how to 
+ * access the queue etc.
  * @author Zsolt Istvan
  *
  */
@@ -23,7 +26,7 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 		super(clazz);
 	}
 	
-	/**
+	/*
 	 * Returns the set of methods which are currently executing. Even if 
 	 * a method is executing in multiple instances, it will appear only 
 	 * once in this set.
@@ -31,7 +34,7 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	 */
 //	public abstract Set<String> getExecutingMethodNameSet();
 	
-	/**
+	/*
 	 * Returns the list of methods which are currently executing. If a method
 	 * is executing in multiple instances, it will appear multiple times in
 	 * this list.
@@ -51,7 +54,7 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	 */
 	public abstract int getNumberOfExecutingRequests();
 	
-	/**
+	/*
 	 * Returns only the instances of a given method name which are
 	 * executing
 	 * @param name
@@ -81,7 +84,7 @@ public abstract class StatefulCompatibilityMap extends CompatibilityMap {
 	 */
 	public abstract boolean isCompatibleWithExecuting(Request request);
 	
-	/**
+	/*
 	 * Returns true if the given method can be run in parallel with all 
 	 * methods that are currently executing. 
 	 * @param method

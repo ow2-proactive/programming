@@ -7,9 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 import org.objectweb.proactive.annotation.PublicAPI;
 
 /**
- * This annotation represents the definition of a method group.
+ * This annotation represents a method group.
  * The compatibility rules that apply on groups can be defined 
- * using the DefineRules construct.
+ * using the {@link DefineRules} annotation.
  * @author Zsolt Istvan
  *
  */
@@ -19,7 +19,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 public @interface Group {
 	
 	/**
-	 * A representative name of the group. This has to be unique for the class.
+	 * A representative name of the group. This has to be unique for a class and its predecessors.
 	 * @return
 	 */
 	public String name();
@@ -30,8 +30,16 @@ public @interface Group {
 	 */
 	public boolean selfCompatible();
 	
+	/**
+	 * Class name of the common argument of all methods belonging to this group.
+	 * @return
+	 */
 	public String parameter() default "";
 	
-	public String comparator() default "";
+	/**
+	 * Conditioning function of the self-compatibility.
+	 * @return
+	 */
+	public String condition() default "";
 
 }

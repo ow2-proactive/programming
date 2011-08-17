@@ -24,14 +24,14 @@ import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 @DefineGroups( 
         { 
-        @Group(name = "add_remove", selfCompatible = true, parameter = "java.lang.String", comparator="equals"),
+        @Group(name = "add_remove", selfCompatible = true, parameter = "java.lang.String", condition="equals"),
         @Group(name = "info", selfCompatible = true),
-        @Group(name = "work", selfCompatible = true, parameter = "functionalTests.multiactivities.imageprocessing.BitmapRegion", comparator="overlaps")
+        @Group(name = "work", selfCompatible = true, parameter = "functionalTests.multiactivities.imageprocessing.BitmapRegion", condition="overlaps")
         }
 )
 @DefineRules( 
         { 
-        @Compatible( value={ "add_remove", "work" }, comparator="functionalTests.multiactivities.imageprocessing.BitmapRegion.sameName"),
+        @Compatible( value={ "add_remove", "work" }, condition="functionalTests.multiactivities.imageprocessing.BitmapRegion.sameName"),
         @Compatible( value={ "info", "work" })
         }
 )

@@ -7,8 +7,8 @@ import org.objectweb.proactive.core.UniqueID;
 
 /**
  * Static class that pairs {@link Body} instances with {@link FutureWaiter}s. Since each body has only one associated service, and each service
- * can have only one internal future waiter, the mapping is one-on-one.
- * @author Izso
+ * can have only one internal future waiter, the mapping is one-to-one.
+ * @author Zsolt Istvan
  *
  */
 public class FutureWaiterRegistry {

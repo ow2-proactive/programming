@@ -13,7 +13,7 @@ import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 /**
  * Class to test ping-pong-like interactions
- * @author Zsolt István
+ * @author Zsolt Istvï¿½n
  *
  */
 @DefineGroups(
@@ -111,7 +111,7 @@ public class Pinger implements RunActive {
     @Override
     public void runActivity(Body body) {
     	if (this.multiActive) {
-    		(new MultiActiveService(body)).multiActiveServing(1, true, true);
+    		(new MultiActiveService(body)).multiActiveServing(1, false, false);
     	} else {
     		(new Service(body)).fifoServing();
     	}

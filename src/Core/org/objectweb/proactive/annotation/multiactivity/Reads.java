@@ -20,6 +20,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @PublicAPI
+@Deprecated
 public @interface Reads {
 	public static final String ALL = "*";
 	public String[] value();

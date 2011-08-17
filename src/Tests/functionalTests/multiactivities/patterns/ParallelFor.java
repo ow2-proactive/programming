@@ -15,7 +15,7 @@ import org.objectweb.proactive.core.node.NodeException;
 import org.objectweb.proactive.multiactivity.MultiActiveService;
 
 @DefineGroups({
-    @Group(name="iteration", selfCompatible=true, parameter="java.lang.Integer", comparator="equals")
+    @Group(name="iteration", selfCompatible=true, parameter="java.lang.Integer", condition="equals")
 })
 public class ParallelFor implements RunActive {
     private static int MAX_THREADS;

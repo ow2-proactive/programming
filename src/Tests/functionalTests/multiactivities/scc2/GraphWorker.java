@@ -34,7 +34,7 @@ import org.objectweb.proactive.multiactivity.MultiActiveService;
 )
 @DefineRules( 
         { 
-        @Compatible( value={ "Backward", "Info", "Forward", "Transaction" }, comparator="equals") 
+        @Compatible( value={ "Backward", "Info", "Forward", "Transaction" }, condition="equals") 
         }
 )
 public class GraphWorker implements RunActive {

@@ -3,6 +3,7 @@ package org.objectweb.proactive.multiactivity.compatibility;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,9 +28,9 @@ import org.objectweb.proactive.core.util.log.Loggers;
  * These data structures are:
  * <ul>
  * 	<li>group map -- this is a map that associates the names of the groups with the actual 
- * {@link MethodGroup}s. It can be retrieved through the {@link #getGroupNameMap()} method.</li>
+ * {@link MethodGroup}s. It can be retrieved through the {@link #getMethodGroups()} method.</li>
  *  <li>method map -- this is a map that holds the group that each method belongs to. It can be 
- *  accessed through the {@link #getMethodNameMap()} method.</li> 
+ *  accessed through the {@link #getMethodMemberships()} method.</li> 
  * </ul>
  * 
  * <br>
@@ -42,32 +43,31 @@ public class AnnotationProcessor {
 	//text used to define the place and type of an error in the annotations
 	protected static final String LOC_CLASS="at class";
 	protected static final String LOC_METHOD="at method";
-	protected static final String REF_GROUP="undefined group";
+	protected static final String UNDEF_GROUP="undefined group";
 	protected static final String DUP_GROUP="duplicate group definition";
-	//protected static final String REF_VARIABLE="unresolvable variable name";
-	protected static final String REF_METHOD="unresolvable method name";
+	protected static final String UNDEF_METHOD="unresolvable method name";
 	protected static final String AD_HOC_GROUP="AD_HOC_";
 	
 	protected Logger logger = Logger.getLogger(Loggers.MAO);
 	
-	//data about groups
+	//group names -> method groups
 	private Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();
+	//method name -> method group in which it is member
 	private Map<String, MethodGroup> methods = new HashMap<String, MethodGroup>();
 	
 	//class that is processed
 	private Class<?> processedClass;
 	
-	//set of class variables used for error checking -- populated only on need
-	//private HashSet<String> classVariables;
+	//set of the method name inside a class -- used for error checking -- populated only on need
 	private HashSet<String> classMethods;
 	
-	//map of errors
-	protected Map<String, List<String>> errors = new HashMap<String, List<String>>();
+	//list of errors
+	protected List<String> errorMessages = new LinkedList<String>();
 	
 	public AnnotationProcessor(Class<?> c) {
 		processedClass = c;
 		
-		//create the list of inheritance of the class we chose (in descending order of "age")
+		//create the inheritance list of the class (in descending order of "age")
 		List<Class> parents = new LinkedList<Class>();
 		parents.add(c);
 		Class<?> p;
@@ -77,11 +77,12 @@ public class AnnotationProcessor {
 		
 		Iterator<Class> i = parents.iterator();
 		
+		//process group and rule definitions starting from the oldest class.
 		while(i.hasNext()) {
-			processClassAnnotations(i.next());
+			processGroupsAndRules(i.next());
 		}
 		
-		processMethodAnnotations();
+		processAnnotationsAtMethods();
 	}
 	
 	/**
@@ -91,8 +92,7 @@ public class AnnotationProcessor {
 	 *  <li>{@link DefineRules} and {@link Compatible} -- these define the rules that apply between them</li>
 	 * </ul>
 	 */
-	protected void processClassAnnotations(Class<?> processedClass){
-		//if there are any groups defined
+	protected void processGroupsAndRules(Class<?> processedClass){
 		Annotation[] declaredAnns = processedClass.getDeclaredAnnotations();
 		Annotation groupDefAnn = null;
 		Annotation compDefAnn = null;
@@ -104,26 +104,28 @@ public class AnnotationProcessor {
 			if (compDefAnn==null && a.annotationType().equals(DefineRules.class)) {
 				compDefAnn = a;
 			}
+			
+			if (compDefAnn!=null && groupDefAnn!=null) {
+				break;
+			}
 		}
 		
+		//if there are groups
 		if (groupDefAnn!=null){
-			DefineGroups defg = (DefineGroups) groupDefAnn;
-			
-			//create the descriptor
-			for (Group g : defg.value()) {
+			for (Group g : ((DefineGroups) groupDefAnn).value()) {
 				if (!groups.containsKey(g.name())) {
-					MethodGroup mg = new MethodGroup(g.name(), g.selfCompatible(), g.parameter(), g.comparator());
+					MethodGroup mg = new MethodGroup(g.name(), g.selfCompatible(), g.parameter(), g.condition());
 					groups.put(g.name(), mg);
 				} else {
 					addError(LOC_CLASS, processedClass.getCanonicalName(), DUP_GROUP, g.name());
 				}
 			}
 		}	
+		
 		// if there are rules defined
 		if (compDefAnn!=null) {
-			DefineRules defr = (DefineRules) compDefAnn;
-			for (Compatible c : defr.value()) {
-				String comparator = c.comparator();
+			for (Compatible c : ((DefineRules) compDefAnn).value()) {
+				String comparator = c.condition();
 				for (String group : c.value()) {
 					for (String other : c.value()) {
 						if (groups.containsKey(group) && groups.containsKey(other) && !other.equals(group)) {
@@ -134,10 +136,10 @@ public class AnnotationProcessor {
 
 						} else {
 							if (!groups.containsKey(group)) {
-								addError(LOC_CLASS, processedClass.getCanonicalName(), REF_GROUP, group);
+								addError(LOC_CLASS, processedClass.getCanonicalName(), UNDEF_GROUP, group);
 							}
 							if (!groups.containsKey(other)) {
-								addError(LOC_CLASS, processedClass.getCanonicalName(), REF_GROUP, other);
+								addError(LOC_CLASS, processedClass.getCanonicalName(), UNDEF_GROUP, other);
 							}
 						}
 					}
@@ -148,20 +150,8 @@ public class AnnotationProcessor {
 
 	}
 	
-	/**
-	 * Processes method-level annotations.
-	 * First it deals with group membership and method-to-method compatibility, then 
-	 * with variable accesses.
-	 */
-	protected void processMethodAnnotations(){
-		
-		processCompatible();
-		
-		//read modify is kind of deprecated. it is functional though... just uncomment everything ;)
-		//processReadModify();
-	}
-	
-	/**
+
+	/*
 	 * Reads and processes the following method-level annotations:
 	 * <ul>
 	 *  <li>{@link Reads} -- the variables that are just read by the method</li>
@@ -288,14 +278,15 @@ public class AnnotationProcessor {
 	 * Reads and processes the following method-level annotations:
 	 * <ul>
 	 *  <li>{@link MemberOf} -- the group the method belongs to</li>
-	 *  <li>{@link Compatible} -- the additional methods it is compatible with</li>
+	 *  <li>{@link Compatible} -- the additional methods this method is compatible with</li>
 	 * </ul>
 	 */
-	protected void processCompatible() {
+	protected void processAnnotationsAtMethods() {
 		HashMap<String, HashSet<String>> compMap = new HashMap<String, HashSet<String>>();
 		
 		//go through each public method of a class
 		for (Method method : processedClass.getMethods()) {
+			
 			//check what group is it part of
 			MemberOf group = method.getAnnotation(MemberOf.class);
 			if (group!=null) {
@@ -303,11 +294,11 @@ public class AnnotationProcessor {
 				methods.put(method.toString(), mg);
 				
 				if (mg==null) {
-					addError(LOC_METHOD, method.toString(), REF_GROUP, group.value());
+					addError(LOC_METHOD, method.toString(), UNDEF_GROUP, group.value());
 				}
 			}
 			
-			//other compatible declarations -- put them into a map
+			/*//other compatible declarations -- put them into a map
 			Compatible comp = method.getAnnotation(Compatible.class);
 			if (comp!=null) {
 				HashSet<String> comps = new HashSet<String>();
@@ -315,14 +306,14 @@ public class AnnotationProcessor {
 					comps.add(other);
 					
 					if (!classHasMethod(other)) {
-						addError(LOC_METHOD, method.toString(), REF_GROUP, other);
+						addError(LOC_METHOD, method.toString(), UNDEF_GROUP, other);
 					}
 				}
 				compMap.put(method.toString(), comps);
-			}
+			}*/
 		}
 		
-		//go through methods that declared compatibilities
+/*		//go through methods that declared compatibilities
 		for (String method : compMap.keySet()) {
 			boolean selfCompatible = compMap.get(method).contains(method) || (groups.get(method)!=null ? groups.get(method).isSelfCompatible() : false);
 			
@@ -344,52 +335,55 @@ public class AnnotationProcessor {
 					methods.get(method).addCompatibleWith(methods.get(other));
 					methods.get(other).addCompatibleWith(methods.get(method));
 				} else {
-					addError(LOC_METHOD, method, REF_METHOD, other);
+					addError(LOC_METHOD, method, UNDEF_METHOD, other);
 				}
 			}
-		}
+		}*/
 	}
 
-	private void addError(String locationType, String location, String refType, String reference) {
-		String where = locationType+location;
-		String what = refType+reference;
-		if (!errors.containsKey(where)) {
-			errors.put(where, new LinkedList<String>());
-		}
-		
-		errors.get(where).add(what);	
+	/**
+	 * Adds an error to the error map (which keep
+	 * @param locationType
+	 * @param location
+	 * @param problemType
+	 * @param problemName
+	 */
+	private void addError(String locationType, String location, String problemType, String problemName) {
+		String msg;
 		
 		if (!locationType.equals(LOC_CLASS)) {
-			logger.error("In '"+processedClass.getName()+"' "+locationType+" '"+location+"' "+refType+" '"+reference+"'");
+			msg = "In '"+processedClass.getName()+"' "+locationType+" '"+location+"' "+problemType+" '"+problemName+"'";
+			logger.error(msg);
+			errorMessages.add(msg);
 		} else {
-			logger.error("In '"+location+"' "+refType+" '"+reference+"'");
+			msg = "In '"+location+"' "+problemType+" '"+problemName+"'";
+			logger.error(msg);
+			errorMessages.add(msg);
 		}
 	}
 	
 	/**
-	 * Returns the invalid references (group names, method names, variable names that are not defined 
-	 * in the class but appear in the annotations).
-	 * @return a map that holds locations and the related lists of the invalid references. A location 
-	 * can be a method name or "CLASS" in case the error is in the class level annotations.
+	 * Returns the list of error messages thrown while processing annotations.
+	 * @return
 	 */
-	public Map<String, List<String>> getInvalidReferences(){
-		return errors;
+	public Collection<String> getErrorMessages(){
+		return errorMessages;
 	}
 	
 	/**
-	 * Returns true if the annotations contain references (group names, method names, variable names)
-	 * that are not defined in the class.
+	 * Returns true if the annotations contain references (group names, method names)
+	 * that are not defined in the class, or if some groups were redefined.
 	 * @return
 	 */
-	public boolean hasInvalidReferences(){
-		return errors.keySet().size()>0;
+	public boolean hasErrors(){
+		return errorMessages.size()>0;
 	}
 	
 	/**
 	 * Returns a map that maps the group names to the method groups.
 	 * @return
 	 */
-	public Map<String, MethodGroup> getGroupNameMap() {
+	public Map<String, MethodGroup> getMethodGroups() {
 		return groups;
 	}
 
@@ -397,11 +391,11 @@ public class AnnotationProcessor {
 	 * Returns a map that pairs each method name with a method group.
 	 * @return
 	 */
-	public Map<String, MethodGroup> getMethodNameMap() {
+	public Map<String, MethodGroup> getMethodMemberships() {
 		return methods;
 	}
 	
-	/**
+	/*
 	 * Returns true if the processed class has a variable named like the parameter.
 	 * @param ref variable name
 	 * @return

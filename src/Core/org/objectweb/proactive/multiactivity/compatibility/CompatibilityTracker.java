@@ -12,7 +12,13 @@ import org.objectweb.proactive.core.body.request.BlockingRequestQueue;
 import org.objectweb.proactive.core.body.request.Request;
 
 /**
- * @author  Izso
+ * This is an implementation of the {@link StatefulCompatibilityMap} abstract class.
+ * It relies on a BlockingRequestQueue (the one used by default in the body of active objects) to get the
+ * list of waiting requests.
+ * <br>
+ * Data about currently executing requests is kept inside the class, and not read from an external source. The
+ * reason for this is that compatibility checking can be sped up if we cache some data in this class.
+ * @author  Zsolt Istvan
  */
 public class CompatibilityTracker extends StatefulCompatibilityMap {
 
@@ -33,11 +39,9 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
         this.queue = queue;
     }
 
-    /*
-     * adds the request to the running set adds one to the compatibility count of all groups
-     * this request's group is compatible with
-     * 
-     * Time: O(g) -- g is the number of groups
+    /**
+     * Adds a request to the set of running requests. Called from a service when a request is started to be served.
+     * @param request
      */
     public void addRunning(Request request) {
         runningCount++;
@@ -45,11 +49,9 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
         runningGroups.get(getGroupOf(request)).add(request);
     }
 
-    /*
-     * removes the request from the running set removes one from the compatibility count of all
-     * groups this request's group is compatible with
-     * 
-     * Time: O(g) -- g is the number of groups
+    /**
+     * Removes a request from the set of running requests. Called from a service when a request has finished serving.
+     * @param request
      */
     public void removeRunning(Request request) {
         runningCount--;
@@ -87,55 +89,10 @@ public class CompatibilityTracker extends StatefulCompatibilityMap {
       return true;
     }
 
-    /*
-     * Alternative for the isCompatibleWithRequests in case we check with the running ones. This
-     * will return the answer in O(1) time, as opposed to O(n) worst-case time of the other.
-     * Thsi works by checking if the count of compatible methods is equal to the number of
-     * running methods. The count is stored for each group and updated upon addition/removal of
-     * requests to/from the running set.
-     * 
-     * Time: O(1)
-     */
-//    private boolean isCompatibleWithExecuting(String method) {
-//        if (runningCount == 0)
-//            return true;
-//
-//        MethodGroup mg = getGroupOf(method);
-//        return (mg != null && compats.containsKey(mg)) && (compats.get(mg) == runningCount);
-//    }
-
-//    public Set<String> getExecutingMethodNameSet() {
-//        return runningMethods.keySet();
-//    }
-
-//    @Override
-//    public List<String> getExecutingMethodNames() {
-//        List<String> names = new LinkedList<String>();
-//        for (String m : runningMethods.keySet()) {
-//            for (int i = 0; i < runningMethods.get(m).size(); i++) {
-//                names.add(m);
-//            }
-//        }
-//
-//        return names;
-//    }
-
     @Override
     public Collection<Request> getExecutingRequests() {
-        /*List<Request> reqs = new LinkedList<Request>();
-        for (List<Request> lrr : runningMethods.values()) {
-            reqs.addAll(lrr);
-        }
-
-        return reqs;*/
         return running;
     }
-
-//    @Override
-//    public List<Request> getExecutingRequestsFor(String method) {
-//        return (runningMethods.containsKey(method)) ? runningMethods.get(method)
-//                : new LinkedList<Request>();
-//    }
 
     @Override
     public Request getOldestInTheQueue() {

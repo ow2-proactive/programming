@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 import org.objectweb.proactive.annotation.PublicAPI;
 
 /**
- * This annotation shows to which group defined at class level (in a DefineGroup construct)
+ * This annotation shows to which {@link Group} (defined in a {@link DefineGroup} construct)
  * a method belongs to.
  * @author Izso
  *

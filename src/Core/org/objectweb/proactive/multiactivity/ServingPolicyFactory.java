@@ -6,6 +6,12 @@ import java.util.List;
 import org.objectweb.proactive.core.body.request.Request;
 import org.objectweb.proactive.multiactivity.compatibility.StatefulCompatibilityMap;
 
+/**
+ * A factory with examples of serving policies.
+ * @author Zsolt Istvan
+ *
+ */
+@Deprecated
 public class ServingPolicyFactory {
 	
 	public static ServingPolicy getSingleActivityPolicy(){

@@ -6,29 +6,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.multiactivity.compatibility.AnnotationProcessor;
 
 /**
- * This annotation can be used to express parallel compatibility.
- * It can be used on the level of 
- * <ul>
- * 		<li>a method -- and it will then represent the compatibility of that method
- * with a list of other methods. <br>ATTENTION: The relationship has to be defined bidirectional,
- * so all referenced methods have to declare the first one as compatible also.</li>
- * 		<li>the class, inside a group definition block (DefineGroup) -- when it will 
- * list the groups whose methods can run in parallel.</li>
- * </ul>
- */
+ * This annotation can be used to express parallel compatibility between groups.
+ * It is to be used inside a {@link DefineRules} annotation, and defines a set of method groups (identified by name) 
+ * which can run in parallel. Optionally, a conditioning function can be defined (see {@link AnnotationProcessor} for details on this function).
+ * @author Zsolt Istvan
+ */ 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @PublicAPI
 public @interface Compatible {
 	
 	/**
-	 * List of method names or group names, depending on the annotation location.
+	 * List of group names that can run in parallel.
 	 * @return
 	 */
 	public String[] value();
 	
-	public String comparator() default "";
+	/**
+	 * Conditioning function of the compatibility rule.
+	 * @return
+	 */
+	public String condition() default "";
 
 }

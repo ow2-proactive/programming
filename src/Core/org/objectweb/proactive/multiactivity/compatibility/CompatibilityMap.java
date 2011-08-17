@@ -8,43 +8,57 @@ import java.util.Map;
 import org.objectweb.proactive.core.body.request.Request;
 
 /**
- * This class can be used to access information about groups and compatibility relation between methods in a class. It has an underlying  {@link AnnotationProcessor}  to extract  this information. <br> The methods of this class are defined both for parameters of type String (for method names) and of type  {@link Request}  
+ * This class can be used to query information about method groups ({@link Group}) and compatibility relations ({@link Compatible}) in a class. 
+ * It uses the {@link AnnotationProcessor} to extract this information.  
  * @author  Zsolt Istvan
  */
 public class CompatibilityMap {
 	
 	private Map<String, MethodGroup> groups = new HashMap<String, MethodGroup>();
-	private Map<String, MethodGroup> methods = new HashMap<String, MethodGroup>();
+	private Map<String, MethodGroup> membership = new HashMap<String, MethodGroup>();
 	
+	/**
+	 * Create a compatibility map using an already existing annotation processor.
+	 * @param annotProc
+	 */
 	public CompatibilityMap(AnnotationProcessor annotProc) {
-		this.groups = annotProc.getGroupNameMap();
-		this.methods = annotProc.getMethodNameMap();
+		this.groups = annotProc.getMethodGroups();
+		this.membership = annotProc.getMethodMemberships();
 	}
 	
+	/**
+	 * Create a compatibility map of a class.
+	 * @param clazz
+	 */
 	public CompatibilityMap(Class<?> clazz) {
 		AnnotationProcessor annotProc = new AnnotationProcessor(clazz);
-		this.groups = annotProc.getGroupNameMap();
-		this.methods = annotProc.getMethodNameMap();
+		this.groups = annotProc.getMethodGroups();
+		this.membership = annotProc.getMethodMemberships();
 	}
 	
+	/**
+	 * Returns the method group a request belongs to.
+	 * @param method
+	 * @return
+	 */
 	public MethodGroup getGroupOf(Request method){
-		return methods.get(method.getMethodCall().getReifiedMethod().toString());
+		return membership.get(MethodGroup.getNameOf(method));
 	}
 	
+	/**
+	 * Returns all method groups defined for this class (and inherited ones as well).
+	 * @return
+	 */
 	public Collection<MethodGroup> getGroups() {
 	    return groups.values();
-	}
+	}	
 	
-//	private boolean areCompatible(String method1, String method2){
-//		MethodGroup mg1 = getGroupOf(method1);
-//		MethodGroup mg2 = getGroupOf(method2);
-//		if (mg1!=null && mg2!=null) {
-//			return (mg1.getCompatibleWith().contains(mg2) || mg2.getCompatibleWith().contains(mg1));
-//		} else {
-//			return false;
-//		}
-//	}
-	
+	/**
+	 * Checks whether the two requests are compatible or not. If a condition function was
+	 * defined for these two requests, it is evaluated. 
+	 * <br>
+	 * For details on deciding compatibility see {@link MethodGroup}.
+	 */
 	public boolean areCompatible(Request request1, Request request2){
 		MethodGroup mg1 = getGroupOf(request1);
         MethodGroup mg2 = getGroupOf(request2);
@@ -56,19 +70,11 @@ public class CompatibilityMap {
         }
 	}
 	
-//	private boolean areCompatibleMethods(Collection<String> methods){
-//		for (String method : methods) {
-//			for (String other : methods) {
-//				if (method!=other) {
-//					if (!areCompatible(method, other)) {
-//						return false;
-//					}
-//				}
-//			}
-//		}
-//		return true;
-//	}
-	
+	/**
+	 * Returns true if all requests are pairwise compatible.
+	 * <br>
+	 * For details on deciding compatibility see {@link MethodGroup}.
+	 */
 	public boolean areCompatibleRequests(Collection<Request> requests){
 		for (Request request : requests) {
 			for (Request other : requests) {
@@ -82,15 +88,15 @@ public class CompatibilityMap {
 		return true;
 	}
 	
-//	private boolean isCompatibleWithMethods(String method, Collection<String> others){
-//		for (String other : others) {
-//			if (!areCompatible(method, other)) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-	
+	/**
+	 * Returns true if "request" is compatible with all other requests. The requests in the collection are not checked for 
+	 * compatibility between themselves.
+	 * <br>
+	 * For details on deciding compatibility see {@link MethodGroup}.
+	 * 
+	 * @param request the request to check against the others
+	 * @param others collection of requests
+	 */
 	public boolean isCompatibleWithRequests(Request request, Collection<Request> others){
 		for (Request other : others) {
 			if (!areCompatible(request, other)) {
@@ -100,6 +106,20 @@ public class CompatibilityMap {
 		return true;
 	}
 	
+	/**
+	 * Checks the "request" against a list of others. It stops when encountering an incompatibility, and returns the index of the last compatible request.
+	 * <br>
+	 * For details on deciding compatibility see {@link MethodGroup}.
+	 * 
+	 * @param request the request to check against the others
+	 * @param others collection of requests
+	 * @return index of the last request the checked one is compatible with:
+	 * <ul>
+	 *  <li> -1 -- the request is not compatible with the first element from the list
+	 *  <li> N -- the request is compatible with all elements up until the Nth
+	 *  <li> size()-1 -- the request is compatible with all
+	 * <ul>
+	 */
 	public int getIndexOfLastCompatibleWith(Request request, List<Request> others){
 	    for (int i=0; i<others.size(); i++) {
             if (!areCompatible(request, others.get(i))) {

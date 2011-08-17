@@ -19,6 +19,7 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @PublicAPI
+@Deprecated
 public @interface Modifies {
 	public String[] value();
 }

@@ -4,15 +4,15 @@ import org.objectweb.proactive.core.body.future.Future;
 
 /**
  * Interface for classes to whom a future proxy can delegate the task of waiting for a future value.
- * The proxy has to announce the arrival of the value to the waiter, thus this can return from the {@link #waitForFuture(Future)}
+ * The proxy has to announce ({@link #futureArrived(Future)}) the arrival of the value to the waiter, thus this can return from the {@link #waitForFuture(Future)}
  * call.
- * @author Izso
+ * @author Zsolt Istvan
  *
  */
 public interface FutureWaiter {
     
     /**
-     * Can be used to replace a java wait call inside a futre's proxy. This method should return only when the future's value has arrived. This is signaled
+     * Can be used to replace the waiting inside a futre's proxy. This method should return only when the future's value has arrived. This is signaled
      * to the waiter by the proxy with the {@link #futureArrived(Future)} method.
      * @param future The future upon which the wait is performed.
      */

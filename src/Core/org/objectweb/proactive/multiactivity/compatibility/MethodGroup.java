@@ -1,17 +1,16 @@
 package org.objectweb.proactive.multiactivity.compatibility;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.objectweb.proactive.api.PAActiveObject;
 import org.objectweb.proactive.core.body.request.Request;
 
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Parameter;
-
 /**
- * This class represents a group of methods. A group is compatible with other groups, meaning that methods belonging to these groups can run in parallel.
+ * This class represents a group of methods. 
+ * A group can be compatible with other groups, meaning that methods belonging to these groups can run in parallel.
  * @author  Zsolt Istvan
  */
 public class MethodGroup {
@@ -23,16 +22,21 @@ public class MethodGroup {
 	
 	private final int hashCode;
 	
-	private Class parameter = null;
-	private HashMap<String, Integer> methodParamPosition = new HashMap<String, Integer>();
+	private Class<?> parameter = null;
+	private HashMap<String, Integer> parameterPosition = new HashMap<String, Integer>();
 	/**
 	 * Hashmap that contains the name of an other group and the comparator name that has to be used
-	 * when comparing methods fromt his group with that other group.
+	 * when comparing parameters of methods from his group with that other group.
 	 * A comparator can be either like "equals" (member function of parameter) or like
-	 * "org.foo.someclass.someFunction" that is a static method in a class.
+	 * "org.foo.someclass.someFunction" that is a static method in a class, or "this.someMethod" 
+	 * in which case it is a method of the active object.
 	 */
 	private HashMap<String, String> comparators = new HashMap<String, String>();
-	private HashMap<String, Method> outsideComparatorCache = new HashMap<String, Method>();
+	
+	/**
+	 * Cache for the actual Method objects found for the comparators functions.
+	 */
+	private HashMap<String, Method> comparatorCache = new HashMap<String, Method>();
 	
 	/**
 	 * Standard constructor of a named group.
@@ -50,6 +54,12 @@ public class MethodGroup {
 		
     }
 
+	/**
+	 * Constructor of a named group with common parameter.
+	 * @param name A descriptive name for the group -- all group names have to be unique
+	 * @param selfCompatible if the methods that are members of the group can run in parallel
+	 * @param parameter -- the common argument to all methods inside the group (type)
+	 */
     public MethodGroup(String name, boolean selfCompatible, String parameter) {
         this(name, selfCompatible);
         if (parameter.length()>0) {
@@ -62,6 +72,13 @@ public class MethodGroup {
         }
     }
     
+    /**
+	 * Constructor of a named group with common parameter and a comparator function for checking in-group compatibility.
+	 * @param name A descriptive name for the group -- all group names have to be unique
+	 * @param selfCompatible if the methods that are members of the group can run in parallel
+	 * @param parameter -- the common argument to all methods inside the group (type)
+	 * @param comparator -- function to use to condition compatibility inside the group.
+	 */
     public MethodGroup(String name, boolean selfCompatible, String parameter, String comparator) {
         this(name, selfCompatible, parameter);
         
@@ -70,11 +87,12 @@ public class MethodGroup {
         }
     }
 	
-	/**
-	 * Standard constructor of a named group.
-	 * @param name A descriptive name for the group -- all group names have to be unique
-	 * @param selfCompatible if the methods that are members of the group can run in parallel
-	 */
+    /*
+     * Constructor which inherits all information 
+     * @param from
+     * @param name
+     * @param selfCompatible
+     *//*
 	public MethodGroup(MethodGroup from, String name, boolean selfCompatible) {
 		this.selfCompatible = selfCompatible;
 		this.name = name;
@@ -91,10 +109,10 @@ public class MethodGroup {
 			}
 		}
 		
-	}
+	}*/
 	
 	/**
-	 * Set the set of compatible groups
+	 * Set the set of compatible groups with this group
 	 * @param  compatibleWith
 	 */
 	public void setCompatibleWith(Set<MethodGroup> compatibleWith) {
@@ -110,41 +128,68 @@ public class MethodGroup {
 		this.compatibleWith.add(compatibleWith);
 	}
 
+	/**
+	 * Add a set of compatible groups to the compatible ones
+	 * @param  compatibleSet
+	 */
 	public void addCompatibleWith(Set<MethodGroup> compatibleSet) {
 		this.compatibleWith.addAll(compatibleSet);
 		
 	}
 
 	/**
-	 * Returns the set of the groups whose member methods can run in parallel with the methods belonging to this group
+	 * Returns the set of the groups whose member methods can run in parallel with the methods belonging to this group (are compatible)
 	 * @return
 	 */
 	public Set<MethodGroup> getCompatibleWith() {
 		return compatibleWith;
 	}
 
+	/**
+	 * Returns true if the two groups are compatible
+	 * @param otherGroup
+	 * @return
+	 */
 	public boolean isCompatibleWith(MethodGroup otherGroup) {
         return compatibleWith.contains(otherGroup);
     }
 
+	/**
+	 * Returns true if the group is selfCompatible (methods belonging to this group
+	 * may run in parallel -- if condition/comparator holds)
+	 * @return
+	 */
     public boolean isSelfCompatible() {
 		return selfCompatible;
 	}
 	
-	public Class getParameterType(){
+    /**
+     * Parameter that is common to the methods inside the group.
+     * @return
+     */
+	public Class<?> getGroupParameter(){
 	    return parameter;
 	}
 	
-	private Object mapMethodParameters(String name, Object[] params){
+	/**
+	 * Returns the argument from the argument list of the method call that matches the 
+	 * group parameter in type. If several arguments of the same type exist, the leftmost is chosen.
+	 * @param r
+	 * @return
+	 */
+	private Object getGroupParameterFor(Request r){
+		String name = getNameOf(r);
+		Object[] params = r.getMethodCall().getParameters();
+		
 	    if (parameter==null) {
 	        return null;
 	    }
-	    if (methodParamPosition.get(name)!=null) {
-	        return params[methodParamPosition.get(name)];
+	    if (parameterPosition.get(name)!=null) {
+	        return params[parameterPosition.get(name)];
 	    } else {
 	        for (int i=0; i<params.length; i++) {
                 if (params[i].getClass().equals(parameter)) {
-                    methodParamPosition.put(name, i);
+                    parameterPosition.put(name, i);
                     return params[i];
                 }
             }
@@ -164,9 +209,9 @@ public class MethodGroup {
 	        return false;
 	    }
 	    if (comparators.get(name)!=null) {
-	        Object param1 = mapMethodParameters(request1.getMethodName(), request1.getMethodCall().getParameters());
-	        Object param2 = (param1!=null) ? mapMethodParameters(request2.getMethodName(), request2.getMethodCall().getParameters()) : null;
-	        return applyComparator(param1, param2, comparators.get(name));
+	        Object param1 = getGroupParameterFor(request1);
+	        Object param2 = getGroupParameterFor(request2);
+	        return evaluateComparator(param1, param2, comparators.get(name));
 	    } else {
 	        return true;
 	    }
@@ -186,12 +231,12 @@ public class MethodGroup {
 	    
         if (other!=null) {
             boolean rules =  (getCompatibleWith().contains(other) || other.getCompatibleWith().contains(this));
-            if (rules == true && comparators.containsKey(other.name) && other.comparators.containsKey(name)) {
-                Object param1 = mapMethodParameters(r1.getMethodName(), r1.getMethodCall().getParameters());
-                Object param2 = (param1!=null) ? other.mapMethodParameters(r2.getMethodName(), r2.getMethodCall().getParameters()) : null;
-                return applyComparator(param1, param2, comparators.get(other.name));
-            } else {
-                return rules;
+            if (rules == true && comparators.containsKey(other.name)) {
+                Object param1 = getGroupParameterFor(r1);
+                Object param2 = other.getGroupParameterFor(r2);
+                if (comparators.get(other.name)!=null) { 
+                	return evaluateComparator(param1, param2, comparators.get(other.name));
+                }
             }
         } 
         return false;
@@ -206,137 +251,224 @@ public class MethodGroup {
 	 * @param comparator name of the method to run (this can be in either one of the parameters -- if their classes differ)
 	 * @return True if the parameters are different and false if they are the same based on the method given as argument
 	 */
-    private Boolean applyComparator(Object param1, Object param2, String comparator) {
-        
-        if (param1==null || param2==null) {
-            //if either is null, they can not be the same
-            return true;
+    private Boolean evaluateComparator(Object param1, Object param2, String comparator) {
+    	boolean affirmative = !comparator.startsWith("!");
+    	String cmp = comparator.replace("!", "");
+    	
+    	if (comparator.length()==0) {
+    		return false;
+    	}
+           
+    	//most common comparator: equals
+        if (cmp.equals("equals")) {
+        	
+        	if (param1!=null && param2!=null) {
+        		boolean result = param1.equals(param2);
+        		return  affirmative ? result : !result;
+        	} else {
+        		return affirmative ? false : true;
+        	}
             
-        } else if (comparator==null || comparator.equals("")) {
-            //if we use no comparator at all, we are not interested if they are the same or not
-            return true;
-            
-        } else if (comparator.equals("equals") && !param1.equals(param2)) {
-            //most common comparator: equals
-            //return true if parameters are different
-            return true;
-            
-        } else if (!comparator.contains(".")) {
-            //execute an abritrary comparator method
-            //this can be defined in either of the parameter's classes, but
+        } else if (!cmp.contains(".")) {
+            //execute a comparator method that is defined in either of the parameter's classes
             //has to return a boolean or integer as a result.
-            //the final result is negated.
 
-            return applyMemberComparator(param1, param2, comparator);
+        	boolean res = evaluateMemberMethod(param1, param2, cmp);        	
+            return affirmative ? res : !res;
             
+        } else if (cmp.startsWith("this.")) {
+            //execute a method of the underlying active object
+            //it has to return a boolean or integer as a result.
+
+        	boolean res = evaluateLocalMethod(param1, param2, cmp);
+        	return affirmative ? res : !res;
         } else {
-            
-            return applyOutsideComparator(param1, param2, comparator);
+        	//execute a static method of an arbitrary class
+            //it has to return a boolean or integer as a result.
+        	
+        	boolean res = evaluateStaticMethod(param1, param2, cmp);
+        	return affirmative ? res : !res;
         }
     }
 
     /**
-     * Compares the two objects given as parameters with a comparator function which is not a member
-     * function of either objects. To speed up comparison, a cache is used for holding the Method
+	 * Compares the two objects with a comparator that is a member function of one of these objects.
+	 * 
+	 * @param param1 
+	 * @param param2
+	 * @param comparator name of the method to be used for comparison
+	 * @return the result of "param1.<i>comparator</i>(param2)" or "param2.<i>comparator</i>(param1)" or false if both parameters are <b>null</b>, or the method does not exist
+	 */
+	private boolean evaluateMemberMethod(Object param1, Object param2, String comparator) {
+		if (param1!=null) {
+		    try {
+		        Method m = null;
+		        Class<?> clazz = param1.getClass();
+		        for (Method cmp : clazz.getMethods()) {
+		            if (cmp.getName().equals(comparator)) {
+		                m = cmp;
+		                break;
+		            }
+		        }
+		
+		        Object res = m.invoke(param1, param2);
+		        if (res instanceof Boolean) {
+		            return ((Boolean) res);
+		        } else {
+		            return ((Integer) res) == 0;
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}
+		
+		if (param2!=null) {
+		    try {
+		        Method m = null;
+		        Class<?> clazz = param2.getClass();
+		        for (Method cmp : clazz.getMethods()) {
+		            if (cmp.getName().equals(comparator)) {
+		                m = cmp;
+		                break;
+		            }
+		        }
+		
+		        Object res = m.invoke(param2, param1);
+		        if (res instanceof Boolean) {
+		            return ((Boolean) res);
+		        } else {
+		            return ((Integer) res) == 0;
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}
+		
+	    return false;
+	}
+
+	/**
+	 * Comapres two parameters with the help of a method that is member of the active object. 
+	 * @param param1
+	 * @param param2
+	 * @param comparator name of the method to use for comparison
+	 * @return the result of "<i>comparator</i>(param1, param2)", or "<i>comparator</i>(param1)" if param2 is <b>null</b>, or "<i>comparator</i>(param2)" if param1 is <b>null</b>, 
+	 * or "<i>comparator</i>()" if both of them are <b>null</b>. If the function does not exist false is returned. 
+	 */
+	private Boolean evaluateLocalMethod(Object param1, Object param2, String comparator) {
+		 try {
+	            Method m = null;
+	            
+	            if (!comparatorCache.containsKey(comparator)) {
+	                Class<?> clazz = PAActiveObject.getBodyOnThis().getReifiedObject().getClass();
+	                String methodName = comparator.replace("this.", "");
+	                for (Method cmp : clazz.getDeclaredMethods()) {
+	                    if (cmp.getName().equals(methodName)) {
+	                        m = cmp;
+	                        comparatorCache.put(comparator, m);
+	                        break;
+	                    }
+	                }
+	            }
+	            
+	            m = comparatorCache.get(comparator);
+	            
+	            if (m==null) {
+	                return false;
+	            }
+	            
+	            //to be able to call private methods :)
+	            m.setAccessible(true);
+	            
+	            Object res;
+	            Object target = PAActiveObject.getBodyOnThis().getReifiedObject();
+	            
+	            if (param1!=null && param2!=null) {
+	            	res = m.invoke(target, param1, param2);
+	            } else if (param1!=null) {
+	            	res = m.invoke(target, param1);
+	            } else if (param2!=null) {
+	            	res = m.invoke(target, param2);
+	            } else {
+	            	res = m.invoke(target);
+	            }
+
+	            if (res instanceof Boolean) {
+	                return ((Boolean) res);
+	            } else {
+	                return ((Integer) res) == 0;
+	            }
+
+	        } catch (Exception e) {
+	            comparatorCache.put(comparator, null);
+	            e.printStackTrace();
+	        }
+
+	        return false;
+	}
+
+	/**
+     * Compares the two objects given as parameters with a comparator that 
+     * is a static public method of a class.
+     *  To speed up comparison a cache is used for holding the Method
      * object of the canonical-name-identified comparator function.
      * @param param1
      * @param param2
      * @param comparator
-     * @return
+     * @return  the result of "<i>comparator</i>(param1, param2)", or "<i>comparator</i>(param1)" if param2 is <b>null</b>, or "<i>comparator</i>(param2)" if param1 is <b>null</b>, 
+	 * or "<i>comparator</i>()" if both of them are <b>null</b>. If the function does not exist false is returned. 
      */
-    private boolean applyOutsideComparator(Object param1, Object param2, String comparator) {
+    private boolean evaluateStaticMethod(Object param1, Object param2, String comparator) {
         try {
             Method m = null;
             
-            if (!outsideComparatorCache.containsKey(comparator)) {
-                
+            if (!comparatorCache.containsKey(comparator)) {
                 String clazzName = comparator.substring(0, comparator.lastIndexOf('.'));
                 Class<?> clazz = Class.forName(clazzName);
                 String methodName = comparator.substring(comparator.lastIndexOf('.') + 1, comparator.length());
                 for (Method cmp : clazz.getMethods()) {
                     if (cmp.getName().equals(methodName)) {
                         m = cmp;
-                        outsideComparatorCache.put(comparator, m);
+                        comparatorCache.put(comparator, m);
                         break;
                     }
                 }
             }
             
-            m = outsideComparatorCache.get(comparator);
+            m = comparatorCache.get(comparator);
             
             if (m==null) {
                 return false;
             }
             
-            Object res = m.invoke(null, param1, param2);
+            Object res;
+            Object target = null;
+            
+            if (param1!=null && param2!=null) {
+            	res = m.invoke(target, param1, param2);
+            } else if (param1!=null) {
+            	res = m.invoke(target, param1);
+            } else if (param2!=null) {
+            	res = m.invoke(target, param2);
+            } else {
+            	res = m.invoke(target);
+            }
 
             if (res instanceof Boolean) {
-                return !((Boolean) res);
+                return ((Boolean) res);
             } else {
-                return ((Integer) res) != 0;
+                return ((Integer) res) == 0;
             }
 
         } catch (Exception e) {
-            outsideComparatorCache.put(comparator, null);
+            comparatorCache.put(comparator, null);
             e.printStackTrace();
         }
 
         return false;
     }
 
-    /**
-     * Compares the two objects with a comparator that is a member function of one of these objects.
-     * The function is given by its simple name.
-     * @param param1
-     * @param param2
-     * @param comparator
-     * @return
-     */
-    private boolean applyMemberComparator(Object param1, Object param2, String comparator) {
-        try {
-            Method m = null;
-            Class clazz = param1.getClass();
-            for (Method cmp : clazz.getMethods()) {
-                if (cmp.getName().equals(comparator)) {
-                    m = cmp;
-                    break;
-                }
-            }
-
-            Object res = m.invoke(param1, param2);
-            if (res instanceof Boolean) {
-                return !((Boolean) res);
-            } else {
-                return ((Integer) res) != 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Method m = null;
-            Class clazz = param2.getClass();
-            for (Method cmp : clazz.getMethods()) {
-                if (cmp.getName().equals(comparator)) {
-                    m = cmp;
-                    break;
-                }
-            }
-
-            Object res = m.invoke(param2, param1);
-            if (res instanceof Boolean) {
-                return !((Boolean) res);
-            } else {
-                return ((Integer) res) != 0;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-	@Override
+    @Override
 	public int hashCode() {
 		return hashCode; 
 	}
@@ -350,12 +482,22 @@ public class MethodGroup {
 		return false;
 	}
 
+	/**
+	 * Sets the comparator function to be used when deciding compatibility with the given group
+	 * @param group
+	 * @param comp
+	 */
     public void setComparatorFor(String group, String comp) {
         if (!comp.equals("")) {
             this.comparators.put(group, comp);
         }
     }
     
+    /**
+     * Checks if there is a comparator function set for conditioning the relation with the other group
+     * @param other
+     * @return
+     */
     public boolean isComparatorDefinedFor(MethodGroup other) {
         return (other!=null) ? comparators.containsKey(other.name) : false;
     }
@@ -363,6 +505,15 @@ public class MethodGroup {
     @Override
     public String toString() {
         return "Group " + this.name+" (compatible with "+compatibleWith+")";
+    }
+    
+    /**
+     * Standard way of getting the name of the method underlying the request. Use this everywhere.
+     * @param r
+     * @return
+     */
+    public static String getNameOf(Request r) {
+    	return r.getMethodCall().getReifiedMethod().toString();
     }
 	
 }
