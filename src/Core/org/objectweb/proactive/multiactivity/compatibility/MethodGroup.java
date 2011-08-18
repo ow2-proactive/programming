@@ -1,5 +1,6 @@
 package org.objectweb.proactive.multiactivity.compatibility;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -259,7 +260,7 @@ public class MethodGroup {
     		return false;
     	}
            
-    	//most common comparator: equals
+    	//most common comparator: equals -- we will not do reflection for this
         if (cmp.equals("equals")) {
         	
         	if (param1!=null && param2!=null) {
@@ -273,7 +274,7 @@ public class MethodGroup {
             //execute a comparator method that is defined in either of the parameter's classes
             //has to return a boolean or integer as a result.
 
-        	boolean res = evaluateMemberMethod(param1, param2, cmp);        	
+        	boolean res = evaluateParameterMethod(param1, param2, cmp);        	
             return affirmative ? res : !res;
             
         } else if (cmp.startsWith("this.")) {
@@ -299,19 +300,12 @@ public class MethodGroup {
 	 * @param comparator name of the method to be used for comparison
 	 * @return the result of "param1.<i>comparator</i>(param2)" or "param2.<i>comparator</i>(param1)" or false if both parameters are <b>null</b>, or the method does not exist
 	 */
-	private boolean evaluateMemberMethod(Object param1, Object param2, String comparator) {
+	private boolean evaluateParameterMethod(Object param1, Object param2, String comparator) {
 		if (param1!=null) {
 		    try {
-		        Method m = null;
 		        Class<?> clazz = param1.getClass();
-		        for (Method cmp : clazz.getMethods()) {
-		            if (cmp.getName().equals(comparator)) {
-		                m = cmp;
-		                break;
-		            }
-		        }
-		
-		        Object res = m.invoke(param1, param2);
+
+		        Object res = invokeMethod(clazz, comparator, param2, null, param1, false);
 		        if (res instanceof Boolean) {
 		            return ((Boolean) res);
 		        } else {
@@ -324,16 +318,9 @@ public class MethodGroup {
 		
 		if (param2!=null) {
 		    try {
-		        Method m = null;
 		        Class<?> clazz = param2.getClass();
-		        for (Method cmp : clazz.getMethods()) {
-		            if (cmp.getName().equals(comparator)) {
-		                m = cmp;
-		                break;
-		            }
-		        }
-		
-		        Object res = m.invoke(param2, param1);
+		        
+		        Object res = invokeMethod(clazz, comparator, param1, null, param2, false);
 		        if (res instanceof Boolean) {
 		            return ((Boolean) res);
 		        } else {
@@ -357,118 +344,166 @@ public class MethodGroup {
 	 */
 	private Boolean evaluateLocalMethod(Object param1, Object param2, String comparator) {
 		 try {
-	            Method m = null;
+	            Class<?> clazz = PAActiveObject.getBodyOnThis().getReifiedObject().getClass();
+	            String methodName = comparator.replace("this.", "");
 	            
-	            if (!comparatorCache.containsKey(comparator)) {
-	                Class<?> clazz = PAActiveObject.getBodyOnThis().getReifiedObject().getClass();
-	                String methodName = comparator.replace("this.", "");
-	                for (Method cmp : clazz.getDeclaredMethods()) {
-	                    if (cmp.getName().equals(methodName)) {
-	                        m = cmp;
-	                        comparatorCache.put(comparator, m);
-	                        break;
-	                    }
-	                }
-	            }
+	            Object res = invokeMethod(clazz, methodName, param1, param2, PAActiveObject.getBodyOnThis().getReifiedObject(), true);
 	            
-	            m = comparatorCache.get(comparator);
-	            
-	            if (m==null) {
-	                return false;
-	            }
-	            
-	            //to be able to call private methods :)
-	            m.setAccessible(true);
-	            
-	            Object res;
-	            Object target = PAActiveObject.getBodyOnThis().getReifiedObject();
-	            
-	            if (param1!=null && param2!=null) {
-	            	res = m.invoke(target, param1, param2);
-	            } else if (param1!=null) {
-	            	res = m.invoke(target, param1);
-	            } else if (param2!=null) {
-	            	res = m.invoke(target, param2);
-	            } else {
-	            	res = m.invoke(target);
-	            }
-
 	            if (res instanceof Boolean) {
 	                return ((Boolean) res);
 	            } else {
 	                return ((Integer) res) == 0;
 	            }
-
-	        } catch (Exception e) {
-	            comparatorCache.put(comparator, null);
-	            e.printStackTrace();
+		 } catch (Exception e) {
+			e.printStackTrace();
+		 }
+		 
+		 return false;
+	}
+	
+	/**
+	 * Compares the two objects given as parameters with a comparator that 
+	 * is a static public method of a class.
+	 *  To speed up comparison a cache is used for holding the Method
+	 * object of the canonical-name-identified comparator function.
+	 * @param param1
+	 * @param param2
+	 * @param comparator
+	 * @return  the result of "<i>comparator</i>(param1, param2)", or "<i>comparator</i>(param1)" if param2 is <b>null</b>, or "<i>comparator</i>(param2)" if param1 is <b>null</b>, 
+	 * or "<i>comparator</i>()" if both of them are <b>null</b>. If the function does not exist false is returned. 
+	 */
+	private boolean evaluateStaticMethod(Object param1, Object param2, String comparator) {
+	    try {
+	        String clazzName = comparator.substring(0, comparator.lastIndexOf('.'));
+	        Class<?> clazz = Class.forName(clazzName);
+	        String methodName = comparator.substring(comparator.lastIndexOf('.') + 1, comparator.length());
+	            
+	        Object res = invokeMethod(clazz, methodName, param1, param2, null, false);
+	            
+	        if (res instanceof Boolean) {
+	            return ((Boolean) res);
+	        } else {
+	            return ((Integer) res) == 0;
 	        }
-
-	        return false;
+		 } catch (Exception e) {
+			e.printStackTrace();
+		 }
+		 
+		 return false;
 	}
 
 	/**
-     * Compares the two objects given as parameters with a comparator that 
-     * is a static public method of a class.
-     *  To speed up comparison a cache is used for holding the Method
-     * object of the canonical-name-identified comparator function.
-     * @param param1
-     * @param param2
-     * @param comparator
-     * @return  the result of "<i>comparator</i>(param1, param2)", or "<i>comparator</i>(param1)" if param2 is <b>null</b>, or "<i>comparator</i>(param2)" if param1 is <b>null</b>, 
-	 * or "<i>comparator</i>()" if both of them are <b>null</b>. If the function does not exist false is returned. 
-     */
-    private boolean evaluateStaticMethod(Object param1, Object param2, String comparator) {
-        try {
-            Method m = null;
-            
-            if (!comparatorCache.containsKey(comparator)) {
-                String clazzName = comparator.substring(0, comparator.lastIndexOf('.'));
-                Class<?> clazz = Class.forName(clazzName);
-                String methodName = comparator.substring(comparator.lastIndexOf('.') + 1, comparator.length());
-                for (Method cmp : clazz.getMethods()) {
-                    if (cmp.getName().equals(methodName)) {
-                        m = cmp;
-                        comparatorCache.put(comparator, m);
-                        break;
-                    }
-                }
-            }
-            
-            m = comparatorCache.get(comparator);
-            
-            if (m==null) {
-                return false;
-            }
-            
-            Object res;
-            Object target = null;
-            
-            if (param1!=null && param2!=null) {
-            	res = m.invoke(target, param1, param2);
-            } else if (param1!=null) {
-            	res = m.invoke(target, param1);
-            } else if (param2!=null) {
-            	res = m.invoke(target, param2);
-            } else {
-            	res = m.invoke(target);
-            }
+	 * Invokes the given method with the arguments. In case the method is overloaded, the version
+	 * which matches the parameter types (and number) is chosen.
+	 * 
+	 * <br>
+	 * A cache is used to reduce the number of reflection calls. 
+	 * It stores method instances for a given class and parameter types.
+	 * @param clazz the class in which to look for this method
+	 * @param method the name of the method to invoke
+	 * @param param1 one parameter to the method (may be null)
+	 * @param param2 other parameter to the method (may be null)
+	 * @param target the object upon which to invoke the method (may be null for static methods)
+	 * @param enablePrivate if set to true the method will be executed even if it is private. 
+	 * Otherwise only public methods are considered
+	 * @return Result of the method call
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
+	private Object invokeMethod(Class clazz, String method, Object param1, Object param2, Object target, boolean enablePrivate) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		Object p1 = param1!=null && param2!=null && param1.getClass().toString().compareTo(param2.getClass().toString())<=0 ? param1 : param2;
+		Object p2 = p1==param1 ? param2 : param1;
+		
+		String cachedName = clazz.toString() +"."+method+
+							"("+(p1!=null ? p1.getClass().toString() : "")+
+							(p1!=null && p2!=null ? "," : "")+
+							(p2!=null ? p2.getClass().toString() : "")+")";
+		
+		if (!comparatorCache.containsKey(cachedName)) {
+			Method[] meths = enablePrivate ? clazz.getDeclaredMethods() : clazz.getMethods();
+			if (p1!=null && p2!=null) {
+				for (Method cmp : meths) {
+		            if (cmp.getName().equals(method)) {
+		                if (cmp.getParameterTypes().length==2) {
+		                	
+		                	if (cmp.getParameterTypes()[0].isAssignableFrom(p1.getClass()) && 
+		                		cmp.getParameterTypes()[1].isAssignableFrom(p2.getClass())) {
+		                		
+		                		comparatorCache.put(cachedName, cmp);
+		                		break;
+		                	}
+		                	if (cmp.getParameterTypes()[1].isAssignableFrom(p1.getClass()) && 
+		                		cmp.getParameterTypes()[0].isAssignableFrom(p2.getClass())) {
+	                					  
+		                		comparatorCache.put(cachedName, cmp);
+		                		break;
+		                	}
+		                }
+		            }
+		        }
+			} else if (p1!=null) {
+				for (Method cmp : meths) {
+		            if (cmp.getName().equals(method)) {
+		                if (cmp.getParameterTypes().length==1) {
+		                	
+		                	if (cmp.getParameterTypes()[0].isAssignableFrom(p1.getClass())){
+		                		comparatorCache.put(cachedName, cmp);
+		                		break;
+		                	}
+		                }
+		            }
+		        }
+				
+			} else if (p2!=null) {
+				for (Method cmp : meths) {
+		            if (cmp.getName().equals(method)) {
+		                if (cmp.getParameterTypes().length==1) {
+		                	
+		                	if (cmp.getParameterTypes()[0].isAssignableFrom(p2.getClass())){
+		                		comparatorCache.put(cachedName, cmp);
+		                		break;
+		                	}
+		                }
+		            }
+				}
+			} else {
+				for (Method cmp : meths) {
+		            if (cmp.getName().equals(method)) {
+		                if (cmp.getParameterTypes().length==0) {
+		                	
+		                		comparatorCache.put(cachedName, cmp);
+		                		break;
+		                }
+		            }
+		        }
+			}
+		}
+		
+		
+		Method m = comparatorCache.get(cachedName);
+		if (enablePrivate) {
+			m.setAccessible(true);
+		}
+		
+		if (m==null) {
+			throw new NullPointerException("Method "+cachedName+" was not found!");
+		}
+			
+		if (p1!=null && p2!=null) {
+			return (m.getParameterTypes()[0].isAssignableFrom(p1.getClass())) ? m.invoke(target, p1, p2) : m.invoke(target, p2, p1);
+		} else if (p1!=null) {
+			return m.invoke(target, p1);
+		} else if (p2!=null) {
+			return m.invoke(target, p2);
+		} else {
+			return m.invoke(target);
+		}
+			
+			
+	}
 
-            if (res instanceof Boolean) {
-                return ((Boolean) res);
-            } else {
-                return ((Integer) res) == 0;
-            }
-
-        } catch (Exception e) {
-            comparatorCache.put(comparator, null);
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    @Override
+	@Override
 	public int hashCode() {
 		return hashCode; 
 	}
