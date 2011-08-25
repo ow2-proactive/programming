@@ -217,6 +217,7 @@ public class RemoteObjectSet implements Serializable, Observer {
         try {
             this.rros.put(getURI(rro), rro);
         } catch (RemoteRemoteObjectException e) {
+            LOGGER_RO.debug(e);
             this.unreliables.add(rro);
         }
     }
