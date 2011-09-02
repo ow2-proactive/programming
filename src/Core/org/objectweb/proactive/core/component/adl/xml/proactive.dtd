@@ -84,6 +84,10 @@
 <?add ast="composedFrom" itf="org.objectweb.proactive.core.component.adl.vnexportation.ComposingVirtualNodeContainer" ?>
 
 
+<?add ast="controller"     itf="org.objectweb.fractal.adl.components.ComponentContainer" ?>
+<?add ast="controller"     itf="org.objectweb.fractal.adl.interfaces.InterfaceContainer" ?>
+<?add ast="controller"     itf="org.objectweb.fractal.adl.bindings.BindingContainer" ?>
+
 
 <!-- ********************************************************************** -->
 <!--                   Mapping from XML names to AST names                  -->
@@ -142,9 +146,9 @@
   value CDATA #REQUIRED
 >
 
-<!ELEMENT controller (comment*) >
+<!ELEMENT controller (comment*,interface*,component*,binding*) >
 <!ATTLIST controller
-  desc CDATA #REQUIRED
+  desc CDATA #IMPLIED
 >
 
 <!ELEMENT content (comment*) >
