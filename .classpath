@@ -136,9 +136,8 @@
 	<classpathentry kind="lib" path="lib/saaj-impl.jar"/>
 	<classpathentry kind="lib" path="lib/wbem.jar"/>
 	<classpathentry kind="lib" path="lib/wiseman-tools.jar"/>
-	<classpathentry kind="lib" path="lib/jna-platform-3.2.7.jar"/>
-	<classpathentry kind="lib" path="lib/yajsw-os.jar"/>
 	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199-tests.jar"/>
 	<classpathentry kind="lib" path="lib/commons-vfs-patched-2.0-SNAPSHOTr19199.jar"/>
+	<classpathentry kind="lib" path="lib/jna-platform-3.3.0.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

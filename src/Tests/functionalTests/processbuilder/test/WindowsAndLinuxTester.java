@@ -97,7 +97,6 @@ public class WindowsAndLinuxTester extends FunctionalTest {
 
         tempPath = System.getenv("OSPB_TEST_TEMP");
         Assume.assumeNotNull(tempPath, "process builder not tested because OSPB_TEST_TEMP is not set");
-
         if (isLinux) {
             String paHome = ProActiveRuntimeImpl.getProActiveRuntime().getProActiveHome();
             File s32 = new File(paHome, "dist/scripts/processbuilder/linux/suer32");
@@ -118,7 +117,6 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         String[] cmd = (isLinux) ? lc : wc;
         File dir = null;
         HashMap<String, String> env = null;
-
         String[] expectedOut = { "111" };
         String[] expectedErr = { "222" };
 
@@ -153,7 +151,6 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
-
     }
 
     @Test
@@ -218,7 +215,6 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
-
     }
 
     @Test
@@ -239,7 +235,6 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
-
     }
 
     @Test
@@ -305,7 +300,6 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
-
     }
 
     @Test
@@ -326,7 +320,6 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         } catch (Exception e) {
             assertNull(e.getMessage(), e);
         }
-
     }
 
     @Test
@@ -423,7 +416,6 @@ public class WindowsAndLinuxTester extends FunctionalTest {
                 assertNull(e.getMessage(), e);
             }
         }
-
     }
 
     @Test
@@ -438,12 +430,10 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         String[] expectedErr = {};
         Integer exitValue = 0;
 
-        if (!isWindows) {
-            try {
-                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
-            } catch (Exception e) {
-                assertNull(e.getMessage(), e);
-            }
+        try {
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
+        } catch (Exception e) {
+            assertNull(e.getMessage(), e);
         }
 
         try {
@@ -456,13 +446,11 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         assertTrue(dir.mkdir());
         expectedOut[0] = dir.getCanonicalPath();
 
-        if (!isWindows) {
-            try {
-                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
-            } catch (Exception e) {
-                dir.delete();
-                assertNull(e.getMessage(), e);
-            }
+        try {
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
+        } catch (Exception e) {
+            dir.delete();
+            assertNull(e.getMessage(), e);
         }
 
         try {
@@ -489,32 +477,25 @@ public class WindowsAndLinuxTester extends FunctionalTest {
         String[] expectedErr = {};
         Integer exitValue = 0;
 
-        if (!isWindows) {
-            try {
-                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
-            } catch (Exception e) {
-                assertNull(e.getMessage(), e);
-            }
+        try {
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
+        } catch (Exception e) {
+            assertNull(e.getMessage(), e);
         }
 
-        // On Windows the behaviour is not defined yet
-        // if the forked process as user inherits the environment from its creator it
-        // can represent a security issue ..
-        if (!isWindows) {
-            try {
-                runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
-            } catch (Exception e) {
-                assertNull(e.getMessage(), e);
-            }
+        try {
+            runAndMatch(cmd, userPasswd, dir, env, expectedOut, expectedErr, exitValue);
+        } catch (Exception e) {
+            assertNull(e.getMessage(), e);
         }
-
     }
 
     @Test
     public void testDestroy() throws IOException, OSUserException, FatalProcessBuilderException {
-
-        Process p = osRuntime.exec(this.userPasswd, new String[] { "/bin/sleep", "5555" }, null,
-                new File("."));
+        String[] lc = { "/bin/sleep", "5555" };
+        String[] wc = { "notepad.exe" };
+        String[] cmd = (isLinux) ? lc : wc;
+        Process p = osRuntime.exec(this.userPasswd, cmd, null, new File("."));
         p.destroy();
     }
 
