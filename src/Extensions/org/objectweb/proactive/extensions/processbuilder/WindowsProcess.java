@@ -88,6 +88,7 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
 /**
  * This class must be exclusively used by WindowsProcessBuilder.start() to
  * create new processes. It requires at least jna-3.3.0 see https://github.com/twall/jna.
+ * This code is highly inspired by http://yajsw.sourceforge.net/
  * 
  * There are 2 ways to create processes on windows:
  * - Logon, Impersonate, CreateProcessAsUser, RevertToSelf: using this way the
@@ -103,7 +104,6 @@ import org.objectweb.proactive.extensions.processbuilder.exception.OSUserExcepti
  * there is not enough non-interactive desktop heap.
  * For more information see http://support.microsoft.com/default.aspx?scid=kb;en-us;824422
  * and http://blogs.msdn.com/b/ntdebugging/archive/2007/01/04/desktop-heap-overview.aspx
- * 
  */
 final class WindowsProcess extends Process {
 
@@ -388,6 +388,12 @@ final class WindowsProcess extends Process {
             si.lpDesktop = "\0"; // the system tries to create the window station and a default desktop
             si.wShowWindow = new WinDef.WORD(0); // SW_HIDE
             si.write();
+
+            if (!Kernel32.INSTANCE.SetHandleInformation(inWrite.getValue(), WinBase.HANDLE_FLAG_INHERIT, 0) ||
+                !Kernel32.INSTANCE.SetHandleInformation(outRead.getValue(), WinBase.HANDLE_FLAG_INHERIT, 0) ||
+                !Kernel32.INSTANCE.SetHandleInformation(errRead.getValue(), WinBase.HANDLE_FLAG_INHERIT, 0)) {
+                throw win32ErrorIOException("SetHandleInformation");
+            }
 
             final WinBase.PROCESS_INFORMATION pi = new WinBase.PROCESS_INFORMATION();
 

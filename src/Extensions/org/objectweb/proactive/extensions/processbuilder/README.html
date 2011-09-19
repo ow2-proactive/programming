@@ -34,12 +34,7 @@
 		<b>Windows particularities</b><br/>
 		<ul>
 			<li>
-			Among the scripts there is a file <i>PipeBridge.cpp</i> which has to be compiled.
-		The compilation has to work with a VisualStudio 20xx as there are no extra dependencies.
-		Just create a project and copy this file as main source.
-			</li>
-			<li>
-			For correct functioning you will need PsExec.exe in the scripts folder (http://technet.microsoft.com/en-us/sysinternals/bb897553.aspx)
+			Nothing to do.
 			</li>
 		</ul>
    	</p>
@@ -73,15 +68,7 @@
    		<b>Windows</b><br/>
    		<ul>
    			<li>
-   			No password - for this to work, the target user's password has to be saved already in the windows
-   			keystore. This can be done by running <i>runas&nbsp;/user:TARGET_USER&nbsp;/savecred&nbsp;cmd.exe</i>. It will prompt
-   			for the password for the first time, but any subsequent run will use the saved password.
-   			<br>
-   			Make sure that the launching user has write rights to the scripts folder (see section 4).
-   			</li>
-   			<li>
-   			With password - no special setup needed (just be sure the PsExec.exe is either in the scripts folder, or 
-   			on the PATH).
+			Nothing to do.
    			</li>
    		</ul> 
    	</p>
@@ -101,15 +88,9 @@
    	</p>
    	
    	<h2>4. Security Threats and Other Issues</h2>
-   	<p>
-   		<b>Windows</b><br/>
-   		The main security issue is that since <i>runas</i> will not propagate the environent correctly (fully) we use a hack.
-   		This hack is writing the contents of the environment to a temp folder.
-   		At the moment, this folder is the scripts folder! <u>Do not put sensitive information into the environment</u> as 
-   		it may be read by anyone.
-   	</p>
-   	
-
+	   	<p>
+			The user of the forking process must have SE_INCREASE_QUOTA_NAME and SE_ASSIGNPRIMARYTOKEN_NAME privileges. 
+	   	</p>   	
 		<p>
    		<b>Linux (general)</b><br/>
    		Since we use scripts to start the executable in case there is a target user, be aware that all paramters
@@ -123,8 +104,6 @@
    		We write the contents of the environment to the temp folder (this is done in the scripts, and we create this 
    		file with <i>mktemp</i>).
    		<u>Do not put sensitive information into the environment</u> as it may be read by anyone.
-   	</p>
-   	
-   	
+   	</p>   	  
    </body>
 </html>
