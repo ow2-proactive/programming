@@ -36,10 +36,8 @@
  */
 package org.objectweb.proactive.core.component.webservices;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.jaxws.JaxWsClientFactoryBean;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
 import org.objectweb.proactive.core.component.webservices.PAWSCaller;
@@ -49,48 +47,42 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 /**
  * Implementation of the {@link PAWSCaller} interface using the <a href="http://cxf.apache.org/">CXF</a>
- * API to call RESTful services. The service class must use annotations of the javax.ws.rs package.
+ * API configured for JAX-WS.
  *
  * @author The ProActive Team
  * @see PAWSCaller
  */
 @PublicAPI
-public class CXFRESTfulServiceCaller implements PAWSCaller {
+public class JaxWsCXFWSCaller implements PAWSCaller {
     private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_REQUESTS);
 
-    private String restServiceUrl;
-    private Object restService;
+    private Client client;
+
+    public JaxWsCXFWSCaller() {
+    }
 
     public void setup(Class<?> serviceClass, String wsUrl) {
-        this.restServiceUrl = wsUrl;
-        this.restService = JAXRSClientFactory.create(wsUrl, serviceClass);
+        JaxWsClientFactoryBean factory = new JaxWsClientFactoryBean();
+        factory.setServiceClass(serviceClass);
+        factory.setAddress(wsUrl);
+        client = factory.create();
     }
 
     public Object callWS(String methodName, Object[] args, Class<?> returnType) {
-        try {
-            Class<?>[] parameterTypes = new Class<?>[args.length];
-            for (int i = 0; i < parameterTypes.length; i++) {
-                parameterTypes[i] = args[i].getClass();
+        if (client != null) {
+            try {
+                Object[] results = client.invoke(methodName, args);
+                if (returnType == null) {
+                    return null;
+                } else {
+                    return results[0];
+                }
+            } catch (Exception e) {
+                logger.error("[JaxWsCXFWSCaller] Failed to invoke web service: " +
+                    client.getEndpoint().getEndpointInfo().getAddress(), e);
             }
-            Method method = restService.getClass().getDeclaredMethod(methodName, parameterTypes);
-            return method.invoke(restService, args);
-        } catch (SecurityException se) {
-            logger.error("[CXFRESTfulServiceCaller] Failed to invoke RESTful service: " + restServiceUrl, se);
-        } catch (NoSuchMethodException nsme) {
-            logger.error("[CXFRESTfulServiceCaller] Failed to invoke RESTful service: " + restServiceUrl,
-                    nsme);
-        } catch (IllegalArgumentException iae) {
-            logger
-                    .error("[CXFRESTfulServiceCaller] Failed to invoke RESTful service: " + restServiceUrl,
-                            iae);
-        } catch (IllegalAccessException iae) {
-            logger
-                    .error("[CXFRESTfulServiceCaller] Failed to invoke RESTful service: " + restServiceUrl,
-                            iae);
-        } catch (InvocationTargetException ite) {
-            logger
-                    .error("[CXFRESTfulServiceCaller] Failed to invoke RESTful service: " + restServiceUrl,
-                            ite);
+        } else {
+            logger.error("[JaxWsCXFWSCaller] Cannot invoke web service since the set up has not been done");
         }
         return null;
     }
