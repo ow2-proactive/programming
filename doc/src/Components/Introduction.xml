@@ -32,7 +32,23 @@
 			</link>. The complete GCM specification is available
 			<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.coregrid.net/mambo/images/stories/Deliverables/d.pm.04.pdf">
 				here
-			</link>.
+			</link> and the GCM standards are available on the ETSI web site:
+			<itemizedlist>
+				<listitem>
+					<para>
+						<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webapp.etsi.org/workprogram/Report_WorkItem.asp?WKI_ID=28857">
+							GCM Fractal Management API
+						</link>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://webapp.etsi.org/workprogram/Report_WorkItem.asp?WKI_ID=28856">
+							GCM Fractal Architecture Description Language
+						</link>
+					</para>
+				</listitem>
+			</itemizedlist>
 		</para>
 
 		<para>
