@@ -36,11 +36,16 @@
  */
 package org.objectweb.proactive.core.component.webservices;
 
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.jws.WebMethod;
+
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.jaxws.JaxWsClientFactoryBean;
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.annotation.PublicAPI;
-import org.objectweb.proactive.core.component.webservices.PAWSCaller;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -58,6 +63,8 @@ public class JaxWsCXFWSCaller implements PAWSCaller {
 
     private Client client;
 
+    private Map<String, String> operationNames;
+
     public JaxWsCXFWSCaller() {
     }
 
@@ -66,12 +73,25 @@ public class JaxWsCXFWSCaller implements PAWSCaller {
         factory.setServiceClass(serviceClass);
         factory.setAddress(wsUrl);
         client = factory.create();
+
+        operationNames = new HashMap<String, String>();
+        Method[] methods = serviceClass.getMethods();
+        for (Method method : methods) {
+            if (method.isAnnotationPresent(WebMethod.class)) {
+                WebMethod webMethodAnnotation = method.getAnnotation(WebMethod.class);
+                if (!webMethodAnnotation.operationName().equals("")) {
+                    operationNames.put(method.getName(), webMethodAnnotation.operationName());
+                    continue;
+                }
+            }
+            operationNames.put(method.getName(), method.getName());
+        }
     }
 
     public Object callWS(String methodName, Object[] args, Class<?> returnType) {
         if (client != null) {
             try {
-                Object[] results = client.invoke(methodName, args);
+                Object[] results = client.invoke(operationNames.get(methodName), args);
                 if (returnType == null) {
                     return null;
                 } else {
