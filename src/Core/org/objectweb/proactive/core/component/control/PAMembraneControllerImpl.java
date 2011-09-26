@@ -816,8 +816,8 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
                 return new ComponentAndInterface(i);
             } else {//The interface is not a controller one
-                throw new NoSuchInterfaceException("The specified interface" + itfTab[0] +
-                    "is not non-functional");
+                throw new NoSuchInterfaceException("The specified interface " + itfTab[0] +
+                    " is not non-functional");
             }
         } else { /* Normally, component and its interface are specified */
             if (itfTab[0].equals("membrane")) {
