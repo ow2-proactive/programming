@@ -2222,7 +2222,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</listitem>
 					<listitem>
 						<para>
-							And finally, you can used one of the
+							And finally, you can use one of the
 							<literal>WebServices</literal> methods:
 						</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/WebServices_Methods_Components.snip" /></textobject></programlisting>
@@ -2303,7 +2303,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</listitem>
 					<listitem>
 						<para>
-							And finally, you can used one of the
+							And finally, you can use one of the
 							<literal>PAWebServicesController</literal> methods:
 						</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/PAWebServicesController_expose_methods.snip" /></textobject></programlisting>
