@@ -102,4 +102,12 @@ public interface Agent {
     /** Return the local Agent ID */
     public AgentID getAgentID();
 
+    /** Close the current tunnel
+     *
+     * The agent will eventually reconnect to the router.
+     *
+     * @param cause
+     *          Cause of the failure
+     */
+    public void closeTunnel(PAMRException cause);
 }

@@ -158,9 +158,14 @@ public class ProActiveMessageHandler implements MessageHandler {
             } catch (PAMRException e) {
                 logger.info("Failed to send the PAMR error reply to " + this._toProcess +
                     ". The router should discover the disconnection and unlock the caller", e);
+                agent.closeTunnel(e);
             } catch (IOException e) {
                 logger.info("Failed to send the PAMR error reply to " + this._toProcess +
                     ". The router should discover the disconnection and unlock the caller", e);
+                agent.closeTunnel(new PAMRException(e));
+            } catch (Throwable t) {
+                PAMRException e = new PAMRException("Fatal error occured while serving acall", t);
+                agent.closeTunnel(e);
             } finally {
                 Thread.currentThread().setContextClassLoader(savedClassLoader);
             }
