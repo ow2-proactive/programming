@@ -8,7 +8,8 @@
 		<interface role="client" name="loader" signature="org.objectweb.fractal.adl.Loader"/>
 		<interface role="client" name="compiler" signature="org.objectweb.fractal.adl.Compiler"/>
 		<interface role="client" name="scheduler" signature="org.objectweb.fractal.task.core.Scheduler"/>
-		<content class="org.objectweb.fractal.adl.BasicFactory"/>
+		<!-- DEBUG replacement: <content class="org.objectweb.fractal.adl.BasicFactory"/> -->
+		<content class="org.objectweb.proactive.core.component.adl.DebugFactory"/>
 	</component>
 
 	<!-- Loader component -->
@@ -18,7 +19,8 @@
 	<component name="compiler" definition="org.objectweb.proactive.core.component.adl.PACompiler"/>
 
 	<!-- Scheduler component -->
-	<component name="scheduler" definition="org.objectweb.fractal.task.core.BasicScheduler"/>
+	<!-- DEBUG replacement: <component name="scheduler" definition="org.objectweb.fractal.task.core.BasicScheduler"/> -->
+	<component name="scheduler" definition="org.objectweb.proactive.core.component.adl.DebugScheduler"/>
 
 	<binding client="this.factory" server="factory.factory"/>
 	<binding client="factory.loader" server="loader.loader"/>
