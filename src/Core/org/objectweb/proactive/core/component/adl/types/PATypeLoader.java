@@ -40,6 +40,11 @@ import java.util.Map;
 
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.objectweb.fractal.adl.ADLException;
+import org.objectweb.fractal.adl.Definition;
+import org.objectweb.fractal.adl.components.Component;
+import org.objectweb.fractal.adl.components.ComponentContainer;
+import org.objectweb.fractal.adl.implementations.Controller;
+import org.objectweb.fractal.adl.implementations.ControllerContainer;
 import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.types.TypeErrors;
@@ -50,9 +55,31 @@ import org.objectweb.fractal.adl.types.TypeLoader;
 /**
  * A {@link org.objectweb.fractal.adl.Loader} to check {@link GCMTypeInterface}
  * nodes in definitions. This loader checks that the Java interfaces specified
- * in these nodes exist.
+ * in these nodes exist.<br/><br/>
+ * 
+ * The {@link PATypeLoader} checks all the &lt;interface&gt; nodes and check
+ * that the Java interfaces specified exist.
+ * 
  */
 public class PATypeLoader extends TypeLoader {
+	
+	/** 
+	 * Overriden to use our own version of 'checkNode', which is private in {@link TypeLoader}.
+	 */
+	@Override
+	public Definition load(final String name, final Map<Object, Object> context)
+			throws ADLException {
+		final Definition d = clientLoader.load(name, context);
+		checkNode(d, context);
+		return d;
+	}
+	
+	/**
+	 * Checks a node that contains &lt;interface&gt; nodes.<br/>
+	 * Uses the interfaceCodeLoader interface to verify the existence of the class specified by the 'signature' attribute.
+	 * Then, checks the values of the 'role', 'contingency' and 'cardinality' attributes according to the possible values
+	 * specified by GCM.  
+	 */
     @Override
     protected void checkInterfaceContainer(final InterfaceContainer container,
             final Map<Object, Object> context) throws ADLException {
@@ -97,4 +124,45 @@ public class PATypeLoader extends TypeLoader {
             }
         }
     }
+    
+    
+    /**
+     * The checking of a node has 3 cases:
+     * <ul>
+     *    <li>If we are in a node that contains &lt;interface&gt; nodes, we check it directly.</li>
+     *    <li>If we are in a node that contains &lt;component&gt; nodes, we must descend on each component looking for &lt;interface&gt; nodes.</li>
+     *    <li>Additionally, if the node contains a &lt;controller&gt; node, we must check if the &lt;controller&gt; node contains &lt;interface&gt; nodes
+     *        (i.e., the definition of the NF interfaces)</li>
+     * </ul>
+     * 
+     * @param node
+     * @param context
+     * @throws ADLException
+     */
+	private void checkNode(final Object node, final Map<Object, Object> context)
+			throws ADLException {
+		if (node instanceof InterfaceContainer) {
+			System.out.println("[ExtendedPATypeLoader] Checking interface container:"+ ((InterfaceContainer) node).astGetType() );
+			checkInterfaceContainer((InterfaceContainer) node, context);
+		}
+		if (node instanceof ComponentContainer) {
+			for (final Component comp : ((ComponentContainer) node).getComponents()) {
+				checkNode(comp, context);
+			}
+		}
+		// Additional check, because the ControllerContainer can also contain interfaces (namely, the interfaces
+		// of the membrane, that must be checked)
+		if (node instanceof ControllerContainer) {
+			System.out.println("[ExtendedPATypeLoader] Checking controller container:"+ ((InterfaceContainer) node).astGetType() );
+			Controller ctrl = ((ControllerContainer)node).getController();
+			if(ctrl != null) {
+				if(ctrl instanceof InterfaceContainer) {
+					checkNode(ctrl, context);				
+				}
+			}
+
+		}
+	}
+	
+	
 }
