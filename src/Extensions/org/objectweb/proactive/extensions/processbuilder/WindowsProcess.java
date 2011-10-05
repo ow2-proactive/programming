@@ -63,8 +63,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 
-import org.objectweb.proactive.extensions.processbuilder.WindowsProcess.MyKernel32.PROCESSENTRY32;
-import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 
 import com.sun.jna.Library;
 import com.sun.jna.Memory;
@@ -83,6 +81,9 @@ import com.sun.jna.platform.win32.WinNT.HANDLEByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.W32APIFunctionMapper;
 import com.sun.jna.win32.W32APITypeMapper;
+
+import org.objectweb.proactive.extensions.processbuilder.WindowsProcess.MyKernel32.PROCESSENTRY32;
+import org.objectweb.proactive.extensions.processbuilder.exception.OSUserException;
 
 
 /**
@@ -104,7 +105,6 @@ import com.sun.jna.win32.W32APITypeMapper;
  * there is not enough non-interactive desktop heap.
  * For more information see http://support.microsoft.com/default.aspx?scid=kb;en-us;824422
  * and http://blogs.msdn.com/b/ntdebugging/archive/2007/01/04/desktop-heap-overview.aspx
- * 
  */
 final class WindowsProcess extends Process {
 
