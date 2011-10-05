@@ -140,11 +140,6 @@ public class ServiceDeployer implements ServiceDeployerItf {
             implClass = ((InterfaceType) interface_.getFcItfType()).getFcItfSignature();
             superclass = Class.forName(implClass, true, interface_.getClass().getClassLoader());
 
-            MethodUtils mc = new MethodUtils(superclass);
-            List<Method> ignoredMethods = mc.getExcludedMethods(null);
-
-            serviceFactory.setIgnoredMethods(ignoredMethods);
-
             svrFactory = new ServerFactoryBean(serviceFactory);
             svrFactory.setServiceBean(superclass.cast(interface_));
         }
