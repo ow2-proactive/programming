@@ -41,11 +41,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.jws.WebService;
+
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
+import org.apache.cxf.jaxws.support.JaxWsServiceFactoryBean;
 import org.apache.cxf.service.factory.ReflectionServiceFactoryBean;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -107,19 +110,20 @@ public class ServiceDeployer implements ServiceDeployerItf {
         Object o = HttpMarshaller.unmarshallObject(marshalledObject);
         Class<?> superclass = null;
         String implClass = null;
+        Object serviceBean = null;
 
-        ReflectionServiceFactoryBean serviceFactory = new ReflectionServiceFactoryBean();
+        ReflectionServiceFactoryBean serviceFactory = null;
         ServerFactoryBean svrFactory = null;
-
-        // This method is called to force element to be unqualified
-        // It is the default behaviour but if you want to expose an active
-        // object using a set of methods, element forms become qualified.
-        serviceFactory.setQualifyWrapperSchema(CentralPAPropertyRepository.PA_WEBSERVICES_ELEMENTFORMDEFAULT
-                .isTrue());
 
         if (!isComponent) {
             superclass = o.getClass().getSuperclass();
             implClass = superclass.getName();
+
+            if (superclass.isAnnotationPresent(WebService.class)) {
+                serviceFactory = new JaxWsServiceFactoryBean();
+            } else {
+                serviceFactory = new ReflectionServiceFactoryBean();
+            }
 
             ArrayList<SerializableMethod> serializableMethods = (ArrayList<SerializableMethod>) HttpMarshaller
                     .unmarshallObject(marshalledSerializedMethods);
@@ -130,8 +134,7 @@ public class ServiceDeployer implements ServiceDeployerItf {
 
             serviceFactory.setIgnoredMethods(ignoredMethods);
 
-            svrFactory = new ServerFactoryBean(serviceFactory);
-            svrFactory.setServiceBean(superclass.cast(o));
+            serviceBean = superclass.cast(o);
 
         } else {
             String interfaceName = serviceName.substring(serviceName.lastIndexOf('_') + 1);
@@ -140,11 +143,24 @@ public class ServiceDeployer implements ServiceDeployerItf {
             implClass = ((InterfaceType) interface_.getFcItfType()).getFcItfSignature();
             superclass = Class.forName(implClass, true, interface_.getClass().getClassLoader());
 
-            svrFactory = new ServerFactoryBean(serviceFactory);
-            svrFactory.setServiceBean(superclass.cast(interface_));
+            if (superclass.isAnnotationPresent(WebService.class)) {
+                serviceFactory = new JaxWsServiceFactoryBean();
+            } else {
+                serviceFactory = new ReflectionServiceFactoryBean();
+            }
+
+            serviceBean = superclass.cast(interface_);
         }
 
+        // This method is called to force element to be unqualified
+        // It is the default behaviour but if you want to expose an active
+        // object using a set of methods, element forms become qualified.
+        serviceFactory.setQualifyWrapperSchema(CentralPAPropertyRepository.PA_WEBSERVICES_ELEMENTFORMDEFAULT
+                .isTrue());
+
+        svrFactory = new ServerFactoryBean(serviceFactory);
         svrFactory.setServiceClass(superclass);
+        svrFactory.setServiceBean(serviceBean);
         svrFactory.setAddress("/" + serviceName);
 
         if (logger.getLevel() != null && logger.getLevel() == Level.DEBUG) {

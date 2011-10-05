@@ -211,7 +211,11 @@
 
     <para>Contrary to the previous version of the active object exposition using Apache SOAP, this new version which uses Axis2 or CXF can handle complex types.
 	 That is, with this version, you can implement a service which exposes a method returning or taking in argument an instance of any class.
-	 However, the class of this instance has to respect some criteria due to the serialization and CXF/Axis2 restrictions:</para>
+	 By using CXF and JAX-WS annotations, there is no limitation on the type of this class. It only implies to use the appropriate adapters (see the
+	 <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://cxf.apache.org/docs/index.html">
+		CXF documentation
+	</link> for more details). However, if you do not want to use JAX-WS annotations or CXF, the class of this instance has to respect some criteria due
+	 to the serialization and CXF/Axis2 restrictions:</para>
 	 <itemizedlist>
 		 <listitem><para>This class has to be serializable</para></listitem>
 		 <listitem><para>This class has to supply a no-args constructor and preferably empty</para></listitem>
