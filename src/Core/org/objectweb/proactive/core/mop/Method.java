@@ -41,6 +41,7 @@ import java.util.List;
 
 import javassist.CtBehavior;
 import javassist.CtMethod;
+import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.MethodInfo;
 import javassist.bytecode.ParameterAnnotationsAttribute;
@@ -55,7 +56,6 @@ import javassist.bytecode.annotation.Annotation;
  *
  */
 public class Method {
-
     private CtMethod method;
     private List<Annotation> methodAnnotation;
     private List<MethodParameter> listMethodParameters;
@@ -73,12 +73,16 @@ public class Method {
         methodAnnotation = new ArrayList<Annotation>();
         listMethodParameters = new ArrayList<MethodParameter>();
 
-        MethodInfo methodInfo = method.getMethodInfo();
-
-        for (int i = 0; i < methodInfo.getAttributes().size(); i++) {
-            // initialize the list of parameters
-            listMethodParameters.add(new MethodParameter());
+        try {
+            // PROACTIVE-1138
+            for (int i = 0; i < method.getParameterTypes().length; i++) {
+                // initialize the list of parameters
+                listMethodParameters.add(new MethodParameter());
+            }
+        } catch (NotFoundException nfe) {
+            throw new RuntimeException(nfe);
         }
+
         grabMethodandParameterAnnotation(method);
     }
 
@@ -117,7 +121,7 @@ public class Method {
             for (Annotation object : methodAnn) {
                 JavassistByteCodeStubBuilder.logger.debug("adding annotation " + object.getTypeName() +
                     " to " + ctBehavior.getLongName());
-                methodAnnotation.add((Annotation) object);
+                methodAnnotation.add(object);
             }
         }
 
