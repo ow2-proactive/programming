@@ -352,6 +352,11 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
         checkCompatibility(clItf, srItf);
 
+        if (srItf instanceof ItfStubObject) {
+            ((ItfStubObject) srItf).setSenderItfID(new ItfID(clientItf, ((PAComponent) clItf.getFcItfOwner())
+                    .getID()));
+        }
+
         if (client.getComponent() == null) { //The client interface belongs to the membrane
             if (!clItfType.isFcClientItf()) { //the client interface is a server one (internal or external) belonging to the membrane
                 if (server.getComponent() == null) { //The server interface belongs to the membrane
@@ -494,6 +499,9 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                 throw new IllegalBindingException("The binding :" + " membrane." + clientItf +
                     "--> external NF interface already exists");
             }
+
+            ((ItfStubObject) srItf).setSenderItfID(new ItfID(clientItf, ((PAComponent) getFcItfOwner())
+                    .getID()));
 
             PAInterface cl = (PAInterface) owner.getFcInterface(clientItf);
             cl.setFcItfImpl(serverItf);
