@@ -106,17 +106,28 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
     }
 
-    private void checkCompatibility(PAGCMInterfaceType client, PAGCMInterfaceType server)
+    private void checkCompatibility(PAGCMInterfaceType clientItfType, Interface serverItf)
             throws IllegalBindingException {
         try {
-            Class<?> cl = Class.forName(client.getFcItfSignature());
-            Class<?> sr = Class.forName(server.getFcItfSignature());
-            if (!cl.isAssignableFrom(sr)) {
-                throw new IllegalBindingException("Signatures of interfaces don't correspond (" +
-                    client.getFcItfSignature() + " and " + server.getFcItfSignature() + ")");
+            if (Utils.isGCMMulticastItf(clientItfType.getFcItfName(), getFcItfOwner())) {
+                GCM.getMulticastController(owner).ensureGCMCompatibility(clientItfType, serverItf);
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+
+            if (Utils.isGCMGathercastItf(serverItf)) {
+                GCM.getGathercastController(owner).ensureGCMCompatibility(clientItfType, serverItf);
+            } else if (Utils.isGCMSingletonItf(clientItfType.getFcItfName(), getFcItfOwner())) {
+                PAGCMInterfaceType serverItfType = (PAGCMInterfaceType) serverItf.getFcItfType();
+                Class<?> cl = Class.forName(clientItfType.getFcItfSignature());
+                Class<?> sr = Class.forName(serverItfType.getFcItfSignature());
+                if (!cl.isAssignableFrom(sr)) {
+                    throw new IllegalBindingException("Signatures of interfaces don't correspond (" +
+                        clientItfType.getFcItfSignature() + " and " + serverItfType.getFcItfSignature() + ")");
+                }
+            }
+        } catch (ClassNotFoundException cnfe) {
+            throw new IllegalBindingException(cnfe.getMessage());
+        } catch (NoSuchInterfaceException nsie) {
+            throw new IllegalBindingException(nsie.getMessage());
         }
     }
 
@@ -344,23 +355,23 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                                 //throw new IllegalBindingException(
                                 //  "Internal server interface can not be bound to an internal client");
                                 checkMembraneIsStopped();
-                                checkCompatibility(clItfType, srItfType);
+                                checkCompatibility(clItfType, srItf);
                                 bindNfServerWithNfClient(clItf.getFcItfName(), srItf); //internal NF server with internal NF client
                             } else { //The server interface belongs to the membrane, and is external client
                                 checkMembraneIsStopped();
-                                checkCompatibility(clItfType, srItfType);
+                                checkCompatibility(clItfType, srItf);
                                 bindNfServerWithNfClient(clItf.getFcItfName(), srItf); //internal NF server with external NF client
                             }
                         } else { //The client itf is a NF external server
                             if (srItfType.isInternal()) {
                                 checkMembraneIsStopped();
-                                checkCompatibility(clItfType, srItfType);
+                                checkCompatibility(clItfType, srItf);
                                 bindNfServerWithNfClient(clItf.getFcItfName(), srItf); //external NF server with internal NF client
                             } else { //Trying to bind an external server NF interface with an external client NF interface
                                 //throw new IllegalBindingException(
                                 //  "External NF server interfaces can not be bound to external NF client interfaces");
                                 checkMembraneIsStopped();
-                                checkCompatibility(clItfType, srItfType);
+                                checkCompatibility(clItfType, srItf);
                                 bindNfServerWithNfClient(clItf.getFcItfName(), srItf); //external NF server with external NF client
                             }
                         }
@@ -374,7 +385,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                             "NF server interfaces can be bound only to server F interfaces of NF components");
                     } else { //NF server interface with a server interface of a NF component : Server alias binding
                         checkMembraneIsStopped();
-                        checkCompatibility(clItfType, srItfType);
+                        checkCompatibility(clItfType, srItf);
                         bindNfServerWithNfCServer(clItf.getFcItfName(), srItf);
                     }
                 }
@@ -399,7 +410,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                             "With this method, an internal client NF interface can only be bound to a NF interface of a F inner component");
                     } else { //OK for binding client NF internal with NF external of F component
                         checkMembraneIsStopped();
-                        checkCompatibility(clItfType, srItfType);
+                        checkCompatibility(clItfType, srItf);
                         bindNfClientWithFCServer(clItf.getFcItfName(), srItf);
                     }
                 }
@@ -487,7 +498,6 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         PAInterface clItf = (PAInterface) client.getInterface();
         PAGCMInterfaceType clItfType = (PAGCMInterfaceType) clItf.getFcItfType();
         PAInterface srItf = (PAInterface) serverItf;
-        PAGCMInterfaceType srItfType = (PAGCMInterfaceType) srItf.getFcItfType();
         if (!clItfType.isFcClientItf()) {
             throw new IllegalBindingException("This method only binds NF client interfaces");
         } else {//OK for binding, but first check that types are compatible
@@ -499,7 +509,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                 throw new IllegalBindingException("The binding :" + " membrane." + clientItf +
                     "--> external NF interface already exists");
             }
-            checkCompatibility(clItfType, srItfType);
+            checkCompatibility(clItfType, srItf);
             PAInterface cl = (PAInterface) owner.getFcInterface(clientItf);
             cl.setFcItfImpl(serverItf);
             nfBindings.addNormalBinding(new NFBinding(clItf, clientItf, srItf, "membrane", null));
