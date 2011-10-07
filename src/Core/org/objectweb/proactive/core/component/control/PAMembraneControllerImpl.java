@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.etsi.uri.gcm.api.type.GCMInterfaceType;
 import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
@@ -233,7 +234,8 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         nfcomponents.put(name, component);
     }
 
-    private void bindNfServerWithNfClient(String clItf, PAInterface srItf) throws IllegalBindingException {
+    private void bindNfServerWithNfClient(String clItf, PAInterface srItf) throws IllegalBindingException,
+            NoSuchInterfaceException {
         PAInterface cl = null;
         try {
             cl = (PAInterface) owner.getFcInterface(clItf);
@@ -245,12 +247,16 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             throw new IllegalBindingException("The binding : membrane." + clItf + "--->" + "membrane." +
                 srItf.getFcItfName() + " already exists");
         }
-        cl.setFcItfImpl(srItf);
-        nfBindings.addNormalBinding(new NFBinding(cl, clItf, srItf, "membrane", "membrane"));
 
+        if (!tryToBindMulticastInterface(cl, srItf)) {
+            cl.setFcItfImpl(srItf);
+
+            nfBindings.addNormalBinding(new NFBinding(cl, clItf, srItf, "membrane", "membrane"));
+        }
     }
 
-    private void bindNfServerWithNfCServer(String clItf, PAInterface srItf) throws IllegalBindingException {
+    private void bindNfServerWithNfCServer(String clItf, PAInterface srItf) throws IllegalBindingException,
+            NoSuchInterfaceException {
         PAInterface cl = null;
         Component srOwner = srItf.getFcItfOwner();
 
@@ -291,17 +297,20 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             logger.debug("The component controller doesn't have a duplication-controller interface");
         }
 
-        cl.setFcItfImpl(srItf);
+        if (!tryToBindMulticastInterface(cl, srItf)) {
+            cl.setFcItfImpl(srItf);
 
-        try {
-            nfBindings.addServerAliasBinding(new NFBinding(cl, clItf, srItf, "membrane", Fractal
-                    .getNameController(srOwner).getFcName()));
-        } catch (NoSuchInterfaceException e) {
-            logger.warn("Could not add a binding : the component does not not have a Name Controller");
+            try {
+                nfBindings.addServerAliasBinding(new NFBinding(cl, clItf, srItf, "membrane", Fractal
+                        .getNameController(srOwner).getFcName()));
+            } catch (NoSuchInterfaceException e) {
+                logger.warn("Could not add a binding : the component does not not have a Name Controller");
+            }
         }
     }
 
-    private void bindNfClientWithFCServer(String clItf, PAInterface srItf) throws IllegalBindingException {
+    private void bindNfClientWithFCServer(String clItf, PAInterface srItf) throws IllegalBindingException,
+            NoSuchInterfaceException {
 
         PAInterface cl = null;
         Component srOwner = null;
@@ -325,17 +334,20 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             e1.printStackTrace();
         }
 
-        cl.setFcItfImpl(srItf);
-        try {
-            nfBindings.addNormalBinding(new NFBinding(cl, clItf, srItf, "membrane", Fractal
-                    .getNameController(srOwner).getFcName()));
-        } catch (NoSuchInterfaceException e) {
-            e.printStackTrace();
+        if (!tryToBindMulticastInterface(cl, srItf)) {
+            cl.setFcItfImpl(srItf);
+
+            try {
+                nfBindings.addNormalBinding(new NFBinding(cl, clItf, srItf, "membrane", Fractal
+                        .getNameController(srOwner).getFcName()));
+            } catch (NoSuchInterfaceException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void bindClientNFWithInternalServerNF(String clItf, PAInterface srItf)
-            throws IllegalBindingException {
+            throws IllegalBindingException, NoSuchInterfaceException {
         bindNfServerWithNfClient(clItf, srItf);
     }
 
@@ -484,7 +496,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     public void bindNFc(String clientItf, Object serverItf) throws NoSuchInterfaceException,
-            IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException {//Binds external NF client itf with External NF Server
+            IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException {// Binds external NF client itf with External NF Server
         serverItf = PAFuture.getFutureValue(serverItf);
         ComponentAndInterface client = getComponentAndInterface(clientItf);
         PAInterface clItf = (PAInterface) client.getInterface();
@@ -492,7 +504,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         PAInterface srItf = (PAInterface) serverItf;
         if (!clItfType.isFcClientItf()) {
             throw new IllegalBindingException("This method only binds NF client interfaces");
-        } else {//OK for binding, but first check that types are compatible
+        } else {// OK for binding, but first check that types are compatible
             checkMembraneIsStopped();
 
             checkCompatibility(clItf, srItf);
@@ -505,11 +517,24 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             ((ItfStubObject) srItf).setSenderItfID(new ItfID(clientItf, ((PAComponent) getFcItfOwner())
                     .getID()));
 
-            PAInterface cl = (PAInterface) owner.getFcInterface(clientItf);
-            cl.setFcItfImpl(serverItf);
-            nfBindings.addNormalBinding(new NFBinding(clItf, clientItf, srItf, "membrane", null));
+            if (!tryToBindMulticastInterface(clItf, srItf)) {
+                PAInterface cl = (PAInterface) owner.getFcInterface(clientItf);
+                cl.setFcItfImpl(serverItf);
+                nfBindings.addNormalBinding(new NFBinding(clItf, clientItf, srItf, "membrane", null));
+            }
         }
 
+    }
+
+    private boolean tryToBindMulticastInterface(PAInterface clientItf, PAInterface serverItf)
+            throws NoSuchInterfaceException {
+        if (((GCMInterfaceType) clientItf.getFcItfType()).isGCMMulticastItf()) {
+            ((PAMulticastControllerImpl) ((PAInterface) GCM.getMulticastController(clientItf.getFcItfOwner()))
+                    .getFcItfImpl()).bindFc(clientItf.getFcItfName(), PAFuture.getFutureValue(serverItf));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String getNFcState(String component) throws NoSuchComponentException, NoSuchInterfaceException,
