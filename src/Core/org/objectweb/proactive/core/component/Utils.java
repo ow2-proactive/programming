@@ -60,6 +60,7 @@ import org.objectweb.proactive.core.component.control.PAMigrationController;
 import org.objectweb.proactive.core.component.control.PAMulticastController;
 import org.objectweb.proactive.core.component.control.PASuperController;
 import org.objectweb.proactive.core.component.factory.PAGenericFactory;
+import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactory;
 
@@ -275,7 +276,14 @@ public class Utils {
      * @throws NoSuchInterfaceException If the component has no such component interface name.
      */
     public static String getGCMCardinality(String itfName, Component owner) throws NoSuchInterfaceException {
-        InterfaceType[] itfTypes = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
+        InterfaceType[] fItfFcTypes = ((PAComponent) owner).getComponentParameters().getComponentType()
+                .getFcInterfaceTypes();
+        InterfaceType[] nfItfFcTypes = ((PAComponent) owner).getComponentParameters().getComponentNFType()
+                .getFcInterfaceTypes();
+        InterfaceType[] itfTypes = new InterfaceType[fItfFcTypes.length + nfItfFcTypes.length];
+        System.arraycopy(fItfFcTypes, 0, itfTypes, 0, fItfFcTypes.length);
+        System.arraycopy(nfItfFcTypes, 0, itfTypes, fItfFcTypes.length, nfItfFcTypes.length);
+
         for (InterfaceType itfType : itfTypes) {
             if (itfType.getFcItfName().equals(itfName)) {
                 return ((GCMInterfaceType) itfType).getGCMCardinality();
