@@ -63,7 +63,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 
-
 import com.sun.jna.Library;
 import com.sun.jna.Memory;
 import com.sun.jna.Native;
