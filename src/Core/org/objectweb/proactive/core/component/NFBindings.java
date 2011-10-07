@@ -42,9 +42,9 @@ import java.util.Vector;
 
 
 /**
- * Extended bindings class, containing more information about bindings inside the mmebrane
- * @author The ProActive Team
+ * Extended bindings class, containing more information about bindings inside the membrane.
  *
+ * @author The ProActive Team
  */
 public class NFBindings {
 
