@@ -240,7 +240,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         } catch (NoSuchInterfaceException e) {
             e.printStackTrace();
         }
-        //Check whether the binding exists
+        // Check whether the binding exists
         if (nfBindings.hasBinding("membrane", clItf, "membrane", srItf.getFcItfName())) {
             throw new IllegalBindingException("The binding : membrane." + clItf + "--->" + "membrane." +
                 srItf.getFcItfName() + " already exists");
@@ -253,6 +253,8 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     private void bindNfServerWithNfCServer(String clItf, PAInterface srItf) throws IllegalBindingException {
         PAInterface cl = null;
         Component srOwner = srItf.getFcItfOwner();
+
+        // Check whether the binding exists
         try {
             if (nfBindings.hasBinding("membrane", clItf, GCM.getNameController(srOwner).getFcName(), srItf
                     .getFcItfName())) {
@@ -270,13 +272,13 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             e.printStackTrace();
         }
 
-        try {//In this case, the nf component controller gets the state of a controller and duplicates it.
+        try {// In this case, the nf component controller gets the state of a controller and duplicates it.
             ControllerStateDuplication dup = (ControllerStateDuplication) srOwner
                     .getFcInterface(Constants.CONTROLLER_STATE_DUPLICATION);
             Object ob = cl.getFcItfImpl();
-            if (ob instanceof ControllerStateDuplication) {//The controller is implemented with an object
+            if (ob instanceof ControllerStateDuplication) {// The controller is implemented with an object
                 dup.duplicateController(((ControllerStateDuplication) ob).getState().getStateObject());
-            } else {//The controller is implemented with a NF component??
+            } else {// The controller is implemented with a NF component?
                 if (ob instanceof PAInterface) {
                     Component cmp = ((PAInterface) ob).getFcItfOwner();
                     ControllerStateDuplication duplicated = (ControllerStateDuplication) cmp
@@ -288,7 +290,6 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         } catch (NoSuchInterfaceException e) {
             logger.debug("The component controller doesn't have a duplication-controller interface");
         }
-        //Check whether the binding exists
 
         cl.setFcItfImpl(srItf);
 
@@ -312,7 +313,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
         srOwner = srItf.getFcItfOwner();
 
-        //Check whether the binding exists
+        // Check whether the binding exists
         try {
             if (nfBindings.hasBinding("membrane", clItf, GCM.getNameController(srOwner).getFcName(), srItf
                     .getFcItfName())) {
@@ -340,7 +341,6 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
     public void bindNFc(String clientItf, String serverItf) throws NoSuchInterfaceException,
             IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException {
-
         ComponentAndInterface client = getComponentAndInterface(clientItf);
         ComponentAndInterface server = getComponentAndInterface(serverItf);
         PAInterface clItf = (PAInterface) client.getInterface();
@@ -357,43 +357,44 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                     .getID()));
         }
 
-        if (client.getComponent() == null) { //The client interface belongs to the membrane
-            if (!clItfType.isFcClientItf()) { //the client interface is a server one (internal or external) belonging to the membrane
-                if (server.getComponent() == null) { //The server interface belongs to the membrane
-                    if (srItfType.isFcClientItf()) { //The (server) interface is client (internal or external) belonging to the membrane
-                        if (clItfType.isInternal()) { //Binding between internal server and internal client is forbidden inside the membrane
-                            if (srItfType.isInternal()) {
-                                bindNfServerWithNfClient(clItf.getFcItfName(), srItf); //internal NF server with internal NF client
+        if (client.getComponent() == null) { // The client interface belongs to the membrane
+            if (!clItfType.isFcClientItf()) { // The client interface is a server one (internal or external) belonging to the membrane
+                if (server.getComponent() == null) { // The server interface belongs to the membrane
+                    if (srItfType.isFcClientItf()) { // The (server) interface is client (internal or external) belonging to the membrane
+                        if (clItfType.isInternal()) { // Binding between internal server and internal client is forbidden inside the membrane
+                            if (srItfType.isInternal()) { // Trying to bind an internal server NF interface with an internal client NF interface
+                                throw new IllegalBindingException(
+                                    "Internal NF server interfaces can not be bound to internal NF client interfaces");
                             } else { //The server interface belongs to the membrane, and is external client
-                                bindNfServerWithNfClient(clItf.getFcItfName(), srItf); //internal NF server with external NF client
+                                bindNfServerWithNfClient(clItf.getFcItfName(), srItf); // Internal NF server with external NF client
                             }
-                        } else { //The client itf is a NF external server
+                        } else { // The client itf is a NF external server
                             if (srItfType.isInternal()) {
-                                bindNfServerWithNfClient(clItf.getFcItfName(), srItf); //external NF server with internal NF client
-                            } else { //Trying to bind an external server NF interface with an external client NF interface
-                                bindNfServerWithNfClient(clItf.getFcItfName(), srItf); //external NF server with external NF client
+                                bindNfServerWithNfClient(clItf.getFcItfName(), srItf); // External NF server with internal NF client
+                            } else { // Trying to bind an external server NF interface with an external client NF interface
+                                throw new IllegalBindingException(
+                                    "External NF server interfaces can not be bound to external NF client interfaces");
                             }
                         }
                     }
-                } else { //The server interface belongs to a component. Possible bindings : External/Internal NF server with a server of a NF component
-                    checkMembraneIsStarted(server.getComponent());
+                } else { // The server interface belongs to a component. Possible bindings : External/Internal NF server with a server of a NF component
                     if (srItfType.isFcClientItf() ||
                         !(server.getComponent() instanceof PANFComponentRepresentative) ||
                         srItfType.getFcItfName().endsWith("-controller")) {
                         throw new IllegalBindingException(
                             "NF server interfaces can be bound only to server F interfaces of NF components");
-                    } else { //NF server interface with a server interface of a NF component : Server alias binding
+                    } else { // NF server interface with a server interface of a NF component : Server alias binding
                         bindNfServerWithNfCServer(clItf.getFcItfName(), srItf);
                     }
                 }
-            } else { //The client interface is a NF client one. For this method it can be only an internal NF client. It can be bound only to a NF interface of a F component.
+            } else { // The client interface is a NF client one. For this method it can be only an internal NF client. It can be bound only to a NF interface of a F component.
                 if (!clItfType.isInternal()) {
                     throw new IllegalBindingException(
                         "With this method, only internal NF client interfaces can be bound");
                 }
-                if (server.getComponent() == null) {//The server interface belongs to the membrane. In this case, this interface HAS to be an internal NF server
+                if (server.getComponent() == null) {// The server interface belongs to the membrane. In this case, this interface HAS to be an internal NF server
                     if (srItfType.getFcItfName().endsWith("-controller") && srItfType.isInternal()) {
-                        bindClientNFWithInternalServerNF(clItfType.getFcItfName(), srItf);//NF internal client ---- NF internal server
+                        bindClientNFWithInternalServerNF(clItfType.getFcItfName(), srItf);// NF internal client ---- NF internal server
                     } else {
                         throw new IllegalBindingException(
                             "Inside the membrane, internal NF interfaces can be bound only with NF internal server of NF interface of F inner components");
@@ -404,75 +405,76 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                         !(srItfType.getFcItfName().endsWith("-controller"))) {
                         throw new IllegalBindingException(
                             "With this method, an internal client NF interface can only be bound to a NF interface of a F inner component");
-                    } else { //OK for binding client NF internal with NF external of F component
+                    } else { // OK for binding client NF internal with NF external of F component
                         bindNfClientWithFCServer(clItf.getFcItfName(), srItf);
                     }
                 }
             }
-        } else { //The client interface belongs to a (NF or F)component
+        } else { // The client interface belongs to a (NF or F)component
 
-            if (!clItfType.isFcClientItf()) { //Check that a client interface of a F/NF component is bound
+            if (!clItfType.isFcClientItf()) {
                 throw new IllegalBindingException("Only a client interface of a NF/F can be bound");
             } else {
-                if (client.getComponent() instanceof PANFComponentRepresentative) { //All possible bindings for client interfaces of NF components
-                    if (server.getComponent() == null) { //A client interface of a NF component to a NF external/internal client
-                        if (srItfType.isFcClientItf() && srItfType.getFcItfName().endsWith("-controller")) { //Connection to any (internal/external) client NF interface
+                if (client.getComponent() instanceof PANFComponentRepresentative) { // All possible bindings for client interfaces of NF components
+                    checkMembraneIsStarted(client.getComponent());
+                    if (server.getComponent() == null) { // A client interface of a NF component to a NF external/internal client
+                        if (srItfType.isFcClientItf() && srItfType.getFcItfName().endsWith("-controller")) { // Connection to any (internal/external) client NF interface
                             GCM.getBindingController(client.getComponent()).bindFc(clItfType.getFcItfName(),
                                     owner.getRepresentativeOnThis().getFcInterface(srItfType.getFcItfName()));// Alias client binding
-                            //Check whether the binding already exist
+                            // Check whether the binding already exist
                             if (nfBindings.hasBinding(GCM.getNameController(client.getComponent())
                                     .getFcName(), client.getInterface().getFcItfName(), "membrane", srItf
                                     .getFcItfName())) {
                                 throw new IllegalBindingException("The binding : " +
                                     GCM.getNameController(client.getComponent()).getFcName() + "." + clItf +
-                                    "--->" + "membrane" + "." + srItf.getFcItfName() + " already exists");
+                                    "--->membrane." + srItf.getFcItfName() + " already exists");
                             }
                             nfBindings.addClientAliasBinding(new NFBinding(null, clItfType.getFcItfName(),
                                 srItf, GCM.getNameController(client.getComponent()).getFcName(), "membrane"));
 
-                        } else { //Exception!!
+                        } else { // Exception!!
                             throw new IllegalBindingException(
                                 "A NF component can only be bound to client NF interfaces of the membrane");
                         }
-                    } else { //Binding of 2 NF components
+                    } else { // Binding of 2 NF components
                         if (!(server.getComponent() instanceof PANFComponentRepresentative)) { //The server component has to be a NF one
                             throw new IllegalBindingException(
                                 "A NF component can only be bound to another NF (not F) component");
-                        } else { //Last verification before binding
+                        } else { // Last verification before binding
                             if (srItfType.isFcClientItf()) {
                                 throw new IllegalBindingException(
                                     "When binding two NF components, a client interface must be bound to a server one");
-                            } else { //Call to binding controller of the component that has the client interface
+                            } else { // Call to binding controller of the component that has the client interface
                                 GCM.getBindingController(client.getComponent()).bindFc(
                                         clItfType.getFcItfName(),
                                         server.getComponent().getFcInterface(srItfType.getFcItfName()));
                             }
                         }
                     }
-                } else { //Binding for NF client interfaces of inner F components
+                } else { // Binding for NF client interfaces of inner F components
                     if (server.getComponent() == null) {
-                        if (!srItfType.isFcClientItf() && srItfType.isInternal()) { //External client NF interface only bound to inner server NF interface
-                            //No beed to check the membrane state of Host component
+                        if (!srItfType.isFcClientItf() && srItfType.isInternal()) { // External client NF interface only bound to inner server NF interface
+                            // No need to check the membrane state of Host component
                             Utils.getPAMembraneController(client.getComponent()).bindNFc(
                                     clItfType.getFcItfName(),
                                     owner.getRepresentativeOnThis().getFcInterface(srItfType.getFcItfName()));
-                            //Check Whether this binding already exist
+                            // Check whether this binding already exist
                             if (nfBindings.hasBinding(GCM.getNameController(client.getComponent())
                                     .getFcName(), client.getInterface().getFcItfName(), "membrane", srItf
                                     .getFcItfName())) {
                                 throw new IllegalBindingException("The binding : " +
                                     GCM.getNameController(client.getComponent()).getFcName() + "." + clItf +
-                                    "--->" + "membrane" + "." + srItf.getFcItfName() + " already exists");
+                                    "--->membrane." + srItf.getFcItfName() + " already exists");
                             }
                             nfBindings.addNormalBinding(new NFBinding(clItf, clItfType.getFcItfName(), srItf,
                                 GCM.getNameController(client.getComponent()).getFcName(), "membrane"));
-                        } else { //Exception
+                        } else { // Exception!!
                             throw new IllegalBindingException(
                                 "The server interface has to be a NF inner server one");
                         }
 
-                        //Bind only to a NF internal server
-                    } else { //Exception!!
+                        // Bind only to a NF internal server
+                    } else { // Exception!!
                         throw new IllegalBindingException(
                             "An inner F component can only bind its client NF interfaces to inner server NF interfaces");
                     }
