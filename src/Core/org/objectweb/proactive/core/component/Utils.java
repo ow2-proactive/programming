@@ -278,8 +278,11 @@ public class Utils {
     public static String getGCMCardinality(String itfName, Component owner) throws NoSuchInterfaceException {
         InterfaceType[] fItfFcTypes = ((PAComponent) owner).getComponentParameters().getComponentType()
                 .getFcInterfaceTypes();
-        InterfaceType[] nfItfFcTypes = ((PAComponent) owner).getComponentParameters().getComponentNFType()
-                .getFcInterfaceTypes();
+        InterfaceType[] nfItfFcTypes = new InterfaceType[0];
+        ComponentType nfComponentType = ((PAComponent) owner).getComponentParameters().getComponentNFType();
+        if (nfComponentType != null) {
+            nfItfFcTypes = nfComponentType.getFcInterfaceTypes();
+        }
         InterfaceType[] itfTypes = new InterfaceType[fItfFcTypes.length + nfItfFcTypes.length];
         System.arraycopy(fItfFcTypes, 0, itfTypes, 0, fItfFcTypes.length);
         System.arraycopy(nfItfFcTypes, 0, itfTypes, fItfFcTypes.length, nfItfFcTypes.length);
