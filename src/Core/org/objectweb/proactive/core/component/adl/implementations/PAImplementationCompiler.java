@@ -44,6 +44,8 @@ import org.apache.log4j.Logger;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Node;
+import org.objectweb.fractal.adl.attributes.Attributes;
+import org.objectweb.fractal.adl.attributes.AttributesContainer;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.implementations.ControllerContainer;
@@ -51,6 +53,8 @@ import org.objectweb.fractal.adl.implementations.Implementation;
 import org.objectweb.fractal.adl.implementations.ImplementationCompiler;
 import org.objectweb.fractal.adl.implementations.ImplementationContainer;
 import org.objectweb.fractal.adl.nodes.VirtualNodeContainer;
+import org.objectweb.fractal.api.type.ComponentType;
+import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.task.core.TaskMap;
 import org.objectweb.fractal.task.core.TaskMap.TaskHole;
 import org.objectweb.fractal.task.deployment.lib.AbstractInstanceProviderTask;
@@ -163,7 +167,10 @@ public class PAImplementationCompiler extends ImplementationCompiler {
             }
         }
 
-        return new ObjectsContainer(implementation, controller, name, definition, n);
+        // check if this Component has subcomponents
+        int k = container.getComponents().length;
+
+        return new ObjectsContainer(implementation, controller, name, definition, n, k > 0);
     }
 
     protected void end(final TaskMap tasks, final ComponentContainer container,
@@ -185,7 +192,7 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         ControllerDescription controllerDesc = null;
 
         if (implementation == null) {
-            // a composite component
+            // a composite component without attributes
             if ("composite".equals(controller) || (controller == null)) {
                 controllerDesc = new ControllerDescription(name, Constants.COMPOSITE);
                 contentDesc = new ContentDescription(Composite.class.getName());
@@ -193,6 +200,21 @@ public class PAImplementationCompiler extends ImplementationCompiler {
                 controllerDesc = new ControllerDescription(name, Constants.COMPOSITE, getControllerPath(
                         controller, name));
             }
+
+        } else if (obj.hasSubcomponents()) {
+            // a composite component with attributes 
+            //    in that case it must have an Attributes node, and the class implementation must implement
+            //    the Attributes signature
+            contentDesc = new ContentDescription(implementation);
+
+            // treat it has a composite
+            if ("composite".equals(controller) || (controller == null)) {
+                controllerDesc = new ControllerDescription(name, Constants.COMPOSITE);
+            } else {
+                controllerDesc = new ControllerDescription(name, Constants.COMPOSITE, getControllerPath(
+                        controller, name));
+            }
+
         } else {
             // a primitive component
             contentDesc = new ContentDescription(implementation);
@@ -259,14 +281,16 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         private VirtualNode n;
         ContentDescription contentDesc = null;
         ControllerDescription controllerDesc = null;
+        private boolean subcomponents = false;
 
         public ObjectsContainer(String implementation, String controller, String name, String definition,
-                VirtualNode n) {
+                VirtualNode n, boolean subcomponents) {
             this.implementation = implementation;
             this.controller = controller;
             this.name = name;
             this.definition = definition;
             this.n = n;
+            this.subcomponents = subcomponents;
         }
 
         public String getController() {
@@ -304,5 +328,10 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         public void setControllerDesc(ControllerDescription controllerDesc) {
             this.controllerDesc = controllerDesc;
         }
+
+        public boolean hasSubcomponents() {
+            return subcomponents;
+        }
+
     }
 }
