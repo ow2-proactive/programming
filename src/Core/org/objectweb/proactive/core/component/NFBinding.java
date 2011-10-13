@@ -40,9 +40,9 @@ import org.objectweb.fractal.api.Interface;
 
 
 /**
- * Extended binding, with additionnal information about a binding
- * @author The ProActive Team 
+ * Extended binding, with additional information about a binding.
  *
+ * @author The ProActive Team
  */
 public class NFBinding extends Binding {
     /**
