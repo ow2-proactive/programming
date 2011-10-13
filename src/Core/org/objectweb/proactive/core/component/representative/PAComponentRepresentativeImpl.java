@@ -129,12 +129,8 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         // functional interfaces are proxies on the corresponding meta-objects
         addFunctionalInterfaces(componentType);
 
-        try {
-            this.componentParameters = ((PAComponent) getFcInterface(Constants.COMPONENT))
-                    .getComponentParameters();
-        } catch (NoSuchInterfaceException e) {
-            logger.error("Can't retrieve the component parameters on the 'component' interface", e);
-        }
+        this.componentParameters = new ComponentParameters(componentType, new ControllerDescription(null,
+            hierarchicalType, controllersConfigFileLocation));
     }
 
     public PAComponentRepresentativeImpl(ComponentParameters componentParam) {
