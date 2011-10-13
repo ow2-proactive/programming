@@ -253,10 +253,6 @@ public class RequestReceiverImpl implements RequestReceiver, java.io.Serializabl
     }
 
     public void setImmediateService(String methodName, boolean uniqueThread) {
-        if (this.serviceModes.containsKey(methodName)) {
-            // IS is already registered, remove any other registration
-            this.serviceModes.remove(methodName);
-        }
         final Hashtable<ClassArrayWrapper, ServiceMode> t = new Hashtable<ClassArrayWrapper, ServiceMode>(1);
         t.put(ANY_PARAMETERS, uniqueThread ? ServiceMode.IMMEDIATE_UNIQUE_THREAD
                 : ServiceMode.IMMEDIATE_MULTI_THREAD);
