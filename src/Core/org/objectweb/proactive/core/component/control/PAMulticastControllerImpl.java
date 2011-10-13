@@ -100,7 +100,16 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
     @Override
     public void initController() {
         // this method is called once the component is fully instantiated with all its interfaces created
-        InterfaceType[] itfTypes = ((ComponentType) owner.getFcType()).getFcInterfaceTypes();
+        InterfaceType[] fItfFcTypes = owner.getComponentParameters().getComponentType().getFcInterfaceTypes();
+        InterfaceType[] nfItfFcTypes = new InterfaceType[0];
+        ComponentType nfComponentType = owner.getComponentParameters().getComponentNFType();
+        if (nfComponentType != null) {
+            nfItfFcTypes = nfComponentType.getFcInterfaceTypes();
+        }
+        InterfaceType[] itfTypes = new InterfaceType[fItfFcTypes.length + nfItfFcTypes.length];
+        System.arraycopy(fItfFcTypes, 0, itfTypes, 0, fItfFcTypes.length);
+        System.arraycopy(nfItfFcTypes, 0, itfTypes, fItfFcTypes.length, nfItfFcTypes.length);
+
         for (int i = 0; i < itfTypes.length; i++) {
             PAGCMInterfaceType type = (PAGCMInterfaceType) itfTypes[i];
             if (type.isGCMMulticastItf()) {
@@ -112,8 +121,7 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
                 }
             }
         }
-        List<InterfaceType> interfaceTypes = Arrays.asList(((ComponentType) owner.getFcType())
-                .getFcInterfaceTypes());
+        List<InterfaceType> interfaceTypes = Arrays.asList(itfTypes);
         Iterator<InterfaceType> it = interfaceTypes.iterator();
 
         while (it.hasNext()) {
