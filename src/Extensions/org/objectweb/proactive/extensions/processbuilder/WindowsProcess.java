@@ -112,7 +112,6 @@ final class WindowsProcess extends Process {
                 put(Library.OPTION_TYPE_MAPPER, W32APITypeMapper.UNICODE);
                 put(Library.OPTION_FUNCTION_MAPPER, W32APIFunctionMapper.UNICODE);
             }
-            private static final long serialVersionUID = 1L;
         };
     }
 
