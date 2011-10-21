@@ -164,9 +164,12 @@ public class PAComponentImpl implements PAComponent, Serializable {
 
         for (Interface itf : controlItfs.values()) {
             // TODO Check with component controller
-            PAController itfImpl = (PAController) ((PAInterfaceImpl) itf).getFcItfImpl();
-            if (itfImpl != null) { // due to non-functional interface implemented using component
-                itfImpl.initController();
+            // A multicast client interface has an implementation (so, it's != null), but it is not a PAController
+            if (((PAInterfaceImpl) itf).getFcItfImpl() instanceof PAController) {
+                PAController itfImpl = (PAController) ((PAInterfaceImpl) itf).getFcItfImpl();
+                if (itfImpl != null) { // due to non-functional interface implemented using component
+                    itfImpl.initController();
+                }
             }
         }
 
@@ -682,12 +685,12 @@ public class PAComponentImpl implements PAComponent, Serializable {
 
             PAGCMInterfaceType itf_type = (PAGCMInterfaceType) itf_ref.getFcItfType();
             Class<?> interfaceClass = Class.forName(itf_type.getFcItfSignature());
-            if (interfaceClass.isAssignableFrom(controllerClass)) { //Check that the class implements the specified interface
+            if (interfaceClass.isAssignableFrom(controllerClass)) { // Check that the class implements the specified interface
                 PAInterface controller = createController(itf_type, controllerClass);
 
                 if (itf_ref.getFcItfImpl() != null) { // Dealing with first initialization
-                    if (itf_ref.getFcItfImpl() instanceof AbstractPAController) { //In this case, itf_ref is implemented by a controller object
-                        if (controller.getFcItfImpl() instanceof ControllerStateDuplication) { //Duplicate the state of the existing controller
+                    if (itf_ref.getFcItfImpl() instanceof AbstractPAController) { // In this case, itf_ref is implemented by a controller object
+                        if (controller.getFcItfImpl() instanceof ControllerStateDuplication) { // Duplicate the state of the existing controller
                             Object ob = itf_ref.getFcItfImpl();
                             if (ob instanceof ControllerStateDuplication) {
                                 ((ControllerStateDuplication) controller.getFcItfImpl())
@@ -695,7 +698,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
                                                 .getStateObject());
                             }
                         }
-                    } else { //In this case, the object controller will replace an interface of a non-functional component
+                    } else { // In this case, the object controller will replace an interface of a non-functional component
                         if (controller.getFcItfImpl() instanceof ControllerStateDuplication) {
                             try {
                                 Component theOwner = ((PAInterface) itf_ref.getFcItfImpl()).getFcItfOwner();
@@ -706,7 +709,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
                                 ((ControllerStateDuplication) controller.getFcItfImpl())
                                         .duplicateController(cs.getStateObject());
                             } catch (NoSuchInterfaceException e) {
-                                //Here nothing to do, if the component controller doesnt have a ControllerDuplication, then no duplication can be done
+                                // Here nothing to do, if the component controller doesnt have a ControllerDuplication, then no duplication can be done
                             }
                         }
                     }
