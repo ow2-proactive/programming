@@ -189,6 +189,9 @@ public class FutureMap extends Object implements java.io.Serializable {
         java.util.HashMap<Long, FuturesAndACs> indexedByID = (indexedByBodyID.get(creatorID));
         if (indexedByID != null) {
             indexedByID.remove(Long.valueOf(id));
+            if (indexedByID.size() == 0) {
+                indexedByBodyID.remove(creatorID);
+            }
         }
     }
 
