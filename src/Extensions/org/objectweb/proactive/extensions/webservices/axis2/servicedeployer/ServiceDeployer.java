@@ -162,12 +162,17 @@ public class ServiceDeployer {
         Object o = null;
         Object component = null;
         ClassLoader loader = null;
+        ArrayList<String> excludedOperations = new ArrayList<String>();
         if (!isComponent) {
             // Unmarshalled object
             o = HttpMarshaller.unmarshallObject(marshalledObject);
             superclass = o.getClass().getSuperclass();
             loader = o.getClass().getClassLoader();
             implClass = superclass.getName();
+
+            // Retrieve methods we don't want
+            MethodUtils mc = new MethodUtils(superclass);
+            excludedOperations = mc.getExcludedMethodsName(methods);
         } else {
             // Unmarshalled object
             component = HttpMarshaller.unmarshallObject(marshalledObject);
@@ -177,10 +182,6 @@ public class ServiceDeployer {
             loader = superclass.getClassLoader();
             implClass = ((InterfaceType) interface_.getFcItfType()).getFcItfSignature();
         }
-
-        // Retrieve methods we don't want
-        MethodUtils mc = new MethodUtils(superclass);
-        ArrayList<String> excludedOperations = mc.getExcludedMethodsName(methods);
 
         // Create the service
         AxisService axisService = this.customCreateService(implClass, serviceName, axisConfiguration, loader,

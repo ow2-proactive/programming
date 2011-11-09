@@ -395,17 +395,13 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /**
-     * Registers a reference on a component with a name
+     * Registers a reference on a component with a name.
      *
-     * @param ref
-     *            a reference on a component (it should be an instance of
-     *            PAComponentRepresentative)
-     * @param name
-     *            the name of the component
-     * @return
-     *            The URI at which the component is bound
-     * @throws ProActiveException
-     *             if the component cannot be registered
+     * @param ref a reference on a component (it should be an instance of
+     *            PAComponentRepresentative).
+     * @param name the name of the component.
+     * @return The URI at which the component is bound.
+     * @throws ProActiveException if the component cannot be registered.
      */
     public static String registerByName(Component ref, String name) throws ProActiveException {
         if (!(ref instanceof PAComponentRepresentative)) {
@@ -415,14 +411,24 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /**
+     * Unregisters a component previously registered into a registry.
+     * 
+     * @param url the url under which the component is registered.
+     * @throws IOException if the remote component cannot be removed from the registry.
+     */
+    public static void unregister(String url) throws IOException {
+        PAActiveObject.unregister(url);
+    }
+
+    /**
      * Returns a reference on a component (a component representative) for the
      * component associated with the specified name.<br>
      *
-     * @param url the registered location of the component
-     * @return a reference on the component corresponding to the given name
-     * @throws IOException if there is a communication problem with the registry
+     * @param url the registered location of the component.
+     * @return a reference on the component corresponding to the given name.
+     * @throws IOException if there is a communication problem with the registry.
      * @throws NamingException if a reference on a component could not be found at the
-     *             specified URL
+     *             specified URL.
      */
     public static PAComponentRepresentative lookup(String url) throws IOException, NamingException {
         UniversalBody b = null;

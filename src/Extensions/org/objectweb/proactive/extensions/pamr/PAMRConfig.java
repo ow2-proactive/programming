@@ -57,7 +57,7 @@ public class PAMRConfig implements PAPropertiesLoaderSPI {
      *
      */
     static public PAPropertyInteger PA_NET_ROUTER_PORT = new PAPropertyInteger("proactive.pamr.router.port",
-        false, 0);
+        false, 33647);
 
     /** The Socket Factory to use by the message routing protocol
      *

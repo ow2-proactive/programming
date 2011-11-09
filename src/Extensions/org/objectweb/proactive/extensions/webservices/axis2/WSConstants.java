@@ -36,6 +36,14 @@
  */
 package org.objectweb.proactive.extensions.webservices.axis2;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.apache.log4j.Logger;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
+
+
 /**
  * Utility constants for deploying active objects and components as Web Services
  *
@@ -43,14 +51,25 @@ package org.objectweb.proactive.extensions.webservices.axis2;
  */
 public class WSConstants extends org.objectweb.proactive.extensions.webservices.WSConstants {
 
+    private static Logger logger = ProActiveLogger.getLogger(Loggers.WEB_SERVICES);
+
     // Path to the ProActive.jar archive
     // Used to retrieve Axis2 configuration file
     public static final String PROACTIVE_JAR;
     static {
-        String temp = WSConstants.class.getResource("/org/objectweb/proactive/extensions/webservices/axis2")
-                .getPath();
-        temp = temp.substring(0, temp.indexOf('!'));
-        PROACTIVE_JAR = temp.substring(temp.indexOf(':') + 1);
+        String temp = null;
+        try {
+            temp = new URI(WSConstants.class.getResource(
+                    "/org/objectweb/proactive/extensions/webservices/axis2").getPath()).getPath();
+        } catch (URISyntaxException use) {
+            logger.error("Cannot find ProActive.jar path: " + use.getMessage(), use);
+        }
+        if (temp != null) {
+            temp = temp.substring(0, temp.indexOf('!'));
+            PROACTIVE_JAR = temp.substring(temp.indexOf(':') + 1);
+        } else {
+            PROACTIVE_JAR = "unknown ProActive.jar path";
+        }
     }
 
     // Files to extract from the ProActive.jar

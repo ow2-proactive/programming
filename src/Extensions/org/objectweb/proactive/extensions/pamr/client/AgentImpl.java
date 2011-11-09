@@ -411,6 +411,11 @@ public class AgentImpl implements Agent, AgentImplMBean {
         }
     }
 
+    /** {@inheritDoc} */
+    public void closeTunnel(PAMRException cause) {
+        this.reportTunnelFailure(this.t, cause);
+    }
+
     /**
      * Reports a tunnel failure to the agent
      * 

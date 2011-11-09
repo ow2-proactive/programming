@@ -2222,7 +2222,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</listitem>
 					<listitem>
 						<para>
-							And finally, you can used one of the
+							And finally, you can use one of the
 							<literal>WebServices</literal> methods:
 						</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/WebServices_Methods_Components.snip" /></textobject></programlisting>
@@ -2303,7 +2303,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					</listitem>
 					<listitem>
 						<para>
-							And finally, you can used one of the
+							And finally, you can use one of the
 							<literal>PAWebServicesController</literal> methods:
 						</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/PAWebServicesController_expose_methods.snip" /></textobject></programlisting>
@@ -2433,9 +2433,15 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					using Apache SOAP, this new version which uses Axis2 or CXF
 					can handle complex types. That is, with this version, you can
 					implement a service which exposes a method returning or taking
-					in argument an instance of any class. However, the class of
-					this instance has to respect some criterion due to the
-					serialization and Axis2/CXF restrictions:
+					in argument an instance of any class. By using CXF and JAX-WS
+					annotations, there is no limitation on the type of this class.
+					It only implies to use the appropriate adapters (see the
+					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://cxf.apache.org/docs/index.html">
+						CXF documentation
+					</link> for more details). However, if you do not want to use
+					JAX-WS annotations or CXF, the class of this instance has to
+					respect some criterion due to the serialization and Axis2/CXF
+					restrictions:
 				</para>
 
 				<itemizedlist>

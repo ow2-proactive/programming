@@ -125,8 +125,9 @@ public class ProActiveMessageHandler implements MessageHandler {
                 try {
                     message = (PAMRMessage) this.marshaller.unmarshallObject(_toProcess.getData());
                 } catch (Throwable t) {
-                    new PAMRException("Failed to unmarshall incoming message", t);
-                    SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, t));
+                    PAMRException e = new PAMRException("Failed to unmarshall incoming message on " +
+                        this.agent.getAgentID() + "for " + this._toProcess, t);
+                    SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, e));
                     agent.sendReply(_toProcess, this.marshaller.marshallObject(sr));
                     return;
                 }
@@ -140,8 +141,9 @@ public class ProActiveMessageHandler implements MessageHandler {
                 try {
                     resultBytes = this.marshaller.marshallObject(result);
                 } catch (Throwable t) {
-                    new PAMRException("Failed to marshall the result bytes", t);
-                    SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, t));
+                    PAMRException e = new PAMRException("Failed to marshall the result bytes on " +
+                        this.agent.getAgentID() + " for " + _toProcess, t);
+                    SynchronousReplyImpl sr = new SynchronousReplyImpl(new MethodCallResult(null, e));
                     agent.sendReply(_toProcess, this.marshaller.marshallObject(sr));
                     return;
                 }
@@ -156,9 +158,14 @@ public class ProActiveMessageHandler implements MessageHandler {
             } catch (PAMRException e) {
                 logger.info("Failed to send the PAMR error reply to " + this._toProcess +
                     ". The router should discover the disconnection and unlock the caller", e);
+                agent.closeTunnel(e);
             } catch (IOException e) {
                 logger.info("Failed to send the PAMR error reply to " + this._toProcess +
                     ". The router should discover the disconnection and unlock the caller", e);
+                agent.closeTunnel(new PAMRException(e));
+            } catch (Throwable t) {
+                PAMRException e = new PAMRException("Fatal error occured while serving acall", t);
+                agent.closeTunnel(e);
             } finally {
                 Thread.currentThread().setContextClassLoader(savedClassLoader);
             }
