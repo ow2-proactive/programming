@@ -38,9 +38,11 @@ package org.objectweb.proactive.core.component.adl.types;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
+import org.objectweb.fractal.adl.Node;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.implementations.Controller;
@@ -50,6 +52,8 @@ import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.types.TypeErrors;
 import org.objectweb.fractal.adl.types.TypeInterface;
 import org.objectweb.fractal.adl.types.TypeLoader;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
@@ -58,10 +62,13 @@ import org.objectweb.fractal.adl.types.TypeLoader;
  * in these nodes exist.<br/><br/>
  * 
  * The {@link PATypeLoader} checks all the &lt;interface&gt; nodes and check
- * that the Java interfaces specified exist.
+ * that the Java interfaces specified exist, including interfaces defined inside
+ * &lt;controller&gt; nodes. 
  * 
  */
 public class PATypeLoader extends TypeLoader {
+
+	public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 	
 	/** 
 	 * Overriden to use our own version of 'checkNode', which is private in {@link TypeLoader}.
@@ -87,6 +94,7 @@ public class PATypeLoader extends TypeLoader {
         for (int i = 0; i < itfs.length; i++) {
             Interface itf = itfs[i];
             if (itf instanceof TypeInterface) {
+            	logger.debug("[PATypeLoader] Checking interface:"+ itf.toString() + " ("+ (itf.astGetDecoration("NF")!=null?"NF":"F") + ")" );
                 String signature = ((TypeInterface) itf).getSignature();
                 if (signature == null) {
                     throw new ADLException(TypeErrors.SIGNATURE_MISSING, itf);
@@ -127,13 +135,7 @@ public class PATypeLoader extends TypeLoader {
     
     
     /**
-     * The checking of a node has 3 cases:
-     * <ul>
-     *    <li>If we are in a node that contains &lt;interface&gt; nodes, we check it directly.</li>
-     *    <li>If we are in a node that contains &lt;component&gt; nodes, we must descend on each component looking for &lt;interface&gt; nodes.</li>
-     *    <li>Additionally, if the node contains a &lt;controller&gt; node, we must check if the &lt;controller&gt; node contains &lt;interface&gt; nodes
-     *        (i.e., the definition of the NF interfaces)</li>
-     * </ul>
+     * Looks for containers of &lt;interface&gt; nodes.
      * 
      * @param node
      * @param context
@@ -141,28 +143,25 @@ public class PATypeLoader extends TypeLoader {
      */
 	private void checkNode(final Object node, final Map<Object, Object> context)
 			throws ADLException {
+				
+		// The node contains <interface> nodes. Check it.
 		if (node instanceof InterfaceContainer) {
-			System.out.println("[ExtendedPATypeLoader] Checking interface container:"+ ((InterfaceContainer) node).astGetType() );
 			checkInterfaceContainer((InterfaceContainer) node, context);
 		}
+		// The node contains <component> nodes. Check each <component>
 		if (node instanceof ComponentContainer) {
 			for (final Component comp : ((ComponentContainer) node).getComponents()) {
 				checkNode(comp, context);
 			}
 		}
-		// Additional check, because the ControllerContainer can also contain interfaces (namely, the interfaces
-		// of the membrane, that must be checked)
+		// The node contains <controller> nodes. The <controller> may contain NF <interface> nodes.
 		if (node instanceof ControllerContainer) {
-			System.out.println("[ExtendedPATypeLoader] Checking controller container:"+ ((InterfaceContainer) node).astGetType() );
 			Controller ctrl = ((ControllerContainer)node).getController();
 			if(ctrl != null) {
-				if(ctrl instanceof InterfaceContainer) {
-					checkNode(ctrl, context);				
-				}
+				checkNode(ctrl, context);
 			}
 
 		}
 	}
-	
 	
 }

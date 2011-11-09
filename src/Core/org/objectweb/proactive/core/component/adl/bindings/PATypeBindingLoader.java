@@ -40,6 +40,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Node;
@@ -49,16 +50,36 @@ import org.objectweb.fractal.adl.bindings.BindingErrors;
 import org.objectweb.fractal.adl.bindings.TypeBindingLoader;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
+import org.objectweb.fractal.adl.implementations.Controller;
+import org.objectweb.fractal.adl.implementations.ControllerContainer;
 import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.types.TypeInterface;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
+ * The {@link PATypeBindingLoader} extends the Fractal {@link TypeBindingLoader} to consider multicast/gathercast interfaces
+ * when checking a binding, and when looking for interfaces. It also consider that the server interface maybe a WS interface.
+ * 
+ * The {@link PATypeBindingLoader} is also extended to explore the bindings defined inside {@link Controller}
+ * nodes. These bindings are NF Bindings.
+ * 
  * @author The ProActive Team
  */
 public class PATypeBindingLoader extends TypeBindingLoader {
-    private boolean isMulticastBinding(final Binding binding, final Map<String, Map<String, Interface>> itfMap)
+	
+	public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+	
+	/** Checks if the binding is a multicast binding.
+	 * 
+	 * @param binding
+	 * @param itfMap
+	 * @return
+	 * @throws ADLException
+	 */
+    protected boolean isMulticastBinding(final Binding binding, final Map<String, Map<String, Interface>> itfMap)
             throws ADLException {
         final String from = binding.getFrom();
         if (from == null) {
@@ -74,10 +95,17 @@ public class PATypeBindingLoader extends TypeBindingLoader {
         return GCMTypeFactory.MULTICAST_CARDINALITY.equals(((TypeInterface) fromItf).getCardinality());
     }
 
+    /** 
+     * Traverses the tree analyzing Bindings.
+     * Bindings can be found inside BindingContainer nodes (definition, component, or controller)
+     */
     @Override
     protected void checkNode(final Object node, final Map<Object, Object> context) throws ADLException {
+    	// only interested in BindingContainers
         if (node instanceof BindingContainer) {
+        	logger.debug("[PATypeBindingLoader] Analyzing bindings of "+ node.toString() + ", "+ ((BindingContainer)node).getBindings().length + ", "+ (((Node)node).astGetDecoration("NF")!=null?"NF":"F"));
             final Map<String, Map<String, Interface>> itfMap = new HashMap<String, Map<String, Interface>>();
+            // build the list of interfaces of "this" component
             if (node instanceof InterfaceContainer) {
                 final Map<String, Interface> containerItfs = new HashMap<String, Interface>();
                 for (final Interface itf : ((InterfaceContainer) node).getInterfaces()) {
@@ -85,6 +113,7 @@ public class PATypeBindingLoader extends TypeBindingLoader {
                 }
                 itfMap.put("this", containerItfs);
             }
+            // build the list of interfaces of each subcomponent
             if (node instanceof ComponentContainer) {
                 for (final Component comp : ((ComponentContainer) node).getComponents()) {
                     if (comp instanceof InterfaceContainer) {
@@ -96,30 +125,55 @@ public class PATypeBindingLoader extends TypeBindingLoader {
                     }
                 }
             }
+            // check each binding described in "this" node using the list of collected interfaces
             for (final Binding binding : ((BindingContainer) node).getBindings()) {
                 checkBinding(binding, itfMap, context);
             }
+            // check for duplicated bindings, i.e. different bindings with the same "from" interface,
+            // unless it is a multicast binding
             final Map<String, Binding> fromItfs = new HashMap<String, Binding>();
             for (final Binding binding : ((BindingContainer) node).getBindings()) {
                 final Binding previousDefinition = fromItfs.put(binding.getFrom(), binding);
+                // there is previous binding with same "from" interface, and it is not a multicast binding
                 if ((previousDefinition != null) && !isMulticastBinding(binding, itfMap)) {
                     throw new ADLException(BindingErrors.DUPLICATED_BINDING, binding, binding.getFrom(),
                         previousDefinition);
                 }
             }
         }
+        // descend through a ComponentContainer
         if (node instanceof ComponentContainer) {
             for (final Component comp : ((ComponentContainer) node).getComponents()) {
                 checkNode(comp, context);
             }
         }
+    	// descend also through a ControllerContainer, because a Controller can also contain (NF) components
+    	if (node instanceof ControllerContainer) {
+    		Controller ctrl = ((ControllerContainer) node).getController();
+    		if(ctrl != null) {
+    			checkNode(ctrl, context);
+    		}
+    	}
     }
 
+    /** 
+     * Checks a binding.
+     * The 'super' method verifies the server/client quality of the interfaces, and if the client interface is superclass 
+     * or the same class as server (i.e., serverClass is the the same or extends clientClass)
+     * 
+     * If that fails, this method verifies the multicast interfaces (which should have thrown an exception in the 'super'
+     * method), and checks that they have the same number of methods. 
+     * 
+     * NOTE: It is not a complete multicast compatibility test. However, a complete checking is done inside the GCM API methods
+     * (see {@link PAMulticastController})
+     * 
+     */
     @Override
     protected void checkBinding(final Binding binding, final Interface fromItf, final String fromCompName,
             final String fromItfName, final Interface toItf, final String toCompName, final String toItfName,
             final Map<Object, Object> context) throws ADLException {
         try {
+        	logger.debug("[PATypeBindingLoader] Checking binding "+ fromItf + "("+ (fromItf.astGetDecoration("NF")!=null?"NF":"F") +")--> "+ toItf + "("+(toItf.astGetDecoration("NF")!=null?"NF":"F")+")");
             super.checkBinding(binding, fromItf, fromCompName, fromItfName, toItf, toCompName, toItfName,
                     context);
         } catch (ADLException e) {
@@ -140,11 +194,22 @@ public class PATypeBindingLoader extends TypeBindingLoader {
                     if (clientSideItfMethods.length != serverSideItfMethods.length) {
                         throw new ADLException(PABindingErrors.INVALID_MULTICAST_SIGNATURE, fromItf, toItf);
                     }
+                    // ok, at least in number of methods
+                    return;
                 }
+                // client class is not multicast, then re-throw e
+                throw e;
             }
+            // the catched exception is still valid
+            throw e;
         }
     }
 
+    /**
+     * Finds an Interface node. 
+     * If both checks fail (it is not a singleton interface, nor it is a collection interface),
+     * then it checks if it is a webservice interface. In that case null is returned.
+     */
     @Override
     protected Interface getInterface(final String compName, final String itfName, final Node sourceNode,
             final Map<String, Map<String, Interface>> itfMap) throws ADLException {
