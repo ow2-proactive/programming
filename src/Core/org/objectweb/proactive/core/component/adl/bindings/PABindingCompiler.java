@@ -59,7 +59,11 @@ import org.objectweb.fractal.task.core.TaskMap.TaskHole;
 import org.objectweb.fractal.task.deployment.api.InstanceProviderTask;
 import org.objectweb.fractal.task.deployment.lib.AbstractRequireInstanceProviderTask;
 
-
+/**
+ * 
+ * @author The ProActive Team
+ *
+ */
 public class PABindingCompiler extends BindingCompiler {
     private static Map<String, Integer> multicastItfTaskIndexer = new HashMap<String, Integer>();
 

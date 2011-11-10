@@ -65,6 +65,8 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * that the Java interfaces specified exist, including interfaces defined inside
  * &lt;controller&gt; nodes. 
  * 
+ * @author The ProActive Team
+ * 
  */
 public class PATypeLoader extends TypeLoader {
 

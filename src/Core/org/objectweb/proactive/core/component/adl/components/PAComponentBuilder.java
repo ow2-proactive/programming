@@ -47,6 +47,8 @@ import org.objectweb.fractal.api.Component;
  * It slightly differs from the FractalComponentBuilder class : the name of the component
  * is not specified in this addition operation, but when the component is instantiated.
  *
+ * @author The ProActive Team
+ *
  */
 public class PAComponentBuilder implements ComponentBuilder {
     // --------------------------------------------------------------------------
