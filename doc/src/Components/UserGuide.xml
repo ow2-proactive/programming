@@ -2823,8 +2823,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					<listitem>
 						<para>
 							Methods dedicated to component instantiation:
-							they allow the specification of a NF type of a
-							component and the instantiation of NF components;
+							they allow the specification of the NF part of
+							the type of a component and the instantiation
+							of NF components.
 						</para>
 					</listitem>
 					<listitem>
@@ -2834,7 +2835,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							and managing the life-cycle of the membrane.
 							Those methods are proposed as an extension of the
 							Fractal component model and consequently of the
-							GCM model;
+							GCM model.
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -2913,7 +2914,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					object controller and two component controllers, the component
 					controllers are connected together and with the outside of the
 					membrane by different bindings. For the moment, we do not specify
-					whether components are localized with the membrane, or distributed.
+					whether components are localized with the membrane or distributed.
 				</para>
 
 				<para>
@@ -2972,7 +2973,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						parallel with the membrane, this method can also induce a
 						significant speedup, and a better availability of the membrane.
 						To summarize, controllers invoked frequently and performing very
-						short treatments, would be more efficiently implemented by local
+						short treatments would be more efficiently implemented by local
 						objects or local components. For controllers called less frequently
 						or which involve long computations, making them distributed would
 						improve performances and availability of the membrane.
@@ -2987,19 +2988,31 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				<section xml:id="NonfunctionalTypeandNonfunctionalComponents_53"><info><title>Non-functional Type and Non-functional Components</title></info>
 
 					<para>
-						To typecheck bindings between membranes, we have to extend the GCM
-						model with a new concept: the non-functional type of a component.
-						This type is defined as the union of the types of NF interfaces the
-						membrane exposes. To specify the NF type of a component, we propose
-						to overload the <literal>newFcInstance</literal> method (the one to
-						create functional components) as follows:
-						<programlisting language="java">public Component newFcInstance(Type fType,Type nfType, any contentDesc, any controllerDesc);</programlisting>
-						In this method, nfType represents the NF type of the component; it
-						can be specified by hand. Soon, it should be possible to specify the
-						NF type within a configuration file: the controller descriptor
-						argument (controllerDesc) can be a file written in Architecture
-						Description Language (ADL) containing the whole description of the
-						NF system.
+						To type check bindings between membranes, we have to extend the GCM
+						model: the type of a component must includes a non-functional part.
+						This part is defined as the union of the types of NF interfaces the
+						membrane exposes. To specify the NF part in the type of a component,
+						we defined the classes:
+						<itemizedlist>
+							<listitem>
+								<para>
+									<literal>PAComponentType</literal> which is an extension
+									of the <literal>ComponentType</literal> class and adds
+									methods to access to the non functional interface types
+									of a component type. 
+								</para>
+							</listitem>
+							<listitem>
+								<para>
+									<literal>PAGCMTypeFactory</literal> which is an extension
+									of the <literal>GCMTypeFactory</literal> class and adds a
+									method to create a <literal>PAComponentType</literal>.
+								</para>
+							</listitem>
+						</itemizedlist>
+						Then the component can be instantiated as usually by using the
+						<literal>newFcInstance</literal> method where the type given as
+						parameter is an instance of <literal>PAComponentType</literal>.
 					</para>
 
 					<para>
@@ -3015,7 +3028,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						and functional components are forbidden. In the generic factory, a
 						method named newNFcInstance that creates this new kind of components
 						has been added:
-						<programlisting language="java">public Component newNFcInstance(Type fType,Type nfType, any contentDesc, any controllerDesc);</programlisting>
+						<programlisting language="java">public Component newNFcInstance(Type fType, any contentDesc, any controllerDesc);</programlisting>
 						Parameters of this method are identical to its functional equivalent and
 						NF components are created in the same way as functional ones.
 					</para>
@@ -3126,8 +3139,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						the membrane controller of the host component.
 						<programlisting language="java">Component nfComp1=mc.getNFcSubComponent("nfComp1");
 Component nfComp2=mc.getNFcSubComponent("nfComp2");
-GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));
-						</programlisting>
+GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));</programlisting>
 					</para>
 
 					<para>
@@ -3140,8 +3152,7 @@ GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));
 						component is the name of the inner component and interface is the name of
 						its client or server interface. We use the name “membrane” to represent the
 						membrane of the host component, e.g. membrane.i1 is the NF interface i1 of
-						the host component; in this case interface is the name of an interface from
-						the NF type. For example, <literal>bindNFc(string, string)</literal>
+						the host component. For example, <literal>bindNFc(string, string)</literal>
 						allows to perform the bindings: <emphasis>b1</emphasis>,
 						<emphasis>b2</emphasis>, <emphasis>b4</emphasis>, <emphasis>b3</emphasis>,
 						<emphasis>b9</emphasis>, <emphasis>b7</emphasis> and <emphasis>b5</emphasis>

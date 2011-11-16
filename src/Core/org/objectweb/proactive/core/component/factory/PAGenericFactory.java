@@ -57,35 +57,27 @@ public interface PAGenericFactory extends GenericFactory {
     /**
      * Creates a component.
      *
-     * @param type
-     *            an arbitrary component type.
-     * @param controllerDesc
-     *            a description of the controller part of the component to be
-     *            created. This description is implementation specific. If it is
-     *            <tt>null</tt> then a "default" controller part will be used.
-     * @param contentDesc
-     *            a description of the content part of the component to be
-     *            created. This description is implementation specific.
-     * @return the {@link Component} interface of the created component.
-     * @throws InstantiationException
-     *             if the component cannot be created.
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the component to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the component to be created. This description is
+     * implementation specific.
+     * @return The {@link Component} interface of the created component.
+     * @throws InstantiationException If the component cannot be created.
      */
     Component newFcInstance(Type type, ControllerDescription controllerDesc, ContentDescription contentDesc)
             throws InstantiationException;
 
     /**
-     *  Creates a non-functional component
-     * @param type  an arbitrary component type.
-     * @param controllerDesc
-     *                           a description of the controller part of the component to be
-     *            created. This description is implementation specific. If it is
-     *            <tt>null</tt> then a "default" controller part will be used.
-     * @param contentDesc
-     *           a description of the content part of the component to be
-     *            created. This description is implementation specific.
-     * @return the {@link Component} interface of the created component.
-     * @throws InstantiationException
-     *                                                 if the component cannot be created.
+     * Creates a non-functional component.
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the component to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the component to be created. This description is
+     * implementation specific.
+     * @return The {@link Component} interface of the created component.
+     * @throws InstantiationException If the component cannot be created.
      */
     Component newNFcInstance(Type type, ControllerDescription controllerDesc, ContentDescription contentDesc)
             throws InstantiationException;
@@ -93,40 +85,29 @@ public interface PAGenericFactory extends GenericFactory {
     /**
      * Creates a component on a given node.
      *
-     * @param type
-     *            an arbitrary component type.
-     * @param controllerDesc
-     *            a description of the controller part of the component to be
-     *            created. This description is implementation specific. If it is
-     *            <tt>null</tt> then a "default" controller part will be used.
-     * @param contentDesc
-     *            a description of the content part of the component to be
-     *            created. This description is implementation specific.
-     * @param node
-     *            the node where to create the component
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the component to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the component to be created. This description is
+     * implementation specific.
+     * @param node The node where to create the component.
      * @return the {@link Component} interface of the created component.
-     * @throws InstantiationException
-     *             if the component cannot be created.
+     * @throws InstantiationException If the component cannot be created.
      */
     Component newFcInstance(Type type, ControllerDescription controllerDesc, ContentDescription contentDesc,
             Node node) throws InstantiationException;
 
     /**
      * Creates a non-functional component on a given node.
-     * @param type
-     *         an arbitrary component type.
-     * @param controllerDesc
-     *                 a description of the controller part of the component to be
-     *            created. This description is implementation specific. If it is
-     *            <tt>null</tt> then a "default" controller part will be used.
-     * @param contentDesc
-     *                         a description of the content part of the component to be
-     *            created. This description is implementation specific.
-     * @param node
-     *                 the node where to create the component
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the component to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the component to be created. This description is
+     * implementation specific.
+     * @param node The node where to create the component.
      * @return the {@link Component} interface of the created component.
-     * @throws InstantiationException
-     *         if the component cannot be created.
+     * @throws InstantiationException If the component cannot be created.
      */
     Component newNFcInstance(Type type, ControllerDescription controllerDesc, ContentDescription contentDesc,
             Node node) throws InstantiationException;
