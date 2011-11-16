@@ -55,6 +55,20 @@ import org.objectweb.proactive.core.node.Node;
 public interface PAGenericFactory extends GenericFactory {
 
     /**
+     * Creates a non-functional component.
+     *
+     * @param type An arbitrary component type.
+     * @param controllerDesc A description of the controller part of the component to be created. This description
+     * is implementation specific. If it is <tt>null</tt> then a "default" controller part will be used.
+     * @param contentDesc A description of the content part of the component to be created. This description is
+     * implementation specific.
+     * @return The {@link Component} interface of the created component.
+     * @throws InstantiationException If the component cannot be created.
+     */
+    public Component newNfFcInstance(Type type, Object controllerDesc, Object contentDesc)
+            throws InstantiationException;
+
+    /**
      * Creates a component.
      *
      * @param type An arbitrary component type.
