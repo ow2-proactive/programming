@@ -39,7 +39,6 @@ package functionalTests.component.nonfunctional.membranecontroller.bindnfc.compo
 import java.util.HashMap;
 import java.util.Map;
 
-import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
@@ -47,13 +46,12 @@ import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.component.Constants;
-import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.control.PAMembraneController;
 import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 import org.objectweb.proactive.core.component.representative.PAComponentRepresentative;
-import org.objectweb.proactive.core.node.Node;
+import org.objectweb.proactive.core.component.type.PAGCMTypeFactory;
 import org.objectweb.proactive.core.util.wrapper.IntWrapper;
 
 import functionalTests.ComponentTest;
@@ -81,57 +79,51 @@ public class Test extends ComponentTest {
     public void action() throws Exception {
         //Thread.sleep(2000);
         Component boot = Utils.getBootstrapComponent(); /*Getting the Fractal-Proactive bootstrap component*/
-        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot); /*Getting the GCM-ProActive type factory*/
+        PAGCMTypeFactory type_factory = Utils.getPAGCMTypeFactory(boot); /*Getting the GCM-ProActive type factory*/
         PAGenericFactory cf = Utils.getPAGenericFactory(boot); /*Getting the GCM-ProActive generic factory*/
 
-        Type fType = type_factory.createFcType(new InterfaceType[] { type_factory.createFcItfType(
-                "componentInfo", ComponentInfo.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                TypeFactory.SINGLE), });
+        InterfaceType[] fItfTypes = new InterfaceType[] { type_factory.createFcItfType("componentInfo",
+                ComponentInfo.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE), };
 
-        Type nfType = type_factory
-                .createFcType(new InterfaceType[] {
-                        type_factory
-                                .createFcItfType(
-                                        Constants.BINDING_CONTROLLER,
-                                        /*BINDING CONTROLLER*/org.objectweb.proactive.core.component.control.PABindingController.class
-                                                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                                        TypeFactory.SINGLE),
-                        type_factory
-                                .createFcItfType(
-                                        Constants.CONTENT_CONTROLLER,
-                                        /*CONTENT CONTROLLER*/org.objectweb.proactive.core.component.control.PAContentController.class
-                                                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                                        TypeFactory.SINGLE),
-                        type_factory
-                                .createFcItfType(
-                                        Constants.LIFECYCLE_CONTROLLER,
-                                        /*LIFECYCLE CONTROLLER*/org.objectweb.proactive.core.component.control.PAGCMLifeCycleController.class
-                                                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                                        TypeFactory.SINGLE),
-                        type_factory
-                                .createFcItfType(
-                                        Constants.SUPER_CONTROLLER,
-                                        /*SUPER CONTROLLER*/org.objectweb.proactive.core.component.control.PASuperController.class
-                                                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                                        TypeFactory.SINGLE),
-                        type_factory.createFcItfType(Constants.NAME_CONTROLLER,
-                        /*NAME CONTROLLER*/org.objectweb.fractal.api.control.NameController.class.getName(),
-                                TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                        type_factory.createFcItfType(Constants.MEMBRANE_CONTROLLER,
-                        /*MEMBRANE CONTROLLER*/PAMembraneController.class.getName(), TypeFactory.SERVER,
-                                TypeFactory.MANDATORY, TypeFactory.SINGLE),
-                        type_factory
-                                .createFcItfType(
-                                        "dummy-controller",
-                                        /*DUMMY CONTROLLER*/functionalTests.component.nonfunctional.creation.DummyControllerItf.class
-                                                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
-                                        TypeFactory.SINGLE),
+        InterfaceType[] nfItfTypes = new InterfaceType[] {
+                type_factory
+                        .createFcItfType(
+                                Constants.BINDING_CONTROLLER,
+                                /*BINDING CONTROLLER*/org.objectweb.proactive.core.component.control.PABindingController.class
+                                        .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                                TypeFactory.SINGLE),
+                type_factory
+                        .createFcItfType(
+                                Constants.CONTENT_CONTROLLER,
+                                /*CONTENT CONTROLLER*/org.objectweb.proactive.core.component.control.PAContentController.class
+                                        .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                                TypeFactory.SINGLE),
+                type_factory
+                        .createFcItfType(
+                                Constants.LIFECYCLE_CONTROLLER,
+                                /*LIFECYCLE CONTROLLER*/org.objectweb.proactive.core.component.control.PAGCMLifeCycleController.class
+                                        .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                                TypeFactory.SINGLE),
+                type_factory.createFcItfType(Constants.SUPER_CONTROLLER,
+                /*SUPER CONTROLLER*/org.objectweb.proactive.core.component.control.PASuperController.class
+                        .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                type_factory.createFcItfType(Constants.NAME_CONTROLLER,
+                /*NAME CONTROLLER*/org.objectweb.fractal.api.control.NameController.class.getName(),
+                        TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                type_factory.createFcItfType(Constants.MEMBRANE_CONTROLLER,
+                /*MEMBRANE CONTROLLER*/PAMembraneController.class.getName(), TypeFactory.SERVER,
+                        TypeFactory.MANDATORY, TypeFactory.SINGLE),
+                type_factory
+                        .createFcItfType(
+                                "dummy-controller",
+                                /*DUMMY CONTROLLER*/functionalTests.component.nonfunctional.creation.DummyControllerItf.class
+                                        .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
+                                TypeFactory.SINGLE) };
 
-                });
+        Type type = type_factory.createFcType(fItfTypes, nfItfTypes);
 
-        componentA = cf.newFcInstance(fType, nfType, (ContentDescription) null,//The component is composite
-                new ControllerDescription("componentA", Constants.COMPOSITE, !Constants.SYNCHRONOUS,
-                    Constants.WITHOUT_CONFIG_FILE), (Node) null);
+        componentA = cf.newFcInstance(type, new ControllerDescription("componentA", Constants.COMPOSITE,
+            !Constants.SYNCHRONOUS, Constants.WITHOUT_CONFIG_FILE), null);
 
         //Filling the membrane with object  controllers
         PAMembraneController memController = Utils.getPAMembraneController(componentA);

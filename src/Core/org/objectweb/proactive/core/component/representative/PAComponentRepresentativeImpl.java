@@ -72,7 +72,9 @@ import org.objectweb.proactive.core.component.gen.RepresentativeInterfaceClassGe
 import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 import org.objectweb.proactive.core.component.request.ComponentRequest;
+import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
+import org.objectweb.proactive.core.component.type.PAGCMTypeFactory;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
 import org.objectweb.proactive.core.group.ProxyForGroup;
 import org.objectweb.proactive.core.mop.MethodCall;
@@ -107,46 +109,33 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     protected Map<String, Interface> fcInterfaceReferences;
     protected Map<String, Interface> nfInterfaceReferences;
     protected Proxy proxy;
-    protected ComponentType componentType = null; // immutable
-    protected ComponentType componentNfType = null;
     protected StubObject stubOnBaseObject = null;
-    protected String hierarchicalType = null;
     protected String currentControllerInterface = null;
     protected boolean useShortcuts;
 
     public PAComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {
-        this.componentType = componentType;
-        useShortcuts = CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue();
-        this.hierarchicalType = hierarchicalType;
-        addControllers(componentType, controllersConfigFileLocation);
-
-        // add functional interfaces
-        // functional interfaces are proxies on the corresponding meta-objects
-        addFunctionalInterfaces(componentType);
-
-        this.componentParameters = new ComponentParameters(componentType, new ControllerDescription(null,
-            hierarchicalType, controllersConfigFileLocation));
+        this(new ComponentParameters(componentType, new ControllerDescription(null, hierarchicalType,
+            controllersConfigFileLocation)));
     }
 
-    public PAComponentRepresentativeImpl(ComponentParameters componentParam) {
-        this.componentParameters = componentParam;
-        this.componentType = componentParam.getComponentType();
-        this.componentNfType = componentParam.getComponentNFType();
-        useShortcuts = CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue();
+    public PAComponentRepresentativeImpl(ComponentParameters componentParameters) {
+        this.componentParameters = componentParameters;
+        this.useShortcuts = CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue();
 
-        this.hierarchicalType = componentParam.getHierarchicalType();
-        ControllerDescription controllerDesc = componentParam.getControllerDescription();
-        if (componentNfType != null) { /*A nf type is specified*/
-            if (controllerDesc.configFileIsSpecified()) { /*If a config file is specified, it must be used to generate nf interfaces*/
-                addControllers(componentType, controllerDesc.getControllersConfigFileLocation());
-            } else { /*The config file is not specified, nf interfaces have to be generated from the nf type*/
-                addControllers(componentParam.getComponentNFType(), componentParam);
+        Type componentType = componentParameters.getComponentType();
+        if ((componentType instanceof PAComponentType) &&
+            (((PAComponentType) componentType).getNfFcInterfaceTypes().length != 0)) { // The nf type is specified
+            if (!this.componentParameters.getControllerDescription().configFileIsSpecified()) { // The config file is not specified, nf interfaces have to be generated from the nf type
+                addControllersWithNfType();
+            } else { // If a config file is specified, it must be used to generate nf interfaces
+                addControllers();
             }
         } else {
-            addControllers(componentType, controllerDesc.getControllersConfigFileLocation());
+            addControllers();
         }
-        addFunctionalInterfaces(componentType);
+
+        addFunctionalInterfaces();
     }
 
     private boolean specialCasesForNfType(Class<?> controllerItf, boolean isPrimitive,
@@ -185,6 +174,39 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         return false;
     }
 
+    private void addControllersWithNfType() {
+        this.nfInterfaceReferences = new HashMap<String, Interface>();
+        InterfaceType[] tmp = ((PAComponentType) this.componentParameters.getComponentType())
+                .getNfFcInterfaceTypes();
+        PAGCMInterfaceType[] interface_types = new PAGCMInterfaceType[tmp.length];
+        System.arraycopy(tmp, 0, interface_types, 0, tmp.length);
+        Class<?> controllerItf = null;
+
+        try {
+            addMandatoryControllers();
+            for (int j = 0; j < interface_types.length; j++) {
+                controllerItf = Class.forName(interface_types[j].getFcItfSignature());
+                if (!specialCasesForNfType(controllerItf, this.componentParameters.getHierarchicalType()
+                        .equals(Constants.PRIMITIVE), interface_types[j], this.componentParameters)) {
+                    if (!interface_types[j].isFcCollectionItf()) {
+                        // itfs members of collection itfs are dynamically generated
+                        Interface interface_reference = RepresentativeInterfaceClassGenerator.instance()
+                                .generateInterface(interface_types[j].getFcItfName(), this,
+                                        interface_types[j], interface_types[j].isInternal(), false);
+
+                        // all calls are to be reified
+                        this.nfInterfaceReferences.put(interface_reference.getFcItfName(),
+                                interface_reference);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //throw new RuntimeException("cannot create interface references : " +
+            //  e.getMessage());
+        }
+    }
+
     private void addMandatoryControllers() throws Exception {
         Component boot = Utils.getBootstrapComponent(); /*Getting the Fractal-GCM-Proactive bootstrap component*/
         GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
@@ -197,7 +219,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         Interface interface_reference = RepresentativeInterfaceClassGenerator.instance().generateInterface(
                 itfType.getFcItfName(), this, itfType, itfType.isInternal(), false);
 
-        nfInterfaceReferences.put(interface_reference.getFcItfName(), interface_reference);
+        this.nfInterfaceReferences.put(interface_reference.getFcItfName(), interface_reference);
 
         itfType = (PAGCMInterfaceType) type_factory.createFcItfType(Constants.NAME_CONTROLLER,
         /* NAME CONTROLLER */org.objectweb.fractal.api.control.NameController.class.getName(),
@@ -206,80 +228,19 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         interface_reference = RepresentativeInterfaceClassGenerator.instance().generateInterface(
                 itfType.getFcItfName(), this, itfType, itfType.isInternal(), false);
 
-        nfInterfaceReferences.put(interface_reference.getFcItfName(), interface_reference);
+        this.nfInterfaceReferences.put(interface_reference.getFcItfName(), interface_reference);
     }
 
-    private void addControllers(ComponentType nfType, ComponentParameters params) {
-        nfInterfaceReferences = new HashMap<String, Interface>();
-        InterfaceType[] tmp = nfType.getFcInterfaceTypes();
-        PAGCMInterfaceType[] interface_types = new PAGCMInterfaceType[tmp.length];
-        System.arraycopy(tmp, 0, interface_types, 0, tmp.length);
-        Class<?> controllerItf = null;
-
-        try {
-            addMandatoryControllers();
-            for (int j = 0; j < interface_types.length; j++) {
-                controllerItf = Class.forName(interface_types[j].getFcItfSignature());
-                if (!specialCasesForNfType(controllerItf, params.getHierarchicalType().equals(
-                        Constants.PRIMITIVE), interface_types[j], params)) {
-                    if (!interface_types[j].isFcCollectionItf()) {
-                        // itfs members of collection itfs are dynamically generated
-                        Interface interface_reference = RepresentativeInterfaceClassGenerator.instance()
-                                .generateInterface(interface_types[j].getFcItfName(), this,
-                                        interface_types[j], interface_types[j].isInternal(), false);
-
-                        // all calls are to be reified
-                        nfInterfaceReferences.put(interface_reference.getFcItfName(), interface_reference);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            //throw new RuntimeException("cannot create interface references : " +
-            //  e.getMessage());
-        }
-    }
-
-    /**
-     * @param componentType
-     */
-    private void addFunctionalInterfaces(ComponentType componentType) {
-        InterfaceType[] interface_types = componentType.getFcInterfaceTypes();
-        fcInterfaceReferences = new HashMap<String, Interface>(interface_types.length +
-            (interface_types.length / 2));
-
-        try {
-            for (int j = 0; j < interface_types.length; j++) {
-                if (!interface_types[j].isFcCollectionItf()) {
-                    // itfs members of collection itfs are dynamically generated
-                    Interface interface_reference = RepresentativeInterfaceClassGenerator.instance()
-                            .generateFunctionalInterface(interface_types[j].getFcItfName(), this,
-                                    (PAGCMInterfaceType) interface_types[j]);
-
-                    // all calls are to be reified
-                    if (interface_reference != null) {
-                        fcInterfaceReferences.put(interface_reference.getFcItfName(), interface_reference);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("cannot create interface references : " + e.getMessage());
-        }
-    }
-
-    private void addControllers(ComponentType componentType, String controllersConfigFileLocation) {
-        if (controllersConfigFileLocation == null) {
-            return;
-        }
+    private void addControllers() {
         ComponentConfigurationHandler componentConfiguration = PAComponentImpl
-                .loadControllerConfiguration(controllersConfigFileLocation);
+                .loadControllerConfiguration(this.componentParameters.getControllerDescription()
+                        .getControllersConfigFileLocation());
         Map<String, String> controllersConfiguration = componentConfiguration.getControllers();
 
-        addControllers(componentType, controllersConfiguration);
+        addControllers(controllersConfiguration);
     }
 
-    private void addControllers(ComponentType componentType, Map<String, String> controllersConfiguration) {
+    private void addControllers(Map<String, String> controllersConfiguration) {
         // create the interface references tables
         // the size is the addition of :
         // - 1 for the current ItfRef (that is at the same time a binding controller, lifecycle controller,
@@ -287,7 +248,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         // - the number of client functional interfaces
         // - the number of server functional interfaces
         //ArrayList interface_references_list = new ArrayList(1 +componentType.getFcInterfaceTypes().length+controllersConfiguration.size());
-        nfInterfaceReferences = new HashMap<String, Interface>(1 + controllersConfiguration.size());
+        this.nfInterfaceReferences = new HashMap<String, Interface>(1 + controllersConfiguration.size());
 
         // add controllers
         //Enumeration controllersInterfaces = controllersConfiguration.propertyNames();
@@ -309,7 +270,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
                 currentInterface = RepresentativeInterfaceClassGenerator.instance()
                         .generateControllerInterface(currentController.getFcItfName(), this,
                                 (PAGCMInterfaceType) currentController.getFcItfType());
-                ((StubObject) currentInterface).setProxy(proxy);
+                ((StubObject) currentInterface).setProxy(this.proxy);
 
             } catch (Exception e) {
                 logger.error("could not create controller " +
@@ -318,7 +279,8 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
             }
 
             if (BindingController.class.isAssignableFrom(controllerClass)) {
-                if ((hierarchicalType.equals(Constants.PRIMITIVE) && (Utils.getClientItfTypes(componentType).length == 0))) {
+                if ((this.componentParameters.getHierarchicalType().equals(Constants.PRIMITIVE) && (Utils
+                        .getClientItfTypes(this.componentParameters.getComponentType()).length == 0))) {
                     //bindingController = null;
                     if (logger.isDebugEnabled()) {
                         logger
@@ -328,34 +290,64 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
                 }
             }
             if (ContentController.class.isAssignableFrom(controllerClass)) {
-                if (Constants.PRIMITIVE.equals(hierarchicalType)) {
+                if (Constants.PRIMITIVE.equals(this.componentParameters.getHierarchicalType())) {
                     // no content controller here
                     continue;
                 }
             }
             if (currentInterface != null) {
-                nfInterfaceReferences.put(currentController.getFcItfName(), currentInterface);
+                this.nfInterfaceReferences.put(currentController.getFcItfName(), currentInterface);
                 nfType.add((InterfaceType) currentInterface.getFcItfType());
             }
         }
 
         try {//Setting the real NF type, as some controllers may not be generated
             Component boot = Utils.getBootstrapComponent();
-            GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
-            InterfaceType[] nf = new InterfaceType[nfType.size()];
-            nfType.toArray(nf);
-            componentNfType = type_factory.createFcType(nf);
+            PAGCMTypeFactory type_factory = Utils.getPAGCMTypeFactory(boot);
+            InterfaceType[] fItfTypes = ((PAComponentType) this.componentParameters.getComponentType())
+                    .getFcInterfaceTypes();
+            InterfaceType[] nfItfTypes = nfType.toArray(new InterfaceType[] {});
+            this.componentParameters.setComponentType(type_factory.createFcType(fItfTypes, nfItfTypes));
         } catch (Exception e) {
             e.printStackTrace();
             logger.warn("NF type could not be set");
         }
     }
 
+    /**
+     * @param componentType
+     */
+    private void addFunctionalInterfaces() {
+        InterfaceType[] itfTypes = this.componentParameters.getComponentType().getFcInterfaceTypes();
+        this.fcInterfaceReferences = new HashMap<String, Interface>(itfTypes.length + (itfTypes.length / 2));
+
+        try {
+            for (int j = 0; j < itfTypes.length; j++) {
+                if (!itfTypes[j].isFcCollectionItf()) {
+                    // itfs members of collection itfs are dynamically generated
+                    Interface interface_reference = RepresentativeInterfaceClassGenerator.instance()
+                            .generateFunctionalInterface(itfTypes[j].getFcItfName(), this,
+                                    (PAGCMInterfaceType) itfTypes[j]);
+
+                    // all calls are to be reified
+                    if (interface_reference != null) {
+                        this.fcInterfaceReferences.put(interface_reference.getFcItfName(),
+                                interface_reference);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("cannot create interface references : " + e.getMessage());
+        }
+    }
+
     protected Object reifyCall(String className, String methodName, Class<?>[] parameterTypes,
             Object[] effectiveParameters, short priority) {
         try {
-            return proxy.reify(MethodCall.getComponentMethodCall(Class.forName(className).getDeclaredMethod(
-                    methodName, parameterTypes), effectiveParameters, null, (String) null, null, priority));
+            return this.proxy.reify(MethodCall.getComponentMethodCall(Class.forName(className)
+                    .getDeclaredMethod(methodName, parameterTypes), effectiveParameters, null, (String) null,
+                    null, priority));
 
             // functional interface name is null
         } catch (NoSuchMethodException e) {
@@ -372,20 +364,18 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
      */
     public Object getFcInterface(String interfaceName) throws NoSuchInterfaceException {
         if (interfaceName.endsWith("-controller") && !(Constants.ATTRIBUTE_CONTROLLER.equals(interfaceName))) {
-            if (nfInterfaceReferences == null) {
-                hierarchicalType = componentParameters.getHierarchicalType();
-                addControllers(componentType, componentParameters.getControllerDescription()
-                        .getControllersSignatures());
+            if (this.nfInterfaceReferences == null) {
+                addControllers(this.componentParameters.getControllerDescription().getControllersSignatures());
             }
-            if (nfInterfaceReferences.containsKey(interfaceName)) {
-                return nfInterfaceReferences.get(interfaceName);
+            if (this.nfInterfaceReferences.containsKey(interfaceName)) {
+                return this.nfInterfaceReferences.get(interfaceName);
             } else {
                 throw new NoSuchInterfaceException(interfaceName);
             }
         }
 
-        if (fcInterfaceReferences.containsKey(interfaceName)) {
-            return fcInterfaceReferences.get(interfaceName);
+        if (this.fcInterfaceReferences.containsKey(interfaceName)) {
+            return this.fcInterfaceReferences.get(interfaceName);
         } else {
             if (interfaceName.equals(Constants.COMPONENT)) {
                 return this;
@@ -399,9 +389,9 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
                     Interface interface_reference = RepresentativeInterfaceClassGenerator.instance()
                             .generateFunctionalInterface(interfaceName, this, (PAGCMInterfaceType) itfType);
 
-                    ((StubObject) interface_reference).setProxy(proxy);
+                    ((StubObject) interface_reference).setProxy(this.proxy);
                     // keep it in the list of functional interfaces
-                    fcInterfaceReferences.put(interfaceName, interface_reference);
+                    this.fcInterfaceReferences.put(interfaceName, interface_reference);
                     return interface_reference;
                 } catch (Throwable e) {
                     logger.info("Could not generate " + interfaceName + " collection interface", e);
@@ -416,10 +406,10 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
      * implements org.objectweb.fractal.api.Component#getFcInterfaces()
      */
     public Object[] getFcInterfaces() {
-        Interface[] nfInterfaces = nfInterfaceReferences.values().toArray(
-                new Interface[nfInterfaceReferences.size()]);
-        Interface[] fcInterfaces = fcInterfaceReferences.values().toArray(
-                new Interface[fcInterfaceReferences.size()]);
+        Interface[] nfInterfaces = this.nfInterfaceReferences.values().toArray(
+                new Interface[this.nfInterfaceReferences.size()]);
+        Interface[] fcInterfaces = this.fcInterfaceReferences.values().toArray(
+                new Interface[this.fcInterfaceReferences.size()]);
         Interface[] result = new Interface[nfInterfaces.length + fcInterfaces.length + 1];
         System.arraycopy(nfInterfaces, 0, result, 0, nfInterfaces.length);
         System.arraycopy(fcInterfaces, 0, result, nfInterfaces.length, fcInterfaces.length);
@@ -431,14 +421,14 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
      * implements org.objectweb.fractal.api.Component#getFcType()
      */
     public Type getFcType() {
-        return componentType;
+        return this.componentParameters.getComponentType();
     }
 
     /*
      * implements org.objectweb.proactive.core.mop.StubObject#getProxy()
      */
     public Proxy getProxy() {
-        return proxy;
+        return this.proxy;
     }
 
     /*
@@ -456,7 +446,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
             }
         }
         for (int i = 0; i < interface_references.length; i++) {
-            if (useShortcuts) {
+            if (this.useShortcuts) {
                 // adds an intermediate FunctionalInterfaceProxy for functional interfaces, to manage shortcutting
                 ((StubObject) interface_references[i]).setProxy(new FunctionalInterfaceProxyImpl(proxy,
                     interface_references[i].getFcItfName()));
@@ -487,7 +477,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         // reified as a standard invocation (not a component one)
         Object result;
         try {
-            result = proxy.reify(MethodCall.getMethodCall(Class.forName(Object.class.getName())
+            result = this.proxy.reify(MethodCall.getMethodCall(Class.forName(Object.class.getName())
                     .getDeclaredMethod("hashCode", new Class<?>[] {}), new Object[] {},
                     (Map<TypeVariable<?>, Class<?>>) null));
             return ((Integer) result).intValue();
@@ -535,7 +525,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
      * getStubOnReifiedObject()
      */
     public StubObject getStubOnBaseObject() {
-        return stubOnBaseObject;
+        return this.stubOnBaseObject;
     }
 
     /*
@@ -543,11 +533,11 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
      * setStubOnReifiedObject(org.objectweb.proactive.core.mop.StubObject)
      */
     public void setStubOnBaseObject(StubObject stub) {
-        stubOnBaseObject = stub;
+        this.stubOnBaseObject = stub;
     }
 
     public boolean isPrimitive() {
-        return Constants.PRIMITIVE.equals(hierarchicalType);
+        return Constants.PRIMITIVE.equals(this.componentParameters.getHierarchicalType());
     }
 
     public void _terminateAO(Proxy proxy) {
@@ -574,7 +564,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
      * @see org.objectweb.fractal.api.Interface#getFcItfType()
      */
     public Type getFcItfType() {
-        return componentType;
+        return this.componentParameters.getComponentType();
     }
 
     /**

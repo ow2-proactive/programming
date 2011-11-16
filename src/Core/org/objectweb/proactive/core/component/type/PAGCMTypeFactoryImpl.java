@@ -72,7 +72,8 @@ public class PAGCMTypeFactoryImpl implements PAGCMTypeFactory {
     }
 
     /*
-     * @see org.objectweb.fractal.api.type.TypeFactory#createFcItfType(String, String, boolean, boolean, boolean)
+     * @see org.objectweb.fractal.api.type.TypeFactory#createFcItfType(String, String, boolean,
+     * boolean, boolean)
      */
     public InterfaceType createFcItfType(String name, String signature, boolean isClient, boolean isOptional,
             boolean isCollection) throws InstantiationException {
@@ -83,23 +84,43 @@ public class PAGCMTypeFactoryImpl implements PAGCMTypeFactory {
     /*
      * @see org.objectweb.fractal.api.type.TypeFactory#createFcType(InterfaceType[])
      */
-    public ComponentType createFcType(InterfaceType[] interfaceTypes) throws InstantiationException {
-
+    public ComponentType createFcType(InterfaceType[] fInterfaceTypes) throws InstantiationException {
         /*
-         * Workaround for null component types.
-         * AOKell and ProActive/Fractal assumes a component type is non null, whereas Julia envisions
-         * situations where this can be the case. To preserve a kind of
-         * compatibility, we bypass null component types with empty arrays of
+         * Workaround for null component types. AOKell and ProActive/Fractal assumes a component
+         * type is non null, whereas Julia envisions situations where this can be the case. To
+         * preserve a kind of compatibility, we bypass null component types with empty arrays of
          * interface types.
          */
-        if (interfaceTypes == null) {
-            interfaceTypes = new InterfaceType[] {};
+        if (fInterfaceTypes == null) {
+            fInterfaceTypes = new InterfaceType[] {};
         }
-        return new PAComponentTypeImpl(interfaceTypes);
+        return new PAComponentTypeImpl(fInterfaceTypes);
     }
 
     /*
-     * @see org.objectweb.proactive.core.component.type.PATypeFactory#createFcItfType(java.lang.String, java.lang.String, boolean, boolean, java.lang.String)
+     * @see org.objectweb.fractal.api.type.TypeFactory#createFcType(InterfaceType[])
+     */
+    public ComponentType createFcType(InterfaceType[] fInterfaceTypes, InterfaceType[] nfInterfaceTypes)
+            throws InstantiationException {
+        /*
+         * Workaround for null component types. AOKell and ProActive/Fractal assumes a component
+         * type is non null, whereas Julia envisions situations where this can be the case. To
+         * preserve a kind of compatibility, we bypass null component types with empty arrays of
+         * interface types.
+         */
+        if (fInterfaceTypes == null) {
+            fInterfaceTypes = new InterfaceType[] {};
+        }
+        if (nfInterfaceTypes == null) {
+            nfInterfaceTypes = new InterfaceType[] {};
+        }
+        return new PAComponentTypeImpl(fInterfaceTypes, nfInterfaceTypes);
+    }
+
+    /*
+     * @see
+     * org.objectweb.proactive.core.component.type.PATypeFactory#createFcItfType(java.lang.String,
+     * java.lang.String, boolean, boolean, java.lang.String)
      */
     public InterfaceType createGCMItfType(String name, String signature, boolean isClient,
             boolean isOptional, String cardinality) throws InstantiationException {

@@ -53,7 +53,6 @@ import org.objectweb.fractal.api.control.IllegalContentException;
 import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.fractal.api.control.LifeCycleController;
 import org.objectweb.fractal.api.factory.InstantiationException;
-import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.fractal.util.Fractal;
@@ -72,6 +71,7 @@ import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 import org.objectweb.proactive.core.component.representative.ItfID;
 import org.objectweb.proactive.core.component.representative.PAComponentRepresentativeImpl;
 import org.objectweb.proactive.core.component.representative.PANFComponentRepresentative;
+import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -736,9 +736,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     public void startMembrane() throws IllegalLifeCycleException {
-
-        InterfaceType[] itfTypes = ((ComponentType) ((PAComponentImpl) getFcItfOwner()).getNFType())
-                .getFcInterfaceTypes();
+        InterfaceType[] itfTypes = ((PAComponentType) getFcItfOwner().getFcType()).getNfFcInterfaceTypes();
         for (InterfaceType itfT : itfTypes) {
             if (!itfT.isFcOptionalItf()) {//Are all mandatory interfaces bound??
                 try {
@@ -932,9 +930,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     public void checkInternalInterfaces() throws IllegalLifeCycleException {
-
-        InterfaceType[] itfTypes = ((ComponentType) ((PAComponentImpl) getFcItfOwner()).getNFType())
-                .getFcInterfaceTypes();
+        InterfaceType[] itfTypes = ((PAComponentType) getFcItfOwner().getFcType()).getNfFcInterfaceTypes();
         PAGCMInterfaceType paItfT;
         for (InterfaceType itfT : itfTypes) {
             paItfT = (PAGCMInterfaceType) itfT;

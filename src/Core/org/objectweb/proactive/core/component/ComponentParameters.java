@@ -58,7 +58,6 @@ import org.objectweb.proactive.annotation.PublicAPI;
 @PublicAPI
 public class ComponentParameters implements Serializable {
     private ComponentType componentType;
-    private ComponentType componentNFType;
     private ControllerDescription controllerDesc;
 
     /**
@@ -68,19 +67,6 @@ public class ComponentParameters implements Serializable {
      */
     public ComponentParameters(ComponentType componentType, ControllerDescription controllerDesc) {
         this.componentType = componentType;
-        this.controllerDesc = controllerDesc;
-    }
-
-    /**
-     * Constructor
-     * @param componentType the type of the component
-     * @param nfComponentType the non-functional type of the component
-     * @param controllerDesc a ControllerDescription object
-     */
-    public ComponentParameters(ComponentType componentType, ComponentType nfComponentType,
-            ControllerDescription controllerDesc) {
-        this.componentType = componentType;
-        componentNFType = nfComponentType;
         this.controllerDesc = controllerDesc;
     }
 
@@ -101,14 +87,6 @@ public class ComponentParameters implements Serializable {
     }
 
     /**
-     * Returns the non-functional type of the component.
-     * @return the non-functional type of the component
-     */
-    public ComponentType getComponentNFType() {
-        return componentNFType;
-    }
-
-    /**
      * getter
      * @return a ControllerDescription object
      */
@@ -122,14 +100,6 @@ public class ComponentParameters implements Serializable {
      */
     public void setComponentType(ComponentType componentType) {
         this.componentType = componentType;
-    }
-
-    /**
-     * setter
-     * @param componentType the non-functional type of the component
-     */
-    public void setComponentNFType(ComponentType componentType) {
-        this.componentNFType = componentType;
     }
 
     /**

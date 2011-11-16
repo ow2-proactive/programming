@@ -291,29 +291,6 @@ public class Fractive implements PAGenericFactory, Component, Factory {
         }
     }
 
-    public Component newFcInstance(Type type, Type nfType, ContentDescription contentDesc,
-            ControllerDescription controllerDesc, Node node) throws InstantiationException {
-        if (nfType == null) {
-            return newFcInstance(type, controllerDesc, contentDesc, node);
-        }
-        try {
-            ActiveObjectWithComponentParameters container = commonInstanciation(type, nfType, controllerDesc,
-                    contentDesc, node);
-            return fComponent(type, container);
-        } catch (ActiveObjectCreationException e) {
-            logger
-                    .info("Active object creation error while creating component; an exception occurs with the following message: " +
-                        e.getMessage());
-            InstantiationException ie = new InstantiationException(e.getMessage());
-            ie.initCause(e);
-            throw ie;
-        } catch (NodeException e) {
-            InstantiationException ie = new InstantiationException(e.getMessage());
-            ie.initCause(e);
-            throw ie;
-        }
-    }
-
     /*
      * @see org.objectweb.fractal.api.Component#getFcInterface(java.lang.String)
      */
@@ -524,70 +501,6 @@ public class Fractive implements PAGenericFactory, Component, Factory {
 
         ComponentParameters componentParameters = new ComponentParameters((ComponentType) type,
             controllerDesc);
-        if (contentDesc.getFactory() == null) {
-            // first create a map with the parameters
-            Map<String, Object> factory_params = new Hashtable<String, Object>(1);
-
-            factory_params.put(ProActiveMetaObjectFactory.COMPONENT_PARAMETERS_KEY, componentParameters);
-            if (controllerDesc.isSynchronous() &&
-                (Constants.COMPOSITE.equals(controllerDesc.getHierarchicalType()))) {
-                factory_params.put(ProActiveMetaObjectFactory.SYNCHRONOUS_COMPOSITE_COMPONENT_KEY,
-                        Constants.SYNCHRONOUS);
-            }
-            contentDesc.setFactory(new ProActiveMetaObjectFactory(factory_params));
-            // factory =
-            // PAComponentMetaObjectFactory.newInstance(componentParameters);
-        }
-
-        // TODO : add controllers in the component metaobject factory?
-        Object ao = null;
-
-        // 3 possibilities : either the component is created on a node (or
-        // null), it is created on a virtual node, or on multiple nodes
-        ao = PAActiveObject.newActive(contentDesc.getClassName(), null, contentDesc
-                .getConstructorParameters(), node, contentDesc.getActivity(), contentDesc.getFactory());
-
-        return new ActiveObjectWithComponentParameters((StubObject) ao, componentParameters);
-    }
-
-    /**
-     * Common instantiation method called during creation both functional and non functional components.
-     *
-     * @param type
-     * @param controllerDesc
-     * @param contentDesc
-     * @param node
-     * @return A container object, containing objects for the generation of the component representative
-     * @throws InstantiationException
-     * @throws ActiveObjectCreationException
-     * @throws NodeException
-     */
-    private ActiveObjectWithComponentParameters commonInstanciation(Type type, Type nfType,
-            ControllerDescription controllerDesc, ContentDescription contentDesc, Node node)
-            throws InstantiationException, ActiveObjectCreationException, NodeException {
-        if (contentDesc == null) {
-            // a composite component, no activitiy/factory/node specified
-            if (Constants.COMPOSITE.equals(controllerDesc.getHierarchicalType())) {
-                contentDesc = new ContentDescription(Composite.class.getName());
-            } else {
-                throw new InstantiationException(
-                    "Content can be null only if the hierarchical type of the component is composite");
-            }
-        }
-
-        // instantiate the component metaobject factory with parameters of
-        // the component
-
-        // type must be a component type
-        if (!(type instanceof ComponentType)) {
-            throw new InstantiationException("Argument type must be an instance of ComponentType");
-        }
-
-        if (!(nfType instanceof ComponentType)) {
-            throw new InstantiationException("Argument nftype must be an instance of ComponentType");
-        }
-        ComponentParameters componentParameters = new ComponentParameters((ComponentType) type,
-            (ComponentType) nfType, controllerDesc);
         if (contentDesc.getFactory() == null) {
             // first create a map with the parameters
             Map<String, Object> factory_params = new Hashtable<String, Object>(1);
