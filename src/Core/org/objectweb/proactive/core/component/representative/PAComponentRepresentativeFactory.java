@@ -132,6 +132,12 @@ public class PAComponentRepresentativeFactory {
                 proxy);
     }
 
+    public PAComponentRepresentative createNFComponentRepresentative(ComponentParameters params, Proxy proxy) {
+        PAComponentRepresentative representative = new PANFComponentRepresentativeImpl(params);
+        representative.setProxy(proxy);
+        return representative;
+    }
+
     /**
      * The creation of a component representative (for a non-functional component) from a proxy object implies a remote invocation (immediate service) for
      * getting the parameters of the component, necessary for the construction of the representative

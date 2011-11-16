@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.component.representative;
 
 import org.objectweb.fractal.api.type.ComponentType;
+import org.objectweb.proactive.core.component.ComponentParameters;
 
 
 /**
@@ -63,5 +64,9 @@ public class PANFComponentRepresentativeImpl extends PAComponentRepresentativeIm
     public PANFComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {
         super(componentType, hierarchicalType, controllersConfigFileLocation);
+    }
+
+    public PANFComponentRepresentativeImpl(ComponentParameters componentParameters) {
+        super(componentParameters);
     }
 }

@@ -645,9 +645,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
             throw new ProActiveRuntimeException("Cannot find a Proxy on the stub object: " + ao);
         }
         PAComponentRepresentative representative = PAComponentRepresentativeFactory.instance()
-                .createNFComponentRepresentative((ComponentType) type,
-                        componentParameters.getHierarchicalType(), myProxy,
-                        componentParameters.getControllerDescription().getControllersConfigFileLocation());
+                .createNFComponentRepresentative(componentParameters, myProxy);
         representative.setStubOnBaseObject(ao);
         return representative;
     }
