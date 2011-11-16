@@ -150,30 +150,30 @@ public class Test extends ComponentTest {
 
         GCM.getNameController(nameController).setFcName("nameController");//Mandatory to manipulate NF components inside the membrane
         //GCM.getGCMLifeCycleController(parametersController).startFc();
-        memController.addNFSubComponent(nameController);
-        memController.bindNFc(Constants.NAME_CONTROLLER, "nameController.name");
+        memController.nfAddFcSubComponent(nameController);
+        memController.nfBindFc(Constants.NAME_CONTROLLER, "nameController.name");
 
         //Adding a non-functional GCM component into the membrane.
         Component dummyMaster = (Component) f.newComponent(
                 "functionalTests.component.nonfunctional.adl.dummyMaster", context);
         GCM.getNameController(dummyMaster).setFcName("dummyMaster");
 
-        memController.addNFSubComponent(dummyMaster);
-        memController.bindNFc("dummy-controller", "dummyMaster.dummy-master");
+        memController.nfAddFcSubComponent(dummyMaster);
+        memController.nfBindFc("dummy-controller", "dummyMaster.dummy-master");
 
         Component dummyController = (Component) f.newComponent(
                 "functionalTests.component.nonfunctional.adl.dummyPrimitive", context);
 
         GCM.getNameController(dummyController).setFcName("dummyPrimitive");
 
-        memController.addNFSubComponent(dummyController);
-        memController.bindNFc("dummyMaster.dummy-client", "dummyPrimitive.dummy-membrane");
+        memController.nfAddFcSubComponent(dummyController);
+        memController.nfBindFc("dummyMaster.dummy-client", "dummyPrimitive.dummy-membrane");
 
         memController.startMembrane();// Before starting the mmebrane, make sure that all mandatory NF interfaces are bound
         System.err.println("Name is : " + GCM.getNameController(componentA).getFcName());
         memController.stopMembrane();//The membrane must be in a stopped state for reconfiguration
 
-        memController.removeNFSubComponent(nameController);
+        memController.nfRemoveFcSubComponent(nameController);
         memController.setControllerObject(Constants.NAME_CONTROLLER,
                 org.objectweb.proactive.core.component.control.PANameControllerImpl.class.getName());
         memController.startMembrane();//Restart the membrane, to be able to serve non-functional calls
@@ -181,8 +181,8 @@ public class Test extends ComponentTest {
             GCM.getNameController(componentA).getFcName());
         memController.stopMembrane();
 
-        memController.addNFSubComponent(nameController);
-        memController.bindNFc(Constants.NAME_CONTROLLER, "nameController.name");
+        memController.nfAddFcSubComponent(nameController);
+        memController.nfBindFc(Constants.NAME_CONTROLLER, "nameController.name");
 
         memController.startMembrane();
         System.err.println("Name is : component replaces object : " +
@@ -190,7 +190,7 @@ public class Test extends ComponentTest {
         memController.stopMembrane();
 
         memController.startMembrane();
-        Object lookUp = memController.lookupNFc("dummyMaster.dummy-client");
+        Object lookUp = memController.nfLookupFc("dummyMaster.dummy-client");
         System.out.println("The returned interface is : " + lookUp);
         DummyControllerItf dummyControl = (DummyControllerItf) componentA.getFcInterface("dummy-controller");
         System.out.println("Dummy void method : " + dummyControl.dummyMethodWithResult());

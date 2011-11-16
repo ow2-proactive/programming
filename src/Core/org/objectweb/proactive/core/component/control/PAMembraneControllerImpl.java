@@ -85,14 +85,14 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAMembraneControllerImpl extends AbstractPAController implements PAMembraneController,
         Serializable, ControllerStateDuplication {
-    private Map<String, Component> nfcomponents;
-    private String membraneState;
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
+    private Map<String, Component> nfComponents;
     private NFBindings nfBindings;//TODO : This structure has to be updated every time a with the membrane is added or removed
+    private String membraneState;
 
     public PAMembraneControllerImpl(Component owner) {
         super(owner);
-        nfcomponents = new HashMap<String, Component>();
+        nfComponents = new HashMap<String, Component>();
         membraneState = MEMBRANE_STOPPED;
         nfBindings = new NFBindings();
     }
@@ -134,7 +134,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
     }
 
-    public void addNFSubComponent(Component component) throws IllegalContentException,
+    public void nfAddFcSubComponent(Component component) throws IllegalContentException,
             IllegalLifeCycleException {
         try {
             if (membraneState.equals(PAMembraneController.MEMBRANE_STARTED) ||
@@ -165,7 +165,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             throw ice;
         }
 
-        if (nfcomponents.containsKey(name)) {
+        if (nfComponents.containsKey(name)) {
             throw new IllegalContentException(
                 "The name of the component is already assigned to an existing non functional component");
         }
@@ -231,7 +231,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                 " doesn't have any reference on its host component");
         }
         //Add the component inside the Map
-        nfcomponents.put(name, component);
+        nfComponents.put(name, component);
     }
 
     private void bindNfServerWithNfClient(String clItf, PAInterface srItf) throws IllegalBindingException,
@@ -366,7 +366,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         bindNfServerWithNfClient(clItf, srItf);
     }
 
-    public void bindNFc(String clientItf, String serverItf) throws NoSuchInterfaceException,
+    public void nfBindFc(String clientItf, String serverItf) throws NoSuchInterfaceException,
             IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException {
         ComponentAndInterface client = getComponentAndInterface(clientItf);
         ComponentAndInterface server = getComponentAndInterface(serverItf);
@@ -482,7 +482,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                     if (server.getComponent() == null) {
                         if (!srItfType.isFcClientItf() && srItfType.isInternal()) { // External client NF interface only bound to inner server NF interface
                             // No need to check the membrane state of Host component
-                            Utils.getPAMembraneController(client.getComponent()).bindNFc(
+                            Utils.getPAMembraneController(client.getComponent()).nfBindFc(
                                     clItfType.getFcItfName(),
                                     owner.getRepresentativeOnThis().getFcInterface(srItfType.getFcItfName()));
                             // Check whether this binding already exist
@@ -510,7 +510,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
     }
 
-    public void bindNFc(String clientItf, Object serverItf) throws NoSuchInterfaceException,
+    public void nfBindFc(String clientItf, Object serverItf) throws NoSuchInterfaceException,
             IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException {// Binds external NF client itf with External NF Server
         serverItf = PAFuture.getFutureValue(serverItf);
         ComponentAndInterface client = getComponentAndInterface(clientItf);
@@ -563,30 +563,30 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
     }
 
-    public String getNFcState(String component) throws NoSuchComponentException, NoSuchInterfaceException,
+    public String nfGetFcState(String component) throws NoSuchComponentException, NoSuchInterfaceException,
             IllegalLifeCycleException {
-        if (!nfcomponents.containsKey(component)) {
+        if (!nfComponents.containsKey(component)) {
             throw new NoSuchComponentException("There is no component named " + component);
         }
-        checkMembraneIsStarted(nfcomponents.get(component));
-        return GCM.getGCMLifeCycleController(nfcomponents.get(component)).getFcState();
+        checkMembraneIsStarted(nfComponents.get(component));
+        return GCM.getGCMLifeCycleController(nfComponents.get(component)).getFcState();
     }
 
-    public Component[] getNFcSubComponents() {
-        List<Component> nfSubComponents = new ArrayList<Component>(nfcomponents.values());
+    public Component[] nfGetFcSubComponents() {
+        List<Component> nfSubComponents = new ArrayList<Component>(nfComponents.values());
         return nfSubComponents.toArray(new Component[nfSubComponents.size()]);
     }
 
-    public String[] listNFc(String component) throws NoSuchComponentException, NoSuchInterfaceException,
+    public String[] nfListFc(String component) throws NoSuchComponentException, NoSuchInterfaceException,
             IllegalLifeCycleException {
-        if (!nfcomponents.containsKey(component)) {
+        if (!nfComponents.containsKey(component)) {
             throw new NoSuchComponentException("There is no " + component + " inside the membrane");
         }
-        checkMembraneIsStarted(nfcomponents.get(component));
-        return GCM.getBindingController(nfcomponents.get(component)).listFc();
+        checkMembraneIsStarted(nfComponents.get(component));
+        return GCM.getBindingController(nfComponents.get(component)).listFc();
     }
 
-    public Object lookupNFc(String itfname) throws NoSuchInterfaceException, NoSuchComponentException {
+    public Object nfLookupFc(String itfname) throws NoSuchInterfaceException, NoSuchComponentException {
         ComponentAndInterface itf = getComponentAndInterface(itfname);
         PAInterface theItf = (PAInterface) itf.getInterface();
         PAGCMInterfaceType theType = (PAGCMInterfaceType) theItf.getFcItfType();
@@ -607,7 +607,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                 return GCM.getBindingController(itf.getComponent()).lookupFc(theItf.getFcItfName());
             } else {//The component is functional, and we are attempting to lookup on a client non-functional external interface
                 if (theType.getFcItfName().endsWith("-controller")) {
-                    return Utils.getPAMembraneController(itf.getComponent()).lookupNFc(
+                    return Utils.getPAMembraneController(itf.getComponent()).nfLookupFc(
                             itf.getInterface().getFcItfName());
                 }
                 //throw new NoSuchComponentException("The specified component: " +
@@ -618,7 +618,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         return null;
     }
 
-    public void removeNFSubComponent(Component component) throws IllegalContentException,
+    public void nfRemoveFcSubComponent(Component component) throws IllegalContentException,
             IllegalLifeCycleException, NoSuchComponentException {
         try { /* Check the lifecycle of the membrane and the component */
             if (membraneState.equals(MEMBRANE_STARTED) ||
@@ -642,11 +642,11 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
         PAComponent ownerRepresentative = owner.getRepresentativeOnThis();
 
-        if (!nfcomponents.containsKey(componentname)) {
+        if (!nfComponents.containsKey(componentname)) {
             throw new NoSuchComponentException("There is no " + componentname + " inside the membrane");
         }
 
-        Component toRemove = nfcomponents.get(componentname);
+        Component toRemove = nfComponents.get(componentname);
 
         try {
             if (Utils.getPABindingController(toRemove).isBound().booleanValue()) {
@@ -665,7 +665,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
         //Here, when removing a component on which the host holds bindings, remove those bindings
         nfBindings.removeServerAliasBindingsOn(componentname);
-        nfcomponents.remove(componentname);
+        nfComponents.remove(componentname);
     }
 
     public void setControllerObject(String itf, Object controllerclass) throws NoSuchInterfaceException {
@@ -683,27 +683,27 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
     }
 
-    public void startNFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
+    public void nfStartFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
             NoSuchInterfaceException {
-        if (!nfcomponents.containsKey(component)) {
+        if (!nfComponents.containsKey(component)) {
             throw new NoSuchComponentException("There is no component named " + component);
         }
 
-        checkMembraneIsStarted(nfcomponents.get(component));
-        GCM.getGCMLifeCycleController(nfcomponents.get(component)).startFc();
+        checkMembraneIsStarted(nfComponents.get(component));
+        GCM.getGCMLifeCycleController(nfComponents.get(component)).startFc();
     }
 
-    public void stopNFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
+    public void nfStopFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
             NoSuchInterfaceException {
-        if (!nfcomponents.containsKey(component)) {
+        if (!nfComponents.containsKey(component)) {
             throw new NoSuchComponentException("There is no component named " + component);
         }
-        checkMembraneIsStarted(nfcomponents.get(component));
+        checkMembraneIsStarted(nfComponents.get(component));
 
-        GCM.getGCMLifeCycleController(nfcomponents.get(component)).stopFc();
+        GCM.getGCMLifeCycleController(nfComponents.get(component)).stopFc();
     }
 
-    public void unbindNFc(String clientItf) throws NoSuchInterfaceException, IllegalLifeCycleException,
+    public void nfUnbindFc(String clientItf) throws NoSuchInterfaceException, IllegalLifeCycleException,
             IllegalBindingException, NoSuchComponentException {//Unbinds client interfaces exposed by the membrane, of client interfaces of non-functional components.
 
         if (membraneState.equals(PAMembraneController.MEMBRANE_STARTED)) {
@@ -756,7 +756,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
             }
 
         }
-        for (Component c : nfcomponents.values()) {
+        for (Component c : nfComponents.values()) {
             try {
                 checkMembraneIsStarted(c);
                 GCM.getGCMLifeCycleController(c).startFc();
@@ -773,7 +773,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
     public void stopMembrane() throws IllegalLifeCycleException {
 
-        for (Component c : nfcomponents.values()) {
+        for (Component c : nfComponents.values()) {
             try {
                 checkMembraneIsStarted(c);
                 GCM.getGCMLifeCycleController(c).stopFc();
@@ -799,7 +799,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
      */
     private boolean membraneIsStopped() {
         boolean result = true;
-        for (Component c : nfcomponents.values()) {
+        for (Component c : nfComponents.values()) {
             try {
                 result = result &&
                     (GCM.getGCMLifeCycleController(c).getFcState().compareTo(LifeCycleController.STOPPED) == 0);
@@ -845,13 +845,13 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         return false;
     }
 
-    public Component getNFcSubComponent(String name) {
-        return nfcomponents.get(name);
+    public Component nfGetFcSubComponent(String name) {
+        return nfComponents.get(name);
     }
 
     public void duplicateController(Object c) {
         if (c instanceof HashMap<?, ?>) {
-            nfcomponents = (HashMap<String, Component>) c;
+            nfComponents = (HashMap<String, Component>) c;
         } else {
             throw new ProActiveRuntimeException(
                 "PAMembraneControllerImpl: Impossible to duplicate the controller " + this +
@@ -885,7 +885,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                 }
 
                 if (searchComponent == null) {//The component we are looking for is not in the functional content
-                    searchComponent = getNFcSubComponent(itfTab[0]); /*
+                    searchComponent = nfGetFcSubComponent(itfTab[0]); /*
                      * Is it a non functional
                      * component??
                      */
@@ -990,7 +990,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
     }
 
     public ControllerState getState() {
-        return new ControllerState((HashMap<String, Component>) nfcomponents);
+        return new ControllerState((HashMap<String, Component>) nfComponents);
     }
 
     public String getMembraneState() {

@@ -185,9 +185,9 @@ public class Test extends ComponentTest {
                 "functionalTests.component.nonfunctional.adl.dummyMaster", context);
         GCM.getNameController(dummyMaster).setFcName("dummyMaster");
         //Including the dummyMaster component inside the membrane of componentA
-        memController.addNFSubComponent(dummyMaster);
-        memController.bindNFc("dummy-controller", "dummyMaster.dummy-master");
-        memController.bindNFc("dummyMaster.dummy-client", "dummy-internal-client-controller");
+        memController.nfAddFcSubComponent(dummyMaster);
+        memController.nfBindFc("dummy-controller", "dummyMaster.dummy-master");
+        memController.nfBindFc("dummyMaster.dummy-client", "dummy-internal-client-controller");
 
         Type typeB = type_factory.createFcType(fItfTypes, nfItfTypesB);
 
@@ -208,24 +208,24 @@ public class Test extends ComponentTest {
         GCM.getNameController(dummyController).setFcName("dummyPrimitive");
 
         //Including the dummyMaster component inside the membrane of componentB
-        memControllerB.addNFSubComponent(dummyMaster2);
-        memControllerB.bindNFc("dummy-controller", "dummyMaster.dummy-master");
-        memControllerB.bindNFc("dummyMaster.dummy-client", "dummy-client-controller");
-        memController.addNFSubComponent(dummyController);
-        memController.bindNFc("dummy-internal-server-controller", "dummyPrimitive.dummy-membrane");
+        memControllerB.nfAddFcSubComponent(dummyMaster2);
+        memControllerB.nfBindFc("dummy-controller", "dummyMaster.dummy-master");
+        memControllerB.nfBindFc("dummyMaster.dummy-client", "dummy-client-controller");
+        memController.nfAddFcSubComponent(dummyController);
+        memController.nfBindFc("dummy-internal-server-controller", "dummyPrimitive.dummy-membrane");
 
         GCM.getContentController(componentA).addFcSubComponent(componentB);
 
-        memController.bindNFc("dummy-internal-client-controller", "componentB.dummy-controller");
-        memController.bindNFc("componentB.dummy-client-controller", "dummy-internal-server-controller");
+        memController.nfBindFc("dummy-internal-client-controller", "componentB.dummy-controller");
+        memController.nfBindFc("componentB.dummy-client-controller", "dummy-internal-server-controller");
 
         memController.startMembrane();//Starting the two membranes
         memControllerB.startMembrane();
-        Object itf = memController.lookupNFc("dummyMaster.dummy-client");
+        Object itf = memController.nfLookupFc("dummyMaster.dummy-client");
         System.out.println("Lookup on the dumyMaster " + itf);
-        itf = memController.lookupNFc("dummy-internal-client-controller");
+        itf = memController.nfLookupFc("dummy-internal-client-controller");
         System.out.println("Lookup on the internal Nf client: " + itf);
-        itf = memController.lookupNFc("componentB.dummy-client-controller");
+        itf = memController.nfLookupFc("componentB.dummy-client-controller");
         System.out.println("Lookup on the external Nf client of componentB: " + itf);
         DummyControllerItf dummyControl = (DummyControllerItf) componentA.getFcInterface("dummy-controller");
         //System.out.println("Dummy void method : " + dummyControl.dummyMethodWithResult()); ATTENTION!! This method generates a deadlock!!

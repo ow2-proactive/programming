@@ -93,8 +93,8 @@ public class Test extends ComponentTestDefaultNodes {
         ControllerDescription controllerDescription = new ControllerDescription("fitnessController",
             Constants.COMPOSITE);
 
-        dummyNFComposite = cf.newNFcInstance(fcType, controllerDescription, null, super.getANode());
-        dummyNFPrimitive = cf.newNFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
+        dummyNFComposite = cf.newNfFcInstance(fcType, controllerDescription, null, super.getANode());
+        dummyNFPrimitive = cf.newNfFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
                 .createFcItfType("fitness-controller-membrane", DummyControllerItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE), }),
                 new ControllerDescription("fitnessController", Constants.PRIMITIVE), new ContentDescription(

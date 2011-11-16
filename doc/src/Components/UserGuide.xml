@@ -3026,9 +3026,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						Inversely, a functional component cannot be added inside a membrane.
 						As a consequence, direct bindings between functional interfaces of NF
 						and functional components are forbidden. In the generic factory, a
-						method named newNFcInstance that creates this new kind of components
+						method named newNfFcInstance that creates this new kind of components
 						has been added:
-						<programlisting language="java">public Component newNFcInstance(Type fType, any contentDesc, any controllerDesc);</programlisting>
+						<programlisting language="java">public Component newNfFcInstance(Type fType, any contentDesc, any controllerDesc);</programlisting>
 						Parameters of this method are identical to its functional equivalent and
 						NF components are created in the same way as functional ones.
 					</para>
@@ -3064,25 +3064,25 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						<itemizedlist mark="opencircle">
 							<listitem>
 								<para>
-									<literal>addNFSubComponent(Component component)</literal>:
+									<literal>nfAddFcSubComponent(Component component)</literal>:
 									adds the NF component given as argument to the membrane;
 								</para>
 							</listitem>
 							<listitem>
 								<para>
-									<literal>removeNFSubComponent(Component component)</literal>:
+									<literal>nfRemoveFcSubComponent(Component component)</literal>:
 									removes the specified NF component from the membrane;
 								</para>
 							</listitem>
 							<listitem>
 								<para>
-									<literal>getNFcSubComponents()</literal>: returns an array
+									<literal>nfGetFcSubComponents()</literal>: returns an array
 									containing all the NF components;
 								</para>
 							</listitem>
 							<listitem>
 								<para>
-									<literal>getNFcSubComponent(string name)</literal>: returns
+									<literal>nfGetFcSubComponent(string name)</literal>: returns
 									the specified NF component, the string argument is the name
 									of the NF component;
 								</para>
@@ -3137,22 +3137,22 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						the interface “i1” of the component “nfComp1” inside the membrane to the
 						interface “i2” of the component “nfComp2”. Suppose "mc" is a reference to
 						the membrane controller of the host component.
-						<programlisting language="java">Component nfComp1=mc.getNFcSubComponent("nfComp1");
-Component nfComp2=mc.getNFcSubComponent("nfComp2");
+						<programlisting language="java">Component nfComp1=mc.nfGetFcSubComponent("nfComp1");
+Component nfComp2=mc.nfGetFcSubComponent("nfComp2");
 GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));</programlisting>
 					</para>
 
 					<para>
 						Using the API of <xref linkend="codeAPI2"/>, this binding can be realized
 						by the following code, that binds the component “nfComp1” correctly.
-						<programlisting language="java">mc.bindNFc("nfComp1.i1","nfComp2.i2");</programlisting>
+						<programlisting language="java">mc.nfBindFc("nfComp1.i1","nfComp2.i2");</programlisting>
 						Similarly to the example above, all the methods of
 						<xref linkend="codeAPI2"/> result in calls on well-known Fractal controllers.
 						Interfaces are represented as strings of the form component.interface, where
 						component is the name of the inner component and interface is the name of
 						its client or server interface. We use the name “membrane” to represent the
 						membrane of the host component, e.g. membrane.i1 is the NF interface i1 of
-						the host component. For example, <literal>bindNFc(string, string)</literal>
+						the host component. For example, <literal>nfBindFc(string, string)</literal>
 						allows to perform the bindings: <emphasis>b1</emphasis>,
 						<emphasis>b2</emphasis>, <emphasis>b4</emphasis>, <emphasis>b3</emphasis>,
 						<emphasis>b9</emphasis>, <emphasis>b7</emphasis> and <emphasis>b5</emphasis>
@@ -3169,7 +3169,7 @@ GCM.getBindingController(nfComp1).bindFc("i1",nfComp2.getFcInterface("i2"));</pr
 						address space, there are two alternatives: create a remote reference on this
 						entity; or make a copy of it. When considering a copy of a NF local component,
 						the NF calls are not consistent. If an invocation on
-						<literal>getNFcSubComponent(string name)</literal> returns a copy of the
+						<literal>nfGetFcSubComponent(string name)</literal> returns a copy of the
 						specified NF component, calls performed on this copy will not be performed
 						on the “real” NF component inside the membrane. Methods introduced in
 						<xref linkend="codeAPI2"/> solve this problem.

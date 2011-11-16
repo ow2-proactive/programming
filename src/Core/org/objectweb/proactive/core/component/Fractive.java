@@ -132,11 +132,11 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNFcInstance(org.objectweb.fractal.api.Type, org.objectweb.proactive.core.component.ControllerDescription, org.objectweb.proactive.core.component.ContentDescription)
+     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type, org.objectweb.proactive.core.component.ControllerDescription, org.objectweb.proactive.core.component.ContentDescription)
      */
-    public Component newNFcInstance(Type type, ControllerDescription controllerDesc,
+    public Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
             ContentDescription contentDesc) throws InstantiationException {
-        return newNFcInstance(type, controllerDesc, contentDesc, (Node) null);
+        return newNfFcInstance(type, controllerDesc, contentDesc, (Node) null);
     }
 
     /*
@@ -193,13 +193,13 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /*
-     * @see org.objectweb.fractal.api.factory.GenericFactory#newNFcInstance(org.objectweb.fractal.api.Type,
+     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type,
      *      java.lang.Object, java.lang.Object)
      */
-    public Component newNFcInstance(Type type, Object controllerDesc, Object contentDesc)
+    public Component newNfFcInstance(Type type, Object controllerDesc, Object contentDesc)
             throws InstantiationException {
         try {
-            return newNFcInstance(type, (ControllerDescription) controllerDesc,
+            return newNfFcInstance(type, (ControllerDescription) controllerDesc,
                     (ContentDescription) contentDesc);
         } catch (ClassCastException e) {
             if ((type == null) && (controllerDesc == null) && (contentDesc instanceof Map)) {
@@ -211,7 +211,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
                 ((contentDesc instanceof String) || (contentDesc == null))) {
                 // for the ADL, when only type and ControllerDescription are
                 // given
-                return newNFcInstance(type, controllerDesc, (contentDesc == null) ? null
+                return newNfFcInstance(type, controllerDesc, (contentDesc == null) ? null
                         : new ContentDescription((String) contentDesc));
             }
 
@@ -234,7 +234,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
 
             }
             if ("primitive".equals(controllerDesc) && (contentDesc instanceof String)) {
-                return newNFcInstance(type, new ControllerDescription(null, Constants.PRIMITIVE),
+                return newNfFcInstance(type, new ControllerDescription(null, Constants.PRIMITIVE),
                         new ContentDescription((String) contentDesc));
             }
 
@@ -269,12 +269,12 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNFcInstance(org.objectweb.fractal.api.Type,
+     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type,
      *      org.objectweb.proactive.core.component.ControllerDescription,
      *      org.objectweb.proactive.core.component.ContentDescription,
      *      org.objectweb.proactive.core.node.Node)
      */
-    public Component newNFcInstance(Type type, ControllerDescription controllerDesc,
+    public Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
             ContentDescription contentDesc, Node node) throws InstantiationException {
         try {
             ActiveObjectWithComponentParameters container = commonInstanciation(type, controllerDesc,

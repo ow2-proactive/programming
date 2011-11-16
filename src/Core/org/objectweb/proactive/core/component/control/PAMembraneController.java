@@ -63,7 +63,7 @@ public interface PAMembraneController {
      * @param component The non-functional component to add.
      * @throws IllegalContentException If the component to add is not a non-functional component.
      */
-    void addNFSubComponent(Component component) throws IllegalContentException, IllegalLifeCycleException;
+    void nfAddFcSubComponent(Component component) throws IllegalContentException, IllegalLifeCycleException;
 
     /**
      * Removes the specified component from the membrane.
@@ -71,7 +71,7 @@ public interface PAMembraneController {
      * @param componentname The name of the component to remove.
      * @throws IllegalContentException If the specified component can not be removed.
      */
-    void removeNFSubComponent(Component componentname) throws IllegalContentException,
+    void nfRemoveFcSubComponent(Component componentname) throws IllegalContentException,
             IllegalLifeCycleException, NoSuchComponentException;
 
     /**
@@ -79,14 +79,14 @@ public interface PAMembraneController {
      *
      * @return All the non-functional components.
      */
-    Component[] getNFcSubComponents();
+    Component[] nfGetFcSubComponents();
 
     /**
      * Returns the non functional component specified by the name parameter.
      *
      * @return The non functional component specified by the name parameter.
      */
-    Component getNFcSubComponent(String name) throws NoSuchComponentException;
+    Component nfGetFcSubComponent(String name) throws NoSuchComponentException;
 
     /**
      * Sets a new controller object implementing the specified interface.
@@ -111,6 +111,13 @@ public interface PAMembraneController {
      */
     public void stopMembrane() throws NoSuchInterfaceException, IllegalLifeCycleException;
 
+    /**
+     * Returns the state of the membrane (by default, started or stopped).
+     *
+     * @return The current state of the membrane.
+     */
+    public String getMembraneState();
+
     //@snippet-end component_userguide_16
 
     //@snippet-start component_userguide_17
@@ -129,7 +136,7 @@ public interface PAMembraneController {
      * @throws IllegalLifeCycleException If one of the component is in inconsistent lifecycle state.
      * @throws IllegalBindingException If the type of the interfaces does not match.
      */
-    void bindNFc(String clientItf, String serverItf) throws NoSuchInterfaceException,
+    void nfBindFc(String clientItf, String serverItf) throws NoSuchInterfaceException,
             IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException;
 
     /**
@@ -144,7 +151,7 @@ public interface PAMembraneController {
      * @throws IllegalLifeCycleException If one of the component is in inconsistent lifecycle state.
      * @throws IllegalBindingException If the type of the interfaces does not match.
      */
-    void bindNFc(String clientItf, Object serverItf) throws NoSuchInterfaceException,
+    void nfBindFc(String clientItf, Object serverItf) throws NoSuchInterfaceException,
             IllegalLifeCycleException, IllegalBindingException, NoSuchComponentException;
 
     /**
@@ -158,7 +165,7 @@ public interface PAMembraneController {
      * @throws IllegalLifeCycleException If the component is in inconsistent lifecycle state.
      * @throws IllegalBindingException If the binding can not be removed.
      */
-    void unbindNFc(String clientItf) throws NoSuchInterfaceException, IllegalLifeCycleException,
+    void nfUnbindFc(String clientItf) throws NoSuchInterfaceException, IllegalLifeCycleException,
             IllegalBindingException, NoSuchComponentException;
 
     /**
@@ -168,7 +175,7 @@ public interface PAMembraneController {
      * @return An array containing the name of the client interfaces(we suppose that non-functional components don't
      * have client NF interfaces).
      */
-    String[] listNFc(String component) throws NoSuchComponentException, NoSuchInterfaceException,
+    String[] nfListFc(String component) throws NoSuchComponentException, NoSuchInterfaceException,
             IllegalLifeCycleException;
 
     /**
@@ -180,7 +187,7 @@ public interface PAMembraneController {
      * @return The stubs and the proxy of the server interface the client interface is connected to.
      * @throws NoSuchInterfaceException If the specified interface does not exist.
      */
-    Object lookupNFc(String itfname) throws NoSuchInterfaceException, NoSuchComponentException;
+    Object nfLookupFc(String itfname) throws NoSuchInterfaceException, NoSuchComponentException;
 
     /**
      * Starts the specified component.
@@ -188,7 +195,7 @@ public interface PAMembraneController {
      * @param component The name of the component to stop.
      * @throws IllegalLifeCycleException If the lifecycle state is inconsistent.
      */
-    void startNFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
+    void nfStartFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
             NoSuchInterfaceException;
 
     /**
@@ -197,7 +204,7 @@ public interface PAMembraneController {
      * @param component The name of the component to stop.
      * @throws IllegalLifeCycleException If the lifecycle state is inconsistent.
      */
-    void stopNFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
+    void nfStopFc(String component) throws IllegalLifeCycleException, NoSuchComponentException,
             NoSuchInterfaceException;
 
     /**
@@ -206,14 +213,7 @@ public interface PAMembraneController {
      * @param component The name of the component.
      * @return The current state of the specified component.
      */
-    String getNFcState(String component) throws NoSuchComponentException, NoSuchInterfaceException,
+    String nfGetFcState(String component) throws NoSuchComponentException, NoSuchInterfaceException,
             IllegalLifeCycleException;
-
-    /**
-     * Returns the state of the membrane (by default, started or stopped).
-     *
-     * @return The current state of the membrane.
-     */
-    String getMembraneState();
     //@snippet-end component_userguide_17
 }

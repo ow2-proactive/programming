@@ -244,14 +244,14 @@ public class PAComponentImpl implements PAComponent, Serializable {
     }
 
     private boolean specialCasesForNfType(Class<?> controllerItf, boolean isPrimitive,
-            PAGCMInterfaceType itfType, ComponentParameters componentParam, Vector<InterfaceType> nftype)
+            PAGCMInterfaceType itfType, ComponentParameters componentParam, Vector<InterfaceType> nfType)
             throws Exception {
 
         if (PAMembraneController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
             !itfType.isInternal()) {
             PAInterface controller = createController(itfType, PAMembraneControllerImpl.class);
             this.controlItfs.put(controller.getFcItfName(), controller);
-            nftype.add((InterfaceType) controller.getFcItfType());
+            nfType.add((InterfaceType) controller.getFcItfType());
             return true; // The membrane controller is a very special case. As soon as the interface is included inside the non-functional type,
             // The controller has to be generated.Indeed, the membrane controller is the default controller for manipulating the membrane.
         }

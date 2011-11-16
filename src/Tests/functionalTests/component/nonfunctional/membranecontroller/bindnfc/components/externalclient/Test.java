@@ -171,9 +171,9 @@ public class Test extends ComponentTest {
                 "functionalTests.component.nonfunctional.adl.dummyMaster", context);
         GCM.getNameController(dummyMaster).setFcName("dummyMaster");
 
-        memController.addNFSubComponent(dummyMaster);
-        memController.bindNFc("dummy-controller", "dummyMaster.dummy-master");
-        memController.bindNFc("dummyMaster.dummy-client", "dummy-client-controller");
+        memController.nfAddFcSubComponent(dummyMaster);
+        memController.nfBindFc("dummy-controller", "dummyMaster.dummy-master");
+        memController.nfBindFc("dummyMaster.dummy-client", "dummy-client-controller");
 
         Type typeB = type_factory.createFcType(fItfTypes, nfItfTypesB);
 
@@ -190,16 +190,16 @@ public class Test extends ComponentTest {
 
         GCM.getNameController(dummyController).setFcName("dummyPrimitive");
 
-        memControllerB.addNFSubComponent(dummyController);
-        memControllerB.bindNFc("dummy-controller", "dummyPrimitive.dummy-membrane");
-        memController.bindNFc("dummy-client-controller", componentB.getFcInterface("dummy-controller"));
+        memControllerB.nfAddFcSubComponent(dummyController);
+        memControllerB.nfBindFc("dummy-controller", "dummyPrimitive.dummy-membrane");
+        memController.nfBindFc("dummy-client-controller", componentB.getFcInterface("dummy-controller"));
         memController.startMembrane();//Starting the two membranes
         memControllerB.startMembrane();
         //TODO : Bind and start everybody
 
-        Object lookUp = memController.lookupNFc("dummyMaster.dummy-client");
+        Object lookUp = memController.nfLookupFc("dummyMaster.dummy-client");
         System.out.println("Result of lookUp : " + lookUp);
-        lookUp = memController.lookupNFc("dummy-client-controller");
+        lookUp = memController.nfLookupFc("dummy-client-controller");
         System.out.println("Result of lookUp : " + lookUp);
         DummyControllerItf dummyControl = (DummyControllerItf) componentA.getFcInterface("dummy-controller");
         //System.out.println("Dummy void method : " + dummyControl.dummyMethodWithResult()); ATTENTION!! This method generates a deadlock!!

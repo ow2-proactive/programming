@@ -174,9 +174,9 @@ public class Test extends ComponentTest {
 
         GCM.getNameController(dummyMaster).setFcName("dummyMaster");
 
-        memController.addNFSubComponent(dummyMaster);
-        memController.bindNFc("dummy-controller", "dummyMaster.dummy-master");
-        memController.bindNFc("dummyMaster.dummy-client", "dummy-internal-client-controller");
+        memController.nfAddFcSubComponent(dummyMaster);
+        memController.nfBindFc("dummy-controller", "dummyMaster.dummy-master");
+        memController.nfBindFc("dummyMaster.dummy-client", "dummy-internal-client-controller");
 
         Type typeB = type_factory.createFcType(fItfTypes, nfItfTypesB);
 
@@ -193,19 +193,19 @@ public class Test extends ComponentTest {
 
         GCM.getNameController(dummyController).setFcName("dummyPrimitive");
 
-        memControllerB.addNFSubComponent(dummyController);
-        memControllerB.bindNFc("dummy-controller", "dummyPrimitive.dummy-membrane");
+        memControllerB.nfAddFcSubComponent(dummyController);
+        memControllerB.nfBindFc("dummy-controller", "dummyPrimitive.dummy-membrane");
         GCM.getContentController(componentA).addFcSubComponent(componentB);
 
-        memController.bindNFc("dummy-internal-client-controller", "componentB.dummy-controller");
+        memController.nfBindFc("dummy-internal-client-controller", "componentB.dummy-controller");
         //At this point, all the non-functional mandatory interfaces are bound
         memController.startMembrane();//Starting the two membranes
         memControllerB.startMembrane();
         GCM.getGCMLifeCycleController(componentA).startFc();
         GCM.getGCMLifeCycleController(componentA).stopFc();
-        Object itf = memController.lookupNFc("dummyMaster.dummy-client");
+        Object itf = memController.nfLookupFc("dummyMaster.dummy-client");
         System.out.println("Lookup on the dumyMaster " + itf);
-        itf = memController.lookupNFc("dummy-internal-client-controller");
+        itf = memController.nfLookupFc("dummy-internal-client-controller");
         System.out.println("Lookup on the internal Nf client: " + itf);
         DummyControllerItf dummyControl = (DummyControllerItf) componentA.getFcInterface("dummy-controller");
         //System.out.println("Dummy void method : " + dummyControl.dummyMethodWithResult()); ATTENTION!! This method generates a deadlock!!

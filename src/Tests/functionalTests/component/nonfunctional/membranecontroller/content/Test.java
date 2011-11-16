@@ -80,7 +80,7 @@ public class Test extends ComponentTest {
         GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot); /*Getting the GCM-ProActive type factory*/
         PAGenericFactory cf = Utils.getPAGenericFactory(boot); /*Getting the GCM-ProActive generic factory*/
 
-        dummyNFComponent = cf.newNFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
+        dummyNFComponent = cf.newNfFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
                 .createFcItfType("dummy-controller-membrane", DummyControllerItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE), }),
                 new ControllerDescription("dummyController", Constants.PRIMITIVE), new ContentDescription(
@@ -94,14 +94,14 @@ public class Test extends ComponentTest {
                     "/functionalTests/component/nonfunctional/membranecontroller/content/config.xml")
                     .getPath()), new ContentDescription(DummyFunctionalComponentImpl.class.getName()));
 
-        Utils.getPAMembraneController(dummyFComponent).addNFSubComponent(dummyNFComponent);
-        Component[] components = Utils.getPAMembraneController(dummyFComponent).getNFcSubComponents();
+        Utils.getPAMembraneController(dummyFComponent).nfAddFcSubComponent(dummyNFComponent);
+        Component[] components = Utils.getPAMembraneController(dummyFComponent).nfGetFcSubComponents();
         System.out.println("Name : " + GCM.getNameController(components[0]).getFcName());
-        Utils.getPAMembraneController(dummyFComponent).startNFc("dummyController");
-        Utils.getPAMembraneController(dummyFComponent).stopNFc("dummyController");
+        Utils.getPAMembraneController(dummyFComponent).nfStartFc("dummyController");
+        Utils.getPAMembraneController(dummyFComponent).nfStopFc("dummyController");
         System.out.println("Lifecycle state :" +
-            Utils.getPAMembraneController(dummyFComponent).getNFcState("dummyController"));
-        Utils.getPAMembraneController(dummyFComponent).removeNFSubComponent(dummyNFComponent);
+            Utils.getPAMembraneController(dummyFComponent).nfGetFcState("dummyController"));
+        Utils.getPAMembraneController(dummyFComponent).nfRemoveFcSubComponent(dummyNFComponent);
     }
 
     /**

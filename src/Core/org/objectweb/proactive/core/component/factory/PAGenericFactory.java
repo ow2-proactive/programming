@@ -79,7 +79,7 @@ public interface PAGenericFactory extends GenericFactory {
      * @return The {@link Component} interface of the created component.
      * @throws InstantiationException If the component cannot be created.
      */
-    Component newNFcInstance(Type type, ControllerDescription controllerDesc, ContentDescription contentDesc)
+    Component newNfFcInstance(Type type, ControllerDescription controllerDesc, ContentDescription contentDesc)
             throws InstantiationException;
 
     /**
@@ -109,6 +109,6 @@ public interface PAGenericFactory extends GenericFactory {
      * @return the {@link Component} interface of the created component.
      * @throws InstantiationException If the component cannot be created.
      */
-    Component newNFcInstance(Type type, ControllerDescription controllerDesc, ContentDescription contentDesc,
-            Node node) throws InstantiationException;
+    Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
+            ContentDescription contentDesc, Node node) throws InstantiationException;
 }
