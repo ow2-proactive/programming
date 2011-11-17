@@ -101,7 +101,7 @@ public class Test extends ComponentTestDefaultNodes {
         ContentDescription contentDescription = new ContentDescription(DummyControllerComponentImpl.class
                 .getName());
 
-        dummyNFComponent = cf.newNFcInstance(fcType, controllerDescription, contentDescription, super
+        dummyNFComponent = cf.newNfFcInstance(fcType, controllerDescription, contentDescription, super
                 .getANode());
         GCM.getGCMLifeCycleController(dummyNFComponent).startFc();
         DummyControllerItf ref = (DummyControllerItf) dummyNFComponent

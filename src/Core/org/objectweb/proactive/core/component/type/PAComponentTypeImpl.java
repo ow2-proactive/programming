@@ -56,7 +56,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  * @author The ProActive Team
  */
-public class PAComponentTypeImpl implements ComponentType, PAGCMInterfaceType, Serializable {
+public class PAComponentTypeImpl implements PAComponentType, PAGCMInterfaceType, Serializable {
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
 
     /**
@@ -65,10 +65,34 @@ public class PAComponentTypeImpl implements ComponentType, PAGCMInterfaceType, S
     private final InterfaceType[] interfaceTypes;
 
     /**
+     * The types of the functional interfaces of components of this type.
+     */
+    private final InterfaceType[] fInterfaceTypes;
+
+    /**
+     * The types of the non functional interfaces of components of this type.
+     */
+    private final InterfaceType[] nfInterfaceTypes;
+
+    /**
      * Constructor for PAComponentTypeImpl.
      */
-    public PAComponentTypeImpl(final InterfaceType[] interfaceTypes) throws InstantiationException {
-        this.interfaceTypes = clone(interfaceTypes);
+    public PAComponentTypeImpl(final InterfaceType[] fInterfaceTypes) throws InstantiationException {
+        this(fInterfaceTypes, null);
+    }
+
+    /**
+     * Constructor for PAComponentTypeImpl.
+     */
+    public PAComponentTypeImpl(final InterfaceType[] fInterfaceTypes, final InterfaceType[] nfInterfaceTypes)
+            throws InstantiationException {
+        this.fInterfaceTypes = clone(fInterfaceTypes);
+        this.nfInterfaceTypes = clone(nfInterfaceTypes);
+        this.interfaceTypes = new InterfaceType[this.fInterfaceTypes.length + this.nfInterfaceTypes.length];
+        System.arraycopy(this.fInterfaceTypes, 0, this.interfaceTypes, 0, this.fInterfaceTypes.length);
+        System.arraycopy(this.nfInterfaceTypes, 0, this.interfaceTypes, this.fInterfaceTypes.length,
+                this.nfInterfaceTypes.length);
+
         // verifications
         for (int i = 0; i < interfaceTypes.length; ++i) {
             String p = interfaceTypes[i].getFcItfName();
@@ -91,48 +115,95 @@ public class PAComponentTypeImpl implements ComponentType, PAGCMInterfaceType, S
     }
 
     /**
-     * Seems doesn't be used
-     * copy constructor
+     * @see org.objectweb.fractal.api.Type#isFcSubTypeOf(Type)
      */
-    //    public PAComponentTypeImpl(final ComponentType componentType) {
-    //        InterfaceType[] tempItfTypes = componentType.getFcInterfaceTypes();
-    //        this.interfaceTypes = new InterfaceType[tempItfTypes.length];
-    //        for (int i = 0; i < interfaceTypes.length; i++) {
-    //            // deep copy
-    //            interfaceTypes[i] = new PAInterfaceTypeImpl(tempItfTypes[i]);
-    //        }
-    //    }
+    @Override
+    public boolean isFcSubTypeOf(Type type) {
+        throw new RuntimeException("not yet implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InterfaceType[] getAllFcInterfaceTypes() {
+        return this.interfaceTypes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InterfaceType getAllFcInterfaceType(String name) throws NoSuchInterfaceException {
+        for (int i = 0; i < this.interfaceTypes.length; i++) {
+            if (this.interfaceTypes[i].isFcCollectionItf()) {
+                if (name.startsWith(this.interfaceTypes[i].getFcItfName()) &&
+                    !name.equals(this.interfaceTypes[i].getFcItfName())) {
+                    return this.interfaceTypes[i];
+                }
+            } else {
+                if (name.equals(this.interfaceTypes[i].getFcItfName())) {
+                    return this.interfaceTypes[i];
+                }
+            }
+        }
+        throw new NoSuchInterfaceException(name);
+    }
+
     /**
      * @see org.objectweb.fractal.api.type.ComponentType#getFcInterfaceTypes()
      */
+    @Override
     public InterfaceType[] getFcInterfaceTypes() {
-        return interfaceTypes;
+        return this.fInterfaceTypes;
     }
 
     /**
      * @see org.objectweb.fractal.api.type.ComponentType#getFcInterfaceType(String)
      */
-    public InterfaceType getFcInterfaceType(String itfName) throws NoSuchInterfaceException {
-        for (int i = 0; i < interfaceTypes.length; i++) {
-            if (interfaceTypes[i].isFcCollectionItf()) {
-                if (itfName.startsWith(interfaceTypes[i].getFcItfName()) &&
-                    !itfName.equals(interfaceTypes[i].getFcItfName())) {
-                    return interfaceTypes[i];
+    @Override
+    public InterfaceType getFcInterfaceType(String name) throws NoSuchInterfaceException {
+        for (int i = 0; i < this.fInterfaceTypes.length; i++) {
+            if (this.fInterfaceTypes[i].isFcCollectionItf()) {
+                if (name.startsWith(this.fInterfaceTypes[i].getFcItfName()) &&
+                    !name.equals(this.fInterfaceTypes[i].getFcItfName())) {
+                    return this.fInterfaceTypes[i];
                 }
             } else {
-                if (itfName.equals(interfaceTypes[i].getFcItfName())) {
-                    return interfaceTypes[i];
+                if (name.equals(this.fInterfaceTypes[i].getFcItfName())) {
+                    return this.fInterfaceTypes[i];
                 }
             }
         }
-        throw new NoSuchInterfaceException(itfName);
+        throw new NoSuchInterfaceException(name);
     }
 
     /**
-     * @see org.objectweb.fractal.api.Type#isFcSubTypeOf(Type)
+     * {@inheritDoc}
      */
-    public boolean isFcSubTypeOf(Type type) {
-        throw new RuntimeException("not yet implemented");
+    @Override
+    public InterfaceType[] getNfFcInterfaceTypes() {
+        return this.nfInterfaceTypes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public InterfaceType getNfFcInterfaceType(String name) throws NoSuchInterfaceException {
+        for (int i = 0; i < this.nfInterfaceTypes.length; i++) {
+            if (this.nfInterfaceTypes[i].isFcCollectionItf()) {
+                if (name.startsWith(this.nfInterfaceTypes[i].getFcItfName()) &&
+                    !name.equals(this.nfInterfaceTypes[i].getFcItfName())) {
+                    return this.nfInterfaceTypes[i];
+                }
+            } else {
+                if (name.equals(this.nfInterfaceTypes[i].getFcItfName())) {
+                    return this.nfInterfaceTypes[i];
+                }
+            }
+        }
+        throw new NoSuchInterfaceException(name);
     }
 
     /**
@@ -140,16 +211,16 @@ public class PAComponentTypeImpl implements ComponentType, PAGCMInterfaceType, S
      * return a copy of the field of this class, instead of the field itself, so
      * that its content can not be modified from outside.
      *
-     * @param types the array to be cloned.
+     * @param itfTypes the array to be cloned.
      * @return a clone of the given array, or an empty array if <tt>type</tt> is
      *      <tt>null</tt>.
      */
-    private static InterfaceType[] clone(final InterfaceType[] types) {
-        if (types == null) {
+    private static InterfaceType[] clone(final InterfaceType[] itfTypes) {
+        if (itfTypes == null) {
             return new InterfaceType[0];
         } else {
-            InterfaceType[] clone = new InterfaceType[types.length];
-            System.arraycopy(types, 0, clone, 0, types.length);
+            InterfaceType[] clone = new InterfaceType[itfTypes.length];
+            System.arraycopy(itfTypes, 0, clone, 0, itfTypes.length);
             return clone;
         }
     }

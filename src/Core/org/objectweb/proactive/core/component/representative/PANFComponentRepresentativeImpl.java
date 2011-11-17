@@ -37,6 +37,7 @@
 package org.objectweb.proactive.core.component.representative;
 
 import org.objectweb.fractal.api.type.ComponentType;
+import org.objectweb.proactive.core.component.ComponentParameters;
 
 
 /**
@@ -46,7 +47,8 @@ import org.objectweb.fractal.api.type.ComponentType;
  * on the active object through a dynamically generated stub of type
  * <code> A  </code>. Similarly, when creating a component, you get a reference
  * on an object of type <code> Component  </code>, in other words an instance of
- * this class. Ini this case, this class represents a non functional component. It is marked by the ProActiveNFComponentRepresentative interface.
+ * this class. Ini this case, this class represents a non functional component. It
+ * is marked by the PANFComponentRepresentative interface.
  * <p>
  * During the construction of an instance of this class, references to
  * interfaces of the component are also dynamically generated : references to
@@ -63,5 +65,9 @@ public class PANFComponentRepresentativeImpl extends PAComponentRepresentativeIm
     public PANFComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
             String controllersConfigFileLocation) {
         super(componentType, hierarchicalType, controllersConfigFileLocation);
+    }
+
+    public PANFComponentRepresentativeImpl(ComponentParameters componentParameters) {
+        super(componentParameters);
     }
 }

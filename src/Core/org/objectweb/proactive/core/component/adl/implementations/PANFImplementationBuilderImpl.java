@@ -65,16 +65,16 @@ public class PANFImplementationBuilderImpl extends PAImplementationBuilderImpl {
     private Component createNFComponent(Object type, Object nodesContainer,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
             Component bootstrap) throws Exception {
-        Component result = newNFcInstance(bootstrap, (ComponentType) type, controllerDesc, contentDesc,
+        Component result = newNfFcInstance(bootstrap, (ComponentType) type, controllerDesc, contentDesc,
                 nodesContainer);
         //        registry.addComponent(result); // the registry can handle groups
         return result;
     }
 
-    private Component newNFcInstance(Component bootstrap, Type type, ControllerDescription controllerDesc,
+    private Component newNfFcInstance(Component bootstrap, Type type, ControllerDescription controllerDesc,
             ContentDescription contentDesc, Object nodesContainer) throws Exception {
         PAGenericFactory genericFactory = Utils.getPAGenericFactory(bootstrap);
-        return genericFactory.newNFcInstance(type, controllerDesc, contentDesc, ADLNodeProvider
+        return genericFactory.newNfFcInstance(type, controllerDesc, contentDesc, ADLNodeProvider
                 .getNode(nodesContainer));
     }
 

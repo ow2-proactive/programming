@@ -89,7 +89,7 @@ public class Test extends ComponentTest {
          * factory
          */
 
-        dummyNFComponent = cf.newNFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
+        dummyNFComponent = cf.newNfFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
                 .createFcItfType("fitness-controller-membrane", DummyControllerItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE), }),
                 new ControllerDescription("fitnessController", Constants.PRIMITIVE), new ContentDescription(

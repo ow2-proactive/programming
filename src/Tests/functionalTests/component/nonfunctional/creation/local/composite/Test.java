@@ -89,12 +89,12 @@ public class Test extends ComponentTest {
          * factory
          */
 
-        dummyNFComposite = cf.newNFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
+        dummyNFComposite = cf.newNfFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
                 .createFcItfType("fitness-controller-membrane", DummyControllerItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE), }),
                 new ControllerDescription("fitnessController", Constants.COMPOSITE), null);
 
-        dummyNFPrimitive = cf.newNFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
+        dummyNFPrimitive = cf.newNfFcInstance(type_factory.createFcType(new InterfaceType[] { type_factory
                 .createFcItfType("fitness-controller-membrane", DummyControllerItf.class.getName(),
                         TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE), }),
                 new ControllerDescription("fitnessController", Constants.PRIMITIVE), new ContentDescription(

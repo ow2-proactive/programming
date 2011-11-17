@@ -38,6 +38,7 @@ package org.objectweb.proactive.core.component.type;
 
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.objectweb.fractal.api.factory.InstantiationException;
+import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.proactive.annotation.PublicAPI;
 
@@ -56,21 +57,36 @@ public interface PAGCMTypeFactory extends GCMTypeFactory {
     /**
      * Creates an interface type.
      *
-     * @param name the name of interfaces of this type (see {@link
+     * @param name The name of interfaces of this type (see {@link
      *       InterfaceType#getFcItfName getFcItfName}).
-     * @param signature signatures of the methods of interfaces of this type. In
+     * @param signature Signatures of the methods of interfaces of this type. In
      *       Java this "signature" is the fully qualified name of a Java interface
      *       corresponding to these method signatures.
      * @param isClient <tt>true</tt> if component interfaces of this type are
      *      client interfaces.
      * @param isOptional <tt>true</tt> if component interfaces of this type are
      *      optional interfaces.
-     * @param cardinality see { @link PAInterfaceType#getFcCardinality() }
+     * @param cardinality See {@link PAInterfaceType#getFcCardinality()}
      * for a description of cardinalities
-     * @param isInternal boolean value, indicating whether the interface is internal
-     * @return an interface type initialized with the given values.
-     * @throws InstantiationException if the interface type cannot be created.
+     * @param isInternal Boolean value, indicating whether the interface is internal
+     * @return An interface type initialized with the given values.
+     * @throws InstantiationException If the interface type cannot be created.
      */
     public InterfaceType createGCMItfType(String name, String signature, boolean isClient,
             boolean isOptional, String cardinality, boolean isInternal) throws InstantiationException;
+
+    /**
+     * Creates a component type.
+     *
+     * @param fInterfaceTypes The functional interface types of the component type to be
+     *      created.
+     * @param nfInterfaceTypes The non functional interface types of the component type to be
+     *      created.
+     * @return A component type whose {@link ComponentType#getFcInterfaceTypes
+     *      getFcInterfaceTypes} method returns an array equal to
+     *      <tt>fInterfaceTypes</tt> + <tt>nfInterfaceTypes</tt>.
+     * @throws InstantiationException if the component type cannot be created.
+     */
+    public ComponentType createFcType(InterfaceType[] fInterfaceTypes, InterfaceType[] nfInterfaceTypes)
+            throws InstantiationException;
 }

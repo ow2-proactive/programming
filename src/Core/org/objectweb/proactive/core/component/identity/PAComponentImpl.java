@@ -88,7 +88,9 @@ import org.objectweb.proactive.core.component.group.PAComponentGroup;
 import org.objectweb.proactive.core.component.interception.InputInterceptor;
 import org.objectweb.proactive.core.component.interception.OutputInterceptor;
 import org.objectweb.proactive.core.component.representative.PAComponentRepresentativeFactory;
+import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
+import org.objectweb.proactive.core.component.type.PAGCMTypeFactory;
 import org.objectweb.proactive.core.mop.MOP;
 import org.objectweb.proactive.core.mop.StubObject;
 import org.objectweb.proactive.core.node.Node;
@@ -132,33 +134,25 @@ public class PAComponentImpl implements PAComponent, Serializable {
     public PAComponentImpl(ComponentParameters componentParameters, Body myBody) {
         this.body = myBody;
         this.componentParameters = componentParameters;
-        boolean component_is_primitive = componentParameters.getHierarchicalType()
-                .equals(Constants.PRIMITIVE);
 
-        // add interface references
-        // ArrayList<Interface> interface_references_list = new ArrayList<Interface>(4);
-
-        // 1. component identity
-        //interface_references_list.add(this);
-        ComponentType nfType = componentParameters.getComponentNFType();
-        ControllerDescription ctrlDesc = componentParameters.getControllerDescription();
-
-        // 2. control interfaces
-        if (nfType != null) { // The nf type is specified
-            if (!ctrlDesc.configFileIsSpecified()) { // There is no file containing the nf configuration
-                generateNfType(nfType, component_is_primitive);
+        // 1. control interfaces
+        Type componentType = componentParameters.getComponentType();
+        if ((componentType instanceof PAComponentType) &&
+            (((PAComponentType) componentType).getNfFcInterfaceTypes().length != 0)) { // The nf type is specified
+            if (!this.componentParameters.getControllerDescription().configFileIsSpecified()) { // There is no file containing the nf configuration
+                addControllersWithNfType();
             } else { // The nfType and a config file is specified. We have to check that the specified nfType corresponds to the interfaces defined in the config file
                 checkCompatibility();
-                addControllers(component_is_primitive);
+                addControllers();
             }
-        } else { // No NFTYpe, means that it has to be generated from the config file
-            addControllers(component_is_primitive);
+        } else { // No NFType, means that it has to be generated from the config file
+            addControllers();
         }
 
-        // 3. external functional interfaces
-        addFunctionalInterfaces(component_is_primitive);
+        // 2. external functional interfaces
+        addFunctionalInterfaces();
 
-        for (Interface itf : controlItfs.values()) {
+        for (Interface itf : this.controlItfs.values()) {
             // TODO Check with component controller
             // A multicast client interface has an implementation (so, it's != null), but it is not a PAController
             if (((PAInterfaceImpl) itf).getFcItfImpl() instanceof PAController) {
@@ -169,13 +163,10 @@ public class PAComponentImpl implements PAComponent, Serializable {
             }
         }
 
-        // put all in a table
-        // interfaceReferences = interface_references_list.toArray(new Interface[interface_references_list.size()]);
         if (logger.isDebugEnabled()) {
-            logger.debug("created component : " + componentParameters.getControllerDescription().getName());
+            logger.debug("created component : " +
+                this.componentParameters.getControllerDescription().getName());
         }
-
-        // PAActiveObject.setImmediateService("getComponentParameters");
     }
 
     private void addMandatoryControllers(Vector<InterfaceType> nftype) throws Exception {
@@ -187,57 +178,58 @@ public class PAComponentImpl implements PAComponent, Serializable {
                 /* LIFECYCLE CONTROLLER */PAGCMLifeCycleController.class.getName(), TypeFactory.SERVER,
                 TypeFactory.MANDATORY, TypeFactory.SINGLE);
         PAInterface controller = createController(itfType, PAGCMLifeCycleControllerImpl.class);
-        controlItfs.put(controller.getFcItfName(), controller);
+        this.controlItfs.put(controller.getFcItfName(), controller);
         nftype.add((InterfaceType) controller.getFcItfType());
 
         itfType = (PAGCMInterfaceType) type_factory.createFcItfType(Constants.NAME_CONTROLLER,
         /* NAME CONTROLLER */NameController.class.getName(), TypeFactory.SERVER, TypeFactory.MANDATORY,
                 TypeFactory.SINGLE);
         controller = createController(itfType, PANameControllerImpl.class);
-        ((NameController) controller).setFcName(componentParameters.getName());
-        controlItfs.put(controller.getFcItfName(), controller);
+        ((NameController) controller).setFcName(this.componentParameters.getName());
+        this.controlItfs.put(controller.getFcItfName(), controller);
         nftype.add((InterfaceType) controller.getFcItfType());
     }
 
-    private void generateNfType(ComponentType nfType, boolean isPrimitive) {
-        InterfaceType[] tmp = nfType.getFcInterfaceTypes();
-        PAGCMInterfaceType[] interface_types = new PAGCMInterfaceType[tmp.length];
-        System.arraycopy(tmp, 0, interface_types, 0, tmp.length);
+    private void addControllersWithNfType() {
+        PAComponentType componentType = (PAComponentType) this.componentParameters.getComponentType();
+        InterfaceType[] nfItfTypes = componentType.getNfFcInterfaceTypes();
+        PAGCMInterfaceType[] pagcmNfItfTypes = new PAGCMInterfaceType[nfItfTypes.length];
+        System.arraycopy(nfItfTypes, 0, pagcmNfItfTypes, 0, nfItfTypes.length);
         PAInterface itf_ref = null;
         Class<?> controllerItf = null;
 
         try {
-            Vector<InterfaceType> nftype = new Vector<InterfaceType>();
-            addMandatoryControllers(nftype);
-            for (int i = 0; i < interface_types.length; i++) {
+            Vector<InterfaceType> nfType = new Vector<InterfaceType>();
+            addMandatoryControllers(nfType);
+            for (int i = 0; i < pagcmNfItfTypes.length; i++) {
                 // Component parameters and name controller have to be managed when the controller is actually added
-                controllerItf = Class.forName(interface_types[i].getFcItfSignature());
+                controllerItf = Class.forName(pagcmNfItfTypes[i].getFcItfSignature());
 
-                if (!specialCasesForNfType(controllerItf, isPrimitive, interface_types[i],
-                        this.componentParameters, nftype)) {
-                    if (interface_types[i].isFcCollectionItf()) {
-                        // members of collection itfs are created dynamically
+                if (!specialCasesForNfType(controllerItf, componentParameters.getHierarchicalType().equals(
+                        Constants.PRIMITIVE), pagcmNfItfTypes[i], this.componentParameters, nfType)) {
+                    if (pagcmNfItfTypes[i].isFcCollectionItf()) {
+                        // Members of collection itfs are created dynamically
                         continue;
                     }
-                    if (interface_types[i].isGCMMulticastItf() && interface_types[i].isFcClientItf()) {//TODO : This piece of code has to be tested
-                        itf_ref = createInterfaceOnGroupOfDelegatees(interface_types[i]);
+                    if (pagcmNfItfTypes[i].isGCMMulticastItf() && pagcmNfItfTypes[i].isFcClientItf()) {//TODO : This piece of code has to be tested
+                        itf_ref = createInterfaceOnGroupOfDelegatees(pagcmNfItfTypes[i]);
                     } else {
                         itf_ref = MetaObjectInterfaceClassGenerator.instance().generateInterface(
-                                interface_types[i].getFcItfName(), this, interface_types[i],
-                                interface_types[i].isInternal(), false);
+                                pagcmNfItfTypes[i].getFcItfName(), this, pagcmNfItfTypes[i],
+                                pagcmNfItfTypes[i].isInternal(), false);
                     }
 
-                    controlItfs.put(interface_types[i].getFcItfName(), itf_ref);
-                    nftype.add((InterfaceType) itf_ref.getFcItfType());
+                    this.controlItfs.put(pagcmNfItfTypes[i].getFcItfName(), itf_ref);
+                    nfType.add((InterfaceType) itf_ref.getFcItfType());
                 }
             }
 
-            try {//Setting the real NF type, as some controllers may not be generated
+            try {// Setting the real NF type, as some controllers may not be generated
                 Component boot = Utils.getBootstrapComponent();
-                GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
-                InterfaceType[] nf = new InterfaceType[nftype.size()];
-                nftype.toArray(nf);
-                this.componentParameters.setComponentNFType(type_factory.createFcType(nf));
+                PAGCMTypeFactory type_factory = Utils.getPAGCMTypeFactory(boot);
+                InterfaceType[] fItfTypes = componentType.getFcInterfaceTypes();
+                nfItfTypes = nfType.toArray(new InterfaceType[] {});
+                this.componentParameters.setComponentType(type_factory.createFcType(fItfTypes, nfItfTypes));
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.warn("NF type could not be set");
@@ -252,16 +244,16 @@ public class PAComponentImpl implements PAComponent, Serializable {
     }
 
     private boolean specialCasesForNfType(Class<?> controllerItf, boolean isPrimitive,
-            PAGCMInterfaceType itfType, ComponentParameters componentParam, Vector<InterfaceType> nftype)
+            PAGCMInterfaceType itfType, ComponentParameters componentParam, Vector<InterfaceType> nfType)
             throws Exception {
 
         if (PAMembraneController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
             !itfType.isInternal()) {
             PAInterface controller = createController(itfType, PAMembraneControllerImpl.class);
-            controlItfs.put(controller.getFcItfName(), controller);
-            nftype.add((InterfaceType) controller.getFcItfType());
+            this.controlItfs.put(controller.getFcItfName(), controller);
+            nfType.add((InterfaceType) controller.getFcItfType());
             return true; // The membrane controller is a very special case. As soon as the interface is included inside the non-functional type,
-            //the controller has to be generated.Indeed, the membrane controller is the default controller for manipulating the membrane.
+            // The controller has to be generated.Indeed, the membrane controller is the default controller for manipulating the membrane.
         }
 
         if (ContentController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
@@ -281,18 +273,18 @@ public class PAComponentImpl implements PAComponent, Serializable {
                     logger.debug("user component class of '" + componentParam.getName() +
                         "' does not have any client interface. It will have no BindingController");
                 }
-                return true;//The BindingController is ignored
+                return true;// The BindingController is ignored
             }
-            return false;//The BindingController is generated
+            return false;// The BindingController is generated
         }
 
         if (NameController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
-            !itfType.isInternal()) { /* Mandatory controller, we don't have to recreate it */
+            !itfType.isInternal()) { // Mandatory controller, we don't have to recreate it
             return true;
         }
 
         if (LifeCycleController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
-            !itfType.isInternal()) { /* Mandatory controller, we don't have to recreate it */
+            !itfType.isInternal()) { // Mandatory controller, we don't have to recreate it
             return true;
         }
         return false;
@@ -315,75 +307,15 @@ public class PAComponentImpl implements PAComponent, Serializable {
     private void checkCompatibility() { // TODO : This method is called when a nfType is given with a config file. It has to check that both correspond
     }
 
-    /**
-     * @param componentParameters
-     * @param component_is_primitive
-     */
-    private void addFunctionalInterfaces(boolean component_is_primitive) {
-        InterfaceType[] tmp = componentParameters.getComponentType().getFcInterfaceTypes();
-        PAGCMInterfaceType[] interface_types = new PAGCMInterfaceType[tmp.length];
-        System.arraycopy(tmp, 0, interface_types, 0, tmp.length);
-
-        try {
-            for (int i = 0; i < interface_types.length; i++) {
-                PAInterface itf_ref = null;
-
-                if (interface_types[i].isFcCollectionItf()) {
-                    // members of collection itfs are created dynamically
-                    continue;
-                }
-                if (interface_types[i].isGCMMulticastItf()) {
-                    itf_ref = createInterfaceOnGroupOfDelegatees(interface_types[i]);
-                } else {
-                    // no interface generated for client itfs of primitive
-                    // components
-                    if (!(interface_types[i].isFcClientItf() && component_is_primitive)) {
-                        itf_ref = MetaObjectInterfaceClassGenerator.instance().generateFunctionalInterface(
-                                interface_types[i].getFcItfName(), this, interface_types[i]);
-                        // server functional interfaces are external interfaces (at
-                        // least they are tagged as external)
-
-                        // set delegation link
-                        if (componentParameters.getHierarchicalType().equals(Constants.PRIMITIVE)) {
-                            if (!interface_types[i].isFcCollectionItf()) {
-                                if (!interface_types[i].isFcClientItf()) {
-                                    (itf_ref).setFcItfImpl(getReferenceOnBaseObject());
-                                } else {
-                                    (itf_ref).setFcItfImpl(null);
-                                }
-                            }
-                        }
-                    }
-
-                    // non multicast client itf of primitive comp : do nothing
-                }
-
-                if (!interface_types[i].isFcClientItf()) {
-                    //System.err.println("SERVER" + interface_types[i].getFcItfName() + itf_ref );
-                    serverItfs.put(interface_types[i].getFcItfName(), itf_ref);
-                } else if (itf_ref != null) {
-                    //System.err.println("CLIENT" + interface_types[i].getFcItfName() + itf_ref );
-                    clientItfs.put(interface_types[i].getFcItfName(), itf_ref);
-                }
-            }
-        } catch (Exception e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("cannot create interface references : " + e.getMessage());
-            }
-            e.printStackTrace();
-            throw new RuntimeException("cannot create interface references : " + e.getMessage(), e);
-        }
-    }
-
-    private void addControllers(boolean isPrimitive) {
+    private void addControllers() {
         ComponentConfigurationHandler componentConfiguration = PAComponentImpl
-                .loadControllerConfiguration(componentParameters.getControllerDescription()
+                .loadControllerConfiguration(this.componentParameters.getControllerDescription()
                         .getControllersConfigFileLocation());
         Map<String, String> controllers = componentConfiguration.getControllers();
         List<String> inputInterceptorsSignatures = componentConfiguration.getInputInterceptors();
-        inputInterceptors.setSize(inputInterceptorsSignatures.size());
+        this.inputInterceptors.setSize(inputInterceptorsSignatures.size());
         List<String> outputInterceptorsSignatures = componentConfiguration.getOutputInterceptors();
-        outputInterceptors.setSize(outputInterceptorsSignatures.size());
+        this.outputInterceptors.setSize(outputInterceptorsSignatures.size());
         Vector<InterfaceType> nfType = new Vector<InterfaceType>();
 
         // Properties controllers =
@@ -409,18 +341,19 @@ public class PAComponentImpl implements PAComponent, Serializable {
 
                 controllerClass = Class.forName(controllers.get(controllerItf.getName()));
 
-                //create Binding and Content controllers only if necessary
+                // Create Binding and Content controllers only if necessary
                 if (BindingController.class.isAssignableFrom(controllerClass) &&
-                    componentParameters.getHierarchicalType().equals(Constants.PRIMITIVE) &&
-                    (componentParameters.getClientInterfaceTypes().length == 0)) {
+                    this.componentParameters.getHierarchicalType().equals(Constants.PRIMITIVE) &&
+                    (this.componentParameters.getClientInterfaceTypes().length == 0)) {
                     if (logger.isDebugEnabled()) {
                         logger.debug("Component '" + componentParameters.getName() +
                             "' does not have any client interface, cancel the BindingController creation");
                     }
                     continue;
                 }
-                if (isPrimitive && ContentController.class.isAssignableFrom(controllerClass)) {
-                    // no content controller for a primitive component
+                if (componentParameters.getHierarchicalType().equals(Constants.PRIMITIVE) &&
+                    ContentController.class.isAssignableFrom(controllerClass)) {
+                    // No content controller for a primitive component
                     continue;
                 }
 
@@ -431,10 +364,10 @@ public class PAComponentImpl implements PAComponent, Serializable {
                 theController = createController((PAGCMInterfaceType) currentController.getFcItfType(),
                         controllerClass);
 
-                // add interceptor
+                // Add interceptor
                 if (InputInterceptor.class.isAssignableFrom(controllerClass)) {
-                    // keep the sequence order of the interceptors
-                    inputInterceptors.setElementAt(theController, inputInterceptorsSignatures
+                    // Keep the sequence order of the interceptors
+                    this.inputInterceptors.setElementAt(theController, inputInterceptorsSignatures
                             .indexOf(controllerClass.getName()));
                 } else if (inputInterceptorsSignatures.contains(controllerClass.getName())) {
                     logger
@@ -444,7 +377,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
                 }
 
                 if (OutputInterceptor.class.isAssignableFrom(controllerClass)) {
-                    outputInterceptors.setElementAt(theController, outputInterceptorsSignatures
+                    this.outputInterceptors.setElementAt(theController, outputInterceptorsSignatures
                             .indexOf(controllerClass.getName()));
                 } else if (outputInterceptorsSignatures.contains(controllerClass.getName())) {
                     logger
@@ -455,30 +388,31 @@ public class PAComponentImpl implements PAComponent, Serializable {
             } catch (Exception e) {
                 throw new ProActiveRuntimeException("Could not create controller '" +
                     controllers.get(controllerItfName) + "' while instantiating '" +
-                    componentParameters.getName() + "' component (please check your configuration file " +
-                    componentParameters.getControllerDescription().getControllersConfigFileLocation() +
+                    this.componentParameters.getName() +
+                    "' component (please check your configuration file " +
+                    this.componentParameters.getControllerDescription().getControllersConfigFileLocation() +
                     ") : " + e.getMessage(), e);
             }
 
             if (NameController.class.isAssignableFrom(controllerClass)) {
-                ((NameController) theController.getFcItfImpl()).setFcName(componentParameters.getName());
+                ((NameController) theController.getFcItfImpl()).setFcName(this.componentParameters.getName());
             }
 
             controlItfs.put(currentController.getFcItfName(), theController);
             nfType.add((InterfaceType) theController.getFcItfType());
         }
 
-        try {//Setting the real NF type, as some controllers may not be generated
+        try {// Setting the real NF type, as some controllers may not be generated
             Component boot = Utils.getBootstrapComponent();
-            GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
-            InterfaceType[] nf = new InterfaceType[nfType.size()];
-            nfType.toArray(nf);
-            this.componentParameters.setComponentNFType(type_factory.createFcType(nf));
+            PAGCMTypeFactory type_factory = Utils.getPAGCMTypeFactory(boot);
+            InterfaceType[] f = this.componentParameters.getComponentType().getFcInterfaceTypes();
+            InterfaceType[] nf = nfType.toArray(new InterfaceType[] {});
+            this.componentParameters.setComponentType(type_factory.createFcType(f, nf));
         } catch (Exception e) {
             e.printStackTrace();
             logger.warn("NF type could not be set");
         }
-        // add the "component" control itfs
+        // Add the "component" control itfs
     }
 
     /**
@@ -509,6 +443,65 @@ public class PAComponentImpl implements PAComponent, Serializable {
         }
     }
 
+    /**
+     * @param componentParameters
+     * @param isPrimitive
+     */
+    private void addFunctionalInterfaces() {
+        InterfaceType[] tmp = this.componentParameters.getComponentType().getFcInterfaceTypes();
+        PAGCMInterfaceType[] interface_types = new PAGCMInterfaceType[tmp.length];
+        System.arraycopy(tmp, 0, interface_types, 0, tmp.length);
+
+        try {
+            for (int i = 0; i < interface_types.length; i++) {
+                PAInterface itf_ref = null;
+
+                if (interface_types[i].isFcCollectionItf()) {
+                    // Members of collection itfs are created dynamically
+                    continue;
+                }
+                if (interface_types[i].isGCMMulticastItf()) {
+                    itf_ref = createInterfaceOnGroupOfDelegatees(interface_types[i]);
+                } else {
+                    // No interface generated for client itfs of primitive
+                    // components
+                    if (!(interface_types[i].isFcClientItf() && componentParameters.getHierarchicalType()
+                            .equals(Constants.PRIMITIVE))) {
+                        itf_ref = MetaObjectInterfaceClassGenerator.instance().generateFunctionalInterface(
+                                interface_types[i].getFcItfName(), this, interface_types[i]);
+                        // Server functional interfaces are external interfaces (at
+                        // least they are tagged as external)
+
+                        // Set delegation link
+                        if (this.componentParameters.getHierarchicalType().equals(Constants.PRIMITIVE)) {
+                            if (!interface_types[i].isFcCollectionItf()) {
+                                if (!interface_types[i].isFcClientItf()) {
+                                    (itf_ref).setFcItfImpl(getReferenceOnBaseObject());
+                                } else {
+                                    (itf_ref).setFcItfImpl(null);
+                                }
+                            }
+                        }
+                    }
+
+                    // Non multicast client itf of primitive comp : do nothing
+                }
+
+                if (!interface_types[i].isFcClientItf()) {
+                    this.serverItfs.put(interface_types[i].getFcItfName(), itf_ref);
+                } else if (itf_ref != null) {
+                    this.clientItfs.put(interface_types[i].getFcItfName(), itf_ref);
+                }
+            }
+        } catch (Exception e) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("cannot create interface references : " + e.getMessage());
+            }
+            e.printStackTrace();
+            throw new RuntimeException("cannot create interface references : " + e.getMessage(), e);
+        }
+    }
+
     // returns a generated interface reference, whose impl field is a group
     // It is able to handle multiple bindings
     private PAInterface createInterfaceOnGroupOfDelegatees(PAGCMInterfaceType itfType) throws Exception {
@@ -527,19 +520,19 @@ public class PAComponentImpl implements PAComponent, Serializable {
     public Object getFcInterface(String interfaceName) throws NoSuchInterfaceException {
         if (!(Constants.ATTRIBUTE_CONTROLLER.equals(interfaceName)) &&
             (interfaceName.endsWith("-controller"))) {
-            if (!controlItfs.containsKey(interfaceName)) {
+            if (!this.controlItfs.containsKey(interfaceName)) {
                 throw new NoSuchInterfaceException(interfaceName);
             }
-            return (controlItfs.get(interfaceName));
+            return (this.controlItfs.get(interfaceName));
         }
         if (interfaceName.equals(Constants.COMPONENT)) {
             return this;
         }
-        if (serverItfs.containsKey(interfaceName)) {
-            return serverItfs.get(interfaceName);
+        if (this.serverItfs.containsKey(interfaceName)) {
+            return this.serverItfs.get(interfaceName);
         }
-        if (clientItfs.containsKey(interfaceName)) {
-            return clientItfs.get(interfaceName);
+        if (this.clientItfs.containsKey(interfaceName)) {
+            return this.clientItfs.get(interfaceName);
         }
 
         // a member of a collection itf?
@@ -549,15 +542,15 @@ public class PAComponentImpl implements PAComponent, Serializable {
             if (type.isFcCollectionItf()) {
                 if ((interfaceName.startsWith(type.getFcItfName()) && !type.getFcItfName().equals(
                         interfaceName))) {
-                    if (collectionItfsMembers.containsKey(interfaceName)) {
-                        return collectionItfsMembers.get(interfaceName);
+                    if (this.collectionItfsMembers.containsKey(interfaceName)) {
+                        return this.collectionItfsMembers.get(interfaceName);
                     } else {
                         // generate a new interface and add it to the list of members of collection its
                         try {
                             Interface clientItf = MetaObjectInterfaceClassGenerator.instance()
                                     .generateFunctionalInterface(interfaceName, this,
                                             (PAGCMInterfaceType) itfTypes[i]);
-                            collectionItfsMembers.put(interfaceName, clientItf);
+                            this.collectionItfsMembers.put(interfaceName, clientItf);
                             return clientItf;
                         } catch (InterfaceGenerationFailedException e1) {
                             logger.info("Generation of the interface '" + interfaceName + "' failed.", e1);
@@ -579,17 +572,17 @@ public class PAComponentImpl implements PAComponent, Serializable {
         // add interface component
         itfs.add(this);
         // add controller interface
-        for (Object object : controlItfs.values()) {
+        for (Object object : this.controlItfs.values()) {
             itfs.add(object);
         }
 
         //add server interface
-        for (Object object : serverItfs.values()) {
+        for (Object object : this.serverItfs.values()) {
             itfs.add(object);
         }
 
         //add client interface
-        for (Object object : clientItfs.values()) {
+        for (Object object : this.clientItfs.values()) {
             itfs.add(object);
         }
 
@@ -601,14 +594,6 @@ public class PAComponentImpl implements PAComponent, Serializable {
      */
     public Type getFcType() {
         return this.componentParameters.getComponentType();
-    }
-
-    /**
-     * Returns the non-functional type of the component (interfaces exposed by the membrane)
-     * @return The non-functional type of the component
-     */
-    public Type getNFType() {
-        return this.componentParameters.getComponentNFType();
     }
 
     /**
@@ -661,7 +646,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
      * @return the body of the current active object
      */
     public Body getBody() {
-        return body;
+        return this.body;
     }
 
     /**
@@ -673,7 +658,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
     }
 
     public void setControllerObject(String itfName, Object classToCreate) throws Exception {
-        PAInterface itf_ref = (PAInterface) controlItfs.get(itfName);
+        PAInterface itf_ref = (PAInterface) this.controlItfs.get(itfName);
         if (itf_ref == null) {
             throw new NoSuchInterfaceException("The requested interface :" + itfName + " doesn't exist");
         } else {
@@ -717,7 +702,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
                     ((PAController) (controller.getFcItfImpl())).initController();
                 }
 
-                controlItfs.put(controller.getFcItfName(), controller);
+                this.controlItfs.put(controller.getFcItfName(), controller);
             } else { /* The controller class does not implement the specified interface */
                 throw new IllegalBindingException("The class " + classToCreate + " does not implement the " +
                     itf_type.getFcItfSignature() + " interface");
@@ -732,17 +717,18 @@ public class PAComponentImpl implements PAComponent, Serializable {
      */
     public PAComponent getRepresentativeOnThis() {
         // optimization : cache self reference
-        if (representativeOnMyself != null) {
-            return representativeOnMyself;
+        if (this.representativeOnMyself != null) {
+            return this.representativeOnMyself;
         }
 
         try {
-            return representativeOnMyself = PAComponentRepresentativeFactory.instance()
+            return this.representativeOnMyself = PAComponentRepresentativeFactory.instance()
                     .createComponentRepresentative(
                             getComponentParameters(),
-                            ((StubObject) MOP.turnReified(body.getReifiedObject().getClass().getName(),
+                            ((StubObject) MOP.turnReified(this.body.getReifiedObject().getClass().getName(),
                                     org.objectweb.proactive.core.Constants.DEFAULT_BODY_PROXY_CLASS_NAME,
-                                    new Object[] { body }, body.getReifiedObject(), null)).getProxy());
+                                    new Object[] { this.body }, this.body.getReifiedObject(), null))
+                                    .getProxy());
         } catch (Exception e) {
             throw new ProActiveRuntimeException("This component could not generate a reference on itself", e);
         }
@@ -756,11 +742,11 @@ public class PAComponentImpl implements PAComponent, Serializable {
     }
 
     public List<Interface> getInputInterceptors() {
-        return inputInterceptors;
+        return this.inputInterceptors;
     }
 
     public List<Interface> getOutputInterceptors() {
-        return outputInterceptors;
+        return this.outputInterceptors;
     }
 
     public void migrateControllersDependentActiveObjectsTo(Node node) throws MigrationException {
@@ -768,7 +754,7 @@ public class PAComponentImpl implements PAComponent, Serializable {
          * for (PAController controller : controlItfs.values()) {
          * controller.migrateDependentActiveObjectsTo(node); }
          */
-        for (Interface controller : controlItfs.values()) {
+        for (Interface controller : this.controlItfs.values()) {
             Object c = ((PAInterface) controller).getFcItfImpl();
             if (c instanceof PAController) { // Object Controller
                 ((PAController) c).migrateDependentActiveObjectsTo(node);

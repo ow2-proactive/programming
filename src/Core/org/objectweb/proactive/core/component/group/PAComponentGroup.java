@@ -87,7 +87,7 @@ public class PAComponentGroup {
             Object result = MOP.newInstance(PAInterfaceImpl.class.getName(), null, null,
                     ProxyForComponentInterfaceGroup.class.getName(), null);
 
-            ProxyForComponentInterfaceGroup proxy = (ProxyForComponentInterfaceGroup) ((StubObject) result)
+            ProxyForComponentInterfaceGroup<?> proxy = (ProxyForComponentInterfaceGroup<?>) ((StubObject) result)
                     .getProxy();
             proxy.setClassName(Interface.class.getName());
 
@@ -141,7 +141,7 @@ public class PAComponentGroup {
                             controllerDesc.getControllersConfigFileLocation() });
 
             // Instanciates the proxy object
-            ProxyForComponentGroup proxy = (ProxyForComponentGroup) MOP.createProxyObject(
+            ProxyForComponentGroup<?> proxy = (ProxyForComponentGroup<?>) MOP.createProxyObject(
                     ProxyForComponentGroup.class.getName(), MOP.EMPTY_OBJECT_ARRAY, reifiedCall);
 
             // connect the stub to the proxy
@@ -162,7 +162,7 @@ public class PAComponentGroup {
 
     /**
      * Creates an empty  non-functional component stub+a group proxy.
-     * The stub in front of the group proxy is a non-functional component stub (instance of NFComponentRepresentativeImpl),
+     * The stub in front of the group proxy is a non-functional component stub (instance of PANFComponentRepresentativeImpl),
      * that offers references to the functional interfaces defined in the type of the component.
      * @param componentType parameters of this component
      * @param controllerDesc TODO
@@ -189,7 +189,7 @@ public class PAComponentGroup {
                             controllerDesc.getControllersConfigFileLocation() });
 
             // Instanciates the proxy object
-            ProxyForComponentGroup proxy = (ProxyForComponentGroup) MOP.createProxyObject(
+            ProxyForComponentGroup<?> proxy = (ProxyForComponentGroup<?>) MOP.createProxyObject(
                     ProxyForComponentGroup.class.getName(), MOP.EMPTY_OBJECT_ARRAY, reifiedCall);
 
             // connect the stub to the proxy

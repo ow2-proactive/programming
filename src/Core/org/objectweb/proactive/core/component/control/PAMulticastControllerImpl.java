@@ -66,6 +66,7 @@ import org.objectweb.proactive.core.component.collectiveitfs.MulticastBindingChe
 import org.objectweb.proactive.core.component.exceptions.ParameterDispatchException;
 import org.objectweb.proactive.core.component.group.PAComponentGroup;
 import org.objectweb.proactive.core.component.group.ProxyForComponentInterfaceGroup;
+import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatch;
@@ -96,15 +97,13 @@ public class PAMulticastControllerImpl extends AbstractCollectiveInterfaceContro
     @Override
     public void initController() {
         // this method is called once the component is fully instantiated with all its interfaces created
-        InterfaceType[] fItfFcTypes = owner.getComponentParameters().getComponentType().getFcInterfaceTypes();
-        InterfaceType[] nfItfFcTypes = new InterfaceType[0];
-        ComponentType nfComponentType = owner.getComponentParameters().getComponentNFType();
-        if (nfComponentType != null) {
-            nfItfFcTypes = nfComponentType.getFcInterfaceTypes();
+        InterfaceType[] itfTypes = null;
+        ComponentType componentType = (ComponentType) owner.getFcType();
+        if (componentType instanceof PAComponentType) {
+            itfTypes = ((PAComponentType) componentType).getAllFcInterfaceTypes();
+        } else {
+            itfTypes = componentType.getFcInterfaceTypes();
         }
-        InterfaceType[] itfTypes = new InterfaceType[fItfFcTypes.length + nfItfFcTypes.length];
-        System.arraycopy(fItfFcTypes, 0, itfTypes, 0, fItfFcTypes.length);
-        System.arraycopy(nfItfFcTypes, 0, itfTypes, fItfFcTypes.length, nfItfFcTypes.length);
 
         for (int i = 0; i < itfTypes.length; i++) {
             PAGCMInterfaceType type = (PAGCMInterfaceType) itfTypes[i];

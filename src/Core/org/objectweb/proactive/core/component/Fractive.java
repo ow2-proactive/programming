@@ -132,11 +132,11 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNFcInstance(org.objectweb.fractal.api.Type, org.objectweb.proactive.core.component.ControllerDescription, org.objectweb.proactive.core.component.ContentDescription)
+     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type, org.objectweb.proactive.core.component.ControllerDescription, org.objectweb.proactive.core.component.ContentDescription)
      */
-    public Component newNFcInstance(Type type, ControllerDescription controllerDesc,
+    public Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
             ContentDescription contentDesc) throws InstantiationException {
-        return newNFcInstance(type, controllerDesc, contentDesc, (Node) null);
+        return newNfFcInstance(type, controllerDesc, contentDesc, (Node) null);
     }
 
     /*
@@ -193,13 +193,13 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /*
-     * @see org.objectweb.fractal.api.factory.GenericFactory#newNFcInstance(org.objectweb.fractal.api.Type,
+     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type,
      *      java.lang.Object, java.lang.Object)
      */
-    public Component newNFcInstance(Type type, Object controllerDesc, Object contentDesc)
+    public Component newNfFcInstance(Type type, Object controllerDesc, Object contentDesc)
             throws InstantiationException {
         try {
-            return newNFcInstance(type, (ControllerDescription) controllerDesc,
+            return newNfFcInstance(type, (ControllerDescription) controllerDesc,
                     (ContentDescription) contentDesc);
         } catch (ClassCastException e) {
             if ((type == null) && (controllerDesc == null) && (contentDesc instanceof Map)) {
@@ -211,7 +211,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
                 ((contentDesc instanceof String) || (contentDesc == null))) {
                 // for the ADL, when only type and ControllerDescription are
                 // given
-                return newNFcInstance(type, controllerDesc, (contentDesc == null) ? null
+                return newNfFcInstance(type, controllerDesc, (contentDesc == null) ? null
                         : new ContentDescription((String) contentDesc));
             }
 
@@ -234,7 +234,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
 
             }
             if ("primitive".equals(controllerDesc) && (contentDesc instanceof String)) {
-                return newNFcInstance(type, new ControllerDescription(null, Constants.PRIMITIVE),
+                return newNfFcInstance(type, new ControllerDescription(null, Constants.PRIMITIVE),
                         new ContentDescription((String) contentDesc));
             }
 
@@ -269,41 +269,18 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /*
-     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNFcInstance(org.objectweb.fractal.api.Type,
+     * @see org.objectweb.proactive.core.component.factory.PAGenericFactory#newNfFcInstance(org.objectweb.fractal.api.Type,
      *      org.objectweb.proactive.core.component.ControllerDescription,
      *      org.objectweb.proactive.core.component.ContentDescription,
      *      org.objectweb.proactive.core.node.Node)
      */
-    public Component newNFcInstance(Type type, ControllerDescription controllerDesc,
+    public Component newNfFcInstance(Type type, ControllerDescription controllerDesc,
             ContentDescription contentDesc, Node node) throws InstantiationException {
         try {
             ActiveObjectWithComponentParameters container = commonInstanciation(type, controllerDesc,
                     contentDesc, node);
             return nfComponent(type, container);
         } catch (ActiveObjectCreationException e) {
-            InstantiationException ie = new InstantiationException(e.getMessage());
-            ie.initCause(e);
-            throw ie;
-        } catch (NodeException e) {
-            InstantiationException ie = new InstantiationException(e.getMessage());
-            ie.initCause(e);
-            throw ie;
-        }
-    }
-
-    public Component newFcInstance(Type type, Type nfType, ContentDescription contentDesc,
-            ControllerDescription controllerDesc, Node node) throws InstantiationException {
-        if (nfType == null) {
-            return newFcInstance(type, controllerDesc, contentDesc, node);
-        }
-        try {
-            ActiveObjectWithComponentParameters container = commonInstanciation(type, nfType, controllerDesc,
-                    contentDesc, node);
-            return fComponent(type, container);
-        } catch (ActiveObjectCreationException e) {
-            logger
-                    .info("Active object creation error while creating component; an exception occurs with the following message: " +
-                        e.getMessage());
             InstantiationException ie = new InstantiationException(e.getMessage());
             ie.initCause(e);
             throw ie;
@@ -551,70 +528,6 @@ public class Fractive implements PAGenericFactory, Component, Factory {
     }
 
     /**
-     * Common instantiation method called during creation both functional and non functional components.
-     *
-     * @param type
-     * @param controllerDesc
-     * @param contentDesc
-     * @param node
-     * @return A container object, containing objects for the generation of the component representative
-     * @throws InstantiationException
-     * @throws ActiveObjectCreationException
-     * @throws NodeException
-     */
-    private ActiveObjectWithComponentParameters commonInstanciation(Type type, Type nfType,
-            ControllerDescription controllerDesc, ContentDescription contentDesc, Node node)
-            throws InstantiationException, ActiveObjectCreationException, NodeException {
-        if (contentDesc == null) {
-            // a composite component, no activitiy/factory/node specified
-            if (Constants.COMPOSITE.equals(controllerDesc.getHierarchicalType())) {
-                contentDesc = new ContentDescription(Composite.class.getName());
-            } else {
-                throw new InstantiationException(
-                    "Content can be null only if the hierarchical type of the component is composite");
-            }
-        }
-
-        // instantiate the component metaobject factory with parameters of
-        // the component
-
-        // type must be a component type
-        if (!(type instanceof ComponentType)) {
-            throw new InstantiationException("Argument type must be an instance of ComponentType");
-        }
-
-        if (!(nfType instanceof ComponentType)) {
-            throw new InstantiationException("Argument nftype must be an instance of ComponentType");
-        }
-        ComponentParameters componentParameters = new ComponentParameters((ComponentType) type,
-            (ComponentType) nfType, controllerDesc);
-        if (contentDesc.getFactory() == null) {
-            // first create a map with the parameters
-            Map<String, Object> factory_params = new Hashtable<String, Object>(1);
-
-            factory_params.put(ProActiveMetaObjectFactory.COMPONENT_PARAMETERS_KEY, componentParameters);
-            if (controllerDesc.isSynchronous() &&
-                (Constants.COMPOSITE.equals(controllerDesc.getHierarchicalType()))) {
-                factory_params.put(ProActiveMetaObjectFactory.SYNCHRONOUS_COMPOSITE_COMPONENT_KEY,
-                        Constants.SYNCHRONOUS);
-            }
-            contentDesc.setFactory(new ProActiveMetaObjectFactory(factory_params));
-            // factory =
-            // PAComponentMetaObjectFactory.newInstance(componentParameters);
-        }
-
-        // TODO : add controllers in the component metaobject factory?
-        Object ao = null;
-
-        // 3 possibilities : either the component is created on a node (or
-        // null), it is created on a virtual node, or on multiple nodes
-        ao = PAActiveObject.newActive(contentDesc.getClassName(), null, contentDesc
-                .getConstructorParameters(), node, contentDesc.getActivity(), contentDesc.getFactory());
-
-        return new ActiveObjectWithComponentParameters((StubObject) ao, componentParameters);
-    }
-
-    /**
      * Creates a component representative for a functional component (to be used with commonInstanciation method)
      * @param container The container containing objects for the generation of component representative
      * @return The created component
@@ -645,9 +558,7 @@ public class Fractive implements PAGenericFactory, Component, Factory {
             throw new ProActiveRuntimeException("Cannot find a Proxy on the stub object: " + ao);
         }
         PAComponentRepresentative representative = PAComponentRepresentativeFactory.instance()
-                .createNFComponentRepresentative((ComponentType) type,
-                        componentParameters.getHierarchicalType(), myProxy,
-                        componentParameters.getControllerDescription().getControllersConfigFileLocation());
+                .createNFComponentRepresentative(componentParameters, myProxy);
         representative.setStubOnBaseObject(ao);
         return representative;
     }
