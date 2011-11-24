@@ -190,9 +190,9 @@ public class ProActiveRuntimeImpl extends RuntimeRegistrationEventProducerImpl i
                 }
 
             } catch (UnknownProtocolException e) {
-                e.printStackTrace();
+                logger.error(e);
             } catch (ProActiveException e) {
-                e.printStackTrace();
+                logger.error(e);
             }
             return proActiveRuntime;
         } else {
