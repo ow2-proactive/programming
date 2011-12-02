@@ -125,42 +125,58 @@ public class PAComponentCompiler implements BindingController, Compiler {
 	  // --------------------------------------------------------------------------
 
 	  void compile(final List<ComponentContainer> path,
-	      final ComponentContainer container, final TaskMap tasks,
-	      final Map<Object, Object> context) throws ADLException {
-		
-		logger.debug("[PAComponentCompiler] Compiling component "+ container.toString() );
-		
-	    path.add(container);
-	    final Component[] comps = container.getComponents();
-	    for (final Component element : comps) {
-	      compile(path, element, tasks, context);
-	    }
-	    final Component[] nfcomps = getNFComponents(container);
-	    for (final Component element : nfcomps) {
-	    	logger.debug("[PAComponentCompiler] Compiling NF component "+ element.getName() );
-	    	//compile(path, element, tasks, context);
-	    }
-	    path.remove(path.size() - 1);
+			  final ComponentContainer container, final TaskMap tasks,
+			  final Map<Object, Object> context) throws ADLException {
 
-	    final Iterator<PrimitiveCompiler> it = primitiveCompilers.values()
-	        .iterator();
-	    while (it.hasNext()) {
-	      (it.next()).compile(path, container, tasks, context);
-	    }
+		  if(container.astGetDecoration("NF") == null) {
+			  logger.debug("[PAComponentCompiler] Compiling  F component "+ container.toString() );  
+		  }
+		  else {
+			  logger.debug("[PAComponentCompiler] Compiling NF component "+ container.toString() );
+		  }
+
+		  path.add(container);
+		  final Component[] comps = getAllComponents(container);
+		  for (final Component element : comps) {
+			  compile(path, element, tasks, context);
+		  }
+		  path.remove(path.size() - 1);
+
+		  final Iterator<PrimitiveCompiler> it = primitiveCompilers.values()
+				  .iterator();
+		  while (it.hasNext()) {
+			  (it.next()).compile(path, container, tasks, context);
+		  }
 	  }
 	  
-	  private Component[] getNFComponents(ComponentContainer container) {
+	  /**
+	   * Helper method to collect all inner components, including F subcomponents,
+	   * and NF components in the membrane.
+	   * 
+	   * @param container
+	   * @return
+	   */
+	  private Component[] getAllComponents(ComponentContainer container) {
 		  
-		  Component[] comps = null;
+		  Component[] fComps = container.getComponents();
+		  Component[] nfComps = null;
 		  
 		  if(container instanceof ControllerContainer) {
 			  Controller ctrl = ((ControllerContainer) container).getController();
 			  if(ctrl != null) {
 				  if(ctrl instanceof ComponentContainer) {
-					  comps = ((ComponentContainer) ctrl).getComponents();
+					  nfComps = ((ComponentContainer) ctrl).getComponents();
 				  }
 			  }
 		  }
+		  
+		  Component[] comps = new Component[fComps.length + (nfComps==null? 0 : nfComps.length)];
+		  System.arraycopy(fComps, 0, comps, 0, fComps.length);
+		  if(nfComps != null) {
+			  System.arraycopy(nfComps, 0, comps, fComps.length, nfComps.length);
+		  }
+		  
+		  
 		  return comps;
 	  }
 }

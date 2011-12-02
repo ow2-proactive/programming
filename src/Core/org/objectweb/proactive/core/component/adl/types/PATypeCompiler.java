@@ -48,20 +48,30 @@ import org.objectweb.fractal.adl.attributes.Attributes;
 import org.objectweb.fractal.adl.attributes.AttributesContainer;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
+import org.objectweb.fractal.adl.implementations.Controller;
+import org.objectweb.fractal.adl.implementations.ControllerContainer;
 import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
-import org.objectweb.fractal.adl.types.TypeBuilder;
 import org.objectweb.fractal.adl.types.TypeCompiler;
 import org.objectweb.fractal.adl.types.TypeInterface;
+import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.task.core.TaskMap;
 import org.objectweb.fractal.task.deployment.lib.AbstractFactoryProviderTask;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 /**
- * Until now, it does not do anything different ...
+ * The {@link PATypeCompiler} creates the {@link InterfaceType} and {@link ComponentType} objects
+ * that must exist prior to creating a component.<br/><br/>
  * 
- * @author cruz
+ * The creation task is performed by a {@link CreateTypeTask}, which collects the data about the F
+ * and NF interfaces of a component (arrays of {@link InterfaceType} objects, and uses them to create
+ * a {@link ComponentType}, which is the outcome of the execution.<br/><br/>
+ * 
+ * The actual creation tasks, using the GCM API, are delegated to a {@link PATypeBuilder}.
+ * 
+ * 
+ * @author The ProActive Team
  *
  */
 public class PATypeCompiler extends TypeCompiler {
@@ -79,13 +89,12 @@ public class PATypeCompiler extends TypeCompiler {
 				// the task may already exist, in case of a shared component
 				tasks.getTask("type", container);
 			} catch (NoSuchElementException e) {
-				CreateTypeTask createTypeTask = new CreateTypeTask(builder,
+				CreateTypeTask createTypeTask = new CreateTypeTask((PATypeBuilder) builder,
 						(InterfaceContainer) container);
 				tasks.addTask("type", container, createTypeTask);
 			}
 		}
 		
-		//super.compile(path, container, tasks, context);
 	}
 
 	
@@ -95,30 +104,59 @@ public class PATypeCompiler extends TypeCompiler {
 
 	static class CreateTypeTask extends AbstractFactoryProviderTask {
 
-		private TypeBuilder builder;
+		private PATypeBuilderItf builder;
 
 		private InterfaceContainer container;
 
-		public CreateTypeTask(final TypeBuilder builder,
+		public CreateTypeTask(final PATypeBuilder builder,
 				final InterfaceContainer container) {
 			this.builder = builder;
 			this.container = container;
 		}
 
-		public void execute(final Map context) throws Exception {
+		public void execute(final Map<Object, Object> context) throws Exception {
 			if (getFactory() != null) {
 				return;
 			}
-			List<Object> itfTypes = new ArrayList<Object>();
-			Interface[] itfs = container.getInterfaces();
-			for (int i = 0; i < itfs.length; i++) {
-				if (itfs[i] instanceof TypeInterface) {
-					TypeInterface itf = (TypeInterface) itfs[i];
-					Object itfType = builder.createInterfaceType(itf.getName(),
-							itf.getSignature(), itf.getRole(), itf
-									.getContingency(), itf.getCardinality(),
-							context);
-					itfTypes.add(itfType);
+
+			String name = null;
+			if (container instanceof Definition) {
+				name = ((Definition) container).getName();
+			} else if (container instanceof Component) {
+				name = ((Component) container).getName();
+			}
+			logger.debug("[PATypeCompiler] Executing CreateTypeTask for "+ (container.astGetDecoration("NF")==null?" F":"NF" )+" component "+ name);
+
+			
+			// collects and creates the F interfaces
+			List<InterfaceType> fItfTypes = new ArrayList<InterfaceType>();
+			Interface[] fItfs = container.getInterfaces();
+			for (Interface itf : fItfs) {
+				logger.debug("[PATypeCompiler] --> ITF: " + itf.toString() );
+				if(itf instanceof TypeInterface) {
+					TypeInterface tItf = (TypeInterface) itf;
+					InterfaceType itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf.getRole(), tItf.getContingency(), tItf.getCardinality(), context);
+					fItfTypes.add(itfType);
+				}
+			}
+			
+			// collects and creates the NF interfaces
+			List<InterfaceType> nfItfTypes = new ArrayList<InterfaceType>();
+			Interface[] nfItfs = null;
+			if (container instanceof ControllerContainer) {
+				Controller ctrl = ((ControllerContainer) container).getController();
+				if(ctrl != null) {
+					if(ctrl instanceof InterfaceContainer) {
+						nfItfs = ((InterfaceContainer) ctrl).getInterfaces();
+						for(Interface itf : nfItfs) {
+							logger.debug("[PATypeCompiler] --> ITF: " + itf.toString());
+							if(itf instanceof TypeInterface) {
+								TypeInterface tItf = (TypeInterface) itf;
+								InterfaceType itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf.getRole(), tItf.getContingency(), tItf.getCardinality(), context);
+								nfItfTypes.add(itfType);
+							}
+						}
+					}
 				}
 			}
 			
@@ -127,26 +165,21 @@ public class PATypeCompiler extends TypeCompiler {
 				Attributes attr = ((AttributesContainer) container)
 						.getAttributes();
 				if (attr != null) {
-					Object itfType = builder.createInterfaceType(
+					InterfaceType itfType = builder.createInterfaceType(
 							"attribute-controller", attr.getSignature(),
 							TypeInterface.SERVER_ROLE,
 							TypeInterface.MANDATORY_CONTINGENCY,
 							TypeInterface.SINGLETON_CARDINALITY, context);
-					itfTypes.add(itfType);
+					fItfTypes.add(itfType);
 				}
 			}
-			String name = null;
-			if (container instanceof Definition) {
-				name = ((Definition) container).getName();
-			} else if (container instanceof Component) {
-				name = ((Component) container).getName();
-			}
-			setFactory(builder.createComponentType(name, itfTypes.toArray(),
-					context));
+			
+			setFactory(builder.createComponentType(name, fItfTypes.toArray(new InterfaceType[0]), nfItfTypes.toArray(new InterfaceType[0]), context));
 		}
 
 		public String toString() {
-			return "T" + System.identityHashCode(this) + "[PA-CreateTypeTask()]";
+			return "T" + System.identityHashCode(this) + "[EXTENDED-CreateTypeTask()]";
 		}
+		
 	}
 }

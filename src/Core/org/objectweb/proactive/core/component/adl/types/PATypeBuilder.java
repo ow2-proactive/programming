@@ -38,54 +38,119 @@ package org.objectweb.proactive.core.component.adl.types;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.adl.ContextMap;
-import org.objectweb.fractal.adl.types.FractalTypeBuilder;
 import org.objectweb.fractal.adl.util.ClassLoaderHelper;
 import org.objectweb.fractal.api.Component;
+import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.proactive.core.component.Utils;
-import org.objectweb.proactive.core.component.type.PAGCMTypeFactoryImpl;
+import org.objectweb.proactive.core.component.type.PAGCMTypeFactory;
+import org.objectweb.proactive.core.util.log.Loggers;
+import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 
 /**
+ * The {@link PATypeBuilder} makes the calls to the GCM API to create the GCM InterfaceType,
+ * and the GCM ComponentType.
+ * 
  * @author The ProActive Team
  */
-public class PATypeBuilder extends FractalTypeBuilder {
-    @Override
-    public Object createInterfaceType(final String name, final String signature, final String role,
-            final String contingency, final String cardinality, final Object context) throws Exception {
+public class PATypeBuilder implements PATypeBuilderItf {
+	
+	public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+	
+	@SuppressWarnings("unchecked")
+	public Object createInterfaceType(String name, String signature, String role,
+			String contingency, String cardinality, Object context) throws Exception {
+		return createInterfaceType(name, signature, role, contingency, cardinality, (Map<Object, Object>)context);	
+	}
+
+	/**
+	 * Default: isInternal = false
+	 */
+    public InterfaceType createInterfaceType(final String name, final String signature, final String role,
+            final String contingency, final String cardinality, final Map<Object, Object> context) throws Exception {
+
+    	// default: isInternal = false;
+    	return createInterfaceType(name, signature, role, contingency, cardinality, false, context);
+    }
+    
+    /**
+     * Makes the call to the GCM API to create the GCM InterfaceType, using the PAGCMTypeFactory,
+     * obtained from the bootstrap component.
+     */
+	public InterfaceType createInterfaceType(String name, String signature,
+			String role, String contingency, String cardinality,
+			boolean isInternal, Map<Object, Object> context) throws Exception {
+
+    	ClassLoader loader = ClassLoaderHelper.getClassLoader(this, context);
+    	// bootstrap component
+        Component bootstrap = null;
+        if(context != null) {
+        	bootstrap = (Component) context.get("bootstrap");
+        }
+        if(bootstrap == null) {
+        	Map<Object, Object> ctxt = ContextMap.instance();
+        	ctxt.put("classloader", loader);
+        	bootstrap = GCM.getBootstrapComponent(ctxt);
+        }
+        // type factory
+        PAGCMTypeFactory patf = (PAGCMTypeFactory) GCM.getGCMTypeFactory(bootstrap);
+    	
         // TODO : cache already created types ?
         boolean client = "client".equals(role);
         boolean optional = "optional".equals(contingency);
+        // default cardinality = singleton
+        String checkedCardinality = (cardinality == null) ? GCMTypeFactory.SINGLETON_CARDINALITY : cardinality;
+        
+        return patf.createGCMItfType(name, signature, client, optional, checkedCardinality, isInternal);
+	}
 
-        String checkedCardinality = (cardinality == null) ? GCMTypeFactory.SINGLETON_CARDINALITY
-                : cardinality;
+	
+	@SuppressWarnings("unchecked")
+	public Object createComponentType(String name, Object[] interfaceTypes, Object context)
+			throws Exception {
+		return createComponentType(name,  (InterfaceType[]) interfaceTypes, (Map<Object, Object>) context);
+	}
 
-        // TODO should use bootstrap type factory with extended createFcItfType method
-        return PAGCMTypeFactoryImpl.instance().createGCMItfType(name, signature, client, optional,
-                checkedCardinality);
-    }
-
-    @Override
-    public Object createComponentType(final String name, final Object[] interfaceTypes, final Object context)
+	/**
+	 * Default: empty NF InterfaceType
+	 */
+    public ComponentType createComponentType(final String name, final InterfaceType[] interfaceTypes, final Map<Object, Object> context)
             throws Exception {
-        ClassLoader loader = ClassLoaderHelper.getClassLoader(this, context);
-
-        Component bootstrap = null;
-        if (context != null) {
-            bootstrap = (Component) ((Map) context).get("bootstrap");
-        }
-        if (bootstrap == null) {
-            Map ctxt = ContextMap.instance(); // new HashMap();
-            ctxt.put("classloader", loader);
-            bootstrap = Utils.getBootstrapComponent(ctxt);
-        }
-        InterfaceType[] types = new InterfaceType[interfaceTypes.length];
-        for (int i = 0; i < types.length; ++i) {
-            types[i] = (InterfaceType) interfaceTypes[i];
-        }
-        return GCM.getGCMTypeFactory(bootstrap).createFcType(types);
+		// pass an empty array of NF InterfaceType
+		return createComponentType(name, interfaceTypes, new InterfaceType[] {}, context);
     }
+
+    /**
+     * Makes the call to the GCM API to create the GCM ComponentType, using the PAGCMTypeFactory,
+     * obtained from the bootstrap component.
+     */
+	public ComponentType createComponentType(String name, InterfaceType[] fInterfaceTypes,
+			InterfaceType[] nfInterfaceTypes, Map<Object,Object> context) throws Exception {
+		
+		logger.debug("[PATypeBuilder] Building types for component ["+ name +"]");
+		
+        ClassLoader loader = ClassLoaderHelper.getClassLoader(this, context);
+    	// bootstrap component
+        Component bootstrap = null;
+        if(context != null) {
+        	bootstrap = (Component) context.get("bootstrap");
+        }
+        if(bootstrap == null) {
+        	Map<Object, Object> ctxt = ContextMap.instance();
+        	ctxt.put("classloader", loader);
+        	bootstrap = GCM.getBootstrapComponent(ctxt);
+        }
+        // type factory
+        PAGCMTypeFactory patf = (PAGCMTypeFactory) GCM.getGCMTypeFactory(bootstrap);
+		
+        return patf.createFcType(fInterfaceTypes, nfInterfaceTypes);
+	}
+
+
+
+
 }

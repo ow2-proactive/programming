@@ -12,6 +12,7 @@
 	
 	<!-- the delegated compilers -->
 	<component name="type-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
+	    <interface role="client" name="builder" signature="org.objectweb.proactive.core.component.adl.types.PATypeBuilderItf"/>
 	    <content class="org.objectweb.proactive.core.component.adl.types.PATypeCompiler"/>
 	</component> 
 	<component name="implementation-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
@@ -29,7 +30,7 @@
 
 	<!-- Builder definitions -->
 	<component name="type-builder">
-		<interface role="server" name="builder" signature="org.objectweb.fractal.adl.types.TypeBuilder"/>
+		<interface role="server" name="builder" signature="org.objectweb.proactive.core.component.adl.types.PATypeBuilderItf"/>
 		<content class="org.objectweb.proactive.core.component.adl.types.PATypeBuilder"/>
 	</component>
 	<component name="implementation-builder">
