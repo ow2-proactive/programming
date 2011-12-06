@@ -60,6 +60,11 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
+ * The {@link PAImplementationBuilder} makes the GCM API calls to create
+ * the component. In addition to the common attributes, like name, {@link ControllerDescription},
+ * and {@link ContentDescription}, it considers also the specification of a VirtualNode,
+ * and the fact that a component may be Functional or Non-Functional (component in the membrane)
+ * 
  * @author The ProActive Team
  */
 public class PAImplementationBuilderImpl implements PAImplementationBuilder, BindingController {
@@ -77,9 +82,11 @@ public class PAImplementationBuilderImpl implements PAImplementationBuilder, Bin
 
     public Object createComponent(Object type, String name, String definition,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
-            Map<Object, Object> context) throws Exception {
+            boolean isFunctional, Map<Object, Object> context) throws Exception {
+
+    	logger.debug("[PAImplementationBuilder] Building "+ (isFunctional?"F":"NF") +" component "+ name);
         ObjectsContainer obj = commonCreation(type, name, definition, contentDesc, adlVN, context);
-        return createFComponent(type, obj, controllerDesc, contentDesc, adlVN, obj.getBootstrapComponent());
+        return createComponent(type, obj, controllerDesc, contentDesc, adlVN, obj.getBootstrapComponent(), isFunctional);
     }
 
     protected ObjectsContainer commonCreation(Object type, String name, String definition,
@@ -162,12 +169,17 @@ public class PAImplementationBuilderImpl implements PAImplementationBuilder, Bin
         return result;
     }
 
-    private Component createFComponent(Object type, ObjectsContainer objectContainer,
+    private Component createComponent(Object type, ObjectsContainer objectContainer,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
-            Component bootstrap) throws Exception {
-        Component result = objectContainer.createFComponent((ComponentType) type, controllerDesc,
-                contentDesc, adlVN);
-        //        registry.addComponent(result);
+            Component bootstrap, boolean isFunctional) throws Exception {
+    	Component result = null;
+    	if(isFunctional) {
+    		result = objectContainer.createFComponent((ComponentType) type, controllerDesc, contentDesc, adlVN);
+    	}
+    	else {
+    		result = objectContainer.createNFComponent((ComponentType) type, controllerDesc, contentDesc, adlVN);
+        }
+        // registry.addComponent(result);
         return result;
     }
 
@@ -187,11 +199,39 @@ public class PAImplementationBuilderImpl implements PAImplementationBuilder, Bin
         public Component getBootstrapComponent() {
             return bootstrap;
         }
-
+        
+        /**
+         * Creates a Functional component using the PAGenericFactory
+         * 
+         * @param type
+         * @param controllerDesc
+         * @param contentDesc
+         * @param adlVN
+         * @return
+         * @throws Exception
+         */
         public Component createFComponent(ComponentType type, ControllerDescription controllerDesc,
                 ContentDescription contentDesc, VirtualNode adlVN) throws Exception {
             PAGenericFactory gf = Utils.getPAGenericFactory(bootstrap);
             Component result = gf.newFcInstance(type, controllerDesc, contentDesc, ADLNodeProvider
+                    .getNode(nodesContainer));
+            return result;
+        }
+
+        /**
+         * Creates a Non-Functional component using the PAGenericFactory
+         * 
+         * @param type
+         * @param controllerDesc
+         * @param contentDesc
+         * @param adlVN
+         * @return
+         * @throws Exception
+         */
+        public Component createNFComponent(ComponentType type, ControllerDescription controllerDesc,
+                ContentDescription contentDesc, VirtualNode adlVN) throws Exception {
+            PAGenericFactory gf = Utils.getPAGenericFactory(bootstrap);
+            Component result = gf.newNfFcInstance(type, controllerDesc, contentDesc, ADLNodeProvider
                     .getNode(nodesContainer));
             return result;
         }
