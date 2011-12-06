@@ -42,7 +42,6 @@ import org.apache.log4j.Logger;
 import org.etsi.uri.gcm.api.type.GCMTypeFactory;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
-import org.objectweb.fractal.adl.Node;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.implementations.Controller;
