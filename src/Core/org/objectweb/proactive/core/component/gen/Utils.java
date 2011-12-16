@@ -119,6 +119,11 @@ public class Utils {
                 .endsWith(GATHERCAST_ITF_PROXY_DEFAULT_SUFFIX));
     }
 
+    public static boolean isWebServiceProxyClassName(String classname) {
+        return (classname.startsWith(GENERATED_DEFAULT_PREFIX) && classname
+                .endsWith(WEBSERVICE_PROXY_SUFFIX));
+    }
+
     /**
      * Parse a representative classname and rebuild the interface signature i.e. the Java interface name.
      * @param className
