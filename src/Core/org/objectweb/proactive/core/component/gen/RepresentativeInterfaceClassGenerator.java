@@ -51,6 +51,7 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
+import javassist.LoaderClassPath;
 import javassist.Modifier;
 import javassist.NotFoundException;
 
@@ -179,7 +180,17 @@ public class RepresentativeInterfaceClassGenerator extends AbstractInterfaceClas
             List<CtClass> interfacesToImplement = new ArrayList<CtClass>();
 
             // add interface to reify
-            CtClass functional_itf = pool.get(itfType.getFcItfSignature());
+            CtClass functional_itf = null;
+            try {
+                functional_itf = pool.get(itfType.getFcItfSignature());
+            } catch (NotFoundException nfe) {
+                // may happen in environments with multiple classloaders: itfType.getFcItfSignature() is not
+                // available in the initial classpath of javassist's class pool
+                // ==> try to append classpath of the class corresponding to itfType.getFcItfSignature()
+                pool.appendClassPath(new LoaderClassPath(Class.forName(itfType.getFcItfSignature())
+                        .getClassLoader()));
+                functional_itf = pool.get(itfType.getFcItfSignature());
+            }
 
             generatedCtClass.addInterface(functional_itf);
 
