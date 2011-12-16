@@ -111,7 +111,8 @@ public class Utils {
     }
 
     public static boolean isMetaObjectClassName(String classname) {
-        throw new ProActiveRuntimeException("not implemented yet");
+        return classname.startsWith(GENERATED_DEFAULT_PREFIX) && !isRepresentativeClassName(classname) &&
+            !isGathercastProxyClassName(classname) && !isWebServiceProxyClassName(classname);
     }
 
     public static boolean isGathercastProxyClassName(String classname) {
