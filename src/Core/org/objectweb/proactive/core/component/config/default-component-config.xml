@@ -44,5 +44,9 @@
             <interface>org.etsi.uri.gcm.api.control.PriorityController</interface>
             <implementation>org.objectweb.proactive.core.component.control.PAPriorityControllerImpl</implementation>
         </controller>
+        <controller>
+            <interface>org.objectweb.proactive.core.component.control.PAMembraneController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PAMembraneControllerImpl</implementation>
+        </controller>
     </controllers>
 </componentConfiguration>

@@ -19,6 +19,10 @@
 		<interface role="client" name="builder" signature="org.objectweb.fractal.adl.implementations.ImplementationBuilder"/>
 		<content class="org.objectweb.proactive.core.component.adl.implementations.PAImplementationCompiler"/>
 	</component>
+	<component name="component-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
+		<!--<interface role="client" name="builder" signature="org.objectweb.fractal.adl.implementations.ImplementationBuilder"/>-->
+		<content class="org.objectweb.proactive.core.component.adl.components.PAPrimitiveComponentCompiler"/>
+	</component>
 	<component name="binding-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
 		<interface role="client" name="builder" signature="org.objectweb.fractal.adl.bindings.BindingBuilder"/>
 		<content class="org.objectweb.proactive.core.component.adl.bindings.PABindingCompiler"/>
