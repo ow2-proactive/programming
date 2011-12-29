@@ -89,7 +89,7 @@ public class PATypeCompiler extends TypeCompiler {
 				// the task may already exist, in case of a shared component
 				tasks.getTask("type", container);
 			} catch (NoSuchElementException e) {
-				CreateTypeTask createTypeTask = new CreateTypeTask((PATypeBuilder) builder,
+				CreateTypeTask createTypeTask = new CreateTypeTask((PATypeBuilderItf) builder,
 						(InterfaceContainer) container);
 				tasks.addTask("type", container, createTypeTask);
 			}
@@ -108,7 +108,7 @@ public class PATypeCompiler extends TypeCompiler {
 
 		private InterfaceContainer container;
 
-		public CreateTypeTask(final PATypeBuilder builder,
+		public CreateTypeTask(final PATypeBuilderItf builder,
 				final InterfaceContainer container) {
 			this.builder = builder;
 			this.container = container;
