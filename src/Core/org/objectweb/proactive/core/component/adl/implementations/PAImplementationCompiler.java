@@ -275,7 +275,7 @@ public class PAImplementationCompiler extends ImplementationCompiler {
             //    the Attributes signature
             contentDesc = new ContentDescription(implementation);
 
-            // treat it has a composite
+            // treat it as a composite
             if ("composite".equals(controller) || (controller == null)) {
                 controllerDesc = new ControllerDescription(name, Constants.COMPOSITE);
             } else {

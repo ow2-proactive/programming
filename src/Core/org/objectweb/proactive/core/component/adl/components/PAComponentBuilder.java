@@ -52,7 +52,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 /**
  * A ProActive based implementation of the {@link ComponentBuilder} interface.
- * This implementation uses the Fractal API to add and start components.
+ * This implementation uses the GCM API to add and start components.
  * It slightly differs from the FractalComponentBuilder class : the name of the component
  * is not specified in this addition operation, but when the component is instantiated. <br/><br/>
  *
