@@ -16,15 +16,15 @@
 	    <content class="org.objectweb.proactive.core.component.adl.types.PATypeCompiler"/>
 	</component> 
 	<component name="implementation-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
-		<interface role="client" name="builder" signature="org.objectweb.fractal.adl.implementations.ImplementationBuilder"/>
+		<interface role="client" name="builder" signature="org.objectweb.proactive.core.component.adl.implementations.PAImplementationBuilder"/>
 		<content class="org.objectweb.proactive.core.component.adl.implementations.PAImplementationCompiler"/>
 	</component>
 	<component name="component-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
-		<!--<interface role="client" name="builder" signature="org.objectweb.fractal.adl.implementations.ImplementationBuilder"/>-->
+		<interface role="client" name="builder" signature="org.objectweb.proactive.core.component.adl.components.PAComponentBuilderItf"/>
 		<content class="org.objectweb.proactive.core.component.adl.components.PAPrimitiveComponentCompiler"/>
 	</component>
 	<component name="binding-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
-		<interface role="client" name="builder" signature="org.objectweb.fractal.adl.bindings.BindingBuilder"/>
+		<interface role="client" name="builder" signature="org.objectweb.proactive.core.component.adl.bindings.PABindingBuilderItf"/>
 		<content class="org.objectweb.proactive.core.component.adl.bindings.PABindingCompiler"/>
 	</component>
 	<component name="exportedVirtualNodes-compiler" definition="org.objectweb.fractal.adl.components.PrimitiveCompilerType">
@@ -53,11 +53,11 @@
 		<!-- <binding client="builder.registry" server="registry.registry"/> -->
 	</component>
 	<component name="component-builder">
-		<interface role="server" name="builder" signature="org.objectweb.fractal.adl.components.ComponentBuilder"/>
+		<interface role="server" name="builder" signature="org.objectweb.proactive.core.component.adl.components.PAComponentBuilderItf"/>
 		<content class="org.objectweb.proactive.core.component.adl.components.PAComponentBuilder"/>
 	</component>
 	<component name="binding-builder">
-		<interface role="server" name="builder" signature="org.objectweb.fractal.adl.bindings.BindingBuilder"/>
+		<interface role="server" name="builder" signature="org.objectweb.proactive.core.component.adl.bindings.PABindingBuilderItf"/>
 		<content class="org.objectweb.proactive.core.component.adl.bindings.PABindingBuilder"/>
 	</component>
 	<component name="attribute-builder">

@@ -37,26 +37,59 @@
 package org.objectweb.proactive.core.component.adl.bindings;
 
 import org.etsi.uri.gcm.util.GCM;
-import org.objectweb.fractal.adl.bindings.FractalBindingBuilder;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.control.BindingController;
-
+import org.objectweb.fractal.api.control.NameController;
+import org.objectweb.proactive.core.component.Utils;
+import org.objectweb.proactive.core.component.control.PAMembraneController;
 
 /**
- * An extension of the {@link FractalBindingBuilder} class for web service bindings.
+ * ProActive based implementation of the {@link BindingBuilder} interface.
+ * 
+ * Uses the GCM API to bind functional interfaces (F bindings),
+ * and also handle WebService Bindings, and non functional interfaces (NF bindings).
  *
  * @author The ProActive Team
  */
-public class PABindingBuilder extends FractalBindingBuilder {
+public class PABindingBuilder implements PABindingBuilderItf {
     public static final int WEBSERVICE_BINDING = 3;
 
-    public void bindComponent(int type, Object client, String clientItf, Object server, String serverItf,
-            Object context) throws Exception {
-        if (type != WEBSERVICE_BINDING) {
-            super.bindComponent(type, client, clientItf, server, serverItf, context);
-        } else {
-            BindingController bc = GCM.getBindingController((Component) client);
-            bc.bindFc(clientItf, serverItf);
-        }
+    public void bindComponent(int type, Object client, String clientItf, Object server, String serverItf, Object context) throws Exception {
+    	// default: isFunctional = true
+    	bindComponent(type, client, clientItf, server, serverItf, true, context);
     }
+
+	@Override
+	public void bindComponent(int type, Object client, String clientItf, Object server, String serverItf, boolean isFunctional, Object context) throws Exception {
+
+		// F binding
+		if(isFunctional) {
+			BindingController bc = GCM.getBindingController((Component)client);
+			// regular functional binding
+			if (type != WEBSERVICE_BINDING) {
+			    Object itf;
+			    if (type == IMPORT_BINDING) {
+			      itf = GCM.getContentController((Component)server).getFcInternalInterface(serverItf);
+			    } 
+			    else {
+			      itf = ((Component)server).getFcInterface(serverItf);
+			    }
+			    bc.bindFc(clientItf, itf);
+			}
+			// web-service binding
+			else {
+				bc.bindFc(clientItf, serverItf);
+			}
+		}
+		// NF binding
+		else {
+			PAMembraneController pamc = Utils.getPAMembraneController((Component)client);
+			// the current definition of bindings inside the membrane require to specify the server interface as "component.interface"
+			NameController nc = GCM.getNameController((Component)server);
+			// TODO: check other types of bindings
+			serverItf = nc.getFcName() + "." + serverItf;
+			// not handling webservice NF bindings
+			pamc.nfBindFc(clientItf, serverItf);
+		}
+	}
 }
