@@ -700,19 +700,23 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
                 // (e.g. InvalidClassException)
                 try {
                     reply.send(request.getSender());
-                } catch (IOException e1) {
+                } catch (Throwable e1) {
+                    // see PROACTIVE-1172
+                    // previously only IOException were caught but now that new communication protocols
+                    // can be added dynamically (remote objects) we can no longer suppose that only IOException
+                    // will be thrown i.e. a runtime exception sent by the protocol can go through the stack and
+                    // kill the service thread if not caught here.
+                    // We do not want the AO to be killed if he cannot send the result.
                     try {
+                        // trying to send the exception as result to fill the future.
+                        // we want to inform the caller that the result cannot be set in
+                        // the future for any reason. let's see if we can put the exception instead.
+                        // works only if the exception is not due to a communication issue.
                         this.retrySendReplyWithException(reply, e1, request.getSender());
-                    } catch (Exception retryException1) {
-                        // the stacktraced exception must be the first one
+                    } catch (Throwable retryException1) {
+                        // log the issue on the AO side for debugging purpose
+                        // the initial exception must be the one to appear in the log.
                         sendReplyExceptionsLogger.error("Failed to send reply to " + request, e1);
-                    }
-                } catch (ProActiveRuntimeException e2) {
-                    try {
-                        this.retrySendReplyWithException(reply, e2, request.getSender());
-                    } catch (Exception retryException2) {
-                        // the stacktraced exception must be the first one
-                        sendReplyExceptionsLogger.error("Failted to send reply to " + request, e2);
                     }
                 }
             }
@@ -738,7 +742,7 @@ public abstract class BodyImpl extends AbstractBody implements java.io.Serializa
         }
 
         // If a reply sending has failed, try to send the exception as reply
-        private void retrySendReplyWithException(Reply reply, Exception e, UniversalBody destination)
+        private void retrySendReplyWithException(Reply reply, Throwable e, UniversalBody destination)
                 throws Exception {
 
             //            Get current request TAGs from current context
