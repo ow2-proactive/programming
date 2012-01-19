@@ -45,10 +45,10 @@ import org.objectweb.fractal.adl.components.ComponentBuilder;
  * to indicate if the subcomponent to add is functional or non-functional.<br/>
  * 
  * The implementation may, so, determine if the subcomponent is added on the functional content
- * (ContentController) or in the membrane (MembraneController).
+ * (ContentController) or in the membrane (MembraneController).<br/>
  * 
  * It also includes a method to explicitly start the membrane, so that the functional lifecycle can be
- * properly started later.
+ * properly started later.<br/>
  * 
  * @author The ProActive Team
  *

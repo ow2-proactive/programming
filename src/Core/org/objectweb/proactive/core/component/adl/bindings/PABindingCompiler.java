@@ -81,7 +81,6 @@ public class PABindingCompiler extends BindingCompiler {
     // Implementation of the Compiler interface
     // --------------------------------------------------------------------------
     @Override
-    @SuppressWarnings("unchecked")
     public void compile(final List path, final ComponentContainer container,
             final org.objectweb.fractal.task.core.TaskMap tasks, final Map context) throws ADLException {
         
@@ -152,9 +151,8 @@ public class PABindingCompiler extends BindingCompiler {
                 try {
                     // the task may already exist, in case of a shared component
                     // but multicast interfaces are handled specifically
-                	// Verify if the interfaces involved are multicast ... if they are, throw and Exception to use an special treatment
-                    if ((BindingBuilder.EXPORT_BINDING == type) && (container instanceof BindingContainer) &&
-                        (container instanceof InterfaceContainer)) {
+                	// Verify if the interfaces involved are multicast ... if they are, throw an Exception to use an special treatment
+                    if ((BindingBuilder.EXPORT_BINDING == type) && (container instanceof BindingContainer) && (container instanceof InterfaceContainer)) {
                     	// check interfaces of "this"
                         Interface[] itfs = ((InterfaceContainer) container).getInterfaces();
                         for (int j = 0; j < itfs.length; j++) {
@@ -166,8 +164,7 @@ public class PABindingCompiler extends BindingCompiler {
                                 }
                             }
                         }
-                    } else if ((clientComp instanceof BindingContainer) &&
-                        (clientComp instanceof InterfaceContainer)) {
+                    } else if ((clientComp instanceof BindingContainer) && (clientComp instanceof InterfaceContainer)) {
                     	// check interface of 'clientComp' (which maybe still 'this'?)
                         Interface[] itfs = ((InterfaceContainer) clientComp).getInterfaces();
                         for (int j = 0; j < itfs.length; j++) {
@@ -212,16 +209,14 @@ public class PABindingCompiler extends BindingCompiler {
                     // then make sure that the client component is added to 'this' component before.
                     // i.e., set the addTask as a 'previous' dependency
                     if (clientComp != container) {
-                        TaskHole addTask = tasks.getTaskHole("add", new ComponentPair(container,
-                            (Component) clientComp));
+                        TaskHole addTask = tasks.getTaskHole("add", new ComponentPair(container, (Component) clientComp));
                         bindTask.addDependency(addTask, Task.PREVIOUS_TASK_ROLE, context);
                         //bindTask.addPreviousTask(addTask);
                     }
                     // the server component is not "this" (and it's not a WS-Binding either),
                     // make sure that the server component is added to 'this' component before
                     if ((type != PABindingBuilder.WEBSERVICE_BINDING) && (serverComp != container)) {
-                        TaskHole addTask = tasks.getTaskHole("add", new ComponentPair(container,
-                            (Component) serverComp));
+                        TaskHole addTask = tasks.getTaskHole("add", new ComponentPair(container, (Component) serverComp));
                         bindTask.addDependency(addTask, Task.PREVIOUS_TASK_ROLE, context);
                         //bindTask.addPreviousTask(addTask);
                     }
@@ -466,7 +461,7 @@ public class PABindingCompiler extends BindingCompiler {
         }
 
         public String toString() {
-            return "T" + System.identityHashCode(this) + "[EXTENDED-BindTask(" + clientItf + "," + serverItf + ")]";
+            return "T" + System.identityHashCode(this) + "[BindTask(" + clientItf + "," + serverItf + ")]";
         }
     }
 }

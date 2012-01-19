@@ -66,10 +66,10 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 /**
  * The {@link PAImplementationCompiler} compiles the &lt;component&gt; nodes and
- * creates the creation tasks for each component.<br/>
+ * creates the creation tasks {@link CreateTask} for each component.<br/>
  * 
  * For each component, the {@link PAImplementationCompiler} collects the info required 
- * to create the component:
+ * to create it:
  * <ul>
  *   <li>name</li>
  *   <li>implementing class</li>
@@ -83,13 +83,16 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  * @author The ProActive Team
  */
 public class PAImplementationCompiler extends ImplementationCompiler {
-	// TODO: this counter is used for what???
-    protected static int counter = 0;
+
+	// Is this counter is used???
+    //protected static int counter = 0;
+    
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     @Override
     public void compile(List<ComponentContainer> path, ComponentContainer container, TaskMap tasks,
             Map<Object, Object> context) throws ADLException {
+    	
         //DEBUG
     	String name = null;
     	boolean f = true;
@@ -134,7 +137,8 @@ public class PAImplementationCompiler extends ImplementationCompiler {
      */
     protected ObjectsContainer init(final List<ComponentContainer> path, final ComponentContainer container,
             final TaskMap tasks, final Map<Object, Object> context) {
-        counter++; // it seems that this counter is not used ...
+    	
+        //counter++; // it seems that this counter is not used ...
 
         String implementation = null;
         if (container instanceof ImplementationContainer) {
@@ -208,40 +212,7 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         return new ObjectsContainer(implementation, controller, name, definition, n, k > 0, isFunctional);
     }
     
-    /**
-     * Creates the {@link CreateTask} that will take charge of creating the component,
-     * and sets its dependency (the corresponding task of type "type").
-     * 
-     * @param tasks
-     * @param container
-     * @param context
-     * @param name
-     * @param definition
-     * @param controllerDesc
-     * @param contentDesc
-     * @param n
-     * @param isFunctional
-     */
-    protected void end(final TaskMap tasks, final ComponentContainer container,
-            final Map<Object, Object> context, String name, String definition,
-            ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode n,
-            boolean isFunctional) {
-        AbstractInstanceProviderTask createTask = null;
-        
-        // the CreateTask delegates the effective creation to a PAImplementationBuilder
-        createTask = new CreateTask((PAImplementationBuilder) builder, container, name, definition,
-            controllerDesc, contentDesc, n, context, isFunctional);
-
-        // obtains the TaskHole of type "type" associated to this container (which may be null if it has not yet been created)
-        // and sets it as the 'FactoryProvider' Task for this task. This implies that the factory provider task will be executed
-        // before the current task.
-        // Finally, it adds the current task, as a task of type "create", associate to this container.
-        TaskHole typeTask = tasks.getTaskHole("type", container);
-        createTask.setFactoryProviderTask(typeTask);
-        tasks.addTask("create", container, createTask);
-    }
-
-    
+   
     /** 
      * Completes the collected ObjectsContainer with the ContentDescription and the ControllerDescription objects.<br/><br/>
      * 
@@ -300,6 +271,45 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         obj.setControllerDesc(controllerDesc);
     }
 
+    
+    /**
+     * Creates the {@link CreateTask} that will take charge of creating the component,
+     * and sets its dependency (the corresponding task of type "type").
+     * 
+     * @param tasks
+     * @param container
+     * @param context
+     * @param name
+     * @param definition
+     * @param controllerDesc
+     * @param contentDesc
+     * @param n
+     * @param isFunctional
+     */
+    protected void end(final TaskMap tasks, final ComponentContainer container,
+            final Map<Object, Object> context, String name, String definition,
+            ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode n,
+            boolean isFunctional) {
+        AbstractInstanceProviderTask createTask = null;
+        
+        // the CreateTask delegates the effective creation to a PAImplementationBuilder
+        createTask = new CreateTask((PAImplementationBuilder) builder, container, name, definition,
+            controllerDesc, contentDesc, n, context, isFunctional);
+
+        // obtains the TaskHole of type "type" associated to this container (which may be null if it has not yet been created)
+        // and sets it as the 'FactoryProvider' Task for this task. This implies that the factory provider task will be executed
+        // before the current task.
+        // Finally, it adds the current task, as a task of type "create", associate to this container.
+        TaskHole typeTask = tasks.getTaskHole("type", container);
+        createTask.setFactoryProviderTask(typeTask);
+        tasks.addTask("create", container, createTask);
+    }
+
+    
+	// --------------------------------------------------------------------------
+	// Inner classes
+	// --------------------------------------------------------------------------
+    
     // TODO change visibility of this inner class in ImplementationCompiler
     static class CreateTask extends AbstractInstanceProviderTask {
         PAImplementationBuilder builder;
@@ -332,14 +342,13 @@ public class PAImplementationCompiler extends ImplementationCompiler {
             }
             logger.debug("[PAImplementationCompiler] Executing creation of "+ (functional?"F":"NF") +" component"+ name);
             Object type = getFactoryProviderTask().getFactory();
-            Object result = builder.createComponent(type, name, definition, controllerDesc, contentDesc, vn, functional,
-                    context);
+            Object result = builder.createComponent(type, name, definition, controllerDesc, contentDesc, vn, functional, context);
             setInstance(result);
         }
 
         @Override
         public String toString() {
-            return "T" + System.identityHashCode(this) + "[EXTENDED-CreateTask(" + name + "," + controllerDesc + "," +
+            return "T" + System.identityHashCode(this) + "[CreateTask(" + name + "," + controllerDesc + "," +
                 contentDesc + ")]";
         }
     }

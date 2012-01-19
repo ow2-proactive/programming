@@ -27,10 +27,10 @@ public interface PATypeBuilderItf extends TypeBuilder {
 			throws Exception;
 
 	ComponentType createComponentType(String name,
-			InterfaceType[] interfaceTypes, Map<Object, Object> context)
+			Object[] interfaceTypes, Map<Object, Object> context)
 			throws Exception;
 
 	ComponentType createComponentType(String name,
-			InterfaceType[] fInterfaceTypes, InterfaceType[] nfInterfaceTypes,
+			Object[] fInterfaceTypes, Object[] nfInterfaceTypes,
 			Map<Object, Object> context) throws Exception;
 }

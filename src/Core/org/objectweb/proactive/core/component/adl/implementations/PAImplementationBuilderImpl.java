@@ -60,7 +60,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 
 /**
- * The {@link PAImplementationBuilder} makes the GCM API calls to create
+ * The {@link PAImplementationBuilderImpl} makes the GCM API calls to create
  * the component. In addition to the common attributes, like name, {@link ControllerDescription},
  * and {@link ContentDescription}, it considers also the specification of a VirtualNode,
  * and the fact that a component may be Functional or Non-Functional (component in the membrane)

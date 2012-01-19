@@ -78,8 +78,7 @@ public class PATypeBuilder implements PATypeBuilderItf {
     }
     
     /**
-     * Makes the call to the GCM API to create the GCM InterfaceType, using the PAGCMTypeFactory,
-     * obtained from the bootstrap component.
+     * Makes the call to the GCM API to create the GCM InterfaceType, using the PAGCMTypeFactory.
      */
 	public InterfaceType createInterfaceType(String name, String signature,
 			String role, String contingency, String cardinality,
@@ -118,18 +117,18 @@ public class PATypeBuilder implements PATypeBuilderItf {
 	/**
 	 * Default: empty NF InterfaceType
 	 */
-    public ComponentType createComponentType(final String name, final InterfaceType[] interfaceTypes, final Map<Object, Object> context)
+    public ComponentType createComponentType(final String name, final Object[] interfaceTypes, final Map<Object, Object> context)
             throws Exception {
 		// pass an empty array of NF InterfaceType
-		return createComponentType(name, interfaceTypes, new InterfaceType[] {}, context);
+		return createComponentType(name, interfaceTypes, new Object[] {}, context);
     }
 
     /**
      * Makes the call to the GCM API to create the GCM ComponentType, using the PAGCMTypeFactory,
      * obtained from the bootstrap component.
      */
-	public ComponentType createComponentType(String name, InterfaceType[] fInterfaceTypes,
-			InterfaceType[] nfInterfaceTypes, Map<Object,Object> context) throws Exception {
+	public ComponentType createComponentType(String name, Object[] fInterfaceTypes,
+			Object[] nfInterfaceTypes, Map<Object,Object> context) throws Exception {
 		
 		logger.debug("[PATypeBuilder] Building types for component ["+ name +"]");
 		
@@ -146,8 +145,18 @@ public class PATypeBuilder implements PATypeBuilderItf {
         }
         // type factory
         PAGCMTypeFactory patf = (PAGCMTypeFactory) GCM.getGCMTypeFactory(bootstrap);
+        
+        // type copy
+        InterfaceType[] fItfsTypes = new InterfaceType[fInterfaceTypes.length];
+        for(int i=0; i < fInterfaceTypes.length; i++) {
+        	fItfsTypes[i] = (InterfaceType) fInterfaceTypes[i];
+        }
+        InterfaceType[] nfItfsTypes = new InterfaceType[nfInterfaceTypes.length];
+        for(int i=0; i < nfInterfaceTypes.length; i++) {
+        	nfItfsTypes[i] = (InterfaceType) nfInterfaceTypes[i];
+        }
 		
-        return patf.createFcType(fInterfaceTypes, nfInterfaceTypes);
+        return patf.createFcType(fItfsTypes, nfItfsTypes);
 	}
 
 

@@ -43,7 +43,6 @@ import java.util.NoSuchElementException;
 import org.apache.log4j.Logger;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.components.Component;
-import org.objectweb.fractal.adl.components.ComponentBuilder;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.components.ComponentPair;
 import org.objectweb.fractal.adl.components.PrimitiveComponentCompiler;
@@ -76,7 +75,7 @@ public class PAPrimitiveComponentCompiler extends PrimitiveComponentCompiler {
 	protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 	
 	/**
-	 * Creates a StartTask for the component to be executed after the CreateTask and the AddTask.
+	 * Creates a StartTask for the component to be executed after the CreateTask and the AddTask.<br/><br/>
 	 * 
 	 * Creates an AddTask for each F subcomponent, and for each NF component in the membrane.
 	 */
@@ -102,7 +101,6 @@ public class PAPrimitiveComponentCompiler extends PrimitiveComponentCompiler {
 		for (int i = 0; i < comps.length; i++) {
 			
 			logger.debug("[PAPrimitiveComponentCompiler] --> Add component "+ comps[i].getName());
-			
 			// the "create" task for the subcomponent
 			TaskMap.TaskHole createSubComponentTaskHole = tasks.getTaskHole("create", comps[i]);
 
@@ -225,7 +223,7 @@ public class PAPrimitiveComponentCompiler extends PrimitiveComponentCompiler {
 		}
 
 		public String toString() {
-			return "T" + System.identityHashCode(this) + "[EXTENDED-AddTask(" + name
+			return "T" + System.identityHashCode(this) + "[AddTask(" + name
 					+ ")]";
 		}
 	}
@@ -258,7 +256,7 @@ public class PAPrimitiveComponentCompiler extends PrimitiveComponentCompiler {
 		}
 
 		public String toString() {
-			return "T" + System.identityHashCode(this) + "[EXTENDED-StartTask()]";
+			return "T" + System.identityHashCode(this) + "[StartTask()]";
 		}
 	}
 

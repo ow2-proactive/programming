@@ -45,10 +45,9 @@ import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 
 
 /**
- * The {@link PAImplementationBuilder} makes the GCM API calls to create
- * the component. In addition to the common attributes, like name, {@link ControllerDescription},
- * and {@link ContentDescription}, it considers also the specification of a VirtualNode,
- * and the fact that a component may be Functional or Non-Functional (component in the membrane)
+ * The {@link PAImplementationBuilder} extends the {@link ImplementationBuilder} to include
+ * a parameter that describes a {@link VirtualNode}, and an indication if the component is
+ * Functional or Non-Functional (component in the membrane).
  * 
  * @author The ProActive Team
  */

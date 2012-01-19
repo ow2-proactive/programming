@@ -47,7 +47,7 @@ import org.objectweb.proactive.core.component.control.PAMembraneController;
  * ProActive based implementation of the {@link BindingBuilder} interface.
  * 
  * Uses the GCM API to bind functional interfaces (F bindings),
- * and also handle WebService Bindings, and non functional interfaces (NF bindings).
+ * and also handles WebService Bindings, and non functional interfaces (NF bindings).
  *
  * @author The ProActive Team
  */
