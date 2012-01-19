@@ -588,21 +588,21 @@ public class PAComponentImpl implements PAComponent, Serializable {
     	
     	// CONTENT controller is not created for primitives
     	if(Constants.CONTENT_CONTROLLER.equals(controllerName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
-    		logger.warn("Ignored controller '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
+    		logger.debug("[PAComponentImpl] Ignored controller '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
     		return true;
     	}
     	
     	// BINDING controller is not created for primitives without client interfaces
     	if(Constants.BINDING_CONTROLLER.equals(controllerName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
     		if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
-    			logger.warn("Ignored controller '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
+    			logger.debug("[PAComponentImpl] Ignored controller '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
     			return true;
     		}
     	}
     	
     	// Controller interface had already been declared (f.e., in the NF Type). Do not create this controller.
     	if(existsNfInterface(controllerName)) {
-    		logger.warn("Controller interface '"+ controllerName +"' already created. Ignoring this controller.");
+    		logger.debug("[PAComponentImpl] Controller interface '"+ controllerName +"' already created. Ignoring this controller.");
     		return true;
     	}
 
@@ -628,20 +628,20 @@ public class PAComponentImpl implements PAComponent, Serializable {
     	
     	// MEMBRANE controller must be created as an object controller
     	if(Constants.MEMBRANE_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal()) {
-    		logger.warn("Ignored NF Interface '"+ Constants.MEMBRANE_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
+    		logger.debug("[PAComponentImpl] Ignored NF Interface '"+ Constants.MEMBRANE_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
     		return true;
     	}
     	
     	// CONTENT controller is not created for primitives
     	if(Constants.CONTENT_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
-    		logger.warn("Ignored NF Interface '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
+    		logger.debug("[PAComponentImpl] Ignored NF Interface '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
     		return true;
     	}
     	
     	// BINDING controller is not created for primitives without client interfaces
     	if(Constants.BINDING_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
     		if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
-    			logger.warn("Ignored NF Interface '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
+    			logger.debug("[PAComponentImpl] Ignored NF Interface '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
     			return true;
     		}
     	}

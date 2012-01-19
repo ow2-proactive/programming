@@ -137,7 +137,6 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         loggerADL.debug("[PAComponentRepresentativeImpl]  FType: "+ ((PAComponentType) componentType).getFcInterfaceTypes().length );
         loggerADL.debug("[PAComponentRepresentativeImpl] NFType: "+ ((PAComponentType) componentType).getNfFcInterfaceTypes().length );
         loggerADL.debug("[PAComponentRepresentativeImpl] Config File: " + (this.componentParameters.getControllerDescription().configFileIsSpecified()?this.componentParameters.getControllerDescription().getControllersConfigFileLocation():"---") );
-                
         
         if((componentType instanceof PAComponentType)) {
         	loggerADL.debug("[PAComponentRepresentativeImpl] GENERAL CREATION of controller interfaces");
@@ -325,20 +324,20 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     	
     	// MEMBRANE controller must be created as an object controller
     	if(Constants.MEMBRANE_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal()) {
-    		logger.warn("Ignored NF Interface '"+ Constants.MEMBRANE_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
+    		//logger.warn("Ignored NF Interface '"+ Constants.MEMBRANE_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
     		return true;
     	}
     	
     	// CONTENT controller is not created for primitives
     	if(Constants.CONTENT_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
-    		logger.warn("Ignored NF Interface '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
+    		//logger.warn("Ignored NF Interface '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
     		return true;
     	}
     	
     	// BINDING controller is not created for primitives without client interfaces
     	if(Constants.BINDING_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
     		if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
-    			logger.warn("Ignored NF Interface '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
+    			//logger.warn("Ignored NF Interface '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
     			return true;
     		}
     	}
@@ -404,21 +403,21 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     	
     	// CONTENT controller is not created for primitives
     	if(Constants.CONTENT_CONTROLLER.equals(controllerName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
-    		logger.warn("Ignored controller '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
+    		//logger.warn("Ignored controller '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
     		return true;
     	}
     	
     	// BINDING controller is not created for primitives without client interfaces
     	if(Constants.BINDING_CONTROLLER.equals(controllerName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
     		if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
-    			logger.warn("Ignored controller '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
+    			//logger.warn("Ignored controller '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
     			return true;
     		}
     	}
     	
     	// Controller interface had already been declared (f.e., in the NF Type). Do not create this controller.
     	if(existsNfInterface(controllerName)) {
-    		logger.warn("Controller interface '"+ controllerName +"' already created. Ignoring this controller.");
+    		//logger.warn("Controller interface '"+ controllerName +"' already created. Ignoring this controller.");
     		return true;
     	}
 
@@ -660,7 +659,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
 		// Obtains the interface type after having instantiated the object
 		PAGCMInterfaceType controllerItfType = (PAGCMInterfaceType) controller.getFcItfType();
 		String controllerName = controller.getFcItfName();
-		// Generates the PAInterface and sets the instantiated object as its implementation
+		// Generates the representative PAInterface 
 		PAInterface itfRef = RepresentativeInterfaceClassGenerator.instance().generateInterface(controllerName, this, controllerItfType, controllerItfType.isInternal(), false);
 		//itfRef.setFcItfImpl(controller);
 		
