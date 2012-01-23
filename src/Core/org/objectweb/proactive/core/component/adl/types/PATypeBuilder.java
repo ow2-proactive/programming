@@ -111,7 +111,7 @@ public class PATypeBuilder implements PATypeBuilderItf {
 	@SuppressWarnings("unchecked")
 	public Object createComponentType(String name, Object[] interfaceTypes, Object context)
 			throws Exception {
-		return createComponentType(name,  (InterfaceType[]) interfaceTypes, (Map<Object, Object>) context);
+		return createComponentType(name, interfaceTypes, (Map<Object, Object>) context);
 	}
 
 	/**
