@@ -124,7 +124,8 @@ public class PAUnboundInterfaceDetectorLoader extends UnboundInterfaceDetectorLo
 					if(itf instanceof TypeInterface) {
 						// default contingency is null?
 						String contingency = ((TypeInterface)itf).getContingency();
-						if(contingency==null || TypeInterface.MANDATORY_CONTINGENCY.equals(contingency) ) {
+						String role = ((TypeInterface)itf).getRole();
+						if( (contingency==null || TypeInterface.MANDATORY_CONTINGENCY.equals(contingency)) && TypeInterface.CLIENT_ROLE.equals(role)) {
 							logger.debug("[PAUnboundInterfaceDetectorLoader] Unbound mandatory interface. Component: "+ componentName + " Interface: "+ itf.getName() + " Contingency: "+ ((TypeInterface)itf).getContingency());
 							// TODO should throw a list of errors (containing every unbound interface)
 							throw new ADLException(BindingErrors.UNBOUND_CLIENT_INTERFACE, comp,
