@@ -123,7 +123,7 @@
 <!ELEMENT interface (comment*) >
 <!ATTLIST interface
   name CDATA #REQUIRED
-  role (client | server) #IMPLIED
+  role (client | server | internal-client | internal-server ) #IMPLIED
   signature CDATA #IMPLIED
   contingency (mandatory | optional) #IMPLIED
   cardinality (singleton | collection | multicast | gathercast) #IMPLIED
