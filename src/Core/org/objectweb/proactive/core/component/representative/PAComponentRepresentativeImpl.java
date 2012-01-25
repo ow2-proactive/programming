@@ -139,7 +139,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         loggerADL.debug("[PAComponentRepresentativeImpl] Config File: " + (this.componentParameters.getControllerDescription().configFileIsSpecified()?this.componentParameters.getControllerDescription().getControllersConfigFileLocation():"---") );
         
         if((componentType instanceof PAComponentType)) {
-        	loggerADL.debug("[PAComponentRepresentativeImpl] GENERAL CREATION of controller interfaces");
+        	loggerADL.debug("[PAComponentRepresentativeImpl] GENERAL CREATION of controller interfaces for "+ this.componentParameters.getName());
         	addControllerInterfaces();
         }
         
@@ -168,9 +168,9 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         componentType = componentParameters.getComponentType();
         loggerADL.debug("[PAComponentRepresentativeImpl] NFType: "+ ((PAComponentType) componentType).getNfFcInterfaceTypes().length );
         loggerADL.debug("[PAComponentRepresentativeImpl] NFItfs: "+ nfItfs.keySet().size() );
-        /*for(String itfName : nfItfs.keySet()) {
-        	loggerADL.debug("[PAComponentRepresentativeImpl] --> "+ itfName);
-        }*/
+//        for(String itfName : nfItfs.keySet()) {
+//        	loggerADL.debug("[PAComponentRepresentativeImpl] --> "+ itfName);
+//        }
 
     }
     
@@ -308,8 +308,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     /**
      * Discriminate special NF interfaces
      * <ul>
-     *    <li>COLLECTION: ignored</li>
-     *    <li>MEMBRANE: ignored. Must be created as an object controller.</li>
+     *    <li>COLLECTION: ignored, they are dynamically generated</li>
      *    <li>CONTENT: if primitive, ignore it</li>
      *    <li>BINDING: if primitive and DOESN'T HAVE F client interfaces, ignore it</li>
      * </ul>
@@ -321,12 +320,12 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     	if(itfType.isFcCollectionItf()) {
     		return true;
     	}
-    	
+    	/*
     	// MEMBRANE controller must be created as an object controller
     	if(Constants.MEMBRANE_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal()) {
     		//logger.warn("Ignored NF Interface '"+ Constants.MEMBRANE_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
     		return true;
-    	}
+    	}*/
     	
     	// CONTENT controller is not created for primitives
     	if(Constants.CONTENT_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal() && isPrimitive) {
@@ -575,7 +574,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     
     /**
      * Checks that the mandatory controllers are defined and, if not, creates them.
-     * Mandatory controllers: NAME, LIFECYCLE, MEMBRANE.
+     * Mandatory controllers: NAME, LIFECYCLE
      * Also: CONTENT for composite, BINDING for composites and primitive with F client itfs
      */
     private void checkMandatoryControllers(Vector<InterfaceType> nfType) {
@@ -596,16 +595,6 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     			// ASSERTIONS: controller implements PAGCMLifeCycleController, and controllerName is "lifecycle-controller"
     		}
 
-    		// MEMBRANE Controller
-    		if(!existsNfInterface(Constants.MEMBRANE_CONTROLLER)) {
-    			// default implementation of PAMembraneController 
-    			controllerClass = PAMembraneControllerImpl.class;
-    			itfRef = createControllerRepresentative(controllerClass);
-    			this.nfItfs.put(itfRef.getFcItfName(), itfRef);
-    			nfType.add((InterfaceType) itfRef.getFcItfType());
-    			// ASSERTIONS: controller implements PAMembraneController, and controllerName is "membrane-controller"
-    		}
-    		
     		// NAME Controller
     		if(!existsNfInterface(Constants.NAME_CONTROLLER)) {
     			// default implementation of NameController 
@@ -635,7 +624,22 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     			nfType.add((InterfaceType) itfRef.getFcItfType());
     			// ASSERTIONS: controller implements PABindingController, and controllerName is "binding-controller"
     		}	
-
+    		
+    		// MEMBRANE Controller ...
+    		// Must be created it was declared and it has no implementation yet
+    		if(existsNfInterface(Constants.MEMBRANE_CONTROLLER)) {
+    			PAInterface membraneItfRef = (PAInterface) this.nfItfs.get(Constants.MEMBRANE_CONTROLLER);
+    			if( ((StubObject)membraneItfRef).getProxy() == null) {
+    				// default implementation of PAMembraneController 
+    				controllerClass = PAMembraneControllerImpl.class;
+    				itfRef = createControllerRepresentative(controllerClass);
+    				// replace the previous entry for 'membrane-controller'
+    				this.nfItfs.put(itfRef.getFcItfName(), itfRef);
+    				// but don't re-add the type to the nfType vector, because it already exists
+    			}
+    			// ASSERTIONS: controller implements PAMembraneController, and controllerName is "membrane-controller"
+    		}
+    		
     	} catch (Exception e) {
     		throw new ProActiveRuntimeException("Could not create mandatory controller representative '" + controllerClass.getName() +
 					"' while instantiating component'" + this.componentParameters.getName() + "': " + e.getMessage(), e);

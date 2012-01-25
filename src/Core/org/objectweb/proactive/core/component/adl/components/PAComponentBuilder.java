@@ -113,18 +113,25 @@ public class PAComponentBuilder implements PAComponentBuilderItf {
 				// membrane of superComponent must be stopped
 				PAMembraneController pamc = Utils.getPAMembraneController((Component)superComponent);
 				pamc.stopMembrane();
+
 				//membrane of subComponent must be started (why?)
-				PAMembraneController subPamc = Utils.getPAMembraneController((Component)subComponent);
-				subPamc.startMembrane();
+				PAMembraneController subPamc = null;
+				try {
+					subPamc = Utils.getPAMembraneController((Component)subComponent);
+					subPamc.startMembrane();
+				} catch (NoSuchInterfaceException nsie) {
+					//nothing to stop if the subcomponent does not have a membrane controller
+				}
 				
 				logger.debug("[PAComponentBuilder] Membrane state-sup: "+ pamc.getMembraneState());
-				logger.debug("[PAComponentBuilder] Membrane state-sub: "+ subPamc.getMembraneState());
+				logger.debug("[PAComponentBuilder] Membrane state-sub: "+ (subPamc!=null?subPamc.getMembraneState():"no membrane controller") );
 				
 				// add the NF component
 				pamc.nfAddFcSubComponent((Component) subComponent);
 				
 			} catch (NoSuchInterfaceException nsie) {
-				logger.debug("[PAComponentBuilder] NOT FOUND Membrane Controller in "+ superComponentName);
+				logger.debug("[PAComponentBuilder] Membrane Controller NOT FOUND in "+ superComponentName +". Cannot add subcomponent "+ subComponentName);
+				throw nsie;
 			}
 
 		}
@@ -151,13 +158,13 @@ public class PAComponentBuilder implements PAComponentBuilderItf {
 		//--DEBUG
 		
 		try {
-			// start the membrane
+			// start the membrane if it exists
 			PAMembraneController pamc = Utils.getPAMembraneController((Component)component);
 			pamc.startMembrane();
 			
 		} catch (NoSuchInterfaceException e) {
 			logger.debug("[PAComponentBuilder] NOT FOUND Membrane Controller in "+ componentName);
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		

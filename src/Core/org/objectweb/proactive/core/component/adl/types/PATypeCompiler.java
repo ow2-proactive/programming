@@ -58,6 +58,7 @@ import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.task.core.TaskMap;
 import org.objectweb.fractal.task.deployment.lib.AbstractFactoryProviderTask;
 import org.objectweb.proactive.core.component.Constants;
+import org.objectweb.proactive.core.component.control.PAMembraneController;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -152,6 +153,7 @@ public class PATypeCompiler extends TypeCompiler {
 			// collects and creates the NF interfaces
 			List<Object> nfItfTypes = new ArrayList<Object>();
 			Interface[] nfItfs = null;
+			boolean membraneControllerDefined = false;
 			if (container instanceof ControllerContainer) {
 				Controller ctrl = ((ControllerContainer) container).getController();
 				if(ctrl != null) {
@@ -163,8 +165,18 @@ public class PATypeCompiler extends TypeCompiler {
 								TypeInterface tItf = (TypeInterface) itf;
 								Object itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf.getRole(), tItf.getContingency(), tItf.getCardinality(), context);
 								nfItfTypes.add(itfType);
+								if(Constants.MEMBRANE_CONTROLLER.equals(tItf.getName())) {
+									membraneControllerDefined = true;
+								}
 							}
 						}
+						// if there are interfaces described in the membrane, and none of them is the "membrane-controller", then add the interface
+						if(nfItfs.length > 0 && !membraneControllerDefined) {
+							Object itfType = builder.createInterfaceType(Constants.MEMBRANE_CONTROLLER, PAMembraneController.class.getName(), 
+									TypeInterface.SERVER_ROLE, TypeInterface.MANDATORY_CONTINGENCY, TypeInterface.SINGLETON_CARDINALITY, context);
+							nfItfTypes.add(itfType);
+						}
+						
 					}
 				}
 			}
