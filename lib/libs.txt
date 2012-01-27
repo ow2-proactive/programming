@@ -86,7 +86,6 @@
 ./ws/mail.jar
 ./ws/servlet-api.jar
 ./ws/xml-apis.jar
-./ws/axis.jar
 ./ws/soap.jar
 ./log4j.jar
 ./scilab
