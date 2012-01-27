@@ -51,7 +51,7 @@
         <para>A SOAP Engine is the mechanism responsible of making transparent
         the unmarshalling of the request and the marshalling of the response.
         Thus, the service developer doesn't have to worry with SOAP.
-		  In our case, we can use Axis2 or CXF which can be installed into any HTTP server.
+		In our case, we use Apache CXF which can be installed into any HTTP server.
 		  </para>
       </listitem>
 
@@ -60,7 +60,7 @@
 
         <para>Client's role is to consume a web service. It is the producer of
         the SOAP message. The client developer does not have to worry about how
-        the service is implemented. The Axis2 java library or the CXF one provides classes to
+        the service is implemented. The CXF java library provides classes to
 		  easily invoke a service (see examples).</para>
       </listitem>
     </itemizedlist>
@@ -82,7 +82,7 @@
   If you want to expose your active objects on the local embedded Jetty server or on Jetty servers deployed during your deployment, you just have to deploy proactive using
   the <literal>build deploy</literal> command into the <literal>compile</literal> directory. If you want to expose them on an other http
   server, you have to build the <literal>proactive.war</literal> archive.
-  For this, you have to go into your <literal>compile</literal> directory of your ProActive home and type <literal>build proActiveWar[Axis2|CXF]</literal>.
+  For this, you have to go into your <literal>compile</literal> directory of your ProActive home and type <literal>build proActiveWar</literal>.
   The <literal>proactive.war</literal> file will be built into the <literal>dist/</literal> directory.</para>
 
   <para>If you have chosen to use the default Jetty server, then you have nothing else to do. Jetty server will automatically take files it needs.</para>
@@ -118,8 +118,6 @@
 			<para>Once the element created and activated, a <emphasis role="bold">WebServicesFactory</emphasis> object has to be instantiated: </para>
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_4.snip" /></textobject></programlisting>
 			<para>or</para>
-			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_6.snip" /></textobject></programlisting>
-			<para>or else</para>
 			<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_5.snip" /></textobject></programlisting>
 		</listitem>
 		<listitem>
@@ -162,8 +160,9 @@
   <section xml:id="exposeonremotejettyservers_29"><info><title>Exposing as a web service on remote Jetty servers launched during the deployment</title></info>
 	<para>
 		When you call the exposition of your active object,
-		the Axis2 servlet or the CXF one is deployed on the local Jetty server. It is therefore possible
-		to expose your object locally without doing anything else.
+		the CXF servlet is deployed on the local Jetty server.
+		It is therefore possible to expose your object locally
+		without doing anything else.
 	</para>
 	<para>
 		Now, let us assume that your active object is deployed on a remote node.
@@ -171,7 +170,7 @@
 		So, if you want to expose your active object on the remote host, you will have to make a small modification of the previous piece of code.
 	</para>
 	<para>
-		The web service extension provides classes that implements the <literal>InitActive</literal> interface which are in charge of deploying the CXF or the Axis2 servlet on the host
+		The web service extension provides classes that implements the <literal>InitActive</literal> interface which are in charge of deploying the CXF servlet on the host
 		where your object has been initialized. Thus, you just have to instantiate your active object using this implementation of <literal>InitActive</literal>.
 	</para>
 
@@ -180,7 +179,7 @@
 	<para>
 		Now, let us assume that your active object is deployed on a node or locally and that you want to expose it on a host where another node is deployed.
 		On this host, there is only a running Jetty server without any web services servlet.
-		In order to deploy the CXF or Axis2 servlet on it, you can use the following code:
+		In order to deploy the CXF servlet on it, you can use the following code:
 	</para>
 
 	<programlisting language="java">WebServicesInitActiveFactory.getInitActive("cxf").initServlet(myNode);</programlisting>
@@ -192,8 +191,8 @@
   <section xml:id="Accessingtheservices_29"><info><title>Accessing the services</title></info>
 
 
-    <para>Once the active object deployed, you can access it via any web service client (such as C#, SoapUI, Axis2 API, CXF API...) or with your favorite browser
-    (only if the returned type of your service methods are primitive types).</para>
+    <para>Once the active object deployed, you can access it via any web service client (such as C#, SoapUI, Apache CXF API, Apache Axis2 API, ...) or
+    with your favorite browser (only if the returned type of your service methods are primitive types).</para>
 
     <para>First of all, the client will get the WSDL file matching this active
     object. This WSDL file is the 'identity card' of the service. It contains
@@ -209,13 +208,13 @@
 
   <section xml:id="Limitations_29"><info><title>Limitations</title></info>
 
-    <para>Contrary to the previous version of the active object exposition using Apache SOAP, this new version which uses Axis2 or CXF can handle complex types.
+    <para>Contrary to the previous version of the active object exposition using Apache SOAP, this new version which uses CXF can handle complex types.
 	 That is, with this version, you can implement a service which exposes a method returning or taking in argument an instance of any class.
-	 By using CXF and JAX-WS annotations, there is no limitation on the type of this class. It only implies to use the appropriate adapters (see the
+	 By using JAX-WS annotations, there is no limitation on the type of this class. It only implies to use the appropriate adapters (see the
 	 <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://cxf.apache.org/docs/index.html">
 		CXF documentation
-	</link> for more details). However, if you do not want to use JAX-WS annotations or CXF, the class of this instance has to respect some criteria due
-	 to the serialization and CXF/Axis2 restrictions:</para>
+	</link> for more details). However, if you do not want to use JAX-WS annotations, the class of this instance has to respect some criteria due
+	 to the serialization and CXF restrictions:</para>
 	 <itemizedlist>
 		 <listitem><para>This class has to be serializable</para></listitem>
 		 <listitem><para>This class has to supply a no-args constructor and preferably empty</para></listitem>
@@ -223,25 +222,6 @@
 		 <listitem><para>This class has to supply public getters and setters for each field.
 		 These getter and setter methods have to be in this class and not in one of its super classes.</para></listitem>
 	 </itemizedlist>
-
-
-    <para>
-		Axis2 and CXF are not fully compatible. In particular, clients behave differently.
-		Axis2 client uses to send SOAP requests using "argn" as name for the n-th argument of the requested method. However, CXF creates the WSDL
-		service using parameter names as written into the Java code. Thus, there is a difference of names and the service cannot find argument names in the SOAP
-		message matching with the argument names of the requested method. Null value is therefore used as parameters.
-		To easily solve this issue, you can change the argument names of your service to match with "argn". If you cannot change the service, you have to
-		use another client as those used in the ProActive extension.
-	 </para>
-	 <para>
-		If you want to use the CXF client provided by ProActive for calling an Axis2 service, you will also face difficulties since this client waits for a returned SOAP message
-		that the Axis2 service will not return for a void method. One thing but not the best you can do, is to modify ProActive CXF client in order to eat the exception
-		for oneWayCall. This is not the best solution since other exceptions will be eaten too.
-	 </para>
-
-	 <para>
-		 In a general manner, we advise you to use the same framework for the exposition as a web service and for the client consuming this service.
-	 </para>
   </section>
 
   <section xml:id="AsimpleexampleHelloWorld_29"><info><title>A simple example: Hello World</title></info>
@@ -270,7 +250,7 @@
       adding <literal>?[arg0]=[value]&amp;[arg1]=[value]...</literal> where [argn] is the name of the n-th argument
       as written in the wsdl file.</para>
 
-		<para>You can also call a webservice using the ProActive client which uses, depending on the chosen framework, either a axis2 or a cxf client.
+		<para>You can also call a webservice using the ProActive client which uses a CXF client.
 		Here is an example:</para>
 
       <programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_AO_3.snip" /></textobject></programlisting>

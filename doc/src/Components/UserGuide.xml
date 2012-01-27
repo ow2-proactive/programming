@@ -2090,9 +2090,8 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							making transparent the unmarshalling of the
 							request and the marshalling of the response. Thus,
 							the service developer doesn't have to worry with
-							SOAP. In our case, we can use Axis2 (used by
-							default) or CXF which can be installed into any
-							HTTP server.
+							SOAP. In our case, we use Apache CXF which can be
+							installed into any HTTP server.
 						</para>
 					</listitem>
 					<listitem>
@@ -2101,9 +2100,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 							Client's role is to consume a web service. It is
 							the producer of the SOAP message. The client
 							developer doesn't have to worry about how the
-							service is implemented. The Axis2 and CXF java
-							libraries provide classes to easily invoke a
-							service (see examples).
+							service is implemented. The CXF java libraries
+							provide classes to easily invoke a service
+							(see examples).
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -2131,7 +2130,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 					archive. For this, you have to go into your
 					<literal>compile</literal> directory of your ProActive
 					home and type
-					<literal>build proActiveWar[Axis2|CXF]</literal>. The
+					<literal>build proActiveWar</literal>. The
 					<literal>proactive.war</literal> file will be built into
 					the <literal>dist</literal> directory.
 				</para>
@@ -2198,8 +2197,6 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_6.snip" /></textobject></programlisting>
 						<para>or</para>
-						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_8.snip" /></textobject></programlisting>
-						<para>or else</para>
 						<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_7.snip" /></textobject></programlisting>
 					</listitem>
 					<listitem>
@@ -2274,10 +2271,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						<para>
 							The first line is meant to retrieve the path of the
 							controller file. This file is located at
-							<literal>"&lt;your ProActive Home&gt;/src/Extensions/org/objectweb/proactive/extensions/webservices/axis2/initialization/axis2-component-config.xml"</literal>
-							for the Axis2 controller or at
-							<literal>"&lt;your ProActive Home&gt;/src/Extensions/org/objectweb/proactive/extensions/webservices/cxf/initialization/cxf-component-config.xml"</literal>
-							for the CXF controller.
+							<literal>"&lt;your ProActive Home&gt;/src/Extensions/org/objectweb/proactive/extensions/webservices/cxf/initialization/cxf-component-config.xml"</literal>.
 						</para>
 					</listitem>
 					<listitem>
@@ -2336,10 +2330,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 			<section xml:id="exposeonremotejettyservers_29"><info><title>Exposing as a web service on remote Jetty servers launched during the deployment</title></info>
 				<para>
-					When you call the exposition of your component, the Axis2
-					servlet or the CXF one is deployed on the local Jetty server.
-					It is therefore possible to expose your object locally
-					without doing anything else.
+					When you call the exposition of your component, the CXF
+					servlet is deployed on the local Jetty server. It is
+					therefore possible to expose your object locally without
+					doing anything else.
 				</para>
 
 				<para>
@@ -2354,9 +2348,9 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				<para>
 					The web service extension provides classes that implements the
 					<literal>InitActive</literal> interface which are in charge of
-					deploying the CXF or the Axis2 servlet on the host where your
-					object has been initialized. Thus, you just have to instantiate
-					your component using this implementation of
+					deploying the CXF servlet on the host where your object has
+					been initialized. Thus, you just have to instantiate your
+					component using this implementation of
 					<literal>InitActive</literal>.
 				</para>
 
@@ -2402,9 +2396,10 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					Once the component interface exposed, you can access it via
-					any web service client (such as C#, SoapUI, Axis2 API, CXF
-					API...) or with your favorite browser (only if the returned
-					type of your service methods are primitive types).
+					any web service client (such as C#, SoapUI, Apache CXF API,
+					Apache Axis2 API, ...) or with your favorite browser (only if
+					the returned type of your service methods are primitive
+					types).
 				</para>
 
 				<para>
@@ -2430,18 +2425,17 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					Contrary to the previous version of the component exposition
-					using Apache SOAP, this new version which uses Axis2 or CXF
-					can handle complex types. That is, with this version, you can
-					implement a service which exposes a method returning or taking
-					in argument an instance of any class. By using CXF and JAX-WS
-					annotations, there is no limitation on the type of this class.
+					using Apache SOAP, this new version which uses CXF can handle
+					complex types. That is, with this version, you can implement
+					a service which exposes a method returning or taking in
+					argument an instance of any class. By using JAX-WS annotations,
+					there is no limitation on the type of this class.
 					It only implies to use the appropriate adapters (see the
 					<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://cxf.apache.org/docs/index.html">
 						CXF documentation
 					</link> for more details). However, if you do not want to use
-					JAX-WS annotations or CXF, the class of this instance has to
-					respect some criterion due to the serialization and Axis2/CXF
-					restrictions:
+					JAX-WS annotations, the class of this instance has to respect
+					some criterion due to the serialization and CXF restrictions:
 				</para>
 
 				<itemizedlist>
@@ -2469,37 +2463,6 @@ Node node = vns.get("VN1").getANode();</programlisting>
 						</para>
 					</listitem>
 				</itemizedlist>
-
-				<para>
-					Axis2 and CXF are not fully compatible. In particular, clients
-					behave differently. Axis2 client uses to send SOAP requests
-					using "argn" as name for the n-th argument of the requested
-					method. However, CXF creates the WSDL service using parameter
-					names as written into the Java code. Thus, there is a
-					difference of names and the service cannot find argument names
-					in the SOAP message matching with the argument names of the
-					requested method. Null value is therefore used as parameters.
-					To easily solve this issue, you can change the argument names
-					of your service to match with "argn". If you cannot change the
-					service, you have to use another client as those used in the
-					ProActive extension.
-				</para>
-
-				<para>
-					If you want to use the CXF client provided by ProActive for
-					calling an Axis2 service, you will also face difficulties since
-					this client waits for a returned SOAP message that the Axis2
-					service will not return for a void method. One thing but not the
-					best you can do, is to modify ProActive CXF client in order to
-					ignore the exception for oneWayCall. This is not the best
-					solution since other exceptions will be ignored too.
-				</para>
-
-				<para>
-					In a general manner, we advise you to use the same framework for
-					the exposition as a web service and for the client consuming
-					this service.
-				</para>
 
 			</section>
 
@@ -2564,8 +2527,7 @@ Node node = vns.get("VN1").getANode();</programlisting>
 
 				<para>
 					You can also call a webservice using the ProActive client which
-					uses, depending on the chosen framework, either an Axis2 or a CXF
-					client. Here is an example:
+					uses a CXF client. Here is an example:
 				</para>
 
 				<programlisting language="java"><textobject><textdata fileref="automatic_snippets/webservices_Component_5.snip" /></textobject></programlisting>
@@ -2624,13 +2586,12 @@ Node node = vns.get("VN1").getANode();</programlisting>
 			</para>
 
 			<para>
-				By default, the Axis2 API is used to call the web service, but
+				By default, the CXF API is used to call the web service, but
 				it is also possible to specify another library. If so, the URL
 				has to be followed, in parenthesis, by the ID or the full name
 				of the class to use to call the web service. Thus, ProActive
-				offers several ways to call web services: using Axis2 API or
-				using various configurations of CXF API. IDs are defined in
-				the class
+				offers several ways to call web services by using various
+				configurations of CXF API. IDs are defined in the class
 				<literal>org.objectweb.proactive.core.component.webservices.WSInfo</literal>.
 				Otherwise, the full	class name has to be the one of a class
 				implementing the
@@ -2645,18 +2606,18 @@ Node node = vns.get("VN1").getANode();</programlisting>
 				<itemizedlist>
 					<listitem>
 						<para>
-							"http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.Axis2WSCaller)"
+							"http://localhost:8080/proactive/services/Server_HelloWorld(org.objectweb.proactive.core.component.webservices.CXFWSCaller)"
 						</para>
 					</listitem>
 					<listitem>
 						<para>
-							which is equivalent to: "http://localhost:8080/proactive/services/Server_HelloWorld(" + org.objectweb.proactive.core.component.webservices.WSInfo.AXIS2WSCALLER_ID + ")"
+							which is equivalent to: "http://localhost:8080/proactive/services/Server_HelloWorld(" + org.objectweb.proactive.core.component.webservices.WSInfo.CXFWSCALLER_ID + ")"
 						</para>
 					</listitem>
 					<listitem>
 						<para>
 							which is also equivalent to: "http://localhost:8080/proactive/services/Server_HelloWorld"
-							since Axis2 is used by default.
+							since CXF is used by default.
 						</para>
 					</listitem>
 				</itemizedlist>
