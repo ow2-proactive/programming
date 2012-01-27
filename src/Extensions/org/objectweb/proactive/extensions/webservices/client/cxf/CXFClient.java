@@ -57,7 +57,7 @@ public class CXFClient extends AbstractClient implements Client {
      * get a cxf client
      *
      * @param url Url of the service
-     * @param serviceClass Class of the service (needed for cxf contrary to Axis2)
+     * @param serviceClass Class of the service
      * @param serviceName Name of the service
      * @return a cxf Client
      */

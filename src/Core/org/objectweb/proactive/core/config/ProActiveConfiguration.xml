@@ -74,7 +74,7 @@
 
         <prop key="proactive.mop.writestubondisk" value="false"/>                                        
 
-        <prop key="proactive.webservices.framework" value="axis2" />
+        <prop key="proactive.webservices.framework" value="cxf" />
         <prop key="proactive.webservices.elementformdefault" value="false" />
         
     </properties>

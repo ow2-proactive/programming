@@ -45,10 +45,6 @@ import java.io.Serializable;
  * To manipulate objects through web services, the only requirement is to have a no-argument
  * constructor and the appropriate getters and setters in order to allow the
  * serialization/deserialization of the object.
- * <br>
- * There is another one specific requirement to manipulate array of objects through web
- * services, at least with the Axis2 library, which is that the object must ONLY have a
- * no-argument constructor and no more.
  *
  * @author The ProActive Team
  */

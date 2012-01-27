@@ -46,8 +46,7 @@ public interface Services {
 
     public int incrementInt(int i);
 
-    // Due to a limitation of Axis2 client, it seems to be impossible to use array of primitive types in arguments
-    public double[] decrementArrayDouble(Double[] array);
+    public double[] decrementArrayDouble(double[] array);
 
     public String hello(String name);
 

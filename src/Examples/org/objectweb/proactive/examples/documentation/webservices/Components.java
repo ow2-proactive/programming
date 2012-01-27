@@ -94,22 +94,17 @@ public class Components {
         GCM.getGCMLifeCycleController(a).startFc();
         //@snippet-end webservices_Component_1
 
-        // If you want the default WebServicesFactory, you can use
-        // AbstractWebServicesFactory.getDefaultWebServicesFactory()
+        // As only one framework is supported for the moment,
+        // you can use either one of the two following methods
         //@snippet-start webservices_Component_6
         //@snippet-start webservices_Component_7
-        //@snippet-start webservices_Component_8
         WebServicesFactory wsf;
         //@snippet-break webservices_Component_7
-        //@snippet-break webservices_Component_8
-        wsf = AbstractWebServicesFactory.getWebServicesFactory("axis2");
+        wsf = AbstractWebServicesFactory.getDefaultWebServicesFactory();
         //@snippet-end webservices_Component_6
         //@snippet-resume webservices_Component_7
-        wsf = AbstractWebServicesFactory.getDefaultWebServicesFactory();
-        //@snippet-end webservices_Component_7
-        //@snippet-resume webservices_Component_8
         wsf = AbstractWebServicesFactory.getWebServicesFactory("cxf");
-        //@snippet-end webservices_Component_8
+        //@snippet-end webservices_Component_7
 
         //@snippet-start webservices_Component_2
         // If you want the default WebServicesFactory, you can use
@@ -149,7 +144,8 @@ public class Components {
         //start the component
         GCM.getGCMLifeCycleController(helloWorld).startFc();
 
-        // If you want the default WebServicesFactory, you can use
+        // As only one framework is supported for the moment, use
+        // the following method is equivalent to
         // WebServicesFactory.getDefaultWebServicesFactory()
         WebServicesFactory webServicesFactory = AbstractWebServicesFactory.getWebServicesFactory("cxf");
 
@@ -166,7 +162,7 @@ public class Components {
         //@snippet-end webservices_Component_4
 
         //@snippet-resume webservices_Component_18
-        // Get the web services controller corresponding to the chosen framework (here cxf)
+        // Get the web services controller configuration
         String controllerPath = AbstractPAWebServicesControllerImpl.getControllerFileUrl("cxf").getPath();
 
         // Create the component using this controller
@@ -200,11 +196,11 @@ public class Components {
         Node myNode = hello.getANode();
 
         //@snippet-start webservices_Component_9
-        // Get the Axis2 InitActive in charge of deploying the Axis2 Servlet
-        InitActive axis2InitActive = WebServicesInitActiveFactory.getInitActive("axis2");
+        // Get the CXF InitActive in charge of deploying the CXF Servlet
+        InitActive cxfInitActive = WebServicesInitActiveFactory.getInitActive("cxf");
         Component myComponent = ((PAGenericFactory) genericFactory).newFcInstance(componentType,
                 new ControllerDescription("myControllerName", Constants.PRIMITIVE), new ContentDescription(
-                    HelloWorldComponent.class.getName(), null, axis2InitActive, null), myNode);
+                    HelloWorldComponent.class.getName(), null, cxfInitActive, null), myNode);
         //@snippet-end webservices_Component_9
 
         //@snippet-start webservices_Component_10
@@ -212,9 +208,9 @@ public class Components {
         //@snippet-end webservices_Component_10
 
         //@snippet-start webservices_Component_11
-        // Get the web services controller corresponding to the chosen framework (here axis2)
-        String controllersConfigFileLocation = AbstractPAWebServicesControllerImpl.getControllerFileUrl(
-                "axis2").getPath();
+        // Get the web services controller configuration
+        String controllersConfigFileLocation = AbstractPAWebServicesControllerImpl
+                .getControllerFileUrl("cxf").getPath();
 
         // Create the component using this controller
         ControllerDescription cd = new ControllerDescription("server", Constants.PRIMITIVE,
@@ -256,13 +252,9 @@ public class Components {
         //@snippet-end webservices_Component_15
 
         //@snippet-start webservices_Component_5
-        // Instead of using "cxf", you can also use webServicesFactory.getFrameWorkId()
-        // in order to be sure to get the same framework as the service
-        // has used to be exposed. However, you can call a cxf service
-        // using an axis2 client but there exists some incompatibility
-        // between these two frameworks.
-        // If you want the default ClientFactory, you can use
-        // ClientFactory.getDefaultClientFactory()
+        // Instead of using "cxf", you can also use webServicesFactory.getFrameWorkId().
+        // As only one framework is supported for the moment, use the following method
+        // is equivalent to ClientFactory.getDefaultClientFactory()
         ClientFactory cFactory = AbstractClientFactory.getClientFactory("cxf");
 
         // Instead of using "http://localhost:8080/", you can use ws.getUrl() to

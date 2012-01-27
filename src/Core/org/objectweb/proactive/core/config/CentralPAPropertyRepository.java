@@ -659,7 +659,7 @@ public class CentralPAPropertyRepository implements PAPropertiesLoaderSPI {
     /**
      * Web services framework
      *
-     * Suppported values are: axis2, cxf
+     * Suppported value is cxf
      */
     static public PAPropertyString PA_WEBSERVICES_FRAMEWORK = new PAPropertyString(
         "proactive.webservices.framework", false);
