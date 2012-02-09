@@ -46,7 +46,6 @@ import junit.framework.Assert;
 
 import org.etsi.uri.gcm.util.GCM;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.objectweb.fractal.adl.Factory;
 import org.objectweb.fractal.api.Component;
@@ -57,7 +56,6 @@ import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
-import org.objectweb.proactive.core.component.webservices.WSInfo;
 import org.objectweb.proactive.core.xml.VariableContractImpl;
 import org.objectweb.proactive.core.xml.VariableContractType;
 import org.objectweb.proactive.extensions.gcmdeployment.PAGCMDeployment;
@@ -84,15 +82,13 @@ public class TestCXFWSBindings extends CommonSetup {
     public void testCXFWebServiceBindingsWithPrimitiveComponent() throws Exception {
         Component client = gf.newFcInstance(componentType, new ControllerDescription("Client",
             Constants.PRIMITIVE), new ContentDescription(Client.class.getName()));
-        GCM.getBindingController(client).bindFc(
-                Client.SERVICES_NAME,
-                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME + "(" +
-                    WSInfo.CXFWSCALLER_ID + ")");
+        GCM.getBindingController(client).bindFc(Client.SERVICES_NAME,
+                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME);
         for (int i = 0; i < NUMBER_SERVERS; i++) {
             GCM.getBindingController(client).bindFc(
                     Client.SERVICEMULTICASTREAL_NAME,
                     url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + i + "_" +
-                        SERVER_SERVICEMULTICAST_NAME + "(" + WSInfo.CXFWSCALLER_ID + ")");
+                        SERVER_SERVICEMULTICAST_NAME);
         }
         GCM.getGCMLifeCycleController(client).startFc();
         Runner runner = (Runner) client.getFcInterface("Runner");
@@ -127,7 +123,6 @@ public class TestCXFWSBindings extends CommonSetup {
     }
 
     @Test
-    @Ignore
     public void testCXFWebServiceBindingsWithADL() throws Exception {
         Factory factory = org.objectweb.proactive.core.component.adl.FactoryFactory.getFactory();
         Map<Object, Object> context = new HashMap<Object, Object>();
@@ -204,10 +199,8 @@ public class TestCXFWSBindings extends CommonSetup {
                         TypeFactory.CLIENT, TypeFactory.MANDATORY, TypeFactory.SINGLE) });
         Component client = gf.newFcInstance(cType, new ControllerDescription("Client", Constants.PRIMITIVE),
                 new ContentDescription(Client.class.getName()));
-        GCM.getBindingController(client).bindFc(
-                Client.SERVICEERROR_NAME,
-                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME + "(" +
-                    WSInfo.CXFWSCALLER_ID + ")");
+        GCM.getBindingController(client).bindFc(Client.SERVICEERROR_NAME,
+                url + WSConstants.SERVICES_PATH + SERVER_DEFAULT_NAME + "0_" + SERVER_SERVICES_NAME);
         GCM.getGCMLifeCycleController(client).startFc();
         Runner runner = (Runner) client.getFcInterface("Runner");
         Assert.assertFalse("Successful access to a non existing method", runner.execute().getBooleanValue());

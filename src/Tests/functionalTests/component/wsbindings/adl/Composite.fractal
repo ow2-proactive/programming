@@ -12,10 +12,10 @@
   <binding client="this.Runner" server="client.Runner"/>
   <binding client="client.Services" server="this.Services"/>
   <!--  <binding client="client.ServiceMulticastFalse" server="this.ServiceMulticastReal"/> -->
-  <binding client="this.Services" server="http://localhost:8080/proactive/services/Server0_Services"/>
-  <!--  <binding client="this.ServiceMulticastReal" server="http://localhost:8080/proactive/services/Server0_Service"/>
-  <binding client="this.ServiceMulticastReal" server="http://localhost:8080/proactive/services/Server1_Service"/>
-  <binding client="this.ServiceMulticastReal" server="http://localhost:8080/proactive/services/Server2_Service"/> -->
+  <binding client="this.Services" server="http://localhost:8888/proactive/services/Server0_Services"/>
+  <!--  <binding client="this.ServiceMulticastReal" server="http://localhost:8888/proactive/services/Server0_Service"/>
+  <binding client="this.ServiceMulticastReal" server="http://localhost:8888/proactive/services/Server1_Service"/>
+  <binding client="this.ServiceMulticastReal" server="http://localhost:8888/proactive/services/Server2_Service"/> -->
 
   <controller desc="composite"/>
 </definition>

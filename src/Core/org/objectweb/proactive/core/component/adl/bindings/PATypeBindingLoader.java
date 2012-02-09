@@ -116,14 +116,27 @@ public class PATypeBindingLoader extends TypeBindingLoader {
     }
 
     @Override
+    protected void checkBinding(final Binding binding, final Map<String, Map<String, Interface>> itfMap,
+            final Map<Object, Object> context) throws ADLException {
+        try {
+            super.checkBinding(binding, itfMap, context);
+        } catch (ADLException adle) {
+            // checks if trying to bind to a web service
+            if (!binding.getTo().contains("://")) {
+                throw adle;
+            }
+        }
+    }
+
+    @Override
     protected void checkBinding(final Binding binding, final Interface fromItf, final String fromCompName,
             final String fromItfName, final Interface toItf, final String toCompName, final String toItfName,
             final Map<Object, Object> context) throws ADLException {
         try {
             super.checkBinding(binding, fromItf, fromCompName, fromItfName, toItf, toCompName, toItfName,
                     context);
-        } catch (ADLException e) {
-            // check if signatures are incompatible
+        } catch (ADLException adle) {
+            // checks if signatures are incompatible
             TypeInterface cItf = (TypeInterface) fromItf;
             TypeInterface sItf = (TypeInterface) toItf;
 
