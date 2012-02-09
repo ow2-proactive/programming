@@ -71,6 +71,7 @@ import functionalTests.GCMFunctionalTest;
  *
  * @author The ProActive Team
  */
+// TODO Uncomment multicast parts (in this file and in adl/Client.fractal and adl/Composite.fractal) when PROACTIVE-743 has been fixed
 public class TestCXFWSBindings extends CommonSetup {
     @Before
     public void setUpAndDeploy() throws Exception {
