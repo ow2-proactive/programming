@@ -80,5 +80,3 @@ http://java/sun.com/xml/ns/j2ee/connector_1_5.xsd" version="1.5">
     </outbound-resourceadapter>
   </resourceadapter>
 </connector>
-
-
