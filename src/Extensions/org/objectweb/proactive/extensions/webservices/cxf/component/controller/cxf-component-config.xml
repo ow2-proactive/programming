@@ -40,6 +40,10 @@
             <implementation>org.objectweb.proactive.core.component.control.PAMonitorControllerImpl</implementation>
         </controller>
         <controller>
+            <interface>org.etsi.uri.gcm.api.control.PriorityController</interface>
+            <implementation>org.objectweb.proactive.core.component.control.PAPriorityControllerImpl</implementation>
+        </controller>
+        <controller>
             <interface>org.objectweb.proactive.extensions.webservices.component.controller.PAWebServicesController</interface>
             <implementation>org.objectweb.proactive.extensions.webservices.cxf.component.controller.PAWebServicesControllerImpl</implementation>
         </controller>
