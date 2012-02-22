@@ -80,8 +80,9 @@ public class GCMApplicationRemoteObjectAdapter extends Adapter<GCMApplication> i
         } catch (UnknownProtocolException e) {
             ProActiveLogger.logImpossibleException(GCMA_LOGGER, e);
         } catch (ProActiveException e) {
-        	GCMA_LOGGER.error("Failed to determine Remote Object Base URI", e);;
-		}
+            GCMA_LOGGER.error("Failed to determine Remote Object Base URI", e);
+            ;
+        }
     }
 
     public VariableContract getVariableContract() {

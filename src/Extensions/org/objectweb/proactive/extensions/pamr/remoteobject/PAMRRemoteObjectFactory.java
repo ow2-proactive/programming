@@ -141,7 +141,7 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         // Properly configured. The agent can be started
         AgentImpl agent = null;
         if ("".equals(errMsg)) {
-        	try {
+            try {
                 agent = new AgentImpl(routerAddress, routerPort, agentId, magicCookie,
                     ProActiveMessageHandler.class, PAMRSocketFactorySelector.get());
             } catch (ProActiveException e) {
@@ -327,11 +327,11 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
     }
 
     public URI getBaseURI() throws ProActiveException {
-    	this.checkConfig();
-    	AgentID id = this.agent.getAgentID();
-    	if (id == null) {
-    		throw new ProActiveException("PAMR Agent is not connected to router");
-    	}
+        this.checkConfig();
+        AgentID id = this.agent.getAgentID();
+        if (id == null) {
+            throw new ProActiveException("PAMR Agent is not connected to router");
+        }
         return URI.create(this.getProtocolId() + "://" + id.toString() + "/");
     }
 
