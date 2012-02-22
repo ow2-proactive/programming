@@ -117,22 +117,18 @@ public class ActiveBody extends ComponentBodyImpl implements Runnable, java.io.S
                 GCM.getPriorityController(getPAComponentImpl());
                 Utils.getPAMembraneController(getPAComponentImpl());
                 activity = new ComponentMembraneActivityPriority(activity, reifiedObject);
-
-            } catch (NoSuchInterfaceException e) {
+            } catch (NoSuchInterfaceException nsie1) {
                 try {
                     GCM.getPriorityController(getPAComponentImpl());
                     activity = new ComponentActivityPriority(activity, reifiedObject);
-                } catch (NoSuchInterfaceException priorityExc) {
-                    activity = new ComponentActivity(activity, reifiedObject);
+                } catch (NoSuchInterfaceException nsie2) {
+                    try {
+                        Utils.getPAMembraneController(getPAComponentImpl());
+                        activity = new ComponentMembraneActivity(activity, reifiedObject);
+                    } catch (NoSuchInterfaceException nsie3) {
+                        activity = new ComponentActivity(activity, reifiedObject);
+                    }
                 }
-
-                try {
-                    Utils.getPAMembraneController(getPAComponentImpl());
-                    activity = new ComponentMembraneActivity(activity, reifiedObject);
-                } catch (NoSuchInterfaceException priorityExc) {
-                    activity = new ComponentActivity(activity, reifiedObject);
-                }
-
             }
         }
 
