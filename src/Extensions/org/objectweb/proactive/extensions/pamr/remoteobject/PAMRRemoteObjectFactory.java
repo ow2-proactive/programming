@@ -138,16 +138,18 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             magicCookie = new MagicCookie();
         }
 
+        // Properly configured. The agent can be started
+        AgentImpl agent = null;
         if ("".equals(errMsg)) {
-            // Properly configured. The agent can be started
-            AgentImpl agent = null;
-            try {
+        	try {
                 agent = new AgentImpl(routerAddress, routerPort, agentId, magicCookie,
                     ProActiveMessageHandler.class, PAMRSocketFactorySelector.get());
             } catch (ProActiveException e) {
                 errMsg += "Failed to create PAMR agent: " + e.getMessage();
             }
+        }
 
+        if ("".equals(errMsg)) {
             this.agent = agent;
             this.registry = PAMRRegistry.singleton;
             this.badConfigException = null;
@@ -324,8 +326,13 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         return this.agent;
     }
 
-    public URI getBaseURI() {
-        return URI.create(this.getProtocolId() + "://" + this.agent.getAgentID() + "/");
+    public URI getBaseURI() throws ProActiveException {
+    	this.checkConfig();
+    	AgentID id = this.agent.getAgentID();
+    	if (id == null) {
+    		throw new ProActiveException("PAMR Agent is not connected to router");
+    	}
+        return URI.create(this.getProtocolId() + "://" + id.toString() + "/");
     }
 
     public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {
