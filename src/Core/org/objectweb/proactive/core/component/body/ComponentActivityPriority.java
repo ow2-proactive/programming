@@ -73,7 +73,7 @@ public class ComponentActivityPriority extends ComponentActivity implements RunA
     }
 
     public ComponentActivityPriority(Active activity, Object reifiedObject) {
-        super();
+        super(activity, reifiedObject);
 
         // RunActive
         if ((activity != null) && activity instanceof RunActive) {
