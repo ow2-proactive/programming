@@ -70,7 +70,9 @@ import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRegistryListRemoteObjectsMessage;
 import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRemoteObjectLookupMessage;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySPI;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySelector;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSshSocketFactory;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 
 
@@ -136,6 +138,19 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             }
         } else {
             magicCookie = new MagicCookie();
+        }
+
+        PAMRSocketFactorySPI psf = PAMRSocketFactorySelector.get();
+        if (psf.getAlias().equals("ssh")) {
+            PAMRSshSocketFactory ssf = (PAMRSshSocketFactory) psf;
+            try {
+                String[] keys = ssf.getSshConfig().getPrivateKeyPath("");
+                if (keys == null || keys.length == 0) {
+                    throw new IOException("No private key found in " + ssf.getSshConfig().getKeyDir());
+                }
+            } catch (IOException e) {
+                errMsg += "Misconfigured SSH SocketFactory: " + e.getMessage();
+            }
         }
 
         // Properly configured. The agent can be started
