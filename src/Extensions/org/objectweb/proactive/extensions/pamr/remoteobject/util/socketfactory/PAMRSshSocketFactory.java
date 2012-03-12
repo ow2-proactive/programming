@@ -100,6 +100,10 @@ public class PAMRSshSocketFactory implements PAMRSocketFactorySPI {
         this.tp = new SshTunnelPool(this.config);
     }
 
+    public SshConfig getSshConfig() {
+        return this.config;
+    }
+
     public Socket createSocket(String host, int port) throws IOException {
         return tp.getSocket(host, port);
     }

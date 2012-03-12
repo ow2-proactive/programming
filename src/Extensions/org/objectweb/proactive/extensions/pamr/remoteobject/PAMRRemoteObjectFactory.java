@@ -70,7 +70,9 @@ import org.objectweb.proactive.extensions.pamr.protocol.MagicCookie;
 import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRegistryListRemoteObjectsMessage;
 import org.objectweb.proactive.extensions.pamr.remoteobject.message.PAMRRemoteObjectLookupMessage;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.PAMRRegistry;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySPI;
 import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSocketFactorySelector;
+import org.objectweb.proactive.extensions.pamr.remoteobject.util.socketfactory.PAMRSshSocketFactory;
 import org.objectweb.proactive.extensions.pamr.router.RouterImpl;
 
 
@@ -138,16 +140,31 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
             magicCookie = new MagicCookie();
         }
 
+        PAMRSocketFactorySPI psf = PAMRSocketFactorySelector.get();
+        if (psf.getAlias().equals("ssh")) {
+            PAMRSshSocketFactory ssf = (PAMRSshSocketFactory) psf;
+            try {
+                String[] keys = ssf.getSshConfig().getPrivateKeyPath("");
+                if (keys == null || keys.length == 0) {
+                    throw new IOException("No private key found in " + ssf.getSshConfig().getKeyDir());
+                }
+            } catch (IOException e) {
+                errMsg += "Misconfigured SSH SocketFactory: " + e.getMessage();
+            }
+        }
+
+        // Properly configured. The agent can be started
+        AgentImpl agent = null;
         if ("".equals(errMsg)) {
-            // Properly configured. The agent can be started
-            AgentImpl agent = null;
             try {
                 agent = new AgentImpl(routerAddress, routerPort, agentId, magicCookie,
                     ProActiveMessageHandler.class, PAMRSocketFactorySelector.get());
             } catch (ProActiveException e) {
                 errMsg += "Failed to create PAMR agent: " + e.getMessage();
             }
+        }
 
+        if ("".equals(errMsg)) {
             this.agent = agent;
             this.registry = PAMRRegistry.singleton;
             this.badConfigException = null;
@@ -324,8 +341,13 @@ public class PAMRRemoteObjectFactory extends AbstractRemoteObjectFactory impleme
         return this.agent;
     }
 
-    public URI getBaseURI() {
-        return URI.create(this.getProtocolId() + "://" + this.agent.getAgentID() + "/");
+    public URI getBaseURI() throws ProActiveException {
+        this.checkConfig();
+        AgentID id = this.agent.getAgentID();
+        if (id == null) {
+            throw new ProActiveException("PAMR Agent is not connected to router");
+        }
+        return URI.create(this.getProtocolId() + "://" + id.toString() + "/");
     }
 
     public ObjectInputStream getProtocolObjectInputStream(InputStream in) throws IOException {
