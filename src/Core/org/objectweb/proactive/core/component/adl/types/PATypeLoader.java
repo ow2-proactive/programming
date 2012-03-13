@@ -95,7 +95,7 @@ public class PATypeLoader extends TypeLoader {
         for (int i = 0; i < itfs.length; i++) {
             Interface itf = itfs[i];
             if (itf instanceof TypeInterface) {
-            	logger.debug("[PATypeLoader] Checking interface:"+ itf.toString() + " ("+ (itf.astGetDecoration("NF")!=null?"NF":"F") + ")" );
+            	logger.debug("[PATypeLoader] Checking interface:"+ itf.toString() + " ("+ (itf.astGetDecoration("NF")!=null?"NF":"F") + ")");
                 String signature = ((TypeInterface) itf).getSignature();
                 if (signature == null) {
                     throw new ADLException(TypeErrors.SIGNATURE_MISSING, itf);
@@ -110,13 +110,14 @@ public class PATypeLoader extends TypeLoader {
                 if (role == null) {
                     throw new ADLException(TypeErrors.ROLE_MISSING, itf);
                 } else {
-                    if (!role.equals("client") && !role.equals("server")) {
-                        throw new ADLException(TypeErrors.INVALID_ROLE, itf, role);
-                    }
+                	if (!role.equals(TypeInterface.CLIENT_ROLE) && !role.equals(TypeInterface.SERVER_ROLE)
+                		&& !role.equals(PATypeInterface.INTERNAL_CLIENT_ROLE) && !role.equals(PATypeInterface.INTERNAL_SERVER_ROLE)) {
+                		throw new ADLException(PATypeErrors.INVALID_ROLE, itf, role);
+                	}
                 }
                 String contingency = ((TypeInterface) itf).getContingency();
                 if (contingency != null) {
-                    if (!contingency.equals("mandatory") && !contingency.equals("optional")) {
+                    if (!contingency.equals(TypeInterface.MANDATORY_CONTINGENCY) && !contingency.equals(TypeInterface.OPTIONAL_CONTINGENCY)) {
                         throw new ADLException(TypeErrors.INVALID_CONTINGENCY, itf, contingency);
                     }
                 }

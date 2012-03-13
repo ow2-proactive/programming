@@ -18,7 +18,9 @@
 <?add ast="component"  itf="org.objectweb.fractal.adl.interfaces.InterfaceContainer" ?>
 
 <!-- types module -->
-<?add ast="interface"  itf="org.objectweb.fractal.adl.types.TypeInterface" ?>
+<!-- <?add ast="interface"  itf="org.objectweb.fractal.adl.types.TypeInterface" ?> -->
+<?add ast="interface"  itf="org.objectweb.proactive.core.component.adl.types.PATypeInterface" ?>
+
 
 <!-- bindings module -->
 <?add ast="binding"    itf="org.objectweb.fractal.adl.bindings.Binding" ?>
