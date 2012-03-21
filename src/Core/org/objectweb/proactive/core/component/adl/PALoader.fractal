@@ -27,4 +27,10 @@
 	<component name="interface-loader" definition="org.objectweb.fractal.adl.DelegateLoaderType">
 	    <content class="org.objectweb.proactive.core.component.adl.interfaces.PAInterfaceLoader" />
 	</component>
+	
+	<!-- The PAArgumentComponentLoader merges nodes considering Components defined in the membrane -->
+	<component name="component-loader" definition="org.objectweb.fractal.adl.DelegateLoaderType">
+	    <content class="org.objectweb.proactive.core.component.adl.components.PAArgumentComponentLoader" />
+	</component>
+	
 </definition>
