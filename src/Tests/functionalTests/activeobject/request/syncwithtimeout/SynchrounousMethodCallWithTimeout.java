@@ -34,36 +34,30 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core;
+package functionalTests.activeobject.request.syncwithtimeout;
 
-import org.objectweb.proactive.annotation.PublicAPI;
+import java.io.Serializable;
+
+import org.objectweb.proactive.ActiveObjectCreationException;
+import org.objectweb.proactive.Body;
+import org.objectweb.proactive.RunActive;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveTimeoutException;
+import org.objectweb.proactive.core.node.NodeException;
+import org.objectweb.proactive.core.util.wrapper.StringWrapper;
 
 
-@PublicAPI
 /**
- * Exception thrown when a blocking operation times out. Blocking operations for which a timeout is
- * specified need a means to indicate that the timeout has occurred. For many such operations it is
- * possible to return a value that indicates timeout; when that is not possible or desirable then
- * <tt>TimeoutException</tt> should be declared and thrown.
- * 
- * @since 4.0
+ * @author The ProActive Team
+ * @since 5.2.0
  */
-public class ProActiveTimeoutException extends ProActiveRuntimeException {
+public class SynchrounousMethodCallWithTimeout implements Serializable {
 
-    public ProActiveTimeoutException() {
-        super();
+    public SynchrounousMethodCallWithTimeout() {
     }
 
-    public ProActiveTimeoutException(String message) {
-        super(message);
+    public int sleepFor10Sec() throws InterruptedException {
+        Thread.sleep(10000);
+        return 0;
     }
-
-    public ProActiveTimeoutException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ProActiveTimeoutException(Throwable cause) {
-        super(cause);
-    }
-
 }

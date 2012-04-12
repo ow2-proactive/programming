@@ -45,19 +45,14 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.etsi.uri.gcm.api.type.GCMTypeFactory;
-import org.etsi.uri.gcm.util.GCM;
 import org.objectweb.fractal.api.Component;
 import org.objectweb.fractal.api.Interface;
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.Type;
 import org.objectweb.fractal.api.control.BindingController;
 import org.objectweb.fractal.api.control.ContentController;
-import org.objectweb.fractal.api.control.LifeCycleController;
-import org.objectweb.fractal.api.control.NameController;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
-import org.objectweb.fractal.api.type.TypeFactory;
 import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.UniqueID;
 import org.objectweb.proactive.core.body.proxy.UniversalBodyProxy;
@@ -68,6 +63,11 @@ import org.objectweb.proactive.core.component.PAInterface;
 import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.config.ComponentConfigurationHandler;
 import org.objectweb.proactive.core.component.control.AbstractPAController;
+import org.objectweb.proactive.core.component.control.PABindingControllerImpl;
+import org.objectweb.proactive.core.component.control.PAContentControllerImpl;
+import org.objectweb.proactive.core.component.control.PAGCMLifeCycleControllerImpl;
+import org.objectweb.proactive.core.component.control.PAMembraneControllerImpl;
+import org.objectweb.proactive.core.component.control.PANameControllerImpl;
 import org.objectweb.proactive.core.component.gen.RepresentativeInterfaceClassGenerator;
 import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.identity.PAComponentImpl;
@@ -105,12 +105,12 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAComponentRepresentativeImpl implements PAComponentRepresentative, Serializable {
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
+    protected static final Logger loggerADL = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
     private ComponentParameters componentParameters;
-    protected Map<String, Interface> fcInterfaceReferences;
-    protected Map<String, Interface> nfInterfaceReferences;
+    protected Map<String, Interface> fItfs;
+    protected Map<String, Interface> nfItfs = new HashMap<String, Interface>();
     protected Proxy proxy;
     protected StubObject stubOnBaseObject = null;
-    protected String currentControllerInterface = null;
     protected boolean useShortcuts;
 
     public PAComponentRepresentativeImpl(ComponentType componentType, String hierarchicalType,
@@ -120,124 +120,275 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     }
 
     public PAComponentRepresentativeImpl(ComponentParameters componentParameters) {
+
         this.componentParameters = componentParameters;
         this.useShortcuts = CentralPAPropertyRepository.PA_COMPONENT_USE_SHORTCUTS.isTrue();
 
         Type componentType = componentParameters.getComponentType();
-        if ((componentType instanceof PAComponentType) &&
-            (((PAComponentType) componentType).getNfFcInterfaceTypes().length != 0)) { // The nf type is specified
-            if (!this.componentParameters.getControllerDescription().configFileIsSpecified()) { // The config file is not specified, nf interfaces have to be generated from the nf type
-                addControllersWithNfType();
-            } else { // If a config file is specified, it must be used to generate nf interfaces
-                addControllers();
-            }
-        } else {
-            addControllers();
+
+        loggerADL.debug("[PAComponentRepresentativeImpl]  FType: " +
+            ((PAComponentType) componentType).getFcInterfaceTypes().length);
+        loggerADL.debug("[PAComponentRepresentativeImpl] NFType: " +
+            ((PAComponentType) componentType).getNfFcInterfaceTypes().length);
+        loggerADL
+                .debug("[PAComponentRepresentativeImpl] Config File: " +
+                    (this.componentParameters.getControllerDescription().configFileIsSpecified() ? this.componentParameters
+                            .getControllerDescription().getControllersConfigFileLocation()
+                            : "---"));
+
+        if ((componentType instanceof PAComponentType)) {
+            loggerADL.debug("[PAComponentRepresentativeImpl] GENERAL CREATION of controller interfaces for " +
+                this.componentParameters.getName());
+            addControllerInterfaces();
         }
 
         addFunctionalInterfaces();
+
+        componentType = componentParameters.getComponentType();
+        loggerADL.debug("[PAComponentRepresentativeImpl] NFType: " +
+            ((PAComponentType) componentType).getNfFcInterfaceTypes().length);
+        loggerADL.debug("[PAComponentRepresentativeImpl] NFItfs: " + nfItfs.keySet().size());
+
     }
 
-    private boolean specialCasesForNfType(Class<?> controllerItf, boolean isPrimitive,
-            PAGCMInterfaceType itfType, ComponentParameters componentParam) throws Exception {
-        if (ContentController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
-            !itfType.isInternal()) {
-            if (isPrimitive) {
-                return true;// No external server content controller for primitive component
-            }
+    /**
+     * Create and add the NF Interfaces using both a component configuration file, and an NF Type.
+     * <ol>
+     * <li>Creates NF Interfaces from the declared NF Type. If there is non NF Type, this step is ignored.</li>
+     * <li>Creates Object Controllers from the Controllers Configuration File. If some of them duplicates interfaces declared in the NF Type, they are ignored.
+     *     In other words, the declared NF Type has priority over the Controllers Configuration File.</li>
+     * <li>Checks that the mandatory interfaces are declared. In particular, if the membrane controller has been previously declared, it is created here.</li>
+     * <li>Updates the NF Type of the Component.
+     * </ol>
+     * 
+     * NOTE: When an NF interface is described in the ADL file, the Factory adds the 'membrane-controller' default implementation automatically, so that it is not necessary
+     * to specify the 'membrane-controller' explicitly.
+     */
+    private void addControllerInterfaces() {
 
-            return false;//In this case, the ContentController has to be created
+        // Vector to collect the real NF type
+        Vector<InterfaceType> nfType = new Vector<InterfaceType>();
+
+        boolean isPrimitive = Constants.PRIMITIVE.equals(this.componentParameters.getHierarchicalType());
+
+        //------------------------------------------------------------
+        // 1. Create interfaces from the declared NF type
+        // Read the NF Type        
+        PAComponentType componentType = (PAComponentType) this.componentParameters.getComponentType();
+        InterfaceType[] nfItfTypes = componentType.getNfFcInterfaceTypes();
+        PAGCMInterfaceType[] pagcmNfItfTypes = new PAGCMInterfaceType[nfItfTypes.length];
+        System.arraycopy(nfItfTypes, 0, pagcmNfItfTypes, 0, nfItfTypes.length);
+        //Class<?> controllerItf = null;
+
+        for (PAGCMInterfaceType pagcmNfItfType : pagcmNfItfTypes) {
+
+            String itfName = pagcmNfItfType.getFcItfName();
+            PAInterface itfRef = null;
+
+            try {
+                // some controllers interfaces are ignored
+                if (specialCasesForNfType(itfName, pagcmNfItfType, isPrimitive))
+                    continue;
+
+                // TODO: check the case MULTICAST && CLIENT, treated in PAComponentImpl.addControllerInterfaces, but not here
+
+                // Generate the representative interface
+                itfRef = RepresentativeInterfaceClassGenerator.instance().generateInterface(
+                        pagcmNfItfType.getFcItfName(), this, pagcmNfItfType, pagcmNfItfType.isInternal(),
+                        false);
+
+                // update the hashmap and the vector of NF types
+                this.nfItfs.put(itfName, itfRef);
+                nfType.add((InterfaceType) itfRef.getFcItfType());
+
+            } catch (Exception e) {
+                throw new ProActiveRuntimeException("Could not create NF interface reference'" + itfName +
+                    "' while instantiating component'" + this.componentParameters.getName() + "'. " +
+                    e.getMessage(), e);
+            }
         }
 
-        if (BindingController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
-            !itfType.isInternal()) {
-            if (isPrimitive && (Utils.getClientItfTypes(componentParam.getComponentType()).length == 0)) {
-                // The binding controller is not generated for a component without client interfaces
-                if (logger.isDebugEnabled()) {
-                    logger.debug("user component class of '" + componentParam.getName() +
-                        "' does not have any client interface. It will have no BindingController");
+        //------------------------------------------------------------        
+        // 2. Create interfaces from the Controller Configuration file
+
+        // read the Controller Configuration File
+        Map<String, String> controllerEntries = null;
+        if (this.componentParameters.getControllerDescription().configFileIsSpecified()) {
+            // Parse controller config file
+            String controllersConfigFileLocation = this.componentParameters.getControllerDescription()
+                    .getControllersConfigFileLocation();
+            loggerADL.debug("Parsing Controller Configuration File: " + controllersConfigFileLocation);
+            ComponentConfigurationHandler componentConfiguration = PAComponentImpl
+                    .loadControllerConfiguration(controllersConfigFileLocation);
+            controllerEntries = componentConfiguration.getControllers();
+
+            // Create controller objects from the Controller Configuration File
+            for (Map.Entry<String, String> controllerEntry : controllerEntries.entrySet()) {
+
+                String controllerName = null;
+                String controllerItfName = controllerEntry.getKey();
+                String controllerClassName = controllerEntry.getValue();
+                Class<?> controllerItf = null;
+                Class<?> controllerClass = null;
+                AbstractPAController controller = null;
+                PAInterface itfRef = null;
+                PAGCMInterfaceType controllerItfType = null;
+
+                try {
+                    // fetch the classes
+                    controllerItf = Class.forName(controllerItfName);
+                    controllerClass = Class.forName(controllerClassName);
+                    // Instantiates the controller object, using 'this' component as owner.
+                    Constructor<?> controllerClassConstructor = controllerClass
+                            .getConstructor(new Class[] { Component.class });
+                    controller = (AbstractPAController) controllerClassConstructor
+                            .newInstance(new Object[] { this });
+
+                    // Obtains the controller interfaceType as declared by the object (in the method setControllerItfType)
+                    controllerItfType = (PAGCMInterfaceType) controller.getFcItfType();
+                    // now we can know the name of the controller, and discriminate special cases
+                    controllerName = controllerItfType.getFcItfName();
+
+                    // Some controllers are not created
+                    if (specialCasesForController(controllerName, controllerItfType, isPrimitive,
+                            controllersConfigFileLocation)) {
+                        continue;
+                    }
+
+                    if (!controllerItf.isAssignableFrom(controllerClass)) {
+                        logger.error("Could not create controller. Class '" + controllerClassName +
+                            " does not implement interface '" + controllerItfName +
+                            ". Check controller configuration file.");
+                        continue;
+                    }
+
+                    // Generate the representative interface
+                    itfRef = RepresentativeInterfaceClassGenerator.instance().generateControllerInterface(
+                            controllerName, this, controllerItfType);
+                    ((StubObject) itfRef).setProxy(this.proxy);
+
+                } catch (Exception e) {
+                    throw new ProActiveRuntimeException(
+                        "Could not create representative interface for controller '" +
+                            controllerClassName +
+                            "' while instantiating component'" +
+                            this.componentParameters.getName() +
+                            "'. Check your configuration file " +
+                            this.componentParameters.getControllerDescription()
+                                    .getControllersConfigFileLocation() + " : " + e.getMessage(), e);
                 }
-                return true;//In this case, the BindingController is ignored
+
+                // add the controller to the controllers interfaces map, and add the controller type to the NF type
+                nfItfs.put(controllerName, itfRef);
+                nfType.add((InterfaceType) itfRef.getFcItfType());
             }
-            return false;// In this case, the BindingController is created
         }
 
-        if (NameController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
-            !itfType.isInternal()) { /* Mandatory controller, we don't have to recreate it */
+        //------------------------------------------------------------        
+        // 3. Check that the mandatory controllers have been created
+        checkMandatoryControllers(nfType);
+
+        //------------------------------------------------------------        
+        // 4. Set the real NF type, after having created all the NF interfaces
+        try {
+            Component boot = Utils.getBootstrapComponent();
+            PAGCMTypeFactory tf = Utils.getPAGCMTypeFactory(boot);
+            InterfaceType[] f = this.componentParameters.getComponentType().getFcInterfaceTypes();
+            InterfaceType[] nf = nfType.toArray(new InterfaceType[] {});
+            // Re-Set the real ComponentType
+            this.componentParameters.setComponentType(tf.createFcType(f, nf));
+        } catch (Exception e) {
+            logger.error("NF type could not be set");
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Discriminate special NF interfaces
+     * <ul>
+     *    <li>COLLECTION: ignored, they are dynamically generated</li>
+     *    <li>CONTENT: if primitive, ignore it</li>
+     *    <li>BINDING: if primitive and DOESN'T HAVE F client interfaces, ignore it</li>
+     * </ul>
+     * @return true if 'special case', faslse otherwise
+     */
+    private boolean specialCasesForNfType(String itfName, PAGCMInterfaceType itfType, boolean isPrimitive) {
+
+        // COLLECTION interfaces are ignored, because they are generated dynamically
+        if (itfType.isFcCollectionItf()) {
+            return true;
+        }
+        /*
+        // MEMBRANE controller must be created as an object controller
+        if(Constants.MEMBRANE_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() && !itfType.isInternal()) {
+        	//logger.warn("Ignored NF Interface '"+ Constants.MEMBRANE_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
+        	return true;
+        }*/
+
+        // CONTENT controller is not created for primitives
+        if (Constants.CONTENT_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() &&
+            !itfType.isInternal() && isPrimitive) {
+            //logger.warn("Ignored NF Interface '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
             return true;
         }
 
-        if (LifeCycleController.class.isAssignableFrom(controllerItf) && !itfType.isFcClientItf() &&
-            !itfType.isInternal()) { /* Mandatory controller, we don't have to recreate it */
-            return true;
+        // BINDING controller is not created for primitives without client interfaces
+        if (Constants.BINDING_CONTROLLER.equals(itfName) && !itfType.isFcClientItf() &&
+            !itfType.isInternal() && isPrimitive) {
+            if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
+                //logger.warn("Ignored NF Interface '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "'");
+                return true;
+            }
         }
+
         return false;
     }
 
-    private void addControllersWithNfType() {
-        this.nfInterfaceReferences = new HashMap<String, Interface>();
-        InterfaceType[] tmp = ((PAComponentType) this.componentParameters.getComponentType())
-                .getNfFcInterfaceTypes();
-        PAGCMInterfaceType[] interface_types = new PAGCMInterfaceType[tmp.length];
-        System.arraycopy(tmp, 0, interface_types, 0, tmp.length);
-        Class<?> controllerItf = null;
+    /**
+     * Discriminate special controller interfaces
+     * <ul>
+     *    <li>COLLECTION: ignored??? (TODO:check if this is needed)</li>
+     *    <li>CONTENT: if primitive, ignore it</li>
+     *    <li>BINDING: if primitive and DOESN'T HAVE F client interfaces, ignore it</li>
+     *    <li>Avoid duplicates</li>
+     * </ul>
+     * @param controllerName
+     * @param itfType
+     * @param isPrimitive
+     * @return
+     */
+    private boolean specialCasesForController(String controllerName, PAGCMInterfaceType itfType,
+            boolean isPrimitive, String controllersConfigFileLocation) {
 
-        try {
-            addMandatoryControllers();
-            for (int j = 0; j < interface_types.length; j++) {
-                controllerItf = Class.forName(interface_types[j].getFcItfSignature());
-                if (!specialCasesForNfType(controllerItf, this.componentParameters.getHierarchicalType()
-                        .equals(Constants.PRIMITIVE), interface_types[j], this.componentParameters)) {
-                    if (!interface_types[j].isFcCollectionItf()) {
-                        // itfs members of collection itfs are dynamically generated
-                        Interface interface_reference = RepresentativeInterfaceClassGenerator.instance()
-                                .generateInterface(interface_types[j].getFcItfName(), this,
-                                        interface_types[j], interface_types[j].isInternal(), false);
+        // COLLECTION interfaces are ignored, because they are generated dynamically (and an object controller shouldn't be a collection, right?)
+        //if(itfType.isFcCollectionItf()) {
+        //	return true;
+        //}
 
-                        // all calls are to be reified
-                        this.nfInterfaceReferences.put(interface_reference.getFcItfName(),
-                                interface_reference);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            //throw new RuntimeException("cannot create interface references : " +
-            //  e.getMessage());
+        // CONTENT controller is not created for primitives
+        if (Constants.CONTENT_CONTROLLER.equals(controllerName) && !itfType.isFcClientItf() &&
+            !itfType.isInternal() && isPrimitive) {
+            //logger.warn("Ignored controller '"+ Constants.CONTENT_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
+            return true;
         }
-    }
 
-    private void addMandatoryControllers() throws Exception {
-        Component boot = Utils.getBootstrapComponent(); /*Getting the Fractal-GCM-Proactive bootstrap component*/
-        GCMTypeFactory type_factory = GCM.getGCMTypeFactory(boot);
+        // BINDING controller is not created for primitives without client interfaces
+        if (Constants.BINDING_CONTROLLER.equals(controllerName) && !itfType.isFcClientItf() &&
+            !itfType.isInternal() && isPrimitive) {
+            if (Utils.getClientItfTypes(this.componentParameters.getComponentType()).length == 0) {
+                //logger.warn("Ignored controller '"+ Constants.BINDING_CONTROLLER +"' declared for component '"+ this.componentParameters.getName() + "' in file: "+ controllersConfigFileLocation);
+                return true;
+            }
+        }
 
-        PAGCMInterfaceType itfType = (PAGCMInterfaceType) type_factory
-                .createFcItfType(
-                        Constants.LIFECYCLE_CONTROLLER,
-                        /* LIFECYCLE CONTROLLER */org.objectweb.proactive.core.component.control.PAGCMLifeCycleController.class
-                                .getName(), TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE);
-        Interface interface_reference = RepresentativeInterfaceClassGenerator.instance().generateInterface(
-                itfType.getFcItfName(), this, itfType, itfType.isInternal(), false);
+        // Controller interface had already been declared (f.e., in the NF Type). Do not create this controller.
+        if (existsNfInterface(controllerName)) {
+            //logger.warn("Controller interface '"+ controllerName +"' already created. Ignoring this controller.");
+            return true;
+        }
 
-        this.nfInterfaceReferences.put(interface_reference.getFcItfName(), interface_reference);
-
-        itfType = (PAGCMInterfaceType) type_factory.createFcItfType(Constants.NAME_CONTROLLER,
-        /* NAME CONTROLLER */org.objectweb.fractal.api.control.NameController.class.getName(),
-                TypeFactory.SERVER, TypeFactory.MANDATORY, TypeFactory.SINGLE);
-
-        interface_reference = RepresentativeInterfaceClassGenerator.instance().generateInterface(
-                itfType.getFcItfName(), this, itfType, itfType.isInternal(), false);
-
-        this.nfInterfaceReferences.put(interface_reference.getFcItfName(), interface_reference);
-    }
-
-    private void addControllers() {
-        ComponentConfigurationHandler componentConfiguration = PAComponentImpl
-                .loadControllerConfiguration(this.componentParameters.getControllerDescription()
-                        .getControllersConfigFileLocation());
-        Map<String, String> controllersConfiguration = componentConfiguration.getControllers();
-
-        addControllers(controllersConfiguration);
+        return false;
     }
 
     private void addControllers(Map<String, String> controllersConfiguration) {
@@ -248,7 +399,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         // - the number of client functional interfaces
         // - the number of server functional interfaces
         //ArrayList interface_references_list = new ArrayList(1 +componentType.getFcInterfaceTypes().length+controllersConfiguration.size());
-        this.nfInterfaceReferences = new HashMap<String, Interface>(1 + controllersConfiguration.size());
+        this.nfItfs = new HashMap<String, Interface>(1 + controllersConfiguration.size());
 
         // add controllers
         //Enumeration controllersInterfaces = controllersConfiguration.propertyNames();
@@ -296,7 +447,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
                 }
             }
             if (currentInterface != null) {
-                this.nfInterfaceReferences.put(currentController.getFcItfName(), currentInterface);
+                this.nfItfs.put(currentController.getFcItfName(), currentInterface);
                 nfType.add((InterfaceType) currentInterface.getFcItfType());
             }
         }
@@ -315,11 +466,135 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
     }
 
     /**
+     * Checks that the mandatory controllers are defined and, if not, creates them.
+     * Mandatory controllers: NAME, LIFECYCLE
+     * Also: CONTENT for composite, BINDING for composites and primitive with F client itfs
+     * 
+     * CHECK: Is it needed to check if the interface exists, but no implementation has been given yet?
+     * Compare with the equivalent method of PAComponentImpl.
+     * It does not seem to be needed. 
+     */
+    private void checkMandatoryControllers(Vector<InterfaceType> nfType) {
+
+        PAInterface itfRef = null;
+        Class<?> controllerClass = null;
+        boolean isPrimitive = Constants.PRIMITIVE.equals(this.componentParameters.getHierarchicalType());
+        boolean hasFClientInterfaces = this.componentParameters.getClientInterfaceTypes().length > 0;
+
+        try {
+            // LIFECYCLE Controller
+            if (!existsNfInterface(Constants.LIFECYCLE_CONTROLLER)) {
+                // default implementation of PAGCMLifeCycleController
+                controllerClass = PAGCMLifeCycleControllerImpl.class;
+                itfRef = createControllerRepresentative(controllerClass);
+                this.nfItfs.put(itfRef.getFcItfName(), itfRef);
+                nfType.add((InterfaceType) itfRef.getFcItfType());
+                // ASSERTIONS: controller implements PAGCMLifeCycleController, and controllerName is "lifecycle-controller"
+            }
+
+            // NAME Controller
+            if (!existsNfInterface(Constants.NAME_CONTROLLER)) {
+                // default implementation of NameController 
+                controllerClass = PANameControllerImpl.class;
+                itfRef = createControllerRepresentative(controllerClass);
+                this.nfItfs.put(itfRef.getFcItfName(), itfRef);
+                nfType.add((InterfaceType) itfRef.getFcItfType());
+                // ASSERTIONS: controller implements NameController, and controllerName is "name-controller"
+            }
+
+            // CONTENT Controller if composite
+            if (!existsNfInterface(Constants.CONTENT_CONTROLLER) && !isPrimitive) {
+                // default implementation of PAContentController
+                controllerClass = PAContentControllerImpl.class;
+                itfRef = createControllerRepresentative(controllerClass);
+                this.nfItfs.put(itfRef.getFcItfName(), itfRef);
+                nfType.add((InterfaceType) itfRef.getFcItfType());
+                // ASSERTIONS: controller implements PAContentController, and controllerName is "content-controller"
+            }
+
+            //BINDING Controller if composite, or primitive with F client interfaces
+            if (!existsNfInterface(Constants.BINDING_CONTROLLER) && !(isPrimitive && !hasFClientInterfaces)) {
+                // default implementation of PABindingController
+                controllerClass = PABindingControllerImpl.class;
+                itfRef = createControllerRepresentative(controllerClass);
+                this.nfItfs.put(itfRef.getFcItfName(), itfRef);
+                nfType.add((InterfaceType) itfRef.getFcItfType());
+                // ASSERTIONS: controller implements PABindingController, and controllerName is "binding-controller"
+            }
+
+            // MEMBRANE Controller ...
+            // Must be created it was declared and it has no implementation yet
+            if (existsNfInterface(Constants.MEMBRANE_CONTROLLER)) {
+                PAInterface membraneItfRef = (PAInterface) this.nfItfs.get(Constants.MEMBRANE_CONTROLLER);
+                if (((StubObject) membraneItfRef).getProxy() == null) {
+                    // default implementation of PAMembraneController 
+                    controllerClass = PAMembraneControllerImpl.class;
+                    itfRef = createControllerRepresentative(controllerClass);
+                    // replace the previous entry for 'membrane-controller'
+                    this.nfItfs.put(itfRef.getFcItfName(), itfRef);
+                    // but don't re-add the type to the nfType vector, because it already exists
+                }
+                // ASSERTIONS: controller implements PAMembraneController, and controllerName is "membrane-controller"
+            }
+
+        } catch (Exception e) {
+            throw new ProActiveRuntimeException("Could not create mandatory controller representative '" +
+                controllerClass.getName() + "' while instantiating component'" +
+                this.componentParameters.getName() + "': " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Instantiates an object controller and generates its representative interface using only the Controller class
+     * (which must implement {@link AbstractPAController}.
+     * 
+     * The {@link PAGCMInterfaceType} is obtained from the object after instantiating it. 
+     * 
+     * @param controllerClass
+     * @return interface generated for the controller
+     */
+    private PAInterface createControllerRepresentative(Class<?> controllerClass) throws Exception {
+
+        // Instantiate the controller object, setting THIS component as its owner.
+        Constructor<?> controllerClassConstructor = controllerClass
+                .getConstructor(new Class[] { Component.class });
+        AbstractPAController controller = (AbstractPAController) controllerClassConstructor
+                .newInstance(new Object[] { this });
+        // Obtains the interface type after having instantiated the object
+        PAGCMInterfaceType controllerItfType = (PAGCMInterfaceType) controller.getFcItfType();
+        String controllerName = controller.getFcItfName();
+        // Generates the representative PAInterface 
+        PAInterface itfRef = RepresentativeInterfaceClassGenerator.instance().generateInterface(
+                controllerName, this, controllerItfType, controllerItfType.isInternal(), false);
+        //itfRef.setFcItfImpl(controller);
+
+        // TODO: This was not done before. Is it needed now? Following the scheme of "addControllers" I would say yes
+        ((StubObject) itfRef).setProxy(this.proxy);
+        return itfRef;
+    }
+
+    /**
+     * Checks if the NF interface 'itfName' has already been defined.
+     * @param itfName
+     * @return
+     */
+    private boolean existsNfInterface(String itfName) {
+        if (this.nfItfs.containsKey(itfName)) {
+            return true;
+        }
+        // not sure how to handle collection members (IF they must be handled differently)
+        //if(this.collectionNfItfsMembers.containsKey(itfName)) {
+        //    		return true;
+        //}
+        return false;
+    }
+
+    /**
      * @param componentType
      */
     private void addFunctionalInterfaces() {
         InterfaceType[] itfTypes = this.componentParameters.getComponentType().getFcInterfaceTypes();
-        this.fcInterfaceReferences = new HashMap<String, Interface>(itfTypes.length + (itfTypes.length / 2));
+        this.fItfs = new HashMap<String, Interface>(itfTypes.length + (itfTypes.length / 2));
 
         try {
             for (int j = 0; j < itfTypes.length; j++) {
@@ -331,8 +606,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
 
                     // all calls are to be reified
                     if (interface_reference != null) {
-                        this.fcInterfaceReferences.put(interface_reference.getFcItfName(),
-                                interface_reference);
+                        this.fItfs.put(interface_reference.getFcItfName(), interface_reference);
                     }
                 }
             }
@@ -359,23 +633,28 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
         }
     }
 
-    /*
+    /**
+     * Retrieves an interface from its name.
+     * NF Interfaces (both client/server) must have a name ending in "-controller".
+     * 
      * @see org.objectweb.fractal.api.Component#getFcInterface(String)
      */
     public Object getFcInterface(String interfaceName) throws NoSuchInterfaceException {
         if (interfaceName.endsWith("-controller") && !(Constants.ATTRIBUTE_CONTROLLER.equals(interfaceName))) {
-            if (this.nfInterfaceReferences == null) {
+            if (this.nfItfs == null) {
+                // Check: is it needed to do this?... the addControllers method, or equivalent, should have been called at construction,
+                //        and also maybe we're not using a controller config file
                 addControllers(this.componentParameters.getControllerDescription().getControllersSignatures());
             }
-            if (this.nfInterfaceReferences.containsKey(interfaceName)) {
-                return this.nfInterfaceReferences.get(interfaceName);
-            } else {
-                throw new NoSuchInterfaceException(interfaceName);
+            if (this.nfItfs.containsKey(interfaceName)) {
+                return this.nfItfs.get(interfaceName);
             }
+            // TODO: Check how are the collective NF interfaces handled here ... should they also finish by "-controller" ?
+            throw new NoSuchInterfaceException(interfaceName);
         }
 
-        if (this.fcInterfaceReferences.containsKey(interfaceName)) {
-            return this.fcInterfaceReferences.get(interfaceName);
+        if (this.fItfs.containsKey(interfaceName)) {
+            return this.fItfs.get(interfaceName);
         } else {
             if (interfaceName.equals(Constants.COMPONENT)) {
                 return this;
@@ -391,7 +670,7 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
 
                     ((StubObject) interface_reference).setProxy(this.proxy);
                     // keep it in the list of functional interfaces
-                    this.fcInterfaceReferences.put(interfaceName, interface_reference);
+                    this.fItfs.put(interfaceName, interface_reference);
                     return interface_reference;
                 } catch (Throwable e) {
                     logger.info("Could not generate " + interfaceName + " collection interface", e);
@@ -406,10 +685,8 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
      * implements org.objectweb.fractal.api.Component#getFcInterfaces()
      */
     public Object[] getFcInterfaces() {
-        Interface[] nfInterfaces = this.nfInterfaceReferences.values().toArray(
-                new Interface[this.nfInterfaceReferences.size()]);
-        Interface[] fcInterfaces = this.fcInterfaceReferences.values().toArray(
-                new Interface[this.fcInterfaceReferences.size()]);
+        Interface[] nfInterfaces = this.nfItfs.values().toArray(new Interface[this.nfItfs.size()]);
+        Interface[] fcInterfaces = this.fItfs.values().toArray(new Interface[this.fItfs.size()]);
         Interface[] result = new Interface[nfInterfaces.length + fcInterfaces.length + 1];
         System.arraycopy(nfInterfaces, 0, result, 0, nfInterfaces.length);
         System.arraycopy(fcInterfaces, 0, result, nfInterfaces.length, fcInterfaces.length);
@@ -435,9 +712,10 @@ public class PAComponentRepresentativeImpl implements PAComponentRepresentative,
      * implements org.objectweb.proactive.core.mop.StubObject#setProxy(Proxy)}
      */
     public void setProxy(Proxy proxy) {
-        // sets proxy for non functional interfaces
+        // sets proxy for non functional interfaces (what does this mean?)
         this.proxy = proxy;
-        // sets the same proxy for all interfaces of this component
+
+        // sets the same proxy for all interfaces of this component (including NF, because getFcInterfaces returns ALL interfaces)
         Object[] interfaces = getFcInterfaces();
         PAInterface[] interface_references = new PAInterface[interfaces.length - 1];
         for (int i = 0; i < interfaces.length; i++) {

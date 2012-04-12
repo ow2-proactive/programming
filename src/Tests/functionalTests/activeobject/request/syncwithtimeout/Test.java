@@ -34,36 +34,47 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core;
+package functionalTests.activeobject.request.syncwithtimeout;
 
-import org.objectweb.proactive.annotation.PublicAPI;
+import static junit.framework.Assert.assertTrue;
+
+import org.junit.Before;
+import org.objectweb.proactive.api.PAActiveObject;
+import org.objectweb.proactive.core.ProActiveRuntimeException;
+import org.objectweb.proactive.core.ProActiveTimeoutException;
+import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
+
+import functionalTests.FunctionalTest;
 
 
-@PublicAPI
 /**
- * Exception thrown when a blocking operation times out. Blocking operations for which a timeout is
- * specified need a means to indicate that the timeout has occurred. For many such operations it is
- * possible to return a value that indicates timeout; when that is not possible or desirable then
- * <tt>TimeoutException</tt> should be declared and thrown.
- * 
- * @since 4.0
+ * Test blocking request, and calling void, int returned type and object
+ * returned type method
  */
-public class ProActiveTimeoutException extends ProActiveRuntimeException {
 
-    public ProActiveTimeoutException() {
-        super();
+public class Test extends FunctionalTest {
+    SynchrounousMethodCallWithTimeout activeA;
+    boolean exceptionCaught = false;
+
+    @Before
+    public void action() throws Exception {
+        try {
+            CentralPAPropertyRepository.PA_FUTURE_SYNCHREQUEST_TIMEOUT.setValue(2);
+            activeA = PAActiveObject.newActive(SynchrounousMethodCallWithTimeout.class, new Object[0]);
+
+            System.out
+                    .println("calling a synchronous method that waits for 10 sec while timeout is set to 2 sec");
+            activeA.sleepFor10Sec();
+        } catch (ProActiveTimeoutException e) {
+            System.out.println("got the exception " + e.getMessage() + ", this is good");
+            exceptionCaught = true;
+            return;
+        }
+        System.out.println("missed the exception, this is *no* good");
     }
 
-    public ProActiveTimeoutException(String message) {
-        super(message);
+    @org.junit.Test
+    public void postConditions() {
+        assertTrue(exceptionCaught);
     }
-
-    public ProActiveTimeoutException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ProActiveTimeoutException(Throwable cause) {
-        super(cause);
-    }
-
 }

@@ -82,6 +82,9 @@ public class RemoteObjectHelper {
         } catch (UnknownProtocolException e) {
             ProActiveLogger.logImpossibleException(logger, e);
             return null;
+        } catch (ProActiveException e) {
+            logger.error("Failure to determine Remote Object Base URI", e);
+            return null;
         }
     }
 

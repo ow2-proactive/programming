@@ -129,11 +129,11 @@ public interface RemoteObjectFactory {
             boolean rebind) throws ProActiveException;
 
     /**
-     * @return the base URI for all object in this {@link RemoteObjectFactory}
-     * 
      * To lookup an object on this host, caller can use this base URI and just set the name part.
+     * @return the base URI for all object in this {@link RemoteObjectFactory}
+     * @throws ProActiveException  
      */
-    public URI getBaseURI();
+    public URI getBaseURI() throws ProActiveException;
 
     /**
      * Return an input Stream which will handle the deserialization of the RemoteRemoteObject created

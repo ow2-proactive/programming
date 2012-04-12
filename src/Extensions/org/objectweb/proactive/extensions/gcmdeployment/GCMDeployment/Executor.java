@@ -44,6 +44,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.objectweb.proactive.core.config.CentralPAPropertyRepository;
@@ -82,7 +83,10 @@ public class Executor {
                         command);
                     break;
                 case windows:
-                    pb = new ProcessBuilder(command);
+                    // if command is passed to the ProcessBuilder as single string it can be corrupted on windows 
+                    // (see PROACTIVE-1176)
+                    String[] tokenizedCommand = tokenizeCommand(command);
+                    pb = new ProcessBuilder(tokenizedCommand);
                     break;
             }
 
@@ -94,6 +98,15 @@ public class Executor {
         } catch (IOException e) {
             logger.warn("Cannot execute: " + command, e);
         }
+    }
+
+    private static String[] tokenizeCommand(String command) {
+        StringTokenizer st = new StringTokenizer(command);
+        String[] cmdarray = new String[st.countTokens()];
+        for (int i = 0; st.hasMoreTokens(); i++) {
+            cmdarray[i] = st.nextToken();
+        }
+        return cmdarray;
     }
 
     static private class InputStreamMonitor extends Thread {

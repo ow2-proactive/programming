@@ -34,36 +34,47 @@
  * ################################################################
  * $$PROACTIVE_INITIAL_DEV$$
  */
-package org.objectweb.proactive.core;
+package org.objectweb.proactive.core.config;
 
-import org.objectweb.proactive.annotation.PublicAPI;
+import org.objectweb.proactive.core.ProActiveRuntimeException;
 
 
-@PublicAPI
 /**
- * Exception thrown when a blocking operation times out. Blocking operations for which a timeout is
- * specified need a means to indicate that the timeout has occurred. For many such operations it is
- * possible to return a value that indicates timeout; when that is not possible or desirable then
- * <tt>TimeoutException</tt> should be declared and thrown.
- * 
- * @since 4.0
+ * An long ProActive property
+ *
+ * @since ProActive 5.2.0
  */
-public class ProActiveTimeoutException extends ProActiveRuntimeException {
+public class PAPropertyLong extends PAPropertyImpl {
 
-    public ProActiveTimeoutException() {
-        super();
+    public PAPropertyLong(String name, boolean isSystemProp) {
+        super(name, PropertyType.LONG, isSystemProp, null);
     }
 
-    public ProActiveTimeoutException(String message) {
-        super(message);
+    public PAPropertyLong(String name, boolean isSystemProp, long defaultValue) {
+        super(name, PropertyType.LONG, isSystemProp, Long.toString(defaultValue));
     }
 
-    public ProActiveTimeoutException(String message, Throwable cause) {
-        super(message, cause);
+    final public long getValue() {
+        String str = super.getValueAsString();
+        try {
+            return Long.parseLong(str);
+        } catch (NumberFormatException e) {
+            throw new ProActiveRuntimeException("Invalid value for ProActive property " +
+                super.getAliasedName() + " must be a long", e);
+        }
     }
 
-    public ProActiveTimeoutException(Throwable cause) {
-        super(cause);
+    final public void setValue(long value) {
+        super.internalSetValue(new Long(value).toString());
     }
 
+    @Override
+    final public boolean isValid(String value) {
+        try {
+            Long.parseLong(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
