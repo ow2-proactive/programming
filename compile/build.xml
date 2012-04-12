@@ -382,15 +382,17 @@
 			</fileset>
 			<fileset dir="${config.dir}" includes="ProActiveConfiguration.xml" />
 			<fileset dir="${osgi.res.dir}" includes="metadata.xml" />
-			<fileset dir="${cxf.dir}/etc">
-				<include name="META-INF/cxf/**" />
-			</fileset>
 			<indexjars>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
 				<fileset dir="${cxf.lib.dir}">
 					<include name="*.jar" />
+					<!-- It is mandatory to exclude the cxf jar of the jar index
+					and to explicity include it in the classpath. CXF is not able to
+					find its configuration files if they are not directly accessible
+					through the classpath. -->
+					<exclude name="cxf-2.5.2.jar" />
 				</fileset>
 			</indexjars>
 		</jar>
@@ -587,7 +589,7 @@
 
 				<classpath>
 					<additionalClasspath>
-						<!--  it  is mandatory to explicity include the ibis jar in the
+						<!-- It is mandatory to explicity include the ibis jar in the
 						classpath. Ibis is not able to find the classes if they are
 						not directly accessible through the classpath.
 						i.e. we cannot use the jar index tip -->
@@ -1058,13 +1060,6 @@
 			</webinf>
 			<lib dir="${deploy.dir}/lib">
 				<include name="*.jar" />
-			</lib>
-			<lib dir="${cxf.lib.dir}">
-				<include name="*.jar" />
-				<exclude name="servlet-api-*.jar" />
-				<exclude name="geronimo-servlet_*.jar" />
-				<exclude name="jetty-*.jar" />
-				<exclude name="WHICH_JARS" />
 			</lib>
 			<fileset dir="${cxf.dir}/etc">
 				<include name="META-INF/**" />

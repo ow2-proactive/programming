@@ -40,6 +40,7 @@ fi
 # Since ProActive 4.1.0 classes are no longer used
 CLASSPATH=$CLASSPATH:$PROACTIVE/dist/lib/ProActive.jar
 CLASSPATH=$CLASSPATH:$PROACTIVE/dist/lib/ProActive_examples.jar
+CLASSPATH=$CLASSPATH:$PROACTIVE/dist/lib/cxf-2.5.2.jar
 CLASSPATH=$CLASSPATH:$PROACTIVE/dist/lib/ibis-1.4.jar:$PROACTIVE/dist/lib/ibis-connect-1.0.jar:$PROACTIVE/dist/lib/ibis-util-1.0.jar
 
 #echo "CLASSPATH"=$CLASSPATH
