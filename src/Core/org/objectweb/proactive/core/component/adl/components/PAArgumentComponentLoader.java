@@ -39,7 +39,7 @@ public class PAArgumentComponentLoader extends ArgumentComponentLoader {
 
 	protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
-	// The load methods are not changed. The modifications in order to extends the loading
+	// The load methods are not changed. The modifications in order to extend the loading
 	// to the NF components are included in the normalize and resolution methods
 	// from ComponentLoader.	
 	
