@@ -160,10 +160,12 @@ public class PATypeCompiler extends TypeCompiler {
 					if(ctrl instanceof InterfaceContainer) {
 						nfItfs = ((InterfaceContainer) ctrl).getInterfaces();
 						for(Interface itf : nfItfs) {
-							logger.debug("[PATypeCompiler] --> ITF: " + itf.toString());
+							//logger.debug("[PATypeCompiler] --> ITF: " + itf.toString() );
 							if(itf instanceof TypeInterface) {
 								TypeInterface tItf = (TypeInterface) itf;
-								Object itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf.getRole(), tItf.getContingency(), tItf.getCardinality(), context);
+								logger.debug("[PATypeCompiler] --> ITF: " + itf.toString() + " role: "+ tItf.getRole() );
+								boolean isInternal = PATypeInterface.INTERNAL_CLIENT_ROLE.equals(tItf.getRole()) || PATypeInterface.INTERNAL_SERVER_ROLE.equals(tItf.getRole());
+								Object itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf.getRole(), tItf.getContingency(), tItf.getCardinality(), isInternal, context);
 								nfItfTypes.add(itfType);
 								if(Constants.MEMBRANE_CONTROLLER.equals(tItf.getName())) {
 									membraneControllerDefined = true;

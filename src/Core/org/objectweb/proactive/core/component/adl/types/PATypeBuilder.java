@@ -99,7 +99,7 @@ public class PATypeBuilder implements PATypeBuilderItf {
         PAGCMTypeFactory patf = (PAGCMTypeFactory) GCM.getGCMTypeFactory(bootstrap);
     	
         // TODO : cache already created types ?
-        boolean client = "client".equals(role);
+        boolean client = "client".equals(role) || "internal-client".equals(role);
         boolean optional = "optional".equals(contingency);
         // default cardinality = singleton
         String checkedCardinality = (cardinality == null) ? GCMTypeFactory.SINGLETON_CARDINALITY : cardinality;
