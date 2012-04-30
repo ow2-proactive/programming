@@ -86,6 +86,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class PAMembraneControllerImpl extends AbstractPAController implements PAMembraneController,
         Serializable, ControllerStateDuplication {
     protected static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS);
+    protected static Logger loggerADL = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
     private Map<String, Component> nfComponents;
     private NFBindings nfBindings;//TODO : This structure has to be updated every time a with the membrane is added or removed
     private String membraneState;
@@ -143,11 +144,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                     "To perform reconfiguration inside the membrane, the lifecycle and the membrane must be stopped");
             }
         } catch (NoSuchInterfaceException e) {
-
-            /*
-             * Without a life cycle controller, the default activity of a GCM component does not
-             * work
-             */
+        	// Without a life cycle controller, the default activity of a GCM component does not work
         }
         checkMembraneIsStarted(component);
         PAComponent ownerRepresentative = owner.getRepresentativeOnThis();
@@ -166,13 +163,11 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
         }
 
         if (nfComponents.containsKey(name)) {
-            throw new IllegalContentException(
-                "The name of the component is already assigned to an existing non functional component");
+            throw new IllegalContentException("The name of the component is already assigned to an existing non functional component");
         }
 
-        if (!((PAComponentRepresentativeImpl) ownerRepresentative).isPrimitive()) { /*
-         * The host component is composite
-         */
+        if (!((PAComponentRepresentativeImpl) ownerRepresentative).isPrimitive()) {
+        	/// Host component is composite
             Component[] fcomponents = null;
             try {
                 fcomponents = GCM.getContentController(owner).getFcSubComponents();
@@ -183,21 +178,24 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                 throw ice;
             }
 
-            for (Component c : fcomponents) { /*
-             * Check that the name of the component is not
-             * assigned to an existing functional one
-             */
+            for (Component c : fcomponents) {
+            	// Check that the name of the component is not assigned to an existing functional one
                 try {
-                    try {
-                        if (Utils.getPAMembraneController(c).getMembraneState().equals(
-                                PAMembraneController.MEMBRANE_STOPPED)) {
-                            throw new IllegalLifeCycleException(
-                                "While iterating on functional components, it apprears that one of them has its membranje in a stopped state. It should be started.");
-                        }
-                    } catch (NoSuchInterfaceException e) {
+                	// cruz: why is this needed ?
+                	// When adding an NF component, it should not interfere with the F subcomponents, even less with their membrane.
+                	// It makes more sense to check this in the nfBindFc operation.
+                    //try {
+                    //    if (Utils.getPAMembraneController(c).getMembraneState().equals(PAMembraneController.MEMBRANE_STOPPED)) {
+                    //        throw new IllegalLifeCycleException(
+                    //            "While iterating on functional components, it appears that one of them has its membrane in a stopped state. It should be started.");
+                    //    }
+                    //} catch (NoSuchInterfaceException e) {
                         //If the component does not have any membrane-controller, it won't have any impact
-                    }
+                    //}
 
+                    // TODO Check if this must be enforced or not. Theoretically, if are going to allow reconfiguration (insertion/removal)
+                    //      of components in the functional part, and in the membrane, AND we want to promote separation concerns,
+                    //      we should 'a priori' allow repeated names (there's never a direct binding between F and NF components)
                     if (GCM.getNameController(c).getFcName().compareTo(name) == 0) {
                         throw new IllegalContentException(
                             "The name of the component is already assigned to an existing functional component");
@@ -445,6 +443,7 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                 if (client.getComponent() instanceof PANFComponentRepresentative) { // All possible bindings for client interfaces of NF components
                     checkMembraneIsStarted(client.getComponent());
                     if (server.getComponent() == null) { // A client interface of a NF component to a NF external/internal client
+                    	loggerADL.debug("[PAMembraneControllerImpl] Server Interface Type: "+ srItfType.getFcItfName() +" + is client? "+ srItfType.isFcClientItf() +" internal?" + srItfType.isInternal() + " ... " + (srItfType instanceof Interface) );
                         if (srItfType.isFcClientItf() && srItfType.getFcItfName().endsWith("-controller")) { // Connection to any (internal/external) client NF interface
                             GCM.getBindingController(client.getComponent()).bindFc(clItfType.getFcItfName(),
                                     owner.getRepresentativeOnThis().getFcInterface(srItfType.getFcItfName()));// Alias client binding
@@ -861,19 +860,22 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
 
     private ComponentAndInterface getComponentAndInterface(String itf) throws NoSuchInterfaceException {
         String[] itfTab = itf.split("\\.", 2);
-        if (itfTab.length == 1) { /*
-         * The interface tab has only one element : if it exists, it is
-         * an interface of the membrane
-         */
+        if (itfTab.length == 1) { 
+        	// The interface tab has only one element : if it exists, it is
+            //an interface of the membrane
             if (itfTab[0].endsWith("-controller")) {
                 Interface i = (Interface) owner.getFcInterface(itfTab[0]);
 
                 return new ComponentAndInterface(i);
-            } else {//The interface is not a controller one
+            } else {
+            	//The interface is not a controller one
                 throw new NoSuchInterfaceException("The specified interface " + itfTab[0] +
                     " is not non-functional");
             }
-        } else { /* Normally, component and its interface are specified */
+        } else { 
+        	// Normally, component and its interface are specified 
+        	// cruz: I have not used this possibility in practice: to specify an interface as "membrane.interfaceName"
+        	//       (and it forbids the existence of a component called "membrane")
             if (itfTab[0].equals("membrane")) {
                 Interface i = (Interface) owner.getFcInterface(itfTab[1]);
                 return new ComponentAndInterface(i);
@@ -884,18 +886,19 @@ public class PAMembraneControllerImpl extends AbstractPAController implements PA
                     searchComponent = getFunctionalComponent(itfTab[0]);
                 }
 
-                if (searchComponent == null) {//The component we are looking for is not in the functional content
-                    searchComponent = nfGetFcSubComponent(itfTab[0]); /*
-                     * Is it a non functional
-                     * component??
-                     */
+                if (searchComponent == null) {
+                	//The component we are looking for is not in the functional content
+                    searchComponent = nfGetFcSubComponent(itfTab[0]);
+                    // Is it a non functional component??
                     if (searchComponent == null) {
                         throw new NoSuchComponentException("There is no : " + itfTab[0] + " component");
-                    } else { /* The component is non-functional */
+                    } else {
+                    	// The component is non-functional
                         return new ComponentAndInterface(searchComponent, (Interface) searchComponent
                                 .getFcInterface(itfTab[1]));
                     }
-                } else { /* The component is functional */
+                } else { 
+                	// The component is functional 
                     return new ComponentAndInterface(searchComponent, (Interface) searchComponent
                             .getFcInterface(itfTab[1]));
                 }
