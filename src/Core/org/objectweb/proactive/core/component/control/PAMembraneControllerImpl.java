@@ -69,8 +69,6 @@ import org.objectweb.proactive.core.component.exceptions.NoSuchComponentExceptio
 import org.objectweb.proactive.core.component.identity.PAComponent;
 import org.objectweb.proactive.core.component.identity.PAComponentImpl;
 import org.objectweb.proactive.core.component.representative.ItfID;
-import org.objectweb.proactive.core.component.representative.PAComponentRepresentative;
-import org.objectweb.proactive.core.component.representative.PAComponentRepresentativeImpl;
 import org.objectweb.proactive.core.component.representative.PANFComponentRepresentative;
 import org.objectweb.proactive.core.component.type.PAComponentType;
 import org.objectweb.proactive.core.component.type.PAGCMInterfaceType;
