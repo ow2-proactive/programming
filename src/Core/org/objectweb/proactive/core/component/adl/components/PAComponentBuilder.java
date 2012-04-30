@@ -102,13 +102,14 @@ public class PAComponentBuilder implements PAComponentBuilderItf {
 		String subComponentName = ((PAComponent) subComponent).getComponentParameters().getName();
 		logger.debug("[PAComponentBuilder] Adding "+ (isFunctional?"F":"NF") + " component " + subComponentName + " to " + superComponentName );
 		//--DEBUG
-		
+
+		// F Binding ... use the Content Controller
 		if(isFunctional) {
 			// use the ContentController
 			GCM.getContentController((Component) superComponent).addFcSubComponent((Component) subComponent);
 		}
+		// NF Binding ... use the Membrane Controller
 		else {
-			// use the MembraneController
 			try {
 				// membrane of superComponent must be stopped
 				PAMembraneController pamc = Utils.getPAMembraneController((Component)superComponent);
