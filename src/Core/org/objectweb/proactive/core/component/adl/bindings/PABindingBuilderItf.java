@@ -53,6 +53,6 @@ import org.objectweb.fractal.adl.bindings.BindingBuilder;
  */
 public interface PABindingBuilderItf extends BindingBuilder {
 
-	void bindComponent (int type, Object client, String clientItf, Object server, String serverItf, boolean isFunctional, Object context) throws Exception;
+	void bindComponent (int type, Object client, String clientItf, Object server, String serverItf, Object membraneOwner, boolean isFunctional, Object context) throws Exception;
 	
 }

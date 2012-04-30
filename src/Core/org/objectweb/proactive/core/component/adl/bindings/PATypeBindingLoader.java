@@ -36,6 +36,12 @@
  */
 package org.objectweb.proactive.core.component.adl.bindings;
 
+import static org.objectweb.proactive.core.component.adl.types.PATypeInterfaceUtil.isClient;
+import static org.objectweb.proactive.core.component.adl.types.PATypeInterfaceUtil.isMandatory;
+import static org.objectweb.proactive.core.component.adl.types.PATypeInterfaceUtil.isServer;
+import static org.objectweb.proactive.core.component.adl.types.PATypeInterfaceUtil.isInternal;
+import static org.objectweb.proactive.core.component.adl.types.PATypeInterfaceUtil.isCollective;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,11 +56,13 @@ import org.objectweb.fractal.adl.bindings.BindingErrors;
 import org.objectweb.fractal.adl.bindings.TypeBindingLoader;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
+import org.objectweb.fractal.adl.error.NodeErrorLocator;
 import org.objectweb.fractal.adl.implementations.Controller;
 import org.objectweb.fractal.adl.implementations.ControllerContainer;
 import org.objectweb.fractal.adl.interfaces.Interface;
 import org.objectweb.fractal.adl.interfaces.InterfaceContainer;
 import org.objectweb.fractal.adl.types.TypeInterface;
+import org.objectweb.proactive.core.component.adl.types.PATypeInterface;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
@@ -104,8 +112,14 @@ public class PATypeBindingLoader extends TypeBindingLoader {
     	// only interested in BindingContainers
         if (node instanceof BindingContainer) {
         	logger.debug("[PATypeBindingLoader] Analyzing bindings of "+ node.toString() + ", "+ ((BindingContainer)node).getBindings().length + ", "+ (((Node)node).astGetDecoration("NF")!=null?"NF":"F"));
+        	
+        	// Maps of F interface, membrane interfaces, and NF interfaces of subcomponents.
+        	// They are needed, because one F subcomponent and one NF component may have the same name.
             final Map<String, Map<String, Interface>> itfMap = new HashMap<String, Map<String, Interface>>();
-            // build the list of interfaces of "this" component
+            final Map<String, Map<String, Interface>> nfItfMap = new HashMap<String, Map<String, Interface>>();
+            final Map<String, Map<String, Interface>> subNfItfMap = new HashMap<String, Map<String, Interface>>();
+            
+            // build the list of F interfaces of "this" component
             if (node instanceof InterfaceContainer) {
                 final Map<String, Interface> containerItfs = new HashMap<String, Interface>();
                 for (final Interface itf : ((InterfaceContainer) node).getInterfaces()) {
@@ -113,7 +127,21 @@ public class PATypeBindingLoader extends TypeBindingLoader {
                 }
                 itfMap.put("this", containerItfs);
             }
-            // build the list of interfaces of each subcomponent
+            // build the list of NF interfaces of "this" component
+            if (node instanceof ControllerContainer) {
+            	Controller ctrl = ((ControllerContainer) node).getController();
+            	if(ctrl != null) {
+            		if(ctrl instanceof InterfaceContainer) {
+            			final Map<String, Interface> containerItfs = new HashMap<String, Interface>();
+            			for(final Interface itf : ((InterfaceContainer) ctrl).getInterfaces()) {
+            				containerItfs.put(itf.getName(), itf);
+            			}
+            			nfItfMap.put("this", containerItfs);
+            		}
+            	}
+            }
+            
+            // build the list of F interfaces of each F subcomponent
             if (node instanceof ComponentContainer) {
                 for (final Component comp : ((ComponentContainer) node).getComponents()) {
                     if (comp instanceof InterfaceContainer) {
@@ -125,10 +153,58 @@ public class PATypeBindingLoader extends TypeBindingLoader {
                     }
                 }
             }
-            // check each binding described in "this" node using the list of collected interfaces
+            // build the list of F interfaces of each NF component
+            if (node instanceof ControllerContainer) {
+            	Controller ctrl = ((ControllerContainer) node).getController();
+            	if(ctrl != null) {
+            		if(ctrl instanceof ComponentContainer) {
+            			for(final Component comp : ((ComponentContainer) ctrl).getComponents()) {
+            				if(comp instanceof InterfaceContainer) {
+            					final Map<String, Interface> compItfs = new HashMap<String, Interface>();
+            					for(final Interface itf : ((InterfaceContainer) comp).getInterfaces()) {
+            						compItfs.put(itf.getName(), itf);
+            					}
+            					nfItfMap.put(comp.getName(), compItfs);
+            				}
+            			}
+            		}
+            	}
+            }
+            // build the list of NF interfaces of each F subcomponent
+            if (node instanceof ComponentContainer) {
+            	for(final Component comp : ((ComponentContainer) node).getComponents()) {
+            		if(comp instanceof ControllerContainer) {
+            			Controller ctrl = ((ControllerContainer) comp).getController();
+            			if(ctrl != null) {
+            				if(ctrl instanceof InterfaceContainer) {
+            					final Map<String, Interface> compItfs = new HashMap<String, Interface>();
+            					for(final Interface itf : ((InterfaceContainer) ctrl).getInterfaces()) {
+            						compItfs.put(itf.getName(), itf);
+            					}
+            					subNfItfMap.put(comp.getName(), compItfs);
+            				}
+            			}
+            		}
+            	}
+            }
+            
+            // check each F binding (described in "this" node) using the list of collected interfaces
             for (final Binding binding : ((BindingContainer) node).getBindings()) {
                 checkBinding(binding, itfMap, context);
             }
+            // check each binding described in the membrane
+            if (node instanceof ControllerContainer) {
+            	Controller ctrl = ((ControllerContainer) node).getController();
+            	if(ctrl != null) {
+            		if(ctrl instanceof BindingContainer) {
+            			for(final Binding binding : ((BindingContainer) ctrl).getBindings()) {
+            				// TODO implement check for membrane bindings
+            				checkMembraneBinding(binding, nfItfMap, subNfItfMap, context);
+            			}
+            		}
+            	}
+            }
+            
             // check for duplicated bindings, i.e. different bindings with the same "from" interface,
             // unless it is a multicast binding
             final Map<String, Binding> fromItfs = new HashMap<String, Binding>();
@@ -141,22 +217,122 @@ public class PATypeBindingLoader extends TypeBindingLoader {
                 }
             }
         }
-        // descend through a ComponentContainer
+
+    	// descend through a ControllerContainer and check all NF components
+    	if (node instanceof ControllerContainer) {
+    		Controller ctrl = ((ControllerContainer) node).getController();
+    		if(ctrl != null) {
+    			if(ctrl instanceof ComponentContainer) {
+    				for(final Component comp : ((ComponentContainer) ctrl).getComponents()) {
+    					checkNode(comp, context);    					
+    				}
+    			}
+    		}
+    	}
+        // descend through a ComponentContainer and check all F subcomponents
         if (node instanceof ComponentContainer) {
             for (final Component comp : ((ComponentContainer) node).getComponents()) {
                 checkNode(comp, context);
             }
         }
-    	// descend also through a ControllerContainer, because a Controller can also contain (NF) components
-    	if (node instanceof ControllerContainer) {
-    		Controller ctrl = ((ControllerContainer) node).getController();
-    		if(ctrl != null) {
-    			checkNode(ctrl, context);
-    		}
-    	}
+
     }
 
     /** 
+     * Checks binding inside the membrane of "this" component.
+     * There are two such kinds of bindings:<br/>
+     * <ol>
+     * <li>Bindings intra-membrane. From/to NF interfaces of "this" to/from F interface of NF components; or between F interfaces of NF components.
+     *                              In both cases, it only requires to use the nfItfMap.</li>
+     * <li>Bindings membrane - functional part. Between NF internal interfaces of "this" component, and NF interfaces of F subcomponents.
+     *                                          It requires to look for interfaces in nfItfMap and subNfItfMap.</li>
+     * </ol>
+     * 
+     * @param binding - The binding to check
+     * @param nfItfMap - Map of F interfaces of NF components in the membrane of "this" component
+     * @param subNfItfMap - Map of NF interfaces of F components in the functional part of "this" component
+     * @param context
+     */
+    protected void checkMembraneBinding(Binding binding, Map<String, Map<String, Interface>> nfItfMap, Map<String, Map<String, Interface>> subNfItfMap,
+    		Map<Object, Object> context) throws ADLException {
+
+    	// obtain "from" and "to"
+    	final String from = binding.getFrom();
+    	final String to = binding.getTo();
+    	if (from == null) {
+    		throw new ADLException(BindingErrors.MISSING_FROM, binding);
+    	}
+    	if (to == null) {
+    		throw new ADLException(BindingErrors.MISSING_TO, binding);
+    	}
+    	
+    	// separate component and interface
+        int i = from.indexOf('.');
+        if (i < 1 || i == from.length() - 1) {
+          throw new ADLException(BindingErrors.INVALID_FROM_SYNTAX, binding, from);
+        }
+        final String fromCompName = from.substring(0, i);
+        final String fromItfName = from.substring(i + 1);
+
+        i = to.indexOf('.');
+        if (i < 1 || i == to.length() - 1) {
+          throw new ADLException(BindingErrors.INVALID_TO_SYNTAX, binding, to);
+        }
+        final String toCompName = to.substring(0, i);
+        final String toItfName = to.substring(i + 1);
+
+        // ignore the special "component" interface
+        if (ignoreBinding(binding, fromCompName, fromItfName, toCompName, toItfName)) {
+        	return;
+        }
+        
+        // Obtain the interfaces from the maps.
+        // Case (1): bindings intra-membrane
+        // Case (2): bindings membrane-functionalPart
+
+        Interface fromItf = null;
+        Interface toItf = null;
+        
+        // remember, NF interfaces must end with "-controller" (but this is not being enforced here, for the moment)
+
+        // Retrieve the interface objects from the interface maps
+        
+        // if the 'from' component is "this", then the interface must be in the nfItfMap
+        if("this".equals(fromCompName)) {
+        	fromItf = getInterface(fromCompName, fromItfName, binding, nfItfMap);
+        }
+        else {
+        	// else, it may be in the nfItfMap, or in the subNfItfMap
+        	try {
+        		fromItf = getInterface(fromCompName, fromItfName, binding, nfItfMap);
+        	} catch (ADLException ae) {
+        		// if it's not there, then it must be in the subNfItfMap
+        		fromItf = getInterface(fromCompName, fromItfName, binding, subNfItfMap);
+        	}
+        }
+
+        // if the 'to' component is "this", then the interface must be in the nfItfMap
+        if("this".equals(toCompName)) {
+        	toItf = getInterface(toCompName, toItfName, binding, nfItfMap);
+        }
+        else {
+        	// else, it may be in the nfItfMap, or in the subNfItfMap
+        	try {
+        		toItf = getInterface(toCompName, toItfName, binding, nfItfMap);
+        	} catch (ADLException ae) {
+        		// if it's not there, then it must be in the subNfItfMap
+        		toItf = getInterface(toCompName, toItfName, binding, subNfItfMap);
+        	}
+        }
+
+        // and check the binding
+        checkBinding(binding, fromItf, fromCompName, fromItfName, toItf, toCompName, toItfName, context);
+
+        
+
+    }
+
+	/** 
      * Checks a binding.
      * The 'super' method verifies the server/client quality of the interfaces, and if the client interface is superclass 
      * or the same class as server (i.e., serverClass is the the same or extends clientClass)
@@ -170,39 +346,94 @@ public class PATypeBindingLoader extends TypeBindingLoader {
      */
     @Override
     protected void checkBinding(final Binding binding, final Interface fromItf, final String fromCompName,
-            final String fromItfName, final Interface toItf, final String toCompName, final String toItfName,
-            final Map<Object, Object> context) throws ADLException {
-        try {
-        	logger.debug("[PATypeBindingLoader] Checking binding "+ fromItf + "("+ (fromItf.astGetDecoration("NF")!=null?"NF":"F") +")--> "+ toItf + "("+(toItf.astGetDecoration("NF")!=null?"NF":"F")+")");
-            super.checkBinding(binding, fromItf, fromCompName, fromItfName, toItf, toCompName, toItfName,
-                    context);
-        } catch (ADLException e) {
-            // check if signatures are incompatible
-            TypeInterface cItf = (TypeInterface) fromItf;
-            TypeInterface sItf = (TypeInterface) toItf;
+    		final String fromItfName, final Interface toItf, final String toCompName, final String toItfName,
+    		final Map<Object, Object> context) throws ADLException {
+    	try {
+    		logger.debug("[PATypeBindingLoader] Checking binding "+ fromItf + "("+ (fromItf.astGetDecoration("NF")!=null?"NF":"F") +")--> "+ toItf + "("+(toItf.astGetDecoration("NF")!=null?"NF":"F")+")");
+    		// the 'super' method
+    		if (fromItf instanceof PATypeInterface && toItf instanceof PATypeInterface) {
+    			final PATypeInterface cItf = (PATypeInterface) fromItf;
+    			final PATypeInterface sItf = (PATypeInterface) toItf;
+    			if (fromCompName.equals("this")) {
+    				// 'from' interfaces of 'this' must be server, or internal-client 
+    				if (!isServer(cItf) && !isInternal(cItf) ) {
+    					throw new ADLException(PABindingErrors.INVALID_FROM_INTERNAL, binding, fromItfName, new NodeErrorLocator(cItf));
+    				}
+    			} else {
+    				// 'from' interfaces of inner components must be client
+    				if (!isClient(cItf)) {
+    					throw new ADLException(BindingErrors.INVALID_FROM_NOT_A_CLIENT, binding, binding.getFrom(), new NodeErrorLocator(cItf));
+    				}
+    			}
+    			if (toCompName.equals("this")) {
+    				// 'to' interfaces of 'this' must client, or internal-server
+    				if (!isClient(sItf) && !isInternal(sItf)) {
+    					throw new ADLException(PABindingErrors.INVALID_TO_INTERNAL, binding, toItfName, new NodeErrorLocator(cItf));
+    				}
+    			} else {
+    				// 'to' interfaces of inner component must be server
+    				if (!isServer(sItf)) {
+    					throw new ADLException(BindingErrors.INVALID_TO_NOT_A_SERVER, binding, binding.getTo(), new NodeErrorLocator(sItf));
+    				}
+    			}
 
-            Class<?> clientSideItfClass = (Class<?>) interfaceCodeLoaderItf.loadInterface(
-                    cItf.getSignature(), context);
-            Class<?> serverSideItfClass = (Class<?>) interfaceCodeLoaderItf.loadInterface(
-                    sItf.getSignature(), context);
-            if (!clientSideItfClass.isAssignableFrom(serverSideItfClass)) {
-                // check if multicast interface
-                if (GCMTypeFactory.MULTICAST_CARDINALITY.equals(cItf.getCardinality())) {
-                    Method[] clientSideItfMethods = clientSideItfClass.getMethods();
-                    Method[] serverSideItfMethods = serverSideItfClass.getMethods();
+    			// disallow [mandatory --> optional] bindings
+    			if (isMandatory(cItf) && !isMandatory(sItf)) {
+    				throw new ADLException(BindingErrors.INVALID_MANDATORY_TO_OPTIONAL, binding, binding.getFrom(), binding.getTo());
+    			}
+    			
+    			// check that class are loadable and assignable
+    			if (interfaceCodeLoaderItf != null) {
+    				Object cClass = null;
+    				Object sClass = null;
+    				cClass = interfaceCodeLoaderItf.loadInterface(cItf.getSignature(), context);
+    				sClass = interfaceCodeLoaderItf.loadInterface(sItf.getSignature(), context);
+    				
+    				if ((cClass instanceof Class) && (sClass instanceof Class) && !((Class<?>) cClass).isAssignableFrom((Class<?>) sClass)) {
+    					// cClass cannot be assigned sClass ... cItf maybe a Multicast interface
+    					if(isCollective(cItf)) {
+    						// at least the number of methods must coincide. Although, a complete compatibility check is performed later.
+    						Method[] clientSideItfMethods = ((Class<?>) cClass).getMethods();
+    	    				Method[] serverSideItfMethods = ((Class<?>) sClass).getMethods();
+    	    				if (clientSideItfMethods.length != serverSideItfMethods.length) {
+    	    					throw new ADLException(PABindingErrors.INVALID_COLLECTIVE_SIGNATURE, fromItf, toItf);
+    	    				}
+    					}
+    					// not multicast nor gathercast ... nothing to do, throw the exception
+    					else {
+    						throw new ADLException(PABindingErrors.INVALID_SIGNATURE, binding, new NodeErrorLocator(fromItf), new NodeErrorLocator(toItf));
+    					}
+    				}
+    			}
+    		}
+    	} catch (ADLException e) {
+    		// TODO remove this catch instruction and integrate it with the rest of the method
+    		// check if signatures are incompatible
+    		TypeInterface cItf = (TypeInterface) fromItf;
+    		TypeInterface sItf = (TypeInterface) toItf;
 
-                    if (clientSideItfMethods.length != serverSideItfMethods.length) {
-                        throw new ADLException(PABindingErrors.INVALID_MULTICAST_SIGNATURE, fromItf, toItf);
-                    }
-                    // ok, at least in number of methods
-                    return;
-                }
-                // client class is not multicast, then re-throw e
-                throw e;
-            }
-            // the catched exception is still valid
-            throw e;
-        }
+    		Class<?> clientSideItfClass = (Class<?>) interfaceCodeLoaderItf.loadInterface(
+    				cItf.getSignature(), context);
+    		Class<?> serverSideItfClass = (Class<?>) interfaceCodeLoaderItf.loadInterface(
+    				sItf.getSignature(), context);
+    		if (!clientSideItfClass.isAssignableFrom(serverSideItfClass)) {
+    			// check if multicast interface
+    			if (GCMTypeFactory.MULTICAST_CARDINALITY.equals(cItf.getCardinality())) {
+    				Method[] clientSideItfMethods = clientSideItfClass.getMethods();
+    				Method[] serverSideItfMethods = serverSideItfClass.getMethods();
+
+    				if (clientSideItfMethods.length != serverSideItfMethods.length) {
+    					throw new ADLException(PABindingErrors.INVALID_COLLECTIVE_SIGNATURE, fromItf, toItf);
+    				}
+    				// ok, at least in number of methods
+    				return;
+    			}
+    			// client class is not multicast, then re-throw e
+    			throw e;
+    		}
+    		// the catched exception is still valid
+    		throw e;
+    	}
     }
 
     /**
@@ -224,4 +455,16 @@ public class PATypeBindingLoader extends TypeBindingLoader {
             }
         }
     }
+
+    /**
+     * Overrides the corresponding method from {@link BindingLoader} to NOT ignore the interfaces
+     * that end by "-controller"
+     */
+    @Override
+    protected boolean ignoreBinding(final Binding binding,
+    		final String fromCompName, final String fromItfName,
+    		final String toCompName, final String toItfName) {
+    	return fromItfName.equals("component") || toItfName.equals("component");
+    }
+    
 }
