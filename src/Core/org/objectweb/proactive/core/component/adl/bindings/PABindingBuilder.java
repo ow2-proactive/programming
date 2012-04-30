@@ -86,14 +86,14 @@ public class PABindingBuilder implements PABindingBuilderItf {
 			BindingController bc = GCM.getBindingController((Component)client);
 			// regular functional binding
 			if (type != WEBSERVICE_BINDING) {
-			    Object itf;
+			    Object destinationItf;
 			    if (type == IMPORT_BINDING) {
-			      itf = GCM.getContentController((Component)server).getFcInternalInterface(serverItf);
+			      destinationItf = GCM.getContentController((Component)server).getFcInternalInterface(serverItf);
 			    } 
 			    else {
-			      itf = ((Component)server).getFcInterface(serverItf);
+			      destinationItf = ((Component)server).getFcInterface(serverItf);
 			    }
-			    bc.bindFc(clientItf, itf);
+			    bc.bindFc(clientItf, destinationItf);
 			}
 			// web-service binding
 			else {
@@ -159,7 +159,7 @@ public class PABindingBuilder implements PABindingBuilderItf {
 			if( !(client instanceof PANFComponentRepresentative) && !(server instanceof PANFComponentRepresentative) 
 					&& (client != membraneOwner) && (server != membraneOwner) ) {
 				// special case: the bindings between NF interfaces of two F subcomponents, must be carried on by the MembraneController
-				// of the client component, and their owner
+				// of the client component, and not by their owner
 				if(pamcClient != null) {
 					Object destInterface = null;
 					int index = serverItf.indexOf(".");
@@ -172,13 +172,15 @@ public class PABindingBuilder implements PABindingBuilderItf {
 						destInterface = ((PAComponent)server).getFcInterface(serverItf);
 					}
 					index = clientItf.indexOf(".");
-					if(index != -1) {					
-						loggerADL.debug("[PABindingBuilder] Calling nfBindFc( "+ clientItf.substring(index+1) + ", "+ serverItf + ") from the "+ ncClient.getFcName());
+					if(index != -1) {
+						// calling nfBindFc using interface of the server component
+						loggerADL.debug("[PABindingBuilder] Calling nfBindFc("+clientItf+", ITF"+serverItf+")");
 						pamcClient.nfBindFc(clientItf.substring(index+1), destInterface);
 					}
 					else {
 						// same as above ... shouldn't enter here, but we should consider adding a new type of binding to clean this part
-						loggerADL.debug("[PABindingBuilder] Calling nfBindFc( "+ clientItf + ", "+ serverItf + ") from the "+ ncClient.getFcName());
+						// calling nfBindFc using interface of the server component
+						loggerADL.debug("[PABindingBuilder] Calling nfBindFc("+clientItf+", ITF"+serverItf+")");
 						pamcClient.nfBindFc(clientItf, destInterface);
 					}
 				}
@@ -187,9 +189,9 @@ public class PABindingBuilder implements PABindingBuilderItf {
 				}
 			}
 			else {
-
-				loggerADL.debug("[PABindingBuilder] Calling nfBindFc( "+ clientItf + ", "+ serverItf + ")");
-				// not handling webservice NF bindings
+				// Call nfBinFc with the strings indicating component and interface
+				// TODO: not handling webservice NF bindings
+				loggerADL.debug("[PABindingBuilder] Calling nfBindFc("+clientItf+", "+serverItf+")");
 				pamc.nfBindFc(clientItf, serverItf);
 
 			}
