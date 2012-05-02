@@ -105,11 +105,12 @@ public class PAImplementationLoader extends ImplementationLoader {
 			// check that the descriptor file is define, or well, that components or interface are defined
 			checkControllerContainer((ControllerContainer) node);
 			if(ctrl != null) {
-				// check the components described inside the Controller node ... they are NF Components
-				// (all Controller nodes are also ComponentContainers)
-				for(final Component comp: ((ComponentContainer)ctrl).getComponents()) {
-					//logger.debug("[PAImplementationLoader]   Check NF component "+ comp.getName() );
-					checkNode(comp, context, false);						
+				if(ctrl instanceof ComponentContainer) {
+					// check the components described inside the Controller node ... they are NF Components
+					for(final Component comp: ((ComponentContainer)ctrl).getComponents()) {
+						//logger.debug("[PAImplementationLoader]   Check NF component "+ comp.getName() );
+						checkNode(comp, context, false);						
+					}
 				}
 			}
 		}
