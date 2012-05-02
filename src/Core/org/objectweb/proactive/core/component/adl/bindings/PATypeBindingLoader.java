@@ -390,8 +390,8 @@ public class PATypeBindingLoader extends TypeBindingLoader {
     				sClass = interfaceCodeLoaderItf.loadInterface(sItf.getSignature(), context);
     				
     				if ((cClass instanceof Class) && (sClass instanceof Class) && !((Class<?>) cClass).isAssignableFrom((Class<?>) sClass)) {
-    					// cClass cannot be assigned sClass ... cItf maybe a Multicast interface
-    					if(isCollective(cItf)) {
+    					// cClass cannot be assigned sClass ... one of them maybe a Collective (Multicast/Gathercast) interface
+    					if(isCollective(cItf) || isCollective(sItf)) {
     						// at least the number of methods must coincide. Although, a complete compatibility check is performed later.
     						Method[] clientSideItfMethods = ((Class<?>) cClass).getMethods();
     	    				Method[] serverSideItfMethods = ((Class<?>) sClass).getMethods();
