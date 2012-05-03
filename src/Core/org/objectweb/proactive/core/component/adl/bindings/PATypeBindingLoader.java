@@ -78,7 +78,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PATypeBindingLoader extends TypeBindingLoader {
 
-    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     /** Checks if the binding is a multicast binding.
      * 

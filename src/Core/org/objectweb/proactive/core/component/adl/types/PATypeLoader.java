@@ -69,7 +69,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PATypeLoader extends TypeLoader {
 
-    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     /** 
      * Overriden to use our own version of 'checkNode', which is private in {@link TypeLoader}.

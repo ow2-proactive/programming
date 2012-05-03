@@ -78,7 +78,7 @@ public class PAComponentCompiler implements BindingController, Compiler {
      */
     private final Map<String, PrimitiveCompiler> primitiveCompilers = new TreeMap<String, PrimitiveCompiler>();
 
-    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     // --------------------------------------------------------------------------
     // Implementation of the BindingController interface

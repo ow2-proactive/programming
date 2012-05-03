@@ -68,7 +68,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class PAInterfaceLoader extends InterfaceLoader {
 
-    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     /** 
      * Checks the tree considering the initial &lt;definition&gt; as F component

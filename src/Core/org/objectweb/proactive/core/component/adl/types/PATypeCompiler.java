@@ -80,7 +80,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PATypeCompiler extends TypeCompiler {
 
-    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     @Override
     public void compile(List path, ComponentContainer container, TaskMap tasks, Map context)

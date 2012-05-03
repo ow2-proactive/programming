@@ -72,7 +72,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
 public class PAImplementationLoader extends ImplementationLoader {
 
-    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     /**
      * Checks the &lt;definition&gt; node and marks the components as F or NF

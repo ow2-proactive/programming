@@ -70,7 +70,7 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAUnboundInterfaceDetectorLoader extends UnboundInterfaceDetectorLoader {
 
-    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    private static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     private static final String WS_BINDING_ID = "WSBinding";
 
