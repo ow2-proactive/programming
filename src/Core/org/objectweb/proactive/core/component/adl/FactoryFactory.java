@@ -80,7 +80,6 @@ public class FactoryFactory {
         return org.objectweb.fractal.adl.FactoryFactory.getFactory(PROACTIVE_NFFACTORY, PROACTIVE_NFBACKEND,
                 new HashMap());
     }
-    
 
     /**
      * Returns a factory for the GCM ADL that prints debugging information
@@ -90,9 +89,8 @@ public class FactoryFactory {
      */
     @SuppressWarnings("unchecked")
     public static Factory getDebugFactory() throws ADLException {
-        return org.objectweb.fractal.adl.FactoryFactory.getFactory(PROACTIVE_DEBUG_FACTORY, PROACTIVE_BACKEND,
-                new HashMap());
+        return org.objectweb.fractal.adl.FactoryFactory.getFactory(PROACTIVE_DEBUG_FACTORY,
+                PROACTIVE_BACKEND, new HashMap());
     }
-    
-    
+
 }

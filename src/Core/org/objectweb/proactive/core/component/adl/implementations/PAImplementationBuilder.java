@@ -53,20 +53,20 @@ import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
  */
 public interface PAImplementationBuilder extends ImplementationBuilder {
 
-	/**
-	 * Allows the creation of a ProActive component on a given virtual node
-	 * @param type the type of the component
-	 * @param name the name of the component
-	 * @param definition the definition of the component
-	 * @param controllerDesc the description of the controller
-	 * @param contentDesc the description of the content
-	 * @param adlVN the virtual node where the component should be deployed
-	 * @param isFunctional F/NF component
-	 * @param context context
-	 * @return an instance of the specified component
-	 * @throws Exception if the creation of the component failed
-	 */
-	public Object createComponent(Object type, String name, String definition,
-			ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
-			boolean isFunctional, Map<Object, Object> context) throws Exception;
+    /**
+     * Allows the creation of a ProActive component on a given virtual node
+     * @param type the type of the component
+     * @param name the name of the component
+     * @param definition the definition of the component
+     * @param controllerDesc the description of the controller
+     * @param contentDesc the description of the content
+     * @param adlVN the virtual node where the component should be deployed
+     * @param isFunctional F/NF component
+     * @param context context
+     * @return an instance of the specified component
+     * @throws Exception if the creation of the component failed
+     */
+    public Object createComponent(Object type, String name, String definition,
+            ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
+            boolean isFunctional, Map<Object, Object> context) throws Exception;
 }

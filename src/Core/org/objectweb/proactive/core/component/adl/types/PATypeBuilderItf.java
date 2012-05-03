@@ -6,6 +6,7 @@ import org.objectweb.fractal.adl.types.TypeBuilder;
 import org.objectweb.fractal.api.type.ComponentType;
 import org.objectweb.fractal.api.type.InterfaceType;
 
+
 /**
  * The {@link PATypeBuilderItf} extends the {@link TypeBuilder} interface to provide
  * a method that creates a ComponentType (technically, a PAComponentType) using an array
@@ -18,19 +19,15 @@ import org.objectweb.fractal.api.type.InterfaceType;
  */
 public interface PATypeBuilderItf extends TypeBuilder {
 
-	InterfaceType createInterfaceType(String name, String signature,
-			String role, String contingency, String cardinality, Map<Object, Object> context)
-			throws Exception;
-	
-	InterfaceType createInterfaceType(String name, String signature,
-			String role, String contingency, String cardinality, boolean isInternal, Map<Object, Object> context)
-			throws Exception;
+    InterfaceType createInterfaceType(String name, String signature, String role, String contingency,
+            String cardinality, Map<Object, Object> context) throws Exception;
 
-	ComponentType createComponentType(String name,
-			Object[] interfaceTypes, Map<Object, Object> context)
-			throws Exception;
+    InterfaceType createInterfaceType(String name, String signature, String role, String contingency,
+            String cardinality, boolean isInternal, Map<Object, Object> context) throws Exception;
 
-	ComponentType createComponentType(String name,
-			Object[] fInterfaceTypes, Object[] nfInterfaceTypes,
-			Map<Object, Object> context) throws Exception;
+    ComponentType createComponentType(String name, Object[] interfaceTypes, Map<Object, Object> context)
+            throws Exception;
+
+    ComponentType createComponentType(String name, Object[] fInterfaceTypes, Object[] nfInterfaceTypes,
+            Map<Object, Object> context) throws Exception;
 }

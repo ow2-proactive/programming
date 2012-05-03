@@ -56,9 +56,9 @@ public enum PAImplementationErrors implements ErrorTemplate {
             "vnName"),
 
     /** */
-    EMPTY_CONTROLLER_NODE("The <controller> node is empty. It should contain at least one component or interface; otherwise it must contain a controller descriptor file.");
-    
-    
+    EMPTY_CONTROLLER_NODE(
+            "The <controller> node is empty. It should contain at least one component or interface; otherwise it must contain a controller descriptor file.");
+
     /** The groupId of ErrorTemplates defined in this enumeration. */
     public static final String GROUP_ID = "PAIMP";
 

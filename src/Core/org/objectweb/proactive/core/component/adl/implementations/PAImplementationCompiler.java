@@ -44,8 +44,6 @@ import org.apache.log4j.Logger;
 import org.objectweb.fractal.adl.ADLException;
 import org.objectweb.fractal.adl.Definition;
 import org.objectweb.fractal.adl.Node;
-import org.objectweb.fractal.adl.attributes.Attributes;
-import org.objectweb.fractal.adl.attributes.AttributesContainer;
 import org.objectweb.fractal.adl.components.Component;
 import org.objectweb.fractal.adl.components.ComponentContainer;
 import org.objectweb.fractal.adl.implementations.ControllerContainer;
@@ -53,8 +51,6 @@ import org.objectweb.fractal.adl.implementations.Implementation;
 import org.objectweb.fractal.adl.implementations.ImplementationCompiler;
 import org.objectweb.fractal.adl.implementations.ImplementationContainer;
 import org.objectweb.fractal.adl.nodes.VirtualNodeContainer;
-import org.objectweb.fractal.api.type.ComponentType;
-import org.objectweb.fractal.api.type.InterfaceType;
 import org.objectweb.fractal.task.core.TaskMap;
 import org.objectweb.fractal.task.core.TaskMap.TaskHole;
 import org.objectweb.fractal.task.deployment.lib.AbstractInstanceProviderTask;
@@ -62,6 +58,7 @@ import org.objectweb.proactive.core.ProActiveRuntimeException;
 import org.objectweb.proactive.core.component.Constants;
 import org.objectweb.proactive.core.component.ContentDescription;
 import org.objectweb.proactive.core.component.ControllerDescription;
+import org.objectweb.proactive.core.component.adl.implementations.PAImplementationBuilder;
 import org.objectweb.proactive.core.component.adl.nodes.VirtualNode;
 import org.objectweb.proactive.core.component.type.Composite;
 import org.objectweb.proactive.core.util.log.Loggers;
@@ -88,28 +85,28 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAImplementationCompiler extends ImplementationCompiler {
 
-	// Is this counter is used???
+    // Is this counter is used???
     //protected static int counter = 0;
-    
+
     protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
     @Override
     public void compile(List<ComponentContainer> path, ComponentContainer container, TaskMap tasks,
             Map<Object, Object> context) throws ADLException {
-    	
+
         //DEBUG
-    	String name = null;
-    	boolean f = true;
+        String name = null;
+        boolean f = true;
         if (container instanceof Definition) {
             name = ((Definition) container).getName();
         } else if (container instanceof Component) {
             name = ((Component) container).getName();
         }
         f = (container.astGetDecoration("NF") == null);
-    	logger.debug("[PAImplementationCompiler] Compiling "+ (f?"F":"NF") + " component: "+ name);
+        logger.debug("[PAImplementationCompiler] Compiling " + (f ? "F" : "NF") + " component: " + name);
         //--DEBUG
-    	
-    	// collect info required for creating the component
+
+        // collect info required for creating the component
         ObjectsContainer obj = init(path, container, tasks, context);
         // determines content description and controller description info
         controllers(obj.getImplementation(), obj.getController(), obj.getName(), obj);
@@ -141,7 +138,7 @@ public class PAImplementationCompiler extends ImplementationCompiler {
      */
     protected ObjectsContainer init(final List<ComponentContainer> path, final ComponentContainer container,
             final TaskMap tasks, final Map<Object, Object> context) {
-    	
+
         //counter++; // it seems that this counter is not used ...
 
         String implementation = null;
@@ -211,12 +208,11 @@ public class PAImplementationCompiler extends ImplementationCompiler {
 
         // determine if the component is functional
         boolean isFunctional = (container.astGetDecoration("NF") == null);
-        
+
         // return the object with all the info collected
         return new ObjectsContainer(implementation, controller, name, definition, n, k > 0, isFunctional);
     }
-    
-   
+
     /** 
      * Completes the collected ObjectsContainer with the ContentDescription and the ControllerDescription objects.<br/><br/>
      * 
@@ -275,7 +271,6 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         obj.setControllerDesc(controllerDesc);
     }
 
-    
     /**
      * Creates the {@link CreateTask} that will take charge of creating the component,
      * and sets its dependency (the corresponding task of type "type").
@@ -295,7 +290,7 @@ public class PAImplementationCompiler extends ImplementationCompiler {
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode n,
             boolean isFunctional) {
         AbstractInstanceProviderTask createTask = null;
-        
+
         // the CreateTask delegates the effective creation to a PAImplementationBuilder
         createTask = new CreateTask((PAImplementationBuilder) builder, container, name, definition,
             controllerDesc, contentDesc, n, context, isFunctional);
@@ -309,11 +304,10 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         tasks.addTask("create", container, createTask);
     }
 
-    
-	// --------------------------------------------------------------------------
-	// Inner classes
-	// --------------------------------------------------------------------------
-    
+    // --------------------------------------------------------------------------
+    // Inner classes
+    // --------------------------------------------------------------------------
+
     // TODO change visibility of this inner class in ImplementationCompiler
     static class CreateTask extends AbstractInstanceProviderTask {
         PAImplementationBuilder builder;
@@ -328,7 +322,8 @@ public class PAImplementationCompiler extends ImplementationCompiler {
 
         public CreateTask(final PAImplementationBuilder builder, final ComponentContainer container,
                 final String name, final String definition, final ControllerDescription controllerDesc,
-                final ContentDescription contentDesc, final VirtualNode vn, final Map<Object, Object> context, final boolean isFunctional) {
+                final ContentDescription contentDesc, final VirtualNode vn,
+                final Map<Object, Object> context, final boolean isFunctional) {
             this.builder = builder;
             this.container = container;
             this.name = name;
@@ -344,9 +339,11 @@ public class PAImplementationCompiler extends ImplementationCompiler {
             if (getInstance() != null) {
                 return;
             }
-            logger.debug("[PAImplementationCompiler] Executing creation of "+ (functional?"F":"NF") +" component"+ name);
+            logger.debug("[PAImplementationCompiler] Executing creation of " + (functional ? "F" : "NF") +
+                " component" + name);
             Object type = getFactoryProviderTask().getFactory();
-            Object result = builder.createComponent(type, name, definition, controllerDesc, contentDesc, vn, functional, context);
+            Object result = builder.createComponent(type, name, definition, controllerDesc, contentDesc, vn,
+                    functional, context);
             setInstance(result);
         }
 
@@ -418,9 +415,9 @@ public class PAImplementationCompiler extends ImplementationCompiler {
         public boolean hasSubcomponents() {
             return subcomponents;
         }
-        
+
         public boolean isFunctional() {
-        	return functional;
+            return functional;
         }
 
     }

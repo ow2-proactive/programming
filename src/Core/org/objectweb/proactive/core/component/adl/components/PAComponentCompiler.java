@@ -56,6 +56,7 @@ import org.objectweb.fractal.task.core.TaskMap;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
+
 /**
  * The PAComponentCompiler DOES NOT extend ComponentCompiler, because it seems that that one is not thought
  * to be extendible (private fields and classes). So this one, implements directly Compiler.
@@ -66,117 +67,111 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PAComponentCompiler implements BindingController, Compiler {
 
-	  /**
-	   * Name of the collection interface bound to the {@link PrimitiveCompiler}s
-	   * used by this compiler.
-	   */
-	  public static final String                   PRIMITIVE_COMPILERS_BINDING = "primitive-compilers";
+    /**
+     * Name of the collection interface bound to the {@link PrimitiveCompiler}s
+     * used by this compiler.
+     */
+    public static final String PRIMITIVE_COMPILERS_BINDING = "primitive-compilers";
 
-	  /**
-	   * The primitive compilers used by this compiler.
-	   */
-	  private final Map<String, PrimitiveCompiler> primitiveCompilers          = new TreeMap<String, PrimitiveCompiler>();
-	  
-	  public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    /**
+     * The primitive compilers used by this compiler.
+     */
+    private final Map<String, PrimitiveCompiler> primitiveCompilers = new TreeMap<String, PrimitiveCompiler>();
 
-	  // --------------------------------------------------------------------------
-	  // Implementation of the BindingController interface
-	  // --------------------------------------------------------------------------
+    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
-	  public String[] listFc() {
-	    return primitiveCompilers.keySet().toArray(
-	        new String[primitiveCompilers.size()]);
-	  }
+    // --------------------------------------------------------------------------
+    // Implementation of the BindingController interface
+    // --------------------------------------------------------------------------
 
-	  public Object lookupFc(final String itf) {
-	    if (itf.startsWith(PRIMITIVE_COMPILERS_BINDING)) {
-	      return primitiveCompilers.get(itf);
-	    } else {
-	      return null;
-	    }
-	  }
+    public String[] listFc() {
+        return primitiveCompilers.keySet().toArray(new String[primitiveCompilers.size()]);
+    }
 
-	  public void bindFc(final String itf, final Object value) {
-	    if (itf.startsWith(PRIMITIVE_COMPILERS_BINDING)) {
-	      primitiveCompilers.put(itf, (PrimitiveCompiler) value);
-	    }
-	  }
+    public Object lookupFc(final String itf) {
+        if (itf.startsWith(PRIMITIVE_COMPILERS_BINDING)) {
+            return primitiveCompilers.get(itf);
+        } else {
+            return null;
+        }
+    }
 
-	  public void unbindFc(final String itf) {
-	    if (itf.startsWith(PRIMITIVE_COMPILERS_BINDING)) {
-	      primitiveCompilers.remove(itf);
-	    }
-	  }
+    public void bindFc(final String itf, final Object value) {
+        if (itf.startsWith(PRIMITIVE_COMPILERS_BINDING)) {
+            primitiveCompilers.put(itf, (PrimitiveCompiler) value);
+        }
+    }
 
-	  // --------------------------------------------------------------------------
-	  // Implementation of the Compiler interface
-	  // --------------------------------------------------------------------------
+    public void unbindFc(final String itf) {
+        if (itf.startsWith(PRIMITIVE_COMPILERS_BINDING)) {
+            primitiveCompilers.remove(itf);
+        }
+    }
 
-	  public void compile(final Definition definition, final TaskMap tasks,
-	      final Map<Object, Object> context) throws ADLException {
-	    if (definition instanceof ComponentContainer) {
-	      compile(new ArrayList<ComponentContainer>(),
-	          (ComponentContainer) definition, tasks, context);
-	    }
-	  }
+    // --------------------------------------------------------------------------
+    // Implementation of the Compiler interface
+    // --------------------------------------------------------------------------
 
-	  // --------------------------------------------------------------------------
-	  // Compilation methods
-	  // --------------------------------------------------------------------------
+    public void compile(final Definition definition, final TaskMap tasks, final Map<Object, Object> context)
+            throws ADLException {
+        if (definition instanceof ComponentContainer) {
+            compile(new ArrayList<ComponentContainer>(), (ComponentContainer) definition, tasks, context);
+        }
+    }
 
-	  void compile(final List<ComponentContainer> path,
-			  final ComponentContainer container, final TaskMap tasks,
-			  final Map<Object, Object> context) throws ADLException {
+    // --------------------------------------------------------------------------
+    // Compilation methods
+    // --------------------------------------------------------------------------
 
-		  if(container.astGetDecoration("NF") == null) {
-			  logger.debug("[PAComponentCompiler] Compiling  F component "+ container.toString() );  
-		  }
-		  else {
-			  logger.debug("[PAComponentCompiler] Compiling NF component "+ container.toString() );
-		  }
+    void compile(final List<ComponentContainer> path, final ComponentContainer container,
+            final TaskMap tasks, final Map<Object, Object> context) throws ADLException {
 
-		  path.add(container);
-		  final Component[] comps = getAllComponents(container);
-		  for (final Component element : comps) {
-			  compile(path, element, tasks, context);
-		  }
-		  path.remove(path.size() - 1);
+        if (container.astGetDecoration("NF") == null) {
+            logger.debug("[PAComponentCompiler] Compiling  F component " + container.toString());
+        } else {
+            logger.debug("[PAComponentCompiler] Compiling NF component " + container.toString());
+        }
 
-		  final Iterator<PrimitiveCompiler> it = primitiveCompilers.values()
-				  .iterator();
-		  while (it.hasNext()) {
-			  (it.next()).compile(path, container, tasks, context);
-		  }
-	  }
-	  
-	  /**
-	   * Helper method to collect all inner components, including F subcomponents,
-	   * and NF components in the membrane.
-	   * 
-	   * @param container
-	   * @return
-	   */
-	  private Component[] getAllComponents(ComponentContainer container) {
-		  
-		  Component[] fComps = container.getComponents();
-		  Component[] nfComps = null;
-		  
-		  if(container instanceof ControllerContainer) {
-			  Controller ctrl = ((ControllerContainer) container).getController();
-			  if(ctrl != null) {
-				  if(ctrl instanceof ComponentContainer) {
-					  nfComps = ((ComponentContainer) ctrl).getComponents();
-				  }
-			  }
-		  }
-		  
-		  Component[] comps = new Component[fComps.length + (nfComps==null? 0 : nfComps.length)];
-		  System.arraycopy(fComps, 0, comps, 0, fComps.length);
-		  if(nfComps != null) {
-			  System.arraycopy(nfComps, 0, comps, fComps.length, nfComps.length);
-		  }
-		  
-		  
-		  return comps;
-	  }
+        path.add(container);
+        final Component[] comps = getAllComponents(container);
+        for (final Component element : comps) {
+            compile(path, element, tasks, context);
+        }
+        path.remove(path.size() - 1);
+
+        final Iterator<PrimitiveCompiler> it = primitiveCompilers.values().iterator();
+        while (it.hasNext()) {
+            (it.next()).compile(path, container, tasks, context);
+        }
+    }
+
+    /**
+     * Helper method to collect all inner components, including F subcomponents,
+     * and NF components in the membrane.
+     * 
+     * @param container
+     * @return
+     */
+    private Component[] getAllComponents(ComponentContainer container) {
+
+        Component[] fComps = container.getComponents();
+        Component[] nfComps = null;
+
+        if (container instanceof ControllerContainer) {
+            Controller ctrl = ((ControllerContainer) container).getController();
+            if (ctrl != null) {
+                if (ctrl instanceof ComponentContainer) {
+                    nfComps = ((ComponentContainer) ctrl).getComponents();
+                }
+            }
+        }
+
+        Component[] comps = new Component[fComps.length + (nfComps == null ? 0 : nfComps.length)];
+        System.arraycopy(fComps, 0, comps, 0, fComps.length);
+        if (nfComps != null) {
+            System.arraycopy(nfComps, 0, comps, fComps.length, nfComps.length);
+        }
+
+        return comps;
+    }
 }

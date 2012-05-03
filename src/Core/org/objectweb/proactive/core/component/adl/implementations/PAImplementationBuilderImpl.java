@@ -84,9 +84,11 @@ public class PAImplementationBuilderImpl implements PAImplementationBuilder, Bin
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
             boolean isFunctional, Map<Object, Object> context) throws Exception {
 
-    	logger.debug("[PAImplementationBuilder] Building "+ (isFunctional?"F":"NF") +" component "+ name);
+        logger.debug("[PAImplementationBuilder] Building " + (isFunctional ? "F" : "NF") + " component " +
+            name);
         ObjectsContainer obj = commonCreation(type, name, definition, contentDesc, adlVN, context);
-        return createComponent(type, obj, controllerDesc, contentDesc, adlVN, obj.getBootstrapComponent(), isFunctional);
+        return createComponent(type, obj, controllerDesc, contentDesc, adlVN, obj.getBootstrapComponent(),
+                isFunctional);
     }
 
     protected ObjectsContainer commonCreation(Object type, String name, String definition,
@@ -172,12 +174,13 @@ public class PAImplementationBuilderImpl implements PAImplementationBuilder, Bin
     private Component createComponent(Object type, ObjectsContainer objectContainer,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
             Component bootstrap, boolean isFunctional) throws Exception {
-    	Component result = null;
-    	if(isFunctional) {
-    		result = objectContainer.createFComponent((ComponentType) type, controllerDesc, contentDesc, adlVN);
-    	}
-    	else {
-    		result = objectContainer.createNFComponent((ComponentType) type, controllerDesc, contentDesc, adlVN);
+        Component result = null;
+        if (isFunctional) {
+            result = objectContainer.createFComponent((ComponentType) type, controllerDesc, contentDesc,
+                    adlVN);
+        } else {
+            result = objectContainer.createNFComponent((ComponentType) type, controllerDesc, contentDesc,
+                    adlVN);
         }
         // registry.addComponent(result);
         return result;
@@ -199,7 +202,7 @@ public class PAImplementationBuilderImpl implements PAImplementationBuilder, Bin
         public Component getBootstrapComponent() {
             return bootstrap;
         }
-        
+
         /**
          * Creates a Functional component using the PAGenericFactory
          * 

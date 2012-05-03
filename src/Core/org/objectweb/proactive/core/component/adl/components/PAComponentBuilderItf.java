@@ -40,6 +40,7 @@ import java.util.Map;
 
 import org.objectweb.fractal.adl.components.ComponentBuilder;
 
+
 /**
  * The {@link PAComponentBuilderItf} extends the {@link ComponentBuilder} interface,
  * to indicate if the subcomponent to add is functional or non-functional.<br/>
@@ -54,9 +55,10 @@ import org.objectweb.fractal.adl.components.ComponentBuilder;
  *
  */
 public interface PAComponentBuilderItf extends ComponentBuilder {
-	
-	void addComponent (Object superComponent, Object subComponent, String name, boolean isFunctional, Map<Object, Object> context) throws Exception;
-	
-	void startMembrane (Object component, Map<Object, Object> context) throws Exception;
+
+    void addComponent(Object superComponent, Object subComponent, String name, boolean isFunctional,
+            Map<Object, Object> context) throws Exception;
+
+    void startMembrane(Object component, Map<Object, Object> context) throws Exception;
 
 }

@@ -52,6 +52,7 @@ import org.objectweb.fractal.task.core.Task;
 import org.objectweb.fractal.task.core.TaskExecutionException;
 import org.objectweb.fractal.task.core.TaskMap;
 
+
 /**
  * Debug version of the {@link BasicFactory}, provided by Fractal. 
  * This class does the same as {@link BasicFactory}, but include some debug messages
@@ -65,161 +66,159 @@ import org.objectweb.fractal.task.core.TaskMap;
  */
 public class DebugFactory implements BindingController, Factory {
 
-  /**
-   * Name of the client interface bound to the {@link Loader} used by this
-   * factory.
-   */
-  public static final String LOADER_BINDING    = "loader";
+    /**
+     * Name of the client interface bound to the {@link Loader} used by this
+     * factory.
+     */
+    public static final String LOADER_BINDING = "loader";
 
-  /**
-   * Name of the client interface bound to the {@link Compiler} used by this
-   * factory.
-   */
-  public static final String COMPILER_BINDING  = "compiler";
+    /**
+     * Name of the client interface bound to the {@link Compiler} used by this
+     * factory.
+     */
+    public static final String COMPILER_BINDING = "compiler";
 
-  /**
-   * Name of the client interface bound to the {@link Scheduler} used by this
-   * factory.
-   */
-  public static final String SCHEDULER_BINDING = "scheduler";
+    /**
+     * Name of the client interface bound to the {@link Scheduler} used by this
+     * factory.
+     */
+    public static final String SCHEDULER_BINDING = "scheduler";
 
-  /**
-   * The {@link Loader} used by this factory.
-   */
-  // TODO rename loader to loaderItf
-  public Loader              loader;
+    /**
+     * The {@link Loader} used by this factory.
+     */
+    // TODO rename loader to loaderItf
+    public Loader loader;
 
-  /**
-   * The {@link Compiler} used by this factory.
-   */
-  // TODO rename compiler to compilerItf
-  public Compiler            compiler;
+    /**
+     * The {@link Compiler} used by this factory.
+     */
+    // TODO rename compiler to compilerItf
+    public Compiler compiler;
 
-  /**
-   * The {@link Scheduler} used by this factory.
-   */
-  // TODO rename scheduler to schedulerItf
-  public Scheduler           scheduler;
+    /**
+     * The {@link Scheduler} used by this factory.
+     */
+    // TODO rename scheduler to schedulerItf
+    public Scheduler scheduler;
 
-  // --------------------------------------------------------------------------
-  // Implementation of the BindingController interface
-  // --------------------------------------------------------------------------
+    // --------------------------------------------------------------------------
+    // Implementation of the BindingController interface
+    // --------------------------------------------------------------------------
 
-  public String[] listFc() {
-    return new String[]{LOADER_BINDING, COMPILER_BINDING, SCHEDULER_BINDING};
-  }
-
-  public Object lookupFc(final String itf) {
-    if (itf.equals(LOADER_BINDING)) {
-      return loader;
-    } else if (itf.equals(COMPILER_BINDING)) {
-      return compiler;
-    } else if (itf.equals(SCHEDULER_BINDING)) {
-      return scheduler;
-    }
-    return null;
-  }
-
-  public void bindFc(final String itf, final Object value) {
-    if (itf.equals(LOADER_BINDING)) {
-      loader = (Loader) value;
-    } else if (itf.equals(COMPILER_BINDING)) {
-      compiler = (Compiler) value;
-    } else if (itf.equals(SCHEDULER_BINDING)) {
-      scheduler = (Scheduler) value;
-    }
-  }
-
-  public void unbindFc(final String itf) {
-    if (itf.equals(LOADER_BINDING)) {
-      loader = null;
-    } else if (itf.equals(COMPILER_BINDING)) {
-      compiler = null;
-    } else if (itf.equals(SCHEDULER_BINDING)) {
-      scheduler = null;
-    }
-  }
-
-  // --------------------------------------------------------------------------
-  // Implementation of the Factory interface
-  // --------------------------------------------------------------------------
-
-  // Suppress unchecked warning to avoid to change Factory interface
-  @SuppressWarnings("unchecked")
-  public Object newComponentType(final String name, final Map context)
-      throws ADLException {
-    final Definition d = loader.load(name, context);
-    final TaskMap m = new FractalADLTaskMap();
-    compiler.compile(d, m, context);
-    try {
-      m.getTask("type", d).execute(context);
-
-      // return ((FactoryProviderTask)m.getTask("type", d)).getFactory();
-      /* XXX this is a more generic way to obtain the Task result */
-      return (m.getTask("type", d)).getResult();
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  // Suppress unchecked warning to avoid to change Factory interface
-  @SuppressWarnings("unchecked")
-  public Object newComponent(final String name, final Map context)
-      throws ADLException {
-
-    //  DEBUG
-	if (name.contains("cruz")) {
-	  System.out.println("=====================================================================");
-      System.out.println("[Factory] Loading file: " + name);
-      System.out.println("---------------------------------------------------------------------");
-    }
-    //--DEBUG
-    final Definition d = loader.load(name, context);
-
-    //  DEBUG
-    if (name.contains("cruz")) {
-      try {
-        final java.io.PrintWriter pw = new java.io.PrintWriter(System.err, true);
-        pw.println("---------------------------------------------------------------------");
-        pw.println("[After LOAD phase] AST obtained");
-        new org.objectweb.fractal.adl.xml.XMLWriter(pw).write(d);
-        pw.flush();
-      } catch (final java.io.IOException e) {
-      }
-      System.err.println();
-      System.err.println("---------------------------------------------------------------------");
-    }
-    //--DEBUG
-
-    final TaskMap m = new FractalADLTaskMap();
-    compiler.compile(d, m, context);
-    final Task[] tasks = m.getTasks();
-
-    //  DEBUG
-    if (name.contains("cruz")) {
-      System.err.println();
-      System.err.println("---------------------------------------------------------------------");
-      System.err.println("[After COMPILE phase] List of tasks:");
-      final Task[] ts = m.getTasks();
-      for (int i = 0; i < ts.length; ++i) {
-        System.err.println(ts[i]);
-      }
-    }
-    //--DEBUG
-
-    try {
-      System.err.println();
-      System.err.println("---------------------------------------------------------------------");
-      System.err.println("[Scheduler] Task execution:");
-      scheduler.schedule(tasks, context);
-    } catch (final TaskExecutionException tee) {
-      tee.printStackTrace();
-      throw new ADLException(ADLErrors.TASK_EXECUTION_ERROR, tee);
+    public String[] listFc() {
+        return new String[] { LOADER_BINDING, COMPILER_BINDING, SCHEDULER_BINDING };
     }
 
-    // return ((InstanceProviderTask)m.getTask("create", d)).getInstance();
-    /* XXX this is a more generic way to obtain the Task result */
-    return (m.getTask("create", d)).getResult();
-  }
+    public Object lookupFc(final String itf) {
+        if (itf.equals(LOADER_BINDING)) {
+            return loader;
+        } else if (itf.equals(COMPILER_BINDING)) {
+            return compiler;
+        } else if (itf.equals(SCHEDULER_BINDING)) {
+            return scheduler;
+        }
+        return null;
+    }
+
+    public void bindFc(final String itf, final Object value) {
+        if (itf.equals(LOADER_BINDING)) {
+            loader = (Loader) value;
+        } else if (itf.equals(COMPILER_BINDING)) {
+            compiler = (Compiler) value;
+        } else if (itf.equals(SCHEDULER_BINDING)) {
+            scheduler = (Scheduler) value;
+        }
+    }
+
+    public void unbindFc(final String itf) {
+        if (itf.equals(LOADER_BINDING)) {
+            loader = null;
+        } else if (itf.equals(COMPILER_BINDING)) {
+            compiler = null;
+        } else if (itf.equals(SCHEDULER_BINDING)) {
+            scheduler = null;
+        }
+    }
+
+    // --------------------------------------------------------------------------
+    // Implementation of the Factory interface
+    // --------------------------------------------------------------------------
+
+    // Suppress unchecked warning to avoid to change Factory interface
+    @SuppressWarnings("unchecked")
+    public Object newComponentType(final String name, final Map context) throws ADLException {
+        final Definition d = loader.load(name, context);
+        final TaskMap m = new FractalADLTaskMap();
+        compiler.compile(d, m, context);
+        try {
+            m.getTask("type", d).execute(context);
+
+            // return ((FactoryProviderTask)m.getTask("type", d)).getFactory();
+            /* XXX this is a more generic way to obtain the Task result */
+            return (m.getTask("type", d)).getResult();
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Suppress unchecked warning to avoid to change Factory interface
+    @SuppressWarnings("unchecked")
+    public Object newComponent(final String name, final Map context) throws ADLException {
+
+        //  DEBUG
+        if (name.contains("cruz")) {
+            System.out.println("=====================================================================");
+            System.out.println("[Factory] Loading file: " + name);
+            System.out.println("---------------------------------------------------------------------");
+        }
+        //--DEBUG
+        final Definition d = loader.load(name, context);
+
+        //  DEBUG
+        if (name.contains("cruz")) {
+            try {
+                final java.io.PrintWriter pw = new java.io.PrintWriter(System.err, true);
+                pw.println("---------------------------------------------------------------------");
+                pw.println("[After LOAD phase] AST obtained");
+                new org.objectweb.fractal.adl.xml.XMLWriter(pw).write(d);
+                pw.flush();
+            } catch (final java.io.IOException e) {
+            }
+            System.err.println();
+            System.err.println("---------------------------------------------------------------------");
+        }
+        //--DEBUG
+
+        final TaskMap m = new FractalADLTaskMap();
+        compiler.compile(d, m, context);
+        final Task[] tasks = m.getTasks();
+
+        //  DEBUG
+        if (name.contains("cruz")) {
+            System.err.println();
+            System.err.println("---------------------------------------------------------------------");
+            System.err.println("[After COMPILE phase] List of tasks:");
+            final Task[] ts = m.getTasks();
+            for (int i = 0; i < ts.length; ++i) {
+                System.err.println(ts[i]);
+            }
+        }
+        //--DEBUG
+
+        try {
+            System.err.println();
+            System.err.println("---------------------------------------------------------------------");
+            System.err.println("[Scheduler] Task execution:");
+            scheduler.schedule(tasks, context);
+        } catch (final TaskExecutionException tee) {
+            tee.printStackTrace();
+            throw new ADLException(ADLErrors.TASK_EXECUTION_ERROR, tee);
+        }
+
+        // return ((InstanceProviderTask)m.getTask("create", d)).getInstance();
+        /* XXX this is a more generic way to obtain the Task result */
+        return (m.getTask("create", d)).getResult();
+    }
 }

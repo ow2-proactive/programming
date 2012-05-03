@@ -64,9 +64,10 @@ public class PANFImplementationBuilderImpl extends PAImplementationBuilderImpl {
     public Object createComponent(Object type, String name, String definition,
             ControllerDescription controllerDesc, ContentDescription contentDesc, VirtualNode adlVN,
             boolean isFunctional, Map<Object, Object> context) throws Exception {
-    	
-    	// forces the component to be NF
-    	return super.createComponent(type, name, definition, controllerDesc, contentDesc, adlVN, false, context);
+
+        // forces the component to be NF
+        return super.createComponent(type, name, definition, controllerDesc, contentDesc, adlVN, false,
+                context);
 
     }
 }

@@ -66,16 +66,16 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  *
  */
 public class PAComponentBuilder implements PAComponentBuilderItf {
-	
-	protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
-	
+
+    protected static final Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+
     // --------------------------------------------------------------------------
     // Implementation of the ComponentBuilder interface
     // --------------------------------------------------------------------------
-	@Override
+    @Override
     public void addComponent(final Object superComponent, final Object subComponent, final String name,
             final Object context) throws Exception {
-    	
+
         GCM.getContentController((Component) superComponent).addFcSubComponent((Component) subComponent);
         // as opposed  to the standard fractal implementation, we do not set
         // the name of the component here because :
@@ -87,89 +87,89 @@ public class PAComponentBuilder implements PAComponentBuilderItf {
         //    } catch (NoSuchInterfaceException ignored) {
         //    }
     }
-	
-	/**
-	 * Add the subComponent into the superComponent, either in the functional content,
-	 * or in the membrane.
-	 */
-	@Override
-	public void addComponent(Object superComponent, Object subComponent,
-			String name, boolean isFunctional, Map<Object, Object> context)
-			throws Exception {
-		
-		//DEBUG
-		String superComponentName = ((PAComponent) superComponent).getComponentParameters().getName();
-		String subComponentName = ((PAComponent) subComponent).getComponentParameters().getName();
-		logger.debug("[PAComponentBuilder] Adding "+ (isFunctional?"F":"NF") + " component " + subComponentName + " to " + superComponentName );
-		//--DEBUG
 
-		// F Binding ... use the Content Controller
-		if(isFunctional) {
-			// use the ContentController
-			GCM.getContentController((Component) superComponent).addFcSubComponent((Component) subComponent);
-		}
-		// NF Binding ... use the Membrane Controller
-		else {
-			try {
-				// membrane of superComponent must be stopped
-				PAMembraneController pamc = Utils.getPAMembraneController((Component)superComponent);
-				pamc.stopMembrane();
+    /**
+     * Add the subComponent into the superComponent, either in the functional content,
+     * or in the membrane.
+     */
+    @Override
+    public void addComponent(Object superComponent, Object subComponent, String name, boolean isFunctional,
+            Map<Object, Object> context) throws Exception {
 
-				//membrane of subComponent must be started (why?)
-				PAMembraneController subPamc = null;
-				try {
-					subPamc = Utils.getPAMembraneController((Component)subComponent);
-					subPamc.startMembrane();
-				} catch (NoSuchInterfaceException nsie) {
-					//nothing to stop if the subcomponent does not have a membrane controller
-				}
-				
-				logger.debug("[PAComponentBuilder] Membrane state-sup: "+ pamc.getMembraneState());
-				logger.debug("[PAComponentBuilder] Membrane state-sub: "+ (subPamc!=null?subPamc.getMembraneState():"no membrane controller") );
-				
-				// add the NF component
-				pamc.nfAddFcSubComponent((Component) subComponent);
-				
-			} catch (NoSuchInterfaceException nsie) {
-				logger.debug("[PAComponentBuilder] Membrane Controller NOT FOUND in "+ superComponentName +". Cannot add subcomponent "+ subComponentName);
-				throw nsie;
-			}
+        //DEBUG
+        String superComponentName = ((PAComponent) superComponent).getComponentParameters().getName();
+        String subComponentName = ((PAComponent) subComponent).getComponentParameters().getName();
+        logger.debug("[PAComponentBuilder] Adding " + (isFunctional ? "F" : "NF") + " component " +
+            subComponentName + " to " + superComponentName);
+        //--DEBUG
 
-		}
-		
-	}
+        // F Binding ... use the Content Controller
+        if (isFunctional) {
+            // use the ContentController
+            GCM.getContentController((Component) superComponent).addFcSubComponent((Component) subComponent);
+        }
+        // NF Binding ... use the Membrane Controller
+        else {
+            try {
+                // membrane of superComponent must be stopped
+                PAMembraneController pamc = Utils.getPAMembraneController((Component) superComponent);
+                pamc.stopMembrane();
+
+                //membrane of subComponent must be started (why?)
+                PAMembraneController subPamc = null;
+                try {
+                    subPamc = Utils.getPAMembraneController((Component) subComponent);
+                    subPamc.startMembrane();
+                } catch (NoSuchInterfaceException nsie) {
+                    //nothing to stop if the subcomponent does not have a membrane controller
+                }
+
+                logger.debug("[PAComponentBuilder] Membrane state-sup: " + pamc.getMembraneState());
+                logger.debug("[PAComponentBuilder] Membrane state-sub: " +
+                    (subPamc != null ? subPamc.getMembraneState() : "no membrane controller"));
+
+                // add the NF component
+                pamc.nfAddFcSubComponent((Component) subComponent);
+
+            } catch (NoSuchInterfaceException nsie) {
+                logger.debug("[PAComponentBuilder] Membrane Controller NOT FOUND in " + superComponentName +
+                    ". Cannot add subcomponent " + subComponentName);
+                throw nsie;
+            }
+
+        }
+
+    }
 
     /**
      * Nothing
      */
     public void startComponent(final Object component, final Object context) throws Exception {
-    	
+
     }
 
     /**
      * Start the membrane of the component. 
      * This method should be called after all the manipulations inside the membrane have been made.
      */
-	@Override
-	public void startMembrane(final Object component, final Map<Object, Object> context) throws Exception {
-		
-		// DEBUG
-		String componentName = ((PAComponent) component).getComponentParameters().getName();
-		logger.debug("[PAComponentBuilder] Starting membrane of "+ componentName);
-		//--DEBUG
-		
-		try {
-			// start the membrane if it exists
-			PAMembraneController pamc = Utils.getPAMembraneController((Component)component);
-			pamc.startMembrane();
-			
-		} catch (NoSuchInterfaceException e) {
-			logger.debug("[PAComponentBuilder] NOT FOUND Membrane Controller in "+ componentName);
-			//e.printStackTrace();
-		}
-		
-		
-	}
+    @Override
+    public void startMembrane(final Object component, final Map<Object, Object> context) throws Exception {
 
+        // DEBUG
+        String componentName = ((PAComponent) component).getComponentParameters().getName();
+        logger.debug("[PAComponentBuilder] Starting membrane of " + componentName);
+        //--DEBUG
+
+        try {
+            // start the membrane if it exists
+            PAMembraneController pamc = Utils.getPAMembraneController((Component) component);
+            pamc.startMembrane();
+
+        } catch (NoSuchInterfaceException e) {
+            logger.debug("[PAComponentBuilder] NOT FOUND Membrane Controller in " + componentName);
+            //e.printStackTrace();
+        }
+
+    }
 
 }

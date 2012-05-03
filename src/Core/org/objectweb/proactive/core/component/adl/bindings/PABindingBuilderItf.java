@@ -38,6 +38,7 @@ package org.objectweb.proactive.core.component.adl.bindings;
 
 import org.objectweb.fractal.adl.bindings.BindingBuilder;
 
+
 /**
  * Extends the {@link BindingBuilder} interface to add a method
  * able to recognize a NF Binding.
@@ -53,6 +54,7 @@ import org.objectweb.fractal.adl.bindings.BindingBuilder;
  */
 public interface PABindingBuilderItf extends BindingBuilder {
 
-	void bindComponent (int type, Object client, String clientItf, Object server, String serverItf, Object membraneOwner, boolean isFunctional, Object context) throws Exception;
-	
+    void bindComponent(int type, Object client, String clientItf, Object server, String serverItf,
+            Object membraneOwner, boolean isFunctional, Object context) throws Exception;
+
 }

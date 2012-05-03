@@ -57,25 +57,23 @@ import functionalTests.component.nonfunctional.adl.factory.nf.NFService;
 
 
 public class TestADLNFFactory extends ComponentTest {
-	
+
     public TestADLNFFactory() {
         super("TestADLNFFactory", "Component instantiation using the extended ADL Factory");
     }
-    
+
     @org.junit.Test
-	public void action() throws Exception {
-		
-		
-		// ADL Instantiation
-		System.out.println("------------------------------------");
-		System.out.println("Starting GCM ADL instantiation ...");
-		Factory f = FactoryFactory.getFactory();
-		Map<Object, Object> context = new HashMap<Object, Object>();
-		String gcmADL = "functionalTests.component.nonfunctional.adl.factory.adl.helloworld-wrappers";
-		System.out.println("GCM ADL: "+ gcmADL );		
+    public void action() throws Exception {
+
+        // ADL Instantiation
+        System.out.println("------------------------------------");
+        System.out.println("Starting GCM ADL instantiation ...");
+        Factory f = FactoryFactory.getFactory();
+        Map<Object, Object> context = new HashMap<Object, Object>();
+        String gcmADL = "functionalTests.component.nonfunctional.adl.factory.adl.helloworld-wrappers";
+        System.out.println("GCM ADL: " + gcmADL);
         Component comp = (Component) f.newComponent(gcmADL, context);
-        
-        
+
         // Start and run
         System.out.println("------------------------------------");
         System.out.println("Components created... ");
@@ -86,14 +84,14 @@ public class TestADLNFFactory extends ComponentTest {
         GCM.getGCMLifeCycleController(comp).startFc();
         System.out.println("Running...");
         ((Runnable) comp.getFcInterface("r")).run();
-        
+
         // change one attribute of server and re-run
         Component clientWrapper = find(comp, "client-wrapper");
-        if(clientWrapper != null) {
-        	((WrapperAttributes) GCM.getAttributeController(clientWrapper)).setHeader("<----");
-        	((WrapperAttributes) GCM.getAttributeController(clientWrapper)).setCount(3);
-        	System.out.println("Running again ...");
-        	((Runnable) comp.getFcInterface("r")).run();
+        if (clientWrapper != null) {
+            ((WrapperAttributes) GCM.getAttributeController(clientWrapper)).setHeader("<----");
+            ((WrapperAttributes) GCM.getAttributeController(clientWrapper)).setCount(3);
+            System.out.println("Running again ...");
+            ((Runnable) comp.getFcInterface("r")).run();
         }
 
         System.out.println("------------------------------------");
@@ -113,58 +111,57 @@ public class TestADLNFFactory extends ComponentTest {
         System.out.println("------------------------------------");
         System.out.println("Stopping components ...");
         GCM.getGCMLifeCycleController(comp).stopFc();
-		System.out.println("Finished!...");
-	}
-	
-	/**
-	 * DFS search for a component from the component 'start'
-	 * 
-	 * @param start
-	 * @param name
-	 * @return
-	 */
-	public static Component find(Component start, String name) {
-		try {
-			Component[] subComponents = GCM.getContentController(start).getFcSubComponents();
-			for(Component comp : subComponents) {
-				String compName = GCM.getNameController(comp).getFcName();
-				if(name.equals(compName)) {
-					return comp;
-				}
-				else {
-					return find(comp, name);
-				}
-			}
-		} catch (NoSuchInterfaceException e) {
-			// silently continue
-		} 
-		return null;
-	}
-	
-	/** 
-	 * DFS search looking for membranes in each component beginning from 'start'
-	 * @param start
-	 */
-	public static void checkMembranes (Component start) {
-		
-		PAMembraneController pamc = null;
-		String compName = null;
-		
-		try {
-			compName = GCM.getNameController(start).getFcName();
-			pamc = Utils.getPAMembraneController(start);
-		} catch (NoSuchInterfaceException e1) {
-			pamc = null;
-		}
-		System.out.println("Component "+ compName + " has MembraneController? "+ (pamc!=null));
-		
-		try {
-			Component[] subComponents = GCM.getContentController(start).getFcSubComponents();
-			for(Component comp : subComponents) {
-				checkMembranes(comp);
-			}
-		} catch (NoSuchInterfaceException e) {
-			// primitive component ... silently continue
-		} 
-	}
+        System.out.println("Finished!...");
+    }
+
+    /**
+     * DFS search for a component from the component 'start'
+     * 
+     * @param start
+     * @param name
+     * @return
+     */
+    public static Component find(Component start, String name) {
+        try {
+            Component[] subComponents = GCM.getContentController(start).getFcSubComponents();
+            for (Component comp : subComponents) {
+                String compName = GCM.getNameController(comp).getFcName();
+                if (name.equals(compName)) {
+                    return comp;
+                } else {
+                    return find(comp, name);
+                }
+            }
+        } catch (NoSuchInterfaceException e) {
+            // silently continue
+        }
+        return null;
+    }
+
+    /** 
+     * DFS search looking for membranes in each component beginning from 'start'
+     * @param start
+     */
+    public static void checkMembranes(Component start) {
+
+        PAMembraneController pamc = null;
+        String compName = null;
+
+        try {
+            compName = GCM.getNameController(start).getFcName();
+            pamc = Utils.getPAMembraneController(start);
+        } catch (NoSuchInterfaceException e1) {
+            pamc = null;
+        }
+        System.out.println("Component " + compName + " has MembraneController? " + (pamc != null));
+
+        try {
+            Component[] subComponents = GCM.getContentController(start).getFcSubComponents();
+            for (Component comp : subComponents) {
+                checkMembranes(comp);
+            }
+        } catch (NoSuchInterfaceException e) {
+            // primitive component ... silently continue
+        }
+    }
 }

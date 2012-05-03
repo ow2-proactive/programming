@@ -62,6 +62,7 @@ import org.objectweb.proactive.core.component.control.PAMembraneController;
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
+
 /**
  * The {@link PATypeCompiler} compiles the &lt;interface&gt; nodes, 
  * and creates the {@link InterfaceType} and {@link ComponentType} objects
@@ -79,130 +80,134 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
  */
 public class PATypeCompiler extends TypeCompiler {
 
-	public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
+    public static Logger logger = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
 
-	@Override
-	public void compile(List path, ComponentContainer container, TaskMap tasks,
-			Map context) throws ADLException {
-		
-		logger.debug("[PATypeCompiler] Compiling container "+ container.toString() );
-		
-		if (container instanceof InterfaceContainer) {
-			try {
-				// the task may already exist, in case of a shared component
-				tasks.getTask("type", container);
-			} catch (NoSuchElementException e) {
-				CreateTypeTask createTypeTask = new CreateTypeTask((PATypeBuilderItf) builder, (InterfaceContainer) container);
-				tasks.addTask("type", container, createTypeTask);
-			}
-		}
-		
-	}
+    @Override
+    public void compile(List path, ComponentContainer container, TaskMap tasks, Map context)
+            throws ADLException {
 
-	
-	// --------------------------------------------------------------------------
-	// Inner classes
-	// --------------------------------------------------------------------------
+        logger.debug("[PATypeCompiler] Compiling container " + container.toString());
 
-	/**
-	 * 
-	 * The {@link CreateTypeTask} collects the data from the InterfaceType and delegates the 
-	 * type creation to a {@link PATypeBuilderItf}.
-	 * 
-	 * @author The ProActive Team
-	 *
-	 */
-	static class CreateTypeTask extends AbstractFactoryProviderTask {
+        if (container instanceof InterfaceContainer) {
+            try {
+                // the task may already exist, in case of a shared component
+                tasks.getTask("type", container);
+            } catch (NoSuchElementException e) {
+                CreateTypeTask createTypeTask = new CreateTypeTask((PATypeBuilderItf) builder,
+                    (InterfaceContainer) container);
+                tasks.addTask("type", container, createTypeTask);
+            }
+        }
 
-		private PATypeBuilderItf builder;
+    }
 
-		private InterfaceContainer container;
+    // --------------------------------------------------------------------------
+    // Inner classes
+    // --------------------------------------------------------------------------
 
-		public CreateTypeTask(final PATypeBuilderItf builder,
-				final InterfaceContainer container) {
-			this.builder = builder;
-			this.container = container;
-		}
+    /**
+     * 
+     * The {@link CreateTypeTask} collects the data from the InterfaceType and delegates the 
+     * type creation to a {@link PATypeBuilderItf}.
+     * 
+     * @author The ProActive Team
+     *
+     */
+    static class CreateTypeTask extends AbstractFactoryProviderTask {
 
-		public void execute(final Map<Object, Object> context) throws Exception {
-			if (getFactory() != null) {
-				return;
-			}
+        private PATypeBuilderItf builder;
 
-			String name = null;
-			if (container instanceof Definition) {
-				name = ((Definition) container).getName();
-			} else if (container instanceof Component) {
-				name = ((Component) container).getName();
-			}
-			logger.debug("[PATypeCompiler] Executing CreateTypeTask for "+ (container.astGetDecoration("NF")==null?" F":"NF" )+" component "+ name);
+        private InterfaceContainer container;
 
-			
-			// collects and creates the F interfaces
-			List<Object> fItfTypes = new ArrayList<Object>();
-			Interface[] fItfs = container.getInterfaces();
-			for (Interface itf : fItfs) {
-				logger.debug("[PATypeCompiler] --> ITF: " + itf.toString() );
-				if(itf instanceof TypeInterface) {
-					TypeInterface tItf = (TypeInterface) itf;
-					Object itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf.getRole(), tItf.getContingency(), tItf.getCardinality(), context);
-					fItfTypes.add(itfType);
-				}
-			}
-			
-			// collects and creates the NF interfaces
-			List<Object> nfItfTypes = new ArrayList<Object>();
-			Interface[] nfItfs = null;
-			boolean membraneControllerDefined = false;
-			if (container instanceof ControllerContainer) {
-				Controller ctrl = ((ControllerContainer) container).getController();
-				if(ctrl != null) {
-					if(ctrl instanceof InterfaceContainer) {
-						nfItfs = ((InterfaceContainer) ctrl).getInterfaces();
-						for(Interface itf : nfItfs) {
-							//logger.debug("[PATypeCompiler] --> ITF: " + itf.toString() );
-							if(itf instanceof TypeInterface) {
-								TypeInterface tItf = (TypeInterface) itf;
-								logger.debug("[PATypeCompiler] --> ITF: " + itf.toString() + " role: "+ tItf.getRole() );
-								boolean isInternal = PATypeInterface.INTERNAL_CLIENT_ROLE.equals(tItf.getRole()) || PATypeInterface.INTERNAL_SERVER_ROLE.equals(tItf.getRole());
-								Object itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf.getRole(), tItf.getContingency(), tItf.getCardinality(), isInternal, context);
-								nfItfTypes.add(itfType);
-								if(Constants.MEMBRANE_CONTROLLER.equals(tItf.getName())) {
-									membraneControllerDefined = true;
-								}
-							}
-						}
-						// if there are interfaces described in the membrane, and none of them is the "membrane-controller", then add the interface
-						if(nfItfs.length > 0 && !membraneControllerDefined) {
-							Object itfType = builder.createInterfaceType(Constants.MEMBRANE_CONTROLLER, PAMembraneController.class.getName(), 
-									TypeInterface.SERVER_ROLE, TypeInterface.MANDATORY_CONTINGENCY, TypeInterface.SINGLETON_CARDINALITY, context);
-							nfItfTypes.add(itfType);
-						}
-						
-					}
-				}
-			}
-			
-			/* TODO improve module separation (how?) */
-			if (container instanceof AttributesContainer) { 
-				Attributes attr = ((AttributesContainer) container)
-						.getAttributes();
-				if (attr != null) {
-					Object itfType = builder.createInterfaceType(Constants.ATTRIBUTE_CONTROLLER,
-							attr.getSignature(),
-							TypeInterface.SERVER_ROLE,
-							TypeInterface.MANDATORY_CONTINGENCY,
-							TypeInterface.SINGLETON_CARDINALITY, context);
-					fItfTypes.add(itfType);
-				}
-			}
-			
-			setFactory(builder.createComponentType(name, fItfTypes.toArray(), nfItfTypes.toArray(), context));
-		}
+        public CreateTypeTask(final PATypeBuilderItf builder, final InterfaceContainer container) {
+            this.builder = builder;
+            this.container = container;
+        }
 
-		public String toString() {
-			return "T" + System.identityHashCode(this) + "[CreateTypeTask()]";
-		}
-		
-	}
+        public void execute(final Map<Object, Object> context) throws Exception {
+            if (getFactory() != null) {
+                return;
+            }
+
+            String name = null;
+            if (container instanceof Definition) {
+                name = ((Definition) container).getName();
+            } else if (container instanceof Component) {
+                name = ((Component) container).getName();
+            }
+            logger.debug("[PATypeCompiler] Executing CreateTypeTask for " +
+                (container.astGetDecoration("NF") == null ? " F" : "NF") + " component " + name);
+
+            // collects and creates the F interfaces
+            List<Object> fItfTypes = new ArrayList<Object>();
+            Interface[] fItfs = container.getInterfaces();
+            for (Interface itf : fItfs) {
+                logger.debug("[PATypeCompiler] --> ITF: " + itf.toString());
+                if (itf instanceof TypeInterface) {
+                    TypeInterface tItf = (TypeInterface) itf;
+                    Object itfType = builder.createInterfaceType(tItf.getName(), tItf.getSignature(), tItf
+                            .getRole(), tItf.getContingency(), tItf.getCardinality(), context);
+                    fItfTypes.add(itfType);
+                }
+            }
+
+            // collects and creates the NF interfaces
+            List<Object> nfItfTypes = new ArrayList<Object>();
+            Interface[] nfItfs = null;
+            boolean membraneControllerDefined = false;
+            if (container instanceof ControllerContainer) {
+                Controller ctrl = ((ControllerContainer) container).getController();
+                if (ctrl != null) {
+                    if (ctrl instanceof InterfaceContainer) {
+                        nfItfs = ((InterfaceContainer) ctrl).getInterfaces();
+                        for (Interface itf : nfItfs) {
+                            //logger.debug("[PATypeCompiler] --> ITF: " + itf.toString() );
+                            if (itf instanceof TypeInterface) {
+                                TypeInterface tItf = (TypeInterface) itf;
+                                logger.debug("[PATypeCompiler] --> ITF: " + itf.toString() + " role: " +
+                                    tItf.getRole());
+                                boolean isInternal = PATypeInterface.INTERNAL_CLIENT_ROLE.equals(tItf
+                                        .getRole()) ||
+                                    PATypeInterface.INTERNAL_SERVER_ROLE.equals(tItf.getRole());
+                                Object itfType = builder.createInterfaceType(tItf.getName(), tItf
+                                        .getSignature(), tItf.getRole(), tItf.getContingency(), tItf
+                                        .getCardinality(), isInternal, context);
+                                nfItfTypes.add(itfType);
+                                if (Constants.MEMBRANE_CONTROLLER.equals(tItf.getName())) {
+                                    membraneControllerDefined = true;
+                                }
+                            }
+                        }
+                        // if there are interfaces described in the membrane, and none of them is the "membrane-controller", then add the interface
+                        if (nfItfs.length > 0 && !membraneControllerDefined) {
+                            Object itfType = builder.createInterfaceType(Constants.MEMBRANE_CONTROLLER,
+                                    PAMembraneController.class.getName(), TypeInterface.SERVER_ROLE,
+                                    TypeInterface.MANDATORY_CONTINGENCY, TypeInterface.SINGLETON_CARDINALITY,
+                                    context);
+                            nfItfTypes.add(itfType);
+                        }
+
+                    }
+                }
+            }
+
+            /* TODO improve module separation (how?) */
+            if (container instanceof AttributesContainer) {
+                Attributes attr = ((AttributesContainer) container).getAttributes();
+                if (attr != null) {
+                    Object itfType = builder.createInterfaceType(Constants.ATTRIBUTE_CONTROLLER, attr
+                            .getSignature(), TypeInterface.SERVER_ROLE, TypeInterface.MANDATORY_CONTINGENCY,
+                            TypeInterface.SINGLETON_CARDINALITY, context);
+                    fItfTypes.add(itfType);
+                }
+            }
+
+            setFactory(builder.createComponentType(name, fItfTypes.toArray(), nfItfTypes.toArray(), context));
+        }
+
+        public String toString() {
+            return "T" + System.identityHashCode(this) + "[CreateTypeTask()]";
+        }
+
+    }
 }

@@ -50,6 +50,7 @@ import org.objectweb.proactive.core.component.representative.PANFComponentRepres
 import org.objectweb.proactive.core.util.log.Loggers;
 import org.objectweb.proactive.core.util.log.ProActiveLogger;
 
+
 /**
  * ProActive based implementation of the {@link BindingBuilder} interface.
  * 
@@ -61,141 +62,145 @@ import org.objectweb.proactive.core.util.log.ProActiveLogger;
 public class PABindingBuilder implements PABindingBuilderItf {
     public static final int WEBSERVICE_BINDING = 3;
     public static final int MEMBRANE_BINDING = 4;
-    
+
     protected static final Logger loggerADL = ProActiveLogger.getLogger(Loggers.COMPONENTS_ADL);
-    
-    public void bindComponent(int type, Object client, String clientItf, Object server, String serverItf, Object context) throws Exception {
-    	// default: isFunctional = true
-    	bindComponent(type, client, clientItf, server, serverItf, null, true, context);
+
+    public void bindComponent(int type, Object client, String clientItf, Object server, String serverItf,
+            Object context) throws Exception {
+        // default: isFunctional = true
+        bindComponent(type, client, clientItf, server, serverItf, null, true, context);
     }
 
-	@Override
-	public void bindComponent(int type, Object client, String clientItf, Object server, String serverItf, Object membraneOwner, boolean isFunctional, Object context) throws Exception {
+    @Override
+    public void bindComponent(int type, Object client, String clientItf, Object server, String serverItf,
+            Object membraneOwner, boolean isFunctional, Object context) throws Exception {
 
-		String clientName="", serverName="";
-		if(client instanceof PAComponentRepresentative) {
-			clientName = ((PAComponentRepresentative)client).getComponentParameters().getName();
-		}
-		if(server instanceof PAComponentRepresentative) {
-			serverName = ((PAComponentRepresentative)server).getComponentParameters().getName();
-		}
-		loggerADL.debug("[PABindingBuilder] Binding ("+ type + ") " + (isFunctional?"F":"NF") + " "+ clientName + "." + clientItf + " --> "+ serverName + "." + serverItf);
+        String clientName = "", serverName = "";
+        if (client instanceof PAComponentRepresentative) {
+            clientName = ((PAComponentRepresentative) client).getComponentParameters().getName();
+        }
+        if (server instanceof PAComponentRepresentative) {
+            serverName = ((PAComponentRepresentative) server).getComponentParameters().getName();
+        }
+        loggerADL.debug("[PABindingBuilder] Binding (" + type + ") " + (isFunctional ? "F" : "NF") + " " +
+            clientName + "." + clientItf + " --> " + serverName + "." + serverItf);
 
-		// F binding
-		if(isFunctional) {
-			BindingController bc = GCM.getBindingController((Component)client);
-			// regular functional binding
-			if (type != WEBSERVICE_BINDING) {
-			    Object destinationItf;
-			    if (type == IMPORT_BINDING) {
-			      destinationItf = GCM.getContentController((Component)server).getFcInternalInterface(serverItf);
-			    } 
-			    else {
-			      destinationItf = ((Component)server).getFcInterface(serverItf);
-			    }
-			    bc.bindFc(clientItf, destinationItf);
-			}
-			// web-service binding
-			else {
-				bc.bindFc(clientItf, serverItf);
-			}
-		}
-		// NF binding
-		else {
-			PAMembraneController pamcClient;
-			try {
-				pamcClient = Utils.getPAMembraneController((Component)client);
-			} catch (NoSuchInterfaceException e) {
-				pamcClient = null;
-			}
-			PAMembraneController pamcServer;
-			try {
-				pamcServer = Utils.getPAMembraneController((Component)server);
-			} catch (NoSuchInterfaceException e) {
-				pamcServer = null;
-			}
-			
-			// the current definition of bindings inside the membrane require to specify the server interface as "component.interface"
-			NameController ncServer = GCM.getNameController((Component)server);
-			NameController ncClient = GCM.getNameController((Component)client);
-			NameController ncMembraneOwner = null;
-			String membraneOwnerName = "---";
-			if(membraneOwner != null) {
-				ncMembraneOwner = GCM.getNameController((Component)membraneOwner);
-				membraneOwnerName = ncMembraneOwner.getFcName();
-			}
-			
-			loggerADL.debug("[PABindingBuilder] MembraneOwner: "+ membraneOwnerName);
-			if(pamcClient == null) {
-				loggerADL.debug("[PABindingBuilder] Client "+ ncClient.getFcName() +" does not have MEMBRANE-controller");
-			}
-			if(pamcServer == null) {
-				loggerADL.debug("[PABindingBuilder] Server "+ ncServer.getFcName() +" does not have MEMBRANE-controller");			
-			}
-			
-			PAMembraneController pamc;
-			try {
-				pamc = Utils.getPAMembraneController((Component)membraneOwner);
-			} catch (NoSuchInterfaceException e) {
-				pamc = null;
-			}
-			
-			// Check each type of binding
-			if(type == NORMAL_BINDING) {
-				clientItf = ncClient.getFcName() + "." + clientItf;
-				serverItf = ncServer.getFcName() + "." + serverItf;
-			}
-			if(type == EXPORT_BINDING) {
-				serverItf = ncServer.getFcName() + "." + serverItf;
-			}
-			if(type == IMPORT_BINDING) {
-				clientItf = ncClient.getFcName() + "." + clientItf;
-			}
-			if(type == MEMBRANE_BINDING) {
-				// nothing to change in the interfaces names
-			}
-			
-			
-			if( !(client instanceof PANFComponentRepresentative) && !(server instanceof PANFComponentRepresentative) 
-					&& (client != membraneOwner) && (server != membraneOwner) ) {
-				// special case: the bindings between NF interfaces of two F subcomponents, must be carried on by the MembraneController
-				// of the client component, and not by their owner
-				if(pamcClient != null) {
-					Object destInterface = null;
-					int index = serverItf.indexOf(".");
-					if(index != -1) {
-						destInterface = ((PAComponent)server).getFcInterface(serverItf.substring(index+1));
-					}
-					else {
-						// should not enter in this case, because this situation should be classified as NORMAL_BINDING
-						// unless, a new type of binding have been added (to consider)
-						destInterface = ((PAComponent)server).getFcInterface(serverItf);
-					}
-					index = clientItf.indexOf(".");
-					if(index != -1) {
-						// calling nfBindFc using interface of the server component
-						loggerADL.debug("[PABindingBuilder] Calling nfBindFc("+clientItf+", ITF"+serverItf+")");
-						pamcClient.nfBindFc(clientItf.substring(index+1), destInterface);
-					}
-					else {
-						// same as above ... shouldn't enter here, but we should consider adding a new type of binding to clean this part
-						// calling nfBindFc using interface of the server component
-						loggerADL.debug("[PABindingBuilder] Calling nfBindFc("+clientItf+", ITF"+serverItf+")");
-						pamcClient.nfBindFc(clientItf, destInterface);
-					}
-				}
-				else {
-					throw new NoSuchInterfaceException("[PABindingBuilder] The client component "+ ncClient.getFcName() + " has no MembraneController.");
-				}
-			}
-			else {
-				// Call nfBinFc with the strings indicating component and interface
-				// TODO: not handling webservice NF bindings
-				loggerADL.debug("[PABindingBuilder] Calling nfBindFc("+clientItf+", "+serverItf+")");
-				pamc.nfBindFc(clientItf, serverItf);
+        // F binding
+        if (isFunctional) {
+            BindingController bc = GCM.getBindingController((Component) client);
+            // regular functional binding
+            if (type != WEBSERVICE_BINDING) {
+                Object destinationItf;
+                if (type == IMPORT_BINDING) {
+                    destinationItf = GCM.getContentController((Component) server).getFcInternalInterface(
+                            serverItf);
+                } else {
+                    destinationItf = ((Component) server).getFcInterface(serverItf);
+                }
+                bc.bindFc(clientItf, destinationItf);
+            }
+            // web-service binding
+            else {
+                bc.bindFc(clientItf, serverItf);
+            }
+        }
+        // NF binding
+        else {
+            PAMembraneController pamcClient;
+            try {
+                pamcClient = Utils.getPAMembraneController((Component) client);
+            } catch (NoSuchInterfaceException e) {
+                pamcClient = null;
+            }
+            PAMembraneController pamcServer;
+            try {
+                pamcServer = Utils.getPAMembraneController((Component) server);
+            } catch (NoSuchInterfaceException e) {
+                pamcServer = null;
+            }
 
-			}
-			
-		}
-	}
+            // the current definition of bindings inside the membrane require to specify the server interface as "component.interface"
+            NameController ncServer = GCM.getNameController((Component) server);
+            NameController ncClient = GCM.getNameController((Component) client);
+            NameController ncMembraneOwner = null;
+            String membraneOwnerName = "---";
+            if (membraneOwner != null) {
+                ncMembraneOwner = GCM.getNameController((Component) membraneOwner);
+                membraneOwnerName = ncMembraneOwner.getFcName();
+            }
+
+            loggerADL.debug("[PABindingBuilder] MembraneOwner: " + membraneOwnerName);
+            if (pamcClient == null) {
+                loggerADL.debug("[PABindingBuilder] Client " + ncClient.getFcName() +
+                    " does not have MEMBRANE-controller");
+            }
+            if (pamcServer == null) {
+                loggerADL.debug("[PABindingBuilder] Server " + ncServer.getFcName() +
+                    " does not have MEMBRANE-controller");
+            }
+
+            PAMembraneController pamc;
+            try {
+                pamc = Utils.getPAMembraneController((Component) membraneOwner);
+            } catch (NoSuchInterfaceException e) {
+                pamc = null;
+            }
+
+            // Check each type of binding
+            if (type == NORMAL_BINDING) {
+                clientItf = ncClient.getFcName() + "." + clientItf;
+                serverItf = ncServer.getFcName() + "." + serverItf;
+            }
+            if (type == EXPORT_BINDING) {
+                serverItf = ncServer.getFcName() + "." + serverItf;
+            }
+            if (type == IMPORT_BINDING) {
+                clientItf = ncClient.getFcName() + "." + clientItf;
+            }
+            if (type == MEMBRANE_BINDING) {
+                // nothing to change in the interfaces names
+            }
+
+            if (!(client instanceof PANFComponentRepresentative) &&
+                !(server instanceof PANFComponentRepresentative) && (client != membraneOwner) &&
+                (server != membraneOwner)) {
+                // special case: the bindings between NF interfaces of two F subcomponents, must be carried on by the MembraneController
+                // of the client component, and not by their owner
+                if (pamcClient != null) {
+                    Object destInterface = null;
+                    int index = serverItf.indexOf(".");
+                    if (index != -1) {
+                        destInterface = ((PAComponent) server).getFcInterface(serverItf.substring(index + 1));
+                    } else {
+                        // should not enter in this case, because this situation should be classified as NORMAL_BINDING
+                        // unless, a new type of binding have been added (to consider)
+                        destInterface = ((PAComponent) server).getFcInterface(serverItf);
+                    }
+                    index = clientItf.indexOf(".");
+                    if (index != -1) {
+                        // calling nfBindFc using interface of the server component
+                        loggerADL.debug("[PABindingBuilder] Calling nfBindFc(" + clientItf + ", ITF" +
+                            serverItf + ")");
+                        pamcClient.nfBindFc(clientItf.substring(index + 1), destInterface);
+                    } else {
+                        // same as above ... shouldn't enter here, but we should consider adding a new type of binding to clean this part
+                        // calling nfBindFc using interface of the server component
+                        loggerADL.debug("[PABindingBuilder] Calling nfBindFc(" + clientItf + ", ITF" +
+                            serverItf + ")");
+                        pamcClient.nfBindFc(clientItf, destInterface);
+                    }
+                } else {
+                    throw new NoSuchInterfaceException("[PABindingBuilder] The client component " +
+                        ncClient.getFcName() + " has no MembraneController.");
+                }
+            } else {
+                // Call nfBinFc with the strings indicating component and interface
+                // TODO: not handling webservice NF bindings
+                loggerADL.debug("[PABindingBuilder] Calling nfBindFc(" + clientItf + ", " + serverItf + ")");
+                pamc.nfBindFc(clientItf, serverItf);
+
+            }
+
+        }
+    }
 }
