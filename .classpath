@@ -70,7 +70,6 @@
 	<classpathentry kind="lib" path="lib/mofcomp.jar"/>
 	<classpathentry kind="lib" path="lib/netty-3.2.0.ALPHA2.jar"/>
 	<classpathentry kind="lib" path="lib/osgi.jar"/>
-	<classpathentry kind="lib" path="lib/progIdVsClsidDB.properties"/>
 	<classpathentry kind="lib" path="lib/puretls.jar"/>
 	<classpathentry kind="lib" path="lib/saaj-impl.jar"/>
 	<classpathentry kind="lib" path="lib/servicebinder-0.9.0.jar"/>
@@ -104,7 +103,6 @@
 	<classpathentry kind="lib" path="lib/virtualization-xenserver.jar"/>
 	<classpathentry kind="lib" path="lib/wbem.jar"/>
 	<classpathentry kind="lib" path="lib/winp-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/winp.dll"/>
 	<classpathentry kind="lib" path="lib/wiseman-tools.jar"/>
 	<classpathentry kind="lib" path="lib/ws-commons-util-1.0.2.jar"/>
 	<classpathentry kind="lib" path="lib/xenserver-5.0.0-3.jar"/>
